@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "wiki.css",
+	"sources": [
+		"wiki.scss"
+	],
+	"sourcesContent": [
+		"table {\n\tborder-collapse: collapse;\n}\n\ntr:nth-child(2n) {\n\tbackground-color: rgb(246, 248, 250);\n}\n\ntd {\n\tpadding: 14px 0 0 14px;\n\tborder: 1px solid rgb(198, 203, 209);\n\t\n\t// column that contains images\n\t&:nth-child(2) {\n\t\twidth: 40%;\n\t\tpadding: 0 0 0 0;\n\t}\n\t\n\tp:first-child {\n\t\tmargin-top: 0;\n\t}\n\t\n\timg {\n\t\tdisplay: block;\n\t\tmargin: 0 auto;\n\t\tmax-width: 90%;\n\t\tpadding-top: 14px;\n\t\tpadding-bottom: 14px;\n\t}\n}\n\nimg {\n\tmax-width: 100%;\n}\n"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,KAAK,CAAC,EACL,eAAe,EAAE,QAAQ,GACzB;;AAED,AAAA,EAAE,CAAC,SAAU,CAAA,EAAE,EAAE,EAChB,gBAAgB,EAAE,OAAkB,GACpC;;AAED,AAAA,EAAE,CAAC,EACF,OAAO,EAAE,aAAa,EACtB,MAAM,EAAE,GAAG,CAAC,KAAK,CAAC,OAAkB,GAmBpC;;AArBD,AAKC,EALC,CAKC,SAAU,CAAA,CAAC,EAAE,EACd,KAAK,EAAE,GAAG,EACV,OAAO,EAAE,OAAO,GAChB;;AARF,AAUC,EAVC,CAUD,CAAC,CAAC,WAAW,CAAC,EACb,UAAU,EAAE,CAAC,GACb;;AAZF,AAcC,EAdC,CAcD,GAAG,CAAC,EACH,OAAO,EAAE,KAAK,EACd,MAAM,EAAE,MAAM,EACd,SAAS,EAAE,GAAG,EACd,WAAW,EAAE,IAAI,EACjB,cAAc,EAAE,IAAI,GACpB;;AAGF,AAAA,GAAG,CAAC,EACH,SAAS,EAAE,IAAI,GACf"
+}

@@ -9,65 +9,46 @@
 <pre>
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.nlp.breakdetect.calabash.impl;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
-<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Collection;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Collections;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.HashSet;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.Set;
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.function.Predicate;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.XdmNode;
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> * Encapsulate what the Lexer needs to know about the input format so it can</em>
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <em class="jxr_javadoccomment"> * parse and rebuild the input documents.</em>
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <em class="jxr_javadoccomment"> */</em>
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/FormatSpecifications.html">FormatSpecifications</a> {
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  	<strong class="jxr_keyword">public</strong> QName sentenceTag;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<strong class="jxr_keyword">public</strong> QName wordTag;
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  	<strong class="jxr_keyword">public</strong> String tmpNsPrefix = <span class="jxr_string">"tmp"</span>;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	<strong class="jxr_keyword">public</strong> QName langAttr;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; inlineElements;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; ensureWordBefore;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; ensureWordAfter;
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; ensureSentenceBefore;
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	<strong class="jxr_keyword">public</strong> Set&lt;String&gt; ensureSentenceAfter;
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<strong class="jxr_keyword">public</strong> String tmpNs;
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  	FormatSpecifications(String tmpNamespace, String sentenceElement, String wordElement,
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	        String langNamespace, String langAttr, Collection&lt;String&gt; inlineElements,
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	        Collection&lt;String&gt; ensureWordBefore, Collection&lt;String&gt; ensureWordAfter,
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	        Collection&lt;String&gt; ensureSentenceBefore, Collection&lt;String&gt; ensureSentenceAfter) {
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">if</strong> (ensureWordBefore == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			ensureWordBefore = Collections.EMPTY_LIST;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">if</strong> (ensureWordAfter == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			ensureWordAfter = Collections.EMPTY_LIST;
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">if</strong> (ensureSentenceBefore == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			ensureSentenceBefore = Collections.EMPTY_LIST;
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">if</strong> (ensureSentenceAfter == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			ensureSentenceAfter = Collections.EMPTY_LIST;
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		sentenceTag = <strong class="jxr_keyword">new</strong> QName(tmpNamespace, sentenceElement);
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		wordTag = <strong class="jxr_keyword">new</strong> QName(tmpNamespace, wordElement);
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		<strong class="jxr_keyword">this</strong>.langAttr = <strong class="jxr_keyword">new</strong> QName(langNamespace, langAttr);
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		<strong class="jxr_keyword">this</strong>.inlineElements = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(inlineElements);
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">this</strong>.inlineElements.addAll(ensureWordBefore);
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">this</strong>.inlineElements.addAll(ensureWordAfter);
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">this</strong>.inlineElements.addAll(ensureSentenceBefore);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		<strong class="jxr_keyword">this</strong>.inlineElements.addAll(ensureSentenceAfter);
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">this</strong>.inlineElements.add(wordElement);
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">this</strong>.ensureWordBefore = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(ensureWordBefore);
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">this</strong>.ensureWordAfter = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(ensureWordAfter);
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		<strong class="jxr_keyword">this</strong>.ensureSentenceBefore = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(ensureSentenceBefore);
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">this</strong>.ensureSentenceAfter = <strong class="jxr_keyword">new</strong> HashSet&lt;String&gt;(ensureSentenceAfter);
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">this</strong>.tmpNs = tmpNamespace;
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <em class="jxr_javadoccomment"> * Encapsulate what the Lexer needs to know about the input format so it can</em>
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <em class="jxr_javadoccomment"> * parse and rebuild the input documents.</em>
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/nlp-common/src/main/java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/FormatSpecifications.html">FormatSpecifications</a> {
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  	<strong class="jxr_keyword">public</strong> QName sentenceTag;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  	<strong class="jxr_keyword">public</strong> QName wordTag;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  	<strong class="jxr_keyword">public</strong> QName langAttr;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<strong class="jxr_keyword">public</strong> Predicate&lt;XdmNode&gt; inlineElements;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  	<strong class="jxr_keyword">public</strong> Predicate&lt;XdmNode&gt; ensureWordBefore;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	<strong class="jxr_keyword">public</strong> Predicate&lt;XdmNode&gt; ensureWordAfter;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">public</strong> Predicate&lt;XdmNode&gt; ensureSentenceBefore;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">public</strong> Predicate&lt;XdmNode&gt; ensureSentenceAfter;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	FormatSpecifications(QName sentenceElement, QName wordElement,
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	        String langNamespace, String langAttr, Predicate&lt;XdmNode&gt; inlineElements,
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	        Predicate&lt;XdmNode&gt; ensureWordBefore, Predicate&lt;XdmNode&gt; ensureWordAfter,
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	        Predicate&lt;XdmNode&gt; ensureSentenceBefore, Predicate&lt;XdmNode&gt; ensureSentenceAfter) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		sentenceTag = sentenceElement;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		wordTag = wordElement;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">this</strong>.langAttr = <strong class="jxr_keyword">new</strong> QName(langNamespace, langAttr);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		<strong class="jxr_keyword">this</strong>.inlineElements = inlineElements.or(ensureWordBefore)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		                                    .or(ensureWordAfter)
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		                                    .or(ensureSentenceBefore)
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		                                    .or(ensureSentenceAfter)
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		                                    .or(x -&gt; wordTag.equals(x.getNodeName()));
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		<strong class="jxr_keyword">this</strong>.ensureWordBefore = ensureWordBefore;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">this</strong>.ensureWordAfter = ensureWordAfter;
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		<strong class="jxr_keyword">this</strong>.ensureSentenceBefore = ensureSentenceBefore;
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">this</strong>.ensureSentenceAfter = ensureSentenceAfter;
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2020 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2021 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

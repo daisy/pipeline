@@ -16,22 +16,31 @@
 
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			&lt;<span class="code-xml-element-local-name">p</span>&gt;A set of 'metadata' documents in the OPF namespace&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-
-	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"manifest"</span>&gt;
-		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			&lt;<span class="code-xml-element-local-name">p</span>&gt;The 'manifest' document&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;A set of &lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt; or &lt;<span class="code-xml-element-local-name">code</span>&gt;package&lt;/<span class="code-xml-element-local-name">code</span>&gt; documents in the OPF
+			namespace.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;When a document is a &lt;<span class="code-xml-element-local-name">code</span>&gt;package&lt;/<span class="code-xml-element-local-name">code</span>&gt; element, it may also contain a
+			&lt;<span class="code-xml-element-local-name">code</span>&gt;manifest&lt;/<span class="code-xml-element-local-name">code</span>&gt; element, in which case elements from the &lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+			element may "refine" elements from the manifest. It is assumed that the manifest is the
+			same as the one of the final package document. It makes most sense if at most one of the
+			documents on the 'source' port has a manifest.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'#default'"</span>/&gt;
 
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"log-conflicts"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'true'"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;Whether to create log messages when there are fields with the same property in
+			different documents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			&lt;<span class="code-xml-element-local-name">p</span>&gt;A single 'metadata' document in the OPF namespace, containing in 'merged'
-			metadata&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;A single &lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt; document in the OPF namespace, containing the merged
+			metadata, and possibly having a &lt;<span class="code-xml-element-local-name">code</span>&gt;prefix&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute. When the same metadata
+			(the same property) exists in multiple input documents, the first occurences
+			win. Elements that are not valid OPF 3 metadata elements are removed.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 
@@ -45,21 +54,20 @@
 		
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span>&gt;
 
-	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"metadata-with-single-prefix-attribute"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"implicit-output-prefixes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$reserved-prefixes"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-merge-prefix</span>&gt;
 
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
-		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"metadata-with-single-prefix-attribute"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"manifest"</span>/&gt;
-		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/create-metadata.merge.xsl" class="source">create-metadata.merge.xsl</a>"</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$reserved-prefixes"</span>&gt;
+			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"log-conflicts"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$log-conflicts"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;

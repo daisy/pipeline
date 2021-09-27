@@ -15,19 +15,30 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            The input document must be valid HTML (namespace "http://www.w3.org/1999/xhtml") or
-            DTBook ("http://www.daisy.org/z3986/2005/dtbook/"). The 'display', 'render-table-by' and
-            'table-header-policy' properties of elements in the input must be declared in
-            css:display, css:render-table-by and css:table-header-policy attributes.
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;The input document must be valid HTML (namespace "http://www.w3.org/1999/xhtml") or
+            DTBook ("http://www.daisy.org/z3986/2005/dtbook/"). The 'display', 'render-table-by',
+            'table-header-policy' and 'flow' properties of elements in the input must be declared in
+            css:display, css:render-table-by, css:table-header-policy and css:flow attributes. Style
+            attributes must be simple declaration lists, except for the table element which may also
+            have '::table-by()', '::list-item' and '::list-header' pseudo-elements. Properties with
+            value 'inherit' are not allowed.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            Each table element with a 'display' property not equal to 'table' and with a
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Each table element with a 'display' property not equal to 'table' and with a
             'render-table-by' property is rendered according to the axes specified in the
-            'render-table-by' property.
+            'render-table-by' property. The td and th elements are rearranged and put in a new tree
+            structure consisting of css:table-by, css:list-item and css:list-header elements. tr,
+            tbody, thead and tfoot elements are dropped. When a table header element is duplicated,
+            descendent css:id attributes are excluded, as are elements that are not part of the
+            normal flow. The style attributes of the css:table-by, css:list-item and css:list-header
+            elements are determined by the '::table-by()', '::list-item' and '::list-header'
+            pseudo-elements declared on the table element. Style attributes of th and td elements in
+            the output are transformed (or added) in such a way that the computed style in the
+            output equals the computed style of the element in the input.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
     

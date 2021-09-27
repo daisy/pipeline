@@ -195,9 +195,9 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">return</strong> t;
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 		}
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 		
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Transform&gt; java.lang.Iterable&lt;T&gt; logSelect(<strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> query,
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		                                                                    <strong class="jxr_keyword">final</strong> TransformProvider&lt;T&gt; provider,
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		                                                                    <strong class="jxr_keyword">final</strong> Logger context) {
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T <strong class="jxr_keyword">extends</strong> Transform&gt; Iterable&lt;T&gt; logSelect(<strong class="jxr_keyword">final</strong> <a href="/pipeline/modules/braille/common-utils/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> query,
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 		                                                          <strong class="jxr_keyword">final</strong> TransformProvider&lt;T&gt; provider,
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		                                                          <strong class="jxr_keyword">final</strong> Logger context) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;T&gt;() {
 <a class="jxr_linenumber" name="L193" href="#L193">193</a> 				<strong class="jxr_keyword">public</strong> Iterator&lt;T&gt; iterator() {
 <a class="jxr_linenumber" name="L194" href="#L194">194</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;T&gt;() {

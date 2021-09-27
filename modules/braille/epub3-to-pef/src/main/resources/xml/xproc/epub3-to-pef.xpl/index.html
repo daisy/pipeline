@@ -165,17 +165,29 @@ Style sheets, whether they're specified with the "stylesheets" option or associa
 may have parameters (variables in case of Sass). The "stylesheet-parameters" option can be used to
 set these parameters.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">braille-code</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">liblouis-table-query</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			<span property="name" content="Braille code">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Braille code&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content='Braille code to be used for braille transcription.
+
+If set, [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) is
+done with the selected braille code. If left empty, the braille code is determined by the document
+language and the "Transformer features" option.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Braille code to be used for braille transcription.
+
+If set, [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) is
+done with the selected braille code. If left empty, the braille code is determined by the document
+language and the "Transformer features" option.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">transform</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">transform-query</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="(translator:liblouis)(formatter:dotify)">'(translator:liblouis)(formatter:dotify)'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			<span property="name" content="Transformer query">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Transformer query&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="The transformer query.
+			<span property="name" content="Transformer features">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Transformer features&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content='Features of the braille transformer.
 
-A query for selecting the [braille
-transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) to be used for creating
-the paginated braille document from the CSS styled input document.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The transformer query.
+Features of the [braille transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+to be used for creating the paginated braille document from the CSS styled input document. Together
+with the "Braille code" option this determines the transformer that is selected.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Features of the braille transformer.
 
-A query for selecting the [braille
-transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) to be used for creating
-the paginated braille document from the CSS styled input document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+Features of the [braille transformer](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+to be used for creating the paginated braille document from the CSS styled input document. Together
+with the "Braille code" option this determines the transformer that is selected.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">include-preview</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Include preview">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Include preview&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -214,11 +226,10 @@ use the 'width' feature, and makes the variable `$page-width` available in style
 
 See the CSS specification for more info:
 
-- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule"></span></span></span>
-</div></body>
-<html><p>xA;- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
+- the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+- the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
-"&gt;&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The number of columns available for printing.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;The number of columns available for printing.
 
 Sets the default page width (this can be overwritten with `@page` rules), affects media queries that
 use the 'width' feature, and makes the variable `$page-width` available in style sheets.
@@ -228,8 +239,8 @@ See the CSS specification for more info:
 - the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
 - the [`size`](http://braillespecs.github.io/braille-css/#the-size-property) property
 - the [page dimensions media features](https://www.w3.org/TR/mediaqueries-4/#mf-dimensions)
-&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">page-height</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">integer</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="25">'25'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Page layout: Page height">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Page layout: Page height&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
             <span property="desc" content="The number of rows available for printing.
@@ -849,6 +860,14 @@ See the CSS specification for more info:
 - the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
 &lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">toc-exclude-class</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">string</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Table of contents: Exclude headings">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Table of contents: Exclude headings&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Class name for excluding headings from the table of contents.
+
+If specified, heading elements with this class name are excluded from the generated tables of contents.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Class name for excluding headings from the table of contents.
+
+If specified, heading elements with this class name are excluded from the generated tables of contents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">maximum-number-of-sheets</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">integer</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="70">'70'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Volumes: Maximum number of sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Volumes: Maximum number of sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
             <span property="desc" content="The maximum number of sheets in a volume.
@@ -903,6 +922,141 @@ is given. A higher value results in volumes that are less equal in size.">&lt;<s
 The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference
 is given. A higher value results in volumes that are less equal in size.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">notes-placement</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="end-of-book">'end-of-book'</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;<span rel="data-type"><span typeof="data-type" id="data-type-notes-placement" resource="../epub3-to-pef.xpl#data-type-notes-placement"><link rel="doc" href="#data-type-notes-placement">
+<span property="id" content="px:epub3-to-pef.script-notes-placement"><span property="definition" content='
+                &lt;choice&gt;
+                    &lt;value&gt;bottom-of-page&lt;/value&gt;
+                    &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the bottom of the page
+
+Notes are rendered in the [`@footnotes`](http://braillespecs.github.io/braille-css/#the-footnotes-area)
+area of the page on which they occur.
+
+There is a built-in fallback mechanism: if a note does not fit on a page, e.g. because it is too
+big, or there are too many other notes on that page, all notes in the whole book will be rendered at
+the end of the volume in which they occur.
+
+The footnotes area can be styled using a `@footnotes` rule. Example:
+
+~~~css
+@page {
+   @footnotes {
+      border-top: ⠤;
+      max-height: 20;
+   }
+}
+~~~
+&lt;/documentation&gt;
+                    &lt;value&gt;end-of-volume&lt;/value&gt;
+                    &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the volume
+
+Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+the volume in which they occur.
+&lt;/documentation&gt;
+                    &lt;value&gt;end-of-book&lt;/value&gt;
+                    &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the book
+
+Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+the last volume.
+
+Notes can be grouped by volume using a
+[`#endnotes-section::-obfl-on-volume-start`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-list-of-references)
+rule. Example:
+
+~~~css
+#endnotes-section::-obfl-on-volume-start {
+   content: "Notes in volume " -obfl-evaluate("$started-volume-number");
+   margin: 1 0;
+}
+~~~
+&lt;/documentation&gt;
+                &lt;/choice&gt;
+            '>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">choice</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;bottom-of-page&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;At the bottom of the page
+
+Notes are rendered in the [`@footnotes`](http://braillespecs.github.io/braille-css/#the-footnotes-area)
+area of the page on which they occur.
+
+There is a built-in fallback mechanism: if a note does not fit on a page, e.g. because it is too
+big, or there are too many other notes on that page, all notes in the whole book will be rendered at
+the end of the volume in which they occur.
+
+The footnotes area can be styled using a `@footnotes` rule. Example:
+
+~~~css
+@page {
+   @footnotes {
+      border-top: ⠤;
+      max-height: 20;
+   }
+}
+~~~
+&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;end-of-volume&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;At the end of the volume
+
+Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+the volume in which they occur.
+&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;end-of-book&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;At the end of the book
+
+Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+the last volume.
+
+Notes can be grouped by volume using a
+[`#endnotes-section::-obfl-on-volume-start`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-list-of-references)
+rule. Example:
+
+~~~css
+#endnotes-section::-obfl-on-volume-start {
+   content: "Notes in volume " -obfl-evaluate("$started-volume-number");
+   margin: 1 0;
+}
+~~~
+&lt;/<span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;</span><span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Placement of content: Notes placement">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Placement of content: Notes placement&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Placement of notes
+
+Notes, i.e. elements that are referenced by an element with `epub:type` &quot;noteref&quot;, can be rendered
+either at the bottom of the page on which they occur (on which they are referenced), at the end of
+the volume in which they occur, or at the end of the book. Elements with `epub:type` &quot;note&quot;,
+&quot;footnote&quot;, &quot;endnote&quot; or &quot;rearnote&quot; that are not referenced by a noteref are not rendered.
+
+Note references and notes can be styled using `a[epub|type~='noteref']` and
+`a[epub|type~='noteref']::alternate` rules, respectively. A title can be inserted at the beginning
+of an endnotes section using a `#endnotes-section::-obfl-on-collection-start` rule. Example:
+
+~~~css
+#endnotes-section::-obfl-on-collection-start {
+   content: &quot;Notes in this volume&quot;;
+   text-align: center;
+   margin-bottom: 1;
+}
+~~~
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Placement of notes
+
+Notes, i.e. elements that are referenced by an element with `epub:type` "noteref", can be rendered
+either at the bottom of the page on which they occur (on which they are referenced), at the end of
+the volume in which they occur, or at the end of the book. Elements with `epub:type` "note",
+"footnote", "endnote" or "rearnote" that are not referenced by a noteref are not rendered.
+
+Note references and notes can be styled using `a[epub|type~='noteref']` and
+`a[epub|type~='noteref']::alternate` rules, respectively. A title can be inserted at the beginning
+of an endnotes section using a `#endnotes-section::-obfl-on-collection-start` rule. Example:
+
+~~~css
+#endnotes-section::-obfl-on-collection-start {
+   content: "Notes in this volume";
+   text-align: center;
+   margin-bottom: 1;
+}
+~~~
+&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">pef-output-dir</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output</span>=<span class="code-xml-attribute-value">"result"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyDirURI"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/x-pef+xml</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="PEF">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;PEF&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
 			<span property="desc" content="The PEF.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The PEF.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
@@ -956,7 +1110,7 @@ is given. A higher value results in volumes that are less equal in size.&lt;/<sp
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">in-scope-names</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Collecting parameters"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"epub                                            preamble                                            stylesheet                                            stylesheet-parameters                                            apply-document-specific-stylesheets                                            transform                                            ascii-table                                            ascii-file-format                                            include-brf                                            include-preview                                            include-obfl                                            pef-output-dir                                            brf-output-dir                                            preview-output-dir                                            obfl-output-dir                                            temp-dir"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">delete-parameters</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"input-options"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Collecting parameters"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">parameter-names</span>=<span class="code-xml-attribute-value">"epub                                            preamble                                            stylesheet                                            stylesheet-parameters                                            apply-document-specific-stylesheets                                            transform                                            braille-code                                            ascii-table                                            ascii-file-format                                            include-brf                                            include-preview                                            include-obfl                                            pef-output-dir                                            brf-output-dir                                            preview-output-dir                                            obfl-output-dir                                            temp-dir"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"in-scope-names"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
@@ -1009,7 +1163,7 @@ is given. A higher value results in volumes that are less equal in size.&lt;/<sp
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$stylesheet"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"apply-document-specific-stylesheets"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$apply-document-specific-stylesheets"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$transform"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"include-obfl"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$include-obfl"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"input-options"</span>/&gt;
@@ -1027,7 +1181,7 @@ is given. A higher value results in volumes that are less equal in size.&lt;/<sp
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*/@xml:base"</span>/&gt;
-    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-to-pef.store</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Storing PEF"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-to-pef.store</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Storing results"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"epub"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$epub"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"opf"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"opf"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
@@ -1045,5 +1199,5 @@ is given. A higher value results in volumes that are less equal in size.&lt;/<sp
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"obfl-output-dir"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$obfl-output-dir"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">epub3-to-pef.store</span>&gt;
     
-&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</p></html>
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
 </html>

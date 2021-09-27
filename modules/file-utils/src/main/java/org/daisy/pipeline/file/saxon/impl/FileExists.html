@@ -63,8 +63,8 @@
 <a class="jxr_linenumber" name="L54" href="#L54">54</a>  					<strong class="jxr_keyword">boolean</strong> result = (path.isEmpty()) ? <strong class="jxr_keyword">true</strong> : <strong class="jxr_keyword">new</strong> File(path)
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  							.exists();
 <a class="jxr_linenumber" name="L56" href="#L56">56</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> BooleanValue(result, BuiltInAtomicType.BOOLEAN);
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XPathException(<span class="jxr_string">"pf:file-exists failed"</span>, e);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  				} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XPathException(<span class="jxr_string">"Unexpected error in pf:file-exists"</span>, e);
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  				}
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  			}
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  		};

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">fileset-join {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/fileset-utils/src/main/resources/xml/xproc/fileset-join.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">fileset-join</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Join zero or more <code>d:fileset</code> documents into a single one. The joint
+    <code>xml:base</code> is the longest common URI of all the <code>xml:base</code> attributes. If
+    an input fileset does not have an <code>xml:base</code> or if it is not a "file:" URI, it does
+    not contribute to the new base. If none of the input fileset have an <code>xml:base</code> the
+    joint fileset has no <code>xml:base</code> either. The <code>href</code> and
+    <code>original-href</code> attributes are normalized. <code>href</code> are relativized against
+    the new base, and <code>original-href</code> are made absolute. <code>@xml:base</code>
+    attributes are removed from <code>d:file</code>. Files that have the same resolved
+    <code>href</code> are merged, i.e. their attributes are combined. In case of conflicting
+    attributes the last occurence wins.</p>
+<code xmlns:xd="http://github.com/vojtechtoman/xprocdoc">href</code><div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/fileset-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary sequence</span>
+</td>
+<td></td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr></tbody>
+</table>
+</body>
+</html>

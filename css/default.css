@@ -1,724 +1,174 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Lato:300,400,700");
-:root {
-  font-family: "Lato", sans-serif;
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 1.5em; }
+:root { font-family: "Lato", sans-serif; font-size: 14px; font-weight: 300; line-height: 1.5em; }
 
-code,
-.CodeRay {
-  font-family: monospace;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.3em; }
+code, .CodeRay { font-family: monospace; font-size: 14px; font-weight: 400; line-height: 1.3em; }
 
-h1 {
-  font-size: 220%;
-  font-weight: 700;
-  line-height: 5rem;
-  margin-left: -.5em;
-  padding-left: .5em;
-  border-top: 1px solid silver;
-  border-bottom: 1px solid silver;
-  color: #ee7733;
-  letter-spacing: .01em;
-  background-color: #f9fbff; }
+h1 { font-size: 220%; font-weight: 700; line-height: 5rem; margin-left: -.5em; padding-left: .5em; border-top: 1px solid silver; border-bottom: 1px solid silver; color: #ee7733; letter-spacing: .01em; background-color: #f9fbff; }
 
-h2 {
-  color: #e09800; }
+h2 { color: #e09800; }
 
-h3 {
-  color: #b27900; }
+h3 { color: #b27900; }
 
-h4 {
-  color: #7a5300; }
+h4 { color: #7a5300; }
 
-li > p {
-  margin: 7px 0; }
+li > p { margin: 7px 0; }
 
-b {
-  font-weight: 600; }
+b { font-weight: 600; }
 
-a,
-[role=link] {
-  font-weight: 400;
-  color: #01797e; }
-  a:visited,
-  [role=link]:visited {
-    color: #01797e; }
-  a.external-link::after,
-  [role=link].external-link::after {
-    content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=); }
-  a.broken-link,
-  [role=link].broken-link {
-    text-decoration: line-through; }
-  a:focus,
-  [role=link]:focus {
-    color: #ff7711; }
-  a:hover,
-  [role=link]:hover {
-    cursor: pointer; }
-  a > code,
-  [role=link] > code {
-    color: inherit; }
+a, [role=link] { font-weight: 400; color: #01797e; }
 
-code,
-.CodeRay {
-  background-color: #f9fbff;
-  border: 1px solid #e6e6e6; }
+a:visited, [role=link]:visited { color: #01797e; }
 
-span.CodeRay,
-code {
-  white-space: pre;
-  color: #003377;
-  border-radius: .2rem;
-  padding: 1px 4px; }
+a.external-link::after, .external-link[role=link]::after { content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=); }
 
-.CodeRay,
-pre > code {
-  display: block;
-  border-radius: .3rem;
-  padding: 9px 11px;
-  overflow-x: auto; }
+a.broken-link, .broken-link[role=link] { text-decoration: line-through; }
 
-pre {
-  margin: 0; }
+a:focus, [role=link]:focus { color: #ff7711; }
 
-section.important {
-  background-color: #f7f7ff;
-  margin-left: -1rem;
-  padding: .7rem 1rem;
-  border-radius: .5rem;
-  border: 1px solid silver; }
-  section.important h2 {
-    color: #ff5500;
-    font-size: 180%; }
+a:hover, [role=link]:hover { cursor: pointer; }
 
-nav ul.spine ul.spine {
-  display: none; }
-  nav ul.spine ul.spine.spine-has-current {
-    display: block; }
-nav li.spine-item.spine-item-current > ul.spine {
-  display: block; }
+a > code, [role=link] > code { color: inherit; }
 
-html {
-  margin: 0; }
+code, .CodeRay { background-color: #f9fbff; border: 1px solid #e6e6e6; }
 
-body {
-  margin: 0 2rem 3rem 0; }
+span.CodeRay, code { white-space: pre; color: #003377; border-radius: .2rem; padding: 1px 4px; }
 
-#body {
-  margin: 0 auto;
-  position: relative;
-  padding-top: 7.5rem;
-  padding-left: 17rem; }
-  #body::before {
-    display: block;
-    content: ' ';
-    position: absolute;
-    left: 2.5rem;
-    top: 1rem;
-    width: 11em;
-    height: 11em;
-    background-image: url("/pipeline/css/logo.png");
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    z-index: 1; }
+.CodeRay, pre > code { display: block; border-radius: .3rem; padding: 9px 11px; overflow-x: auto; }
 
-#nav-sitemap {
-  position: absolute;
-  left: 13.5rem;
-  top: 13.5rem;
-  width: 50rem;
-  /* > ul.spine */ }
-  #nav-sitemap > ul.spine {
-    position: absolute;
-    top: -10rem;
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 0; }
-    #nav-sitemap > ul.spine ul {
-      list-style-type: none;
-      padding-left: 0; }
-    #nav-sitemap > ul.spine a {
-      text-decoration: none;
-      font-weight: 300;
-      color: inherit; }
-      #nav-sitemap > ul.spine a:visited {
-        color: inherit; }
-      #nav-sitemap > ul.spine a.external-link::after {
-        content: none; }
-    #nav-sitemap > ul.spine .spine-item-current > a {
-      cursor: default; }
-    #nav-sitemap > ul.spine > li {
-      display: block;
-      margin: .9375rem;
-      float: left; }
-      #nav-sitemap > ul.spine > li > a {
-        display: block;
-        padding: .43rem .625rem .37rem .625rem;
-        border-radius: .5rem;
-        font-weight: 600;
-        text-transform: uppercase; }
-        #nav-sitemap > ul.spine > li > a:hover, #nav-sitemap > ul.spine > li > a:focus {
-          background-color: #e5ebff; }
-      #nav-sitemap > ul.spine > li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > a, #nav-sitemap > ul.spine > li.spine-item-has-current > a {
-        background-color: #416DF2;
-        color: white; }
-      #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"] {
-        width: 68.25px;
-        height: 71.5px;
-        padding: 0;
-        margin: 0 .5em;
-        color: transparent;
-        background-image: url("/pipeline/css/daisy_uppercase_shadow.png");
-        background-size: 100% 200%;
-        background-repeat: no-repeat;
-        position: relative;
-        top: -1.4em; }
-        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:hover, #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus {
-          background-position-y: -71.5px;
-          background-color: initial; }
-        #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus {
-          outline: 1px dotted black; }
-      #nav-sitemap > ul.spine > li.spine-item-current > ul,
-      #nav-sitemap > ul.spine > li > ul.spine-has-current {
-        position: absolute;
-        left: -12.8rem;
-        top: 10.4rem;
-        width: 13rem;
-        margin-right: .5rem;
-        padding-right: .625rem;
-        padding-top: 0.625rem;
-        overflow-x: hidden; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li ul,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li ul {
-          margin-left: .31rem; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li > a {
-          display: block;
-          width: 100%;
-          padding-top: .625rem;
-          padding-bottom: .625rem;
-          padding-left: .625rem;
-          padding-right: .625rem;
-          background-color: #f9fbff;
-          border-left: .07rem solid #cccccc; }
-          #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover, #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:focus,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:focus {
-            background-color: #e5ebff; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > a,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:active,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > a {
-          background-color: #416DF2;
-          color: white;
-          border-left: none;
-          padding-left: 0.725rem; }
-        #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul,
-        #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul {
-          margin-left: 0;
-          border-left: 0.38rem solid #416DF2; }
-          #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul li > a,
-          #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul li > a {
-            border-left: none; }
-  #nav-sitemap.fixed > ul.spine > li.spine-item-current > ul,
-  #nav-sitemap.fixed > ul.spine > li > ul.spine-has-current {
-    position: fixed;
-    top: 0.4rem;
-    left: 0.7rem; }
+pre { margin: 0; }
+
+section.important { background-color: #f7f7ff; margin-left: -1rem; padding: .7rem 1rem; border-radius: .5rem; border: 1px solid silver; }
+
+section.important h2 { color: #ff5500; font-size: 180%; }
+
+nav ul.spine ul.spine { display: none; }
+
+nav ul.spine ul.spine.spine-has-current { display: block; }
+
+nav li.spine-item.spine-item-current > ul.spine { display: block; }
+
+html { margin: 0; }
+
+body { margin: 0 2rem 3rem 0; }
+
+#body { margin: 0 auto; position: relative; padding-top: 7.5rem; padding-left: 17rem; }
+
+#body::before { display: block; content: ' '; position: absolute; left: 2.5rem; top: 1rem; width: 11em; height: 11em; background-image: url("/pipeline/css/logo.png"); background-repeat: no-repeat; background-size: 100% 100%; z-index: 1; }
+
+#nav-sitemap { position: absolute; left: 13.5rem; top: 13.5rem; width: 50rem; /* > ul.spine */ }
+
+#nav-sitemap > ul.spine { position: absolute; top: -10rem; list-style-type: none; padding-left: 0; margin-top: 0; }
+
+#nav-sitemap > ul.spine ul { list-style-type: none; padding-left: 0; }
+
+#nav-sitemap > ul.spine a { text-decoration: none; font-weight: 300; color: inherit; }
+
+#nav-sitemap > ul.spine a:visited { color: inherit; }
+
+#nav-sitemap > ul.spine a.external-link::after { content: none; }
+
+#nav-sitemap > ul.spine .spine-item-current > a { cursor: default; }
+
+#nav-sitemap > ul.spine > li { display: block; margin: .9375rem; float: left; }
+
+#nav-sitemap > ul.spine > li > a { display: block; padding: .43rem .625rem .37rem .625rem; border-radius: .5rem; font-weight: 600; text-transform: uppercase; }
+
+#nav-sitemap > ul.spine > li > a:hover, #nav-sitemap > ul.spine > li > a:focus { background-color: #e5ebff; }
+
+#nav-sitemap > ul.spine > li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > a, #nav-sitemap > ul.spine > li.spine-item-has-current > a { background-color: #416DF2; color: white; }
+
+#nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"] { width: 68.25px; height: 71.5px; padding: 0; margin: 0 .5em; color: transparent; background-image: url("/pipeline/css/daisy_uppercase_shadow.png"); background-size: 100% 200%; background-repeat: no-repeat; position: relative; top: -1.4em; }
+
+#nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:hover, #nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus { background-position-y: -71.5px; background-color: initial; }
+
+#nav-sitemap > ul.spine > li > a[href="http://www.daisy.org"]:focus { outline: 1px dotted black; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul, #nav-sitemap > ul.spine > li > ul.spine-has-current { position: absolute; left: -12.8rem; top: 10.4rem; width: 13rem; margin-right: .5rem; padding-right: .625rem; padding-top: 0.625rem; overflow-x: hidden; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li ul, #nav-sitemap > ul.spine > li > ul.spine-has-current li ul { margin-left: .31rem; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li > a, #nav-sitemap > ul.spine > li > ul.spine-has-current li > a { display: block; width: 100%; padding-top: .625rem; padding-bottom: .625rem; padding-left: .625rem; padding-right: .625rem; background-color: #f9fbff; border-left: .07rem solid #cccccc; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li > a:hover, #nav-sitemap > ul.spine > li.spine-item-current > ul li > a:focus, #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:hover, #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:focus { background-color: #e5ebff; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li > a:active, #nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > a, #nav-sitemap > ul.spine > li > ul.spine-has-current li > a:active, #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > a { background-color: #416DF2; color: white; border-left: none; padding-left: 0.725rem; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul, #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul { margin-left: 0; border-left: 0.38rem solid #416DF2; }
+
+#nav-sitemap > ul.spine > li.spine-item-current > ul li.spine-item-current > ul li > a, #nav-sitemap > ul.spine > li > ul.spine-has-current li.spine-item-current > ul li > a { border-left: none; }
+
+#nav-sitemap.fixed > ul.spine > li.spine-item-current > ul, #nav-sitemap.fixed > ul.spine > li > ul.spine-has-current { position: fixed; top: 0.4rem; left: 0.7rem; }
 
 /* #nav-sitemap */
-.edit-button {
-  position: absolute;
-  right: 10px;
-  top: 10.625rem;
-  font-size: 80%; }
+.edit-button { position: absolute; right: 10px; top: 10.625rem; font-size: 80%; }
 
-.gui-synopsis, .cli-synopsis {
-  position: relative; }
-  .gui-synopsis.hidden, .cli-synopsis.hidden {
-    display: none; }
+.gui-synopsis, .cli-synopsis { position: relative; }
 
-.cli-synopsis {
-  background-color: #f9fbff;
-  border: 1px solid #e6e6e6;
-  border-radius: .2rem;
-  padding: 9px 11px; }
-  .cli-synopsis > pre,
-  .cli-synopsis > table {
-    font-family: monospace;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.3em;
-    color: #003377; }
-  .cli-synopsis code {
-    background-color: initial;
-    border: initial;
-    padding: 0; }
-  .cli-synopsis .synopsis-option-default code:empty::after, .cli-synopsis .synopsis-option-default code:empty::before, .cli-synopsis .synopsis-option-default code.contains-space::after, .cli-synopsis .synopsis-option-default code.contains-space::before {
-    content: "'"; }
-  .cli-synopsis td {
-    vertical-align: top; }
-    .cli-synopsis td:first-child {
-      white-space: pre;
-      padding-left: 3em;
-      padding-right: 1em; }
+.gui-synopsis.hidden, .cli-synopsis.hidden { display: none; }
 
-.toggle-synopsis-button {
-  position: absolute;
-  right: 1rem;
-  top: -2.5rem; }
-  .gui-synopsis .toggle-synopsis-button::before {
-    content: 'Switch to CLI view'; }
-  .cli-synopsis .toggle-synopsis-button::before {
-    content: 'Switch to GUI view'; }
+.cli-synopsis { background-color: #f9fbff; border: 1px solid #e6e6e6; border-radius: .2rem; padding: 9px 11px; }
 
-.synopsis-inputs,
-.synopsis-outputs,
-.synopsis-reports,
-.synopsis-options {
-  list-style-type: none;
-  padding-left: 1rem;
-  margin: 0; }
-  .synopsis-inputs .synopsis-input,
-  .synopsis-inputs .synopsis-output,
-  .synopsis-inputs .synopsis-report,
-  .synopsis-inputs .synopsis-option,
-  .synopsis-outputs .synopsis-input,
-  .synopsis-outputs .synopsis-output,
-  .synopsis-outputs .synopsis-report,
-  .synopsis-outputs .synopsis-option,
-  .synopsis-reports .synopsis-input,
-  .synopsis-reports .synopsis-output,
-  .synopsis-reports .synopsis-report,
-  .synopsis-reports .synopsis-option,
-  .synopsis-options .synopsis-input,
-  .synopsis-options .synopsis-output,
-  .synopsis-options .synopsis-report,
-  .synopsis-options .synopsis-option {
-    position: relative;
-    border-top: 1px solid #FFCE65;
-    border-left: 1px solid #FFCE65;
-    border-bottom: 1px solid white;
-    border-radius: .2rem; }
-    .synopsis-inputs .synopsis-input.details-off:hover,
-    .synopsis-inputs .synopsis-output.details-off:hover,
-    .synopsis-inputs .synopsis-report.details-off:hover,
-    .synopsis-inputs .synopsis-option.details-off:hover,
-    .synopsis-outputs .synopsis-input.details-off:hover,
-    .synopsis-outputs .synopsis-output.details-off:hover,
-    .synopsis-outputs .synopsis-report.details-off:hover,
-    .synopsis-outputs .synopsis-option.details-off:hover,
-    .synopsis-reports .synopsis-input.details-off:hover,
-    .synopsis-reports .synopsis-output.details-off:hover,
-    .synopsis-reports .synopsis-report.details-off:hover,
-    .synopsis-reports .synopsis-option.details-off:hover,
-    .synopsis-options .synopsis-input.details-off:hover,
-    .synopsis-options .synopsis-output.details-off:hover,
-    .synopsis-options .synopsis-report.details-off:hover,
-    .synopsis-options .synopsis-option.details-off:hover {
-      background-color: #fff9ec;
-      cursor: pointer; }
-    .synopsis-inputs .synopsis-input.details-off .synopsis-input-desc .longdesc,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-input-media-type,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-input-sequence,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-output-desc .longdesc,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-output-media-type,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-report-desc .longdesc,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-option-desc .longdesc,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-option-data-type,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-option-default,
-    .synopsis-inputs .synopsis-input.details-off .synopsis-option-required,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-input-desc .longdesc,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-input-media-type,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-input-sequence,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-output-desc .longdesc,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-output-media-type,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-report-desc .longdesc,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-option-desc .longdesc,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-option-data-type,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-option-default,
-    .synopsis-inputs .synopsis-output.details-off .synopsis-option-required,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-input-desc .longdesc,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-input-media-type,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-input-sequence,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-output-desc .longdesc,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-output-media-type,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-report-desc .longdesc,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-option-desc .longdesc,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-option-data-type,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-option-default,
-    .synopsis-inputs .synopsis-report.details-off .synopsis-option-required,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-input-desc .longdesc,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-input-media-type,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-input-sequence,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-output-desc .longdesc,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-output-media-type,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-report-desc .longdesc,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-option-desc .longdesc,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-option-data-type,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-option-default,
-    .synopsis-inputs .synopsis-option.details-off .synopsis-option-required,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-input-desc .longdesc,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-input-media-type,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-input-sequence,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-output-desc .longdesc,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-output-media-type,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-report-desc .longdesc,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-option-desc .longdesc,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-option-data-type,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-option-default,
-    .synopsis-outputs .synopsis-input.details-off .synopsis-option-required,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-input-desc .longdesc,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-input-media-type,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-input-sequence,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-output-desc .longdesc,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-output-media-type,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-report-desc .longdesc,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-option-desc .longdesc,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-option-data-type,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-option-default,
-    .synopsis-outputs .synopsis-output.details-off .synopsis-option-required,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-input-desc .longdesc,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-input-media-type,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-input-sequence,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-output-desc .longdesc,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-output-media-type,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-report-desc .longdesc,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-option-desc .longdesc,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-option-data-type,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-option-default,
-    .synopsis-outputs .synopsis-report.details-off .synopsis-option-required,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-input-desc .longdesc,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-input-media-type,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-input-sequence,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-output-desc .longdesc,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-output-media-type,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-report-desc .longdesc,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-option-desc .longdesc,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-option-data-type,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-option-default,
-    .synopsis-outputs .synopsis-option.details-off .synopsis-option-required,
-    .synopsis-reports .synopsis-input.details-off .synopsis-input-desc .longdesc,
-    .synopsis-reports .synopsis-input.details-off .synopsis-input-media-type,
-    .synopsis-reports .synopsis-input.details-off .synopsis-input-sequence,
-    .synopsis-reports .synopsis-input.details-off .synopsis-output-desc .longdesc,
-    .synopsis-reports .synopsis-input.details-off .synopsis-output-media-type,
-    .synopsis-reports .synopsis-input.details-off .synopsis-report-desc .longdesc,
-    .synopsis-reports .synopsis-input.details-off .synopsis-option-desc .longdesc,
-    .synopsis-reports .synopsis-input.details-off .synopsis-option-data-type,
-    .synopsis-reports .synopsis-input.details-off .synopsis-option-default,
-    .synopsis-reports .synopsis-input.details-off .synopsis-option-required,
-    .synopsis-reports .synopsis-output.details-off .synopsis-input-desc .longdesc,
-    .synopsis-reports .synopsis-output.details-off .synopsis-input-media-type,
-    .synopsis-reports .synopsis-output.details-off .synopsis-input-sequence,
-    .synopsis-reports .synopsis-output.details-off .synopsis-output-desc .longdesc,
-    .synopsis-reports .synopsis-output.details-off .synopsis-output-media-type,
-    .synopsis-reports .synopsis-output.details-off .synopsis-report-desc .longdesc,
-    .synopsis-reports .synopsis-output.details-off .synopsis-option-desc .longdesc,
-    .synopsis-reports .synopsis-output.details-off .synopsis-option-data-type,
-    .synopsis-reports .synopsis-output.details-off .synopsis-option-default,
-    .synopsis-reports .synopsis-output.details-off .synopsis-option-required,
-    .synopsis-reports .synopsis-report.details-off .synopsis-input-desc .longdesc,
-    .synopsis-reports .synopsis-report.details-off .synopsis-input-media-type,
-    .synopsis-reports .synopsis-report.details-off .synopsis-input-sequence,
-    .synopsis-reports .synopsis-report.details-off .synopsis-output-desc .longdesc,
-    .synopsis-reports .synopsis-report.details-off .synopsis-output-media-type,
-    .synopsis-reports .synopsis-report.details-off .synopsis-report-desc .longdesc,
-    .synopsis-reports .synopsis-report.details-off .synopsis-option-desc .longdesc,
-    .synopsis-reports .synopsis-report.details-off .synopsis-option-data-type,
-    .synopsis-reports .synopsis-report.details-off .synopsis-option-default,
-    .synopsis-reports .synopsis-report.details-off .synopsis-option-required,
-    .synopsis-reports .synopsis-option.details-off .synopsis-input-desc .longdesc,
-    .synopsis-reports .synopsis-option.details-off .synopsis-input-media-type,
-    .synopsis-reports .synopsis-option.details-off .synopsis-input-sequence,
-    .synopsis-reports .synopsis-option.details-off .synopsis-output-desc .longdesc,
-    .synopsis-reports .synopsis-option.details-off .synopsis-output-media-type,
-    .synopsis-reports .synopsis-option.details-off .synopsis-report-desc .longdesc,
-    .synopsis-reports .synopsis-option.details-off .synopsis-option-desc .longdesc,
-    .synopsis-reports .synopsis-option.details-off .synopsis-option-data-type,
-    .synopsis-reports .synopsis-option.details-off .synopsis-option-default,
-    .synopsis-reports .synopsis-option.details-off .synopsis-option-required,
-    .synopsis-options .synopsis-input.details-off .synopsis-input-desc .longdesc,
-    .synopsis-options .synopsis-input.details-off .synopsis-input-media-type,
-    .synopsis-options .synopsis-input.details-off .synopsis-input-sequence,
-    .synopsis-options .synopsis-input.details-off .synopsis-output-desc .longdesc,
-    .synopsis-options .synopsis-input.details-off .synopsis-output-media-type,
-    .synopsis-options .synopsis-input.details-off .synopsis-report-desc .longdesc,
-    .synopsis-options .synopsis-input.details-off .synopsis-option-desc .longdesc,
-    .synopsis-options .synopsis-input.details-off .synopsis-option-data-type,
-    .synopsis-options .synopsis-input.details-off .synopsis-option-default,
-    .synopsis-options .synopsis-input.details-off .synopsis-option-required,
-    .synopsis-options .synopsis-output.details-off .synopsis-input-desc .longdesc,
-    .synopsis-options .synopsis-output.details-off .synopsis-input-media-type,
-    .synopsis-options .synopsis-output.details-off .synopsis-input-sequence,
-    .synopsis-options .synopsis-output.details-off .synopsis-output-desc .longdesc,
-    .synopsis-options .synopsis-output.details-off .synopsis-output-media-type,
-    .synopsis-options .synopsis-output.details-off .synopsis-report-desc .longdesc,
-    .synopsis-options .synopsis-output.details-off .synopsis-option-desc .longdesc,
-    .synopsis-options .synopsis-output.details-off .synopsis-option-data-type,
-    .synopsis-options .synopsis-output.details-off .synopsis-option-default,
-    .synopsis-options .synopsis-output.details-off .synopsis-option-required,
-    .synopsis-options .synopsis-report.details-off .synopsis-input-desc .longdesc,
-    .synopsis-options .synopsis-report.details-off .synopsis-input-media-type,
-    .synopsis-options .synopsis-report.details-off .synopsis-input-sequence,
-    .synopsis-options .synopsis-report.details-off .synopsis-output-desc .longdesc,
-    .synopsis-options .synopsis-report.details-off .synopsis-output-media-type,
-    .synopsis-options .synopsis-report.details-off .synopsis-report-desc .longdesc,
-    .synopsis-options .synopsis-report.details-off .synopsis-option-desc .longdesc,
-    .synopsis-options .synopsis-report.details-off .synopsis-option-data-type,
-    .synopsis-options .synopsis-report.details-off .synopsis-option-default,
-    .synopsis-options .synopsis-report.details-off .synopsis-option-required,
-    .synopsis-options .synopsis-option.details-off .synopsis-input-desc .longdesc,
-    .synopsis-options .synopsis-option.details-off .synopsis-input-media-type,
-    .synopsis-options .synopsis-option.details-off .synopsis-input-sequence,
-    .synopsis-options .synopsis-option.details-off .synopsis-output-desc .longdesc,
-    .synopsis-options .synopsis-option.details-off .synopsis-output-media-type,
-    .synopsis-options .synopsis-option.details-off .synopsis-report-desc .longdesc,
-    .synopsis-options .synopsis-option.details-off .synopsis-option-desc .longdesc,
-    .synopsis-options .synopsis-option.details-off .synopsis-option-data-type,
-    .synopsis-options .synopsis-option.details-off .synopsis-option-default,
-    .synopsis-options .synopsis-option.details-off .synopsis-option-required {
-      display: none; }
-    .synopsis-inputs .synopsis-input.details-on,
-    .synopsis-inputs .synopsis-output.details-on,
-    .synopsis-inputs .synopsis-report.details-on,
-    .synopsis-inputs .synopsis-option.details-on,
-    .synopsis-outputs .synopsis-input.details-on,
-    .synopsis-outputs .synopsis-output.details-on,
-    .synopsis-outputs .synopsis-report.details-on,
-    .synopsis-outputs .synopsis-option.details-on,
-    .synopsis-reports .synopsis-input.details-on,
-    .synopsis-reports .synopsis-output.details-on,
-    .synopsis-reports .synopsis-report.details-on,
-    .synopsis-reports .synopsis-option.details-on,
-    .synopsis-options .synopsis-input.details-on,
-    .synopsis-options .synopsis-output.details-on,
-    .synopsis-options .synopsis-report.details-on,
-    .synopsis-options .synopsis-option.details-on {
-      background-color: #ffefce;
-      border-right: 1px solid #FFCE65;
-      border-bottom: 1px solid #FFCE65; }
-      .synopsis-inputs .synopsis-input.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-inputs .synopsis-input.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-inputs .synopsis-input.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-inputs .synopsis-input.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-inputs .synopsis-output.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-inputs .synopsis-output.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-inputs .synopsis-output.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-inputs .synopsis-output.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-inputs .synopsis-report.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-inputs .synopsis-report.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-inputs .synopsis-report.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-inputs .synopsis-report.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-inputs .synopsis-option.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-inputs .synopsis-option.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-inputs .synopsis-option.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-inputs .synopsis-option.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-outputs .synopsis-input.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-outputs .synopsis-input.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-outputs .synopsis-input.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-outputs .synopsis-input.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-outputs .synopsis-output.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-outputs .synopsis-output.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-outputs .synopsis-output.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-outputs .synopsis-output.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-outputs .synopsis-report.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-outputs .synopsis-report.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-outputs .synopsis-report.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-outputs .synopsis-report.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-outputs .synopsis-option.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-outputs .synopsis-option.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-outputs .synopsis-option.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-outputs .synopsis-option.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-reports .synopsis-input.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-reports .synopsis-input.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-reports .synopsis-input.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-reports .synopsis-input.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-reports .synopsis-output.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-reports .synopsis-output.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-reports .synopsis-output.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-reports .synopsis-output.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-reports .synopsis-report.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-reports .synopsis-report.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-reports .synopsis-report.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-reports .synopsis-report.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-reports .synopsis-option.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-reports .synopsis-option.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-reports .synopsis-option.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-reports .synopsis-option.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-options .synopsis-input.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-options .synopsis-input.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-options .synopsis-input.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-options .synopsis-input.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-options .synopsis-output.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-options .synopsis-output.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-options .synopsis-output.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-options .synopsis-output.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-options .synopsis-report.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-options .synopsis-report.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-options .synopsis-report.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-options .synopsis-report.details-on .synopsis-option-desc .shortdesc,
-      .synopsis-options .synopsis-option.details-on .synopsis-input-desc .shortdesc,
-      .synopsis-options .synopsis-option.details-on .synopsis-output-desc .shortdesc,
-      .synopsis-options .synopsis-option.details-on .synopsis-report-desc .shortdesc,
-      .synopsis-options .synopsis-option.details-on .synopsis-option-desc .shortdesc {
-        display: none; }
+.cli-synopsis > pre, .cli-synopsis > table { font-family: monospace; font-size: 14px; font-weight: 400; line-height: 1.3em; color: #003377; }
 
-.synopsis-input,
-.synopsis-output,
-.synopsis-report,
-.synopsis-option {
-  margin: .5rem 0 .3rem 1rem;
-  padding: .5rem 1rem 0 1rem; }
-  .synopsis-input .synopsis-option-default code:empty,
-  .synopsis-output .synopsis-option-default code:empty,
-  .synopsis-report .synopsis-option-default code:empty,
-  .synopsis-option .synopsis-option-default code:empty {
-    padding: 0;
-    border: none;
-    color: initial;
-    background-color: initial;
-    font-family: "Lato", sans-serif;
-    font-size: 14px;
-    font-weight: 300;
-    line-height: 1.5em; }
-    .synopsis-input .synopsis-option-default code:empty::after,
-    .synopsis-output .synopsis-option-default code:empty::after,
-    .synopsis-report .synopsis-option-default code:empty::after,
-    .synopsis-option .synopsis-option-default code:empty::after {
-      content: "(empty)"; }
-  .synopsis-input p > code:only-child,
-  .synopsis-output p > code:only-child,
-  .synopsis-report p > code:only-child,
-  .synopsis-option p > code:only-child {
-    white-space: pre; }
-  .synopsis-input .synopsis-input-name,
-  .synopsis-input .synopsis-input-desc,
-  .synopsis-input .synopsis-input-media-type,
-  .synopsis-input .synopsis-input-sequence,
-  .synopsis-input .synopsis-output-name,
-  .synopsis-input .synopsis-output-desc,
-  .synopsis-input .synopsis-output-media-type,
-  .synopsis-input .synopsis-report-name,
-  .synopsis-input .synopsis-report-desc,
-  .synopsis-input .synopsis-option-name,
-  .synopsis-input .synopsis-option-desc,
-  .synopsis-input .synopsis-option-data-type,
-  .synopsis-input .synopsis-option-default,
-  .synopsis-input .synopsis-option-required,
-  .synopsis-output .synopsis-input-name,
-  .synopsis-output .synopsis-input-desc,
-  .synopsis-output .synopsis-input-media-type,
-  .synopsis-output .synopsis-input-sequence,
-  .synopsis-output .synopsis-output-name,
-  .synopsis-output .synopsis-output-desc,
-  .synopsis-output .synopsis-output-media-type,
-  .synopsis-output .synopsis-report-name,
-  .synopsis-output .synopsis-report-desc,
-  .synopsis-output .synopsis-option-name,
-  .synopsis-output .synopsis-option-desc,
-  .synopsis-output .synopsis-option-data-type,
-  .synopsis-output .synopsis-option-default,
-  .synopsis-output .synopsis-option-required,
-  .synopsis-report .synopsis-input-name,
-  .synopsis-report .synopsis-input-desc,
-  .synopsis-report .synopsis-input-media-type,
-  .synopsis-report .synopsis-input-sequence,
-  .synopsis-report .synopsis-output-name,
-  .synopsis-report .synopsis-output-desc,
-  .synopsis-report .synopsis-output-media-type,
-  .synopsis-report .synopsis-report-name,
-  .synopsis-report .synopsis-report-desc,
-  .synopsis-report .synopsis-option-name,
-  .synopsis-report .synopsis-option-desc,
-  .synopsis-report .synopsis-option-data-type,
-  .synopsis-report .synopsis-option-default,
-  .synopsis-report .synopsis-option-required,
-  .synopsis-option .synopsis-input-name,
-  .synopsis-option .synopsis-input-desc,
-  .synopsis-option .synopsis-input-media-type,
-  .synopsis-option .synopsis-input-sequence,
-  .synopsis-option .synopsis-output-name,
-  .synopsis-option .synopsis-output-desc,
-  .synopsis-option .synopsis-output-media-type,
-  .synopsis-option .synopsis-report-name,
-  .synopsis-option .synopsis-report-desc,
-  .synopsis-option .synopsis-option-name,
-  .synopsis-option .synopsis-option-desc,
-  .synopsis-option .synopsis-option-data-type,
-  .synopsis-option .synopsis-option-default,
-  .synopsis-option .synopsis-option-required {
-    padding-bottom: .5em; }
-  .synopsis-input .synopsis-input-name,
-  .synopsis-input .synopsis-report-name,
-  .synopsis-input .synopsis-output-name,
-  .synopsis-input .synopsis-option-name,
-  .synopsis-output .synopsis-input-name,
-  .synopsis-output .synopsis-report-name,
-  .synopsis-output .synopsis-output-name,
-  .synopsis-output .synopsis-option-name,
-  .synopsis-report .synopsis-input-name,
-  .synopsis-report .synopsis-report-name,
-  .synopsis-report .synopsis-output-name,
-  .synopsis-report .synopsis-option-name,
-  .synopsis-option .synopsis-input-name,
-  .synopsis-option .synopsis-report-name,
-  .synopsis-option .synopsis-output-name,
-  .synopsis-option .synopsis-option-name {
-    font-size: 110%;
-    font-weight: 800;
-    color: #473000; }
-  .synopsis-input ul.media-types,
-  .synopsis-output ul.media-types,
-  .synopsis-report ul.media-types,
-  .synopsis-option ul.media-types {
-    display: inline;
-    padding-left: 0; }
-    .synopsis-input ul.media-types li,
-    .synopsis-output ul.media-types li,
-    .synopsis-report ul.media-types li,
-    .synopsis-option ul.media-types li {
-      display: inline; }
-      .synopsis-input ul.media-types li::after,
-      .synopsis-output ul.media-types li::after,
-      .synopsis-report ul.media-types li::after,
-      .synopsis-option ul.media-types li::after {
-        content: " or "; }
-      .synopsis-input ul.media-types li:last-child::after,
-      .synopsis-output ul.media-types li:last-child::after,
-      .synopsis-report ul.media-types li:last-child::after,
-      .synopsis-option ul.media-types li:last-child::after {
-        content: ""; }
-  .synopsis-input dl.choice,
-  .synopsis-output dl.choice,
-  .synopsis-report dl.choice,
-  .synopsis-option dl.choice {
-    margin-top: .3rem; }
-    .synopsis-input dl.choice dt,
-    .synopsis-output dl.choice dt,
-    .synopsis-report dl.choice dt,
-    .synopsis-option dl.choice dt {
-      display: list-item;
-      list-style-type: "\25BA";
-      margin-left: 2rem; }
-    .synopsis-input dl.choice dd,
-    .synopsis-output dl.choice dd,
-    .synopsis-report dl.choice dd,
-    .synopsis-option dl.choice dd {
-      margin-bottom: .5rem; }
+.cli-synopsis code { background-color: initial; border: initial; padding: 0; }
 
-table#scripts-matrix {
-  border-collapse: collapse;
-  width: 100%; }
-  table#scripts-matrix th {
-    border: 1px solid #ddd; }
-  table#scripts-matrix td {
-    border: 1px solid #eee;
-    text-align: center;
-    width: 12%;
-    background-color: #d6e0ff; }
-  table#scripts-matrix td:empty {
-    background-color: initial; }
+.cli-synopsis .synopsis-option-default code:empty::after, .cli-synopsis .synopsis-option-default code:empty::before, .cli-synopsis .synopsis-option-default code.contains-space::after, .cli-synopsis .synopsis-option-default code.contains-space::before { content: "'"; }
+
+.cli-synopsis td { vertical-align: top; }
+
+.cli-synopsis td:first-child { white-space: pre; padding-left: 3em; padding-right: 1em; }
+
+.toggle-synopsis-button { position: absolute; right: 1rem; top: -2.5rem; }
+
+.gui-synopsis .toggle-synopsis-button::before { content: 'Switch to CLI view'; }
+
+.cli-synopsis .toggle-synopsis-button::before { content: 'Switch to GUI view'; }
+
+.synopsis-inputs, .synopsis-outputs, .synopsis-reports, .synopsis-options { list-style-type: none; padding-left: 1rem; margin: 0; }
+
+.synopsis-inputs .synopsis-input, .synopsis-inputs .synopsis-output, .synopsis-inputs .synopsis-report, .synopsis-inputs .synopsis-option, .synopsis-outputs .synopsis-input, .synopsis-outputs .synopsis-output, .synopsis-outputs .synopsis-report, .synopsis-outputs .synopsis-option, .synopsis-reports .synopsis-input, .synopsis-reports .synopsis-output, .synopsis-reports .synopsis-report, .synopsis-reports .synopsis-option, .synopsis-options .synopsis-input, .synopsis-options .synopsis-output, .synopsis-options .synopsis-report, .synopsis-options .synopsis-option { position: relative; border-top: 1px solid #FFCE65; border-left: 1px solid #FFCE65; border-bottom: 1px solid white; border-radius: .2rem; }
+
+.synopsis-inputs .synopsis-input.details-off:hover, .synopsis-inputs .synopsis-output.details-off:hover, .synopsis-inputs .synopsis-report.details-off:hover, .synopsis-inputs .synopsis-option.details-off:hover, .synopsis-outputs .synopsis-input.details-off:hover, .synopsis-outputs .synopsis-output.details-off:hover, .synopsis-outputs .synopsis-report.details-off:hover, .synopsis-outputs .synopsis-option.details-off:hover, .synopsis-reports .synopsis-input.details-off:hover, .synopsis-reports .synopsis-output.details-off:hover, .synopsis-reports .synopsis-report.details-off:hover, .synopsis-reports .synopsis-option.details-off:hover, .synopsis-options .synopsis-input.details-off:hover, .synopsis-options .synopsis-output.details-off:hover, .synopsis-options .synopsis-report.details-off:hover, .synopsis-options .synopsis-option.details-off:hover { background-color: #fff9ec; cursor: pointer; }
+
+.synopsis-inputs .synopsis-input.details-off .synopsis-input-desc .longdesc, .synopsis-inputs .synopsis-input.details-off .synopsis-input-media-type, .synopsis-inputs .synopsis-input.details-off .synopsis-input-sequence, .synopsis-inputs .synopsis-input.details-off .synopsis-output-desc .longdesc, .synopsis-inputs .synopsis-input.details-off .synopsis-output-media-type, .synopsis-inputs .synopsis-input.details-off .synopsis-report-desc .longdesc, .synopsis-inputs .synopsis-input.details-off .synopsis-option-desc .longdesc, .synopsis-inputs .synopsis-input.details-off .synopsis-option-data-type, .synopsis-inputs .synopsis-input.details-off .synopsis-option-default, .synopsis-inputs .synopsis-input.details-off .synopsis-option-required, .synopsis-inputs .synopsis-output.details-off .synopsis-input-desc .longdesc, .synopsis-inputs .synopsis-output.details-off .synopsis-input-media-type, .synopsis-inputs .synopsis-output.details-off .synopsis-input-sequence, .synopsis-inputs .synopsis-output.details-off .synopsis-output-desc .longdesc, .synopsis-inputs .synopsis-output.details-off .synopsis-output-media-type, .synopsis-inputs .synopsis-output.details-off .synopsis-report-desc .longdesc, .synopsis-inputs .synopsis-output.details-off .synopsis-option-desc .longdesc, .synopsis-inputs .synopsis-output.details-off .synopsis-option-data-type, .synopsis-inputs .synopsis-output.details-off .synopsis-option-default, .synopsis-inputs .synopsis-output.details-off .synopsis-option-required, .synopsis-inputs .synopsis-report.details-off .synopsis-input-desc .longdesc, .synopsis-inputs .synopsis-report.details-off .synopsis-input-media-type, .synopsis-inputs .synopsis-report.details-off .synopsis-input-sequence, .synopsis-inputs .synopsis-report.details-off .synopsis-output-desc .longdesc, .synopsis-inputs .synopsis-report.details-off .synopsis-output-media-type, .synopsis-inputs .synopsis-report.details-off .synopsis-report-desc .longdesc, .synopsis-inputs .synopsis-report.details-off .synopsis-option-desc .longdesc, .synopsis-inputs .synopsis-report.details-off .synopsis-option-data-type, .synopsis-inputs .synopsis-report.details-off .synopsis-option-default, .synopsis-inputs .synopsis-report.details-off .synopsis-option-required, .synopsis-inputs .synopsis-option.details-off .synopsis-input-desc .longdesc, .synopsis-inputs .synopsis-option.details-off .synopsis-input-media-type, .synopsis-inputs .synopsis-option.details-off .synopsis-input-sequence, .synopsis-inputs .synopsis-option.details-off .synopsis-output-desc .longdesc, .synopsis-inputs .synopsis-option.details-off .synopsis-output-media-type, .synopsis-inputs .synopsis-option.details-off .synopsis-report-desc .longdesc, .synopsis-inputs .synopsis-option.details-off .synopsis-option-desc .longdesc, .synopsis-inputs .synopsis-option.details-off .synopsis-option-data-type, .synopsis-inputs .synopsis-option.details-off .synopsis-option-default, .synopsis-inputs .synopsis-option.details-off .synopsis-option-required, .synopsis-outputs .synopsis-input.details-off .synopsis-input-desc .longdesc, .synopsis-outputs .synopsis-input.details-off .synopsis-input-media-type, .synopsis-outputs .synopsis-input.details-off .synopsis-input-sequence, .synopsis-outputs .synopsis-input.details-off .synopsis-output-desc .longdesc, .synopsis-outputs .synopsis-input.details-off .synopsis-output-media-type, .synopsis-outputs .synopsis-input.details-off .synopsis-report-desc .longdesc, .synopsis-outputs .synopsis-input.details-off .synopsis-option-desc .longdesc, .synopsis-outputs .synopsis-input.details-off .synopsis-option-data-type, .synopsis-outputs .synopsis-input.details-off .synopsis-option-default, .synopsis-outputs .synopsis-input.details-off .synopsis-option-required, .synopsis-outputs .synopsis-output.details-off .synopsis-input-desc .longdesc, .synopsis-outputs .synopsis-output.details-off .synopsis-input-media-type, .synopsis-outputs .synopsis-output.details-off .synopsis-input-sequence, .synopsis-outputs .synopsis-output.details-off .synopsis-output-desc .longdesc, .synopsis-outputs .synopsis-output.details-off .synopsis-output-media-type, .synopsis-outputs .synopsis-output.details-off .synopsis-report-desc .longdesc, .synopsis-outputs .synopsis-output.details-off .synopsis-option-desc .longdesc, .synopsis-outputs .synopsis-output.details-off .synopsis-option-data-type, .synopsis-outputs .synopsis-output.details-off .synopsis-option-default, .synopsis-outputs .synopsis-output.details-off .synopsis-option-required, .synopsis-outputs .synopsis-report.details-off .synopsis-input-desc .longdesc, .synopsis-outputs .synopsis-report.details-off .synopsis-input-media-type, .synopsis-outputs .synopsis-report.details-off .synopsis-input-sequence, .synopsis-outputs .synopsis-report.details-off .synopsis-output-desc .longdesc, .synopsis-outputs .synopsis-report.details-off .synopsis-output-media-type, .synopsis-outputs .synopsis-report.details-off .synopsis-report-desc .longdesc, .synopsis-outputs .synopsis-report.details-off .synopsis-option-desc .longdesc, .synopsis-outputs .synopsis-report.details-off .synopsis-option-data-type, .synopsis-outputs .synopsis-report.details-off .synopsis-option-default, .synopsis-outputs .synopsis-report.details-off .synopsis-option-required, .synopsis-outputs .synopsis-option.details-off .synopsis-input-desc .longdesc, .synopsis-outputs .synopsis-option.details-off .synopsis-input-media-type, .synopsis-outputs .synopsis-option.details-off .synopsis-input-sequence, .synopsis-outputs .synopsis-option.details-off .synopsis-output-desc .longdesc, .synopsis-outputs .synopsis-option.details-off .synopsis-output-media-type, .synopsis-outputs .synopsis-option.details-off .synopsis-report-desc .longdesc, .synopsis-outputs .synopsis-option.details-off .synopsis-option-desc .longdesc, .synopsis-outputs .synopsis-option.details-off .synopsis-option-data-type, .synopsis-outputs .synopsis-option.details-off .synopsis-option-default, .synopsis-outputs .synopsis-option.details-off .synopsis-option-required, .synopsis-reports .synopsis-input.details-off .synopsis-input-desc .longdesc, .synopsis-reports .synopsis-input.details-off .synopsis-input-media-type, .synopsis-reports .synopsis-input.details-off .synopsis-input-sequence, .synopsis-reports .synopsis-input.details-off .synopsis-output-desc .longdesc, .synopsis-reports .synopsis-input.details-off .synopsis-output-media-type, .synopsis-reports .synopsis-input.details-off .synopsis-report-desc .longdesc, .synopsis-reports .synopsis-input.details-off .synopsis-option-desc .longdesc, .synopsis-reports .synopsis-input.details-off .synopsis-option-data-type, .synopsis-reports .synopsis-input.details-off .synopsis-option-default, .synopsis-reports .synopsis-input.details-off .synopsis-option-required, .synopsis-reports .synopsis-output.details-off .synopsis-input-desc .longdesc, .synopsis-reports .synopsis-output.details-off .synopsis-input-media-type, .synopsis-reports .synopsis-output.details-off .synopsis-input-sequence, .synopsis-reports .synopsis-output.details-off .synopsis-output-desc .longdesc, .synopsis-reports .synopsis-output.details-off .synopsis-output-media-type, .synopsis-reports .synopsis-output.details-off .synopsis-report-desc .longdesc, .synopsis-reports .synopsis-output.details-off .synopsis-option-desc .longdesc, .synopsis-reports .synopsis-output.details-off .synopsis-option-data-type, .synopsis-reports .synopsis-output.details-off .synopsis-option-default, .synopsis-reports .synopsis-output.details-off .synopsis-option-required, .synopsis-reports .synopsis-report.details-off .synopsis-input-desc .longdesc, .synopsis-reports .synopsis-report.details-off .synopsis-input-media-type, .synopsis-reports .synopsis-report.details-off .synopsis-input-sequence, .synopsis-reports .synopsis-report.details-off .synopsis-output-desc .longdesc, .synopsis-reports .synopsis-report.details-off .synopsis-output-media-type, .synopsis-reports .synopsis-report.details-off .synopsis-report-desc .longdesc, .synopsis-reports .synopsis-report.details-off .synopsis-option-desc .longdesc, .synopsis-reports .synopsis-report.details-off .synopsis-option-data-type, .synopsis-reports .synopsis-report.details-off .synopsis-option-default, .synopsis-reports .synopsis-report.details-off .synopsis-option-required, .synopsis-reports .synopsis-option.details-off .synopsis-input-desc .longdesc, .synopsis-reports .synopsis-option.details-off .synopsis-input-media-type, .synopsis-reports .synopsis-option.details-off .synopsis-input-sequence, .synopsis-reports .synopsis-option.details-off .synopsis-output-desc .longdesc, .synopsis-reports .synopsis-option.details-off .synopsis-output-media-type, .synopsis-reports .synopsis-option.details-off .synopsis-report-desc .longdesc, .synopsis-reports .synopsis-option.details-off .synopsis-option-desc .longdesc, .synopsis-reports .synopsis-option.details-off .synopsis-option-data-type, .synopsis-reports .synopsis-option.details-off .synopsis-option-default, .synopsis-reports .synopsis-option.details-off .synopsis-option-required, .synopsis-options .synopsis-input.details-off .synopsis-input-desc .longdesc, .synopsis-options .synopsis-input.details-off .synopsis-input-media-type, .synopsis-options .synopsis-input.details-off .synopsis-input-sequence, .synopsis-options .synopsis-input.details-off .synopsis-output-desc .longdesc, .synopsis-options .synopsis-input.details-off .synopsis-output-media-type, .synopsis-options .synopsis-input.details-off .synopsis-report-desc .longdesc, .synopsis-options .synopsis-input.details-off .synopsis-option-desc .longdesc, .synopsis-options .synopsis-input.details-off .synopsis-option-data-type, .synopsis-options .synopsis-input.details-off .synopsis-option-default, .synopsis-options .synopsis-input.details-off .synopsis-option-required, .synopsis-options .synopsis-output.details-off .synopsis-input-desc .longdesc, .synopsis-options .synopsis-output.details-off .synopsis-input-media-type, .synopsis-options .synopsis-output.details-off .synopsis-input-sequence, .synopsis-options .synopsis-output.details-off .synopsis-output-desc .longdesc, .synopsis-options .synopsis-output.details-off .synopsis-output-media-type, .synopsis-options .synopsis-output.details-off .synopsis-report-desc .longdesc, .synopsis-options .synopsis-output.details-off .synopsis-option-desc .longdesc, .synopsis-options .synopsis-output.details-off .synopsis-option-data-type, .synopsis-options .synopsis-output.details-off .synopsis-option-default, .synopsis-options .synopsis-output.details-off .synopsis-option-required, .synopsis-options .synopsis-report.details-off .synopsis-input-desc .longdesc, .synopsis-options .synopsis-report.details-off .synopsis-input-media-type, .synopsis-options .synopsis-report.details-off .synopsis-input-sequence, .synopsis-options .synopsis-report.details-off .synopsis-output-desc .longdesc, .synopsis-options .synopsis-report.details-off .synopsis-output-media-type, .synopsis-options .synopsis-report.details-off .synopsis-report-desc .longdesc, .synopsis-options .synopsis-report.details-off .synopsis-option-desc .longdesc, .synopsis-options .synopsis-report.details-off .synopsis-option-data-type, .synopsis-options .synopsis-report.details-off .synopsis-option-default, .synopsis-options .synopsis-report.details-off .synopsis-option-required, .synopsis-options .synopsis-option.details-off .synopsis-input-desc .longdesc, .synopsis-options .synopsis-option.details-off .synopsis-input-media-type, .synopsis-options .synopsis-option.details-off .synopsis-input-sequence, .synopsis-options .synopsis-option.details-off .synopsis-output-desc .longdesc, .synopsis-options .synopsis-option.details-off .synopsis-output-media-type, .synopsis-options .synopsis-option.details-off .synopsis-report-desc .longdesc, .synopsis-options .synopsis-option.details-off .synopsis-option-desc .longdesc, .synopsis-options .synopsis-option.details-off .synopsis-option-data-type, .synopsis-options .synopsis-option.details-off .synopsis-option-default, .synopsis-options .synopsis-option.details-off .synopsis-option-required { display: none; }
+
+.synopsis-inputs .synopsis-input.details-on, .synopsis-inputs .synopsis-output.details-on, .synopsis-inputs .synopsis-report.details-on, .synopsis-inputs .synopsis-option.details-on, .synopsis-outputs .synopsis-input.details-on, .synopsis-outputs .synopsis-output.details-on, .synopsis-outputs .synopsis-report.details-on, .synopsis-outputs .synopsis-option.details-on, .synopsis-reports .synopsis-input.details-on, .synopsis-reports .synopsis-output.details-on, .synopsis-reports .synopsis-report.details-on, .synopsis-reports .synopsis-option.details-on, .synopsis-options .synopsis-input.details-on, .synopsis-options .synopsis-output.details-on, .synopsis-options .synopsis-report.details-on, .synopsis-options .synopsis-option.details-on { background-color: #ffefce; border-right: 1px solid #FFCE65; border-bottom: 1px solid #FFCE65; }
+
+.synopsis-inputs .synopsis-input.details-on .synopsis-input-desc .shortdesc, .synopsis-inputs .synopsis-input.details-on .synopsis-output-desc .shortdesc, .synopsis-inputs .synopsis-input.details-on .synopsis-report-desc .shortdesc, .synopsis-inputs .synopsis-input.details-on .synopsis-option-desc .shortdesc, .synopsis-inputs .synopsis-output.details-on .synopsis-input-desc .shortdesc, .synopsis-inputs .synopsis-output.details-on .synopsis-output-desc .shortdesc, .synopsis-inputs .synopsis-output.details-on .synopsis-report-desc .shortdesc, .synopsis-inputs .synopsis-output.details-on .synopsis-option-desc .shortdesc, .synopsis-inputs .synopsis-report.details-on .synopsis-input-desc .shortdesc, .synopsis-inputs .synopsis-report.details-on .synopsis-output-desc .shortdesc, .synopsis-inputs .synopsis-report.details-on .synopsis-report-desc .shortdesc, .synopsis-inputs .synopsis-report.details-on .synopsis-option-desc .shortdesc, .synopsis-inputs .synopsis-option.details-on .synopsis-input-desc .shortdesc, .synopsis-inputs .synopsis-option.details-on .synopsis-output-desc .shortdesc, .synopsis-inputs .synopsis-option.details-on .synopsis-report-desc .shortdesc, .synopsis-inputs .synopsis-option.details-on .synopsis-option-desc .shortdesc, .synopsis-outputs .synopsis-input.details-on .synopsis-input-desc .shortdesc, .synopsis-outputs .synopsis-input.details-on .synopsis-output-desc .shortdesc, .synopsis-outputs .synopsis-input.details-on .synopsis-report-desc .shortdesc, .synopsis-outputs .synopsis-input.details-on .synopsis-option-desc .shortdesc, .synopsis-outputs .synopsis-output.details-on .synopsis-input-desc .shortdesc, .synopsis-outputs .synopsis-output.details-on .synopsis-output-desc .shortdesc, .synopsis-outputs .synopsis-output.details-on .synopsis-report-desc .shortdesc, .synopsis-outputs .synopsis-output.details-on .synopsis-option-desc .shortdesc, .synopsis-outputs .synopsis-report.details-on .synopsis-input-desc .shortdesc, .synopsis-outputs .synopsis-report.details-on .synopsis-output-desc .shortdesc, .synopsis-outputs .synopsis-report.details-on .synopsis-report-desc .shortdesc, .synopsis-outputs .synopsis-report.details-on .synopsis-option-desc .shortdesc, .synopsis-outputs .synopsis-option.details-on .synopsis-input-desc .shortdesc, .synopsis-outputs .synopsis-option.details-on .synopsis-output-desc .shortdesc, .synopsis-outputs .synopsis-option.details-on .synopsis-report-desc .shortdesc, .synopsis-outputs .synopsis-option.details-on .synopsis-option-desc .shortdesc, .synopsis-reports .synopsis-input.details-on .synopsis-input-desc .shortdesc, .synopsis-reports .synopsis-input.details-on .synopsis-output-desc .shortdesc, .synopsis-reports .synopsis-input.details-on .synopsis-report-desc .shortdesc, .synopsis-reports .synopsis-input.details-on .synopsis-option-desc .shortdesc, .synopsis-reports .synopsis-output.details-on .synopsis-input-desc .shortdesc, .synopsis-reports .synopsis-output.details-on .synopsis-output-desc .shortdesc, .synopsis-reports .synopsis-output.details-on .synopsis-report-desc .shortdesc, .synopsis-reports .synopsis-output.details-on .synopsis-option-desc .shortdesc, .synopsis-reports .synopsis-report.details-on .synopsis-input-desc .shortdesc, .synopsis-reports .synopsis-report.details-on .synopsis-output-desc .shortdesc, .synopsis-reports .synopsis-report.details-on .synopsis-report-desc .shortdesc, .synopsis-reports .synopsis-report.details-on .synopsis-option-desc .shortdesc, .synopsis-reports .synopsis-option.details-on .synopsis-input-desc .shortdesc, .synopsis-reports .synopsis-option.details-on .synopsis-output-desc .shortdesc, .synopsis-reports .synopsis-option.details-on .synopsis-report-desc .shortdesc, .synopsis-reports .synopsis-option.details-on .synopsis-option-desc .shortdesc, .synopsis-options .synopsis-input.details-on .synopsis-input-desc .shortdesc, .synopsis-options .synopsis-input.details-on .synopsis-output-desc .shortdesc, .synopsis-options .synopsis-input.details-on .synopsis-report-desc .shortdesc, .synopsis-options .synopsis-input.details-on .synopsis-option-desc .shortdesc, .synopsis-options .synopsis-output.details-on .synopsis-input-desc .shortdesc, .synopsis-options .synopsis-output.details-on .synopsis-output-desc .shortdesc, .synopsis-options .synopsis-output.details-on .synopsis-report-desc .shortdesc, .synopsis-options .synopsis-output.details-on .synopsis-option-desc .shortdesc, .synopsis-options .synopsis-report.details-on .synopsis-input-desc .shortdesc, .synopsis-options .synopsis-report.details-on .synopsis-output-desc .shortdesc, .synopsis-options .synopsis-report.details-on .synopsis-report-desc .shortdesc, .synopsis-options .synopsis-report.details-on .synopsis-option-desc .shortdesc, .synopsis-options .synopsis-option.details-on .synopsis-input-desc .shortdesc, .synopsis-options .synopsis-option.details-on .synopsis-output-desc .shortdesc, .synopsis-options .synopsis-option.details-on .synopsis-report-desc .shortdesc, .synopsis-options .synopsis-option.details-on .synopsis-option-desc .shortdesc { display: none; }
+
+.synopsis-input, .synopsis-output, .synopsis-report, .synopsis-option { margin: .5rem 0 .3rem 1rem; padding: .5rem 1rem 0 1rem; }
+
+.synopsis-input .synopsis-option-default code:empty, .synopsis-output .synopsis-option-default code:empty, .synopsis-report .synopsis-option-default code:empty, .synopsis-option .synopsis-option-default code:empty { padding: 0; border: none; color: initial; background-color: initial; font-family: "Lato", sans-serif; font-size: 14px; font-weight: 300; line-height: 1.5em; }
+
+.synopsis-input .synopsis-option-default code:empty::after, .synopsis-output .synopsis-option-default code:empty::after, .synopsis-report .synopsis-option-default code:empty::after, .synopsis-option .synopsis-option-default code:empty::after { content: "(empty)"; }
+
+.synopsis-input p > code:only-child, .synopsis-output p > code:only-child, .synopsis-report p > code:only-child, .synopsis-option p > code:only-child { white-space: pre; }
+
+.synopsis-input .synopsis-input-name, .synopsis-input .synopsis-input-desc, .synopsis-input .synopsis-input-media-type, .synopsis-input .synopsis-input-sequence, .synopsis-input .synopsis-output-name, .synopsis-input .synopsis-output-desc, .synopsis-input .synopsis-output-media-type, .synopsis-input .synopsis-report-name, .synopsis-input .synopsis-report-desc, .synopsis-input .synopsis-option-name, .synopsis-input .synopsis-option-desc, .synopsis-input .synopsis-option-data-type, .synopsis-input .synopsis-option-default, .synopsis-input .synopsis-option-required, .synopsis-output .synopsis-input-name, .synopsis-output .synopsis-input-desc, .synopsis-output .synopsis-input-media-type, .synopsis-output .synopsis-input-sequence, .synopsis-output .synopsis-output-name, .synopsis-output .synopsis-output-desc, .synopsis-output .synopsis-output-media-type, .synopsis-output .synopsis-report-name, .synopsis-output .synopsis-report-desc, .synopsis-output .synopsis-option-name, .synopsis-output .synopsis-option-desc, .synopsis-output .synopsis-option-data-type, .synopsis-output .synopsis-option-default, .synopsis-output .synopsis-option-required, .synopsis-report .synopsis-input-name, .synopsis-report .synopsis-input-desc, .synopsis-report .synopsis-input-media-type, .synopsis-report .synopsis-input-sequence, .synopsis-report .synopsis-output-name, .synopsis-report .synopsis-output-desc, .synopsis-report .synopsis-output-media-type, .synopsis-report .synopsis-report-name, .synopsis-report .synopsis-report-desc, .synopsis-report .synopsis-option-name, .synopsis-report .synopsis-option-desc, .synopsis-report .synopsis-option-data-type, .synopsis-report .synopsis-option-default, .synopsis-report .synopsis-option-required, .synopsis-option .synopsis-input-name, .synopsis-option .synopsis-input-desc, .synopsis-option .synopsis-input-media-type, .synopsis-option .synopsis-input-sequence, .synopsis-option .synopsis-output-name, .synopsis-option .synopsis-output-desc, .synopsis-option .synopsis-output-media-type, .synopsis-option .synopsis-report-name, .synopsis-option .synopsis-report-desc, .synopsis-option .synopsis-option-name, .synopsis-option .synopsis-option-desc, .synopsis-option .synopsis-option-data-type, .synopsis-option .synopsis-option-default, .synopsis-option .synopsis-option-required { padding-bottom: .5em; }
+
+.synopsis-input .synopsis-input-name, .synopsis-input .synopsis-report-name, .synopsis-input .synopsis-output-name, .synopsis-input .synopsis-option-name, .synopsis-output .synopsis-input-name, .synopsis-output .synopsis-report-name, .synopsis-output .synopsis-output-name, .synopsis-output .synopsis-option-name, .synopsis-report .synopsis-input-name, .synopsis-report .synopsis-report-name, .synopsis-report .synopsis-output-name, .synopsis-report .synopsis-option-name, .synopsis-option .synopsis-input-name, .synopsis-option .synopsis-report-name, .synopsis-option .synopsis-output-name, .synopsis-option .synopsis-option-name { font-size: 110%; font-weight: 800; color: #473000; }
+
+.synopsis-input ul.media-types, .synopsis-output ul.media-types, .synopsis-report ul.media-types, .synopsis-option ul.media-types { display: inline; padding-left: 0; }
+
+.synopsis-input ul.media-types li, .synopsis-output ul.media-types li, .synopsis-report ul.media-types li, .synopsis-option ul.media-types li { display: inline; }
+
+.synopsis-input ul.media-types li::after, .synopsis-output ul.media-types li::after, .synopsis-report ul.media-types li::after, .synopsis-option ul.media-types li::after { content: ' or '; }
+
+.synopsis-input ul.media-types li:last-child::after, .synopsis-output ul.media-types li:last-child::after, .synopsis-report ul.media-types li:last-child::after, .synopsis-option ul.media-types li:last-child::after { content: ''; }
+
+.synopsis-input dl.choice, .synopsis-output dl.choice, .synopsis-report dl.choice, .synopsis-option dl.choice { margin-top: .3rem; }
+
+.synopsis-input dl.choice dt, .synopsis-output dl.choice dt, .synopsis-report dl.choice dt, .synopsis-option dl.choice dt { display: list-item; list-style-type: "\25BA"; margin-left: 2rem; }
+
+.synopsis-input dl.choice dd, .synopsis-output dl.choice dd, .synopsis-report dl.choice dd, .synopsis-option dl.choice dd { margin-bottom: .5rem; }
+
+table#scripts-matrix { border-collapse: collapse; width: 100%; }
+
+table#scripts-matrix th { border: 1px solid #ddd; }
+
+table#scripts-matrix td { border: 1px solid #eee; text-align: center; width: 12%; background-color: #d6e0ff; }
+
+table#scripts-matrix td:empty { background-color: initial; }
+
+/*# sourceMappingURL=default.css.map */

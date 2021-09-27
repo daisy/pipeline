@@ -40,12 +40,65 @@
 <td>Port</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">metadata</span><span class="details"> sequence</span>
+</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Metadata to be included in the EPUB.
+
+If specified, the document must be a single
+[`metadata`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-metadata-elem) or
+[`package`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-elem) element. A
+[`prefix`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-prefix-attr) attribute is
+allowed on the root element. The metadata will be injected in the EPUB's package document, possibly
+overwriting existing metadata. This works as follows:
+
+- All (valid) fields in the provided metadata document end up in the output EPUB. More than one
+  field with the same property is allowed. `meta` elements with a `refines` attribute must refine
+  elements within the metadata document itself. Elements that refine elements in the EPUB's package
+  document will be dropped.
+- Any metadata fields in the input EPUB that have matching fields (same property in case of `meta`
+  fields, same element name in case of `dc:*` fields) in the provided metadata document are omitted,
+  together with any `meta` elements that refine them.
+- Metadata fields in the input that do not have any matching fields in the provided metadata
+  document are preserved in the output.
+
+There are a number of fields that result in addional changes in the EPUB (apart from an updated
+`metadata` section in the package document):
+
+- If the provided metadata document contains one or more
+  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+  fields, the first one without a `refines` attribute will be used to update the
+  [`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+  attribute on the package document. The `dc:identifier` metadata in the content documents can also be
+  aligned with it. This behavior can be enabled or disabled with the "Update &lt;meta
+  name='dc:identifier'&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains one or more
+  [`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) fields, the
+  first one can also be used as the `title` element in the content documents. This behavior can be
+  enabled or disabled with the "Update &lt;title&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains exactly one
+  [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) field,
+  it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
+  behavior can be enabled or disabled with the "Update 'lang' attributes based on metadata" option.
+
+Some fields are ignored:
+
+- The [`dcterms:modified`](https://www.w3.org/publishing/epub3/epub-packages.html#last-modified-date)
+  field gets updated whenever Pipeline produces an EPUB. As a consequence, any `dcterms:modified`
+  fields in the provided metadata document are ignored.</p>
+</td>
+</tr>
+<tr>
 <td width="150px" class="nowrap name">
 <span class="">tts-config</span><span class="details"></span>
 </td>
 <td></td>
-</tr></tbody>
+</tr>
+</tbody>
 </table>
 <h3>Output Ports</h3>
 <table border="1">
@@ -84,10 +137,96 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
+<span class="">update-lang-attributes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update 'lang' attributes based on metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+
+If there is exactly one
+[`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) element,
+use its value to create `xml:lang` and `lang` attributes on the root elements of all content
+documents (overwriting any existing attributes)
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">update-identifier-in-content-docs</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+
+Use the primary identifier (provided by the
+[`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+element identified by the
+[`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
+(overwriting any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">update-title-in-content-docs</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Update &lt;title&gt; elements based on EPUB metadata</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+If there is one or more
+[`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) element, use
+the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
+any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ensure-pagenum-text</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">ensure-section-headings</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Ensure headings for all sections</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to generate a heading element for sections that don't have one.
+
+For sectioning elements that don't have a heading element, one can be created. The headings are
+generated based on the section element's [`aria-label`](https://www.w3.org/TR/wai-aria/#aria-label)
+attribute. If the `aria-label` attribute is not present, no heading element is generated. When an
+`aria-label` is used to generate a heading, it is replaced with a
+[`aria-labelledby`](https://www.w3.org/TR/wai-aria/#aria-labelledby) attribute that points to the
+new heading. The rank of the generated heading matches the depth of the corresponding TOC item in
+the navigation document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
 <span class="">braille</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'true'</td>
+<td width="10px" class="nowrap code">'false'</td>
 <td>
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Translate to braille</h2>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether to produce a braille rendition.</p>
@@ -100,6 +239,20 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'default'</td>
 <td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">sentence-detection</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Perform sentence detection</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to add markup (span elements) for sentences.
+
+This setting has no effect when text-to-speech is also enabled. In that case sentences are always
+marked up.</p>
+</td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
@@ -163,6 +316,20 @@ specific.
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
+<span class="">sentence-class</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Sentence class</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Class attribute to mark sentences with.
+
+When sentence detection is enabled, this option may be used to add a class attribute to the `span`
+elements that represent the sentences.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
 <span class="required">output-dir</span><span class="details"> required</span>
 </td>
 <td width="10px" class="nowrap uri"></td>
@@ -179,6 +346,14 @@ specific.
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Directory used for temporary files.</p>
 </td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-tts-log</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
 </tr>
 </tbody>
 </table>

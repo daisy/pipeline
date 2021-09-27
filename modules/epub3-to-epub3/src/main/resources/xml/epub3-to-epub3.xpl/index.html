@@ -32,7 +32,244 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     
-    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">braille</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="true">'true'</span>"</span>&gt;
+    <span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">metadata</span>"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/xml</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Metadata">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Metadata&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Metadata to be included in the EPUB.
+
+If specified, the document must be a single
+[`metadata`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-metadata-elem) or
+[`package`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-elem) element. A
+[`prefix`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-prefix-attr) attribute is
+allowed on the root element. The metadata will be injected in the EPUB's package document, possibly
+overwriting existing metadata. This works as follows:
+
+- All (valid) fields in the provided metadata document end up in the output EPUB. More than one
+  field with the same property is allowed. `meta` elements with a `refines` attribute must refine
+  elements within the metadata document itself. Elements that refine elements in the EPUB's package
+  document will be dropped.
+- Any metadata fields in the input EPUB that have matching fields (same property in case of `meta`
+  fields, same element name in case of `dc:*` fields) in the provided metadata document are omitted,
+  together with any `meta` elements that refine them.
+- Metadata fields in the input that do not have any matching fields in the provided metadata
+  document are preserved in the output.
+
+There are a number of fields that result in addional changes in the EPUB (apart from an updated
+`metadata` section in the package document):
+
+- If the provided metadata document contains one or more
+  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+  fields, the first one without a `refines` attribute will be used to update the
+  [`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+  attribute on the package document. The `dc:identifier` metadata in the content documents can also be
+  aligned with it. This behavior can be enabled or disabled with the &quot;Update &lt;meta
+  name='dc:identifier'&gt; elements based on EPUB metadata&quot; option.
+- If the provided metadata document contains one or more
+  [`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) fields, the
+  first one can also be used as the `title` element in the content documents. This behavior can be
+  enabled or disabled with the &quot;Update &lt;title&gt; elements based on EPUB metadata&quot; option.
+- If the provided metadata document contains exactly one
+  [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) field,
+  it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
+  behavior can be enabled or disabled with the &quot;Update 'lang' attributes based on metadata&quot; option.
+
+Some fields are ignored:
+
+- The [`dcterms:modified`](https://www.w3.org/publishing/epub3/epub-packages.html#last-modified-date)
+  field gets updated whenever Pipeline produces an EPUB. As a consequence, any `dcterms:modified`
+  fields in the provided metadata document are ignored.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Metadata to be included in the EPUB.
+
+If specified, the document must be a single
+[`metadata`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-metadata-elem) or
+[`package`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-elem) element. A
+[`prefix`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-prefix-attr) attribute is
+allowed on the root element. The metadata will be injected in the EPUB's package document, possibly
+overwriting existing metadata. This works as follows:
+
+- All (valid) fields in the provided metadata document end up in the output EPUB. More than one
+  field with the same property is allowed. `meta` elements with a `refines` attribute must refine
+  elements within the metadata document itself. Elements that refine elements in the EPUB's package
+  document will be dropped.
+- Any metadata fields in the input EPUB that have matching fields (same property in case of `meta`
+  fields, same element name in case of `dc:*` fields) in the provided metadata document are omitted,
+  together with any `meta` elements that refine them.
+- Metadata fields in the input that do not have any matching fields in the provided metadata
+  document are preserved in the output.
+
+There are a number of fields that result in addional changes in the EPUB (apart from an updated
+`metadata` section in the package document):
+
+- If the provided metadata document contains one or more
+  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+  fields, the first one without a `refines` attribute will be used to update the
+  [`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+  attribute on the package document. The `dc:identifier` metadata in the content documents can also be
+  aligned with it. This behavior can be enabled or disabled with the "Update &lt;meta
+  name='dc:identifier'&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains one or more
+  [`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) fields, the
+  first one can also be used as the `title` element in the content documents. This behavior can be
+  enabled or disabled with the "Update &lt;title&gt; elements based on EPUB metadata" option.
+- If the provided metadata document contains exactly one
+  [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) field,
+  it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
+  behavior can be enabled or disabled with the "Update 'lang' attributes based on metadata" option.
+
+Some fields are ignored:
+
+- The [`dcterms:modified`](https://www.w3.org/publishing/epub3/epub-packages.html#last-modified-date)
+  field gets updated whenever Pipeline produces an EPUB. As a consequence, any `dcterms:modified`
+  fields in the provided metadata document are ignored.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">update-lang-attributes</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Update 'lang' attributes based on metadata">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Update 'lang' attributes based on metadata&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+
+If there is exactly one
+[`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) element,
+use its value to create `xml:lang` and `lang` attributes on the root elements of all content
+documents (overwriting any existing attributes)
+
+If the &quot;Metadata&quot; option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
+
+If there is exactly one
+[`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) element,
+use its value to create `xml:lang` and `lang` attributes on the root elements of all content
+documents (overwriting any existing attributes)
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">update-identifier-in-content-docs</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Update &lt;meta name='dc:identifier'&gt; elements based on EPUB metadata&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+
+Use the primary identifier (provided by the
+[`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+element identified by the
+[`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
+(overwriting any existing elements with the same name).
+
+If the &quot;Metadata&quot; option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
+
+Use the primary identifier (provided by the
+[`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+element identified by the
+[`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
+(overwriting any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">update-title-in-content-docs</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Update &lt;title&gt; elements based on EPUB metadata">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Update &lt;title&gt; elements based on EPUB metadata&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content='Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+If there is one or more
+[`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) element, use
+the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
+any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
+
+If there is one or more
+[`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) element, use
+the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
+any existing elements with the same name).
+
+If the "Metadata" option is used to inject new metadata into the EPUB, the resulting metadata is
+used to generate the attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">ensure-pagenum-text</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+            <span rel="data-type"><span typeof="data-type" id="data-type-ensure-pagenum-text" resource="../epub3-to-epub3.xpl#data-type-ensure-pagenum-text"><link rel="doc" href="#data-type-ensure-pagenum-text">
+<span property="id" content="px:epub3-to-epub3.script-ensure-pagenum-text"><span property="definition" content='
+                &lt;choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"&gt;
+                    &lt;value&gt;true&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;Yes&lt;/a:documentation&gt;
+                    &lt;value&gt;false&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;No&lt;/a:documentation&gt;
+                    &lt;value&gt;hidden&lt;/value&gt;
+                    &lt;a:documentation xml:lang="en"&gt;Yes, but not visible&lt;/a:documentation&gt;
+                &lt;/choice&gt;
+            '>&lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;
+                &lt;<span class="code-xml-element-local-name">choice</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;true&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Yes&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;false&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;No&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">value</span>&gt;hidden&lt;/<span class="code-xml-element-local-name">value</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">lang</span>=<span class="code-xml-attribute-value">"en"</span>&gt;Yes, but not visible&lt;/<span class="code-xml-element-prefix">a:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;/<span class="code-xml-element-local-name">choice</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">type</span>&gt;</span></span></span></span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipeinfo</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Ensure text content for page numbers">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Ensure text content for page numbers&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether to fix empty page number elements.
+
+Page number elements (elements with a `doc-pagebreak` `role` or `pagebreak` `epub:type`) that have
+no child text node can be given one. The text can be generated based on
+
+- the element's `aria-label` attribute,
+- the element's `title` attribute, or
+- the text used by the corresponding page link in the navigation document.
+
+These options are tried in the listed order. If none of the attributes exist, and the page is linked
+from the navigation document, no text is generated.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to fix empty page number elements.
+
+Page number elements (elements with a `doc-pagebreak` `role` or `pagebreak` `epub:type`) that have
+no child text node can be given one. The text can be generated based on
+
+- the element's `aria-label` attribute,
+- the element's `title` attribute, or
+- the text used by the corresponding page link in the navigation document.
+
+These options are tried in the listed order. If none of the attributes exist, and the page is linked
+from the navigation document, no text is generated.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">ensure-section-headings</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Ensure headings for all sections">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Ensure headings for all sections&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether to generate a heading element for sections that don't have one.
+
+For sectioning elements that don't have a heading element, one can be created. The headings are
+generated based on the section element's [`aria-label`](https://www.w3.org/TR/wai-aria/#aria-label)
+attribute. If the `aria-label` attribute is not present, no heading element is generated. When an
+`aria-label` is used to generate a heading, it is replaced with a
+[`aria-labelledby`](https://www.w3.org/TR/wai-aria/#aria-labelledby) attribute that points to the
+new heading. The rank of the generated heading matches the depth of the corresponding TOC item in
+the navigation document.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to generate a heading element for sections that don't have one.
+
+For sectioning elements that don't have a heading element, one can be created. The headings are
+generated based on the section element's [`aria-label`](https://www.w3.org/TR/wai-aria/#aria-label)
+attribute. If the `aria-label` attribute is not present, no heading element is generated. When an
+`aria-label` is used to generate a heading, it is replaced with a
+[`aria-labelledby`](https://www.w3.org/TR/wai-aria/#aria-labelledby) attribute that points to the
+new heading. The rank of the generated heading matches the depth of the corresponding TOC item in
+the navigation document.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">braille</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Translate to braille">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Translate to braille&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
             <span property="desc" content="Whether to produce a braille rendition.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Whether to produce a braille rendition.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
@@ -72,6 +309,19 @@ This will remove any existing media overlays in the EPUB.&lt;/<span class="code-
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">sentence-detection</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Perform sentence detection">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Perform sentence detection&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Whether to add markup (span elements) for sentences.
+
+This setting has no effect when text-to-speech is also enabled. In that case sentences are always
+marked up.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether to add markup (span elements) for sentences.
+
+This setting has no effect when text-to-speech is also enabled. In that case sentences are always
+marked up.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">braille-translator</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">transform-query</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="(translator:liblouis)">'(translator:liblouis)'</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="Braille translator query">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Braille translator query&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -149,6 +399,19 @@ specific.
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;&lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">config</span>/&gt;&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;</span>
     
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">sentence-class</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            <span property="name" content="Sentence class">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Sentence class&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="Class attribute to mark sentences with.
+
+When sentence detection is enabled, this option may be used to add a class attribute to the `span`
+elements that represent the sentences.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Class attribute to mark sentences with.
+
+When sentence detection is enabled, this option may be used to add a class attribute to the `span`
+elements that represent the sentences.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
     <span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">output-dir</span>"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"anyDirURI"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             <span property="name" content="Output EPUB 3">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Output EPUB 3&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -157,14 +420,24 @@ specific.
     
     
     
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">include-tts-log</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			<span property="name" content="Enable TTS log">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Enable TTS log&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Whether or not to make the TTS log available.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Whether or not to make the TTS log available.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+        
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     <span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">tts-log</span>"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="TTS log">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;TTS log&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="Log file with information about text-to-speech process.
+			<span property="desc" content='Log file with information about text-to-speech process.
 
-Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings) property.
-			">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Log file with information about text-to-speech process.
+Can be enabled with the "Include TTS log" option or the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
+			'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Log file with information about text-to-speech process.
 
-Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings) property.
+Can be enabled with the "Include TTS log" option or the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
 			&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
         
@@ -197,12 +470,23 @@ Can be enabled or disabled with the [`org.daisy.pipeline.tts.log`](http://daisy.
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"load"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"in-memory"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"result-base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"concat($output-dir,'/',replace(replace($source,'(\.epub|/mimetype)$',''),'^.*/([^/]+)$','$1'),'.epub!/')"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"metadata"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"metadata"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-translator"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-translator"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$stylesheet"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"apply-document-specific-stylesheets"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$apply-document-specific-stylesheets"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set-default-rendition-to-braille"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$set-default-rendition-to-braille"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tts"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$tts"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sentence-detection"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence-detection"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-lang-attributes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$update-lang-attributes"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-identifier-in-content-docs"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$update-identifier-in-content-docs"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"update-title-in-content-docs"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$update-title-in-content-docs"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ensure-pagenum-text"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ensure-pagenum-text"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ensure-section-headings"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ensure-section-headings"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sentence-class"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence-class"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"include-tts-log"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$include-tts-log"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"tts-config"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"tts-config"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;

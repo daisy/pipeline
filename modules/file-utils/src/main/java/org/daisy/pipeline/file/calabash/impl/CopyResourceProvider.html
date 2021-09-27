@@ -131,7 +131,7 @@
 <a class="jxr_linenumber" name="L122" href="#L122">122</a> 		File getFile(URI destUri,URI sourceUri){
 <a class="jxr_linenumber" name="L123" href="#L123">123</a> 			File target=<strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L124" href="#L124">124</a> 			<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"file"</span>.equals(destUri.getScheme())) {
-<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), <span class="jxr_string">"Only file: scheme URIs are supported by taget."</span>);
+<a class="jxr_linenumber" name="L125" href="#L125">125</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step, <span class="jxr_string">"Only file: scheme URIs are supported by taget."</span>);
 <a class="jxr_linenumber" name="L126" href="#L126">126</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L127" href="#L127">127</a> 				target = <strong class="jxr_keyword">new</strong> File(destUri.getPath());
 <a class="jxr_linenumber" name="L128" href="#L128">128</a> 			}
@@ -144,7 +144,7 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 					target = <strong class="jxr_keyword">new</strong> File(target, sourceUri.getPath());
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 				}
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 				<strong class="jxr_keyword">if</strong> (target.isDirectory()) {
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), <span class="jxr_string">"Cannot copy: target is a directory: "</span> + target.getAbsolutePath());
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step, <span class="jxr_string">"Cannot copy: target is a directory: "</span> + target.getAbsolutePath());
 <a class="jxr_linenumber" name="L139" href="#L139">139</a> 				}
 <a class="jxr_linenumber" name="L140" href="#L140">140</a> 			}
 <a class="jxr_linenumber" name="L141" href="#L141">141</a> 			<strong class="jxr_keyword">return</strong> target;
@@ -160,9 +160,9 @@
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				src.close();
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 				dst.close();
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 			} <strong class="jxr_keyword">catch</strong> (FileNotFoundException fnfe) {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(fnfe);
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step, fnfe);
 <a class="jxr_linenumber" name="L155" href="#L155">155</a> 			} <strong class="jxr_keyword">catch</strong> (IOException ioe) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(ioe);
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step, ioe);
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 			}
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 		}
 <a class="jxr_linenumber" name="L159" href="#L159">159</a> 	}

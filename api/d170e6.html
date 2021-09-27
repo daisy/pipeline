@@ -2,7 +2,7 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">html-break-detect {http://www.daisy.org/ns/pipeline/xproc}</title>
+<title property="dc:title">translate-file {http://liblouis.org/liblouis}</title>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
         
@@ -20,25 +20,12 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">html-break-detect</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">translate-file</span> <span class="uri">{http://liblouis.org/liblouis}</span>
 </h2>
 <div>Defined in:
-          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/html-break-detection/library.xpl.html">http://www.daisy.org/pipeline/modules/html-break-detection/library.xpl</a></span>
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/braille/liblouis-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl</a></span>
 </div>
 <h3>Input Ports</h3>
-<table border="1">
-<thead><tr>
-<td>Port</td>
-<td>Description</td>
-</tr></thead>
-<tbody><tr>
-<td width="150px" class="nowrap name">
-<span class="primary">source</span><span class="details"> primary</span>
-</td>
-<td></td>
-</tr></tbody>
-</table>
-<h3>Output Ports</h3>
 <table border="1">
 <thead><tr>
 <td>Port</td>
@@ -47,17 +34,42 @@
 <tbody>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="primary">result</span><span class="details"> primary</span>
+<span class="primary">source</span><span class="details"> primary</span>
 </td>
 <td></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="">sentence-ids</span><span class="details"></span>
+<span class="">styles</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">semantics</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">page-layout</span><span class="details"> primary parameter</span>
 </td>
 <td></td>
 </tr>
 </tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary sequence</span>
+</td>
+<td></td>
+</tr></tbody>
 </table>
 <h3>Options</h3>
 <table border="1">
@@ -67,14 +79,32 @@
 <td class="nowrap">Default</td>
 <td>Description</td>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td width="150px;" class="nowrap name">
-<span class="">id-prefix</span><span class="details"></span>
+<span class="">table</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
+<td width="10px" class="nowrap code"></td>
 <td></td>
-</tr></tbody>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">paged</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">temp-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+</tbody>
 </table>
 </body>
 </html>

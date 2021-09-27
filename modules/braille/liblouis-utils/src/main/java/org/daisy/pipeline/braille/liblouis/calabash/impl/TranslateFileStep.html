@@ -208,7 +208,7 @@
 <a class="jxr_linenumber" name="L199" href="#L199">199</a> 						<strong class="jxr_keyword">if</strong> (configPath == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 							configPath = path;
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!configPath.equals(path))
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(),
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step,
 <a class="jxr_linenumber" name="L203" href="#L203">203</a> 									<span class="jxr_string">"All configuration files and semantic action files must be placed in "</span> + configPath);
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 						configFileNames.add(URLs.relativize(path, uri).getPath()); }}}
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 			
@@ -225,7 +225,7 @@
 <a class="jxr_linenumber" name="L216" href="#L216">216</a> 						<strong class="jxr_keyword">if</strong> (configPath == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L217" href="#L217">217</a> 							configPath = path;
 <a class="jxr_linenumber" name="L218" href="#L218">218</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (!configPath.equals(path))
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(),
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step,
 <a class="jxr_linenumber" name="L220" href="#L220">220</a> 									<span class="jxr_string">"All configuration files and semantic action files must be placed in "</span> + configPath);
 <a class="jxr_linenumber" name="L221" href="#L221">221</a> 						semanticFileNames.add(path.relativize(uri).getPath()); }}}
 <a class="jxr_linenumber" name="L222" href="#L222">222</a> 			
@@ -264,8 +264,8 @@
 <a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<strong class="jxr_keyword">break</strong>; }
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 			reader.close(); }
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 		
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> XProcException(step.getNode(), e); }
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step); }
 <a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
 <a class="jxr_linenumber" name="L261" href="#L261">261</a> 	
 <a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> writeDocument(URI baseURI, String textContent, <strong class="jxr_keyword">int</strong> pageCount) {

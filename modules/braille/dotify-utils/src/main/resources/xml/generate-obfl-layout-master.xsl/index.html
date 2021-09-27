@@ -28,6 +28,7 @@
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span>&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"obfl:meta"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sequences"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//obfl:sequence|//obfl:toc-sequence|//obfl:dynamic-sequence"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"distinct-values($sequences/@css:page)"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"layout-master-name"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"pxi:layout-master-name(.)"</span>/&gt;
@@ -47,7 +48,7 @@
                     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
                 &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"* except obfl:meta"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
     
@@ -192,7 +193,13 @@
                         &lt;/<span class="code-xml-element-local-name">fallback</span>&gt;
                     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
                     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$footnotes-border-top!='none'"</span>&gt;
-                        &lt;<span class="code-xml-element-local-name">before</span>&gt;&lt;<span class="code-xml-element-local-name">leader</span> <span class="code-xml-attribute-local-name">pattern</span>=<span class="code-xml-attribute-value">"{$footnotes-border-top}"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"100%"</span> <span class="code-xml-attribute-local-name">align</span>=<span class="code-xml-attribute-value">"right"</span>/&gt;&lt;/<span class="code-xml-element-local-name">before</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">before</span>&gt;
+                            &lt;<span class="code-xml-element-local-name">block</span> <span class="code-xml-attribute-local-name">translate</span>=<span class="code-xml-attribute-value">"pre-translated-text-css"</span>&gt;
+                                &lt;<span class="code-xml-element-local-name">leader</span> <span class="code-xml-attribute-local-name">pattern</span>=<span class="code-xml-attribute-value">"{$footnotes-border-top}"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"100%"</span> <span class="code-xml-attribute-local-name">align</span>=<span class="code-xml-attribute-value">"right"</span>/&gt;
+                                
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$footnotes-border-top"</span>/&gt;
+                            &lt;/<span class="code-xml-element-local-name">block</span>&gt;
+                        &lt;/<span class="code-xml-element-local-name">before</span>&gt;
                     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
                 &lt;/<span class="code-xml-element-local-name">page-area</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
