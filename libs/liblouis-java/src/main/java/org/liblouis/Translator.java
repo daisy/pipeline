@@ -23,9 +23,8 @@ public class Translator {
 	public static final byte SHY = 1;
 	public static final byte ZWSP = 2;
 	
-	private static final int MODE_DOTSIO = 4;
-	
 	private final String table;
+	private DisplayTable displayTable = null;
 	
 	/**
 	 * @param table The translation table or table list to compile.
@@ -179,12 +178,12 @@ public class Translator {
 			if (interCharacterAttributes.length != textLength - 1)
 				throw new IllegalArgumentException(
 					"interCharacterAttributes length must be equal to text length (number of code points) minus 1");
-		WideString inbuf;
+		WideCharString inbuf;
 		try {
 			inbuf = getWideCharBuffer("text-in", textLength).write(text); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
-		WideString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
+		WideCharString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
 		IntByReference inlen = new IntByReference(textLength);
 		IntByReference outlen = new IntByReference(outbuf.length());
 		int[] inputPos = null;
@@ -192,7 +191,7 @@ public class Translator {
 			typeform = Arrays.copyOf(typeform, outbuf.length());
 		if (characterAttributes != null || interCharacterAttributes != null)
 			inputPos = getIntegerBuffer("inputpos", textLength * OUTLEN_MULTIPLIER);
-		int mode = displayTable != StandardDisplayTables.DEFAULT ? MODE_DOTSIO : 0;
+		int mode = displayTable.getMode().value();
 		if (Louis.getLibrary().lou_translate(table, inbuf, inlen, outbuf, outlen, typeform,
 		                                     null, null, inputPos, null, mode) == 0)
 			throw new TranslationException("Unable to complete translation");
@@ -203,12 +202,12 @@ public class Translator {
 		int textLength = WideChar.SIZE == 2
 			? text.length()
 			: text.codePoints().toArray().length;
-		WideString inbuf;
+		WideCharString inbuf;
 		try {
 			inbuf = getWideCharBuffer("text-in", textLength).write(text); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
-		WideString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
+		WideCharString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
 		IntByReference inlen = new IntByReference(textLength);
 		IntByReference outlen = new IntByReference(outbuf.length());
 		
@@ -237,7 +236,7 @@ public class Translator {
 			// simply don't support it.
 			throw new IllegalArgumentException("Unicode characters above U+FFFF are not supported");
 		}
-		WideString inbuf;
+		WideCharString inbuf;
 		try {
 			inbuf = getWideCharBuffer("text-in", inlen).write(text); }
 		catch (IOException e) {
@@ -264,25 +263,14 @@ public class Translator {
 			hyphenPositions[matcher.start() + 1] = ZWSP;
 		return hyphenPositions;
 	}
-	
+
 	/**
-	 * Convert a braille string from either Unicode braille or Liblouis' dotsIO format to the
-	 * charset defined by the (display) table.
+	 * Use this translation table as a display table.
 	 */
-	public String display(String braille) throws TranslationException {
-		WideString inbuf;
-		try {
-			inbuf = getWideCharBuffer("text-in", braille.length()).write(braille); }
-		catch (IOException e) {
-			throw new RuntimeException("should not happen", e); }
-		int length = braille.length();
-		WideString outbuf = getWideCharBuffer("text-out", braille.length() * OUTLEN_MULTIPLIER);
-		if (Louis.getLibrary().lou_dotsToChar(table, inbuf, outbuf, length, 0) == 0)
-			throw new TranslationException("Unable to complete translation");
-		try {
-			return outbuf.read(length); }
-		catch (IOException e) {
-			throw new RuntimeException("should not happen", e); }
+	public DisplayTable asDisplayTable() {
+		if (displayTable == null)
+			displayTable = DisplayTable.fromTable(table);
+		return displayTable;
 	}
 	
 	/*
@@ -293,7 +281,7 @@ public class Translator {
 	private static final int OUTLEN_MULTIPLIER = WideChar.SIZE * 2 + 4;
 	
 	private static class Buffers {
-		Map<String,WideString> WIDECHAR_BUFFERS = new HashMap<String,WideString>();
+		Map<String,WideCharString> WIDECHAR_BUFFERS = new HashMap<String,WideCharString>();
 		Map<String,byte[]> BYTE_BUFFERS = new HashMap<String,byte[]>();
 		Map<String,int[]> INT_BUFFERS = new HashMap<String,int[]>();
 	}
@@ -305,10 +293,10 @@ public class Translator {
 			}
 		};
 	
-	private static WideString getWideCharBuffer(String id, int minCapacity) {
-		WideString buffer = buffers.get().WIDECHAR_BUFFERS.get(id);
+	static WideCharString getWideCharBuffer(String id, int minCapacity) {
+		WideCharString buffer = buffers.get().WIDECHAR_BUFFERS.get(id);
 		if (buffer == null || buffer.length() < minCapacity) {
-			buffer = new WideString(minCapacity * 2);
+			buffer = new WideCharString(minCapacity * 2);
 			buffers.get().WIDECHAR_BUFFERS.put(id, buffer); }
 		return buffer;
 	}

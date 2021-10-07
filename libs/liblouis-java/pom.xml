@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.liblouis</groupId>
   <artifactId>liblouis-java</artifactId>
-  <version>4.4.0</version>
+  <version>5.0.1</version>
   <packaging>bundle</packaging>
   <name>liblouis-java</name>
   <description>JNA based Java bindings to liblouis, an open-source braille translator and back-translator.</description>
@@ -13,7 +13,7 @@
     <connection>scm:git:git@github.com:bertfrees/liblouis-java.git</connection>
     <developerConnection>scm:git:git@github.com:bertfrees/liblouis-java.git</developerConnection>
     <url>git@github.com:bertfrees/liblouis-java.git</url>
-    <tag>4.4.0</tag>
+    <tag>5.0.1</tag>
   </scm>
   <licenses>
     <license>
@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louis</artifactId>
-        <version>3.17.0</version>
+        <version>3.19.0</version>
         <type>nar</type>
       </dependency>
     </dependencies>
@@ -69,6 +69,13 @@
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>3.1.1</version>
@@ -212,14 +219,17 @@
         </configuration>
         <executions>
           <execution>
-            <id>bundle-standalone</id>
+            <id>bundle-resources</id>
             <phase>package</phase>
             <goals>
               <goal>bundle</goal>
             </goals>
             <configuration>
-              <classifier>standalone</classifier>
-              <instructions>
+              <classifier>resources</classifier>
+              <instructions combine.self="replace">
+                <Bundle-SymbolicName>org.liblouis.java.resources</Bundle-SymbolicName>
+                <Private-Package />
+                <Export-Package />
                 <Include-Resource>
                   org/liblouis/resource-files/tables=target/dependency/share/liblouis/tables,
                   darwin/liblouis.dylib=target/dependency/lib/x86_64-MacOSX-gpp/shared/liblouis.dylib,

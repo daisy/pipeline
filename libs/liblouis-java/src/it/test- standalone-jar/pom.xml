@@ -8,11 +8,16 @@
 	<version>0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<dependencies>
+	  <dependency>
+			<groupId>org.liblouis</groupId>
+			<artifactId>liblouis-java</artifactId>
+			<version>${liblouis-java.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.liblouis</groupId>
 			<artifactId>liblouis-java</artifactId>
 			<version>${liblouis-java.version}</version>
-			<classifier>standalone</classifier>
+			<classifier>resources</classifier>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

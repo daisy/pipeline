@@ -11,7 +11,7 @@ public class TableInfo {
 	private final Map<String,String> cache;
 	private final Set<String> missingFields;
 	
-	TableInfo(String table) {
+	public TableInfo(String table) {
 		this.table = table;
 		cache = new HashMap<String,String>();
 		missingFields = new HashSet<String>();

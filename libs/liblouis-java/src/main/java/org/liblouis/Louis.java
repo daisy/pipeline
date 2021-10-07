@@ -234,8 +234,8 @@ public class Louis {
 			try {
 				setTableResolver(new EmbeddedTableResolver(logger)); }
 			catch (Throwable e) {
-				// tables are only included in standalone version
-				// if tables are not present it will result in an exception in EmbeddedTableResolver.listResources
+				// tables are included in "resources" artifact
+				// if it is not on the class path it will result in an exception in EmbeddedTableResolver.listResources
 				standalone = false;
 			}
 		}
@@ -256,17 +256,19 @@ public class Louis {
 	
 	interface LouisLibrary extends Library {
 		
-		public int lou_translate(String tableList, WideString inbuf, IntByReference inlen,
-				WideString outbuf, IntByReference outlen, short[] typeform, byte[] spacing,
+		public int lou_translate(String tableList, WideCharString inbuf, IntByReference inlen,
+				WideCharString outbuf, IntByReference outlen, short[] typeform, byte[] spacing,
 				int[] outputPos, int[] inputPos, IntByReference cursorPos, int mode);
 		
-		public int lou_backTranslate(String tableList, WideString inbuf, IntByReference inlen,
-				WideString outbuf, IntByReference outlen, short[] typeform, byte[] spacing,
+		public int lou_backTranslate(String tableList, WideCharString inbuf, IntByReference inlen,
+				WideCharString outbuf, IntByReference outlen, short[] typeform, byte[] spacing,
 				int[] outputPos, int[] inputPos, IntByReference cursorPos, int mode);
 		
-		public int lou_hyphenate(String tableList, WideString inbuf, int inlen, byte[] hyphens, int mode);
+		public int lou_hyphenate(String tableList, WideCharString inbuf, int inlen, byte[] hyphens, int mode);
 		
-		public int lou_dotsToChar(String tableList, WideString inbuf, WideString outbuf, int length, int mode);
+		public int lou_dotsToChar(String tableList, WideCharString inbuf, WideCharString outbuf, int length, int mode);
+		
+		public int lou_charToDots(String tableList, WideCharString inbuf, WideCharString outbuf, int length, int mode);
 		
 		public int lou_charSize();
 		

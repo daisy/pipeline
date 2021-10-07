@@ -11,14 +11,14 @@ public class TranslationResult {
 	private int[] characterAttributes = null;
 	private int[] interCharacterAttributes = null;
 	
-	TranslationResult(WideString outbuf, IntByReference outlen, int[] inputPos,
+	TranslationResult(WideCharString outbuf, IntByReference outlen, int[] inputPos,
 	                  int[] characterAttributes, int[] interCharacterAttributes,
 	                  DisplayTable displayTable) throws DisplayException {
 		int len = outlen.getValue();
 		try {
 			this.braille = outbuf.read(len, displayTable); }
 		catch (UnmappableCharacterException e) {
-			throw new DisplayException("virtual dots present in output", e); }
+			throw new DisplayException(e.getMessage(), e); }
 		catch (IOException e) {
 			throw new RuntimeException("should not happen", e); }
 		if (characterAttributes != null) {

@@ -41,8 +41,21 @@ class EmbeddedTableResolver implements TableResolver {
 	
 	EmbeddedTableResolver(org.slf4j.Logger logger) {
 		tables = new HashMap<String,URL>();
-		for (String table : listResources("org/liblouis/resource-files/tables"))
-			tables.put(table, Louis.class.getResource("resource-files/tables/" + table));
+		File resourcesJarFile; {
+			URL knownResource = Louis.class.getClassLoader().getResource("darwin/liblouis.dylib");
+			if (knownResource == null)
+				throw new RuntimeException("resources artifact not on classpath");
+			else if ("file".equals(knownResource.getProtocol()))
+				resourcesJarFile = asFile(knownResource).getParentFile().getParentFile();
+			else if ("jar".equals(knownResource.getProtocol()))
+				resourcesJarFile = new File(
+					URI.create(
+						knownResource.toExternalForm().substring(4, knownResource.toExternalForm().indexOf("!/"))));
+			else
+				throw new RuntimeException(); // don't know what to do with this
+		}
+		for (String table : listResources("org/liblouis/resource-files/tables", resourcesJarFile))
+			tables.put(table, getClass().getClassLoader().getResource("org/liblouis/resource-files/tables/" + table));
 		tablePaths = Collections.unmodifiableSet(tables.keySet());
 		logger.debug("Using default tables");
 		logger.trace("Table files: " + tablePaths);
@@ -96,8 +109,11 @@ class EmbeddedTableResolver implements TableResolver {
 		return tablePaths;
 	}
 	
-	private static Iterable<String> listResources(final String directory) {
-		File jarFile = asFile(Louis.class.getProtectionDomain().getCodeSource().getLocation());
+	private static Iterable<String> listResources(final String directory, Class<?> context) {
+		return listResources(directory, asFile(context.getProtectionDomain().getCodeSource().getLocation()));
+	}
+	
+	private static Iterable<String> listResources(final String directory, File jarFile) {
 		if (!jarFile.exists())
 			throw new RuntimeException();
 		else if (jarFile.isDirectory()) {
