@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/classes</directory>
+      <outputDirectory>system/cli</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>

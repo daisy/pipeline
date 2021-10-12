@@ -175,11 +175,13 @@ target/maven-jlink/classifiers/jre-linux                               : src/mai
                                                                          mvn -Pbuild-jre-linux
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
+                                                                             -Pcompile-simple-cli \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
+                                                                             -Pcompile-simple-cli \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
                                                                              -Punpack-updater-linux \
@@ -258,6 +260,7 @@ check-docker :
 
 PROFILES :=                     \
 	copy-artifacts              \
+	compile-simple-cli          \
 	generate-release-descriptor \
 	build-jre                   \
 	build-jre-linux             \

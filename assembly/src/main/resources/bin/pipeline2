@@ -21,6 +21,7 @@
 #    http://karaf.apache.org/
 #
 
+CWD=$(pwd)
 DIRNAME=$(dirname "$0")
 PROGNAME=$(basename "$0")
 #
@@ -362,6 +363,11 @@ run() {
 
     while [ "$#" -gt 0 ]; do
       case "$1" in
+        'cli')
+            MODE=cli
+            ENABLE_PERSISTENCE=false
+            shift
+            ;;
         'osgi')
             ENABLE_OSGI=true
             shift
@@ -396,12 +402,27 @@ run() {
             ENABLE_PERSISTENCE=false
             shift
             ;;
+        '--')
+            shift
+            if [ "$ENABLE_CLI" = "false" ]; then
+                die "Additional arguments can only be provided in CLI mode (\"--\" must follow \"cli\")"
+            fi
+            CLI_ARGS=("$@")
+            break
+            ;;
         '*')
             die "Unexpected argument: $1"
             ;;
       esac
     done
 
+    if [ "$MODE" = "cli" ]; then
+        PIPELINE2_WS_LOCALFS=true
+        if [ "$ENABLE_OSGI" = "true" ]; then
+            warn "OSGi can not be enabled in CLI mode"
+            ENABLE_OSGI=false
+        fi
+    fi
     if [ "$ENABLE_OSGI" = "true" ]; then
         PATHS="$PATHS system/osgi/bundles"
     else
@@ -446,10 +467,15 @@ run() {
         fi
         eval listJars JARS system/common $PATHS modules
         CLASSPATH="$(join : ${JARS[@]})"
+        if [ "$MODE" = "cli" ]; then
+            CLASSPATH="$CLASSPATH:system/cli"
+        fi
         if [ "$MODE" = "webservice" ]; then
             MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
-        else
+        elif [ "$MODE" = "gui" ]; then
             MAIN=org.daisy.pipeline.gui.GUIService
+        else
+			MAIN=SimpleCLI
         fi
     fi
 
@@ -493,16 +519,22 @@ run() {
                                   -Dorg.daisy.pipeline.logdir=\"$PIPELINE2_LOGDIR\"
                                   -Dorg.daisy.pipeline.mode=$MODE"
 
+    # to resolve relative file paths in CLI
+    if [ "$MODE" = "cli" ]; then
+        SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.cli.cwd=\"$CWD\""
+    fi
+
     if [ $JAVA_VERSION -lt 9 ]; then
         # java 8
-        eval exec "\"$JAVA"\" "$JAVA_OPTS" \
+        eval exec echo "\"$JAVA"\" "$JAVA_OPTS" \
              -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" \
              -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" \
              $OSGI_OPTS \
              -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
              $SYSTEM_PROPS \
              -classpath "\"$CLASSPATH"\" \
-             $MAIN
+             $MAIN \
+             '"${CLI_ARGS[@]}"'
     else
         # java >= 9
         eval exec "\"$JAVA"\" "$JAVA_OPTS" \
@@ -522,7 +554,8 @@ run() {
              -Dorg.daisy.pipeline.properties="\"$PIPELINE2_CONFIG/pipeline.properties\"" \
              $SYSTEM_PROPS \
              -classpath "\"$CLASSPATH"\" \
-             $MAIN
+             $MAIN \
+             '"${CLI_ARGS[@]}"'
     fi
 }
 

@@ -229,6 +229,11 @@
           <artifactId>maven-jlink-plugin</artifactId>
           <version>3.1.0</version>
         </plugin>
+        <plugin>
+          <groupId>org.daisy.pipeline.build</groupId>
+          <artifactId>ds-to-spi-maven-plugin</artifactId>
+          <version>1.1.3</version>
+        </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
@@ -1452,6 +1457,80 @@
       </build>
     </profile>
     <profile>
+      <id>compile-simple-cli</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>framework-core</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline</groupId>
+          <artifactId>ds-to-spi-runtime</artifactId>
+          <scope>provided</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.compendium</artifactId>
+          <scope>provided</scope>
+        </dependency>
+      </dependencies>
+      <build>
+        <resources>
+          <!-- needed to not include src/main/resources -->
+          <resource>
+            <directory>xxx</directory>
+          </resource>
+        </resources>
+        <plugins>
+          <plugin>
+            <groupId>org.daisy.pipeline.build</groupId>
+            <artifactId>ds-to-spi-maven-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>generate-spi-classes</id>
+                <phase>generate-sources</phase>
+                <goals>
+                  <goal>generate-spi-classes</goal>
+                </goals>
+                <configuration>
+                  <includes>
+                    SimpleCLI
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>compile</phase>
+                <goals>
+                  <goal>compile</goal>
+                </goals>
+                <configuration>
+                  <source>1.8</source>
+                  <target>1.8</target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>process-resources</phase>
+                <goals>
+                  <goal>resources</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>unpack-cli-mac</id>
       <build>
         <plugins>
@@ -2649,7 +2728,10 @@
             <executions>
               <execution>
                 <id>jlink</id>
-                <phase>package</phase>
+                <!-- if done in package phase, will try to include target/classes and fail because
+                     of "target/classes does not contain a module-info.java file" error -->
+                <phase>initialize</phase>
+                <!-- <phase>package</phase> -->
                 <goals>
                   <goal>jlink</goal>
                 </goals>
@@ -2687,7 +2769,8 @@
             <executions>
               <execution>
                 <id>jlink-linux</id>
-                <phase>package</phase>
+                <phase>initialize</phase>
+                <!-- <phase>package</phase> -->
                 <goals>
                   <goal>jlink</goal>
                 </goals>
