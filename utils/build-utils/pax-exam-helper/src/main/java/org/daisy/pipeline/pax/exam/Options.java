@@ -110,7 +110,7 @@ public abstract class Options {
 	public static MavenBundle logbackClassic() {
 		// fixed version that is compatible with slf4j version used by Pipeline
 		// can not be put on the class path because Pax Exam itself depends on version 0.9.30
-		return mavenBundle("ch.qos.logback:logback-classic:1.0.11");
+		return mavenBundle("ch.qos.logback:logback-classic:1.2.8");
 	}
 	
 	public static MavenBundleOption xprocspec() {
