@@ -360,7 +360,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 				printWarning("creating META-INF/services file: " + dest);
 				BufferedWriter writer = new BufferedWriter(new FileWriter(dest));
 				for (ComponentModel component : immediateComponents) {
-					writer.write(component.packageName + "." + component.spiClassName);
+					writer.write((component.packageName != null ? component.packageName + "." : "") + component.spiClassName);
 					writer.newLine();
 				}
 				writer.close();
