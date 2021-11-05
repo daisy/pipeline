@@ -1,3 +1,10 @@
+Changes in release v1.14.5
+==========================
+
+### Modules
+
+- **FIX** CereProc TTS adapter
+
 Changes in release v1.14.4
 ==========================
 
