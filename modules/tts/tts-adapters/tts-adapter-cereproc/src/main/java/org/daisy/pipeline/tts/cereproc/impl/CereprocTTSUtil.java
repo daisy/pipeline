@@ -26,10 +26,8 @@ class CereprocTTSUtil {
         String lang = getCurrentLanguage();
         if ("sv".equals(lang)) {
             return new RegexReplace(URLs.getResourceFromJAR("/regex/cereproc_sv.xml", CereprocTTSUtil.class));
-        } else if ("en".equals(lang)) {
-            return new RegexReplace(URLs.getResourceFromJAR("/regex/cereproc_en.xml", CereprocTTSUtil.class));
         } else {
-            throw new IllegalStateException();
+            return new RegexReplace(URLs.getResourceFromJAR("/regex/cereproc_en.xml", CereprocTTSUtil.class));
         }
     }
 
