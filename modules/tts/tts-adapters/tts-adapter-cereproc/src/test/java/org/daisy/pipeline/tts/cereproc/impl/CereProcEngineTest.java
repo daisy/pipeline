@@ -42,8 +42,7 @@ public class CereProcEngineTest {
 				"Server",
 				9999,
 				client,
-				1,
-				CereProcEngine.class.getResource("/transform-ssml.xsl")
+				1
 		);
 		Configuration conf = new Configuration();
 		List<XdmItem> ssmlProcessed = new ArrayList<>();

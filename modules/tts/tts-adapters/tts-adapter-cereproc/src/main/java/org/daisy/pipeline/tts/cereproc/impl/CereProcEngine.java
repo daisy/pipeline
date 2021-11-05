@@ -36,6 +36,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.common.shell.CommandRunner;
@@ -76,7 +77,7 @@ public class CereProcEngine extends MarklessTTSEngine {
 		= ThreadLocal.withInitial(() -> {
 				return new ConcurrentHashMap<Configuration,ThreadUnsafeXslTransformer>(); });
 
-	private URL ssmLxslTransformerURL;
+	private static final URL ssmLxslTransformerURL = URLs.getResourceFromJAR("/transform-ssml.xsl", CereProcEngine.class);
 
 	enum Variant {
 		STANDARD,
@@ -88,8 +89,7 @@ public class CereProcEngine extends MarklessTTSEngine {
 	                      String server,
 	                      int port,
 	                      File client,
-	                      int priority,
-	                      URL ssmlXslTransformerURL)
+	                      int priority)
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
@@ -129,7 +129,6 @@ public class CereProcEngine extends MarklessTTSEngine {
 		                                   sampleRate * sampleBits / (2 * 8), // frame rate
 		                                   false                              // little endian
 		                                   );
-		this.ssmLxslTransformerURL = ssmlXslTransformerURL;
 	}
 
 

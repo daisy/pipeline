@@ -18,10 +18,6 @@ public abstract class CereProcService extends AbstractTTSService {
 
 	private final static Logger logger = LoggerFactory.getLogger(CereProcService.class);
 
-	protected void loadSSMLadapter() {
-		super.loadSSMLadapter("/transform-ssml.xsl", CereProcService.class);
-	}
-
 	@Override
 	public URL getSSMLxslTransformerURL() {
 		return null;
@@ -85,12 +81,6 @@ public abstract class CereProcService extends AbstractTTSService {
 		}
 
 		@Override
-		@Activate
-		protected void loadSSMLadapter() {
-			super.loadSSMLadapter();
-		}
-
-		@Override
 		protected CereProcEngine newEngine(
 				String server, File client, int priority, Map<String,String> params) throws Throwable {
 
@@ -112,8 +102,7 @@ public abstract class CereProcService extends AbstractTTSService {
 			                          server,
 			                          port,
 			                          client,
-			                          priority,
-			                          super.getSSMLxslTransformerURL());
+			                          priority);
 		}
 	}
 
@@ -134,12 +123,6 @@ public abstract class CereProcService extends AbstractTTSService {
 		@Override
 		public String getVersion() {
 			return "dnn";
-		}
-
-		@Override
-		@Activate
-		protected void loadSSMLadapter() {
-			super.loadSSMLadapter();
 		}
 
 		@Override
@@ -177,8 +160,7 @@ public abstract class CereProcService extends AbstractTTSService {
 			                          server,
 			                          port,
 			                          client,
-			                          priority,
-			                          super.getSSMLxslTransformerURL());
+			                          priority);
 		}
 	}
 }
