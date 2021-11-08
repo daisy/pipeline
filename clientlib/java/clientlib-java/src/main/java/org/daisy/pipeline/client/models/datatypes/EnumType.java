@@ -30,6 +30,9 @@ public class EnumType extends DataType {
 				
 				Node valueNode = valueNodes.get(i);
 				value.name = XPath.selectText("text()", valueNode, XPath.dp2ns);
+				if (value.name == null) {
+					value.name = "";
+				}
 				
 				List<Node> precedingDocNodes = XPath.selectNodes("/*/*[local-name()='documentation' and not(preceding-sibling::*[local-name()='value'])]/*[local-name()='value' and count(preceding-sibling::*[local-name()='value'])="+i+"]", dataTypeXml, XPath.dp2ns);
 				List<Node> followingDocNodes = XPath.selectNodes("/*/*[local-name()='documentation' and count(preceding-sibling::*[local-name()='value'])="+(i+1)+"]", dataTypeXml, XPath.dp2ns);

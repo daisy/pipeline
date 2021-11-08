@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -237,35 +238,45 @@ public class Pipeline2HttpClient {
 		
 		if (parameters != null) {
 			for (String name : parameters.keySet()) {
-				try { url += URLEncoder.encode(name, "UTF-8") + "=" + URLEncoder.encode(parameters.get(name), "UTF-8") + "&"; }
-				catch (UnsupportedEncodingException e) { throw new Pipeline2Exception("Unsupported encoding: UTF-8", e); }
+				try {
+					url += URLEncoder.encode(name, "UTF-8")
+						+ "=" + URLEncoder.encode(parameters.get(name), "UTF-8")
+						+ "&"; }
+				catch (UnsupportedEncodingException e) {
+					throw new Pipeline2Exception("Unsupported encoding: UTF-8", e); }
 			}
 		}
 		
 		if (hasAuth) {
-			String time = iso8601.format(new Date());
 
+			// add parameters "authid", "time" and "nonce"
+			parameters = new HashMap<>();
+			parameters.put("authid", username);
+			String time = iso8601.format(new Date());
+			parameters.put("time", time);
 			String nonce = "";
 			while (nonce.length() < 30)
 				nonce += (Math.random()+"").substring(2);
 			nonce = nonce.substring(0, 30);
+			parameters.put("nonce", nonce);
+			for (String name : parameters.keySet()) {
+				try {
+					url += name
+						+ "=" + URLEncoder.encode(parameters.get(name), "UTF-8")
+						+ "&"; }
+				catch (UnsupportedEncodingException e) {
+					throw new Pipeline2Exception("Unsupported encoding: UTF-8", e); }
+			}
+			url = url.substring(0, url.length() - 1);
 
-			url += "authid="+username + "&time="+time + "&nonce="+nonce;
-
-			String hash = "";
+			// add parameter "sign"
 			try {
-				hash = calculateRFC2104HMAC(url, secret);
-				String hashEscaped = "";
-				char c;
-				for (int i = 0; i < hash.length(); i++) {
-					// Base64 encoding uses + which we have to encode in URL parameters.
-					// Hoping this for loop is more efficient than the equivalent replace("\\+","%2B") regex.
-					c = hash.charAt(i);
-					if (c == '+') hashEscaped += "%2B";
-					else hashEscaped += c;
-				} 
-				url += "&sign="+hashEscaped;
-
+				String hash = calculateRFC2104HMAC(url, secret);
+				try {
+					url += "&sign"
+						+ "=" + URLEncoder.encode(hash, "UTF-8"); }
+				catch (UnsupportedEncodingException e) {
+					throw new Pipeline2Exception("Unsupported encoding: UTF-8", e); }
 			} catch (SignatureException e) {
 				throw new Pipeline2Exception("Could not sign request.");
 			}
