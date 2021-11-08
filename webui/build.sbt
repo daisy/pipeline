@@ -6,7 +6,7 @@ import com.typesafe.sbt.packager.windows.WixHelper
 
 organization := "org.daisy.pipeline"
 name := "webui"
-version := "2.7.0"
+version := "2.7.2-SNAPSHOT"
 
 organizationName := "The DAISY Consortium"
 organizationHomepage := Some(url("http://daisy.org"))
@@ -190,12 +190,16 @@ libraryDependencies ++= Seq(
   "org.avaje.ebeanorm" % "avaje-ebeanorm-api" % "3.1.1",
   "org.apache.derby" % "derby" % "10.11.1.1",
   "mysql" % "mysql-connector-java" % "8.0.15",
-  "org.daisy.pipeline" % "clientlib-java" % "5.0.0",
-  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.1.1",
+  "org.daisy.pipeline" % "clientlib-java" % "5.0.1",
+  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.1.2",
   "org.apache.commons" % "commons-compress" % "1.9",
   "org.apache.commons" % "commons-email" % "1.4",
-  "log4j" % "log4j" % "1.2.17",
-  "log4j" % "apache-log4j-extras" % "1.2.17"
+  // override version included by default (1.1.3)
+  "ch.qos.logback" % "logback-core" % "1.2.8",
+  "ch.qos.logback" % "logback-classic" % "1.2.8",
+  "org.slf4j" % "slf4j-api" % "1.7.32",
+  "org.slf4j" % "jul-to-slf4j" % "1.7.32",
+  "org.slf4j" % "jcl-over-slf4j" % "1.7.32"
 )
 
 scalacOptions += "-deprecation"
