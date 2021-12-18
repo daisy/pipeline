@@ -1,9 +1,38 @@
 Changes in release v1.14.5
 ==========================
 
+### Framework
+
+- Engine optimizations
+- Remove external dependency on the Lame MP3 encoder
+
 ### Modules
 
+- **NEW** Automatic selection of MacOS voices
+- **NEW** Automatic selection of Windows (SAPI) voices
+- **NEW** Automatic selection of Google Cloud TTS voices
+- **NEW** Possibility to select Norwegian voices for CereProc
+- **NEW** TTS configuration setting for bitrate of MP3s
 - **FIX** CereProc TTS adapter
+- **FIX** SAPI adapter
+- **FIX** Google Cloud TTS adapter
+- **FIX** Bug in DTBook to DAISY 3 script: `<?xml-stylesheet?>` processing instructions were getting
+  lost in the conversion.
+- **FIX** Bug in EPUB Updater script: embedded TrueType fonts were not preserved.
+- Changes to braille production scripts, see [release notes of braille modules v1.14.5](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1145)
+
+### Details
+
+- [Closed issues in braille-css](https://github.com/issues?q=repo%3Adaisy%2Fbraille-css+milestone%3Av1.14.5)
+- [Closed issues in jStyleParser](https://github.com/issues?q=repo%3Adaisy%2FjStyleParser+milestone%3Av1.14.5)
+- [Closed issues in osgi-libs](https://github.com/issues?q=repo%3Adaisy%2Fosgi-libs+milestone%3Av1.14.5)
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.14.5)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.5)
+- [Closed issues in pipeline-build-utils](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-build-utils+milestone%3Av1.14.5)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.14.5)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.5)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.5)
+- [Closed issues in pipeline-mod-braille](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-mod-braille+milestone%3Av1.14.5)
 
 Changes in release v1.14.4
 ==========================
