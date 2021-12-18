@@ -32,7 +32,8 @@ public class VendorExtensionsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("ol.toc::-obfl-on-toc-start { content: '...' }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -52,7 +53,8 @@ public class VendorExtensionsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("p::after { content: -obfl-evaluate('(...)') }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -69,7 +71,8 @@ public class VendorExtensionsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("@-obfl-volume-transition { @any-interrupted { content: flow(volume-end); } }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
 		AnyAtRule rule = (AnyAtRule)sheet.get(0);
@@ -87,7 +90,8 @@ public class VendorExtensionsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("span { -dotify-counter-style: symbols(numeric '⠴' '⠂' '⠆' '⠒' '⠲' '⠢' '⠖' '⠶' '⠦' '⠔'); }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -109,7 +113,8 @@ public class VendorExtensionsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("span { transform: -dotify-counter; }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);

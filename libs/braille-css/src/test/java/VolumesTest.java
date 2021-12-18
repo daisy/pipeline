@@ -33,7 +33,8 @@ public class VolumesTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("@volume { max-length: 100; }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		Rule<?> rule = sheet.get(0);
@@ -51,7 +52,8 @@ public class VolumesTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("@volume:first { max-length: 100; }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		Rule<?> rule = sheet.get(0);
@@ -70,7 +72,8 @@ public class VolumesTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("@volume:nth(2) { max-length: 100; }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		Rule<?> rule = sheet.get(0);
@@ -89,7 +92,8 @@ public class VolumesTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("@volume { max-length: 100; @begin { content: 'foo' } }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		Rule<?> rule = sheet.get(0);

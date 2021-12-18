@@ -26,9 +26,11 @@ import org.daisy.braille.css.BrailleCSSProperty.BorderAlign;
 import org.daisy.braille.css.BrailleCSSProperty.BorderPattern;
 import org.daisy.braille.css.BrailleCSSProperty.BorderStyle;
 import org.daisy.braille.css.BrailleCSSProperty.BorderWidth;
+import org.daisy.braille.css.BrailleCSSProperty.BrailleCharset;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.Display;
 import org.daisy.braille.css.BrailleCSSProperty.Flow;
+import org.daisy.braille.css.BrailleCSSProperty.HyphenateCharacter;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.LineHeight;
@@ -58,7 +60,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	
 	private static Logger log = LoggerFactory.getLogger(SupportedBrailleCSS.class);
 	
-	private static final int TOTAL_SUPPORTED_DECLARATIONS = 67;
+	private static final int TOTAL_SUPPORTED_DECLARATIONS = 69;
 	
 	private static final TermFactory tf = CSSFactory.getTermFactory();
 	
@@ -258,7 +260,9 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		setProperty("string-set", StringSet.NONE);
 		setProperty("content", Content.NONE);
 		setProperty("text-transform", TextTransform.AUTO);
+		setProperty("braille-charset", BrailleCharset.UNICODE);
 		setProperty("white-space", WhiteSpace.NORMAL);
+		setProperty("hyphenate-character", HyphenateCharacter.AUTO);
 		setProperty("hyphens", Hyphens.MANUAL);
 		setProperty("letter-spacing", LetterSpacing.length, DEFAULT_UA_LETTER_SPACING);
 		setProperty("word-spacing", WordSpacing.length, DEFAULT_UA_WORD_SPACING);

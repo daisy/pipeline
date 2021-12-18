@@ -57,7 +57,8 @@ public class PseudoClassTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":not(.foo,.bar) { display: none }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -95,7 +96,8 @@ public class PseudoClassTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":has(.foo,.bar) { display: none }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -138,7 +140,8 @@ public class PseudoClassTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":not(:has(:not(.foo, .bar))) { display: none }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);

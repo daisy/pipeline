@@ -39,7 +39,8 @@ public class PseudoElementsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("body p::after { content: 'foo' }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 	}
@@ -49,7 +50,8 @@ public class PseudoElementsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("p::after::before { content: 'foo' }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);
@@ -76,7 +78,8 @@ public class PseudoElementsTest {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource("table::table-by(row)::list-item:last-child::after { display: none }",
 			              (String)null,
-			              new URL("file:///base/url/is/not/specified")),
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
 			new DefaultCSSSourceReader());
 		assertEquals(1, sheet.size());
 		RuleSet rule = (RuleSet)sheet.get(0);

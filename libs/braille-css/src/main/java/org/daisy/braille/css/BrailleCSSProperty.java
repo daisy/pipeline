@@ -146,6 +146,33 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 	
+	public enum BrailleCharset implements BrailleCSSProperty {
+		UNICODE("unicode"), CUSTOM("custom"), INHERIT("inherit"), INITIAL("initial");
+		
+		private String text;
+		
+		private BrailleCharset(String text) {
+			this.text = text;
+		}
+		
+		public boolean inherited() {
+			return true;
+		}
+		
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+		
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
 	public enum Content implements BrailleCSSProperty {
 		content_list(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 
@@ -212,6 +239,33 @@ public interface BrailleCSSProperty extends CSSProperty {
 
 		public boolean inherited() {
 			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+	
+	public enum HyphenateCharacter implements BrailleCSSProperty {
+		braille_string(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private HyphenateCharacter(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return true;
 		}
 
 		public boolean equalsInherit() {
