@@ -140,11 +140,12 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 endif
 
 .PHONY : docker
-docker : target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+docker : mvn -Pwithout-gui -Pwithout-osgi \
+         target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 	mkdir target/docker
 	cp Dockerfile.without_builder target/docker/Dockerfile
 	cp -r target/assembly-$(assembly/VERSION)-linux/daisy-pipeline target/docker/
-	cp -r $< target/docker/jre
+	cp -r $(word 4,$^) target/docker/jre
 	cd target/docker && \
 	$(DOCKER) build -t daisyorg/pipeline-assembly .
 
@@ -205,6 +206,15 @@ check-docker :
 
 .PHONY : --without-persistence
 --without-persistence : -Pwithout-persistence
+
+.PHONY : --without-osgi
+--without-osgi : -Pwithout-osgi
+
+.PHONY : --without-gui
+--without-gui : -Pwithout-gui
+
+.PHONY : --without-webservice
+--without-webservice : -Pwithout-webservice
 
 #                         process-sources      generate-resources      process-resources      prepare-package       package
 #                         ---------------      ---------------         -----------------      ---------------       -------
@@ -282,7 +292,10 @@ PROFILES :=                     \
 	unpack-updater-mac          \
 	unpack-updater-win          \
 	unpack-updater-gui-win      \
-	without-persistence
+	without-persistence         \
+	without-osgi                \
+	without-gui                 \
+	without-webservice
 
 .PHONY : mvn
 mvn :

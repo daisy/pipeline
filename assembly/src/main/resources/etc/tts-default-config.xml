@@ -1,62 +1,5 @@
 <config>
 	<!--
-	    AT&T
-	-->
-	<voice engine="att" name="alain16" lang="fr" gender="male-adult" priority="10"/>
-	<voice engine="att" name="alain8" lang="fr" gender="male-adult" priority="7"/>
-	<voice engine="att" name="juliette16" lang="fr" gender="female-adult" priority="10"/>
-	<voice engine="att" name="juliette8" lang="fr" gender="female-adult" priority="7"/>
-	<voice engine="att" name="arnaud16" lang="fr-ca" gender="male-adult" priority="10"/>
-	<voice engine="att" name="arnaud8" lang="fr-ca" gender="male-adult" priority="7"/>
-	<voice engine="att" name="klara16" lang="de" gender="female-adult" priority="10"/>
-	<voice engine="att" name="klara8" lang="de" gender="female-adult" priority="7"/>
-	<voice engine="att" name="reiner16" lang="de" gender="male-adult" priority="10"/>
-	<voice engine="att" name="reiner8" lang="de" gender="male-adult" priority="7"/>
-	<voice engine="att" name="anjali16" lang="en-uk" gender="female-adult" priority="10"/>
-	<voice engine="att" name="anjali8" lang="en-uk" gender="female-adult" priority="7"/>
-	<voice engine="att" name="audrey16" lang="en-uk" gender="female-adult" priority="10"/>
-	<voice engine="att" name="audrey8" lang="en-uk" gender="female-adult" priority="7"/>
-	<voice engine="att" name="charles16" lang="en-uk" gender="male-adult" priority="10"/>
-	<voice engine="att" name="charles8" lang="en-uk" gender="male-adult" priority="7"/>
-	<voice engine="att" name="mike16" lang="en-us" gender="male-adult" priority="10"/>
-	<voice engine="att" name="mike8" lang="en-us" gender="male-adult" priority="7"/>
-	<voice engine="att" name="claire16" lang="en-us" gender="female-adult" priority="10"/>
-	<voice engine="att" name="claire8" lang="en-us" gender="female-adult" priority="7"/>
-	<voice engine="att" name="crystal16" lang="en-us" gender="female-adult" priority="10"/>
-	<voice engine="att" name="crystal8" lang="en-us" gender="female-adult" priority="7"/>
-	<voice engine="att" name="julia16" lang="en-us" gender="female-adult" priority="10"/>
-	<voice engine="att" name="julia8" lang="en-us" gender="female-adult" priority="7"/>
-	<voice engine="att" name="lauren16" lang="en-us" gender="female-adult" priority="10"/>
-	<voice engine="att" name="lauren8" lang="en-us" gender="female-adult" priority="7"/>
-	<voice engine="att" name="mel16" lang="en-us" gender="male-adult" priority="10"/>
-	<voice engine="att" name="mel8" lang="en-us" gender="male-adult" priority="7"/>
-	<voice engine="att" name="ray16" lang="en-us" gender="male-adult" priority="10"/>
-	<voice engine="att" name="ray8" lang="en-us" gender="male-adult" priority="7"/>
-	<voice engine="att" name="rich16" lang="en-us" gender="male-adult" priority="10"/>
-	<voice engine="att" name="rich8" lang="en-us" gender="male-adult" priority="7"/>
-	<voice engine="att" name="alberto16" lang="es-us" gender="male-adult" priority="10"/>
-	<voice engine="att" name="alberto8" lang="es-us" gender="male-adult" priority="7"/>
-	<voice engine="att" name="rosa16" lang="es-us" gender="female-adult" priority="10"/>
-	<voice engine="att" name="rosa8" lang="es-us" gender="female-adult" priority="7"/>
-	<voice engine="att" name="francesca16" lang="it" gender="female-adult" priority="10"/>
-	<voice engine="att" name="francesca8" lang="it" gender="female-adult" priority="7"/>
-	<voice engine="att" name="giovanni16" lang="it" gender="male-adult" priority="10"/>
-	<voice engine="att" name="giovanni8" lang="it" gender="male-adult" priority="7"/>
-	<voice engine="att" name="marina16" lang="pt-br" gender="female-adult" priority="10"/>
-	<voice engine="att" name="marina8" lang="pt-br" gender="female-adult" priority="7"/>
-	<voice engine="att" name="tiago16" lang="pt-br" gender="male-adult" priority="10"/>
-	<voice engine="att" name="tiago8" lang="pt-br" gender="male-adult" priority="7"/>
-	<!--
-	    Microsoft
-	-->
-	<voice engine="sapi" name="Microsoft Anna" lang="en-us" gender="female-adult" priority="4"/>
-	<voice engine="sapi" name="Microsoft David" lang="en-us" gender="male-adult" priority="6"/>
-	<voice engine="sapi" name="Microsoft Zira" lang="en-us" gender="female-adult" priority="6"/>
-	<voice engine="sapi" name="Microsoft Hazel" lang="en-uk" gender="male-adult" priority="6"/>
-	<voice engine="sapi" name="Microsoft Mike" lang="en-us" gender="male-adult" priority="2"/>
-	<voice engine="sapi" name="Microsoft Lili" lang="zh" gender="female-adult" priority="3"/>
-	<voice engine="sapi" name="Microsoft Simplified Chinese" lang="zh" gender="male-adult" priority="2"/>
-	<!--
 	    Acapela
 	-->
 	<voice engine="acapela" name="heather" lang="en-us" gender="female-adult" priority="12"/>
@@ -66,9 +9,4 @@
 	<voice engine="acapela" name="claire" lang="fr" gender="female-adult" priority="12"/>
 	<voice engine="acapela" name="alice" lang="fr" gender="female-adult" priority="12"/>
 	<voice engine="acapela" name="bruno" lang="fr" gender="male-adult" priority="12"/>
-	<!--
-	    OS X
-	-->
-	<voice engine="osx-speech" name="Alex" lang="en-us" gender="male-adult" priority="5"/>
-	<voice engine="osx-speech" name="Thomas" lang="fr-fr" gender="male-adult" priority="5"/>
 </config>

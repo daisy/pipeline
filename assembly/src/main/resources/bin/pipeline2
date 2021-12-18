@@ -27,26 +27,6 @@ PROGNAME=$(basename "$0")
 # Check/Set up some easily accessible MIN/MAX params for JVM mem usage
 #
 
-if [ "x$JAVA_MIN_MEM" = "x" ]; then
-    JAVA_MIN_MEM=256M
-    export JAVA_MIN_MEM
-fi
-
-if [ "x$JAVA_MAX_MEM" = "x" ]; then
-    JAVA_MAX_MEM=1G
-    export JAVA_MAX_MEM
-fi
-
-if [ "x$JAVA_PERM_MEM" = "x" ]; then
-    JAVA_PERM_MEM=16M
-    export JAVA_PERM_MEM
-fi
-
-if [ "x$JAVA_MAX_PERM_MEM" = "x" ]; then
-    JAVA_MAX_PERM_MEM=256M
-    export JAVA_MAX_PERM_MEM
-fi
-
 warn() {
     echo "${PROGNAME}: $*"
 }
@@ -402,6 +382,25 @@ run() {
       esac
     done
 
+    if [ "$MODE" = "webservice" ]; then
+        if ! [ -e "$PIPELINE2_HOME/system/webservice" ]; then
+            if ! [ -e "$PIPELINE2_HOME/system/gui" ]; then
+                die "Pipeline can not be started"
+            fi
+            MODE=gui
+            ENABLE_PERSISTENCE=false
+        fi
+    elif [ "$MODE" = "gui" ]; then
+        if ! [ -e "$PIPELINE2_HOME/system/gui" ] ; then
+            die "GUI mode not supported"
+        fi
+    fi
+    if [ "$ENABLE_OSGI" = "true" ]; then
+        if ! [ -e "$PIPELINE2_HOME/system/osgi/bootstrap" ]; then
+            warn "OSGi can not be enabled"
+            ENABLE_OSGI=false
+        fi
+    fi
     if [ "$ENABLE_OSGI" = "true" ]; then
         PATHS="$PATHS system/osgi/bundles"
     else
@@ -413,6 +412,12 @@ run() {
             PATHS="$PATHS system/osgi/gogo"
         else
             warn "Shell can only be enabled under OSGi"
+        fi
+    fi
+    if [ "$ENABLE_PERSISTENCE" = "true" ]; then
+        if ! [ -e "$PIPELINE2_HOME/system/persistence" ]; then
+            warn "Running without persistence"
+            ENABLE_PERSISTENCE=false
         fi
     fi
     if [ "$ENABLE_PERSISTENCE" = "true" ]; then
@@ -477,8 +482,6 @@ run() {
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/config-logback.xml\""
     # XMLCalabash base configuration file
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.xproc.configuration=\"${PIPELINE2_HOME}/etc/config-calabash.xml\""
-    # Version number as returned by "alive" call
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.version=${project.version}"
     # Updater configuration
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.updater.bin=\"${PIPELINE2_HOME}/updater/${pipeline.updater}\"
                                   -Dorg.daisy.pipeline.updater.deployPath=\"${PIPELINE2_HOME}/\"

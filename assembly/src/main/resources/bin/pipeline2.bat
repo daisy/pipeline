@@ -158,6 +158,32 @@ goto :RUN_LOOP
 goto :RUN_LOOP
 
 :EXECUTE
+    if %MODE% == webservice (
+        if not exist "%PIPELINE2_HOME%\system\webservice" (
+            if not exist "%PIPELINE2_HOME%\system\gui" (
+                rem fatal
+                set exitCode=3
+                goto END
+            )
+            set MODE=gui
+            set ENABLE_PERSISTENCE=false
+        )
+    ) else (
+        if %MODE% == gui (
+            if not exist "%PIPELINE2_HOME%\system\gui" (
+                call:warn GUI mode not supported
+                rem user-fixable
+                set exitCode=2
+                goto END
+            )
+        )
+    )
+    if %ENABLE_OSGI% == true (
+        if not exist "%PIPELINE2_HOME%\system\osgi\bootstrap" (
+            call:warn OSGi can not be enabled
+            set ENABLE_OSGI=false
+        )
+    )
     if %ENABLE_OSGI% == true (
         set PATHS=!PATHS! system\osgi\bundles
     ) else (
@@ -169,6 +195,12 @@ goto :RUN_LOOP
             set PATHS=!PATHS! system\osgi\gogo
         ) else (
             call:warn Shell can only be enabled under OSGi
+        )
+    )
+    if %ENABLE_PERSISTENCE% == true (
+        if not exist "%PIPELINE2_HOME%\system\persistence" (
+            call:warn Running without persistence
+            set ENABLE_PERSISTENCE=false
         )
     )
     if %ENABLE_PERSISTENCE% == true (
@@ -233,8 +265,6 @@ goto :RUN_LOOP
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dlogback.configurationFile="file:%PIPELINE2_HOME:\=/%/etc/config-logback.xml"
     rem XMLCalabash base configuration file
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.xproc.configuration="%PIPELINE2_HOME:\=/%/etc/config-calabash.xml"
-    rem Version number as returned by "alive" call
-    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.version=${project.version}
     rem Updater configuration
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.updater.bin="%PIPELINE2_HOME:\=/%/updater/pipeline-updater" ^
                                     -Dorg.daisy.pipeline.updater.deployPath="%PIPELINE2_HOME:\=/%/" ^
