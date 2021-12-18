@@ -4,6 +4,7 @@ package org.daisy.pipeline.client;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Random;
 
@@ -19,8 +20,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 import com.google.common.base.Strings;
-
-import org.apache.commons.codec.binary.Base64;
 
 import org.daisy.pipeline.webservice.jaxb.base.Alive;
 import org.daisy.pipeline.webservice.jaxb.clients.Client;
@@ -184,12 +183,10 @@ public class PipelineClient {
 
                 @Override
                 public void filter(ClientRequestContext ctxt) throws IOException {
-                        String timestamp=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
-                        .format(new Date());
-                        String nonce=new Integer(new Random().nextInt(1073741824)).toString();
+                        String timestamp = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(new Date());
+                        String nonce = new Integer(new Random().nextInt(1073741824)).toString();
                         nonce=Strings.padStart(nonce,30,'0');
-                        
-                        UriBuilder builder=UriBuilder.fromUri(ctxt.getUri());
+                        UriBuilder builder = UriBuilder.fromUri(ctxt.getUri());
                         builder.queryParam("authid",this.clientId);
                         builder.queryParam("time",timestamp);
                         builder.queryParam("nonce",nonce);
@@ -198,23 +195,14 @@ public class PipelineClient {
                         try {
                                 Mac mac = Mac.getInstance("HmacSHA1");
                                 mac.init(key);
-
-
-                                byte[] bytes = mac.doFinal(builder.clone().build()
-                                                .toString().getBytes("UTF-8"));
-
-                                builder.queryParam("sign",Base64.encodeBase64String(bytes));
+                                byte[] bytes = mac.doFinal(builder.clone().build().toString().getBytes("UTF-8"));
+                                builder.queryParam("sign", Base64.getEncoder().encodeToString(bytes));
                                 ctxt.setUri(builder.build());
                         } catch (Exception e) {
                                 logger.warn(e.getMessage());
                                 throw new RuntimeException(e);
                         }
-
-
-                        
-
                 }
-                
         }
 }
 

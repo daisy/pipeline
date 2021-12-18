@@ -249,8 +249,10 @@ public class PipelineWebService extends Application {
         private void halt() {
                 if (OSGiHelper.inOSGiContext())
                         OSGiHelper.stopFramework();
-                else
+                else {
+                        close();
                         System.exit(0);
+                }
         }
 
         /**
@@ -259,11 +261,15 @@ public class PipelineWebService extends Application {
          * @throws Throwable
          */
         @Deactivate
-        public void close() throws Exception {
-                if (this.component!=null)
-                        this.component.stop();
-                this.stop();
-                logger.info("Webservice stopped.");
+        public void close() {
+                try {
+                        if (this.component!=null)
+                                this.component.stop();
+                        this.stop();
+                        logger.info("Webservice stopped.");
+                } catch (Exception e) {
+                        logger.error("Error stopping the web service:" + e.getMessage());
+                }
         }
 
         /**
@@ -385,6 +391,14 @@ public class PipelineWebService extends Application {
                 PipelineWebService webservice = SPIHelper.createWebService();
                 if (webservice == null)
                         System.exit(1);
+                // Add shutdown hook to gracefully stop webservice because webservice.finalize()
+                // is not automatically called (object is not garbage collected before shutdown).
+                // Note that only the webservice is stopped gracefully, all the bound services
+                // are terminated hard.
+                Runtime.getRuntime().addShutdownHook(
+                        new Thread() {
+                                public void run() {
+                                        webservice.close(); }} );
                 System.err.println("Press Ctrl-C to exit");
                 // program does not exit until last thread has finished
         }

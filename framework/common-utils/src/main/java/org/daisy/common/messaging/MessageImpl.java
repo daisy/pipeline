@@ -51,14 +51,14 @@ class MessageImpl extends ProgressMessage implements MessageAppender {
 		if (parent == null) {
 			MessageThread t = new MessageThread(ownerId, null);
 			if (activeBlockInThread.containsKey(t))
-				messageThread = new MessageThread(ownerId, sequence);
+				messageThread = new MessageThread(ownerId, this.sequence);
 			else
 				messageThread = t;
 			MDC.put("message-thread", messageThread.toString());
 		} else if (thread == parent.thread)
 			messageThread = parent.messageThread;
 		else {
-			messageThread = new MessageThread(ownerId, sequence);
+			messageThread = new MessageThread(ownerId, this.sequence);
 			MDC.put("message-thread", messageThread.toString());
 		}
 		activeBlockInThread.put(messageThread, this);

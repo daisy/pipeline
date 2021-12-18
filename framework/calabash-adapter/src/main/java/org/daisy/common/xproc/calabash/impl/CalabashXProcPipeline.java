@@ -1,11 +1,11 @@
 package org.daisy.common.xproc.calabash.impl;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Properties;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
-import javax.xml.transform.SourceLocator;
 import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 
@@ -14,6 +14,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.xproc.XProcError;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
@@ -23,7 +24,9 @@ import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.common.xproc.XProcResult;
+import org.daisy.common.xproc.calabash.CalabashXProcError;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -31,6 +34,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;
+
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcMessageListener;
@@ -42,11 +46,16 @@ import com.xmlcalabash.model.Output;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XPipeline;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Calabash piplines allow to define and run xproc pipelines using calabash. The
  * pipelines supplied by this class are reusable.
  */
 public class CalabashXProcPipeline implements XProcPipeline {
+
+	private static final Logger logger = LoggerFactory.getLogger(CalabashXProcPipeline.class);
 
 	/** The uri. */
 	private final URI uri;
@@ -259,7 +268,19 @@ public class CalabashXProcPipeline implements XProcPipeline {
                 //propagate possible errors
 			
 		} catch (XProcException e) {
-			throw new XProcErrorException(new CalabashXProcError(e), e);
+
+			// if multiple errors have been reported, log all except the last one (the last one
+			// should normally contain the same info as the caught XProcException)
+			List<XdmNode> errors = pipeline.xpipe.errors();
+			for (int i = 0; i < errors.size() - 1; i++)
+				try {
+					XProcError err = XProcError.parse(
+						new SaxonInputValue(errors.get(i).getUnderlyingNode()).asXMLStreamReader());
+					logger.error(err.toString()); }
+				catch (Throwable e1) {}
+
+			XProcError err = CalabashXProcError.from(e);
+			throw new XProcErrorException(err, e);
 		} catch (Exception e) {
                         throw new RuntimeException(e);
 
@@ -270,35 +291,6 @@ public class CalabashXProcPipeline implements XProcPipeline {
                 }
 		return CalabashXProcResult.newInstance( pipeline.xpipe ,
 				pipeline.config);
-	}
-
-	private class CalabashXProcError extends XProcError {
-		
-		final XProcException e;
-		
-		CalabashXProcError(XProcException e) {
-			this.e = e;
-		}
-		
-		public String getCode() {
-			if (e.getErrorCode() != null)
-				return e.getErrorCode().toString();
-			else
-				return null;
-		}
-		
-		public String getMessage() {
-			return e.getMessage();
-		}
-		
-		public XProcError getCause() {
-			XProcException cause = e.getErrorCause();
-			return cause == null ? null : new CalabashXProcError(cause);
-		}
-		
-		public SourceLocator[] getLocation() {
-			return e.getLocation();
-		}
 	}
 
 	/**

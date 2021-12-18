@@ -210,6 +210,14 @@ public class StaxXProcPipelineInfoParser {
 		 * @param infoBuilder the info builder
 		 */
 		private void parseOption(final XMLEvent event, final Builder infoBuilder) {
+			Attribute hiddenAttr = event.asStartElement().getAttributeByName(
+					Attributes.PX_HIDDEN);
+			if (hiddenAttr != null) {
+				if (Values.TRUE.equals(hiddenAttr.getValue())) {
+					// hide option from user
+					return;
+				}
+			}
 			QName name = null;
 			boolean required = false;
 			String select = null;

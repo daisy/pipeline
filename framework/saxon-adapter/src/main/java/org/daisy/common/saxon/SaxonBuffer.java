@@ -36,7 +36,7 @@ public class SaxonBuffer extends Buffer<Void,Void> {
 		if (input == null) {
 			if (xdmItemBuffer == null)
 				xdmItemBuffer = new ItemBuffer<>();
-			input = new SaxonInputValue(xdmItemBuffer, configuration);
+			input = new SaxonInputValue(xdmItemBuffer);
 		}
 		return input;
 	}

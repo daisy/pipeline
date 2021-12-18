@@ -178,7 +178,7 @@ public class MessageListenerImpl implements XProcMessageListener {
 		} else if (level.equals("TRACE")) {
 			builder.withLevel(Level.TRACE);
 		} else {
-			builder.withLevel(Level.INFO);
+			builder.withLevel(Level.DEBUG);
 			message = "Message with invalid level '" + level + "': " + message;
 		}
 		XprocMessageHelper.message(step, location, message, builder);

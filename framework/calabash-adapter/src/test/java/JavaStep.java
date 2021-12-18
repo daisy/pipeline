@@ -11,6 +11,7 @@ import com.xmlcalabash.runtime.XAtomicStep;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.common.transform.TransformerException;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 
@@ -53,9 +54,7 @@ public class JavaStep extends Identity implements XProcStep {
 		}
 		if (getOption(_throw_error, "false").equals("true")) {
 			logger.info("going to throw an exception");
-			throw XProcException.fromException(new RuntimeException("foobar"))
-			                    .rebase(step.getLocation(),
-			                            new RuntimeException().getStackTrace());
+			throw XProcStep.raiseError(new TransformerException(new RuntimeException("foobar")), step);
 		}
 		super.run();
 	}

@@ -66,6 +66,13 @@ public abstract class AbstractJob implements Job {
                                 changeStatus(Status.SUCCESS);
                         else
                                 changeStatus(Status.FAIL);
+                } catch (OutOfMemoryError e) {
+                        changeStatus( Status.ERROR);
+                        ctxt.messageBus.append(new MessageBuilder()
+                                               .withLevel(Level.ERROR)
+                                               .withText(e.getMessage()))
+                                       .close();
+                        logger.error("job consumed all heap space", e);
                 } catch (Throwable e) {
                         changeStatus( Status.ERROR);
                         ctxt.messageBus.append(new MessageBuilder()
@@ -77,15 +84,7 @@ public abstract class AbstractJob implements Job {
                                 logger.debug("job finished with error state", e);
                         } else
                                 logger.error("job finished with error state", e);
-		} catch (OutOfMemoryError e) {//this one needs it's own catch!
-                        changeStatus( Status.ERROR);
-                        ctxt.messageBus.append(new MessageBuilder()
-                                               .withLevel(Level.ERROR)
-                                               .withText(e.getMessage()))
-                                  .close();
-                        logger.error("job consumed all heap space",e);
                 }
-
         }
 
         protected void onStatusChanged(Status newStatus){

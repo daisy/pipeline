@@ -22,6 +22,7 @@ import org.daisy.common.transform.OutputValue;
 import org.daisy.common.transform.StringWithNamespaceContext;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLTransformer;
+import org.daisy.common.xproc.XProcErrorException;
 
 /**
  * {@link com.xmlcalabash.core.XProcStep} that also implements the {@link XMLTransformer} API.
@@ -40,19 +41,19 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						XProcStep.this.setInput(n.getLocalPart(), XMLCalabashInputValue.of(i).asReadablePipe());
 					} else if (i instanceof StringWithNamespaceContext) {
 						XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
-						                         XMLCalabashOptionValue.of((StringWithNamespaceContext)i).asRuntimeValue());
+						                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 					} else {
 						try {
-							XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
-							                         XMLCalabashOptionValue.of(i).asRuntimeValue());
+							Map<net.sf.saxon.s9api.QName,RuntimeValue> params
+								= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
+							if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
+								throw new IllegalArgumentException("unexpected value on input port " + n);
+							for (net.sf.saxon.s9api.QName p : params.keySet())
+								XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
 						} catch (IllegalArgumentException e) {
 							try {
-								Map<net.sf.saxon.s9api.QName,RuntimeValue> params
-									= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
-								if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
-									throw new IllegalArgumentException("unexpected value on input port " + n);
-								for (net.sf.saxon.s9api.QName p : params.keySet())
-									XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
+								XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
+								                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 							} catch (IllegalArgumentException ee) {
 								throw new IllegalArgumentException("unexpected value on input port " + n);
 							}
@@ -136,7 +137,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 					Map<QName,InputValue<?>> input = new HashMap<>();
 					if (inputs != null)
 						for (String port : inputs.keySet())
-							input.put(new QName(port), new XMLCalabashInputValue(inputs.get(port), runtime));
+							input.put(new QName(port), new XMLCalabashInputValue(inputs.get(port)));
 					if (options != null)
 						for (QName name : options.keySet())
 							input.put(name, new XMLCalabashOptionValue(options.get(name)));
@@ -163,14 +164,20 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 	public static XProcException raiseError(Throwable e, XAtomicStep step) {
 		if (e instanceof XProcException)
 			throw (XProcException)e;
-		else {
+		else if (e instanceof XProcErrorException) {
+			throw CalabashExceptionFromXProcError.from(((XProcErrorException)e).getXProcError());
+		} else {
 			StackTraceElement[] stackTrace = new RuntimeException().getStackTrace();
 			stackTrace = Arrays.copyOfRange(stackTrace, 1, stackTrace.length);
 			if (e instanceof TransformerException) {
-				XProcException cause = e.getCause() != null
-					? XProcException.fromException(e.getCause())
-					                .rebase(step.getLocation(), stackTrace)
-					: null;
+				XProcException cause = e.getCause() instanceof XProcException
+					? (XProcException)e.getCause()
+					: e.getCause() instanceof XProcErrorException
+						? CalabashExceptionFromXProcError.from(((XProcErrorException)e.getCause()).getXProcError())
+						: e.getCause() != null
+							? XProcException.fromException(e.getCause())
+							                .rebase(step.getLocation(), stackTrace)
+							: null;
 				return e.getMessage() != null
 					? cause != null
 						? new XProcException(step, e.getMessage(), cause)

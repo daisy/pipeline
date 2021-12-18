@@ -147,6 +147,8 @@ public final class XMLStreamWriterHelper {
 	}
 	
 	public static void writeElement(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
+		if (writer == null)
+			skipElement(reader);
 		writeStartElement(writer, reader.getName());
 		writeAttributes(writer, reader);
 		int depth = 0;
@@ -291,6 +293,26 @@ public final class XMLStreamWriterHelper {
 			} else
 				throw new IllegalArgumentException();
 		}
+	}
+	
+	public static int skipElement(XMLStreamReader reader) throws XMLStreamException {
+		int depth = 0;
+		while (true)
+			try {
+				int event = reader.next();
+				switch (event) {
+				case START_ELEMENT:
+					depth++;
+					break;
+				case END_ELEMENT:
+					if (--depth < 0) return event;
+					break;
+				default:
+				}
+			} catch (NoSuchElementException e) {
+				break;
+			}
+		throw new RuntimeException("coding error");
 	}
 	
 	public interface WriterEvent {

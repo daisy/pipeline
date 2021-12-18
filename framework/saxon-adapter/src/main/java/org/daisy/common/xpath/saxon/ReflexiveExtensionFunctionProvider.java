@@ -7,7 +7,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,16 +14,21 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPath;
 
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentBuilderImpl;
+import net.sf.saxon.dom.ElementOverNodeInfo;
+import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -38,12 +42,9 @@ import net.sf.saxon.om.SequenceIterator;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
-import net.sf.saxon.value.BooleanValue;
-import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
 import net.sf.saxon.value.ObjectValue;
-import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 import net.sf.saxon.xpath.XPathFactoryImpl;
@@ -64,13 +65,15 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	protected ReflexiveExtensionFunctionProvider(Class<?> definition) {
 		definitions = new ArrayList<>();
 		Collection<String> names = new ArrayList<>();
-		for (Constructor<?> constructor : definition.getConstructors()) {
-			if (Modifier.isPublic(constructor.getModifiers())) {
-				if (names.contains("new"))
-					throw new IllegalArgumentException("function overloading not supported");
-				else {
-					names.add("new");
-					definitions.add(extensionFunctionDefinitionFromMethod(constructor));
+		if (!Modifier.isAbstract(definition.getModifiers())) {
+			for (Constructor<?> constructor : definition.getConstructors()) {
+				if (Modifier.isPublic(constructor.getModifiers())) {
+					if (names.contains("new"))
+						throw new IllegalArgumentException("function overloading not supported");
+					else {
+						names.add("new");
+						definitions.add(extensionFunctionDefinitionFromMethod(constructor));
+					}
 				}
 			}
 		}
@@ -168,7 +171,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										javaArgs[j++] = iteratorFromSequence(
 											args[i++],
 											((ParameterizedType)type).getActualTypeArguments()[0]);
-									else
+									else if (type instanceof ParameterizedType
+									           && ((ParameterizedType)type).getRawType().equals(Optional.class)) {
+										Optional<Item> item = getOptionalItem(args[i++]);
+										javaArgs[j++] = item.isPresent()
+											? objectFromItem(item.get(), ((ParameterizedType)type).getActualTypeArguments()[0])
+											: Optional.empty();
+									} else
 										javaArgs[j++] = objectFromItem(getSingleItem(args[i++]), type);
 								}
 								Object result; {
@@ -183,14 +192,12 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										throw new RuntimeException(); // should not happen
 									}
 								}
-								if (result == null)
-									return EmptySequence.getInstance();
-								else if (declaringClass.isInstance(result))
+								if (declaringClass.isInstance(result))
 									return new ObjectValue<>(result);
-								else if (result instanceof Iterator)
-									return sequenceFromIterator((Iterator<?>)result);
+								else if (result instanceof Optional)
+									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
 								else
-									return itemFromObject(result);
+									return SaxonHelper.sequenceFromObject(result);
 							} catch (RuntimeException e) {
 								throw new XPathException("Unexpected error in " + getFunctionQName().getClarkName(), e);
 							}
@@ -217,15 +224,21 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		else if (type.equals(Boolean.class)
 		         || type.equals(boolean.class))
 			return SequenceType.SINGLE_BOOLEAN;
-		else if (type.equals(Node.class))
+		else if (type.equals(Element.class) || type.equals(Node.class))
 			return SequenceType.SINGLE_NODE;
 		else if (type.equals(Object.class))
 			return SequenceType.SINGLE_ITEM;
 		else if (type instanceof ParameterizedType) {
 			Type rawType = ((ParameterizedType)type).getRawType();
-			if (rawType.equals(Iterator.class)) {
+			if (rawType.equals(Optional.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				if (itemType.equals(Node.class))
+				if (itemType.equals(Node.class) || itemType.equals(Element.class))
+					return SequenceType.OPTIONAL_NODE;
+				else if (itemType.equals(String.class))
+					return SequenceType.OPTIONAL_STRING;
+			} else if (rawType.equals(Iterator.class)) {
+				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
+				if (itemType.equals(Node.class) || itemType.equals(Element.class))
 					return SequenceType.NODE_SEQUENCE;
 				else if (itemType.equals(String.class))
 					return SequenceType.STRING_SEQUENCE;
@@ -245,30 +258,6 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		throw new IllegalArgumentException("Unsupported type: " + type);
 	}
 
-	private static Item itemFromObject(Object object) {
-		if (object == null)
-			throw new IllegalArgumentException();
-		else if (object instanceof String)
-			return new StringValue((String)object);
-		else if (object instanceof Integer)
-			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Integer)object));
-		else if (object instanceof Long)
-			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Long)object));
-		else if (object instanceof Float)
-			return FloatValue.makeFloatValue((Float)object);
-		else if (object instanceof Boolean)
-			return BooleanValue.get((Boolean)object);
-		else
-			throw new IllegalArgumentException();
-	}
-
-	private static Sequence sequenceFromIterator(Iterator<?> iterator) {
-		List<Item> list = new ArrayList<>();
-		while (iterator.hasNext())
-			list.add(itemFromObject(iterator.next()));
-		return new SequenceExtent(list);
-	}
-
 	private static Iterator<?> iteratorFromSequence(Sequence sequence, Type itemType) throws XPathException {
 		if (itemType instanceof Class)
 			return iteratorFromSequence(sequence, (Class<?>)itemType);
@@ -280,17 +269,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	private static <T> Iterator<T> iteratorFromSequence(Sequence sequence, Class<T> itemType) throws XPathException {
 		if (itemType.equals(Node.class)) {
 			List<XdmNode> list = new ArrayList<>();
-			Configuration config = null;
 			SequenceIterator iterator = sequence.iterate();
 			Item next;
-			while ((next = iterator.next()) != null) {
+			while ((next = iterator.next()) != null)
 				list.add(objectFromItem(next, XdmNode.class));
-				if (config == null)
-					config = ((NodeInfo)next).getConfiguration();
-			}
 			return list.isEmpty()
 				? (Iterator<T>)Collections.EMPTY_LIST.iterator()
-				: (Iterator<T>)new SaxonInputValue(list.iterator(), config).asNodeIterator();
+				: (Iterator<T>)new SaxonInputValue(list.iterator()).asNodeIterator();
 		} else {
 			List<T> list = new ArrayList<>();
 			SequenceIterator iterator = sequence.iterate();
@@ -342,10 +327,14 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				return (T)new XdmNode((NodeInfo)item);
 			else
 				throw new IllegalArgumentException();
+		else if (type.equals(Element.class))
+			if (item instanceof NodeInfo)
+				return (T)ElementOverNodeInfo.wrap((NodeInfo)item);
+			else
+				throw new IllegalArgumentException();
 		else if (type.equals(Node.class))
 			if (item instanceof NodeInfo)
-				// we can be sure node iterator will be single item
-				return (T)new SaxonInputValue((NodeInfo)item).asNodeIterator().next();
+				return (T)NodeOverNodeInfo.wrap((NodeInfo)item);
 			else
 				throw new IllegalArgumentException();
 		else if (type.equals(String.class))
@@ -387,5 +376,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		if (iterator.next() != null)
 			throw new IllegalArgumentException();
 		return item;
+	}
+
+	private static Optional<Item> getOptionalItem(Sequence sequence) throws XPathException {
+		SequenceIterator iterator = sequence.iterate();
+		Item item = iterator.next();
+		if (iterator.next() != null)
+			throw new IllegalArgumentException();
+		return Optional.ofNullable(item);
 	}
 }

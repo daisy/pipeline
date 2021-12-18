@@ -3,7 +3,6 @@ package org.daisy.common.xproc.calabash;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.DocumentSequence;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.model.Step;
@@ -20,7 +19,7 @@ public class XMLCalabashInputValue extends SaxonInputValue {
 
 	private final ReadablePipe pipe;
 
-	public XMLCalabashInputValue(ReadablePipe value, XProcRuntime runtime) {
+	public XMLCalabashInputValue(ReadablePipe value) {
 		super(
 			new Iterator<XdmNode>() {
 				public boolean hasNext() {
@@ -38,8 +37,7 @@ public class XMLCalabashInputValue extends SaxonInputValue {
 				public void remove() {
 					throw new UnsupportedOperationException();
 				}
-			},
-			runtime.getProcessor().getUnderlyingConfiguration());
+			});
 		this.pipe = value;
 	}
 

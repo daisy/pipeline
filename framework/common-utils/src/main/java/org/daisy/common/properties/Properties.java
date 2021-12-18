@@ -24,7 +24,6 @@ public final class Properties {
 	private final static java.util.Properties systemProperties = System.getProperties();
 	private final static Map<String,String> systemEnv = System.getenv();
 	private final static Set<String> internalProperties = ImmutableSet.of(
-		"org.daisy.pipeline.version",
 		"org.daisy.pipeline.xproc.configuration",
 		"org.daisy.pipeline.updater.bin",
 		"org.daisy.pipeline.updater.deployPath",

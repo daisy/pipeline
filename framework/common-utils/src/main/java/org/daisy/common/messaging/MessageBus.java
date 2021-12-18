@@ -64,9 +64,11 @@ public class MessageBus extends AbstractMessageAccessor implements MessageAppend
 	}
 
 	private void notify(int sequence) {
+		List<Consumer<Integer>> list;
 		synchronized (callbacks) {
-			for (Consumer<Integer> c : callbacks)
-				c.accept(sequence);
+			list = new LinkedList(callbacks);
 		}
+		for (Consumer<Integer> c : list)
+			c.accept(sequence);
 	}
 }

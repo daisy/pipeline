@@ -107,6 +107,9 @@ public final class XProcScriptConstants {
 		/** The Constant PX_TYPE. */
 		public static final QName PX_TYPE = new QName(PX_NS, "type");
 
+		/** The Constant PX_HIDDEN. */
+		public static final QName PX_HIDDEN = new QName(PX_NS, "hidden");
+
 		/** The Constant PX_TYPE. */
 		public static final QName PX_INPUT_FILESETS = new QName(PX_NS,
 				"input-filesets");

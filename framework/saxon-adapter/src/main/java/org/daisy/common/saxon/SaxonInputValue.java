@@ -13,7 +13,6 @@ import com.google.common.collect.Iterators;
 import com.saxonica.xqj.pull.PullFromIterator;
 import com.saxonica.xqj.pull.PullToStax;
 
-import net.sf.saxon.Configuration;
 import net.sf.saxon.dom.DocumentOverNodeInfo;
 import net.sf.saxon.event.PipelineConfiguration;
 import net.sf.saxon.om.NodeInfo;
@@ -32,31 +31,30 @@ import org.w3c.dom.Node;
 
 public class SaxonInputValue extends XMLInputValue<Void> {
 
-	private Configuration configuration = null;
 	private SaxonInputValue backingValue = null;
 	private XdmValue xdmValue = null;
 	private final Iterator<XdmItem> xdmItemIterator;
 	private boolean xdmItemIteratorSupplied = false;
 
-	public SaxonInputValue(XdmValue value, Configuration config) {
-		this(value, config, true);
+	public SaxonInputValue(XdmValue value) {
+		this(value,  true);
 	}
 
-	private SaxonInputValue(XdmValue value, Configuration config, boolean sequence) {
-		this(value.iterator(), config, sequence);
+	private SaxonInputValue(XdmValue value, boolean sequence) {
+		this(value.iterator(), sequence);
 		xdmValue = value;
 	}
 
 	public SaxonInputValue(NodeInfo value) {
-		this(new XdmNode(value), value.getConfiguration());
+		this(new XdmNode(value));
 	}
 
-	public SaxonInputValue(Iterator<? extends XdmItem> value, Configuration config) {
-		this(value, config, true);
+	public SaxonInputValue(Iterator<? extends XdmItem> value) {
+		this(value, true);
 	}
 
 	@SuppressWarnings("unchecked") // safe cast
-	private SaxonInputValue(Iterator<? extends XdmItem> value, Configuration config, boolean sequence) {
+	private SaxonInputValue(Iterator<? extends XdmItem> value, boolean sequence) {
 		super(Iterators.transform(
 				value,
 				n -> {
@@ -77,7 +75,7 @@ public class SaxonInputValue extends XMLInputValue<Void> {
 							// iterate() throws XPathException when evaluating sequence results in dynamic error
 							// (should not happen with a node?)
 							PullFromIterator provider = new PullFromIterator(node.iterate());
-							provider.setPipelineConfiguration(new PipelineConfiguration(config));
+							provider.setPipelineConfiguration(new PipelineConfiguration(node.getConfiguration()));
 							return new BaseURIAwarePullToStax(
 								provider,
 								node.getBaseURI() == null ? null : URI.create(node.getBaseURI()));
@@ -86,13 +84,11 @@ public class SaxonInputValue extends XMLInputValue<Void> {
 					},
 					TransformerException::wrap)));
 		xdmItemIterator = (Iterator<XdmItem>)value;
-		configuration = config;
 	}
 
 	protected SaxonInputValue(SaxonInputValue value, boolean sequence) {
 		super(value, sequence);
 		backingValue = value;
-		configuration = value.configuration;
 		xdmItemIterator = null; // will not be accessed
 	}
 
@@ -158,9 +154,9 @@ public class SaxonInputValue extends XMLInputValue<Void> {
 				}
 				supplied++;
 				if (xdmValue != null)
-					return new SaxonInputValue(xdmValue, configuration, sequence);
+					return new SaxonInputValue(xdmValue, sequence);
 				else
-					return new SaxonInputValue(xdmItemCache.iterator(), configuration, sequence);
+					return new SaxonInputValue(xdmItemCache.iterator(), sequence);
 			}
 		};
 	}

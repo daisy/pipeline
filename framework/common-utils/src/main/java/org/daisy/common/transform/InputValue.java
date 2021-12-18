@@ -68,6 +68,16 @@ public class InputValue<V> {
 		return (T)o;
 	}
 
+	@Override
+	public String toString() {
+		if (backingValue != null)
+			return backingValue.toString();
+		else if (object != null)
+			return object.toString();
+		else
+			return super.toString();
+	}
+
 	/**
 	 * Make multiples of this input.
 	 *

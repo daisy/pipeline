@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.4</version>
+    <version>1.14.6</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>calabash-adapter</artifactId>
-  <version>4.4.0</version>
+  <version>5.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Calabash adapter for the XProc API</name>

@@ -12,11 +12,11 @@
 	<log href="http://example.org/ws/jobs/job-id-01/log"/>
 	<results href="http://example.org/ws/jobs/job-id-01/result" mime-type="zip">
 		<result from="option" href="http://example.org/ws/jobs/job-id-01/result/option/output-dir" mime-type="zip" name="output-dir" nicename="Output directory">
-                        <result href="http://example.org/ws/jobs/job-id-01/result/option/idx/output-dir/file-1.xhtml" mime-type="application/xml" size="110"/>
+                        <result href="http://example.org/ws/jobs/job-id-01/result/option/output-dir/idx/output-dir/file-1.xhtml" mime-type="application/xml" size="110"/>
 		</result>
 		<result from="port" href="http://example.org/ws/jobs/job-id-01/result/port/result" mime-type="zip" name="result" nicename="XML Results">
-                        <result href="http://example.org/ws/jobs/job-id-01/result/port/idx/result/result-1.xml" mime-type="application/xml" size="1024"/>
-                        <result href="http://example.org/ws/jobs/job-id-01/result/port/idx/result/result-2.xml" mime-type="application/xml" size="54321"/>
+                        <result href="http://example.org/ws/jobs/job-id-01/result/port/result/idx/result/result-1.xml" mime-type="application/xml" size="1024"/>
+                        <result href="http://example.org/ws/jobs/job-id-01/result/port/result/idx/result/result-2.xml" mime-type="application/xml" size="54321"/>
 		</result>
 	</results>
 

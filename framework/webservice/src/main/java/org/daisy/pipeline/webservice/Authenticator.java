@@ -6,14 +6,13 @@ import java.security.SignatureException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.RequestLog;
@@ -157,10 +156,9 @@ public class Authenticator {
 			byte[] rawHmac = mac.doFinal(data.getBytes());
 
 			// base64-encode the hmac
-			result = Base64.encodeBase64String(rawHmac);
-
-			} catch (Exception e) {
-				throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
+			result = Base64.getEncoder().encodeToString(rawHmac);
+		} catch (Exception e) {
+			throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
 		}
 		return result;
 	}

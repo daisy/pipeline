@@ -59,6 +59,7 @@ public class JobProgressAppender extends AppenderBase<ILoggingEvent> {
 	protected void append(ILoggingEvent event) {
 		if (!isStarted())
 			return;
+		// "message-thread" value is automatically inherited by child threads
 		String threadId = threadDiscriminator.getDiscriminatingValue(event);
 		if (!"default".equals(threadId)) {
 			Message.Level level = messageLevelFromLogbackLevel(event.getLevel());

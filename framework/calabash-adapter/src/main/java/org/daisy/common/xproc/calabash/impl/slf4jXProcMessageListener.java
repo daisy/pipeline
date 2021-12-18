@@ -157,7 +157,7 @@ public class slf4jXProcMessageListener implements XProcMessageListener {
 		} else if (level.equals("TRACE")) {
 			finest(step, location, message);
 		} else {
-			info(step, location, "Message with invalid level '" + level + "': " + message);
+			fine(step, location, "Message with invalid level '" + level + "': " + message);
 		}
 	}
 

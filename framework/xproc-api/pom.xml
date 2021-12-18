@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>xproc-api</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>5.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: XProc API</name>

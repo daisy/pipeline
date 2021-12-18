@@ -88,12 +88,14 @@ public class CommandRunner {
 	 * Run the command and wait for the process to finish.
 	 *
 	 * @return The exit value.
+	 *
+	 * @throws InterruptedException if the current thread is interrupted while the process is running
 	 */
-	public int run() throws Throwable {
+	public int run() throws InterruptedException, Throwable {
 		return run((Supplier<Long>)null);
 	}
 
-	public int run(Supplier<Long> timeout) throws TimeoutException, Throwable {
+	public int run(Supplier<Long> timeout) throws TimeoutException, InterruptedException, Throwable {
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.command(command);
 		if (outputConsumer == null)
@@ -132,9 +134,9 @@ public class CommandRunner {
 				} while (wait > 0);
 				throw new TimeoutException();
 			}
+		} catch (InterruptedException e) {
+			throw new InterruptedException("Interrupted while running command `" + String.join(" ", command) + "`");
 		} catch (Throwable e) {
-			if (e instanceof InterruptedException)
-				throw new InterruptedException("Interrupted while running command `" + String.join(" ", command) + "`");
 			while (e instanceof ExecutionException) e = ((ExecutionException)e).getCause();
 			throw e;
 		} finally {
