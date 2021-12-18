@@ -37,14 +37,18 @@ options {
    * @param wrapMedia The media queries to be used for wrapping the created rules (e.g. in case
    *    of parsing and imported style sheet) or null when no wrapping is required.
    */
-  public void init(cz.vutbr.web.csskit.antlr.Preparator preparator, List<cz.vutbr.web.css.MediaQuery> wrapMedia) {
+  public void init(cz.vutbr.web.csskit.antlr.Preparator preparator,
+                   List<cz.vutbr.web.css.MediaQuery> wrapMedia,
+                   java.util.Map<String,String> namespaces) {
 		this.preparator = preparator;
 		this.wrapMedia = wrapMedia;
 		this.rules = null;
 		this.importMedia = new ArrayList<List<cz.vutbr.web.css.MediaQuery>>();
 		this.importPaths = new ArrayList<String>();
 		this.preventImports = false;
-		this.namespaces = new java.util.HashMap<String,String>();
+		this.namespaces = (namespaces == null)
+			? new java.util.HashMap<String,String>()
+			: new java.util.HashMap<String,String>(namespaces);
 		this.log = org.slf4j.LoggerFactory.getLogger(getClass());
 	}   
   
@@ -81,10 +85,9 @@ options {
       return ct.getBase();
   }
     	
-  private cz.vutbr.web.css.Declaration.Source extractSource(CommonTree token) {
+  private cz.vutbr.web.css.SourceLocator extractSource(CommonTree token) {
       cz.vutbr.web.csskit.antlr.CSSToken ct = (cz.vutbr.web.csskit.antlr.CSSToken) token.getToken();
-      cz.vutbr.web.css.Declaration.Source src = new cz.vutbr.web.css.Declaration.Source(ct.getBase(), ct.getLine(), ct.getCharPositionInLine());
-      return src;
+      return ct.getSourceLocator();
   }   
 		
     private void logEnter(String entry) {
@@ -283,10 +286,14 @@ scope {
 	  }
 	| ^(XSLT
 	      ( (u=URI {
-	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractText(u), extractBase(u));
+	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractText(u),
+	                                                      extractBase(u),
+	                                                      new java.util.HashMap<String,String>(namespaces));
 	        })
 	      | (s=STRING {
-	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractTextUnescaped(s), extractBase(s));
+	            $stmnt = new cz.vutbr.web.csskit.RuleXslt(extractTextUnescaped(s),
+	                                                      extractBase(s),
+	                                                      new java.util.HashMap<String,String>(namespaces));
 	        })
 	      )
 	      (decls=declarations {
@@ -300,12 +307,12 @@ scope {
 	  {
 	    if (prf == null) {
 	      if (defaultNamespace != null)
-	        warn(n, "Default namespace already declared");
+	        debug(n, "Default namespace already declared");
 	      debug(n, "Declaring default namespace: url({})", ns);
 	      defaultNamespace = ns;
 	    } else {
 	      if (namespaces.containsKey(prf))
-	        warn(n, "Namespace for prefix {} already declared", prf);
+	        debug(n, "Namespace for prefix {} already declared", prf);
 	      debug(n, "Declaring namespace: {} url({})", prf, ns);
 	      namespaces.put(prf, ns);
 	    }
@@ -519,7 +526,7 @@ inlineset returns [cz.vutbr.web.css.RuleBlock<?> is]
 ruleset returns [cz.vutbr.web.css.RuleBlock<?> stmnt]
 @init {
     logEnter("ruleset"); 
-    List<cz.vutbr.web.css.CombinedSelector> cslist = new ArrayList<cz.vutbr.web.css.CombinedSelector>();
+    List<cz.vutbr.web.css.CombinedSelector> cslist = null;
 }
 @after {
     if($statement::invalid) {
@@ -533,12 +540,12 @@ ruleset returns [cz.vutbr.web.css.RuleBlock<?> stmnt]
     logLeave("ruleset");
 }    
     : ^(RULE 
-        (cs=combined_selector  
-        {if(cs!=null && !cs.isEmpty() && !$statement::invalid) {
-            cslist.add(cs);
-            debug("Inserted combined selector ({}) into ruleset",  cslist.size());
-         }   
-        } )*
+        list=combined_selector_list {
+           if (list == null)
+               $statement::invalid = true;
+           else
+               cslist = list;
+        }
 		decl=declarations 
     )
     ;  
@@ -737,6 +744,24 @@ valuepart
     | ^(BRACEBLOCK any*) {$declaration::invalid = true;}    
   ;
   
+combined_selector_list returns [List<cz.vutbr.web.css.CombinedSelector> list]
+@init {
+    $list = new ArrayList<cz.vutbr.web.css.CombinedSelector>();
+    boolean invalid = false;
+}
+@after {
+    if (invalid) $list = null;
+}
+    : (cs=combined_selector {
+         if (cs == null)
+             invalid = true;
+         else if (!cs.isEmpty()) {
+             $list.add(cs);
+             debug("Inserted combined selector ({}) into ruleset",  $list.size());
+         }
+      })+
+    ;
+
 /**
  * Construction of selector
  */
@@ -748,17 +773,9 @@ combined_selector returns [cz.vutbr.web.css.CombinedSelector combinedSelector]
 }
 @after {  
     // entire ruleset is not valid when selector is not valid
-    // there is no need to parse selector's when already marked as invalid
-    if($statement::invalid || invalid) {
+    if(invalid) {
         $combinedSelector = null;
-        if($statement::invalid) { 
-			debug("Ommiting combined selector, whole statement discarded");
-		}	
-        else { 
-			debug("Combined selector is invalid");               
-        }
-		// mark whole ruleset as invalid
-        $statement::invalid = true;
+        debug("Combined selector is invalid");
     }
     else {
         debug("Returing combined selector: {}.", $combinedSelector); 
