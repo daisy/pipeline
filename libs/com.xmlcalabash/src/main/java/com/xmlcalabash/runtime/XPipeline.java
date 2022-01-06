@@ -3,6 +3,7 @@ package com.xmlcalabash.runtime;
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcData;
 import com.xmlcalabash.core.XProcException;
+import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.io.ReadablePipe;
@@ -129,36 +130,6 @@ public class XPipeline extends XCompoundStep {
         return output.getSerialization();
     }
 
-    public void run() throws SaxonApiException {
-        QName infoName = XProcConstants.p_pipeline;
-        /*
-        if (!step.isAnonymous()) {
-            infoName = step.getDeclaredType();
-        }
-        */
-
-        logger.trace("Running " + infoName + " " + step.getName());
-        if (runtime.getAllowGeneralExpressions()) {
-            logger.trace(MessageFormatter.nodeMessage(step.getNode(), "Running with the 'general-values' extension enabled."));
-        }
-
-        XProcData data = runtime.getXProcData();
-        data.openFrame(this);
-
-        runtime.start(this);
-        try {
-            doRun();
-        } catch (XProcException ex) {
-            throw ex;
-        } catch (SaxonApiException ex) {
-            runtime.error(ex);
-            throw ex;
-        } finally {
-            runtime.finish(this);
-            data.closeFrame();
-        }
-    }
-
     private void setupParameters() {
         Vector<String> ports = new Vector<String> ();
         Iterator<String> portIter = getParameterPorts().iterator();
@@ -195,7 +166,25 @@ public class XPipeline extends XCompoundStep {
         }
     }
 
-    private void doRun() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
+        QName infoName = XProcConstants.p_pipeline;
+        /*
+        if (!step.isAnonymous()) {
+            infoName = step.getDeclaredType();
+        }
+        */
+
+        logger.trace("Running " + infoName + " " + step.getName());
+        if (runtime.getAllowGeneralExpressions()) {
+            logger.trace(MessageFormatter.nodeMessage(step.getNode(), "Running with the 'general-values' extension enabled."));
+        }
+
+        XProcData data = runtime.getXProcData();
+        data.openFrame(this);
+
+        runtime.start(this);
+        try {
+
         for (String port : inputs.keySet()) {
             if (!port.startsWith("|")) {
                 String wport = port + "|";
@@ -278,25 +267,44 @@ public class XPipeline extends XCompoundStep {
         for (String port : inputs.keySet()) {
             if (port.startsWith("|")) {
                 String wport = port.substring(1);
-                WritablePipe pipe = outputs.get(wport);
-                try {
-                    for (ReadablePipe reader : inputs.get(port)) {
-                        // Check for the case where there are no documents, but a sequence is not allowed
-                        if (!reader.moreDocuments() && !pipe.writeSequence()) {
-                            throw XProcException.dynamicError(7, "Reading " + wport + " on " + name);
-                        }
-
-
-                        while (reader.moreDocuments()) {
-                            XdmNode doc = reader.read();
-                            pipe.write(doc);
-                            logger.trace(MessageFormatter.nodeMessage(step.getNode(), "Pipeline output copy from " + reader + " to " + pipe));
+                outputs.get(wport).onRead(
+                    new XProcRunnable() {
+                        private boolean done = false;
+                        public void run() throws SaxonApiException {
+                            if (done) return;
+                            done = true;
+                            WritablePipe pipe = outputs.get(wport);
+                            try {
+                                for (ReadablePipe reader : inputs.get(port)) {
+                                    // Check for the case where there are no documents, but a sequence is not allowed
+                                    if (!reader.moreDocuments() && !pipe.writeSequence()) {
+                                        throw XProcException.dynamicError(7, "Reading " + wport + " on " + name);
+                                    }
+                                    while (reader.moreDocuments()) {
+                                        XdmNode doc = reader.read();
+                                        pipe.write(doc);
+                                        logger.trace(
+                                            MessageFormatter.nodeMessage(
+                                                step.getNode(), "Pipeline output copy from " + reader + " to " + pipe));
+                                    }
+                                }
+                            } finally {
+                                pipe.close(); // Indicate that we're done writing to it
+                            }
                         }
                     }
-                } finally {
-                    pipe.close(); // Indicate that we're done writing to it
-                }
+                );
             }
+        }
+
+        } catch (XProcException ex) {
+            throw ex;
+        } catch (SaxonApiException ex) {
+            runtime.error(ex);
+            throw ex;
+        } finally {
+            runtime.finish(this);
+            data.closeFrame();
         }
     }
 

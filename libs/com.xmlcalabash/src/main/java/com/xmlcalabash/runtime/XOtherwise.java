@@ -21,10 +21,10 @@ public class XOtherwise extends XCompoundStep {
     }
 
     @Override
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         XProcMessageListenerHelper.openStep(runtime, this, BigDecimal.ONE, parent.getInScopeOptions());
         try {
-            super.run();
+            super.doRun();
         } finally {
             runtime.getMessageListener().closeStep();
         }

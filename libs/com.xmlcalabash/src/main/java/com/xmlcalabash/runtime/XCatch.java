@@ -37,7 +37,7 @@ public class XCatch extends XCompoundStep {
 
     public ReadablePipe getBinding(String stepName, String portName) {
         if (name.equals(stepName) && "error".equals(portName)) {
-            return new Pipe(runtime,errorPipe.documents());
+            return new ReadOnlyPipe(runtime,errorPipe.documents());
         } else {
             return super.getBinding(stepName, portName);
         }

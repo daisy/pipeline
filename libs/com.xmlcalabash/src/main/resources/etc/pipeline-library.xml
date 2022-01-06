@@ -88,7 +88,7 @@
       <p:option name="undeclare-prefixes" cx:type="xsd:boolean"/>
       <p:option name="version" select="'1.0'" cx:type="xsd:string"/>
    </p:declare-step>
-   <p:declare-step type="p:identity" xml:id="identity">
+   <p:declare-step type="p:identity" xml:id="identity" cx:pure="true">
       <p:input port="source" sequence="true"/>
       <p:output port="result" sequence="true"/>
    </p:declare-step>
@@ -159,7 +159,7 @@
       <p:output port="result"/>
       <p:option name="match" required="true" cx:type="XSLTMatchPattern"/>
    </p:declare-step>
-   <p:declare-step type="p:sink" xml:id="sink">
+   <p:declare-step type="p:sink" xml:id="sink" cx:pure="true">
       <p:input port="source" sequence="true"/>
    </p:declare-step>
    <p:declare-step type="p:split-sequence" xml:id="split-sequence">

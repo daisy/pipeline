@@ -69,7 +69,7 @@ public class Select implements ReadablePipe {
         return true;
     }
     
-    private void readSource() {
+    private void readSource() throws SaxonApiException {
         initialized = true;
         try {
             NamespaceBinding bindings = new NamespaceBinding(runtime,context);
@@ -129,7 +129,7 @@ public class Select implements ReadablePipe {
         docindex = 0;
     }
     
-    public boolean moreDocuments() {
+    public boolean moreDocuments() throws SaxonApiException {
         if (!initialized) {
             readSource();
         }
@@ -140,14 +140,14 @@ public class Select implements ReadablePipe {
         return true;
     }
 
-    public int documentCount() {
+    public int documentCount() throws SaxonApiException {
         if (!initialized) {
             readSource();
         }
         return documents.size();
     }
 
-    public DocumentSequence documents() {
+    public ReadableDocumentSequence documents() {
         return documents;
     }
 

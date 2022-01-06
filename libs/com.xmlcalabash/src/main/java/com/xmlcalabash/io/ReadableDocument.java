@@ -105,7 +105,7 @@ public class ReadableDocument implements ReadablePipe {
         // nop;
     }
 
-    public boolean moreDocuments() {
+    public boolean moreDocuments() throws SaxonApiException {
         if (!readDoc) {
             readDoc();
         }
@@ -116,11 +116,11 @@ public class ReadableDocument implements ReadablePipe {
         return true;
     }
 
-    public int documentCount() {
+    public int documentCount() throws SaxonApiException {
         return documents.size();
     }
 
-    public DocumentSequence documents() {
+    public ReadableDocumentSequence documents() {
         return documents;
     }
 

@@ -34,8 +34,7 @@ public interface ReadablePipe {
     public void setReader(Step step);
     public void setNames(String stepName, String portName);
     public void resetReader();
-    public boolean moreDocuments();
-    public boolean closed();
-    public int documentCount();
-    public DocumentSequence documents();
+    public boolean moreDocuments() throws SaxonApiException;
+    public int documentCount() throws SaxonApiException;
+    public ReadableDocumentSequence documents();
 }

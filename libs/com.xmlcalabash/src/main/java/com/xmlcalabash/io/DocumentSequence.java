@@ -1,5 +1,6 @@
 package com.xmlcalabash.io;
 
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import java.util.Vector;
@@ -16,7 +17,7 @@ import com.xmlcalabash.util.S9apiUtils;
  * Time: 6:56:32 AM
  * To change this template use File | Settings | File Templates.
  */
-public class DocumentSequence {
+public class DocumentSequence implements ReadableDocumentSequence {
     protected static final String logger = "com.xmlcalabash.io.documentsequence";
     private XProcRuntime runtime = null;
     private Vector<XdmNode> documents = new Vector<XdmNode>();
@@ -61,7 +62,8 @@ public class DocumentSequence {
         }
     }
 
-    public XdmNode get(int count) {
+    public XdmNode get(int count) throws SaxonApiException {
+        beforeRead();
         if (count < documents.size()) {
             XdmNode doc = documents.get(count);
             //runtime.finest(logger, null, "Read " + (doc == null ? "null" : doc.getBaseURI()) + " from " + toString());
@@ -83,7 +85,8 @@ public class DocumentSequence {
         return closed;
     }
 
-    public int size() {
+    public int size() throws SaxonApiException {
+        beforeRead();
         return documents.size();
     }
 
@@ -98,4 +101,8 @@ public class DocumentSequence {
     public String toString() {
         return "[document-sequence #" + id + " (" + documents.size() + " docs)]";
     }
+
+	/* for use in Pipe */
+    void beforeRead() throws SaxonApiException {}
+
 }

@@ -116,6 +116,7 @@ public class XProcConstants {
     public static final QName cx_cache = new QName("cx",NS_CALABASH_EX,"cache");
     public static final QName cx_type = new QName("cx",NS_CALABASH_EX,"type");
     public static final QName cx_as = new QName("cx",NS_CALABASH_EX,"as");
+    public static final QName cx_pure = new QName("cx", NS_CALABASH_EX, "pure");
 
     public static final QName xs_QName = new QName("xs", NS_XMLSCHEMA, "QName");
     public static final QName xs_untypedAtomic = new QName("xs", NS_XMLSCHEMA, "untypedAtomic");

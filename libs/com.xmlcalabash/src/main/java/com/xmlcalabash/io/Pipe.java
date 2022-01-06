@@ -19,88 +19,55 @@
 
 package com.xmlcalabash.io;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.model.Step;
 import com.xmlcalabash.util.MessageFormatter;
+
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author ndw
  */
-public class Pipe implements ReadablePipe, WritablePipe {
-    private Logger logger = LoggerFactory.getLogger(Pipe.class);
-    private static int idCounter = 0;
-    private int id = 0;
-    private XProcRuntime runtime = null;
-    private DocumentSequence documents = null;
-    private int pos = 0;
-    private boolean readSeqOk = false;
+public class Pipe extends ReadOnlyPipe implements ReadablePipe, WritablePipe {
+
+    private ListenableDocumentSequence documents = null;
     private boolean writeSeqOk = false;
+    private int size = 0;
     private Step writer = null;
-    private Step reader = null;
-    private String stepName = null;
-    private String portName = null;
 
     /* Creates a new instance of Pipe */
     public Pipe(XProcRuntime xproc) {
-        runtime = xproc;
-        documents = new DocumentSequence(xproc);
-        documents.addReader();
-        id = idCounter++;
+        this(xproc, new ListenableDocumentSequence(xproc));
     }
 
-    public Pipe(XProcRuntime xproc, DocumentSequence seq) {
-        runtime = xproc;
-        documents = seq;
-        seq.addReader();
-        id = ++idCounter;
-    }
-
-    public void setReader(Step step) {
-        reader = step;
+    private Pipe(XProcRuntime xproc, ListenableDocumentSequence documents) {
+        super(xproc, documents);
+        this.documents = documents; // we know this is an empty sequence
+        size = 0;
     }
 
     public void setWriter(Step step) {
-        writer  = step;
-    }
-
-    // These are for debugging...
-    public void setNames(String stepName, String portName) {
-        this.stepName = stepName;
-        this.portName = portName;
+        writer = step;
     }
 
     public void canWriteSequence(boolean sequence) {
         writeSeqOk = sequence;
     }
 
-    public void resetReader() {
-        pos = 0;
-    }
-    
     public void resetWriter() {
         documents.reset();
+        size = 0;
         pos = 0;
-    }
-
-    public void canReadSequence(boolean sequence) {
-        readSeqOk = sequence;
-    }
-
-    public boolean readSequence() {
-        return readSeqOk;
     }
 
     public boolean writeSequence() {
         return writeSeqOk;
-    }
-
-    public boolean moreDocuments() {
-        return pos < documents.size();
     }
 
     public boolean closed() {
@@ -111,52 +78,58 @@ public class Pipe implements ReadablePipe, WritablePipe {
         documents.close();
     }
 
-    public int documentCount() {
-        return documents.size();
-    }
-
-    public DocumentSequence documents() {
-        return documents;
-    }
-
-    public XdmNode read () {
-        if (pos > 0 && !readSeqOk) {
-            dynamicError(6);
-        }
-
-        XdmNode doc = documents.get(pos++);
-
-        if (reader != null) {
-            logger.trace(MessageFormatter.nodeMessage(reader.getNode(),
-                    reader.getName() + " read '" + (doc == null ? "null" : doc.getBaseURI()) + "' from " + this));
-        }
-        
-        return doc;
-    }
-
     public void write(XdmNode doc) {
         if (writer != null) {
-            logger.trace(MessageFormatter.nodeMessage(writer.getNode(),
+            logger.trace(
+                MessageFormatter.nodeMessage(
+                    writer.getNode(),
                     writer.getName() + " wrote '" + (doc == null ? "null" : doc.getBaseURI()) + "' to " + this));
         }
         documents.add(doc);
-
-        if (documents.size() > 1 && !writeSeqOk) {
+        size++;
+        if (size > 1 && !writeSeqOk) {
             dynamicError(7);
         }
     }
 
-    public String toString() {
-        return "[pipe #" + id + "] (" + documents + ")";
+    public void onRead(XProcRunnable runnable) {
+        if (documents.runOnRead == null) {
+            documents.runOnRead = new ArrayList<>();
+        }
+        documents.runOnRead.add(runnable);
     }
 
-    private void dynamicError(int errno) {
-        String msg = null;
-        if (stepName != null) {
-            msg = "Reading " + portName + " on " + stepName;
-        }
-        throw XProcException.dynamicError(errno, reader, msg);
+    private static class ListenableDocumentSequence extends DocumentSequence {
 
+        List<XProcRunnable> runOnRead = null;
+
+        ListenableDocumentSequence(XProcRuntime xproc) {
+            super(xproc);
+        }
+
+        @Override
+        void beforeRead() throws SaxonApiException {
+            if (runOnRead != null) {
+                List<XProcRunnable> r = new ArrayList(runOnRead);
+                runOnRead = null;
+                for (XProcRunnable rr : r) {
+                    rr.run();
+                }
+                // check if the callbacks registered other callbacks, and if so run them (because we are still about to read)
+                if (runOnRead != null) {
+                    beforeRead();
+                }
+                if (runOnRead != null) {
+                    r.addAll(runOnRead);
+                }
+                runOnRead = r;
+            }
+        }
+
+        @Override
+        public void reset() {
+            super.reset();
+            runOnRead = null;
+        }
     }
 }
-

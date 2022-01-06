@@ -17,26 +17,26 @@ import java.util.Vector;
  * To change this template use File | Settings | File Templates.
  */
 public class XOutput {
-    private DocumentSequence documents = null;
-    private XProcRuntime runtime = null;
-    private String port = null;
-    private XdmNode node = null;
-    private boolean sequenceOk = false;
-    private WritablePipe writer = null;
-    private WritablePipe inputWriter = null;
-    private Vector<ReadablePipe> readers = null;
+    private final XProcRuntime runtime;
+    private final String port;
+    private final XdmNode node;
+    private final boolean sequenceOk;
+    private final Pipe writer;
+    private boolean writerReturned = false;
+    private final Vector<ReadablePipe> readers;
 
     public XOutput(XProcRuntime runtime, Output output) {
         this.runtime = runtime;
         node = output.getNode();
         port = output.getPort();
         sequenceOk = output.getSequence();
-        documents = new DocumentSequence(runtime);
+        writer = new Pipe(runtime);
+        writer.canWriteSequence(sequenceOk);
         readers = new Vector<ReadablePipe> ();
     }
 
     public void setLogger(Log log) {
-        documents.setLogger(log);
+        writer.documents().setLogger(log);
     }
 
     public XdmNode getNode() {
@@ -52,21 +52,15 @@ public class XOutput {
     }
 
     public ReadablePipe getReader() {
-        ReadablePipe pipe = new Pipe(runtime, documents);
+        ReadablePipe pipe = new ReadOnlyPipe(runtime, writer.documents());
         readers.add(pipe);
         return pipe;
     }
 
-    public WritablePipe getWriter() {
-        if (writer != null) {
+    public Pipe getWriter() {
+        if (writerReturned) {
             throw new XProcException(node, "Attempt to create two writers for the same output.");
         }
-        if (inputWriter != null) {
-            writer = inputWriter;
-        } else {
-            writer = new Pipe(runtime, documents);
-        }
-        writer.canWriteSequence(sequenceOk);
         return writer;
     }
 }

@@ -10,6 +10,6 @@ import net.sf.saxon.s9api.SaxonApiException;
  * To change this template use File | Settings | File Templates.
  */
 public interface XProcRunnable {
-    public void reset();
+    public default void reset() {}
     public void run() throws SaxonApiException;
 }

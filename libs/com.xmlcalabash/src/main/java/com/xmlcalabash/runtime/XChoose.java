@@ -1,10 +1,10 @@
 package com.xmlcalabash.runtime;
 
 import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.io.ReadableEmpty;
-import com.xmlcalabash.io.WritablePipe;
-import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.Pipe;
+import com.xmlcalabash.io.ReadableEmpty;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.ReadOnlyPipe;
 import com.xmlcalabash.model.*;
 
 import com.xmlcalabash.util.MessageFormatter;
@@ -51,13 +51,13 @@ public class XChoose extends XCompoundStep {
             if (port.endsWith("|")) {
                 String rport = port.substring(0,port.length()-1);
                 XInput xinput = getInput(rport);
-                WritablePipe wpipe = xinput.getWriter();
+                Pipe wpipe = xinput.getWriter();
                 outputs.put(port, wpipe);
                 logger.trace(MessageFormatter.nodeMessage(step.getNode(), " writes to " + wpipe + " for " + port));
             } else {
                 XOutput xoutput = new XOutput(runtime, output);
                 addOutput(xoutput);
-                WritablePipe wpipe = xoutput.getWriter();
+                Pipe wpipe = xoutput.getWriter();
                 outputs.put(port, wpipe);
                 logger.trace(MessageFormatter.nodeMessage(step.getNode(), " writes to " + wpipe + " for " + port));
             }
@@ -74,13 +74,13 @@ public class XChoose extends XCompoundStep {
                 return new ReadableEmpty();
             }
             ReadablePipe pipe = xpc.get(0);  
-            return new Pipe(runtime, pipe.documents());
+            return new ReadOnlyPipe(runtime, pipe.documents());
         } else {
             return super.getBinding(stepName, portName);
         }
     }
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         // N.B. At this time, there are no compound steps that accept parameters or options,
         // so the order in which we calculate them doesn't matter. That will change if/when
         // there are such compound steps.

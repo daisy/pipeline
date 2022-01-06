@@ -1,8 +1,8 @@
 package com.xmlcalabash.runtime;
 
-import com.xmlcalabash.io.DocumentSequence;
+import com.xmlcalabash.io.ReadableDocumentSequence;
 import com.xmlcalabash.io.ReadablePipe;
-import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.io.ReadOnlyPipe;
 import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
@@ -25,8 +25,9 @@ public class XInput {
     private boolean sequenceOk = false;
     private boolean isParameters = false;
     private Vector<ReadablePipe> readers = null;
-    private WritablePipe writer = null;
-    private DocumentSequence documents = null;
+    private Pipe writer = null;
+    private boolean writerReturned = false;
+    private ReadableDocumentSequence documents = null;
 
     public XInput(XProcRuntime runtime, Input input) {
         this.runtime = runtime;
@@ -47,22 +48,23 @@ public class XInput {
 
     public ReadablePipe getReader() {
         if (documents == null) {
-            documents = new DocumentSequence(runtime);
+            writer = new Pipe(runtime);
+            documents = writer.documents();
         }
-        ReadablePipe pipe = new Pipe(runtime, documents);
+        ReadablePipe pipe = new ReadOnlyPipe(runtime, documents);
         pipe.canReadSequence(sequenceOk);
         readers.add(pipe);
         return pipe;
     }
 
-    public WritablePipe getWriter() {
-        if (writer != null) {
+    public Pipe getWriter() {
+        if (writerReturned) {
             throw new XProcException(node, "Attempt to create two writers for the same input.");
+        } else if (writer == null) {
+            writer = new Pipe(runtime);
+            documents = writer.documents();
         }
-        if (documents == null) {
-            documents = new DocumentSequence(runtime);
-        }
-        writer = new Pipe(runtime, documents);
+        writerReturned = true;
         return writer;
     }
 

@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Vector;
 import java.util.List;
+import java.util.Optional;
 
 import com.xmlcalabash.util.MessageFormatter;
 import net.sf.saxon.s9api.Axis;
@@ -45,10 +46,16 @@ public class Step extends SourceArtifact {
     private static final QName cx_depend = new QName("cx",XProcConstants.NS_CALABASH_EX,"depend");
     private static final QName cx_depends = new QName("cx",XProcConstants.NS_CALABASH_EX,"depends");
     private static final QName cx_dependson = new QName("cx",XProcConstants.NS_CALABASH_EX,"dependson");
+    private static final QName cx_message = new QName("cx", XProcConstants.NS_CALABASH_EX, "message");
+
+    private static final String NS_DAISY_PIPELINE_XPROC = "http://www.daisy.org/ns/pipeline/xproc";
+    private static final QName px_message = new QName("px", NS_DAISY_PIPELINE_XPROC, "message");
+    private static final QName px_progress = new QName("px", NS_DAISY_PIPELINE_XPROC, "progress");
 
     protected QName stepType = null;
     protected String stepName = null;
     private boolean anonymous = false;
+    private Optional<Boolean> pure = null;
     protected Vector<Input> inputs = new Vector<Input> ();
     protected Vector<Output> outputs = new Vector<Output> ();
     private Vector<Option> options = new Vector<Option> ();
@@ -128,6 +135,59 @@ public class Step extends SourceArtifact {
 
     public boolean isAnonymous() {
         return anonymous;
+    }
+
+    public Optional<Boolean> isPure() {
+        if (pure == null) {
+            Optional<Boolean> pureAttr; {
+                String attr = getExtensionAttribute(XProcConstants.cx_pure);
+                pureAttr = attr != null ? Optional.of(Boolean.parseBoolean(attr)) : Optional.empty();
+            }
+            boolean containsImpureSteps = false; {
+                for (Step s : subpipeline) {
+                    if (!s.isPure().orElse(true)) {
+                        containsImpureSteps = true;
+                        break;
+                    }
+                }
+            }
+            if (containsImpureSteps) {
+                if (pureAttr.orElse(false)) {
+                    XProcException warning = new XProcException(
+                        this,
+                        "Pipeline was marked with cx:pure=\"true\" but contains impure steps");
+                    logger.warn(warning.toString());
+                }
+                pure = Optional.of(false);
+            } else if (getExtensionAttribute(cx_message) != null) {
+                if (pureAttr.orElse(false)) {
+                    XProcException warning = new XProcException(
+                        this,
+                        "Step was marked with cx:pure=\"true\" but is impure because it has a cx:message attribute");
+                    logger.warn(warning.toString());
+                }
+                pure = Optional.of(false);
+            } else if (getExtensionAttribute(px_message) != null) {
+                if (pureAttr.orElse(false)) {
+                    XProcException warning = new XProcException(
+                        this,
+                        "Step was marked with cx:pure=\"true\" but is impure because it has a px:message attribute");
+                    logger.warn(warning.toString());
+                }
+                pure = Optional.of(false);
+            } else if (getExtensionAttribute(px_progress) != null) {
+                if (pureAttr.orElse(false)) {
+                    XProcException warning = new XProcException(
+                        this,
+                        "Step was marked with cx:pure=\"true\" but is impure because it has a px:progress attribute");
+                    logger.warn(warning.toString());
+                }
+                pure = Optional.of(false);
+            } else {
+                pure = pureAttr;
+            }
+        }
+        return pure;
     }
 
     public void setDeclaration(DeclareStep decl) {

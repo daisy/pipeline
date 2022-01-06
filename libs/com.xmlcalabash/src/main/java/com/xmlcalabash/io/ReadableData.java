@@ -267,7 +267,7 @@ public class ReadableData implements ReadablePipe {
         // nop;
     }
 
-    public boolean moreDocuments() {
+    public boolean moreDocuments() throws SaxonApiException {
         DocumentSequence docs = ensureDocuments();
         return pos < docs.size();
     }
@@ -276,12 +276,12 @@ public class ReadableData implements ReadablePipe {
         return true;
     }
 
-    public int documentCount() {
+    public int documentCount() throws SaxonApiException {
         DocumentSequence docs = ensureDocuments();
         return docs.size();
     }
 
-    public DocumentSequence documents() {
+    public ReadableDocumentSequence documents() {
         return ensureDocuments();
     }
 

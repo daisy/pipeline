@@ -6,7 +6,7 @@ import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.util.MessageFormatter;
 import com.xmlcalabash.util.TreeWriter;
 import com.xmlcalabash.util.XProcMessageListenerHelper;
-import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.model.*;
 import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -59,20 +59,20 @@ public class XTry extends XCompoundStep {
             if (port.endsWith("|")) {
                 String rport = port.substring(0,port.length()-1);
                 XInput xinput = getInput(rport);
-                WritablePipe wpipe = xinput.getWriter();
+                Pipe wpipe = xinput.getWriter();
                 outputs.put(port, wpipe);
                 logger.trace(MessageFormatter.nodeMessage(step.getNode(), " writes to " + wpipe + " for " + port));
             } else {
                 XOutput xoutput = new XOutput(runtime, output);
                 addOutput(xoutput);
-                WritablePipe wpipe = xoutput.getWriter();
+                Pipe wpipe = xoutput.getWriter();
                 outputs.put(port, wpipe);
                 logger.trace(MessageFormatter.nodeMessage(step.getNode(), " writes to " + wpipe + " for " + port));
             }
         }
     }
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
 
         inScopeOptions = parent.getInScopeOptions();
         for (Variable var : step.getVariables()) {
@@ -97,6 +97,9 @@ public class XTry extends XCompoundStep {
         XProcMessageListenerHelper.openStep(runtime, this);
         try {
             xgroup.run();
+        // FIXME: only catch DynamicXProcException
+        // FIXME: also catch SaxonApiException ?
+        // -> or stop throwing SaxonApiException (handle in steps)?
         } catch (XProcException xe) {
             
             logger.trace("p:try: caught error: " + xe.toString());

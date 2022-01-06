@@ -317,17 +317,17 @@ public class RunTestReport {
             for (String port : pipeoutputs.keySet()) {
                 if (compare.inputPorts.contains(port)) {
                     ReadablePipe pipe = pipeoutputs.get(port);
-                    while (pipe.moreDocuments()) {
-                        try {
+                    try {
+                        while (pipe.moreDocuments()) {
                             XdmNode p = pipe.read();
                             if (!cinputs.containsKey(port)) {
                                 cinputs.put(port, new Vector<XdmNode> ());
                             }
                             cinputs.get(port).add(p);
-                        } catch (SaxonApiException sae) {
-                            result.catchException(sae);
-                            return result;
                         }
+                    } catch (SaxonApiException sae) {
+                        result.catchException(sae);
+                        return result;
                     }
                 }
             }

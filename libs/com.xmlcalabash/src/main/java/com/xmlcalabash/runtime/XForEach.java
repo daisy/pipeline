@@ -7,6 +7,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcData;
 import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.ReadOnlyPipe;
 import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.Step;
@@ -42,7 +43,7 @@ public class XForEach extends XCompoundStep {
             if (current == null) {
                 current = new Pipe(runtime);
             }
-            return new Pipe(runtime,current.documents());
+            return new ReadOnlyPipe(runtime, current.documents());
         } else {
             return super.getBinding(stepName, portName);
         }
@@ -58,7 +59,7 @@ public class XForEach extends XCompoundStep {
         sequencePosition = 0;
     }
     
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         logger.trace("Running p:for-each " + step.getName());
 
         XProcData data = runtime.getXProcData();

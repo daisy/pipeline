@@ -48,7 +48,7 @@ public class XRootStep extends XCompoundStep {
     }
 */
     
-    public void run() {
+    protected void doRun() {
         throw new XProcException("The root step can't be run!");
     }
 

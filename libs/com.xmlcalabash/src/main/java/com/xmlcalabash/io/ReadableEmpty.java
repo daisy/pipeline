@@ -47,7 +47,7 @@ public class ReadableEmpty implements ReadablePipe {
         return 0;
     }
 
-    public DocumentSequence documents() {
+    public ReadableDocumentSequence documents() {
         return null;
     }
 }

@@ -20,6 +20,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.stream.StreamSource;
 
+import net.sf.saxon.om.TreeModel;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -258,6 +259,7 @@ public class XProcURIResolver implements URIResolver, EntityResolver, ModuleURIR
         DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
         builder.setDTDValidation(dtdValidate);
         builder.setLineNumbering(true);
+        builder.setTreeModel(TreeModel.getTreeModel(runtime.getProcessor().getUnderlyingConfiguration().getTreeModel()));
 
         try {
             return builder.build(source);
@@ -282,6 +284,7 @@ public class XProcURIResolver implements URIResolver, EntityResolver, ModuleURIR
             DocumentBuilder builder = runtime.getProcessor().newDocumentBuilder();
             builder.setLineNumbering(true);
             builder.setDTDValidation(false);
+            builder.setTreeModel(TreeModel.getTreeModel(runtime.getProcessor().getUnderlyingConfiguration().getTreeModel()));
             return builder.build(source);
         } catch (SaxonApiException sae) {
             String msg = sae.getMessage();

@@ -37,10 +37,13 @@ import net.sf.saxon.event.Receiver;
 import net.sf.saxon.expr.instruct.TerminationException;
 import net.sf.saxon.expr.parser.Location;
 import net.sf.saxon.lib.CollectionFinder;
+import net.sf.saxon.lib.NamespaceConstant;
 import net.sf.saxon.lib.OutputURIResolver;
 import net.sf.saxon.lib.UnparsedTextURIResolver;
 import net.sf.saxon.om.NamespaceBindingSet;
 import net.sf.saxon.om.NodeName;
+import net.sf.saxon.om.StructuredQName;
+import net.sf.saxon.om.TreeModel;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.MessageListener;
 import net.sf.saxon.s9api.Processor;
@@ -84,6 +87,7 @@ import java.util.Vector;
         type = "{http://www.w3.org/ns/xproc}xslt")
 
 public class XSLT extends DefaultStep {
+    private static final StructuredQName TERMINATION_ERROR = new StructuredQName("err", NamespaceConstant.ERR, "XTMM9000");
     private static final QName _initial_mode = new QName("", "initial-mode");
     private static final QName _template_name = new QName("", "template-name");
     private static final QName _output_base_uri = new QName("", "output-base-uri");
@@ -262,6 +266,7 @@ public class XSLT extends DefaultStep {
                 transformer.setDestination(serializer);
             } else {
                 result = new XdmDestination();
+                result.setTreeModel(TreeModel.getTreeModel(runtime.getProcessor().getUnderlyingConfiguration().getTreeModel()));
                 transformer.setDestination(result);
             }
 
@@ -288,6 +293,13 @@ public class XSLT extends DefaultStep {
             } catch (SaxonApiException sae) {
                 Throwable e = sae.getCause();
                 if (e instanceof TransformerException) {
+                    QName code = null; {
+                        if (e instanceof XPathException) {
+                            StructuredQName qn = ((XPathException)e).getErrorCodeQName();
+                            if (qn != null && !TERMINATION_ERROR.equals(qn)) code = new QName(qn);
+                        } else
+                            code = sae.getErrorCode();
+                    }
                     XdmNode message = null;
                     if (e instanceof TerminationException) {
                         message = catchMessages.getTerminatingMessage();
@@ -297,20 +309,22 @@ public class XSLT extends DefaultStep {
                     if (cause != null) {
                         if (message != null)
                             throw new XProcException(
+                                code,
                                 location,
                                 message,
                                 XProcException.fromException(cause)
                                               .rebase(null, new RuntimeException().getStackTrace()));
                         else
                             throw new XProcException(
+                                code,
                                 location,
                                 e,
                                 XProcException.fromException(cause)
                                               .rebase(null, new RuntimeException().getStackTrace()));
                     } else if (message != null)
-                        throw new XProcException(location, message);
+                        throw new XProcException(code, location, message);
                     else
-                        throw new XProcException(location, e);
+                        throw new XProcException(code, location, e);
                 } else
                     throw XProcException.fromException(sae);
             }
@@ -450,6 +464,7 @@ public class XSLT extends DefaultStep {
 
             try {
                 XdmDestination xdmResult = new XdmDestination();
+                xdmResult.setTreeModel(TreeModel.getTreeModel(runtime.getProcessor().getUnderlyingConfiguration().getTreeModel()));
                 secondaryResults.put(baseURI.toASCIIString(), xdmResult);
                 Receiver receiver = xdmResult.getReceiver(runtime.getProcessor().getUnderlyingConfiguration());
                 return new FixedSysidReceiver(receiver, baseURI.toASCIIString());

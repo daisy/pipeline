@@ -77,7 +77,7 @@ public class XSelect implements ReadablePipe {
         return true;
     }
     
-    private void readSource() {
+    private void readSource() throws SaxonApiException {
         initialized = true;
 
         try {
@@ -174,7 +174,7 @@ public class XSelect implements ReadablePipe {
         initialized = false;
     }
 
-    public boolean moreDocuments() {
+    public boolean moreDocuments() throws SaxonApiException {
         if (!initialized) {
             readSource();
         }
@@ -185,7 +185,7 @@ public class XSelect implements ReadablePipe {
         return true;
     }
 
-    public int documentCount() {
+    public int documentCount() throws SaxonApiException {
         if (!initialized) {
             readSource();
         }

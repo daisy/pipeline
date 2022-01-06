@@ -36,7 +36,7 @@ public class XPipelineCall extends XAtomicStep {
     }
 
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         logger.trace("Running " + step.getType());
 
         decl.setup();

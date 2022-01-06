@@ -5,6 +5,7 @@ import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.ReadOnlyPipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.Step;
@@ -46,7 +47,7 @@ public class XUntilUnchanged extends XCompoundStep {
             if (current == null) {
                 current = new Pipe(runtime);
             }
-            return new Pipe(runtime,current.documents());
+            return new ReadOnlyPipe(runtime, current.documents());
         } else {
             return super.getBinding(stepName, portName);
         }
@@ -62,7 +63,7 @@ public class XUntilUnchanged extends XCompoundStep {
         sequencePosition = 0;
     }
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         logger.trace("Running cx:until-unchanged " + step.getName());
 
         XProcData data = runtime.getXProcData();

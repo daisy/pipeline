@@ -13,6 +13,7 @@ import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.io.ReadableInline;
 import com.xmlcalabash.io.ReadableDocument;
+import com.xmlcalabash.io.ReadOnlyPipe;
 import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.Step;
@@ -76,9 +77,6 @@ public class XAtomicStep extends XStep {
     private final static QName _value = new QName("", "value");
     private final static QName _type = new QName("", "type");
     private final static QName cx_item = new QName("cx", XProcConstants.NS_CALABASH_EX, "item");
-
-    protected Hashtable<String, Vector<ReadablePipe>> inputs = new Hashtable<String, Vector<ReadablePipe>> ();
-    protected Hashtable<String, WritablePipe> outputs = new Hashtable<String, WritablePipe> ();
 
     public XAtomicStep(XProcRuntime runtime, Step step, XCompoundStep parent) {
         super(runtime, step);
@@ -189,7 +187,7 @@ public class XAtomicStep extends XStep {
             XOutput xoutput = new XOutput(runtime, output);
             xoutput.setLogger(step.getLog(port));
             addOutput(xoutput);
-            WritablePipe wpipe = xoutput.getWriter();
+            Pipe wpipe = xoutput.getWriter();
             wpipe.canWriteSequence(output.getSequence());
             outputs.put(port, wpipe);
             logger.trace(MessageFormatter.nodeMessage(step.getNode(), step.getName() + " writes to " + wpipe + " for " + port));
@@ -298,7 +296,7 @@ public class XAtomicStep extends XStep {
         clearParameters();
     }
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         XProcStep xstep = runtime.getConfiguration().newStep(runtime, this);
 
         // If there's more than one reader, collapse them all into a single reader
@@ -421,7 +419,7 @@ public class XAtomicStep extends XStep {
                     WritablePipe wpipe = outputs.get(port);
                     // FIXME: Hack. There should be a better way...
                     if (wpipe instanceof Pipe) {
-                        ReadablePipe rpipe = new Pipe(runtime, ((Pipe) wpipe).documents());
+                        ReadablePipe rpipe = new ReadOnlyPipe(runtime, ((Pipe) wpipe).documents());
                         rpipe.canReadSequence(true);
                         rpipe.setReader(step);
                         while (rpipe.moreDocuments()) {
@@ -600,7 +598,7 @@ public class XAtomicStep extends XStep {
         }
     }
 
-    protected RuntimeValue computeValue(ComputableValue var) {
+    protected RuntimeValue computeValue(ComputableValue var) throws SaxonApiException {
         Hashtable<String,String> nsBindings = new Hashtable<String,String> ();
         Hashtable<QName,RuntimeValue> globals = inScopeOptions;
         XdmNode doc = null;

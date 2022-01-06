@@ -9,11 +9,15 @@ import org.slf4j.Logger;
 import java.util.Hashtable;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Vector;
+import java.util.Optional;
 import javax.xml.transform.SourceLocator;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcConstants;
+import com.xmlcalabash.io.Pipe;
+import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.Step;
 import com.xmlcalabash.model.Input;
@@ -34,6 +38,8 @@ public abstract class XStep implements XProcRunnable {
     protected String name = null;
     private Hashtable<String,XInput> xinputs = new Hashtable<String,XInput> ();
     private Hashtable<String,XOutput> xoutputs = new Hashtable<String,XOutput> ();
+    protected Hashtable<String, Vector<ReadablePipe>> inputs = new Hashtable<String, Vector<ReadablePipe>> ();
+    protected Hashtable<String, Pipe> outputs = new Hashtable<String, Pipe> ();
     private Hashtable<QName, RuntimeValue> options = new Hashtable<QName, RuntimeValue> ();
     private Hashtable<String, Hashtable<QName, RuntimeValue>> parameters = new Hashtable<String, Hashtable<QName, RuntimeValue>> ();
     protected XCompoundStep parent = null;
@@ -41,6 +47,7 @@ public abstract class XStep implements XProcRunnable {
     /* the next frames in the call stack */
     private static final SourceLocator[] EMPTY_LOCATION = new SourceLocator[]{};
     protected SourceLocator[] parentLocation = EMPTY_LOCATION;
+    private Boolean runLazily = null;
 
     public XStep(XProcRuntime runtime, Step step) {
         this.runtime = runtime;
@@ -295,7 +302,54 @@ public abstract class XStep implements XProcRunnable {
     public abstract RuntimeValue optionAvailable(QName optName);
     public abstract void instantiate(Step step);
     public abstract void reset();
-    public abstract void run() throws SaxonApiException;
+    public void run() throws SaxonApiException {
+        if (runLazily == null) {
+            runLazily = isPure().orElse(false);
+        }
+        if (runLazily) {
+            XProcRunnable runIfNotRunYet = new XProcRunnable() {
+                    private boolean done = false;
+                    public void run() throws SaxonApiException {
+                        if (done) return;
+                        done = true;
+                        doRun();
+                        // next time XStep.run() is called don't run lazily, because we already know an
+                        // output will be accessed so we might as well do it immediately
+                        runLazily = false;
+                    }
+                };
+            for (String port : outputs.keySet()) {
+                outputs.get(port).onRead(runIfNotRunYet);
+            }
+        } else {
+            doRun();
+        }
+    }
+    protected abstract void doRun() throws SaxonApiException;
+
+    private Optional<Boolean> isPure() {
+        if (step != null) {
+            Optional<Boolean> pure = step.isPure();
+            DeclareStep decl = getDeclareStep();
+            if (decl != null) {
+                Optional<Boolean> declPure = decl.isPure();
+                if (declPure.isPresent()) {
+                    // cx:pure on step has precedence
+                    if (!pure.isPresent())
+                        return declPure;
+                    else if (pure.get() && !declPure.get()) {
+                        XProcException warning = new XProcException(
+                            this,
+                            "Step was marked with cx:pure=\"true\" but the corresponding declaration is impure");
+                        logger.warn(warning.toString());
+                    }
+                }
+            }
+            return pure;
+        } else {
+            return Optional.empty();
+        }
+    }
 
     public void error(XProcException error) {
         runtime.error(this, error);

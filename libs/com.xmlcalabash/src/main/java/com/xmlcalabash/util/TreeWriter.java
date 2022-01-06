@@ -34,6 +34,7 @@ import net.sf.saxon.om.NamespaceBinding;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.om.NodeName;
 import net.sf.saxon.om.StandardNames;
+import net.sf.saxon.om.TreeModel;
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -110,6 +111,7 @@ public class TreeWriter {
         try {
             exec = new Executable(controller.getConfiguration());
             destination = new XdmDestination();
+            destination.setTreeModel(TreeModel.getTreeModel(controller.getConfiguration().getTreeModel()));
             receiver = destination.getReceiver(controller.getConfiguration());
 
             PipelineConfiguration pipe = controller.makePipelineConfiguration();

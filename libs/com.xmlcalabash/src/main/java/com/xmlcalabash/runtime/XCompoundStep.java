@@ -7,6 +7,7 @@ import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.io.ReadableEmpty;
+import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.model.*;
 import com.xmlcalabash.util.MessageFormatter;
 import net.sf.saxon.s9api.XdmNode;
@@ -190,7 +191,7 @@ public class XCompoundStep extends XAtomicStep {
             if (port.endsWith("|")) {
                 String rport = port.substring(0,port.length()-1);
                 XInput xinput = getInput(rport);
-                WritablePipe wpipe = xinput.getWriter();
+                Pipe wpipe = xinput.getWriter();
                 wpipe.setWriter(step);
                 wpipe.canWriteSequence(true); // Let the other half work it out
                 outputs.put(port, wpipe);
@@ -199,7 +200,7 @@ public class XCompoundStep extends XAtomicStep {
                 XOutput xoutput = new XOutput(runtime, output);
                 xoutput.setLogger(step.getLog(port));
                 addOutput(xoutput);
-                WritablePipe wpipe = xoutput.getWriter();
+                Pipe wpipe = xoutput.getWriter();
                 wpipe.setWriter(step);
                 wpipe.canWriteSequence(output.getSequence());
                 outputs.put(port, wpipe);
@@ -231,7 +232,7 @@ public class XCompoundStep extends XAtomicStep {
         }
     }
 
-    public void run() throws SaxonApiException {
+    protected void doRun() throws SaxonApiException {
         XProcData data = runtime.getXProcData();
         data.openFrame(this);
         
