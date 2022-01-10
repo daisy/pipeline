@@ -127,6 +127,7 @@ echo
 echo "# release"
 echo
 
+echo ": add \"-DskipTests\" to -Darguments in order to skip the tests during release:prepare && \\"
 if [ ${#modules[@]} -gt 0 ]; then
     
     # use temporary local repository for installing the artifacts during the prepare phase
