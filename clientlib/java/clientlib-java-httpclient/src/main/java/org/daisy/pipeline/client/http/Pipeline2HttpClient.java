@@ -269,14 +269,10 @@ public class Pipeline2HttpClient {
 			}
 			url = url.substring(0, url.length() - 1);
 
-			// add parameter "sign"
+			// add parameter "urlsign"
 			try {
 				String hash = calculateRFC2104HMAC(url, secret);
-				try {
-					url += "&sign"
-						+ "=" + URLEncoder.encode(hash, "UTF-8"); }
-				catch (UnsupportedEncodingException e) {
-					throw new Pipeline2Exception("Unsupported encoding: UTF-8", e); }
+				url += "&urlsign=" + hash;
 			} catch (SignatureException e) {
 				throw new Pipeline2Exception("Could not sign request.");
 			}
@@ -313,7 +309,7 @@ public class Pipeline2HttpClient {
             byte[] rawHmac = mac.doFinal(data.getBytes());
 
             // base64-encode the hmac
-            result = Base64.getEncoder().encode(rawHmac);
+            result = Base64.getUrlEncoder().withoutPadding().encode(rawHmac);
 
         } catch (Exception e) {
             throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
