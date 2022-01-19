@@ -75,6 +75,14 @@ dist-docker-image : assembly/.compile-dependencies | .maven-init .group-eval
 .PHONY : dist-cli-deb
 dist-cli-deb : cli-$(cli/VERSION)-linux_386.deb
 
+.PHONY : dist-webui-zip
+dist-webui-zip : assembly/.compile-dependencies
+	# see webui README for instructions on how to make a signed package for distribution
+	cd webui && \
+	./activator -Dmvn.settings.localRepository="file:$(CURDIR)/$(MVN_WORKSPACE)" clean universal:packageBin | $(MVN_LOG)
+	mv webui/target/universal/*zip .
+
+
 .PHONY : dist-webui-deb
 dist-webui-deb : assembly/.compile-dependencies
 	# see webui README for instructions on how to make a signed package for distribution

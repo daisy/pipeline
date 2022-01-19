@@ -83,7 +83,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.4</version>
+        <version>1.14.5-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -2765,7 +2765,7 @@
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
-      <url>http://maven.restlet.org</url>
+      <url>https://maven.restlet.talend.com</url>
       <releases>
         <enabled>true</enabled>
       </releases>

@@ -191,7 +191,7 @@ libraryDependencies ++= Seq(
   "org.apache.derby" % "derby" % "10.11.1.1",
   "mysql" % "mysql-connector-java" % "8.0.15",
   "org.daisy.pipeline" % "clientlib-java" % "5.0.0",
-  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.1.1",
+  "org.daisy.pipeline" % "clientlib-java-httpclient" % "2.1.2-SNAPSHOT",
   "org.apache.commons" % "commons-compress" % "1.9",
   "org.apache.commons" % "commons-email" % "1.4",
   "log4j" % "log4j" % "1.2.17",

@@ -40,7 +40,7 @@
 				</repository>
 				<repository>
 					<id>restlet-repo</id>  <!-- defined in framework-parent -->
-					<url>http://maven.restlet.org</url>
+					<url>https://maven.restlet.talend.com</url>
 					<releases>
 						<enabled>true</enabled>
 					</releases>

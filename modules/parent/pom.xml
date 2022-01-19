@@ -1024,7 +1024,7 @@
     <repository>
       <id>restlet-repo</id>
       <name>Public online Restlet repository</name>
-      <url>http://maven.restlet.org</url>
+      <url>https://maven.restlet.talend.com</url>
       <releases>
         <enabled>true</enabled>
       </releases>
