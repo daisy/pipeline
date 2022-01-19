@@ -121,7 +121,7 @@ public class SystemStatus extends Controller {
 			attempt.lastAuthTime = new Date();
 			if (attempt.alive != null && authid != null && secret != null && !attempt.alive.error && attempt.alive.authentication) {
 				try {
-					attempt.authResponse = Pipeline2HttpClient.get(url, "", authid, secret, null);
+					attempt.authResponse = Pipeline2HttpClient.get(url, "/jobs", authid, secret, null);
 					//attempt.authResponse = org.daisy.pipeline.client.Scripts.get(url, authid, secret);
 					if (attempt.authResponse.status == 401) {
 						attempt.authError = "Invalid authentication ID or secret text";

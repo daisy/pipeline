@@ -6,14 +6,13 @@ import java.security.SignatureException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Random;
 import java.util.TimeZone;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
 
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.RequestLog;
@@ -35,7 +34,6 @@ public class Authenticator {
 	public boolean authenticate(Client client, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
-
 		int idx = URI.indexOf("&sign=", 0);
 
 		if (idx > 1) {
@@ -157,10 +155,9 @@ public class Authenticator {
 			byte[] rawHmac = mac.doFinal(data.getBytes());
 
 			// base64-encode the hmac
-			result = Base64.encodeBase64String(rawHmac);
-
-			} catch (Exception e) {
-				throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
+			result = Base64.getUrlEncoder().withoutPadding().encodeToString(rawHmac);
+		} catch (Exception e) {
+			throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
 		}
 		return result;
 	}

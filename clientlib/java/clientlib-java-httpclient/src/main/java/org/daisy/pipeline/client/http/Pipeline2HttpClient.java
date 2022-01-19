@@ -252,20 +252,8 @@ public class Pipeline2HttpClient {
 
 			url += "authid="+username + "&time="+time + "&nonce="+nonce;
 
-			String hash = "";
 			try {
-				hash = calculateRFC2104HMAC(url, secret);
-				String hashEscaped = "";
-				char c;
-				for (int i = 0; i < hash.length(); i++) {
-					// Base64 encoding uses + which we have to encode in URL parameters.
-					// Hoping this for loop is more efficient than the equivalent replace("\\+","%2B") regex.
-					c = hash.charAt(i);
-					if (c == '+') hashEscaped += "%2B";
-					else hashEscaped += c;
-				} 
-				url += "&sign="+hashEscaped;
-
+				url += "&sign=" + calculateRFC2104HMAC(url, secret);
 			} catch (SignatureException e) {
 				throw new Pipeline2Exception("Could not sign request.");
 			}
@@ -302,7 +290,7 @@ public class Pipeline2HttpClient {
             byte[] rawHmac = mac.doFinal(data.getBytes());
 
             // base64-encode the hmac
-            result = Base64.getEncoder().encode(rawHmac);
+            result = Base64.getUrlEncoder().withoutPadding().encode(rawHmac);
 
         } catch (Exception e) {
             throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
