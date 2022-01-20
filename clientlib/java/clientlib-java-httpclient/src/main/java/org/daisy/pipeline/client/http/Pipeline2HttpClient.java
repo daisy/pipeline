@@ -253,7 +253,7 @@ public class Pipeline2HttpClient {
 			url += "authid="+username + "&time="+time + "&nonce="+nonce;
 
 			try {
-				url += "&sign=" + calculateRFC2104HMAC(url, secret);
+				url += "&urlsign=" + calculateRFC2104HMAC(url, secret);
 			} catch (SignatureException e) {
 				throw new Pipeline2Exception("Could not sign request.");
 			}

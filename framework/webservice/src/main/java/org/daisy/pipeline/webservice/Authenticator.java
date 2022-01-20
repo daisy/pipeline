@@ -31,18 +31,18 @@ public class Authenticator {
 		this.requestLog = requestLog;
 	}
 	
-	public boolean authenticate(Client client, String hash, String timestamp, String nonce, String URI, long maxRequestTime) {
+	public boolean authenticate(Client client, String hash, String urlhash, String timestamp, String nonce, String URI, long maxRequestTime) {
 		// rules for hashing: use the whole URL string, minus the hash part (&sign=<some value>)
 		// important!  put the sign param last so we can easily strip it out
 		int idx = URI.indexOf("&sign=", 0);
-
+		if(urlhash != null) {
+			idx = URI.indexOf("&urlsign=", 0);
+		}
 		if (idx > 1) {
 			String hashuri = URI.substring(0, idx);
 			String clientSecret = client.getSecret();
 			String serverHash = "";
 			try {
-				serverHash = calculateRFC2104HMAC(hashuri, clientSecret);
-
 				SimpleDateFormat UTC_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 				UTC_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -54,6 +54,12 @@ public class Authenticator {
 					logger.error(String.format("Could not parse timestamp: %s", timestamp));
 					e.printStackTrace();
 					return false;
+				}
+
+				serverHash = calculateRFC2104HMAC(hashuri, clientSecret, false);
+				if(urlhash != null) {
+					serverHash = calculateRFC2104HMAC(hashuri, clientSecret, true);
+					hash = urlhash;
 				}
 				if(!hash.equals(serverHash)) {
 					logger.error("Hash values do not match");
@@ -96,8 +102,8 @@ public class Authenticator {
 		String hash;
 		URI newUri =  null;
 		try {
-			hash = calculateRFC2104HMAC(uristring, client.getSecret());
-			String authUri = uristring + "&sign=" + hash;
+			hash = calculateRFC2104HMAC(uristring, client.getSecret(), true);
+			String authUri = uristring + "&urlsign=" + hash;
 			newUri = new URI(authUri);
 		} catch (SignatureException e) {
 			// TODO Auto-generated catch block
@@ -141,7 +147,7 @@ public class Authenticator {
 	* @throws
 	* java.security.SignatureException when signature generation fails
 	*/
-	private static String calculateRFC2104HMAC(String data, String secret) throws java.security.SignatureException {
+	private static String calculateRFC2104HMAC(String data, String secret, boolean urlEncoded) throws java.security.SignatureException {
 		String result;
 		try {
 			// get an hmac_sha1 key from the raw key bytes
@@ -155,7 +161,10 @@ public class Authenticator {
 			byte[] rawHmac = mac.doFinal(data.getBytes());
 
 			// base64-encode the hmac
-			result = Base64.getUrlEncoder().withoutPadding().encodeToString(rawHmac);
+			result = Base64.getEncoder().encodeToString(rawHmac);
+			if (urlEncoded) {
+				result = Base64.getUrlEncoder().withoutPadding().encodeToString(rawHmac);
+			}
 		} catch (Exception e) {
 			throw new SignatureException("Failed to generate HMAC : " + e.getMessage());
 		}
