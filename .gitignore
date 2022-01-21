@@ -8,6 +8,7 @@
 /.maven-workspace/
 /maven.log
 /settings.xml
+/webui/.deps.mk
 # eclipse
 bin/
 .classpath
@@ -19,4 +20,4 @@ bin/
 # for build remainders on subrepo branches
 target/
 /build/
-/node-modules/
+/node_modules/
