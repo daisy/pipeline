@@ -972,7 +972,7 @@
            id="tspan9057">medium</tspan></text>
     </a>
     <a
-       xlink:href="modules/braille/common-utils/src/main/resources/xml/apply-stylesheets.xpl"
+       xlink:href="modules/braille/braille-common/src/main/resources/xml/apply-stylesheets.xpl"
        transform="translate(293.87612,150.22324)"
        id="a6175"
        class="apidoc">
@@ -1006,7 +1006,7 @@
            id="tspan9053">px:css-cascade</tspan></text>
     </a>
     <a
-       xlink:href="modules/braille/common-utils/src/main/resources/xml/library.xpl"
+       xlink:href="modules/braille/braille-common/src/main/resources/xml/library.xpl"
        id="a6187"
        class="apidoc"
        transform="translate(329.20444,457.17067)">
@@ -1080,7 +1080,7 @@
            id="tspan9049">px:obfl-to-pef</tspan></text>
     </a>
     <a
-       xlink:href="modules/braille/common-utils/src/main/resources/xml/library.xpl"
+       xlink:href="modules/braille/braille-common/src/main/resources/xml/library.xpl"
        id="a6213"
        class="apidoc"
        transform="translate(214.86114,552.53277)">
@@ -1136,7 +1136,7 @@
          style="font-size:16px;text-decoration: underline;text-decoration-line: underline">pef:pef2text</text>
     </a>
     <a
-       xlink:href="modules/braille/css-utils/src/main/java/org/daisy/pipeline/braille/css/impl/CSSBlockTransform.java"
+       xlink:href="modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/impl/CSSBlockTransform.java"
        id="a6235"
        class="apidoc"
        transform="translate(152.92117,601.12567)">

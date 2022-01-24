@@ -139,7 +139,6 @@ FIXME: add short description for every package
 - [`http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/common-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/css-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/dotify-utils/library.xpl)
-- [`http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/liblouis-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/obfl-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/braille/pef-utils/library.xpl)
 - [`http://www.daisy.org/pipeline/modules/file-utils/library.xpl`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/modules/file-utils/library.xpl)
@@ -183,8 +182,8 @@ FIXME: add short description for every package
 
 ## APIs of Individual Modules
 
-- [`org.daisy.pipeline.modules.braille:common-utils`](http://daisy.github.io/pipeline/modules/braille/common-utils/src/main/README.html)
-- [`org.daisy.pipeline.modules.braille:css-utils`](http://daisy.github.io/pipeline/modules/braille/css-utils/src/main/README.html)
+- [`org.daisy.pipeline.modules.braille:braille-common`](http://daisy.github.io/pipeline/modules/braille/braille-common/src/main/README.html)
+- [`org.daisy.pipeline.modules.braille:braille-css-utils`](http://daisy.github.io/pipeline/modules/braille/braille-css-utils/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dotify-utils`](http://daisy.github.io/pipeline/modules/braille/dotify-utils/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:dtbook-to-pef`](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/README.html)
 - [`org.daisy.pipeline.modules.braille:epub3-to-pef`](http://daisy.github.io/pipeline/modules/braille/epub3-to-pef/src/main/README.html)

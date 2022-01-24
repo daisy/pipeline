@@ -30,9 +30,9 @@ javadoc:
 - group: org.daisy.pipeline.modules
   artifact: tts-common
 - group: org.daisy.pipeline.modules.braille
-  artifact: common-utils
+  artifact: braille-common
 - group: org.daisy.pipeline.modules.braille
-  artifact: css-utils
+  artifact: braille-css-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: dotify-utils
 - group: org.daisy.pipeline.modules.braille
@@ -103,9 +103,9 @@ xprocdoc:
 - group: org.daisy.pipeline.modules.braille
   artifact: epub3-to-pef
 - group: org.daisy.pipeline.modules.braille
-  artifact: common-utils
+  artifact: braille-common
 - group: org.daisy.pipeline.modules.braille
-  artifact: css-utils
+  artifact: braille-css-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: dotify-utils
 - group: org.daisy.pipeline.modules.braille
