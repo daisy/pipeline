@@ -229,7 +229,10 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		name := getFlagName(option.Name, "x-", command.Flags())
 		shortDesc := option.ShortDesc
 		longDesc := option.LongDesc
-		longDesc += ("\n\nPossible values: " + optionTypeToDetailedHelp(option.Type))
+		possibleValues := optionTypeToDetailedHelp(option.Type)
+		if (possibleValues != "") {
+			longDesc += ("\n\nPossible values: " + possibleValues)
+		}
 		if ! option.Required {
 			longDesc += "\n\nDefault value: "
 			if option.Default == "" {
@@ -329,13 +332,9 @@ func optionTypeToString(optionType pipeline.DataType, optionName string, default
 			return italic("PATTERN")
 		}
 	case pipeline.XsAnyURI:
-		if optionName == "" {
-			return italic("URI")
-		}
+		return italic("URI")
 	case pipeline.XsString:
-		if optionName == "" {
-			return italic("STRING")
-		}
+		return italic("STRING")
 	default:
 		if optionName == "" {
 			return italic("STRING")
@@ -413,7 +412,6 @@ func optionTypeToDetailedHelp(optionType pipeline.DataType) string {
 			help += "A _STRING_"
 		}
 	default:
-		help += "A _STRING_"
 	}
 	return help
 }
