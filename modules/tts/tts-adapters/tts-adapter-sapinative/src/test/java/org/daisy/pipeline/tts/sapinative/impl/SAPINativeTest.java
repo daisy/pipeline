@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.sapinative.impl;
 
 import org.daisy.pipeline.tts.sapinative.SAPILib;
+import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -10,16 +11,8 @@ import org.junit.Test;
 public class SAPINativeTest {
 
 	@BeforeClass
-	public static void load() {
-		String libpath = System.getProperty("user.dir") + "/"
-		        + "target/generated-resources/lib/";
-		if (System.getProperty("os.arch").endsWith("64"))
-			libpath += "x64";
-		else
-			libpath += "x86";
-		libpath += "-Windows-msvc/jni/sapi-nar.dll";
-
-		System.load(libpath);
+	public static void load() throws SynthesisException {
+		SAPIservice.loadDLL();
 		SAPILib.initialize(8000, 16);
 	}
 

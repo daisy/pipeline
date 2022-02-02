@@ -1,10 +1,17 @@
 package org.daisy.pipeline.tts.sapinative.impl;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.nio.file.Files;
 import java.util.Map;
 
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.sound.sampled.AudioFormat;
 
+import org.daisy.common.file.URLs;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.sapinative.SAPILib;
 import org.daisy.pipeline.tts.TTSEngine;
@@ -39,7 +46,7 @@ public class SAPIservice extends AbstractTTSService {
 			}
 
 			if (mFirstLoad) {
-				System.loadLibrary("sapinative");
+				loadDLL();
 				mFirstLoad = false;
 			}
 
@@ -91,4 +98,46 @@ public class SAPIservice extends AbstractTTSService {
 		return defaultVal;
 	}
 
+	/**
+	 * Unpack and load sapinative.dll
+	 */
+	static void loadDLL() throws SynthesisException {
+		if (!System.getProperty("os.name").toLowerCase().startsWith("windows"))
+			throw new SynthesisException("Not on Windows");
+		URL dll; {
+			String arch = System.getProperty("os.arch").toLowerCase();
+			if (arch.equals("amd64") || arch.equals("x86_64"))
+				dll = URLs.getResourceFromJAR("x64/sapinative.dll", SAPIservice.class);
+			else
+				dll = URLs.getResourceFromJAR("x86/sapinative.dll", SAPIservice.class);
+		}
+		File dllFile; {
+			try {
+				dllFile = new File(URLs.asURI(dll));
+			} catch (IllegalArgumentException iae) {
+				try {
+					File tmpDirectory = Files.createTempDirectory("pipeline-").toFile();
+					tmpDirectory.deleteOnExit();
+					dllFile = new File(tmpDirectory, "sapinative.dll");
+					dllFile.deleteOnExit();
+					dllFile.getParentFile().mkdirs();
+					dllFile.createNewFile();
+					FileOutputStream writer = new FileOutputStream(dllFile);
+					dll.openConnection();
+					InputStream reader = dll.openStream();
+					byte[] buffer = new byte[153600];
+					int bytesRead = 0;
+					while ((bytesRead = reader.read(buffer)) > 0) {
+						writer.write(buffer, 0, bytesRead);
+						buffer = new byte[153600];
+					}
+					writer.close();
+					reader.close();
+				} catch (IOException e) {
+					throw new SynthesisException("Could not unpack sapinative.dll", e);
+				}
+			}
+		}
+		System.load(dllFile.getAbsolutePath());
+	}
 }
