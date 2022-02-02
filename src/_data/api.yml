@@ -2,10 +2,10 @@ javadoc:
 
 - group: org.daisy.pipeline
   artifact: clientlib-java
-  version: 5.0.1-SNAPSHOT
+  version: 5.0.1
 - group: org.daisy.pipeline
   artifact: clientlib-java-httpclient
-  version: 2.1.2-SNAPSHOT
+  version: 2.1.2
 - group: org.daisy.pipeline
   artifact: ds-to-spi-runtime
   version: 1.1.1
