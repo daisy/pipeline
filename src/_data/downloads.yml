@@ -1,6 +1,27 @@
 ## Generate with:
 ## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.4 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
 
+- group: webui
+  version: "2.7.1"
+  state: stable
+  github_tag: "v2.7.1"
+  github_url: "https://github.com/daisy/pipeline-webui/releases/tag/v2.7.1"
+  files:
+    - platform: windows
+      package: installer
+      content: webui
+      url: "https://github.com/daisy/pipeline-webui/releases/download/v2.7.1/DAISY.Pipeline.2.Web.UI.msi"
+      size: 56406316
+    - platform: debian
+      package: deb
+      content: webui
+      url: "https://github.com/daisy/pipeline-webui/releases/download/v2.7.1/webui_2.7.1_all.deb"
+      size: 53742236
+    - platform: redhat
+      package: rpm
+      content: webui
+      url: "https://github.com/daisy/pipeline-webui/releases/download/v2.7.1/pipeline2-webui-2.7.1-1.noarch.rpm"
+      size: 55812790
 
 - group: main
   version: "1.14.4"
