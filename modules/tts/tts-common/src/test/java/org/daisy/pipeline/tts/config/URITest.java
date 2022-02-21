@@ -12,8 +12,14 @@ public class URITest {
 	@Test
 	public void absolutePath() {
 		URL url = ConfigReader.URIinsideConfig("/foo/bar.xml", null);
-		Assert.assertTrue("file:///foo/bar.xml".equals(url.toString())
-		        || "file:/foo/bar.xml".equals(url.toString()));
+		String systemRoot = "/";
+		if(System.getProperty("os.name").toLowerCase().startsWith("windows")){
+			systemRoot = "/" + System.getenv("SYSTEMDRIVE") + "/";
+		}
+		
+		Assert.assertTrue(
+			("file://"+ systemRoot+ "foo/bar.xml").equals(url.toString())
+		        || ("file:" +systemRoot+ "foo/bar.xml").equals(url.toString()));
 	}
 
 	@Test

@@ -69,10 +69,27 @@ public class ConfigReader implements ConfigProperties {
 	}
 
 	static public URL URIinsideConfig(String pathOrURI, URI relativeTo) {
-		URI uri= null;
-		if (pathOrURI.startsWith("/")) {
+		URI uri = null;
+		
+		// absolute path check
+		if(System.getProperty("os.name").toLowerCase().startsWith("windows")){
+			// on windows machine, test for each drive, 
+			for(File root : File.listRoots()){
+				String rootDrive = root.getAbsolutePath().split(":")[0] + ":";
+				if (pathOrURI.startsWith(rootDrive)) {
+					uri = URLs.asURI(new File(pathOrURI));
+					break;
+				} else if (pathOrURI.startsWith("/") && System.getenv("SYSTEMDRIVE").equals(rootDrive)){
+					uri = URLs.asURI(new File(rootDrive + pathOrURI));
+				}
+			}
+		} else if (pathOrURI.startsWith("/")) {
+			// test for unix machine
 			uri = URLs.asURI(new File(pathOrURI));
-		} else {
+		} 
+		
+		
+		if(uri == null) {
 			try {
 				uri = URLs.asURI(pathOrURI);
 			} catch (Exception e) {
