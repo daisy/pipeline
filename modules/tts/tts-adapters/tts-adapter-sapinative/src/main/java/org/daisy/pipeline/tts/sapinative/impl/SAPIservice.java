@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioFormat;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.sapinative.SAPILib;
+import org.daisy.pipeline.tts.sapinative.SAPILibResult;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -51,10 +52,10 @@ public class SAPIservice extends AbstractTTSService {
 			}
 
 			if (mAudioFormat == null) {
-				int res = SAPILib.initialize(sampleRate, 8 * bytesPerSample);
-				if (res != 0) {
+				int res = SAPILib.initialize(sampleRate, (short)(8 * bytesPerSample));
+				if (res != SAPILibResult.SAPINATIVE_OK.value()) {
 					throw new SynthesisException(
-					        "SAPI initialization failed with error code '" + res + "'");
+					        "SAPI initialization failed with error code '" + res + "': " + SAPILibResult.valueOfCode(res));
 				}
 				mAudioFormat = audioFormat;
 			}

@@ -1,7 +1,14 @@
 package org.daisy.pipeline.tts.sapinative.impl;
 
 import org.daisy.pipeline.tts.sapinative.SAPILib;
+import org.daisy.pipeline.tts.sapinative.impl.*;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
+import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
+import org.daisy.pipeline.tts.Voice;
+
+
+import java.util.Collection;
+import java.util.HashMap;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -13,7 +20,7 @@ public class SAPINativeTest {
 	@BeforeClass
 	public static void load() throws SynthesisException {
 		SAPIservice.loadDLL();
-		SAPILib.initialize(8000, 16);
+		SAPILib.initialize(8000, (short) 16);
 	}
 
 	@AfterClass
@@ -29,6 +36,7 @@ public class SAPINativeTest {
 	static long speakCycle(String text) {
 		String[] names = SAPILib.getVoiceNames();
 		String[] vendors = SAPILib.getVoiceVendors();
+		String[] locales = SAPILib.getVoiceLocales();
 		Assert.assertTrue(names.length > 0);
 		Assert.assertTrue(vendors.length > 0);
 
@@ -71,6 +79,24 @@ public class SAPINativeTest {
 	}
 
 	@Test
+	public void getVoiceLocales() {
+		String[] locales = SAPILib.getVoiceLocales();
+		Assert.assertTrue(locales.length > 0);
+	}
+
+	@Test
+	public void getVoiceGenders() {
+		String[] genders = SAPILib.getVoiceGenders();
+		Assert.assertTrue(genders.length > 0);
+	}
+
+	@Test
+	public void getVoiceAges() {
+		String[] ages = SAPILib.getVoiceAges();
+		Assert.assertTrue(ages.length > 0);
+	}
+
+	@Test
 	public void manageConnection() {
 		long connection = SAPILib.openConnection();
 		Assert.assertNotSame(0, connection);
@@ -81,6 +107,17 @@ public class SAPINativeTest {
 	public void speakEasy() {
 		long connection = speakCycle(SSML("this is a test"));
 		SAPILib.closeConnection(connection);
+	}
+
+	private static SAPIengine allocateEngine() throws Throwable {
+		SAPIservice s = new SAPIservice();
+		return (SAPIengine) s.newEngine(new HashMap<String, String>());
+	}
+
+	@Test
+	public void getVoiceInfo() throws Throwable {
+		Collection<Voice> voices = allocateEngine().getAvailableVoices();
+		Assert.assertTrue(voices.size() > 1);
 	}
 
 	@Test
@@ -115,7 +152,7 @@ public class SAPINativeTest {
 
 	@Test
 	public void bookmarkReply() {
-		long connection = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
+		long connection = speakCycle(SSML("this is <bookmark mark=\"t\"/> a bookmark"));
 		String[] names = SAPILib.getBookmarkNames(connection);
 		long[] pos = SAPILib.getBookmarkPositions(connection);
 		SAPILib.closeConnection(connection);
@@ -127,7 +164,7 @@ public class SAPINativeTest {
 	@Test
 	public void oneBookmark() {
 		String bookmark = "bmark";
-		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark
+		long connection = speakCycle(SSML("this is <bookmark mark=\"" + bookmark
 		        + "\"/> a bookmark"));
 		String[] names = SAPILib.getBookmarkNames(connection);
 		long[] pos = SAPILib.getBookmarkPositions(connection);
@@ -138,12 +175,28 @@ public class SAPINativeTest {
 		Assert.assertEquals(bookmark, names[0]);
 	}
 
+	// @Test
+	/**
+	 * ending mark test : abandonned as SAPI does not detect marks after the last element of a spoke sentence.
+	 */
+	// public void endingBookmark() {
+	// 	String bookmark = "endingmark";
+	// 	long connection = speakCycle(SSML("this is an ending mark <bookmark mark=\"" + bookmark
+	// 	        + "\"/> "));
+	// 	String[] names = SAPILib.getBookmarkNames(connection);
+	// 	long[] pos = SAPILib.getBookmarkPositions(connection);
+	// 	SAPILib.closeConnection(connection);
+	// 	Assert.assertSame(1, names.length);
+	// 	Assert.assertSame(1, pos.length);
+	// 	Assert.assertEquals(bookmark, names[0]);
+	// }
+
 	@Test
 	public void twoBookmarks() {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
-		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
-		        + "\"/> five six <mark name=\"" + b2 + "\"/> seven"));
+		long connection = speakCycle(SSML("one two three four <bookmark mark=\"" + b1
+		        + "\"/> five six <bookmark mark=\"" + b2 + "\"/> seven"));
 		String[] names = SAPILib.getBookmarkNames(connection);
 		long[] pos = SAPILib.getBookmarkPositions(connection);
 		SAPILib.closeConnection(connection);
