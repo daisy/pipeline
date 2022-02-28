@@ -25,6 +25,10 @@ public class SAPINativeTest {
 
 	@AfterClass
 	public static void dispose() {
+		System.out.println("WARNING notice: you may encountered an exception when the dll is released by the JVM after finishing tests, with an error log generated in the project folder.");
+		System.out.println("This exception does not prevent the tests and build to complete in success, and has not yet occured in real-world production tests.");
+		System.out.println("You can ignore it and the error log.");
+
 		SAPILib.dispose();
 	}
 
