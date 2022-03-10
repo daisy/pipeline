@@ -68,24 +68,8 @@ public class OmnilangLexer implements LexService {
 			//replace "J.J.R. Tolkien" with "J.J.RA Tolkien"
 			input = input.replaceAll("(\\p{Lu})(([.]\\p{Lu})+)[.](?=[\n ]\\p{Lu})", "$1$2A");
 
-			// Handle Titles by replacing the dot with A.
-			input = input.replaceAll("Mr\\.", "MrA");
-			input = input.replaceAll("Mrs\\.", "MrsA");
-			input = input.replaceAll("Ms\\.", "MsA");
-			input = input.replaceAll("Prof\\.", "ProfA");
-			input = input.replaceAll("Dr\\.", "DrA");
-
 			//replace "!)" with ",)" to prevent it from detecting a new sentence
 			input = input.replaceAll("[؟:?‥!…។៕。]\\)", ",)");
-
-			if (input.matches(".*https?://.*")) {
-				int offset = 0;
-				while((offset = input.indexOf('?', offset)) != -1 && offset < input.length() - 1) {
-					if (input.charAt(offset) == '?' && input.charAt(offset + 1) != ' ') {
-						input = input.substring(0,offset)+'_'+input.substring(offset + 1);
-					}
-				}
-			}
 
 			sentIterator.setText(input);
 			int start = sentIterator.first();

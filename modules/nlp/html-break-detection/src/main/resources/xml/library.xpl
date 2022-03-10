@@ -43,8 +43,7 @@
                      html:small|html:strike|html:strong|html:sup|html:sub|html:u|html:q|html:address|
                      html:abbr|html:em|html:style"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
-        ensure-word-after="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
-        cannot-be-sentence-child="html:span[@class='lic']"
+        ensure-word-after="span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|
                                html:h3|html:h4|html:h5|html:h6|html:header|html:footer|html:address|
                                html:p|html:pre|html:blockquote|html:li|html:dt|html:dd|html:a|html:q|
@@ -75,13 +74,6 @@
     <p:output port="result" primary="true"/>
     <p:unwrap match="html:span[@role='word' and not(@* except @role)]"/>
     <p:delete match="html:span/@role[.='word']"/>
-  </p:declare-step>
-
-  <p:declare-step type="px:remove-empty-lic">
-    <p:documentation>Remove empty lic elements.</p:documentation>
-    <p:input port="source" primary="true"/>
-    <p:output port="result" primary="true"/>
-    <p:delete match="html:span[@class = 'lic' and normalize-space(.) = '']"/>
   </p:declare-step>
 
 </p:library>

@@ -129,7 +129,6 @@
     <p:documentation>
       px:html-break-detect
       px:html-unwrap-words
-      px:remove-empty-lic
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
@@ -142,11 +141,6 @@
     <p:documentation>
       px:fileset-load
       px:fileset-update
-    </p:documentation>
-  </p:import>
-  <p:import href="prepare-for-tts.xpl">
-    <p:documentation>
-      px:prepare-for-tts
     </p:documentation>
   </p:import>
 
@@ -232,7 +226,7 @@
           <p:pipe step="ssml" port="result"/>
         </p:output>
         <p:output port="html">
-          <p:pipe port="result" step="remove-empty-lic"/>
+          <p:pipe port="result" step="rm-words"/>
         </p:output>
         <p:output port="sentence-ids">
           <p:pipe port="sentence-ids" step="lexing"/>
@@ -241,9 +235,6 @@
           <p:documentation>
             Insert "speech-only" spans from @tts:before and @tts:after attributes
           </p:documentation>
-          <px:prepare-for-tts>
-            <!-- Add extra line numbers to ordered lists -->
-          </px:prepare-for-tts>
           <p:insert match="*[@tts:before]" position="first-child">
             <p:input port="insertion">
               <p:inline><tts:before>[CONTENT]</tts:before></p:inline>
@@ -261,7 +252,6 @@
           <p:rename match="tts:before|tts:after"
                     new-name="span" new-namespace="http://www.w3.org/1999/xhtml"/>
         </p:group>
-
         <px:html-break-detect name="lexing" px:progress="1/2">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
@@ -303,15 +293,12 @@
           <p:documentation>Remove @tts:* attributes and tts namespace nodes</p:documentation>
           <px:css-speech-clean/>
         </p:group>
-        <px:html-unwrap-words>
+        <px:html-unwrap-words name="rm-words">
           <p:documentation>
             Remove the word tags because it results in invalid EPUB. (The info is used in the
             synthesize step, but not for synchronization on word level.)
           </p:documentation>
         </px:html-unwrap-words>
-        <px:remove-empty-lic name="remove-empty-lic">
-          <!-- Remove all the empty lic tags -->
-        </px:remove-empty-lic>
       </p:for-each>
       <px:ssml-to-audio name="to-audio" px:progress="8/9">
         <p:input port="config">

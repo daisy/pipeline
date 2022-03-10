@@ -18,13 +18,10 @@
   <name>DAISY Pipeline 2 module :: EPUB 3 Enhancer</name>
   
   <dependencies>
+    <!-- for XProcScriptService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>calabash-adapter</artifactId>
     </dependency>
     <!--
         runtime dependencies
@@ -83,6 +80,11 @@
       <scope>test</scope>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
       <scope>test</scope>
@@ -104,8 +106,7 @@
       org.daisy.pipeline.modules.impl.Module_epub3_to_epub3,
       org.daisy.pipeline.script.impl.XProcScript_epub3_to_epub3,
       org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_tts,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text,
-      com.textalk.AppendLegal$Step$Provider
+      org.daisy.pipeline.datatypes.impl.Datatype_px_epub3_to_epub3_script_ensure_pagenum_text
     </expose-services>
   </properties>
   
@@ -139,19 +140,6 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <archive>
-            <manifest>
-              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-              <mainClass>com.textalk.AppendLegal</mainClass>
-            </manifest>
-          </archive>
-        </configuration>
       </plugin>
     </plugins>
   </build>
