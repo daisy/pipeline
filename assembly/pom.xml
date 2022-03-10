@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.4</cli.version>
+    <cli.version>2.1.5-SNAPSHOT</cli.version>
     <javafx.version>11.0.1</javafx.version>
     <!--
         for package-exe
@@ -2655,6 +2655,7 @@
                     <addModule>java.base</addModule>
                     <addModule>java.desktop</addModule>
                     <addModule>java.instrument</addModule>
+                    <addModule>java.security.jgss</addModule>
                     <addModule>java.sql</addModule>
                     <addModule>java.xml</addModule>
                     <addModule>jdk.management.agent</addModule>
