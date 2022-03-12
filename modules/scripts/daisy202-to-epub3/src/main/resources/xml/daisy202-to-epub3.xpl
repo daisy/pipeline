@@ -30,7 +30,7 @@
     </p:option>
     <p:option name="output" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB</h2>
+            <h2 px:role="name">EPUB 3</h2>
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
@@ -53,8 +53,10 @@
     </p:option>
     <p:option name="epub-filename" required="false" select="''" px:type="string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">EPUB 3 Filename</h2>
-            <p px:role="desc">By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.</p>
+            <h2 px:role="name">EPUB 3 file name</h2>
+            <p px:role="desc" xml:space="preserve">By default, the file name is the dc:identifier with a ".epub" file extension.
+
+This option can be used to set a custom file name.</p>
         </p:documentation>
     </p:option>
 

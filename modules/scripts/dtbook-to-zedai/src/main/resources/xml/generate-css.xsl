@@ -12,7 +12,6 @@
     <xsl:output method="text"/>
     
     <xsl:template match="/">
-        <xsl:message>Generating CSS</xsl:message>
         <xsl:apply-templates select="//z:object"/>
         <xsl:apply-templates select="//z:table"/>
         <xsl:apply-templates select="//z:col"/>

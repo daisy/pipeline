@@ -3,7 +3,9 @@ package org.daisy.pipeline.tts.config;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
@@ -26,8 +28,10 @@ public class ConfigReader implements ConfigProperties {
 
 	private static Logger Logger = LoggerFactory.getLogger(ConfigReader.class);
 
-	public static final String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
+	static final String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
 	private static final String ttsConfigProperty = "org.daisy.pipeline.tts.config";
+	private static final List<String> safeProperties = Arrays.asList(new String[] {
+			"org.daisy.pipeline.tts.mp3.bitrate" });
 
 	public interface Extension {
 		/**
@@ -47,7 +51,7 @@ public class ConfigReader implements ConfigProperties {
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
 		String staticConfigPath = Properties.getProperty(ttsConfigProperty);
 		if (staticConfigPath != null) {
-			XdmNode content = readFromURIinsideConfig(staticConfigPath, saxonproc, URLs.asURI(new File("./")));
+			XdmNode content = readFromURL(staticConfigPath, saxonproc);
 			if (content != null)
 				readConfig(null, content, extensions);
 		}
@@ -64,50 +68,70 @@ public class ConfigReader implements ConfigProperties {
 		}
 		mAllProps = new HashMap<String, String>();
 		mAllProps.putAll(mStaticProps);
-		if (Properties.getProperty(HostProtectionProperty, "true").equalsIgnoreCase("false"))
+		String hostProtection = Properties.getProperty(HostProtectionProperty);
+		if (hostProtection != null)
+			Logger.warn("'" + HostProtectionProperty + "' setting is deprecated. " +
+			            "It may become unavailable in future version of DAISY Pipeline.");
+		if (hostProtection != null && hostProtection.equalsIgnoreCase("false"))
 			mAllProps.putAll(mDynamicProps);
+		else
+			for (String k : mDynamicProps.keySet())
+				if (safeProperties.contains(k))
+					mAllProps.put(k, mDynamicProps.get(k));
 	}
 
-	static public URL URIinsideConfig(String pathOrURI, URI relativeTo) {
-		URI uri= null;
-		if (pathOrURI.startsWith("/")) {
-			uri = URLs.asURI(new File(pathOrURI));
-		} else {
-			try {
-				uri = URLs.asURI(pathOrURI);
-			} catch (Exception e) {
-				Logger.debug("URI " + uri + ": wrong format " + e);
-				return null;
-			}
-		}
-		if (!uri.isAbsolute()) {
-			if (relativeTo == null) {
-				Logger.debug("URI " + uri + " must be absolute");
-				return null;
-			}
-			uri = relativeTo.resolve(uri);
-		}
+	/**
+	 * Resolve URL within TTS configuration document.
+	 *
+	 * @param url  The URL to resolve.
+	 * @param base The base URI of the configuration document.
+	 */
+	public static URL URIinsideConfig(String url, URI base) {
 		try {
-			return URLs.asURL(uri);
+			return URLs.asURL(URLs.resolve(base, URLs.asURI(url)));
 		} catch (Exception e) {
-			Logger.debug("Malformed URL: " + uri);
+			Logger.debug("Malformed URL: " + url);
 			return null;
 		}
 	}
 
-	static public XdmNode readFromURIinsideConfig(String pathOrURI, Processor saxonproc,
-	        URI relativeTo) {
-		URL url = URIinsideConfig(pathOrURI, relativeTo);
-		if (url != null) {
-			try {
-				SAXSource source = new SAXSource(new InputSource(url.openStream()));
-				source.setSystemId(url.toString());
-				return saxonproc.newDocumentBuilder().build(source);
-			} catch (Exception e) {
-				Logger.debug("error while reading " + url + ": " + e);
-			}
+	/**
+	 * Read document from URL within TTS configuration document.
+	 *
+	 * @param url  The URL to read from. If relative, it is resolved
+	 *             against the base URI of the configuration document.
+	 * @param base The base URI of the configuration document.
+	 */
+	public static XdmNode readFromURIinsideConfig(String url, Processor saxonproc, URI base) {
+		return readFromURL(URIinsideConfig(url, base), saxonproc);
+	}
+
+	/**
+	 * Read document from URL.
+	 *
+	 * @param url The URL to read from. If relative, it is resolved
+	 *            against the current directory.
+	 */
+	private static XdmNode readFromURL(String url, Processor saxonproc) {
+		return readFromURIinsideConfig(url, saxonproc, URLs.asURI(new File("./")));
+	}
+
+	/**
+	 * Read document from URL.
+	 *
+	 * @param url The URL to read from.
+	 */
+	private static XdmNode readFromURL(URL url, Processor saxonproc) {
+		if (url == null)
+			return null;
+		try {
+			SAXSource source = new SAXSource(new InputSource(url.openStream()));
+			source.setSystemId(url.toString());
+			return saxonproc.newDocumentBuilder().build(source);
+		} catch (Exception e) {
+			Logger.debug("error while reading " + url + ": " + e);
+			return null;
 		}
-		return null;
 	}
 
 	private void readConfig(Map<String, String> props, XdmNode doc, Extension... extensions) {
@@ -136,7 +160,6 @@ public class ConfigReader implements ConfigProperties {
 						        + node.toString());
 					} else if (props != null) {
 						if (!key.startsWith("org.daisy.pipeline.tts."))
-							// for backwards compatibility
 							key = "org.daisy.pipeline.tts." + key;
 						props.put(key, value);
 					} else {

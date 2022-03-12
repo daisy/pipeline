@@ -34,6 +34,10 @@
             </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="all" as="element()*" select="f:all-prefix-decl(/,$implicit.in)"/>
+        <!--
+            #default means: if a prefix is implicit in at least one of the input attributes, it will
+            be implicit in the output attribute
+        -->
         <xsl:variable name="implicit.out" as="element(f:vocab)*"
                       select="if ($implicit-output-prefixes='#default')
                               then $implicit.in[some $v1 in . satisfies

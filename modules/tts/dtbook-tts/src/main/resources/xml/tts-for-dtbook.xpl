@@ -71,9 +71,33 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="audio-file-type" select="'audio/mpeg'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+      <p>Examples:</p>
+      <ul>
+        <li>"audio/mpeg"</li>
+        <li>"audio/x-wav"</li>
+      </ul>
+    </p:documentation>
+  </p:option>
+
   <p:option name="process-css" required="false" select="'true'" cx:as="xs:string">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Set to false to bypass aural CSS processing.</p>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="word-detection" required="false" select="'true'" cx:as="xs:string">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Whether to detect and mark up words with <code>&lt;w&gt;</code> tags.</p>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="temp-dir" select="''">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Empty directory dedicated to this conversion. May be left empty in which case a temporary
+      directory will be automatically created.</p>
     </p:documentation>
   </p:option>
 
@@ -85,6 +109,7 @@
   <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
     <p:documentation>
       px:dtbook-break-detect
+      px:dtbook-unwrap-words
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
@@ -206,7 +231,7 @@
 	  </p:input>
 	  <p:with-option name="test" select="concat('position()=', p:iteration-position())"/>
 	</p:split-sequence>
-	<px:dtbook-to-ssml name="ssml-gen">
+	<px:dtbook-to-ssml name="ssml-gen" px:message="SSML generation for DTBook">
 	  <p:input port="content.in">
 	    <p:pipe port="current" step="for-each.content"/>
 	  </p:input>
@@ -225,23 +250,37 @@
 	</px:dtbook-to-ssml>
       </p:for-each>
       <px:ssml-to-audio name="to-audio" px:progress="1">
+	<p:with-option name="audio-file-type" select="$audio-file-type">
+	  <p:empty/>
+	</p:with-option>
 	<p:with-option name="include-log" select="$include-log">
 	  <p:empty/>
 	</p:with-option>
 	<p:input port="config">
 	  <p:pipe port="config" step="main"/>
 	</p:input>
+	<p:with-option name="temp-dir" select="if ($temp-dir!='') then concat($temp-dir,'audio/') else ''">
+	  <p:empty/>
+	</p:with-option>
       </px:ssml-to-audio>
     </p:otherwise>
   </p:choose>
 
-  <p:for-each name="remove-css">
+  <p:for-each>
     <p:iteration-source>
       <p:pipe port="result" step="lexing"/>
     </p:iteration-source>
-    <p:output port="result"/>
     <px:css-speech-clean/>
   </p:for-each>
+  <p:choose>
+    <p:when test="$word-detection='false'">
+      <px:dtbook-unwrap-words/>
+    </p:when>
+    <p:otherwise>
+      <p:identity/>
+    </p:otherwise>
+  </p:choose>
+  <p:identity name="clean-dtbook"/>
   <p:sink/>
 
   <px:fileset-update name="update-fileset">
@@ -255,7 +294,7 @@
       <p:pipe step="dtbook" port="result.fileset"/>
     </p:input>
     <p:input port="update.in-memory">
-      <p:pipe step="remove-css" port="result"/>
+      <p:pipe step="clean-dtbook" port="result"/>
     </p:input>
   </px:fileset-update>
 

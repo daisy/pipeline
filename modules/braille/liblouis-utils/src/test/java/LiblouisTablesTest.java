@@ -42,7 +42,7 @@ public class LiblouisTablesTest extends AbstractTest {
 	@Test
 	public void testQueryTranslator() {
 		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
-		           .asLiblouisTable().asURIs()[2].toString().endsWith("/nl_BE.tbl"));
+		           .asLiblouisTable().asURIs()[1].toString().endsWith("/nl_BE.tbl"));
 	}
 	
 	@Test
@@ -64,8 +64,8 @@ public class LiblouisTablesTest extends AbstractTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			brailleModule("libhyphen-utils"),
-			brailleModule("common-utils"),
-			brailleModule("css-utils"),
+			brailleModule("braille-common"),
+			brailleModule("braille-css-utils"),
 			brailleModule("pef-utils"),
 			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),

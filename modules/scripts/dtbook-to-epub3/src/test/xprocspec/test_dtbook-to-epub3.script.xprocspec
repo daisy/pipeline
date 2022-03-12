@@ -266,6 +266,7 @@
                 </x:document>
             </x:input>
             <x:option name="audio" select="true()"/>
+            <x:option name="audio-file-type" select="'audio/x-wav'"/>
             <x:option name="output-dir" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
         </x:call>
@@ -280,19 +281,19 @@
         <x:context label="the result EPUB">
             <x:document type="zip" base-uri="temp-dir" href="tts/output-dir/minimal.epub" ordered="true"/>
         </x:context>
-        <x:expect label="the result EPUB should contain mp3 files" type="compare">
+        <x:expect label="the result EPUB should contain audio files" type="compare">
             <x:document type="inline">
                 <c:zipfile name="minimal.epub">
-                    <c:file name="EPUB/audio/part0000_00_000.mp3"/>
-                    <c:file name="EPUB/audio/part0000_01_000.mp3"/>
-                    <c:file name="EPUB/audio/part0001_00_000.mp3"/>
-                    <c:file name="EPUB/audio/part0001_01_000.mp3"/>
-                    <c:file name="EPUB/audio/part0001_02_000.mp3"/>
-                    <c:file name="EPUB/audio/part0002_00_000.mp3"/>
-                    <c:file name="EPUB/audio/part0002_01_000.mp3"/>
-                    <c:file name="EPUB/audio/part0002_02_000.mp3"/>
-                    <c:file name="EPUB/audio/part0002_03_000.mp3"/>
-                    <c:file name="EPUB/audio/part0002_04_000.mp3"/>
+                    <c:file name="EPUB/audio/part0000_00_000.wav"/>
+                    <c:file name="EPUB/audio/part0000_01_000.wav"/>
+                    <c:file name="EPUB/audio/part0001_00_000.wav"/>
+                    <c:file name="EPUB/audio/part0001_01_000.wav"/>
+                    <c:file name="EPUB/audio/part0001_02_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_00_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_01_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_02_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_03_000.wav"/>
+                    <c:file name="EPUB/audio/part0002_04_000.wav"/>
                     <c:file name="EPUB/minimal-1.xhtml"/>
                     <c:file name="EPUB/minimal-2.xhtml"/>
                     <c:file name="EPUB/mo/minimal-1.smil"/>

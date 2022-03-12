@@ -9,8 +9,9 @@ public interface Schedulable {
 	/**
 	 * Execute the action
 	 *
+	 * @throws InterruptedException if the action thread is interrupted
 	 * @throws RecoverableError if the error is recoverable, so that the action can be rescheduled
 	 * @throws FatalError if the action cannot be rescheduled
 	 */
-	public void launch() throws RecoverableError, FatalError;
+	public void launch() throws InterruptedException, RecoverableError, FatalError;
 }

@@ -25,6 +25,20 @@ public class MockHyphenator extends AbstractHyphenator {
 		}
 	};
 	
+	private static final FullHyphenator fullHyphenator = new FullHyphenator() {
+		public String transform(String text) throws NonStandardHyphenationException {
+			throw new NonStandardHyphenationException();
+		}
+		public String[] transform(String[] text) throws NonStandardHyphenationException {
+			throw new NonStandardHyphenationException();
+		}
+	};
+	
+	@Override
+	public FullHyphenator asFullHyphenator() {
+		return fullHyphenator;
+	}
+	
 	@Override
 	public LineBreaker asLineBreaker() {
 		return lineBreaker;

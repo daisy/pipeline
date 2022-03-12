@@ -30,10 +30,27 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">Whether or not to include audio files associated with media overlays. Can be either 'true' or 'false'.</p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-join
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
+        <p:documentation>
+            px:html-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
+        <p:documentation>
+            px:mediatype-detect
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:set-base-uri
@@ -54,8 +71,21 @@
         <px:set-base-uri>
             <p:with-option name="base-uri" select="$original-href"/>
         </px:set-base-uri>
-        <p:add-xml-base/>
-        <px:html-to-fileset/>
+        <p:add-xml-base name="html"/>
+        <p:sink/>
+        <px:fileset-add-entry media-type="application/xhtml+xml">
+            <p:input port="source">
+                <p:inline><d:fileset/></p:inline>
+            </p:input>
+            <p:input port="entry">
+                <p:pipe step="html" port="result"/>
+            </p:input>
+        </px:fileset-add-entry>
+        <px:html-load>
+            <p:input port="source.in-memory">
+                <p:pipe step="html" port="result"/>
+            </p:input>
+        </px:html-load>
         <!-- not using fileset-filter because we don't want to delete files references from iframes -->
         <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"/>
         <px:message message="extracted list of resources from $1">

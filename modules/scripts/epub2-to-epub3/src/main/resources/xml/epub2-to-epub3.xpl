@@ -93,7 +93,7 @@
 		- text/x-oeb1-css
 		- text/x-oeb1-document
 	</p:documentation>
-	<px:epub3-ensure-core-media name="clean">
+	<px:epub3-ensure-core-media name="clean" px:progress="1/6">
 		<p:input port="source.in-memory">
 			<p:pipe step="move" port="result.in-memory"/>
 		</p:input>
@@ -102,7 +102,7 @@
 	<p:documentation>
 		Upgrade HTML
 	</p:documentation>
-	<p:group name="upgrade-html">
+	<p:group name="upgrade-html" px:progress="3/6">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="rename" port="result.in-memory"/>
@@ -112,7 +112,7 @@
 				<p:pipe step="clean" port="result.in-memory"/>
 			</p:input>
 		</px:fileset-load>
-		<p:for-each name="docs">
+		<p:for-each name="docs" px:progress="2/3">
 			<p:output port="result"/>
 			<px:html-upgrade/>
 		</p:for-each>
@@ -142,7 +142,7 @@
 		<p:delete match="/*/*[not(self::d:file)]"/>
 		<p:delete match="d:file/@*[not(name()=('href','original-href'))]" name="mapping"/>
 		<p:sink/>
-		<px:epub-rename-files name="rename">
+		<px:epub-rename-files name="rename" px:progress="1/3">
 			<p:input port="source.fileset">
 				<p:pipe step="update" port="result.fileset"/>
 			</p:input>
@@ -158,7 +158,7 @@
 	<p:documentation>
 		Upgrade package document
 	</p:documentation>
-	<p:group name="upgrade-package-doc">
+	<p:group name="upgrade-package-doc" px:progress="1/6">
 		<p:output port="result.fileset" primary="true"/>
 		<p:output port="result.in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
@@ -191,7 +191,7 @@
 	<p:documentation>
 		Create navigation document
 	</p:documentation>
-	<p:group name="ncx-to-nav">
+	<p:group name="ncx-to-nav" px:progress="1/6">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="create-nav" port="result.in-memory"/>

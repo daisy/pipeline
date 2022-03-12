@@ -7,7 +7,6 @@
 ## [catalog.xml](resources/META-INF/catalog.xml)
 
 - [`http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xsl`](resources/xml/library.xsl)
-- [`http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl`](resources/xml/library.xpl)
 
 ## Liblouis table paths ([`org.daisy.pipeline.braille.liblouis.LiblouisTablePath`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTablePath.html))
 
@@ -42,17 +41,6 @@
   Liblouis based braille translator, see [user documentation](../../doc/)
 
 <!--
-- [`(input:css)(output:pef)(formatter:liblouis)`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSStyledDocumentTransform.java)
-  
-  Converts an XML document with inline braille CSS to PEF using
-  Liblouisutdml. Recognized features are:
-
-  `formatter`
-  : Will only match if the value is "liblouis".
-
-  The remaining features are used for selecting sub-transformers of
-  type
-  [BrailleTranslator](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/BrailleTranslator.html).
 
 - [`(hyphenator:liblouis)`](java/org/daisy/pipeline/braille/liblouis/impl/LiblouisHyphenatorJnaImplProvider.java)
   

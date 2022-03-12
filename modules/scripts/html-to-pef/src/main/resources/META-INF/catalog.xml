@@ -22,9 +22,10 @@
   
   <!-- partials -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss" uri="../css/_tables.scss"/>
-
+  <uri name="http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss" uri="../css/_definition-lists.scss"/>
+  
   <!-- dependencies -->
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>

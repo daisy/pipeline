@@ -34,9 +34,9 @@ import com.xmlcalabash.util.TreeWriter;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
-	name = "pxi:set-doctype",
+	name = "px:set-doctype",
 	service = { XProcStepProvider.class },
-	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}set-doctype" }
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}set-doctype" }
 )
 public class SetDoctypeProvider implements XProcStepProvider {
 

@@ -35,19 +35,25 @@
         <p:pipe port="report" step="check-images-exist"/>
     </p:output>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-        <p:documentation>For manipulating files.</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
     </p:import>
     
-    <p:import
-        href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation> Collection of utilities for validation and reporting. </p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+        <p:documentation>
+            px:check-files-exist
+        </p:documentation>
     </p:import>
     
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation>Utilities for representing a fileset.</p:documentation>
+        <p:documentation>
+            px:fileset-add-entry
+            px:fileset-add-ref
+            px:fileset-create
+            px:fileset-join
+        </p:documentation>
     </p:import>
     
     <p:variable name="dtbook-uri" select="base-uri()"/>
@@ -66,26 +72,32 @@
                 <p:variable name="imgpath" select="resolve-uri(*/@src, $dtbook-uri)"/>
                 <px:fileset-add-entry>
                     <p:with-option name="href" select="$imgpath"/>
-                    <p:with-option name="ref" select="concat($dtbook-uri, '#', $refid)"/>
                     <p:input port="source">
                         <p:inline>
                             <d:fileset/>
                         </p:inline>
                     </p:input>
                 </px:fileset-add-entry>
+                <px:fileset-add-ref>
+                  <p:with-option name="href" select="$imgpath"/>
+                  <p:with-option name="ref" select="concat($dtbook-uri, '#', $refid)"/>
+                </px:fileset-add-ref>
             </p:when>
             <!-- m:math has @altimg -->
             <p:otherwise>
                 <p:variable name="imgpath" select="resolve-uri(*/@altimg, $dtbook-uri)"/>
                 <px:fileset-add-entry>
                     <p:with-option name="href" select="$imgpath"/>
-                    <p:with-option name="ref" select="concat($dtbook-uri, '#', $refid)"/>
                     <p:input port="source">
                         <p:inline>
                             <d:fileset/>
                         </p:inline>
                     </p:input>
                 </px:fileset-add-entry>
+                <px:fileset-add-ref>
+                  <p:with-option name="href" select="$imgpath"/>
+                  <p:with-option name="ref" select="concat($dtbook-uri, '#', $refid)"/>
+                </px:fileset-add-ref>
             </p:otherwise>
         </p:choose>
     </p:for-each>

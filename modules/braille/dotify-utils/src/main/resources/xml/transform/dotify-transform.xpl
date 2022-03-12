@@ -16,17 +16,30 @@
 	
 	<p:option name="output" select="pef"/> <!-- pef | obfl -->
 	<p:option name="css-block-transform" required="true"/> <!-- empty means disable pre-translation -->
-	<p:option name="locale" required="true"/>
-	<p:option name="mode" required="true"/>
+	<p:option name="document-locale" required="true"/>
+	<p:option name="text-transform" required="true"/>
+	<p:option name="braille-charset" select="''"/>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
+		<p:documentation>
+			px:transform
+		</p:documentation>
+	</p:import>
 	<p:import href="../library.xpl">
 		<p:documentation>
 			px:obfl-to-pef
 		</p:documentation>
 	</p:import>
-	<p:import href="../css-to-obfl.xpl"/>
-	<p:import href="../obfl-normalize-space.xpl"/>
+	<p:import href="../css-to-obfl.xpl">
+		<p:documentation>
+			pxi:css-to-obfl
+		</p:documentation>
+	</p:import>
+	<p:import href="../obfl-normalize-space.xpl">
+		<p:documentation>
+			pxi:obfl-normalize-space
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="page-width" cx:as="xs:string"
 	               select="(//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,'40')[1]">
@@ -61,48 +74,22 @@
 	</p:choose>
 	
 	<pxi:css-to-obfl px:message="Transforming from CSS to OBFL" px:progress=".83">
-		<p:with-option name="locale" select="$locale"/>
+		<p:with-option name="document-locale" select="$document-locale"/>
+		<p:with-option name="text-transform" select="$text-transform"/>
+		<p:with-option name="braille-charset" select="$braille-charset"/>
 		<p:with-option name="page-width" select="$page-width"/>
 		<p:with-option name="page-height" select="$page-height"/>
 		<p:with-option name="duplex" select="$duplex"/>
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>
 	
-	<pxi:obfl-normalize-space name="obfl" px:progress=".01"/>
+	<pxi:obfl-normalize-space px:progress=".01"/>
 	
 	<p:choose px:progress=".04">
 		<p:when test="$output='pef'">
-			
-			<!--
-			    Follow the OBFL standard which says that "when volume-transition is present, the
-			    last page or sheet in each volume may be modified so that the volume break occurs
-			    earlier than usual: preferably between two blocks, or if that is not possible,
-			    between words" (http://braillespecs.github.io/obfl/obfl-specification.html#L8701).
-			    In other words, volumes should by default not be allowed to end on a hyphen.
-			-->
-			<px:add-parameters name="allow-ending-volume-on-hyphen">
-				<p:input port="source">
-					<p:empty/>
-				</p:input>
-				<p:with-param name="allow-ending-volume-on-hyphen"
-				              select="if (/*/obfl:volume-transition) then 'false' else 'true'">
-					<p:pipe step="obfl" port="result"/>
-				</p:with-param>
-			</px:add-parameters>
-			<px:merge-parameters name="parameters">
-				<p:input port="source">
-					<p:pipe step="allow-ending-volume-on-hyphen" port="result"/>
-					<p:pipe step="main" port="parameters"/>
-				</p:input>
-			</px:merge-parameters>
 			<px:obfl-to-pef px:message="Transforming from OBFL to PEF" px:progress="1">
-				<p:input port="source">
-					<p:pipe step="obfl" port="result"/>
-				</p:input>
-				<p:with-option name="locale" select="$locale"/>
-				<p:with-option name="mode" select="$mode"/>
 				<p:input port="parameters">
-					<p:pipe step="parameters" port="result"/>
+					<p:pipe step="main" port="parameters"/>
 				</p:input>
 			</px:obfl-to-pef>
 		</p:when>

@@ -24,20 +24,20 @@
         <p:empty/>
     </p:input>
     
+    <p:option name="output-dir" select="''"/>
     <p:option name="pef-output-dir" select="''"/>
-    <p:option name="brf-output-dir" select="''"/>
     <p:option name="preview-output-dir" select="''"/>
     <p:option name="obfl-output-dir" select="''"/>
     
     <p:option name="name" required="true"/>
     <p:option name="include-preview" select="'false'"/>
-    <p:option name="include-brf" select="'false'"/>
-    <p:option name="ascii-file-format" select="''"/>
-    <p:option name="ascii-table" select="''"/>
+    <p:option name="include-pef" select="'false'"/>
+    <p:option name="output-file-format" select="''"/>
+    <p:option name="preview-table" select="''"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl"/>
 
-    <!-- store OBFL first so that if something goes wrong in pef:store we still have OBFL -->
+    <!-- store OBFL first so that if something goes wrong in px:pef-store we still have OBFL -->
     <p:group>
         <p:documentation>
             Store OBFL
@@ -74,27 +74,28 @@
         </p:count>
         <p:choose px:progress=".50">
             <p:when test="number(string(/*)) &gt; 0"> <!-- must be 0 or 1 -->
-                <pef:store name="pef-store"
-                           px:message="Storing PEF{if ($include-brf='true') then ', BRF' else ''}{if ($include-preview='true') then ' and HTML preview' else ''}">
+                <px:pef-store>
                     <p:input port="source">
                         <p:pipe step="main" port="pef"/>
                     </p:input>
-                    <p:with-option name="href" select="concat($pef-output-dir,'/',$name,'.pef')"/>
+                    <p:with-option name="pef-href" select="if ($include-pef='true' and $pef-output-dir!='')
+                                                           then concat($pef-output-dir,'/',$name,'.pef')
+                                                           else ''"/>
                     <p:with-option name="preview-href" select="if ($include-preview='true' and $preview-output-dir!='')
                                                                then concat($preview-output-dir,'/',$name,'.pef.html')
                                                                else ''"/>
-                    <p:with-option name="brf-dir-href" select="if ($include-brf='true' and $brf-output-dir!='')
-                                                               then $brf-output-dir
-                                                               else ''"/>
-                    <p:with-option name="brf-name-pattern" select="concat($name,'_vol-{}')"/>
-                    <p:with-option name="brf-file-format" select="concat($ascii-file-format,'(locale:',(//pef:meta/dc:language,'und')[1],')')">
+                    <p:with-option name="output-dir" select="$output-dir"/>
+                    <p:with-option name="name-pattern" select="concat($name,'_vol-{}')"/>
+                    <p:with-option name="single-volume-name" select="$name"/>
+                    <p:with-option name="file-format" select="concat(($output-file-format,'(format:pef)')[not(.='')][1],
+                                                                     '(document-locale:',(//pef:meta/dc:language,'und')[1],')')">
                         <p:pipe step="main" port="pef"/>
                     </p:with-option>
-                    <p:with-option name="brf-table" select="if ($ascii-table!='') then $ascii-table
-                                                            else concat('(locale:',(//pef:meta/dc:language,'und')[1],')')">
+                    <p:with-option name="preview-table" select="if ($preview-table!='') then $preview-table
+                                                                else concat('(document-locale:',(//pef:meta/dc:language,'und')[1],')')">
                         <p:pipe step="main" port="pef"/>
                     </p:with-option>
-                </pef:store>
+                </px:pef-store>
             </p:when>
             <p:otherwise>
                 <p:sink/>

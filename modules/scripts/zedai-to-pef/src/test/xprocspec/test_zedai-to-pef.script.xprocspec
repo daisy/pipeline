@@ -2,7 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               script="../../main/resources/xml/zedai-to-pef.xpl">
+               script="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/zedai-to-pef.xpl">
   
   <x:scenario label="test alice.xml with default.css + alice.css" pending="errors for unknown reason">
     <x:call step="px:zedai-to-pef.script">
@@ -10,6 +10,8 @@
         <x:document type="file" href="../resources/alice.xml"/>
       </x:input>
       <x:option name="include-preview" select="'true'"/>
+      <x:option name="output-dir" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'alice/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'alice/temp-dir/')"/>
     </x:call>
@@ -39,6 +41,8 @@
         </x:document>
       </x:input>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
+      <x:option name="output-dir" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'reset/temp-dir/')"/>
     </x:call>

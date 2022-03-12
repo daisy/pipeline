@@ -3,20 +3,22 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:re="regex-utils"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
-                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
-    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
     <xsl:param name="page-width" as="xs:string" required="yes"/>
     <xsl:param name="page-height" as="xs:string" required="yes"/>
     <xsl:param name="duplex" as="xs:string" required="yes"/>
+    <xsl:param name="braille-charset-table" as="xs:string" required="yes"/>
     
     <xsl:variable name="page-stylesheets" as="element(css:rule)*" select="/*/css:rule[@selector='@page']"/>
     
@@ -96,14 +98,6 @@
         <field allow-text-flow="true"/>
     </xsl:variable>
     
-    <xsl:template mode="obfl:generate-layout-master" match="css:rule[@selector='@page']" priority="1">
-        <xsl:call-template name="pf:next-match-with-generated-ids">
-            <xsl:with-param name="prefix" select="'tmp_'"/>
-            <xsl:with-param name="for-elements" select="descendant::css:string[@name][not(@target)]"/>
-            <xsl:with-param name="in-use" select="()"/>
-        </xsl:call-template>
-    </xsl:template>
-    
     <xsl:template mode="obfl:generate-layout-master" match="css:rule[@selector='@page']">
         <xsl:param name="name" tunnel="yes" as="xs:string"/>
         <xsl:param name="default-page-counter-name" tunnel="yes" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
@@ -151,6 +145,9 @@
         <layout-master name="{$name}" duplex="{$duplex}"
                        page-width="{$page-width}" page-height="{$page-height}">
             <xsl:if test="$right-page-stylesheet">
+                <!--
+                    FIXME: need better way to determine whether we are on right or left page: https://github.com/mtmse/obfl/issues/22
+                -->
                 <template use-when="(= (% $page 2) 1)">
                     <xsl:call-template name="template">
                         <xsl:with-param name="stylesheet" select="$right-page-stylesheet"/>
@@ -184,9 +181,11 @@
                     <xsl:with-param name="msg">not more than one flow() function supported in footnotes area</xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
-             <!--
-                 default scope within footnotes area is 'page'
-             -->
+             <xsl:if test="$footnotes-content[self::css:flow[@from]][1][not(@scope)]">
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">flow() function without scope argument not allowed within footnotes area</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
             <xsl:if test="$footnotes-content[self::css:flow[@from]][1]/@scope[not(.='page')]">
                 <xsl:call-template name="pf:warn">
                     <xsl:with-param name="msg">{} argument of flow() function not allowed within footnotes area</xsl:with-param>
@@ -228,12 +227,17 @@
                     <xsl:if test="$footnotes-border-top!='none'">
                         <before>
                             <block translate="pre-translated-text-css">
-                                <leader pattern="{$footnotes-border-top}" position="100%" align="right"/>
+	                            <xsl:variable name="pattern"
+	                                          select="if ($braille-charset-table='')
+                                                      then $footnotes-border-top
+                                                      else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),
+                                                                      $footnotes-border-top)"/>
+                                <leader pattern="{$pattern}" position="100%" align="right"/>
                                 <!-- We add a single instance of the pattern in order to have some
                                      text after the leader and to make sure that the
                                      translate="pre-translated-text-css" has an effect on the leader
                                      (Dotify bug). -->
-                                <xsl:value-of select="$footnotes-border-top"/>
+                                <xsl:value-of select="$pattern"/>
                             </block>
                         </before>
                     </xsl:if>
@@ -422,14 +426,14 @@
                         <xsl:choose>
                             <xsl:when test="$white-space='pre-wrap'">
                                 <string value="{replace(.,'\s','&#x00A0;')}">
-                                    <xsl:if test="not($text-transform=('none','auto'))">
+                                    <xsl:if test="not($text-transform='auto')">
                                         <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
                                     </xsl:if>
                                 </string>
                             </xsl:when>
                             <xsl:otherwise>
                                 <string value="{.}">
-                                    <xsl:if test="not($text-transform=('none','auto'))">
+                                    <xsl:if test="not($text-transform='auto')">
                                         <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
                                     </xsl:if>
                                 </string>
@@ -440,7 +444,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <string value="{string(@value)}">
-                    <xsl:if test="not($text-transform=('none','auto'))">
+                    <xsl:if test="not($text-transform='auto')">
                         <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
                     </xsl:if>
                 </string>
@@ -478,7 +482,7 @@
             <xsl:if test="matches(@style,re:exact($css:SYMBOLS_FN_RE))">
                 <xsl:sequence select="'-dotify-counter'"/>
             </xsl:if>
-            <xsl:sequence select="$text-transform[not(.=('none','auto'))]"/>
+            <xsl:sequence select="$text-transform[not(.='auto')]"/>
         </xsl:variable>
         <xsl:variable name="text-style" as="xs:string*">
             <xsl:if test="exists($text-transform)">
@@ -524,24 +528,19 @@
                   mode="eval-content-list-left-right" priority="1">
         <xsl:param name="white-space" as="xs:string" select="'normal'"/>
         <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
-        <!--
-            FIXME: marker-indicator does not have a text-style attribute
-            (https://github.com/braillespecs/obfl/issues/90). The locale option passed to Dotify
-            will be used to translate the indicator string.
-        -->
-        <xsl:if test="$white-space!='normal'">
-            <xsl:call-template name="pf:warn">
-                <xsl:with-param name="msg">white-space:{} could not be applied to -obfl-marker-indicator({}, {})</xsl:with-param>
-                <xsl:with-param name="args" select="($white-space,@arg1,@arg2)"/>
-            </xsl:call-template>
-        </xsl:if>
-        <xsl:if test="$text-transform!='normal'">
-            <xsl:call-template name="pf:warn">
-                <xsl:with-param name="msg">text-transform:{} could not be applied to -obfl-marker-indicator({}, {})</xsl:with-param>
-                <xsl:with-param name="args" select="($text-transform,@arg1,@arg2)"/>
-            </xsl:call-template>
-        </xsl:if>
-        <marker-indicator markers="indicator/{@arg1}" indicator="{substring(@arg2,2,string-length(@arg2)-2)}"/>
+        <xsl:variable name="text-style" as="xs:string*">
+            <xsl:if test="not($text-transform='auto')">
+                <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
+            </xsl:if>
+            <xsl:if test="not($white-space='normal')">
+                <xsl:sequence select="concat('white-space: ',$white-space)"/>
+            </xsl:if>
+        </xsl:variable>
+        <marker-indicator markers="indicator/{@arg1}" indicator="{substring(@arg2,2,string-length(@arg2)-2)}">
+            <xsl:if test="exists($text-style)">
+                <xsl:attribute name="text-style" select="string-join($text-style,'; ')"/>
+            </xsl:if>
+        </marker-indicator>
     </xsl:template>
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator']" mode="eval-content-list-left-right">

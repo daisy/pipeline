@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-result-prefixes="#all">
 
     <!-- Note: files without @media-type are all assumed to be binary files. -->
 
@@ -44,14 +45,13 @@
         />
     </xsl:function>
 
-    <!-- makes it easy to run the functions on a d:file from XProc -->
     <xsl:template match="/d:file">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
-            <xsl:attribute name="is-xml" select="pf:is-xml(@media-type)"/>
-            <xsl:attribute name="is-html" select="pf:is-html(@media-type)"/>
-            <xsl:attribute name="is-text" select="pf:is-text(@media-type)"/>
-            <xsl:attribute name="is-binary" select="pf:is-binary(@media-type)"/>
+            <xsl:attribute name="method" select="     if (pf:is-xml (@media-type)) then 'xml'
+                                                 else if (pf:is-html(@media-type)) then 'html'
+                                                 else if (pf:is-text(@media-type)) then 'text'
+                                                 else                                   'binary'"/>
             <xsl:copy-of select="node()"/>
         </xsl:copy>
     </xsl:template>

@@ -3,11 +3,11 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
     
-    <x:scenario label="text-transform: uncontracted">
+    <x:scenario label="custom @text-transform rule">
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc>
+                    <doc style="@text-transform uncontracted { system: braille-translator; contraction: no; }">
                         <p style="display: block">foobar</p>
                         <p style="display: block; text-transform: uncontracted">foobar</p>
                     </doc>
@@ -20,32 +20,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none">
-                    <p style="display: block">⠋⠥⠃⠁⠗</p>
-                    <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
-                </doc>
-            </x:document>
-        </x:expect>
-    </x:scenario>
-    
-    <x:scenario label="custom @text-transform rule">
-        <x:call step="px:transform">
-            <x:input port="source">
-                <x:document type="inline">
-                    <doc style="@text-transform my-uncontracted { system: braille-translator; contraction: no; }">
-                        <p style="display: block">foobar</p>
-                        <p style="display: block; text-transform: my-uncontracted">foobar</p>
-                    </doc>
-                </x:document>
-            </x:input>
-            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
-        </x:call>
-        <x:context label="result">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="result" type="compare">
-            <x:document type="inline">
-                <doc style="text-transform: none @text-transform my-uncontracted { system: braille-translator; contraction: no }">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; contraction: no }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -80,9 +55,9 @@
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc style="@text-transform my-uncontracted { system: braille-translator; liblouis-table: url(../resources/tables/foobar.utb); }">
+                    <doc style="@text-transform uncontracted { system: braille-translator; liblouis-table: url(../resources/tables/foobar.utb); }">
                         <p style="display: block">foobar</p>
-                        <p style="display: block; text-transform: my-uncontracted">foobar</p>
+                        <p style="display: block; text-transform: uncontracted">foobar</p>
                     </doc>
                 </x:document>
             </x:input>
@@ -93,9 +68,59 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform my-uncontracted { system: braille-translator; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="custom text-transform combined with other text-transform">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc style="@text-transform uncontracted { system: braille-translator; contraction: no; }">
+                        <p style="display: block">foobar</p>
+                        <p style="display: block; text-transform: uncontracted -louis-italic">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; contraction: no }">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block">⠨⠋⠕⠕⠃⠁⠗</p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="@text-transform rule with 'system' descriptor that matches Liblouis metadata field">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc style="@text-transform ueb { locale: en; system: ueb }">
+                        <p style="display: block">foobar</p>
+                        <p style="display: block; text-transform: ueb">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc style="text-transform: none @text-transform ueb { locale: en; system: ueb }">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block">⠋⠕⠕⠃⠜</p>
                 </doc>
             </x:document>
         </x:expect>

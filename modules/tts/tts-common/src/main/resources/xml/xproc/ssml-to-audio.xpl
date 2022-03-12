@@ -2,9 +2,20 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 type="px:ssml-to-audio" name="main">
 
-  <p:input port="source" primary="true" sequence="true" px:media-type="application/ssml+xml"/>
+  <p:input port="source" primary="true" sequence="true" px:media-type="application/ssml+xml">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>SSML documents.</p>
+      <p>It is assumed that content documents have been prepared so that ID attributes are unique
+      within the whole sequence of SSML documents.</p>
+    </p:documentation>
+  </p:input>
   <p:input port="config"/>
-  <p:output port="result" primary="true" />
+  <p:output port="result" primary="true">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p><code>d:audio-clips</code> document that lists the generated audio files and maps SSML
+      elements (sentences) to audio clips (audio file, start time, end time).</p>
+    </p:documentation>
+  </p:output>
   <p:output port="status">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>
@@ -18,6 +29,16 @@
       </p>
     </p:documentation>
   </p:output>
+  <p:option name="audio-file-type" select="'audio/mpeg'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+      <p>Examples:</p>
+      <ul>
+        <li>"audio/mpeg" (MP3)</li>
+        <li>"audio/x-wav" (WAVE)</li>
+      </ul>
+    </p:documentation>
+  </p:option>
   <p:option name="include-log" select="'false'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Whether or not to make the TTS log available on the "log" port.</p>
@@ -34,7 +55,7 @@
   </p:option>
 
   <!--
-      Implemented in ../../../java/org/daisy/pipeline/tts/synthesize/calabash/impl/SynthesizeStep.java
+      Implemented in ../../../java/org/daisy/pipeline/tts/calabash/impl/SynthesizeStep.java
   -->
 
 </p:declare-step>

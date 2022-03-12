@@ -30,7 +30,8 @@ See the CSS specification for more info:
             <p px:role="desc" xml:space="preserve">Amount with which volume breaks are allowed within sections.
 
 The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
-right before or `section` elements. The higher the value, the more equal the volumes will be in size.</p>
+right before `section` elements. The higher the value, the more equal the volumes will be in
+size.</p>
         </p:documentation>
     </p:option>
 

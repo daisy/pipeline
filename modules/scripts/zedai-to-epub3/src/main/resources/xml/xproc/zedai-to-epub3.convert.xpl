@@ -64,6 +64,16 @@
             <p px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
         </p:documentation>
     </p:option>
+    <p:option name="audio-file-type" select="'audio/mpeg'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+            <p>Examples:</p>
+            <ul>
+                <li>"audio/mpeg"</li>
+                <li>"audio/x-wav" (but note that this is not a core media type)</li>
+            </ul>
+        </p:documentation>
+    </p:option>
     <p:option name="process-css" required="false" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Set to false to bypass aural CSS processing.</p>
@@ -202,6 +212,7 @@
             <p:pipe step="main" port="tts-config"/>
         </p:input>
         <p:with-option name="audio" select="$audio"/>
+        <p:with-option name="audio-file-type" select="$audio-file-type"/>
         <p:with-option name="include-tts-log" select="$include-tts-log"/>
         <p:with-option name="output-dir" select="concat($output-dir,'epub/')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>

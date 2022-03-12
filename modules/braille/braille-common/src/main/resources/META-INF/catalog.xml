@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <!-- libraries -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl" uri="../xml/library.xpl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl" uri="../xml/library.xsl"/>
+  <!-- extendable XSLT stylesheets -->
+  <uri name="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl"
+       uri="../xml/abstract-block-translator.xsl"/>
+  <uri name="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl"
+       uri="../xml/block-translator-from-text-transform.xsl"/>
+  <!-- datatypes -->
+  <uri uri="../xml/data-types/transform-query.xml" px:content-type="data-type" px:id="transform-query"/>
+  
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
+  
+</catalog>

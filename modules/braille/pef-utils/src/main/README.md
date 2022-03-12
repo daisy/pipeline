@@ -64,9 +64,11 @@
 
   Decode a braille string in the specified character set (to Unicode braille), see [XSLT documentation](resources/xml/library.xsl)
 
+- [`{http://www.daisy.org/ns/2008/pef}get-table-id`](java/org/daisy/pipeline/braille/pef/saxon/impl/GetTableIdDefinition.java)
+
 ## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
-- [`{http://www.daisy.org/ns/2008/pef}pef2text`](java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java)
+- [`{http://www.daisy.org/ns/pipeline/xproc/internal}pef2text`](java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2TextStep.java)
 
   Convert a PEF document into a textual (ASCII-based) format, see [XProc documentation](resources/xml/pef2text.xpl)
 

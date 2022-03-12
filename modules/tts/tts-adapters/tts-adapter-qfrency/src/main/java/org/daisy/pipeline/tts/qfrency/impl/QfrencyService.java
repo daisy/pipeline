@@ -4,24 +4,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.daisy.common.shell.BinaryFinder;
-import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.ComponentContext;
 
 @Component(
 	name = "qfrency-tts-service",
 	service = { TTSService.class }
 )
-public class QfrencyService extends AbstractTTSService {
-
-	@Activate
-	protected void loadSSMLadapter() {
-		super.loadSSMLadapter("/transform-ssml.xsl", QfrencyService.class);
-	}
+public class QfrencyService implements TTSService {
 	
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
@@ -56,10 +48,5 @@ public class QfrencyService extends AbstractTTSService {
 	@Override
 	public String getName() {
 		return "qfrency_cli";
-	}
-
-	@Override
-	public String getVersion() {
-		return "cli";
 	}
 }

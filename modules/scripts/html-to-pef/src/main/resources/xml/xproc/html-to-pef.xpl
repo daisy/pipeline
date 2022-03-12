@@ -9,7 +9,7 @@
                 name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">HTML to PEF</h1>
+        <h1 px:role="name">HTML to braille</h1>
         <p px:role="desc">Transforms a HTML document into an embosser ready braille document.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/">
             Online documentation
@@ -43,6 +43,18 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:output>
     
     <p:option name="stylesheet" px:sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+          <p px:role="desc" xml:space="preserve" px:inherit="prepend">
+
+A number of [partials](https://sass-lang.com/documentation/at-rules/import#partials) (helper style
+sheet modules) are available for use in Sass style sheets:
+
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/tables):
+  for styling tables
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/definition-lists):
+  for styling definition lists
+</p>
+        </p:documentation>
         <p:pipeinfo>
             <px:type>
                 <choice>
@@ -61,10 +73,10 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
-    <p:option name="include-brf"/>
+    <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
-    <p:option name="ascii-file-format"/>
-    <p:option name="ascii-table"/>
+    <p:option name="output-file-format"/>
+    <p:option name="preview-table"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
@@ -85,8 +97,8 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
     <p:option name="notes-placement"/>
+    <p:option name="output-dir"/>
     <p:option name="pef-output-dir"/>
-    <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
@@ -113,14 +125,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
-            px:fileset-create
             px:fileset-add-entry
-            px:fileset-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
-            px:html-to-fileset
+            px:html-load
         </p:documentation>
     </p:import>
     
@@ -137,13 +147,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                                            stylesheet-parameters
                                            transform
                                            braille-code
-                                           ascii-file-format
-                                           ascii-table
-                                           include-brf
+                                           output-file-format
+                                           include-pef
                                            include-preview
                                            include-obfl
+                                           output-dir
                                            pef-output-dir
-                                           brf-output-dir
                                            preview-output-dir
                                            obfl-output-dir
                                            temp-dir">
@@ -161,25 +170,26 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
     <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:message-severity="DEBUG" px:progress=".01">
-        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
+        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $output-dir"/>
     </px:tempdir>
     
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:fileset-create/>
     <px:fileset-add-entry media-type="application/xhtml+xml">
+        <p:input port="source">
+          <p:inline><d:fileset/></p:inline>
+        </p:input>
         <p:with-option name="href" select="$html"/>
     </px:fileset-add-entry>
-    <px:fileset-load name="html" px:message="Loading HTML" px:progress=".03"/>
-    <px:html-to-fileset/>
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".03"/>
     
     <!-- ============ -->
     <!-- HTML TO PEF -->
     <!-- ============ -->
     <px:html-to-pef name="convert" px:message="Converting from HTML to PEF" px:progress=".90">
         <p:input port="source.in-memory">
-            <p:pipe step="html" port="result"/>
+            <p:pipe step="html" port="result.in-memory"/>
         </p:input>
         <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
             <p:pipe step="temp-dir" port="result"/>
@@ -202,14 +212,14 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
             <p:pipe step="convert" port="obfl"/>
         </p:input>
         <p:input port="html">
-            <p:pipe step="html" port="result"/>
+            <p:pipe step="html" port="result.in-memory"/>
         </p:input>
-        <p:with-option name="include-brf" select="$include-brf"/>
+        <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
-        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="output-file-format" select="$output-file-format"/>
+        <p:with-option name="preview-table" select="$preview-table"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:html-to-pef.store>

@@ -65,6 +65,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:message
+            px:error
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -84,7 +85,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
         </p:inline>
     </p:variable>
 
-    <px:epub-load name="load" version="3" store-to-disk="true" px:progress="0.1">
+    <px:epub-load name="load" version="3" store-to-disk="true" px:progress="0.1" px:message="Loading EPUB 3">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="validation" select="$validation"/>
@@ -118,7 +119,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
                         <p:with-option name="output-dir" select="$output-dir"/>
                     </px:epub3-to-daisy202>
 
-                    <px:fileset-store name="store" fail-on-error="true" px:progress="1/10">
+                    <px:fileset-store name="store" fail-on-error="true" px:progress="1/10" px:message="Storing DAISY 2.02">
                         <p:input port="fileset.in">
                             <p:pipe step="convert" port="result.fileset"/>
                         </p:input>
@@ -134,36 +135,36 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
                     </p:identity>
                 </p:group>
                 <p:catch name="catch">
-                    <p:output port="status">
-                        <p:inline>
-                            <d:validation-status result="error"/>
-                        </p:inline>
-                    </p:output>
+                    <p:output port="status"/>
                     <p:identity>
                         <p:input port="source">
-                            <p:pipe step="catch" port="error"/>
+                            <p:inline>
+                                <d:validation-status result="error"/>
+                            </p:inline>
                         </p:input>
                     </p:identity>
                     <p:choose>
-                        <!--
-                            catching only errors of a certain type (PED01 PED02) will be easier with XProc 3.0
-                        -->
+                        <p:xpath-context>
+                            <p:pipe step="catch" port="error"/>
+                        </p:xpath-context>
+                        <!-- catch only errors of type PED01/PED02 -->
                         <p:when test="/c:errors/c:error/@code=('PED01','PED02')">
                             <px:message message="The EPUB 3 input can not be processed: $1">
-                                <p:with-option name="param1" select="/c:errors/c:error/@code=('PED01','PED02')[1]/message"/>
+                                <p:with-option name="param1" select="/c:errors/c:error/@code=('PED01','PED02')[1]/message">
+                                    <p:pipe step="catch" port="error"/>
+                                </p:with-option>
                             </px:message>
                             <px:message message="Aborting..."/>
                         </p:when>
                         <p:otherwise>
-                            <p:wrap wrapper="px:cause" match="/*" name="cause"/>
-                            <p:error code="runtime">
-                                <p:input port="source">
-                                    <p:pipe step="cause" port="result"/>
+                            <!-- re-throw error -->
+                            <px:error>
+                                <p:input port="error">
+                                    <p:pipe step="catch" port="error"/>
                                 </p:input>
-                            </p:error>
+                            </px:error>
                         </p:otherwise>
                     </p:choose>
-                    <p:sink/>
                 </p:catch>
             </p:try>
         </p:otherwise>

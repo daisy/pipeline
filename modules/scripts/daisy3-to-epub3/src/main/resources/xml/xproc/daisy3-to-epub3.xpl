@@ -70,7 +70,11 @@
         </p:documentation>
     </p:option>-->
 
-    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl">
+        <p:documentation>
+            px:daisy3-load
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="desc">For putting it all into a ZIP container.</p>
@@ -84,9 +88,9 @@
     <p:variable name="output-dir-checked" select="resolve-uri(replace($output-dir,'(.+?)/?$','$1/'))"/>
     <p:variable name="epub-file" select="concat($output-dir-checked,'result.epub')"/>
 
-    <px:daisy3-load name="load"/>
+    <px:daisy3-load name="load" px:progress="1/10" px:message="Loading DAISY 3"/>
 
-    <px:daisy3-to-epub3 name="convert">
+    <px:daisy3-to-epub3 name="convert" px:progress="8/10">
         <p:input port="source.in-memory">
             <p:pipe step="load" port="in-memory.out"/>
         </p:input>
@@ -96,7 +100,7 @@
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:daisy3-to-epub3>
 
-    <px:epub3-store>
+    <px:epub3-store px:progress="1/10" px:message="Storing EPUB 3">
         <p:with-option name="href" select="$epub-file"/>
         <p:input port="in-memory.in">
             <p:pipe step="convert" port="result.in-memory"/>

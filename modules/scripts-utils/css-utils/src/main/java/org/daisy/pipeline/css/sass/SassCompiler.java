@@ -222,7 +222,7 @@ public class SassCompiler implements CssPreProcessor {
 			// FIXME: Note that postProcess() breaks the column info in sourceMap. Luckily this only
 			// happens in selectors, not in url() values.
 			css = postProcess(css);
-			logger.debug(base + " compiled to:\n\n" + css);
+			logger.debug(base + " compiled to:\n---\n" + css + "---\n");
 			return new PreProcessingResult(
 				new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)),
 				sourceMap,

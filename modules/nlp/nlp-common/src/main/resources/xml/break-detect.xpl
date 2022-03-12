@@ -16,7 +16,7 @@
   <p:option name="ensure-sentence-after" required="false" select="''"/>
 
   <!--
-      Implemented in ../../java/org/daisy/pipeline/nlp/breakdetect/calabash/impl/BreakDetectStep.java
+      Implemented in ../../java/org/daisy/pipeline/nlp/calabash/impl/BreakDetectStep.java
   -->
 
 </p:declare-step>

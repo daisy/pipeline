@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:set-base-uri"
-                xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:set-base-uri"
                 exclude-inline-prefixes="px">
 	
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -26,6 +26,12 @@
 			<p:inline>
 				<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0">
 					<xsl:param name="output-base-uri" required="yes"/>
+					<xsl:template match="/">
+						<xsl:document>
+							<xsl:sequence select="/processing-instruction()"/>
+							<xsl:apply-templates select="/*"/>
+						</xsl:document>
+					</xsl:template>
 					<xsl:template match="/*">
 						<xsl:sequence select="."/>
 					</xsl:template>

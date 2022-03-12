@@ -2,25 +2,17 @@ package org.daisy.pipeline.tts.osx.impl;
 
 import java.util.Map;
 
-import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.ComponentContext;
 
 @Component(
 	name = "osx-tts-service",
 	service = { TTSService.class }
 )
-public class OSXSpeechService extends AbstractTTSService {
+public class OSXSpeechService implements TTSService {
 	
-	@Activate
-	protected void loadSSMLadapter() {
-		super.loadSSMLadapter("/transform-ssml.xsl", OSXSpeechService.class);
-	}
-
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
 		// settings
@@ -46,10 +38,5 @@ public class OSXSpeechService extends AbstractTTSService {
 	@Override
 	public String getName() {
 		return "osx-speech";
-	}
-
-	@Override
-	public String getVersion() {
-		return "cli";
 	}
 }

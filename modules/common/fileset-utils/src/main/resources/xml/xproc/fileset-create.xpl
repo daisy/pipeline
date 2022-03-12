@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-create" xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:err="http://www.w3.org/ns/xproc-error"
-  xmlns:px="http://www.daisy.org/ns/pipeline/xproc" exclude-inline-prefixes="err px">
+<p:declare-step  xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                 type="px:fileset-create"
+                 exclude-inline-prefixes="px">
 
   <p:output port="result"/>
   <p:option name="base" required="false"/>
   
   <p:identity>
     <p:input port="source">
-      <p:inline exclude-inline-prefixes="px">
-        <d:fileset/>
-      </p:inline>
+      <p:inline exclude-inline-prefixes="px"><d:fileset/></p:inline>
     </p:input>
   </p:identity>
   <p:choose>

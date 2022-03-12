@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 px:input-filesets="zedai"
@@ -120,14 +121,14 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
             <p:with-option name="include-tts-log" select="$include-tts-log"/>
         </px:zedai-to-epub3>
 
-        <px:epub3-store>
+        <px:epub3-store name="store">
             <p:with-option name="href" select="$epub-file-uri"/>
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory.out" step="convert"/>
             </p:input>
         </px:epub3-store>
 
-        <px:fileset-delete>
+        <px:fileset-delete cx:depends-on="store">
           <p:input port="source">
             <p:pipe step="convert" port="temp-audio-files"/>
           </p:input>

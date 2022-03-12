@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:library version="1.0"
-    xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:cx="http://xmlcalabash.com/ns/extensions"
-    xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:epub="http://www.idpf.org/2007/ops">
+<p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+           xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           xmlns:ssml="http://www.w3.org/2001/10/synthesis">
 
   <p:declare-step type="px:html-break-detect">
 
@@ -38,10 +36,11 @@
 
     <!-- Based on the containers of phrasing, flow and transparent content of HTML5, the
          "can-contain-sentences" elements are the following: -->
+    <!-- ssml:phoneme is not valid HTML5 or EPUB but is included as experimental feature -->
     <px:break-and-reshape name="generic"
         inline-tags="html:span|html:i|html:b|html:a|html:br|html:del|html:font|html:ruby|html:s|
                      html:small|html:strike|html:strong|html:sup|html:sub|html:u|html:q|html:address|
-                     html:abbr|html:em|html:style"
+                     html:abbr|html:em|html:style|ssml:phoneme"
         ensure-word-before="html:span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         ensure-word-after="span|html:br|html:ruby|html:s|html:address|html:abbr|html:style"
         can-contain-sentences="html:body|html:section|html:nav|html:article|html:aside|html:h1|html:h2|

@@ -25,7 +25,7 @@
             <p>Directory for the audio files.</p>
         </p:documentation>
     </p:option>
-    <p:option name="flatten" select="'true'"/>
+    <p:option name="flatten" select="true()"/>
     <p:option name="anti-conflict-prefix" select="''"/>
     <p:option name="mediaoverlay-dir">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

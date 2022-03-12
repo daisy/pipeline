@@ -3,6 +3,7 @@
  */
 
 $toc-depth: 0 !default;
+$toc-exclude-class: '' !default;
 
 @if $toc-depth > 0 {
 	/*

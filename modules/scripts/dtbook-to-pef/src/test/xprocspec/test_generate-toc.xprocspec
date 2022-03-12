@@ -8,6 +8,15 @@
             <x:input port="source">
                 <x:document type="inline">
                     <html xmlns="http://www.w3.org/1999/xhtml">
+                        <head>
+                            <style media="embossed" type="text/x-scss">
+                                @xslt "../../main/resources/css/generate-toc.xsl" {
+                                    depth: 2;
+                                    exclude-class: 'exclude';
+                                    document-toc-id: 'generated-document-toc';
+                                }
+                            </style>
+                        </head>
                         <body>
                             <h3 id="a">Heading 1.1.1</h3>
                             <p>...</p>
@@ -25,10 +34,6 @@
                     </html>
                 </x:document>
             </x:input>
-            <x:option name="stylesheets" select="'../../main/resources/css/generate-toc.xsl'"/>
-            <x:param port="parameters" name="depth" select="2"/>
-            <x:param port="parameters" name="exclude-class" select="'exclude'"/>
-            <x:param port="parameters" name="document-toc-id" select="'generated-document-toc'"/>
         </x:call>
         <x:context label="result">
             <x:document type="port" port="result"/>
@@ -51,6 +56,15 @@
                             </ol>
                         </li>
                     </ol>
+                    <head>
+                        <style media="embossed" type="text/x-scss">
+                                @xslt "../../main/resources/css/generate-toc.xsl" {
+                                    depth: 2;
+                                    exclude-class: 'exclude';
+                                    document-toc-id: 'generated-document-toc';
+                                }
+                            </style>
+                    </head>
                     <body>
                         <h3 id="a">Heading 1.1.1</h3>
                         <p>...</p>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-inline-prefixes="#all"
                 type="px:add-xml-base" name="main">
 	
@@ -29,7 +31,12 @@
 			px:assert
 		</p:documentation>
 	</p:import>
-	
+	<cx:import href="../xslt/uri-functions.xsl" type="application/xslt+xml">
+		<p:documentation>
+			pf:is-relative
+		</p:documentation>
+	</cx:import>
+
 	<px:assert message="The 'root' option can not be false if the 'all' option is true" error-code="XC0058">
 		<p:with-option name="test" select="not($root='false' and $all='true')"/>
 	</px:assert>
@@ -41,30 +48,11 @@
 	
 	<p:choose>
 		<p:when test="$root='false'">
-			<p:xslt name="absolute-xml-base" template-name="main">
-				<p:input port="source">
-					<p:empty/>
-				</p:input>
-				<p:input port="stylesheet">
-					<p:inline>
-						<xsl:stylesheet version="2.0">
-							<xsl:import href="../xslt/uri-functions.xsl"/>
-							<xsl:param name="xml-base"/>
-							<xsl:template name="main">
-								<result>
-									<xsl:value-of xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-									              select="$xml-base[not(.='') and not(pf:is-relative(.))]"/>
-								</result>
-							</xsl:template>
-						</xsl:stylesheet>
-					</p:inline>
-				</p:input>
-				<p:with-param name="xml-base" select="/*/@xml:base">
-					<p:pipe step="main" port="source"/>
-				</p:with-param>
-			</p:xslt>
+			<p:variable name="absolute-xml-base" cx:as="xs:string?" select="/*/@xml:base[not(pf:is-relative(.))]">
+				<p:pipe step="main" port="source"/>
+			</p:variable>
 			<p:choose>
-				<p:when test="string(.)=''">
+				<p:when test="not(exists($absolute-xml-base))">
 					<p:delete match="/*/@xml:base">
 						<p:input port="source">
 							<p:pipe step="with-xml-base" port="result"/>

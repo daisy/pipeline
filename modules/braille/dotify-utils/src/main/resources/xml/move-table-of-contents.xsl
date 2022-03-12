@@ -22,7 +22,7 @@
 
     <xsl:template match="toc-sequence">
         <xsl:variable name="toc" as="element(obfl:table-of-contents)" select="table-of-contents"/>
-        <xsl:variable name="toc" as="element(obfl:table-of-contents)" select="$tocs[.=$toc or deep-equal(., $toc)]"/>
+        <xsl:variable name="toc" as="element(obfl:table-of-contents)" select="$tocs[. is $toc or deep-equal(., $toc)]"/>
         <xsl:copy>
             <xsl:attribute name="toc" select="concat('toc_',functx:index-of-node($tocs,$toc))"/>
             <xsl:apply-templates select="@*"/>

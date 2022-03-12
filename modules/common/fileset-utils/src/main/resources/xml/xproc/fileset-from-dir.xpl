@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-from-dir" xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                type="px:fileset-from-dir">
 
   <p:output port="result"/>
   <p:option name="path" required="true"/>
@@ -8,8 +9,16 @@
   <p:option name="include-filter"/>
   <p:option name="exclude-filter"/>
 
-  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-  <p:import href="fileset-from-dir-list.xpl"/>
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+    <p:documentation>
+      px:directory-list
+    </p:documentation>
+  </p:import>
+  <p:import href="fileset-from-dir-list.xpl">
+    <p:documentation>
+      px:fileset-from-dir-list
+    </p:documentation>
+  </p:import>
 
   <p:choose>
     <p:when

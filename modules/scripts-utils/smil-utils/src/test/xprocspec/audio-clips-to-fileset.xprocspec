@@ -41,7 +41,8 @@
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect type="compare" label="the result port">
+        <x:expect label="the result port"
+                  type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
             <x:document type="inline">
                 <d:fileset>
                     <d:file href="file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/part0000_00_000.mp3"

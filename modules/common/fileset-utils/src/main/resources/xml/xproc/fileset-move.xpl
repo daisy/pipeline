@@ -46,7 +46,7 @@
             <p>The target directory.</p>
         </p:documentation>
     </p:option>
-    <p:option name="flatten" required="false" select="'false'">
+    <p:option name="flatten" required="false" select="false()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Move all files to a single directory.</p>
         </p:documentation>

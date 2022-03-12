@@ -3,6 +3,9 @@ package org.daisy.pipeline.css;
 import java.net.URI;
 import java.util.Map;
 
+import javax.xml.namespace.QName;
+
+import org.daisy.common.transform.InputValue;
 import org.daisy.common.transform.XMLInputValue;
 
 /**
@@ -15,6 +18,6 @@ public interface XsltProcessor {
 	 */
 	public XMLInputValue<Void> transform(URI stylesheetURI,
 	                                     XMLInputValue<?> source,
-	                                     Map<String,String> parameters);
+	                                     Map<QName,InputValue<?>> parameters);
 
 }

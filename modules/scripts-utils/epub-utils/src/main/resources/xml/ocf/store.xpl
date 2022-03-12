@@ -5,8 +5,16 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 type="px:epub3-store" name="main">
 
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>Store a EPUB 3 fileset in a ZIP container</p>
+    </p:documentation>
+
     <p:input port="fileset.in" primary="true"/>
-    <p:input port="in-memory.in" sequence="true"/>
+    <p:input port="in-memory.in" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The EPUB 3 fileset</p>
+        </p:documentation>
+    </p:input>
 
     <p:output port="result" primary="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -15,7 +23,11 @@
         <p:pipe port="result" step="zip"/>
     </p:output>
 
-    <p:option name="href" required="true"/>
+    <p:option name="href" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The URI of the ZIP file</p>
+        </p:documentation>
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>

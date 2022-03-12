@@ -10,8 +10,8 @@
 	<x:scenario label="test">
 		<x:call step="px:html-to-epub3">
 			<x:input port="input.fileset">
-				<x:document type="inline" xml:base="file:/tmp/">
-					<d:fileset>
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp/">
 						<d:file href="foo.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="desc.xml" media-type="application/z3998-auth-diagram+xml" kind="description"/>
 						<d:file href="image.svg" media-type="image/svg+xml"/>

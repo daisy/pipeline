@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>epub-to-daisy</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB to DAISY</name>
@@ -70,7 +70,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-common</artifactId>
+      <artifactId>tts-mocks</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -88,29 +88,5 @@
       org.daisy.pipeline.datatypes.impl.Datatype_px_epub_to_daisy_script_validation
     </expose-services>
   </properties>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-spi-test-classes</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>generate-spi-test-classes</goal>
-            </goals>
-            <configuration>
-              <includes>
-                MockTTS,
-                MockEncoder
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
 
 </project>

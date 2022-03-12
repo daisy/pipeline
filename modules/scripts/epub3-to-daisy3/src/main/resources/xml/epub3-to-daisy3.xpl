@@ -73,7 +73,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
             px:html-merge
-            px:html-to-fileset
+            px:html-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
@@ -478,15 +478,14 @@
             </p:input>
         </px:dtbook-load>
         <p:sink/>
-        <px:fileset-load media-types="application/xhtml+xml">
-            <p:input port="fileset">
+        <px:html-load name="html-fileset">
+            <p:input port="source.fileset">
                 <p:pipe step="copy" port="result.fileset"/>
             </p:input>
-            <p:input port="in-memory">
+            <p:input port="source.in-memory">
                 <p:pipe step="copy" port="result.in-memory"/>
             </p:input>
-        </px:fileset-load>
-        <px:html-to-fileset name="html-fileset"/>
+        </px:html-load>
         <px:fileset-diff name="unreferenced-resources">
             <p:input port="secondary">
                 <p:pipe step="dtbook-fileset" port="fileset.out"/>

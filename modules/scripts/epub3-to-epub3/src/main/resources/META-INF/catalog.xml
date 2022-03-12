@@ -4,7 +4,7 @@
 	   px:content-type="script" px:id="epub3-to-epub3" px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/epub3-to-epub3/library.xpl" uri="../xml/library.xpl"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>

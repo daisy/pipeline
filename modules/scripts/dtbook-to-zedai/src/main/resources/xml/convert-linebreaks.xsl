@@ -8,7 +8,6 @@
     <xsl:output indent="yes" method="xml"/>
 
     <xsl:template match="/">
-        <xsl:message>Convert br to lines</xsl:message>
         <xsl:apply-templates/>
     </xsl:template>
 

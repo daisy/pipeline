@@ -1,0 +1,9 @@
+<?xml-stylesheet href="1.css" media="embossed"?>
+<?xml-stylesheet href="2.css" type="text/css"?>
+<?xml-stylesheet  href='3.css'  ?>
+<?xml-stylesheet href='4.css' foo="bar"?>
+<?xml-stylesheet href=5.css?>
+<?xml-stylesheet href=" 6.css " type="text/css"?>
+<?xml-stylesheet href="7.scss"?>
+<?some-other-instruction?>
+<irrelevant/>

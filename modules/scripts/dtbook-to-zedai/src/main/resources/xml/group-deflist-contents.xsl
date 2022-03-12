@@ -5,7 +5,6 @@
     exclude-result-prefixes="dtb" version="2.0">
 
     <xsl:template match="/">
-        <xsl:message>Grouping contents of a definition list into items</xsl:message>
         <xsl:apply-templates/>
     </xsl:template>
 

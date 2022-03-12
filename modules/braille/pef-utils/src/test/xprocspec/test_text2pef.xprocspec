@@ -11,7 +11,7 @@
       <p:option name="source"/>
       <p:option name="table"/>
       <p:option name="temp-dir"/>
-      <p:import href="../resources/text2pef.xpl"/>
+      <p:import href="../../main/resources/xml/text2pef.xpl"/>
       <p:declare-step type="pxi:load-text">
         <p:output port="result"/>
         <p:option name="href"/>

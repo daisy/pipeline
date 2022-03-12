@@ -97,8 +97,9 @@ public class Request<ContentType> {
 	 *
 	 * @return the input stream, through which data are send back by the server
 	 * @throws IOException if an error occured during the connection or while sending data to the server
+	 * @throws InterruptedException if the current thead is interrupted while getting the response from the server
 	 */
-	public InputStream send() throws IOException {
+	public InputStream send() throws IOException, InterruptedException {
 		connection = (HttpURLConnection) requestURL.openConnection();
 		connection.setRequestMethod(method);
 		if (headers != null) headers.forEach((String key, String value) -> {
@@ -113,7 +114,37 @@ public class Request<ContentType> {
 		} else {
 			connection.setDoOutput(false);
 		}
-		return connection.getInputStream();
+		// handle thread interrupts (fired by TTSTimeout)
+		Thread currentThread = Thread.currentThread();
+		Thread handleInterrupt = new Thread() {
+			public void run() {
+				while (true) {
+					try {
+						sleep(1000);
+					} catch (InterruptedException e) {
+						return;
+					}
+					if (currentThread.isInterrupted()) {
+						connection.disconnect(); // unblocks connection.getInputStream() below
+						connection = null;
+						return;
+					}
+				}
+			}
+		};
+		handleInterrupt.start();
+		try {
+			return connection.getInputStream();
+		} catch (IOException e) {
+			handleInterrupt.interrupt();
+			if (connection == null)
+				// cancelled by interrupt handler
+				throw new InterruptedException("request was interrupted");
+			else
+				throw e;
+		} finally {
+			handleInterrupt.interrupt();
+		}
 	}
 
 	/**

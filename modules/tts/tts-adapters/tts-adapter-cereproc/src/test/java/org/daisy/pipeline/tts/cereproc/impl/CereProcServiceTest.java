@@ -1,15 +1,22 @@
 package org.daisy.pipeline.tts.cereproc.impl;
 
+import java.io.StringReader;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
+import javax.sound.sampled.AudioInputStream;
+import javax.xml.transform.sax.SAXSource;
 
-import org.daisy.pipeline.audio.AudioBuffer;
+import com.google.common.collect.ImmutableSet;
+
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.tts.StraightBufferAllocator;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService;
@@ -17,8 +24,7 @@ import org.daisy.pipeline.tts.Voice;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.google.common.collect.ImmutableSet;
+import org.xml.sax.InputSource;
 
 public class CereProcServiceTest extends AbstractTest {
 
@@ -48,18 +54,20 @@ public class CereProcServiceTest extends AbstractTest {
 		                  || "cereproc-dnn".equals(ttsService.getName()));
 		TTSResource resource = engine.allocateThreadResources();
 		try {
-			Collection<AudioBuffer> audio = engine.synthesize("<s>Hi, my name is William</s>",
-			                                                  null, // xml
-			                                                  new Voice(null, "William"),
-			                                                  resource,
-			                                                  null, // marks,
-			                                                  null, // expectedMarks
-			                                                  new StraightBufferAllocator(),
-			                                                  false // retry
-			                                                  );
-			Assert.assertTrue(audio.stream().mapToInt(x -> x.size).sum() > 10000);
+			AudioInputStream audio = engine.synthesize(
+				parseSSML("<s xmlns=\"http://www.w3.org/2001/10/synthesis\">Hi, my name is William</s>"),
+				new Voice(null, "William"),
+				resource
+			).audio;
+			Assert.assertTrue(audio.getFrameLength() * audio.getFormat().getFrameSize() > 10000);
 		} finally {
 			engine.releaseThreadResources(resource);
 		}
+	}
+
+	private static final Processor proc = new Processor(false);
+
+	private static XdmNode parseSSML(String ssml) throws SaxonApiException {
+		return proc.newDocumentBuilder().build(new SAXSource(new InputSource(new StringReader(ssml))));
 	}
 }

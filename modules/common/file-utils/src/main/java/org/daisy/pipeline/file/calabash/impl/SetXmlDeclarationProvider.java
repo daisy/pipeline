@@ -34,9 +34,9 @@ import com.xmlcalabash.util.TreeWriter;
 import org.osgi.service.component.annotations.Component;
 
 @Component(
-	name = "pxi:set-xml-declaration",
+	name = "px:set-xml-declaration",
 	service = { XProcStepProvider.class },
-	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}set-xml-declaration" }
+	property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}set-xml-declaration" }
 )
 public class SetXmlDeclarationProvider implements XProcStepProvider {
 

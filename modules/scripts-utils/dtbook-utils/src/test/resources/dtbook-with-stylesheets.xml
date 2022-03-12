@@ -1,0 +1,28 @@
+<!-- with 'text/css' type-->
+<?xml-stylesheet href="test1.css" type="text/css"?>
+<!-- with implied type-->
+<?xml-stylesheet href="test2.css"?>
+<!-- using single quotes-->
+<?xml-stylesheet href='test3.css' type='text/css'?>
+<!-- with other type -->
+<?xml-stylesheet href="test4.css" type="foo"?>
+<!-- other processing instruction -->
+<?foo href="test5.css" type="text/css"?>
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
+	<head>
+		<!-- href with spaces -->
+		<link rel="stylesheet" type="text/css" href=" test6.css "/>
+		<!-- with implied type -->
+		<link rel="stylesheet" href="test7.css"/>
+		<!-- with other type -->
+		<link rel="stylesheet" type="foo" href="test8.css"/>
+		<!-- without href -->
+		<link rel="stylesheet" type="text/css"/>
+		<!-- without rel="stylesheet" -->
+		<link type="text/css" href="test9.css"/>
+		<!-- with other rel -->
+		<link rel="foo" type="text/css" href="test10.css"/>
+		<!-- with media -->
+		<link rel="stylesheet" type="text/css" href="test11.css" media="print"/>
+	</head>
+</dtbook>

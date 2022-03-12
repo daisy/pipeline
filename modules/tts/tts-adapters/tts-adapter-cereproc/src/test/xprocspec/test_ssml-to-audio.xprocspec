@@ -46,6 +46,7 @@
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="audio-file-type" select="'audio/x-wav'"/>
 			<x:option name="temp-dir" select="resolve-uri('audio/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status port">

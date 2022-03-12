@@ -1,0 +1,23 @@
+/*
+ * Definition lists
+ */
+
+$group-dt-dd: false !default;
+$dt-suffix: ": " !default;
+$dt-separator: " " !default;
+
+@if $group-dt-dd {
+    @xslt "definition-lists.xsl";
+}
+
+@if $dt-suffix {
+	dt, dd {
+		display: inline;
+	}
+	dt:has(+ dd)::after {
+		content: $dt-suffix;
+	}
+	dt:has(+ dt)::after {
+		content: $dt-separator;
+	}
+}

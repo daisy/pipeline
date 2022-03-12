@@ -27,6 +27,8 @@
     <entry key="png"       value="image/png"/>
     <entry key="svg"       value="image/svg+xml"/>
     <entry key="css"       value="text/css"/>
+    <entry key="scss"      value="text/x-scss"/>
+    <entry key="sass"      value="text/x-sass"/>
     <entry key="dtd"       value="application/xml-dtd"/>
     <entry key="res"       value="application/x-dtbresource+xml"/>
     <entry key="ogg"       value="audio/ogg"/>

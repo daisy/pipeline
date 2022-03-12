@@ -1,60 +1,77 @@
 $notes-placement: end-of-volume !default;
+$chapter-selector: "level1, level2, level3, level4, level5, level6" !default;
 
-noteref::alternate {
-	display: block;
-	content: target-content(attr(href));
-}
+@if $notes-placement != custom {
 
-// notes that are not referenced are not rendered
-note {
-	display: none;
-}
-
-/*
- * - Generate a div element to contain all the notes and to attach a title.
- */
-@xslt "notes.xsl" {
-	endnotes-section-id: "endnotes-section";
-}
-
-#endnotes-section {
-	display: -obfl-list-of-references;
-	flow: endnotes-container;
-	&::after {
-		content: -obfl-collection(endnotes);
+	/*
+	 * - Move note elements if notes-placement is "end-of-block",
+	 * - otherwise generate a div element to contain all the notes and to attach a title.
+	 */
+	@xslt "notes.xsl" {
+		notes-placement: $notes-placement;
+		endnotes-section-class: "endnotes-section";
+		chapter-selector: $chapter-selector;
 	}
-}
 
-@if $notes-placement == bottom-of-page {
-	noteref::alternate {
-		flow: footnotes;
-	}
-	@page {
-		@footnotes {
-			content: flow(footnotes);
-            -obfl-fallback-collection: endnotes;
+	@if $notes-placement == end-of-block {
+
+	} @else {
+
+		noteref::alternate {
+			display: block;
+			content: target-content(attr(idref));
 		}
-	}
 
-} @else {
-	noteref::alternate {
-		flow: endnotes;
-	}
-}
-
-@if $notes-placement == end-of-book {
-	@volume:last {
-		@end {
-			content: flow(endnotes-container);
+		// notes that are not referenced are not rendered
+		note {
+			display: none;
 		}
-	}
-} @else {
-	#endnotes-section {
-		-obfl-list-of-references-range: volume;
-	}
-	@volume {
-		@end {
-			content: flow(endnotes-container);
+
+		.endnotes-section {
+			display: -obfl-list-of-references;
+			@if $notes-placement != end-of-chapter {
+				flow: endnotes-container;
+			}
+			&::after {
+				@if $notes-placement == end-of-chapter {
+					content: flow(endnotes);
+				} @else if $notes-placement == end-of-book {
+					content: flow(endnotes, document);
+				} @else {
+					content: flow(endnotes, volume);
+				}
+			}
+		}
+
+		@if $notes-placement == bottom-of-page {
+			noteref::alternate {
+				flow: footnotes;
+			}
+			@page {
+				@footnotes {
+					content: flow(footnotes, page);
+					-obfl-fallback-collection: endnotes;
+				}
+			}
+
+		} @else {
+			noteref::alternate {
+				flow: endnotes;
+			}
+		}
+
+		@if $notes-placement == end-of-book {
+			@volume:last {
+				@end {
+					content: flow(endnotes-container, document);
+				}
+			}
+		} @else if $notes-placement != end-of-chapter {
+			@volume {
+				@end {
+					content: flow(endnotes-container, document);
+				}
+			}
 		}
 	}
 }

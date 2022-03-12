@@ -1,17 +1,18 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Optional;
 import static com.google.common.collect.Iterables.size;
 
+import cz.vutbr.web.css.CSSProperty;
+
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
+import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
-import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
@@ -23,6 +24,14 @@ import org.osgi.service.component.annotations.Component;
 
 import org.slf4j.Logger;
 
+/**
+ * BrailleTranslator that can translate numbers.
+ *
+ * Requires that input text is a string consisting of only digits or
+ * roman numbers (for generating page numbers), braille pattern
+ * characters (U+28xx), white space characters (SPACE, NBSP, BRAILLE
+ * PATTERN BLANK) and pre-hyphenation characters (SHY and ZWSP).
+ */
 public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 	
 	@Override
@@ -38,33 +47,13 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 			int i = 0;
 			for (CSSStyledText t : styledText) {
 				if (i >= from && i < to)
-					braille[i - from] = NumberBrailleTranslator.this.transform(t.getText(), t.getStyle());
+					braille[i - from] = NumberBrailleTranslator.this.transform(t);
 				i++; }
 			return Arrays.asList(braille);
 		}
-	};
-	
-	@Override
-	public LineBreakingFromStyledText lineBreakingFromStyledText() {
-		return lineBreakingFromStyledText;
-	}
-
-	private final LineBreakingFromStyledText lineBreakingFromStyledText = new LineBreakingFromStyledText() {
-		public LineIterator transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-			List<String> braille = new ArrayList<>();
-			for (CSSStyledText t : styledText)
-				braille.add(NumberBrailleTranslator.this.transform(t));
-			StringBuilder brailleString = new StringBuilder();
-			int fromChar = 0;
-			int toChar = to >= 0 ? 0 : -1;
-			for (String s : braille) {
-				brailleString.append(s);
-				if (--from == 0)
-					fromChar = brailleString.length();
-				if (--to == 0)
-					toChar = brailleString.length();
-			}
-			return new DefaultLineBreaker.LineIterator(brailleString.toString(), fromChar, toChar, '\u2800', '\u2824', 1);
+		@Override
+		public String toString() {
+			return NumberBrailleTranslator.this + ".fromStyledTextToBraille()";
 		}
 	};
 
@@ -75,6 +64,7 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 	private final static char LF = '\n';
 	private final static char TAB = '\t';
 	private final static char NBSP = '\u00a0';
+	private final static char LS = '\u2028';   // line separator
 	private final static Pattern VALID_INPUT = Pattern.compile("[ivxlcdm0-9\\.\u2800-\u28ff" + SHY + ZWSP + SPACE + LF + CR + TAB + NBSP + "]*");
 	private final static Pattern NUMBER = Pattern.compile("(?<decimal>[0-9]+\\.[0-9]+)|(?<natural>[0-9]+)|(?<roman>[ivxlcdm]+)");
 	private final static String NUMSIGN = "\u283c";
@@ -85,17 +75,44 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 		"\u2834","\u2802","\u2806","\u2812","\u2832","\u2822","\u2816","\u2836","\u2826","\u2814"};
 	
 	private String transform(CSSStyledText styledText) {
+		Map<String,String> attrs = styledText.getTextAttributes();
+		if (attrs != null && !attrs.isEmpty())
+			throw new RuntimeException("Translator does not support text attributes '" + attrs + "'");
 		return transform(styledText.getText(), styledText.getStyle());
 	}
 	
 	private String transform(String text, SimpleInlineStyle style) {
 		if (!VALID_INPUT.matcher(text).matches())
 			throw new RuntimeException("Invalid input: \"" + text + "\"");
-		if (style != null
-		    && style.getProperty("text-transform") == TextTransform.list_values
-		    && style.getValue("text-transform").toString().equals("downshift"))
-			return translateNumbers(text, true);
-		return translateNumbers(text, false);
+		boolean noTransform = false;
+		boolean downShift = false;
+		if (style != null) {
+			CSSProperty ws = style.getProperty("white-space");
+			if (ws != null) {
+				if (ws == WhiteSpace.PRE_WRAP)
+					text = text.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
+					           .replaceAll("[\\x20\t\\u2800]", "\u00A0");
+				if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
+					text = text.replaceAll("[\\n\\r]", ""+LS);
+				style.removeProperty("white-space"); }
+			CSSProperty textTransform = style.getProperty("text-transform");
+			if (textTransform == TextTransform.AUTO)
+				style.removeProperty("text-transform");
+			else if (textTransform == TextTransform.NONE) {
+				noTransform = true;
+				style.removeProperty("text-transform");
+			} else if (textTransform == TextTransform.list_values
+			           && style.getValue("text-transform").toString().equals("downshift")) {
+				downShift = true;
+				style.removeProperty("text-transform");
+			}
+			if (!style.isEmpty())
+				throw new RuntimeException("Translator does not support style '" + style + "'");
+		}
+		if (noTransform)
+			return text;
+		else
+			return translateNumbers(text, downShift);
 	}
 	
 	private static String translateNumbers(String text, boolean downshift) {
@@ -150,6 +167,11 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 		             .replace('m', '⠍');
 	}
 	
+	@Override
+	public String toString() {
+		return "NumberBrailleTranslator";
+	}
+	
 	@Component(
 		name = "number-braille-translator-provider",
 		service = {
@@ -161,6 +183,7 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 		final static NumberBrailleTranslator instance = new NumberBrailleTranslator();
 		public Iterable<NumberBrailleTranslator> get(Query query) {
 			MutableQuery q = mutableQuery(query);
+			q.removeAll("document-locale");
 			try {
 				if ("text-css".equals(q.removeOnly("input").getValue().orElse(null))
 				    && "braille".equals(q.removeOnly("output").getValue().orElse(null))

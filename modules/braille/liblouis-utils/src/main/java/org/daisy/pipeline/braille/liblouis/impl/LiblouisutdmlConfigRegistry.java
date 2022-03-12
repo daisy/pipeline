@@ -11,11 +11,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "org.daisy.pipeline.braille.liblouis.impl.LiblouisutdmlConfigRegistry",
-	service = { LiblouisutdmlConfigResolver.class }
+	service = { LiblouisutdmlConfigRegistry.class }
 )
-public class LiblouisutdmlConfigRegistry
-	extends ResourceRegistry<LiblouisutdmlConfigPath>
-	implements LiblouisutdmlConfigResolver {
+public class LiblouisutdmlConfigRegistry extends ResourceRegistry<LiblouisutdmlConfigPath>
+                                         implements LiblouisutdmlConfigResolver {
 	
 	@Reference(
 		name = "LiblouisutdmlConfigPath",

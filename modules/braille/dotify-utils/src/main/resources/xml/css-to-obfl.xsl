@@ -5,6 +5,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -14,13 +15,15 @@
     
     <xsl:namespace-alias stylesheet-prefix="_xsl" result-prefix="xsl"/>
     
-    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     <xsl:include href="marker-reference.xsl"/>
     
-    <xsl:param name="locale" as="xs:string" required="yes"/>
+    <xsl:param name="document-locale" as="xs:string" required="yes"/>
+    <xsl:param name="braille-charset-table" as="xs:string" required="yes"/>
     <xsl:param name="page-counters" as="xs:string" required="yes"/>
     <xsl:param name="volume-transition" as="xs:string?" required="no"/>
+    <xsl:param name="default-text-transform" as="xs:string" required="yes"/>
     <xsl:param name="text-transforms" as="xs:string?" required="no"/>
     
     <xsl:variable name="sections" select="collection()[position() &lt; last()]"/>
@@ -137,7 +140,7 @@
         <xsl:for-each select="$page-stylesheets">
             <xsl:sequence select="css:rule[@selector='@footnotes'][1]
                                   /css:property[@name='content'][1]
-                                  /css:flow[@from and (not(@scope) or @scope='page')]/@from"/>
+                                  /css:flow[@from][@scope='page']/@from"/>
         </xsl:for-each>
         <xsl:for-each select="$volume-stylesheets">
             <xsl:for-each select="(.|*[matches(@selector,'^&amp;:')])
@@ -145,13 +148,13 @@
                 <xsl:variable name="volume-area-content" as="element()*"
                               select="(if (css:property) then . else *[not(@selector)])
                                       /css:property[@name='content'][1]/*"/>
-                <xsl:sequence select="$volume-area-content/self::css:flow[@from and @scope='volume']/@from"/>
+                <xsl:sequence select="$volume-area-content/self::css:flow[@from][@scope='volume']/@from"/>
                 <xsl:for-each select="distinct-values(
-                                        $volume-area-content/self::css:flow[@from][(@scope,'document')[1]='document']/@from)">
+                                        $volume-area-content/self::css:flow[@from][@scope='document']/@from)">
                     <xsl:variable name="flow" as="xs:string" select="."/>
                     <xsl:sequence select="$sections/*[@css:flow=$flow]
                                           /css:box[@type='block' and @css:_obfl-list-of-references]
-                                          //css:custom-func[@name='-obfl-collection' and @arg1 and not(@arg2)]/@arg1"/>
+                                          //css:flow[@from][@scope=('volume','-obfl-document')]/@from"/>
                 </xsl:for-each>
             </xsl:for-each>
         </xsl:for-each>
@@ -255,7 +258,9 @@
                   select="if ($sections/css:_/css:box[not(@css:text-transform='none')])
                           then 'auto'
                           else 'none'"/>
+    <xsl:variable name="initial-braille-charset" as="xs:string" select="if ($braille-charset-table='') then 'unicode' else 'custom'"/>
     <xsl:variable name="initial-hyphens" as="xs:string" select="'manual'"/>
+	<xsl:variable name="initial-hyphenate-character" as="xs:string" select="'auto'"/>
     <xsl:variable name="initial-word-spacing" as="xs:integer" select="1"/>
     
     <!-- count the total number of text nodes with braille content so that we get a good estimate of the progress -->
@@ -278,7 +283,7 @@
         <xsl:call-template name="pf:progress">
             <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
         </xsl:call-template>
-        <obfl version="2011-1" xml:lang="{$locale}">
+        <obfl version="2011-1" xml:lang="{$document-locale}">
             <xsl:variable name="translate" as="xs:string" select="if ($initial-text-transform='none') then 'pre-translated-text-css' else ''"/>
             <xsl:variable name="hyphenate" as="xs:string" select="string($initial-hyphens='auto')"/>
             <xsl:attribute name="hyphenate" select="$hyphenate"/>
@@ -287,6 +292,12 @@
             </xsl:if>
             <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
                 <dp2:style-type>text/css</dp2:style-type>
+                <xsl:if test="$braille-charset-table!=''">
+                    <dp2:braille-charset><xsl:value-of select="$braille-charset-table"/></dp2:braille-charset>
+                </xsl:if>
+                <xsl:if test="$default-text-transform!=''">
+                    <dp2:default-mode><xsl:value-of select="$default-text-transform"/></dp2:default-mode>
+                </xsl:if>
                 <xsl:if test="exists($text-transform-rule)">
                     <dp2:css-text-transform-definitions>
                         <xsl:text>&#xa;</xsl:text>
@@ -297,7 +308,9 @@
             </meta>
             <xsl:call-template name="_start">
                 <xsl:with-param name="text-transform" tunnel="yes" select="$initial-text-transform"/>
+                <xsl:with-param name="braille-charset" tunnel="yes" select="$initial-braille-charset"/>
                 <xsl:with-param name="hyphens" tunnel="yes" select="$initial-hyphens"/>
+                <xsl:with-param name="hyphenate-character" tunnel="yes" select="$initial-hyphenate-character"/>
                 <xsl:with-param name="word-spacing" tunnel="yes" select="$initial-word-spacing"/>
             </xsl:call-template>
         </obfl>
@@ -305,487 +318,469 @@
     
     <xsl:template name="_start">
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
-            <xsl:sequence select="$page-stylesheets"/>
-            <xsl:if test="count($volume-stylesheets)&gt;1">
-                <xsl:call-template name="pf:warn">
-                    <xsl:with-param name="msg">Documents with more than one volume style are not supported.</xsl:with-param>
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:if test="not(exists($volume-stylesheets))">
-                <xsl:call-template name="pf:warn">
-                    <xsl:with-param name="msg">Document does not have an associated volume style.</xsl:with-param>
-                </xsl:call-template>
-            </xsl:if>
-            <xsl:if test="collection()//*/@css:_obfl-scenarios">
-                <xsl:call-template name="renderers"/>
-            </xsl:if>
-            <xsl:if test="$volume-stylesheets[1]/*">
-                <xsl:variable name="volume-stylesheets" as="element()*"
-                              select="$volume-stylesheets[1]/(.|*[matches(@selector,'^&amp;:')])"/>
-                <xsl:variable name="volume-stylesheets-use-when" as="xs:string*"
-                              select="if (count($volume-stylesheets)=1)
-                                      then ('t')
-                                      else obfl:volume-stylesheets-use-when($volume-stylesheets)"/>
-                <xsl:if test="not(obfl:or($volume-stylesheets-use-when)='nil')">
-                    <xsl:variable name="no-upper-limit" select="'1000'"/>
-                    <xsl:for-each select="$volume-stylesheets">
-                        <xsl:variable name="i" select="position()"/>
-                        <xsl:variable name="use-when" as="xs:string" select="$volume-stylesheets-use-when[$i]"/>
-                        <xsl:if test="not($use-when='nil')">
-                            <xsl:variable name="properties" as="element()*"
-                                          select="if (css:property) then * else *[not(@selector)]/css:property"/>
-                            <xsl:variable name="volume-area-rules" as="element()*" select="*[@selector=('@begin','@end')]"/>
-                            <!--
-                                page style to use in @begin and @end areas when no page property specified
-                            -->
-                            <xsl:variable name="default-page-style" as="xs:string" select="($sections/*[not(@css:flow)])[1]/string(@css:page)"/>
-                            <volume-template sheets-in-volume-max="{($properties[@name='max-length' and css:is-valid(.)]/string(@value),$no-upper-limit)[1]}">
-                                <xsl:if test="not($use-when='t')">
-                                    <xsl:attribute name="use-when" select="$use-when"/>
+        <xsl:sequence select="$page-stylesheets"/>
+        <xsl:if test="count($volume-stylesheets)&gt;1">
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">Documents with more than one volume style are not supported.</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="not(exists($volume-stylesheets))">
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">Document does not have an associated volume style.</xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="collection()//*/@css:_obfl-scenarios">
+            <xsl:call-template name="renderers"/>
+        </xsl:if>
+        <xsl:if test="$volume-stylesheets[1]/*">
+            <xsl:variable name="volume-stylesheets" as="element()*"
+                          select="$volume-stylesheets[1]/(.|*[matches(@selector,'^&amp;:')])"/>
+            <xsl:variable name="volume-stylesheets-use-when" as="xs:string*"
+                          select="if (count($volume-stylesheets)=1)
+                                  then ('t')
+                                  else obfl:volume-stylesheets-use-when($volume-stylesheets)"/>
+            <xsl:if test="not(obfl:or($volume-stylesheets-use-when)='nil')">
+                <xsl:variable name="no-upper-limit" select="'1000'"/>
+                <xsl:for-each select="$volume-stylesheets">
+                    <xsl:variable name="i" select="position()"/>
+                    <xsl:variable name="use-when" as="xs:string" select="$volume-stylesheets-use-when[$i]"/>
+                    <xsl:if test="not($use-when='nil')">
+                        <xsl:variable name="properties" as="element()*"
+                                      select="if (css:property) then * else *[not(@selector)]/css:property"/>
+                        <xsl:variable name="volume-area-rules" as="element()*" select="*[@selector=('@begin','@end')]"/>
+                        <!--
+                            page style to use in @begin and @end areas when no page property specified
+                        -->
+                        <xsl:variable name="default-page-style" as="xs:string" select="($sections/*[not(@css:flow)])[1]/string(@css:page)"/>
+                        <volume-template sheets-in-volume-max="{($properties[@name='max-length' and css:is-valid(.)]/string(@value),$no-upper-limit)[1]}">
+                            <xsl:if test="not($use-when='t')">
+                                <xsl:attribute name="use-when" select="$use-when"/>
+                            </xsl:if>
+                            <xsl:for-each select="('@begin','@end')">
+                                <xsl:variable name="volume-area" select="."/>
+                                <xsl:variable name="volume-area-style" as="element()*"
+                                              select="$volume-area-rules[@selector=$volume-area][1]/*"/>
+                                <xsl:variable name="volume-area-page-style" as="xs:string?"
+                                              select="$volume-area-style[@selector='@page']/@style"/>
+                                <xsl:variable name="volume-area-properties" as="element()*"
+                                              select="if ($volume-area-style/self::css:property)
+                                                      then $volume-area-style
+                                                      else $volume-area-style[not(@selector)]/css:property"/>
+                                <xsl:variable name="pending-text-transform" as="xs:string?" select="$volume-area-properties[@name='text-transform']/@value"/>
+                                <xsl:variable name="pending-braille-charset" as="xs:string?" select="$volume-area-properties[@name='braille-charset']/@value"/>
+                                <xsl:variable name="pending-hyphens" as="xs:string?" select="$volume-area-properties[@name='hyphens']/@value"/>
+                                <xsl:variable name="pending-hyphenate-character" as="xs:string?" select="$volume-area-properties[@name='hyphenate-character']/@value"/>
+                                <xsl:variable name="word-spacing" as="xs:integer" select="($volume-area-properties[@name='word-spacing']/@value,$word-spacing)[1]"/>
+                                <xsl:variable name="white-space" as="xs:string?" select="$volume-area-properties[@name='white-space']/@value"/>
+                                <xsl:variable name="volume-area-content" as="element()*"> <!-- css:_|obfl:list-of-references -->
+                                    <xsl:apply-templates mode="css:eval-volume-area-content-list"
+                                                         select="$volume-area-properties[@name='content'][1]/*"/>
+                                </xsl:variable>
+                                <xsl:variable name="space" as="xs:string" select="('pre','post')[index-of(('@begin','@end'),$volume-area)]"/>
+                                <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
+                                <xsl:if test="$volume-area-properties[@name=('counter-increment','counter-reset')]">
+                                    <xsl:message terminate="yes">
+                                        <xsl:apply-templates mode="css:serialize"
+                                                             select="$volume-area-properties[@name=('counter-increment','counter-reset')][1]"/>
+                                        <xsl:text>: counter-reset and counter-increment not supported in </xsl:text>
+                                        <xsl:value-of select="$volume-area"/>
+                                    </xsl:message>
                                 </xsl:if>
-                                <xsl:for-each select="('@begin','@end')">
-                                    <xsl:variable name="volume-area" select="."/>
-                                    <xsl:variable name="volume-area-style" as="element()*"
-                                                  select="$volume-area-rules[@selector=$volume-area][1]/*"/>
-                                    <xsl:variable name="volume-area-page-style" as="xs:string?"
-                                                  select="$volume-area-style[@selector='@page']/@style"/>
-                                    <xsl:variable name="volume-area-properties" as="element()*"
-                                                  select="if ($volume-area-style/self::css:property)
-                                                          then $volume-area-style
-                                                          else $volume-area-style[not(@selector)]/css:property"/>
-                                    <xsl:variable name="pending-text-transform" as="xs:string?" select="$volume-area-properties[@name='text-transform']/@value"/>
-                                    <xsl:variable name="pending-hyphens" as="xs:string?" select="$volume-area-properties[@name='hyphens']/@value"/>
-                                    <xsl:variable name="word-spacing" as="xs:integer" select="($volume-area-properties[@name='word-spacing']/@value,$word-spacing)[1]"/>
-                                    <xsl:variable name="white-space" as="xs:string?" select="$volume-area-properties[@name='white-space']/@value"/>
-                                    <xsl:variable name="volume-area-content" as="element()*"> <!-- css:_|obfl:list-of-references -->
-                                        <xsl:apply-templates mode="css:eval-volume-area-content-list"
-                                                             select="$volume-area-properties[@name='content'][1]/*"/>
-                                    </xsl:variable>
-                                    <xsl:variable name="space" as="xs:string" select="('pre','post')[index-of(('@begin','@end'),$volume-area)]"/>
-                                    <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
-                                    <xsl:if test="$volume-area-properties[@name=('counter-increment','counter-reset')]">
-                                        <xsl:message terminate="yes">
-                                            <xsl:apply-templates mode="css:serialize"
-                                                                 select="$volume-area-properties[@name=('counter-increment','counter-reset')][1]"/>
-                                            <xsl:text>: counter-reset and counter-increment not supported in </xsl:text>
-                                            <xsl:value-of select="$volume-area"/>
-                                        </xsl:message>
-                                    </xsl:if>
-                                    <xsl:variable name="volume-area-counter-set" as="element()*"
-                                                  select="css:parse-counter-set(
-                                                            ($volume-area-properties[@name='counter-set']/@value,$default-page-counter-name)[1]
-                                                            ,0)"/>
-                                    <xsl:if test="$volume-area-content">
-                                        <xsl:element name="{$space}-content">
-                                            <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
-                                            <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
-                                                <xsl:for-each-group select="current-group()" group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
-                                                    <xsl:variable name="page-style" select="current-grouping-key()"/>
-                                                    <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
-                                                    <xsl:variable name="page-properties" as="element()*"
-                                                                  select="(if ($page-style/css:property)
-                                                                           then $page-style/css:property
-                                                                           else $page-style/*[not(@selector)]/css:property)"/>
-                                                    <xsl:variable name="counter-increment" as="element()"
-                                                                  select="css:parse-counter-set(
-                                                                            ($page-properties[@name='counter-increment']/@value,$default-page-counter-name)[1],
-                                                                            1)[last()]"/>
-                                                    <xsl:variable name="page-number-counter" as="attribute()?">
-                                                        <xsl:if test="not($counter-increment/@name=$default-page-counter-name)">
-                                                            <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
+                                <xsl:variable name="volume-area-counter-set" as="element()*"
+                                              select="css:parse-counter-set($volume-area-properties[@name='counter-set']/@value,0)"/>
+                                <xsl:if test="$volume-area-content">
+                                    <xsl:element name="{$space}-content">
+                                        <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
+                                        <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
+                                            <xsl:for-each-group select="current-group()" group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
+                                                <xsl:variable name="page-style" select="current-grouping-key()"/>
+                                                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
+                                                <xsl:variable name="page-properties" as="element()*"
+                                                              select="(if ($page-style/css:property)
+                                                                       then $page-style/css:property
+                                                                       else $page-style/*[not(@selector)]/css:property)"/>
+                                                <xsl:variable name="counter-increment" as="element()"
+                                                              select="css:parse-counter-set(
+                                                                        ($page-properties[@name='counter-increment']/@value,$default-page-counter-name)[1],
+                                                                        1)[last()]"/>
+                                                <xsl:variable name="page-number-counter" as="attribute()?">
+                                                    <xsl:if test="not($counter-increment/@name=$default-page-counter-name)">
+                                                        <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
+                                                    </xsl:if>
+                                                </xsl:variable>
+                                                <xsl:variable name="counter-set" as="element()*"
+                                                              select="($volume-area-counter-set,
+                                                                       current-group()[1]/@css:counter-set/css:parse-counter-set(.,0))"/>
+                                                <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
+                                                    <xsl:message terminate="yes">
+                                                        <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$counter-increment/@name)][1]"/>
+                                                        <xsl:text>: only the active page counter (</xsl:text>
+                                                        <xsl:value-of select="$counter-increment/@name"/>
+                                                        <xsl:text>) may be manipulated</xsl:text>
+                                                    </xsl:message>
+                                                </xsl:if>
+                                                <xsl:variable name="counter-set" as="element()?" select="$counter-set[last()]"/>
+                                                <xsl:variable name="initial-page-number" as="attribute()?">
+                                                    <xsl:if test="$counter-set">
+                                                        <xsl:if test="(xs:integer($counter-set/@value) mod 2)=0">
+                                                            <!--
+                                                                FIXME: see https://github.com/mtmse/obfl/issues/22
+                                                            -->
+                                                            <xsl:message terminate="yes">
+                                                                <xsl:apply-templates mode="css:serialize" select="$counter-set"/>
+                                                                <xsl:text>: page counter may not be set to an even value</xsl:text>
+                                                            </xsl:message>
                                                         </xsl:if>
-                                                    </xsl:variable>
-                                                            <xsl:variable name="counter-set" as="element()*"
-                                                                          select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
-                                                            <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
-                                                                <xsl:message terminate="yes">
-                                                                    <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$counter-increment/@name)][1]"/>
-                                                                    <xsl:text>: only the active page counter (</xsl:text>
-                                                                    <xsl:value-of select="$counter-increment/@name"/>
-                                                                    <xsl:text>) may be manipulated</xsl:text>
-                                                                </xsl:message>
-                                                            </xsl:if>
-                                                            <xsl:variable name="counter-set" as="element()?" select="$counter-set[last()]"/>
-                                                            <xsl:variable name="initial-page-number" as="attribute()?">
-                                                                <xsl:if test="$counter-set">
-                                                                    <xsl:if test="(xs:integer($counter-set/@value) mod 2)=0">
-                                                                        <xsl:message terminate="yes">
-                                                                            <xsl:apply-templates mode="css:serialize" select="$counter-set"/>
-                                                                            <xsl:text>: page counter may not be set to an even value</xsl:text>
-                                                                        </xsl:message>
+                                                        <xsl:attribute name="initial-page-number" select="$counter-set/@value"/>
+                                                    </xsl:if>
+                                                </xsl:variable>
+                                                <xsl:apply-templates mode="assert-nil-attr"
+                                                                     select="current-group()/self::css:_/(@* except (@css:flow|@css:page|@css:counter-set))"/>
+                                                <xsl:for-each-group select="for $e in current-group() return if ($e/self::css:_) then $e/* else $e"
+                                                                    group-starting-with="css:box[@type='block' and @css:_obfl-toc]">
+                                                    <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
+                                                    <xsl:for-each-group select="current-group()"
+                                                                        group-ending-with="css:box[@type='block' and @css:_obfl-toc]">
+                                                        <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                                                        <xsl:choose>
+                                                            <xsl:when test="not(current-group()/self::css:box[@type='block' and @css:_obfl-toc])">
+                                                                <xsl:variable name="sequence" as="element()*">
+                                                                    <xsl:call-template name="apply-templates-within-post-or-pre-content-sequence">
+                                                                        <xsl:with-param name="select" select="current-group()"/>
+                                                                        <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                        <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                                                                        <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                        <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                                                                        <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                        <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                                                                    </xsl:call-template>
+                                                                </xsl:variable>
+                                                                <xsl:for-each-group select="$sequence"
+                                                                                    group-starting-with="obfl:list-of-references[not(starts-with(@collection,'meta/'))]">
+                                                                    <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                                                                    <xsl:for-each-group select="current-group()"
+                                                                                        group-ending-with="obfl:list-of-references[not(starts-with(@collection,'meta/'))]">
+                                                                        <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                                                                        <xsl:element name="{if (current-group()/self::obfl:list-of-references) then 'dynamic-sequence' else 'sequence'}">
+                                                                            <xsl:attribute name="css:page" select="$page-style/@style"/>
+                                                                            <xsl:if test="$first">
+                                                                                <xsl:sequence select="$initial-page-number"/>
+                                                                            </xsl:if>
+                                                                            <xsl:sequence select="$page-number-counter"/>
+                                                                            <xsl:sequence select="current-group()"/>
+                                                                        </xsl:element>
+                                                                    </xsl:for-each-group>
+                                                                </xsl:for-each-group>
+                                                            </xsl:when>
+                                                            <xsl:otherwise>
+                                                                <xsl:variable name="toc" as="element()" select="current-group()"/>
+                                                                <xsl:variable name="toc-range" as="xs:string"
+                                                                              select="($toc/@css:_obfl-toc-range,'document')[1]"/>
+                                                                <xsl:variable name="on-toc-start" as="element()*"
+                                                                              select="$sections/*[@css:flow=concat('-obfl-on-toc-start/',
+                                                                                                                   $toc/@css:_obfl-on-toc-start)]/*"/>
+                                                                <xsl:variable name="on-volume-start" as="element()*"
+                                                                              select="if ($toc-range='document' and $toc/@css:_obfl-on-volume-start)
+                                                                                      then $sections/*[@css:flow=concat('-obfl-on-volume-start/',
+                                                                                                                        $toc/@css:_obfl-on-volume-start)]/*
+                                                                                      else ()"/>
+                                                                <xsl:variable name="on-volume-end" as="element()*"
+                                                                              select="if ($toc-range='document' and $toc/@css:_obfl-on-volume-end)
+                                                                                      then $sections/*[@css:flow=concat('-obfl-on-volume-end/',
+                                                                                                                        $toc/@css:_obfl-on-volume-end)]/*
+                                                                                      else ()"/>
+                                                                <xsl:variable name="on-toc-end" as="element()*"
+                                                                              select="($sections/*[@css:flow=concat('-obfl-on-toc-end/',
+                                                                                                                    $toc/@css:_obfl-on-toc-end)]/*)"/>
+                                                                <toc-sequence css:page="{$page-style/@style}" range="{$toc-range}">
+                                                                    <xsl:if test="$first">
+                                                                        <xsl:sequence select="$initial-page-number"/>
                                                                     </xsl:if>
-                                                                    <xsl:attribute name="initial-page-number" select="$counter-set/@value"/>
-                                                                </xsl:if>
-                                                            </xsl:variable>
-                                                            <xsl:apply-templates mode="assert-nil-attr"
-                                                                                 select="current-group()/self::css:_/(@* except (@css:flow|@css:page|@css:counter-set))"/>
-                                                            <xsl:variable name="current-group" as="element()*"
-                                                                          select="for $e in current-group() return if ($e/self::css:_) then $e/* else $e"/>
-                                                            <xsl:variable name="first-toc" as="element()?"
-                                                                          select="($current-group/self::css:box[@type='block' and @css:_obfl-toc])[1]"/>
-                                                            <xsl:choose>
-                                                                <xsl:when test="not($first-toc)">
-                                                                    <xsl:variable name="sequence" as="element()*">
-                                                                        <xsl:call-template name="apply-templates-within-post-or-pre-content-sequence">
-                                                                            <xsl:with-param name="select" select="$current-group"/>
+                                                                    <xsl:sequence select="$page-number-counter"/>
+                                                                    <!--
+                                                                        Inserting table-of-contents here as child of toc-sequence. Will be moved to the
+                                                                        right place (child of obfl) later.
+                                                                    -->
+                                                                    <table-of-contents>
+                                                                        <xsl:apply-templates mode="table-of-contents" select="$toc">
                                                                             <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                            <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                                                                             <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                            <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                             <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
                                                                             <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                        </xsl:call-template>
-                                                                    </xsl:variable>
-                                                                    <xsl:element name="{if ($sequence/self::obfl:list-of-references) then 'dynamic-sequence' else 'sequence'}">
-                                                                        <xsl:attribute name="css:page" select="$page-style/@style"/>
-                                                                        <xsl:sequence select="$page-number-counter|$initial-page-number"/>
-                                                                        <xsl:sequence select="$sequence"/>
-                                                                    </xsl:element>
-                                                                </xsl:when>
-                                                                <xsl:otherwise>
-                                                                    <xsl:variable name="before-first-toc" as="element()*">
-                                                                        <xsl:for-each-group select="$current-group"
-                                                                                            group-starting-with="css:box[@type='block' and @css:_obfl-toc]">
-                                                                            <xsl:if test="position()=1
-                                                                                          and not(current-group()/self::css:box[@type='block' and @css:_obfl-toc])">
-                                                                                <xsl:call-template name="apply-templates-within-post-or-pre-content-sequence">
-                                                                                    <xsl:with-param name="select" select="current-group()"/>
-                                                                                    <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                    <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                    <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                    <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                </xsl:call-template>
-                                                                            </xsl:if>
-                                                                        </xsl:for-each-group>
-                                                                    </xsl:variable>
-                                                                    <xsl:for-each-group select="$current-group"
-                                                                                        group-starting-with="css:box[@type='block' and @css:_obfl-toc]">
-                                                                        <xsl:variable name="toc" as="element()?"
-                                                                                      select="current-group()/self::css:box[@type='block' and @css:_obfl-toc]"/>
-                                                                        <xsl:if test="exists($toc)">
-                                                                            <xsl:variable name="toc-range" as="xs:string"
-                                                                                          select="($toc/@css:_obfl-toc-range,'document')[1]"/>
-                                                                            <xsl:variable name="on-toc-start" as="element()*"
-                                                                                          select="$sections/*[@css:flow=concat('-obfl-on-toc-start/',
-                                                                                                                               $toc/@css:_obfl-on-toc-start)]/*"/>
-                                                                            <xsl:variable name="on-volume-start" as="element()*"
-                                                                                          select="if ($toc-range='document' and $toc/@css:_obfl-on-volume-start)
-                                                                                                  then $sections/*[@css:flow=concat('-obfl-on-volume-start/',
-                                                                                                                                    $toc/@css:_obfl-on-volume-start)]/*
-                                                                                                  else ()"/>
-                                                                            <xsl:variable name="on-volume-end" as="element()*"
-                                                                                          select="if ($toc-range='document' and $toc/@css:_obfl-on-volume-end)
-                                                                                                  then $sections/*[@css:flow=concat('-obfl-on-volume-end/',
-                                                                                                                                    $toc/@css:_obfl-on-volume-end)]/*
-                                                                                                  else ()"/>
-                                                                            <xsl:variable name="on-toc-end" as="element()*"
-                                                                                          select="($sections/*[@css:flow=concat('-obfl-on-toc-end/',
-                                                                                                                                $toc/@css:_obfl-on-toc-end)]/*)"/>
-                                                                            <xsl:variable name="before-toc" as="element()*" select="if (position()=2) then $before-first-toc else ()"/>
-                                                                            <xsl:variable name="after-toc" as="element()*">
-                                                                                <xsl:call-template name="apply-templates-within-post-or-pre-content-sequence">
-                                                                                    <xsl:with-param name="select" select="current-group()[not(self::css:box[@type='block' and @css:_obfl-toc])]"/>
-                                                                                    <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                    <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                    <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                    <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                </xsl:call-template>
-                                                                            </xsl:variable>
-                                                                            <xsl:if test="exists($before-toc) and not($toc-range='document')
-                                                                                          or $before-toc/self::obfl:list-of-references">
-                                                                                <xsl:element name="{if ($before-toc/self::obfl:list-of-references) then 'dynamic-sequence' else 'sequence'}">
-                                                                                    <xsl:attribute name="css:page" select="$page-style/@style"/>
-                                                                                    <xsl:sequence select="$page-number-counter|$initial-page-number"/>
-                                                                                    <xsl:sequence select="$before-toc"/>
-                                                                                </xsl:element>
-                                                                            </xsl:if>
-                                                                            <toc-sequence css:page="{$page-style/@style}" range="{$toc-range}">
-                                                                                <xsl:if test="position()=1
-                                                                                              or (exists($before-toc) and $toc-range='document' and not($before-toc/self::obfl:list-of-references))">
-                                                                                    <xsl:sequence select="$initial-page-number"/>
-                                                                                </xsl:if>
-                                                                                <xsl:sequence select="$page-number-counter"/>
-                                                                                <!--
-                                                                                    Inserting table-of-contents here as child of toc-sequence. Will be moved to the
-                                                                                    right place (child of obfl) later.
-                                                                                -->
-                                                                                <table-of-contents>
-                                                                                    <xsl:apply-templates mode="table-of-contents" select="$toc">
-                                                                                        <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                        <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                        <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                        <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                    </xsl:apply-templates>
-                                                                                </table-of-contents>
-                                                                                <xsl:if test="(exists($before-toc) and $toc-range='document' and not($before-toc/self::obfl:list-of-references))
-                                                                                              or exists($on-toc-start)">
-                                                                                    <on-toc-start>
-                                                                                        <xsl:if test="$toc-range='document' and not($before-toc/self::obfl:list-of-references)">
-                                                                                            <xsl:sequence select="$before-toc"/>
-                                                                                        </xsl:if>
-                                                                                        <xsl:apply-templates mode="sequence" select="$on-toc-start">
-                                                                                            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                            <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                            <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                            <xsl:with-param name="top-of-page" tunnel="yes" select="true()"/> <!-- toc-sequence always starts on new sheet -->
-                                                                                        </xsl:apply-templates>
-                                                                                    </on-toc-start>
-                                                                                </xsl:if>
-                                                                                <xsl:if test="exists($on-volume-start)">
-                                                                                    <on-volume-start>
-                                                                                        <xsl:apply-templates mode="sequence" select="$on-volume-start">
-                                                                                            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                            <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                            <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                        </xsl:apply-templates>
-                                                                                    </on-volume-start>
-                                                                                </xsl:if>
-                                                                                <xsl:if test="exists($on-volume-end)">
-                                                                                    <on-volume-end>
-                                                                                        <xsl:apply-templates mode="sequence" select="$on-volume-end">
-                                                                                            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                            <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                            <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                        </xsl:apply-templates>
-                                                                                    </on-volume-end>
-                                                                                </xsl:if>
-                                                                                <xsl:if test="exists($on-toc-end) or (exists($after-toc) and not($after-toc/self::obfl:list-of-references))">
-                                                                                    <on-toc-end>
-                                                                                        <xsl:apply-templates mode="sequence" select="$on-toc-end">
-                                                                                            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                                                                            <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                                                                            <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                                                                            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                                                                                        </xsl:apply-templates>
-                                                                                        <xsl:if test="not($after-toc/self::obfl:list-of-references)">
-                                                                                            <xsl:sequence select="$after-toc"/>
-                                                                                        </xsl:if>
-                                                                                    </on-toc-end>
-                                                                                </xsl:if>
-                                                                            </toc-sequence>
-                                                                            <xsl:if test="$after-toc/self::obfl:list-of-references">
-                                                                                <xsl:element name="{if ($after-toc/self::obfl:list-of-references) then 'dynamic-sequence' else 'sequence'}">
-                                                                                    <xsl:attribute name="css:page" select="$page-style/@style"/>
-                                                                                    <xsl:sequence select="$after-toc"/>
-                                                                                </xsl:element>
-                                                                            </xsl:if>
-                                                                        </xsl:if>
-                                                                    </xsl:for-each-group>
-                                                                </xsl:otherwise>
-                                                            </xsl:choose>
-                                                        </xsl:for-each-group>
+                                                                        </xsl:apply-templates>
+                                                                    </table-of-contents>
+                                                                    <xsl:if test="exists($on-toc-start)">
+                                                                        <on-toc-start>
+                                                                            <xsl:apply-templates mode="sequence" select="$on-toc-start">
+                                                                                <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                                <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                                                                                <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                                <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                                                                                <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                                                                            </xsl:apply-templates>
+                                                                        </on-toc-start>
+                                                                    </xsl:if>
+                                                                    <xsl:if test="exists($on-volume-start)">
+                                                                        <on-volume-start>
+                                                                            <xsl:apply-templates mode="sequence" select="$on-volume-start">
+                                                                                <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                                <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                                                                                <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                                <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                                                                                <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                                                                            </xsl:apply-templates>
+                                                                        </on-volume-start>
+                                                                    </xsl:if>
+                                                                    <xsl:if test="exists($on-volume-end)">
+                                                                        <on-volume-end>
+                                                                            <xsl:apply-templates mode="sequence" select="$on-volume-end">
+                                                                                <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                                <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                                                                                <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                                <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                                                                                <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                                                                            </xsl:apply-templates>
+                                                                        </on-volume-end>
+                                                                    </xsl:if>
+                                                                    <xsl:if test="exists($on-toc-end)">
+                                                                        <on-toc-end>
+                                                                            <xsl:apply-templates mode="sequence" select="$on-toc-end">
+                                                                                <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                                                                                <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                                                                                <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                                                                                <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                                                                                <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                                                                            </xsl:apply-templates>
+                                                                        </on-toc-end>
+                                                                    </xsl:if>
+                                                                </toc-sequence>
+                                                            </xsl:otherwise>
+                                                        </xsl:choose>
                                                     </xsl:for-each-group>
-                                        </xsl:element>
-                                    </xsl:if>
-                                </xsl:for-each>
-                            </volume-template>
-                        </xsl:if>
-                    </xsl:for-each>
-                </xsl:if>
+                                                </xsl:for-each-group>
+                                            </xsl:for-each-group>
+                                        </xsl:for-each-group>
+                                    </xsl:element>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </volume-template>
+                    </xsl:if>
+                </xsl:for-each>
             </xsl:if>
-            <!--
-                Note that a volume-keep-priority attribute is not needed to prefer volume breaking
-                before a block over inside a block, but for now we have the conditional anyway.
-            -->
-            <xsl:if test="exists($volume-transition-rule) or $sections//@css:volume-break-inside">
-                <volume-transition range="sheet">
-                    <xsl:for-each select="$volume-transition-rule/css:rule[matches(@selector,'@(sequence|any)-(interrupted|resumed)')
-                                                                           and css:property[@name='content']]">
-                        <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"
-                                      select="css:property[@name='content'][1]/*"/>
-                        <xsl:variable name="pending-text-transform" as="xs:string?" select="css:property[@name='text-transform']/@value"/>
-                        <xsl:variable name="pending-hyphens" as="xs:string?" select="css:property[@name='hyphens']/@value"/>
-                        <xsl:variable name="word-spacing" as="xs:integer" select="(css:property[@name='word-spacing']/@value,$word-spacing)[1]"/>
-                        <xsl:variable name="white-space" as="xs:string?" select="css:property[@name='white-space']/@value"/>
-                        <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- (css:_|css:box)* -->
-                            <xsl:apply-templates mode="css:eval-sequence-interrupted-resumed-content-list"
-                                                 select="$sequence-interrupted-resumed-content"/>
-                        </xsl:variable>
-                        <xsl:apply-templates mode="assert-nil-attr"
-                                             select="$sequence-interrupted-resumed-content/self::css:_/(@* except @css:flow)"/>
-                        <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- css:box* -->
-                            <xsl:sequence select="for $e in $sequence-interrupted-resumed-content return if ($e/self::css:_) then $e/* else $e"/>
-                        </xsl:variable>
-                        <xsl:variable name="sequence-interrupted-resumed-content" as="element(css:box)*"> <!-- css:box[@type='block']* -->
-                            <xsl:call-template name="make-anonymous-block-boxes">
-                                <xsl:with-param name="boxes" select="$sequence-interrupted-resumed-content"/>
-                            </xsl:call-template>
-                        </xsl:variable>
-                        <xsl:variable name="sequence-interrupted-resumed-content" as="element(css:box)*"> <!-- css:box[@type='block']* -->
-                            <!--
-                                for now these are the only properties supported on @(sequence|any)-(interrupted|resumed)
-                            -->
-                            <xsl:variable name="style" as="element(css:property)*"
-                                          select="css:property[@name=(
-                                                    'margin-top',    'padding-top',    'border-top-pattern',
-                                                    'margin-bottom', 'padding-bottom', 'border-bottom-pattern',
-                                                    'margin-left',   'padding-left',   'border-left-pattern',
-                                                    'margin-right',  'padding-right',  'border-right-pattern'
-                                                    )]"/>
-                            <xsl:choose>
-                                <xsl:when test="exists($style)">
-                                    <!--
-                                        FIXME: values are not validated and inherited (css:new-definition)
-                                        and negative values are not handled (css:adjust-boxes)
-                                    -->
-                                    <css:box type="block">
-                                        <xsl:apply-templates mode="css:property-as-attribute" select="$style"/>
-                                        <xsl:sequence select="$sequence-interrupted-resumed-content"/>
-                                    </css:box>
-                                </xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:sequence select="$sequence-interrupted-resumed-content"/>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:variable name="sequence" as="element()*"> <!-- block* -->
-                            <xsl:apply-templates mode="sequence-interrupted-resumed" select="$sequence-interrupted-resumed-content">
-                                <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
-                                <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
-                                <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
-                                <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
-                            </xsl:apply-templates>
-                        </xsl:variable>
-                        <xsl:if test="$sequence">
-                            <xsl:element name="{substring-after(@selector,'@')}">
-                                <xsl:sequence select="$sequence"/>
-                            </xsl:element>
-                        </xsl:if>
-                    </xsl:for-each>
-                </volume-transition>
-            </xsl:if>
-            <xsl:apply-templates mode="assert-nil" select="$sections/*[not(self::css:_)]"/>
-            <xsl:for-each select="$sections/css:_[@css:flow=$collection-flows]">
-                <xsl:variable name="flow" as="xs:string" select="@css:flow"/>
-                <collection name="{$flow}">
-                    <xsl:for-each select="*">
-                        <xsl:if test="@css:anchor='NULL'">
-                            <xsl:call-template name="pf:warn">
-                                <xsl:with-param name="msg">Flowed element does not have anchor in normal flow</xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:if>
+        </xsl:if>
+        <!--
+            Note that a volume-keep-priority attribute is not needed to prefer volume breaking
+            before a block over inside a block, but for now we have the conditional anyway.
+        -->
+        <xsl:if test="exists($volume-transition-rule) or $sections//@css:volume-break-inside">
+            <volume-transition range="sheet">
+                <xsl:for-each select="$volume-transition-rule/css:rule[matches(@selector,'@(sequence|any)-(interrupted|resumed)')
+                                                                       and css:property[@name='content']]">
+                    <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"
+                                  select="css:property[@name='content'][1]/*"/>
+                    <xsl:variable name="pending-text-transform" as="xs:string?" select="css:property[@name='text-transform']/@value"/>
+                    <xsl:variable name="pending-braille-charset" as="xs:string?" select="css:property[@name='braille-charset']/@value"/>
+                    <xsl:variable name="pending-hyphens" as="xs:string?" select="css:property[@name='hyphens']/@value"/>
+                    <xsl:variable name="pending-hyphenate-character" as="xs:string?" select="css:property[@name='hyphenate-character']/@value"/>
+                    <xsl:variable name="word-spacing" as="xs:integer" select="(css:property[@name='word-spacing']/@value,$word-spacing)[1]"/>
+                    <xsl:variable name="white-space" as="xs:string?" select="css:property[@name='white-space']/@value"/>
+                    <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- (css:_|css:box)* -->
+                        <xsl:apply-templates mode="css:eval-sequence-interrupted-resumed-content-list"
+                                             select="$sequence-interrupted-resumed-content"/>
+                    </xsl:variable>
+                    <xsl:apply-templates mode="assert-nil-attr"
+                                         select="$sequence-interrupted-resumed-content/self::css:_/(@* except @css:flow)"/>
+                    <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- css:box* -->
+                        <xsl:sequence select="for $e in $sequence-interrupted-resumed-content return if ($e/self::css:_) then $e/* else $e"/>
+                    </xsl:variable>
+                    <xsl:variable name="sequence-interrupted-resumed-content" as="element(css:box)*"> <!-- css:box[@type='block']* -->
+                        <xsl:call-template name="make-anonymous-block-boxes">
+                            <xsl:with-param name="boxes" select="$sequence-interrupted-resumed-content"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:variable name="sequence-interrupted-resumed-content" as="element(css:box)*"> <!-- css:box[@type='block']* -->
                         <!--
-                            We don't explicitly check that two items do not end up having the same
-                            ID, which would trigger a "Identifier is not unique" error in
-                            Dotify. Until this happens in practice I just assume that it can not
-                            happen.
+                            for now these are the only properties supported on @(sequence|any)-(interrupted|resumed)
+                        -->
+                        <xsl:variable name="style" as="element(css:property)*"
+                                      select="css:property[@name=(
+                                                'margin-top',    'padding-top',    'border-top-pattern',
+                                                'margin-bottom', 'padding-bottom', 'border-bottom-pattern',
+                                                'margin-left',   'padding-left',   'border-left-pattern',
+                                                'margin-right',  'padding-right',  'border-right-pattern'
+                                                )]"/>
+                        <xsl:choose>
+                            <xsl:when test="exists($style)">
+                                <!--
+                                    FIXME: values are not validated and inherited (css:new-definition)
+                                    and negative values are not handled (css:adjust-boxes)
+                                -->
+                                <css:box type="block">
+                                    <xsl:apply-templates mode="css:property-as-attribute" select="$style"/>
+                                    <xsl:sequence select="$sequence-interrupted-resumed-content"/>
+                                </css:box>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:sequence select="$sequence-interrupted-resumed-content"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="sequence" as="element()*"> <!-- block* -->
+                        <xsl:apply-templates mode="sequence-interrupted-resumed" select="$sequence-interrupted-resumed-content">
+                            <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                            <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+                            <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                            <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+                            <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                            <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
+                        </xsl:apply-templates>
+                    </xsl:variable>
+                    <xsl:if test="$sequence">
+                        <xsl:element name="{substring-after(@selector,'@')}">
+                            <xsl:sequence select="$sequence"/>
+                        </xsl:element>
+                    </xsl:if>
+                </xsl:for-each>
+            </volume-transition>
+        </xsl:if>
+        <xsl:apply-templates mode="assert-nil" select="$sections/*[not(self::css:_)]"/>
+        <xsl:for-each select="$sections/css:_[@css:flow=$collection-flows]">
+            <xsl:variable name="flow" as="xs:string" select="@css:flow"/>
+            <collection name="{$flow}">
+                <xsl:for-each-group select="*" group-by="@css:anchor">
+                    <xsl:if test="@css:anchor='NULL'">
+                        <xsl:call-template name="pf:warn">
+                            <xsl:with-param name="msg">Flowed element does not have anchor in normal flow</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+                    <!--
+                        FIXME: We don't explicitly check that two items in different collections
+                        do not end up having the same ID, which would trigger a "Identifier is
+                        not unique" error in Dotify.
+                    -->
+                    <item id="{@css:anchor}">
+                        <xsl:apply-templates mode="item" select="current-group()"/>
+                    </item>
+                </xsl:for-each-group>
+            </collection>
+            <xsl:if test="$sections/css:_[@css:flow[not(.=$collection-flows)]]/*/@css:_obfl-use-when-collection-not-empty=$flow">
+                <collection name="meta/{$flow}">
+                    <xsl:for-each select="*[1]">
+                        <!--
+                            giving this dummy item the same ID as the first item of the real collection seems to work
                         -->
                         <item id="{@css:anchor}">
-                            <xsl:apply-templates mode="item" select="."/>
+                            <block/>
                         </item>
                     </xsl:for-each>
                 </collection>
-                <xsl:if test="$sections/css:_[@css:flow[not(.=$collection-flows)]]/*/@css:_obfl-use-when-collection-not-empty=$flow">
-                    <collection name="meta/{$flow}">
-                        <xsl:for-each select="*[1]">
-                            <!--
-                                giving this dummy item the same ID as the first item of the real collection seems to work
-                            -->
-                            <item id="{@css:anchor}">
-                                <block/>
-                            </item>
-                        </xsl:for-each>
-                    </collection>
-                </xsl:if>
-            </xsl:for-each>
-            <!--
-                FIXME: duplication
-            -->
-            <xsl:variable name="default-page-style-uses-explicit-counter-page" as="xs:boolean"
-                          select="some $p in $page-stylesheets[@style=($sections/*[not(@css:flow)])[1]/string(@css:page)][1]
-                                  satisfies
-                                    (if ($p/css:property)
-                                     then $p/css:property
-                                     else $p/*[not(@selector)]/css:property)
-                                    [@name='counter-increment']
-                                    [css:parse-counter-set(@value,1)[@name='page']]"/>
-            <xsl:variable name="some-volume-areas-use-counter-page" as="xs:boolean"
-                          select="some $a in (for $v in $volume-stylesheets
-                                              return $v/(.|*[matches(@selector,'^&amp;:')])
-                                                     /*[@selector=('@begin','@end')])
-                                  satisfies
-                                    if (not($a/*[@selector='@page']))
-                                    then $default-page-style-uses-explicit-counter-page
-                                    else some $p in $a/*[@selector='@page']
-                                         satisfies
-                                           (if ($p/css:property)
-                                            then $p/css:property
-                                            else $p/*[not(@selector)]/css:property)
-                                           [@name='counter-increment']
-                                           [css:parse-counter-set(@value,1)[@name='page']]"/>
-            <xsl:for-each-group select="$sections/css:_[not(@css:flow)]" group-starting-with="*[@css:counter-set]">
-                <xsl:variable name="first-sequence" as="xs:boolean" select="position()=1"/>
-                <xsl:for-each-group select="current-group()" group-adjacent="string(@css:page)">
-                    <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
-                    <xsl:variable name="page-style" select="current-grouping-key()"/>
-                    <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
-                    <xsl:variable name="page-properties" as="element()*"
-                                  select="(if ($page-style/css:property)
-                                           then $page-style/css:property
-                                           else $page-style/*[not(@selector)]/css:property)"/>
-                    <xsl:variable name="counter-increment" as="element()"
-                                  select="css:parse-counter-set(
-                                            ($page-properties[@name='counter-increment']/@value,'page')[1],
-                                            1)[last()]"/>
-                    <xsl:variable name="page-number-counter" as="attribute()?">
-                        <xsl:if test="not($counter-increment/@name='page')
-                                      or $some-volume-areas-use-counter-page">
-                            <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
-                        </xsl:if>
-                    </xsl:variable>
-                        <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:volume-break-after='always']">
-                          <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
-                            <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
-                                <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
-                                <sequence css:page="{$page-style/@style}">
-                                    <xsl:variable name="counter-set" as="element()*"
-                                                  select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
-                                    <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
-                                        <xsl:message terminate="yes">
-                                            <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$counter-increment/@name)][1]"/>
-                                            <xsl:text>: only the active page counter (</xsl:text>
-                                            <xsl:value-of select="$counter-increment/@name"/>
-                                            <xsl:text>) may be manipulated</xsl:text>
-                                        </xsl:message>
-                                    </xsl:if>
-                                    <xsl:variable name="counter-set" as="element()?" select="$counter-set[last()]"/>
-                                    <xsl:if test="$counter-set">
-                                        <xsl:if test="(xs:integer($counter-set/@value) mod 2)=0">
-                                            <xsl:message terminate="yes">
-                                                <xsl:apply-templates mode="css:serialize" select="$counter-set"/>
-                                                <xsl:text>: page counter may not be set to an even value</xsl:text>
-                                            </xsl:message>
-                                        </xsl:if>
-                                        <xsl:attribute name="initial-page-number" select="$counter-set/@value"/>
-                                    </xsl:if>
-                                    <xsl:sequence select="$page-number-counter"/>
-                                    <xsl:if test="not($first) or
-                                                  (current-group()[1]/*/@css:volume-break-before='always' and not($first-sequence))">
-                                        <xsl:attribute name="break-before" select="'volume'"/>
-                                    </xsl:if>
-                                    <xsl:apply-templates mode="sequence-attr"
-                                                         select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry|@css:counter-set))"/>
-                                    <xsl:apply-templates mode="sequence"
-                                                         select="current-group()[1]/(@css:string-entry|*)">
-                                        <xsl:with-param name="top-of-page" tunnel="yes" select="true()"/> <!-- sequence starts on new sheet -->
-                                        <xsl:with-param name="volume-break-handled" tunnel="yes"
-                                                        select="current-group()/*/(@css:volume-break-before[.='always']|
-                                                                                   @css:volume-break-after[.='always'])"/>
-                                    </xsl:apply-templates>
-                                    <xsl:apply-templates mode="assert-nil-attr"
-                                                         select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
-                                    <xsl:apply-templates mode="sequence"
-                                                         select="current-group()[position()&gt;1]/*">
-                                        <xsl:with-param name="volume-break-handled" tunnel="yes"
-                                                        select="current-group()/*/(@css:volume-break-before[.='always']|
-                                                                                   @css:volume-break-after[.='always'])"/>
-                                    </xsl:apply-templates>
-                                </sequence>
-                            </xsl:for-each-group>
-                        </xsl:for-each-group>
+            </xsl:if>
+        </xsl:for-each>
+        <!--
+            FIXME: duplication
+        -->
+        <xsl:variable name="default-page-style-uses-explicit-counter-page" as="xs:boolean"
+                      select="some $p in $page-stylesheets[@style=($sections/*[not(@css:flow)])[1]/string(@css:page)][1]
+                              satisfies
+                                (if ($p/css:property)
+                                 then $p/css:property
+                                 else $p/*[not(@selector)]/css:property)
+                                [@name='counter-increment']
+                                [css:parse-counter-set(@value,1)[@name='page']]"/>
+        <xsl:variable name="some-volume-areas-use-counter-page" as="xs:boolean"
+                      select="some $a in (for $v in $volume-stylesheets
+                                          return $v/(.|*[matches(@selector,'^&amp;:')])
+                                                 /*[@selector=('@begin','@end')])
+                              satisfies
+                                if (not($a/*[@selector='@page']))
+                                then $default-page-style-uses-explicit-counter-page
+                                else some $p in $a/*[@selector='@page']
+                                     satisfies
+                                       (if ($p/css:property)
+                                        then $p/css:property
+                                        else $p/*[not(@selector)]/css:property)
+                                       [@name='counter-increment']
+                                       [css:parse-counter-set(@value,1)[@name='page']]"/>
+        <xsl:for-each-group select="$sections/css:_[not(@css:flow)]" group-starting-with="*[@css:counter-set]">
+            <xsl:variable name="first-sequence" as="xs:boolean" select="position()=1"/>
+            <xsl:for-each-group select="current-group()" group-adjacent="string(@css:page)">
+                <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
+                <xsl:variable name="page-style" select="current-grouping-key()"/>
+                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
+                <xsl:variable name="page-properties" as="element()*"
+                              select="(if ($page-style/css:property)
+                                       then $page-style/css:property
+                                       else $page-style/*[not(@selector)]/css:property)"/>
+                <xsl:variable name="counter-increment" as="element()"
+                              select="css:parse-counter-set(
+                                        ($page-properties[@name='counter-increment']/@value,'page')[1],
+                                        1)[last()]"/>
+                <xsl:variable name="page-number-counter" as="attribute()?">
+                    <xsl:if test="not($counter-increment/@name='page')
+                                  or $some-volume-areas-use-counter-page">
+                        <xsl:attribute name="page-number-counter" select="$counter-increment/@name"/>
+                    </xsl:if>
+                </xsl:variable>
+                <xsl:for-each-group select="current-group()" group-ending-with="css:_[*/@css:volume-break-after='always']">
+                    <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
+                    <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
+                        <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                        <sequence css:page="{$page-style/@style}">
+                            <xsl:variable name="counter-set" as="element()*"
+                                          select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
+                            <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
+                                <xsl:message terminate="yes">
+                                    <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$counter-increment/@name)][1]"/>
+                                    <xsl:text>: only the active page counter (</xsl:text>
+                                    <xsl:value-of select="$counter-increment/@name"/>
+                                    <xsl:text>) may be manipulated</xsl:text>
+                                </xsl:message>
+                            </xsl:if>
+                            <xsl:variable name="counter-set" as="element()?" select="$counter-set[last()]"/>
+                            <xsl:if test="$counter-set">
+                                <xsl:if test="(xs:integer($counter-set/@value) mod 2)=0">
+                                    <!--
+                                        FIXME: see https://github.com/mtmse/obfl/issues/22
+                                    -->
+                                    <xsl:message terminate="yes">
+                                        <xsl:apply-templates mode="css:serialize" select="$counter-set"/>
+                                        <xsl:text>: page counter may not be set to an even value</xsl:text>
+                                    </xsl:message>
+                                </xsl:if>
+                                <xsl:attribute name="initial-page-number" select="$counter-set/@value"/>
+                            </xsl:if>
+                            <xsl:sequence select="$page-number-counter"/>
+                            <xsl:if test="not($first) or
+                                          (current-group()[1]/*/@css:volume-break-before='always' and not($first-sequence))">
+                                <xsl:attribute name="break-before" select="'volume'"/>
+                            </xsl:if>
+                            <xsl:apply-templates mode="sequence-attr"
+                                                 select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry|@css:counter-set))"/>
+                            <xsl:apply-templates mode="sequence"
+                                                 select="current-group()[1]/(@css:string-entry|*)">
+                                <xsl:with-param name="volume-break-handled" tunnel="yes"
+                                                select="current-group()/*/(@css:volume-break-before[.='always']|
+                                                                           @css:volume-break-after[.='always'])"/>
+                            </xsl:apply-templates>
+                            <xsl:apply-templates mode="assert-nil-attr"
+                                                 select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
+                            <xsl:apply-templates mode="sequence"
+                                                 select="current-group()[position()&gt;1]/*">
+                                <xsl:with-param name="volume-break-handled" tunnel="yes"
+                                                select="current-group()/*/(@css:volume-break-before[.='always']|
+                                                                           @css:volume-break-after[.='always'])"/>
+                            </xsl:apply-templates>
+                        </sequence>
+                    </xsl:for-each-group>
                 </xsl:for-each-group>
             </xsl:for-each-group>
+        </xsl:for-each-group>
     </xsl:template>
     
     <xsl:template name="apply-templates-within-post-or-pre-content-sequence" as="element()*"> <!-- block|list-of-references -->
@@ -802,17 +797,7 @@
                                 <xsl:sequence select="."/>
                             </xsl:when>
                             <xsl:otherwise> <!-- css:box[@type='block' and @css:_obfl-list-of-references] -->
-                                <xsl:variable name="collection" as="element()*">
-                                    <xsl:apply-templates mode="display-obfl-list-of-references" select="."/>
-                                </xsl:variable>
-                                <xsl:if test="not(count($collection)=1)">
-                                    <xsl:message terminate="yes">
-                                      <xsl:text>The 'content' property on an element with 'display: -obfl-list-of-references' </xsl:text>
-                                      <xsl:text>must consist of exactly one -obfl-collection().</xsl:text>
-                                    </xsl:message>
-                                </xsl:if>
                                 <xsl:variable name="self" as="element()" select="."/>
-                                <xsl:variable name="range" as="xs:string" select="(@css:_obfl-list-of-references-range,'document')[1]"/>
                                 <xsl:variable name="on-collection-start" as="element()*"
                                               select="if (@css:_obfl-on-collection-start)
                                                       then $sections/*[@css:flow=concat('-obfl-on-collection-start/',
@@ -823,46 +808,92 @@
                                                       then $sections/*[@css:flow=concat('-obfl-on-collection-end/',
                                                                                         $self/@css:_obfl-on-collection-end)]/*
                                                       else ()"/>
-                                <xsl:variable name="on-volume-start" as="element()*"
-                                              select="if ($range='document' and @css:_obfl-on-volume-start)
-                                                      then $sections/*[@css:flow=concat('-obfl-on-volume-start/',
-                                                                                        $self/@css:_obfl-on-volume-start)]/*
-                                                      else ()"/>
-                                <xsl:variable name="on-volume-end" as="element()*"
-                                              select="if ($range='document' and @css:_obfl-on-volume-end)
-                                                      then $sections/*[@css:flow=concat('-obfl-on-volume-end/',
-                                                                                        $self/@css:_obfl-on-volume-end)]/*
-                                                      else ()"/>
-                                <list-of-references collection="{$collection/@arg1}" range="{$range}">
-                                    <xsl:if test="exists($on-collection-start)">
-                                        <on-collection-start>
-                                            <xsl:for-each select="$on-collection-start">
-                                                <xsl:apply-templates mode="sequence" select="."/>
-                                            </xsl:for-each>
-                                        </on-collection-start>
-                                    </xsl:if>
-                                    <xsl:if test="exists($on-collection-end)">
-                                        <on-collection-end>
-                                            <xsl:for-each select="$on-collection-end">
-                                                <xsl:apply-templates mode="sequence" select="."/>
-                                            </xsl:for-each>
-                                        </on-collection-end>
-                                    </xsl:if>
-                                    <xsl:if test="exists($on-volume-start)">
-                                        <on-volume-start>
-                                            <xsl:for-each select="$on-volume-start">
-                                                <xsl:apply-templates mode="sequence" select="."/>
-                                            </xsl:for-each>
-                                        </on-volume-start>
-                                    </xsl:if>
-                                    <xsl:if test="exists($on-volume-end)">
-                                        <on-volume-end>
-                                            <xsl:for-each select="$on-volume-end">
-                                                <xsl:apply-templates mode="sequence" select="."/>
-                                            </xsl:for-each>
-                                        </on-volume-end>
-                                    </xsl:if>
-                                </list-of-references>
+                                <xsl:choose>
+                                    <xsl:when test=".//css:flow">
+                                        <!--
+                                            not evaluated yet because @scope is "volume" or because a ::-obfl-on-volume-start
+                                            or ::-obfl-on-volume-end is present
+                                        -->
+                                        <xsl:variable name="flow" as="element()*"> <!-- css:flow -->
+                                            <xsl:apply-templates mode="display-obfl-list-of-references" select="."/>
+                                        </xsl:variable>
+                                        <xsl:if test="not(count($flow)=1)">
+                                            <!-- should not happen (already checked) -->
+                                            <xsl:message terminate="yes">
+                                                <xsl:text>An element with 'display: -obfl-list-of-references' must contain</xsl:text>
+                                                <xsl:text>exactly one -obfl-collection() or flow() and nothing more.</xsl:text>
+                                            </xsl:message>
+                                        </xsl:if>
+                                        <xsl:variable name="range" as="xs:string?" select="if ($flow/@scope='-obfl-document')
+                                                                                           then 'document'
+                                                                                           else $flow/@scope"/>
+                                        <xsl:if test="not($range=('volume','document'))">
+                                            <!-- should not happen -->
+                                            <xsl:message terminate="yes">
+                                                <xsl:text>The range of the flow() or -obfl-collection() function inside a </xsl:text>
+                                                <xsl:text>'display: -obfl-list-of-references' element that is flowed into a volume </xsl:text>
+                                                <xsl:text>area must be either 'volume' or 'document'.</xsl:text>
+                                            </xsl:message>
+                                        </xsl:if>
+                                        <xsl:variable name="on-volume-start" as="element()*"
+                                                      select="if ($range='document' and @css:_obfl-on-volume-start)
+                                                              then $sections/*[@css:flow=concat('-obfl-on-volume-start/',
+                                                                                                $self/@css:_obfl-on-volume-start)]/*
+                                                              else ()"/>
+                                        <xsl:variable name="on-volume-end" as="element()*"
+                                                      select="if ($range='document' and @css:_obfl-on-volume-end)
+                                                              then $sections/*[@css:flow=concat('-obfl-on-volume-end/',
+                                                                                                $self/@css:_obfl-on-volume-end)]/*
+                                                              else ()"/>
+                                        <list-of-references collection="{$flow/@from}" range="{$range}">
+                                            <xsl:if test="exists($on-collection-start)">
+                                                <on-collection-start>
+                                                    <xsl:apply-templates mode="sequence" select="$on-collection-start"/>
+                                                </on-collection-start>
+                                            </xsl:if>
+                                            <xsl:if test="exists($on-collection-end)">
+                                                <on-collection-end>
+                                                    <xsl:apply-templates mode="sequence" select="$on-collection-end"/>
+                                                </on-collection-end>
+                                            </xsl:if>
+                                            <xsl:if test="exists($on-volume-start)">
+                                                <on-volume-start>
+                                                    <xsl:apply-templates mode="sequence" select="$on-volume-start"/>
+                                                </on-volume-start>
+                                            </xsl:if>
+                                            <xsl:if test="exists($on-volume-end)">
+                                                <on-volume-end>
+                                                    <xsl:apply-templates mode="sequence" select="$on-volume-end"/>
+                                                </on-volume-end>
+                                            </xsl:if>
+                                        </list-of-references>
+                                    </xsl:when>
+                                    <xsl:when test=".//css:box//text()">
+                                        <!--
+                                            already evaluated and not empty
+                                        -->
+                                        <xsl:variable name="collection" as="element()">
+                                            <xsl:apply-templates mode="sequence" select=".">
+                                                <xsl:with-param name="ignore-obfl-list-of-references" tunnel="yes" select="true()"/>
+                                            </xsl:apply-templates>
+                                        </xsl:variable>
+                                        <xsl:choose>
+                                            <xsl:when test="exists(($on-collection-start,$on-collection-end))">
+                                                <xsl:for-each select="$collection">
+                                                    <xsl:copy>
+                                                        <xsl:sequence select="@*"/>
+                                                        <xsl:apply-templates mode="sequence" select="$on-collection-start"/>
+                                                        <xsl:sequence select="node()"/>
+                                                        <xsl:apply-templates mode="sequence" select="$on-collection-end"/>
+                                                    </xsl:copy>
+                                                </xsl:for-each>
+                                            </xsl:when>
+                                            <xsl:otherwise>
+                                                <xsl:sequence select="$collection"/>
+                                            </xsl:otherwise>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                </xsl:choose>
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
@@ -883,9 +914,7 @@
                                     <list-of-references collection="meta/{$flow}" range="document">
                                         <on-collection-start>
                                             <xsl:for-each select="current-group()">
-                                                <xsl:apply-templates mode="sequence" select=".">
-                                                    <xsl:with-param name="top-of-page" tunnel="yes" select="$first and position()=1"/>
-                                                </xsl:apply-templates>
+                                                <xsl:apply-templates mode="sequence" select="."/>
                                             </xsl:for-each>
                                         </on-collection-start>
                                     </list-of-references>
@@ -894,7 +923,6 @@
                             <xsl:otherwise>
                                 <xsl:for-each select="current-group()">
                                     <xsl:apply-templates mode="sequence" select=".">
-                                        <xsl:with-param name="top-of-page" tunnel="yes" select="$first and position()=1"/>
                                         <xsl:with-param name="last-of-sequence" tunnel="yes" select="$last and position()=last()"/>
                                     </xsl:apply-templates>
                                 </xsl:for-each>
@@ -923,13 +951,13 @@
     </xsl:template>
     
     <xsl:template mode="display-obfl-list-of-references"
-                  match="/css:_
-                         /css:box[@type='block' and @css:_obfl-list-of-references]">
+                  match="css:box[@type='block' and @css:_obfl-list-of-references]">
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@type|
                                                                        @css:text-transform|
+                                                                       @css:braille-charset|
                                                                        @css:hyphens|
+                                                                       @css:hyphenate-character|
                                                                        @css:_obfl-list-of-references|
-                                                                       @css:_obfl-list-of-references-range|
                                                                        @css:_obfl-on-collection-start|
                                                                        @css:_obfl-on-collection-end|
                                                                        @css:_obfl-on-volume-start|
@@ -938,22 +966,29 @@
     </xsl:template>
     
     <xsl:template mode="display-obfl-list-of-references"
-                  match="css:box[@type='inline']">
-        <xsl:apply-templates mode="#current" select="@* except @type"/>
+                  match="css:box[@type='inline']|
+                         css:box[@type='inline']/css:_">
+        <xsl:apply-templates mode="assert-nil-attr" select="@css:id"/>
+        <xsl:apply-templates mode="#current" select="@* except (@type|
+                                                                @css:id|
+                                                                @css:text-transform|
+                                                                @css:braille-charset|
+                                                                @css:hyphens|
+                                                                @css:hyphenate-character)"/>
         <xsl:apply-templates mode="#current"/>
     </xsl:template>
     
     <xsl:template mode="display-obfl-list-of-references"
-                  match="css:custom-func[@name='-obfl-collection' and @arg1 and not(@arg2)]">
+                  match="css:flow[@from][@scope=('volume','-obfl-document')]">
         <xsl:sequence select="."/>
     </xsl:template>
     
     <xsl:template mode="display-obfl-list-of-references"
                   match="@*|node()">
-      <xsl:message terminate="yes">
-          <xsl:text>Coding error: unexpected </xsl:text>
-          <xsl:value-of select="pxi:get-path(.)"/>
-          <xsl:text> inside element with 'display: -obfl-list-of-references'</xsl:text>
+        <xsl:message terminate="yes">
+            <xsl:text>Coding error: unexpected </xsl:text>
+            <xsl:value-of select="pxi:get-path(.)"/>
+            <xsl:text> inside element with 'display: -obfl-list-of-references'</xsl:text>
         </xsl:message>
     </xsl:template>
     
@@ -993,16 +1028,6 @@
     <!-- Block boxes -->
     <!-- =========== -->
     
-    <xsl:template priority="1"
-                  mode="sequence sequence-interrupted-resumed"
-                  match="css:box[@type='block']">
-        <xsl:call-template name="pf:next-match-with-generated-ids">
-            <xsl:with-param name="prefix" select="'tmp_'"/>
-            <xsl:with-param name="for-elements" select="descendant::css:string[@name][not(@target)][@scope]"/>
-            <xsl:with-param name="in-use" select="()"/>
-        </xsl:call-template>
-    </xsl:template>
-    
     <xsl:template mode="sequence item td sequence-interrupted-resumed"
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="block" select="."/>
@@ -1013,16 +1038,6 @@
         <xsl:apply-templates mode="toc-block" select="."/>
     </xsl:template>
     
-    <!--
-        block or toc-block element depending on context
-    -->
-    <xsl:template priority="0.8"
-                  mode="block"
-                  match="css:box[@type='block']">
-        <block>
-            <xsl:next-match/>
-        </block>
-    </xsl:template>
     <xsl:template priority="0.8"
                   mode="toc-block"
                   match="css:box[@type='block']">
@@ -1042,15 +1057,13 @@
                 -->
             </xsl:when>
             <xsl:otherwise>
-                <toc-block>
-                    <xsl:next-match/>
-                </toc-block>
+                <xsl:next-match/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     
     <!--
-        wrap content in additional (toc-)block element when page-break-before is combined with padding-top and string-set:
+        wrap main block in additional block when page-break-before is combined with padding-top and string-set:
         the marker needs to come before the padding in order to make page-start and page-start-except-last behave correctly
         
         FIXME: this probably breaks page-start-except-first
@@ -1058,12 +1071,6 @@
     <xsl:template priority="0.73"
                   mode="block toc-block"
                   match="css:box[@type='block'][@css:page-break-before]">
-          <xsl:apply-templates mode="block-attr" select="@css:page-break-before"/>
-          <xsl:next-match/>
-    </xsl:template>
-    <xsl:template priority="0.72"
-                  mode="block"
-                  match="css:box[@type='block'][@css:page-break-before]">
         <xsl:variable name="first-inline" as="element()?" select="(descendant::css:box[@type='inline'])[1]"/>
         <xsl:variable name="string-set-on-first-inline" as="attribute()*"
                       select="$first-inline/@css:string-set|
@@ -1075,121 +1082,174 @@
                               $first-inline/css:_[not(preceding-sibling::*) and
                                                   not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                                            //@css:id"/>
+        <xsl:variable name="block-tag" as="xs:string">
+            <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
+        </xsl:variable>
         <xsl:choose>
             <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
                             and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
                             and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
-                <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
-                <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
-                <block>
+                <xsl:element name="{$block-tag}">
+                    <xsl:apply-templates mode="block-attr" select="@css:page-break-before"/>
+                    <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
+                    <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
                     <xsl:next-match>
+                        <xsl:with-param name="page-break-before-handled" tunnel="yes" select="true()"/>
                         <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
                         <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
                     </xsl:next-match>
-                </block>
+                </xsl:element>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:next-match/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    <xsl:template priority="0.72"
-                  mode="toc-block"
-                  match="css:box[@type='block'][@css:page-break-before]">
-        <xsl:variable name="first-inline" as="element()?" select="(descendant::css:box[@type='inline'])[1]"/>
-        <xsl:variable name="string-set-on-first-inline" as="attribute()*"
-                      select="$first-inline/@css:string-set|
-                              $first-inline/css:_[not(preceding-sibling::*) and
-                                                  not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
-                                           //@css:string-set"/>
-        <xsl:variable name="id-on-first-inline" as="attribute()*"
-                      select="$first-inline/@css:id|
-                              $first-inline/css:_[not(preceding-sibling::*) and
-                                                  not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
-                                           //@css:id"/>
-        <xsl:choose>
-            <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
-                            and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
-                            and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
-                <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
-                <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
-                <toc-block>
-                    <xsl:next-match>
-                        <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
-                        <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
-                    </xsl:next-match>
-                </toc-block>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:next-match/>
-            </xsl:otherwise>
-        </xsl:choose>
+    <xsl:template priority="0.73"
+                  mode="block-attr"
+                  match="css:box[@type='block']/@css:page-break-before">
+        <xsl:param name="page-break-before-handled" tunnel="yes" select="false()"/>
+        <xsl:if test="not($page-break-before-handled)">
+            <xsl:next-match/>
+        </xsl:if>
     </xsl:template>
-    
-    <xsl:template priority="0.7" mode="marker" match="@css:string-set">
+    <xsl:template priority="0.73" mode="marker" match="@css:string-set">
         <xsl:param name="string-set-handled" as="attribute()*" tunnel="yes" select="()"/>
         <xsl:if test="not(. intersect $string-set-handled)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
-    <xsl:template priority="0.7" mode="block td toc-entry" match="@css:id">
+    <xsl:template priority="0.73" mode="block td toc-entry" match="@css:id">
         <xsl:param name="id-handled" as="attribute()*" tunnel="yes" select="()"/>
         <xsl:if test="not(. intersect $id-handled)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
-    
+
     <!--
-        wrap content in additional (toc-)block element when line-height > 1 is combined with
-        top/bottom margin or border
+        main block
     -->
-    <xsl:template priority="0.61"
-                  mode="block"
-                  match="css:box[@type='block']
-                                [@css:line-height
-                                 and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
-                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
-        <block>
-            <xsl:next-match/>
-        </block>
-    </xsl:template>
-    <xsl:template priority="0.61"
-                  mode="toc-block"
-                  match="css:box[@type='block']
-                                [@css:line-height
-                                 and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
-                                      @css:border-top-pattern or @css:border-bottom-pattern)]">
-        <toc-block>
-            <xsl:next-match/>
-        </toc-block>
-    </xsl:template>
-    
-    <!--
-        attributes that apply on inner block if content is wrapped in additional block
-    -->
-    <xsl:template priority="0.6"
+    <xsl:template priority="0.72"
                   mode="block toc-block"
-                  match="css:box[@type='block']
-                                [not(@css:line-height
-                                     and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
-                                          @css:border-top-pattern or @css:border-bottom-pattern))]">
+                  match="css:box[@type='block']">
+        <xsl:variable name="block-tag" as="xs:string">
+            <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
+        </xsl:variable>
+        <xsl:element name="{$block-tag}">
+            <xsl:next-match/>
+        </xsl:element>
+    </xsl:template>
+    
+    <!--
+        attributes translate and hyphenate
+    -->
+    <xsl:template priority="0.71"
+                  mode="block toc-block"
+                  match="css:box[@type='block']"
+                  name="insert-text-attributes-and-next-match">
+        <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
+        <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes" select="()"/>
+        <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes" select="()"/>
+        <xsl:variable name="new-text-transform" as="xs:string?">
+            <xsl:apply-templates mode="css:text-transform" select="."/>
+        </xsl:variable>
+        <xsl:variable name="new-hyphens" as="xs:string?">
+            <xsl:apply-templates mode="css:hyphens" select="."/>
+        </xsl:variable>
+        <xsl:call-template name="obfl:translate">
+            <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
+        </xsl:call-template>
+        <xsl:call-template name="obfl:hyphenate">
+            <xsl:with-param name="new-hyphens" select="$new-hyphens"/>
+        </xsl:call-template>
+        <xsl:variable name="pending-braille-charset" as="xs:string?"
+                      select="(@css:braille-charset/string(),$pending-braille-charset)[1]"/>
+        <xsl:variable name="pending-hyphenate-character" as="xs:string?"
+                      select="(@css:hyphenate-character/string(),$pending-hyphenate-character)[1]"/>
+        <xsl:next-match>
+            <xsl:with-param name="text-transform" tunnel="yes" select="($new-text-transform,$text-transform)[1]"/>
+            <xsl:with-param name="hyphens" tunnel="yes" select="($new-hyphens,$hyphens)[1]"/>
+            <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
+            <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
+            <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
+            <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <!--
+        other attributes that apply on main block
+    -->
+    <xsl:template priority="0.7"
+                  mode="block toc-block"
+                  match="css:box[@type='block']">
         <xsl:apply-templates mode="block-attr"
-                             select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@css:page-break-inside"/>
+                             select="@* except (@type|
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
+                                                @css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|
+                                                @css:page-break-inside|@css:margin-top-skip-if-top-of-page|
+                                                @css:padding-top|@css:padding-bottom|@css:padding-left|@css:padding-right|
+                                                @css:border-top-pattern|@css:border-left-pattern|@css:border-right-pattern)"/>
         <xsl:next-match/>
-        <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
-    <xsl:template priority="0.6"
+    
+    <!--
+        wrap content of main block in additional block when margin-top-skip-if-top-of-page is present
+    -->
+    <xsl:template priority="0.63"
+                  mode="block toc-block"
+                  match="css:box[@type='block']
+                                [@css:margin-top-skip-if-top-of-page]">
+        <xsl:variable name="block-tag" as="xs:string">
+            <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
+        </xsl:variable>
+        <block display-when="(! $starts-at-top-of-page)">
+            <xsl:attribute name="margin-top" select="format-number(xs:integer(number(@css:margin-top-skip-if-top-of-page)), '0')"/>
+        </block>
+        <xsl:element name="{$block-tag}">
+            <xsl:next-match/>
+        </xsl:element>
+    </xsl:template>
+    <!--
+        attributes that apply on inner block if present, or main block otherwise
+    -->
+    <xsl:template priority="0.62"
+                  mode="block toc-block"
+                  match="css:box[@type='block']">
+        <xsl:apply-templates mode="block-attr"
+                             select="@css:padding-top|@css:padding-bottom|@css:padding-left|@css:padding-right|
+                                     @css:border-top-pattern|@css:border-left-pattern|@css:border-right-pattern"/>
+        <xsl:next-match/>
+    </xsl:template>
+    
+    <!--
+        wrap content in additional block when line-height > 1 is combined with top/bottom margin or border
+    -->
+    <xsl:template priority="0.61"
                   mode="block toc-block"
                   match="css:box[@type='block']
                                 [@css:line-height
-                                 and (@css:margin-top or @css:margin-top-skip-if-top-of-page or @css:margin-bottom or
+                                 and (@css:margin-top or @css:margin-bottom or
                                       @css:border-top-pattern or @css:border-bottom-pattern)]">
+        <xsl:variable name="block-tag" as="xs:string">
+            <xsl:apply-templates select="$pxi:print-mode" mode="#current"/>
+        </xsl:variable>
+        <xsl:element name="{$block-tag}">
+            <!--
+                repeat orphans/widows (why?)
+            -->
+            <xsl:apply-templates mode="block-attr" select="@css:orphans|@css:widows"/>
+            <xsl:next-match/>
+        </xsl:element>
+    </xsl:template>
+    <!--
+        attributes that apply on inner block if present, or containing block otherwise
+    -->
+    <xsl:template priority="0.6"
+                  mode="block toc-block"
+                  match="css:box[@type='block']">
         <xsl:apply-templates mode="block-attr"
                              select="@css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@css:page-break-inside"/>
-        <!--
-            repeat orphans/widows (why?)
-        -->
-        <xsl:apply-templates mode="block-attr" select="@css:orphans|@css:widows"/>
         <xsl:next-match/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
@@ -1259,6 +1319,49 @@
     </xsl:template>
     
     <!--
+        Block boxes with "display: -obfl-list-of-references" outside of @begin or @end area. These
+        can not be converted to a list-of-references element (OBFL does not support this), but we
+        can handle them here as long as the range is not "volume".
+    -->
+    <xsl:template mode="sequence td block"
+                  match="css:box[@type='block' and @css:_obfl-list-of-references]"
+                  priority="0.9">
+        <xsl:param name="ignore-obfl-list-of-references" tunnel="true" select="false()"/>
+        <xsl:choose>
+            <xsl:when test="$ignore-obfl-list-of-references">
+                <xsl:next-match/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="list-of-references" as="element()*">
+                    <xsl:call-template name="apply-templates-within-post-or-pre-content-sequence">
+                        <xsl:with-param name="select" select="."/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:choose>
+                    <xsl:when test="$list-of-references/self::obfl:list-of-references">
+                        <xsl:if test="$list-of-references/@scope='volume'">
+                            <xsl:message terminate="yes">
+                                <xsl:text>An element with 'display: -obfl-list-of-references' that occurs outside a </xsl:text>
+                                <xsl:text>@begin or @end area can not have a "volume" range.</xsl:text>
+                            </xsl:message>
+                        </xsl:if>
+                        <xsl:if test="$list-of-references/@scope='document'">
+                            <xsl:message terminate="yes">
+                                <xsl:text>An element with 'display: -obfl-list-of-references' that occurs outside a </xsl:text>
+                                <xsl:text>@begin or @end area can not have a ::-obfl-on-volume-start or </xsl:text>
+                                <xsl:text>::-obfl-on-volume-end pseudo-element.</xsl:text>
+                            </xsl:message>
+                        </xsl:if>
+                    </xsl:when>
+                    <xsl:otherwise> <!-- block -->
+                        <xsl:sequence select="$list-of-references"/>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+    
+    <!--
         Rendering scenarios
     -->
     <xsl:template priority="0.592"
@@ -1290,49 +1393,6 @@
         <xsl:next-match/>
     </xsl:template>
     
-    <!--
-        attributes translate, hyphenate
-    -->
-    <xsl:template priority="0.71"
-                  mode="block toc-block"
-                  match="css:box[@type='block']"
-                  name="insert-text-attributes-and-next-match">
-        <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
-        <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
-        <xsl:variable name="new-text-transform" as="xs:string?">
-            <xsl:apply-templates mode="css:text-transform" select="."/>
-        </xsl:variable>
-        <xsl:variable name="new-hyphens" as="xs:string?">
-            <xsl:apply-templates mode="css:hyphens" select="."/>
-        </xsl:variable>
-        <xsl:call-template name="obfl:translate">
-            <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
-        </xsl:call-template>
-        <xsl:call-template name="obfl:hyphenate">
-            <xsl:with-param name="new-hyphens" select="$new-hyphens"/>
-        </xsl:call-template>
-        <xsl:next-match>
-            <xsl:with-param name="text-transform" tunnel="yes" select="($new-text-transform,$text-transform)[1]"/>
-            <xsl:with-param name="hyphens" tunnel="yes" select="($new-hyphens,$hyphens)[1]"/>
-            <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
-            <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
-        </xsl:next-match>
-    </xsl:template>
-    
-    <!--
-        all other attributes
-    -->
-    <xsl:template priority="0.7"
-                  mode="block toc-block"
-                  match="css:box[@type='block']">
-        <xsl:apply-templates mode="block-attr"
-                             select="@* except (@type|
-                                                @css:text-transform|@css:hyphens|
-                                                @css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|
-                                                @css:page-break-inside|@css:page-break-before)"/>
-        <xsl:next-match/>
-    </xsl:template>
-    
     <!-- ====== -->
     <!-- Tables -->
     <!-- ====== -->
@@ -1348,7 +1408,7 @@
     <xsl:template mode="sequence block"
                   match="css:box[@type='table']">
         <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
-                                                                  @css:text-transform|@css:hyphens)"/>
+                                                                  @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
         <xsl:variable name="render-table-by" as="xs:string*" select="tokenize(@css:render-table-by,'\s*,\s*')[not(.='')]"/>
         <xsl:variable name="render-table-by" as="xs:string" select="string-join($render-table-by,', ')"/>
         <xsl:if test="not($render-table-by=('',
@@ -1463,7 +1523,7 @@
         </xsl:if>
         <xsl:apply-templates mode="td-attr"
                              select="@* except (@type|
-                                                @css:text-transform|@css:hyphens|
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
                                                 @css:table-header-group|
                                                 @css:table-row-group|
                                                 @css:table-footer-group|
@@ -1490,11 +1550,17 @@
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes" select="()"/>
+        <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes" select="()"/>
+        <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:variable name="pending-text-transform" as="xs:string?"
                       select="(@css:text-transform/string(),$pending-text-transform)[1]"/>
+        <xsl:variable name="pending-braille-charset" as="xs:string?"
+                      select="(@css:braille-charset/string(),$pending-braille-charset)[1]"/>
         <xsl:variable name="pending-hyphens" as="xs:string?"
                       select="(@css:hyphens/string(),$pending-hyphens)[1]"/>
+        <xsl:variable name="pending-hyphenate-character" as="xs:string?"
+                      select="(@css:hyphenate-character/string(),$pending-hyphenate-character)[1]"/>
         <xsl:apply-templates mode="#current" select="@css:id"/>
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
         <xsl:apply-templates mode="assert-nil-attr"
@@ -1502,7 +1568,7 @@
                                                 @css:id|
                                                 @css:string-set|
                                                 @css:_obfl-marker|
-                                                @css:text-transform|@css:hyphens)"/>
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
         <xsl:for-each-group select="node()" group-adjacent="boolean(
                                                               self::css:box[@type='inline'] or
                                                               self::css:leader)">
@@ -1510,7 +1576,9 @@
                 <xsl:when test="current-grouping-key()">
                     <xsl:apply-templates mode="#current" select="current-group()">
                         <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
+                        <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                         <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
+                        <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                     </xsl:apply-templates>
                 </xsl:when>
                 <xsl:when test="every $n in current-group() satisfies
@@ -1547,7 +1615,9 @@
                                 <xsl:sequence select="$attrs"/>
                                 <xsl:apply-templates mode="span" select="current-group()">
                                     <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
+                                    <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                                     <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
+                                    <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                     <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
                                     <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                                 </xsl:apply-templates>
@@ -1556,7 +1626,9 @@
                         <xsl:otherwise>
                             <xsl:apply-templates mode="#current" select="current-group()">
                                 <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
+                                <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
+                                <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                 <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
                                 <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                             </xsl:apply-templates>
@@ -1673,7 +1745,13 @@
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-toc-start|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-volume-start|
                          /css:_/*[@css:_obfl-toc]/@css:_obfl-on-volume-end|
-                         /css:_/*[@css:_obfl-toc]/@css:_obfl-on-toc-end"/>
+                         /css:_/*[@css:_obfl-toc]/@css:_obfl-on-toc-end|
+                         css:box[@type='block']/@css:_obfl-list-of-references|
+                         css:box[@type='block'][@css:_obfl-list-of-references]/@css:_obfl-on-collection-start|
+                         css:box[@type='block'][@css:_obfl-list-of-references]/@css:_obfl-on-volume-start|
+                         css:box[@type='block'][@css:_obfl-list-of-references]/@css:_obfl-on-volume-start|
+                         css:box[@type='block'][@css:_obfl-list-of-references]/@css:_obfl-on-collection-end
+                         "/>
     
     <xsl:template mode="block-attr table-attr"
                   match="css:box[@type=('block','table')]/@css:margin-left|
@@ -1702,14 +1780,6 @@
                 </xsl:message>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
-    
-    <xsl:template mode="block-attr table-attr toc-entry-attr"
-                  match="css:box[@type='block']/@css:margin-top-skip-if-top-of-page">
-        <xsl:param name="top-of-page" as="xs:boolean" tunnel="yes" select="false()"/>
-        <xsl:if test="not($top-of-page)">
-            <xsl:attribute name="margin-top" select="format-number(xs:integer(number(.)), '0')"/>
-        </xsl:if>
     </xsl:template>
     
     <!--
@@ -2032,7 +2102,9 @@
     
     <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type='block']/@css:_obfl-underline">
-        <xsl:attribute name="underline-pattern" select="."/>
+        <xsl:attribute name="underline-pattern" select="if ($braille-charset-table='')
+                                                        then .
+                                                        else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),.)"/>
     </xsl:template>
     
     <xsl:template mode="block-attr assert-nil-attr"
@@ -2074,26 +2146,12 @@
                         <xsl:with-param name="args" select="(@name,@scope,@scope)"/>
                     </xsl:call-template>
                 </xsl:if>
-                <xsl:variable name="marker-references" as="element(obfl:marker-reference)*">
-                    <xsl:apply-templates mode="marker-reference" select="."/>
-                </xsl:variable>
-                <xsl:for-each select="$marker-references">
+                <xsl:apply-templates mode="marker-reference" select=".">
                     <!--
                         text-style attribute is only for marker-reference inside field
                     -->
-                    <xsl:choose>
-                        <xsl:when test="@text-style">
-                            <style name="{@text-style}">
-                                <xsl:copy>
-                                    <xsl:sequence select="@* except @text-style"/>
-                                </xsl:copy>
-                            </style>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="."/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:for-each>
+                    <xsl:with-param name="allow-style-element" tunnel="yes" select="true()"/>
+                </xsl:apply-templates>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -2162,9 +2220,13 @@
     <xsl:template mode="span block toc-entry"
                   match="css:counter[@target][@name=$page-counter-names]">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
+        <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
+        <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
+        <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="inside-span" as="xs:boolean" select="false()"/>
         <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
@@ -2183,8 +2245,14 @@
             <xsl:if test="exists($text-transform)">
                 <xsl:sequence select="concat('text-transform: ',string-join($text-transform,' '))"/>
             </xsl:if>
+            <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+            </xsl:if>
             <xsl:if test="$hyphens='none'">
                 <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
+            </xsl:if>
+            <xsl:if test="$pending-hyphenate-character[not(.=$hyphenate-character)]">
+                <xsl:sequence select="concat('hyphenate-character: ',$pending-hyphenate-character)"/>
             </xsl:if>
             <xsl:if test="$white-space[not(.='normal')]">
                 <xsl:sequence select="concat('white-space: ',$white-space)"/>
@@ -2213,8 +2281,9 @@
     <!--
         leader()
     -->
-    <xsl:template mode="block td toc-entry"
+    <xsl:template mode="block td toc-entry span"
                   match="css:leader">
+        <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:if test="@position[not(matches(.,re:exact($css:POSITIVE_NUMBER_RE)))]">
             <!--
                 Percentages not supported because they are relative to the box width, but
@@ -2225,7 +2294,22 @@
                 <xsl:text>: percentage not supported</xsl:text>
             </xsl:message>
         </xsl:if>
-        <leader pattern="{@pattern}" position="{(@position,'100%')[1]}" align="{(@alignment,'right')[1]}"/>
+        <xsl:choose>
+            <xsl:when test="$text-transform!='none'">
+                <span translate="pre-translated-text-css">
+                    <xsl:apply-templates mode="span" select=".">
+                        <xsl:with-param name="text-transform" tunnel="yes" select="'none'"/>
+                    </xsl:apply-templates>
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <leader pattern="{if ($braille-charset-table='')
+                                  then @pattern
+                                  else pef:encode(concat('(id:&quot;',$braille-charset-table,'&quot;)'),@pattern)}"
+                        position="{(@position,'100%')[1]}"
+                        align="{(@alignment,'right')[1]}"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <!--
@@ -2242,9 +2326,13 @@
     <xsl:template mode="block toc-entry span"
                   match="css:custom-func[@name='-obfl-evaluate'][matches(@arg1,$css:STRING_RE) and not (@arg2)]">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
+        <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
+        <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
+        <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="inside-span" as="xs:boolean" select="false()"/>
         <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
@@ -2257,8 +2345,14 @@
             <xsl:if test="not($text-transform=('auto','none'))">
                 <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
             </xsl:if>
+            <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+            </xsl:if>
             <xsl:if test="$hyphens='none'">
                 <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
+            </xsl:if>
+            <xsl:if test="$pending-hyphenate-character[not(.=$hyphenate-character)]">
+                <xsl:sequence select="concat('hyphenate-character: ',$pending-hyphenate-character)"/>
             </xsl:if>
             <xsl:if test="$white-space[not(.='normal')]">
                 <xsl:sequence select="concat('white-space: ',$white-space)"/>
@@ -2348,6 +2442,16 @@
     <xsl:template mode="block-attr span-attr assert-nil-attr"
                   match="css:box/@css:anchor"/>
     
+    <xsl:template mode="assert-nil-attr"
+                  match="css:box[@type='inline']/@css:id|
+                         css:box[@type='inline']/css:_/@css:id">
+        <xsl:variable name="id" as="xs:string" select="."/>
+        <xsl:if test="(not(ancestor::*/@css:flow[not(.='normal')]) and $id=($page-number-references,$toc-entry-references))
+                      or (some $s in $sections[/*[@css:flow=$collection-flows]] satisfies $s/*/*/@css:anchor=$id)">
+            <xsl:next-match/>
+        </xsl:if>
+    </xsl:template>
+    
     <!-- ======= -->
     <!-- Markers -->
     <!-- ======= -->
@@ -2376,9 +2480,10 @@
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
             </xsl:variable>
-            <marker class="{@name}/if-not-set-next/prev"/>
-            <marker class="{@name}/if-not-set-next"
-                    value="{replace(string-join($value,''),'^\s+|\s+$','')}"/>
+            <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
+            <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
+            <marker class="{@name}/if-not-set-next/prev"/> <!-- value will be filled later -->
+            <marker class="{@name}/if-not-set-next" value="{$value}"/>
         </xsl:for-each>
     </xsl:template>
     
@@ -2391,11 +2496,12 @@
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
             </xsl:variable>
-            <marker class="{@name}/prev"/>
-            <marker class="{@name}" value="{replace(string-join($value,''),'^\s+|\s+$','')}"/>
-            <marker class="{@name}/if-not-set-next/prev"/>
-            <marker class="{@name}/if-not-set-next"
-                    value="{if ($markers-wrapped) then '' else replace(string-join($value,''),'^\s+|\s+$','')}"/>
+            <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
+            <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
+            <marker class="{@name}/prev"/> <!-- value will be filled later -->
+            <marker class="{@name}" value="{$value}"/>
+            <marker class="{@name}/if-not-set-next/prev"/> <!-- value will be filled later -->
+            <marker class="{@name}/if-not-set-next" value="{if ($markers-wrapped) then '' else $value}"/>
         </xsl:for-each>
     </xsl:template>
     
@@ -2449,9 +2555,13 @@
     <xsl:template name="text">
         <xsl:param name="text" as="xs:string" required="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
+        <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
+        <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
+        <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
+        <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         
         <xsl:call-template name="pf:progress">
             <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
@@ -2505,11 +2615,17 @@
                     <xsl:if test="not($text-transform=('none','auto'))">
                         <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
                     </xsl:if>
+                    <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                        <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+                    </xsl:if>
                     <!--
                         hyphens handled through hyphenate attribute but not OBFL counterpart for value 'none'
                     -->
                     <xsl:if test="$hyphens='none'">
                         <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
+                    </xsl:if>
+                    <xsl:if test="$pending-hyphenate-character[not(.=$hyphenate-character)]">
+                      <xsl:sequence select="concat('hyphenate-character: ',$pending-hyphenate-character)"/>
                     </xsl:if>
                     <xsl:if test="not($word-spacing=1)">
                         <xsl:sequence select="concat('word-spacing: ',format-number($word-spacing, '0'))"/>
@@ -2663,19 +2779,25 @@
         </css:box>
     </xsl:template>
     
-    <!--
-        default scope within volume area is 'document'
-    -->
     <xsl:template mode="css:eval-volume-area-content-list
                         css:eval-sequence-interrupted-resumed-content-list"
-                  match="css:flow[@from and (not(@scope) or @scope='document')]">
+                  match="css:flow[@from][@scope='document']"
+                  priority="0.6">
         <xsl:variable name="flow" as="xs:string" select="@from"/>
         <xsl:sequence select="$sections/*[@css:flow=$flow]"/>
     </xsl:template>
     
     <xsl:template mode="css:eval-volume-area-content-list"
-                  match="css:flow[@from=$collection-flows and @scope='volume']">
+                  match="css:flow[@from=$collection-flows][@scope='volume']"
+                  priority="0.6">
         <list-of-references collection="{@from}" range="volume"/>
+    </xsl:template>
+    
+    <xsl:template mode="css:eval-volume-area-content-list"
+                  match="css:flow[@from]">
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">The range of a flow() function inside a volume area must be either 'volume' or 'document'</xsl:with-param>
+        </xsl:call-template>
     </xsl:template>
     
     <xsl:template mode="css:eval-volume-area-content-list
@@ -2696,9 +2818,10 @@
     </xsl:template>
     
     <xsl:template mode="css:eval-volume-area-content-list"
-                  match="css:custom-func[@name='-obfl-evaluate']">
+                  match="css:custom-func[@name]">
         <xsl:call-template name="pf:warn">
-            <xsl:with-param name="msg">-obfl-evaluate() function not supported in volume area</xsl:with-param>
+            <xsl:with-param name="msg">{}() function not supported in volume area</xsl:with-param>
+            <xsl:with-param name="args" select="@name"/>
         </xsl:call-template>
     </xsl:template>
     

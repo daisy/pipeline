@@ -10,7 +10,6 @@
 
 - [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css`](resources/css/reset.css)
 - [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/default.scss`](resources/css/default.scss)
-- [`http://www.daisy.org/pipeline/modules/braille/html-to-pef/volume-breaking.xsl`](resources/xml/xslt/volume-breaking.xsl)
 
 ## Script definitions ([org.daisy.pipeline.script.XProcScriptService](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/XProcScriptService.html))
 

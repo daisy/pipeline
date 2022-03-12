@@ -39,12 +39,12 @@ import org.slf4j.LoggerFactory;
 )
 public class LocaleBasedTableProvider extends AbstractTableProvider {
 	
-	private static Set<String> supportedFeatures = ImmutableSet.of("locale");
-	private static Map<String,String> tablesFromLocale = new HashMap<String,String>();
+	private static Set<String> supportedFeatures = ImmutableSet.of("locale", "document-locale");
+	private static Map<String,String> tableFromLocale = new HashMap<String,String>();
 	
 	public LocaleBasedTableProvider() {
-		tablesFromLocale.put("en", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
-		tablesFromLocale.put("nl", "com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01");
+		tableFromLocale.put("en", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
+		tableFromLocale.put("nl", "com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01");
 	}
 
 	/**
@@ -58,13 +58,20 @@ public class LocaleBasedTableProvider extends AbstractTableProvider {
 			if (!supportedFeatures.contains(feature.getKey())) {
 				logger.debug("Unsupported feature: " + feature);
 				return empty; }
-		Iterable<Table> tables = empty;
+		Iterable<Table> table = empty;
 		MutableQuery q = mutableQuery(query);
+		final String documentLocale = q.containsKey("document-locale")
+			? q.removeOnly("document-locale").getValue().get()
+			: null;
 		if (q.containsKey("locale")) {
-			String id = tablesFromLocale.get(q.removeOnly("locale").getValue().get());
+			String id = tableFromLocale.get(q.removeOnly("locale").getValue().get());
 			if (id != null && q.isEmpty())
-				tables = get(id); }
-		return tables;
+				table = get(id); }
+		else if (documentLocale != null && q.isEmpty()) {
+			String id = tableFromLocale.get(documentLocale);
+			if (id != null)
+				table = get(id); }
+		return table;
 	}
 	
 	private final static Iterable<Table> empty = Optional.<Table>absent().asSet();

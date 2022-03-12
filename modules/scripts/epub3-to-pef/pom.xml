@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>epub3-to-pef</artifactId>
-  <version>4.2.1-SNAPSHOT</version>
+  <version>5.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 to PEF</name>
@@ -33,12 +33,12 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>common-utils</artifactId>
+      <artifactId>braille-common</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>css-utils</artifactId>
+      <artifactId>braille-css-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

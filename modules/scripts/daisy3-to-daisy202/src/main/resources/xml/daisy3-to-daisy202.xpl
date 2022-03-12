@@ -39,10 +39,26 @@
     <!-- IMPORTS                                                                 -->
     <!--=========================================================================-->
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="internal/convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:assert
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl">
+        <p:documentation>
+            px:daisy3-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="internal/convert.xpl">
+        <p:documentation>
+            px:daisy3-to-daisy202
+        </p:documentation>
+    </p:import>
 
 
     <!--=========================================================================-->
@@ -65,12 +81,12 @@
     <!--=========================================================================-->
     <!-- LOAD THE DAISY 3 FILESET                                                -->
     <!--=========================================================================-->
-    <px:daisy3-load name="load"/>
+    <px:daisy3-load name="load" px:message="Loading DAISY 3"/>
 
     <!--=========================================================================-->
     <!-- RUN THE MAIN CONVERSION STEP                                            -->
     <!--=========================================================================-->
-    <px:daisy3-to-daisy202 name="convert">
+    <px:daisy3-to-daisy202 name="convert" px:message="Downgrading DAISY 3 to DAISY 2.02">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
@@ -80,7 +96,7 @@
     <!--=========================================================================-->
     <!-- FINALIZE AND STORE THE CONTAINER                                        -->
     <!--=========================================================================-->
-    <px:fileset-store>
+    <px:fileset-store px:message="Storing DAISY 2.02">
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="convert"/>
         </p:input>

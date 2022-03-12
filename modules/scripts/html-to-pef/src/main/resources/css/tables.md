@@ -16,7 +16,7 @@ Use this style sheet by importing it in your custom SCSS style sheet:
 
 The module provides two mixins that correspond with the two main table
 styles, and one mixin for automatically finding the optimal table
-layout.
+layout. It also provides variables for duplicating tables.
 
 ## `table-matrix` mixin
 
@@ -124,3 +124,21 @@ Parameters that can be used in cost expressions are:
 - `$total-height`: the total height (in number of braille cells) of the table.
 - `$min-block-width`: the width (in number of braille cells) of the
   narrowest block within the table, typically a table cell.
+
+## `$duplicate-tables-with-class` and `$classes-for-table-duplicates` variables
+
+Set `$duplicate-tables-with-class` to duplicate all tables with that
+class. If the value is the empty string, all tables without a class
+attribute are duplicated. The `$classes-for-table-duplicates` variable
+determines how many copies are made and which classes are added. The
+value must be a space separated list of class names. As many copies
+are made as there are items in the list. The first class is added to
+the first copy, etc. At least two items are required. A `.` may be
+used to separate classes if multiple classes need to be added to a
+single copy.
+
+This feature is useful for trying out different table layouts before
+deciding which layout to use for which table.
+
+Note that the variables must be set *before* the `@import` rule in
+order to have effect.

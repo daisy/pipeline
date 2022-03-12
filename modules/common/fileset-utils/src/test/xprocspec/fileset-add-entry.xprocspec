@@ -56,7 +56,7 @@
     <x:scenario label="add-entry-first">
         <x:call step="px:fileset-add-entry">
             <x:option name="href" select="'doc.html'"/>
-            <x:option name="first" select="'true'"/>
+            <x:option name="first" select="true()"/>
             <x:input port="source">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">

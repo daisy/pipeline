@@ -6,6 +6,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-inline-prefixes="px"
                 type="px:fileset-add-entry" name="main">
 
@@ -14,9 +15,7 @@
   </p:documentation>
 
   <p:input port="source" primary="true">
-    <p:inline exclude-inline-prefixes="#all">
-      <d:fileset/>
-    </p:inline>
+    <p:inline exclude-inline-prefixes="#all"><d:fileset/></p:inline>
   </p:input>
   <p:input port="source.in-memory" sequence="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -57,11 +56,10 @@
   </p:option>
 
   <p:option name="media-type" select="''"/>
-  <p:option name="ref" select="''"><!-- if relative; will be resolved relative to the file --></p:option>
   <p:option name="original-href" select="''"><!-- if relative; will be resolved relative to the file --></p:option>
-  <p:option name="first" cx:as="xs:string" select="'false'"/>
-  <p:option name="replace" cx:as="xs:string" select="'false'"/>
-  <p:option name="replace-attributes" cx:as="xs:string" select="'false'"/>
+  <p:option name="first" cx:as="xs:boolean" select="false()"/>
+  <p:option name="replace" cx:as="xs:boolean" select="false()"/>
+  <p:option name="replace-attributes" cx:as="xs:boolean" select="false()"/>
 
   <p:input port="file-attributes" kind="parameter" primary="false">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -82,13 +80,21 @@
       px:message
     </p:documentation>
   </p:import>
-  <p:import href="fileset-add-ref.xpl">
+  <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
     <p:documentation>
-      px:fileset-add-ref
+      px:set-base-uri
     </p:documentation>
   </p:import>
+  <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" type="application/xslt+xml">
+    <p:documentation>
+      pf:is-relative
+      pf:relativize-uri
+      pf:normalize-uri
+    </p:documentation>
+  </cx:import>
 
-  <p:variable name="fileset-base" cx:as="xs:string" select="/*/@xml:base"/>
+  <p:variable name="fileset-base" cx:as="xs:string" select="pf:normalize-uri(base-uri(/*))"/>
+  <p:variable name="fileset-xml-base" cx:as="xs:string" select="/*/@xml:base/pf:normalize-uri(.)"/>
 
   <px:assert message="Expected $1 on the entry port" error-code="XXXXX">
     <p:input port="source">
@@ -100,7 +106,7 @@
   </px:assert>
 
   <p:group>
-  <p:variable name="href2" select="if ($href='') then base-uri(/*) else $href"/>
+  <p:variable name="file-base" select="pf:normalize-uri(if ($href='') then base-uri(/*) else $href)"/>
 
   <p:identity>
     <p:input port="source">
@@ -108,89 +114,54 @@
     </p:input>
   </p:identity>
   <p:choose name="check-base">
-    <!-- TODO: replace by uri-utils 'is-relative' function (depending on how that impacts performance) -->
-    <p:when test="$fileset-base='' and not(matches($href2,'^[^/]+:')) and not(starts-with($href2,'/'))">
-      <px:message severity="WARN" message="Adding a relative resource to a file set with no base URI"/>
+    <p:when test="$fileset-xml-base='' and pf:is-relative($file-base)">
+      <px:message severity="WARN" message="Adding a relative resource to a file set with no base directory"/>
     </p:when>
     <p:otherwise>
       <p:identity/>
     </p:otherwise>
   </p:choose>
 
-  <!--Create the new d:file entry-->
-  <p:add-attribute match="/*" attribute-name="xml:base">
+  <!--
+      Create the new d:file entry
+  -->
+  <px:set-base-uri>
     <p:input port="source">
       <p:inline>
         <d:file/>
       </p:inline>
     </p:input>
-    <p:with-option name="attribute-value" select="base-uri(/*)"/>
-  </p:add-attribute>
+    <p:with-option name="base-uri" select="base-uri(/*)"/>
+  </px:set-base-uri>
   <p:choose>
-    <p:when test="$fileset-base">
-      <p:identity/>
+    <p:when test="not($media-type='')">
+      <p:add-attribute match="/*" attribute-name="media-type">
+        <p:with-option name="attribute-value" select="$media-type"/>
+      </p:add-attribute>
     </p:when>
     <p:otherwise>
-      <p:delete match="/*/@xml:base"/>
+      <p:identity/>
     </p:otherwise>
   </p:choose>
-  <p:add-attribute match="/*" attribute-name="media-type">
-    <p:with-option name="attribute-value" select="$media-type"/>
-  </p:add-attribute>
   <p:add-attribute match="/*" attribute-name="href">
-    <p:with-option name="attribute-value" select="if ($fileset-base='file:/' and starts-with($href2, 'file:///'))
-                                                  then substring-after($href2, 'file:///')
-                                                  else if (starts-with($href2, $fileset-base) and ends-with($fileset-base,'/'))
-                                                  then substring-after($href2, $fileset-base)
-                                                  else $href2"/>
+    <p:with-option name="attribute-value" select="if ($fileset-xml-base='')
+                                                  then $file-base
+                                                  else pf:relativize-uri(resolve-uri($file-base,$fileset-base),$fileset-base)"/>
   </p:add-attribute>
-  <p:add-attribute match="/*" attribute-name="original-href">
-    <p:with-option name="attribute-value" select="if ($original-href) then resolve-uri($original-href, $fileset-base) else ''"/>
-  </p:add-attribute>
-  <p:delete match="@media-type[not(normalize-space())]"/>
-  <p:delete match="@original-href[not(normalize-space())]"/>
   <p:choose>
-    <p:when
-      test="   starts-with(/*/@href,'/')
-            or contains(substring-before(/*/@href,'/'),':')
-            or contains(/*/@href,'/.')
-            or contains(/*/@href,'//')
-            or string-length(translate(/*/@href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0
-            or contains(/*/@href,'%') and count(tokenize(/*/@href,'%')[not(starts-with(.,'20'))]) = 0
-            or starts-with(/*/@original-href,'/')
-            or contains(substring-before(/*/@original-href,'/'),':')
-            or contains(/*/@original-href,'/.')
-            or contains(/*/@original-href,'//')
-            or string-length(translate(/*/@original-href,'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_./%():','')) &gt; 0
-            or contains(/*/@original-href,'%') and count(tokenize(/*/@original-href,'%')[not(starts-with(.,'20'))]) = 0">
-      <!-- URI probably needs normalization -->
-      <px:message severity="DEBUG" message="URI normalization: $1">
-        <p:with-option name="param1"
-          select="string-join((
-                    concat('href=&quot;',/*/@href,'&quot;'),
-                    if (/*/@original-href) then concat('original-href=&quot;',/*/@original-href,'&quot;') else (),
-                    if (/*/@original-href!=$original-href or /*/@href!=$href2) then concat('xml:base=&quot;',$fileset-base,'&quot;') else ()
-                  ),' ')"
-        />
-      </px:message>
-      <p:xslt>
-        <p:input port="parameters">
-          <p:empty/>
-        </p:input>
-        <p:input port="stylesheet">
-          <p:document href="../xslt/file-normalize.xsl"/>
-        </p:input>
-      </p:xslt>
+    <p:when test="not($original-href='')">
+      <p:add-attribute match="/*" attribute-name="original-href">
+        <p:with-option name="attribute-value" select="pf:normalize-uri(resolve-uri($original-href,$fileset-base))"/>
+      </p:add-attribute>
     </p:when>
     <p:otherwise>
-      <!-- skip URI normalization, it seems not to be necessary -->
       <p:identity/>
     </p:otherwise>
   </p:choose>
-  <p:delete match="/*/@xml:base"/>
   </p:group>
+
   <!--
-      add custom attributes
+      Add custom attributes
   -->
   <p:identity name="entry-without-attributes"/>
   <p:sink/>
@@ -229,30 +200,30 @@
   </p:set-attributes>
   <p:identity name="new-entry"/>
 
-  <!-- Insert the entry as the last or first child of the file set - unless it already exists -->
+  <!--
+      Insert the entry as the last or first child of the file set - unless it already exists
+  -->
   <p:group name="result">
     <p:output port="fileset" primary="true"/>
     <p:output port="in-memory" sequence="true">
       <p:pipe step="if-present-in-input" port="in-memory"/>
     </p:output>
-    
     <p:variable name="href-normalized" select="/*/@href">
       <p:pipe port="result" step="new-entry"/>
     </p:variable>
-
     <p:identity>
       <p:input port="source">
         <p:pipe port="source" step="main"/>
       </p:input>
     </p:identity>
     <p:choose name="if-present-in-input">
-      <p:when test="not($replace='true') and /*/d:file[@href=$href-normalized]">
+      <p:when test="not($replace) and /*/d:file[@href=$href-normalized]">
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
           <p:pipe step="main" port="source.in-memory"/>
         </p:output>
         <p:choose>
-          <p:when test="$replace-attributes='true'">
+          <p:when test="$replace-attributes">
             <p:set-attributes>
               <p:input port="attributes">
                 <p:pipe step="new-entry" port="result"/>
@@ -274,7 +245,7 @@
           <p:pipe step="in-memory" port="result"/>
         </p:output>
         <p:choose>
-          <p:when test="$replace='true'">
+          <p:when test="$replace">
             <p:delete>
               <p:with-option name="match" select="concat('d:file[@href=&quot;',$href-normalized,'&quot;]')"/>
             </p:delete>
@@ -287,10 +258,10 @@
           <p:input port="insertion">
             <p:pipe port="result" step="new-entry"/>
           </p:input>
-          <p:with-option name="position" select="if ($first='true') then 'first-child' else 'last-child'"/>
+          <p:with-option name="position" select="if ($first) then 'first-child' else 'last-child'"/>
         </p:insert>
         <p:choose>
-          <p:when test="$first='false'">
+          <p:when test="not($first)">
             <p:identity>
               <p:input port="source">
                 <p:pipe step="main" port="source.in-memory"/>
@@ -308,18 +279,6 @@
           </p:otherwise>
         </p:choose>
         <p:identity name="in-memory"/>
-      </p:otherwise>
-    </p:choose>
-
-    <p:choose>
-      <p:when test="$ref=''">
-        <p:identity/>
-      </p:when>
-      <p:otherwise>
-        <px:fileset-add-ref>
-          <p:with-option name="href" select="$href-normalized"/>
-          <p:with-option name="ref" select="$ref"/>
-        </px:fileset-add-ref>
       </p:otherwise>
     </p:choose>
   </p:group>

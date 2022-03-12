@@ -40,7 +40,7 @@
 		</p:input>
 	</odt:get-file>
 	
-	<px:message severity="DEBUG" message="[odf-utils] separating mathml"/>
+	<px:message severity="DEBUG" message="separating mathml"/>
 	
 	<p:viewport match="draw:object[math:math]" name="content.temp">
 		<p:variable name="href" select="concat('Math/mathml_', number($numbering-offset) + p:iteration-position())"/>

@@ -45,7 +45,7 @@
             <p>The target directory.</p>
         </p:documentation>
     </p:option>
-    <p:option name="flatten" cx:as="xs:string" required="false" select="'false'">
+    <p:option name="flatten" cx:as="xs:boolean" required="false" select="false()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Move all files to a single directory.</p>
             <p>Renames files when needed to avoid that files would overwrite each other.</p>
@@ -57,7 +57,7 @@
             <p>Only if "flatten" option is set.</p>
         </p:documentation>
     </p:option>
-    <p:option name="dry-run" cx:as="xs:string" required="false" select="'false'">
+    <p:option name="dry-run" cx:as="xs:boolean" required="false" select="false()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Don't actually perform the copy operation, only return the list of intended rename
             actions on the "mapping" port.</p>
@@ -74,18 +74,41 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
-    <p:import href="fileset-join.xpl"/>
-    <p:import href="fileset-apply.xpl"/>
+    <p:import href="fileset-join.xpl">
+        <p:documentation>
+            px:fileset-join
+        </p:documentation>
+    </p:import>
+    <p:import href="fileset-apply.xpl">
+        <p:documentation>
+            px:fileset-apply
+        </p:documentation>
+    </p:import>
 
-    <p:documentation>Add xml:base and normalize fileset</p:documentation>
-    <p:add-xml-base/>
+    <p:documentation>Check that the base directory (@xml:base) is specified.</p:documentation>
+    <p:choose>
+        <p:when test="not($flatten)">
+            <px:assert error-code="XXXX" message="Fileset must have a base directory (@xml:base attribute)">
+                <p:with-option name="test" select="exists(/*/@xml:base)"/>
+            </px:assert>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
+    
+    <p:add-xml-base>
+        <!-- make @xml:base absolute -->
+    </p:add-xml-base>
+
+    <p:documentation>Normalize fileset</p:documentation>
     <px:fileset-join/>
 
     <p:label-elements match="/*/d:file" attribute="href-before-move" label="resolve-uri(@href, base-uri(.))"/>
 
     <p:documentation>Flatten fileset</p:documentation>
     <p:choose>
-        <p:when test="$flatten='true'">
+        <p:when test="$flatten">
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document href="../xslt/fileset-flatten.xsl"/>
@@ -133,7 +156,7 @@
     <p:sink/>
 
     <p:choose name="maybe-apply">
-        <p:when test="$dry-run='true'">
+        <p:when test="$dry-run">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="main" port="source.in-memory"/>

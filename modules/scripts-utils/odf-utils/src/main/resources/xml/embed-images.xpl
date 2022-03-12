@@ -38,7 +38,7 @@
 		</p:input>
 	</odt:get-file>
 	
-	<px:message severity="DEBUG" message="[odf-utils] embedding images"/>
+	<px:message severity="DEBUG" message="embedding images"/>
 	<p:sink/>
 	
 	<px:fileset-create name="base">

@@ -4,13 +4,9 @@
     exclude-result-prefixes="dtb tmp" version="2.0"
     xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp">
     
-    
     <xsl:output indent="yes" method="xml"/>
     
-    
     <xsl:template match="/">
-        
-        <xsl:message>Renaming annotation elements to identify block or phrase variants.</xsl:message>
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -24,7 +20,6 @@
     <xsl:template match="dtb:annotation">
         <xsl:variable name="block-level-contents"
             select="tokenize('div,sidebar,caption,code-block,hd,list,note,p,blockquote,table,dl,dateline,epigraph,address,imggroup,poem,linegroup,samp', ',')"/>
-        
         <xsl:choose>
             <xsl:when test="child::*/local-name() = $block-level-contents">
                 <xsl:element name="tmp:annotation-block">
@@ -40,8 +35,6 @@
                 </xsl:element>
             </xsl:otherwise>
         </xsl:choose>
-        
-        
     </xsl:template>
     
 </xsl:stylesheet>

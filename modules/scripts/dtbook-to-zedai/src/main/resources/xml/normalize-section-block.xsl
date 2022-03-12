@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/" exclude-result-prefixes="dtb" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                exclude-result-prefixes="dtb">
 
     <!--Normalizes mixed block/inline content models.-->
 
     <xsl:output indent="yes" method="xml"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     
     <xsl:template match="/">
-        <xsl:message>Normalize mixed section/block content</xsl:message>
         <xsl:apply-templates/>
     </xsl:template>
     
@@ -22,7 +24,11 @@
 
     <!-- purposely exclude level6 because it cannot contain child levels -->
     <xsl:template match="dtb:level | dtb:level1 | dtb:level2 | dtb:level3 | dtb:level4 | dtb:level5">
-        <xsl:message>Normalize mixed section and block content model for <xsl:value-of select="local-name(.)"/></xsl:message>
+        <xsl:call-template name="pf:debug">
+            <xsl:with-param name="msg">Normalize mixed section and block content model for <xsl:value-of
+                select="local-name(.)"
+            /></xsl:with-param>
+        </xsl:call-template>
         <xsl:choose>
             <xsl:when test="self::dtb:level">
                 <xsl:call-template name="normalize-level">

@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.14.4-SNAPSHOT</version>
+  <version>1.14.6-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -52,7 +52,7 @@
     <module>nlp/dtbook-break-detection</module>
     <module>audio/audio-common</module>
     <module>audio/audio-encoder-lame</module>
-    <!-- att-nar and sapi-nar are excluded because they are platform-specific. -->
+    <!-- att-nar is excluded because it is platform-specific. -->
     <!-- tts-adapter-attnative is excluded because it depends on att-nar which cannot be publicly
          deployed according to the AT&T's license. -->
     <module>tts/css-speech</module>
@@ -67,10 +67,11 @@
     <module>tts/tts-adapters/tts-adapter-qfrency</module>
     <module>tts/tts-adapters/tts-adapter-google</module>
     <module>tts/tts-adapters/tts-adapter-cereproc</module>
+    <module>tts/tts-mocks</module>
     <module>tts/zedai-to-ssml</module>
     <module>tts/mathml-to-ssml</module>
-    <module>braille/common-utils</module>
-    <module>braille/css-utils</module>
+    <module>braille/braille-common</module>
+    <module>braille/braille-css-utils</module>
     <module>braille/pef-utils</module>
     <module>braille/obfl-utils</module>
     <module>braille/liblouis-utils</module>

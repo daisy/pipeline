@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.base.Optional;
@@ -21,9 +20,7 @@ import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableFilter;
 
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
-import org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider;
+import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
@@ -32,7 +29,7 @@ import org.daisy.pipeline.braille.pef.FileFormatProvider;
 import org.daisy.pipeline.braille.pef.impl.BRFWriter;
 import org.daisy.pipeline.braille.pef.impl.BRFWriter.Padding;
 import org.daisy.pipeline.braille.pef.impl.BRFWriter.PageBreaks;
-import org.daisy.pipeline.braille.pef.TableProvider;
+import org.daisy.pipeline.braille.pef.TableRegistry;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -54,8 +51,9 @@ public class ConfigurableFileFormat implements FileFormat {
 	private static final Padding DEFAULT_PADDING = Padding.NONE;
 	private static final String DEFAULT_FILE_EXTENSION = ".brf";
 	
-	private final org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider;
+	private final TableRegistry tableRegistry;
 	private Table table;
+	private String documentLocale;
 	private String locale;
 	private LineBreaks lineBreaks;
 	private PageBreaks pageBreaks;
@@ -63,8 +61,8 @@ public class ConfigurableFileFormat implements FileFormat {
 	private Charset charset;
 	private String fileExtension;
 	
-	private ConfigurableFileFormat(org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider) {
-		this.tableProvider = tableProvider;
+	private ConfigurableFileFormat(TableRegistry tableRegistry) {
+		this.tableRegistry = tableRegistry;
 		lineBreaks = DEFAULT_LINE_BREAKS;
 		pageBreaks = DEFAULT_PAGE_BREAKS;
 		padding = DEFAULT_PADDING;
@@ -96,6 +94,10 @@ public class ConfigurableFileFormat implements FileFormat {
 		return false;
 	}
 	
+	public boolean supportsVolumes() {
+		return false;
+	}
+	
 	private final TableFilter tableFilter = new TableFilter() {
 		public boolean accept(FactoryProperties object) {
 			return true;
@@ -120,11 +122,19 @@ public class ConfigurableFileFormat implements FileFormat {
 					if (tableFilter.accept(t)) {
 						table = (Table)value;
 						return; }}
-				else if (value instanceof String)
-					for (Table t : tableProvider.get(mutableQuery().add("id", (String)value)))
+				else if (value instanceof String) {
+					for (Table t : tableRegistry.get(mutableQuery().add("id", (String)value)))
 						if (tableFilter.accept(t)) {
 							table = t;
-							return; }}
+							return; }
+					// table could be a locale
+					try {
+						String locale = parseLocale((String)value).toLanguageTag();
+						for (Table t : tableRegistry.get(mutableQuery().add("locale", locale)))
+							if (tableFilter.accept(t)) {
+								table = t;
+								return; }}
+					catch (IllegalArgumentException e) {}}}
 			throw new IllegalArgumentException("Unsupported value for table: " + value);
 		} else if ("locale".equals(key)) {
 			if (value != null) {
@@ -135,6 +145,15 @@ public class ConfigurableFileFormat implements FileFormat {
 					locale = (String)value;
 					return; }}
 			throw new IllegalArgumentException("Unsupported value for locale: " + value);
+		} else if ("document-locale".equals(key)) {
+			if (value != null) {
+				if (value instanceof Locale) {
+					documentLocale = ((Locale)value).toLanguageTag();
+					return; }
+				else if (value instanceof String) {
+					documentLocale = (String)value;
+					return; }}
+			throw new IllegalArgumentException("Unsupported value for document-locale: " + value);
 		} else if ("line-breaks".equals(key)) {
 			if (value != null) {
 				if (value instanceof LineBreaks) {
@@ -252,24 +271,22 @@ public class ConfigurableFileFormat implements FileFormat {
 	
 	private FileFormat build() {
 		if (table == null) {
-			if (locale == null)
-				setFeature("table", DEFAULT_TABLE);
-			else {
-				for (Table t : tableProvider.get(mutableQuery().add("locale", locale)))
+			if (locale != null || documentLocale != null)
+				for (Table t : tableRegistry.get(mutableQuery().add("locale", locale != null ? locale : documentLocale)))
 					if (tableFilter.accept(t)) {
 						table = t;
 						break; }
-				if (table == null) {
-					setFeature("table", DEFAULT_TABLE);
-					logger.warn("Table " + table + " not compatible with locale " + locale); }}}
+			if (table == null)
+				setFeature("table", DEFAULT_TABLE); }
 		else if (locale != null) {
 			boolean match = false;
-			for (Table t : tableProvider.get(mutableQuery().add("locale", locale)))
+			for (Table t : tableRegistry.get(mutableQuery().add("locale", locale)))
 				if (t.equals(table)) {
 					match = true;
 					break; }
-			if (!match)
-				logger.warn("Table " + table + " not compatible with locale " + locale); }
+			if (!match) {
+				logger.warn("Table " + table + " not compatible with locale " + locale);
+				throw new NoSuchElementException(); }}
 		finalized = true;
 		return this;
 	}
@@ -282,7 +299,7 @@ public class ConfigurableFileFormat implements FileFormat {
 		
 		public Iterable<FileFormat> get(Query query) {
 			MutableQuery q = mutableQuery(query);
-			ConfigurableFileFormat format = new ConfigurableFileFormat(tableProvider);
+			ConfigurableFileFormat format = new ConfigurableFileFormat(tableRegistry);
 			for (Feature f : q)
 				try {
 					format.setFeature(f.getKey(), f.getValue().orElse(f.getKey())); }
@@ -294,23 +311,17 @@ public class ConfigurableFileFormat implements FileFormat {
 				return empty; }
 		}
 		
-		private List<TableProvider> tableProviders = new ArrayList<TableProvider>();
-		private MemoizingProvider<Query,Table> tableProvider = memoize(dispatch(tableProviders));
+		private TableRegistry tableRegistry;
 	
 		@Reference(
-			name = "TableProvider",
-			unbind = "removeTableProvider",
-			service = TableProvider.class,
-			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			name = "TableRegistry",
+			unbind = "-",
+			service = TableRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
 		)
-		protected void addTableProvider(TableProvider provider) {
-			tableProviders.add(provider);
-		}
-		
-		protected void removeTableProvider(TableProvider provider) {
-			tableProviders.remove(provider);
-			this.tableProvider.invalidateCache();
+		protected void addTableProvider(TableRegistry registry) {
+			tableRegistry = registry;
 		}
 	}
 	

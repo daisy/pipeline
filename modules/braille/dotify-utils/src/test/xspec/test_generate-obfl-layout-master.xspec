@@ -7,6 +7,7 @@
   <x:param name="duplex" select="'true'"/>
   <x:param name="page-width" select="'40'"/>
   <x:param name="page-height" select="'25'"/>
+  <x:param name="braille-charset-table" select="''"/>
   
   <x:scenario label="test_01">
     <x:call template="obfl:generate-layout-master">
@@ -426,29 +427,30 @@
                                 scope="spread-content"
                                 start-offset="-1"
                                 text-style="text-transform: print-page"/>
-              <marker-reference marker="slash-print-page"
-                                direction="backward"
-                                scope="sequence"
-                                text-style="-dotify-def:tmp_2; text-transform: print-page"/>
-              <marker-reference marker="slash-print-page/entry"
-                                direction="backward"
-                                scope="sequence"
-                                text-style="-dotify-ifndef:tmp_2; text-transform: print-page"/>
+              <compound-marker-reference>
+                <marker-reference marker="slash-print-page"
+                                  direction="backward"
+                                  scope="sequence"
+                                  text-style="text-transform: print-page"/>
+                <marker-reference marker="slash-print-page/entry"
+                                  direction="backward"
+                                  scope="sequence"
+                                  text-style="text-transform: print-page"/>
+              </compound-marker-reference>
             </field>
             <field>
-              <marker-reference marker="running-footer/prev"
-                                direction="forward"
-                                scope="spread-content"
-                                text-style="-dotify-def:tmp_3"
-                                start-offset="-1"/>
-              <marker-reference marker="running-footer"
-                                direction="backward"
-                                scope="sequence"
-                                text-style="-dotify-defifndef:tmp_3"/>
-              <marker-reference marker="running-footer/entry"
-                                direction="backward"
-                                scope="sequence"
-                                text-style="-dotify-ifndef:tmp_3"/>
+              <compound-marker-reference>
+                <marker-reference marker="running-footer/prev"
+                                  direction="forward"
+                                  scope="spread-content"
+                                  start-offset="-1"/>
+                <marker-reference marker="running-footer"
+                                  direction="backward"
+                                  scope="sequence"/>
+                <marker-reference marker="running-footer/entry"
+                                  direction="backward"
+                                  scope="sequence"/>
+              </compound-marker-reference>
             </field>
             <field>
               <current-page number-format="default"/>

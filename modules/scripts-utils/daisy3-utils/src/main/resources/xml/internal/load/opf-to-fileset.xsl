@@ -11,7 +11,6 @@
     <xsl:template match="package">
         <d:fileset>
             <xsl:attribute name="xml:base" select="replace(base-uri(.),'[^/]+$','')"/>
-            <xsl:message select="'creating fileset'"/>
 
             <!--get the SMILs in spine order-->
             <xsl:variable name="smils" as="element()*">

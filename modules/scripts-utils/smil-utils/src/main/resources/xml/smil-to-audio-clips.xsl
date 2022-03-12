@@ -4,6 +4,7 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:mo="http://www.w3.org/ns/SMIL"
                 xmlns:s="http://www.w3.org/2001/SMIL20/"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns="http://www.daisy.org/ns/pipeline/data"
                 exclude-result-prefixes="#all">
 
@@ -12,9 +13,31 @@
     <xsl:param name="output-base-uri"/>
 
     <xsl:template name="create-map">
-        <audio-clips>
-            <xsl:apply-templates select="collection()/*"/>
-        </audio-clips>
+        <xsl:variable name="audio-clips" as="element(d:audio-clips)">
+            <audio-clips>
+                <xsl:apply-templates select="collection()/*"/>
+            </audio-clips>
+        </xsl:variable>
+        <!--
+            Remove duplicate clips (two clips could have the same idref if the SMILs contain two
+            text references to the same element)
+        -->
+        <xsl:for-each select="$audio-clips">
+            <xsl:copy>
+                <xsl:for-each-group select="d:clip" group-by="@idref">
+                    <xsl:variable name="clips" as="element(d:clip)*" select="current-group()"/>
+                    <xsl:variable name="clip" as="element(d:clip)" select="$clips[1]"/>
+                    <xsl:if test="$clips[not(@clipBegin=$clip/@clipBegin and @clipEnd=$clip/@clipEnd)]">
+                        <xsl:message terminate="yes">
+                            <xsl:text>SMILs contain two text references to the same element (</xsl:text>
+                            <xsl:value-of select="$clip/@idref"/>
+                            <xsl:text>) but with different clipBegin and/or clipEnd.</xsl:text>
+                        </xsl:message>
+                    </xsl:if>
+                    <xsl:sequence select="$clip"/>
+                </xsl:for-each-group>
+            </xsl:copy>
+        </xsl:for-each>
     </xsl:template>
 
     <xsl:template match="mo:text[@src]|

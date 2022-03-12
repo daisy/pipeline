@@ -7,7 +7,7 @@
                 version="1.0">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Play the mp3 files in a d:audio-clips document. The step is made available as a (fake
+        <p>Play the audio files in a d:audio-clips document. The step is made available as a (fake
         because passes always) XProcSpec assertion.</p>
     </p:documentation>
     
@@ -17,17 +17,29 @@
     
     <p:output port="result" primary="true"/>
     
-    <p:for-each name="mpg123">
+    <p:for-each name="play">
         <p:iteration-source select="/d:audio-clips/d:clip">
             <p:pipe step="main" port="context"/>
         </p:iteration-source>
-        <p:exec command="mpg123" result-is-xml="false">
-            <p:with-option name="args" select="substring-after(/*/@src,'file:')"/>
-        </p:exec>
+        <p:choose>
+            <p:when test="ends-with(/*/@src,'.mp3')">
+                <p:exec command="mpg123" result-is-xml="false">
+                    <p:with-option name="args" select="substring-after(/*/@src,'file:')"/>
+                </p:exec>
+            </p:when>
+            <p:when test="ends-with(/*/@src,'.wav')">
+                <p:exec command="afplay" result-is-xml="false">
+                    <p:with-option name="args" select="substring-after(/*/@src,'file:')"/>
+                </p:exec>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
     </p:for-each>
     <p:sink/>
     
-    <p:identity cx:depends-on="mpg123">
+    <p:identity cx:depends-on="play">
         <p:input port="source">
             <p:inline>
                 <x:test-result result="passed"/>

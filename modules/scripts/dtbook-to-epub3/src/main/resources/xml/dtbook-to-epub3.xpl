@@ -78,8 +78,13 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
     <p:option name="audio" select="'false'">
       <!-- defined in common-options.xpl -->
     </p:option>
+    <p:option name="audio-file-type" select="'audio/mpeg'" px:hidden="true"/>
 
-    <p:import href="convert.xpl"/>
+    <p:import href="convert.xpl">
+        <p:documentation>
+            px:dtbook-to-epub3
+        </p:documentation>
+    </p:import>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
@@ -127,6 +132,7 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
 	    <p:pipe step="dtbook-to-epub3" port="tts-config"/>
 	  </p:input>
 	  <p:with-option name="audio" select="$audio"/>
+	  <p:with-option name="audio-file-type" select="$audio-file-type"/>
 	  <p:with-option name="language" select="$language"/>
 	  <p:with-option name="assert-valid" select="$assert-valid"/>
 	  <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>

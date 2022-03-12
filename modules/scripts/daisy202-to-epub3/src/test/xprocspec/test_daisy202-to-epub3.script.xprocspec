@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-			   xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-			   xmlns:c="http://www.w3.org/ns/xproc-step"
-			   xmlns:mo="http://www.w3.org/ns/SMIL"
-			   xmlns:epub="http://www.idpf.org/2007/ops"
-			   xmlns:html="http://www.w3.org/1999/xhtml"
-			   script="../../main/resources/xml/daisy202-to-epub3.xpl">
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:mo="http://www.w3.org/ns/SMIL"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns:html="http://www.w3.org/1999/xhtml"
+               script="../../main/resources/xml/daisy202-to-epub3.xpl">
 
     <x:scenario label="Running with media overlays and compatibility mode enabled">
         <x:call step="px:daisy202-to-epub3.script">
@@ -13,36 +13,35 @@
             <x:option name="output" select="resolve-uri('scenario1/output/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('scenario1/temp-dir/',$temp-dir)"/>
         </x:call>
-		<x:context label="the output directory">
+        <x:context label="the output directory">
             <x:document type="directory" base-uri="temp-dir" href="scenario1/output/"/>
-		</x:context>
+        </x:context>
         <x:expect type="compare"
-				  label="the output directory should contain the EPUB file, and it should be named after the title of the book">
+                  label="the output directory should contain the EPUB file, and it should be named after the title of the book">
             <x:document type="inline">
                 <c:directory name="output">
                     <c:file name="F00000.epub"/>
                 </c:directory>
             </x:document>
         </x:expect>
-		<x:context label="the result epub">
+        <x:context label="the result epub">
             <x:document type="zip" base-uri="temp-dir" href="scenario1/output/F00000.epub" ordered="true" select="/*/c:file"/>
-		</x:context>
+        </x:context>
         <x:expect type="compare"
-				  label="the expected epub">
+                  label="the expected epub">
             <x:document type="zip" ordered="true"
                         href="../resources/expected/scenario1/output/F00000%20-%20Don%27t%20Worry%2C%20Be%20Happy%20Lyrics.epub"
                         select="/*/c:file"/>
-		</x:expect>
-		<x:context label="the package.opf file">
+        </x:expect>
+        <x:context label="the package.opf file">
             <x:document type="file" base-uri="temp-dir" href="scenario1/output/F00000.epub!/EPUB/package.opf" method="xml"/>
-		</x:context>
+        </x:context>
         <x:expect label="the OPF 2.0 meta elements should be present"
-				  type="xpath"
+                  type="xpath"
                   test="count(/*/*[local-name()='metadata']/*[namespace-uri()='http://www.idpf.org/2007/opf'
-						                                      and local-name()='meta'
-															  and (@name or @content)]) &gt; 0"/>
+                                                              and local-name()='meta'
+                                                              and (@name or @content)]) &gt; 0"/>
     </x:scenario>
-
 
     <x:scenario label="Running with media overlays and compatibility mode disabled">
         <x:call step="px:daisy202-to-epub3.script">
@@ -52,29 +51,28 @@
             <x:option name="mediaoverlay" select="'false'"/>
             <x:option name="compatibility-mode" select="'false'"/>
         </x:call>
-		<x:context label="the result epub">
+        <x:context label="the result epub">
             <x:document type="zip" base-uri="temp-dir" href="scenario2/output/F00000.epub" ordered="true" select="/*/c:file"/>
-		</x:context>
+        </x:context>
         <x:expect type="compare"
-				  label="the expected epub">
+                  label="the expected epub">
             <x:document type="zip" ordered="true"
                         href="../resources/expected/scenario2/output/F00000%20-%20Don%27t%20Worry%2C%20Be%20Happy%20Lyrics.epub"
                         select="/*/c:file"/>
-		</x:expect>
-		<x:context label="the package.opf file">
+        </x:expect>
+        <x:context label="the package.opf file">
             <x:document type="file" base-uri="temp-dir" href="scenario2/output/F00000.epub!/EPUB/package.opf" method="xml"/>
-		</x:context>
+        </x:context>
         <x:expect label="the OPF 2.0 meta elements should not be present"
-				  type="xpath"
+                  type="xpath"
                   test="count(/*/*[local-name()='metadata']/*[namespace-uri()='http://www.idpf.org/2007/opf'
-						                                      and local-name()='meta'
-															  and (@name or @content)]) = 0"/>
-		
-		<x:context label="the mimetype file">
+                                                              and local-name()='meta'
+                                                              and (@name or @content)]) = 0"/>
+        <x:context label="the mimetype file">
             <x:document type="file" base-uri="temp-dir" href="scenario2/output/F00000.epub!/mimetype" method="text"/>
-		</x:context>
+        </x:context>
         <x:expect type="compare"
-				  label="the mimetype file should contain the string 'application/epub+zip'">
+                  label="the mimetype file should contain the string 'application/epub+zip'">
             <x:document type="inline">
                 <c:body>application/epub+zip</c:body>
             </x:document>

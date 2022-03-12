@@ -3,12 +3,14 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 xmlns="http://www.idpf.org/2007/opf"
                 xpath-default-namespace="http://www.idpf.org/2007/opf"
                 exclude-result-prefixes="#all">
 
     <xsl:include href="epub3-vocab.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 
     <!--
         prefix declarations have been previously normalized by px:epub3-merge-prefix according
@@ -79,7 +81,7 @@
                     <xsl:variable name="value" as="xs:string"
                                   select="f:serialize-value(current-group())"/>
                     <xsl:if test="$value!=$new-value">
-                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        <xsl:message>Updating '<xsl:value-of select="name()"
                         />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
                         select="$new-value"/>.</xsl:message>
                     </xsl:if>
@@ -100,7 +102,7 @@
                     <xsl:variable name="value" as="xs:string"
                                   select="f:serialize-value(current-group())"/>
                     <xsl:if test="$value!=$new-value">
-                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        <xsl:message>Updating '<xsl:value-of select="name()"
                         />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
                         select="$new-value"/>.</xsl:message>
                     </xsl:if>
@@ -121,7 +123,7 @@
                     <xsl:variable name="value" as="xs:string"
                                   select="f:serialize-value(current-group())"/>
                     <xsl:if test="$value!=$new-value">
-                        <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                        <xsl:message>Updating '<xsl:value-of select="name()"
                         />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
                         select="$new-value"/>.</xsl:message>
                     </xsl:if>
@@ -155,9 +157,11 @@
                             <xsl:sequence select="$first"/>
                             <!-- Discard other fields in the same metadata document -->
                             <xsl:for-each select="$first-group except $first">
-                                <xsl:message>[WARNING] Discarding '<xsl:value-of select="name()"
-                                />' with value '<xsl:value-of select="string(.)"/>': only one '<xsl:value-of
-                                select="name()"/>' allowed.</xsl:message>
+                                <xsl:call-template name="pf:warn">
+                                    <xsl:with-param name="msg">Discarding '<xsl:value-of select="name()"
+                                        />' with value '<xsl:value-of select="string(.)"/>': only one '<xsl:value-of
+                                        select="name()"/>' allowed.</xsl:with-param>
+                                </xsl:call-template>
                             </xsl:for-each>
                         </xsl:when>
                         <xsl:otherwise>
@@ -175,7 +179,7 @@
                         <xsl:variable name="value" as="xs:string"
                                       select="f:serialize-value(current-group())"/>
                         <xsl:if test="$value!=$new-value">
-                            <xsl:message>[INFO] Updating '<xsl:value-of select="name()"
+                            <xsl:message>Updating '<xsl:value-of select="name()"
                             />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
                             select="$new-value"/>.</xsl:message>
                         </xsl:if>
@@ -203,7 +207,7 @@
                                 <xsl:for-each select="$discarded">
                                     <xsl:choose>
                                         <xsl:when test="$property='http://purl.org/dc/terms/modified'">
-                                            <xsl:message>[INFO] Discarding property '<xsl:value-of select="@property"
+                                            <xsl:message>Discarding property '<xsl:value-of select="@property"
                                             />' with value '<xsl:value-of select="."
                                             />'. A new value is generated.</xsl:message>
                                         </xsl:when>
@@ -231,7 +235,7 @@
                                             <xsl:variable name="value" as="xs:string"
                                                           select="f:serialize-value(current-group())"/>
                                             <xsl:if test="$value!=$new-value">
-                                                <xsl:message>[INFO] Updating property '<xsl:value-of select="@property"
+                                                <xsl:message>Updating property '<xsl:value-of select="@property"
                                                 />': replacing value <xsl:value-of select="$value"/> with <xsl:value-of
                                                 select="$new-value"/>.</xsl:message>
                                             </xsl:if>
@@ -239,9 +243,11 @@
                                     </xsl:when>
                                     <xsl:otherwise>
                                         <xsl:for-each select="$discarded">
-                                            <xsl:message>[WARNING] Discarding property '<xsl:value-of
-                                            select="@property" />' with value '<xsl:value-of select="string(.)"
-                                            />'.</xsl:message>
+                                            <xsl:call-template name="pf:warn">
+                                                <xsl:with-param name="msg">Discarding property '<xsl:value-of
+                                                    select="@property" />' with value '<xsl:value-of select="string(.)"
+                                                    />'.</xsl:with-param>
+                                            </xsl:call-template>
                                         </xsl:for-each>
                                     </xsl:otherwise>
                                 </xsl:choose>
@@ -253,8 +259,10 @@
                              present. -->
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:message>[WARNING] Discarding property '<xsl:value-of
-                        select="@property"/>' from an undeclared vocab.</xsl:message>
+                        <xsl:call-template name="pf:warn">
+                            <xsl:with-param name="msg">Discarding property '<xsl:value-of
+                                select="@property"/>' from an undeclared vocab.</xsl:with-param>
+                        </xsl:call-template>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:for-each-group>
@@ -268,8 +276,10 @@
 
                 <xsl:for-each select="meta[@refines][not(replace(@refines,'^#','')=$manifest//item/@id) and
                                       not(exists(key('unified-id',f:unified-id(@refines))))]">
-                    <xsl:message>[WARNING] Discarding property '<xsl:value-of select="@property"
-                    />' with broken refines attribute '<xsl:value-of select="@refines"/>'.</xsl:message>
+                    <xsl:call-template name="pf:warn">
+                        <xsl:with-param name="msg">Discarding property '<xsl:value-of select="@property"
+                            />' with broken refines attribute '<xsl:value-of select="@refines"/>'.</xsl:with-param>
+                    </xsl:call-template>
                 </xsl:for-each>
             </xsl:for-each>
 
@@ -295,7 +305,7 @@
         <xsl:variable name="property" select="f:expand-property(@property,$vocabs)"/>
         <xsl:choose>
             <xsl:when test="$property/@uri='http://purl.org/dc/terms/modified'">
-                <xsl:message>[INFO] Discarding property '<xsl:value-of select="@property"
+                <xsl:message>Discarding property '<xsl:value-of select="@property"
                     />' with value '<xsl:value-of select="."/>'. A new value is generated.</xsl:message>
             </xsl:when>
             <xsl:when test="not(@property) and @name and @content">
@@ -304,24 +314,32 @@
                      fields in the input, the corresponding OPF 3 fields are also present. -->
             </xsl:when>
             <xsl:when test="not(normalize-space())">
-                <xsl:message>[WARNING] Discarding empty property '<xsl:value-of select="@property"
-                    />'.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding empty property '<xsl:value-of select="@property"
+                        />'.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="$property/@uri=''">
-                <xsl:message>[WARNING] Discarding property '<xsl:value-of select="@property"/>' from
-                    an undeclared vocab.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding property '<xsl:value-of select="@property"/>' from
+                        an undeclared vocab.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when
                 test="$property/@prefix='' and $property/@name=('display-seq','meta-auth')">
-                <xsl:message>[WARNING] The deprecated property '<xsl:value-of select="@property"
-                    />' was found.</xsl:message>
-                    <xsl:next-match/>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">The deprecated property '<xsl:value-of select="@property"
+                        />' was found.</xsl:with-param>
+                </xsl:call-template>
+                <xsl:next-match/>
             </xsl:when>
             <xsl:when
                 test="$property/@prefix='' and not($property/@name=('alternate-script','display-seq',
                 'file-as','group-position','identifier-type','meta-auth','role','title-type'))">
-                <xsl:message>[WARNING] Discarding unknown property '<xsl:value-of select="@property"
-                    />'.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding unknown property '<xsl:value-of select="@property"
+                        />'.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:next-match/>
@@ -335,26 +353,34 @@
         <xsl:variable name="rel" select="f:expand-property(@rel,$vocabs)"/>
         <xsl:choose>
             <xsl:when test="not(@href) or not(@rel)">
-                <xsl:message>[WARNING] Discarding link with no @href or @rel
-                    attributes.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding link with no @href or @rel
+                        attributes.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <!-- EPUB3.2: values marc21xml-record, mods-record, onix-record, and xmp-signature of @rel are deprecated and should be replaced by 'record'-->
             <xsl:when
                 test="$rel/@prefix='' and $rel/@name=('marc21xml-record',
                 'mods-record','onix-record','xml-signature xmp-record')">
-                <xsl:message>[WARNING] Found link with deprecated @rel value '<xsl:value-of
-                        select="@rel"/>'. This value should be replaced by 'record' with a corresponding 'media-type' attribute.</xsl:message>
-                    <xsl:next-match/>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Found link with deprecated @rel value '<xsl:value-of
+                        select="@rel"/>'. This value should be replaced by 'record' with a corresponding 'media-type' attribute.</xsl:with-param>
+                </xsl:call-template>
+                <xsl:next-match/>
             </xsl:when>
             <xsl:when
                 test="$rel/@prefix='' and not($rel/@name=('marc21xml-record',
                 'mods-record','onix-record','xml-signature xmp-record','record','acquire','alternate'))">
-                <xsl:message>[WARNING] Discarding link with unknown @rel value '<xsl:value-of
-                        select="@rel"/>'.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding link with unknown @rel value '<xsl:value-of
+                        select="@rel"/>'.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="$rel/@uri=''">
-                <xsl:message>[WARNING] Discarding link with @rel value '<xsl:value-of
-                        select="@property"/>' from an undeclared vocab.</xsl:message>
+                <xsl:call-template name="pf:warn">
+                    <xsl:with-param name="msg">Discarding link with @rel value '<xsl:value-of
+                        select="@property"/>' from an undeclared vocab.</xsl:with-param>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:next-match/>

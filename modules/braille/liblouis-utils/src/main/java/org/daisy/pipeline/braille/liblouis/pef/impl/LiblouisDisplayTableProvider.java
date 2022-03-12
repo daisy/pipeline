@@ -19,6 +19,7 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
+import org.daisy.pipeline.braille.liblouis.pef.LiblouisDisplayTableBrailleConverter;
 import org.daisy.pipeline.braille.pef.AbstractTableProvider;
 import org.daisy.pipeline.braille.pef.TableProvider;
 
@@ -70,8 +71,8 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 			if (!q.isEmpty())
 				return empty;
 			q.add("liblouis-table", id); }
-		else
-			q.add("display");
+		if (!q.containsKey("liblouis-table"))
+			q.add("type", "display");
 		return filter(
 			transform(
 				tableProvider.get(q),
@@ -94,7 +95,7 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 		}
 		
 		public BrailleConverter newBrailleConverter() {
-			return new LiblouisDisplayTableBrailleConverter(table);
+			return new LiblouisDisplayTableBrailleConverter(table.asDisplayTable());
 		}
 		
 		public void setFeature(String key, Object value) {

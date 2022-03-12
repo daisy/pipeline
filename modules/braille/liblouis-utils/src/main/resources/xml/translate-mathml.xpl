@@ -12,7 +12,7 @@
     
     <p:option name="math-code" required="true"/>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xpl">
+    <p:import href="translate-file.xpl">
         <p:documentation>
             louis:translate-file
         </p:documentation>

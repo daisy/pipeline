@@ -7,8 +7,7 @@
   <xsl:template match="/">
     <d:fileset>
       <xsl:for-each-group select="//d:clip" group-by="@src">
-        <!-- FIXME: deal with other format than audio/mpeg -->
-        <d:file href="{current-grouping-key()}" media-type="audio/mpeg"/>
+        <d:file href="{current-grouping-key()}"/>
       </xsl:for-each-group>
     </d:fileset>
   </xsl:template>

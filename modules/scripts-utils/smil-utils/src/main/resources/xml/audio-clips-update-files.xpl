@@ -11,6 +11,7 @@
   <p:input port="source" primary="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>The input d:audio-clips document</p>
+      <p>It is expected to have no two clips with the same idref.</p>
     </p:documentation>
   </p:input>
 

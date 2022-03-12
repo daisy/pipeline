@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.1.1-SNAPSHOT</version>
   <artifactId>tts-adapter-google</artifactId>
   <packaging>bundle</packaging>
 
@@ -29,6 +29,12 @@
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
+    </dependency>
+    <!-- test dependencies -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-mocks</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   
@@ -51,6 +57,16 @@
               *
             </Import-Package>
           </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <systemPropertyVariables>
+            <org.daisy.pipeline.tts.google.address>http://localhost:8080</org.daisy.pipeline.tts.google.address>
+            <org.daisy.pipeline.tts.google.apikey>mykey</org.daisy.pipeline.tts.google.apikey>
+          </systemPropertyVariables>
         </configuration>
       </plugin>
     </plugins>

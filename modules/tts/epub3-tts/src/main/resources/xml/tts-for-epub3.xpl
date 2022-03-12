@@ -77,6 +77,17 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="audio-file-type" select="'audio/mpeg'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+      <p>Examples:</p>
+      <ul>
+        <li>"audio/mpeg"</li>
+        <li>"audio/x-wav" (but note that this is not a core media type)</li>
+      </ul>
+    </p:documentation>
+  </p:option>
+
   <p:option name="process-css" required="false" select="'true'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Set to false to bypass aural CSS processing.</p>
@@ -252,7 +263,7 @@
           <p:rename match="tts:before|tts:after"
                     new-name="span" new-namespace="http://www.w3.org/1999/xhtml"/>
         </p:group>
-        <px:html-break-detect name="lexing" px:progress="1/2">
+        <px:html-break-detect name="lexing" px:progress="1/2" px:message="Performing sentence detection">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
         </px:html-break-detect>
         <px:isolate-skippable name="isolate-skippable"
@@ -266,7 +277,7 @@
           </p:input>
           <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
         </px:isolate-skippable>
-        <px:epub3-to-ssml name="ssml" px:progress="1/2">
+        <px:epub3-to-ssml name="ssml" px:progress="1/2" px:message="Generating SSML from EPUB 3">
           <p:input port="sentence-ids">
             <p:pipe port="sentence-ids" step="lexing"/>
           </p:input>
@@ -300,10 +311,13 @@
           </p:documentation>
         </px:html-unwrap-words>
       </p:for-each>
-      <px:ssml-to-audio name="to-audio" px:progress="8/9">
+      <px:ssml-to-audio name="to-audio" px:progress="8/9" px:message="Processing SSML">
         <p:input port="config">
           <p:pipe port="config" step="main"/>
         </p:input>
+        <p:with-option name="audio-file-type" select="$audio-file-type">
+          <p:empty/>
+        </p:with-option>
         <p:with-option name="include-log" select="$include-log">
           <p:empty/>
         </p:with-option>

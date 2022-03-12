@@ -7,7 +7,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("common-utils"),
+			brailleModule("braille-common"),
 			brailleModule("pef-utils"),
 			brailleModule("obfl-utils"),
 			brailleModule("liblouis-utils"),

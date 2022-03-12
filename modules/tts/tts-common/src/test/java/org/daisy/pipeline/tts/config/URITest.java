@@ -10,8 +10,8 @@ import org.junit.Test;
 
 public class URITest {
 	@Test
-	public void absolutePath() {
-		URL url = ConfigReader.URIinsideConfig("/foo/bar.xml", null);
+	public void absolutePath() throws URISyntaxException {
+		URL url = ConfigReader.URIinsideConfig("/foo/bar.xml", new URI("file:///tmp/"));
 		Assert.assertTrue("file:///foo/bar.xml".equals(url.toString())
 		        || "file:/foo/bar.xml".equals(url.toString()));
 	}
@@ -25,7 +25,7 @@ public class URITest {
 
 	@Test
 	public void regularURI() throws URISyntaxException {
-		URL url = ConfigReader.URIinsideConfig("file:///foo/bar.xml", null);
+		URL url = ConfigReader.URIinsideConfig("file:///foo/bar.xml", new URI("file:///tmp/"));
 		Assert.assertTrue("file:///foo/bar.xml".equals(url.toString())
 		        || "file:/foo/bar.xml".equals(url.toString()));
 	}

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="dispatching-table-provider">
-  <implementation class="DispatchingTableProvider"/>
-  <service>
-    <provide interface="DispatchingTableProvider"/>
-  </service>
-  <reference name="TableProvider" cardinality="0..n" policy="static" interface="org.daisy.pipeline.braille.pef.TableProvider" bind="addProvider"/>
-</component>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils</artifactId>
-  <version>4.0.4-SNAPSHOT</version>
+  <version>5.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils</name>
@@ -28,7 +28,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
-      <artifactId>common-utils</artifactId>
+      <artifactId>braille-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -77,39 +77,24 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_pef_utils,
+      org.daisy.pipeline.braille.pef.FileFormatRegistry,
+      org.daisy.pipeline.braille.pef.TableRegistry,
       org.daisy.pipeline.braille.pef.impl.BrailleUtilsFileFormatCatalog,
       org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog,
       org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
       org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider,
+      org.daisy.pipeline.braille.pef.impl.PEFFileFormat$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider,
       org.daisy.pipeline.braille.pef.saxon.impl.DecodeDefinition,
-      org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition
+      org.daisy.pipeline.braille.pef.saxon.impl.EncodeDefinition,
+      org.daisy.pipeline.braille.pef.saxon.impl.GetTableIdDefinition
     </expose-services>
   </properties>
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-spi-test-classes</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>generate-spi-test-classes</goal>
-            </goals>
-            <configuration>
-              <includes>
-                DispatchingFileFormatProvider,
-                DispatchingTableProvider
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>

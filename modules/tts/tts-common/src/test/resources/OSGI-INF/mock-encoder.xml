@@ -2,6 +2,6 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="mock-encoder">
    <implementation class="MockEncoder"/>
    <service>
-      <provide interface="org.daisy.pipeline.audio.AudioEncoder"/>
+      <provide interface="org.daisy.pipeline.audio.AudioEncoderService"/>
    </service>
 </scr:component>

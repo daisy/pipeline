@@ -1,6 +1,5 @@
 package org.daisy.pipeline.tts;
 
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -12,14 +11,9 @@ import java.util.Map;
 public interface TTSService {
 
 	class SynthesisException extends Exception {
-		public SynthesisException(String message, Throwable cause) {
-			super(message
-			        + (cause != null && cause.getMessage() != null ? ": " + cause.getMessage()
-			                : ""), cause);
-			if (cause != null) {
-				setStackTrace(cause.getStackTrace());
-			}
 
+		public SynthesisException(String message, Throwable cause) {
+			super(message, cause);
 		}
 
 		public SynthesisException(Throwable t) {
@@ -29,19 +23,6 @@ public interface TTSService {
 		public SynthesisException(String message) {
 			super(message);
 		}
-	}
-
-	/**
-	 * Java counterpart of SSML's marks and TTS processors' bookmarks.
-	 */
-	class Mark {
-		public Mark(String name, int offset) {
-			this.offsetInAudio = offset;
-			this.name = name;
-		}
-
-		public int offsetInAudio; //in bytes
-		public String name;
 	}
 
 	/**
@@ -65,31 +46,5 @@ public interface TTSService {
 	 *         priority will be chosen. Must be thread-safe.
 	 */
 	public String getName();
-
-	/**
-	 * @return the version or type (binary, in-memory) of the TTS service. Used
-	 *         only for printing information. Must be thread-safe.
-	 */
-	public String getVersion();
-
-	/**
-	 * Must be thread safe.
-	 *
-	 * @return the URL of the XSLT stylesheet to use for transforming SSML into
-	 *         plain strings, in whatever syntax the TTS processor takes as
-	 *         input.
-	 *
-	 *         <p>If the TTS processor does not add any extra ending pauses, the
-	 *         XSLT should produce a silent break at the end (around 250ms). It
-	 *         should also add an ending SSML mark if it can handle it. The XSLT
-	 *         must take as parameters an optional voice name and an
-	 *         ending-mark.</p>
-	 *
-	 *         <p>May be <code>null</code> in which case the SSML is not
-	 *         transformed, and the <code>sentence</code> argument that is
-	 *         passed to {@link TTSEngine#synthesize} will be
-	 *         <code>null</code>.</p>
-	 */
-	public URL getSSMLxslTransformerURL();
 
 }

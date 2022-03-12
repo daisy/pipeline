@@ -9,5 +9,6 @@
     <p:import href="i18n-translate.xpl"/>
     <p:import href="xml-chunker.xpl"/>
     <p:import href="add-ids.xpl"/>
+    <p:import href="parse-xml-stylesheet-instructions.xpl"/>
     
 </p:library>

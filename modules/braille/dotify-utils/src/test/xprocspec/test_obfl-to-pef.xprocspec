@@ -2,25 +2,71 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:dp2="http://www.daisy.org/ns/pipeline/"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
   <x:script>
     <p:declare-step type="pxi:test" version="1.0">
       <p:input port="source"/>
       <p:output port="result"/>
-      <p:option name="text-transform" select="''"/>
+      <p:option name="text-transform" select="'(input:braille)'"/>
+      <p:option name="braille-charset" select="''"/>
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
+      <p:choose>
+        <p:when test="not(exists(/obfl:obfl/meta))">
+          <p:insert match="/obfl:obfl" position="first-child">
+            <p:input port="insertion">
+              <p:inline>
+                <obfl:meta/>
+              </p:inline>
+            </p:input>
+          </p:insert>
+        </p:when>
+        <p:otherwise>
+          <p:identity/>
+        </p:otherwise>
+      </p:choose>
+      <p:choose>
+        <p:when test="$braille-charset!=''">
+          <p:insert match="/obfl:obfl/obfl:meta" position="last-child">
+            <p:input port="insertion">
+              <p:inline>
+                <dp2:braille-charset>{}</dp2:braille-charset>
+              </p:inline>
+            </p:input>
+          </p:insert>
+          <p:string-replace match="/obfl:obfl/obfl:meta/dp2:braille-charset/text()">
+            <p:with-option name="replace" select="concat('&quot;',$braille-charset,'&quot;')"/>
+          </p:string-replace>
+        </p:when>
+        <p:otherwise>
+          <p:identity/>
+        </p:otherwise>
+      </p:choose>
+      <p:group>
+        <p:insert match="/obfl:obfl/obfl:meta" position="last-child">
+          <p:input port="insertion">
+            <p:inline>
+              <dp2:default-mode>{}</dp2:default-mode>
+            </p:inline>
+          </p:input>
+        </p:insert>
+        <p:string-replace match="/obfl:obfl/obfl:meta/dp2:default-mode/text()">
+          <p:with-option name="replace" select='concat("&apos;",$text-transform,"&apos;")'/>
+        </p:string-replace>
+      </p:group>
       <pxi:obfl-normalize-space/>
-      <px:obfl-to-pef locale="und">
-        <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
-      </px:obfl-to-pef>
+      <px:obfl-to-pef/>
+      <p:delete match="/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset"/>
     </p:declare-step>
   </x:script>
   
-  <x:scenario label="text-transform-write-out-numbers">
+  <x:scenario label="mode-write-out-numbers">
     <x:documentation>
-      Tests text-transform option. A liblouis table is selected that writes out numbers.
+      Tests mode option. A liblouis table is selected that writes out numbers.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -409,6 +455,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -531,7 +578,7 @@
           </obfl>
         </x:document>
       </x:input>
-      <x:option name="text-transform" select="'(number-translator)'"/>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -795,6 +842,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -933,6 +981,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -1043,6 +1092,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3144,9 +3194,6 @@
     </x:expect>
   </x:scenario>
   
-  <!--
-      note that generate-dotify-tests.xsl hides the issue at the beginning of a blocks
-  -->
   <x:scenario label="white-space-normalization-around-marker">
     <x:documentation>
       Tests white space normalisation near marker elements. Tests that white space at the beginning
@@ -3271,6 +3318,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3469,6 +3517,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3608,6 +3657,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3776,6 +3826,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3877,12 +3928,12 @@
                 <header/>
                 <footer>
                   <field>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    <compound-marker-reference>
+                      <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                      <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                    </compound-marker-reference>
                   </field>
                   <field/>
-                  <field>
-                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
-                  </field>
                 </footer>
               </default-template>
             </layout-master>
@@ -3905,6 +3956,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -3935,7 +3987,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row> <!-- 1 -->
+                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 1 -->
                 </page>
               </section>
             </volume>
@@ -4121,6 +4173,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4218,6 +4271,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4259,11 +4313,10 @@
   <x:scenario label="marker-reference-page-first-workaround">
     <x:documentation>
       Tests (hypothetical) marker-reference type that corresponds with 'page-first' in CSS. This
-      type is not directly supported in OBFL. As a workaround I do a forward page search (left
-      corner in this test), and if that does not return a value, a backward sequence search (right
-      corner). Tested with markers at the beginning of the sequence, in the middle of a page, at a
-      soft page break within a block, at a soft page break between two blocks, and at a hard page
-      break.
+      type is not directly supported in OBFL. As a workaround I do a forward page search, and if
+      that does not return a value, a backward sequence search. Tested with markers at the beginning
+      of the sequence, in the middle of a page, at a soft page break within a block, at a soft page
+      break between two blocks, and at a hard page break.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -4273,12 +4326,12 @@
               <default-template>
                 <header>
                   <field>
-                    <marker-reference marker="foo" direction="forward" scope="page"/>
+                    <compound-marker-reference>
+                      <marker-reference marker="foo" direction="forward" scope="page"/>
+                      <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    </compound-marker-reference>
                   </field>
                   <field/>
-                  <field>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                  </field>
                 </header>
                 <footer/>
               </default-template>
@@ -4330,6 +4383,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4347,14 +4401,14 @@
               <section>
                 <page>
                   <!-- 1 -->
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠼⠁</row> <!-- 1   1 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                 </page>
                 <page>
-                  <row>⠼⠃⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 2   3 -->
+                  <row>⠼⠃</row> <!-- 2 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 2 -->
                   <row>⠁⠁⠁⠁⠁</row>
@@ -4363,7 +4417,7 @@
                   <!-- 3 -->
                 </page>
                 <page>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row> <!--     3 -->
+                  <row>⠼⠉</row> <!-- 3 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
@@ -4371,7 +4425,7 @@
                 </page>
                 <page>
                   <!-- 4 -->
-                  <row>⠼⠙⠀⠀⠀⠀⠀⠀⠼⠙</row> <!-- 4   4 -->
+                  <row>⠼⠙</row> <!-- 4 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
@@ -4379,13 +4433,13 @@
                 </page>
                 <page>
                   <!-- 5 -->
-                  <row>⠼⠑⠀⠀⠀⠀⠀⠀⠼⠑</row> <!-- 5   5 -->
+                  <row>⠼⠑</row> <!-- 5 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                 </page>
                 <page>
                   <!-- 6 -->
-                  <row>⠼⠋⠀⠀⠀⠀⠀⠀⠼⠋</row> <!-- 6   6 -->
+                  <row>⠼⠋</row> <!-- 6 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                 </page>
@@ -4399,12 +4453,11 @@
   
   <x:scenario label="marker-reference-page-start-workaround">
     <x:documentation>
-      Tests (hypothetical) marker-reference type that corresponds with 'page-start' in CSS. This
-      type is not directly supported in OBFL. As a workaround I do a forward page search for the
-      marker 'foo/prev' (rendered top left corner), and if that does not return a value, a backward
-      sequence search for the marker 'foo' (top right corner). At any position in the OBFL the value
-      of the preceding marker of class 'foo' matches the value of the following marker of class
-      'foo/prev'.
+      Tests (hypothetical) marker-reference type that corresponds with 'page-start' in CSS (top left
+      corner). This type is not directly supported in OBFL. As a workaround I do a forward page
+      search for the marker 'foo/prev', and if that does not return a value, a backward sequence
+      search for the marker 'foo'. At any position in the OBFL the value of the preceding marker of
+      class 'foo' matches the value of the following marker of class 'foo/prev'.
       
       In addition, tests marker-reference with scope page and direction backward, which corresponds
       more or less with 'page-last-except-start' in CSS (bottom left corner).
@@ -4420,18 +4473,17 @@
               <default-template>
                 <header>
                   <field>
-                    <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
+                    <compound-marker-reference>
+                      <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
+                      <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    </compound-marker-reference>
                   </field>
                   <field/>
-                  <field>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                  </field>
                 </header>
                 <footer>
                   <field>
                     <marker-reference marker="foo" direction="backward" scope="page"/>
                   </field>
-                  <field/>
                   <field/>
                 </footer>
               </default-template>
@@ -4487,6 +4539,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4504,57 +4557,56 @@
               <section>
                 <page>
                   <!-- 1 -->
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row> <!--     1 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 1     -->
+                  <row>⠼⠁</row> <!-- 1 -->
                 </page>
                 <page>
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 1   3 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 2 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 3 -->
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 3 -->
+                  <row>⠼⠉</row> <!-- 3 -->
                 </page>
                 <page>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row> <!--     3 -->
+                  <row>⠼⠉</row> <!-- 3 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                 </page>
                 <page>
                   <!-- 4 -->
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠼⠙</row> <!-- 3   4 --> <!-- should ideally be:     4 -->
+                  <row>⠼⠉</row> <!-- 3 --> <!-- should ideally be: 4 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠼⠙⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 4     -->
+                  <row>⠼⠙</row> <!-- 4 -->
                 </page>
                 <page>
                   <!-- 5 -->
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠑</row> <!--     5 -->
+                  <row>⠼⠑</row> <!-- 5 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row/>
                   <row/>
-                  <row>⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 5     -->
+                  <row>⠼⠑</row> <!-- 5 -->
                 </page>
                 <page>
                   <!-- 6 -->
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋</row> <!--     6 -->
+                  <row>⠼⠋</row> <!-- 6 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row/>
                   <row/>
-                  <row>⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 6     -->
+                  <row>⠼⠋</row> <!-- 6 -->
                 </page>
               </section>
             </volume>
@@ -4567,10 +4619,9 @@
   <x:scenario label="marker-reference-page-start-except-last-workaround">
     <x:documentation>
       Tests (hypothetical) marker-reference type that corresponds with 'page-start-except-last' in
-      CSS. This type is not directly supported in OBFL. As a workaround I do a forward page search
-      for the marker 'foo/prev' (rendered top left corner). At any position in the OBFL the value of
-      the preceding marker of class 'foo' matches the value of the following marker of class
-      'foo/prev'.
+      CSS (top left corner). This type is not directly supported in OBFL. As a workaround I do a
+      forward page search for the marker 'foo/prev'. At any position in the OBFL the value of the
+      preceding marker of class 'foo' matches the value of the following marker of class 'foo/prev'.
       
       In addition, tests marker-reference with scope sequence and direction backward, which
       corresponds with 'page-last' in CSS (bottom left corner).
@@ -4589,13 +4640,11 @@
                     <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
                   </field>
                   <field/>
-                  <field/>
                 </header>
                 <footer>
                   <field>
                     <marker-reference marker="foo" direction="backward" scope="sequence"/>
                   </field>
-                  <field/>
                   <field/>
                 </footer>
               </default-template>
@@ -4651,6 +4700,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4730,12 +4780,12 @@
   
   <x:scenario label="marker-reference-spread-start-workaround">
     <x:documentation>
-      Tests (hypothetical) marker-reference type that corresponds with 'spread-start' in CSS. This
-      type is not directly supported in OBFL. As a workaround I do a forward spread search for the
-      marker 'foo/prev' starting on the left page (rendered top left corner), and if that does not
-      return a value, a backward sequence search for the marker 'foo' starting on the right page
-      (top right corner). At any position in the OBFL the value of the preceding marker of class
-      'foo' matches the value of the following marker of class 'foo/prev'.
+      Tests (hypothetical) marker-reference type that corresponds with 'spread-start' in CSS (top
+      left corner). This type is not directly supported in OBFL. As a workaround I do a forward
+      spread search for the marker 'foo/prev' starting on the left page, and if that does not return
+      a value, a backward sequence search for the marker 'foo' starting on the right page. At any
+      position in the OBFL the value of the preceding marker of class 'foo' matches the value of the
+      following marker of class 'foo/prev'.
       
       In addition, tests marker-reference with scope spread and direction backward, starting on the
       right page, which corresponds more or less with 'spread-last-except-start' in CSS (bottom left
@@ -4753,36 +4803,34 @@
               <template use-when="(= (% $page 2) 1)">
                 <header>
                   <field>
-                    <marker-reference marker="foo/prev" direction="forward" scope="spread-content" start-offset="-1"/>
+                    <compound-marker-reference>
+                      <marker-reference marker="foo/prev" direction="forward" scope="spread-content" start-offset="-1"/>
+                      <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    </compound-marker-reference>
                   </field>
                   <field/>
-                  <field>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                  </field>
                 </header>
                 <footer>
                   <field>
                     <marker-reference marker="foo" direction="backward" scope="spread"/>
                   </field>
                   <field/>
-                  <field/>
                 </footer>
               </template>
               <template use-when="(= (% $page 2) 0)">
                 <header>
                   <field>
-                    <marker-reference marker="foo/prev" direction="forward" scope="spread-content"/>
+                    <compound-marker-reference>
+                      <marker-reference marker="foo/prev" direction="forward" scope="spread-content"/>
+                      <marker-reference marker="foo" direction="backward" scope="sequence" start-offset="1"/>
+                    </compound-marker-reference>
                   </field>
                   <field/>
-                  <field>
-                    <marker-reference marker="foo" direction="backward" scope="sequence" start-offset="1"/>
-                  </field>
                 </header>
                 <footer>
                   <field>
                     <marker-reference marker="foo" direction="backward" scope="spread" start-offset="1"/>
                   </field>
-                  <field/>
                   <field/>
                 </footer>
               </template>
@@ -4844,6 +4892,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -4862,63 +4911,63 @@
                 <!-- right -->
                 <page>
                   <!-- 0 -->
-                  <row>⠼⠚⠀⠀⠀⠀⠀⠀⠼⠁</row> <!-- 0    1 -->
+                  <row>⠼⠚</row> <!-- 0-->
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 1 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                 </page>
                 <!-- left -->
                 <page>
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 1   3 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 2 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <!-- 3 -->
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 3 -->
+                  <row>⠼⠉</row> <!-- 3 -->
                 </page>
                 <!-- right -->
                 <page>
-                  <row>⠼⠁⠀⠀⠀⠀⠀⠀⠼⠉</row> <!-- 1   3 -->
+                  <row>⠼⠁</row> <!-- 1 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 3 -->
+                  <row>⠼⠉</row> <!-- 3 -->
                 </page>
                 <!-- left -->
                 <page>
                   <!-- 4 -->
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠼⠑</row> <!-- 3   5 --> <!-- should ideally be: 4   5 -->
+                  <row>⠼⠉</row> <!-- 3 --> <!-- should ideally be: 4 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
-                  <row>⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 5 -->
+                  <row>⠼⠑</row> <!-- 5 -->
                 </page>
                 <!-- right -->
                 <page>
                   <!-- 5 -->
-                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠼⠑</row> <!-- 3   5 --> <!-- should ideally be: 4   5 -->
+                  <row>⠼⠉</row> <!-- 3 --> <!-- should ideally be: 4 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row/>
                   <row/>
-                  <row>⠼⠑⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 5 -->
+                  <row>⠼⠑</row> <!-- 5 -->
                 </page>
                 <!-- left -->
                 <page>
                   <!-- 6 -->
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋</row> <!--     6 -->
+                  <row>⠼⠋</row> <!-- 6 -->
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row/>
                   <row/>
-                  <row>⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀</row> <!-- 6 -->
+                  <row>⠼⠋</row> <!-- 6 -->
                 </page>
               </section>
             </volume>
@@ -4931,10 +4980,9 @@
   <x:scenario label="marker-reference-spread-start-except-last-workaround">
     <x:documentation>
       Tests (hypothetical) marker-reference type that corresponds with 'spread-start-except-last' in
-      CSS. This type is not directly supported in OBFL. As a workaround I do a forward spread search
-      for the marker 'foo/prev' (rendered top left corner). At any position in the OBFL the value of
-      the preceding marker of class 'foo' matches the value of the following marker of class
-      'foo/prev'.
+      CSS (top left corner). This type is not directly supported in OBFL. As a workaround I do a
+      forward spread search for the marker 'foo/prev'. At any position in the OBFL the value of the
+      preceding marker of class 'foo' matches the value of the following marker of class 'foo/prev'.
       
       In addition, tests marker-reference with scope sequence and direction backward, which
       corresponds with 'spread-last' in CSS (bottom left corner).
@@ -4954,13 +5002,11 @@
                     <marker-reference marker="foo/prev" direction="forward" scope="spread-content" start-offset="-1"/>
                   </field>
                   <field/>
-                  <field/>
                 </header>
                 <footer>
                   <field>
                     <marker-reference marker="foo" direction="backward" scope="sequence"/>
                   </field>
-                  <field/>
                   <field/>
                 </footer>
               </template>
@@ -5038,6 +5084,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -5340,6 +5387,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -5689,6 +5737,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -5762,6 +5811,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -5944,31 +5994,22 @@
   </x:scenario>
 
   <x:scenario label="collapsing-margin-top-of-page">
-    <x:documentation>
-      Tests that the bottom margin of an empty block is not rendered if at the top of a page.
-      
-      TODO: use this trick to implement the "skip-margin-top-of-page" parameter.
-    </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
         <x:document type="inline">
           <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
-            <layout-master name="a" page-width="40" page-height="25" duplex="true">
+            <layout-master name="a" page-width="10" page-height="5" duplex="true">
               <default-template>
                 <header/>
                 <footer/>
               </default-template>
             </layout-master>
             <sequence master="a">
-              <block margin-top="1"> ⠿ </block>
-            </sequence>
-            <sequence master="a">
-              <block margin-bottom="1"/>
+              <block margin-top="1" display-when="(! $starts-at-top-of-page)"/>
               <block> ⠿ </block>
-            </sequence>
-            <sequence master="a">
+              <block margin-top="1" display-when="(! $starts-at-top-of-page)"/>
               <block> ⠿ </block>
-              <block margin-bottom="1"/>
+              <block> ⠿ </block>
               <block> ⠿ </block>
             </sequence>
           </obfl>
@@ -5987,22 +6028,13 @@
             </meta>
           </head>
           <body>
-            <volume rows="25" cols="40" rowgap="0" duplex="true">
-              <section>
-                <page>
-                  <row/>
-                  <row>⠿</row>
-                </page>
-              </section>
-              <section>
-                <page>
-                  <row>⠿</row>
-                </page>
-              </section>
+            <volume rows="5" cols="10" rowgap="0" duplex="true">
               <section>
                 <page>
                   <row>⠿</row>
                   <row/>
+                  <row>⠿</row>
+                  <row>⠿</row>
                   <row>⠿</row>
                 </page>
               </section>
@@ -6012,7 +6044,81 @@
       </x:document>
     </x:expect>
   </x:scenario>
-
+  
+  <x:scenario label="display-when">
+    <x:documentation>
+      The old implementation of display-when had a limitation, namely that the page breaking did not
+      take into account that certain rows will not take up space so that some available space at the
+      bottom the page might not be used. (See https://github.com/mtmse/dotify.library/issues/22.)
+      THis has been fixed.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="a" page-width="10" page-height="10" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="a">
+              <block display-when="(! $starts-at-top-of-page)">
+                ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤
+                ⠤⠤⠤⠤⠤
+              </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume rows="10" cols="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                  <row>⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
   <x:scenario label="row-spacing-nested-blocks">
     <x:documentation>
       Tests row-spacing on block nested in block with border bottom and default row-spacing.
@@ -6114,6 +6220,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -7599,6 +7706,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -7706,6 +7814,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -8486,6 +8595,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -8630,6 +8740,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -8955,6 +9066,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(input:text-css)(output:braille)(number-translator)'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -9878,6 +9990,128 @@
                 <page>
                   <row>⠇</row>
                   <row>⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="braille-charset">
+    <x:documentation>
+      Tests "braille-charset" metadata field.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+            <layout-master name="master" duplex="false" page-width="40" page-height="25">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="master">
+              <block>
+                <style name="braille-charset: unicode">⠤⠤⠤</style>
+              </block>
+              <block>---</block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:option name="braille-charset" select="resolve-uri('../resources/braille-charset.dis')"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row dp2:ascii="___">⠤⠤⠤</row>
+                  <row dp2:ascii="---">⠒⠒⠒</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="allow-text-flow">
+    <x:documentation>
+      Tests &lt;field allow-text-flow="true"/&gt;.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="master" page-width="10" page-height="5" duplex="true">
+              <default-template>
+                <header/>
+                <footer>
+                  <field allow-text-flow="true"/>
+                  <field>
+                    <string value="⠀⠤⠤"/>
+                  </field>
+                </footer>
+                <footer>
+                  <field allow-text-flow="true"/>
+                  <field>
+                    <string value="⠀⠤⠤⠤⠤"/>
+                  </field>
+                </footer>
+              </default-template>
+            </layout-master>
+            <sequence master="master">
+              <block margin-top="1" display-when="(! $starts-at-top-of-page)"/>
+              <block row-spacing="2"> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿ </block>
+              <block> ⠿⠿⠿ ⠿⠿⠿ </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row rowgap="4">⠿</row>
+                  <row>⠿</row>
+                  <row>⠿⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠿⠿⠿⠀⠀⠀⠤⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠤⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

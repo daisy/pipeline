@@ -11,8 +11,6 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -38,15 +36,11 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.dotify.api.embosser.EmbosserWriter;
 import org.daisy.dotify.api.embosser.FileFormat;
-import org.daisy.dotify.api.table.Table;
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.pef.FileFormatProvider;
-import org.daisy.pipeline.braille.pef.TableProvider;
+import org.daisy.pipeline.braille.pef.FileFormatRegistry;
 
 import org.xml.sax.SAXException;
 
@@ -60,9 +54,8 @@ import org.slf4j.LoggerFactory;
 
 public class PEF2TextStep extends DefaultStep implements XProcStep {
 	
-	private static final QName _dir_href = new QName("dir-href");
+	private static final QName _output_dir = new QName("output-dir");
 	private static final QName _file_format = new QName("file-format");
-	private static final QName _table = new QName("table");
 	private static final QName _line_breaks = new QName("line-breaks");
 	private static final QName _page_breaks = new QName("page-breaks");
 	private static final QName _pad = new QName("pad");
@@ -71,20 +64,15 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	private static final QName _number_width = new QName("number-width");
 	private static final QName _single_volume_name = new QName("single-volume-name");
 	
-	private static final Query EN_US = mutableQuery().add("id", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
-	
-	private final org.daisy.pipeline.braille.common.Provider<Query,FileFormat> fileFormatProvider;
-	private final org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider;
+	private final FileFormatRegistry fileFormatRegistry;
 	
 	private ReadablePipe source = null;
 	
 	private PEF2TextStep(XProcRuntime runtime,
 	                     XAtomicStep step,
-	                     org.daisy.pipeline.braille.common.Provider<Query,FileFormat> fileFormatProvider,
-	                     org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider) {
+	                     FileFormatRegistry fileFormatRegistry) {
 		super(runtime, step);
-		this.fileFormatProvider = fileFormatProvider;
-		this.tableProvider = tableProvider;
+		this.fileFormatRegistry = fileFormatRegistry;
 	}
 	
 	@Override
@@ -101,27 +89,14 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		MutableQuery q = mutableQuery(query(getOption(_file_format, "")));
+		q.removeAll("blank-last-page"); // has been handled in pef2text.xpl
+		q.removeAll("sheets-multiple-of-two"); // has been handled in pef2text.xpl
 		addOption(_line_breaks, q);
 		addOption(_page_breaks, q);
 		addOption(_pad, q);
 		addOption(_charset, q);
-		RuntimeValue tableQuery = getOption(_table);
-		if (tableQuery != null) {
-			Table table;
-			try {
-				logger.debug("Finding table for query: " + tableQuery);
-				table = tableProvider.get(query(tableQuery.getString())).iterator().next();
-				logger.debug("Found table: " + table); }
-			catch (NoSuchElementException e) {
-				
-				// this fallback is done because in dtbook-to-pef we use the
-				// query (locale:...) which does not always match something
-				// FIXME: https://github.com/daisy/pipeline-mod-braille/issues/75
-				logger.warn("Table not found, falling back to en-US table.");
-				table = tableProvider.get(EN_US).iterator().next(); }
-			q.add("table", table.getIdentifier()); }
 		logger.debug("Finding file format for query: " + q);
-		Iterable<FileFormat> fileFormats = fileFormatProvider.get(q);
+		Iterable<FileFormat> fileFormats = fileFormatRegistry.get(q);
 		if (!fileFormats.iterator().hasNext()) {
 			throw new XProcException(step, "No file format found for query: " + q); }
 		for (FileFormat fileFormat : fileFormats) {
@@ -129,7 +104,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 				logger.debug("Storing PEF to file format: " + fileFormat);
 				
 				// Initialize output directory
-				File textDir = new File(new URI(getOption(_dir_href).getString()));
+				File textDir = new File(new URI(getOption(_output_dir).getString()));
 				textDir.mkdirs();
 				
 				// Read source PEF
@@ -137,6 +112,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 				Serializer serializer = runtime.getProcessor().newSerializer();
 				serializer.setOutputStream(s);
 				serializer.setCloseOnCompletion(true);
+				serializer.setOutputProperty(Serializer.Property.INDENT, "yes");
 				serializer.serializeNode(source.read());
 				serializer.close();
 				InputStream pefStream = new ByteArrayInputStream(s.toByteArray());
@@ -149,6 +125,12 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 					pattern = "volume-{}";
 				int match = pattern.indexOf("{}");
 				if (match < 0 || match != pattern.lastIndexOf("{}")) {
+					logger.error("name-pattern is invalid: '" + pattern + "'");
+					if (singleVolumeName.isEmpty())
+						throw new RuntimeException("name-pattern and single-volume-name may not both be empty");
+				}
+				if ((fileFormat.supportsVolumes() && !singleVolumeName.isEmpty())
+				    || match < 0 || match != pattern.lastIndexOf("{}")) {
 					// Output to single file
 					convertPEF2Text(pefStream,
 							new File(textDir, singleVolumeName + fileFormat.getFileExtension()), fileFormat);
@@ -212,74 +194,53 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	
 	private void convertPEF2Text(InputStream pefStream, File textFile, FileFormat fileFormat)
 			throws ParserConfigurationException, SAXException, IOException, UnsupportedWidthException {
-		// Create EmbosserWriter
 		OutputStream textStream = new FileOutputStream(textFile);
-		EmbosserWriter writer = fileFormat.newEmbosserWriter(textStream);
-		
-		// Parse PEF to text
-		PEFHandler.Builder builder = new PEFHandler.Builder(writer);
-		builder.range(null).align(Alignment.LEFT).offset(0);
-		parsePefFile(pefStream, builder.build());
+		if ("pef".equals(fileFormat.getIdentifier())) {
+
+			// just write pefStream to textFile without parsing it
+			byte[] buf = new byte[153600];
+			int length;
+			while ((length = pefStream.read(buf)) > 0)
+				textStream.write(buf, 0, length);
+		} else {
+			EmbosserWriter writer = fileFormat.newEmbosserWriter(textStream);
+			PEFHandler.Builder builder = new PEFHandler.Builder(writer);
+			builder.range(null).align(Alignment.LEFT).offset(0);
+			parsePefFile(pefStream, builder.build());
+		}
 		textStream.close();
 	}
 	
 	private void addOption(QName option, MutableQuery query) {
 		RuntimeValue v = getOption(option);
-		if (v != null)
+		if (v != null && !"".equals(v.getString()))
 			query.add(option.getLocalName(), v.getString());
 	}
 	
 	@Component(
-		name = "pef:pef2text",
+		name = "pxi:pef2text",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://www.daisy.org/ns/2008/pef}pef2text" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}pef2text" }
 	)
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new PEF2TextStep(runtime, step, fileFormatProvider, tableProvider);
+			return new PEF2TextStep(runtime, step, fileFormatRegistry);
 		}
 		
 		@Reference(
-			name = "FileFormatProvider",
-			unbind = "unbindFileFormatProvider",
-			service = FileFormatProvider.class,
-			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			name = "FileFormatRegistry",
+			unbind = "-",
+			service = FileFormatRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
 		)
-		protected void bindFileFormatProvider(FileFormatProvider provider) {
-			fileFormatProviders.add(provider);
+		protected void bindFileFormatRegistry(FileFormatRegistry registry) {
+			fileFormatRegistry = registry;
 		}
 		
-		protected void unbindFileFormatProvider(FileFormatProvider provider) {
-			fileFormatProviders.remove(provider);
-			this.fileFormatProvider.invalidateCache();
-		}
-		
-		private List<FileFormatProvider> fileFormatProviders = new ArrayList<FileFormatProvider>();
-		private org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider<Query,FileFormat> fileFormatProvider
-		= memoize(dispatch(fileFormatProviders));
-		
-		@Reference(
-			name = "TableProvider",
-			unbind = "unbindTableProvider",
-			service = TableProvider.class,
-			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
-		)
-		protected void bindTableProvider(TableProvider provider) {
-			tableProviders.add(provider);
-		}
-		
-		protected void unbindTableProvider(TableProvider provider) {
-			tableProviders.remove(provider);
-			this.tableProvider.invalidateCache();
-		}
-		
-		private List<TableProvider> tableProviders = new ArrayList<TableProvider>();
-		private org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider<Query,Table> tableProvider
-		= memoize(dispatch(tableProviders));
+		private FileFormatRegistry fileFormatRegistry;
 		
 	}
 	

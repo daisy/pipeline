@@ -14,7 +14,7 @@
       <xsl:apply-templates select="if (local-name()='speak') then node() else ." mode="copy"/>
       <ssml:break time="250ms"/>
       <xsl:if test="$ending-mark != ''">
-	<ssml:mark name="{$ending-mark}"/>
+        <bookmark mark="{$ending-mark}"/>
       </xsl:if>
     </ssml:speak>
   </xsl:template>
@@ -32,6 +32,10 @@
   <xsl:template match="ssml:token" mode="copy">
     <!-- tokens are not copied because they are not SSML1.0-compliant and not SAPI-compliant-->
     <xsl:apply-templates select="@*|node()" mode="copy"/>
+  </xsl:template>
+
+  <xsl:template match="ssml:mark" mode="copy">
+     <bookmark mark="@name"/>
   </xsl:template>
 
 

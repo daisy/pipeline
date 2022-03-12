@@ -7,8 +7,7 @@
     
     <p:output port="fileset.out" primary="true"/>
     <p:output port="in-memory.out" sequence="true">
-        <p:pipe step="epub" port="result.in-memory"/>
-        <p:pipe step="preamble.in-memory" port="result"/>
+        <p:pipe step="add-preamble" port="in-memory"/>
     </p:output>
     
     <p:option name="epub" required="true"/>
@@ -20,13 +19,12 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-add-entry
-            px:fileset-load
             px:fileset-join
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
-            px:html-to-fileset
+            px:html-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
@@ -39,57 +37,36 @@
         <p:with-option name="href" select="$epub"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub-load>
-    <p:sink/>
 
     <!--
         Add preamble HTML + resources
     -->
-    <p:choose>
+    <p:choose name="add-preamble">
         <p:when test="$preamble!=''">
-            <px:fileset-add-entry media-type="text/html">
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="epub" port="result.in-memory"/>
+                <p:pipe step="preamble" port="result.in-memory"/>
+            </p:output>
+            <px:fileset-add-entry media-type="text/html" replace-attributes="true">
                 <p:with-option name="href" select="$preamble"/>
-            </px:fileset-add-entry>
-            <px:fileset-load/>
-        </p:when>
-        <p:otherwise>
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:otherwise>
-    </p:choose>
-    <p:identity name="preamble.in-memory"/>
-    <p:sink/>
-    
-    <p:choose>
-        <p:when test="$preamble!=''">
-            <px:html-to-fileset>
-                <p:input port="source">
-                    <p:pipe step="preamble.in-memory" port="result"/>
-                </p:input>
-            </px:html-to-fileset>
-            <px:fileset-add-entry replace-attributes="true">
-                <p:input port="entry">
-                    <p:pipe step="preamble.in-memory" port="result"/>
-                </p:input>
                 <p:with-param port="file-attributes" name="role" select="'preamble'"/>
             </px:fileset-add-entry>
-            <p:identity name="preamble.fileset"/>
+            <px:html-load name="preamble"/>
             <p:sink/>
             <px:fileset-join>
                 <p:input port="source">
                     <p:pipe step="epub" port="result.fileset"/>
-                    <p:pipe step="preamble.fileset" port="result"/>
+                    <p:pipe step="preamble" port="result.fileset"/>
                 </p:input>
             </px:fileset-join>
         </p:when>
         <p:otherwise>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe step="epub" port="result.fileset"/>
-                </p:input>
-            </p:identity>
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="epub" port="result.in-memory"/>
+            </p:output>
+            <p:identity/>
         </p:otherwise>
     </p:choose>
     

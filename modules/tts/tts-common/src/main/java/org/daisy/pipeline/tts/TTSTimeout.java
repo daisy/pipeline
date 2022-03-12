@@ -41,6 +41,8 @@ public class TTSTimeout extends Thread {
 	}
 
 	public void enable(Thread job, ThreadFreeInterrupter interruptable, int seconds) {
+		if (seconds < 0)
+			throw new IllegalArgumentException("Expecting a positive number of seconds");
 		mInterrupter = interruptable;
 		mJob = job;
 		mEnable = true;
@@ -54,12 +56,11 @@ public class TTSTimeout extends Thread {
 		enable(job, null, seconds);
 	}
 
-	public void enableForCurrentThread(ThreadFreeInterrupter interruptable, int seconds)
-	        throws InterruptedException {
+	public void enableForCurrentThread(ThreadFreeInterrupter interruptable, int seconds) {
 		enable(Thread.currentThread(), interruptable, seconds);
 	}
 
-	public void enableForCurrentThread(int seconds) throws InterruptedException {
+	public void enableForCurrentThread(int seconds) {
 		enableForCurrentThread(null, seconds);
 	}
 
@@ -95,7 +96,7 @@ public class TTSTimeout extends Thread {
 				}
 			}
 			try {
-				sleep(mSeconds * 1000);
+				sleep(Math.multiplyExact(mSeconds, 1000));
 			} catch (InterruptedException e) {
 				//interrupted by the TTS thread with disable() because the watched job is finished
 				notifyFinished();

@@ -49,13 +49,14 @@ import static org.daisy.pipeline.braille.common.util.Files.normalize;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.common.WithSideEffect;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
-import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.datatypes.ValidationResult;
 
-import org.liblouis.Louis;
 import org.liblouis.CompilationException;
+import org.liblouis.DisplayTable;
+import org.liblouis.DisplayTable.Fallback;
 import org.liblouis.Logger.Level;
+import org.liblouis.Louis;
 import org.liblouis.Table;
 import org.liblouis.TableInfo;
 import org.liblouis.TableResolver;
@@ -89,16 +90,22 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	public class LiblouisTableJnaImpl extends LiblouisTable implements Transform {
 		
 		private final Translator translator;
+		private final DisplayTable displayTable;
 		private final TableInfo info;
 		
-		private LiblouisTableJnaImpl(String table, TableInfo info) throws CompilationException {
-			super(table);
-			translator = new Translator(table);
+		private LiblouisTableJnaImpl(Translator translator, DisplayTable displayTable, TableInfo info) {
+			super(translator.getTable());
+			this.translator = translator;
+			this.displayTable = displayTable;
 			this.info = info;
 		}
 		
 		public Translator getTranslator() {
 			return translator;
+		}
+		
+		public DisplayTable getDisplayTable() {
+			return displayTable;
 		}
 		
 		public String getIdentifier() {
@@ -118,8 +125,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	
 	private LiblouisTableRegistry tableRegistry;
 	
-	private File unicodeDisFile;
+	private DisplayTable unicodeDisplayTable;
+	private DisplayTable unicodeDisplayTableWithNoBreakSpace;
 	private File spacesFile;
+	private File spacesDisFile;
 	
 	private void registerTableResolver() {
 		Louis.setTableResolver(new TableResolver() {
@@ -191,14 +200,21 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			registerTableResolver();
 			// invoke after table resolver registered because otherwise default tables will be unpacked for no reason
 			logger.debug("liblouis version: {}", Louis.getVersion());
-			unicodeDisFile = new File(makeUnpackDir(), "unicode.dis");
+			File unicodeDisFile = new File(makeUnpackDir(), "unicode.dis");
 			unpack(
 				URLs.getResourceFromJAR("/tables/unicode.dis", LiblouisTableJnaImplProvider.class),
 				unicodeDisFile);
+			unicodeDisplayTable = DisplayTable.fromTable("" + URLs.asURI(unicodeDisFile), Fallback.MASK);
 			spacesFile = new File(makeUnpackDir(), "spaces.cti");
 			unpack(
 				URLs.getResourceFromJAR("/tables/spaces.cti", LiblouisTableJnaImplProvider.class),
 				spacesFile);
+			spacesDisFile = new File(makeUnpackDir(), "spaces.dis");
+			unpack(
+				URLs.getResourceFromJAR("/tables/spaces.dis", LiblouisTableJnaImplProvider.class),
+				spacesDisFile);
+			unicodeDisplayTableWithNoBreakSpace = DisplayTable.fromTable(
+				"" + URLs.asURI(unicodeDisFile) + "," + URLs.asURI(spacesDisFile), Fallback.MASK);
 			Louis.setLogger(new org.liblouis.Logger() {
 					@Override
 					public void log(Level level, String message) {
@@ -282,14 +298,11 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						public LiblouisTableJnaImpl _apply() {
 							MutableQuery q = mutableQuery(query);
 							String table = null;
+							String charset = null;
 							TableInfo tableInfo = null;
-							boolean unicode = false;
 							boolean whiteSpace = false;
 							String dotsForUndefinedChar = null;
-							boolean display = false;
-							if (q.containsKey("unicode")) {
-								q.removeOnly("unicode");
-								unicode = true; }
+							String documentLocale = null;
 							if (q.containsKey("white-space")) {
 								q.removeOnly("white-space");
 								whiteSpace = true; }
@@ -300,24 +313,29 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 									throw new NoSuchElementException();
 								}
 							}
-							if (q.containsKey("display")) {
-								q.removeOnly("display");
-								if (unicode) {
-									logger.warn("A query with '(unicode)(display)' never matches anything");
-									throw new NoSuchElementException(); }
-								display = true; }
-							if (q.containsKey("table"))
-								// FIXME: display and remaining features in query are ignored
-								table = q.removeOnly("table").getValue().get();
-							else if (q.containsKey("liblouis-table"))
-								// FIXME: display and remaining features in query are ignored
-								table = q.removeOnly("liblouis-table").getValue().get();
-							else if (!q.isEmpty()) {
+							if (q.containsKey("document-locale"))
+								documentLocale = q.removeOnly("document-locale").getValue().get();
+							if (q.containsKey("charset") || q.containsKey("braille-charset"))
+								charset = q.containsKey("charset")
+									? q.removeOnly("charset").getValue().get()
+									: q.removeOnly("braille-charset").getValue().get();
+							if (q.containsKey("table") || q.containsKey("liblouis-table")) {
+								table = q.containsKey("table")
+									? q.removeOnly("table").getValue().get()
+									: q.removeOnly("liblouis-table").getValue().get();
+								tableInfo = new TableInfo(table);
+								for (Feature f : q)
+									if (!f.getValue().orElse("yes").equals(tableInfo.get(f.getKey()))) {
+										logger.warn("Table " + table + " does not match " + f);
+										throw new NoSuchElementException(); }
+							} else {
+								if (!q.containsKey("locale") && documentLocale != null)
+									q.add("locale", documentLocale);
+								if (q.isEmpty())
+									throw new NoSuchElementException();
 								StringBuilder b = new StringBuilder();
-								if (display)
-									b.append("type:display ");
 								
-								// FIXME: if !display, need to match for absence of "type:display"
+								// FIXME: if query does not contain (type:display), need to match for absence of "type:display"
 								// -> i.e. Liblouis query syntax must support negation!
 								// -> this used to be solved by matching "type:translation" but the downside of this
 								//    is that this feature had to be added to every table which is not desired
@@ -349,8 +367,19 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							if (table != null) {
 								if (whiteSpace)
 									table = URLs.asURI(spacesFile) + "," + table;
-								if (unicode)
-									table = URLs.asURI(unicodeDisFile) + "," + table;
+								DisplayTable displayTable = null;
+								if (charset == null)
+									displayTable = whiteSpace ? unicodeDisplayTableWithNoBreakSpace : unicodeDisplayTable;
+								else
+									try {
+										if (whiteSpace)
+											charset = "" + URLs.asURI(spacesDisFile) + "," + charset;
+										// using Translator.asDisplayTable() and not DisplayTable.fromTable() so we can
+										// catch CompilationException
+										displayTable = new Translator(charset).asDisplayTable(); }
+									catch (CompilationException e) {
+										// the specified table is not a Liblouis table
+										throw new NoSuchElementException(); }
 								if (dotsForUndefinedChar != null) {
 									try {
 										File undefinedFile = createTempFile("undefined-", ".uti");
@@ -379,7 +408,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 									}
 								}
 								try {
-									return new LiblouisTableJnaImpl(table, tableInfo); }
+									return new LiblouisTableJnaImpl(new Translator(table), displayTable, tableInfo); }
 								catch (CompilationException e) {
 									__apply(
 										warn("Could not compile table " + table));
@@ -428,9 +457,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		                                     .getDOMImplementation().createDocument(null, "choice", null);
 		List<String> values = new ArrayList<>();
 		Element choice = doc.getDocumentElement();
-		values.add("");
+		String defaultValue = "";
+		values.add(defaultValue);
 		choice.appendChild(doc.createElement("value"))
-		      .appendChild(doc.createTextNode(""));
+		      .appendChild(doc.createTextNode(defaultValue));
 		choice.appendChild(doc.createElementNS("http://relaxng.org/ns/compatibility/annotations/1.0", "documentation"))
 		      .appendChild(doc.createTextNode("-"));
 		List<Table> tables = new ArrayList<>();

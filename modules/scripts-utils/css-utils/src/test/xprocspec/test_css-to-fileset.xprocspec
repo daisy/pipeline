@@ -4,15 +4,16 @@
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/css-to-fileset.xpl">
 
-	<x:scenario label="test">
+	<x:scenario label="test 1">
 		<x:call step="px:css-to-fileset">
-			<x:option name="source" select="resolve-uri('../resources/references.css')"/>
-			<x:input port="context.fileset">
+			<x:input port="source.fileset">
 				<x:document type="inline">
-					<d:fileset/>
+					<d:fileset>
+						<d:file href="../resources/references.css" media-type="text/css"/>
+					</d:fileset>
 				</x:document>
 			</x:input>
-			<x:input port="context.in-memory"/>
+			<x:input port="source.in-memory"/>
 		</x:call>
 		<x:context label="the result">
 			<x:document type="port" port="result"/>
@@ -30,5 +31,37 @@
 			</x:document>
 		</x:expect>
 	</x:scenario>
-	
+
+	<x:scenario label="test 2">
+		<x:call step="px:css-to-fileset">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="foo.css" original-href="../resources/references.css" media-type="text/css"/>
+						<d:file href="misc.css" original-href="../resources/misc.css"/>
+						<d:file href="misc.scss" original-href="../resources/misc.scss"/>
+						<d:file href="font.ttf" original-href="../resources/font.ttf"/>
+						<d:file href="bg.png" original-href="../resources/bg.png"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+		</x:call>
+		<x:context label="the result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"
+		          step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="foo.css" media-type="text/css" original-href="../resources/references.css"/>
+					<d:file href="misc.css" media-type="text/css" original-href="../resources/misc.css"/>
+					<d:file href="font.ttf" media-type="application/x-font-ttf" original-href="../resources/font.ttf"/>
+					<d:file href="bg.png" media-type="image/png" original-href="../resources/bg.png"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="#all"
                 type="px:daisy202-update-links" name="main">
 
@@ -61,7 +62,12 @@
     </px:fileset-load>
     <p:for-each name="updated-links-in-html.in-memory">
         <p:output port="result"/>
-        <px:html-update-links>
+        <p:variable name="html-base" select="base-uri(/*)"/>
+        <p:variable name="html-href" select="//d:file[resolve-uri(@href,base-uri(.))=$html-base]/@href">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:variable>
+        <px:html-update-links px:message="Updating cross-references in {$html-href}"
+                              px:message-severity="DEBUG">
             <p:input port="mapping">
                 <p:pipe step="main" port="mapping"/>
             </p:input>
@@ -100,7 +106,12 @@
     </px:fileset-load>
     <p:for-each name="updated-links-in-smil.in-memory">
         <p:output port="result"/>
-        <px:smil-update-links>
+        <p:variable name="smil-base" select="base-uri(/*)"/>
+        <p:variable name="smil-href" select="//d:file[resolve-uri(@href,base-uri(.))=$smil-base]/@href">
+            <p:pipe step="main" port="source.fileset"/>
+        </p:variable>
+        <px:smil-update-links px:message="Updating cross-references in {$smil-href}"
+                              px:message-severity="DEBUG">
             <p:input port="mapping">
                 <p:pipe step="main" port="mapping"/>
             </p:input>

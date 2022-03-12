@@ -123,8 +123,11 @@
 				result.</dd>
 				<dt>no-implied</dt>
 				<dd>Like outline-depth, but in addition create new sections as needed to get rid of
-				implied sections. Note that this may result in multiple <code>body</code> elements,
-				so a cleanup step may be required.</dd>
+				implied sections completely. Note that this may result in multiple <code>body</code>
+				elements or may break the structure or semantics of the document some other
+				way. This feature is intended for creating an intermediary HTML document that will
+				be converted further into a format that does not allow implied sections (like
+				DTBook).</dd>
 				<dt>keep</dt>
 				<dd>Do nothing. Default value.</dd>
 			</dl>
@@ -241,6 +244,10 @@
 	<p:identity name="normalize"/>
 	<p:sink/>
 
+	<!--
+	    Remove the non-root d:outline to make sure the result is the same regardless of the
+	    "fix-sectioning" setting
+	-->
 	<p:unwrap match="/*//d:outline">
 		<p:input port="source">
 			<p:pipe step="outline" port="secondary"/>

@@ -5,7 +5,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("common-utils"),
+			brailleModule("braille-common"),
 			pipelineModule("file-utils"),
 			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",

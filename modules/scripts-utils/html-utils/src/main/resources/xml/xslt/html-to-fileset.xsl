@@ -15,7 +15,6 @@
     <!-- <xsl:use-package name="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/> -->
     <xsl:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xsl"/>
 
-    <xsl:strip-space elements="*"/>
     <xsl:output indent="yes"/>
 
     <xsl:param name="context.fileset" as="document-node(element(d:fileset))?"/>
@@ -57,18 +56,6 @@
         <xsl:apply-templates select="node()|@*"/>
     </xsl:template>
 
-    <xsl:template match="/processing-instruction('xml-stylesheet')">
-        <xsl:variable name="href" select="replace(.,'^.*href=(&amp;apos;|&quot;)(.*?)\1.*$','$2')"/>
-        <xsl:variable name="type" select="replace(.,'^.*type=(&amp;apos;|&quot;)(.*?)\1.*$','$2')"/>
-        <xsl:sequence
-            select="f:fileset-entry($href,
-            if ($type) then $type
-            else if (pf:get-extension($href)='css') then 'text/css'
-            else if (pf:get-extension($href)=('xsl','xslt')) then 'application/xslt+xml'
-            else '','stylesheet')"
-        />
-    </xsl:template>
-
     <xsl:template match="@aria-describedat[not(starts-with(.,'#'))]">
         <xsl:sequence select="f:fileset-entry(.,(),'description')"/>
     </xsl:template>
@@ -89,14 +76,6 @@
                 else if (pf:get-extension(@href)='pls') then 'application/pls+xml'
                 else '',$rel)"
             />
-        </xsl:if>
-        <xsl:if test="$rel='stylesheet' and (@type='text/css' or pf:get-extension(@href)='css')">
-            <xsl:variable name="href" select="resolve-uri(@href,base-uri(.))"/>
-            <xsl:if test="unparsed-text-available($href)">
-                <xsl:for-each select="pf:css-to-fileset(unparsed-text($href),$href,$context.fileset,$context.in-memory)">
-                    <xsl:sequence select="f:fileset-entry(.,(),'')"/>
-                </xsl:for-each>
-            </xsl:if>
         </xsl:if>
     </xsl:template>
 
@@ -233,17 +212,11 @@
             <xsl:variable name="resolved"
                 select="
                 if ($uri instance of attribute()) then
-                    resolve-uri($href,base-uri($uri))
+                    resolve-uri($href,pf:base-uri($uri))
                 else
                     $href
                 "/>
-            <d:file
-                href="{if (starts-with($href,'file:')) then
-                           pf:relativize-uri($href,$doc-base)
-                       else if (pf:is-relative($href) and  $uri instance of attribute() and base-uri($uri) ne $doc-base) then
-                           pf:relativize-uri($resolved,$doc-base)
-                       else
-                           $href}">
+            <d:file href="{pf:relativize-uri($resolved,$doc-base)}">
                 <xsl:if test="not($context.fileset//d:file[resolve-uri(@href,base-uri(.))=$resolved]
                                                           [1][not(@original-href)])">
                     <xsl:attribute name="original-href" select="$resolved"/>

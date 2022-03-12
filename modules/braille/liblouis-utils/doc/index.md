@@ -24,7 +24,7 @@ can be selected using a query that contains
   or not at all. A value not equal to "none", "liblouis" or "auto"
   will match every Liblouis translator that uses an external
   hyphenator that matches this feature. A translator will only use
-  external hyphenators with the same locale as the translator itself.
+  external hyphenators with the same locale as the document.
 
 `table`
 `liblouis-table`
@@ -43,6 +43,12 @@ can be selected using a query that contains
 
 `locale`
 : Matches only Liblouis translators with this locale.
+
+<!-- `charset`
+     `braille-charset`
+     : The character set in which the output braille should be encoded. The
+       value has the same format as the `table` feature.
+     : By default the braille character set is Unicode braille. -->
 
 <!-- handle-non-standard-hyphenation
      : Specifies how non-standard hyphenation is handled in pre-translation

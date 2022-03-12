@@ -76,12 +76,10 @@
   </p:declare-step>
 
   <p:declare-step type="px:dtbook-unwrap-words">
-
     <p:documentation>Remove the word markups from the input document.</p:documentation>
-
     <p:input port="source" primary="true"/>
     <p:output port="result" primary="true"/>
-    <p:unwrap match="dtb:w" />
+    <p:unwrap match="dtb:w[not(@*)]"/>
   </p:declare-step>
 
 </p:library>

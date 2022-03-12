@@ -15,13 +15,10 @@ import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
 import org.daisy.dotify.api.table.Table;
-import org.daisy.pipeline.braille.common.Provider;
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.pef.TableProvider;
+import org.daisy.pipeline.braille.pef.TableRegistry;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -42,24 +39,17 @@ public class DecodeDefinition extends ExtensionFunctionDefinition {
 			"http://www.daisy.org/ns/2008/pef", "decode");
 	
 	@Reference(
-		name = "TableProvider",
-		unbind = "unbindTableProvider",
-		service = TableProvider.class,
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		name = "TableRegistry",
+		unbind = "-",
+		service = TableRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
 	)
-	protected void bindTableProvider(TableProvider provider) {
-		tableProviders.add(provider);
+	protected void bindTableRegistry(TableRegistry registry) {
+		tableRegistry = registry;
 	}
 	
-	protected void unbindTableProvider(TableProvider provider) {
-		tableProviders.remove(provider);
-		this.tableProvider.invalidateCache();
-	}
-	
-	private final List<TableProvider> tableProviders = new ArrayList<TableProvider>();
-	private Provider.util.MemoizingProvider<Query,Table> tableProvider
-	= memoize(dispatch(tableProviders));
+	private TableRegistry tableRegistry;
 	private final Query fallbackQuery = mutableQuery()
 		.add("id", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
 	
@@ -87,7 +77,7 @@ public class DecodeDefinition extends ExtensionFunctionDefinition {
 	
 	@Override
 	public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
-		return SequenceType.OPTIONAL_STRING;
+		return SequenceType.SINGLE_STRING;
 	}
 	
 	@Override
@@ -99,13 +89,15 @@ public class DecodeDefinition extends ExtensionFunctionDefinition {
 					String text = ((AtomicSequence)arguments[1]).getStringValue();
 					Table table;
 					try {
-						table = tableProvider.get(tableQuery).iterator().next(); }
+						table = tableRegistry.get(tableQuery).iterator().next(); }
 					catch (NoSuchElementException e) {
 						try {
-							table = tableProvider.get(fallbackQuery).iterator().next(); }
+							table = tableRegistry.get(fallbackQuery).iterator().next(); }
 						catch (NoSuchElementException e2) {
 							throw new XPathException("Could not find a table for query: " + tableQuery); }}
 					return new StringValue(table.newBrailleConverter().toBraille(text)); }
+				catch (XPathException e) {
+					throw e; }
 				catch (Throwable e) {
 					throw new XPathException("Unexpected error in pef:decode", e); }
 			}

@@ -1,1 +1,4 @@
-<config xmlns="http://config"/>
+<config>
+  <voice engine="mock-tts" name="foo" lang="fr" gender="male-adult"/>
+  <voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
+</config>

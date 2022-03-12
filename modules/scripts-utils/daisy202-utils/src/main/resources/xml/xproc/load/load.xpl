@@ -43,7 +43,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
-            px:html-to-fileset
+            px:html-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -133,16 +133,9 @@
         </p:delete>
         <p:add-attribute match="d:file[matches(lower-case(@href),'\.x?html$')]"
                          attribute-name="media-type" attribute-value="application/xhtml+xml"/>
-        <px:fileset-filter media-types="text/html application/xhtml+xml"/>
-        <px:fileset-load/>
-        <p:identity name="in-memory.html"/>
+        <px:html-load name="html-load"
+                      px:message-severity="DEBUG" px:message="Listing all resources referenced from the HTML files"/>
 
-        <px:message severity="DEBUG" message="Listing all resources referenced from the HTML files"/>
-        <p:for-each>
-            <p:variable name="filename" select="replace(base-uri(/*),'^.*/','')"/>
-            <px:html-to-fileset px:message="extracting list of resources from {$filename}" px:message-severity="DEBUG"/>
-        </p:for-each>
-        <px:fileset-join/>
         <!-- omit HTML files except those referenced from iframes -->
         <p:delete match="d:file[@media-type='application/xhtml+xml' and not(@kind='content')]"
                   name="fileset.html-resources"/>
@@ -151,7 +144,7 @@
             <p:input port="source">
                 <p:pipe port="result" step="in-memory.ncc"/>
                 <p:pipe port="result" step="in-memory.smil"/>
-                <p:pipe port="result" step="in-memory.html"/>
+                <p:pipe step="html-load" port="result.in-memory"/>
             </p:input>
         </p:identity>
 

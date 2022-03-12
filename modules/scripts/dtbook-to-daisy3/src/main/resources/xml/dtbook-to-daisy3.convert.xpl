@@ -123,11 +123,36 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="audio-file-type" select="'audio/mpeg'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+      <p>Examples:</p>
+      <ul>
+        <li>"audio/mpeg"</li>
+        <li>"audio/x-wav"</li>
+      </ul>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="word-detection" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Whether to detect and mark up words with <code>&lt;w&gt;</code> tags.</p>
+    </p:documentation>
+  </p:option>
+
   <p:option name="date" required="false" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Date of publication of the DTB</p>
       <p>Format must be YYYY[-MM[-DD]]</p>
       <p>Defaults to the date in the DTBook, or the current date.</p>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="temp-dir" required="false" select="''">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Empty directory dedicated to this step. If set, the directory will be used to store
+      audio files. If not set, the audio files will be stored in temporary directory that is
+      automatically created.</p>
     </p:documentation>
   </p:option>
 
@@ -197,7 +222,10 @@
       <p:pipe step="main" port="tts-config"/>
     </p:input>
     <p:with-option name="audio" select="$audio"/>
+    <p:with-option name="audio-file-type" select="$audio-file-type"/>
     <p:with-option name="include-log" select="$include-tts-log"/>
+    <p:with-option name="word-detection" select="$word-detection"/>
+    <p:with-option name="temp-dir" select="$temp-dir"/>
   </px:tts-for-dtbook>
   <px:fileset-load media-types="application/x-dtbook+xml" name="tts-enriched-dtbook">
     <p:input port="in-memory">

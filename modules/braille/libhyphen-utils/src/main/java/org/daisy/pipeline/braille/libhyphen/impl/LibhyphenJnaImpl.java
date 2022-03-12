@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 import ch.sbs.jhyphen.CompilationException;
 import ch.sbs.jhyphen.Hyphen;
 import ch.sbs.jhyphen.Hyphenator;
+import ch.sbs.jhyphen.StandardHyphenationException;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -33,7 +34,6 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.NativePath;
-import org.daisy.pipeline.braille.common.ResourceResolver;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
@@ -47,8 +47,6 @@ import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.common.WithSideEffect;
 import org.daisy.pipeline.braille.libhyphen.LibhyphenHyphenator;
-import org.daisy.pipeline.braille.libhyphen.LibhyphenTableProvider;
-import org.daisy.pipeline.braille.libhyphen.LibhyphenTableResolver;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -79,8 +77,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	private final static char SHY = '\u00AD';
 	private final static char ZWSP = '\u200B';
 	
-	private ResourceResolver tableResolver;
-	private LibhyphenTableProvider tableProvider;
+	private LibhyphenTableRegistry tableRegistry;
 	
 	@Activate
 	protected void activate() {
@@ -107,27 +104,15 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	}
 	
 	@Reference(
-		name = "LibhyphenTableResolver",
+		name = "LibhyphenTableRegistry",
 		unbind = "-",
-		service = LibhyphenTableResolver.class,
+		service = LibhyphenTableRegistry.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	protected void bindTableResolver(LibhyphenTableResolver resolver) {
-		tableResolver = resolver;
-		logger.debug("Registering libhyphen table resolver: " + resolver);
-	}
-	
-	@Reference(
-		name = "LibhyphenTableProvider",
-		unbind = "-",
-		service = LibhyphenTableProvider.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	protected void bindTableProvider(LibhyphenTableProvider provider) {
-		tableProvider = provider;
-		logger.debug("Registering libhyphen table provider: " + provider);
+	protected void bindTableRegistry(LibhyphenTableRegistry registry) {
+		tableRegistry = registry;
+		logger.debug("Registering libhyphen table registry: " + registry);
 	}
 	
 	private final static Iterable<LibhyphenHyphenator> empty
@@ -169,23 +154,21 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				            + q.iterator().next().getKey() + "' never matches anything");
 				return empty; }
 			return of(get(URLs.asURI(table))); }
-		if (tableProvider != null) {
-			Locale locale; {
-				String loc = "und";
-				if (q.containsKey("locale"))
-					loc = q.removeOnly("locale").getValue().get();
-				try {
-					locale = parseLocale(loc); }
-				catch (IllegalArgumentException e) {
-					logger.error("Invalid locale", e);
-					return empty; }
-			}
-			return transform(
-				tableProvider.get(locale),
-				new Function<URI,LibhyphenHyphenator>() {
-					public LibhyphenHyphenator _apply(URI table) {
-						return __apply(get(table)); }}); }
-		return empty;
+		Locale locale; {
+			String loc = "und";
+			if (q.containsKey("locale"))
+				loc = q.removeOnly("locale").getValue().get();
+			try {
+				locale = parseLocale(loc); }
+			catch (IllegalArgumentException e) {
+				logger.error("Invalid locale", e);
+				return empty; }
+		}
+		return transform(
+			tableRegistry.get(locale),
+			new Function<URI,LibhyphenHyphenator>() {
+				public LibhyphenHyphenator _apply(URI table) {
+					return __apply(get(table)); }});
 	}
 	
 	private WithSideEffect<LibhyphenHyphenator,Logger> get(final URI table) {
@@ -225,10 +208,10 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		}
 		
 		private final FullHyphenator fullHyphenator = new FullHyphenator() {
-			public String transform(String text) {
+			public String transform(String text) throws NonStandardHyphenationException {
 				return LibhyphenHyphenatorImpl.this.transform(text);
 			}
-			public String[] transform(String[] text) {
+			public String[] transform(String[] text) throws NonStandardHyphenationException {
 				return LibhyphenHyphenatorImpl.this.transform(text);
 			}
 		};
@@ -252,25 +235,27 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 			if (text.length() == 0)
 				return text;
 			try {
-				Tuple2<String,byte[]> t = extractHyphens(text, SHY, ZWSP);
+				Tuple2<String,byte[]> t = extractHyphens(text, false, SHY, ZWSP);
 				if (t._1.length() == 0)
 					return text;
-				return insertHyphens(t._1, transform(t._2, t._1), SHY, ZWSP); }
+				return insertHyphens(t._1, transform(t._2, t._1), false, SHY, ZWSP); }
+			catch (NonStandardHyphenationException e) {
+				throw e; }
 			catch (Exception e) {
 				throw new RuntimeException("Error during libhyphen hyphenation", e); }
 		}
 		
 		private String[] transform(String[] text) {
 			try {
-				Tuple2<String,byte[]> t = extractHyphens(join(text, US), SHY, ZWSP);
+				Tuple2<String,byte[]> t = extractHyphens(join(text, US), false, SHY, ZWSP);
 				String[] unhyphenated = toArray(SEGMENT_SPLITTER.split(t._1), String.class);
-				t = extractHyphens(t._2, t._1, null, null, US);
+				t = extractHyphens(t._2, t._1, false, null, null, US);
 				String _text = t._1;
 				// This byte array is used not only to track the hyphen
 				// positions but also the segment boundaries.
 				byte[] positions = t._2;
 				positions = transform(positions, _text);
-				_text = insertHyphens(_text, positions, SHY, ZWSP, US);
+				_text = insertHyphens(_text, positions, false, SHY, ZWSP, US);
 				if (text.length == 1)
 					return new String[]{_text};
 				else {
@@ -283,6 +268,8 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 					while(i < text.length)
 						rv[i++] = "";
 					return rv; }}
+			catch (NonStandardHyphenationException e) {
+				throw e; }
 			catch (Exception e) {
 				throw new RuntimeException("Error during libhyphen hyphenation", e); }
 		}
@@ -310,9 +297,13 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 									wordHasManualHyphens = true;
 									break; }}
 						if (!wordHasManualHyphens) {
-							byte[] wordHyphens = hyphenator.hyphenate(segment);
-							for (int k = 0; k < len - 1; k++)
-								hyphens[pos + k] |= wordHyphens[k];
+							try {
+								byte[] wordHyphens = hyphenator.hyphenate(segment);
+								for (int k = 0; k < len - 1; k++)
+									hyphens[pos + k] |= wordHyphens[k];
+							} catch (StandardHyphenationException e) {
+								throw new NonStandardHyphenationException(e);
+							}
 						}
 					}
 					pos += segment.length();
@@ -320,7 +311,11 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				}
 				return hyphens;
 			} else
-				return hyphenator.hyphenate(textWithoutManualHyphens);
+				try {
+					return hyphenator.hyphenate(textWithoutManualHyphens);
+				} catch (StandardHyphenationException e) {
+					throw new NonStandardHyphenationException(e);
+				}
 		}
 		
 		@Override
@@ -345,7 +340,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 	}
 	
 	private File resolveTable(URI table) throws FileNotFoundException {
-		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableResolver.resolve(table);
+		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableRegistry.resolve(table);
 		if (resolvedTable == null)
 			throw new FileNotFoundException("Hyphenation table " + table + " could not be resolved");
 		return asFile(resolvedTable);

@@ -4,13 +4,9 @@
     exclude-result-prefixes="dtb" version="2.0"
     xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp">
 
-
     <xsl:output indent="yes" method="xml"/>
 
-
     <xsl:template match="/">
-
-        <xsl:message>Renaming code and kbd elements to reflect block or phrase variants.</xsl:message>
         <xsl:apply-templates/>
     </xsl:template>
 
@@ -24,7 +20,6 @@
     <xsl:template match="dtb:code | dtb:kbd">
         <xsl:variable name="block-level-contents"
             select="tokenize('dfn,code,samp,kbd,cite,a,img,imggroup,q,sent,w,prodnote,annoref,noteref', ',')"/>
-
         <xsl:choose>
             <xsl:when test="child::*/local-name() = $block-level-contents">
                 <xsl:element name="tmp:code-block">
@@ -39,8 +34,6 @@
                 </xsl:element>
             </xsl:otherwise>
         </xsl:choose>
-
-
     </xsl:template>
 
 </xsl:stylesheet>

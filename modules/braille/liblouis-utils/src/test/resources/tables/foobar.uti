@@ -6,8 +6,12 @@ include signs.cti
 
 punctuation - 36
 punctuation . 46
+sign ' 4
 numsign 3456
 
 sign \x200B 2b
 sign \x00AD 2c
 sign \x2028 2d
+
+include ital.cti
+include braille-patterns.cti

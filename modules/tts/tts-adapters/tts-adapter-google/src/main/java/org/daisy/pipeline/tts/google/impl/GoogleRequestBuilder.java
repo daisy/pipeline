@@ -13,9 +13,13 @@ import org.json.JSONObject;
 public class GoogleRequestBuilder {
 
 	/**
+	 * Google API address
+	 */
+	private final String serverAddress;
+	/**
 	 * Google API key
 	 */
-	private String apiKey;
+	private final String apiKey;
 
 	/**
 	 * Encoding sample rate (if null, uses the default encoding)
@@ -32,8 +36,9 @@ public class GoogleRequestBuilder {
 	 *
 	 * @param apiKey the API key to access google services (to create from your google cloud console API identifiers)
 	 */
-	public GoogleRequestBuilder(String apiKey) {
+	public GoogleRequestBuilder(String serverAddress, String apiKey) {
 		this.apiKey = apiKey;
+		this.serverAddress = serverAddress;
 	}
 
 	/**
@@ -92,7 +97,7 @@ public class GoogleRequestBuilder {
 	 * @return a new builder to use for building a request
 	 */
 	public GoogleRequestBuilder newRequest() {
-		return new GoogleRequestBuilder(apiKey);
+		return new GoogleRequestBuilder(serverAddress, apiKey);
 	}
 
 	/**
@@ -114,37 +119,22 @@ public class GoogleRequestBuilder {
 			break;
 		case SPEECH:
 			// speech synthesis errors handling
-			if (this.text == null || text.length() == 0) 
+			if (this.text == null || text.length() == 0)
 				throw new Exception("Speech request without text.");
 			if (languageCode == null || languageCode.length() == 0)
 				throw new Exception("Language code definition is mandatory, please set one (speech request for " + text + ")");
-			
-			String jsonParameters =
-				"{"
-					+ "\"input\":{"
-						+ "\"ssml\":\"" + text + "\""
-					+ "},"
-					+ "\"voice\":{"
-						+ "\"languageCode\":\"" + languageCode + "\""
-						+ (voice != null && voice.length() > 0
-							? ",\"name\":\"" + voice + "\""
-							: "")
-					+"},"
-					+ "\"audioConfig\":{"
-						+ "\"audioEncoding\":\"LINEAR16\""
-						+ (sampleRate != null
-							? ",\"sampleRateHertz\":\"" + sampleRate + "\""
-							: "")
-					+ "}"
-				+ "}";
-
-			parameters = new JSONObject(jsonParameters);
+			parameters = new JSONObject()
+				.put("input", new JSONObject().put("ssml", text))
+				.put("voice", new JSONObject().put("languageCode", languageCode)
+				                              .putOpt("name", voice))
+				.put("audioConfig", new JSONObject().put("audioEncoding", "LINEAR16")
+				                                    .putOpt("sampleRateHertz", sampleRate));
 			break;
 		}
 
 		return new Request<JSONObject>(
 			action.method,
-			"https://texttospeech.googleapis.com" + action.domain + "?key=" + apiKey,
+			serverAddress + action.domain + "?key=" + apiKey,
 			headers,
 			parameters);
 	}

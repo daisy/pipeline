@@ -21,7 +21,7 @@ public class XSpecAndXProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			"org.daisy.bindings:jhyphen:?",
-			brailleModule("common-utils"),
+			brailleModule("braille-common"),
 		};
 	}
 	

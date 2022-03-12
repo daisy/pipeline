@@ -4,28 +4,19 @@ import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 
-import org.daisy.pipeline.tts.AbstractTTSService;
 import org.daisy.pipeline.tts.RoundRobinLoadBalancer;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
-import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
 import com.sun.jna.Native;
 
-import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.ComponentContext;
 
 @Component(
 	name = "acapela-tts-service",
 	service = { TTSService.class }
 )
-public class AcapelaService extends AbstractTTSService {
-	
-	@Activate
-	protected void loadSSMLadapter() {
-		super.loadSSMLadapter("/transform-ssml.xsl", AcapelaService.class);
-	}
+public class AcapelaService implements TTSService {
 	
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
@@ -59,7 +50,7 @@ public class AcapelaService extends AbstractTTSService {
 		try {
 			Native.loadLibrary(NscubeLibrary.JNA_LIBRARY_NAME, NscubeLibrary.class);
 		} catch (Throwable e) {
-			throw new Exception("unable to load 'nscube' library", e);
+			throw new SynthesisException("unable to load 'nscube' library", e);
 		}
 
 		return new AcapelaEngine(this, format, balancer, speed, reserved, priority);
@@ -68,11 +59,6 @@ public class AcapelaService extends AbstractTTSService {
 	@Override
 	public String getName() {
 		return "acapela";
-	}
-
-	@Override
-	public String getVersion() {
-		return "jna";
 	}
 
 	private static int convertToInt(Map<String, String> params, String prop, int defaultVal)

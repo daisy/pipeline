@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="#all"
                 type="px:fileset-compose">
 
@@ -73,5 +74,7 @@
     <px:assert test-count-min="1" message="At least one input document expected" error-code="XXX"/>
 
     <pxi:fileset-compose-recursively/>
+
+    <p:delete match="d:file[not(d:anchor|@original-href)]"/>
 
 </p:declare-step>

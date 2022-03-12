@@ -10,7 +10,7 @@
     
     <p:option name="table" required="true"/>
 
-    <p:xslt px:message="Pad pages with whitespace" px:progress="1/2">
+    <p:xslt px:message="Pad pages with whitespace" px:message-severity="DEBUG" px:progress="1/2">
         <p:input port="stylesheet">
             <p:document href="pef-padding.xsl"/>
         </p:input>
@@ -19,7 +19,7 @@
         </p:input>
     </p:xslt>
     
-    <p:xslt px:message="Generate HTML preview" px:progress="1/2">
+    <p:xslt px:message="Generate HTML preview" px:message-severity="DEBUG" px:progress="1/2">
         <p:input port="stylesheet">
             <p:document href="pef-preview.xsl"/>
         </p:input>

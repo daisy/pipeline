@@ -107,12 +107,13 @@ public class LibhyphenCoreTest extends AbstractTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			"org.daisy.bindings:jhyphen:?",
-			brailleModule("common-utils"),
+			brailleModule("braille-common"),
 		};
 	}
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		// needed because it can not be generated with maven-bundle-plugin
 		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml");
 		return probe;
 	}

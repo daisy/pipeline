@@ -1,7 +1,6 @@
 package org.daisy.pipeline.css;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
@@ -11,7 +10,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import cz.vutbr.web.csskit.antlr.SourceLocator;
+import cz.vutbr.web.css.SourceLocator;
 import cz.vutbr.web.csskit.antlr.SourceMap;
 
 import mjson.Json;
@@ -40,10 +39,16 @@ public final class SourceMapReader {
 					for (Json s : jsonArray.asJsonList()) {
 						if (!s.isString())
 							throw new RuntimeException("Expected string");
-						try {
-							sources.add(URLs.asURL(URLs.resolve(base, new URI(null, null, s.asString(), null)))); }
-						catch (URISyntaxException e) {
-							throw new RuntimeException(e); } // should not happen
+						// the source can be either
+						if (s.asString().matches("^\\w+:"))
+							// an absolute URL (with encoded path)
+							sources.add(URLs.asURL(URLs.resolve(base, URLs.asURI(s.asString()))));
+						else
+							// or a (unencoded) file path (relative to the current working directory)
+							try {
+								sources.add(URLs.asURL(URLs.resolve(base, new URI(null, null, s.asString(), null)))); }
+							catch (java.net.URISyntaxException e) {
+								throw new RuntimeException(e); } // should not happen
 					}
 				}
 				CharacterIterator mappings; {
@@ -124,6 +129,10 @@ public final class SourceMapReader {
 				Map.Entry<LineColumn,SourceLocator> entry = sourceMap.ceilingEntry(new LineColumn(line, column));
 				return entry == null ? null : entry.getValue();
 			}
+			@Override
+			public String toString() {
+				return sourceMap.toString();
+			}
 		};
 	}
 
@@ -147,7 +156,7 @@ public final class SourceMapReader {
 				return 0;
 		}
 		public String toString() {
-			return "(" + line + ", " + column + ")";
+			return line + ":" + column;
 		}
 	}
 
@@ -170,7 +179,7 @@ public final class SourceMapReader {
 			return column;
 		}
 		public String toString() {
-			return "(" + url + ", " + line + ", " + column + ")";
+			return url + ":" + line + ":" + column;
 		}
 	}
 

@@ -50,3 +50,8 @@ caption {
 [epub|type~='z3998:production'] {
 	display: if($include-production-notes, block, none);
 }
+
+@text-transform uncontracted {
+	system: braille;
+	contraction: no;
+}

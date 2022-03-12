@@ -34,7 +34,9 @@ that contains `(formatter:dotify)`. Recognized features are:
 The remaining features are used for selecting the [braille
 translator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#braille-transcription)
 and
-[hyphenator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#hyphenation).
+[hyphenator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#hyphenation). By
+default, the document locale is used to select the translator and
+hyphenator.
 
 # Dotify based braille transcription
 
@@ -48,7 +50,6 @@ can be selected using a transformer query that contains
 : Will only match if the value is "dotify"
 
 `locale`
-: Required.
 : Matches only Dotify translators for that locale. An automatic
   fallback mechanism is used: if nothing is found for
   language-COUNTRY-variant, then language-COUNTRY is searched, then

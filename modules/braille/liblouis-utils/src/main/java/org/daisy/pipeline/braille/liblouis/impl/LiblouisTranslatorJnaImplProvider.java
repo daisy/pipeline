@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,7 +20,6 @@ import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.collect.Iterables.toArray;
 import com.google.common.collect.Iterators;
-import com.google.common.collect.Maps;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CSSProperty.FontStyle;
@@ -32,6 +30,7 @@ import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 
+import org.daisy.braille.css.BrailleCSSProperty.BrailleCharset;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
@@ -47,31 +46,32 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
+import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
+import org.daisy.pipeline.braille.common.CompoundBrailleTranslator;
 import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
-import org.daisy.pipeline.braille.common.HyphenatorProvider;
+import org.daisy.pipeline.braille.common.Hyphenator.NonStandardHyphenationException;
+import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
-import static org.daisy.pipeline.braille.common.TransformProvider.util.memoize;
-import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
-import static org.daisy.pipeline.braille.common.util.Iterables.combinations;
+import org.daisy.pipeline.braille.common.UnityBrailleTranslator;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.insertHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.Tuple2;
-import org.daisy.pipeline.braille.common.WithSideEffect;
-import org.daisy.pipeline.braille.css.CompoundTranslator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
+import org.daisy.pipeline.braille.liblouis.pef.LiblouisDisplayTableBrailleConverter;
 
 import org.liblouis.DisplayException;
+import org.liblouis.DisplayTable;
 import org.liblouis.TranslationException;
 import org.liblouis.TranslationResult;
 import org.liblouis.Translator;
@@ -100,6 +100,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	
 	private final static char SHY = '\u00AD';  // soft hyphen
 	private final static char ZWSP = '\u200B'; // zero-width space
+	private final static char NBSP = '\u00A0'; // no-break space
+	private final static char LS = '\u2028';   // line separator
+	private final static char RS = '\u001E';   // (for segmentation)
+	private final static char US = '\u001F';   // (for segmentation)
+	private final static Splitter SEGMENT_SPLITTER = Splitter.on(RS);
+	private final static Pattern ON_NBSP_SPLITTER = Pattern.compile("[" + SHY + ZWSP + "]*" + NBSP + "[" + SHY + ZWSP + NBSP + "]*");
+	private final static Pattern ON_SPACE_SPLITTER = Pattern.compile("[" + SHY + ZWSP + "]*[\\x20\t\\n\\r\\u2800" + NBSP + "][" + SHY + ZWSP + "\\x20\t\\n\\r\\u2800" + NBSP+ "]*");
+	private final static Pattern LINE_SPLITTER = Pattern.compile("[" + SHY + ZWSP + "]*[\\n\\r][" + SHY + ZWSP + "\\n\\r]*");
+	private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800" + NBSP + "]+");
 	
 	private LiblouisTableJnaImplProvider tableProvider;
 	
@@ -118,38 +127,20 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	protected void unbindLiblouisTableJnaImplProvider(LiblouisTableJnaImplProvider provider) {
 		tableProvider = null;
 	}
-	
+
 	@Reference(
-		name = "HyphenatorProvider",
-		unbind = "unbindHyphenatorProvider",
-		service = HyphenatorProvider.class,
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		name = "HyphenatorRegistry",
+		unbind = "-",
+		service = HyphenatorRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
 	)
-	@SuppressWarnings(
-		"unchecked" // safe cast to TransformProvider<Hyphenator>
-	)
-	protected void bindHyphenatorProvider(HyphenatorProvider<?> provider) {
-		if (provider instanceof LiblouisHyphenatorJnaImplProvider)
-			return;
-		hyphenatorProviders.add((TransformProvider<Hyphenator>)provider);
-		hyphenatorProvider.invalidateCache();
-		logger.debug("Adding Hyphenator provider: " + provider);
+	protected void bindHyphenatorRegistry(HyphenatorRegistry registry) {
+		hyphenatorRegistry = registry;
+		logger.debug("Binding hyphenator registry: " + registry);
 	}
 	
-	protected void unbindHyphenatorProvider(HyphenatorProvider<?> provider) {
-		if (provider instanceof LiblouisHyphenatorJnaImplProvider)
-			return;
-		hyphenatorProviders.remove(provider);
-		hyphenatorProvider.invalidateCache();
-		logger.debug("Removing Hyphenator provider: " + provider);
-	}
-	
-	private List<TransformProvider<Hyphenator>> hyphenatorProviders
-	= new ArrayList<TransformProvider<Hyphenator>>();
-	
-	private TransformProvider.util.MemoizingProvider<Hyphenator> hyphenatorProvider
-	= memoize(dispatch(hyphenatorProviders));
+	private HyphenatorRegistry hyphenatorRegistry;
 	
 	private final static Iterable<LiblouisTranslator> empty
 	= Iterables.<LiblouisTranslator>empty();
@@ -161,12 +152,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		for (Feature f : q.removeAll("input"))
 			if (!supportedInput.contains(f.getValue().get()))
 				return empty;
-		boolean asciiBraille = false;
 		if (q.containsKey("output")) {
 			String v = q.removeOnly("output").getValue().get();
 			if ("braille".equals(v)) {}
-			else if ("ascii".equals(v))
-				asciiBraille = true;
 			else
 				return empty; }
 		if (q.containsKey("translator"))
@@ -187,10 +175,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		else
 			v = "auto";
 		final String hyphenator = v;
-		v = null;
-		if (q.containsKey("locale"))
-			v = q.removeAll("locale").iterator().next().getValue().get();
-		final String locale = v;
+		final String documentLocale; {
+			try {
+				documentLocale = q.containsKey("document-locale")
+					? parseLocale(q.removeOnly("document-locale").getValue().get()).toLanguageTag()
+					: null; }
+			catch (IllegalArgumentException e) {
+				logger.error("Invalid locale", e);
+				return empty; }
+		}
 		v = null;
 		if (q.containsKey("handle-non-standard-hyphenation"))
 			v = q.removeOnly("handle-non-standard-hyphenation").getValue().get();
@@ -200,72 +193,35 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL : v.equalsIgnoreCase("defer") ?
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_DEFER :
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_IGNORE;
-		if (table != null && !q.isEmpty()) {
-			logger.warn("A query with both 'table' or 'liblouis-table' and '"
-			            + q.iterator().next().getKey() + "' never matches anything");
-			return empty; }
 		if (table != null)
 			q.add("table", table);
-		if (locale != null)
-			try {
-				q.add("locale", parseLocale(locale).toLanguageTag()); }
-			catch (IllegalArgumentException e) {
-				logger.error("Invalid locale", e);
-				return empty; }
-		if (!asciiBraille)
-			q.add("unicode");
+		if (documentLocale != null)
+			q.add("document-locale", documentLocale);
 		q.add("white-space");
 		Iterable<LiblouisTranslator> translators = getSimpleTranslator(
 			q.asImmutable(),
-			locale,
+			documentLocale,
 			hyphenator,
 			handleNonStandardHyphenation);
-		if (translators.iterator().hasNext()) {
-			String contraction = q.containsKey("contraction")
-				? q.removeAll("contraction").iterator().next().getValue().get()
-				: null;
-			boolean computer = q.containsKey("type")
-				&& "computer".equals(q.get("type").iterator().next().getValue().orElse(null));
-			if (!computer && !"no".equals(contraction)) {
-				q.add("contraction", "no");
-				q.removeAll("grade");
-				Iterable<LiblouisTranslator> nonContractingTranslators = Iterables.memoize(
-					getSimpleTranslator(
-						q.asImmutable(),
-						locale,
-						hyphenator,
-						handleNonStandardHyphenation));
-				if (nonContractingTranslators.iterator().hasNext())
-					return concat(
-						Iterables.transform(
-							combinations(
-								Maps.toMap(
-									ImmutableList.<Boolean>of(Boolean.TRUE, Boolean.FALSE),
-									contracted -> contracted ? translators : nonContractingTranslators)),
-							new Function<Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>>,LiblouisTranslator>() {
-								public LiblouisTranslator _apply(Map<Boolean,WithSideEffect<LiblouisTranslator,Logger>> translators)
-									throws NoSuchElementException {
-									LiblouisTranslator t;
-									try {
-										t = __apply(translators.get(true));
-									} catch (NoSuchElementException e) {
-										// make sure all elements that we get from an iterator are also
-										// dereferenced (because AbstractTransformProvider.util.concat
-										// requires it)
-										__apply(translators.get(false));
-										throw e;
-									}
-									return new HandleTextTransformUncontracted(t, __apply(translators.get(false)));
-								}
-							}),
-						translators);
-			}
-		}
-		return translators;
+		if (translators.apply(null).iterator().hasNext()) {
+			// all translators use the same display table
+			DisplayTable displayTable = tableProvider.get(q).iterator().next().getDisplayTable();
+			BrailleTranslator unityTranslator = new UnityBrailleTranslator(
+				new LiblouisDisplayTableBrailleConverter(displayTable), false);
+			return Iterables.transform(
+				translators,
+				new Function<LiblouisTranslator,LiblouisTranslator>() {
+					public LiblouisTranslator _apply(LiblouisTranslator t) {
+						return new HandleTextTransformNone(t, unityTranslator); }});
+		} else
+			return translators;
 	}
 
+	/**
+	 * @param documentLocale  Locale for hyphenation rules
+	 */
 	private Iterable<LiblouisTranslator> getSimpleTranslator(Query query,
-	                                                         String locale,
+	                                                         String documentLocale,
 	                                                         String hyphenator,
 	                                                         int handleNonStandardHyphenation) {
 		return concat(
@@ -282,8 +238,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										translators = Iterables.of(
 											logCreate((LiblouisTranslator)new LiblouisTranslatorHyphenatorImpl(
 													table.getTranslator(),
+													table.getDisplayTable(),
 													handleNonStandardHyphenation,
-													locale,
 													unicodeNormalization))
 										);
 										break; }
@@ -291,15 +247,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								MutableQuery hyphenatorQuery = mutableQuery();
 								if (!"auto".equals(hyphenator))
 									hyphenatorQuery.add("hyphenator", hyphenator);
-								if (locale != null)
-									hyphenatorQuery.add("locale", locale);
-								Iterable<Hyphenator> hyphenators = logSelect(hyphenatorQuery.asImmutable(), hyphenatorProvider);
-								if (locale != null && !"auto".equals(hyphenator)) {
-									// also search without locale because locale might only refer to translator itself
+								if (documentLocale != null)
+									hyphenatorQuery.add("locale", documentLocale);
+								Iterable<Hyphenator> hyphenators = logSelect(hyphenatorQuery.asImmutable(), hyphenatorRegistry);
+								if (documentLocale != null && !"auto".equals(hyphenator)) {
+									// also search without locale because "hyphenator" feature might be an ID
 									hyphenatorQuery.removeAll("locale");
 									hyphenators = concat(
 										hyphenators,
-										logSelect(hyphenatorQuery.asImmutable(), hyphenatorProvider)); }
+										logSelect(hyphenatorQuery.asImmutable(), hyphenatorRegistry)); }
 								translators = concat(
 									translators,
 									transform(
@@ -310,9 +266,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 													logCreate(
 														(LiblouisTranslator)new LiblouisTranslatorImpl(
 																table.getTranslator(),
+																table.getDisplayTable(),
 																hyphenator,
 																handleNonStandardHyphenation,
-																locale,
 																unicodeNormalization))); }}));
 								}}
 						if ("none".equals(hyphenator) || "auto".equals(hyphenator))
@@ -320,9 +276,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								translators,
 								logCreate((LiblouisTranslator)new LiblouisTranslatorImpl(
 										table.getTranslator(),
+										table.getDisplayTable(),
 										null,
 										handleNonStandardHyphenation,
-										locale,
 										unicodeNormalization)));
 						return translators;
 					}
@@ -340,10 +296,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		private final LiblouisTable table;
 		protected final Translator translator;
+		private final DisplayTable displayTable;
 		private Hyphenator hyphenator;
 		protected FullHyphenator fullHyphenator;
 		private Hyphenator.LineBreaker lineBreaker;
-		private final String mainLocale;
 		private final Map<String,Typeform> supportedTypeforms;
 		
 		// how to handle non-standard hyphenation in pre-translation mode
@@ -361,25 +317,36 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		private final static int NON_STANDARD_HYPH_FAIL = 1;
 		private final static int NON_STANDARD_HYPH_DEFER = 2;
 		
+		/**
+		 * The following assumptions are made for <code>displayTable</code>:
+		 * <ul>
+		 *   <li> the NBSP character, if present in the display table, represents a preserved space, and no other
+		 *        characters do </li>
+		 *   <li> the LS character, if present in the display table, represents a preserved line break, and no other
+		 *        characters do </li>
+		 *   <li> the SPACE, TAB, CR, LF and BLANK BRAILLE PATTERN characters, if present in the display table, all
+		 *        represent white space, and no other characters do </li>
+		 * </ul>
+		 */
 		private LiblouisTranslatorImpl(Translator translator,
+		                               DisplayTable displayTable,
 			                           int handleNonStandardHyphenation,
-			                           String mainLocale,
 			                           Normalizer.Form unicodeNormalization) {
 			table = new LiblouisTable(translator.getTable());
 			this.translator = translator;
+			this.displayTable = displayTable;
 			this.handleNonStandardHyphenation = handleNonStandardHyphenation;
-			this.mainLocale = mainLocale;
 			this.supportedTypeforms
 				= translator.getSupportedTypeforms().stream().collect(Collectors.toMap(Typeform::getName, e -> e));
 			this.unicodeNormalization = unicodeNormalization;
 		}
 		
 		private LiblouisTranslatorImpl(Translator translator,
+		                               DisplayTable displayTable,
 			                           Hyphenator hyphenator,
 			                           int handleNonStandardHyphenation,
-			                           String mainLocale,
 			                           Normalizer.Form unicodeNormalization) {
-			this(translator, handleNonStandardHyphenation, mainLocale, unicodeNormalization);
+			this(translator, displayTable, handleNonStandardHyphenation, unicodeNormalization);
 			this.hyphenator = hyphenator;
 			if (hyphenator != null) {
 				try {
@@ -446,6 +413,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			if (lineBreakingFromStyledText == null)
 				lineBreakingFromStyledText = new LineBreaker(
 					translator,
+					displayTable,
 					supportedTypeforms,
 					unicodeNormalization,
 					lineBreaker,
@@ -468,11 +436,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return lineBreakingFromStyledText;
 		}
 		
-		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
-		
 		static class LineBreaker extends DefaultLineBreaker {
 			
 			final Translator liblouisTranslator;
+			final DisplayTable displayTable;
 			final Map<String,Typeform> supportedTypeforms;
 			final Hyphenator.LineBreaker lineBreaker;
 			final FullHyphenator fullHyphenator;
@@ -480,13 +447,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			final Normalizer.Form unicodeNormalization;
 			
 			protected LineBreaker(Translator liblouisTranslator,
+			                      DisplayTable displayTable,
 			                      Map<String,Typeform> supportedTypeforms,
 			                      Normalizer.Form unicodeNormalization,
 			                      Hyphenator.LineBreaker lineBreaker,
 			                      FullHyphenator fullHyphenator,
 			                      FromStyledTextToBraille fullTranslator) {
-				super(logger);
+				// Note that `displayTable.encode('\u2800')` is always a space because of the addition of spaces.dis
+				super(displayTable.encode('\u2800'),
+				      displayTable.encode('\u2824'),
+				      new LiblouisDisplayTableBrailleConverter(displayTable),
+				      logger);
 				this.liblouisTranslator = liblouisTranslator;
+				this.displayTable = displayTable;
 				this.supportedTypeforms = supportedTypeforms;
 				this.lineBreaker = lineBreaker;
 				this.fullHyphenator = fullHyphenator;
@@ -501,8 +474,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				java.lang.Iterable<String> braille;
 				try {
 					braille = fullTranslator.transform(styledTextCopy); }
-				catch (Exception e) {
+				catch (NonStandardHyphenationException e) {
 					return new BrailleStreamImpl(liblouisTranslator,
+					                             displayTable,
 					                             supportedTypeforms,
 					                             lineBreaker,
 					                             fullHyphenator,
@@ -512,33 +486,39 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					                             to); }
 				// style is mutated and may not be empty
 				Iterator<SimpleInlineStyle> style = Iterators.transform(styledTextCopy.iterator(), CSSStyledText::getStyle);
-				StringBuilder brailleString = new StringBuilder();
+				List<String> brailleWithPreservedWS = new ArrayList(); {
+					for (String s : braille) {
+						// the only property expected in the output is white-space
+						// ignore other properties
+						SimpleInlineStyle st = style.next();
+						if (st != null) {
+							CSSProperty ws = st.getProperty("white-space");
+							if (ws != null) {
+								if (ws == WhiteSpace.PRE_WRAP)
+									s = s.replaceAll("[\\x20\t\\u2800]+", "$0"+ZWSP)
+										.replaceAll("[\\x20\t\\u2800]", ""+NBSP);
+								if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
+									s = s.replaceAll("[\\n\\r]", ""+LS); }}
+						brailleWithPreservedWS.add(s);
+					}
+				}
+				StringBuilder joined = new StringBuilder();
 				int fromChar = 0;
 				int toChar = to >= 0 ? 0 : -1;
-				for (String s : braille) {
-					// the only property expected in the output is white-space
-					// ignore other properties
-					SimpleInlineStyle st = style.next();
-					if (st != null) {
-						CSSProperty ws = st.getProperty("white-space");
-						if (ws != null) {
-							if (ws == WhiteSpace.PRE_WRAP)
-								s = s.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
-									.replaceAll("[\\x20\t\\u2800]", "\u00A0");
-							if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-								s = s.replaceAll("[\\n\\r]", "\u2028"); }}
-					brailleString.append(s);
+				for (String s : brailleWithPreservedWS) {
+					joined.append(s);
 					if (--from == 0)
-						fromChar = brailleString.length();
+						fromChar = joined.length();
 					if (--to == 0)
-						toChar = brailleString.length();
+						toChar = joined.length();
 				}
-				return new FullyHyphenatedAndTranslatedString(brailleString.toString(), fromChar, toChar);
+				return new FullyHyphenatedAndTranslatedString(joined.toString(), fromChar, toChar, '\u2824');
 			}
 			
 			static class BrailleStreamImpl implements BrailleStream {
 				
 				final Translator liblouisTranslator;
+				final DisplayTable displayTable;
 				final Map<String,Typeform> supportedTypeforms;
 				final Hyphenator.LineBreaker lineBreaker;
 				final FullHyphenator fullHyphenator;
@@ -551,9 +531,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				final boolean[] preserveLines;
 				final boolean[] preserveSpace;
 				final int[] letterSpacing;
-				
-				// don't perform a translation at all
-				final boolean noTransform;
 				
 				// text with some segments split up into white space segments that need to be preserved
 				// in the output and other segments
@@ -570,7 +547,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				// white space replaced with a nbsp
 				String joinedText;
 				
-				// mapping from character index in joinedText to segment index in textWithWs
+				// mapping from character (codepoint) index in joinedText to segment index in textWithWs
 				int[] joinedTextMapping;
 				
 				// byte array for tracking hyphenation positions
@@ -579,13 +556,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				// translation result without hyphens and with preserved white space not restored
 				String joinedBraille;
 				
-				// mapping from character index in joinedBraille to character index in joinedText
+				// mapping from character (codepoint) index in joinedBraille to character (codepoint) index in joinedText
 				int[] characterIndicesInBraille;
 				
-				// mapping from inter-character index in joinedBraille to inter-character index in joinedText
+				// mapping from inter-character (codepoint) index in joinedBraille to inter-character (codepoint) index in joinedText
+				// 1-based because a inter-character attribute value of "0" in the output of Liblouis means "no attribute"
 				int[] interCharacterIndicesInBraille;
 				
-				// current position in input and output (joinedText and joinedBraille)
+				// current position (codepoint index) in input and output (joinedText and joinedBraille)
 				int curPos = -1;
 				int curPosInBraille = -1;
 				int endPos = -1;
@@ -593,6 +571,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				final int to;
 				
 				BrailleStreamImpl(Translator liblouisTranslator,
+				                  DisplayTable displayTable,
 				                  Map<String,Typeform> supportedTypeforms,
 				                  Hyphenator.LineBreaker lineBreaker,
 				                  FullHyphenator fullHyphenator,
@@ -602,6 +581,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				                  int to) {
 					
 					this.liblouisTranslator = liblouisTranslator;
+					this.displayTable = displayTable;
 					this.supportedTypeforms = supportedTypeforms;
 					this.lineBreaker = lineBreaker;
 					this.fullHyphenator = fullHyphenator;
@@ -629,9 +609,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						for (int k = 0; k < text.length; k++)
 							text[k] = Normalizer.normalize(text[k], unicodeNormalization);
 					
-					boolean someTransform = false;
-					boolean someNotTransform = false;
-					
 					{ // compute typeform, hyphenate, preserveLines, preserveSpace and letterSpacing
 						typeform = new Typeform[size];
 						hyphenate = new boolean[size];
@@ -655,15 +632,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								val = style.getProperty("text-transform");
 								if (val != null) {
 									if (val == TextTransform.NONE) {
-										someNotTransform = true;
+										// "text-transform: none" is handled by HandleTextTransformNone, but
+										// HandleTextTransformNone is a CompoundBrailleTranslator and
+										// CompoundBrailleTranslator puts "text-transform: none" on (already translated)
+										// context segments. We assume that all Liblouis tables correctly handle Unicode
+										// braille. If this is not the case, it is not the end of the words because this
+										// is a context segment.
+										val = style.getProperty("braille-charset");
+										if (val != null) {
+											if (val == BrailleCharset.CUSTOM)
+												// translate to Unicode braille
+												text[i] = displayTable.decode(text[i]);
+											style.removeProperty("braille-charset"); }
 										style.removeProperty("text-transform");
-										if (WORD_SPLITTER.matcher(text[i]).matches())
-											style.removeProperty("hyphens");
-										if (!style.isEmpty()) {
-											String p = style.getPropertyNames().iterator().next();
-											CSSProperty v = style.getProperty(p);
-											logger.warn("'text-transform: none' can not be used in combination with '" + p + ": " + v + "'");
-											logger.debug("(text is: '" + text[i] + "')"); }
 										continue; }
 									else if (val == TextTransform.AUTO) {}
 									else if (val == TextTransform.list_values) {
@@ -671,13 +652,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										text[i] = textFromTextTransform(text[i], values);
 										typeform[i] = typeform[i].add(typeformFromTextTransform(values, liblouisTranslator, supportedTypeforms)); }
 									style.removeProperty("text-transform"); }
-								someTransform = true;
 								val = style.getProperty("hyphens");
 								if (val != null) {
 									if (val == Hyphens.AUTO)
 										hyphenate[i] = true;
 									else if (val == Hyphens.NONE)
-										text[i] = extractHyphens(text[i], SHY, ZWSP)._1;
+										text[i] = extractHyphens(text[i], false, SHY, ZWSP)._1;
 									style.removeProperty("hyphens"); }
 								val = style.getProperty("letter-spacing");
 								if (val != null) {
@@ -689,9 +669,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									style.removeProperty("letter-spacing"); }
 								typeform[i] = typeform[i].add(typeformFromInlineCSS(style, liblouisTranslator, supportedTypeforms));
 								for (String prop : style.getPropertyNames())
-									logger.warn("{}: {} not supported", prop, style.get(prop)); }
-							else
-								someTransform = true; }
+									logger.warn("{}: {} not supported", prop, style.get(prop)); }}
 					}
 					{ // compute preserved white space segments (textWithWs, textWithWsMapping, pre)
 						List<String> l1 = new ArrayList<String>();
@@ -731,18 +709,18 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						String[] textWithWsReplaced = new String[textWithWs.length];
 						for (int i = 0; i < textWithWs.length; i++)
 							textWithWsReplaced[i] = pre[i] ? ""+NBSP : textWithWs[i];
-						Tuple2<String,byte[]> t = extractHyphens(join(textWithWsReplaced, RS), SHY, ZWSP);
+						Tuple2<String,byte[]> t = extractHyphens(join(textWithWsReplaced, RS), true, SHY, ZWSP);
 						manualHyphens = t._2;
 						String[] nohyph = toArray(SEGMENT_SPLITTER.split(t._1), String.class);
-						joinedTextMapping = new int[join(nohyph).length()];
+						joinedTextMapping = new int[lengthByCodePoints(join(nohyph))];
 						int i = 0;
 						int j = 0;
 						for (String s : nohyph) {
-							int l = s.length();
+							int l = lengthByCodePoints(s);
 							for (int k = 0; k < l; k++)
 								joinedTextMapping[i++] = j;
 							j++; }
-						t = extractHyphens(manualHyphens, t._1, null, null, null, RS);
+						t = extractHyphens(manualHyphens, t._1, true, null, null, null, RS);
 						joinedText = t._1;
 					}
 					{ // compute initial curPos and endPos from from and to
@@ -762,9 +740,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						this.curPos = fromChar;
 						this.endPos = toChar;
 					}
-					
-					// FIXME: also handle (someNotTransform && someTransform)
-					noTransform = joinedText.matches("\\xA0*") || (someNotTransform && !someTransform);
 				}
 				
 				public String next(final int limit, final boolean force, boolean allowHyphens) {
@@ -774,10 +749,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				  segments: while (true) {
 						if (curPos == endPos)
 							break;
-						if (noTransform) {
-							next = joinedText.substring(curPos, endPos);
-							curPos = endPos;
-							break; }
 						if (joinedBraille == null)
 							updateBraille();
 						int curSegment = joinedTextMapping[curPos];
@@ -790,8 +761,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						int curSegmentEndInBraille = positionInBraille(curSegmentEnd);
 						if (curSegmentEndInBraille == curPosInBraille)
 							continue segments;
-						String segment = joinedText.substring(curPos, curSegmentEnd);
+						String segment = substringByCodePoints(joinedText, curPos, curSegmentEnd);
 						String segmentInBraille = joinedBraille.substring(curPosInBraille, curSegmentEndInBraille);
+						byte[] segmentManualHyphens = manualHyphens != null
+							? Arrays.copyOfRange(manualHyphens, curPos, curSegmentEnd - 1)
+							: null;
 						
 						// restore preserved white space segments
 						if (pre[curSegment]) {
@@ -800,7 +774,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								String restoredSpace = segment.replaceAll("[\\x20\t\\u2800]", ""+NBSP)
 								                              .replaceAll("[\\n\\r]", ""+LS) + m.group(1);
 								next += restoredSpace;
-								available -= restoredSpace.length();
+								available -= lengthByCodePoints(restoredSpace);
 								curPos = curSegmentEnd;
 								curPosInBraille = curSegmentEndInBraille;
 								continue segments; }}
@@ -812,7 +786,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							if (hyphenate[textWithWsMapping[curSegment]] || segmentInBraille.length() > available)
 								logger.warn("hyphens: auto not supported");
 							
-							segmentInBraille = addLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
+							segmentInBraille = addLetterSpacing(segment, segmentInBraille, curPos, curPosInBraille,
+							                                    letterSpacing[textWithWsMapping[curSegment]]);
 							next += segmentInBraille;
 							available -= segmentInBraille.length();
 							curPos = curSegmentEnd;
@@ -822,14 +797,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						// try standard hyphenation of the whole segment
 						if (fullHyphenator != null) {
 							try {
-								
-								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, letterSpacing[textWithWsMapping[curSegment]]);
+								segmentInBraille = addHyphensAndLetterSpacing(segment, segmentInBraille, curPos, curPosInBraille,
+								                                              segmentManualHyphens, letterSpacing[textWithWsMapping[curSegment]]);
 								next += segmentInBraille;
 								available -= segmentInBraille.length();
 								curPos = curSegmentEnd;
 								curPosInBraille = curSegmentEndInBraille;
 								continue segments; }
-							catch (Exception e) {}}
+							catch (NonStandardHyphenationException e) {}}
 						
 						// loop over words in segment
 						Matcher m = WORD_SPLITTER.matcher(segment);
@@ -840,8 +815,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							if (wordEnd > curPos) {
 								int wordEndInBraille = positionInBraille(wordEnd);
 								if (wordEndInBraille > curPosInBraille) {
-									String word = joinedText.substring(curPos, wordEnd);
+									String word = substringByCodePoints(joinedText, curPos, wordEnd);
 									String wordInBraille = joinedBraille.substring(curPosInBraille, wordEndInBraille);
+									byte[] wordManualHyphens = manualHyphens != null
+										? Arrays.copyOfRange(manualHyphens, curPos, wordEnd - 1)
+										: null;
 									
 									// don't hyphenate if word fits in the available space
 									if (wordInBraille.length() <= available) {
@@ -853,13 +831,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 										
 										// try standard hyphenation of the whole word
 										try {
-											
-											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, letterSpacing[textWithWsMapping[curSegment]]);
+											if (fullHyphenator == null) throw new NonStandardHyphenationException();
+											wordInBraille = addHyphensAndLetterSpacing(word, wordInBraille, curPos, curPosInBraille,
+											                                           wordManualHyphens, letterSpacing[textWithWsMapping[curSegment]]);
 											next += wordInBraille;
 											available -= wordInBraille.length();
 											curPos = wordEnd;
 											curPosInBraille = wordEndInBraille; }
-										catch (Exception ee) {
+										catch (NonStandardHyphenationException ee) {
 											
 											// before we try non-standard hyphenation, return what we have already
 											// we do this because we are not sure that the value of "available" is accurate
@@ -869,12 +848,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 												break segments;
 											
 											// try non-standard hyphenation
+											if (lineBreaker == null) throw ee;
 											Hyphenator.LineIterator lines = lineBreaker.transform(word);
 											
 											// do a binary search for the optimal break point
 											Solution bestSolution = null;
 											int left = 1;
-											int right = word.length() - 1;
+											int right = lengthByCodePoints(word) - 1;
 											int textAvailable = available;
 											if (textAvailable > right)
 												textAvailable = right;
@@ -884,12 +864,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 												String line = lines.nextLine(textAvailable, force && next.isEmpty(), allowHyphens);
 												String replacementWord = line + lines.remainder();
 												if (updateInput(curPos, wordEnd, replacementWord)) {
-													wordEnd = curPos + replacementWord.length();
+													wordEnd = curPos + lengthByCodePoints(replacementWord);
 													updateBraille(); }
-												int lineEnd = curPos + line.length();
+												int lineEnd = curPos + lengthByCodePoints(line);
 												int lineEndInBraille = positionInBraille(lineEnd);
 												String lineInBraille = joinedBraille.substring(curPosInBraille, lineEndInBraille);
-												lineInBraille = addLetterSpacing(line, lineInBraille, letterSpacing[textWithWsMapping[curSegment]]);
+												lineInBraille = addLetterSpacing(line, lineInBraille, curPos, curPosInBraille,
+												                                 letterSpacing[textWithWsMapping[curSegment]]);
 												int lineInBrailleLength = lineInBraille.length();
 												if (lines.lineHasHyphen()) {
 													lineInBraille += "\u00ad";
@@ -920,7 +901,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 														available = 0;
 														if (updateInput(curPos, wordEnd, bestSolution.replacementWord))
 															updateBraille();
-														curPos += bestSolution.line.length();
+														curPos += lengthByCodePoints(bestSolution.line);
 														curPosInBraille = positionInBraille(curPos); }
 													else if (force && next.isEmpty()) {
 														next = wordInBraille;
@@ -952,8 +933,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				}
 				
 				public boolean hasNext() {
-					if (noTransform)
-						return curPos < endPos;
 					if (joinedBraille == null)
 						updateBraille();
 					boolean hasNextOutput = curPosInBraille < endPosInBraille;
@@ -966,8 +945,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				Character lastPeek = null;
 				
 				public Character peek() {
-					if (noTransform)
-						return joinedText.charAt(curPos);
 					if (joinedBraille == null)
 						updateBraille();
 					lastPeek = joinedBraille.charAt(curPosInBraille);
@@ -977,8 +954,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				// FIXME: does not take into account white-space property of segments: if "white-space: pre",
 				// spaces are not replaced with NBSP yet at this point (this only happens in next() method)
 				public String remainder() {
-					if (noTransform)
-						return joinedText.substring(curPos, endPos);
 					if (joinedBraille == null)
 						updateBraille();
 					return joinedBraille.substring(curPosInBraille, endPosInBraille);
@@ -987,8 +962,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				// FIXME: does not take into account white-space property of segments: if "white-space: pre",
 				// spaces are not replaced with NBSP yet at this point (this only happens in next() method)
 				public boolean hasPrecedingSpace() {
-					if (noTransform)
-						return DefaultLineBreaker.hasPrecedingSpace(joinedText, curPos);
 					if (joinedBraille == null)
 						updateBraille();
 					return DefaultLineBreaker.hasPrecedingSpace(joinedBraille, curPosInBraille);
@@ -1021,42 +994,57 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					return posInBraille;
 				}
 				
-				private String addHyphensAndLetterSpacing(String segment, String segmentInBraille, int letterSpacing) {
+				private String addHyphensAndLetterSpacing(String segment,
+				                                          String segmentInBraille,
+				                                          int curPos,
+				                                          int curPosInBraille,
+				                                          byte[] manualHyphens,
+				                                          int letterSpacing) {
 					byte[] hyphens = fullHyphenator.hyphenate(
 						// insert manual hyphens first so that hyphenator knows which words to skip
-						insertHyphens(segment, manualHyphens, SHY, ZWSP));
+						insertHyphens(segment, manualHyphens, true, SHY, ZWSP));
 					// FIXME: don't hard-code the number 4
 					byte[] hyphensAndLetterBoundaries
 						= (letterSpacing > 0) ? detectLetterBoundaries(hyphens, segment, (byte)4) : hyphens;
 					if (hyphensAndLetterBoundaries == null && manualHyphens == null)
 						return segment;
 					byte[] hyphensAndLetterBoundariesInBraille = new byte[segmentInBraille.length() - 1];
-					if (hyphensAndLetterBoundaries != null)
-						for (int i = 0; i < hyphensAndLetterBoundariesInBraille.length; i++)
-							hyphensAndLetterBoundariesInBraille[i]
-								= hyphensAndLetterBoundaries[interCharacterIndicesInBraille[curPosInBraille + i] - curPos];
-					String r = insertHyphens(segmentInBraille, hyphensAndLetterBoundariesInBraille, SHY, ZWSP, US);
+					if (hyphensAndLetterBoundaries != null) {
+						for (int i = 0; i < hyphensAndLetterBoundariesInBraille.length; i++) {
+							int pos = interCharacterIndicesInBraille[curPosInBraille + i] - 1;
+							if (pos >= 0)
+								hyphensAndLetterBoundariesInBraille[i] = hyphensAndLetterBoundaries[pos - curPos];
+						}
+					}
+					String r = insertHyphens(segmentInBraille, hyphensAndLetterBoundariesInBraille, false, SHY, ZWSP, US);
 					return (letterSpacing > 0) ? applyLetterSpacing(r, letterSpacing) : r;
 				}
 				
-				private String addLetterSpacing(String segment, String segmentInBraille, int letterSpacing) {
+				private String addLetterSpacing(String segment,
+				                                String segmentInBraille,
+				                                int curPos,
+				                                int curPosInBraille,
+				                                int letterSpacing) {
 					if (letterSpacing > 0) {
 						// FIXME: don't hard-code the number 1
 						byte[] letterBoundaries = detectLetterBoundaries(null, segment, (byte)1);
 						byte[] letterBoundariesInBraille = new byte[segmentInBraille.length() - 1];
-						for (int i = 0; i < letterBoundariesInBraille.length; i++)
-							letterBoundariesInBraille[i] = letterBoundaries[interCharacterIndicesInBraille[curPosInBraille + i] - curPos];
-						return applyLetterSpacing(insertHyphens(segmentInBraille, letterBoundariesInBraille, US), letterSpacing); }
+						for (int i = 0; i < letterBoundariesInBraille.length; i++) {
+							int pos = interCharacterIndicesInBraille[curPosInBraille + i] - 1;
+							if (pos >= 0)
+								letterBoundariesInBraille[i] = letterBoundaries[pos - curPos];
+						}
+						return applyLetterSpacing(insertHyphens(segmentInBraille, letterBoundariesInBraille, false, US), letterSpacing); }
 					else
 						return segmentInBraille;
 				}
 				
 				private boolean updateInput(int start, int end, String replacement) {
-					if (joinedText.substring(start, end).equals(replacement))
+					if (substringByCodePoints(joinedText, start, end).equals(replacement))
 						return false;
-					joinedText = joinedText.substring(0, start) + replacement + joinedText.substring(end);
+					joinedText = substringByCodePoints(joinedText, 0, start) + replacement + substringByCodePoints(joinedText, end);
 					{ // recompute joinedTextMapping
-						int[] updatedJoinedTextMapping = new int[joinedText.length()];
+						int[] updatedJoinedTextMapping = new int[lengthByCodePoints(joinedText)];
 						int i = 0;
 						int j = 0;
 						while (i < start)
@@ -1065,7 +1053,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						while (i < end)
 							if (joinedTextMapping[i++] != startSegment)
 								throw new RuntimeException("Coding error");
-						while (j < start + replacement.length())
+						while (j < start + lengthByCodePoints(replacement))
 							updatedJoinedTextMapping[j++] = startSegment;
 						while (j < updatedJoinedTextMapping.length)
 							updatedJoinedTextMapping[j++] = joinedTextMapping[i++];
@@ -1073,12 +1061,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					}
 					// recompute manualHyphens
 					if (manualHyphens != null) {
-						byte[] updatedManualHyphens = new byte[joinedText.length() - 1];
+						byte[] updatedManualHyphens = new byte[lengthByCodePoints(joinedText) - 1];
 						int i = 0;
 						int j = 0;
 						while (i < start)
 							updatedManualHyphens[j++] = manualHyphens[i++];
-						while (j < start + replacement.length() - 1)
+						while (j < start + lengthByCodePoints(replacement) - 1)
 							updatedManualHyphens[j++] = 0;
 						i = end - 1;
 						while (j < updatedManualHyphens.length)
@@ -1099,27 +1087,31 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				
 				// TODO: warn about lost white space?
 				private void updateBraille() {
+					int joinedTextLength = lengthByCodePoints(joinedText);
+
 					String partBeforeCurPos = curPosInBraille > 0 ? joinedBraille.substring(0, curPosInBraille): null;
-					int[] characterIndices = new int[joinedText.length()]; {
-						for (int i = 0; i < joinedText.length(); i++)
+					int[] characterIndices = new int[joinedTextLength]; {
+						for (int i = 0; i < joinedTextLength; i++)
 							characterIndices[i] = i; }
-					int[] interCharacterIndices = new int[joinedText.length() - 1]; {
-						for (int i = 0; i < joinedText.length() - 1; i++)
-							interCharacterIndices[i] = i; }
+					int[] interCharacterIndices = new int[joinedTextLength - 1]; {
+						for (int i = 0; i < joinedTextLength - 1; i++)
+							interCharacterIndices[i] = i + 1; }
 					
 					// typeform var with the same length as joinedText
 					Typeform[] _typeform = null;
 					for (Typeform t : typeform)
 						if (t != Typeform.PLAIN_TEXT) {
-							_typeform = new Typeform[joinedText.length()];
+							_typeform = new Typeform[joinedTextLength];
 							for (int i = 0; i < _typeform.length; i++)
 								_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 							break; }
 					try {
-						TranslationResult r = liblouisTranslator.translate(joinedText, _typeform, characterIndices, interCharacterIndices);
+						TranslationResult r = liblouisTranslator.translate(joinedText, _typeform, characterIndices, interCharacterIndices, displayTable);
 						joinedBraille = r.getBraille();
+						if (lengthByCodePoints(joinedBraille) != joinedBraille.length())
+							throw new RuntimeException(); // assuming there are no characters above U+FFFF in braille
 						characterIndicesInBraille = r.getCharacterAttributes();
-						interCharacterIndicesInBraille = r.getCharacterAttributes(); }
+						interCharacterIndicesInBraille = r.getInterCharacterAttributes(); }
 					catch (TranslationException e) {
 						throw new RuntimeException(e); }
 					catch (DisplayException e) {
@@ -1163,8 +1155,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			boolean[] preserveLines = new boolean[size];
 			boolean[] preserveSpace = new boolean[size];
 			int[] letterSpacing = new int[size];
-			boolean someTransform = false;
-			boolean someNotTransform = false;
 			for (int i = 0; i < size; i++) {
 				typeform[i] = Typeform.PLAIN_TEXT;
 				hyphenate[i] = false;
@@ -1183,15 +1173,18 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					val = style.getProperty("text-transform");
 					if (val != null) {
 						if (val == TextTransform.NONE) {
-							someNotTransform = true;
+							// "text-transform: none" is handled by HandleTextTransformNone, but HandleTextTransformNone
+							// is a CompoundBrailleTranslator and CompoundBrailleTranslator puts "text-transform: none"
+							// on (already translated) context segments. We assume that all Liblouis tables correctly
+							// handle Unicode braille. If this is not the case, it is not the end of the words because
+							// this is a context segment.
+							val = style.getProperty("braille-charset");
+							if (val != null) {
+								if (val == BrailleCharset.CUSTOM)
+									// translate to Unicode braille
+									text[i] = displayTable.decode(text[i]);
+								style.removeProperty("braille-charset"); }
 							style.removeProperty("text-transform");
-							if (WORD_SPLITTER.matcher(text[i]).matches())
-								style.removeProperty("hyphens");
-							if (!style.isEmpty()) {
-								String p = style.getPropertyNames().iterator().next();
-								CSSProperty v = style.getProperty(p);
-								logger.warn("'text-transform: none' can not be used in combination with '" + p + ": " + v + "'");
-								logger.debug("(text is: '" + text[i] + "')"); }
 							continue; }
 						else if (val == TextTransform.AUTO) {}
 						else if (val == TextTransform.list_values) {
@@ -1199,13 +1192,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							text[i] = textFromTextTransform(text[i], values);
 							typeform[i] = typeform[i].add(typeformFromTextTransform(values, translator, supportedTypeforms)); }
 						style.removeProperty("text-transform"); }
-					someTransform = true;
 					val = style.getProperty("hyphens");
 					if (val != null) {
 						if (val == Hyphens.AUTO)
 							hyphenate[i] = true;
 						else if (val == Hyphens.NONE)
-							text[i] = extractHyphens(text[i], SHY, ZWSP)._1;
+							text[i] = extractHyphens(text[i], false, SHY, ZWSP)._1;
 						style.removeProperty("hyphens"); }
 					val = style.getProperty("letter-spacing");
 					if (val != null) {
@@ -1218,13 +1210,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));
 					for (String prop : style.getPropertyNames())
 						if (!"white-space".equals(prop))
-							logger.warn("{}: {} not supported", prop, style.get(prop)); }
-				else
-					someTransform = true; }
+							logger.warn("{}: {} not supported", prop, style.get(prop)); }}
 			
-			// FIXME: also handle (someNotTransform && someTransform)
-			if (someNotTransform && !someTransform)
-				return text;
 			return transform(text, typeform, hyphenate, preserveLines, preserveSpace, letterSpacing,
 			                 forceBraille, failWhenNonStandardHyphenation);
 		}
@@ -1240,15 +1227,6 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				letterSpacing[i] = 0; }
 			return transform(text, typeform, hyphenate, preserveLines, preserveSpace, letterSpacing, false, false);
 		}
-		
-		protected final static char RS = '\u001E';   // (for segmentation)
-		protected final static char US = '\u001F';   // (for segmentation)
-		protected final static char LS = '\u2028';   // line separator
-		protected final static char NBSP = '\u00A0'; // no-break space
-		protected final static Splitter SEGMENT_SPLITTER = Splitter.on(RS);
-		private final static Pattern ON_NBSP_SPLITTER = Pattern.compile("[\\xAD\\u200B]*\\xA0[\\xAD\\u200B\\xA0]*");
-		private final static Pattern ON_SPACE_SPLITTER = Pattern.compile("[\\xAD\\u200B]*[\\x20\t\\n\\r\\u2800\\xA0][\\xAD\\u200B\\x20\t\\n\\r\\u2800\\xA0]*");
-		private final static Pattern LINE_SPLITTER = Pattern.compile("[\\xAD\\u200B]*[\\n\\r][\\xAD\\u200B\\n\\r]*");
 		
 		// the positions in the text where spacing must be inserted have been previously indicated with a US control character
 		private static String applyLetterSpacing(String text, int letterSpacing) {
@@ -1325,25 +1303,25 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				String[] textWithWsReplaced = new String[textWithWs.length];
 				for (int i = 0; i < textWithWs.length; i++)
 					textWithWsReplaced[i] = pre[i] ? ""+NBSP : textWithWs[i];
-				Tuple2<String,byte[]> t = extractHyphens(join(textWithWsReplaced, RS), SHY, ZWSP);
+				Tuple2<String,byte[]> t = extractHyphens(join(textWithWsReplaced, RS), true, SHY, ZWSP);
 				joinedText = t._1;
 				inputAttrs = t._2;
 				String[] nohyph = toArray(SEGMENT_SPLITTER.split(joinedText), String.class);
-				joinedTextMapping = new int[join(nohyph).length()];
+				joinedTextMapping = new int[lengthByCodePoints(join(nohyph))];
 				int i = 0;
 				int j = 0;
 				for (String s : nohyph) {
-					int l = s.length();
+					int l = lengthByCodePoints(s);
 					for (int k = 0; k < l; k++)
 						joinedTextMapping[i++] = j;
 					j++; }
-				t = extractHyphens(inputAttrs, joinedText, null, null, null, RS);
+				t = extractHyphens(inputAttrs, joinedText, true, null, null, null, RS);
 				joinedText = t._1;
 				inputAttrs = t._2;
 				if (joinedText.matches("\\xA0*"))
 					return text;
 				if (inputAttrs == null)
-					inputAttrs = new byte[joinedText.length() - 1];
+					inputAttrs = new byte[lengthByCodePoints(joinedText) - 1];
 			}
 			
 			// add automatic hyphenation points to inputAttrs array
@@ -1359,12 +1337,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						if (fullHyphenator == null) {
 							logger.warn("hyphens: auto not supported");
 							if (lineBreaker != null)
-								throw new RuntimeException(); }
+								throw new NonStandardHyphenationException(); }
 						else {
 							hyphens = fullHyphenator.hyphenate(
 								// insert manual hyphens so that hyphenator knows which words to skip
-								insertHyphens(joinedText, inputAttrs, SHY, ZWSP)); }}
-					catch (Exception e) {
+								insertHyphens(joinedText, inputAttrs, true, SHY, ZWSP)); }}
+					catch (NonStandardHyphenationException e) {
 						if (failWhenNonStandardHyphenation)
 							throw e;
 						else
@@ -1411,7 +1389,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			Typeform[] _typeform = null;
 			for (Typeform t : typeform)
 				if (t != Typeform.PLAIN_TEXT) {
-					_typeform = new Typeform[joinedText.length()];
+					_typeform = new Typeform[lengthByCodePoints(joinedText)];
 					for (int i = 0; i < _typeform.length; i++)
 						_typeform[i] = typeform[textWithWsMapping[joinedTextMapping[i]]];
 					break; }
@@ -1427,14 +1405,16 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					int[] inputAttrsAsInt = new int[inputAttrs.length];
 					for (int i = 0; i < inputAttrs.length; i++)
 						inputAttrsAsInt[i] = inputAttrs[i];
-					TranslationResult r = translator.translate(joinedText, _typeform, null, inputAttrsAsInt);
+					TranslationResult r = translator.translate(joinedText, _typeform, null, inputAttrsAsInt, displayTable);
 					joinedBrailleWithoutHyphens = r.getBraille();
+					if (lengthByCodePoints(joinedBrailleWithoutHyphens) != joinedBrailleWithoutHyphens.length())
+						throw new RuntimeException(); // assuming there are no characters above U+FFFF in braille
 					int [] outputAttrsAsInt = r.getInterCharacterAttributes();
 					if (outputAttrsAsInt != null) {
 						outputAttrs = new byte[outputAttrsAsInt.length];
 						for (int i = 0; i < outputAttrs.length; i++)
 							outputAttrs[i] = (byte)outputAttrsAsInt[i];
-						joinedBraille = insertHyphens(joinedBrailleWithoutHyphens, outputAttrs, SHY, ZWSP, US, RS); }
+						joinedBraille = insertHyphens(joinedBrailleWithoutHyphens, outputAttrs, false, SHY, ZWSP, US, RS); }
 					else {
 						joinedBraille = joinedBrailleWithoutHyphens;
 						outputAttrs = null; }
@@ -1449,7 +1429,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					{
 						brailleWithWs = new String[textWithWs.length];
 						int i = 0;
-						int imax = joinedText.length();
+						int imax = lengthByCodePoints(joinedText);
 						int kmax = textWithWs.length;
 						int k = (i < imax) ? joinedTextMapping[i] : kmax;
 						int l = 0;
@@ -1490,7 +1470,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						int[] inputSegmentNumbers = joinedTextMapping;
 						
 						// split at all positions where the segment number is increased in the output
-						TranslationResult r = translator.translate(joinedText, _typeform, inputSegmentNumbers, null);
+						TranslationResult r = translator.translate(joinedText, _typeform, inputSegmentNumbers, null, displayTable);
 						if (!r.getBraille().equals(joinedBrailleWithoutHyphens))
 							throw new RuntimeException("Coding error");
 						int[] outputSegmentNumbers = r.getCharacterAttributes();
@@ -1579,15 +1559,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		 */
 		private static byte[] detectLetterBoundaries(byte[] addTo, String text, byte val) {
 			if (addTo == null)
-				addTo = new byte[text.length() - 1];
-			for(int i = 0; i < addTo.length; i++){
-				if(Character.isLetter(text.charAt(i)) && Character.isLetter(text.charAt(i+1)))
+				addTo = new byte[lengthByCodePoints(text) - 1];
+			int i = 0;
+			int prev = -1;
+			for (int c : text.codePoints().toArray()) {
+				if (i > 0 && ((Character.isLetter(c) && Character.isLetter(prev)) ||
+				              c == '-' ||
+				              prev == '-'))
+					addTo[i - 1] |= val;
+				if (i < addTo.length && c == '\u00ad') // SHY is not actual character, so boundary only after SHY
 					addTo[i] |= val;
-				if((text.charAt(i) == '-') || (text.charAt(i+1) == '-'))
-					addTo[i] |= val;
-				if((text.charAt(i) == '\u00ad')) // SHY is not actual character, so boundary only after SHY
-					addTo[i] |= val;
-				}
+				prev = c;
+				i++;
+			}
 			return addTo;
 		}
 		
@@ -1619,6 +1603,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			LiblouisTranslatorImpl that = (LiblouisTranslatorImpl)object;
 			if (!this.translator.equals(that.translator))
 				return false;
+			if (!this.displayTable.equals(that.displayTable))
+				return false;
 			if (this.hyphenator == null && that.hyphenator != null)
 				return false;
 			if (this.hyphenator != null && that.hyphenator == null)
@@ -1629,14 +1615,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 	}
 	
-	private static class HandleTextTransformUncontracted extends CompoundTranslator implements LiblouisTranslator {
+	private static class HandleTextTransformNone extends CompoundBrailleTranslator implements LiblouisTranslator {
 		
 		final LiblouisTranslator translator;
 		
-		HandleTextTransformUncontracted(LiblouisTranslator translator,
-		                                LiblouisTranslator nonContractingTranslator) {
-			super(translator, ImmutableMap.of("uncontracted", () -> nonContractingTranslator,
-			                                  "contracted", () -> translator));
+		HandleTextTransformNone(LiblouisTranslator translator, BrailleTranslator unityTranslator) {
+			super(translator, ImmutableMap.of("none", () -> unityTranslator));
 			this.translator = translator;
 		}
 		
@@ -1649,17 +1633,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		public FromTypeformedTextToBraille fromTypeformedTextToBraille() {
 			return translator.fromTypeformedTextToBraille();
 		}
-		
-		
 	}
 	
 	private static class LiblouisTranslatorHyphenatorImpl extends LiblouisTranslatorImpl {
 		
 		private LiblouisTranslatorHyphenatorImpl(Translator translator,
+		                                         DisplayTable displayTable,
 			                                     int handleNonStandardHyphenation,
-			                                     String mainLocale,
 			                                     Normalizer.Form unicodeNormalization) {
-			super(translator, handleNonStandardHyphenation, mainLocale, unicodeNormalization);
+			super(translator, displayTable, handleNonStandardHyphenation, unicodeNormalization);
 			fullHyphenator = new LiblouisTranslatorAsFullHyphenator(translator);
 		}
 		
@@ -1686,10 +1668,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		
 		// FIXME: code duplication with LiblouisHyphenatorJnaImplProvider
 		public byte[] hyphenate(String text) {
-			if (text.length() == 0)
+			if (text.isEmpty())
 				return null;
-			Tuple2<String,byte[]> t = extractHyphens(text, SHY, ZWSP);
-			if (t._1.length() == 0)
+			Tuple2<String,byte[]> t = extractHyphens(text, true, SHY, ZWSP);
+			if (t._1.isEmpty())
 				return null;
 			String textWithoutManualHyphens = t._1;
 			byte[] manualHyphens = t._2;
@@ -1705,8 +1687,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				boolean word = true;
 				int pos = 0;
 				for (String segment : splitInclDelimiter(textWithoutManualHyphens, ON_SPACE_SPLITTER)) {
-					if (word && segment.length() > 0) {
-						int len = segment.length();
+					if (word && !segment.isEmpty()) {
+						int len = lengthByCodePoints(segment);
 						boolean wordHasManualHyphens = false; {
 							for (int k = 0; k < len - 1; k++)
 								if (hyphens[pos + k] != 0) {
@@ -1722,7 +1704,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								hyphens[pos + k] |= wordHyphens[k];
 						}
 					}
-					pos += segment.length();
+					pos += lengthByCodePoints(segment);
 					word = !word;
 				}
 				return hyphens;
@@ -1743,7 +1725,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 		
 		public byte[] hyphenate(String text) {
-			return extractHyphens(hyphenator.transform(text), SHY, ZWSP)._2;
+			return extractHyphens(hyphenator.transform(text), true, SHY, ZWSP)._2;
 		}
 	}
 	
@@ -1806,7 +1788,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				text = text.toUpperCase();
 			else if (tt.equals("lowercase"))
 				text = text.toLowerCase();
-			else if (!tt.equals("uncontracted") && !tt.equals("contracted") && !LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
+			else if (!LOUIS_TEXT_TRANSFORM.matcher(tt).matches())
 				logger.warn("text-transform: {} not supported", tt);
 		}
 		return text;
@@ -1847,11 +1829,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						            table.getTable());
 				}
 				continue;
-			} else if (tt.equals("uppercase") || tt.equals("lowercase") || tt.equals("uncontracted")) {
-				// - uppercase and lowercase handled in textFromTextTransform
-				// - uncontracted can be ignored because the current contraction grade is already 0
-				//   (otherwise uncontracted would already have been handled in
-				//   HandleTextTransformUncontracted)
+			} else if (tt.equals("uppercase") || tt.equals("lowercase")) {
+				// handled in textFromTextTransform
 				continue;
 			}
 			logger.warn("text-transform: {} not supported", tt);
@@ -1867,6 +1846,18 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		if (result < 0)
 			result += n;
 		return result;
+	}
+	
+	private static int lengthByCodePoints(String s) {
+		return s.codePointCount(0, s.length());
+	}
+	
+	private static String substringByCodePoints(String s, int beginIndex) {
+		return s.substring(s.offsetByCodePoints(0, beginIndex));
+	}
+	
+	private static String substringByCodePoints(String s, int beginIndex, int endIndex) {
+		return s.substring(s.offsetByCodePoints(0, beginIndex), s.offsetByCodePoints(0, endIndex));
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(LiblouisTranslatorJnaImplProvider.class);

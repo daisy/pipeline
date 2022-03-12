@@ -184,4 +184,29 @@
                   test="/d:results/@document-element-base-uri-after-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e.svg')"/>
     </x:scenario>
     
+    <x:scenario label="from-zip-with-processing-instruction">
+        <x:call step="px:fileset-load-and-get-base-uri">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/a.zip!/e%5Bxml%5D" media-type="application/xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:option name="media-types" select="'application/xml'"/>
+        </x:call>
+        <x:context label="the results">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the number of documents should be 1" type="count" min="1" max="1"/>
+        <x:expect label="the base-uri of the loaded document is the requested uri" type="xpath"
+                  test="/d:results/@document-base-uri-before-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e%5Bxml%5D')"/>
+        <x:expect label="the base-uri of the document element is the requested uri" type="xpath"
+                  test="/d:results/@document-element-base-uri-before-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e%5Bxml%5D')"/>
+        <x:expect label="the base-uri of the loaded document should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-base-uri-after-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e%5Bxml%5D')"/>
+        <x:expect label="the base-uri of the document element should remain the same after xslt transformation" type="xpath"
+                  test="/d:results/@document-element-base-uri-after-xslt" equals="resolve-uri('samples/fileset2/a.zip!/e%5Bxml%5D')"/>
+    </x:scenario>
+    
 </x:description>

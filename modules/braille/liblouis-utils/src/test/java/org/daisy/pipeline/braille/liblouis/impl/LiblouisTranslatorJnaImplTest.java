@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.junit.Test;
 
 import org.liblouis.CompilationException;
+import org.liblouis.DisplayTable.StandardDisplayTables;
 import org.liblouis.Louis;
 import org.liblouis.Translator;
 
@@ -102,6 +103,7 @@ public class LiblouisTranslatorJnaImplTest {
 		LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl stream
 		= new LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl(
 			liblouisTranslator,
+			StandardDisplayTables.DEFAULT,
 			null,
 			hyphenator,
 			null,

@@ -21,11 +21,6 @@
       <p:pipe port="result" step="ssml-gen" />
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-      <p:documentation>
-	px:message
-      </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/text-to-ssml/library.xpl">
       <p:documentation>
 	px:text-to-ssml
@@ -102,7 +97,5 @@
       <p:with-option name="word-element" select="'w'"/>
       <p:with-option name="lang" select="if ($dc-lang) then $dc-lang else 'en'"/>
     </px:text-to-ssml>
-
-    <px:message message="End SSML generation for DTBook"/><p:sink/>
 
 </p:declare-step>

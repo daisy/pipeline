@@ -53,6 +53,16 @@
     <p:input port="tts-config">
         <p:inline><d:config/></p:inline>
     </p:input>
+    <p:option name="tts-audio-file-type" select="'audio/mpeg'">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>The desired file type of the generated audio files, specified as a MIME type.</p>
+        <p>Examples:</p>
+        <ul>
+          <li>"audio/mpeg"</li>
+          <li>"audio/x-wav" (but note that this is not a core media type)</li>
+        </ul>
+      </p:documentation>
+    </p:option>
     <p:option name="sentence-class" required="false" select="''"/>
     <p:output port="temp-audio-files">
         <p:documentation>
@@ -632,6 +642,7 @@
                         <p:input port="config">
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
+                        <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
                         <p:with-option name="temp-dir" select="$temp-dir"/>
                     </px:tts-for-epub3>

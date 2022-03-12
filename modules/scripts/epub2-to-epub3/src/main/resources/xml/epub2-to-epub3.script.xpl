@@ -69,7 +69,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 		</p:documentation>
 	</p:import>
 
-	<px:epub-load version="2" name="load" px:message="Loading EPUB 2">
+	<px:epub-load version="2" name="load" px:message="Loading EPUB 2" px:progress="1/10">
 		<p:with-option name="href" select="$source"/>
 		<p:with-option name="validation" select="$validation"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
@@ -81,7 +81,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 			<p:pipe step="load" port="validation-status"/>
 		</p:input>
 	</p:identity>
-	<p:choose name="status">
+	<p:choose name="status" px:progress="9/10">
 		<p:when test="/d:validation-status[@result='error']">
 			<p:output port="result"/>
 			<p:identity/>
@@ -89,7 +89,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 		<p:otherwise>
 			<p:output port="result"/>
 
-			<px:epub2-to-epub3 name="convert" px:message="Converting to EPUB 3">
+			<px:epub2-to-epub3 name="convert" px:message="Converting to EPUB 3" px:progress="8/9">
 				<p:input port="source.fileset">
 					<p:pipe step="load" port="result.fileset"/>
 				</p:input>
@@ -102,7 +102,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 				                              '.epub!/')"/>
 			</px:epub2-to-epub3>
 
-			<px:fileset-store name="store" px:message="Storing EPUB 3">
+			<px:fileset-store name="store" px:message="Storing EPUB 3" px:progress="1/9">
 				<p:input port="in-memory.in">
 					<p:pipe step="convert" port="result.in-memory"/>
 				</p:input>

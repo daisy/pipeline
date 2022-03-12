@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-common</artifactId>
-  <version>2.0.2-SNAPSHOT</version>
+  <version>2.0.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: NLP API</name>
@@ -70,7 +70,7 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_nlp_common,
       org.daisy.pipeline.nlp.lexing.LexServiceRegistry,
-      org.daisy.pipeline.nlp.breakdetect.calabash.impl.BreakDetectProvider
+      org.daisy.pipeline.nlp.calabash.impl.BreakDetectProvider
     </expose-services>
   </properties>
   

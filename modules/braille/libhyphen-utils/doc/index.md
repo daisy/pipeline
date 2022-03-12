@@ -13,7 +13,9 @@ features are:
 <!-- id:  If present it must be the only feature. Matches a hyphenator with a unique ID. -->
 
 `hyphenator`
-: Will only match if the value is "hyphen" or "libhyphen". <!-- or if it's a hyphenator's ID -->
+: Will only match if the value is "hyphen" or "libhyphen", or if the
+  value is a Hyphen table URI (see `libhyphen-table` feature
+  below). <!-- or if it's a hyphenator's ID -->
 
 `table`
 `hyphen-table`
@@ -22,7 +24,7 @@ features are:
   relative to a registered table path, an absolute file URI, or a
   fully qualified table identifier. A collection of tables used in
   LibreOffice is available under the path
-  [`http://www.libreoffice.org/dictionaries/hyphen/`](../src/main/resources/hyphen/). This
+  [`http://www.libreoffice.org/dictionaries/hyphen/`](../src/main/resources/tables/). This
   feature is not compatible with other features except `hyphenator`.
 
 `locale`

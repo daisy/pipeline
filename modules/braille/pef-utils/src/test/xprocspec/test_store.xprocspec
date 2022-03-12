@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:pef="http://www.daisy.org/ns/2008/pef"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="../../main/resources/xml/store.xpl">
   
   <x:scenario label="test_01">
-    <x:call step="pef:store">
+    <x:call step="px:pef-store">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_4.pef"/>
       </x:input>
-      <x:option name="href" select="resolve-uri('test_01/pef_4.pef',$temp-dir)"/>
+      <x:option name="pef-href" select="resolve-uri('test_01/pef_4.pef',$temp-dir)"/>
       <x:option name="preview-href" select="resolve-uri('test_01/pef_4.pef.html',$temp-dir)"/>
     </x:call>
     <x:context label="result fileset">
@@ -24,13 +24,14 @@
   </x:scenario>
 
   <x:scenario label="test_02">
-    <x:call step="pef:store">
+    <x:call step="px:pef-store">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_3.pef"/>
       </x:input>
-      <x:option name="href" select="resolve-uri('test_02/pef_3.pef',$temp-dir)"/>
-      <x:option name="brf-dir-href" select="resolve-uri('test_02/',$temp-dir)"/>
-      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
+      <x:option name="pef-href" select="resolve-uri('test_02/pef_3.pef',$temp-dir)"/>
+      <x:option name="output-dir" select="resolve-uri('test_02/',$temp-dir)"/>
+      <x:option name="file-format" select="'(table:&quot;org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US&quot;)'"/>
+      <x:option name="name-pattern" select="'pef_3-{}'"/>
     </x:call>
     <x:context label="result fileset">
       <x:document type="directory" base-uri="temp-dir" href="test_02/" recursive="true"/>
@@ -45,14 +46,14 @@
   </x:scenario>
   
   <x:scenario label="test_03">
-    <x:call step="pef:store">
+    <x:call step="px:pef-store">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_3.pef"/>
       </x:input>
-      <x:option name="href" select="resolve-uri('test_03/pef_3.pef',$temp-dir)"/>
-      <x:option name="brf-dir-href" select="resolve-uri('test_03/',$temp-dir)"/>
-      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
-      <x:option name="brf-file-format" select="'(line-breaks:DOS)
+      <x:option name="pef-href" select="resolve-uri('test_03/pef_3.pef',$temp-dir)"/>
+      <x:option name="output-dir" select="resolve-uri('test_03/',$temp-dir)"/>
+      <x:option name="name-pattern" select="'pef_3-{}'"/>
+      <x:option name="file-format" select="'(line-breaks:DOS)
                                                 (page-breaks:&quot;---&quot;)
                                                 (pad:BOTH)'"/>
     </x:call>
@@ -65,14 +66,14 @@
   </x:scenario>
 
   <x:scenario label="test_04">
-    <x:call step="pef:store">
+    <x:call step="px:pef-store">
       <x:input port="source">
         <x:document type="file" href="../resources/pef_3.pef"/>
       </x:input>
-      <x:option name="href" select="resolve-uri('test_04/pef_3.pef',$temp-dir)"/>
-      <x:option name="brf-dir-href" select="resolve-uri('test_04/',$temp-dir)"/>
-      <x:option name="brf-name-pattern" select="'pef_3-{}'"/>
-      <x:option name="brf-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+      <x:option name="pef-href" select="resolve-uri('test_04/pef_3.pef',$temp-dir)"/>
+      <x:option name="output-dir" select="resolve-uri('test_04/',$temp-dir)"/>
+      <x:option name="name-pattern" select="'pef_3-{}'"/>
+      <x:option name="file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                 (line-breaks:DOS)
                                                 (page-breaks:&quot;---&quot;)
                                                 (pad:BOTH)'"/>

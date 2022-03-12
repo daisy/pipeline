@@ -13,11 +13,6 @@
   <xsl:param name="uid"/>
   <xsl:param name="audio-only"/>
 
-  <xsl:function name="d:smil">
-    <xsl:param name="smilref"/>
-    <xsl:value-of select="substring-before($smilref, '#')"/>
-  </xsl:function>
-
   <xsl:variable name="content-doc-uri" select="base-uri(/*)"/>
   <xsl:variable name="content-doc-rel" select="pf:relativize-uri($content-doc-uri, $mo-dir)"/>
   <xsl:variable name="ref-targets" select="' note annotation '"/>
@@ -62,7 +57,7 @@
     <!-- TODO: rewrite the algorithm to iterate over the document only once. -->
     <xsl:variable name="root" select="/"/>
     <!-- This could be optimized by not recursing over the nodes with a @smilref. -->
-    <xsl:for-each-group select="//*[@smilref]" group-by="d:smil(@smilref)">
+    <xsl:for-each-group select="//*[@smilref]" group-by="substring-before(@smilref, '#')">
       <xsl:result-document href="{resolve-uri(current-grouping-key(), $content-doc-uri)}">
 	<smil>
 	  <head>
@@ -95,7 +90,7 @@
 
   <xsl:template match="*[@smilref]" mode="find-ref" priority="2">
     <xsl:param name="smilfile"/>
-    <xsl:if test="d:smil(@smilref) = $smilfile">
+    <xsl:if test="substring-before(@smilref, '#') = $smilfile">
       <xsl:apply-templates select="." mode="write-smil"/>
     </xsl:if>
     <!-- No 'otherwise' needed as the children will have the same
@@ -106,10 +101,10 @@
   <!-- === SMIL WRITING TEMPLATES === -->
 
   <xsl:template match="*[@smilref]" mode="write-smil" priority="2">
-    <xsl:variable name="smil-nr" select="d:smil(@smilref)"/>
+    <xsl:variable name="smil-nr" select="substring-before(@smilref, '#')"/>
     <xsl:variable name="id-in-smil" select="substring-after(@smilref, '#')"/>
     <xsl:choose>
-      <xsl:when test="descendant::*[@smilref and d:smil(@smilref) = $smil-nr][1]">
+      <xsl:when test="descendant::*[@smilref and substring-before(@smilref, '#') = $smil-nr][1]">
 	<seq id="{$id-in-smil}" class="{local-name()}">
 	  <xsl:if test="self::math:*">
 	    <xsl:call-template name="escapable"/>

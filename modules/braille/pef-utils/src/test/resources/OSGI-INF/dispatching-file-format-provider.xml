@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="dispatching-file-format-provider">
-  <implementation class="DispatchingFileFormatProvider"/>
-  <service>
-    <provide interface="DispatchingFileFormatProvider"/>
-  </service>
-  <reference name="FileFormatProvider" cardinality="0..n" policy="static" interface="org.daisy.pipeline.braille.pef.FileFormatProvider" bind="addProvider"/>
-</component>

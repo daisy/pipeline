@@ -163,7 +163,7 @@
                 </p:input>
             </px:fileset-add-entry>
         </p:for-each>
-        <px:fileset-join px:message="Converted to XHTML." name="zedai-to-html.fileset"/>
+        <px:fileset-join name="zedai-to-html.fileset"/>
         <p:sink/>
         <px:fileset-compose name="compose-mapping">
             <p:input port="source">

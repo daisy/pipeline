@@ -46,7 +46,12 @@
 		</p:documentation>
 	</p:import>
 
-	<p:variable name="core-media-types" select="'application/font-woff
+	<!--
+	    see https://www.w3.org/publishing/epub3/epub-spec.html#sec-core-media-types
+	-->
+	<p:variable name="core-media-types" select="'application/font-sfnt
+	                                             application/font-woff
+	                                             application/javascript
 	                                             application/pls+xml
 	                                             application/smil+xml
 	                                             application/vnd.ms-opentype
@@ -54,6 +59,10 @@
 	                                             application/xhtml+xml
 	                                             audio/mp4
 	                                             audio/mpeg
+	                                             font/otf
+	                                             font/ttf
+	                                             font/woff
+	                                             font/woff2
 	                                             image/gif
 	                                             image/jpeg
 	                                             image/png

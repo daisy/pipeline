@@ -26,11 +26,18 @@
 			                       if ($css) then pf:css-to-fileset($css,$css-uri,$context.fileset,$context.in-memory)
 			                       else ())">
 				<xsl:variable name="href" select="."/>
+				<xsl:variable name="file-in-context" as="element(d:file)?"
+							  select="$context.fileset//d:file[resolve-uri(@href,base-uri(.))=$href][1]"/>
 				<d:file href="{pf:relativize-uri($href,$css-uri)}">
-					<xsl:if test="not($context.fileset//d:file[resolve-uri(@href,base-uri(.))=$href]
-					                                          [1][not(@original-href)])">
-						<xsl:attribute name="original-href" select="$href"/>
-					</xsl:if>
+					<xsl:choose>
+						<xsl:when test="$file-in-context[@original-href]">
+							<xsl:sequence select="$file-in-context/@original-href"/>
+						</xsl:when>
+						<xsl:when test="$file-in-context"/>
+						<xsl:otherwise>
+							<xsl:attribute name="original-href" select="$href"/>
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:if test="pf:get-extension($href)='css'">
 						<xsl:attribute name="media-type" select="'text/css'"/>
 					</xsl:if>
@@ -114,7 +121,7 @@
 
 	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
 		<desc>
-			<p>Test whether a media query matches a medium..</p>
+			<p>Test whether a media query matches a medium.</p>
 		</desc>
 	</doc>
 	<java:function name="pf:media-query-matches" as="xs:boolean">

@@ -1,73 +1,90 @@
 $notes-placement: end-of-volume !default;
+$chapter-selector: "section" !default;
 
-@namespace epub 'http://www.idpf.org/2007/ops';
+@if $notes-placement != custom {
 
-a[epub|type~='noteref']::alternate {
-	display: block;
-	content: target-content(attr(href));
-}
+	@namespace epub 'http://www.idpf.org/2007/ops';
 
-// notes that are not referenced are not rendered
-*[epub|type~='note'],
-*[epub|type~='footnote'],
-*[epub|type~='endnote'],
-*[epub|type~='rearnote'] {
-	display: none;
-}
-
-// also remove collections of notes
-*[epub|type~='notes'],
-*[epub|type~='footnotes'],
-*[epub|type~='endnotes'],
-*[epub|type~='rearnotes'] {
-	display: none;
-}
-
-/*
- * - Generate a div element to contain all the notes and to attach a title.
- */
-@xslt "notes.xsl" {
-	endnotes-section-id: "endnotes-section";
-}
-
-#endnotes-section {
-	display: -obfl-list-of-references;
-	flow: endnotes-container;
-	&::after {
-		content: -obfl-collection(endnotes);
+	/*
+	 * - Move note elements if notes-placement is "end-of-block",
+	 * - otherwise generate a div element to contain all the notes and to attach a title.
+	 */
+	@xslt "notes.xsl" {
+		notes-placement: $notes-placement;
+		endnotes-section-class: "endnotes-section";
+		chapter-selector: $chapter-selector;
 	}
-}
 
-@if $notes-placement == bottom-of-page {
-	a[epub|type~='noteref']::alternate {
-		flow: footnotes;
-	}
-	@page {
-		@footnotes {
-			content: flow(footnotes);
-            -obfl-fallback-collection: endnotes;
+	@if $notes-placement == end-of-block {
+
+	} @else {
+
+		a[epub|type~='noteref']::alternate {
+			display: block;
+			content: target-content(attr(href));
 		}
-	}
 
-} @else {
-	a[epub|type~='noteref']::alternate {
-		flow: endnotes;
-	}
-}
-
-@if $notes-placement == end-of-book {
-	@volume:last {
-		@end {
-			content: flow(endnotes-container);
+		// notes that are not referenced are not rendered
+		*[epub|type~='note'],
+		*[epub|type~='footnote'],
+		*[epub|type~='endnote'],
+		*[epub|type~='rearnote'] {
+			display: none;
 		}
-	}
-} @else {
-	#endnotes-section {
-		-obfl-list-of-references-range: volume;
-	}
-	@volume {
-		@end {
-			content: flow(endnotes-container);
+
+		// also remove collections of notes
+		*[epub|type~='notes'],
+		*[epub|type~='footnotes'],
+		*[epub|type~='endnotes'],
+		*[epub|type~='rearnotes'] {
+			display: none;
+		}
+
+		.endnotes-section {
+			display: -obfl-list-of-references;
+			@if $notes-placement != end-of-chapter {
+				flow: endnotes-container;
+			}
+			&::after {
+				@if $notes-placement == end-of-chapter {
+					content: flow(endnotes);
+				} @else if $notes-placement == end-of-book {
+					content: flow(endnotes, document);
+				} @else {
+					content: flow(endnotes, volume);
+				}
+			}
+		}
+
+		@if $notes-placement == bottom-of-page {
+			a[epub|type~='noteref']::alternate {
+				flow: footnotes;
+			}
+			@page {
+				@footnotes {
+					content: flow(footnotes, page);
+					-obfl-fallback-collection: endnotes;
+				}
+			}
+
+		} @else {
+			a[epub|type~='noteref']::alternate {
+				flow: endnotes;
+			}
+		}
+
+		@if $notes-placement == end-of-book {
+			@volume:last {
+				@end {
+					content: flow(endnotes-container, document);
+				}
+			}
+		} @else if $notes-placement != end-of-chapter {
+			@volume {
+				@end {
+					content: flow(endnotes-container, document);
+				}
+			}
 		}
 	}
 }

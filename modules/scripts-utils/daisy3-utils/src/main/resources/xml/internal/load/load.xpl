@@ -36,8 +36,9 @@
     <p:serialization port="fileset.out" indent="true"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating
-            filesets.</p:documentation>
+        <p:documentation>
+            px:fileset-join
+        </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
         <p:documentation>

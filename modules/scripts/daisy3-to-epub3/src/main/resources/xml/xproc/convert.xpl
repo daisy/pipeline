@@ -48,11 +48,6 @@
             px:smil-to-audio-clips
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            px:message
-        </p:documentation>
-    </p:import>
     <p:import href="../internal/ncx-to-nav.xpl">
         <p:documentation>
             pxi:ncx-to-nav
@@ -106,7 +101,7 @@
         normally eliminate any relative hrefs starting with "..", which is required for this step
         to work.
     -->
-    <px:fileset-rebase>
+    <px:fileset-rebase px:progress="1/20">
         <p:input port="source">
             <p:pipe step="main" port="source.fileset"/>
         </p:input>
@@ -117,7 +112,7 @@
     <p:identity name="source.fileset"/>
 
 
-    <p:group name="convert">
+    <p:group name="convert" px:progress="19/20">
     <p:output port="result.fileset" primary="true"/>
     <p:output port="result.in-memory" sequence="true">
         <p:pipe step="finalize" port="in-memory.out"/>
@@ -151,10 +146,10 @@
     <!--=========================================================================-->
 
     <!--TODO conditionally, if the MO option is set-->
-    <p:choose name="audio-clips">
+    <p:choose name="audio-clips" px:progress="1/19">
         <p:when test="$mediaoverlays and $type='text+mo'">
             <p:output port="result"/>
-            <px:smil-to-audio-clips>
+            <px:smil-to-audio-clips px:progress="1">
                 <p:input port="source">
                     <p:pipe step="smils" port="result"/>
                 </p:input>
@@ -178,7 +173,7 @@
     <!-- CONVERT DTBOOK TO XHTML                                                 -->
     <!--=========================================================================-->
 
-    <px:dtbook-to-html name="content-docs" chunk="true">
+    <px:dtbook-to-html name="content-docs" chunk="true" px:progress="4/19" px:message="Converting DTBook to XHTML">
         <p:input port="source.fileset">
             <p:pipe step="source.fileset" port="result"/>
         </p:input>
@@ -198,7 +193,7 @@
     <!--=========================================================================-->
     <!-- CONVERT NCX TO NAVIGATION DOCUMENT                                      -->
     <!--=========================================================================-->
-    <pxi:ncx-to-nav name="nav-doc">
+    <pxi:ncx-to-nav name="nav-doc" px:progress="1/19" px:message="Converting NCX to EPUB navigation document">
         <p:input port="source">
             <p:pipe port="result" step="ncx"/>
         </p:input>
@@ -220,13 +215,13 @@
     <!-- GENERATE MEDIA OVERLAYS                                                 -->
     <!--=========================================================================-->
 
-    <p:choose name="media-overlays">
-        <p:when test="$mediaoverlays and $type='text+mo'">
+    <p:choose name="media-overlays" px:progress="3/19">
+        <p:when test="$mediaoverlays and $type='text+mo'" px:message="Creating EPUB media overlay documents">
             <p:output port="fileset.out" primary="true"/>
             <p:output port="in-memory.out" sequence="true">
                 <p:pipe port="result.in-memory" step="media-overlays.inner"/>
             </p:output>
-            <px:epub3-create-mediaoverlays flatten="false" name="media-overlays.inner">
+            <px:epub3-create-mediaoverlays flatten="false" name="media-overlays.inner" px:progress="1">
                 <p:input port="source.fileset">
                     <p:pipe step="content-docs" port="result.fileset"/>
                 </p:input>
@@ -259,7 +254,7 @@
     <!--=========================================================================-->
 
     <p:documentation>Extract metadata from the DAISY 3 OPF document</p:documentation>
-    <px:oebps-to-opf-metadata name="metadata">
+    <px:oebps-to-opf-metadata name="metadata" px:progress="1/19">
         <p:input port="source">
             <p:pipe step="opf" port="result"/>
         </p:input>
@@ -271,7 +266,7 @@
     <!-- CREATE THE PACKAGE DOCUMENT                                             -->
     <!--=========================================================================-->
 
-    <p:group name="package-doc">
+    <p:group name="package-doc" px:progress="8/19" px:message="Creating EPUB package document">
         <p:output port="fileset.out" primary="true"/>
         <p:output port="in-memory.out">
             <p:pipe port="result" step="package-doc.create"/>
@@ -288,7 +283,7 @@
         </px:fileset-join>
         <p:sink/>
 
-        <px:epub3-create-package-doc name="package-doc.create">
+        <px:epub3-create-package-doc name="package-doc.create" px:progress="1">
             <p:input port="source.fileset">
                 <p:pipe step="package-doc.join-filesets" port="result"/>
             </p:input>
@@ -315,8 +310,6 @@
                 <p:pipe step="package-doc.create" port="result.fileset"/>
             </p:input>
         </px:fileset-join>
-
-        <px:message message="Package Document Created."/>
     </p:group>
     <p:sink/>
 
@@ -324,7 +317,7 @@
     <!-- FINALIZE AND STORE THE CONTAINER                                        -->
     <!--=========================================================================-->
 
-    <p:group name="finalize">
+    <p:group name="finalize" px:progress="1/19">
         <p:output port="fileset.out" primary="true">
             <p:pipe port="result" step="finalize.ocf"/>
         </p:output>
@@ -342,7 +335,7 @@
             </p:input>
         </px:fileset-join>
         <p:sink/>
-        <px:epub3-ocf-finalize name="finalize.ocf">
+        <px:epub3-ocf-finalize name="finalize.ocf" px:progress="1">
             <p:input port="source">
                 <p:pipe port="result" step="fileset.without-ocf"/>
             </p:input>

@@ -10,16 +10,10 @@ import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.dotify.DotifyHyphenator;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 import org.daisy.pipeline.junit.AbstractTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-
-import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import org.ops4j.pax.exam.Option;
 
 public class DotifyCoreTest extends AbstractTest {
 	
@@ -32,22 +26,16 @@ public class DotifyCoreTest extends AbstractTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("common-utils"),
-			brailleModule("css-utils"),
+			brailleModule("braille-common"),
+			brailleModule("braille-css-utils"),
+			brailleModule("pef-utils"),
 			pipelineModule("css-utils"),
+			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 			// because the exclusion of com.fasterxml.woodstox:woodstox-core from the dotify.library
 			// dependencies causes stax2-api to be excluded too
 			"org.codehaus.woodstox:stax2-api:jar:?",
 		};
-	}
-	
-	@Override @Configuration
-	public Option[] config() {
-		return options(
-			// apparently the liblouis-java exclusion defined in modules-bom does not have an effect
-			mavenBundle("org.daisy.dotify:dotify.library:?"),
-			composite(super.config()));
 	}
 	
 	@Test

@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.8-SNAPSHOT</version>
+  <version>3.0.9-SNAPSHOT</version>
   <artifactId>tts-adapter-espeak</artifactId>
   <packaging>bundle</packaging>
 
@@ -33,11 +33,6 @@
     <!--
         test dependencies
     -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>audio-encoder-lame</artifactId>
-      <scope>test</scope>
-    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

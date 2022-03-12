@@ -9,8 +9,9 @@
       <x:input port="source">
         <x:document type="file" href="../resources/hauy_valid.xml"/>
       </x:input>
+      <x:option name="output-dir" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
       <x:option name="pef-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
-      <x:option name="brf-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
       <x:option name="preview-output-dir" select="resolve-uri('hauy/output-dir',$temp-dir)"/>
       <x:option name="temp-dir" select="resolve-uri('hauy/temp-dir',$temp-dir)"/>
     </x:call>
@@ -39,8 +40,9 @@
         </x:document>
       </x:input>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
+      <x:option name="output-dir" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
       <x:option name="pef-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
-      <x:option name="brf-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="preview-output-dir" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="temp-dir" select="resolve-uri('hauy_reset/temp-dir',$temp-dir)"/>
       <x:option name="stylesheet" select="'../resources/reset.css ../resources/style.css'"/>
@@ -75,8 +77,10 @@
   <x:scenario label="various options">
   <x:call step="px:dtbook-to-pef.script">
     <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
+    <x:option name="include-pef" select="'true'"/>
+    <x:option name="output-dir" select="''"/>
   </x:call>
-    
+  
   <x:scenario label="page-size">
     <x:documentation>
       Tests page-width and page-height options.
@@ -170,7 +174,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="levels-in-footer" pending="liblouis translation bug">
+  <x:scenario label="levels-in-footer">
     <x:documentation>
       Tests levels-in-footer option.
     </x:documentation>
@@ -596,7 +600,7 @@
         </x:document>
       </x:expect>
     </x:scenario>
-    <x:scenario label="enabled">
+    <x:scenario label="disabled">
       <x:call>
         <x:option name="include-line-groups" select="'false'"/>
         <x:option name="pef-output-dir" select="concat($temp-dir,'include-line-groups/disabled/output-dir/')"/>
@@ -900,10 +904,7 @@
     <x:expect label="OBFL present in the output directory'" type="xpath" test="count(/*/*[ends-with(@name,'.obfl')])" equals="1"/>
   </x:scenario>
   
-  <x:scenario label="ascii-file-format">
-    <x:call>
-      <x:option name="include-brf" select="'true'"/>
-    </x:call>
+  <x:scenario label="output-file-format">
     <x:scenario label="ascii-table has priority over dc:language / xml:lang">
       <x:call>
         <x:input port="source">
@@ -922,17 +923,16 @@
             </dtbook>
           </x:document>
         </x:input>
-        <x:option name="pef-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
-        <x:option name="brf-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview-output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
-        <x:option name="ascii-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
-                                                    (line-breaks:DOS)
-                                                    (page-breaks:&quot;---&quot;)
-                                                    (pad:BOTH)'"/>
+        <x:option name="output-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
+                                                     (line-breaks:DOS)
+                                                     (page-breaks:&quot;---&quot;)
+                                                     (pad:BOTH)'"/>
       </x:call>
       <x:context label="brf">
-        <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_dtbook-to-pef.script_vol-1.brf"/>
+        <x:document type="file" method="text" base-uri="temp-dir" href="ascii-table/output-dir/test_dtbook-to-pef.script.brf"/>
       </x:context>
       <x:expect label="brf" type="compare" normalize-space="false">
         <x:document type="file" method="text" href="../resources/test_ascii-table_1.brf"/>
@@ -958,16 +958,15 @@
           </x:document>
         </x:input>
         <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(type:literary)'"/>
-        <x:option name="pef-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
-        <x:option name="brf-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="preview-output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
-        <x:option name="ascii-file-format" select="'(line-breaks:DOS)
-                                                    (page-breaks:&quot;---&quot;)
-                                                    (pad:BOTH)'"/>
+        <x:option name="output-file-format" select="'(line-breaks:DOS)
+                                                     (page-breaks:&quot;---&quot;)
+                                                     (pad:BOTH)'"/>
       </x:call>
       <x:context label="brf">
-        <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_dtbook-to-pef.script_vol-1.brf"/>
+        <x:document type="file" method="text" base-uri="temp-dir" href="default-ascii-table/output-dir/test_dtbook-to-pef.script.brf"/>
       </x:context>
       <x:expect label="brf" type="compare" normalize-space="false">
         <x:document type="file" method="text" href="../resources/test_ascii-table_2.brf"/>
@@ -1006,6 +1005,8 @@
       </x:input>
       <x:option name="stylesheet-parameters" select="'(my-string:&quot;simple\Atest&quot;)'"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
+      <x:option name="output-dir" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
       <x:option name="pef-output-dir" select="concat($temp-dir,'parameter/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'parameter/temp-dir/')"/>
     </x:call>

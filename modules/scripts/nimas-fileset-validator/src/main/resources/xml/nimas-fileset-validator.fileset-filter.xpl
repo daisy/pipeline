@@ -39,10 +39,19 @@
         </p:documentation>
     </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation>Utilities for representing a fileset.</p:documentation>
+        <p:documentation>
+            px:fileset-add-entry
+            px:fileset-add-ref
+            px:fileset-create
+            px:fileset-join
+        </p:documentation>
     </p:import>
 
     <p:variable name="package-doc-uri" select="base-uri()"/>
@@ -60,13 +69,16 @@
         
         <px:fileset-add-entry>
             <p:with-option name="href" select="$filepath"/>
-            <p:with-option name="ref" select="concat($package-doc-uri, '#', $refid)"/>
             <p:input port="source">
                 <p:inline>
                     <d:fileset/>
                 </p:inline>
             </p:input>
         </px:fileset-add-entry>
+        <px:fileset-add-ref>
+            <p:with-option name="href" select="$filepath"/>
+            <p:with-option name="ref" select="concat($package-doc-uri, '#', $refid)"/>
+        </px:fileset-add-ref>
     </p:for-each>
 
     <!-- input fileset -->

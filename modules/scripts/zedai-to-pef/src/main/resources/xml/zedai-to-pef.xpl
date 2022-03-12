@@ -9,7 +9,7 @@
                 name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">ZedAI to PEF</h1>
+        <h1 px:role="name">ZedAI to braille</h1>
         <p px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into an embosser ready braille document.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/">
             Online documentation
@@ -31,7 +31,7 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="stylesheet" required="false" px:sequence="true" select="''" px:media-type="text/css application/xslt+xml">
+    <p:option name="stylesheet" px:sequence="true">
         <p:pipeinfo>
             <px:type>
                 <choice>
@@ -44,86 +44,17 @@
                 </choice>
             </px:type>
         </p:pipeinfo>
-        <p:documentation>
-            <h2 px:role="name">Style sheets</h2>
-            <p px:role="desc" xml:space="preserve">A list of CSS/SASS style sheets to apply.
-
-Must be a space separated list of URIs, absolute or relative to source.
-
-Style sheets can also be associated with the source in other ways: linked (using a
-['link' element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
-element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using
-'[style' attributes](https://www.w3.org/TR/css-style-attr/)).
-
-All style sheets are applied at once, but the order in which they are specified (first the ones
-specified through this option, then the ones associated with the source document) has an influence
-on the cascading order.
-
-CSS/SASS style sheets are interpreted according to [braille
-CSS](http://braillespecs.github.io/braille-css) rules.
-
-For info on how to use SASS (Syntactically Awesome StyleSheets) see the [SASS
-manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
-        </p:documentation>
     </p:option>
     
-    <p:option name="transform" required="false" px:type="transform-query" select="'(translator:liblouis)(formatter:dotify)'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Transformer query</h2>
-            <p px:role="desc">The transformer query.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="ascii-table" required="false" px:type="transform-query" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">ASCII braille table</h2>
-            <p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and the plain text version.
-
-If left blank, the locale information in the input document will be used to select a suitable table.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="include-preview" required="false" px:type="boolean" select="'false'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Include preview</h2>
-            <p px:role="desc">Whether or not to include a preview of the PEF in HTML.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="include-brf" required="false" px:type="boolean" select="'false'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Include plain text file (BRF)</h2>
-            <p px:role="desc">Whether or not to include a plain text ASCII version of the PEF.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="pef-output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">PEF</h2>
-            <p px:role="desc">The PEF.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="brf-output-dir" px:output="result" px:type="anyDirURI" px:media-type="text" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">BRF</h2>
-            <p px:role="desc">A plain text ASCII version of the PEF.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="preview-output-dir" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''" >
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Preview</h2>
-            <p px:role="desc">An HTML preview of the PEF.</p>
-        </p:documentation>
-    </p:option>
-    
-    <p:option name="temp-dir" required="false" px:output="temp" px:type="anyDirURI" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Directory for storing temporary files.</p>
-        </p:documentation>
-    </p:option>
+    <p:option name="transform"/>
+    <p:option name="output-dir"/>
+    <p:option name="output-file-format"/>
+    <p:option name="include-preview"/>
+    <p:option name="preview-table"/>
+    <p:option name="preview-output-dir"/>
+    <p:option name="include-pef"/>
+    <p:option name="pef-output-dir"/>
+    <p:option name="temp-dir"/>
     
     <p:import href="zedai-to-pef.convert.xpl">
         <p:documentation>
@@ -190,11 +121,12 @@ If left blank, the locale information in the input document will be used to sele
         <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
             <p:pipe step="main" port="source"/>
         </p:with-option>
-        <p:with-option name="include-brf" select="$include-brf"/>
+        <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="output-file-format" select="$output-file-format"/>
+        <p:with-option name="preview-table" select="$preview-table"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
     </px:xml-to-pef.store>
     

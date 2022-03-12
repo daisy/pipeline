@@ -18,12 +18,9 @@ import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
 import org.daisy.pipeline.braille.common.Hyphenator;
-import org.daisy.pipeline.braille.common.Provider;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.common.TransformProvider;
-import static org.daisy.pipeline.braille.common.TransformProvider.util.dispatch;
 import org.daisy.pipeline.braille.liblouis.LiblouisHyphenator;
 
 import org.osgi.service.component.annotations.Component;
@@ -46,26 +43,17 @@ public class HyphenateDefinition extends ExtensionFunctionDefinition {
 	
 	@Reference(
 		name = "LiblouisHyphenatorProvider",
-		unbind = "unbindLiblouisHyphenatorProvider",
+		unbind = "-",
 		service = LiblouisHyphenator.Provider.class,
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
 	)
 	protected void bindLiblouisHyphenatorProvider(LiblouisHyphenator.Provider provider) {
-		providers.add(provider);
-		logger.debug("Adding LiblouisHyphenator provider: {}", provider);
+		hyphenatorProvider = provider;
+		logger.debug("Binding LiblouisHyphenator provider: {}", provider);
 	}
 	
-	protected void unbindLiblouisHyphenatorProvider(LiblouisHyphenator.Provider provider) {
-		providers.remove(provider);
-		hyphenators.invalidateCache();
-		logger.debug("Removing LiblouisHyphenator provider: {}", provider);
-	}
-	
-	private List<TransformProvider<LiblouisHyphenator>> providers
-	= new ArrayList<TransformProvider<LiblouisHyphenator>>();
-	private Provider.util.MemoizingProvider<Query,LiblouisHyphenator> hyphenators
-	= memoize(dispatch(providers));
+	private LiblouisHyphenator.Provider hyphenatorProvider;
 	
 	public StructuredQName getFunctionQName() {
 		return funcname;
@@ -99,10 +87,12 @@ public class HyphenateDefinition extends ExtensionFunctionDefinition {
 					String[] text = sequenceToArray(arguments[1]);
 					Hyphenator hyphenator;
 					try {
-						hyphenator = hyphenators.get(query).iterator().next(); }
+						hyphenator = hyphenatorProvider.get(query).iterator().next(); }
 					catch (NoSuchElementException e) {
 						throw new XPathException("Could not find a hyphenator for query: " + query); }
 					return arrayToSequence(hyphenator.asFullHyphenator().transform(text));}
+				catch (XPathException e) {
+					throw e; }
 				catch (Throwable e) {
 					throw new XPathException("Unexpected error in louis:hyphenate", e); }
 			}

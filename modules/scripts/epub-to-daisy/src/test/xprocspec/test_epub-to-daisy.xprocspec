@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/epub-to-daisy.xpl">
+
+	<x:scenario label="minimal">
+		<x:call step="px:epub-to-daisy">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/mimetype" compression-method="stored"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/chapter.xhtml"
+						        media-type="application/xhtml+xml"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/cover.xhtml"
+						        media-type="application/xhtml+xml"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/front.xhtml"
+						        media-type="application/xhtml+xml"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/package.opf"
+						        media-type="application/oebps-package+xml" media-version="2.0"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/EPUB/toc.ncx"
+						        media-type="application/x-dtbncx+xml"/>
+						<d:file href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/META-INF/container.xml"
+						        media-type="application/xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+			<x:option name="tts" select="true()"/>
+			<x:option name="tts-audio-file-type" select="'audio/x-wav'"/>
+			<x:input port="tts-config">
+				<x:document type="inline">
+					<config>
+						<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
+						<!-- log can be found in "log" output -->
+						<property key="log" value="true"/>
+					</config>
+				</x:document>
+			</x:input>
+			<x:option name="epub3-output-dir" select="resolve-uri('out/epub3/')"/>
+			<x:option name="daisy202-output-dir" select="resolve-uri('out/daisy202/')"/>
+			<x:option name="daisy3-output-dir" select="resolve-uri('out/daisy3/')"/>
+			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_epub-to-daisy/minimal/')"/>
+		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the convertion must succeed" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
+		<x:context label="The EPUB 3">
+			<x:document type="port" port="epub3.fileset"/>
+		</x:context>
+		<x:expect label="The EPUB 3 fileset" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="out/epub3/mimetype" compression-method="stored"
+					        original-href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/mimetype"/>
+					<d:file href="out/epub3/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="out/epub3/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="out/epub3/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="out/epub3/EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="out/epub3/META-INF/container.xml" media-type="application/xml"
+					        original-href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/META-INF/container.xml"/>
+					<d:file href="out/epub3/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="out/epub3/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="2.0" indent="true"/>
+					<d:file href="out/epub3/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
+					<d:file href="out/epub3/EPUB/mo/cover.smil" media-type="application/smil+xml"/>
+					<d:file href="out/epub3/EPUB/mo/front.smil" media-type="application/smil+xml"/>
+					<d:file href="out/epub3/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_01_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_00_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0001_02_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_02_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_00_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0000_00_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0001_03_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_03_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0002_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_01_000.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="The DAISY 3">
+			<x:document type="port" port="daisy3.fileset"/>
+		</x:context>
+		<x:expect label="The DAISY 3 fileset" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="out/daisy3/content.xml" media-type="application/x-dtbook+xml"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"
+					        doctype-public="-//NISO//DTD dtbook 2005-3//EN"/>
+					<d:file href="out/daisy3/mo0.smil" media-type="application/smil" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"/>
+					<d:file href="out/daisy3/mo1.smil" media-type="application/smil" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"/>
+					<d:file href="out/daisy3/mo3.smil" media-type="application/smil" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"/>
+					<d:file href="out/daisy3/mo4.smil" media-type="application/smil" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"/>
+					<d:file href="out/daisy3/navigation.ncx" media-type="application/x-dtbncx+xml" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"
+					        doctype-public="-//NISO//DTD ncx 2005-1//EN"/>
+					<d:file href="out/daisy3/resources.res" media-type="application/x-dtbresource+xml"
+					        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"
+					        doctype-public="-//NISO//DTD resource 2005-1//EN"/>
+					<d:file href="out/daisy3/book.opf" media-type="text/xml" indent="true"
+					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"/>
+					<d:file href="out/daisy3/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_01_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_00_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0001_02_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_02_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_00_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0000_00_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0001_03_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_03_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0002_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_01_000.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="The DAISY 2.02">
+			<x:document type="port" port="daisy202.fileset"/>
+		</x:context>
+		<x:expect label="The DAISY 2.02 fileset" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="out/daisy202/id/ncc.html" media-type="application/xhtml+xml"
+					        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+					        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+					<d:file href="out/daisy202/id/cover.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
+					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="out/daisy202/id/front.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
+					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="out/daisy202/id/chapter.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
+					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="out/daisy202/id/content.html" media-type="application/xhtml+xml"
+					        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
+					        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+					<d:file href="out/daisy202/id/part0001_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_01_000.wav"/>
+					<d:file href="out/daisy202/id/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_00_000.wav"/>
+					<d:file href="out/daisy202/id/part0001_02_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_02_000.wav" />
+					<d:file href="out/daisy202/id/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_00_000.wav" />
+					<d:file href="out/daisy202/id/part0000_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0000_00_000.wav" />
+					<d:file href="out/daisy202/id/part0001_03_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0001_03_000.wav"/>
+					<d:file href="out/daisy202/id/part0002_01_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/audio/part0002_01_000.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

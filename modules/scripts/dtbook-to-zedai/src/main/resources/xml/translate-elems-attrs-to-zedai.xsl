@@ -27,7 +27,6 @@
     <xsl:key name="ids" match="*" use="@id"/>
 
     <xsl:template match="/">
-        <xsl:message>Translate to ZedAI</xsl:message>
         <!-- just for testing: insert the oxygen schema reference -->
         <!--
             <xsl:processing-instruction name="oxygen">

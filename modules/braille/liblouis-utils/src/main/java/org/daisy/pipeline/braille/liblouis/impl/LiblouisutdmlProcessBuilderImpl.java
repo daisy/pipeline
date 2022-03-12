@@ -17,15 +17,12 @@ import com.google.common.base.Function;
 
 import static org.daisy.common.file.URLs.asURL;
 import org.daisy.pipeline.braille.common.NativePath;
-import org.daisy.pipeline.braille.common.ResourceResolver;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import static org.daisy.pipeline.braille.common.util.Files.isAbsoluteFile;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
-import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.daisy.pipeline.braille.liblouis.Liblouisutdml;
-import org.daisy.pipeline.braille.liblouis.LiblouisutdmlConfigResolver;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -46,8 +43,8 @@ import org.slf4j.LoggerFactory;
 public class LiblouisutdmlProcessBuilderImpl implements Liblouisutdml {
 	
 	private File file2brl;
-	private LiblouisTableResolver tableResolver;
-	private ResourceResolver configResolver;
+	private LiblouisTableRegistry tableRegistry;
+	private LiblouisutdmlConfigRegistry configRegistry;
 	
 	@Activate
 	protected void activate() {
@@ -74,25 +71,25 @@ public class LiblouisutdmlProcessBuilderImpl implements Liblouisutdml {
 	}
 	
 	@Reference(
-		name = "LiblouisTableResolver",
+		name = "LiblouisTableRegistry",
 		unbind = "-",
-		service = LiblouisTableResolver.class,
+		service = LiblouisTableRegistry.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	protected void bindTableResolver(LiblouisTableResolver tableResolver) {
-		this.tableResolver = tableResolver;
+	protected void bindTableRegistry(LiblouisTableRegistry tableRegistry) {
+		this.tableRegistry = tableRegistry;
 	}
 	
 	@Reference(
-		name = "LiblouisutdmlConfigResolver",
+		name = "LiblouisutdmlConfigRegistry",
 		unbind = "-",
-		service = LiblouisutdmlConfigResolver.class,
+		service = LiblouisutdmlConfigRegistry.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	protected void bindConfigResolver(LiblouisutdmlConfigResolver configResolver) {
-		this.configResolver = configResolver;
+	protected void bindConfigRegistry(LiblouisutdmlConfigRegistry configRegistry) {
+		this.configRegistry = configRegistry;
 	}
 	
 	/**
@@ -166,7 +163,7 @@ public class LiblouisutdmlProcessBuilderImpl implements Liblouisutdml {
 	}
 	
 	private String resolveTable(LiblouisTable table) throws IOException {
-		File[] resolved = tableResolver.resolveLiblouisTable(table, null);
+		File[] resolved = tableRegistry.resolveLiblouisTable(table, null);
 		if (resolved == null)
 			throw new RuntimeException("Liblouis table " + table + " could not be resolved");
 		String[] files = new String[resolved.length];
@@ -176,7 +173,7 @@ public class LiblouisutdmlProcessBuilderImpl implements Liblouisutdml {
 	}
 	
 	private File resolveConfigPath(URI configPath) {
-		URL resolvedConfigPath = isAbsoluteFile(configPath) ? asURL(configPath) : configResolver.resolve(configPath);
+		URL resolvedConfigPath = isAbsoluteFile(configPath) ? asURL(configPath) : configRegistry.resolve(configPath);
 		if (resolvedConfigPath == null)
 			throw new RuntimeException("Liblouisutdml config path " + configPath + " could not be resolved");
 		return asFile(resolvedConfigPath);

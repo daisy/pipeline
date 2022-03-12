@@ -1,45 +1,45 @@
 package org.daisy.pipeline.tts.espeak.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.shell.CommandRunner;
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
-import org.daisy.pipeline.tts.MarklessTTSEngine;
-import org.daisy.pipeline.tts.SoundUtil;
+import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ESpeakEngine extends MarklessTTSEngine {
+public class ESpeakEngine extends TTSEngine {
 
-	private AudioFormat mAudioFormat;
-	private String[] mCmd;
-	private String mESpeakPath;
-	private final static int MIN_CHUNK_SIZE = 2048;
-	private int mPriority;
+	private final String[] mCmd;
+	private final String mESpeakPath;
+	private final int mPriority;
+
+	private final static URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml.xsl", ESpeakEngine.class);
 	private final static Logger mLogger = LoggerFactory.getLogger(ESpeakEngine.class);
 
 	public ESpeakEngine(ESpeakService eSpeakService, File eSpeakPath, int priority) {
@@ -52,53 +52,38 @@ public class ESpeakEngine extends MarklessTTSEngine {
 	}
 
 	@Override
-	public Collection<AudioBuffer> synthesize(String sentence, XdmNode xmlSentence,
-	        Voice voice, TTSResource threadResources, AudioBufferAllocator bufferAllocator, boolean retry)
-	        		throws SynthesisException,InterruptedException, MemoryException {
+	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource threadResources)
+			throws SynthesisException,InterruptedException {
 
-		Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
+		String sentence; {
+			Map<String,Object> xsltParams = new HashMap<>(); {
+				if (voice != null) xsltParams.put("voice", voice.name);
+			}
+			try {
+				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
+			} catch (IOException | SaxonApiException e) {
+				throw new SynthesisException(e);
+			}
+		}
+		ArrayList<AudioInputStream> result = new ArrayList<>();
 		try {
 			new CommandRunner(mCmd)
 				.feedInput(sentence.getBytes("utf-8"))
 				// read the wave on the standard output
 				.consumeOutput(stream -> {
-						BufferedInputStream in = new BufferedInputStream(stream);
-						AudioInputStream fi = AudioSystem.getAudioInputStream(in);
-						if (mAudioFormat == null)
-							mAudioFormat = fi.getFormat();
-						while (true) {
-							AudioBuffer b = bufferAllocator
-								.allocateBuffer(MIN_CHUNK_SIZE + fi.available());
-							int ret = fi.read(b.data, 0, b.size);
-							if (ret == -1) {
-								// note: perhaps it would be better to call allocateBuffer()
-								// somewhere else in order to avoid this extra call:
-								bufferAllocator.releaseBuffer(b);
-								break;
-							}
-							b.size = ret;
-							result.add(b);
-						}
-						fi.close();
-				})
+						result.add(
+							createAudioStream(
+								stream)); })
 				.consumeError(mLogger)
 				.run();
-		} catch (MemoryException|InterruptedException e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
+			return new SynthesisResult(result.get(0));
+		} catch (InterruptedException e) {
 			throw e;
 		} catch (Throwable e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			throw new SynthesisException(e);
 		}
-
-		return result;
-	}
-
-	@Override
-	public AudioFormat getAudioOutputFormat() {
-		return mAudioFormat;
 	}
 
 	@Override
@@ -120,7 +105,7 @@ public class ESpeakEngine extends MarklessTTSEngine {
 								if (mr.find()) {
 									languages.add(mr.group(1).split("-")[0]);
 								} else {
-									mLogger.warn("Could not parse line from `espeak --voices' output: " + line);
+									mLogger.debug("Could not parse line from `espeak --voices' output: " + line);
 								}
 							}
 						}
@@ -142,14 +127,20 @@ public class ESpeakEngine extends MarklessTTSEngine {
 									String line = scanner.nextLine();
 									mr.reset(line);
 									if (mr.find()) {
-										Locale locale = Locale.forLanguageTag(mr.group("locale"));
-										Gender gender = "f".equals(mr.group("gender").trim().toLowerCase())
-											? Gender.FEMALE_ADULT
-											: Gender.MALE_ADULT;
 										String name = mr.group("name");
-										result.add(new Voice(getProvider().getName(), name, locale, gender));
+										try {
+											Locale locale = VoiceInfo.tagToLocale(mr.group("locale"));
+											Gender gender = "f".equals(mr.group("gender").trim().toLowerCase())
+												? Gender.FEMALE_ADULT
+												: Gender.MALE_ADULT;
+											result.add(new Voice(getProvider().getName(), name, locale, gender));
+										} catch (VoiceInfo.UnknownLanguage e) {
+											mLogger.debug("Could not parse line from `espeak --voices' output: " + line);
+											mLogger.debug("Reason: could not parse locale: " + mr.group("locale"));
+											result.add(new Voice(getProvider().getName(), name));
+										}
 									} else {
-										mLogger.warn("Could not parse line from `espeak --voices' output: " + line);
+										mLogger.debug("Could not parse line from `espeak --voices' output: " + line);
 									}
 								}
 							}
@@ -161,7 +152,7 @@ public class ESpeakEngine extends MarklessTTSEngine {
 		} catch (InterruptedException e) {
 			throw e;
 		} catch (Throwable e) {
-			throw new SynthesisException(e.getMessage(), e.getCause());
+			throw new SynthesisException(e);
 		}
 
 		return result;

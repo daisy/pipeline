@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:pef="http://www.daisy.org/ns/2008/pef"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns="http://www.w3.org/1999/xhtml"
-    exclude-result-prefixes="#all"
-    version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pef="http://www.daisy.org/ns/2008/pef"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:dp2="http://www.daisy.org/ns/pipeline/"
+                xmlns="http://www.w3.org/1999/xhtml"
+                exclude-result-prefixes="#all">
     
     <xsl:param name="table"/>
+    
+    <xsl:variable name="table-matches-braille-charset" as="xs:boolean"
+                  select="exists(/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset[.=pef:get-table-id($table)])"/>
     
     <xsl:template match="/">
         <html>
@@ -103,7 +106,9 @@
                                         <xsl:for-each select="pef:row">
                                             <div class="row">
                                                 <xsl:sequence select="@rowgap"/>
-                                                <xsl:sequence select="pef:encode($table, string(.))"/>
+                                                <xsl:sequence select="if ($table-matches-braille-charset and exists(@dp2:ascii))
+                                                                      then string(@dp2:ascii)
+                                                                      else pef:encode($table,string(.))"/>
                                             </div>
                                         </xsl:for-each>
                                     </div>

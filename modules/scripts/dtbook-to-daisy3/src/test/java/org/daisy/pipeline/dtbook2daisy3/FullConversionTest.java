@@ -87,11 +87,11 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			pipelineModule("file-utils"),
 			pipelineModule("smil-utils"),
 			pipelineModule("mathml-utils"),
+			pipelineModule("dtbook-tts"),
 			"commons-io:commons-io:?",
 			"org.daisy.pipeline:xproc-api:?",
-			// for dtbook-tss mock
-			pipelineModule("dtbook-break-detection"),
 			pipelineModule("nlp-omnilang-lexer"),
+			pipelineModule("tts-mocks"),
 		};
 	}
 	
@@ -150,8 +150,6 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Bundle-Name", "DTBook TTS MOCK");
-		probe.setHeader("Service-Component", "OSGI-INF/module.xml");
 		probe.setHeader("SPI-Consumer", "javax.xml.parsers.SAXParserFactory#newInstance");
 		return probe;
 	}
@@ -294,28 +292,26 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 						+ testStructureUnchanged);
 		outputDir.mkdirs();
 
-		// URL xmlinput = getClass().getResource(filename); //not used otherwise
-		// we can't find the CSS
-		URL xmlinput = new URI(System.getProperty("res.on.disk")).resolve(
+		URL sourceURL = new URI(System.getProperty("res.on.disk")).resolve(
 				"." + filename).toURL();
-		URL configOption = getClass().getResource("/tts-config.xml");
+		URL ttsConfigURL = getClass().getResource("/tts-config.xml");
 
 		Assert.assertNotNull("file " + filename
-				+ " must exist in resource directory", xmlinput);
+				+ " must exist in resource directory", sourceURL);
 
-		Source source = new StreamSource(new InputStreamReader(
-				xmlinput.openStream()));
-		source.setSystemId(xmlinput.toURI().toString());
+		Source source = new StreamSource(new InputStreamReader(sourceURL.openStream()));
+		source.setSystemId(sourceURL.toURI().toString());
+		Source ttsConfig = new StreamSource(new InputStreamReader(ttsConfigURL.openStream()));
+		ttsConfig.setSystemId(ttsConfigURL.toURI().toString());
 
-		Supplier<Source> supplier = Suppliers.ofInstance(source);
-
-		Builder xprocInput = new XProcInput.Builder().withOption(
-				new QName("output-dir"), outputDir.toURI().toString())
-				.withInput("source", supplier);
+		Builder xprocInput = new XProcInput.Builder()
+			.withInput("source", Suppliers.ofInstance(source))
+			.withOption(new QName("output-dir"), outputDir.toURI().toString());
 		if (audio) {
-			//xprocInput = xprocInput.withOption(new QName("tts-config"),
-			//		configOption.toURI().toString());
-			xprocInput = xprocInput.withOption(new QName("audio"), "true");
+			xprocInput = xprocInput
+				.withOption(new QName("audio"), "true")
+				.withOption(new QName("audio-file-type"), "audio/x-wav")
+				.withInput("tts-config", Suppliers.ofInstance(ttsConfig));
 		}
 
 		XProcPipeline pipeline = xprocEngine
@@ -326,7 +322,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 
 		if (audio) {
 			Assert.assertTrue("No audio was generated",
-			                  new File(outputDir, "30sec.mp3").exists());
+			                  outputDir.list((dir, name) -> name.endsWith(".wav")).length > 0);
 		}
 
 		ZedVal zv = new ZedVal();
@@ -340,15 +336,14 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 
 		// ********** check that the content is unchanged **************
 		if (testTextUnchanged) {
-			File xmloutput = new File(outputDir, FilenameUtils.getName(xmlinput
-					.getPath()));
+			File xmloutput = new File(outputDir, FilenameUtils.getName(sourceURL.getPath()));
 
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
 			TextCollector collector1 = new TextCollector();
 			TextCollector collector2 = new TextCollector();
-			saxParser.parse(xmlinput.openStream(), collector1);
+			saxParser.parse(sourceURL.openStream(), collector1);
 			saxParser.parse(new FileInputStream(xmloutput), collector2);
 
 			// split into chunks to ease the debugging
@@ -368,7 +363,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 					expectedtext.length(), actualText.length());
 
 			if (testStructureUnchanged) {
-				String inputContent = IOUtils.toString(xmlinput.openStream());
+				String inputContent = IOUtils.toString(sourceURL.openStream());
 				String outputContent = IOUtils.toString(new FileInputStream(
 						xmloutput));
 				Diff diff = new Diff(inputContent, outputContent);

@@ -10,7 +10,7 @@
     <p:import href="merge.xpl"/>
     
     <!--
-        pef:store
+        px:pef-store
     -->
     <p:import href="store.xpl"/>
     

@@ -17,14 +17,10 @@ import static com.google.common.collect.Iterables.concat;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermList;
-import cz.vutbr.web.css.TermString;
 
-import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
-import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.dotify.api.translator.AttributeWithContext;
@@ -43,15 +39,13 @@ import org.daisy.dotify.api.translator.TranslatorConfigurationException;
 import org.daisy.dotify.api.translator.TranslatorSpecification;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
-import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
+import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
 import org.daisy.pipeline.braille.common.CSSStyledText;
-import org.daisy.pipeline.braille.common.Provider;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
+import org.daisy.pipeline.braille.css.CounterStyle;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -70,31 +64,18 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	public void setCreatedWithSPI() {}
 	
 	@Reference(
-		name = "BrailleTranslatorProvider",
-		unbind = "unbindBrailleTranslatorProvider",
-		service = BrailleTranslatorProvider.class,
-		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		name = "BrailleTranslatorRegistry",
+		unbind = "-",
+		service = BrailleTranslatorRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
 	)
-	@SuppressWarnings(
-		"unchecked" // safe cast to BrailleTranslatorProvider<BrailleTranslator>
-	)
-	protected void bindBrailleTranslatorProvider(BrailleTranslatorProvider<?> provider) {
-		brailleTranslatorProviders.add((BrailleTranslatorProvider<org.daisy.pipeline.braille.common.BrailleTranslator>)provider);
-		logger.debug("Adding BrailleTranslator provider: {}", provider);
+	protected void bindBrailleTranslatorRegistry(BrailleTranslatorRegistry registry) {
+		translatorRegistry = registry;
+		logger.debug("Binding BrailleTranslator registry: {}", registry);
 	}
 	
-	protected void unbindBrailleTranslatorProvider(BrailleTranslatorProvider<?> provider) {
-		brailleTranslatorProviders.remove(provider);
-		brailleTranslatorProvider.invalidateCache();
-		logger.debug("Removing BrailleTranslator provider: {}", provider);
-	}
-	
-	private final List<BrailleTranslatorProvider<org.daisy.pipeline.braille.common.BrailleTranslator>> brailleTranslatorProviders
-	= new ArrayList<BrailleTranslatorProvider<org.daisy.pipeline.braille.common.BrailleTranslator>>();
-	
-	private final Provider.util.MemoizingProvider<Query,org.daisy.pipeline.braille.common.BrailleTranslator> brailleTranslatorProvider
-	= memoize(dispatch(brailleTranslatorProviders));
+	private BrailleTranslatorRegistry translatorRegistry;
 	
 	public boolean supportsSpecification(String locale, String mode) {
 		try {
@@ -119,21 +100,17 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * breaking according to CSS. Corresponds with translator query
 	 * `(input:braille)(input:text-css)(output:braille)`
 	 */
-	private final static String PRE_TRANSLATED_MODE = "pre-translated-text-css";
-	
 	private class BrailleTranslatorFactoryImpl implements BrailleTranslatorFactory {
 		public BrailleTranslator newTranslator(String locale, String mode) throws TranslatorConfigurationException {
-			if (PRE_TRANSLATED_MODE.equals(mode))
-				mode = "(input:braille)(input:text-css)(output:braille)";
 			Matcher m = QUERY.matcher(mode);
 			if (!m.matches())
 				throw new TranslatorConfigurationException();
 			Query query = query(mode);
 			if (locale != null && !"und".equals(locale))
-				query = mutableQuery(query).add("locale", locale);
-			for (org.daisy.pipeline.braille.common.BrailleTranslator t : brailleTranslatorProvider.get(query))
+				query = mutableQuery(query).add("document-locale", locale);
+			for (org.daisy.pipeline.braille.common.BrailleTranslator t : translatorRegistry.get(query))
 				try {
-					return new BrailleTranslatorFromBrailleTranslator(mode, t); }
+					return new BrailleTranslatorFromBrailleTranslator(mode, t.lineBreakingFromStyledText()); }
 				catch (UnsupportedOperationException e) {}
 			throw new TranslatorConfigurationException("Factory does not support " + locale + "/" + mode);
 		}
@@ -156,30 +133,19 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * not. Regardless of this setting, hyphenation characters (SHY and ZWSP) in the input are used
 	 * in line breaking, except when overridden with a <code>hyphens: none</code> style.
 	 *
-	 * Supports special variable assignments (in the form of "<code>-dotify-def:foo</code>") and
-	 * tests (in the form of "<code>-dotify-ifdef:foo</code>" or "<code>-dotify-ifndef:foo</code>")
-	 * in text attributes in order to support special ad hoc handling of marker-references.
-	 *
 	 * Support <code>text-transform</code> value "<code>-dotify-counter</code>" which causes numbers
 	 * to be formatted according to the value of the <code>-dotify-counter-style</code> property.
 	 */
 	private static class BrailleTranslatorFromBrailleTranslator implements BrailleTranslator {
 		
 		final String mode;
-		org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText lineBreakingFromStyledText;
-		org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille;
+		final org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText translator;
 		
 		private BrailleTranslatorFromBrailleTranslator(
 				String mode,
-				org.daisy.pipeline.braille.common.BrailleTranslator translator)
-				throws UnsupportedOperationException {
+				org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText translator) {
 			this.mode = mode;
-			try {
-				this.lineBreakingFromStyledText = translator.lineBreakingFromStyledText();
-				this.fromStyledTextToBraille = null; }
-			catch (UnsupportedOperationException e) {
-				this.lineBreakingFromStyledText = null;
-				this.fromStyledTextToBraille = translator.fromStyledTextToBraille(); }
+			this.translator = translator;
 		}
 		
 		public BrailleTranslatorResult translate(Translatable input) throws TranslationException {
@@ -189,7 +155,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 					// see org.daisy.dotify.formatter.impl.row.SegmentProcessor.layoutLeader
 					return new DefaultLineBreaker.LineIterator("", '\u2800', '\u2824', 1);
 				if (" ".equals(text))
-					// If input text is a space, it will be user for calculating the margin character
+					// If input text is a space, it may be used for calculating the margin character
 					// (see org.daisy.dotify.formatter.impl.common.FormatterCoreContext)
 					return new DefaultLineBreaker.LineIterator("\u2800", '\u2800', '\u2824', 1); }
 			return translate(cssStyledTextFromTranslatable(input), 0, -1);
@@ -211,39 +177,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		}
 		
 		private BrailleTranslatorResult translate(Iterable<CSSStyledText> styledText, int from, int to) throws TranslationException {
-			if (lineBreakingFromStyledText != null)
-				return lineBreakingFromStyledText.transform(styledText, from, to);
-			else {
-				List<String> braille = new ArrayList<>();
-				Iterator<CSSStyledText> style = styledText.iterator();
-				for (String s : fromStyledTextToBraille.transform(styledText)) {
-					SimpleInlineStyle st = style.next().getStyle();
-					if (st != null) {
-						if (st.getProperty("hyphens") == Hyphens.NONE) {
-							s = s.replaceAll("[\u00AD\u200B]","");
-							st.removeProperty("hyphens"); }
-						CSSProperty ws = st.getProperty("white-space");
-						if (ws != null) {
-							if (ws == WhiteSpace.PRE_WRAP)
-								s = s.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
-								     .replaceAll("[\\x20\t\\u2800]", "\u00A0");
-							if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-								s = s.replaceAll("[\\n\\r]", "\u2028");
-							st.removeProperty("white-space"); }}
-					braille.add(s);
-				}
-				StringBuilder brailleString = new StringBuilder();
-				int fromChar = 0;
-				int toChar = to >= 0 ? 0 : -1;
-				for (String s : braille) {
-					brailleString.append(s);
-					if (--from == 0)
-						fromChar = brailleString.length();
-					if (--to == 0)
-						toChar = brailleString.length();
-				}
-				return new DefaultLineBreaker.LineIterator(brailleString.toString(), fromChar, toChar, '\u2800', '\u2824', 1);
-			}
+			return translator.transform(styledText, from, to);
 		}
 		
 		public String getTranslatorMode() {
@@ -264,12 +198,11 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 */
 	protected static Iterable<CSSStyledText> cssStyledTextFromTranslatable(Translatable specification) {
 		return handleCounterStyles(
-			handleVariables(
-				cssStyledTextFromTranslatable(
-					specification.getText(),
-					specification.getAttributes(),
-					specification.isHyphenating(),
-					null)));
+			cssStyledTextFromTranslatable(
+				specification.getText(),
+				specification.getAttributes(),
+				specification.isHyphenating(),
+				null));
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
@@ -314,13 +247,12 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 */
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(TranslatableWithContext specification) {
 		return handleCounterStyles(
-			handleVariables(
-				cssStyledTextFromTranslatable(
-					specification.getPrecedingText(),
-					specification.getTextToTranslate(),
-					specification.getFollowingText(),
-					specification.getAttributes().orElse(null),
-					null)));
+			cssStyledTextFromTranslatable(
+				specification.getPrecedingText(),
+				specification.getTextToTranslate(),
+				specification.getFollowingText(),
+				specification.getAttributes().orElse(null),
+					null));
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(List<PrecedingText> preceding,
@@ -360,6 +292,8 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		if (attributes.hasNext()) {
 			AttributeWithContext a = attributes.next();
 			int w = a.getWidth();
+			if (w == 0)
+				return cssStyledTextFromTranslatable(preceding, text, following, attributes, parentStyle);
 			if (w <= precedingSize)
 				return concat(
 					cssStyledTextFromTranslatable(preceding.subList(0, w), null, null, a, parentStyle),
@@ -408,48 +342,6 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 
 	private static Iterable<CSSStyledText> empty = Optional.<CSSStyledText>absent().asSet();
 
-	private static Iterable<CSSStyledText> handleVariables(Iterable<CSSStyledText> styledText) {
-		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
-		Set<String> env = null;
-		String segment = null;
-		SimpleInlineStyle style = null;
-		Map<String,String> attrs = null;
-		for (CSSStyledText st : styledText) {
-			String t = st.getText();
-			SimpleInlineStyle s = st.getStyle();
-			Map<String,String> a = st.getTextAttributes();
-			if (s != null) {
-				Collection<String> properties = s.getPropertyNames();
-				String key = null;
-				if (properties.contains("-dotify-def")) {
-					key = "-dotify-def"; }
-				else if (properties.contains("-dotify-ifdef")) {
-					key = "-dotify-ifdef"; }
-				else if (properties.contains("-dotify-ifndef")) {
-					key = "-dotify-ifndef"; }
-				else if (properties.contains("-dotify-defifndef")) {
-					key = "-dotify-defifndef"; }
-				if (key != null) {
-					if (!"".equals(t)) {
-						String var = s.getProperty(key, true).toString();
-						if (env == null)
-							env = new HashSet<String>();
-						if (key.equals("-dotify-ifdef") && !env.contains(var)
-						    || (key.equals("-dotify-ifndef") || key.equals("-dotify-defifndef")) && env.contains(var))
-							t = "";
-						if (key.equals("-dotify-def") || key.equals("-dotify-defifndef"))
-							env.add(var); }
-					s.removeProperty(key); }}
-			if (segment != null)
-				segments.add(new CSSStyledText(segment, style, attrs));
-			segment = t;
-			style = s;
-			attrs = a; }
-		if (segment != null)
-			segments.add(new CSSStyledText(segment, style, attrs));
-		return segments;
-	}
-
 	private static Iterable<CSSStyledText> handleCounterStyles(Iterable<CSSStyledText> styledText) {
 		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 		String segment = null;
@@ -470,29 +362,11 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 						if ("??".equals(t)) {
 						} else {
 							int counterValue = Integer.parseInt(t);
-							Term<?> counterStyle = s.getValue(TermFunction.class, "-dotify-counter-style");
-							if (counterStyle instanceof TermFunction
-							    && ((TermFunction)counterStyle).getFunctionName().equals("symbols")) {
-								String system = null;
-								List<String> symbols = new ArrayList<String>();
-								for (Term<?> term : (TermFunction)counterStyle) {
-									if (system == null) {
-										if (term instanceof TermIdent)
-											system = ((TermIdent)term).getValue();
-										else
-											system = "symbolic"; }
-									else
-										symbols.add(((TermString)term).getValue()); }
-								if (system.equals("alphabetic"))
-									t = counterRepresentationAlphabetic(counterValue, symbols);
-								else if (system.equals("numeric"))
-									t = counterRepresentationNumeric(counterValue, symbols);
-								else if (system.equals("cyclic"))
-									t = counterRepresentationCyclic(counterValue, symbols);
-								else if (system.equals("fixed"))
-									t = counterRepresentationFixed(counterValue, symbols);
-								else if (system.equals("symbolic"))
-									t = counterRepresentationSymbolic(counterValue, symbols); }}}}
+							Term<?> counterStyle = s.getValue("-dotify-counter-style");
+							if (counterStyle != null) {
+								try {
+									t = new CounterStyle(counterStyle).format(counterValue); }
+								catch (IllegalArgumentException e) {}}}}}
 				s.removeProperty("-dotify-counter-style"); }
 			if (segment != null)
 				segments.add(new CSSStyledText(segment, style, attrs));
@@ -502,53 +376,5 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		if (segment != null)
 			segments.add(new CSSStyledText(segment, style, attrs));
 		return segments;
-	}
-
-	private static int mod(int a, int n) {
-		int result = a % n;
-		if (result < 0)
-			result += n;
-		return result;
-	}
-
-	static String counterRepresentationAlphabetic(int counterValue, List<String> symbols) {
-		if (counterValue < 1)
-			return "";
-		if (counterValue > symbols.size())
-			return counterRepresentationAlphabetic((counterValue - 1) / symbols.size(), symbols)
-				+ symbols.get(mod(counterValue - 1, symbols.size()));
-		else
-			return symbols.get(counterValue - 1);
-	}
-
-	static String counterRepresentationCyclic(int counterValue, List<String> symbols) {
-		return symbols.get(mod(counterValue - 1, symbols.size()));
-	}
-
-	static String counterRepresentationFixed(int counterValue, List<String> symbols) {
-		if (counterValue < 1 || counterValue > symbols.size())
-			return "";
-		else
-			return symbols.get(counterValue - 1);
-	}
-
-	static String counterRepresentationNumeric(int counterValue, List<String> symbols) {
-		if (counterValue < 0)
-			return "-" + counterRepresentationNumeric(- counterValue, symbols);
-		if (counterValue >= symbols.size())
-			return counterRepresentationNumeric(counterValue / symbols.size(), symbols)
-				+ symbols.get(mod(counterValue, symbols.size()));
-		else
-			return symbols.get(counterValue);
-	}
-
-	static String counterRepresentationSymbolic(int counterValue, List<String> symbols) {
-		if (counterValue < 1)
-			return "";
-		String symbol = symbols.get(mod(counterValue - 1, symbols.size()));
-		String s = symbol;
-		for (int i = 0; i < ((counterValue - 1) / symbols.size()); i++)
-			s += symbol;
-		return s;
 	}
 }

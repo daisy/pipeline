@@ -65,7 +65,7 @@ public class SpeechSheetAnalyser {
 		for (int k = 0; k < csscode.size(); ++k) {
 			String basePath = alluris.get(k).resolve(".").toString();
 			String withAbsURL = makeURLabsolute(csscode.get(k), basePath);
-			styleSheets.add(parserFactory.parse(new CSSSource(withAbsURL, (String)null, new URL("http://base")),
+			styleSheets.add(parserFactory.parse(new CSSSource(withAbsURL, (String)null, new URL("http://base"), 0, 0),
 			                                    new DefaultCSSSourceReader(network)));
 			/*
 			 * we cannot use CSSFactory.parse(withAbsURL) because it tries to

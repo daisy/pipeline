@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:test="http://www.daisy.org/ns/xprocspec/inline-script">
+  
     <x:script>
         <p:declare-step type="test:test" version="1.0">
             <!-- either href or input-as-text must be specified -->
@@ -10,7 +13,6 @@
             <p:option name="input-as-text"/>
             <p:option name="target" required="true"/>
             <p:option name="doctype" required="true"/>
-            <p:option name="use-java-implementation" select="'true'"/>
             <p:output port="result">
                 <p:pipe port="result" step="set-doctype"/>
             </p:output>
@@ -58,7 +60,6 @@
                     <p:pipe port="result" step="store"/>
                 </p:with-option>
                 <p:with-option name="doctype" select="$doctype"/>
-                <p:with-option name="use-java-implementation" select="$use-java-implementation"/>
             </px:set-doctype>
             <p:add-attribute match="/*" attribute-name="href">
                 <p:with-option name="attribute-value" select="/*/text()"/>
@@ -87,42 +88,6 @@
         
         <x:context label="the stored document">
             <x:document type="file" base-uri="temp-dir" href="set-doctype.without-doctype.xml" method="text"/>
-        </x:context>
-        <x:expect label="the document should be stored" type="count" min="1" max="1"/>
-        <x:expect label="the document should start with a xml declaration" type="xpath" test="substring(/*/text(),1,38)" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>
-        <x:expect label="the document should contain the correct DOCTYPE declaration" type="xpath" test="replace(/*/text(),'^.*?(&lt;!DOCTYPE[^&gt;]*&gt;).*','$1','s')" equals="'&lt;!DOCTYPE html&gt;'"/>
-        <x:expect label="the document should otherwise be exactly as the input document" type="compare">
-            <x:document type="inline" xml:space="preserve"><body xmlns="http://www.w3.org/ns/xproc-step">&lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;!DOCTYPE html&gt;
-&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
-    &lt;head&gt;
-        &lt;title&gt;XHTML5&lt;/title&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;h1&gt;XHTML5&lt;/h1&gt;
-        &lt;!--&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;--&gt;
-        &lt;![CDATA[&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"&gt;]]&gt;
-    &lt;/body&gt;
-&lt;/html&gt;</body></x:document>
-        </x:expect>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:set-doctype - without a pre-existing doctype - using the XProc/XSLT implementation">
-        <x:call step="test:test">
-            <x:option name="target" select="resolve-uri('set-doctype.without-doctype.java.xml',$temp-dir)"/>
-            <x:option name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
-            <x:option name="href" select="resolve-uri('samples/set-doctype.without-doctype.xml',base-uri(.))"/>
-            <x:option name="use-java-implementation" select="'false'"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="The value of the result must be the URI to the document" type="xpath" test="/*/text()" equals="resolve-uri('set-doctype.without-doctype.java.xml',$temp-dir)"/>
-        
-        <x:context label="the stored document">
-            <x:document type="file" base-uri="temp-dir" href="set-doctype.without-doctype.java.xml" method="text"/>
         </x:context>
         <x:expect label="the document should be stored" type="count" min="1" max="1"/>
         <x:expect label="the document should start with a xml declaration" type="xpath" test="substring(/*/text(),1,38)" equals="'&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;'"/>

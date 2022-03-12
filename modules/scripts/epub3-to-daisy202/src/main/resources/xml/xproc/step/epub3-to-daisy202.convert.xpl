@@ -711,7 +711,8 @@
         <px:fileset-filter media-types="application/xhtml+xml
                                         application/smil+xml
                                         audio/mpeg
-                                        audio/mp4"/>
+                                        audio/mp4
+										audio/x-wav"/>
         <px:fileset-copy flatten="true" dry-run="true" name="flatten">
             <p:with-option name="target" select="base-uri(/*)"/>
         </px:fileset-copy>

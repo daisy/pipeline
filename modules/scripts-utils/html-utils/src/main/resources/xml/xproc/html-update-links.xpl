@@ -26,7 +26,7 @@
 		</p:documentation>
 	</p:input>
 	
-	<p:option name="source-renamed" cx:as="xs:string" select="'false'">
+	<p:option name="source-renamed" cx:as="xs:boolean" select="false()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether the source document itself has previously been renamed according to "mapping"
 			or not. In other words, whether the URI of the source document is to be compared with

@@ -27,8 +27,6 @@ public class AcapelaSSMLTest {
 	private static Processor Proc = new Processor(false);
 	private static String SsmlNs = "http://www.w3.org/2001/10/synthesis";
 
-	//TODO: test the ending-mark
-	
 	@Before
 	public void setUp() throws SaxonApiException {
 		InputStream is = this.getClass().getResourceAsStream("/transform-ssml.xsl");

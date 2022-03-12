@@ -94,3 +94,12 @@
         }
     }
 }
+
+$duplicate-tables-with-class: null !default;
+
+@if $duplicate-tables-with-class != null {
+    @xslt "tables.xsl" {
+        duplicate-tables-with-class: $duplicate-tables-with-class;
+        classes-for-table-duplicates: $classes-for-table-duplicates;
+    }
+}

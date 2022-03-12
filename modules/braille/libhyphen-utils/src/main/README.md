@@ -10,7 +10,7 @@
 
 ## Hyphen table paths ([`org.daisy.pipeline.braille.libhyphen.LibhyphenTablePath`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/libhyphen/LibhyphenTablePath.html))
 
-- [`http://www.libreoffice.org/dictionaries/hyphen/`](resources/hyphen/)
+- [`http://www.libreoffice.org/dictionaries/hyphen/`](resources/tables/)
 
   A standard collection of hyphenation tables used in LibreOffice
 

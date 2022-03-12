@@ -73,9 +73,10 @@
 	<!--
 	    dtbook-to-daisy3
 	    dtbook-to-epub3
+	    epub3-to-epub3
 	    zedai-to-epub3
 	-->
-	<p:option name="include-tts-log" select="'false'">
+	<p:option name="include-tts-log" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Enable TTS log</h2>
 			<p px:role="desc">Whether or not to make the TTS log available.</p>
@@ -143,6 +144,7 @@ split up if they exceed the given maximum size.</p>
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef
+	    zedai-to-pef
 	-->
 	<p:option name="stylesheet" required="false" px:type="string" select="''" px:sequence="true" px:media-type="text/css application/xslt+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -209,47 +211,33 @@ with the "Braille code" option this determines the transformer that is selected.
 		</p:documentation>
 	</p:option>
 
-	<p:option name="pef-output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml">
+	<p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="text">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">PEF</h2>
-			<p px:role="desc">The PEF.</p>
+			<h2 px:role="name">Output file</h2>
+			<p px:role="desc">The output braille file.</p>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="include-brf" required="false" px:type="boolean" select="'false'">
+	<p:option name="output-file-format" required="false" px:type="transform-query" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Include plain text file (BRF)</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not to include a plain text ASCII version of the PEF.</p>
-		</p:documentation>
-	</p:option>
+			<h2 px:role="name">Output file format</h2>
+			<p px:role="desc" xml:space="preserve">The file format in which to store the braille result.
 
-	<p:option name="ascii-file-format" required="false" px:type="transform-query" select="''">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Plain text (BRF) file format</h2>
-			<p px:role="desc" xml:space="preserve">The file format to store the plain text version.
-
-If left blank, the locale information in the input document will be used to select a suitable file format.</p>
-		</p:documentation>
-	</p:option>
-
-	<p:option name="brf-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text" select="''">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">BRF</h2>
-			<p px:role="desc">A plain text ASCII version of the PEF.</p>
+If left blank, the braille will be stored in PEF format.</p>
 		</p:documentation>
 	</p:option>
 
 	<p:option name="include-preview" required="false" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include preview</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not to include a preview of the PEF in HTML.</p>
+			<p px:role="desc" xml:space="preserve">Whether or not to include a HTML preview of the braille result.</p>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="ascii-table" required="false" px:type="transform-query" select="''">
+	<p:option name="preview-table" required="false" px:type="transform-query" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">ASCII braille table</h2>
-			<p px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and, if no plain text file format was specified, the plain text version.
+			<h2 px:role="name">ASCII braille table for HTML preview</h2>
+			<p px:role="desc" xml:space="preserve">The ASCII braille table used to render the HTML preview.
 
 If left blank, the locale information in the input document will be used to select a suitable table.</p>
 		</p:documentation>
@@ -258,21 +246,35 @@ If left blank, the locale information in the input document will be used to sele
 	<p:option name="preview-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Preview</h2>
-			<p px:role="desc">An HTML preview of the PEF.</p>
+			<p px:role="desc">An HTML preview of the braille result.</p>
+		</p:documentation>
+	</p:option>
+
+	<p:option name="include-pef" required="false" px:type="boolean" select="'false'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Include PEF</h2>
+			<p px:role="desc" xml:space="preserve">Whether or not to keep the intermediary PEF file (for debugging).</p>
+		</p:documentation>
+	</p:option>
+
+	<p:option name="pef-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PEF</h2>
+			<p px:role="desc">The intermediary PEF file.</p>
 		</p:documentation>
 	</p:option>
 
 	<p:option name="include-obfl" required="false" px:type="boolean" select="'false'">
 		<p:documentation>
 			<h2 px:role="name">Include OBFL</h2>
-			<p px:role="desc" xml:space="preserve">Keeps the intermediary OBFL-file for debugging.</p>
+			<p px:role="desc" xml:space="preserve">Whether or not the keep the intermediary OBFL file (for debugging).</p>
 		</p:documentation>
 	</p:option>
 
 	<p:option name="obfl-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">OBFL</h2>
-			<p px:role="desc">The intermediary OBFL-file (for debugging).</p>
+			<p px:role="desc">The intermediary OBFL file.</p>
 		</p:documentation>
 	</p:option>
 

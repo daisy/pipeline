@@ -1,16 +1,29 @@
 package org.daisy.pipeline.tts;
 
+import java.net.URL;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.common.io.ByteStreams;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
+import net.sf.saxon.Configuration;
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
+import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
+import org.daisy.common.xslt.XslTransformCompiler;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
-import org.daisy.pipeline.tts.TTSService.Mark;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
 /**
@@ -22,6 +35,29 @@ import org.daisy.pipeline.tts.TTSService.SynthesisException;
  * Most of the methods of TTSEngine must be thread-safe.
  */
 public abstract class TTSEngine {
+
+	public static class SynthesisResult {
+		/**
+		 * The audio produced by the TTS processor. The {@link AudioFormat} of
+		 * the stream must be the same every time the same voice is used.
+		 */
+		public final AudioInputStream audio;
+		/**
+		 * The mark offsets (in bytes) corresponding to the
+		 * <code>ssml:mark</code> elements of the input SSML. The order must be
+		 * kept. The offsets are relative to the {@link AudioInputStream}. That
+		 * is, they start at 0. May be <code>null</code> if the TTS processor
+		 * doesn't handle SSML marks.
+		 */
+		public final List<Integer> marks;
+		public SynthesisResult(AudioInputStream audio) {
+			this(audio, null);
+		}
+		public SynthesisResult(AudioInputStream audio, List<Integer> marks) {
+			this.audio = audio;
+			this.marks = marks;
+		}
+	}
 
 	/**
 	 * @param provider is the service from which the TTSEngine has been
@@ -44,13 +80,7 @@ public abstract class TTSEngine {
 	 * This method must be thread-safe. But @param threadResources is here to
 	 * prevent the service from locking internal resources.
 	 * 
-	 * @param sentence is the sentence to synthesize. It is the serialized
-	 *            result of the SSML conversion performed by the XSLT whose URL
-	 *            is returned by {@link TTSService#getSSMLxslTransformerURL()},
-	 *            or <code>null</code> if that method returns <code>null</code>.
-	 * @param xmlSentence is the XML version of @param sentence. It should not
-	 *            be used unless one needs information that has been lost during
-	 *            the serialization process (e.g. marks or CSS)
+	 * @param sentence is the sentence to synthesize, as an SSML node.
 	 * @param voice is the voice the synthesizer must use. It is guaranteed to
 	 *            be one of those returned by getAvailableVoices(). This
 	 *            parameter can't be null.
@@ -60,42 +90,14 @@ public abstract class TTSEngine {
 	 *            boolean field 'released' is guaranteed to be false, i.e. the
 	 *            resource provided is always valid and will remain so during
 	 *            the call.
-	 * @param marks are the returned pairs (markName, offset-in-output)
-	 *            corresponding to the ssml:marks of @param sentence. The order
-	 *            must be kept. The provided list is always empty. The
-	 *            offset-in-outputs are relative to the new buffers returned by
-	 *            synthesize(). That is, they start at 0. If the service doesn't
-	 *            handle SSML marks (i.e. endingmark() returns null). This
-	 *            parameter may be set to null.
-	 * @param expectedMarks are the mark names extracted from @param xmlSentence. The
-	 * 	          TTS engine can use them if it doesn't play well with complicated/long
-	 *            mark names, but it will harder to detect errors. It does include
-	 *            the TTS provider's ending mark. The ending-mark can be set to anything if
-	 *            the TTS processor or @param voice cannot handle marks. 
-	 * @param bufferAllocator is the object that the TTS Service must use to
-	 *            allocate new audio buffers.
-	 * @param retry is true when this is not the first time the thread attempts
-	 *            to synthesize @param sentence. In such cases, you may
-	 *            reinitialize the connection to remote TTS servers if there are
-	 *            any.
-	 * 
-	 * 
-	 * @return a list of adjacent PCM chunks produced by the TTS processor.
+	 *
+	 * @return a {@link SynthesisResult} object containing the audio data and the
+	 *         mark offsets.
 	 */
-	abstract public Collection<AudioBuffer> synthesize(String sentence, XdmNode xmlSentence,
-	        Voice voice, TTSResource threadResources, List<Mark> marks, List<String> expectedMarks,
-	        AudioBufferAllocator bufferAllocator, boolean retry) throws SynthesisException,
-	        InterruptedException, MemoryException;
-
-	/**
-	 * @return the audio format (sample rate etc.) of the data produced by
-	 *         synthesize(). The engine is assumed to use the same audio format
-	 *         every time. It is okay to return null before the first call to
-	 *         synthesize(), though it is better to return non-null values for
-	 *         optimization purposes. It must, however, return a non-null value
-	 *         once synthesize() has been called. Must be thread-safe.
-	 */
-	abstract public AudioFormat getAudioOutputFormat();
+	abstract public SynthesisResult synthesize(XdmNode sentence,
+	                                           Voice voice,
+	                                           TTSResource threadResources)
+		throws SynthesisException, InterruptedException;
 
 	/**
 	 * Need not be thread-safe. This method is called from the main thread.
@@ -167,11 +169,80 @@ public abstract class TTSEngine {
 	}
 
 	/**
-	 * @return the name of the mark that will be added to check whether all the
-	 *         SSML have been successfully synthesized. TTS processors that
-	 *         cannot handle marks must return null. Must be thread-safe.
+	 * @return <code>true</code> if the TTS engine handles SSML marks,
+	 *         <code>false</code> otherwise. Must be thread-safe.
 	 */
-	public String endingMark() {
-		return null; //marks not handled
+	public boolean handlesMarks() {
+		return false;
+	}
+
+	/* -------------------------------------------- */
+	/*               HELPER FUNCTIONS               */
+	/* -------------------------------------------- */
+
+	/**
+	 * Transform an SSML node to a string using a given XSLT and parameter map
+	 */
+	protected String transformSsmlNodeToString(XdmNode ssml, URL xslt, Map<String,Object> params)
+			throws IOException, SaxonApiException {
+		return compileXslt(xslt, ssml.getUnderlyingNode().getConfiguration())
+			.transformToString(ssml, params);
+	}
+
+	/**
+	 * Compile an XSLT.
+	 */
+	private ThreadUnsafeXslTransformer compileXslt(URL xslt, Configuration config)
+			throws SaxonApiException, IOException {
+		Map<URL,ThreadUnsafeXslTransformer> cache = compiledXslts.get().get(config);
+		if (cache == null) {
+			cache = new HashMap<URL,ThreadUnsafeXslTransformer>();
+			compiledXslts.get().put(config, cache);
+		}
+		ThreadUnsafeXslTransformer transformer = cache.get(xslt);
+		if (transformer == null) {
+			transformer = new XslTransformCompiler(config)
+				.compileStylesheet(xslt.openStream())
+				.newTransformer();
+			cache.put(xslt, transformer);
+		}
+		return transformer;
+	}
+
+	// Normally the same thread uses only one Configuration so
+	// ThreadLocal<Map<URL,ThreadUnsafeXslTransformer>> would also work, but we do it this way to be safe.
+	private static ThreadLocal<Map<Configuration,Map<URL,ThreadUnsafeXslTransformer>>> compiledXslts
+		= ThreadLocal.withInitial(() -> {
+				return new HashMap<Configuration,Map<URL,ThreadUnsafeXslTransformer>>(); });
+
+	/**
+	 * Create an {@link AudioInputStream} from an {@link AudioFormat} and the audio data.
+	 */
+	protected static AudioInputStream createAudioStream(AudioFormat format, byte[] data) {
+		return createAudioStream(format, new ByteArrayInputStream(data));
+	}
+
+	protected static AudioInputStream createAudioStream(AudioFormat format, ByteArrayInputStream data) {
+		return new AudioInputStream(data,
+		                            format,
+		                            // ByteArrayInputStream.available() returns
+		                            // the total number of bytes
+		                            data.available() / format.getFrameSize());
+	}
+
+	/**
+	 * Create a {@link AudioInputStream} from a {@link InputStream}.
+	 *
+	 * This is to work around a bug in {@link javax.sound.sampled.AudioSystem}
+	 * which may return {@link AudioInputStream} with a wrong {@link
+	 * AudioInputStream#getFrameLength()}.
+	 */
+	protected static AudioInputStream createAudioStream(InputStream stream)
+			throws UnsupportedAudioFileException, IOException {
+		AudioInputStream audio = AudioSystem.getAudioInputStream(new BufferedInputStream(stream));
+		byte[] data = ByteStreams.toByteArray(audio);
+		audio.close();
+		audio = createAudioStream(audio.getFormat(), data);
+		return audio;
 	}
 }

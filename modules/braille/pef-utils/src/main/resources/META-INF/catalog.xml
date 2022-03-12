@@ -5,4 +5,5 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.rng" uri="../schema/pef-2008-1.rng"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/pef-utils/schema/pef-2008-1.sch" uri="../schema/pef-2008-1.sch"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
 </catalog>

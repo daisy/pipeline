@@ -18,7 +18,9 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:option name="locale" select="'und'"/>
+    <p:option name="document-locale" select="'und'"/>
+    <p:option name="text-transform" select="''"/>
+    <p:option name="braille-charset" select="''"/>
     <p:option name="page-width" select="'40'"/>
     <p:option name="page-height" select="'25'"/>
     <p:option name="duplex" select="'true'"/>
@@ -483,11 +485,61 @@
         </p:with-option>
     </css:eval-counter>
     
-    <css:flow-from px:progress=".03">
-        <p:documentation>
-            Evaluate css:flow elements. <!-- depends on parse-content and eval-counter -->
-        </p:documentation>
-    </css:flow-from>
+    <p:group px:progress=".03">
+        <p:for-each>
+            <p:group>
+                <p:documentation>
+                    Rename -obfl-collection() to flow() so that css:flow-from will process them.
+                </p:documentation>
+                <p:label-elements match="*[@css:_obfl-list-of-references]
+                                          //css:custom-func[@name='-obfl-collection'][@arg1]"
+                                  attribute="from" label="@arg1"/>
+                <p:rename match="css:custom-func[@name='-obfl-collection'][@from]" new-name="css:flow"/>
+                <p:label-elements match="css:flow[@name='-obfl-collection'][@arg2]" attribute="scope" label="@arg2"/>
+                <p:delete match="css:flow[@name='-obfl-collection']/@name|
+                                 css:flow[@name='-obfl-collection']/@arg1|
+                                 css:flow[@name='-obfl-collection']/@arg2"/>
+            </p:group>
+            <p:group>
+                <p:documentation>
+                    Change scope 'document' to '-obfl-document' when ::-obfl-on-volume-start or
+                    ::-obfl-on-volume-end pseudo-elements are present.
+                </p:documentation>
+                <p:label-elements match="*[@css:_obfl-list-of-references]
+                                          [@css:_obfl-on-volume-start or @css:_obfl-on-volume-start]
+                                          //css:flow[@from][@scope='document']"
+                                  attribute="scope" label="'-obfl-document'"/>
+            </p:group>
+            <px:assert error-code="XXX"
+                       message="An element with 'display: -obfl-list-of-references' must consist of exactly one
+ -obfl-collection() or flow() and nothing more.">
+                <p:documentation>
+                    Check that elements with "display: -obfl-list-of-references" contain exactly one
+                    -obfl-collection() or flow().
+                </p:documentation>
+                <p:with-option name="test" select="every $e in //*[@css:_obfl-list-of-references] satisfies
+                                                   not($e//node()[not(self::css:box[@type='inline']|
+                                                                      self::css:_|
+                                                                      self::css:flow)])"/>
+            </px:assert>
+        </p:for-each>
+        <css:flow-from px:progress=".03">
+            <p:documentation>
+                Evaluate css:flow elements. <!-- depends on parse-content and eval-counter -->
+            </p:documentation>
+        </css:flow-from>
+        <p:for-each>
+            <p:documentation>
+                Wrap unevaluated css:flow in block box so that we can be sure that when evaluated
+                later inline boxes have no descendant block boxes (see also css:make-anonymous-inline-boxes).
+            </p:documentation>
+            <p:wrap match="css:flow[not(ancestor::*[@css:_obfl-list-of-references])]"
+                    wrapper="css:_block-box_"
+                    group-adjacent="?"/>
+            <p:add-attribute match="css:_block-box_" attribute-name="type" attribute-value="block"/>
+            <p:rename match="css:_block-box_" new-name="css:box"/>
+        </p:for-each>
+    </p:group>
     
     <css:eval-target-text px:progress=".01">
         <p:documentation>
@@ -543,7 +595,7 @@
                               label="(ancestor::*[@css:volume])[last()]/@css:volume"/>
             <p:delete match="css:_/@css:volume"/>
         </p:group>
-        <p:delete match="css:box[@type='box']/@css:top-of-page">
+        <p:delete match="css:box[@type='inline']/@css:top-of-page">
             <p:documentation>
                 :top-of-page is only supported on block elements.
             </p:documentation>
@@ -556,7 +608,8 @@
         </css:shift-string-set>
         <pxi:shift-obfl-marker px:progress=".15">
             <p:documentation>
-                Move css:_obfl-marker attributes. <!-- depends on make-anonymous-inline-boxes -->
+                Move css:_obfl-marker attributes to inline css:box elements. <!-- depends on
+                make-anonymous-inline-boxes -->
             </p:documentation>
         </pxi:shift-obfl-marker>
     </p:for-each>
@@ -568,8 +621,13 @@
     </css:shift-id>
     
     <p:for-each px:progress=".27">
-        <p:unwrap name="unwrap-css-_"
-                  match="css:_[not(@css:* except @css:_obfl-on-resumed) and parent::*]">
+        <p:unwrap match="css:_[not(@css:* except (@css:_obfl-on-resumed|
+                                                  @css:_obfl-list-of-references|
+                                                  @css:_obfl-on-collection-start|
+                                                  @css:_obfl-on-collection-end|
+                                                  @css:_obfl-on-volume-start|
+                                                  @css:_obfl-on-volume-end))
+                               and parent::*]">
             <p:documentation>
                 All css:_ elements except for root elements, top-level elements in named flows (with
                 css:anchor attribute), and empty elements with a css:id, css:string-set or
@@ -611,6 +669,7 @@
             <p:input port="definition">
                 <p:document href="obfl-css-definition.xsl"/>
             </p:input>
+            <p:with-param name="initial-braille-charset" select="if ($braille-charset='') then 'unicode' else 'custom'"/>
         </css:new-definition>
         <p:xslt px:progress=".03">
             <p:input port="parameters">
@@ -777,13 +836,15 @@
     <p:for-each px:progress=".01">
         <p:choose px:progress="1">
             <p:documentation>
-                Delete css:margin-top from first non-empty block and move css:margin-top of other
-                blocks to css:margin-bottom of their preceding block.
+                Move css:margin-top of blocks that have a preceding (non-empty) block to
+                css:margin-bottom of their preceding block, and rename other css:margin-top to
+                css:margin-top-skip-if-top-of-page.
             </p:documentation>
             <p:when test="$skip-margin-top-of-page='true'">
                 <p:label-elements px:progress=".20"
                                   match="css:box
                                            [@type='block']
+                                           [descendant::css:box[@type='inline' and child::node()]]
                                            [following-sibling::*[1]
                                               [some $self in . satisfies
                                                  $self/descendant-or-self::*
@@ -801,14 +862,7 @@
                                                    [last()][@css:_margin-bottom_]]"/>
                 <p:rename match="@css:_margin-bottom_" new-name="css:margin-bottom"/>
                 <p:rename px:progress=".20"
-                          match="css:box
-                                   [@type='block']
-                                   [@css:margin-top]
-                                   [not(preceding::css:box[@type='inline' and child::node()
-                                                           or @css:border-top-pattern or @css:border-top-style
-                                                           or @css:border-bottom-pattern or @css:border-bottom-style])]
-                                   [not(ancestor::*[@css:border-top-pattern or @css:border-top-style])]
-                                 /@css:margin-top"
+                          match="css:box[@type='block'][@css:margin-top]/@css:margin-top"
                           new-name="css:margin-top-skip-if-top-of-page"/>
             </p:when>
             <p:otherwise>
@@ -827,7 +881,10 @@
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>
         </p:input>
-        <p:with-param name="locale" select="$locale">
+        <p:with-param name="document-locale" select="$document-locale">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="braille-charset-table" select="$braille-charset">
             <p:empty/>
         </p:with-param>
         <p:with-param name="page-counters" select="$page-counters">
@@ -835,6 +892,9 @@
         </p:with-param>
         <p:with-param name="volume-transition" select="/_/*/@css:_obfl-volume-transition">
             <p:pipe step="assert-volume-transition-only-on-root" port="result"/>
+        </p:with-param>
+        <p:with-param name="default-text-transform" select="$text-transform">
+            <p:empty/>
         </p:with-param>
         <p:with-param name="text-transforms" select="/_/*/@css:text-transform">
             <p:pipe step="assert-text-transform-only-on-root" port="result"/>
@@ -855,6 +915,9 @@
             <p:empty/>
         </p:with-param>
         <p:with-param name="duplex" select="$duplex">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="braille-charset-table" select="$braille-charset">
             <p:empty/>
         </p:with-param>
     </p:xslt>
@@ -909,11 +972,12 @@
                                      //obfl:marker-indicator[tokenize(normalize-space(@markers),' ')=$class])]"/>
 
     <!--
-        because empty marker values would be regarded as absent in BrailleFilterImpl
+        FIXME: because otherwise empty marker values would be regarded as absent in Dotify
+        (FieldResolver.resolveCompoundMarkerReferenceField)
     -->
     <p:add-attribute px:progress=".005"
                      match="obfl:marker[@value='']" attribute-name="value" attribute-value="&#x200B;"/>
-    
+
     <!--
         move table-of-contents elements to the right place
     -->
@@ -925,10 +989,5 @@
             <p:empty/>
         </p:input>
     </p:xslt>
-    
-    <!--
-        display-when="..." also requires keep="page"
-    -->
-    <p:add-attribute match="obfl:block[@display-when]" attribute-name="keep" attribute-value="page"/>
     
 </p:declare-step>

@@ -14,7 +14,7 @@
 
   <!-- stylesheet defaults to names used in HTML if no other grammar is detected -->
   
-  <xsl:param name="depth" as="xs:string" select="'0'"/>
+  <xsl:param name="depth" as="xs:integer" select="0"/>
   <xsl:param name="exclude-class" as="xs:string" select="''"/>
   <xsl:param name="document-toc-id" as="xs:string" select="''"/>
   <xsl:param name="volume-toc-id" as="xs:string" select="''"/>
@@ -22,8 +22,6 @@
   
   <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
   <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
-  
-  <xsl:variable name="_depth" as="xs:integer" select="if ($depth) then xs:integer($depth) else 6"/>
   
   <xsl:variable name="root-base-uri" as="xs:anyURI" select="base-uri(/*)"/>
   
@@ -46,7 +44,7 @@
   <xsl:template match="/*">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="$_depth &gt; 0 and ($document-toc-id!='' or $volume-toc-id!='')">
+      <xsl:if test="$depth &gt; 0 and ($document-toc-id!='' or $volume-toc-id!='')">
         <xsl:variable name="list" as="element()*">
           <xsl:for-each-group select="$included-headings" group-starting-with="*:h1">
             <xsl:variable name="list-item" as="element()*">
@@ -58,7 +56,7 @@
                   <xsl:apply-templates select="current-group()/self::*:h1/child::node()"/>
                 </xsl:element>
               </xsl:if>
-              <xsl:if test="$_depth &gt; 1">
+              <xsl:if test="$depth &gt; 1">
                 <xsl:variable name="list" as="element()*">
                   <xsl:for-each-group select="current-group()[not(self::*:h1)]" group-starting-with="*:h2">
                     <xsl:variable name="list-item" as="element()*">
@@ -70,7 +68,7 @@
                           <xsl:apply-templates select="current-group()/self::*:h2/child::node()"/>
                         </xsl:element>
                       </xsl:if>
-                      <xsl:if test="$_depth &gt; 2">
+                      <xsl:if test="$depth &gt; 2">
                         <xsl:variable name="list" as="element()*">
                           <xsl:for-each-group select="current-group()[not(self::*:h2)]" group-starting-with="*:h3">
                             <xsl:variable name="list-item" as="element()*">
@@ -82,7 +80,7 @@
                                   <xsl:apply-templates select="current-group()/self::*:h3/child::node()"/>
                                 </xsl:element>
                               </xsl:if>
-                              <xsl:if test="$_depth &gt; 3">
+                              <xsl:if test="$depth &gt; 3">
                                 <xsl:variable name="list" as="element()*">
                                   <xsl:for-each-group select="current-group()[not(self::*:h3)]" group-starting-with="*:h4">
                                     <xsl:variable name="list-item" as="element()*">
@@ -94,7 +92,7 @@
                                           <xsl:apply-templates select="current-group()/self::*:h4/child::node()"/>
                                         </xsl:element>
                                       </xsl:if>
-                                      <xsl:if test="$_depth &gt; 4">
+                                      <xsl:if test="$depth &gt; 4">
                                         <xsl:variable name="list" as="element()*">
                                           <xsl:for-each-group select="current-group()[not(self::*:h4)]" group-starting-with="*:h5">
                                             <xsl:variable name="list-item" as="element()*">
@@ -106,7 +104,7 @@
                                                   <xsl:apply-templates select="current-group()/self::*:h5/child::node()"/>
                                                 </xsl:element>
                                               </xsl:if>
-                                              <xsl:if test="$_depth &gt; 5">
+                                              <xsl:if test="$depth &gt; 5">
                                                 <xsl:variable name="list" as="element()*">
                                                   <xsl:for-each select="current-group()/self::*:h6">
                                                     <xsl:element name="{f:list-item-name(namespace-uri(/*))}" namespace="{namespace-uri(/*)}">
@@ -229,7 +227,7 @@
                        *:h6[not(@id|@xml:id)]">
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
-      <xsl:if test="$_depth &gt; 0 and . intersect $included-headings">
+      <xsl:if test="$depth &gt; 0 and . intersect $included-headings">
         <xsl:variable name="generated-id" as="xs:string">
           <xsl:call-template name="pf:generate-id"/>
         </xsl:variable>

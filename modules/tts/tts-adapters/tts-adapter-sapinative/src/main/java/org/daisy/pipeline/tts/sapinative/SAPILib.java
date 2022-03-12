@@ -17,12 +17,18 @@ public class SAPILib {
 
 	public static native String[] getVoiceNames();
 
+	public static native String[] getVoiceLocales();
+
+	public static native String[] getVoiceGenders();
+
+	public static native String[] getVoiceAges();
+
 	public static native String[] getBookmarkNames(long connection);
 
 	/* in milliseconds */
 	public static native long[] getBookmarkPositions(long connection);
 
-	public static native int initialize(int sampleRate, int bitsPerSample);
+	public static native int initialize(int sampleRate, short bitsPerSample);
 
 	public static native int dispose();
 

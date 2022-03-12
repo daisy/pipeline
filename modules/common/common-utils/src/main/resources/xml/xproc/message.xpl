@@ -17,17 +17,33 @@
         </pre>
     </p:documentation>
 
-    <!-- see also: pipx (http://pipx.org/) -->
-
     <p:input port="source" primary="true" sequence="true">
+        <p:empty/>
+    </p:input>
+    <p:input port="error" sequence="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>If a <code>c:errors</code> document is supplied on this port, the errors will be
+            logged.</p>
+        </p:documentation>
         <p:empty/>
     </p:input>
     <p:output port="result" sequence="true">
         <p:pipe port="result" step="result"/>
     </p:output>
 
-    <p:option name="severity" select="'INFO'"/>                  <!-- one of either: WARN, INFO, DEBUG. Defaults to "INFO". Use px:error to throw errors. -->
-    <p:option name="message" required="true" cx:as="xs:string"/> <!-- message to be logged. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
+    <p:option name="severity" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>One of "ERROR", "WARN", "INFO", "DEBUG". Defaults to "ERROR" if there is a document
+            on the "error" port, "INFO" otherwise. Use px:error to throw errors.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="message" select="''" cx:as="xs:string">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Message to be logged. $1, $2 etc will be replaced with the contents of options
+            "param1", "param2", etc. Must be set if there is no document on the "error" port. Must
+            not be set if there is a document on the "error" port.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="param1" select="''" cx:as="xs:string"/>
     <p:option name="param2" select="''" cx:as="xs:string"/>
     <p:option name="param3" select="''" cx:as="xs:string"/>
@@ -39,138 +55,91 @@
     <p:option name="param9" select="''" cx:as="xs:string"/>
     <!-- in the unlikely event that you need more parameters you'll have to format the message string yourself -->
 
-    <p:import href="http://xmlcalabash.com/extension/steps/library-1.0.xpl" use-when="p:system-property('p:product-name') = 'XML Calabash'">
+    <p:import href="log-error.xpl">
         <p:documentation>
-            cx:message
+            px:log-error
         </p:documentation>
     </p:import>
-    <p:import href="error.xpl">
-        <p:documentation>
-            px:error
-        </p:documentation>
-    </p:import>
-    
-    <!--
-        Calabash:
-        <p:declare-step type="cx:message">
-            <p:input port="source" sequence="true"/>
-            <p:output port="result" sequence="true"/>
-            <p:option name="message" required="true"/>
-        </p:declare-step>
-    -->
 
-    <!--
-        Calumet:
-        <p:declare-step type="x:message">
-            <p:option name="message" required="true"/>
-            <p:option name="stderr" select="'true'"/>
-            <p:option name="stdout" select="'false'"/>
-            <p:input port="source" sequence="true"/>
-            <p:output port="result" sequence="true"/>
-        </p:declare-step>
-    -->
-    
-    <!-- TODO: implement this in Java to make use of the logging levels there -->
-    <p:declare-step type="px:log-message">
-        <p:option name="message" required="true"/>
-        <p:option name="severity" select="'INFO'"/>
-        <p:input port="source" primary="true" sequence="true"/>
-        <p:output port="result" sequence="true"/>
-        <!--
-            Implemented in ../../../java/org/daisy/pipeline/common/calabash/impl/Message.java
-        -->
-    </p:declare-step>
-
-    <p:variable name="validSeverity" use-when="not(p:system-property('p:xpath-version')='1.0')" select="if ($severity=('WARN','INFO','DEBUG')) then $severity else 'INFO'">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>
-    <p:variable name="validSeverity" use-when="p:system-property('p:xpath-version')='1.0'" select="concat(
-        substring($severity, 1, number($severity='WARN' or $severity='INFO' or $severity='DEBUG') * string-length($severity)),
-        substring('INFO', 1, number(not($severity='WARN' or $severity='INFO' or $severity='DEBUG')) * string-length('INFO'))
-        )">
-        <p:inline>
-            <irrelevant/>
-        </p:inline>
-    </p:variable>
-    
-    <p:add-attribute match="/*" attribute-name="message" name="message">
-        <p:input port="source">
-            <p:inline>
-                <c:result/>
-            </p:inline>
-        </p:input>
-        <p:with-option name="attribute-value" use-when="p:system-property('p:xpath-version')='1.0'" select="$message">
-            <!-- replace(...) not supported in XPath 1.0 -->
-            <p:inline>
-                <irrelevant/>
-            </p:inline>
-        </p:with-option>
-        <p:with-option name="attribute-value" use-when="not(p:system-property('p:xpath-version')='1.0')"
-            select="replace(replace(replace(replace(replace(replace(replace(replace(replace($message,'\$1',replace($param1,'\$','\\\$')),'\$2',replace($param2,'\$','\\\$')),'\$3',replace($param3,'\$','\\\$')),'\$4',replace($param4,'\$','\\\$')),'\$5',replace($param5,'\$','\\\$')),'\$6',replace($param6,'\$','\\\$')),'\$7',replace($param7,'\$','\\\$')),'\$8',replace($param8,'\$','\\\$')),'\$9',replace($param9,'\$','\\\$'))">
-            <p:inline>
-                <irrelevant/>
-            </p:inline>
-        </p:with-option>
-    </p:add-attribute>
     <p:sink/>
-
-    <p:identity>
+    <p:count>
         <p:input port="source">
-            <p:pipe port="source" step="main"/>
+            <p:pipe step="main" port="error"/>
         </p:input>
-    </p:identity>
+    </p:count>
     <p:choose>
-        <p:xpath-context>
-            <p:inline>
-                <irrelevant/>
-            </p:inline>
-        </p:xpath-context>
-        
-        <!-- Pipeline 2 -->
-        <p:when test="p:step-available('px:log-message')">
-            <px:log-message>
-                <p:with-option name="message" select="/*/@message">
-                    <p:pipe port="result" step="message"/>
-                </p:with-option>
-                <p:with-option name="severity" select="$validSeverity">
-                    <p:inline>
-                        <irrelevant/>
-                    </p:inline>
-                </p:with-option>
-            </px:log-message>
+        <p:when test="number(/*)&gt;1">
+            <p:error code="XXX">
+                <p:input port="source">
+                    <p:inline><message>Not more than one document allowed on the "error" port.</message></p:inline>
+                </p:input>
+            </p:error>
         </p:when>
-
+        <p:when test="number(/*)=1">
+            <p:choose>
+                <p:when test="$message!=''">
+                    <p:error code="XXX">
+                        <p:input port="source">
+                            <p:inline><message
+                                >"message" option must not be set if there is a document on the "error" port.</message></p:inline>
+                        </p:input>
+                    </p:error>
+                </p:when>
+                <p:otherwise>
+                    <px:log-error>
+                        <p:input port="source">
+                            <p:pipe step="main" port="source"/>
+                        </p:input>
+                        <p:input port="error">
+                            <p:pipe step="main" port="error"/>
+                        </p:input>
+                        <p:with-option name="severity" select="($severity[.=('WARN','INFO','DEBUG')],'ERROR')[1]"/>
+                    </px:log-error>
+                </p:otherwise>
+            </p:choose>
+        </p:when>
+        <p:when test="$message=''">
+            <p:error code="XXX">
+                <p:input port="source">
+                    <p:inline><message>"message" option must be set</message></p:inline>
+                </p:input>
+            </p:error>
+        </p:when>
         <p:otherwise>
-            
-            <!-- Calabash -->
-            <cx:message p:use-when="p:system-property('p:product-name') = 'XML Calabash'">
-                <p:with-option name="message" select="concat('[',$validSeverity,'] ',/*/@message)">
-                    <p:pipe port="result" step="message"/>
-                </p:with-option>
-            </cx:message>
-
-            <!-- Calumet -->
-            <x:message p:use-when="p:system-property('p:product-name') = 'Calumet'">
-                <p:with-option name="message" select="concat('[',$validSeverity,'] ',/*/@message)">
-                    <p:pipe port="result" step="message"/>
-                </p:with-option>
-                <p:with-option name="stderr" select="$validSeverity='WARN'">
-                    <p:inline>
-                        <irrelevant/>
-                    </p:inline>
-                </p:with-option>
-                <p:with-option name="stdout" select="not($validSeverity='WARN')">
-                    <p:inline>
-                        <irrelevant/>
-                    </p:inline>
-                </p:with-option>
-            </x:message>
-
-            <!-- Other XProc processor -->
-            <p:identity/>
-
+            <p:variable name="formatted-message"
+                        select="replace(replace(replace(replace(replace(replace(replace(replace(replace(
+                                  $message,
+                                  '\$1',replace($param1,'\$','\\\$')),
+                                  '\$2',replace($param2,'\$','\\\$')),
+                                  '\$3',replace($param3,'\$','\\\$')),
+                                  '\$4',replace($param4,'\$','\\\$')),
+                                  '\$5',replace($param5,'\$','\\\$')),
+                                  '\$6',replace($param6,'\$','\\\$')),
+                                  '\$7',replace($param7,'\$','\\\$')),
+                                  '\$8',replace($param8,'\$','\\\$')),
+                                  '\$9',replace($param9,'\$','\\\$'))"/>
+            <p:identity>
+                <p:input port="source">
+                    <p:pipe step="main" port="source"/>
+                </p:input>
+            </p:identity>
+            <p:choose>
+                <p:xpath-context>
+                    <p:empty/>
+                </p:xpath-context>
+                <p:when test="$severity='ERROR'">
+                    <p:identity px:message-severity="ERROR" px:message="{$formatted-message}"/>
+                </p:when>
+                <p:when test="$severity='WARN'">
+                    <p:identity px:message-severity="WARN" px:message="{$formatted-message}"/>
+                </p:when>
+                <p:when test="$severity='DEBUG'">
+                    <p:identity px:message-severity="DEBUG" px:message="{$formatted-message}"/>
+                </p:when>
+                <p:otherwise>
+                    <p:identity px:message-severity="INFO" px:message="{$formatted-message}"/>
+                </p:otherwise>
+            </p:choose>
         </p:otherwise>
     </p:choose>
     <p:identity name="result"/>

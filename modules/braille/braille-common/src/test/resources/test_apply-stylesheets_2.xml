@@ -1,0 +1,15 @@
+<?xml-stylesheet href="stylesheet_3.css" type="text/css"?>
+<html>
+	<head>
+		<link type="text/x-scss" rel="stylesheet" href="stylesheet_4.scss" media="embossed"/>
+		<style media="embossed" type="text/css">
+			body {
+				hyphens: auto
+			}
+		</style>
+	</head>
+	<body>
+		<h1 style="text-transform: foo"/>
+		<p/>
+	</body>
+</html>

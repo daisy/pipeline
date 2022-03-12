@@ -42,7 +42,6 @@
     <p:option name="param9" select="''" cx:as="xs:string"/>
     <!-- in the unlikely event that you need more parameters you'll have to format the message string yourself -->
     
-    <p:import href="message.xpl"/>
     <p:import href="error.xpl"/>
     
     <p:add-attribute match="/*" attribute-name="message" name="message">
@@ -51,14 +50,18 @@
                 <c:result/>
             </p:inline>
         </p:input>
-        <p:with-option name="attribute-value" use-when="p:system-property('p:xpath-version')='1.0'" select="$message">
-            <!-- replace(...) not supported in XPath 1.0 -->
-            <p:inline>
-                <irrelevant/>
-            </p:inline>
-        </p:with-option>
-        <p:with-option name="attribute-value" use-when="not(p:system-property('p:xpath-version')='1.0')"
-            select="replace(replace(replace(replace(replace(replace(replace(replace(replace($message,'\$1',replace($param1,'\$','\\\$')),'\$2',replace($param2,'\$','\\\$')),'\$3',replace($param3,'\$','\\\$')),'\$4',replace($param4,'\$','\\\$')),'\$5',replace($param5,'\$','\\\$')),'\$6',replace($param6,'\$','\\\$')),'\$7',replace($param7,'\$','\\\$')),'\$8',replace($param8,'\$','\\\$')),'\$9',replace($param9,'\$','\\\$'))">
+        <p:with-option name="attribute-value"
+                       select="replace(replace(replace(replace(replace(replace(replace(replace(replace(
+                                 $message,
+                                 '\$1',replace($param1,'\$','\\\$')),
+                                 '\$2',replace($param2,'\$','\\\$')),
+                                 '\$3',replace($param3,'\$','\\\$')),
+                                 '\$4',replace($param4,'\$','\\\$')),
+                                 '\$5',replace($param5,'\$','\\\$')),
+                                 '\$6',replace($param6,'\$','\\\$')),
+                                 '\$7',replace($param7,'\$','\\\$')),
+                                 '\$8',replace($param8,'\$','\\\$')),
+                                 '\$9',replace($param9,'\$','\\\$'))">
             <p:inline>
                 <irrelevant/>
             </p:inline>
@@ -69,13 +72,12 @@
         <p:when test="$test">
             <p:choose>
                 <p:when test="$test-count-min or $test-count-max">
-                    <px:message severity="WARN" message="the 'test' option and the 'test-count-*' options cannot be specified at the same time; only 'test' will be evaluated"/>
+                    <p:identity px:message-severity="WARN" px:message="the 'test' option and the 'test-count-*' options cannot be specified at the same time; only 'test' will be evaluated"/>
                 </p:when>
                 <p:otherwise>
                     <p:identity/>
                 </p:otherwise>
             </p:choose>
-            
             <p:choose>
                 <p:when test="$test='true'">
                     <!-- assertion passed; do nothing -->
@@ -118,7 +120,7 @@
         </p:when>
         
         <p:otherwise>
-            <px:message severity="WARN" message="either the 'test' option or at least one of the 'test-count-*' options must be specified; assertion failed"/>
+            <p:identity px:message-severity="WARN" px:message="either the 'test' option or at least one of the 'test-count-*' options must be specified; assertion failed"/>
             <p:add-attribute match="/*" attribute-name="result" attribute-value="false"/>
         </p:otherwise>
     </p:choose>
@@ -145,12 +147,12 @@
         
         <p:otherwise>
             <!-- assertion failed; display warning -->
-            <px:message severity="WARN">
-                <p:with-option name="message" select="/*/@message"/>
+            <p:variable name="msg" select="/*/@message"/>
+            <p:identity px:message-severity="WARN" px:message="{$msg}">
                 <p:input port="source">
                     <p:pipe port="source" step="main"/>
                 </p:input>
-            </px:message>
+            </p:identity>
         </p:otherwise>
     </p:choose>
     

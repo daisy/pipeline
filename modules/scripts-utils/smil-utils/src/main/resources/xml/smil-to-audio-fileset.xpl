@@ -8,8 +8,17 @@
 		<p>List the distinct files referenced from audio elements in a SMIL.</p>
 	</p:documentation>
 	
-	<p:input port="source"/>
-	<p:output port="result"/>
+	<p:input port="source">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>A SMIL document</p>
+		</p:documentation>
+	</p:input>
+	<p:output port="result">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>A d:fileset document with the parent directory of the SMIL as base URI and which
+			contains all the files referenced from the SMIL.</p>
+		</p:documentation>
+	</p:output>
 	
 	<p:xslt>
 		<p:input port="stylesheet">

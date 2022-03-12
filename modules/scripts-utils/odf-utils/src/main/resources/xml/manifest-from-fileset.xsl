@@ -12,7 +12,7 @@
     <xsl:template match="d:fileset">
         <xsl:if test="not(exists(//d:file[resolve-uri(@href,base-uri(.))=$base][@media-type]))">
             <xsl:message terminate="yes">
-                <xsl:text>[odf-utils] ERROR: manifest could not be created from fileset, no entry with media-type application/vnd.oasis.opendocument* and no entry with href="</xsl:text>
+                <xsl:text>Manifest could not be created from fileset, no entry with media-type application/vnd.oasis.opendocument* and no entry with href="</xsl:text>
                 <xsl:value-of select="$base"/>
                 <xsl:text>" and that has a media-type</xsl:text>
             </xsl:message>
@@ -65,7 +65,7 @@
             </xsl:when>
             <xsl:otherwise>
                 <xsl:message>
-                    <xsl:text>[odf-utils] WARNING: the file </xsl:text>
+                    <xsl:text>WARNING: the file </xsl:text>
                     <xsl:value-of select="$absolute-uri"/>
                     <xsl:text> will not be included in the manifest because it falls outside of the base directory </xsl:text>
                     <xsl:value-of select="$base"/>

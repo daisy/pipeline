@@ -1,12 +1,10 @@
 package org.daisy.pipeline.braille.dotify.impl;
 
 import java.net.URI;
-import java.util.Iterator;
 import java.util.Map;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.collect.ImmutableMap;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -52,43 +50,34 @@ public interface DotifyOBFLTransform {
 		protected Iterable<Transform> _get(Query query) {
 			try {
 				MutableQuery q = mutableQuery(query);
-				q.removeAll("force-pre-translation");
-				if (q.containsKey("formatter"))
-					if (!"dotify".equals(q.removeOnly("formatter").getValue().get()))
+				boolean obfl = false;
+				for (Feature f : q.removeAll("input")) {
+					String i = f.getValue().get();
+					if ("obfl".equals(i))
+						obfl = true;
+					else if (!"text-css".equals(i))
+						return empty; }
+				if (!obfl)
+					return empty;
+				for (Feature f : q.removeAll("output"))
+					if (!("pef".equals(f.getValue().get()) || "braille".equals(f.getValue().get())))
 						return empty;
-				Iterator<Feature> input = q.get("input").iterator();
-				while (input.hasNext())
-					if ("obfl".equals(input.next().getValue().get())) {
-						input.remove();
-						for (Feature f : q.removeAll("output"))
-							if (!("pef".equals(f.getValue().get()) || "braille".equals(f.getValue().get())))
-								return empty;
-						q.add("output", "braille");
-						return Iterables.<Transform>of(
-							logCreate((Transform)new TransformImpl(q))); }}
+				if (!q.isEmpty())
+					return empty;
+				return Iterables.<Transform>of(
+					logCreate((Transform)new TransformImpl())); }
 			catch (IllegalStateException e) {}
 			return empty;
 		}
 		
 		private class TransformImpl extends AbstractTransform implements XProcStepProvider {
 			
-			private final Map<String,String> options;
-			
-			private TransformImpl(Query textTransformQuery) {
-				String locale = "und";
-				if (textTransformQuery.containsKey("locale")) {
-					MutableQuery q = mutableQuery(textTransformQuery);
-					locale = q.removeOnly("locale").getValue().get();
-					textTransformQuery = q;
-				}
-				options = ImmutableMap.of(
-					"locale", locale,
-					"mode", textTransformQuery.toString());
+			private TransformImpl() {
 			}
 			
 			@Override
 			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-				return new CxEvalBasedTransformer(href, null, options).newStep(runtime, step);
+				return new CxEvalBasedTransformer(href, null, null).newStep(runtime, step);
 			}
 			
 			@Override

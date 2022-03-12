@@ -16,6 +16,16 @@
 	<p:input port="tts-config">
 		<p:inline><d:config/></p:inline>
 	</p:input>
+	<p:option name="tts-audio-file-type" select="'audio/mpeg'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The desired file type of the generated audio files, specified as a MIME type.</p>
+			<p>Examples:</p>
+			<ul>
+				<li>"audio/mpeg"</li>
+				<li>"audio/x-wav"</li>
+			</ul>
+		</p:documentation>
+	</p:option>
 	<p:output port="status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether or not the conversion was successful.</p>
@@ -84,7 +94,7 @@
 
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
 		<p:documentation>
-			px:log-error
+			px:message
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/epub2-to-epub3/library.xpl">
@@ -137,6 +147,7 @@
 			<p:pipe step="upgrade" port="in-memory"/>
 		</p:input>
 		<p:with-option name="tts" select="$tts"/>
+		<p:with-option name="tts-audio-file-type" select="$tts-audio-file-type"/>
 		<p:input port="tts-config">
 			<p:pipe step="main" port="tts-config"/>
 		</p:input>
@@ -210,11 +221,11 @@
 					</p:inline>
 				</p:input>
 			</p:identity>
-			<px:log-error severity="ERROR">
+			<px:message>
 				<p:input port="error">
 					<p:pipe step="catch" port="error"/>
 				</p:input>
-			</px:log-error>
+			</px:message>
 			<p:identity px:message="Failed to convert to DAISY 2.02 and DAISY 3" px:message-severity="ERROR"/>
 		</p:catch>
 	</p:try>

@@ -69,7 +69,7 @@
     <p:sink/>
 
     <p:documentation>
-        Normalize mapping document and make href absolute
+        Normalize mapping document and make href absolute. Also removes duplicate files.
     </p:documentation>
     <px:fileset-join>
         <p:input port="source">

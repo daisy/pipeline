@@ -7,7 +7,7 @@
                 name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DTBook to PEF</h1>
+        <h1 px:role="name">DTBook to braille</h1>
         <p px:role="desc" xml:space="preserve">Transforms a DTBook (DAISY 3 XML) document into an embosser ready braille document.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef/">
             Online documentation
@@ -66,10 +66,10 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
-    <p:option name="include-brf"/>
+    <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
-    <p:option name="ascii-file-format"/>
-    <p:option name="ascii-table"/>
+    <p:option name="output-file-format"/>
+    <p:option name="preview-table"/>
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
@@ -90,8 +90,8 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
     <p:option name="notes-placement"/>
+    <p:option name="output-dir"/>
     <p:option name="pef-output-dir"/>
-    <p:option name="brf-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="obfl-output-dir"/>
     <p:option name="temp-dir"/>
@@ -137,13 +137,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
                                            stylesheet-parameters
                                            transform
                                            braille-code
-                                           ascii-file-format
-                                           ascii-table
-                                           include-brf
+                                           output-file-format
+                                           include-pef
                                            include-preview
                                            include-obfl
+                                           output-dir
                                            pef-output-dir
-                                           brf-output-dir
                                            preview-output-dir
                                            obfl-output-dir
                                            temp-dir">
@@ -161,7 +160,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
     <!-- CREATE TEMP DIR -->
     <!-- =============== -->
     <px:tempdir name="temp-dir" px:progress=".01">
-        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $pef-output-dir"/>
+        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $output-dir"/>
     </px:tempdir>
     <p:sink/>
     
@@ -204,12 +203,12 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
-        <p:with-option name="include-brf" select="$include-brf"/>
+        <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
-        <p:with-option name="ascii-file-format" select="$ascii-file-format"/>
-        <p:with-option name="ascii-table" select="$ascii-table"/>
+        <p:with-option name="output-file-format" select="$output-file-format"/>
+        <p:with-option name="preview-table" select="$preview-table"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="brf-output-dir" select="$brf-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:dtbook-to-pef.store>

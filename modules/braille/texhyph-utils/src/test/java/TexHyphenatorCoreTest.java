@@ -1,6 +1,7 @@
 import javax.inject.Inject;
 
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
@@ -13,7 +14,7 @@ import org.ops4j.pax.exam.TestProbeBuilder;
 public class TexHyphenatorCoreTest extends AbstractTest {
 	
 	@Inject
-	public DispatchingTexHyphenatorProvider provider;
+	public HyphenatorRegistry provider;
 	
 	@Test
 	public void testHyphenate() {
@@ -39,7 +40,7 @@ public class TexHyphenatorCoreTest extends AbstractTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			pipelineModule("common-utils"),
-			brailleModule("common-utils"),
+			brailleModule("braille-common"),
 			"com.googlecode.texhyphj:texhyphj:?",
 			"org.daisy.dotify:dotify.library:?",
 			"org.daisy.libs:saxon-he:?",
@@ -49,8 +50,8 @@ public class TexHyphenatorCoreTest extends AbstractTest {
 	
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
-		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml," +
-		                                     "OSGI-INF/dispatching-tex-hyphenator-provider.xml");
+		// needed because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/table-path.xml");
 		return probe;
 	}
 }

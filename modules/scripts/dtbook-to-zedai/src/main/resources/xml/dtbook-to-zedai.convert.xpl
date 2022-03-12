@@ -97,7 +97,6 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
-            px:message
             px:assert
         </p:documentation>
     </p:import>
@@ -183,20 +182,14 @@
     <p:variable name="mods-file" select="concat($output-dir, $mods-filename)"/>
     <p:variable name="css-file" select="concat($output-dir, $css-filename)"/>
 
-    <px:message>
-        <p:with-option name="message" select="concat('ZedAI file name: ',$zedai-filename)"/>
-    </px:message>
-    <px:message>
-        <p:with-option name="message" select="concat('MODS file name: ',$mods-filename)"/>
-    </px:message>
-    <px:message>
-        <p:with-option name="message" select="concat('CSS file name: ',$css-filename)"/>
-    </px:message>
+    <p:identity px:message-severity="DEBUG" px:message="ZedAI file name: {$zedai-filename}"/>
+    <p:identity px:message-severity="DEBUG" px:message="MODS file name: {$mods-filename}"/>
+    <p:identity px:message-severity="DEBUG" px:message="CSS file name: {$css-filename}"/>
 
     <!-- =============================================================== -->
     <!-- LOAD INPUT DTBOOKS -->
     <!-- =============================================================== -->
-    <p:group name="dtbook-input">
+    <p:group name="dtbook-input" px:progress="1/23">
         <p:output port="result" sequence="true"/>
         <px:fileset-load media-types="application/x-dtbook+xml">
             <p:input port="in-memory">
@@ -212,7 +205,7 @@
     <!-- UPGRADE -->
     <!-- =============================================================== -->
     <p:documentation>Upgrade the DTBook document(s) to 2005-3</p:documentation>
-    <p:for-each name="upgrade-dtbook">
+    <p:for-each name="upgrade-dtbook" px:progress="2/23" px:message="Upgrading DTBook to 2005-3">
         <p:output port="result"/>
         <px:dtbook-upgrade>
             <p:input port="parameters">
@@ -231,13 +224,13 @@
         document.</p:documentation>
     <p:count name="num-input-documents" limit="2"/>
 
-    <p:choose name="choose-to-merge-dtbook-files">
+    <p:choose name="choose-to-merge-dtbook-files" px:progress="2/23">
         <p:when test=".//c:result[. > 1]">
             <p:output port="result" primary="true"/>
             <p:output port="mapping">
                 <p:pipe step="merge" port="mapping"/>
             </p:output>
-            <px:dtbook-merge name="merge">
+            <px:dtbook-merge name="merge" px:progress="1" px:message="Merging DTBook files">
                 <p:input port="parameters">
                     <p:empty/>
                 </p:input>
@@ -277,10 +270,10 @@
     <p:documentation>Validate the DTBook input</p:documentation>
 
     <p:documentation>Remove the Aural CSS attributes before validation</p:documentation>
-    <px:css-speech-clean name="dtbook-validation-input"/>
+    <px:css-speech-clean name="dtbook-validation-input" px:progress="1/23"/>
     <p:documentation>Schema selector for DTBook validation</p:documentation>
     <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-    <px:validate-with-relax-ng-and-report name="validate-dtbook">
+    <px:validate-with-relax-ng-and-report name="validate-dtbook" px:message="Validating DTBook" px:progress="2/23">
         <p:input port="source">
             <p:pipe port="result" step="dtbook-validation-input"/>
         </p:input>
@@ -289,7 +282,6 @@
         </p:input>
         <p:with-option name="assert-valid" select="$opt-assert-valid"/>
     </px:validate-with-relax-ng-and-report>
-    <px:message message="Input document is valid"/>
     <p:sink/>
 
     <!-- =============================================================== -->
@@ -302,7 +294,7 @@
 	<p:pipe port="result" step="choose-to-merge-dtbook-files"/>
       </p:input>
     </p:identity>
-    <pxi:dtbook2005-3-to-zedai name="transform-to-zedai"/>
+    <pxi:dtbook2005-3-to-zedai name="transform-to-zedai" px:progress="5/23"/>
 
     <!-- =============================================================== -->
     <!-- CSS -->
@@ -313,7 +305,7 @@
     -->
     <p:documentation>Generate CSS from the visual property attributes in the ZedAI
         document</p:documentation>
-    <p:xslt name="generate-css">
+    <p:xslt name="generate-css" px:progress="1/23" px:message="Generating CSS">
         <p:with-param name="css-file" select="$css-file"/>
         <p:input port="stylesheet">
             <p:inline>
@@ -334,7 +326,7 @@
     </p:xslt>
 
     <p:documentation>If CSS was generated, add a reference to the ZedAI document</p:documentation>
-    <p:choose name="add-css-reference">
+    <p:choose name="add-css-reference" px:progress="1/23">
         <p:xpath-context>
             <p:pipe port="result" step="generate-css"/>
         </p:xpath-context>
@@ -385,7 +377,7 @@
     <!-- this step should remove the 'tmp' prefix (it is no longer needed after this point) but it doesn't! -->
     <p:documentation>Strip temporary attributes from the ZedAI
         document.</p:documentation>
-    <p:xslt name="remove-css-attributes">
+    <p:xslt name="remove-css-attributes" px:progress="1/23">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -402,7 +394,7 @@
     <!-- METADATA -->
     <!-- =============================================================== -->
     <p:documentation>Generate MODS metadata</p:documentation>
-    <px:dtbook-to-mods-meta>
+    <px:dtbook-to-mods-meta px:progress="2/23" px:message="Generating MODS metadata">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -417,7 +409,7 @@
     <p:add-xml-base name="generate-mods-metadata"/>
 
     <p:documentation>Generate ZedAI metadata</p:documentation>
-    <px:dtbook-to-zedai-meta name="generate-zedai-metadata">
+    <px:dtbook-to-zedai-meta name="generate-zedai-metadata" px:progress="2/23" px:message="Generating ZedAI metadata">
         <p:input port="parameters">
             <p:empty/>
         </p:input>
@@ -487,8 +479,8 @@
                     </p:add-attribute>
                 </p:when>
                 <p:otherwise>
-                    <px:message
-                        message="WARNING: required xml:lang attribute not found, and no 'lang' option was passed to the converter."/>
+                    <p:identity px:message-severity="WARNING"
+                                px:message="required xml:lang attribute not found, and no 'lang' option was passed to the converter."/>
                     <p:identity/>
                 </p:otherwise>
             </p:choose>
@@ -499,15 +491,14 @@
     <!-- VALIDATE FINAL OUTPUT -->
     <!-- =============================================================== -->
     <p:documentation>Validate the final ZedAI output.</p:documentation>
-    <px:zedai-validate name="validate-zedai" px:message="Validating ZedAI"/>
-    <px:message message="Conversion complete."/>
+    <px:zedai-validate name="validate-zedai" px:message="Validating ZedAI" px:progress="2/23"/>
     <p:sink/>
 
 
     <!-- =============================================================== -->
     <!-- COMPILE RESULT FILESET -->
     <!-- =============================================================== -->
-    <p:group name="result.fileset">
+    <p:group name="result.fileset" px:progress="1/23">
         <p:output port="result"/>
         <p:variable name="dtbook-base"
             select="replace(//d:file[@media-type = 'application/x-dtbook+xml'][1]/resolve-uri(@href,base-uri(.)),'^(.*/)[^/]*$','$1')">
@@ -542,9 +533,7 @@
                     </p:variable>
                     <p:variable name="result-uri" select="resolve-uri($src, $output-dir)"/>
 
-                    <px:message>
-                        <p:with-option name="message" select="concat($source-uri,' --> ',$result-uri)"/>
-                    </px:message>
+                    <p:identity px:message-severity="DEBUG" px:message="{$source-uri} --> {$result-uri}"/>
                     <p:sink/>
 
                     <px:fileset-create>
@@ -558,9 +547,8 @@
                     </p:add-attribute>
                 </p:for-each>
             </p:when>
-            <p:otherwise>
+            <p:otherwise px:message-severity="DEBUG" px:message="NOT copying external resources">
                 <p:output port="result" sequence="true"/>
-                <px:message message="NOT copying external resources"/>
                 <p:identity>
                     <p:input port="source"><p:empty/></p:input>
                 </p:identity>

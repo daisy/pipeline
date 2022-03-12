@@ -47,3 +47,8 @@ linegroup line {
 prodnote {
 	display: if($include-production-notes, block, none);
 }
+
+@text-transform uncontracted {
+	system: braille;
+	contraction: no;
+}

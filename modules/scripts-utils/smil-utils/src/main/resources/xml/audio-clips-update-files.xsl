@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-result-prefixes="#all">
@@ -24,6 +25,10 @@
     </xsl:template>
 
     <xsl:template match="/d:audio-clips">
+        <xsl:variable name="idrefs" as="xs:string*" select="./d:clip/@idref"/>
+        <xsl:if test="not(count($idrefs)=count(distinct-values($idrefs)))">
+            <xsl:message terminate="yes">d:audio-clips document contains clips with the same idref</xsl:message>
+        </xsl:if>
         <!--
             update idref and src of clips
         -->

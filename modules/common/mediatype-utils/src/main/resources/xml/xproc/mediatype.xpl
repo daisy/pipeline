@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step name="main" xmlns:p="http://www.w3.org/ns/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    exclude-inline-prefixes="#all" version="1.0" type="px:mediatype-detect">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-inline-prefixes="#all"
+                type="px:mediatype-detect" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">Media type detect</h1>
@@ -115,7 +119,7 @@
                         </p:xslt>
 
                         <p:choose>
-                            <p:when test="/*/@is-xml='true' and $load-if-not-in-memory='true'">
+                            <p:when test="/*/@method='xml' and $load-if-not-in-memory='true'">
                                 <!-- try to load from disk as xml -->
                                 <px:fileset-filter>
                                     <p:with-option name="href" select="resolve-uri(/*/@href,base-uri(/*))"/>
@@ -123,7 +127,7 @@
                                         <p:pipe step="main" port="source"/>
                                     </p:input>
                                 </px:fileset-filter>
-                                <p:add-attribute match="/*" attribute-name="media-type" attribute-value="application/xml"/>
+                                <p:add-attribute match="/*" attribute-name="method" attribute-value="xml"/>
                                 <px:fileset-load name="file-from-disk" load-if-not-in-memory="true">
                                     <p:input port="in-memory">
                                         <p:pipe port="in-memory" step="main"/>

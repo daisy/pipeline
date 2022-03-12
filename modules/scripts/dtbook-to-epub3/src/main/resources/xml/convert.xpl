@@ -25,6 +25,16 @@
 	<p:option name="language" required="true"/>
 	<p:option name="assert-valid" required="true" cx:as="xs:string"/>
 	<p:option name="audio" required="true" cx:as="xs:string"/>
+	<p:option name="audio-file-type" select="'audio/mpeg'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The desired file type of the generated audio files, specified as a MIME type.</p>
+			<p>Examples:</p>
+			<ul>
+				<li>"audio/mpeg"</li>
+				<li>"audio/x-wav" (but note that this is not a core media type)</li>
+			</ul>
+		</p:documentation>
+	</p:option>
 	<p:option name="chunk-size" required="false" select="'-1'"/>
 
 	<p:option name="output-name" required="true"/>
@@ -36,8 +46,16 @@
 			px:css-speech-cascade
 		</p:documentation>
 	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-zedai/library.xpl">
+		<p:documentation>
+			px:dtbook-to-zedai
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/zedai-to-epub3/library.xpl">
+		<p:documentation>
+			px:zedai-to-epub3
+		</p:documentation>
+	</p:import>
 
 	<!-- CSS inlining -->
 	<p:choose>
@@ -98,6 +116,7 @@
 		<p:with-option name="output-dir" select="concat($temp-dir,'epub3/out/')"/>
 		<p:with-option name="temp-dir" select="concat($temp-dir,'epub3/temp/')"/>
 		<p:with-option name="audio" select="$audio"/>
+		<p:with-option name="audio-file-type" select="$audio-file-type"/>
 		<p:with-option name="chunk-size" select="$chunk-size"/>
 	</px:zedai-to-epub3>
 	

@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.3.2-SNAPSHOT</version>
+  <version>4.0.1-SNAPSHOT</version>
   <artifactId>tts-common</artifactId>
   <packaging>bundle</packaging>
 
@@ -92,9 +92,9 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.tts.TTSRegistry,
-      org.daisy.pipeline.tts.config.impl.GetAnnotationsProvider,
-      org.daisy.pipeline.tts.config.impl.GetLexiconsProvider,
-      org.daisy.pipeline.tts.synthesize.calabash.impl.SynthesizeProvider,
+      org.daisy.pipeline.tts.calabash.impl.GetAnnotationsProvider,
+      org.daisy.pipeline.tts.calabash.impl.GetLexiconsProvider,
+      org.daisy.pipeline.tts.calabash.impl.SynthesizeProvider,
       org.daisy.pipeline.modules.impl.Module_tts_common
     </expose-services>
   </properties>
@@ -125,7 +125,10 @@
               <goal>generate-spi-test-classes</goal>
             </goals>
             <configuration>
-              <includes>MockEncoder,MockTTS</includes>
+              <includes>
+                  MockEncoder,
+                  MockTTS
+              </includes>
             </configuration>
           </execution>
         </executions>

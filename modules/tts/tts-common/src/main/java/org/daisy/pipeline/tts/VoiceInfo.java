@@ -17,6 +17,7 @@ public class VoiceInfo {
 	        .compile("(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*");
 
 	public enum Gender {
+		ANY("*", "neutral"),
 		MALE_ADULT("male", "man", "male-adult"),
 		MALE_CHILD("boy", "male-young", "male-child"),
 		MALE_ELDERY("man-old", "male-old", "male-elder", "man-elder"),
@@ -43,17 +44,14 @@ public class VoiceInfo {
 						lookup.put(parts.get(1) + parts.get(0), gender);
 						lookup.put(parts.get(0) + '-' + parts.get(1), gender);
 						lookup.put(parts.get(1) + '-' + parts.get(0), gender);
-						lookup.put(parts.get(0) + '_' + parts.get(1), gender);
-						lookup.put(parts.get(1) + '_' + parts.get(0), gender);
 					}
 				}
 			}
 		}
 
 		public static Gender of(String gender) {
-			return lookup.get(gender);
+			return gender == null ? null : lookup.get(gender.toLowerCase().replace("_", "-"));
 		}
-
 	}
 	
 	public static class UnknownLanguage extends Exception{
@@ -65,22 +63,9 @@ public class VoiceInfo {
 	public static Locale tagToLocale(String langtag) throws UnknownLanguage {
 		if (langtag == null || "*".equals(langtag) || "mul".equals(langtag))
 			return NO_DEFINITE_LANG;
-		
-		//TODO: in Java7 we would use:
-		//return Locale.forLanguageTag(lang)
-		//=> this works with BCP47 tags, and should work with old tags from RFC 3066
-		//TODO: use a common function for pipeline-mod-nlp and pipeline-mod-tts
-		Locale locale = null;
-		if (langtag != null) {
-			Matcher m = localePattern.matcher(langtag.toLowerCase());
-			if (m.matches()) {
-				locale = new Locale(m.group(1), m.group(2) != null ? m.group(2) : "");
-			}
-		}
-		
-		if (locale == null)
+		Locale locale = Locale.forLanguageTag(langtag.replace("_", "-"));
+		if (locale == null || "und".equals(locale.toLanguageTag()))
 			throw new UnknownLanguage(langtag);
-		
 		return locale;
 	}
 
@@ -154,4 +139,6 @@ public class VoiceInfo {
 	public float priority;
 	
 	public static Locale NO_DEFINITE_LANG = new Locale("mul");
+	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
+
 }

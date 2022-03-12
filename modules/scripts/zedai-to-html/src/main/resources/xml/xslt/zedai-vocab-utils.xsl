@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xsl:stylesheet xmlns:pf="http://www.daisy.org/ns/functions"
-  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0"
+                xmlns:pf="http://www.daisy.org/ns/functions"
+                exclude-result-prefixes="#all">
 
   <xsl:function name="pf:to-epub" as="xs:string">
     <xsl:param name="term" as="xs:string"/>

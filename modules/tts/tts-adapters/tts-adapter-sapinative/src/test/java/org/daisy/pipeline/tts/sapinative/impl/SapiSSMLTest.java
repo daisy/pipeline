@@ -62,7 +62,7 @@ public class SapiSSMLTest {
 
 		String result = Transformer.transformToString(tw.getResult(), params);
 		String expected = "<s:speak xmlns:s=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s:s>"
-		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><s:mark name=\""
+		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><bookmark mark=\""
 		        + endingmark + "\"/></s:speak>";
 
 		Diff d = new Diff(result, expected);
@@ -93,7 +93,7 @@ public class SapiSSMLTest {
 		String result = Transformer.transformToString(tw.getResult(), params);
 
 		String expected = "<s:speak xmlns:s=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s:s>"
-		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><s:mark name=\""
+		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><bookmark mark=\""
 		        + endingmark + "\"/></s:speak>";
 
 		Diff d = new Diff(result, expected);
@@ -126,7 +126,7 @@ public class SapiSSMLTest {
 
 		String result = Transformer.transformToString(firstChild, params);
 		String expected = "<s:speak xmlns:s=\"http://www.w3.org/2001/10/synthesis\" version=\"1.0\"><s:s>"
-		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><s:mark name=\""
+		        + "<s:y attr=\"attr-val\"/>this is text</s:s><s:break time=\"250ms\"/><bookmark mark=\""
 		        + endingmark + "\"/></s:speak>";
 
 		Diff d = new Diff(result, expected);

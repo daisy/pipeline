@@ -31,14 +31,13 @@
         <p:documentation>
             px:fileset-create
             px:fileset-add-entry
-            px:fileset-load
             px:fileset-copy
             px:fileset-store
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
-            px:html-to-fileset
+            px:html-load
         </p:documentation>
     </p:import>
     <p:import href="html-to-dtbook.xpl">
@@ -54,7 +53,7 @@
     <p:group name="html-and-resources" px:progress="1/10" px:message="Loading HTML">
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
-            <p:pipe step="html" port="result"/>
+            <p:pipe step="html" port="result.in-memory"/>
         </p:output>
         <px:fileset-create>
             <p:with-option name="base" select="resolve-uri('./',$html)"/>
@@ -62,8 +61,7 @@
         <px:fileset-add-entry media-type="application/xhtml+xml">
             <p:with-option name="href" select="$html"/>
         </px:fileset-add-entry>
-        <px:fileset-load name="html"/>
-        <px:html-to-fileset/>
+        <px:html-load name="html"/>
     </p:group>
 
     <p:documentation>

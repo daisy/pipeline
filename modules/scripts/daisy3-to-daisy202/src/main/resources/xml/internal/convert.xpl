@@ -44,7 +44,6 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
-            px:message
             px:assert
         </p:documentation>
     </p:import>
@@ -113,7 +112,7 @@
     <!-- CONVERT NCX TO NCC                                                      -->
     <!--=========================================================================-->
     <p:documentation>Generate the NCC from the NCX</p:documentation>
-    <p:group name="ncc">
+    <p:group name="ncc" px:message="Generating NCC document">
         <p:output port="fileset" primary="true">
             <p:pipe port="result" step="ncc.fileset"/>
         </p:output>
@@ -156,7 +155,6 @@
                     <p:pipe step="ncc.doc" port="result"/>
                 </p:input>
             </px:fileset-add-entry>
-            <px:message message="NCC document created."/>
         </p:group>
     </p:group>
     <p:sink/>
@@ -165,7 +163,7 @@
     <!-- CONVERT SMILS                                                           -->
     <!--=========================================================================-->
 
-    <pxi:daisy3-to-daisy202-smils name="smils">
+    <pxi:daisy3-to-daisy202-smils name="smils" px:message="Downgrading SMIL documents">
         <p:input port="source.fileset">
             <p:pipe step="fileset.in" port="result"/>
         </p:input>

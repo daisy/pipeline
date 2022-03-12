@@ -25,4 +25,8 @@
         <xsl:attribute name="id" select="generate-id()"/>
     </xsl:template>
     
+    <xsl:template name="pf:debug">
+        <xsl:param name="msg"/>
+    </xsl:template>
+    
 </xsl:stylesheet>

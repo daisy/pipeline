@@ -1,41 +1,41 @@
 package org.daisy.pipeline.tts.osx.impl;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.shell.CommandRunner;
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
-import org.daisy.pipeline.tts.MarklessTTSEngine;
-import org.daisy.pipeline.tts.SoundUtil;
+import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+import org.daisy.pipeline.tts.VoiceInfo;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class OSXSpeechEngine extends MarklessTTSEngine {
+public class OSXSpeechEngine extends TTSEngine {
 
-	private AudioFormat mAudioFormat;
-	private String mSayPath;
-	private int mPriority;
-	private final static int MIN_CHUNK_SIZE = 2048;
+	private final String mSayPath;
+	private final int mPriority;
+
+	private final static URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml.xsl", OSXSpeechEngine.class);
 	private final static Logger mLogger = LoggerFactory.getLogger(OSXSpeechEngine.class);
 
 	public OSXSpeechEngine(OSXSpeechService service, String osxPath, int priority) {
@@ -45,12 +45,19 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 	}
 
 	@Override
-	public Collection<AudioBuffer> synthesize(String sentence, XdmNode xmlSentence,
-	        Voice voice, TTSResource threadResources,
-	        AudioBufferAllocator bufferAllocator, boolean retry) throws SynthesisException,
-	        InterruptedException, MemoryException {
-
-		Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
+	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource threadResources)
+			throws SynthesisException, InterruptedException {
+		
+		String sentence; {
+			Map<String,Object> xsltParams = new HashMap<>(); {
+				xsltParams.put("voice", voice.name);
+			}
+			try {
+				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
+			} catch (IOException | SaxonApiException e) {
+				throw new SynthesisException(e);
+			}
+		}
 		File waveOut = null;
 		try {
 			waveOut = File.createTempFile("pipeline", ".wav");
@@ -61,32 +68,12 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 				.run();
 			
 			// read the wave on the standard output
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(waveOut));
-			AudioInputStream fi = AudioSystem.getAudioInputStream(in);
-
-			if (mAudioFormat == null)
-				mAudioFormat = fi.getFormat();
-
-			while (true) {
-				AudioBuffer b = bufferAllocator
-				        .allocateBuffer(MIN_CHUNK_SIZE + fi.available());
-				int ret = fi.read(b.data, 0, b.size);
-				if (ret == -1) {
-					//note: perhaps it would be better to call allocateBuffer()
-					//somewhere else in order to avoid this extra call:
-					bufferAllocator.releaseBuffer(b);
-					break;
-				}
-				b.size = ret;
-				result.add(b);
-			}
-
-			fi.close();
-		} catch (MemoryException|InterruptedException e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
+			return new SynthesisResult(
+				createAudioStream(
+					new FileInputStream(waveOut)));
+		} catch (InterruptedException e) {
 			throw e;
 		} catch (Throwable e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
 			throw new SynthesisException(e);
@@ -94,15 +81,9 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 			if (waveOut != null)
 				waveOut.delete();
 		}
-		return result;
 	}
 
-	@Override
-	public AudioFormat getAudioOutputFormat() {
-		return mAudioFormat;
-	}
-
-	@Override
+		@Override
 	public Collection<Voice> getAvailableVoices() throws SynthesisException,
 	        InterruptedException {
 
@@ -110,12 +91,25 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 		try {
 			new CommandRunner(mSayPath, "-v", "?")
 				.consumeOutput(stream -> {
-						Matcher mr = Pattern.compile("(.*?)\\s+\\w{2}_\\w{2}").matcher("");
+						Matcher mr = Pattern.compile("(?<name>.*?)\\s+(?<locale>\\w{2}_\\w{2})\\s*(#.*)?").matcher("");
 						try (Scanner scanner = new Scanner(stream)) {
 							while (scanner.hasNextLine()) {
-								mr.reset(scanner.nextLine());
+								String line = scanner.nextLine();
+								mr.reset(line);
 								if (mr.find()) {
-									result.add(new Voice(getProvider().getName(), mr.group(1).trim()));
+									String name = mr.group("name").trim();
+									try {
+										Locale locale = VoiceInfo.tagToLocale(mr.group("locale"));
+										// Note that we could also maintain (hard-code) a mapping from voice to gender
+										Gender unknownGender = Gender.ANY;
+										result.add(new Voice(getProvider().getName(), name, locale, unknownGender));
+									} catch (VoiceInfo.UnknownLanguage e) {
+										mLogger.debug("Could not parse line from `say -v ?' output: " + line);
+										mLogger.debug("Reason: could not parse locale: " + mr.group("locale"));
+										result.add(new Voice(getProvider().getName(), name));
+									}
+								} else {
+									mLogger.debug("Could not parse line from `say -v ?' output: " + line);
 								}
 							}
 						}
@@ -123,8 +117,10 @@ public class OSXSpeechEngine extends MarklessTTSEngine {
 				)
 				.consumeError(mLogger)
 				.run();
+		} catch (InterruptedException e) {
+			throw e;
 		} catch (Throwable e) {
-			throw new SynthesisException(e.getMessage(), e.getCause());
+			throw new SynthesisException(e);
 		}
 
 		return result;

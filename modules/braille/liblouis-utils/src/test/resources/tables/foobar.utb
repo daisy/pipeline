@@ -4,3 +4,5 @@
 include foobar.uti
 
 uplow Áá 12356
+
+noback correct "\y1f600" "grin"

@@ -56,8 +56,9 @@
         <xsl:variable name="root" as="node()?" select="root($arg)"/>
         <!--
             Note: This only works if the context node is a descendant of a document that was
-            provided as input. It does not work if the node was retrieved via doc(), or
-            created within the current XSLT transformation.
+            provided as input. It does not work if the node was retrieved via doc(), or created
+            within the current XSLT transformation. It also does not work if the input document is
+            pre-processed by e.g. a xsl:strip-space instruction.
         -->
         <xsl:sequence select="collection()[. is $root][1]"/>
     </xsl:function>

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>dtbook-to-daisy3</artifactId>
-  <version>3.1.4-SNAPSHOT</version>
+  <version>3.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to DAISY 3</name>
@@ -40,16 +40,11 @@
       <artifactId>daisy3-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
-    <!--
-        removed dependency in order to be able to mock it in the tests
-    -->
-    <!--
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-tts</artifactId>
       <scope>runtime</scope>
     </dependency>
-    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>dtbook-utils</artifactId>
@@ -102,22 +97,12 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>dtbook-break-detection</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>nlp-omnilang-lexer</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>audio-encoder-lame</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-common</artifactId>
+      <artifactId>tts-mocks</artifactId>
       <scope>test</scope>
     </dependency>
     <!--
@@ -207,55 +192,7 @@
   </properties>
   
   <build>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <includes>
-          <include>dtbook-tts-mock/library.xpl</include>
-        </includes>
-        <filtering>true</filtering>
-      </testResource>
-      <testResource>
-        <directory>src/test/resources</directory>
-        <excludes>
-          <exclude>dtbook-tts-mock/library.xpl</exclude>
-        </excludes>
-        <filtering>false</filtering>
-      </testResource>
-    </testResources>
     <plugins>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>modules-build-helper</artifactId>
-        <executions>
-          <execution>
-            <id>process-test-catalog</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>process-test-catalog</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.daisy.pipeline.build</groupId>
-        <artifactId>ds-to-spi-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>generate-spi-test-classes</id>
-            <phase>process-test-sources</phase>
-            <goals>
-              <goal>generate-spi-test-classes</goal>
-            </goals>
-            <configuration>
-              <includes>
-                org.daisy.pipeline.modules.impl.Module_test_module,
-                MockTTS
-              </includes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>

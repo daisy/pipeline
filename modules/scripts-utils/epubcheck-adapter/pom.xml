@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.4-SNAPSHOT</version>
+    <version>1.14.6-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -57,7 +57,7 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
-            <Export-Package />
+            <Export-Package/>
             <Private-Package>
               org.idpf.epubcheck.util.saxon95,
               ${generated-packages}

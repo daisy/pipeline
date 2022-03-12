@@ -15,7 +15,7 @@
         </p:documentation>
     </p:import>
 
-    <px:assert message="new-base must not be empty">
+    <px:assert message="new-base must not be empty" error-code="XXX">
         <p:with-option name="test" select="not($new-base='')"/>
     </px:assert>
 

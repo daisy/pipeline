@@ -7,7 +7,11 @@
 
   <p:input port="source" primary="true"/>
   <p:input port="secondary"/>
-  <p:output port="result"/>
+  <p:output port="result">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The files in "source" that are not in "secondary".</p>
+    </p:documentation>
+  </p:output>
 
   <p:import href="fileset-join.xpl"/>
 

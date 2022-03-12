@@ -7,12 +7,13 @@
 	<x:scenario label="load">
 		<x:call step="px:dtbook-load">
 			<x:input port="source">
-				<x:document type="inline" xml:base="file:/foo.xml">
+				<x:document type="inline" xml:base="../resources/foo.xml" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
 					<dtbook version="1.1.0">
 						<head>
 							<title>Title</title>
 							<meta name="dc:Title" content="Title"/>
 							<link rel="stylesheet" type="text/css" href="style.css"/>
+							<link rel="pronunciation" type="application/pls+xml" href="lexicon.pls"/>
 						</head>
 						<book>
 							<bodymatter>
@@ -32,19 +33,46 @@
 		<x:expect label="the fileset"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
-				<d:fileset xml:base="file:/">
-					<d:file href="style.css" media-type="text/css"/>
-					<d:file href="foo.xml" original-href="foo.xml" media-type="application/x-dtbook+xml"/>
+				<d:fileset xml:base="../resources/">
+					<d:file href="style.css" media-type="text/css" original-href="style.css"/>
+					<d:file href="lexicon.pls" media-type="application/pls+xml" original-href="lexicon.pls"/>
+					<d:file href="foo.xml" media-type="application/x-dtbook+xml"/>
 					<d:file href="image.png" original-href="image.png" media-type="image/png"/>
+					<d:file href="font.ttf" original-href="font.ttf" media-type="application/x-font-ttf"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
 	</x:scenario>
-	
+
+	<x:scenario label="css from links and xml-stylesheet instructions">
+		<x:call step="px:dtbook-load">
+			<x:input port="source">
+				<x:document type="file" href="../resources/dtbook-with-stylesheets.xml"/>
+			</x:input>
+		</x:call>
+		<x:context label="the fileset">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/dtbook-with-stylesheets.xml" media-type="application/x-dtbook+xml"/>
+					<d:file href="../resources/test1.css" media-type="text/css" original-href="../resources/test1.css"/>
+					<d:file href="../resources/test2.css" media-type="text/css" original-href="../resources/test2.css"/>
+					<d:file href="../resources/test3.css" media-type="text/css" original-href="../resources/test3.css"/>
+					<d:file href="../resources/test6.css" media-type="text/css" original-href="../resources/test6.css"/>
+					<d:file href="../resources/test7.css" media-type="text/css" original-href="../resources/test7.css"/>
+					<d:file href="../resources/test11.css" media-type="text/css" original-href="../resources/test11.css"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 	<x:scenario label="if the base uri starts with file:///">
 		<x:call step="px:dtbook-load">
 			<x:input port="source">
-				<x:document type="inline" xml:base="file:///foo.xml">
+				<x:document type="inline" xml:base="file:///foo.xml" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
 					<dtbook version="1.1.0">
 						<head>
 							<title>Title</title>
@@ -69,9 +97,7 @@
 		<x:expect label="this results in a xml:base with only one slash after file:" type="compare"> <!-- not using x:fileset-compare -->
 			<x:document type="inline">
 				<d:fileset xml:base="file:/">
-					<d:file href="foo.xml" original-href="file:/foo.xml" media-type="application/x-dtbook+xml"/>
-					<d:file href="image.png" original-href="file:/image.png" media-type="image/png"/>
-					<d:file href="style.css" media-type="text/css"/>
+					<d:file href="foo.xml" media-type="application/x-dtbook+xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

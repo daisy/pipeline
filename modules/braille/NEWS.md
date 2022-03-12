@@ -1,18 +1,100 @@
+v1.14.5
+=======
+
+Changes
+-------
+- New values for `notes-placement` option to specify the layout of notes: "end-of-block",
+  "end-of-chapter" and "custom"
+- Enhanced CSS module (Sass partial) for table styling
+  - Possibility to duplicate tables (and style each copy differently)
+- New CSS module (Sass partial) for styling of definition lists
+- Allow PEF preview to have different representations of the same braille cell in different contexts
+  (https://github.com/daisy/pipeline-mod-braille/issues/199)
+- Generalized and improved `ascii-file-format` option
+  - Generalized to `output-file-format`
+  - Support for `(table:LOCALE)` in `output-file-format` query
+  - Support for `(blank-last-page)` in `output-file-format` query to ensure that each volume has a
+    blank backside
+  - Support for `(sheets-multiple-of-two)` in `output-file-format` query to ensure that volumes have
+    a number of sheets that is a multiple of two (for magazine layout)
+  - Support for `(format:pef)` in `output-file-format` query (default value)
+  - Storing (intermediary) PEF is now optional
+- Support characters above U+FFFF (https://github.com/liblouis/liblouis-java/issues/20)
+- Support for `hyphenate-character` property
+- Support for `text-transform` inside `@left` (https://github.com/daisy/pipeline-modules/issues/36,
+  https://github.com/mtmse/obfl/issues/32, https://github.com/mtmse/dotify.library/pull/33)
+- Support for `counter-set` inside `@begin`
+- Changed default value of "scope" argument of `flow()` function to `backward`
+- Allow `flow()` function with `document` scope everywhere
+- Allow `display: -obfl-list-of-references` outside of `@begin` or `@end` areas
+- Allow using `flow()` instead of `-obfl-collection()`
+- Deprecated `-obfl-list-of-references-range` property
+- Support custom `text-transform` (defined through `@text-transform`) combined with other
+  `text-transform` (e.g. `-louis-bold`)
+- Fixed regression in vendor prefixed `text-transform` values (e.g. `-louis-bold`)
+- Fixed line breaking around `text-transform` styled segments
+- Fixed non-standard hyphenation
+- Various other bugfixes
+
+Components
+----------
+- **liblouis** ([**3.19.0**](https://github.com/liblouis/liblouis/releases/tag/v3.19.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  **liblouis-java** ([**5.0.1**](https://github.com/liblouis/liblouis-java/releases/tag/5.0.1))
+- **dotify** ([**1.0.3**](https://github.com/mtmse/dotify.library/releases/tag/1.0.3)
+- **braille-css** ([**1.21.0**](https://github.com/daisy/braille-css/releases/tag/1.21.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+Closed issues
+-------------
+- https://github.com/daisy/pipeline-modules/issues/36
+- https://github.com/daisy/pipeline-mod-braille/issues/75
+- https://github.com/daisy/pipeline-mod-braille/issues/163
+- https://github.com/daisy/pipeline-mod-braille/issues/199
+- https://github.com/mtmse/obfl/issues/32
+- https://github.com/mtmse/dotify.library/pull/33
+- https://github.com/mtmse/dotify.library/pull/35
+
+v1.14.4
+=======
+
+Changes
+-------
+- Update to Liblouis [3.19.0](https://github.com/liblouis/liblouis/releases/tag/v3.19.0)
+- Various bugfixes
+
+Components
+----------
+- **liblouis** ([**3.19.0**](https://github.com/liblouis/liblouis/releases/tag/v3.19.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
+- dotify ([1.0.1](https://github.com/mtmse/dotify.library/releases/tag/1.0.1)
+- braille-css ([1.19.0](https://github.com/daisy/braille-css/releases/tag/1.19.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+
 v1.14.3
 =======
 
 Changes
 -------
 - Update to Liblouis [3.17.0](https://github.com/liblouis/liblouis/releases/tag/v3.17.0)
-- New option to choose from a list of braille codes (Liblouis tables).
+- New option to choose from a list of braille codes (Liblouis tables)
+  (https://github.com/daisy/pipeline-modules/issues/38)
 - Possibility to specify the braille code's locale as a transformer feature
   (e.g. `(locale:nl)`). The input document's language is only used if no locale or Liblouis table
-  has been specified.
+  has been specified. (https://github.com/daisy/pipeline-modules/issues/37)
 - By default text is transcribed to braille during formatting. A `force-pre-translation` transformer
   feature was added to override this behavior.
 - Option to specify the layout of notes
 - CSS module (Sass partial) for table styling
-- Support for `@counter-style` rules.
+- Support for `@counter-style` rules
 - Support for relative `url()` values
 - Support for `:-obfl-alternate-scenario(2)` etc.
 - Support for `-obfl-list-of-references-range: volume`
@@ -42,12 +124,15 @@ Components
 Closed issues
 -------------
 - https://github.com/daisy/pipeline/issues/603
+- https://github.com/daisy/pipeline-modules/issues/37
+- https://github.com/daisy/pipeline-modules/issues/38
 - https://github.com/mtmse/dotify.library/pull/9
 - https://github.com/mtmse/dotify.library/pull/10
 - https://github.com/mtmse/dotify.library/pull/14
 - https://github.com/mtmse/dotify.library/pull/15
 - https://github.com/mtmse/dotify.library/pull/17
 - https://github.com/mtmse/dotify.library/pull/19
+- https://github.com/daisy/braille-css/issues/26
 
 
 v1.14.2

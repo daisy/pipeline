@@ -92,9 +92,10 @@
             <p:pipe step="rm-css" port="result.in-memory"/>
         </p:output>
         <p:sink/>
-        <px:css-to-fileset>
-            <p:with-option name="source" select="$dtbook-css"/>
-        </px:css-to-fileset>
+        <px:fileset-add-entry media-type="text/css">
+            <p:with-option name="href" select="$dtbook-css"/>
+        </px:fileset-add-entry>
+        <px:css-to-fileset/>
         <px:fileset-copy name="css">
             <p:with-option name="target" select="resolve-uri('./',base-uri(/*))">
                 <p:pipe step="dtbook" port="result"/>

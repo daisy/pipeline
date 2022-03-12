@@ -1,9 +1,6 @@
-space \x0020 0 # hard coded in compileTranslationTable.c
+space \x0020 0
 space \x0009 0
 space \x000a 0
 space \x000c 0
 space \x000d 0
-space \x00a0 a # hard coded in compileTranslationTable.c
-
-display \x0020 0
-display \x00a0 a
+space \x00a0 a

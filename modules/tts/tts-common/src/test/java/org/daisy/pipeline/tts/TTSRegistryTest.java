@@ -1,32 +1,28 @@
 package org.daisy.pipeline.tts;
 
-import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
+import static java.util.Collections.EMPTY_LIST;
+import static java.util.Collections.singletonList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
-import javax.sound.sampled.AudioFormat;
 
 import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
-import org.daisy.pipeline.tts.TTSService.Mark;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 public class TTSRegistryTest {
 
-	private static class SimplifiedService extends AbstractTTSService {
+	private static class SimplifiedService implements TTSService {
 
 		@Override
 		public TTSEngine newEngine(Map<String, String> params) throws SynthesisException,
@@ -38,25 +34,15 @@ public class TTSRegistryTest {
 		public String getName() {
 			return "simplified-service";
 		}
-
 	}
 
-	private static class SimplifiedProcessor extends SimpleTTSEngine {
+	private static class SimplifiedProcessor extends TTSEngine {
 
 		private Collection<Voice> mVoices;
 
-		SimplifiedProcessor(String xslt, String... voices) throws MalformedURLException {
+		SimplifiedProcessor(Collection<Voice> voices) {
 			super(new SimplifiedService());
-			mVoices = new ArrayList<Voice>();
-			for (String v : voices) {
-				String[] parts = v.split(":");
-				mVoices.add(new Voice(parts[0], parts[1]));
-			}
-		}
-
-		@Override
-		public AudioFormat getAudioOutputFormat() {
-			return null;
+			mVoices = voices;
 		}
 
 		@Override
@@ -66,418 +52,431 @@ public class TTSRegistryTest {
 		}
 
 		@Override
-		public Collection<AudioBuffer> synthesize(String sentence,
-		        Voice voice, TTSResource threadResources, List<Mark> marks,
-		        AudioBufferAllocator bufferAllocator, boolean retry)
-		        throws SynthesisException, InterruptedException, MemoryException {
+		public SynthesisResult synthesize(XdmNode sentence, Voice voice,
+		        TTSResource threadResources)
+		        throws SynthesisException, InterruptedException {
 			return null;
 		}
 	}
 
 	static Configuration Conf = new Processor(false).getUnderlyingConfiguration();
 
-	private static String registerVoice(String engine, String name, String lang,
-	        String gender, float priority, List<VoiceInfo> extraVoices) {
-
-		try {
-			extraVoices.add(new VoiceInfo(engine, name, lang, Gender.of(gender), priority));
-		} catch (UnknownLanguage e) {
-			e.printStackTrace();
-		}
-
-		return engine + ":" + name;
-	}
-
-	private static VoiceManager initVoiceManager(Collection<VoiceInfo> extraVoices,
-	        String... voices) throws MalformedURLException {
-		return new VoiceManager(Arrays.<TTSEngine> asList(new SimplifiedProcessor(
-		        "/empty-ssml-adapter.xsl", voices)), extraVoices);
-	}
-
 	@Test
-	public void simpleInit() throws MalformedURLException {
-		VoiceManager vm = initVoiceManager(Collections.EMPTY_LIST, "acapela:claire");
-		boolean[] perfectMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice("acapela", "claire", null, null, perfectMatch);
-		Assert.assertTrue(perfectMatch[0]);
+	public void simpleInit() {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("acapela", "claire"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = EMPTY_LIST;
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice("acapela", "claire", null, null, exactMatch);
+		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
 		Assert.assertEquals("acapela", v.engine);
 		Assert.assertEquals("claire", v.name);
 	}
 
 	@Test
-	public void customVoice() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname = registerVoice(vendor, voiceName, "en", "male-adult", 10, extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname);
-
+	public void customVoice() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice(vendor, voiceName, null, null, exactMatch);
+		Voice v = vm.findAvailableVoice("vendor", "voice1", null, null, exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, v.engine);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void onlyLanguage() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname0 = registerVoice("v2", "wrong-lang1", "fr", "male-adult", 15,
-		        extraVoices);
-		String fullname1 = registerVoice("v", "low-prio", "en", "male-adult", 5, extraVoices);
-		String fullname2 = registerVoice(vendor, voiceName, "en", "male-adult", 10,
-		        extraVoices);
-		String fullname3 = registerVoice("v2", "wrong-lang2", "fr", "male-adult", 15,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname0, fullname1, fullname2,
-		        fullname3);
-
+	public void onlyLanguage() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("v2", "wrong-lang1"));
+			availableVoices.add(new Voice("v", "low-prio"));
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("v2", "wrong-lang2"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang1", "fr", Gender.of("male-adult"), 15));
+			voiceInfoFromConfig.add(new VoiceInfo("v", "low-prio", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang2", "fr", Gender.of("male-adult"), 15));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
 		Voice v = vm.findAvailableVoice(null, null, "en", null, exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, v.engine);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void withGenderAndLang() throws MalformedURLException {
-		String vendor = "vendor";
-		String maleVoice = "male-voice";
-		String femaleVoice = "female-voice";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, maleVoice, "en", "male-adult", 5, extraVoices);
-		String fullname2 = registerVoice(vendor, femaleVoice, "en", "female-adult", 10,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor, "fr-voice", "fr", "female-adult", 15,
-		        extraVoices);
-		String fullname4 = registerVoice(vendor, "lowprio1", "en", "female-adult", 5,
-		        extraVoices);
-		String fullname5 = registerVoice(vendor, "lowprio2", "en", "male-adult", 5,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4, fullname5);
+	public void withGenderAndLang() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "male-voice"));
+			availableVoices.add(new Voice("vendor", "female-voice"));
+			availableVoices.add(new Voice("vendor", "fr-voice"));
+			availableVoices.add(new Voice("vendor", "lowprio1"));
+			availableVoices.add(new Voice("vendor", "lowprio2"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "male-voice", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "female-voice", "en", Gender.of("female-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "fr-voice", "fr", Gender.of("female-adult"), 15));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio1", "en", Gender.of("female-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio2", "en", Gender.of("male-adult"), 5));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-
 		Voice v = vm.findAvailableVoice(null, null, "en", "male-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(maleVoice, v.name);
-
+		Assert.assertEquals("male-voice", v.name);
 		v = vm.findAvailableVoice(null, null, "en", "female-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(femaleVoice, v.name);
+		Assert.assertEquals("female-voice", v.name);
 	}
 
 	@Test
-	public void withVendorAndLang() throws MalformedURLException {
-		String vendor1 = "vendor1";
-		String vendor2 = "vendor2";
-		String voice1 = "voice1";
-		String voice2 = "voice2";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor1, voice1, "en", "male-adult", 5, extraVoices);
-		String fullname2 = registerVoice(vendor2, voice2, "en", "male-adult", 10, extraVoices);
-		String fullname3 = registerVoice(vendor1, "voice-fr", "fr", "male-adult", 15,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3);
+	public void withVendorAndLang() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor1", "voice1"));
+			availableVoices.add(new Voice("vendor2", "voice2"));
+			availableVoices.add(new Voice("vendor1", "voice-fr"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice-fr", "fr", Gender.of("male-adult"), 15));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-
-		Voice v = vm.findAvailableVoice(vendor1, null, "en", null, exactMatch);
+		Voice v = vm.findAvailableVoice("vendor1", null, "en", null, exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor1, v.engine);
-		Assert.assertEquals(voice1, v.name);
-
-		v = vm.findAvailableVoice(vendor2, null, "en", null, exactMatch);
+		Assert.assertEquals("vendor1", v.engine);
+		Assert.assertEquals("voice1", v.name);
+		v = vm.findAvailableVoice("vendor2", null, "en", null, exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor2, v.engine);
-		Assert.assertEquals(voice2, v.name);
+		Assert.assertEquals("vendor2", v.engine);
+		Assert.assertEquals("voice2", v.name);
 	}
 
 	@Test
-	public void withVendorAndLangAndGender() throws MalformedURLException {
-		String vendor1 = "vendor1";
-		String vendor2 = "vendor2";
-		String maleVoice = "male-voice";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor2, maleVoice, "en", "male-adult", 100,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor1, maleVoice, "en", "male-adult", 10,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor1, "wrong", "fr", "male-adult", 100,
-		        extraVoices);
-		String fullname4 = registerVoice(vendor1, "low-prio", "en", "male-adult", 5,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4);
+	public void withVendorAndLangAndGender() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor2", "male-voice"));
+			availableVoices.add(new Voice("vendor1", "male-voice"));
+			availableVoices.add(new Voice("vendor1", "wrong"));
+			availableVoices.add(new Voice("vendor1", "low-prio"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "male-voice", "en", Gender.of("male-adult"), 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "male-voice", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "wrong", "fr", Gender.of("male-adult"), 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "low-prio", "en", Gender.of("male-adult"), 5));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-
 		Voice v = vm.findAvailableVoice("vendor1", null, "en", "male-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor1, v.engine);
-		Assert.assertEquals(maleVoice, v.name);
+		Assert.assertEquals("vendor1", v.engine);
+		Assert.assertEquals("male-voice", v.name);
 	}
 
 	@Test
-	public void voiceNotFound() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, voiceName, "en", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, "wrongvoice", "fr", "male-adult", 100,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2);
-
+	public void voiceNotFound() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("vendor", "wrongvoice"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 100));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "en", "female-adult",
-		        exactMatch);
+		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "en", "female-adult", exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, vendor);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void approximateMatch1() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, voiceName, "en", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, "wrongvoice1", "fr", "male-adult", 100,
-		        extraVoices);
-		String fullname3 = registerVoice("another-vendor", "wrongvoice2", "en", "male-adult",
-		        200, extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3);
-
+	public void approximateMatch1() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("vendor", "wrongvoice1"));
+			availableVoices.add(new Voice("another-vendor", "wrongvoice2"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice1", "fr", Gender.of("male-adult"), 100));
+			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrongvoice2", "en", Gender.of("male-adult"), 200));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice(vendor, null, "en", "female-adult", exactMatch);
+		Voice v = vm.findAvailableVoice("vendor", null, "en", "female-adult", exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, vendor);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void approximateMatch2() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, voiceName, "en", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, "wrongvoice", "fr", "male-adult", 100,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2);
-
+	public void approximateMatch2() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("vendor", "wrongvoice"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 100));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
 		Voice v = vm.findAvailableVoice("wrong-vendor", null, "en", "male-adult", exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, vendor);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void langVariantPriority() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, "voice-a", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, "voice-b", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor, "voice-c", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname4 = registerVoice(vendor, voiceName, "en-us", "male-adult", 10,
-		        extraVoices);
-		String fullname5 = registerVoice(vendor, "voice-d", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname6 = registerVoice(vendor, "voice-e", "en", "male-adult", 10,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4, fullname5, fullname6);
-
+	public void langVariantPriority() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice-a"));
+			availableVoices.add(new Voice("vendor", "voice-b"));
+			availableVoices.add(new Voice("vendor", "voice-c"));
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("vendor", "voice-d"));
+			availableVoices.add(new Voice("vendor", "voice-e"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-a", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-b", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-c", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en-us", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-d", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-e", "en", Gender.of("male-adult"), 10));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
 		Voice v = vm.findAvailableVoice(null, null, "en-us", "male-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("voice1", v.name);
 	}
 
 	@Test
-	public void voiceFallback1() throws MalformedURLException {
-		String vendor1 = "vendor1";
-		String vendor2 = "vendor2";
-		String firstChoice = "voice1";
-		String secondChoice = "voice2";
-		String thirdChoice = "voice3";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor1, firstChoice, "en", "male-adult", 20,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor2, "wrong-choice", "en", "male-adult", 5,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor2, thirdChoice, "en", "female-adult", 19,
-		        extraVoices);
-		String fullname4 = registerVoice(vendor2, secondChoice, "en", "male-adult", 18,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4);
-
+	public void voiceFallback1() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor1", "voice1"));
+			availableVoices.add(new Voice("vendor2", "wrong-choice"));
+			availableVoices.add(new Voice("vendor2", "voice3"));
+			availableVoices.add(new Voice("vendor2", "voice2"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", "en", Gender.of("female-adult"), 19));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", "en", Gender.of("male-adult"), 18));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
 		Voice v = vm.findAvailableVoice(null, null, "en-us", "male-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(firstChoice, v.name);
-
+		Assert.assertEquals("voice1", v.name);
 		v = vm.findSecondaryVoice(v);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor2, v.engine);
-		Assert.assertTrue(secondChoice.equals(v.name) || thirdChoice.equals(v.name));
+		Assert.assertEquals("vendor2", v.engine);
+		Assert.assertTrue("voice2".equals(v.name) || "voice3".equals(v.name));
 	}
 
 	@Test
-	public void voiceFallback2() throws MalformedURLException {
-		String vendor = "vendor";
-		String wantedVoice = "voice1";
-		String availableVoice = "voice2";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		registerVoice(vendor, wantedVoice, "en", "male-adult", 20, extraVoices);
-		String fullname1 = registerVoice(vendor, "wrong-voice1", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, availableVoice, "en", "male-adult", 20,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor, "wrong-voice2", "en", "male-adult", 10,
-		        extraVoices);
-		String fullname4 = registerVoice("another-vendor", "wrong-voice3", "en", "male-adult",
-		        50, extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4);
-
+	public void voiceFallback2() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "wrong-voice1"));
+			availableVoices.add(new Voice("vendor", "voice2"));
+			availableVoices.add(new Voice("vendor", "wrong-voice2"));
+			availableVoices.add(new Voice("another-vendor", "wrong-voice3"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice2", "en", Gender.of("male-adult"), 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice2", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrong-voice3", "en", Gender.of("male-adult"), 50));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice(vendor, wantedVoice, null, null, exactMatch);
+		Voice v = vm.findAvailableVoice("vendor", "voice1", null, null, exactMatch);
 		Assert.assertFalse(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(availableVoice, v.name);
+		Assert.assertEquals("voice2", v.name);
 	}
-	
+
 	@Test
-	public void voiceFallback3() throws MalformedURLException {
-		String vendor1 = "vendor1";
-		String vendor2 = "vendor2";
-		String firstChoice = "voice1";
-		String secondChoice = "voice2";
-		String thirdChoice = "voice3";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor1, firstChoice, "en", "male-adult", 20,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor2, "wrong-choice", "en", "male-adult", 5,
-		        extraVoices);
-		String fullname3 = registerVoice(vendor2, thirdChoice, "en", "male-adult", 19,
-		        extraVoices);
-		String fullname4 = registerVoice(vendor1, secondChoice, "en", "male-adult", 10,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2, fullname3,
-		        fullname4);
-
+	public void voiceFallback3() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor1", "voice1"));
+			availableVoices.add(new Voice("vendor2", "wrong-choice"));
+			availableVoices.add(new Voice("vendor2", "voice3"));
+			availableVoices.add(new Voice("vendor1", "voice2"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", "en", Gender.of("male-adult"), 19));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice2", "en", Gender.of("male-adult"), 10));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice(vendor1, null, "en-us", "male-adult", exactMatch);
+		Voice v = vm.findAvailableVoice("vendor1", null, "en-us", "male-adult", exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(firstChoice, v.name);
-
+		Assert.assertEquals("voice1", v.name);
 		v = vm.findSecondaryVoice(v);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor1, v.engine);
-		Assert.assertEquals(secondChoice, v.name);
-	}
-	
-	@Test
-	public void multiLangVoice() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, voiceName, "*", "male-adult", 10,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1);
-
-		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "fr", "female-adult",
-		        exactMatch);
-		Assert.assertFalse(exactMatch[0]);
-		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, v.engine);
-		Assert.assertEquals(voiceName, v.name);
-	}
-	
-	@Test
-	public void multiLangVoicePriority() throws MalformedURLException {
-		String vendor = "vendor";
-		String voiceName = "voice1";
-
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		String fullname1 = registerVoice(vendor, voiceName, "*", "male-adult", 10,
-		        extraVoices);
-		String fullname2 = registerVoice(vendor, "wrongvoice", "fr", "male-adult", 5,
-		        extraVoices);
-
-		VoiceManager vm = initVoiceManager(extraVoices, fullname1, fullname2);
-
-		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "fr", "female-adult",
-		        exactMatch);
-		Assert.assertFalse(exactMatch[0]);
-		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, v.engine);
-		Assert.assertEquals(voiceName, v.name);
+		Assert.assertEquals("vendor1", v.engine);
+		Assert.assertEquals("voice2", v.name);
 	}
 
 	@Test
-	public void caseInsensitivity() throws MalformedURLException {
-		String vendor = "Vendor1";
-		String voiceName = "Voice1";
-		List<VoiceInfo> extraVoices = new ArrayList<VoiceInfo>();
-		VoiceManager vm = initVoiceManager(extraVoices,
-		                                   registerVoice(vendor, voiceName, "*", "male-adult", 10, extraVoices));
+	public void voiceFallback4() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor1", "voice1", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
 		boolean[] exactMatch = new boolean[1];
-		Voice v = vm.findAvailableVoice(vendor, voiceName.toLowerCase(), null, null, exactMatch);
+		Voice v = vm.findAvailableVoice("vendor1", "voice1", null, null, exactMatch);
 		Assert.assertTrue(exactMatch[0]);
 		Assert.assertNotNull(v);
-		Assert.assertEquals(vendor, v.engine);
-		Assert.assertEquals(voiceName, v.name);
+		// fallback should never be the same as the primary voice
+		v = vm.findSecondaryVoice(v);
+		Assert.assertNull(v);
+	}
+
+	@Test
+	public void multiLangVoice() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", Gender.of("male-adult"), 10));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "fr", "female-adult", exactMatch);
+		Assert.assertFalse(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
+	}
+
+	@Test
+	public void multiLangVoicePriority() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1"));
+			availableVoices.add(new Voice("vendor", "wrongvoice"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 5));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice("any-vendor", "any-voice", "fr", "female-adult", exactMatch);
+		Assert.assertFalse(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
+	}
+
+	@Test
+	public void caseInsensitivity() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("Vendor1", "Voice1"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("Vendor1", "Voice1", "*", Gender.of("male-adult"), 10));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice("Vendor1", "voice1", null, null, exactMatch);
+		Assert.assertTrue(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals("Vendor1", v.engine);
+		Assert.assertEquals("Voice1", v.name);
+	}
+
+	@Test
+	public void voiceWithKnownLanguageAndUnknownGender() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice1", Locale.forLanguageTag("en"), Gender.ANY));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = EMPTY_LIST;
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		boolean[] exactMatch = new boolean[1];
+		Voice v = vm.findAvailableVoice(null, null, "en", null, exactMatch);
+		Assert.assertTrue(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
+		v = vm.findAvailableVoice(null, null, "en", "male-adult", exactMatch);
+		Assert.assertTrue(exactMatch[0]);
+		Assert.assertNotNull(v);
+		Assert.assertEquals("vendor", v.engine);
+		Assert.assertEquals("voice1", v.name);
 	}
 }

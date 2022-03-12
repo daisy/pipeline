@@ -69,7 +69,7 @@ public class TTSRegistry {
 		policy = ReferencePolicy.DYNAMIC
 	)
 	public void addTTS(TTSService tts) {
-		ServerLogger.info("Adding TTSService " + TTSServiceUtil.displayName(tts));
+		ServerLogger.info("Adding TTSService " + tts.getName());
 		mServices.add(tts);
 		synchronized (mTTSResources) {
 			mTTSResources.put(tts, new ArrayList<TTSResource>());
@@ -80,7 +80,7 @@ public class TTSRegistry {
 	 * Service component callback
 	 */
 	public void removeTTS(TTSService tts) {
-		ServerLogger.info("Removing TTSService " + TTSServiceUtil.displayName(tts));
+		ServerLogger.info("Removing TTSService " + tts.getName());
 
 		List<TTSResource> resources = null;
 		synchronized (mTTSResources) {
@@ -88,7 +88,7 @@ public class TTSRegistry {
 		}
 		if (resources != null) {
 			if (resources.size() > 0)
-				ServerLogger.warn("Stopping bundle of " + TTSServiceUtil.displayName(tts)
+				ServerLogger.warn("Stopping bundle of " + tts.getName()
 				        + " while a TTS job is running");
 			for (TTSResource resource : resources) {
 				synchronized (resource) {
@@ -114,8 +114,8 @@ public class TTSRegistry {
 		TTSTimeout timeout = new TTSTimeout();
 		List<Voice> result = new ArrayList<Voice>();
 		for (TTSService service : mServices) {
+			timeout.enableForCurrentThread(30);
 			try {
-				timeout.enableForCurrentThread(30);
 				TTSEngine engine = service.newEngine(cr.getStaticProperties());
 				result.addAll(engine.getAvailableVoices());
 			} catch (Throwable e) {

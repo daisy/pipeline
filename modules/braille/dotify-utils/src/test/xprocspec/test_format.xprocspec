@@ -3,34 +3,40 @@
                xmlns:dotify="http://code.google.com/p/dotify/"
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:dp2="http://www.daisy.org/ns/pipeline/"
+               xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
+               xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
   <x:script>
     <p:declare-step type="dotify:format" version="1.0">
       <p:input port="source"/>
-      <p:output port="result" primary="true"/>
-      <p:output port="obfl" sequence="false">
-        <p:pipe step="obfl" port="result"/>
+      <p:output port="result" primary="true">
+        <p:pipe step="pef" port="result"/>
       </p:output>
-      <p:option name="text-transform" select="''"/>
+      <p:output port="obfl" sequence="false">
+        <p:pipe step="obfl-final" port="result"/>
+      </p:output>
+      <p:option name="text-transform" select="'(input:braille)'"/>
+      <p:option name="braille-charset" select="''"/>
       <p:option name="skip-margin-top-of-page" select="'false'"/>
       <p:variable name="allow-text-overflow-trimming" select="'true'"/>
       <p:import href="../../main/resources/xml/css-to-obfl.xpl"/>
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
-                       duplex="true" locale="und">
+                       duplex="true" document-locale="und">
+        <p:with-option name="text-transform" select="$text-transform"/>
+        <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
       </pxi:css-to-obfl>
       <pxi:obfl-normalize-space px:progress=".01"/>
-      <p:for-each><p:identity/></p:for-each>
       <p:try px:progress=".10">
         <p:group>
-          <px:obfl-to-pef px:message="obfl-to-pef" px:progress="1"
-                          locale="und">
-            <p:with-option name="mode" select="concat($text-transform,'(input:text-css)(output:braille)')"/>
+          <px:obfl-to-pef px:message="obfl-to-pef" px:progress="1">
             <p:with-param port="parameters" name="allow-text-overflow-trimming" select="$allow-text-overflow-trimming"/>
           </px:obfl-to-pef>
+          <p:delete match="/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset"/>
         </p:group>
         <p:catch name="catch">
           <p:identity>
@@ -40,6 +46,15 @@
           </p:identity>
         </p:catch>
       </p:try>
+      <p:identity name="pef"/>
+      <p:sink/>
+      <p:delete match="/obfl:obfl/obfl:meta/dp2:default-mode">
+        <p:input port="source">
+          <p:pipe step="obfl" port="result"/>
+        </p:input>
+      </p:delete>
+      <p:delete match="/obfl:obfl/obfl:meta/dp2:braille-charset" name="obfl-final"/>
+      <p:sink/>
     </p:declare-step>
   </x:script>
   
@@ -198,9 +213,11 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <marker-reference marker="running-header" direction="forward" scope="page" text-style="-dotify-def:tmp_3"/>
-                  <marker-reference marker="running-header" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_3"/>
-                  <marker-reference marker="running-header/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_3"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-header" direction="forward" scope="page"/>
+                    <marker-reference marker="running-header" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-header/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -211,14 +228,18 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <marker-reference marker="running-footer" direction="forward" scope="page" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="running-footer" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="running-footer/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-footer" direction="forward" scope="page"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
-                  <marker-reference marker="print-page" direction="forward" scope="page" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_2"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="forward" scope="page"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
               </footer>
             </default-template>
@@ -361,14 +382,18 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <marker-reference marker="running-footer" direction="forward" scope="page" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="running-footer" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="running-footer/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-footer" direction="forward" scope="page"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
-                  <marker-reference marker="print-page" direction="forward" scope="page" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_2"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="forward" scope="page"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
               </footer>
             </default-template>
@@ -470,6 +495,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -2173,6 +2199,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -2371,6 +2398,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -2531,6 +2559,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -3472,7 +3501,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @page { margin-top: 1; @top-left { content: '⠆' } }">
+          <doc style="text-transform: none; @page { margin-top: 1; @top-left { content: '⠆'; text-transform: none } }">
             <body>
               <p style="display:block">⠿⠿⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠿⠿</p>
             </body>
@@ -3493,7 +3522,7 @@
             <default-template>
               <header>
                 <field>
-                  <string value="⠆"/>
+                  <string value="⠆" text-style="text-transform:none"/>
                 </field>
                 <field>
                   <string value=""/>
@@ -3894,6 +3923,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -4703,6 +4733,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -4718,21 +4749,27 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-def:tmp_4"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_4"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="spread-content" start-offset="-1"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-def:tmp_6"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_6"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
               </header>
               <footer>
                 <!--
                 <field>
-                  <marker-reference marker="print-page/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_x"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_x"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_x"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
                 -->
@@ -4741,9 +4778,11 @@
                 </field>
                 <!--
                 <field>
-                  <marker-reference marker="print-page/prev" direction="forward" scope="spread-content" text-style="-dotify-def:tmp_x" start-offset="-1"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_x"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_x"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="spread-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="spread"/>
                 </field>
                 -->
@@ -4756,8 +4795,10 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -4766,9 +4807,11 @@
               <footer>
                 <!--
                 <field>
-                  <marker-reference marker="print-page/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_x"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_x"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_x"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
                 -->
@@ -4961,6 +5004,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -4976,9 +5020,11 @@
               <header/>
               <footer>
                 <field>
-                  <marker-reference marker="print-page/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -5111,6 +5157,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -5126,9 +5173,11 @@
               <header/>
               <footer>
                 <field>
-                  <marker-reference marker="print-page/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -5252,7 +5301,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @page { size: 15 5 } @volume { @begin { content: flow(titlepage) }}">
+          <doc style="text-transform: none; @page { size: 15 5 } @volume { @begin { content: flow(titlepage, document) }}">
             <front>
               <titlepage style="display: block; flow: titlepage">
                 ⠿⠿⠿
@@ -5748,14 +5797,18 @@
               <header/>
               <footer>
                 <field>
-                  <marker-reference marker="foo" direction="forward" scope="page" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="foo" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="foo" direction="forward" scope="page"/>
+                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
-                  <marker-reference marker="foo/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="foo" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_2"/>
-                  <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
+                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
               </footer>
             </default-template>
@@ -5971,7 +6024,7 @@
               <footer/>
               <margin-region align="left" width="2">
                 <indicators>
-                  <marker-indicator markers="indicator/pagenum" indicator="⠿"/>
+                  <marker-indicator markers="indicator/pagenum" indicator="⠿" text-style="text-transform: none"/>
                 </indicators>
               </margin-region>
             </default-template>
@@ -6246,6 +6299,7 @@
           </table>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -6484,7 +6538,7 @@
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none;
-                       @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
+                       @page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display: block">
               ⠤⠤⠤
               <note style="flow: footnotes;
@@ -6593,7 +6647,7 @@
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none;
-                       @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
+                       @page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
               <noteref ref="note_1"
@@ -6670,8 +6724,11 @@
   
   <x:scenario label="test_63">
     <x:documentation>
-      Tests volume notes using ::alternate pseudo-element and target-content() and volume range flow(). Also test that
-      content included before the `flow(endnotes, volume)' is automatically skipped when the volume contains no notes.
+      Tests volume notes using ::alternate pseudo-element and target-content() and volume range
+      flow(). Note that there are sheet breaks between the `flow(endnotes, volume)' and any content
+      that is included before and after it, and that the content before and after is not
+      automatically skipped when the volume contains no notes. To accomplish this you need to use
+      `display: -obfl-list-of-references' and a `::-obfl-on-collection-start' pseudo-element.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -6679,9 +6736,9 @@
           <doc style="text-transform: none;
                       @page { size: 10 6 }
                       @volume {
-                        max-length: 3;
+                        max-length: 4;
                         @end {
-                          content: flow(volume-notes-title) flow(endnotes, volume) }}">
+                          content: flow(volume-notes-title, document) flow(endnotes, volume) }}">
             <body style="&amp;::alternate {
                            flow: volume-notes-title;
                            display: block;
@@ -6729,10 +6786,12 @@
               <footer/>
             </default-template>
           </layout-master>
-          <volume-template sheets-in-volume-max="3">
+          <volume-template sheets-in-volume-max="4">
             <post-content>
-              <dynamic-sequence master="main">
+              <sequence master="main">
                 <block>⠭⠭⠭</block>
+              </sequence>
+              <dynamic-sequence master="main">
                 <list-of-references collection="endnotes" range="volume"/>
               </dynamic-sequence>
             </post-content>
@@ -6811,6 +6870,10 @@
               <section>
                 <page>
                   <row>⠭⠭⠭</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠿⠿⠿</row>
                 </page>
               </section>
@@ -6853,6 +6916,10 @@
               <section>
                 <page>
                   <row>⠭⠭⠭</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠿⠿⠿⠿⠿⠿</row>
                 </page>
               </section>
@@ -6862,6 +6929,11 @@
                 <page>
                   <row>⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠭⠭⠭</row>
                 </page>
               </section>
             </volume>
@@ -6875,13 +6947,14 @@
     <x:documentation>
       Tests numbering of footnotes. Numbers are added both to the note itself and to the note
       reference. The numbering is not reset on each page. Two alternative methods are used for
-      adding a number to the note itself.
+      adding a number to the note itself. The third noteref has the text content "*" which is
+      replaced with the number.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none;
-                       @page { size: 20 6; @footnotes { content: flow(footnotes) }}">
+                       @page { size: 20 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
               <noteref ref="note_1"
@@ -6900,6 +6973,15 @@
                                 display: block;
                                 content: target-content(attr(ref)); }
                               &amp;::alternate::before { content: counter(footnote) ' '; }"/>
+              ⠤⠤⠤
+              <noteref ref="note_1"
+                       style="flow: null;
+                              counter-increment: footnote;
+                              &amp;::alternate { content: '⠦' counter(footnote) '⠴'; }
+                              &amp;::alternate::alternate {
+                                flow: footnotes;
+                                display: block;
+                                content: counter(footnote) ' ' target-content(attr(ref)); }">*</noteref>
             </p>
             <note id="note_1" style="display:none">
               ⠿⠿⠿
@@ -6907,16 +6989,20 @@
             <note id="note_2" style="display:none">
               ⠿⠿⠿
             </note>
+            <note id="note_3" style="display:none">
+              ⠿⠿⠿
+            </note>
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
     </x:context>
     <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
       <x:document type="inline">
-        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
           </meta>
@@ -6929,18 +7015,29 @@
           </layout-master>
           <collection name="footnotes">
             <item id="a">
-              <block> <span translate="">1</span> ⠿⠿⠿ </block>
+              <block translate="pre-translated-text-css">
+                <span translate="">1</span> ⠿⠿⠿
+              </block>
             </item>
             <item id="b">
-              <block> <span translate="">2</span> ⠿⠿⠿ </block>
+              <block translate="pre-translated-text-css">
+                <span translate="">2</span> ⠿⠿⠿
+              </block>
+            </item>
+            <item id="c">
+              <block translate="pre-translated-text-css">
+                <span translate="">3</span> ⠿⠿⠿
+              </block>
             </item>
           </collection>
           <sequence master="main">
-            <block>
+            <block translate="pre-translated-text-css">
               ⠤⠤⠤ ⠦<span translate="">1</span>⠴
               <anchor item="a"/>
               ⠤⠤⠤ ⠦<span translate="">2</span>⠴
               <anchor item="b"/>
+              ⠤⠤⠤ ⠦<span translate="">3</span>⠴
+              <anchor item="c"/>
             </block>
           </sequence>
         </obfl>
@@ -6962,11 +7059,11 @@
               <section>
                 <page>
                   <row>⠤⠤⠤⠀⠦⠼⠁⠴⠀⠤⠤⠤⠀⠦⠼⠃⠴</row>
-                  <row/>
-                  <row/>
+                  <row>⠤⠤⠤⠀⠦⠼⠉⠴</row>
                   <row/>
                   <row>⠼⠁⠀⠿⠿⠿</row>
                   <row>⠼⠃⠀⠿⠿⠿</row>
+                  <row>⠼⠉⠀⠿⠿⠿</row>
                 </page>
               </section>
             </volume>
@@ -6978,14 +7075,17 @@
   
   <x:scenario label="test_65">
     <x:documentation>
-      Tests chapter endnotes using flow() function in ::after pseudo-element.
+      Tests chapter endnotes using flow() function in ::after pseudo-element. Also tests that
+      `display: -obfl-list-of-references' can occur outside of a @begin or @end area.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none; @page { size: 20 6 }">
             <section style="display: block;
-                            &amp;::after { display:block; content: flow(chapter-notes)}">
+                            &amp;::after {
+                              display: block;
+                              content: flow(chapter-notes) }">
               <h1 style="display:block; page-break-before:always">
                 ⠤⠤⠤
               </h1>
@@ -7004,7 +7104,9 @@
               ⠤⠤⠤
             </section>
             <section style="display: block;
-                            &amp;::after { display:block; content: flow(chapter-notes)}">
+                            &amp;::after {
+                              display: -obfl-list-of-references;
+                              content: flow(chapter-notes) }">
               <h1 style="display:block; page-break-before:always">
                 ⠤⠤⠤
               </h1>
@@ -7138,6 +7240,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -7201,7 +7304,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="@page { size: 10 6; @footnotes { content: flow(footnotes) }}">
+          <body style="@page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
               <noteref ref="note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
@@ -7299,7 +7402,7 @@
                        @page {
                          size: 20 10;
                          @footnotes {
-                           content: flow(footnotes);
+                           content: flow(footnotes, page);
                            -obfl-fallback-collection: endnotes; }}
                        @volume {
                          @end {
@@ -7418,7 +7521,7 @@
                        @page {
                          size: 20 10;
                          @footnotes {
-                           content: flow(footnotes);
+                           content: flow(footnotes, page);
                            -obfl-fallback-collection: endnotes; }}
                        @volume {
                          @end {
@@ -7538,7 +7641,10 @@
   <x:scenario label="test_70">
     <x:documentation>
       Tests document scope table of contents in @begin area of first volume and volume scope table
-      of contents in @begin are of subsequent volumes.
+      of contents in @begin area of subsequent volumes. Note that there are sheet breaks between the
+      TOC and any content that is included before and after it, and that content before the TOC is
+      not automatically put in a "on-toc-start" element. For this you need to use a
+      `::-obfl-on-toc-start' pseudo-element.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -7548,8 +7654,8 @@
                         size: 15 7;
                         margin-bottom: 1;
                         @bottom-right { content: counter(page) }}
-                      @volume:first { max-length: 3; @begin { content: flow(first-front) }}
-                      @volume { max-length: 3; @begin { content: flow(next-front) }}">
+                      @volume:first { max-length: 4; @begin { content: flow(first-front, document) }}
+                      @volume { max-length: 4; @begin { content: flow(next-front, document) }}">
             <front>
               <h1 style="display: block; flow: first-front">
                 ⠿ ⠿ ⠿ ⠿
@@ -7602,6 +7708,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -7657,7 +7764,7 @@
               </toc-block>
             </toc-block>
           </table-of-contents>
-          <volume-template sheets-in-volume-max="3" use-when="(! (= $volume 1))">
+          <volume-template sheets-in-volume-max="4" use-when="(! (= $volume 1))">
             <pre-content>
               <sequence master="main">
                 <block translate="pre-translated-text-css"> ⠿⠿⠿⠿ </block>
@@ -7669,13 +7776,13 @@
               </toc-sequence>
             </pre-content>
           </volume-template>
-          <volume-template sheets-in-volume-max="3" use-when="(= $volume 1)">
+          <volume-template sheets-in-volume-max="4" use-when="(= $volume 1)">
             <pre-content>
+              <sequence master="main">
+                <block translate="pre-translated-text-css"> ⠿ ⠿ ⠿ ⠿ </block>
+                <block translate="pre-translated-text-css"> ⠿⠿⠿⠿ </block>
+              </sequence>
               <toc-sequence toc="toc" master="main" range="document">
-                <on-toc-start>
-                  <block translate="pre-translated-text-css"> ⠿ ⠿ ⠿ ⠿ </block>
-                  <block translate="pre-translated-text-css"> ⠿⠿⠿⠿ </block>
-                </on-toc-start>
                 <on-volume-start>
                   <block>
                     <evaluate expression="(round $started-volume-number)"/>
@@ -7761,20 +7868,31 @@
                 <page>
                   <row>⠿⠀⠿⠀⠿⠀⠿</row>
                   <row>⠿⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠼⠁</row>
                   <row>⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁</row>
                   <row>⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁</row>
                   <row>⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠉</row>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
-                </page>
-                <page>
                   <row>⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠙</row>
                   <row>⠼⠃</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠉</row>
+                </page>
+                <page>
                   <row>⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠑</row>
                   <row>⠀⠼⠃⠀⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠋</row>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃</row>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠙</row>
                 </page>
               </section>
               <section>
@@ -7858,21 +7976,6 @@
                   <row>⠼⠃</row>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠋</row>
                 </page>
-              </section>
-            </volume>
-            <volume cols="15" rows="7" rowgap="0" duplex="true">
-              <section>
-                <page>
-                  <row>⠿⠿⠿⠿</row>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
-                </page>
-              </section>
-              <section>
                 <page>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤⠀</row>
@@ -7912,10 +8015,17 @@
                         size: 15 7;
                         margin-bottom: 1;
                         @bottom-right {content: counter(page) }}
-                      @volume { @begin { content: flow(front) }}">
+                      @volume { @begin { content: flow(front, document) }}">
             <front>
-              <h1 id="ch_0" style="display:block; margin-bottom:1; flow:front; text-transform:auto"> 0 </h1>
-              <toc style="display: -obfl-toc; flow: front; text-transform: auto">
+              <toc id="ch_0"
+                   style="display: -obfl-toc;
+                          flow: front;
+                          text-transform: auto;
+                          &amp;::-obfl-on-toc-start {
+                            display: block;
+                            margin-bottom: 1;
+                            text-transform: auto;
+                            content: '0'; }">
                 <entry ref="ch_0" style="display: block;
                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 0 </entry>
                 <entry ref="ch_1" style="display: block;
@@ -7940,6 +8050,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -8100,7 +8211,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="text-transform: none; @volume { @begin { content: flow(foo) flow(bar); }}">
+          <body style="text-transform: none; @volume { @begin { content: flow(foo, document) flow(bar, document); }}">
             <level1 style="display: block; page-break-after: always; flow: foo;">
               <p style="display: block">⠤⠤⠤</p>
             </level1>
@@ -8211,7 +8322,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="@volume { @begin { content: flow(front); }}">
+          <body style="@volume { @begin { content: flow(front, document); }}">
             <level1 style="display: block; flow: front; page-break-before: always;">
               <h1 style="display: block">⠿⠿⠿ 0</h1>
             </level1>
@@ -8227,6 +8338,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -8252,13 +8364,12 @@
           </table-of-contents>
           <volume-template sheets-in-volume-max="1000">
             <pre-content>
-              <toc-sequence master="main" range="document" toc="toc">
-                <on-toc-start>
-                  <block break-before="page">
-                    <block>⠿⠿⠿ 0</block>
-                  </block>
-                </on-toc-start>
-              </toc-sequence>
+              <sequence master="main">
+                <block break-before="page">
+                  <block>⠿⠿⠿ 0</block>
+                </block>
+              </sequence>
+              <toc-sequence master="main" range="document" toc="toc"/>
             </pre-content>
           </volume-template>
           <sequence master="main">
@@ -8292,6 +8403,8 @@
                 <page>
                   <row>⠿⠿⠿⠀⠼⠚</row>
                 </page>
+              </section>
+              <section>
                 <page>
                   <row>⠿⠿⠿⠀⠼⠁⠀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠼⠁</row>
                 </page>
@@ -8323,7 +8436,7 @@
                           content: counter(page); }}
                       @volume {
                         @begin {
-                          content: flow(titlepage);
+                          content: flow(titlepage, document);
                           @page { size: 15 5 }}}">
             <front>
               <titlepage style="display: block; flow: titlepage">
@@ -8336,6 +8449,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -8421,7 +8535,7 @@
                        @page {
                          size: 10 6;
                          @footnotes {
-                           content: flow(footnotes);
+                           content: flow(footnotes, page);
                            max-height: 4;
                            border-top-pattern: ⠒; }}">
             <p style="display:block">
@@ -8747,6 +8861,11 @@
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               </p>
             </div>
+            <div style="display: block; border-top-pattern: ⠒; page-break-before: always">
+              <p style="display: block; border-top-pattern: ⠒; margin-top: 2">
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+              </p>
+            </div>
             <div style="display: block; page-break-before: always">
               <p style="display: block; padding-top: 2">
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -8781,7 +8900,10 @@
           <sequence master="main">
             <block margin-bottom="2">
               <block margin-bottom="2">
-                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <block display-when="(! $starts-at-top-of-page)" margin-top="2"/>
+                <block>
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
               </block>
               <block margin-bottom="2">
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -8796,8 +8918,19 @@
               </block>
             </block>
             <block border-top-style="solid" border-top-align="center" break-before="page">
-              <block margin-top="2">
-                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+              <block>
+                <block display-when="(! $starts-at-top-of-page)" margin-top="2"/>
+                <block>
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
+              </block>
+            </block>
+            <block border-top-style="solid" border-top-align="center" break-before="page">
+              <block>
+                <block display-when="(! $starts-at-top-of-page)" margin-top="2"/>
+                <block border-top-style="solid" border-top-align="center">
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
               </block>
             </block>
             <block break-before="page">
@@ -8806,9 +8939,12 @@
               </block>
             </block>
             <block break-before="sheet">
-              <block margin-bottom="2"/>
+              <block/>
               <block>
-                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <block display-when="(! $starts-at-top-of-page)" margin-top="2"/>
+                <block>
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
               </block>
             </block>
           </sequence>
@@ -8853,12 +8989,19 @@
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                 </page>
                 <page>
+                  <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                  <row/>
+                  <row/>
+                  <row>⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒</row>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                </page>
+                <page>
                   <row/>
                   <row/>
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                 </page>
-                <page/>
                 <page>
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
@@ -9097,7 +9240,7 @@
           <body style="text-transform: none;
                        display: block;
                        @page { size: 15 5; }
-                       @volume { max-length: 3; @begin { content: flow(pre) }}">
+                       @volume { max-length: 3; @begin { content: flow(pre, document) }}">
             <p style="display: block; text-transform: auto; flow: pre">
               <span style="&amp;::before { content: -obfl-evaluate('(round $sheets-in-volume)') ' ⠌ ' -obfl-evaluate('(round $sheets-in-document)') }"/>
             </p>
@@ -9110,6 +9253,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -9233,7 +9377,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <body style="text-transform: none; @page { size: 10 6; @footnotes { content: flow(footnotes) }}">
+          <body style="text-transform: none; @page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
               <note style="flow:footnotes; display:block">⠿</note>
@@ -9321,7 +9465,7 @@
           <doc style="text-transform: none;
                       @page { size: 15 7 }
                       @volume { max-length: 2 }
-                      @volume:last { max-length: 2; @begin { content: flow(toc) }}">
+                      @volume:last { max-length: 2; @begin { content: flow(toc, document) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
               <entry ref="ch_1"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
@@ -9343,6 +9487,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -9502,7 +9647,7 @@
           <doc style="text-transform: none;
                       @page { size: 15 7 }
                       @volume { max-length: 2 }
-                      @volume:last { max-length: 2; @end { content: flow(toc) }}">
+                      @volume:last { max-length: 2; @end { content: flow(toc, document) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
               <entry ref="ch_1"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
@@ -9524,6 +9669,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -9682,7 +9828,7 @@
         <x:document type="inline">
           <doc style="text-transform: none;
                       @page { size: 20 10 }
-                      @volume:first { @begin { content: flow(front); @page { size: 10 5 }}}">
+                      @volume:first { @begin { content: flow(front, document); @page { size: 10 5 }}}">
             <front style="display: block; flow: front">
               ⠤⠤⠤⠤⠤
               <toc style="display: block; @page { size: 10 10 }">
@@ -9797,6 +9943,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -9857,7 +10004,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage) }}">
+          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage, document) }}">
             <titlepage style="display: block; flow: titlepage">
               ⠤⠤⠤⠤⠤
               <span style="&amp;::before {
@@ -9871,6 +10018,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -9947,7 +10095,7 @@
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage) }}">
+          <doc style="text-transform: none; @volume { @begin { content: flow(titlepage, document) }}">
             <titlepage style="display: block; flow: titlepage; text-transform: auto">
               1<span style="&amp;::after {
                               text-transform: downshift;
@@ -10048,11 +10196,11 @@
                        @page {
                          size: 20 10;
                          @footnotes {
-                           content: flow(footnotes);
+                           content: flow(footnotes, page);
                            -obfl-fallback-collection: endnotes; }}
                        @volume {
                          @begin {
-                           content: flow(front) }
+                           content: flow(front, document) }
                          @end {
                            content: flow(endnotes, volume); }}">
             <p style="display: block; flow: front; -obfl-use-when-collection-not-empty: footnotes">
@@ -10952,9 +11100,11 @@
                   <string value=""/>
                 </field>
                 <field>
-                  <marker-reference marker="running-footer" direction="forward" scope="page" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="running-footer" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="running-footer/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-footer" direction="forward" scope="page"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -11027,7 +11177,7 @@
                           content: counter(page) }}
                       @volume {
                         @begin {
-                          content: flow(titlepage) }}">
+                          content: flow(titlepage, document) }}">
             <front>
               <titlepage style="display: block; flow: titlepage; counter-set: pre-page 11">
                 ⠿⠿⠿
@@ -11039,6 +11189,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -11262,6 +11413,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -11277,8 +11429,10 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -11375,7 +11529,7 @@
                       @volume:last {
                         max-length: 3;
                         @end {
-                          content: flow(endnotes) }}">
+                          content: flow(endnotes, document) }}">
             <body>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -11544,11 +11698,11 @@
                       @volume:last {
                         max-length: 3;
                         @end {
-                          content: flow(endnotes-container) }}">
+                          content: flow(endnotes-container, document) }}">
             <body style="&amp;::alternate {
                            display: -obfl-list-of-references;
                            flow: endnotes-container;
-                           content: -obfl-collection(endnotes); }
+                           content: -obfl-collection(endnotes, document); }
                          &amp;::alternate::-obfl-on-volume-start {
                            display: block;
                            border-bottom-pattern: ⠒;
@@ -11580,6 +11734,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -11732,7 +11887,7 @@
         <x:document type="inline">
           <doc style="text-transform: none;
                       @page { size: 15 5 }
-                      @volume { @begin { content: flow(titlepage1) flow(titlepage2) }}">
+                      @volume { @begin { content: flow(titlepage1, document) flow(titlepage2, document) }}">
             <front>
               <titlepage style="display: block; flow: titlepage1">
                 ⠿⠿⠿
@@ -12156,7 +12311,19 @@
                            counter-increment: page;
                            size: 15 5;
                            margin-bottom: 1;
-                           @bottom-right { content: counter(page) }}">
+                           @bottom-right { content: counter(page); }}
+                         @volume:first {
+                           @begin {
+                             counter-set: custom-page 11;
+                             content: flow(begin, document);
+                             @page {
+                               counter-increment: custom-page;
+                               size: 15 5;
+                               margin-bottom: 1;
+                               @bottom-right { content: counter(custom-page); }}}}">
+              <section style="display: block; flow: begin">
+                ⠿⠿⠿
+              </section>
               <section style="display: block">
                 ⠤⠤⠤
               </section>
@@ -12168,11 +12335,11 @@
               </section>
               <section style="display: block;
                               @page {
-                                counter-increment: page2;
+                                counter-increment: custom-page;
                                 size: 15 5;
                                 margin-bottom: 1;
-                                @bottom-right { content: counter(page2) }}">
-                ⠤⠤⠤
+                                @bottom-right { content: counter(custom-page) }}">
+                ⠉⠉⠉
               </section>
               <section style="display: block">
                 ⠤⠤⠤
@@ -12181,6 +12348,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -12191,6 +12359,19 @@
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
           </meta>
+          <layout-master name="c" duplex="true" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <layout-master name="a" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
@@ -12217,6 +12398,16 @@
               </footer>
             </default-template>
           </layout-master>
+          <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume 1))"/>
+          <volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
+            <pre-content>
+              <sequence master="c" page-number-counter="custom-page" initial-page-number="11">
+                <block>
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+            </pre-content>
+          </volume-template>
           <sequence master="a">
             <block>
               ⠤⠤⠤
@@ -12228,9 +12419,9 @@
               ⠤⠤⠤
             </block>
           </sequence>
-          <sequence master="b" page-number-counter="page2">
+          <sequence master="b" page-number-counter="custom-page">
             <block break-before="sheet">
-              ⠤⠤⠤
+              ⠉⠉⠉
             </block>
           </sequence>
           <sequence master="a">
@@ -12256,6 +12447,15 @@
             <volume rows="5" cols="15" rowgap="0" duplex="true">
               <section>
                 <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠤⠤⠤</row>
                   <row/>
                   <row/>
@@ -12279,11 +12479,11 @@
               </section>
               <section>
                 <page>
-                  <row>⠤⠤⠤</row>
+                  <row>⠉⠉⠉</row>
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
                 </page>
               </section>
               <section>
@@ -12317,7 +12517,7 @@
                         @bottom-right {
                           content: counter(page) }}
                       @volume {
-                        @begin { content: flow(titlepage) }}">
+                        @begin { content: flow(titlepage, document) }}">
             <front>
               <titlepage style="display: block; flow: titlepage">
                 ⠿⠿⠿
@@ -12331,6 +12531,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -12886,6 +13087,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -12901,13 +13103,17 @@
               <header/>
               <footer>
                 <field>
-                  <marker-reference marker="print-page" direction="forward" scope="page" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="forward" scope="page"/>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
-                  <marker-reference marker="print-page" direction="backward" scope="sequence" text-style="-dotify-def:tmp_2"/>
-                  <marker-reference marker="print-page/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_2"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
               </footer>
             </default-template>
@@ -13423,6 +13629,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -14165,8 +14372,8 @@
                         size: 15 7;
                         margin-bottom: 1;
                         @bottom-right { content: counter(page) }}
-                      @volume:first { @begin { content: flow(first-front) }}
-                      @volume { @begin { content: flow(next-front) }}">
+                      @volume:first { @begin { content: flow(first-front, document) }}
+                      @volume { @begin { content: flow(next-front, document) }}">
             <front>
               <ol style="display: -obfl-toc;
                          flow: first-front;
@@ -14618,9 +14825,11 @@
               <header/>
               <footer>
                 <field>
-                  <marker-reference marker="foo/if-not-set-next/prev" direction="forward" scope="page-content" text-style="-dotify-def:tmp_1"/>
-                  <marker-reference marker="foo/if-not-set-next" direction="backward" scope="sequence" offset="-1" text-style="-dotify-defifndef:tmp_1"/>
-                  <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="-dotify-ifndef:tmp_1"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="foo/if-not-set-next/prev" direction="forward" scope="page-content"/>
+                    <marker-reference marker="foo/if-not-set-next" direction="backward" scope="sequence" offset="-1"/>
+                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                  </compound-marker-reference>
                 </field>
                 <field>
                   <string value=""/>
@@ -14741,6 +14950,7 @@
           </doc>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -14757,12 +14967,11 @@
               <footer>
                 <field allow-text-flow="true"/>
                 <field>
-                  <marker-reference marker="foo" direction="forward" scope="page"
-                                    text-style="-dotify-def:tmp_1; white-space: pre-wrap"/>
-                  <marker-reference marker="foo" direction="backward" scope="sequence"
-                                    text-style="-dotify-defifndef:tmp_1; white-space: pre-wrap"/>
-                  <marker-reference marker="foo/entry" direction="backward" scope="sequence"
-                                    text-style="-dotify-ifndef:tmp_1; white-space: pre-wrap"/>
+                  <compound-marker-reference>
+                    <marker-reference marker="foo" direction="forward" scope="page" text-style="white-space: pre-wrap"/>
+                    <marker-reference marker="foo" direction="backward" scope="sequence" text-style="white-space: pre-wrap"/>
+                    <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="white-space: pre-wrap"/>
+                  </compound-marker-reference>
                   <string value=" "/>
                   <current-page number-format="default" text-style="white-space: pre-wrap"/>
                 </field>
@@ -14887,15 +15096,11 @@
           <volume-transition range="sheet">
             <any-resumed>
               <block>
-                <style name="-dotify-def:tmp_1">
+                <compound-marker-reference>
                   <marker-reference marker="foo/if-not-set-next/prev" direction="forward" scope="page-content"/>
-                </style>
-                <style name="-dotify-defifndef:tmp_1">
                   <marker-reference marker="foo/if-not-set-next" direction="backward" scope="sequence" offset="-1"/>
-                </style>
-                <style name="-dotify-ifndef:tmp_1">
                   <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
-                </style>
+                </compound-marker-reference>
               </block>
             </any-resumed>
           </volume-transition>
@@ -15426,11 +15631,11 @@
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block display-when="(! $starts-at-top-of-page)" keep="page">⠿</block>
+              <block display-when="(! $starts-at-top-of-page)">⠿</block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
-              <block display-when="(! $starts-at-top-of-page)" keep="page">⠿</block>
+              <block display-when="(! $starts-at-top-of-page)">⠿</block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </block>
@@ -15480,7 +15685,7 @@
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none;
-                       @volume { @begin { content: flow(front); }}">
+                       @volume { @begin { content: flow(front, document); }}">
             <list style="display: -obfl-toc; flow: front"/>
             <h1 style="display: block">⠿⠿⠿</h1>
           </body>
@@ -15549,7 +15754,7 @@
       <x:input port="source">
         <x:document type="inline">
           <body style="text-transform: none;
-                       @volume { @begin { content: flow(front); }}">
+                       @volume { @begin { content: flow(front, document); }}">
             <list style="display: -obfl-toc; flow: front">
               <li style="display: block"/>
               <li style="display: block">
@@ -15562,6 +15767,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="text-transform" select="'(number-translator)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -15964,7 +16170,7 @@
           <body style="text-transform: none;
                        @page {
                          size: 10 10;
-                         @footnotes { content: flow(footnotes) }}">
+                         @footnotes { content: flow(footnotes, page) }}">
             <table style="display: block;
                           render-table-by: row, column;
                           &amp;::table-by(row)::list-item {
@@ -16075,6 +16281,12 @@
           </doc>
         </x:document>
       </x:input>
+       <!--
+           Trick to select UnityBrailleTranslator as main translator while still being able to
+           select NumberBrailleTranslator using @text-transform. We can't do this with
+           "(input:braille)".
+       -->
+      <x:option name="text-transform" select="'(document-locale:und-Brai)'"/>
     </x:call>
     <x:context label="obfl">
       <x:document type="port" port="obfl"/>
@@ -16203,6 +16415,296 @@
                   <row>⠟⠀⠤⠤⠤</row>
                   <row>⠿⠀⠤⠤⠤</row>
                   <row>⠿⠁⠀⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_138">
+    <x:documentation>
+      Tests that noterefs without content also generate anchors. Under certain conditions
+      consecutive anchors collapse into one and the corresponding items are merged.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <body style="text-transform: none;
+                       @page {
+                         size: 20 10;
+                         @footnotes { content: flow(footnotes, page) }}">
+            <p>
+              <a href="#note_1"
+                 style="display: none
+                        &amp;::alternate {
+                          display: block;
+                          flow: footnotes;
+                          content: target-content(attr(href)); }"/>
+              <a href="#note_2"
+                 style="display: none;
+                        &amp;::alternate {
+                          display: block;
+                          flow: footnotes;
+                          content: target-content(attr(href)); }"/>
+            </p>
+            <a href="#note_3"
+               style="display: none
+                      &amp;::alternate {
+                        display: block;
+                        flow: footnotes;
+                        content: target-content(attr(href)); }"/>
+            <a href="#note_4"
+               style="display: none;
+                      &amp;::alternate {
+                        display: block;
+                        flow: footnotes;
+                        content: target-content(attr(href)); }"/>
+            <p style="display: block">
+              ⠉⠉⠉
+            </p>
+            <aside id="note_1" style="display: none">
+              ⠿⠿⠿
+            </aside>
+            <aside id="note_2" style="display: none">
+              ⠿⠿⠿ ⠿⠿⠿
+            </aside>
+            <aside id="note_3" style="display: none">
+              ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿
+            </aside>
+            <aside id="note_4" style="display: none">
+              ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿
+            </aside>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+          <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
+            <dp2:style-type>text/css</dp2:style-type>
+          </meta>
+          <layout-master name="master" duplex="true" page-width="20" page-height="10">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+            <page-area align="bottom" max-height="5" collection="footnotes"/>
+          </layout-master>
+          <collection name="footnotes">
+            <item id="item_1">
+              <block translate="pre-translated-text-css">
+                ⠿⠿⠿
+              </block>
+            </item>
+            <item id="item_2">
+              <block translate="pre-translated-text-css">
+                ⠿⠿⠿ ⠿⠿⠿
+              </block>
+            </item>
+            <item id="item_3">
+              <block translate="pre-translated-text-css">
+                ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿
+              </block>
+              <block translate="pre-translated-text-css">
+                ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿ ⠿⠿⠿
+              </block>
+            </item>
+          </collection>
+          <sequence master="master">
+            <block>
+              <anchor item="item_1"/>
+              <anchor item="item_2"/>
+              <anchor item="item_3"/>
+            </block>
+            <block translate="pre-translated-text-css">
+              ⠉⠉⠉
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠉⠉⠉</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠀⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿⠀⠿⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_139">
+    <x:documentation>
+      Tests "braille-charset" option.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <body style="text-transform: none">
+            <p style="display: block;
+                      border-top-pattern: ⠉;
+                      border-bottom-pattern: ⠤;
+                      &amp;::before {
+                        content: leader('⠄') '⠀'; }">⠿⠿⠿</p>
+          </body>
+        </x:document>
+      </x:input>
+      <x:option name="braille-charset" select="resolve-uri('../resources/braille-charset.dis')"/>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
+            <dp2:style-type>text/css</dp2:style-type>
+          </meta>
+          <layout-master name="master" duplex="true" page-width="40" page-height="25">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="master">
+            <block border-top-style="solid" border-top-align="outer"
+                   border-bottom-style="solid" border-bottom-align="outer">
+              <leader pattern="." position="100%" align="right"/>⠀<style name="braille-charset: unicode">⠿⠿⠿</style>
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="40" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row dp2:ascii="‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾">⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉</row>
+                  <row dp2:ascii=".................................... XXX">⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠀⠿⠿⠿</row>
+                  <row dp2:ascii="________________________________________">⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤⠤</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_140">
+    <x:documentation>
+      Tests "hyphenate-character" property.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <body style="text-transform: none;
+                       @page { size: 5 10 }">
+            <p style="display: block">
+              ⠿⠿⠿­⠿⠿⠿
+              ⠿⠿⠿­⠿⠿⠿
+              <span style="hyphenate-character: '⠈'">⠿⠿⠿­⠿⠿⠿</span>
+              ⠿⠿⠿­⠿⠿⠿
+              ⠿⠿⠿­⠿⠿⠿
+            </p>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
+          <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
+            <dp2:style-type>text/css</dp2:style-type>
+          </meta>
+          <layout-master name="master" duplex="true" page-width="5" page-height="10">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="master">
+            <block>
+              ⠿⠿⠿­⠿⠿⠿
+              ⠿⠿⠿­⠿⠿⠿
+              <style name="hyphenate-character: '⠈'">⠿⠿⠿­⠿⠿⠿</style>
+              ⠿⠿⠿­⠿⠿⠿
+              ⠿⠿⠿­⠿⠿⠿
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="5" rows="10" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠤</row>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠤</row>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠈</row>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠤</row>
+                  <row>⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠤</row>
+                  <row>⠿⠿⠿</row>
                 </page>
               </section>
             </volume>

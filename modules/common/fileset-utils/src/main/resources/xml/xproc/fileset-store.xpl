@@ -53,14 +53,21 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The output fileset is a copy of the input fileset but with <code>original-href</code>
             attributes added (or overwritten) with the same value as <code>href</code>. Missing
-            files are removed if the "fail-or-error" option is not set (default).</p>
+            files are removed if the "fail-on-error" option is not set (default).</p>
         </p:documentation>
         <p:pipe port="result" step="store"/>
     </p:output>
 
-    <p:option name="fail-on-error" required="false" select="'false'">
+    <p:option name="fail-on-error" required="false" select="false()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Whether to ignore missing files or raise an error.</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="temp-dir" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>If set, this is the directory that will be used for extracting zipped files before
+            they are stored at the final location (for testing purposes).</p>
         </p:documentation>
     </p:option>
 
@@ -106,7 +113,7 @@
 
     <p:variable name="fileset-base" select="base-uri(/*)"/>
 
-    <pxi:fileset-fix-original-hrefs name="fix">
+    <pxi:fileset-fix-original-hrefs name="fix" purge="true">
         <p:documentation>
             Make the original-href attributes reflect what is actually stored on disk. Also normalizes
             @xml:base, @href and @original-href, relativizes @href against @xml:base, makes
@@ -116,7 +123,6 @@
             <p:pipe step="main" port="in-memory.in"/>
         </p:input>
         <p:with-option name="fail-on-missing" select="$fail-on-error"/>
-        <p:with-option name="purge" select="'true'"/>
     </pxi:fileset-fix-original-hrefs>
 
     <p:viewport match="d:file">
@@ -145,7 +151,25 @@
         <p:when test="//d:file[@original-href[contains(resolve-uri(.,base-uri(..)),'!/') or matches(.,'^(bundle|jar):')]]">
             <p:identity name="fileset"/>
             <p:sink/>
-            <px:tempdir delete-on-exit="true"/>
+            <p:choose>
+                <p:when test="not($temp-dir='')">
+                    <p:in-scope-names name="vars"/>
+                    <p:template>
+                        <p:input port="template">
+                            <p:inline><c:result>{$temp-dir}/</c:result></p:inline>
+                        </p:input>
+                        <p:input port="parameters">
+                            <p:pipe step="vars" port="result"/>
+                        </p:input>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:template>
+                </p:when>
+                <p:otherwise>
+                    <px:tempdir delete-on-exit="true"/>
+                </p:otherwise>
+            </p:choose>
             <px:normalize-uri name="unzip-dir">
                 <p:with-option name="href" select="string(/*)"/>
             </px:normalize-uri>
@@ -169,6 +193,10 @@
                 </px:fileset-add-entry>
                 <px:fileset-load/>
                 <p:store cx:decode="true" encoding="base64" name="store-binary">
+                    <!--
+                        Note that if the final target location is a file inside a ZIP, the temporary
+                        location will be a file within a regular directory ending with a '!'.
+                    -->
                     <p:with-option name="href" select="resolve-uri($href,$unzip-dir)"/>
                 </p:store>
                 <p:add-attribute match="/*" attribute-name="original-href">
@@ -212,7 +240,25 @@
                     </p:output>
                     <p:identity name="zip-fileset"/>
                     <p:sink/>
-                    <px:tempdir delete-on-exit="true"/>
+                    <p:choose>
+                        <p:when test="not($temp-dir='')">
+                            <p:in-scope-names name="vars"/>
+                            <p:template>
+                                <p:input port="template">
+                                    <p:inline><c:result>{$temp-dir}/</c:result></p:inline>
+                                </p:input>
+                                <p:input port="parameters">
+                                    <p:pipe step="vars" port="result"/>
+                                </p:input>
+                                <p:input port="source">
+                                    <p:empty/>
+                                </p:input>
+                            </p:template>
+                        </p:when>
+                        <p:otherwise>
+                            <px:tempdir delete-on-exit="true"/>
+                        </p:otherwise>
+                    </p:choose>
                     <px:normalize-uri name="unzip-dir">
                         <p:with-option name="href" select="string(/*)"/>
                     </px:normalize-uri>

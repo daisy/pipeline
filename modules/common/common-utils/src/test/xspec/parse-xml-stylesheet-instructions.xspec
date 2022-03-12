@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               stylesheet="../../main/resources/xml/xslt/parse-xml-stylesheet-instructions.xsl">
+
+    <x:scenario label="xml-stylesheet processing instructions">
+        <x:scenario label="with 'text/css' type">
+            <x:context>
+                <?xml-stylesheet href="test.css" type="text/css"?>
+            </x:context>
+            <x:expect label="are extracted">
+                <d:xml-stylesheet-instruction href="test.css" type="text/css"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="using single quotes">
+            <x:context>
+                <?xml-stylesheet href='test.css' type='text/css'?>
+            </x:context>
+            <x:expect label="are extracted">
+                <d:xml-stylesheet-instruction href="test.css" type="text/css"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with other type">
+            <x:context>
+                <?xml-stylesheet href="test.css" type="foo"?>
+            </x:context>
+            <x:expect label="are extracted">
+                <d:xml-stylesheet-instruction href="test.css" type="foo"/>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="other processing instructions">
+            <x:context>
+                <?foo href="test.css" type="text/css"?>
+            </x:context>
+            <x:expect label="are ignored"/>
+        </x:scenario>
+    </x:scenario>
+
+</x:description>

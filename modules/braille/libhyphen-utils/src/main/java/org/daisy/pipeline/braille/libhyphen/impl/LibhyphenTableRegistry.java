@@ -29,8 +29,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 @Component(
 	name = "org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTableRegistry",
 	service = {
-		LibhyphenTableProvider.class,
-		LibhyphenTableResolver.class
+		LibhyphenTableRegistry.class
 	}
 )
 public class LibhyphenTableRegistry extends ResourceRegistry<LibhyphenTablePath>

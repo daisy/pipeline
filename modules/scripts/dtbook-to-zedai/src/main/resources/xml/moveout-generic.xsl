@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:f="http://www.daisy.org/ns/pipeline/internal-function"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-function"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                exclude-result-prefixes="#all" >
     
     <xsl:output indent="yes" method="xml"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     
     <xsl:template match="/*" priority="100">
         <xsl:apply-templates select="." mode="moveout"/>
@@ -26,9 +29,11 @@
                 <xsl:for-each-group select="$children" group-adjacent="f:is-target(.)">
                     <xsl:choose>
                         <xsl:when test="current-grouping-key()">
-                            <xsl:message>Moving out <xsl:value-of
+                            <xsl:call-template name="pf:debug">
+                                <xsl:with-param name="msg">Moving out <xsl:value-of
                                     select="current-group()/concat(local-name(.),if (@id) then concat('#',@id) else '')"
-                                /></xsl:message>
+                                /></xsl:with-param>
+                            </xsl:call-template>
                             <xsl:apply-templates select="current-group()" mode="moveout"/>
                         </xsl:when>
                         <xsl:when test="every $n in current-group() satisfies $n/self::text()[normalize-space()='']">

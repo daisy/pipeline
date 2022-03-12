@@ -18,7 +18,7 @@
     <!-- <xsl:import href="uri-functions.xsl"/> -->
     <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
 
-    <xsl:param name="source-renamed" as="xs:string" select="'false'"/>
+    <xsl:param name="source-renamed" as="xs:boolean" select="false()"/>
 
     <!--
         A fileset defines the relocation of resources.
@@ -28,13 +28,13 @@
     </xsl:variable>
 
     <xsl:variable name="original-doc-base" as="xs:string"
-                  select="if (not($source-renamed='true'))
+                  select="if (not($source-renamed))
                           then pf:html-base-uri(/)
                           else (for $file in $mapping/d:file[resolve-uri(@href,base-uri(.))=base-uri(current())][1]
                                   return pf:html-base-uri(/,$file/@original-href),
                                 pf:html-base-uri(/))[1]"/>
     <xsl:variable name="doc-base" as="xs:string"
-                  select="if ($source-renamed='true')
+                  select="if ($source-renamed)
                           then pf:html-base-uri(/)
                           else (for $file in $mapping/d:file[@original-href]
                                                             [resolve-uri(@original-href,base-uri(.))=base-uri(current())][1]

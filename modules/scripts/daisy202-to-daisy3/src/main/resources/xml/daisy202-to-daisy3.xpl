@@ -57,7 +57,7 @@
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
 		<p:documentation>
-			px:html-to-fileset
+			px:html-load
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -160,23 +160,24 @@
 			Filter content documents
 		</p:documentation>
 		<p:group name="html">
-			<p:output port="fileset" primary="true">
-				<p:pipe step="load" port="result.fileset"/>
-			</p:output>
+			<p:output port="fileset" primary="true"/>
 			<p:output port="in-memory" sequence="true">
-				<p:pipe step="load" port="result"/>
+				<p:pipe step="filter" port="result.in-memory"/>
 			</p:output>
-			<px:fileset-filter media-types="application/xhtml+xml">
-				<p:input port="source">
-					<p:pipe step="copy" port="result.fileset"/>
-				</p:input>
-			</px:fileset-filter>
+			<p:output port="fileset-with-resources">
+				<p:pipe step="html-load" port="result.fileset"/>
+			</p:output>
 			<p:delete match="d:file[@href='ncc.html']"/>
-			<px:fileset-load name="load">
-				<p:input port="in-memory">
+			<px:html-load name="html-load">
+				<p:input port="source.in-memory">
 					<p:pipe step="copy" port="result.in-memory"/>
 				</p:input>
-			</px:fileset-load>
+			</px:html-load>
+			<px:fileset-filter media-types="application/xhtml+xml" name="filter">
+				<p:input port="source.in-memory">
+					<p:pipe step="html-load" port="result.in-memory"/>
+				</p:input>
+			</px:fileset-filter>
 		</p:group>
 
 		<p:documentation>
@@ -361,21 +362,10 @@
 			</p:for-each>
 			<px:fileset-join name="dtbook-fileset"/>
 			<p:sink/>
-			<p:for-each>
-				<p:iteration-source>
-					<p:pipe step="html" port="in-memory"/>
-				</p:iteration-source>
-				<px:html-to-fileset>
-					<p:input port="context.fileset">
-						<p:pipe step="copy" port="result.fileset"/>
-					</p:input>
-					<p:input port="context.in-memory">
-						<p:pipe step="copy" port="result.in-memory"/>
-					</p:input>
-				</px:html-to-fileset>
-			</p:for-each>
-			<px:fileset-join name="html-fileset"/>
 			<px:fileset-diff>
+				<p:input port="source">
+					<p:pipe step="html" port="fileset-with-resources"/>
+				</p:input>
 				<p:input port="secondary">
 					<p:pipe step="dtbook-fileset" port="result"/>
 				</p:input>

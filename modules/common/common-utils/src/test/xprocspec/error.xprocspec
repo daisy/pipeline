@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../../src/main/resources/xml/xproc/error.xpl">
+
+  <x:scenario label="error-code">
+    <x:call step="px:error">
+      <x:option name="code" select="'ERR'"/>
+	  <x:option name="message" select="'foobar'"/>
+    </x:call>
+    <x:context label="the error">
+      <x:document type="errors" select="/*/c:error"/>
+    </x:context>
+    <x:expect label="the error" type="compare">
+      <x:document type="inline">
+        <c:error code="ERR" name="!1.19.5.4.4.1" type="p:error" href="src/main/resources/xml/xproc/error.xpl" line="169" column="30">
+          <message>foobar</message>
+          <px:location>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="169" column="30"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="168" column="30"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="139" column="23"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="117" column="22"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="70" column="15"/>
+            <!-- these lines can change if the XProcSpec implementation changes! -->
+            <px:file href="src/test/xprocspec/error.xprocspec" line="10" column="98"/>
+            <px:file href="src/test/xprocspec/error.xprocspec" line="9" column="18"/>
+            <px:file href="src/test/xprocspec/error.xprocspec" line="8" column="29"/>
+          </px:location>
+        </c:error>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="error-port">
+    <x:call step="px:error">
+      <x:input port="error">
+        <x:document type="inline">
+          <c:errors>
+            <c:error code="ERR">foobar</c:error>
+          </c:errors>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="the error">
+      <x:document type="errors" select="/*/c:error"/>
+    </x:context>
+    <x:expect label="the error" type="compare">
+      <x:document type="inline">
+        <c:error code="ERR">foobar</c:error>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

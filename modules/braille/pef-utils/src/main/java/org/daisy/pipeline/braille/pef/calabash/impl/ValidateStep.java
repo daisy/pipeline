@@ -73,41 +73,45 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 			if (getOption(_assert_valid) != null)
 				assertValid = getOption(_assert_valid).getBoolean();
 			File tempDir = new File(new URI(getOption(_temp_dir).getString()));
+			XdmNode pef = source.read();
+
+			// FIXME: PEFValidator has moved to dotify.task.impl and should be created through the
+			// streamline API.
+			logger.warn("Skipping PEF validation (currently not supported)");
+			boolean valid = true;
 			
 			// Write PEF document to file
-			File pefFile = File.createTempFile("validate.", ".pef", tempDir);
+			/*File pefFile = File.createTempFile("validate.", ".pef", tempDir);
 			OutputStream pefStream = new FileOutputStream(pefFile);
 			Serializer serializer = runtime.getProcessor().newSerializer();
 			serializer.setOutputStream(pefStream);
 			serializer.setCloseOnCompletion(true);
-			XdmNode pef = source.read();
 			serializer.serializeNode(pef);
 			serializer.close();
 			pefStream.close();
 			
-			// FIXME: PEFValidator has moved to dotify.task.impl and should be created through the
-			// streamline API.
-			throw new XProcException(step, "PEF validation currently not supported");
-			
-			/*PEFValidator validator = new PEFValidator();
+			PEFValidator validator = new PEFValidator();
 			boolean valid = validator.validate(pefFile.toURI().toURL());
 			InputStreamReader is = new InputStreamReader(validator.getReportStream());
 			LineNumberReader lnr = new LineNumberReader(is);
 			String line;
 			while ((line=lnr.readLine())!=null) {
 				logger.info(line);
-			}
+			}*/
 			
 			if (assertValid && !valid)
 				throw new RuntimeException("PEF document is invalid.");
 			
 			if (validationStatus!=null) {
 				String validationXML = "<d:validation-status xmlns:d=\"http://www.daisy.org/ns/pipeline/data\" result=\""+(valid?"ok":"error")+"\"/>";
-				XdmNode validationResult = runtime.getProcessor().newDocumentBuilder().build(new StreamSource(new StringReader(validationXML)));
+				XdmNode validationResult = runtime.getProcessor().newDocumentBuilder()
+					.build(
+						new StreamSource(
+							new StringReader(validationXML)));
 				validationStatus.write(validationResult);
 			}
-			result.write(pef);*/
-		
+			result.write(pef);
+
 		} catch (Throwable e) {
 			throw XProcStep.raiseError(e, step);
 		}

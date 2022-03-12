@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="dispatching-tex-hyphenator-provider">
-  <implementation class="DispatchingTexHyphenatorProvider"/>
-  <service>
-    <provide interface="DispatchingTexHyphenatorProvider"/>
-  </service>
-  <reference name="TexHyphenatorProvider" cardinality="0..n" policy="static" interface="org.daisy.pipeline.braille.tex.TexHyphenator$Provider" bind="addProvider"/>
-</component>

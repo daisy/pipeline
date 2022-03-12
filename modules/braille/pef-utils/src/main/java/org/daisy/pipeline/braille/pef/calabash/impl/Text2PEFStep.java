@@ -5,8 +5,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 import net.sf.saxon.s9api.QName;
@@ -18,11 +16,9 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableCatalogService;
-import static org.daisy.pipeline.braille.common.Provider.util.dispatch;
-import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.pef.TableProvider;
+import org.daisy.pipeline.braille.pef.TableRegistry;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -51,15 +47,15 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 	private static final QName _duplex = new QName("duplex");
 	
 	private final TableCatalogService tableCatalog;
-	private final org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider;
+	private final TableRegistry tableRegistry;
 	
 	private Text2PEFStep(XProcRuntime runtime,
 	                     XAtomicStep step,
 	                     TableCatalogService tableCatalog,
-	                     org.daisy.pipeline.braille.common.Provider<Query,Table> tableProvider) {
+	                     TableRegistry tableRegistry) {
 		super(runtime, step);
 		this.tableCatalog = tableCatalog;
-		this.tableProvider = tableProvider;
+		this.tableRegistry = tableRegistry;
 	}
 	
 	@Override
@@ -86,7 +82,7 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 			Query tableQuery = query(getOption(_table).getString());
 			Table table = null;
 			try {
-				table = tableProvider.get(tableQuery).iterator().next(); }
+				table = tableRegistry.get(tableQuery).iterator().next(); }
 			catch (NoSuchElementException e) {
 				throw new XProcException(step, "Could not find a table for query: " + tableQuery); }
 			
@@ -129,7 +125,7 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 		
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new Text2PEFStep(runtime, step, tableCatalog, tableProvider);
+			return new Text2PEFStep(runtime, step, tableCatalog, tableRegistry);
 		}
 		
 		private TableCatalogService tableCatalog;
@@ -146,24 +142,17 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 		}
 		
 		@Reference(
-			name = "TableProvider",
-			unbind = "unbindTableProvider",
-			service = TableProvider.class,
-			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			name = "TableRegistry",
+			unbind = "-",
+			service = TableRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
 		)
-		protected void bindTableProvider(TableProvider provider) {
-			tableProviders.add(provider);
+		protected void bindTableRegistry(TableRegistry registry) {
+			tableRegistry = registry;
 		}
 		
-		protected void unbindTableProvider(TableProvider provider) {
-			tableProviders.remove(provider);
-			this.tableProvider.invalidateCache();
-		}
-		
-		private List<TableProvider> tableProviders = new ArrayList<TableProvider>();
-		private org.daisy.pipeline.braille.common.Provider.util.MemoizingProvider<Query,Table> tableProvider
-		= memoize(dispatch(tableProviders));
+		private TableRegistry tableRegistry;
 		
 	}
 	

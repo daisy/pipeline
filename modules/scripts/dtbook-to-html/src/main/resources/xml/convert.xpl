@@ -35,11 +35,6 @@
 	<p:option name="filename" required="true"/>
 	<p:option name="output-dir" required="true"/>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-		<p:documentation>
-			px:message
-		</p:documentation>
-	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation>
 			px:fileset-compose
@@ -56,8 +51,7 @@
 		</p:documentation>
 	</p:import>
 	
-	<px:message message="Converting to ZedAI..."/>
-	<px:dtbook-to-zedai name="to-zedai">
+	<px:dtbook-to-zedai name="to-zedai" px:message="Converting DTBook to ZedAI" px:progress="1/2">
 		<p:input port="in-memory.in">
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
@@ -67,8 +61,7 @@
 		<p:with-option name="opt-assert-valid" select="$assert-valid"/>
 	</px:dtbook-to-zedai>
 
-	<px:message message="Converting to XHTML5..."/>
-	<px:zedai-to-html name="to-html">
+	<px:zedai-to-html name="to-html" px:message="Converting ZedAI to XHTML 5" px:progress="1/2">
 		<p:input port="in-memory.in">
 			<p:pipe step="to-zedai" port="in-memory.out"/>
 		</p:input>

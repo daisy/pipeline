@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" type="px:fileset-intersect" xmlns:p="http://www.w3.org/ns/xproc"
-  xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:err="http://www.w3.org/ns/xproc-error"
-  xmlns:px="http://www.daisy.org/ns/pipeline/xproc" exclude-inline-prefixes="err px">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                exclude-inline-prefixes="px"
+                type="px:fileset-intersect">
 
   <p:input port="source" sequence="true"/>
-  <p:output port="result"/>
+  <p:output port="result">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>A fileset that contains only the files that are in all input filesets. Only the attributes
+      from the <code>d:file</code> elements of the first input fileset are retained.</p>
+    </p:documentation>
+  </p:output>
 
   <p:import href="fileset-join.xpl">
     <p:documentation>
