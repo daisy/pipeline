@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.14.6-SNAPSHOT</version>
+		<version>1.14.7-SNAPSHOT</version>
 		<relativePath>../../../parent</relativePath>
   </parent>
 
@@ -137,8 +137,8 @@
 		</goals>
 		<configuration>
 		  <tasks>
-		    <copy file="target/dependency/lib/x64-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x64/sapinative.dll" />
-		    <copy file="target/dependency/lib/x86-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x86/sapinative.dll" />
+		    <copy file="target/dependency/lib/x64-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x64/sapinative.dll"/>
+		    <copy file="target/dependency/lib/x86-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x86/sapinative.dll"/>
 		  </tasks>
 		</configuration>
 	      </execution>

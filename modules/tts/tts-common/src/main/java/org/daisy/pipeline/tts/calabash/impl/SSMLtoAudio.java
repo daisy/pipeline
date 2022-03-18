@@ -120,7 +120,10 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 
 		/*
 		 * Create a piece of SSML that will be used for testing. Useless
-		 * attributes and namespaces are inserted on purpose.
+		 * attributes and namespaces are inserted on purpose. A <mark> is
+		 * included for engines that support marks. It is inserted somewhere
+		 * in the middle of the string because the SAPI adapter ignores
+		 * marks that appear at the end.
 		 */
 		DocumentBuilder docBuilder = proc.newDocumentBuilder();
 		XdmNode testingSSMLWithoutMark; {
@@ -134,8 +137,8 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		}
 		XdmNode testingSSMLWithMark; {
 			String ssml = "<s:speak version=\"1.0\" xmlns:s=\"http://www.w3.org/2001/10/synthesis\">"
-			        + "<s:s xmlns:tmp=\"http://\" id=\"s1\"><s:token>small</s:token> sentence</s:s>"
-			        + "<s:mark name=\"mark\"></s:mark></s:speak>";
+			        + "<s:s xmlns:tmp=\"http://\" id=\"s1\"><s:token>small</s:token>"
+			        + "<s:mark name=\"mark\"></s:mark> sentence</s:s></s:speak>";
 			try {
 				testingSSMLWithMark = docBuilder.build(new SAXSource(new InputSource(new StringReader(ssml))));
 			} catch (SaxonApiException e) {
