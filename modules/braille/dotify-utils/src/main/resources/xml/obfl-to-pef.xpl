@@ -29,6 +29,7 @@
 		<p:option name="identifier" required="false" select="''"/>
 		<p:option name="style-type" required="false" select="''"/>
 		<p:option name="css-text-transform-definitions" required="false" select="''"/>
+		<p:option name="css-counter-style-definitions" required="false" select="''"/>
 		<p:input port="parameters" kind="parameter" primary="false"/>
 		<!--
 		    Implemented in ../../java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java
@@ -61,6 +62,9 @@
 	<p:delete match="/obfl:obfl/obfl:meta/dp2:css-text-transform-definitions">
 		<!-- We don't want this to end up in the PEF. -->
 	</p:delete>
+	<p:delete match="/obfl:obfl/obfl:meta/dp2:css-counter-style-definitions">
+		<!-- We don't want this to end up in the PEF. -->
+	</p:delete>
 	<p:delete match="/obfl:obfl/obfl:meta/dp2:braille-charset">
 		<!-- We don't want this to end up in the PEF. Another field "dp2:ascii-braille-charset"
 		     will be added through the "braille-charset" option. -->
@@ -79,6 +83,9 @@
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="css-text-transform-definitions" select="/obfl:obfl/obfl:meta/dp2:css-text-transform-definitions">
+			<p:pipe step="main" port="source"/>
+		</p:with-option>
+		<p:with-option name="css-counter-style-definitions" select="/obfl:obfl/obfl:meta/dp2:css-counter-style-definitions">
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:input port="parameters">

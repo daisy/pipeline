@@ -8,6 +8,8 @@
 
 - [`http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl`](resources/xml/library.xsl)
 - [`http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl`](resources/xml/library.xpl)
+- [`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl`](resources/xml/abstract-block-translator.xsl)
+- [`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl`](resources/xml/block-translator-from-text-transform.xsl)
 
 ## Transformers ([`org.daisy.pipeline.braille.common.TransformProvider`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/common/TransformProvider.html))
 
@@ -59,4 +61,5 @@
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/common/calabash/impl/PxTransformStep.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/common/calabash/impl/PxParseQueryStep.java"/>
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/common/impl/CSSBlockTransform.java"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>

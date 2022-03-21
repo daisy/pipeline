@@ -12,7 +12,7 @@ import org.daisy.common.transform.XMLTransformer;
  *
  * <p>The known implementations are:</p>
  * <ul>
- *   <li><a href="http://daisy.github.io/pipeline/modules/braille/css-utils/src/main/README.html"
+ *   <li><a href="http://daisy.github.io/pipeline/modules/braille/braille-css-utils/src/main/README.html"
  *          class="apidoc">Medium <b>embossed</b></a></li>
  * </ul>
  */

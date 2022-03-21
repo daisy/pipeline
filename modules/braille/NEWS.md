@@ -1,3 +1,33 @@
+v1.14.6
+=======
+
+Changes
+-------
+- Update to Liblouis [3.21.0](https://github.com/liblouis/liblouis/releases/tag/v3.21.0)
+- Support for `volume` counter
+- Support applying custom counter styles (defined with `@counter-style`) to page and volume counters
+- Support applying counter style (using the `counter()` function) to the following numeric OBFL
+  variables:
+  - `-obfl-volume`
+  - `-obfl-volumes`
+  - `-obfl-sheets-in-document`
+  - `-obfl-sheets-in-volume`
+  - `-obfl-started-volume-number`
+  - `-obfl-started-page-number`
+  - `-obfl-started-volume-first-content-page`
+
+Components
+----------
+- **liblouis** ([**3.21.0**](https://github.com/liblouis/liblouis/releases/tag/v3.21.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.1](https://github.com/liblouis/liblouis-java/releases/tag/5.0.1))
+- dotify ([1.0.3](https://github.com/mtmse/dotify.library/releases/tag/1.0.3)
+- braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.14.5
 =======
 

@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.7-SNAPSHOT</version>
+    <version>1.14.8-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
   <artifactId>asciimath-utils</artifactId>
@@ -69,14 +69,14 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/generated-resources/javascript" />
-                    <get src="${asciimathml.js.url}" dest="target/generated-resources/javascript" />
-                    <delete file="target/optimization-files/patches-applied.txt" />
-                    <local name="checksum.matches" />
-                    <local name="checksum.matches.fail" />
-                    <checksum file="target/generated-resources/javascript/ASCIIMathML.js" algorithm="sha1" property="${asciimathml.js.sha1}" verifyproperty="checksum.matches" />
+                    <mkdir dir="target/generated-resources/javascript"/>
+                    <get src="${asciimathml.js.url}" dest="target/generated-resources/javascript"/>
+                    <delete file="target/optimization-files/patches-applied.txt"/>
+                    <local name="checksum.matches"/>
+                    <local name="checksum.matches.fail"/>
+                    <checksum file="target/generated-resources/javascript/ASCIIMathML.js" algorithm="sha1" property="${asciimathml.js.sha1}" verifyproperty="checksum.matches"/>
                     <condition property="checksum.matches.fail">
-                      <equals arg1="${checksum.matches}" arg2="false" />
+                      <equals arg1="${checksum.matches}" arg2="false"/>
                     </condition>
                     <fail if="checksum.matches.fail">Checksum error</fail>
                   </tasks>

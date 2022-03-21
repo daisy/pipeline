@@ -113,9 +113,9 @@
     <!--
         counter(<ident>,<counter-style>?): http://braillespecs.github.io/braille-css/#dfn-counter
     -->
-    <xsl:variable name="css:COUNTER_FN_RE" select="concat('counter\(\s*(',$css:IDENT_RE,')\s*(,\s*(',$css:COUNTER_STYLE_RE,')\s*)?\)')"/>
+    <xsl:variable name="css:COUNTER_FN_RE" select="concat('counter\(\s*(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*(,\s*(',$css:COUNTER_STYLE_RE,')\s*)?\)')"/>
     <xsl:variable name="css:COUNTER_FN_RE_ident" select="1"/>
-    <xsl:variable name="css:COUNTER_FN_RE_style" select="$css:COUNTER_FN_RE_ident + $css:IDENT_RE_groups + 2"/>
+    <xsl:variable name="css:COUNTER_FN_RE_style" select="$css:COUNTER_FN_RE_ident + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 2"/>
     <xsl:variable name="css:COUNTER_FN_RE_groups" select="$css:COUNTER_FN_RE_style + $css:COUNTER_STYLE_RE_groups"/>
     
     <!--

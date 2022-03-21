@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.7-SNAPSHOT</version>
+    <version>1.14.8-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils</artifactId>
-  <version>2.1.3-SNAPSHOT</version>
+  <version>2.1.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils</name>
@@ -265,7 +265,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-linux</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.linux
                 </Private-Package>
@@ -289,7 +289,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-mac</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.mac
                 </Private-Package>
@@ -313,7 +313,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-windows</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.windows
                 </Private-Package>
@@ -351,24 +351,6 @@
       </activation>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>maven-bundle-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>linux-bundle</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>mac-bundle</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>windows-bundle</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
           <plugin>
             <groupId>org.daisy.pipeline.build</groupId>
             <artifactId>modules-build-helper</artifactId>
@@ -443,6 +425,36 @@
       </build>
     </profile>
     <profile>
+      <id>module-with-documentation-only</id>
+      <activation>
+        <property>
+          <name>documentation-only</name>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>linux-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>mac-bundle</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>windows-bundle</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
       <id>generate-table-files</id>
       <activation>
         <activeByDefault>false</activeByDefault>
@@ -459,14 +471,14 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout"/>
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
+                    <mkdir dir="target/checkout" />
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
                     <unzip dest="target/generated-resources/tables" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic"/>
-                        <exclude name="**/hyph_de.dic"/>
+                        <include name="**/hyph_*.dic" />
+                        <exclude name="**/hyph_de.dic" />
                       </patternset>
-                      <mapper type="flatten"/>
+                      <mapper type="flatten" />
                     </unzip>
                   </tasks>
                 </configuration>

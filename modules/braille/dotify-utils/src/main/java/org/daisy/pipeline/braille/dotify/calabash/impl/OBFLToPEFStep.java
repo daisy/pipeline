@@ -13,6 +13,7 @@ import java.util.NoSuchElementException;
 
 import javax.xml.transform.stream.StreamSource;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 
 import com.xmlcalabash.core.XProcException;
@@ -27,6 +28,9 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
 import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.braille.css.InlineStyle;
+import org.daisy.braille.css.RuleCounterStyle;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
@@ -56,6 +60,8 @@ import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.common.TextTransformParser;
 import org.daisy.pipeline.braille.common.util.Function0;
 import org.daisy.pipeline.braille.common.util.Functions;
+import org.daisy.pipeline.braille.css.CounterStyle;
+import org.daisy.pipeline.braille.dotify.impl.CounterHandlingBrailleTranslator;
 import org.daisy.pipeline.braille.pef.TableRegistry;
 
 import org.osgi.framework.FrameworkUtil;
@@ -83,6 +89,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private static final QName _identifier = new QName("identifier");
 	private static final QName _style_type = new QName("style-type");
 	private static final QName _css_text_transform_definitions = new QName("css-text-transform-definitions");
+	private static final QName _css_counter_style_definitions = new QName("css-counter-style-definitions");
 	
 	/** Code for Dotify errors caused by invalid or unsupported OBFL. */
 	private static final QName DOTIFY_INVALID = new QName("DOTIFY_INVALID");
@@ -202,6 +209,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 						"No translator available for mode '" + mode + "' and locale '" + locale + "' "
 						+ "that supports style type " + styleType);
 				}
+				BrailleTranslator translator = mainTranslator;
 				String textTransformDefinitions = getOption(_css_text_transform_definitions, "");
 				if (!"".equals(textTransformDefinitions)) {
 					Map<String,Query> subQueries = TextTransformParser.getBrailleTranslatorQueries(textTransformDefinitions,
@@ -222,13 +230,20 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 								= Maps.transformValues(
 									subQueries,
 									q -> () -> brailleTranslatorRegistry.get(q).iterator().next());
-							BrailleTranslator compoundTranslator = new CompoundBrailleTranslator(defaultTranslator, subTranslators);
-							evictTempTranslator = temporaryBrailleTranslatorProvider.provideTemporarily(compoundTranslator);
-							mode = mutableQuery().add("id", compoundTranslator.getIdentifier()).toString();
-							locale = "und";
+							translator = new CompoundBrailleTranslator(defaultTranslator, subTranslators);
 						}
 					}
 				}
+				String counterStyleDefinitions = getOption(_css_counter_style_definitions, "");
+				Map<String,CounterStyle> counterStyles = "".equals(counterStyleDefinitions)
+					? null
+					: CounterStyle.parseCounterStyleRules(
+						Iterables.filter(new InlineStyle(counterStyleDefinitions), RuleCounterStyle.class));
+				// handle text-transform: -dotify-counter
+				translator = new CounterHandlingBrailleTranslator(translator, counterStyles);
+				evictTempTranslator = temporaryBrailleTranslatorProvider.provideTemporarily(translator);
+				mode = mutableQuery().add("id", translator.getIdentifier()).toString();
+				locale = "und";
 			} else if (!"".equals(styleType)) {
 				throw new XProcException(step.getNode(), "Value of style-type option not recognized: " + styleType);
 			}

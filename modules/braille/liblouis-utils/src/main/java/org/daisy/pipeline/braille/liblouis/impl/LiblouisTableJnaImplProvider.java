@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -46,6 +47,7 @@ import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocal
 import static org.daisy.pipeline.braille.common.util.Files.unpack;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import static org.daisy.pipeline.braille.common.util.Files.normalize;
+import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.common.WithSideEffect;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
@@ -302,7 +304,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							TableInfo tableInfo = null;
 							boolean whiteSpace = false;
 							String dotsForUndefinedChar = null;
-							String documentLocale = null;
+							Locale documentLocale = null;
 							if (q.containsKey("white-space")) {
 								q.removeOnly("white-space");
 								whiteSpace = true; }
@@ -314,7 +316,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								}
 							}
 							if (q.containsKey("document-locale"))
-								documentLocale = q.removeOnly("document-locale").getValue().get();
+								documentLocale = parseLocale(q.removeOnly("document-locale").getValue().get());
 							if (q.containsKey("charset") || q.containsKey("braille-charset"))
 								charset = q.containsKey("charset")
 									? q.removeOnly("charset").getValue().get()
@@ -324,13 +326,41 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 									? q.removeOnly("table").getValue().get()
 									: q.removeOnly("liblouis-table").getValue().get();
 								tableInfo = new TableInfo(table);
+								if (q.containsKey("locale")) {
+									// locale is shorthand for language + region
+									String locale = q.removeOnly("locale").getValue().get();
+									q.add("locale", locale);
+									q.add("region", locale);
+								}
 								for (Feature f : q)
 									if (!f.getValue().orElse("yes").equals(tableInfo.get(f.getKey()))) {
 										logger.warn("Table " + table + " does not match " + f);
 										throw new NoSuchElementException(); }
 							} else {
-								if (!q.containsKey("locale") && documentLocale != null)
-									q.add("locale", documentLocale);
+								if (documentLocale != null && !q.containsKey("locale")) {
+									// Liblouis table selection happens based on a language tag (primary target language
+									// of the braille code) and an optional region tag (region or community in which the
+									// braille code applies).
+									if (!documentLocale.equals(new Locale(documentLocale.getLanguage(), documentLocale.getCountry()))) {
+										// If the document locale has other subtags than language and region, we
+										// interpret the locale as a language.
+										if (!q.containsKey("language"))
+											q.add("language", documentLocale.toLanguageTag());
+									} else if (q.containsKey("region")) {
+										// If the region is already specified in the query, we ignore the region subtag
+										// of the document locale.
+										if (!q.containsKey("language"))
+											q.add("language", documentLocale.getLanguage());
+									} else {
+										// Otherwise we use the language subtag of the document locale as the language,
+										// and the region subtag (if specified) as the region in which the braille code
+										// applies.
+										if (!q.containsKey("language"))
+											q.add("language", documentLocale.getLanguage());
+										if (!"".equals(documentLocale.getCountry()))
+											q.add("region", documentLocale.toLanguageTag());
+									}
+								}
 								if (q.isEmpty())
 									throw new NoSuchElementException();
 								StringBuilder b = new StringBuilder();

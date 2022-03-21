@@ -88,8 +88,8 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 			return fromNullable(get(URLs.asURI(v))); }
 		Locale locale; {
 			String loc;
-			if (q.containsKey("locale"))
-				loc = q.removeOnly("locale").getValue().get();
+			if (q.containsKey("document-locale"))
+				loc = q.removeOnly("document-locale").getValue().get();
 			else
 				loc = "und";
 			try {

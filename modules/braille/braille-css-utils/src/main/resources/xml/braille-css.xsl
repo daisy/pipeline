@@ -497,6 +497,7 @@
     </xsl:function>
     
     <xsl:variable name="css:predefined-counter-styles" as="element()*">
+        <!-- FIXME: the "range" descriptor is not taken into account -->
         <css:counter-style name="decimal"
                            system="numeric"
                            symbols="'0' '1' '2' '3' '4' '5' '6' '7' '8' '9'"
@@ -527,7 +528,7 @@
                 input is either:
                 - a string, in which case it should be a regular style sheet consisting of @counter-style rules, or
                 - a `css:counter-style' attribute, in which case it should have the form "& style1 { ... } & style2 { ... }"
-                - a `css:rule` element with selector "@counter-style"
+                - the fully parsed style as a `css:rule` element with selector "@counter-style"
             -->
         </xsl:param>
         <xsl:map>

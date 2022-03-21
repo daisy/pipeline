@@ -37,12 +37,26 @@ can be selected using a query that contains
   [`http://www.liblouis.org/tables/`](../src/main/resources/default-tables/). See
   also [this overview of
   tables](https://github.com/liblouis/liblouis/blob/master/extra/generate-display-names/display-names)
-  available in Liblouis. The `liblouis-table` feature is not
-  compatible with other features except `translator`, `hyphenator` and
-  `locale`.
+  available in Liblouis.
+
+`language`
+: The primary target language of the Liblouis translator. Must be a
+  [RFC 5646](https://tools.ietf.org/html/rfc5646) language tag. By
+  default the document locale is used. In that case an automatic
+  fallback mechanism is used: if nothing is found for
+  language-COUNTRY-variant, then language-COUNTRY is searched, then
+  language. If the document locale is of the form language-COUNTRY,
+  only the language subtag is used.
+
+`region`
+: The region or community in which the braille code applies. Must be a
+  [RFC 5646](https://tools.ietf.org/html/rfc5646) language tag. By
+  default the document locale is used if it is of the form
+  language-COUNTRY. (The same automatic fallback mechanism as
+  described above is used.)
 
 `locale`
-: Matches only Liblouis translators with this locale.
+: Shorthand for `language` and `region`.
 
 <!-- `charset`
      `braille-charset`

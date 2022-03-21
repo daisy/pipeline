@@ -216,9 +216,7 @@ public final class BrailleCssSerializer {
 		return b;
 	}
 
-	/* = PRIVATE ========================================= */
-
-	private static String serializeTermList(List<Term<?>> termList) {
+	public static String serializeTermList(List<Term<?>> termList) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {
@@ -231,6 +229,8 @@ public final class BrailleCssSerializer {
 			s += toString(t); }
 		return s;
 	}
+
+	/* = PRIVATE ========================================= */
 
 	private static String serializeDeclarationList(Iterable<Declaration> declarations) {
 		List<Declaration> sortedDeclarations = new ArrayList<Declaration>();

@@ -156,8 +156,8 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 			return of(get(URLs.asURI(table))); }
 		Locale locale; {
 			String loc = "und";
-			if (q.containsKey("locale"))
-				loc = q.removeOnly("locale").getValue().get();
+			if (q.containsKey("document-locale"))
+				loc = q.removeOnly("document-locale").getValue().get();
 			try {
 				locale = parseLocale(loc); }
 			catch (IllegalArgumentException e) {

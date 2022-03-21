@@ -45,7 +45,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testFuzzySelect() {
-		provider.get(query("(locale:sv_SE_blaah)")).iterator().next();
+		provider.get(query("(document-locale:sv_SE_blaah)")).iterator().next();
 	}
 	
 	@Test
@@ -59,7 +59,7 @@ public class DotifyCoreTest extends AbstractTest {
 	@Test
 	public void testHyphenate() {
 		assertEquals("foo\u00ADbar",
-		             hyphenatorProvider.get(query("(locale:sv-SE)")).iterator().next()
+		             hyphenatorProvider.get(query("(document-locale:sv-SE)")).iterator().next()
 		                               .asFullHyphenator()
 		                               .transform(new String[]{"foobar"})[0]);
 	}

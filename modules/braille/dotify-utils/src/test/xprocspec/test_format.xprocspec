@@ -7668,7 +7668,7 @@
               <toc style="display: -obfl-toc;
                           flow: first-front;
                           text-transform: auto;
-                          &amp;::-obfl-on-volume-start { content:-obfl-evaluate('(round $started-volume-number)') }
+                          &amp;::-obfl-on-volume-start { content: counter(-obfl-started-volume-number) }
                           &amp;::duplicate { display:-obfl-toc; -obfl-toc-range:volume; flow:next-front; text-transform:auto }
                           &amp;::duplicate::-obfl-on-toc-start { content:'⠿⠿⠿' }">
                 <entry ref="ch_1" style="display: block;
@@ -7785,7 +7785,7 @@
               <toc-sequence toc="toc" master="main" range="document">
                 <on-volume-start>
                   <block>
-                    <evaluate expression="(round $started-volume-number)"/>
+                    <evaluate expression="$started-volume-number"/>
                   </block>
                 </on-volume-start>
               </toc-sequence>
@@ -9242,7 +9242,7 @@
                        @page { size: 15 5; }
                        @volume { max-length: 3; @begin { content: flow(pre, document) }}">
             <p style="display: block; text-transform: auto; flow: pre">
-              <span style="&amp;::before { content: -obfl-evaluate('(round $sheets-in-volume)') ' ⠌ ' -obfl-evaluate('(round $sheets-in-document)') }"/>
+              <span style="&amp;::before { content: counter(-obfl-sheets-in-volume) ' ⠌ ' counter(-obfl-sheets-in-document) }"/>
             </p>
             ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
             ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -9274,7 +9274,7 @@
             <pre-content>
               <sequence master="main">
                 <block>
-                  <evaluate expression="(round $sheets-in-volume)"/> ⠌ <evaluate expression="(round $sheets-in-document)"/>
+                  <evaluate expression="$sheets-in-volume"/> ⠌ <evaluate expression="$sheets-in-document"/>
                 </block>
               </sequence>
             </pre-content>
@@ -10009,7 +10009,7 @@
               ⠤⠤⠤⠤⠤
               <span style="&amp;::before {
                              text-transform: auto;
-                             content: -obfl-evaluate('(round $volume)') }"/>
+                             content: -obfl-evaluate('$volume') }"/>
               ⠤⠤⠤⠤⠤
             </titlepage>
             <body style="display: block">
@@ -10042,7 +10042,7 @@
                   ⠤⠤⠤⠤⠤
                   <span translate="">
                     <style name="">
-                      <evaluate expression="(round $volume)"/>
+                      <evaluate expression="$volume"/>
                     </style>
                   </span>
                   ⠤⠤⠤⠤⠤
@@ -10099,11 +10099,11 @@
             <titlepage style="display: block; flow: titlepage; text-transform: auto">
               1<span style="&amp;::after {
                               text-transform: downshift;
-                              content: -obfl-evaluate('(round $volumes)') }"/>
+                              content: -obfl-evaluate('$volumes') }"/>
               <p style="&amp;::after {
                           display: block;
                           text-transform: downshift;
-                          content: -obfl-evaluate('(round $volume)') }"/>
+                          content: -obfl-evaluate('$volume') }"/>
             </titlepage>
             <body style="display: block">
               ⠤⠤⠤⠤⠤
@@ -10134,12 +10134,12 @@
                 <block>
                   <block>
                     1<style name="text-transform: downshift">
-                    <evaluate expression="(round $volumes)"/>
+                    <evaluate expression="$volumes"/>
                   </style>
                   </block>
                   <block>
                     <style name="text-transform: downshift">
-                      <evaluate expression="(round $volume)"/>
+                      <evaluate expression="$volume"/>
                     </style>
                   </block>
                 </block>
@@ -11706,7 +11706,7 @@
                          &amp;::alternate::-obfl-on-volume-start {
                            display: block;
                            border-bottom-pattern: ⠒;
-                           content: -obfl-evaluate('(round $started-volume-number)');
+                           content: counter(-obfl-started-volume-number);
                            text-transform: auto; }">
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -11758,7 +11758,7 @@
                 <list-of-references collection="endnotes" range="document">
                   <on-volume-start>
                     <block border-bottom-style="solid" border-bottom-align="center">
-                      <evaluate expression="(round $started-volume-number)"/>
+                      <evaluate expression="$started-volume-number"/>
                     </block>
                   </on-volume-start>
                 </list-of-references>
@@ -13617,9 +13617,9 @@
                        @volume { max-length: 3 }
                        @-obfl-volume-transition {
                          @any-interrupted {
-                           content: '⠒⠒⠒ ' -obfl-evaluate('(round $volume)') ' ⠒⠒⠒'; }
+                           content: '⠒⠒⠒ ' counter(volume) ' ⠒⠒⠒'; }
                          @any-resumed {
-                           content: '⠒⠒⠒ ' -obfl-evaluate('(round $volume)') ' ⠒⠒⠒'; }}">
+                           content: '⠒⠒⠒ ' counter(volume) ' ⠒⠒⠒'; }}">
             <p style="display: block">
               ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
               ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿
@@ -13650,12 +13650,12 @@
           <volume-transition range="sheet">
             <any-interrupted>
               <block>
-                ⠒⠒⠒ <evaluate expression="(round $volume)"/> ⠒⠒⠒
+                ⠒⠒⠒ <evaluate expression="$volume"/> ⠒⠒⠒
               </block>
             </any-interrupted>
             <any-resumed>
               <block>
-                ⠒⠒⠒ <evaluate expression="(round $volume)"/> ⠒⠒⠒
+                ⠒⠒⠒ <evaluate expression="$volume"/> ⠒⠒⠒
               </block>
             </any-resumed>
           </volume-transition>
@@ -14389,7 +14389,7 @@
                                           display: block;
                                           content: '1 ⠄⠄⠄'}
                                         &amp;::-obfl-on-resumed::after {
-                                          content: ' ⠐⠐⠐⠐⠐ ' -obfl-evaluate('$started-volume-first-content-page') }"
+                                          content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                      >1</a>
                   <ol style="display: block; margin-left: 1">
                     <li style="display: block">
@@ -14408,7 +14408,7 @@
                                           display: block;
                                           content: '2 ⠄⠄⠄'}
                                         &amp;::-obfl-on-resumed::after {
-                                          content: ' ⠐⠐⠐⠐⠐ ' -obfl-evaluate('$started-volume-first-content-page') }"
+                                          content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                      >2</a>
                   <ol style="display: block; margin-left: 1">
                     <li style="display: block">
@@ -14417,7 +14417,7 @@
                                                 display: block;
                                                 content: '2.1 ⠄⠄⠄'}
                                               &amp;::-obfl-on-resumed::after {
-                                                content: ' ⠐⠐ ' -obfl-evaluate('$started-volume-first-content-page') }"
+                                                content: ' ⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                          >2.1</a>
                     </li>
                     <li style="display: block">
@@ -14426,7 +14426,7 @@
                                                 display: block;
                                                 content: '2.2 ⠄⠄⠄'}
                                               &amp;::-obfl-on-resumed::after {
-                                                content: ' ⠐⠐⠐⠐⠐ ' -obfl-evaluate('$started-volume-first-content-page') }"
+                                                content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                          >2.2</a>
                     </li>
                   </ol>
@@ -16353,8 +16353,19 @@
                      list-style-type: dice;
                      @counter-style dice {
                        system: additive;
-                       additive-symbols: 6 '⠿', 5 '⠟', 4 '⠛', 3 '⠋', 2 '⠉', 1 '⠁';
-                       text-transform: none; }">
+                       additive-symbols: 6 '⠿', 5 '⠻', 4 '⠛', 3 '⠙', 2 '⠉', 1 '⠈';
+                       text-transform: none; }
+                     @page {
+                       size: 15 5;
+                       @top-right {
+                         content: counter(page, dice); }}
+                     @volume {
+                       @begin {
+                         content: flow(begin, document); }}
+                     &amp;::before {
+                       display: block;
+                       flow: begin;
+                       content: counter(volume, dice); }">
             <li style="display: list-item">⠤⠤⠤</li>
             <li style="display: list-item">⠤⠤⠤</li>
             <li style="display: list-item">⠤⠤⠤</li>
@@ -16374,21 +16385,46 @@
         <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
+            <dp2:css-counter-style-definitions>
+              @counter-style dice {
+                system: additive;
+                additive-symbols: 6 '⠿', 5 '⠻', 4 '⠛', 3 '⠙', 2 '⠉', 1 '⠈';
+                text-transform: none
+              }
+            </dp2:css-counter-style-definitions>
           </meta>
-          <layout-master name="body" page-width="40" page-height="25" duplex="true">
+          <layout-master name="master" page-width="15" page-height="5" duplex="true">
             <default-template>
-              <header/>
+              <header>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default" text-style="text-transform: -dotify-counter; -dotify-counter-style: dice"/>
+                </field>
+              </header>
               <footer/>
             </default-template>
           </layout-master>
-          <sequence master="body">
-            <block>⠁ ⠤⠤⠤</block>
+          <volume-template sheets-in-volume-max="1000">
+            <pre-content>
+              <sequence master="master">
+                <block>
+                  <style name="text-transform: -dotify-counter; -dotify-counter-style: dice">
+                    <evaluate expression="$volume"/>
+                  </style>
+                </block>
+              </sequence>
+            </pre-content>
+          </volume-template>
+          <sequence master="master">
+            <block>⠈ ⠤⠤⠤</block>
             <block>⠉ ⠤⠤⠤</block>
-            <block>⠋ ⠤⠤⠤</block>
+            <block>⠙ ⠤⠤⠤</block>
             <block>⠛ ⠤⠤⠤</block>
-            <block>⠟ ⠤⠤⠤</block>
+            <block>⠻ ⠤⠤⠤</block>
             <block>⠿ ⠤⠤⠤</block>
-            <block>⠿⠁ ⠤⠤⠤</block>
+            <block>⠿⠈ ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -16405,16 +16441,26 @@
             </meta>
           </head>
           <body>
-            <volume rows="25" cols="40" rowgap="0" duplex="true">
+            <volume rows="5" cols="15" rowgap="0" duplex="true">
               <section>
                 <page>
-                  <row>⠁⠀⠤⠤⠤</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈</row>
+                  <row>⠈</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈</row>
+                  <row>⠈⠀⠤⠤⠤</row>
                   <row>⠉⠀⠤⠤⠤</row>
-                  <row>⠋⠀⠤⠤⠤</row>
+                  <row>⠙⠀⠤⠤⠤</row>
                   <row>⠛⠀⠤⠤⠤</row>
-                  <row>⠟⠀⠤⠤⠤</row>
+                </page>
+                <page>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉</row>
+                  <row>⠻⠀⠤⠤⠤</row>
                   <row>⠿⠀⠤⠤⠤</row>
-                  <row>⠿⠁⠀⠤⠤⠤</row>
+                  <row>⠿⠈⠀⠤⠤⠤</row>
                 </page>
               </section>
             </volume>

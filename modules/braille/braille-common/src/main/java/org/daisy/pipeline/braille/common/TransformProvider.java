@@ -230,9 +230,9 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 				return delegate.withContext(context).get(query);
 			}
 			public Locale getLocale(Query query) {
-				if (query.containsKey("locale"))
+				if (query.containsKey("document-locale"))
 					try {
-						return parseLocale(query.getOnly("locale").getValue().get()); }
+						return parseLocale(query.getOnly("document-locale").getValue().get()); }
 					catch (IllegalArgumentException e) {
 						logger.warn("Invalid locale", e);
 						return null; }
@@ -241,8 +241,8 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			}
 			public Query assocLocale(Query query, Locale locale) {
 				MutableQuery q = mutableQuery(query);
-				q.removeAll("locale");
-				q.add("locale", locale.toLanguageTag());
+				q.removeAll("document-locale");
+				q.add("document-locale", locale.toLanguageTag());
 				return q.asImmutable();
 			}
 			public TransformProvider<T> withContext(Logger context) {

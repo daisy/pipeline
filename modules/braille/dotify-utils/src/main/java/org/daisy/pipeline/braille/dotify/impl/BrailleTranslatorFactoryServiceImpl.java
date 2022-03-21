@@ -3,24 +3,15 @@ package org.daisy.pipeline.braille.dotify.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
-import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import static com.google.common.collect.Iterables.concat;
 
-import cz.vutbr.web.css.CSSProperty;
-import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermIdent;
-import cz.vutbr.web.css.TermList;
-
-import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.dotify.api.translator.AttributeWithContext;
@@ -45,7 +36,6 @@ import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
-import org.daisy.pipeline.braille.css.CounterStyle;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -132,9 +122,6 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * Through setHyphenating() the translator can be made to perform automatic hyphenation or
 	 * not. Regardless of this setting, hyphenation characters (SHY and ZWSP) in the input are used
 	 * in line breaking, except when overridden with a <code>hyphens: none</code> style.
-	 *
-	 * Support <code>text-transform</code> value "<code>-dotify-counter</code>" which causes numbers
-	 * to be formatted according to the value of the <code>-dotify-counter-style</code> property.
 	 */
 	private static class BrailleTranslatorFromBrailleTranslator implements BrailleTranslator {
 		
@@ -197,12 +184,11 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * property is assumed to have been performed already.
 	 */
 	protected static Iterable<CSSStyledText> cssStyledTextFromTranslatable(Translatable specification) {
-		return handleCounterStyles(
-			cssStyledTextFromTranslatable(
-				specification.getText(),
-				specification.getAttributes(),
-				specification.isHyphenating(),
-				null));
+		return cssStyledTextFromTranslatable(
+			specification.getText(),
+			specification.getAttributes(),
+			specification.isHyphenating(),
+			null);
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
@@ -246,13 +232,12 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * text-transform property is assumed to have been performed already.
 	 */
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(TranslatableWithContext specification) {
-		return handleCounterStyles(
-			cssStyledTextFromTranslatable(
-				specification.getPrecedingText(),
-				specification.getTextToTranslate(),
-				specification.getFollowingText(),
-				specification.getAttributes().orElse(null),
-					null));
+		return cssStyledTextFromTranslatable(
+			specification.getPrecedingText(),
+			specification.getTextToTranslate(),
+			specification.getFollowingText(),
+			specification.getAttributes().orElse(null),
+				null);
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(List<PrecedingText> preceding,
@@ -342,39 +327,4 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 
 	private static Iterable<CSSStyledText> empty = Optional.<CSSStyledText>absent().asSet();
 
-	private static Iterable<CSSStyledText> handleCounterStyles(Iterable<CSSStyledText> styledText) {
-		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
-		String segment = null;
-		SimpleInlineStyle style = null;
-		Map<String,String> attrs = null;
-		for (CSSStyledText st : styledText) {
-			String t = st.getText();
-			SimpleInlineStyle s = st.getStyle();
-			Map<String,String> a = st.getTextAttributes();
-			if (s != null) {
-				if (s.getProperty("text-transform") == TextTransform.list_values) {
-					TermList list = s.getValue(TermList.class, "text-transform");
-					if (((TermIdent)list.get(0)).getValue().equals("-dotify-counter")) {
-						if (list.size() == 1)
-							s.removeProperty("text-transform");
-						else
-							list.remove(0);
-						if ("??".equals(t)) {
-						} else {
-							int counterValue = Integer.parseInt(t);
-							Term<?> counterStyle = s.getValue("-dotify-counter-style");
-							if (counterStyle != null) {
-								try {
-									t = new CounterStyle(counterStyle).format(counterValue); }
-								catch (IllegalArgumentException e) {}}}}}
-				s.removeProperty("-dotify-counter-style"); }
-			if (segment != null)
-				segments.add(new CSSStyledText(segment, style, attrs));
-			segment = t;
-			style = s;
-			attrs = a; }
-		if (segment != null)
-			segments.add(new CSSStyledText(segment, style, attrs));
-		return segments;
-	}
 }

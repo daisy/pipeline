@@ -23,10 +23,12 @@ can be selected using a query that contains
   hyphenator configurations. The `table` feature is not compatible
   with `locale`.
 
-`locale`
-: Matches only hyphenators with this locale.
-
 No other features are allowed.
+
+By default, the document locale is used to select the hyphenator. An
+automatic fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.
 
 
 [TeX]: http://www.tug.org

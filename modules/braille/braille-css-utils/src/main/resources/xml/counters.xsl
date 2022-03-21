@@ -225,8 +225,8 @@
                 <xsl:variable name="style" as="element()">
                     <xsl:for-each select="css:named-counter-style($style/@fallback)">
                         <xsl:copy>
-                            <xsl:sequence select="@* except (@prefix|@suffix|@text-transform)"/>
-                            <xsl:sequence select="$style/(@prefix|@suffix|@text-transform)"/>
+                            <xsl:sequence select="@* except (@prefix|@suffix)"/>
+                            <xsl:sequence select="$style/(@prefix|@suffix)"/>
                         </xsl:copy>
                     </xsl:for-each>
                 </xsl:variable>

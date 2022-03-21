@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 import com.google.common.base.MoreObjects;
@@ -177,17 +178,40 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 			new AbstractTransformProvider<DotifyTranslator>() {
 				public Iterable<DotifyTranslator> _get(Query query) {
 					MutableQuery q = mutableQuery(query);
-					if (q.containsKey("locale") || q.containsKey("document-locale")) {
-						final String documentLocale;
-						final String locale; {
+					if (q.containsKey("language")
+					    || q.containsKey("region")
+					    || q.containsKey("locale")
+					    || q.containsKey("document-locale")) {
+						final Locale documentLocale;
+						final Locale locale; {
 							try {
 								documentLocale = q.containsKey("document-locale")
-									? parseLocale(q.removeOnly("document-locale").getValue().get()).toLanguageTag()
+									? parseLocale(q.removeOnly("document-locale").getValue().get())
 									: null;
-								locale = q.containsKey("locale")
-									? parseLocale(q.removeOnly("locale").getValue().get()).toLanguageTag()
-									: documentLocale; }
-							catch (IllegalArgumentException e) {
+								if (q.containsKey("locale"))
+									locale = parseLocale(q.removeOnly("locale").getValue().get());
+								else {
+									Locale language = q.containsKey("language")
+										? parseLocale(q.removeOnly("language").getValue().get())
+										: documentLocale;
+									Locale region = q.containsKey("region")
+										? parseLocale(q.removeOnly("region").getValue().get())
+										: null;
+									if (region != null) {
+										// If region is specified we use it, but only if its language subtag matches the
+										// specified language or the document locale (because Dotify only has a single
+										// "locale" parameter).
+										if (language != null)
+											if (!language.equals(new Locale(language.getLanguage()))
+											    || !region.getLanguage().equals(language.getLanguage()))
+												return empty;
+										locale = region;
+									} else if (language != null)
+										locale = language;
+									else
+										return empty;
+								}
+							} catch (IllegalArgumentException e) {
 								logger.error("Invalid locale", e);
 								return empty; }
 						}
@@ -206,8 +230,8 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 							new Function<BrailleFilterFactoryService,BrailleFilter>() {
 								public BrailleFilter _apply(BrailleFilterFactoryService service) {
 									try {
-										if (service.supportsSpecification(locale, mode))
-											return service.newFactory().newFilter(locale, mode); }
+										if (service.supportsSpecification(locale.toLanguageTag(), mode))
+											return service.newFactory().newFilter(locale.toLanguageTag(), mode); }
 									catch (TranslatorConfigurationException e) {
 										logger.error("Could not create BrailleFilter for locale " + locale + " and mode " + mode, e); }
 									throw new NoSuchElementException(); }});
@@ -221,7 +245,9 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 											MutableQuery hyphenatorQuery = mutableQuery();
 											if (!"auto".equals(hyphenator))
 												hyphenatorQuery.add("hyphenator", hyphenator);
-											hyphenatorQuery.add("locale", documentLocale != null ? documentLocale : locale);
+											if (documentLocale != null)
+												// FIXME: better would be to use original document-locale (before varyLocale) for selecting hyphenator
+												hyphenatorQuery.add("document-locale", documentLocale.toLanguageTag());
 											Iterable<Hyphenator> hyphenators = logSelect(hyphenatorQuery, hyphenatorRegistry);
 											translators = Iterables.transform(
 												hyphenators,

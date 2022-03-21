@@ -27,8 +27,10 @@ features are:
   [`http://www.libreoffice.org/dictionaries/hyphen/`](../src/main/resources/tables/). This
   feature is not compatible with other features except `hyphenator`.
 
-`locale`
-: Matches only hyphenators with that locale.
+By default, the document locale is used to select the hyphenator. An
+automatic fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.
 
 
 [Hyphen]: http://hunspell.github.io/

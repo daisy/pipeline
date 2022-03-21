@@ -437,7 +437,8 @@
     
     <p:group px:progress=".55">
     <p:variable name="page-counters"
-                select="string-join(distinct-values((
+                cx:as="xs:string*"
+                select="distinct-values((
                           if (not(/*/*[@selector='@page']))
                           then 'page'
                           else for $r in /*/*[@selector='@page'] return
@@ -446,7 +447,7 @@
                                            else $r) return
                                  ((if ($rr/css:property) then $rr/css:property
                                    else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/@value,'page')[1]
+                                  [@name='counter-increment']/string(@value),'page')[1]
                           ,
                           if (not(//*[@selector='@begin']/*[@selector='@page']))
                           then 'pre-page'
@@ -456,18 +457,18 @@
                                            else $r) return
                                  ((if ($rr/css:property) then $rr/css:property
                                    else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/@value,'pre-page')[1]
+                                  [@name='counter-increment']/string(@value),'pre-page')[1]
                           ,
                           if (not(//*[@selector='@end']/*[@selector='@page']))
-                          then 'pre-page'
+                          then 'post-page'
                           else for $r in //*[@selector='@end']/*[@selector='@page'] return
                                for $rr in (if ($r/*[matches(@selector,'^:')])
                                            then $r/*[not(@selector)]
                                            else $r) return
                                  ((if ($rr/css:property) then $rr/css:property
                                    else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/@value,'post-page')[1]
-                          )),' ')">
+                                  [@name='counter-increment']/string(@value),'post-page')[1]
+                          ))">
         <p:pipe step="extract-page-and-volume-styles" port="styles"/>
     </p:variable>
     
@@ -477,7 +478,15 @@
             css:counter-reset attributes in the output will be manipulating page counters. <!--
             depends on label-targets, parse-content and make-boxes -->
         </p:documentation>
-        <p:with-option name="exclude-counters" select="$page-counters">
+        <p:with-option name="exclude-counters" select="string-join(($page-counters,
+                                                                    'volume',
+                                                                    '-obfl-volume',
+                                                                    '-obfl-volumes',
+                                                                    '-obfl-sheets-in-document',
+                                                                    '-obfl-sheets-in-volume',
+                                                                    '-obfl-started-volume-number',
+                                                                    '-obfl-started-page-number',
+                                                                    '-obfl-started-volume-first-content-page'),' ')">
             <p:empty/>
         </p:with-option>
         <p:with-option name="counter-styles" select="css:parse-counter-styles(/_/*/@css:counter-style)">
@@ -871,13 +880,7 @@
         </p:choose>
     </p:for-each>
     
-    <p:identity name="sections"/>
-    
     <p:xslt px:progress=".06">
-        <p:input port="source">
-            <p:pipe step="sections" port="result"/>
-            <p:pipe step="extract-page-and-volume-styles" port="styles"/>
-        </p:input>
         <p:input port="stylesheet">
             <p:document href="css-to-obfl.xsl"/>
         </p:input>
@@ -899,6 +902,12 @@
         <p:with-param name="text-transforms" select="/_/*/@css:text-transform">
             <p:pipe step="assert-text-transform-only-on-root" port="result"/>
         </p:with-param>
+        <p:with-param name="counter-styles" select="/_/*/@css:counter-style">
+            <p:pipe step="assert-counter-style-only-on-root" port="result"/>
+        </p:with-param>
+        <p:with-param name="page-and-volume-styles" select="/*/*">
+            <p:pipe step="extract-page-and-volume-styles" port="styles"/>
+        </p:with-param>
     </p:xslt>
     
     <!--
@@ -919,6 +928,9 @@
         </p:with-param>
         <p:with-param name="braille-charset-table" select="$braille-charset">
             <p:empty/>
+        </p:with-param>
+        <p:with-param name="counter-styles" select="/_/*/@css:counter-style">
+            <p:pipe step="assert-counter-style-only-on-root" port="result"/>
         </p:with-param>
     </p:xslt>
     

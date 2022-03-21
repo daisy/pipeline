@@ -41,13 +41,13 @@ public class LiblouisTablesTest extends AbstractTest {
 	
 	@Test
 	public void testQueryTranslator() {
-		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
-		           .asLiblouisTable().asURIs()[1].toString().endsWith("/nl_BE.tbl"));
+		assertTrue(provider.get(query("(document-locale:nl-BE)(type:literary)")).iterator().next()
+		           .asLiblouisTable().asURIs()[1].toString().endsWith("/nl.tbl"));
 	}
 	
 	@Test
 	public void testUnicodeBraille() {
-		assertTrue(provider.get(query("(locale:nl-BE)")).iterator().next()
+		assertTrue(provider.get(query("(document-locale:nl-BE)")).iterator().next()
 		           .fromStyledTextToBraille()
 		           .transform(Optional.of(new CSSStyledText("foobar")).asSet()).iterator().next()
 		           .matches("[\\s\\t\\n\u00a0\u00ad\u200b\u2800-\u28ff]*"));

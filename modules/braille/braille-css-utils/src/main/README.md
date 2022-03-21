@@ -13,8 +13,6 @@
 ### XSLT
 
 - [`http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl`](resources/xml/library.xsl): Utility functions for CSS-parsing.
-- [`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl`](resources/xml/transform/abstract-block-translator.xsl)
-- [`http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl`](resources/xml/transform/block-translator-from-text-transform.xsl)
 
 ## CSS cascaders [`org.daisy.pipeline.css.CssCascader`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/css/CssCascader.html)
 
@@ -47,7 +45,6 @@
 
 
 <link rev="dp2:doc" href="./"/>
-<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/impl/CSSBlockTransform.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/impl/BrailleCssCascader.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java"/>

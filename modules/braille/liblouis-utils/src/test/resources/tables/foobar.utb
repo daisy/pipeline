@@ -3,6 +3,8 @@
 #+unicode-form:nfc
 include foobar.uti
 
-uplow Áá 12356
+lowercase á 12356
+
+base uppercase Á á
 
 noback correct "\y1f600" "grin"

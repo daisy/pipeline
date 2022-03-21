@@ -18,7 +18,6 @@
         cz.vutbr.web=WARN
         org.daisy.xprocspec=WARN
         com.xmlcalabash=OFF
-        org.daisy.pipeline.common.calabash.impl.Message=OFF
         org.daisy.pipeline.pax.exam.Options=OFF
       </loggerLevels>
     </filter>
