@@ -86,6 +86,7 @@ having pulled the image you're ready to run the Pipeline web server:
 ~~~sh
 docker run --detach \
            -p 8181:8181 \
+           -e PIPELINE2_WS_HOST=0.0.0.0 \
            daisyorg/pipeline-assembly
 ~~~
 
