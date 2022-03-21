@@ -1,3 +1,12 @@
+Changes in release v1.14.6
+==========================
+
+### Modules
+- Changes to braille production scripts, see [release notes of braille modules v1.14.6](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1146)
+
+### Details
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.5)
+
 Changes in release v1.14.5
 ==========================
 
