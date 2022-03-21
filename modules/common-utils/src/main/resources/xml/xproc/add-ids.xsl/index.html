@@ -12,12 +12,32 @@
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xslt/generate-id.xsl" class="source">../xslt/generate-id.xsl</a>"</span>/&gt;
 
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"next-doc"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"all-docs"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()"</span>/&gt;
+
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ids"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@id]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
-    
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:first-element-in-all-docs"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"(for $d in $all-docs return $d/key('ids',$id))[1]"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"collection()[position()=$next-doc]"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"1"</span>&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:next-match-with-generated-ids"</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'id_'"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"for-elements"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//*[@id][not(key('ids',@id)[1] is .)]|                                     //*[@pxi:need-id][not(@id)]"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"for-elements"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//*[@id][not(pf:first-element-in-all-docs(@id) is .)]|                                     //*[@pxi:need-id][not(@id)]"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"in-use"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$all-docs//@id"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
@@ -25,7 +45,7 @@
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@id"</span>&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"key('ids',.)[1] is .."</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"pf:first-element-in-all-docs(.) is .."</span>&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
@@ -39,18 +59,14 @@
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">".9"</span>&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-match</span>/&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mapping"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{base-uri()}"</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//*[@id][not(key('ids',@id)[1] is .)]"</span>&gt;
-                            &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">anchor</span>&gt;
-                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:generate-id"</span>/&gt;
-                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"original-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
-                            &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">anchor</span>&gt;
-                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
-                    &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span>&gt;
+            &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{base-uri()}"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">".//*[@id][not(pf:first-element-in-all-docs(@id) is .)]"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">anchor</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:generate-id"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"original-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">anchor</span>&gt;
                 &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span>&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">result-document</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
@@ -68,13 +84,6 @@
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@pxi:need-id"</span>/&gt;
 
-    
-    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/pxi:wrapper"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
-
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|*"</span>&gt;
         &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span> <span class="code-xml-attribute-local-name">copy-namespaces</span>=<span class="code-xml-attribute-value">"no"</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"namespace::*[not(.='http://www.daisy.org/ns/pipeline/xproc/internal')]"</span>&gt;
@@ -82,6 +91,10 @@
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"text()|processing-instruction()|comment()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
 &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>

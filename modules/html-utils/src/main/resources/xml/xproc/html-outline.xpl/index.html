@@ -120,8 +120,11 @@
 				result.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
 				&lt;<span class="code-xml-element-local-name">dt</span>&gt;no-implied&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
 				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Like outline-depth, but in addition create new sections as needed to get rid of
-				implied sections. Note that this may result in multiple &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements,
-				so a cleanup step may be required.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+				implied sections completely. Note that this may result in multiple &lt;<span class="code-xml-element-local-name">code</span>&gt;body&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+				elements or may break the structure or semantics of the document some other
+				way. This feature is intended for creating an intermediary HTML document that will
+				be converted further into a format that does not allow implied sections (like
+				DTBook).&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
 				&lt;<span class="code-xml-element-local-name">dt</span>&gt;keep&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
 				&lt;<span class="code-xml-element-local-name">dd</span>&gt;Do nothing. Default value.&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
 			&lt;/<span class="code-xml-element-local-name">dl</span>&gt;
@@ -229,6 +232,7 @@
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"normalize"</span>/&gt;
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
 
+	
 	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*//d:outline"</span>&gt;
 		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
 			&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"outline"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"secondary"</span>/&gt;

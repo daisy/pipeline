@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">make-anonymous-block-boxes {http://www.daisy.org/ns/pipeline/braille-css}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/braille/braille-css-utils/src/main/resources/xml/make-anonymous-block-boxes.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">make-anonymous-block-boxes</span> <span class="uri">{http://www.daisy.org/ns/pipeline/braille-css}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Wrap inline boxes that have sibling block boxes in anonymous block boxes.
+        (http://braillespecs.github.io/braille-css/#anonymous-boxes).</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/braille/css-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The input is assumed to be a tree-of-boxes representation of a document where boxes
+            are represented by css:box elements. The document root and top-level elements in named
+            flows must be boxes or css:_ elements. The parent of a box must be another box (or a
+            css:_ element if it's the document root or a top-level element in a named flow). Inline
+            boxes must not have non-inline descendant boxes. Table-cell boxes must have a parent
+            table box and table boxes must have only table-cell child boxes. All other nodes must
+            have at least one inline box ancestor. If the input represents a named flow this must be
+            indicated with a css:flow attribute on the document element.</p></td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Adjacent inline boxes with one or more sibling block or table boxes are grouped and
+            wrapped in an anonymous block box. If all top-level boxes in the normal flow are inline
+            they are wrapped in an anonymous block box too. Top-level elements in a named flow that
+            are inline boxes are wrapped in an anonymous block box each and their css:anchor
+            attributes are moved to the anonymous block. Top-level elements in a named flow that are
+            css:_ elements are changed into anonymous block boxes.</p></td>
+</tr></tbody>
+</table>
+</body>
+</html>

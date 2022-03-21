@@ -23,7 +23,7 @@
 <h2>
             Step <span class="name">zedai-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">ZedAI to PEF</h1>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">ZedAI to braille</h1>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a ZedAI (DAISY 4 XML) document into an embosser ready braille document.</p>
 <a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef">
             Online documentation
@@ -68,7 +68,7 @@
 <span class="">stylesheet</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
+<td width="10px" class="nowrap code"></td>
 <td></td>
 </tr>
 <tr>
@@ -76,90 +76,72 @@
 <span class="">transform</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'(translator:liblouis)(formatter:dotify)'</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Transformer query</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The transformer query.</p>
-</td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">ascii-table</span><span class="details"></span>
+<span class="">output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">ASCII braille table</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The ASCII braille table, used to render the PEF preview and the plain text version.
-
-If left blank, the locale information in the input document will be used to select a suitable table.</p>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">output-file-format</span><span class="details"></span>
 </td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">include-preview</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'false'</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Include preview</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether or not to include a preview of the PEF in HTML.</p>
-</td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">include-brf</span><span class="details"></span>
-</td>
-<td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'false'</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Include plain text file (BRF)</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether or not to include a plain text ASCII version of the PEF.</p>
-</td>
-</tr>
-<tr>
-<td width="150px;" class="nowrap name">
-<span class="required">pef-output-dir</span><span class="details"> required</span>
+<span class="">preview-table</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">PEF</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">The PEF.</p>
-</td>
-</tr>
-<tr>
-<td width="150px;" class="nowrap name">
-<span class="">brf-output-dir</span><span class="details"></span>
-</td>
-<td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">BRF</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">A plain text ASCII version of the PEF.</p>
-</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">preview-output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Preview</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">An HTML preview of the PEF.</p>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">include-pef</span><span class="details"></span>
 </td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">pef-output-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
 <span class="">temp-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">''</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Directory for storing temporary files.</p>
-</td>
+<td width="10px" class="nowrap code"></td>
+<td></td>
 </tr>
 </tbody>
 </table>

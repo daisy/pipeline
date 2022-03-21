@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../catalog.xml">
+</head>
+<body><div class="code">&lt;<span class="code-xml-element-local-name">catalog</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"urn:oasis:names:tc:entity:xmlns:xml:catalog"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline"</span>&gt;
+  
+  <span about="../../xml/library.xpl">&lt;<span class="code-xml-element-local-name">uri</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/api/org/daisy/pipeline/modules/braille/common-utils/library.xpl.html" class="apidoc"><span rel="alias" resource="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl</span></a>"</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/library.xpl" class="source">../xml/library.xpl</a>"</span>/&gt;</span>
+  <span about="../../xml/library.xsl">&lt;<span class="code-xml-element-local-name">uri</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/library.xsl" class="apidoc"><span rel="alias" resource="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl">http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl</span></a>"</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/library.xsl" class="source">../xml/library.xsl</a>"</span>/&gt;</span>
+  
+  <span about="../../xml/abstract-block-translator.xsl">&lt;<span class="code-xml-element-local-name">uri</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/abstract-block-translator.xsl" class="apidoc"><span rel="alias" resource="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl">http://www.daisy.org/pipeline/modules/braille/css-utils/transform/abstract-block-translator.xsl</span></a>"</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/abstract-block-translator.xsl" class="source">../xml/abstract-block-translator.xsl</a>"</span>/&gt;</span>
+  <span about="../../xml/block-translator-from-text-transform.xsl">&lt;<span class="code-xml-element-local-name">uri</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/block-translator-from-text-transform.xsl" class="apidoc"><span rel="alias" resource="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl">http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl</span></a>"</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/block-translator-from-text-transform.xsl" class="source">../xml/block-translator-from-text-transform.xsl</a>"</span>/&gt;</span>
+  
+  <span about="../../xml/data-types/transform-query.xml" typeof="data-type"><meta property="id" content="transform-query">
+<meta property="definition" content="&lt;data type=&quot;string&quot;&gt;
+    &lt;documentation xml:lang=&quot;en&quot;&gt;A query
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    query
+     : feature*
+     ;
+    feature
+     : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+     ;
+    value
+     : string | integer | IDENT
+     ;
+&lt;/documentation&gt;
+    &lt;param name=&quot;pattern&quot;&gt;^\\s*(\\(\\s*[_a-zA-Z][_a-zA-Z0-9-]*(\\s*:\\s*([_a-zA-Z][_a-zA-Z0-9-]*|'[^']*'|&quot;[^&quot;]*&quot;|0|-?[1-9][0-9]*))?\\s*\\)\\s*)*$&lt;/param&gt;
+&lt;/data&gt;">&lt;<span class="code-xml-element-local-name">uri</span> <span class="code-xml-attribute-local-name">uri</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-common/src/main/resources/xml/data-types/transform-query.xml" class="source">../xml/data-types/transform-query.xml</a>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">content-type</span>=<span class="code-xml-attribute-value">"data-type"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">id</span>=<span class="code-xml-attribute-value">"transform-query"</span>/&gt;</span>
+  
+  &lt;<span class="code-xml-element-local-name">nextCatalog</span> <span class="code-xml-attribute-local-name">catalog</span>=<span class="code-xml-attribute-value">"org:daisy:pipeline:modules:css-utils"</span>/&gt;
+  &lt;<span class="code-xml-element-local-name">nextCatalog</span> <span class="code-xml-attribute-local-name">catalog</span>=<span class="code-xml-attribute-value">"org:daisy:pipeline:modules:common-utils"</span>/&gt;
+  &lt;<span class="code-xml-element-local-name">nextCatalog</span> <span class="code-xml-attribute-local-name">catalog</span>=<span class="code-xml-attribute-value">"org:daisy:pipeline:modules:braille:css-utils"</span>/&gt;
+  
+&lt;/<span class="code-xml-element-local-name">catalog</span>&gt;</div></body>
+</html>

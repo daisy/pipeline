@@ -880,7 +880,9 @@ that contains <code>(formatter:dotify)</code>. Recognized features are:</p>
 <p>The remaining features are used for selecting the <a href="/pipeline/Get-Help/User-Guide/Braille#braille-transcription">braille
 translator</a>
 and
-<a href="/pipeline/Get-Help/User-Guide/Braille#hyphenation">hyphenator</a>.</p>
+<a href="/pipeline/Get-Help/User-Guide/Braille#hyphenation">hyphenator</a>. By
+default, the document locale is used to select the translator and
+hyphenator.</p>
 
 <h1 id="dotify-based-braille-transcription">Dotify based braille transcription</h1>
 
@@ -894,7 +896,6 @@ can be selected using a transformer query that contains
   <dt><code>translator</code></dt>
   <dd>Will only match if the value is “dotify”</dd>
   <dt><code>locale</code></dt>
-  <dd>Required.</dd>
   <dd>Matches only Dotify translators for that locale. An automatic
 fallback mechanism is used: if nothing is found for
 language-COUNTRY-variant, then language-COUNTRY is searched, then

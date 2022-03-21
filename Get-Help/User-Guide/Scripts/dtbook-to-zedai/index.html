@@ -933,45 +933,6 @@ Filename for the generated MODS file
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Copy external resources</div>
-<div class="synopsis-option-desc">
-Include any referenced external resources like images and CSS-files to the output.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">CSS filename</div>
-<div class="synopsis-option-desc">
-Filename for the generated CSS file
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">ZedAI filename</div>
 <div class="synopsis-option-desc">
 Filename for the generated ZedAI file
@@ -994,6 +955,45 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">CSS filename</div>
+<div class="synopsis-option-desc">
+Filename for the generated CSS file
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Copy external resources</div>
+<div class="synopsis-option-desc">
+Include any referenced external resources like images and CSS-files to the output.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 </ul>
@@ -1049,24 +1049,24 @@ Options:</pre>
 <td>MODS filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--copy-external-resources [<span style="text-transform: uppercase">copy-external-resources</span>]</td>
-<td>Copy external resources (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
-<td>CSS filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
 <td>--zedai-filename [<span style="text-transform: uppercase">zedai-filename</span>]</td>
 <td>ZedAI filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--lang [<span style="text-transform: uppercase">lang</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
+<td>CSS filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--copy-external-resources [<span style="text-transform: uppercase">copy-external-resources</span>]</td>
+<td>Copy external resources (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

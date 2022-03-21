@@ -13,8 +13,7 @@
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
     &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//d:clip"</span> <span class="code-xml-attribute-local-name">group-by</span>=<span class="code-xml-attribute-value">"@src"</span>&gt;
-        
-        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{current-grouping-key()}"</span> <span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"audio/mpeg"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{current-grouping-key()}"</span>/&gt;
       &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span>&gt;
     &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
   &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;

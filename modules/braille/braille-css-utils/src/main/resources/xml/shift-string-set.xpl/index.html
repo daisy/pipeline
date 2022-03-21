@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../shift-string-set.xpl">
+</head>
+<body><div class="code" about="../shift-string-set.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">css</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/braille-css"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"css:shift-string-set"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Move 'string-set' declarations to inline boxes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Boxes must be represented by &lt;<span class="code-xml-element-local-name">code</span>&gt;css:box&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements. All block boxes must have
+            at least one descendant inline box and inline boxes must have no descendant block
+            boxes. 'string-set' properties must be declared in &lt;<span class="code-xml-element-local-name">code</span>&gt;css:string-set&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+            attributes, and must conform to &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://braillespecs.github.io/braille-css/#the-string-set-property"</span>&gt;http://braillespecs.github.io/braille-css/#the-string-set-property&lt;/<span class="code-xml-element-local-name">a</span>&gt;.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;For each element in the input that has a &lt;<span class="code-xml-element-local-name">code</span>&gt;css:string-set&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute and is
+            not a descendant of an inline box and not an inline box itself, the attribute is moved
+            to the first descendant or following inline box within the same block (which may be the
+            element itself). If there is no such element, the attribute is placed on an empty
+            &lt;<span class="code-xml-element-local-name">code</span>&gt;css:_&lt;/<span class="code-xml-element-local-name">code</span>&gt; element inserted as the last child of the last preceding inline box
+            (in the same block). In the former case, if the attribute is moved to a
+            &lt;<span class="code-xml-element-local-name">code</span>&gt;css:box&lt;/<span class="code-xml-element-local-name">code</span>&gt; element that already has a &lt;<span class="code-xml-element-local-name">code</span>&gt;css:string-set&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute in
+            the input, the 'string-set' declarations are prepended to it.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+    
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

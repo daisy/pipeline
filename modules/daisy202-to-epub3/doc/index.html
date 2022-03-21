@@ -906,7 +906,7 @@ This page describes the steps, comments and issues related to this transformatio
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">EPUB</div>
+<div class="synopsis-output-name">EPUB 3</div>
 <div class="synopsis-output-desc">
 
 </div>
@@ -918,9 +918,27 @@ This page describes the steps, comments and issues related to this transformatio
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">EPUB 3 Filename</div>
+<div class="synopsis-option-name">Include Media Overlay</div>
 <div class="synopsis-option-desc">
-By default, the filename is the dc:identifier with a "epub" file extension. This option can be used to set a custom filename.
+Whether or not to include media overlays and associated audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">EPUB 3 file name</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+</div>
+<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+
+<p>This option can be used to set a custom file name.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
@@ -934,19 +952,6 @@ By default, the filename is the dc:identifier with a "epub" file extension. This
 <div class="synopsis-option-name">Backwards compatible</div>
 <div class="synopsis-option-desc">
 Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include Media Overlay</div>
-<div class="synopsis-option-desc">
-Whether or not to include media overlays and associated audio files.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1004,16 +1009,16 @@ Options:</pre>
 <td></td>
 </tr>
 <tr>
+<td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
+<td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
 <td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
-<td>EPUB 3 Filename (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
 <td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
-<td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

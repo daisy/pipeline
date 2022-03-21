@@ -173,13 +173,13 @@
     <a xlink:href="https://www.w3.org/TR/mediaqueries-4/" id="a93" transform="translate(344.42555,28.360552)" class="external-link" target="_blank">
       <text style="font-size:12px;text-decoration: underline;text-decoration-line: underline" id="text6170" x="20.575195" y="0"><tspan style="text-align:center;text-anchor:middle" id="tspan9057">medium</tspan></text>
     </a>
-    <a xlink:href="/pipeline/api/d1047e216.html" transform="translate(293.87612,150.22324)" id="a6175" class="apidoc">
+    <a xlink:href="/pipeline/api/d860e193.html" transform="translate(293.87612,150.22324)" id="a6175" class="apidoc">
       <text id="text6173" style="font-size:16px;text-decoration: underline;text-decoration-line: underline" x="71.679688" y="0"><tspan style="text-align:center;text-anchor:middle" id="tspan9055">px:apply-stylesheets</tspan></text>
     </a>
     <a xlink:href="http://braillespecs.github.io/braille-css/#style-attribute" id="a6179" transform="translate(620.12747,177.482159)" class="external-link" target="_blank">
       <text style="font-family:monospace" id="text6177">style</text>
     </a>
-    <a xlink:href="/pipeline/api/d382e106.html" id="a6183" class="apidoc" transform="translate(370.67723,199.92493)">
+    <a xlink:href="/pipeline/api/d254e52.html" id="a6183" class="apidoc" transform="translate(370.67723,199.92493)">
       <text id="text6181" style="font-size:13.3333px;text-decoration: underline;text-decoration-line: underline" x="45.244026" y="0"><tspan style="text-align:center;text-anchor:middle" id="tspan9053">px:css-cascade</tspan></text>
     </a>
     <a xlink:href="/pipeline/api/org/daisy/pipeline/modules/braille/common-utils/library.xpl.html" id="a6187" class="apidoc" transform="translate(329.20444,457.17067)">
@@ -209,10 +209,10 @@
     <a xlink:href="https://github.com/mtmse/dotify.formatter.impl/" id="a6227" transform="translate(508.09184,781.39391)" class="external-link" target="_blank">
       <text id="text6225" style="font-size:16px;text-decoration: underline;text-decoration-line: underline">Dotify</text>
     </a>
-    <a xlink:href="/pipeline/api/d898e73.html" id="a6231" class="apidoc" transform="translate(326.6172,1057.7447)">
+    <a xlink:href="/pipeline/api/d887e73.html" id="a6231" class="apidoc" transform="translate(326.6172,1057.7447)">
       <text id="text6229" style="font-size:16px;text-decoration: underline;text-decoration-line: underline">pef:pef2text</text>
     </a>
-    <a xlink:href="/pipeline/modules/braille/css-utils/src/main/README.html" id="a6235" class="apidoc" transform="translate(152.92117,601.12567)">
+    <a xlink:href="/pipeline/modules/braille/braille-common/src/main/README.html" id="a6235" class="apidoc" transform="translate(152.92117,601.12567)">
       <text id="text6233" style="font-size:16px;text-decoration: underline;text-decoration-line: underline" x="142.625" y="0"><tspan style="text-align:center;text-anchor:middle" id="tspan9039">CSSBlockTransform</tspan></text>
     </a>
   </g>

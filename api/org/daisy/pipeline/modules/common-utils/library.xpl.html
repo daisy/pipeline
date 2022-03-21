@@ -31,12 +31,12 @@
 </tr></thead>
 <tbody>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e417.html">add-ids</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e465.html">add-ids</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Add missing IDs and fix duplicate IDs.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e162.html">assert</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e210.html">assert</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Example usage:
         
@@ -44,32 +44,29 @@
                &lt;p:with-param name="param1" select="(/d:fileset/d:file[n [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e67.html">error</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e95.html">error</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Example usage:
         
-            &lt;px:error code="pxe:PEOU0001"&gt;
+            &lt;px:error code="pxe:PEOU0001" message="URI must be absolute and refer to the local file system: $1"&gt;
                 &lt;p:with-param name="param1" select="$href"/&gt;
-                &lt;p:input port="error-definitions"&gt;
-                    &lt;p:inline&gt;
-                        &lt;d:errors xmlns:pxe="..."&gt;
-                            &lt;d:erro [...]</td>
+            &lt;/px:error&gt;</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e270.html">i18n-translate</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e318.html">i18n-translate</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>This step invokes the pf:i18n-translate function (implemented in i18n-translate.xsl) with its options as arguments and returns the result as a c:result
             document.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e110.html">log-error</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e158.html">log-error</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Log a caught XProc error.
         Logs a message in the job execution log and prints the stack trace in the detailed
         log.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e26.html">message</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e28.html">message</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Example usage:
         
@@ -78,13 +75,19 @@
             &lt;/px:message&gt;</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e215.html">tokenize</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e540.html">parse-xml-stylesheet-instructions</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Extract and parse &lt;?xml-stylesheet?&gt; processing instructions from a
+		document.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e263.html">tokenize</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>This step invokes the XPath fn:tokenize function with its options as
             arguments and returns the result as a sequence of c:result documents.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1238e325.html">xml-chunker</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1373e373.html">xml-chunker</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Break a document into smaller parts.</td>
 </tr>

@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">shift-string-set {http://www.daisy.org/ns/pipeline/braille-css}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/braille/braille-css-utils/src/main/resources/xml/shift-string-set.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">shift-string-set</span> <span class="uri">{http://www.daisy.org/ns/pipeline/braille-css}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Move 'string-set' declarations to inline boxes.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/braille/css-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Boxes must be represented by <code>css:box</code> elements. All block boxes must have
+            at least one descendant inline box and inline boxes must have no descendant block
+            boxes. 'string-set' properties must be declared in <code>css:string-set</code>
+            attributes, and must conform to <a href="http://braillespecs.github.io/braille-css/#the-string-set-property" class="external-link" target="_blank">http://braillespecs.github.io/braille-css/#the-string-set-property</a>.</p></td>
+</tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">For each element in the input that has a <code>css:string-set</code> attribute and is
+            not a descendant of an inline box and not an inline box itself, the attribute is moved
+            to the first descendant or following inline box within the same block (which may be the
+            element itself). If there is no such element, the attribute is placed on an empty
+            <code>css:_</code> element inserted as the last child of the last preceding inline box
+            (in the same block). In the former case, if the attribute is moved to a
+            <code>css:box</code> element that already has a <code>css:string-set</code> attribute in
+            the input, the 'string-set' declarations are prepended to it.</p></td>
+</tr></tbody>
+</table>
+</body>
+</html>

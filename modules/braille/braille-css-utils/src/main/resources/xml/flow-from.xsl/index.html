@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../flow-from.xsl">
+</head>
+<body><div class="code" about="../flow-from.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsl</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/XSL/Transform"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">css</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/braille-css"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">re</span>=<span class="code-xml-attribute-value">"regex-utils"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">f</span>=<span class="code-xml-attribute-value">"f"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"3.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">include</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-css-utils/src/main/resources/xml/library.xsl" class="source">library.xsl</a>"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"all-docs"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"document-node()*"</span>/&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"flow-contents-and-consumers"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"map(xs:string,element()*)"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">map</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"distinct-values($all-docs//css:flow/@from)[not(.='normal')]"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"flow"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">map-entry</span> <span class="code-xml-attribute-local-name">key</span>=<span class="code-xml-attribute-value">"$flow"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:sort-by-original-position((                                                      $all-docs/*[@css:flow=$flow]/*,                                                      $all-docs//css:flow[@from=$flow]))"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">map</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:flow[@from]"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"flow"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@from"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(@scope)"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"flow-contents-and-consumers"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$flow-contents-and-consumers($flow)"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"index"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:index-of($flow-contents-and-consumers,.)"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"resolved"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"reverse(subsequence($flow-contents-and-consumers,1,$index - 1))"</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"items"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"()"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">on-completion</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$items"</span>/&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"self::css:flow[@from]"</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$items"</span>/&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"items"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"(.,$items)"</span>/&gt;
+                                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$resolved"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@scope=('document')"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$all-docs/*[@css:flow=$flow]/*"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@scope=('volume','page')                             or matches(@scope,re:exact($css:VENDOR_PRF_IDENT_RE))"</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span>&gt;flow() function argument '&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@scope"</span>/&gt;' not supported&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*|node()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*|node()"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:flow"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"(($element/ancestor-or-self::*)[1]/@css:flow,'normal')[1]"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:original-position"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()?"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"element"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"flow"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"1 to 100"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"position"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$element"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">on-completion</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">terminate</span>=<span class="code-xml-attribute-value">"yes"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">on-completion</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"current-flow"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:flow($position)"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$current-flow='normal' and not($flow='normal')"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"()"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$current-flow=$flow"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$position"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"anchor"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"($position/ancestor-or-self::*)[2]/@css:anchor"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"anchor"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$all-docs//*[@css:id=$anchor]"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"position"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$anchor"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:sort-by-original-position"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"elements"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">perform-sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$elements"</span>&gt;
+            
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"count(f:original-position(.,'normal')/(preceding::*|ancestor::*))"</span>/&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:flow(.)"</span>/&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sort</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"count(f:original-position(.,f:flow(.))/(preceding::*|ancestor::*))"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">perform-sort</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+    
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"f:index-of"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer?"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"seq"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"search"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$seq"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"i"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"1"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">on-completion</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"()"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">". is $search"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$i"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"i"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$i + 1"</span>/&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">next-iteration</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">iterate</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">function</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

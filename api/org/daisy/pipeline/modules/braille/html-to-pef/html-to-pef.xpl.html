@@ -23,7 +23,7 @@
 <h2>
             Step <span class="name">html-to-pef.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">HTML to PEF</h1>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">HTML to braille</h1>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms a HTML document into an embosser ready braille document.</p>
 <a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/html-to-pef">
             Online documentation
@@ -83,7 +83,16 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td></td>
+<td><p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve" px:inherit="prepend">
+
+A number of [partials](https://sass-lang.com/documentation/at-rules/import#partials) (helper style
+sheet modules) are available for use in Sass style sheets:
+
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/tables):
+  for styling tables
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/definition-lists):
+  for styling definition lists
+</p></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
@@ -119,7 +128,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">include-brf</span><span class="details"></span>
+<span class="">include-pef</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
@@ -135,7 +144,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">ascii-file-format</span><span class="details"></span>
+<span class="">output-file-format</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
@@ -143,7 +152,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">ascii-table</span><span class="details"></span>
+<span class="">preview-table</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
@@ -311,7 +320,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">pef-output-dir</span><span class="details"></span>
+<span class="">output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
@@ -319,7 +328,7 @@ When `include-obfl` is set to true, the conversion may fail but still output a d
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">brf-output-dir</span><span class="details"></span>
+<span class="">pef-output-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>

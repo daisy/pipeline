@@ -858,6 +858,20 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">Text-to-speech configuration file</div>
+<div class="synopsis-input-desc">
+<div class="shortdesc">Configuration file for the text-to-speech.
+</div>
+<div class="longdesc">Configuration file for the text-to-speech.
+
+<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
+</div>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name">DTBook file</div>
 <div class="synopsis-input-desc">
 The 2005-3 DTBook file to be transformed.
@@ -867,20 +881,6 @@ The 2005-3 DTBook file to be transformed.
 <ul class="media-types">
 <li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
 </ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">Text-to-speech configuration file</div>
-<div class="synopsis-input-desc">
-<div class="shortdesc">Configuration file for the text-to-speech.
-</div>
-<div class="longdesc">Configuration file for the text-to-speech.
-
-<p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
-</div>
 </div>
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
@@ -895,6 +895,12 @@ The 2005-3 DTBook file to be transformed.
 <div class="synopsis-output-name">DAISY 3</div>
 <div class="synopsis-output-desc">
 The resulting DAISY 3 publication.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
 </div>
 </li>
 <li class="synopsis-output details-on">
@@ -916,6 +922,38 @@ property.</p>
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Detect words</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether to detect and mark up words with `&lt;w&gt;` tags.
+</div>
+<div class="longdesc">Whether to detect and mark up words with `<w>` tags.
+
+<p>By default word detection is performed but an option is provided to disable it because some DAISY 3
+reading systems can’t handle the word tags.</p>
+&lt;/div&gt;
+&lt;/div&gt;
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+&lt;/li&gt;
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-desc">
+Whether or not to make the TTS log available.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Publisher</div>
@@ -957,20 +995,21 @@ Includes DTBook in output, as opposed to audio only.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-name"></div>
 <div class="synopsis-option-desc">
-Whether or not to make the TTS log available.
+
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>audio/mpeg</code>
 </div>
 </li>
-</ul>
+&lt;/ul&gt;
 
-  <script type="text/javascript">
+
+<script type="text/javascript">
 var allElements = [];
 function showDetailsAndHideAllOther() {
   var windowTopBefore = window.pageYOffset;
@@ -1002,25 +1041,34 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
+&lt;/div&gt;
 
-</div>
+
 
 <div class="cli-synopsis hidden">
 
-  <pre>Usage: dp2 [GLOBAL_OPTIONS] dtbook-to-daisy3 [OPTIONS]
+<pre>Usage: dp2 [GLOBAL_OPTIONS] dtbook-to-daisy3 [OPTIONS]
 
 Options:</pre>
-  <table>
+<table>
+<tr>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+</td>
+<td>Configuration file for the text-to-speech.
+</td>
+</tr>
 <tr>
 <td>--source <span style="text-transform: uppercase">source</span>
 </td>
 <td>The 2005-3 DTBook file to be transformed.</td>
 </tr>
 <tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
-</td>
-<td>Configuration file for the text-to-speech.
-</td>
+<td>--word-detection [<span style="text-transform: uppercase">word-detection</span>]</td>
+<td>Detect words (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
+<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
@@ -1035,8 +1083,8 @@ Options:</pre>
 <td>With text (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
-<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
+<td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
@@ -1117,6 +1165,12 @@ if (window.addEventListener) {
 }
 </script>
 
+</w>
+</div>
+</div>
+</li>
+</ul>
+</div>
 
     </div>
   </body>

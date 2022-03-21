@@ -939,6 +939,15 @@ if (window.addEventListener) {
         }
     }
 }
+
+<span class="variable">$duplicate-tables-with-class</span>: <span class="value">null</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@if</span> <span class="variable">$duplicate-tables-with-class</span> != <span class="value">null</span> {
+    <span class="directive">@xslt</span> <span class="string"><span class="delimiter">"</span><span class="content">tables.xsl</span><span class="delimiter">"</span></span> {
+        <span class="key">duplicate-tables-with-class</span>: <span class="variable">$duplicate-tables-with-class</span>;
+        <span class="key">classes-for-table-duplicates</span>: <span class="variable">$classes-for-table-duplicates</span>;
+    }
+}
 </pre></div>
 </div>
 </div>

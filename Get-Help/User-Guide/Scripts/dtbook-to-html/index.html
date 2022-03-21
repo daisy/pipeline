@@ -882,12 +882,31 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 <div class="synopsis-output-desc">
 The resulting HTML document.
 </div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
 </li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Language code</div>
@@ -918,19 +937,6 @@ split up if they exceed the given maximum size.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>-1</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
 </div>
 </li>
 </ul>
@@ -982,16 +988,16 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
-</tr>
-<tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

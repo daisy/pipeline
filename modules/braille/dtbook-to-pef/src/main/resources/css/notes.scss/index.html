@@ -844,62 +844,79 @@ if (window.addEventListener) {
 <div class="language-sass highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="variable">$notes-placement</span>: <span class="value">end-of-volume</span> <span class="error">!</span><span class="value">default</span>;
+<span class="variable">$chapter-selector</span>: <span class="string"><span class="delimiter">"</span><span class="content">level1, level2, level3, level4, level5, level6</span><span class="delimiter">"</span></span> <span class="error">!</span><span class="value">default</span>;
 
-<span class="key">noteref</span><span class="pseudo-class">::alternate</span> {
-        <span class="key">display</span>: <span class="value">block</span>;
-        <span class="key">content</span>: <span class="predefined">target-content</span>(<span class="function"><span class="delimiter">attr(</span><span class="content">href</span><span class="delimiter">)</span></span>);
-}
+<span class="directive">@if</span> <span class="variable">$notes-placement</span> != <span class="value">custom</span> {
 
-<span class="comment"><span class="delimiter">//</span><span class="content"> notes that are not referenced are not rendered</span></span>
-<span class="tag">note</span> {
-        <span class="key">display</span>: <span class="value">none</span>;
-}
-
-<span class="comment"><span class="delimiter">/*</span><span class="content">
- * - Generate a div element to contain all the notes and to attach a title.
- */</span></span>
-<span class="directive">@xslt</span> <span class="string"><span class="delimiter">"</span><span class="content">notes.xsl</span><span class="delimiter">"</span></span> {
-        <span class="key">endnotes-section-id</span>: <span class="string"><span class="delimiter">"</span><span class="content">endnotes-section</span><span class="delimiter">"</span></span>;
-}
-
-<span class="id">#endnotes-section</span> {
-        <span class="key">display</span>: <span class="value">-obfl-list-of-references</span>;
-        <span class="key">flow</span>: <span class="value">endnotes-container</span>;
-        <span class="local-variable">&amp;</span>::<span class="value">after</span> {
-                <span class="key">content</span>: -<span class="predefined">obfl-collection</span>(<span class="value">endnotes</span>);
+        <span class="comment">/*</span>
+         * - <span class="key">Move</span> <span class="key">note</span> <span class="key">elements</span> <span class="key">if</span> <span class="key">notes-placement</span> <span class="key">is</span> <span class="string"><span class="delimiter">"</span><span class="content">end-of-block</span><span class="delimiter">"</span></span>,
+         * - <span class="key">otherwise</span> <span class="key">generate</span> <span class="key">a</span> <span class="key">div</span> <span class="key">element</span> <span class="key">to</span> <span class="key">contain</span> <span class="key">all</span> <span class="key">the</span> <span class="key">notes</span> <span class="key">and</span> <span class="key">to</span> <span class="key">attach</span> <span class="key">a</span> <span class="key">title</span>.
+         */
+        <span class="directive">@xslt</span> <span class="string"><span class="delimiter">"</span><span class="content">notes.xsl</span><span class="delimiter">"</span></span> {
+                <span class="key">notes-placement</span>: <span class="variable">$notes-placement</span>;
+                <span class="key">endnotes-section-class</span>: <span class="string"><span class="delimiter">"</span><span class="content">endnotes-section</span><span class="delimiter">"</span></span>;
+                <span class="key">chapter-selector</span>: <span class="variable">$chapter-selector</span>;
         }
-}
 
-<span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">bottom-of-page</span> {
-        <span class="key">noteref</span>::<span class="value">alternate</span> {
-                <span class="key">flow</span>: <span class="value">footnotes</span>;
-        }
-        <span class="directive">@page</span> {
-                <span class="directive">@footnotes</span> {
-                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">footnotes</span>);
-            <span class="key">-obfl-fallback-collection</span>: <span class="value">endnotes</span>;
+        <span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">end-of-block</span> {
+
+        } <span class="directive">@else</span> {
+
+                <span class="key">noteref</span>::<span class="value">alternate</span> {
+                        <span class="key">display</span>: <span class="value">block</span>;
+                        <span class="key">content</span>: <span class="predefined">target-content</span>(<span class="function"><span class="delimiter">attr(</span><span class="content">idref</span><span class="delimiter">)</span></span>);
                 }
-        }
 
-} <span class="directive">@else</span> {
-        <span class="key">noteref</span>::<span class="value">alternate</span> {
-                <span class="key">flow</span>: <span class="value">endnotes</span>;
-        }
-}
-
-<span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">end-of-book</span> {
-        <span class="directive">@volume</span>:<span class="value">last</span> {
-                <span class="directive">@end</span> {
-                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes-container</span>);
+                <span class="comment">// notes that are not referenced are not rendered</span>
+                <span class="key">note</span> {
+                        <span class="key">display</span>: <span class="value">none</span>;
                 }
-        }
-} <span class="directive">@else</span> {
-        <span class="error">#</span><span class="key">endnotes-section</span> {
-                <span class="key">-obfl-list-of-references-range</span>: <span class="value">volume</span>;
-        }
-        <span class="directive">@volume</span> {
-                <span class="directive">@end</span> {
-                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes-container</span>);
+
+                .<span class="key">endnotes-section</span> {
+                        <span class="key">display</span>: <span class="value">-obfl-list-of-references</span>;
+                        <span class="directive">@if</span> <span class="variable">$notes-placement</span> != <span class="value">end-of-chapter</span> {
+                                <span class="key">flow</span>: <span class="value">endnotes-container</span>;
+                        }
+                        <span class="local-variable">&amp;</span>::<span class="value">after</span> {
+                                <span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">end-of-chapter</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes</span>);
+                                } <span class="directive">@else if</span> <span class="variable">$notes-placement</span> == <span class="value">end-of-book</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes</span>, <span class="value">document</span>);
+                                } <span class="directive">@else</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes</span>, <span class="value">volume</span>);
+                                }
+                        }
+                }
+
+                <span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">bottom-of-page</span> {
+                        <span class="key">noteref</span>::<span class="value">alternate</span> {
+                                <span class="key">flow</span>: <span class="value">footnotes</span>;
+                        }
+                        <span class="directive">@page</span> {
+                                <span class="directive">@footnotes</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">footnotes</span>, <span class="value">page</span>);
+                                        <span class="key">-obfl-fallback-collection</span>: <span class="value">endnotes</span>;
+                                }
+                        }
+
+                } <span class="directive">@else</span> {
+                        <span class="key">noteref</span>::<span class="value">alternate</span> {
+                                <span class="key">flow</span>: <span class="value">endnotes</span>;
+                        }
+                }
+
+                <span class="directive">@if</span> <span class="variable">$notes-placement</span> == <span class="value">end-of-book</span> {
+                        <span class="directive">@volume</span>:<span class="value">last</span> {
+                                <span class="directive">@end</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes-container</span>, <span class="value">document</span>);
+                                }
+                        }
+                } <span class="directive">@else if</span> <span class="variable">$notes-placement</span> != <span class="value">end-of-chapter</span> {
+                        <span class="directive">@volume</span> {
+                                <span class="directive">@end</span> {
+                                        <span class="key">content</span>: <span class="predefined">flow</span>(<span class="value">endnotes-container</span>, <span class="value">document</span>);
+                                }
+                        }
                 }
         }
 }

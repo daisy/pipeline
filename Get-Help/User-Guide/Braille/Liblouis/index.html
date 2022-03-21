@@ -867,7 +867,7 @@ supports hyphenation out-of-the-box, with the help of an external
 or not at all. A value not equal to “none”, “liblouis” or “auto”
 will match every Liblouis translator that uses an external
 hyphenator that matches this feature. A translator will only use
-external hyphenators with the same locale as the translator itself.</dd>
+external hyphenators with the same locale as the document.</dd>
   <dt><code>table</code></dt>
   <dt><code>liblouis-table</code></dt>
   <dd>A Liblouis table is a list of URIs that can be either a file name, a
@@ -885,6 +885,12 @@ compatible with other features except <code>translator</code>, <code>hyphenator<
   <dt><code>locale</code></dt>
   <dd>Matches only Liblouis translators with this locale.</dd>
 </dl>
+
+<!-- `charset`
+     `braille-charset`
+     : The character set in which the output braille should be encoded. The
+       value has the same format as the `table` feature.
+     : By default the braille character set is Unicode braille. -->
 
 <!-- handle-non-standard-hyphenation
      : Specifies how non-standard hyphenation is handled in pre-translation

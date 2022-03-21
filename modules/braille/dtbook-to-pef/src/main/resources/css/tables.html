@@ -858,7 +858,7 @@ if (window.addEventListener) {
 
 <p>The module provides two mixins that correspond with the two main table
 styles, and one mixin for automatically finding the optimal table
-layout.</p>
+layout. It also provides variables for duplicating tables.</p>
 
 <h2 id="table-matrix-mixin">
 <code>table-matrix</code> mixin</h2>
@@ -986,6 +986,25 @@ and not a valid hyphenation point.</li>
 <code>$min-block-width</code>: the width (in number of braille cells) of the
 narrowest block within the table, typically a table cell.</li>
 </ul>
+
+<h2 id="duplicate-tables-with-class-and-classes-for-table-duplicates-variables">
+<code>$duplicate-tables-with-class</code> and <code>$classes-for-table-duplicates</code> variables</h2>
+
+<p>Set <code>$duplicate-tables-with-class</code> to duplicate all tables with that
+class. If the value is the empty string, all tables without a class
+attribute are duplicated. The <code>$classes-for-table-duplicates</code> variable
+determines how many copies are made and which classes are added. The
+value must be a space separated list of class names. As many copies
+are made as there are items in the list. The first class is added to
+the first copy, etc. At least two items are required. A <code>.</code> may be
+used to separate classes if multiple classes need to be added to a
+single copy.</p>
+
+<p>This feature is useful for trying out different table layouts before
+deciding which layout to use for which table.</p>
+
+<p>Note that the variables must be set <em>before</em> the <code>@import</code> rule in
+order to have effect.</p>
 
     </div>
   </body>

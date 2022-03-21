@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">new-definition {http://www.daisy.org/ns/pipeline/braille-css}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/braille/braille-css-utils/src/main/resources/xml/new-definition.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">new-definition</span> <span class="uri">{http://www.daisy.org/ns/pipeline/braille-css}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Migrate to a custom CSS definition.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/braille/css-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The input is assumed to be a tree-of-boxes representation of a document, where boxes
+            are represented by css:box elements. Box properties may be declared in style attributes
+            or individial css:* attributes or both.</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">definition</span><span class="details"></span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The new CSS definition must be a xsl:stylesheet consisting of a one variable and four
+            functions. All properties and functions must be in the namespace "css:new-definition".
+            The 'properties' variable is a sequence of strings that defines the supported
+            properties. The 'is-valid' function defines whether a property declaration is valid.
+            The 'is-inherited' function defines whether a property is inherited. The 'initial-value'
+            function defines the initial value of a property. The 'applies-to' function defines
+            whether a property applies in a certain context. All functions are possibly context
+            dependent.</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">parameters</span><span class="details"> parameter</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">There parameters that are passed to the <code>definition</code> XSLT.</p></td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody><tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">css:* attributes will be added on boxes in the output in such a way that for each box
+            and for each of the new definition's properties, the value of the property computed at
+            the input according to the old CSS definition is equal to the value computed at the
+            output according to the new definition. Property declarations are omitted from the
+            output when possible, 'initial' values are concretized, and 'inherit' values are
+            concretized only when needed. style attributes on boxes at the output are dropped. css:*
+            attributes that don't correspond to a property in the new definition are retained.</p></td>
+</tr></tbody>
+</table>
+</body>
+</html>

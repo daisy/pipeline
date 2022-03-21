@@ -131,6 +131,14 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
+<span class="">audio-file-type</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'audio/mpeg'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
 <span class="">with-text</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
@@ -138,6 +146,20 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
 <td>
 <h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">With text</h2>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Includes DTBook in output, as opposed to audio only.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">word-detection</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'true'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Detect words</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether to detect and mark up words with `&lt;w&gt;` tags.
+
+By default word detection is performed but an option is provided to disable it because some DAISY 3
+reading systems can't handle the word tags.</p>
 </td>
 </tr>
 </tbody>

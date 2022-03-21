@@ -861,9 +861,11 @@ if (window.addEventListener) {
 # http://liblouis.org/braille-specs/english/#computer-braille-code-cbc
 #
 #-copyright: 2019, Timothy Wynn
+#-copyright: 2021, BAUM Engineering
 #-license: LGPLv2.1
 #
 #  Copyright (C) 2019 Timothy Wynn &lt;tmthywynn8@gmail.com&gt;
+#  Copyright (C) 2021, BAUM Engineering &lt;liblouis@baum.ro&gt;
 #
 #  This file is part of liblouis.
 #
@@ -923,6 +925,8 @@ sign $ 1246 dollar sign
 sign % 146 percent sign
 sign &amp; 12346 ampersand
 punctuation ' 3 apostrophe, single quote
+punctuation \x2019 3 # right single quotation mark
+punctuation \x00b4 3 # acute accent
 punctuation ( 12356 left parenthesis
 punctuation ) 23456 right parenthesis
 sign * 16 asterisk, multiplication sign

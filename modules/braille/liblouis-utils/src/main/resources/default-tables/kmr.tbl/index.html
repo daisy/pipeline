@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>kmr.tbl</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="kmr.tbl">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Configuration-Files" tabindex="15">
+      Configuration Files
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html" class="external-link" target="_blank" tabindex="16">
+      
+      Text-To-Speech Configuration
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="17">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="18">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-validator/doc" tabindex="19">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy202-to-epub3/doc" tabindex="20">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-daisy202/doc" tabindex="21">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/daisy3-to-epub3/doc" tabindex="22">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-validator/doc" tabindex="23">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-daisy3/doc" tabindex="24">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-epub3/doc" tabindex="25">
+      
+      DTBook to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-html/doc" tabindex="26">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-odt/doc" tabindex="27">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/dtbook-to-pef/doc" tabindex="28">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-rtf/doc" tabindex="29">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/dtbook-to-zedai/doc" tabindex="30">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub2-to-epub3/doc" tabindex="31">
+      
+      EPUB 2 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-epub3/doc" tabindex="32">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-validator/doc" tabindex="33">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy202/doc" tabindex="34">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub3-to-daisy3/doc" tabindex="35">
+      
+      EPUB 3 to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/epub3-to-pef/doc" tabindex="36">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/epub-to-daisy/doc" tabindex="37">
+      
+      EPUB to DAISY
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-dtbook/doc" tabindex="38">
+      
+      HTML to DTBook
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/html-to-epub3/doc" tabindex="39">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/html-to-pef/doc" tabindex="40">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/nimas-fileset-validator/doc" tabindex="41">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-epub3/doc" tabindex="42">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/zedai-to-html/doc" tabindex="43">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/modules/braille/zedai-to-pef/doc" tabindex="44">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="45">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="46">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="47">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="48">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="49">
+      
+      Troubleshooting on Windows
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="50">
+      
+      Contact
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="51">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="52">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="53">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="54">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="55">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="56">
+      XProc
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="57">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="58">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="59">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="60">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="61">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rev="doc" href="../kmr.tbl">
+
+<div class="language-plaintext highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre># liblouis: Northern Kurdish grade 0 braille
+
+#-name: niwisen kuran kurmanci
+#-display-name: Northern Kurdish braille
+#-index-name: Northern Kurdish
+
+#+locale:kmr
+#+type:literary
+#+dots:6
+#+contraction:no
+#+grade:0
+
+# This table was created by Imam Kahraman &lt;imam.kahraman@gmail.com&gt;
+#-author-name: Imam Kahraman
+#-maintainer-name: Imam Kahraman
+#-maintainer-email: imam.kahraman@gmail.com
+
+#-copyright: 2021, Imam Kahraman
+#-license: LGPLv2.1
+
+#  Copyright (C) 2021 Imam Kahraman &lt;imam.kahraman@gmail.com&gt;
+#
+#  This file is part of liblouis.
+#
+#  liblouis is free software: you can redistribute it and/or modify it
+#  under the terms of the GNU Lesser General Public License as
+#  published by the Free Software Foundation, either version 2.1 of the
+#  License, or (at your option) any later version.
+#
+#  liblouis is distributed in the hope that it will be useful, but
+#  WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+#  Lesser General Public License for more details.
+#
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with liblouis. If not, see
+#  &lt;http://www.gnu.org/licenses/&gt;.
+
+# Background of this table:
+#
+# Since the Kurdish language was forbidden for several decades and is
+# still partly forbidden, there are no generally applicable standards
+# because all four parts of Kurdistan are very different. Even among
+# close villages, you can see differences. Only in the last 100 years
+# did the awareness of a Kurdish nation and the intellectual Kurdish
+# language developed. In northern Kurdistan (south-east Turkey), the
+# Kurdish dialect was crystallized from the Botan region for the
+# intellectual language.
+#
+# Since the freedom movement of Kurdistan organized itself in all parts
+# of Kurdistan and the diaspora with the idea of self-administration /
+# Organisation and self-determination and promoted the intellectual
+# language, the Botan dialect from Northern Kurdistan became the
+# intellectual universal language everywhere in the community. This is
+# also shown in text, sound, and images (books, press, media, TV, and
+# radio). In Northern Kurdistan, despite the ban of the Kurdish
+# language, Kurdish is taught and learned through
+# self-organization. This also became the ground for the Kurdish native
+# language in the schools in Rojava and the Democratic Federation of
+# Northern and Eastern Syria.
+#
+# Despite the threat of further wars in the region, a school for the
+# blind was found in Kobane in 2016, which is sponsored and supported by
+# the Kobane People's Council and the city administration. The school
+# for the blind, consisting of 10 pupils, developed the Braille script
+# for Northern Kurdish with the support of the language and cultural
+# institutes from Germany and Northern Kurdistan. They tried to keep to
+# the international standards. It quickly became clear that few letters
+# differ from English. This knowledge became the basis of Braille in
+# Northern Kurdish and since then there have been courses for learning
+# Braille in a blind school class for 10 people several hours a
+# week. The pupils in the blind school class consist of both war
+# veterans and blind people by birth who try to learn their native
+# language and Kurdish Braille together.
+#
+# In cooperation with the Kurdish Institute for Science and Research
+# (Kurdisches Institut für Wissenschaft und Forschung e. V) in
+# Düsseldorf, Germany and the Language and Culture Institute in Amed
+# (Diyarbakir), as well as the People's Council of Kobane, the standards
+# developed by the school for the blind in Kobane, were adopted in 2018
+# in the curricula for people with blindness.
+#
+# Due to the reality of the war, the work of the 10-person class has
+# been suspended since October 2019. There are attempts to resume work
+# as soon as possible.
+#
+# Imam Kahraman worked with the Kurdish Institute for Science and
+# Research (Kurdisches Institut für Wissenschaft und Forschung e. V) in
+# Düsseldorf translated the NVDA interface into Northern Kurdish and
+# created the Liblouis table for Northern Kurdish based on Kobane's
+# Braille script that was previously developed.
+
+# -----------
+
+# Kurdish letters: Ç Ê Î Ş Û
+letter        \x0037        16        KURDISH CAPITAL LETTER Ç
+letter        \x00e7        16        KURDISH SMALL LETTER Ç
+letter        \x00CA        126        KURDISH CAPITAL LETTER Ê
+letter        \x00EA        126        KURDISH SMALL LETTER Ê
+letter        \x00CE        35        KURDISH CAPITAL LETTER Î
+letter        \x00EE        35        KURDISH SMALL LETTER Î
+letter        \x015E        146        KURDISH CAPITAL LETTER Ş
+letter        \x015F        146        KURDISH SMALL LETTER Ş
+letter        \x00DB        156        KURDISH CAPITAL LETTER Û
+letter        \x00FB        156        KURDISH SMALL LETTER Û
+
+# get all entries from default English tables
+include en-ueb-g1.ctb
+include latinLetterDef6Dots.uti
+include digits6Dots.uti
+</pre></div>
+</div>
+</div>
+
+    </div>
+  </body>
+</html>

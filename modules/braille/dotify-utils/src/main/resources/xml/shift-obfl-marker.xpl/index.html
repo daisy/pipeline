@@ -10,23 +10,29 @@
 </head>
 <body><div class="code" about="../shift-obfl-marker.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">pxi</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc/internal"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"pxi:shift-obfl-marker"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        Move '-obfl-marker' declarations to inline boxes.
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">p</span>&gt;Move '-obfl-marker' declarations to inline boxes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            Boxes must be represented by css:box elements. '-obfl-marker' properties must be
-            declared in css:_obfl-marker attributes.
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Boxes must be represented by &lt;<span class="code-xml-element-local-name">code</span>&gt;css:box&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements. All block boxes must have
+            at least one descendant inline box and inline boxes must have no descendant block
+            boxes. '-obfl-marker' properties must be declared in &lt;<span class="code-xml-element-local-name">code</span>&gt;css:_obfl-marker&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+            attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            For each element in the input that is not an inline css:box and not a descendant of an
-            inline css:box, if it has a css:_obfl-marker attribute it is moved to the first
-            following inline css:box. If this css:box element already has a css:_obfl-marker
-            attribute in the input, the '-obfl-marker' declarations are prepended to it.
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;For each element in the input that has a &lt;<span class="code-xml-element-local-name">code</span>&gt;css:_obfl-marker&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute and
+            is not a descendant of an inline box and not an inline box itself, the attribute is
+            moved to the first descendant or following inline box within the same block (which may
+            be the element itself). If there is no such element, the attribute is placed on an empty
+            &lt;<span class="code-xml-element-local-name">code</span>&gt;css:_&lt;/<span class="code-xml-element-local-name">code</span>&gt; element inserted as the last child of the last preceding inline box
+            (in the same block). In the former case, if the attribute is moved to a
+            &lt;<span class="code-xml-element-local-name">code</span>&gt;css:box&lt;/<span class="code-xml-element-local-name">code</span>&gt; element that already has a &lt;<span class="code-xml-element-local-name">code</span>&gt;css:_obfl-marker&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute
+            in the input, the '-obfl-marker' declarations are prepended to it.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
     
