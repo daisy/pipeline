@@ -120,6 +120,7 @@ run-gui : $(dev_launcher)
 	$< gui
 
 .PHONY : run-cli
+.SILENT : run-cli
 run-cli :
 	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"; }"
 	echo '# Run this command to configure your shell: '
@@ -401,16 +402,19 @@ $(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target
 	$(MAKE) -C website $${target#website/}
 
 .PHONY : dump-maven-cmd
+.SILENT : dump-maven-cmd
 dump-maven-cmd :
-	@echo "mvn () { $(shell dirname "$$(which mvn)")/mvn --settings \"$(CURDIR)/$(MVN_SETTINGS)\" $(MVN_PROPERTIES) \"\$$@\"; }"
-	@echo '# Run this command to configure your shell: '
-	@echo '# eval $$(make $@)'
+	echo "mvn () { $(shell dirname "$$(which mvn)")/mvn --settings \"$(CURDIR)/$(MVN_SETTINGS)\" $(MVN_PROPERTIES) \"\$$@\"; }"
+	echo '# Run this command to configure your shell: '
+	echo '# eval $$(make $@)'
 
 .PHONY : dump-gradle-cmd
+.SILENT : dump-gradle-cmd
 dump-gradle-cmd :
 	echo M2_HOME=$(CURDIR)/$(TARGET_DIR)/.gradle-settings $(GRADLE) $(MVN_PROPERTIES)
 
 .PHONY : help
+.SILENT : help
 help :
 	echo "make all:"                                                                                                >&2
 	echo "	Incrementally compile and test code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"  >&2
