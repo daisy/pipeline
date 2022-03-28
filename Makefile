@@ -22,9 +22,17 @@ include .make/main.mk
 assembly/BASEDIR := assembly
 include assembly/deps.mk
 -include webui/.deps.mk
+else
+.SILENT: clean-website
 endif
+else
+.SILENT: dump-gradle-cmd
 endif
+else
+.SILENT: dump-maven-cmd
 endif
+else
+.SILENT: help
 endif
 endif
 
@@ -402,9 +410,9 @@ $(addprefix website/target/maven/,javadoc doc sources xprocdoc) : website/target
 
 .PHONY : dump-maven-cmd
 dump-maven-cmd :
-	@echo "mvn () { $(shell dirname "$$(which mvn)")/mvn --settings \"$(CURDIR)/$(MVN_SETTINGS)\" $(MVN_PROPERTIES) \"\$$@\"; }"
-	@echo '# Run this command to configure your shell: '
-	@echo '# eval $$(make $@)'
+	echo "mvn () { $(shell dirname "$$(which mvn)")/mvn --settings \"$(CURDIR)/$(MVN_SETTINGS)\" $(MVN_PROPERTIES) \"\$$@\"; }"
+	echo '# Run this command to configure your shell: '
+	echo '# eval $$(make $@)'
 
 .PHONY : dump-gradle-cmd
 dump-gradle-cmd :
