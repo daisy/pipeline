@@ -2,23 +2,21 @@
 # copy the artifacts into a final image which exposes the port and
 # starts the pipeline.
 
-# Build the pipeline first
+# Build Pipeline
 FROM maven:3.5-jdk-8 as builder
-ADD . /usr/src/daisy-pipeline2
-WORKDIR /usr/src/daisy-pipeline2
-RUN mkdir -p $HOME/.m2 && curl -fsSL https://raw.github.com/daisy/maven-parents/travis/settings.xml > $HOME/.m2/settings.xml
-RUN mvn clean package -Punpack-cli-linux -Punpack-updater-linux -Passemble-linux-dir
+ADD src /usr/src/pipeline-assembly/
+ADD pom.xml /usr/src/pipeline-assembly/
+ADD Makefile /usr/src/pipeline-assembly/
+ADD deps.mk /usr/src/pipeline-assembly/
+WORKDIR /usr/src/pipeline-assembly
+RUN make DOCKER=: docker
 
-# then use the build artifacts to create an image where the pipeline is installed
-#FROM adoptopenjdk/openjdk11
+# Use the build artifacts to create an image with Pipeline installed
 FROM debian:stretch
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
-RUN apt-get update && apt-get install -y wget
-COPY --from=builder /usr/src/daisy-pipeline2/target/assembly-*-linux/daisy-pipeline /opt/daisy-pipeline2
-RUN wget "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz" -O /tmp/openjdk.tar.gz --no-verbose \
-    && tar -zxvf /tmp/openjdk.tar.gz -C /opt \
-    && rm /tmp/openjdk.tar.gz
-ENV JAVA_HOME=/opt/jdk-11+28
+COPY --from=builder /usr/src/pipeline-assembly/target/docker/daisy-pipeline /opt/daisy-pipeline2
+COPY --from=builder /usr/src/pipeline-assembly/target/docker/jre /opt/daisy-pipeline2/jre
+ENV JAVA_HOME=/opt/daisy-pipeline2/jre
 ENV PIPELINE2_WS_LOCALFS=false \
     PIPELINE2_WS_AUTHENTICATION=true \
     PIPELINE2_WS_AUTHENTICATION_KEY=clientid \

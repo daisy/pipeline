@@ -143,7 +143,7 @@ endif
 docker : mvn -Pwithout-gui -Pwithout-osgi \
          target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 	mkdir target/docker
-	cp Dockerfile.without_builder target/docker/Dockerfile
+	cp src/main/docker/Dockerfile target/docker/Dockerfile
 	cp -r target/assembly-$(assembly/VERSION)-linux/daisy-pipeline target/docker/
 	cp -r $(word 4,$^) target/docker/jre
 	cd target/docker && \
@@ -153,7 +153,7 @@ src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28/jdk-11+28 : src/main/jre/Open
 	mkdir -p $@
 	tar -zxvf $< -C $(dir $@)/
 
-src/main/docker/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz :
+src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz :
 	mkdir -p $(dir $@)
 	curl -L -o $@ "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/$(notdir $@)"
 
