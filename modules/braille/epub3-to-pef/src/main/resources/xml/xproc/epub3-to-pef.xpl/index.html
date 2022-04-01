@@ -764,13 +764,13 @@ content at the beginning of every other volume, include the following additional
 ~~~css
 @volume {
   @begin {
-    content: flow(volume-toc);
+    content: flow(volume-toc, document);
   }
 }
 
 @volume:first {
   @begin {
-    content: flow(document-toc);
+    content: flow(document-toc, document);
   }
 }
 ~~~
@@ -838,13 +838,13 @@ content at the beginning of every other volume, include the following additional
 ~~~css
 @volume {
   @begin {
-    content: flow(volume-toc);
+    content: flow(volume-toc, document);
   }
 }
 
 @volume:first {
   @begin {
-    content: flow(document-toc);
+    content: flow(document-toc, document);
   }
 }
 ~~~

@@ -257,11 +257,11 @@
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 								<strong class="jxr_keyword">if</strong> (!<span class="jxr_string">"auto"</span>.equals(hyphenator))
 <a class="jxr_linenumber" name="L249" href="#L249">249</a> 									hyphenatorQuery.add(<span class="jxr_string">"hyphenator"</span>, hyphenator);
 <a class="jxr_linenumber" name="L250" href="#L250">250</a> 								<strong class="jxr_keyword">if</strong> (documentLocale != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 									hyphenatorQuery.add(<span class="jxr_string">"locale"</span>, documentLocale);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 									hyphenatorQuery.add(<span class="jxr_string">"document-locale"</span>, documentLocale);
 <a class="jxr_linenumber" name="L252" href="#L252">252</a> 								Iterable&lt;Hyphenator&gt; hyphenators = logSelect(hyphenatorQuery.asImmutable(), hyphenatorRegistry);
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 								<strong class="jxr_keyword">if</strong> (documentLocale != <strong class="jxr_keyword">null</strong> &amp;&amp; !<span class="jxr_string">"auto"</span>.equals(hyphenator)) {
 <a class="jxr_linenumber" name="L254" href="#L254">254</a> 									<em class="jxr_comment">// also search without locale because "hyphenator" feature might be an ID</em>
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 									hyphenatorQuery.removeAll(<span class="jxr_string">"locale"</span>);
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 									hyphenatorQuery.removeAll(<span class="jxr_string">"document-locale"</span>);
 <a class="jxr_linenumber" name="L256" href="#L256">256</a> 									hyphenators = concat(
 <a class="jxr_linenumber" name="L257" href="#L257">257</a> 										hyphenators,
 <a class="jxr_linenumber" name="L258" href="#L258">258</a> 										logSelect(hyphenatorQuery.asImmutable(), hyphenatorRegistry)); }

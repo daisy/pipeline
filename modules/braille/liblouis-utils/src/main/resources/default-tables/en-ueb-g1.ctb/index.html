@@ -850,7 +850,7 @@ if (window.addEventListener) {
 #-index-name: English, unified, uncontracted
 #-display-name: Unified English uncontracted braille
 #
-#+locale:en
+#+language:en
 #+type:literary
 #+contraction:no
 #+grade:1
@@ -870,6 +870,7 @@ if (window.addEventListener) {
 #  Copyright (C) 2004-2006 JJB Software, Inc. www.jjb-software.com
 #  Copyright (C) 2016 American Printing House for the Blind, Inc. www.aph.org
 #  Copyright (C) 2016 Joseph Lee &lt;joseph.lee22590@gmail.com&gt;
+#  Copyright (C) 2021 RNIB, www.rnib.org.uk
 #
 #  This file is part of liblouis.
 #
@@ -900,6 +901,10 @@ numsign 3456  number sign, just a dots operand
 numericmodechars .,
 nocontractsign 56
 numericnocontchars abcdefghij
+
+# Correct order of dot and numeric indicator
+match %a . %# 256-34569  force correct position of numeric indicator
+noback pass2 @3456-256-34569 @256-3456    Clear up extra indicator after the match line
 
 # numeric space
 noback correct _$d["\s"]$d     "\xE020"   # change space to custom symbol representing numeric space

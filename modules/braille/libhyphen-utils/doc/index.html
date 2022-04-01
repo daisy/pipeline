@@ -870,9 +870,12 @@ fully qualified table identifier. A collection of tables used in
 LibreOffice is available under the path
 <a href="/pipeline/modules/braille/libhyphen-utils/src/main/resources/tables"><code>http://www.libreoffice.org/dictionaries/hyphen/</code></a>. This
 feature is not compatible with other features except <code>hyphenator</code>.</dd>
-  <dt><code>locale</code></dt>
-  <dd>Matches only hyphenators with that locale.</dd>
 </dl>
+
+<p>By default, the document locale is used to select the hyphenator. An
+automatic fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.</p>
 
 
     </div>

@@ -866,11 +866,14 @@ hyphenation pattern file (“.tex”) or a Java properties file (“.xml”
 or “.properties”) that <a href="https://github.com/mtmse/dotify.hyphenator.impl" class="external-link" target="_blank">Dotify</a> uses as the format for storing
 hyphenator configurations. The <code>table</code> feature is not compatible
 with <code>locale</code>.</dd>
-  <dt><code>locale</code></dt>
-  <dd>Matches only hyphenators with this locale.</dd>
 </dl>
 
 <p>No other features are allowed.</p>
+
+<p>By default, the document locale is used to select the hyphenator. An
+automatic fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.</p>
 
 
     </div>

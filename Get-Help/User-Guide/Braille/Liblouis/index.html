@@ -879,11 +879,23 @@ available under the path
 <a href="/pipeline/modules/braille/liblouis-utils/src/main/resources/default-tables"><code>http://www.liblouis.org/tables/</code></a>. See
 also <a href="https://github.com/liblouis/liblouis/blob/master/extra/generate-display-names/display-names" class="external-link" target="_blank">this overview of
 tables</a>
-available in Liblouis. The <code>liblouis-table</code> feature is not
-compatible with other features except <code>translator</code>, <code>hyphenator</code> and
-<code>locale</code>.</dd>
+available in Liblouis.</dd>
+  <dt><code>language</code></dt>
+  <dd>The primary target language of the Liblouis translator. Must be a
+<a href="https://tools.ietf.org/html/rfc5646" class="external-link" target="_blank">RFC 5646</a> language tag. By
+default the document locale is used. In that case an automatic
+fallback mechanism is used: if nothing is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language. If the document locale is of the form language-COUNTRY,
+only the language subtag is used.</dd>
+  <dt><code>region</code></dt>
+  <dd>The region or community in which the braille code applies. Must be a
+<a href="https://tools.ietf.org/html/rfc5646" class="external-link" target="_blank">RFC 5646</a> language tag. By
+default the document locale is used if it is of the form
+language-COUNTRY. (The same automatic fallback mechanism as
+described above is used.)</dd>
   <dt><code>locale</code></dt>
-  <dd>Matches only Liblouis translators with this locale.</dd>
+  <dd>Shorthand for <code>language</code> and <code>region</code>.</dd>
 </dl>
 
 <!-- `charset`

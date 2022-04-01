@@ -239,9 +239,9 @@
 <a class="jxr_linenumber" name="L230" href="#L230">230</a> 				<strong class="jxr_keyword">return</strong> delegate.withContext(context).get(query);
 <a class="jxr_linenumber" name="L231" href="#L231">231</a> 			}
 <a class="jxr_linenumber" name="L232" href="#L232">232</a> 			<strong class="jxr_keyword">public</strong> Locale getLocale(<a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> query) {
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">if</strong> (query.containsKey(<span class="jxr_string">"locale"</span>))
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 				<strong class="jxr_keyword">if</strong> (query.containsKey(<span class="jxr_string">"document-locale"</span>))
 <a class="jxr_linenumber" name="L234" href="#L234">234</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 						<strong class="jxr_keyword">return</strong> parseLocale(query.getOnly(<span class="jxr_string">"locale"</span>).getValue().get()); }
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 						<strong class="jxr_keyword">return</strong> parseLocale(query.getOnly(<span class="jxr_string">"document-locale"</span>).getValue().get()); }
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					<strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {
 <a class="jxr_linenumber" name="L237" href="#L237">237</a> 						logger.warn(<span class="jxr_string">"Invalid locale"</span>, e);
 <a class="jxr_linenumber" name="L238" href="#L238">238</a> 						<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>; }
@@ -250,8 +250,8 @@
 <a class="jxr_linenumber" name="L241" href="#L241">241</a> 			}
 <a class="jxr_linenumber" name="L242" href="#L242">242</a> 			<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> assocLocale(<a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/Query.html">Query</a> query, Locale locale) {
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> 				MutableQuery q = mutableQuery(query);
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				q.removeAll(<span class="jxr_string">"locale"</span>);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				q.add(<span class="jxr_string">"locale"</span>, locale.toLanguageTag());
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 				q.removeAll(<span class="jxr_string">"document-locale"</span>);
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 				q.add(<span class="jxr_string">"document-locale"</span>, locale.toLanguageTag());
 <a class="jxr_linenumber" name="L246" href="#L246">246</a> 				<strong class="jxr_keyword">return</strong> q.asImmutable();
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 			}
 <a class="jxr_linenumber" name="L248" href="#L248">248</a> 			<strong class="jxr_keyword">public</strong> TransformProvider&lt;T&gt; withContext(Logger context) {

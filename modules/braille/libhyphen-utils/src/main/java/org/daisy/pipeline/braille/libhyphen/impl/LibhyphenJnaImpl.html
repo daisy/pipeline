@@ -165,8 +165,8 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 			<strong class="jxr_keyword">return</strong> of(get(URLs.asURI(table))); }
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 		Locale locale; {
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 			String loc = <span class="jxr_string">"und"</span>;
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"locale"</span>))
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				loc = q.removeOnly(<span class="jxr_string">"locale"</span>).getValue().get();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 			<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"document-locale"</span>))
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				loc = q.removeOnly(<span class="jxr_string">"document-locale"</span>).getValue().get();
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 			<strong class="jxr_keyword">try</strong> {
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 				locale = parseLocale(loc); }
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 			<strong class="jxr_keyword">catch</strong> (IllegalArgumentException e) {

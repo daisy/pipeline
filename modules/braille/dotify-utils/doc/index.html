@@ -895,11 +895,22 @@ can be selected using a transformer query that contains
 <dl>
   <dt><code>translator</code></dt>
   <dd>Will only match if the value is “dotify”</dd>
-  <dt><code>locale</code></dt>
-  <dd>Matches only Dotify translators for that locale. An automatic
+  <dt><code>language</code></dt>
+  <dd>The primary target language of the Liblouis translator. Must be a
+<a href="https://tools.ietf.org/html/rfc5646" class="external-link" target="_blank">RFC 5646</a> language tag. By
+default the document locale is used. In that case an automatic
 fallback mechanism is used: if nothing is found for
 language-COUNTRY-variant, then language-COUNTRY is searched, then
-language.</dd>
+language. If the document locale is of the form language-COUNTRY,
+only the language subtag is used.</dd>
+  <dt><code>region</code></dt>
+  <dd>The region or community in which the braille code applies. Must be a
+<a href="https://tools.ietf.org/html/rfc5646" class="external-link" target="_blank">RFC 5646</a> language tag. By
+default the document locale is used if it is of the form
+language-COUNTRY. (The same automatic fallback mechanism as
+described above is used.)</dd>
+  <dt><code>locale</code></dt>
+  <dd>Shorthand for <code>language</code> and <code>region</code>.</dd>
   <dt><code>hyphenator</code></dt>
   <dd>A value “none” will disable hyphenation. “auto” is the default and
 will match any Dotify translator, whether it supports hyphenation
@@ -925,15 +936,14 @@ can be selected using a transformer query that contains
 <dl>
   <dt><code>hyphenator</code></dt>
   <dd>Will only match if the value is “dotify”.</dd>
-  <dt><code>locale</code></dt>
-  <dd>Required.</dd>
-  <dd>Matches only Dotify hyphenators for that locale. An automatic
-fallback mechanism is used: if nothing is found for
-language-COUNTRY-variant, then language-COUNTRY is searched, then
-language.</dd>
 </dl>
 
 <p>No other features are allowed.</p>
+
+<p>The document locale is used to select the hyphenator. An automatic
+fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.</p>
 
 
     </div>
