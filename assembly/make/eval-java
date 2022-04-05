@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+exec java -classpath make:make/java eval_java "$@"

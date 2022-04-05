@@ -1,0 +1,29 @@
+name: windows
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  build:
+    name: Test Makefile on Windows
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Java and Maven
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+    - name: Cache downloaded dependencies
+      uses: actions/cache@v3
+      with:
+        path: C:\\Users\\runneradmin\\.m2\\repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+    - name: Build .deb file
+      shell: cmd
+      run: .\\make.exe deb

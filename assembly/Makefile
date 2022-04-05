@@ -1,54 +1,79 @@
+ifneq ($(firstword $(sort $(MAKE_VERSION) 3.82)), 3.82)
+$(error "GNU Make 3.82 is required to run this script")
+endif
+
+ifeq ($(OS),Windows_NT)
+SHELL := make\\eval-java.exe
+else
+SHELL := make/eval-java
+endif
+.SHELLFLAGS :=
+
 MVN ?= mvn
 DOCKER := docker
-SHELL  := /bin/bash
+
+OS := $(shell println(getOS());)
 
 .PHONY : default
-ifeq ($(shell uname), Darwin)
+ifeq ($(OS), WINDOWS)
+default : exe
+else ifeq ($(OS), MACOSX)
 default : dmg
+else ifeq ($(OS), REDHAT)
+default : rpm
 else
 default : zip-linux
 endif
 
 .PHONY : help
 help :
-	echo "make [default]:"                                                      >&2
-	echo "	Builds the default package for the current platform"                >&2
-	echo "make dmg:"                                                            >&2
-	echo "	Builds a DMG image (Mac OS disk image)"                             >&2
-	echo "make exe:"                                                            >&2
-	echo "	Builds a EXE (Windows installer)"                                   >&2
-	echo "make deb:"                                                            >&2
-	echo "	Builds a DEB (Debian package)"                                      >&2
-	echo "make rpm:"                                                            >&2
-	echo "	Builds a RPM (RedHat package)"                                      >&2
-	echo "make zip-linux:"                                                      >&2
-	echo "	Builds a ZIP for Linux"                                             >&2
-	echo "make all:"                                                            >&2
-	echo "	Builds a DMG, a EXE, a DEB, a RPM and a ZIP for Linux"              >&2
-	echo "make zip-mac:"                                                        >&2
-	echo "	Builds a ZIP for Mac OS"                                            >&2
-	echo "make zip-win:"                                                        >&2
-	echo "	Builds a ZIP for Windows"                                           >&2
-	echo "make zips:"                                                           >&2
-	echo "	Builds a ZIP for each platform"                                     >&2
-	echo "make zip-minimal:"                                                    >&2
-	echo "	Builds a minimal ZIP that will complete itself upon first update"   >&2
-	echo "make docker:"                                                         >&2
-	echo "	Builds a Docker image"                                              >&2
-	echo "make check|check-docker:"                                             >&2
-	echo "	Tests the Docker image"                                             >&2
+	@err.println(                                                                 \
+		"make [default]:"                                                + "\n" + \
+		"    Builds the default package for the current platform"        + "\n" + \
+		"make dmg:"                                                      + "\n" + \
+		"    Builds a DMG image (Mac OS disk image)"                     + "\n" + \
+		"make exe:"                                                      + "\n" + \
+		"    Builds a EXE (Windows installer)"                           + "\n" + \
+		"make deb:"                                                      + "\n" + \
+		"    Builds a DEB (Debian package)");                                     \
+	if (getOS() == OS.REDHAT)                                                     \
+		err.println(                                                              \
+			"make rpm:"                                                  + "\n" + \
+			"    Builds a RPM (RedHat package)");                                 \
+	err.println(                                                                  \
+		"make zip-linux:"                                                + "\n" + \
+		"    Builds a ZIP for Linux"                                     + "\n" + \
+		"make all:"                                                      + "\n" + \
+		"    Builds a DMG, a EXE, a DEB, a RPM and a ZIP for Linux"      + "\n" + \
+		"make zip-mac:"                                                  + "\n" + \
+		"    Builds a ZIP for Mac OS"                                    + "\n" + \
+		"make zip-win:"                                                  + "\n" + \
+		"    Builds a ZIP for Windows"                                   + "\n" + \
+		"make dir-word-addin:"                                           + "\n" + \
+		"	Builds a directory to be included in SaveAsDAISY"            + "\n" + \
+		"make zip-minimal:"                                              + "\n" + \
+		"    Builds a minimal ZIP that will complete itself upon first update");  \
+	if (getOS() != OS.WINDOWS)                                                    \
+		err.println(                                                              \
+			"make docker:"                                               + "\n" + \
+			"    Builds a Docker image"                                  + "\n" + \
+			"make check-docker:"                                         + "\n" + \
+			"    Tests the Docker image"                                 + "\n" + \
+			"make dev-launcher:"                                         + "\n" + \
+			"    Builds a version that can be run directly on the current platform");
 
-assembly/VERSION     := $(shell xmllint --xpath "/*/*[local-name()='version']/text()" pom.xml)
-assembly/BASEDIR     := .
-MVN_LOCAL_REPOSITORY ?= $(HOME)/.m2/repository
+assembly/VERSION             := $(shell println(xpath(new File("pom.xml"), "/*/*[local-name()='version']/text()"));)
+assembly/BASEDIR             := .
+DEFAULT_MVN_LOCAL_REPOSITORY := $(shell println(System.getProperty("user.home").replace("\\", "/"));)/.m2/repository
+MVN_LOCAL_REPOSITORY         ?= $(DEFAULT_MVN_LOCAL_REPOSITORY)
 
 include deps.mk
 
 .PHONY : all
-all : dmg exe deb rpm zip-linux
-
-.PHONY : zips
-zips : zip-mac zip-linux zip-win
+all : dmg exe deb zip-linux
+ifeq ($(OS), REDHAT)
+all : rpm
+endif
 
 .PHONY : dmg exe deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
 
@@ -104,87 +129,129 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-linux \
                                                                                                                        -Ppackage-deb-cli
-ifeq ($(shell uname), Darwin)
+ifeq ($(OS), MACOSX)
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
                                                                                                                        -Passemble-mac-dir \
                                                                                                                        -Ppackage-mac-app
-	# we run package-dmg in a subsequent mvn call to avoid execution
-	# order issues when the package-mac-app and package-dmg profiles
-	# are activated together
-	$(MVN) install -Ppackage-dmg
-	test -e $@
+ifndef DUMP_PROFILES
+	// we run package-dmg in a subsequent mvn call to avoid execution
+	// order issues when the package-mac-app and package-dmg profiles
+	// are activated together
+	exec("$(MVN)", "install", "-Ppackage-dmg");
+	exit(new File("$@").exists());
+endif
 else
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         :
-	@echo "Can not build DMG because not running MacOS" >&2
-	exit 1
-endif
-ifeq ($(shell test -f /etc/redhat-release; echo $$?), 0)
+	@err.println("Can not build DMG because not running MacOS"); \
+	exit(1);
+endif # eq ($(OS), MACOSX)
+ifeq ($(OS), REDHAT)
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm   : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Passemble-linux-dir \
                                                                                                                        -Ppackage-rpm
-	test -e $@
+ifndef DUMP_PROFILES
+	exit(new File("$@").exists());
+endif
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm     : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-linux \
                                                                                                                        -Ppackage-rpm-cli
-	test -e $@
+ifndef DUMP_PROFILES
+	exit(new File("$@").exists());
+endif
 else
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm :
-	@echo "Can not build RPM because not running RedHat/CentOS" >&2
-	exit 1
-endif
+	@err.println("Can not build RPM because not running RedHat/CentOS"); \
+	exit(1);
+endif # eq ($(OS), REDHAT)
+
+.PHONY : dir-word-addin
+dir-word-addin : target/assembly-$(assembly/VERSION)-word-addin
+target/assembly-$(assembly/VERSION)-word-addin : mvn -Pwithout-osgi \
+                                                     -Pwithout-persistence \
+                                                     -Pwithout-webservice \
+                                                     -Pwithout-gui \
+                                                     -Pwithout-cli \
+                                                     -Pwithout-updater \
+                                                     -Pcompile-simple-api \
+                                                     -Pcopy-artifacts \
+                                                     -Pbuild-jre-win32 \
+                                                     -Pbuild-jre-win64 \
+                                                     -Passemble-word-addin-dir
+-Pbuild-jre-win64                              : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-win32                              : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+
+src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8 \
+src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : %.zip
+	unzip(new File("$<"), new File("$(dir $@)"));
+
+src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz \
+src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip \
+src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip :
+	mkdirs("$(dir $@)");                                                                                           \
+	copy(new URL("https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/$(notdir $@)"), \
+	     new File("$@"));
+
+ifneq ($(OS), WINDOWS)
 
 .PHONY : docker
 docker : mvn -Pwithout-gui -Pwithout-osgi \
-         target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
-	mkdir target/docker
-	cp src/main/docker/Dockerfile target/docker/Dockerfile
-	cp -r target/assembly-$(assembly/VERSION)-linux/daisy-pipeline target/docker/
-	cp -r $(word 4,$^) target/docker/jre
-	cd target/docker && \
-	$(DOCKER) build -t daisyorg/pipeline-assembly .
+         target/maven-jlink/classifiers/jre-linux \
+         target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+ifndef DUMP_PROFILES
+	mkdirs("target/docker");                                                                        \
+	exec("cp", "src/main/docker/Dockerfile", "target/docker/Dockerfile");
+	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
+	exec("cp", "-r", "$(word 4,$^)", "target/docker/jre");
+	exec(new File("target/docker"),                                                                 \
+	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline-assembly", ".");
+endif
 
-src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28/jdk-11+28 : src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz
-	mkdir -p $@
-	tar -zxvf $< -C $(dir $@)/
-
-src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28.tar.gz :
-	mkdir -p $(dir $@)
-	curl -L -o $@ "https://github.com/AdoptOpenJDK/openjdk11-binaries/releases/download/jdk-11%2B28/$(notdir $@)"
+src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8 : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
+	mkdirs("$(dir $@)");                             \
+	exec("tar", "-zxvf", "$<", "-C", "$(dir $@)/");
 
 .PHONY : dev-launcher
 dev-launcher : target/dev-launcher/pipeline2
 target/dev-launcher/pipeline2 : pom.xml
-ifeq ($(shell uname), Darwin)
+ifeq ($(OS), MACOSX)
 target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 else
 target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
-	mkdir -p $(dir $@)
-	echo "#!/usr/bin/env bash"                  >$@
-	echo "JAVA_HOME=$(CURDIR)/$(word 1,$^) \\" >>$@
-	echo "$(CURDIR)/$(word 2,$^) \"\$$@\""     >>$@
-	chmod +x $@
+ifndef DUMP_PROFILES
+	mkdirs("$(dir $@)");                                \
+	File f = new File("$@");                            \
+	f.delete();                                         \
+	write(f, "#!/usr/bin/env bash\n");                  \
+	write(f, "JAVA_HOME=$(CURDIR)/$(word 1,$^) \\\n");  \
+	write(f, "$(CURDIR)/$(word 2,$^) \"$$@\"\n");       \
+	exec("chmod", "+x", "$@");
+endif
 
 target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre
-target/maven-jlink/classifiers/jre-linux                               : src/main/jre/OpenJDK11-jdk_x64_linux_hotspot_11_28/jdk-11+28 \
-                                                                         mvn -Pbuild-jre-linux
+target/maven-jlink/classifiers/jre-linux                               : mvn -Pbuild-jre-linux
+-Pbuild-jre-linux                                                      : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
+                                                                             -Pcompile-simple-api \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
+                                                                             -Pcompile-simple-api \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
                                                                              -Punpack-updater-linux \
                                                                              -Passemble-linux-dir
+
+endif # neq ($(OS), WINDOWS)
 
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb \
@@ -195,14 +262,18 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb \
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2 \
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 :
-	test -e $@
+ifndef DUMP_PROFILES
+	exit(new File("$@").exists());
+endif
 
+ifneq ($(OS), WINDOWS)
 .PHONY : check
 check : check-docker
 
 .PHONY : check-docker
 check-docker :
-	bash src/test/resources/test-docker-image.sh
+	exec("bash", "src/test/resources/test-docker-image.sh");
+endif # neq ($(OS), WINDOWS)
 
 .PHONY : --without-persistence
 --without-persistence : -Pwithout-persistence
@@ -215,6 +286,17 @@ check-docker :
 
 .PHONY : --without-webservice
 --without-webservice : -Pwithout-webservice
+
+.PHONY : --without-cli
+--without-cli : -Pwithout-cli
+
+.PHONY : --without-updater
+--without-updater : -Pwithout-updater
+
+clean :
+	for (File f : new File("make/java/").listFiles())  \
+		if (f.getName().matches(".*\\.(java|class)"))  \
+			f.delete();
 
 #                         process-sources      generate-resources      process-resources      prepare-package       package
 #                         ---------------      ---------------         -----------------      ---------------       -------
@@ -242,6 +324,8 @@ check-docker :
 #                                              generate-release-descriptor
 # build-jre                                                                                                         jlink
 # build-jre-linux                                                                                                   jlink-linux
+# build-jre-win32                                                                                                   jlink-win32
+# build-jre-win64                                                                                                   jlink-win64
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
@@ -256,6 +340,7 @@ check-docker :
 # assemble-linux-zip                                                                                                assemble-linux-zip
 # assemble-win-zip                                                                                                  assemble-win-zip
 # assemble-minimal-zip                                                                                              assemble-minimal-zip
+# assemble-word-addin-dir                                                                                           assemble-word-addin-dir
 # package-mac-app                                                                                                   javapackager
 # package-dmg                                                                                 install-node
 #                                                                                             install-appdmg        package-appdmg
@@ -268,15 +353,19 @@ check-docker :
 
 PROFILES :=                     \
 	copy-artifacts              \
+	compile-simple-api          \
 	generate-release-descriptor \
 	build-jre                   \
 	build-jre-linux             \
+	build-jre-win32             \
+	build-jre-win64             \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
 	assemble-mac-zip            \
 	assemble-win-dir            \
 	assemble-win-zip            \
+	assemble-word-addin-dir     \
 	assemble-minimal-zip        \
 	package-deb                 \
 	package-deb-cli             \
@@ -295,17 +384,27 @@ PROFILES :=                     \
 	without-persistence         \
 	without-osgi                \
 	without-gui                 \
-	without-webservice
+	without-webservice          \
+	without-cli                 \
+	without-updater
 
 .PHONY : mvn
 mvn :
 ifndef DUMP_PROFILES
-	set -o pipefail; \
-	$(MVN) clean install $(shell $(MAKE) -qs DUMP_PROFILES=true -- $(MAKECMDGOALS))
+	@List<String> cmd = new ArrayList<>();                                                                                 \
+	cmd.add("$(MVN)");                                                                                                     \
+	cmd.add("clean");                                                                                                      \
+	cmd.add("install");                                                                                                    \
+	exitOnError(                                                                                                           \
+		captureOutput(                                                                                                     \
+			Arrays.asList("$(MAKE) -s --no-print-directory ECHO=true DUMP_PROFILES=true -- $(MAKECMDGOALS)".split("\\s")), \
+			line -> { if (line.startsWith("-P")) cmd.add(line); }));                                                       \
+	println(String.join(" ", cmd));                                                                                        \
+	exec(runInShell(cmd));
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))
 ifdef DUMP_PROFILES
 $(addprefix -P,$(PROFILES)) :
-	+echo $@
+	@println("$@");
 endif

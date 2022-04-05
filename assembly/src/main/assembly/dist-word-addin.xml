@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <assembly>
-  <id>linux</id>
+  <id>word-addin</id>
   <formats>
     <format>zip</format>
     <format>dir</format>
@@ -8,11 +8,9 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/base-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/jars.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/jars-linux.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/cli-linux.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/updater-linux.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/jars-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/simple-api.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/jre-win.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>
