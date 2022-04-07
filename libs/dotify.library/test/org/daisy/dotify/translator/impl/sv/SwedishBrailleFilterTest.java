@@ -511,4 +511,30 @@ public class SwedishBrailleFilterTest {
         assertEquals("⠈⠑", filter.filter("ệ"));
         assertEquals("⠈⠑", filter.filter("ễ"));
     }
+
+    @Test
+    public void testPhoneticCharacters() {
+        assertEquals("⠡⠒", filter.filter("ɑː"));
+        //assertEquals("⠩",  filter.filter("æ"));
+        assertEquals("⠢",  filter.filter("ə"));
+        assertEquals("⠜",  filter.filter("ɛ"));
+        assertEquals("⠌",  filter.filter("ɪ"));
+        assertEquals("⠴⠕", filter.filter("ɵ"));
+        //assertEquals("⠳",  filter.filter("ø"));
+        //assertEquals("⠪",  filter.filter("œ"));
+        assertEquals("⠔⠪", filter.filter("ɶ"));
+        assertEquals("⠣",  filter.filter("ɔ"));
+        assertEquals("⠴⠥", filter.filter("ʉ"));
+        assertEquals("⠷",  filter.filter("ʊ"));
+        assertEquals("⠖⠽", filter.filter("ʏ"));
+        assertEquals("⠖⠎", filter.filter("ɕ"));
+        assertEquals("⠲⠙", filter.filter("ɖ"));
+        assertEquals("⠦⠓", filter.filter("ɦ"));
+        assertEquals("⠭⠱", filter.filter("ɧ"));
+        assertEquals("⠲⠇", filter.filter("ɭ"));
+        assertEquals("⠫",  filter.filter("ŋ"));
+        assertEquals("⠲⠝", filter.filter("ɳ"));
+        assertEquals("⠲⠎", filter.filter("ʂ"));
+        assertEquals("⠲⠞", filter.filter("ʈ"));
+    }
 }

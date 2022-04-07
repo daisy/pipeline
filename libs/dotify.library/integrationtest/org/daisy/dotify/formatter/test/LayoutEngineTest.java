@@ -3,6 +3,7 @@ package org.daisy.dotify.formatter.test;
 import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.translator.TranslatorType;
 import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
@@ -103,9 +104,15 @@ public class LayoutEngineTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
+            FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+                new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                    .allowsEndingPageOnHyphen(true)
+                    .build(),
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
             "resource-files/obfl-input-content-items.obfl",
             "resource-files/obfl-content-items-expected.pef",
-            false
+            null
         );
     }
 
@@ -115,9 +122,15 @@ public class LayoutEngineTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
+            FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+                new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                    .allowsEndingPageOnHyphen(true)
+                    .build(),
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
             "resource-files/obfl-input-content-items-fallback.obfl",
             "resource-files/obfl-content-items-fallback-expected.pef",
-            false
+            null
         );
     }
 
@@ -127,9 +140,15 @@ public class LayoutEngineTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
+            FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+                new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                    .allowsEndingPageOnHyphen(true)
+                    .build(),
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
             "resource-files/obfl-input-content-items-fallback2.obfl",
             "resource-files/obfl-content-items-fallback2-expected.pef",
-            false
+            null
         );
     }
 
@@ -139,9 +158,15 @@ public class LayoutEngineTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
+            FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+                new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                    .allowsEndingPageOnHyphen(true)
+                    .build(),
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
             "resource-files/obfl-input-content-items-fallback3.obfl",
             "resource-files/obfl-content-items-fallback3-expected.pef",
-            false
+            null
         );
     }
 

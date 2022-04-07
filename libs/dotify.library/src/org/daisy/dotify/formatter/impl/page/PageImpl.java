@@ -226,11 +226,12 @@ public class PageImpl implements Page {
                     throw new PaginatorException("Failed to translate: " + ret, e);
                 }
             }
-            boolean spaceOnly = ret.length() == 0;
-            if (ret.length() < w) {
+            int len = ret.codePointCount(0, ret.length());
+            boolean spaceOnly = len == 0;
+            if (len < w) {
                 StringBuilder sb = new StringBuilder();
                 if (rightSide) {
-                    while (sb.length() < w - ret.length()) {
+                    while (sb.length() < w - len) {
                         sb.append(fcontext.getSpaceCharacter());
                     }
                     sb.append(ret);
@@ -241,9 +242,9 @@ public class PageImpl implements Page {
                     }
                 }
                 ret = sb.toString();
-            } else if (ret.length() > w) {
+            } else if (len > w) {
                 if (fcontext.getConfiguration().isAllowingTextOverflowTrimming()) {
-                    String trimmed = ret.substring(0, mr.getWidth());
+                    String trimmed = ret.substring(0, ret.offsetByCodePoints(0, mr.getWidth()));
                     logger.log(Level.WARNING, "Cannot fit \"" + ret + "\" into a margin-region of size " + mr.getWidth()
                                + ", trimming to \"" + trimmed + "\"");
                     ret = trimmed;

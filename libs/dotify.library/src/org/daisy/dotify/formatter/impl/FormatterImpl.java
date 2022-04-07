@@ -42,7 +42,7 @@ import java.util.logging.Logger;
  *
  * @author Joel Håkansson
  */
-class FormatterImpl implements Formatter {
+public class FormatterImpl implements Formatter {
     private static final int MAX_ITERATIONS = 200;
 
     private final Stack<VolumeTemplate> volumeTemplates;
@@ -52,6 +52,8 @@ class FormatterImpl implements Formatter {
     private final Stack<BlockSequence> blocks;
 
     private final LazyFormatterContext context;
+
+    private List<VolumeImpl> finalVolumes;
 
     /**
      * Creates a new formatter.
@@ -158,10 +160,12 @@ class FormatterImpl implements Formatter {
         }
     }
 
-    private Iterable<? extends Volume> getVolumes() {
-        VolumeProvider volumeProvider = new VolumeProvider(blocks, volumeTemplates, context);
+    public Iterable<? extends Volume> getVolumes() {
+        if (finalVolumes != null) {
+            return finalVolumes;
+        }
 
-        List<VolumeImpl> ret;
+        VolumeProvider volumeProvider = new VolumeProvider(blocks, volumeTemplates, context);
 
         /*
          * Inside this loop a result is created. The volume provider does all the work, and this loop
@@ -186,15 +190,15 @@ class FormatterImpl implements Formatter {
          */
         for (int j = 1; j <= MAX_ITERATIONS; j++) {
             try {
-                ret = new ArrayList<>();
+                finalVolumes = new ArrayList<>();
                 volumeProvider.prepare();
                 while (volumeProvider.hasNext()) {
-                    ret.add(volumeProvider.nextVolume());
+                    finalVolumes.add(volumeProvider.nextVolume());
                 }
 
                 if (volumeProvider.done()) {
                     //everything fits
-                    return ret;
+                    return finalVolumes;
                 }
 
             } catch (RestartPaginationException e) {

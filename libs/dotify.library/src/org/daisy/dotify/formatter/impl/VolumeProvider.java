@@ -386,7 +386,7 @@ public class VolumeProvider {
             return true;
         } else {
             crh.setDirty(false);
-            logger.info("Things didn't add up, running another iteration (" + j + ")");
+            logger.fine("Things didn't add up, running another iteration (" + j + ")");
         }
         j++;
         return false;

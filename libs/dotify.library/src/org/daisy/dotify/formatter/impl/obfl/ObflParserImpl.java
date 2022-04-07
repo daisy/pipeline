@@ -2167,7 +2167,7 @@ public class ObflParserImpl extends XMLParserBase implements ObflParser {
         boolean markCapitalLetters = getMarkCapitalLetters(event, defaults.shouldMarkCapitalLetters());
 
         String trans = getTranslate(event, defaults.getTranslationMode());
-        return new TextProperties.Builder(loc.toString())
+        return new TextProperties.Builder(loc)
                 .translationMode(trans)
                 .hyphenate(hyph)
                 .markCapitalLetters(markCapitalLetters)

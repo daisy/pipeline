@@ -102,7 +102,7 @@ public class Evaluate implements Segment {
 
     @Override
     public Optional<String> getLocale() {
-        return Optional.of(props.getLocale());
+        return Optional.ofNullable(props.getLocale());
     }
 
     @Override

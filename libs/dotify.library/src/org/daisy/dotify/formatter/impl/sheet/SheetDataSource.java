@@ -339,14 +339,16 @@ public class SheetDataSource implements SplitPointDataSource<Sheet, SheetDataSou
                     }
                 }
                 // The last line may be hyphenated when
-                // - the configuration allows it, or
-                // - we are not on the last sheet of the volume, or
-                // - we are in duplex mode and the current page index is even
-                //   (so we're not on the last page of the sheet)
+                // - the configuration allows it on pages within the volume, and
+                // - the configuration allows it on the last page of the volume, or
+                //   - we are not on the last sheet of the volume, or
+                //   - we are in duplex mode and the current page index is even
+                //     (so we're not on the last page of the sheet)
                 boolean hyphenateLastLine =
-                        context.getConfiguration().allowsEndingVolumeOnHyphen()
+                    context.getConfiguration().allowsEndingPageOnHyphen()
+                        && (context.getConfiguration().allowsEndingVolumeOnHyphen()
                                 || sheetBuffer.size() != index - 1
-                                || (sectionProperties.duplex() && pageIndex % 2 == 0);
+                                || (sectionProperties.duplex() && pageIndex % 2 == 0));
 
                 PageImpl p = psb.nextPage(
                     initialPageOffset,

@@ -71,7 +71,7 @@ dependencies {
     testImplementation group: "junit", name: "junit", version: "4.12"
     compile group: "com.googlecode.texhyphj", name: "texhyphj", version: "1.2"
     compile 'org.daisy.bindings:jhyphen:1.0.2'
-    runtimeOnly 'com.fasterxml.woodstox:woodstox-core:5.1.0'
+    runtimeOnly 'com.fasterxml.woodstox:woodstox-core:6.2.8'
 
     testImplementation group: "junit", name: "junit", version: "4.12"
     testImplementation "org.mockito:mockito-core:3.3.3"

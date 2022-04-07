@@ -22,6 +22,7 @@ public class HyphenateTest extends AbstractFormatterEngineTest {
         return FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
                 new FormatterConfiguration.Builder("sv-SE",
                         TranslatorType.UNCONTRACTED.toString())
+                .allowsEndingPageOnHyphen(true)
                 .allowsEndingVolumeOnHyphen(false)
                 .build(),
                 PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE));

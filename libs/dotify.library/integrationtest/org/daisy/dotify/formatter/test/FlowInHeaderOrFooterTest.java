@@ -1,7 +1,12 @@
 package org.daisy.dotify.formatter.test;
 
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
+import org.daisy.dotify.api.formatter.FormatterConfiguration;
+import org.daisy.dotify.api.translator.TranslatorType;
+import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -175,9 +180,15 @@ public class FlowInHeaderOrFooterTest extends AbstractFormatterEngineTest {
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
+            FormatterEngineMaker.newInstance().getFactory().newFormatterEngine(
+                new FormatterConfiguration.Builder("sv-SE", TranslatorType.UNCONTRACTED.toString())
+                    .allowsEndingPageOnHyphen(true)
+                    .build(),
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
             "resource-files/flow-in/flow-in-header-footer11-input.obfl",
             "resource-files/flow-in/flow-in-header-footer11-expected.pef",
-            false
+            null
         );
     }
 }

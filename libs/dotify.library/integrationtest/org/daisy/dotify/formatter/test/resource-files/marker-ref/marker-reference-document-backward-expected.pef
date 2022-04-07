@@ -2,8 +2,8 @@
 <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
    <head>
       <meta>
-         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-across-sequence-workaround</dc:title>
-         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with multiple sequences. Currently marker-reference doesn't search across sequences. As a workaround I repeat markers at the start of a new sequence when needed.</dc:description>
+         <dc:title xmlns:dc="http://purl.org/dc/elements/1.1/">marker-reference-document-backward</dc:title>
+         <dc:description xmlns:dc="http://purl.org/dc/elements/1.1/">Tests marker-reference with scope sequence and direction backward.</dc:description>
          <dc:format xmlns:dc="http://purl.org/dc/elements/1.1/">application/x-pef+xml</dc:format>
       </meta>
    </head>

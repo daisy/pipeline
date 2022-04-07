@@ -184,8 +184,7 @@ class SearchInfo {
         PageDetails currentPage = page;
         while (currentPage != null) {
             if (
-                markerRef.getSearchScope() == MarkerSearchScope.VOLUME ||
-                markerRef.getSearchScope() == MarkerSearchScope.DOCUMENT
+                markerRef.getSearchScope() == MarkerSearchScope.VOLUME
             ) {
                 throw new RuntimeException("Marker reference scope not implemented: " + markerRef.getSearchScope());
             }
@@ -219,7 +218,13 @@ class SearchInfo {
                 index += dir;
                 count++;
             }
-            if (
+            if (markerRef.getSearchScope() == MarkerSearchScope.DOCUMENT) {
+                currentPage = currentPage.getPageInScope(
+                    getPageView(currentPage.getSequenceId().getSpace()),
+                    dir,
+                    false
+                );
+            } else if (
                 markerRef.getSearchScope() == MarkerSearchScope.SEQUENCE ||
                 markerRef.getSearchScope() == MarkerSearchScope.SHEET && currentPage.isWithinSheetScope(dir) //||
                 //markerRef.getSearchScope() == MarkerSearchScope.SPREAD && page.isWithinSequenceSpreadScope(dir)

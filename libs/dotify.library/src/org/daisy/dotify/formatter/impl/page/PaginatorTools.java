@@ -6,11 +6,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Does positioning of header/footer fields, and layout of tables.
  */
 class PaginatorTools {
+
+    private static final Logger logger = Logger.getLogger(PaginatorTools.class.getCanonicalName());
+
     /**
      * Distribution modes.
      */
@@ -50,7 +55,7 @@ class PaginatorTools {
                     unit = truncate(unit, width);
                 } else {
                     throw new PaginatorToolsException(
-                        "Text does not fit within provided space of " + width + ": " + units.get(0)
+                        "Text does not fit within provided space of " + width + ": " + unit
                     );
                 }
             }
@@ -138,7 +143,11 @@ class PaginatorTools {
 
     private static String truncate(String s, int lengthInCodePoints) {
         if (s.codePointCount(0, s.length()) > lengthInCodePoints) {
-            return s.substring(0, s.offsetByCodePoints(0, lengthInCodePoints));
+            String truncated = s.substring(0, s.offsetByCodePoints(0, lengthInCodePoints));
+            logger.log(Level.WARNING,
+                       "Text does not fit within provided space of " + lengthInCodePoints + ": \"" + s + "\""
+                       + ", trimming to \"" + truncated + "\"");
+            return truncated;
         } else {
             return s;
         }

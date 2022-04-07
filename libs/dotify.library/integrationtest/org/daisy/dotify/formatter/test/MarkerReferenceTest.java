@@ -192,13 +192,13 @@ public class MarkerReferenceTest extends AbstractFormatterEngineTest {
         );
     }
     @Test
-    public void testMarkerReferenceAcrossSequenceWorkaround() throws
+    public void testMarkerReferenceDocumentBackward() throws
             LayoutEngineException,
             IOException,
             PagedMediaWriterConfigurationException {
         testPEF(
-            "resource-files/marker-ref/marker-reference-across-sequence-workaround-input.obfl",
-            "resource-files/marker-ref/marker-reference-across-sequence-workaround-expected.pef",
+            "resource-files/marker-ref/marker-reference-document-backward-input.obfl",
+            "resource-files/marker-ref/marker-reference-document-backward-expected.pef",
             false
         );
     }
