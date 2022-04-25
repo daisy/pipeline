@@ -209,7 +209,7 @@ ifndef DUMP_PROFILES
 	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
 	exec("cp", "-r", "$(word 4,$^)", "target/docker/jre");
 	exec(new File("target/docker"),                                                                 \
-	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline-assembly", ".");
+	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline:latest-snapshot", ".");
 endif
 
 src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8 : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz

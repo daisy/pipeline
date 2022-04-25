@@ -4,7 +4,7 @@
 
 # Build Pipeline
 FROM maven:3.8.4-jdk-11 as builder
-RUN apt-get update && apt-get install -y make libxml2-utils
+RUN apt-get update && apt-get install -y make
 ADD src/ /usr/src/pipeline-assembly/src/
 ADD pom.xml /usr/src/pipeline-assembly/
 ADD Makefile /usr/src/pipeline-assembly/

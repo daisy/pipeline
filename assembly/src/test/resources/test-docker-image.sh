@@ -33,7 +33,7 @@ docker run --name pipeline --detach \
        -e PIPELINE2_WS_AUTHENTICATION=true \
        -e PIPELINE2_WS_AUTHENTICATION_KEY=$CLIENTKEY \
        -e PIPELINE2_WS_AUTHENTICATION_SECRET=$CLIENTSECRET \
-       -p 8181:8181 daisyorg/pipeline-assembly
+       -p 8181:8181 daisyorg/pipeline:latest-snapshot
 
 trap "docker stop pipeline; docker rm pipeline" EXIT
 
@@ -55,7 +55,7 @@ done
 if ! docker run --name cli --rm -it --link pipeline \
             --entrypoint /opt/daisy-pipeline2/cli/dp2 \
             --volume="$(pwd):$MOUNT_POINT:rw" \
-            daisyorg/pipeline-assembly \
+            daisyorg/pipeline:latest-snapshot \
             --host http://pipeline \
             --starting false \
             --client_key $CLIENTKEY \
