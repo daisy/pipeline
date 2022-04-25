@@ -24,9 +24,24 @@
 		<p:pipe step="update" port="result.in-memory"/>
 	</p:output>
 	
-	<p:import href="get-file.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+	<p:import href="get-file.xpl">
+		<p:documentation>
+			odt:get-file
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+		<p:documentation>
+			px:fileset-create
+			px:fileset-add-entries
+			px:fileset-join
+			px:fileset-update
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:message
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="base" select="//d:file[starts-with(@media-type,'application/vnd.oasis.opendocument')]/resolve-uri(@href, base-uri(.))"/>
 	<p:variable name="numbering-offset"
@@ -62,24 +77,16 @@
 			<p:pipe step="content.temp" port="result"/>
 		</p:input>
 	</p:delete>
-	
-	<px:fileset-create name="base">
+
+	<p:sink/>
+	<px:fileset-create>
 		<p:with-option name="base" select="$base"/>
 	</px:fileset-create>
-	<p:sink/>
-	
-	<p:for-each>
-		<p:iteration-source>
+	<px:fileset-add-entries media-type="application/mathml+xml">
+		<p:input port="entries">
 			<p:pipe step="mathml" port="result"/>
-		</p:iteration-source>
-		<px:fileset-add-entry media-type="application/mathml+xml">
-			<p:input port="source">
-				<p:pipe step="base" port="result"/>
-			</p:input>
-			<p:with-option name="href" select="base-uri(/*)"/>
-		</px:fileset-add-entry>
-	</p:for-each>
-	
+		</p:input>
+	</px:fileset-add-entries>
 	<px:fileset-join name="fileset.mathml"/>
 	
 	<px:fileset-join name="fileset.with-mathml">

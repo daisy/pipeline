@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils</artifactId>
-  <version>2.1.4-SNAPSHOT</version>
+  <version>3.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils</name>
@@ -29,6 +29,11 @@
         <groupId>ch.sbs.pipeline</groupId>
         <artifactId>sbs-hyphenation-tables</artifactId>
         <version>1.23</version>
+      </dependency>
+      <dependency>
+        <groupId>no.nlb</groupId>
+        <artifactId>spell-no-patterns</artifactId>
+        <version>1.1.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -62,11 +67,9 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_libhyphen_utils,
       org.daisy.pipeline.braille.libhyphen.impl.LibhyphenJnaImpl,
       org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTableRegistry,
-      org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTablePath_libreoffice_hyphen_tables,
-      org.daisy.pipeline.braille.libhyphen.saxon.impl.HyphenateDefinition,
+      org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTablePath_libreoffice_hyphen_tables
     </expose-services>
   </properties>
 
@@ -224,8 +227,7 @@
             </Import-Package>
             <Private-Package>
               ${generated-packages}
-              org.daisy.pipeline.braille.libhyphen.impl,
-              org.daisy.pipeline.braille.libhyphen.saxon.impl
+              org.daisy.pipeline.braille.libhyphen.impl
             </Private-Package>
             <!--
                 exclude native and META-INF/services/org.daisy.pipeline.braille.common.NativePath
@@ -234,8 +236,6 @@
               src/main/resources/,
               tables/hyph_de_DE.dic
                =target/dependency/sbs-hyphenation-tables/tables/hyph_de_DE.dic,
-              META-INF/catalog.xml
-               =target/generated-resources/process-catalog/META-INF/catalog.xml,
               META-INF/services
                =target/generated-resources/spi/META-INF/services,
               META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
@@ -387,18 +387,6 @@
             </executions>
           </plugin>
           <plugin>
-            <groupId>org.daisy.pipeline.build</groupId>
-            <artifactId>modules-build-helper</artifactId>
-            <executions>
-              <execution>
-                <id>xprocdoc</id>
-                <configuration>
-                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-javadoc-plugin</artifactId>
             <executions>
@@ -462,10 +450,36 @@
       <build>
         <plugins>
           <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-nlb-tables</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/generated-resources/tables</outputDirectory>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>no.nlb</groupId>
+                      <artifactId>spell-no-patterns</artifactId>
+                      <type>zip</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <includes>
+                    hyph_no_NO.dic
+                  </includes>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <artifactId>maven-antrun-plugin</artifactId>
             <executions>
               <execution>
-                <phase>generate-resources</phase>
+                <!-- <phase>generate-resources</phase> -->
+                <phase>none</phase>
                 <goals>
                   <goal>run</goal>
                 </goals>
@@ -477,6 +491,8 @@
                       <patternset>
                         <include name="**/hyph_*.dic" />
                         <exclude name="**/hyph_de.dic" />
+                        <exclude name="**/hyph_nb_NO.dic" />
+                        <exclude name="**/hyph_nn_NO.dic" />
                       </patternset>
                       <mapper type="flatten" />
                     </unzip>
@@ -489,5 +505,19 @@
       </build>
     </profile>
   </profiles>
+
+  <repositories>
+    <repository>
+      <!-- FIXME: this only works if you have a personal access token (with "read:packages" scope) in your settings.xml -->
+      <id>github</id>
+      <url>https://maven.pkg.github.com/nlbdev/spell-no</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
 
 </project>

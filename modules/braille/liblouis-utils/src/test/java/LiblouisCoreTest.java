@@ -21,12 +21,12 @@ import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBrail
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineIterator;
 import org.daisy.pipeline.braille.common.CompoundBrailleTranslator;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.Provider;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.liblouis.LiblouisHyphenator;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
@@ -74,7 +74,6 @@ public class LiblouisCoreTest extends AbstractTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("libhyphen-utils"),
 			brailleModule("braille-common"),
 			brailleModule("braille-css-utils"),
 			brailleModule("pef-utils"),
@@ -286,29 +285,29 @@ public class LiblouisCoreTest extends AbstractTest {
 	
 	@Test
 	public void testHyphenate() {
-		assertEquals("foo\u00ADbar",
+		assertEquals(text("foo\u00ADbar"),
 		             hyphenatorProvider.withContext(messageBus)
 		                 .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
 		                 .asFullHyphenator()
-		                 .transform("foobar"));
+		                 .transform(styledText("foobar", "hyphens: auto")));
 	}
 	
 	@Test
 	public void testHyphenateCompoundWord() {
-		assertEquals("foo-\u200Bbar",
+		assertEquals(text("foo-\u200Bbar"),
 		             hyphenatorProvider.withContext(messageBus)
 		                 .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
 		                 .asFullHyphenator()
-		                 .transform("foo-bar"));
+		                 .transform(styledText("foo-bar", "hyphens: auto")));
 	}
 	
 	@Test
 	public void testManualWordBreak() {
-		assertEquals("foo\u00ADbar foo\u00ADbar foob\u00ADar",
+		assertEquals(text("foo\u00ADbar foo\u00ADbar foob\u00ADar"),
 		             hyphenatorProvider.withContext(messageBus)
 		                 .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
 		                 .asFullHyphenator()
-		                 .transform("foobar foo\u00ADbar foob\u00ADar"));
+		                 .transform(styledText("foobar foo\u00ADbar foob\u00ADar", "hyphens: auto")));
 		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗ ⠋⠕⠕\u00AD⠃⠁⠗ ⠋⠕⠕⠃\u00AD⠁⠗"),
 		             provider.withContext(messageBus)
 		                     .get(query("(table:'foobar.uti,foobar.dic')")).iterator().next()
@@ -341,6 +340,36 @@ public class LiblouisCoreTest extends AbstractTest {
 			"def",
 			fillLines(translator.transform(styledText("abc\u00ADdef ", "",
 			                                          "abc\u00ADdef", "hyphenate-character: '⠈'")), 4));
+	}
+	
+	@Test
+	public void testTranslateAndHyphenateCompoundWord() {
+		FromStyledTextToBraille translator = provider.withContext(messageBus)
+		                                             .get(query("(table:'foobar.utb,foobar.dic')(hyphenator:auto)")).iterator().next()
+		                                             .fromStyledTextToBraille();
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:auto")));
+		// break opportunity expected after '-' regardless of value of hyphens
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:manual")));
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:none")));
+		// and regardless of value of hyphenator feature
+		translator = provider.withContext(messageBus)
+		                     .get(query("(table:'foobar.utb,foobar.dic')(hyphenator:none)")).iterator().next()
+		                    .fromStyledTextToBraille();
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:auto")));
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:manual")));
+		assertEquals(
+			braille("⠋⠕⠕⠤\u200B⠃⠁⠗"),
+			translator.transform(styledText("foo-bar", "hyphens:none")));
 	}
 	
 	@Test

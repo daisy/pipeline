@@ -8,7 +8,8 @@
   <p:output port="result">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>A fileset that contains only the files that are in all input filesets. Only the attributes
-      from the <code>d:file</code> elements of the first input fileset are retained.</p>
+      from the <code>d:file</code> elements of the first input fileset are retained. Only the
+      xml:base attribute of the first <code>d:fileset</code> is retained.</p>
     </p:documentation>
   </p:output>
 

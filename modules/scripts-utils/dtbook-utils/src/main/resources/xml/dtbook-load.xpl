@@ -32,7 +32,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
-            px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
             px:fileset-load
             px:fileset-purge
@@ -52,15 +52,12 @@
     <!--
         fileset containing the input DTBooks (with normalized base URIs)
     -->
-    <p:for-each>
-        <p:identity name="dtbook"/>
-        <p:sink/>
-        <px:fileset-add-entry media-type="application/x-dtbook+xml">
-            <p:input port="entry">
-                <p:pipe step="dtbook" port="result"/>
-            </p:input>
-        </px:fileset-add-entry>
-    </p:for-each>
+    <p:sink/>
+    <px:fileset-add-entries media-type="application/x-dtbook+xml">
+        <p:input port="entries">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entries>
     <px:fileset-join/>
     <px:fileset-load name="dtbooks">
         <p:input port="in-memory">

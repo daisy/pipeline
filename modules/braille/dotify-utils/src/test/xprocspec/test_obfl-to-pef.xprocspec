@@ -8,11 +8,12 @@
                xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
   <x:script>
-    <p:declare-step type="pxi:test" version="1.0">
+    <p:declare-step type="pxi:test" version="1.0" name="main">
       <p:input port="source"/>
       <p:output port="result"/>
       <p:option name="text-transform" select="'(input:braille)'"/>
       <p:option name="braille-charset" select="''"/>
+      <p:input port="parameters" kind="parameter" primary="false"/>
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:choose>
@@ -59,7 +60,11 @@
         </p:string-replace>
       </p:group>
       <pxi:obfl-normalize-space/>
-      <px:obfl-to-pef/>
+      <px:obfl-to-pef>
+        <p:input port="parameters">
+          <p:pipe step="main" port="parameters"/>
+        </p:input>
+      </px:obfl-to-pef>
       <p:delete match="/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset"/>
     </p:declare-step>
   </x:script>
@@ -9002,9 +9007,10 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="block-underline-with-child-block" pending="undefined behavior">
+  <x:scenario label="block-underline-with-child-block">
     <x:documentation>
-      Tests underlining of a block with a child block. Currently causes an error because the behavior is undefined.
+      Tests underlining of a block with a child block. The OBFL spec says the behavior is undefined
+      in this case. This test shows the behavior of Dotify.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -9028,6 +9034,31 @@
         </x:document>
       </x:input>
     </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="15" rows="15" rowgap="0" duplex="false">
+              <section>
+                <page>
+                  <row>⠌⠌⠌⠌</row>
+                  <row>⠤⠤⠤⠤</row>
+                  <row>⠌⠌⠌⠌</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
   </x:scenario>
 
   <x:scenario label="manual-volume-breaking-toc">
@@ -9562,12 +9593,9 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="volume-breaking-between-words" xfail="true">
+  <x:scenario label="suppress-hyphenation-across-volume-break">
     <x:documentation>
       Tests suppressing of hyphenation of the last line of a volume.
-      
-      Broken: does not work in combination with a volume-transition element: see
-      https://github.com/brailleapps/dotify.formatter.impl/issues/46
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -9580,7 +9608,6 @@
               </default-template>
             </layout-master>
             <volume-template sheets-in-volume-max="3"/>
-            <volume-transition range="sheet"/>
             <sequence xmlns:css="http://www.daisy.org/ns/pipeline/braille-css" master="main">
               <block>
                 ⠁⠁⠁⠁⠁
@@ -9596,6 +9623,7 @@
           </obfl>
         </x:document>
       </x:input>
+      <x:param port="parameters" name="hyphenation-at-page-breaks" select="'except-at-volume-breaks'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -9637,6 +9665,20 @@
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                 </page>
               </section>
@@ -9648,6 +9690,71 @@
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="suppress-hyphenation-across-volume-break-with-volume-transition" xfail="true">
+    <x:documentation>
+      Tests suppressing of hyphenation of the last line of a volume in combination with a
+      volume-transition element.
+      
+      Broken: see https://github.com/brailleapps/dotify.formatter.impl/issues/46
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="main" duplex="true" page-width="10" page-height="5">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <volume-template sheets-in-volume-max="3"/>
+            <volume-transition range="sheet"/>
+            <sequence xmlns:css="http://www.daisy.org/ns/pipeline/braille-css" master="main">
+              <block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:param port="parameters" name="hyphenation-at-page-breaks" select="'except-at-volume-breaks'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
                 </page>
                 <page>
@@ -9659,6 +9766,145 @@
                 </page>
                 <page>
                   <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿⠤</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁⠀⠿⠿</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="suppress-hyphenation-across-page-break">
+    <x:documentation>
+      Tests suppressing of hyphenation of the last line of a page.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="main" duplex="true" page-width="10" page-height="5">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <volume-template sheets-in-volume-max="3"/>
+            <sequence xmlns:css="http://www.daisy.org/ns/pipeline/braille-css" master="main">
+              <block>
+                ⠁⠁⠁⠁⠁
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿­⠿⠿⠿⠿⠿
+                ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠁⠁⠁⠁⠁ ⠿⠿
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+      <x:param port="parameters" name="hyphenation-at-page-breaks" select="'false'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                  <row>⠁⠁⠁⠁⠁</row>
+                </page>
+              </section>
+            </volume>
+            <volume cols="10" rows="5" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠿</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>
                   <row>⠁⠁⠁⠁⠁</row>

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.file.saxon.impl;
+package org.daisy.pipeline.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -48,5 +48,4 @@ class MockFile extends File {
 	public boolean exists() {
 		return exists;
 	}
-
 }

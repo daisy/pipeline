@@ -130,7 +130,7 @@
     <p:sink/>
     
     <px:fileset-add-entry first="true" media-type="text/plain" name="add-mimetype" replace="true">
-        <p:input port="source">
+        <p:input port="source.fileset">
             <p:pipe step="add-manifest" port="fileset"/>
         </p:input>
         <p:input port="source.in-memory">

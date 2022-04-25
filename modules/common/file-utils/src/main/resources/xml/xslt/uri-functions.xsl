@@ -3,6 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:java="implemented-in-java"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -155,22 +156,53 @@
         <xsl:sequence select="pf:recompose-uri(($tokens[1],$tokens[2],pf:normalize-path($path),$tokens[4],$tokens[5]))"/>
     </xsl:function>
 
-    <xsl:function name="pf:normalize-uri" as="xs:string">
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Normalize a URI.</p>
+            <!--
+                http://en.wikipedia.org/wiki/URL_normalization
+                - path segment normalization
+                - case normalization
+                - percent-encoding normalization
+                - default http port
+            -->
+            <!--
+                Note that this function does not behave entirely the same as pf:normalize-uri-legacy
+                (the old XSLT implementation, see below). The functions differ in at least two
+                aspects:
+                - pf:normalize-uri will raise an error if the provided argument, after leading and
+                  trailing white space has been stripped, is not a valid URI.
+                - pf:normalize-uri does not handle IRIs. Use the iri-to-uri function to convert an
+                  IRI to a URI before passing it to pf:normalize-uri.
+            -->
+        </desc>
+        <param name="uri">
+            <p>A relative or absolute URI</p>
+        </param>
+        <param name="fragment">
+            <p></p>
+        </param>
+        <return>
+            <p>A relative or absolute URI</p>
+        </return>
+    </doc>
+    <java:function name="pf:normalize-uri" as="xs:string">
+        <xsl:param name="uri" as="xs:string?"/>
+    </java:function>
+    
+    <java:function name="pf:normalize-uri" as="xs:string">
+        <xsl:param name="uri" as="xs:string?"/>
+        <xsl:param name="fragment" as="xs:boolean"/>
+    </java:function>
+
+    <xsl:function name="pf:normalize-uri-legacy" as="xs:string">
         <xsl:param name="uri" as="xs:string?"/>
         <xsl:sequence select="pf:normalize-uri($uri,true())"/>
     </xsl:function>
-    
-    <xsl:function name="pf:normalize-uri" as="xs:string">
-        <xsl:param name="uri" as="xs:string?"/>
-        <xsl:param name="fragment" as="xs:boolean?"/>
-        <!--
-            http://en.wikipedia.org/wiki/URL_normalization
-            - path segment normalization
-            - case normalization
-            - percent-encoding normalization
-            - default http port
-        -->
 
+    <xsl:function name="pf:normalize-uri-legacy" as="xs:string">
+        <xsl:param name="uri" as="xs:string?"/>
+        <xsl:param name="fragment" as="xs:boolean"/>
         <!--
             normalize percent encodings:
              * capitalize
@@ -184,7 +216,6 @@
                         <xsl:matching-substring>
                             <!-- capitalize -->
                             <xsl:variable name="upper-case" select="upper-case(.)"/>
-
                             <!-- decode ALPHA/DIGIT/hyphen/period/underscore/tilde -->
                             <xsl:variable name="utf8-bytes" as="xs:integer+">
                                 <xsl:analyze-string select="$upper-case" regex="%([0-9A-F]{{2}})" flags="i">
@@ -201,7 +232,6 @@
                                     </xsl:matching-substring>
                                 </xsl:analyze-string>
                             </xsl:variable>
-
                             <xsl:value-of select="if ($utf8-bytes = (65 to 90, 97 to 122, 48 to 57, 45, 46, 95, 126)) then codepoints-to-string(pf:utf8-decode($utf8-bytes)) else $upper-case"/>
                         </xsl:matching-substring>
                         <xsl:non-matching-substring>
@@ -214,27 +244,21 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-
         <xsl:variable name="tokens" select="pf:tokenize-uri(normalize-space($uri))" as="xs:string*"/>
         <xsl:variable name="scheme" select="$tokens[1]"/>
         <xsl:variable name="authority" select="$tokens[2]"/>
         <xsl:variable name="path" select="$tokens[3]"/>
         <xsl:variable name="query" select="$tokens[4]"/>
         <xsl:variable name="fragment" select="if ($fragment) then $tokens[5] else ()"/>
-        
         <!-- lower case scheme and authority components -->
         <xsl:variable name="scheme" select="lower-case($scheme)"/>
         <xsl:variable name="authority" select="lower-case($authority)"/>
-
         <!-- remove default port -->
         <xsl:variable name="authority" select="if ($scheme='http' and ends-with($authority,':80')) then substring($authority,1,string-length($authority)-3) else $authority"/>
-
         <!-- normalize path -->
         <xsl:variable name="path" select="pf:normalize-path($path)"/>
-        
         <xsl:variable name="uri" select="pf:recompose-uri(($scheme,$authority,$path,$query,$fragment))"/>
         <xsl:variable name="uri" select="pf:file-expand83($uri)" use-when="function-available('pf:file-expand83')"/>
-        
         <xsl:sequence select="iri-to-uri($uri)"/>
     </xsl:function>
 

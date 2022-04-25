@@ -57,7 +57,7 @@
     
     <louis:translate-file>
         <p:input port="styles">
-            <p:pipe step="styles" port="result"/>
+            <p:pipe step="styles" port="result.fileset"/>
         </p:input>
         <p:input port="semantics">
             <p:empty/>

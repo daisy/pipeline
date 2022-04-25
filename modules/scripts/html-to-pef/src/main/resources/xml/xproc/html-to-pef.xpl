@@ -82,6 +82,7 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="duplex"/>
     <p:option name="levels-in-footer"/>
     <p:option name="hyphenation"/>
+    <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="line-spacing"/>
     <p:option name="capital-letters"/>
     <p:option name="include-captions"/>
@@ -177,7 +178,7 @@ sheet modules) are available for use in Sass style sheets:
     <!-- LOAD HTML -->
     <!-- ========= -->
     <px:fileset-add-entry media-type="application/xhtml+xml">
-        <p:input port="source">
+        <p:input port="source.fileset">
           <p:inline><d:fileset/></p:inline>
         </p:input>
         <p:with-option name="href" select="$html"/>

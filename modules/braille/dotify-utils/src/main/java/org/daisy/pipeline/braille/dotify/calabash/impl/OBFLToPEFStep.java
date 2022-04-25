@@ -90,6 +90,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private static final QName _style_type = new QName("style-type");
 	private static final QName _css_text_transform_definitions = new QName("css-text-transform-definitions");
 	private static final QName _css_counter_style_definitions = new QName("css-counter-style-definitions");
+	private static final QName _has_volume_transition = new QName("has-volume-transition");
 	
 	/** Code for Dotify errors caused by invalid or unsupported OBFL. */
 	private static final QName DOTIFY_INVALID = new QName("DOTIFY_INVALID");
@@ -259,8 +260,6 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			s.close();
 			
 			// Convert
-			// FIXME: duplication with DotifyTaskSystem! => use that class in
-			// here (like in XMLToOBFL) when it supports setting of the mode
 			String identifier = getOption(_identifier, "");
 			boolean markCapitalLetters; {
 				String p = params.get("mark-capital-letters");
@@ -274,13 +273,31 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			boolean removeStyles; {
 				String p = params.get("remove-styles");
 				removeStyles = (p == null) ? false : p.equalsIgnoreCase("true"); }
+			boolean allowEndingPageOnHyphen;
 			boolean allowEndingVolumeOnHyphen; {
-				String p = params.get("allow-ending-volume-on-hyphen");
-				allowEndingVolumeOnHyphen = (p == null) ? true : p.equalsIgnoreCase("true"); }
+				String p = params.get("hyphenation-at-page-breaks");
+				if ("false".equalsIgnoreCase(p)) {
+					allowEndingPageOnHyphen = false;
+					allowEndingVolumeOnHyphen = false;
+				} else if ("except-at-volume-breaks".equalsIgnoreCase(p)) {
+					allowEndingPageOnHyphen = true;
+					allowEndingVolumeOnHyphen = false;
+				} else { // true (default)
+					allowEndingPageOnHyphen = true;
+					// Follow the OBFL standard which says that "when volume-transition is
+					// present, the last page or sheet in each volume may be modified so that
+					// the volume break occurs earlier than usual: preferably between two
+					// blocks, or if that is not possible, between words"
+					// (http://braillespecs.github.io/obfl/obfl-specification.html#L8701). In
+					// other words, volumes should by default not be allowed to end on a hyphen.
+					allowEndingVolumeOnHyphen = !getOption(_has_volume_transition, false);
+				}
+			}
 			FormatterConfiguration.Builder config = FormatterConfiguration.with(locale, mode)
 				.markCapitalLetters(markCapitalLetters)
 				.hyphenate(hyphenate)
 				.allowsTextOverflowTrimming(allowTextOverflowTrimming)
+				.allowsEndingPageOnHyphen(allowEndingPageOnHyphen)
 				.allowsEndingVolumeOnHyphen(allowEndingVolumeOnHyphen);
 			if (removeStyles)
 				config.ignoreStyle("em").ignoreStyle("strong");

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 type="px:dtbook-to-html.script" name="main"
                 px:input-filesets="dtbook"
                 px:output-filesets="html"
@@ -36,6 +38,12 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Temporary directory</h2>
+        <p px:role="desc">Directory for storing temporary files during conversion.</p></p:documentation>
+    </p:option>
+
     <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Assert validity</h2>
@@ -48,15 +56,27 @@
         <!-- defined in common-options.xpl -->
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="convert.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="convert.xpl">
+        <p:documentation>
+            px:dtbook-to-html
+        </p:documentation>
+    </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:normalize-uri
+        </p:documentation>
+    </cx:import>
 
-    <px:normalize-uri name="output-dir-uri">
-        <p:with-option name="href" select="concat($output-dir,'/')"/>
-    </px:normalize-uri>
-    
     <!-- get the HTML filename from the first DTBook -->
     <p:split-sequence name="first-dtbook" test="position()=1" initial-only="true"/>
     <p:sink/>
@@ -68,10 +88,8 @@
             select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
             <p:pipe port="matched" step="first-dtbook"/>
         </p:variable>
-        <p:variable name="output-dir-uri" select="/c:result/string()">
-            <p:pipe step="output-dir-uri" port="normalized"/>
-        </p:variable>
-        <p:variable name="html-file-uri" select="concat($output-dir,$encoded-title,'.epub')"/>
+        <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+        <p:variable name="html-file-uri" select="concat($output-dir-uri,$encoded-title,'.epub')"/>
 
         <px:dtbook-load name="load">
             <p:input port="source">
@@ -87,6 +105,7 @@
             <p:with-option name="assert-valid" select="$assert-valid"/>
             <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
             <p:with-option name="output-dir" select="$output-dir-uri"/>
+            <p:with-option name="temp-dir" select="pf:normalize-uri(concat($temp-dir,'/'))"/>
             <p:with-option name="filename" select="$encoded-title"/>
         </px:dtbook-to-html>
 

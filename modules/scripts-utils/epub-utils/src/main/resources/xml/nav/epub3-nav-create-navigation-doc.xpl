@@ -276,7 +276,7 @@
 		</p:when>
 		<p:otherwise>
 			<p:output port="result.fileset" primary="true">
-				<p:pipe step="result" port="result"/>
+				<p:pipe step="result" port="result.fileset"/>
 			</p:output>
 			<p:output port="result.in-memory" sequence="true">
 				<p:pipe step="result" port="result.in-memory"/>

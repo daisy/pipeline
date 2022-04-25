@@ -29,7 +29,6 @@
             <p px:role="desc">Sequence of DTBook files</p>
         </p:documentation>
     </p:input>
-    <p:input port="parameters" kind="parameter"/>
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">out</h2>
@@ -48,27 +47,10 @@
         </p:documentation>
         <p:pipe step="file-mapping" port="result"/>
     </p:output>
-    
-    <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-        <p:documentation>
-            Whether to stop processing and raise an error on validation issues.
-        </p:documentation>
-    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation>
             px:message
-        </p:documentation>
-    </p:import>
-    <p:import href="../validate-dtbook/dtbook-validator.select-schema.xpl">
-        <p:documentation>
-            px:dtbook-validator.select-schema
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>
-            px:validate-with-relax-ng-and-report
-            px:validate-with-relax-ng-and-report
         </p:documentation>
     </p:import>
 
@@ -108,11 +90,8 @@
         <p:wrap-sequence wrapper="d:fileset"/>
     </p:group>
     <p:sink/>
-    
-    <!--Loads the DTBook schema-->
-    <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-    
-    <!--Store the first DTBook for later reference-->    
+
+    <!--Store the first DTBook for later reference-->
     <p:split-sequence name="first-dtbook" initial-only="true" test="position()=1">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
@@ -121,33 +100,19 @@
     <px:message severity="DEBUG" message="Merging DTBook documents"/>
     <p:sink/>
 
-    <p:for-each name="validate-input">
-        <p:output port="result"/>
-        <p:iteration-source>
-            <p:pipe step="main" port="source"/>
-        </p:iteration-source>
-        <px:validate-with-relax-ng-and-report>
-            <p:input port="schema">
-                <p:pipe port="result" step="dtbook-schema"/>
-            </p:input>
-            <p:with-option name="assert-valid" select="$assert-valid"/>
-        </px:validate-with-relax-ng-and-report>
-    </p:for-each>
-    
     <p:xslt template-name="merge">
+        <p:input port="source">
+            <p:pipe step="main" port="source"/>
+        </p:input>
         <p:input port="stylesheet">
             <p:document href="merge-dtbook.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+            <p:empty/>
         </p:input>
         <p:with-option name="output-base-uri" select="base-uri(/*)">
             <p:pipe port="matched" step="first-dtbook"/>
         </p:with-option>
     </p:xslt>
-    
-    <px:validate-with-relax-ng-and-report name="validate-dtbook">
-        <p:input port="schema">
-            <p:pipe port="result" step="dtbook-schema"/>
-        </p:input>
-        <p:with-option name="assert-valid" select="$assert-valid"/>
-    </px:validate-with-relax-ng-and-report>
 
 </p:declare-step>

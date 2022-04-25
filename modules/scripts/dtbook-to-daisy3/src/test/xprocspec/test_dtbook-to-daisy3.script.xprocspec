@@ -14,10 +14,10 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="foo" lang="fr" gender="male-adult"/>
-						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="include-tts-log" select="'true'"/> <!-- log can be found in "tts-log" output -->
 			<x:option name="audio" select="false()"/>
 			<x:option name="output-dir" select="resolve-uri('shuffled_7019_xmldtbook_1/output-dir/',$temp-dir)"/>
 		</x:call>

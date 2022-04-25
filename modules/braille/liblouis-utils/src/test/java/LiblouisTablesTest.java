@@ -7,8 +7,8 @@ import javax.inject.Inject;
 
 import com.google.common.base.Optional;
 
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 
 import org.daisy.pipeline.junit.AbstractTest;
@@ -63,7 +63,6 @@ public class LiblouisTablesTest extends AbstractTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("libhyphen-utils"),
 			brailleModule("braille-common"),
 			brailleModule("braille-css-utils"),
 			brailleModule("pef-utils"),

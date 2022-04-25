@@ -225,7 +225,7 @@ public class SSMLtoAudioTest {
 			registry.addTTS(ttsservice);
 
 			AudioFootprintMonitor monitor = new AudioFootprintMonitor();
-			TTSLog logs = new TTSLogImpl();
+			TTSLog logs = new TTSLog();
 
 			SSMLtoAudio ssmlToAudio = new SSMLtoAudio(new File("/tmp/"), MP3, registry, Logger,
 			        monitor, Proc, config, logs);

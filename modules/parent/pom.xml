@@ -223,12 +223,12 @@
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>calabash-adapter</artifactId>
-              <version>4.4.0</version>
+              <version>5.1.0</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.libs</groupId>
               <artifactId>com.xmlcalabash</artifactId>
-              <version>1.1.20-p8-98</version>
+              <version>1.1.20-p10-98</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.xprocspec</groupId>
@@ -432,7 +432,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.6</version>
+        <version>1.14.7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -457,7 +457,7 @@
       <dependency>
         <groupId>org.daisy.maven</groupId>
         <artifactId>xproc-engine-daisy-pipeline</artifactId>
-        <version>1.14.1</version>
+        <version>1.14.3</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -981,10 +981,6 @@
                     <systemProperty>
                       <key>org.daisy.pipeline.ws.localfs</key>
                       <value>true</value>
-                    </systemProperty>
-                    <systemProperty>
-                      <key>org.daisy.pipeline.version</key>
-                      <value>SNAPSHOT</value>
                     </systemProperty>
                   </systemProperties>
                 </configuration>

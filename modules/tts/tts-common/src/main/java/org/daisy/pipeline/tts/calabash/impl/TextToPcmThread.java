@@ -2,8 +2,8 @@ package org.daisy.pipeline.tts.calabash.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -26,6 +26,8 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.AudioFootprintMonitor.MemoryException;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
@@ -99,12 +101,16 @@ public class TextToPcmThread implements FormatSpecifications {
 		public int offsetInAudio;
 	}
 
+	/**
+	 * @param totalTextSize Total size of all text (not only the text contained in <code>input</code>)
+	 * @param portion       Estimated portion of the text that this thread will process.
+	 */
 	void start(final ConcurrentLinkedQueue<ContiguousText> input,
-	        final BlockingQueue<ContiguousPCM> pcmOutput, TimedTTSExecutor executor,
-	        TTSRegistry ttsregistry, VoiceManager voiceManager, SSMLMarkSplitter ssmlSplitter,
-	        final IProgressListener progressListener, Logger logger,
-	        AudioFootprintMonitor audioFootprintMonitor, final int maxQueueEltSize,
-	        TTSLog ttsLog) {
+	           final BlockingQueue<ContiguousPCM> pcmOutput, TimedTTSExecutor executor,
+	           TTSRegistry ttsregistry, VoiceManager voiceManager, SSMLMarkSplitter ssmlSplitter,
+	           Logger logger, AudioFootprintMonitor audioFootprintMonitor, final int maxQueueEltSize,
+	           TTSLog ttsLog, MessageAppender messageAppender,
+	           long totalTextSize, BigDecimal portion) {
 		mSSMLSplitter = ssmlSplitter;
 		mSoundFileLinks = new ArrayList<SoundFileLink>();
 		mExecutor = executor;
@@ -119,55 +125,69 @@ public class TextToPcmThread implements FormatSpecifications {
 		mThread = new Thread() {
 			@Override
 			public void run() {
+				// wrap the messages from this thread in a (empty) block so that there is always an
+				// active block for this thread, so that SLF4J log messages always have a destination
+				MessageAppender messageThread = messageAppender != null
+					? messageAppender.append(new MessageBuilder().withProgress(portion))
+					: null;
 				TTSTimeout timeout = new TTSTimeout();
+				try {
 
-				/* Main loop */
-				while (true) {
-					ContiguousText section = input.poll();
-					if (section == null) { //queue is empty
-						break;
-					}
-					mFileNrInSection = 0;
-					boolean breakloop = false;
-					for (Sentence sentence : section.sentences) {
-						if (breakloop) {
-							mErrorCounter++;
-							continue;
+					/* Main loop */
+					while (true) {
+						ContiguousText section = input.poll();
+						if (section == null) { //queue is empty
+							break;
 						}
+						mFileNrInSection = 0;
+						boolean breakloop = false;
+						for (Sentence sentence : section.sentences) {
+							if (breakloop) {
+								mErrorCounter++;
+								continue;
+							}
+							try {
+								if (!speak(section, sentence, pcmOutput, timeout, maxQueueEltSize)) mErrorCounter++;
+							} catch (Throwable t) {
+								mErrorCounter++;
+								mTTSLog.getWritableEntry(sentence.getID()).addError(
+									new TTSLog.Error(
+										TTSLog.ErrorCode.CRITICAL_ERROR, "the current thread is stopping because of an error", t));
+								breakloop = true;
+							}
+						}
+						flush(section, pcmOutput);
+
+						// update progress
+						if (messageThread != null && portion.compareTo(BigDecimal.ZERO) > 0) {
+							MessageBuilder m = new MessageBuilder()
+								.withProgress(
+									new BigDecimal(section.getStringSize()).divide(new BigDecimal(totalTextSize), MathContext.DECIMAL128)
+									                                       .divide(portion, MathContext.DECIMAL128)
+									                                       .min(BigDecimal.ONE));
+							messageThread.append(m).close();
+						}
+					}
+
+					//release the TTS resources
+					for (Map.Entry<TTSEngine, TTSResource> e : mResources.entrySet()) {
+						timeout.enableForCurrentThread(2);
 						try {
-							if (!speak(section, sentence, pcmOutput, timeout, maxQueueEltSize)) mErrorCounter++;
-						} catch (Throwable t) {
-							StringWriter sw = new StringWriter();
-							t.printStackTrace(new PrintWriter(sw));
-							mErrorCounter++;
-							mTTSLog.getWritableEntry(sentence.getID()).addError(
-							        new TTSLog.Error(TTSLog.ErrorCode.CRITICAL_ERROR,
-							                "the current thread is stopping because of error: "
-							                        + sw.toString()));
-							breakloop = true;
+							releaseResource(e.getKey(), e.getValue());
+						} catch (Exception ex) {
+							mTTSLog.addGeneralError(
+								ErrorCode.WARNING,
+								"Error while releasing resource of " + e.getKey().getProvider().getName() + ex.getMessage(),
+								ex);
+						} finally {
+							timeout.disable();
 						}
 					}
-					flush(section, pcmOutput);
-					progressListener.notifyFinished(section);
+				} finally {
+					timeout.close();
+					if (messageThread != null)
+						messageThread.close(); // sets progress to 100% if not already 100%
 				}
-
-				//release the TTS resources
-				for (Map.Entry<TTSEngine, TTSResource> e : mResources.entrySet()) {
-					timeout.enableForCurrentThread(2);
-					try {
-						releaseResource(e.getKey(), e.getValue());
-					} catch (Exception ex) {
-						String msg = "Error while releasing resource of "
-						        + e.getKey().getProvider().getName() + "; "
-						        + ex.getMessage();
-						mLogger.warn(msg);
-						mTTSLog.addGeneralError(ErrorCode.WARNING, msg);
-					} finally {
-						timeout.disable();
-					}
-				}
-
-				timeout.close();
 			}
 		};
 		mThread.start();
@@ -199,11 +219,8 @@ public class TextToPcmThread implements FormatSpecifications {
 			try {
 				tts.releaseThreadResources(r);
 			} catch (Throwable t) {
-				StringWriter sw = new StringWriter();
-				t.printStackTrace(new PrintWriter(sw));
-				String msg = "error while releasing resources of "
-				        + tts.getProvider().getName() + ": " + sw.toString();
-				mTTSLog.addGeneralError(ErrorCode.WARNING, msg);
+				mTTSLog.addGeneralError(
+					ErrorCode.WARNING, "error while releasing resources of " + tts.getProvider().getName(), t);
 			}
 		}
 	}
@@ -352,11 +369,10 @@ public class TextToPcmThread implements FormatSpecifications {
 		TTSTimeout.ThreadFreeInterrupter interrupter = new ThreadFreeInterrupter() {
 			@Override
 			public void threadFreeInterrupt() {
-				String msg = "Forcing interruption of the current work of "
-				        + tts.getProvider().getName() + "...";
-				mLogger.warn(msg);
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
-				        new TTSLog.Error(ErrorCode.WARNING, msg));
+					new TTSLog.Error(
+						ErrorCode.WARNING,
+						"Forcing interruption of the current work of " + tts.getProvider().getName() + "..."));
 				tts.interruptCurrentWork(fresource);
 			}
 		};
@@ -364,12 +380,11 @@ public class TextToPcmThread implements FormatSpecifications {
 		try {
 			synchronized (resource) {
 				if (resource.invalid) {
-					String msg = "Resource of "
-					        + tts.getProvider().getName()
-					        + " is no longer valid. The corresponding service has probably been stopped.";
-					mLogger.info(msg);
 					mTTSLog.getWritableEntry(sentence.getID()).addError(
-					        new TTSLog.Error(ErrorCode.WARNING, msg));
+						new TTSLog.Error(
+							ErrorCode.WARNING,
+							"Resource of " + tts.getProvider().getName()
+							+ " is no longer valid. The corresponding service has probably been stopped."));
 					return null;
 				}
 				return synthesize(timeout, interrupter, logEntry,
@@ -382,12 +397,9 @@ public class TextToPcmThread implements FormatSpecifications {
 			                + tts.getProvider().getName()));
 			return null;
 		} catch (SynthesisException e) {
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
 			logEntry.addError(
-			        new TTSLog.Error(ErrorCode.WARNING, "error while speaking with "
-			                + tts.getProvider().getName() + " : " + e + ":"
-			                + sw.toString()));
+				new TTSLog.Error(
+					ErrorCode.WARNING, "error while speaking with " + tts.getProvider().getName() + ": " + e, e));
 
 			return null;
 		}
@@ -432,11 +444,10 @@ public class TextToPcmThread implements FormatSpecifications {
 			//Find another voice for this sentence
 			Voice newVoice = mVoiceManager.findSecondaryVoice(sentence.getVoice());
 			if (newVoice == null) {
-				String msg = "something went wrong but no fallback voice can be found for "
-					+ originalVoice;
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
-				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, msg));
-				mLogger.warn(msg + " (see TTS log for more info)");
+					new TTSLog.Error(
+						TTSLog.ErrorCode.AUDIO_MISSING,
+						"something went wrong but no fallback voice can be found for " + originalVoice));
 				return false;
 			}
 			tts = mVoiceManager.getTTS(newVoice); //cannot return null in this case
@@ -451,12 +462,11 @@ public class TextToPcmThread implements FormatSpecifications {
 				return false;
 			}
 			if (pcm == null) {
-				String msg = "something went wrong with " + originalVoice
-					+ " and fallback voice " + newVoice
-					+ " didn't work either";
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
-				        new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, msg));
-				mLogger.warn(msg + " (see TTS log for more info)");
+					new TTSLog.Error(
+						TTSLog.ErrorCode.AUDIO_MISSING,
+						"something went wrong with " + originalVoice
+						+ " and fallback voice " + newVoice + " didn't work either"));
 				return false;
 			}
 
@@ -528,10 +538,9 @@ public class TextToPcmThread implements FormatSpecifications {
 	}
 
 	private void printMemError(Sentence sentence, MemoryException e) {
-		String msg = "out of memory when processing sentence";
-		mLogger.error(msg + " with @id=" + sentence.getID());
+		String msg = "out of memory";
 		mTTSLog.getWritableEntry(sentence.getID()).addError(
-		        new TTSLog.Error(ErrorCode.AUDIO_MISSING, msg));
+			new TTSLog.Error(ErrorCode.AUDIO_MISSING, msg));
 	}
 
 	private void addAudio(Iterable<AudioInputStream> toadd) {

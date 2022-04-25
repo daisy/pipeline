@@ -34,6 +34,7 @@
 	<p:option name="chunk-size" required="false" select="'-1'"/>
 	<p:option name="filename" required="true"/>
 	<p:option name="output-dir" required="true"/>
+	<p:option name="temp-dir" required="true"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation>
@@ -52,18 +53,18 @@
 	</p:import>
 	
 	<px:dtbook-to-zedai name="to-zedai" px:message="Converting DTBook to ZedAI" px:progress="1/2">
-		<p:input port="in-memory.in">
+		<p:input port="source.in-memory">
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
-		<p:with-option name="opt-output-dir" select="concat($output-dir,'zedai/')"/>
-		<p:with-option name="opt-zedai-filename" select="concat($filename,'.xml')"/>
-		<p:with-option name="opt-lang" select="$language"/>
-		<p:with-option name="opt-assert-valid" select="$assert-valid"/>
+		<p:with-option name="output-dir" select="concat($temp-dir,'zedai/')"/>
+		<p:with-option name="zedai-filename" select="concat($filename,'.xml')"/>
+		<p:with-option name="lang" select="$language"/>
+		<p:with-option name="validation" select="if ($assert-valid='true') then 'abort' else 'report'"/>
 	</px:dtbook-to-zedai>
 
 	<px:zedai-to-html name="to-html" px:message="Converting ZedAI to XHTML 5" px:progress="1/2">
 		<p:input port="in-memory.in">
-			<p:pipe step="to-zedai" port="in-memory.out"/>
+			<p:pipe step="to-zedai" port="result.in-memory"/>
 		</p:input>
 		<p:with-option name="output-dir" select="$output-dir"/>
 		<p:with-option name="chunk" select="$chunk"/>

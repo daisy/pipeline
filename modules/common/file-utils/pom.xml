@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>file-utils</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: File Utilities</name>
@@ -56,12 +56,14 @@
       org.daisy.pipeline.modules.impl.Module_file_utils,
       org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_file_utils,
       org.daisy.pipeline.file.calabash.impl.CopyResourceProvider,
+      org.daisy.pipeline.file.calabash.impl.NormalizeURIProvider,
       org.daisy.pipeline.file.calabash.impl.PeekProvider,
       org.daisy.pipeline.file.calabash.impl.SetDoctypeProvider,
       org.daisy.pipeline.file.calabash.impl.SetXmlDeclarationProvider,
       org.daisy.pipeline.file.calabash.impl.XMLPeekProvider,
       org.daisy.pipeline.file.saxon.impl.Expand83,
-      org.daisy.pipeline.file.saxon.impl.FileExists
+      org.daisy.pipeline.file.saxon.impl.FileExists,
+      org.daisy.pipeline.file.saxon.impl.NormalizeURI
     </expose-services>
   </properties>
   

@@ -458,7 +458,7 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect type="xpath" label="should be as expected"
-                  test="/c:data[@name='a.html' and @content-type='binary/octet-stream' and @encoding='base64']"/>
+                  test="/c:data[@content-type='binary/octet-stream' and @encoding='base64']"/>
     </x:scenario>
 
     <x:scenario label="test-media-types-filtering">

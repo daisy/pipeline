@@ -21,7 +21,7 @@
 			</x:input>
 			<x:input port="source.in-memory"/>
 			<x:option name="mediaoverlays" select="true()"/>
-			<x:option name="assert-valid" select="false()"/>
+			<x:option name="assert-valid" select="'false'"/>
 			<x:option name="temp-dir" select="resolve-uri('result/')"/>
 		</x:call>
 		<x:context label="the result.fileset port">

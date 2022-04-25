@@ -277,6 +277,10 @@ public abstract class util {
 				protected Iterator<T> _iterator() {
 					return iterable.iterator();
 				}
+				@Override
+				public String toString() {
+					return iterable.toString();
+				}
 			};
 		}
 		

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-inline-prefixes="px" xpath-version="2.0"
                 type="px:fileset-filter" name="main">
@@ -22,7 +23,7 @@
             <p>The "result.in-memory" port contains all the documents from the "source.in-memory"
             port that are listed in the "result" fileset manifest.</p>
         </p:documentation>
-        <p:pipe step="result.in-memory" port="result"/>
+        <p:pipe step="result.in-memory" port="result.in-memory"/>
     </p:output>
     <p:output port="not-matched">
         <p:pipe step="not-matched" port="result"/>
@@ -34,7 +35,7 @@
             <p>The "not-matched.in-memory" port contains all the documents from the
             "source.in-memory" port that are listed in the "not-matched" fileset manifest.</p>
         </p:documentation>
-        <p:pipe step="not-matched.in-memory" port="result"/>
+        <p:pipe step="not-matched.in-memory" port="result.in-memory"/>
     </p:output>
 
     <p:option name="href" select="''">
@@ -48,7 +49,6 @@
     </p:option>
 
     <p:import href="fileset-filter-in-memory.xpl"/>
-    <p:import href="fileset-load.xpl"/>
     <p:import href="fileset-diff.xpl"/>
 
     <p:choose>
@@ -94,21 +94,14 @@
     </p:choose>
     <p:identity name="result"/>
 
-    <px:fileset-filter-in-memory>
+    <px:fileset-filter-in-memory cx:pure="true" name="result.in-memory">
         <p:input port="source.in-memory">
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:fileset-filter-in-memory>
-    <px:fileset-load>
-        <!-- this will just pick documents, everything is already loaded -->
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
-    <p:identity name="result.in-memory"/>
     <p:sink/>
 
-    <px:fileset-diff name="not-matched">
+    <px:fileset-diff name="not-matched" cx:pure="true">
         <p:input port="source">
             <p:pipe step="main" port="source"/>
         </p:input>
@@ -116,18 +109,11 @@
             <p:pipe step="result" port="result"/>
         </p:input>
     </px:fileset-diff>
-    <px:fileset-filter-in-memory>
+    <px:fileset-filter-in-memory cx:pure="true" name="not-matched.in-memory">
         <p:input port="source.in-memory">
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:fileset-filter-in-memory>
-    <px:fileset-load>
-        <!-- this will just pick documents, everything is already loaded -->
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
-    <p:identity name="not-matched.in-memory"/>
     <p:sink/>
 
 </p:declare-step>

@@ -1,4 +1,14 @@
-v1.14.6
+v1.14.8
+=======
+
+Changes
+-------
+- New option to control hyphenation at page and volume boundaries
+- Allow disabling hyphenation completely (also where there are soft hyphens)
+- Default handling of lists, including support for `start` and `value` attributes
+- Changed default suffix of counter styles to ". "
+
+v1.14.7
 =======
 
 Changes
@@ -28,7 +38,7 @@ Components
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
-v1.14.5
+v1.14.6
 =======
 
 Changes

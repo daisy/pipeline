@@ -30,7 +30,6 @@
 						</css>
 						<voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
 						<voice engine="mock-tts" name="vicki" lang="en" gender="female-adult"/>
-						<!-- <property key="log" value="true"/> -->
 					</config>
 				</x:document>
 			</x:input>

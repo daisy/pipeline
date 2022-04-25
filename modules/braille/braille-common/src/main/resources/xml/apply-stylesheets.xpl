@@ -3,7 +3,6 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
@@ -21,7 +20,7 @@
 			<p>Style sheets can be associated with the source in several ways: linked (using an
 			<code>xml-stylesheet</code> processing instruction or a <code>link</code> element),
 			embedded (using a <code>style</code> element) and/or inlined (using <code>style</code>
-			attributes).</p>p>
+			attributes).</p>
 		</p:documentation>
 	</p:input>
 	
@@ -108,7 +107,7 @@
 				<p:load name="stylesheet">
 					<p:with-option name="href" select="resolve-uri($stylesheet,base-uri(/*))"/>
 				</p:load>
-				<p:xslt px:message="Applying {$stylesheet}" px:progress="1/{count($stylesheets)}">
+				<p:xslt px:message="Applying XSLT: {$stylesheet}" px:progress="1/{count($stylesheets)}">
 					<p:input port="source">
 						<p:pipe step="recursive-xslt" port="source"/>
 					</p:input>
@@ -138,14 +137,18 @@
 		</p:documentation>
 	</p:import>
 	
-	<p:variable name="xslt-stylesheets" cx:as="xs:string*" select="tokenize($stylesheets,'\s+')[matches(.,'\.xslt?$')]"/>
-	<p:variable name="css-stylesheets" cx:as="xs:string*" select="tokenize($stylesheets,'\s+')[matches(.,'\.s?css$')]"/>
+	<p:variable name="xslt-user-stylesheets" cx:as="xs:string*" select="tokenize($stylesheets,'\s+')[matches(.,'\.xslt?$')]"/>
+	<p:variable name="css-user-stylesheets" cx:as="xs:string*" select="tokenize($stylesheets,'\s+')[matches(.,'\.s?css$')]"/>
 	
 	<p:choose>
-		<p:when test="not(string-join(($xslt-stylesheets,$css-stylesheets),' ')=normalize-space($stylesheets))">
+		<p:when test="not(string-join(($xslt-user-stylesheets,$css-user-stylesheets),' ')=normalize-space($stylesheets))">
 			<px:error code="BRL01" message="Invalid `stylesheets` option specified: $1">
 				<p:with-option name="param1" select="$stylesheets"/>
 			</px:error>
+		</p:when>
+		<p:when test="exists($xslt-user-stylesheets)">
+			<p:identity px:message-severity="WARN"
+			            px:message="Applying XSLT user style sheets is deprecated and might not be supported anymore in a future version of Pipeline. Please apply any XSLT style sheets during pre-processing of the document."/>
 		</p:when>
 		<p:otherwise>
 			<p:identity/>
@@ -156,44 +159,44 @@
 	<p:sink/>
 	<p:identity>
 		<p:input port="source">
-			<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
+			<p:pipe step="main" port="source"/>
 		</p:input>
 	</p:identity>
-	
 	<p:group px:progress=".95">
-		<p:variable name="all-xslt-stylesheets" cx:as="xs:string*"
-		            select="($xslt-stylesheets,
-		                     /d:fileset/d:file
-		                       [('text/xsl','application/xslt+xml')=tokenize($type,'\s+')
-	                            and (
-		                          @media-type=('text/xsl','application/xslt+xml'))]
-		                     /string(@href))"/>
-		<p:variable name="all-css-stylesheets" cx:as="xs:string*"
-		            select="($css-stylesheets,
-		                     /d:fileset/d:file
-		                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$media)]
-		                       [(@media-type=('text/css','text/x-scss') and @media-type=tokenize($type,'\s+'))]
-		                     /string(@href))"/>
-		<p:sink/>
-		<p:identity>
-			<p:input port="source">
-				<p:pipe step="main" port="source"/>
-			</p:input>
-		</p:identity>
+		<p:variable name="xslt-stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
+		            select="/d:fileset/d:file
+		                      [('text/xsl','application/xslt+xml')=tokenize($type,'\s+')
+	                           and (
+		                         @media-type=('text/xsl','application/xslt+xml'))]
+		                    /string(@href)">
+			<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
+		</p:variable>
+		<p:choose>
+			<p:when test="exists($xslt-stylesheets-from-xml-stylesheet-instructions)">
+				<p:identity px:message-severity="WARN"
+				            px:message="XSLT style sheets attached through 'xml-stylesheet' processing instructions will be ignored in a future version of Pipeline. Please apply any XSLT style sheets during pre-processing of the document."/>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
 		<pxi:recursive-xslt px:progress=".50">
-			<p:with-option name="stylesheets" select="$all-xslt-stylesheets"/>
+			<p:with-option name="stylesheets" select="($xslt-user-stylesheets,$xslt-stylesheets-from-xml-stylesheet-instructions)"/>
 			<p:input port="parameters">
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
 		</pxi:recursive-xslt>
 		<p:choose px:progress=".50">
 			<p:when test="tokenize($type,'\s')=('text/css','text/x-scss')">
-				<px:css-cascade px:message="Applying CSS{if (exists($all-css-stylesheets))
-				                                         then concat(':',if (count($all-css-stylesheets)=1)
-				                                                         then concat(' ',$all-css-stylesheets[1])
-				                                                         else string-join(('',$all-css-stylesheets),'&#x0A;- '))
-				                                         else ''}">
-					<p:with-option name="default-stylesheet" select="string-join($all-css-stylesheets,' ')"/>
+				<p:variable name="message" cx:as="xs:string"
+				            select="concat('Applying CSS',
+				                           if (exists($css-user-stylesheets))
+				                           then concat(':',if (count($css-user-stylesheets)=1)
+				                                           then concat(' ',$css-user-stylesheets[1])
+				                                           else string-join(('',$css-user-stylesheets),'&#x0A;- '))
+				                           else '')"/>
+				<px:css-cascade px:message="{$message}">
+					<p:with-option name="default-stylesheet" select="string-join($css-user-stylesheets,' ')"/>
 					<p:with-option name="type" select="string-join(tokenize($type,'\s')[.=('text/css','text/x-scss')],' ')"/>
 					<p:with-option name="media" select="$media"/>
 					<p:input port="context">

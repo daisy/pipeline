@@ -30,7 +30,7 @@
                                                                       self::css:footnote-call))
                                                        then @name
                                                        else name()"/>
-                    <xsl:apply-templates select="@style|@css:*"/>
+                    <xsl:apply-templates select="@xml:lang|@style|@css:*"/>
                     <xsl:if test="@css:display='list-item'">
                         <!--
                             implied by display: list-item
@@ -62,7 +62,7 @@
     <xsl:template match="*[@css:table]" priority="0.6">
         <css:box type="block">
             <xsl:attribute name="name" select="name()"/>
-            <xsl:apply-templates select="@style|@css:*"/>
+            <xsl:apply-templates select="@xml:lang|@style|@css:*"/>
             <xsl:apply-templates select="css:before"/>
             <xsl:apply-templates select="*[@css:table-caption]" mode="display-table"/>
             <css:box type="table">
@@ -75,7 +75,7 @@
     <xsl:template match="*[@css:table-caption]" mode="display-table">
         <css:box type="block">
             <xsl:attribute name="name" select="name()"/>
-            <xsl:apply-templates select="@style|@css:*"/>
+            <xsl:apply-templates select="@xml:lang|@style|@css:*"/>
             <xsl:apply-templates/>
         </css:box>
     </xsl:template>
@@ -83,7 +83,7 @@
     <xsl:template match="*[@css:table-cell]" mode="display-table">
         <css:box type="table-cell">
             <xsl:attribute name="name" select="name()"/>
-            <xsl:apply-templates select="@style|@css:*"/>
+            <xsl:apply-templates select="@xml:lang|@style|@css:*"/>
             <xsl:apply-templates/>
         </css:box>
     </xsl:template>
@@ -98,7 +98,7 @@
                                                               self::css:footnote-call))
                                                then @name
                                                else name()"/>
-            <xsl:apply-templates select="@style|@css:*|node()"/>
+            <xsl:apply-templates select="@xml:lang|@style|@css:*|node()"/>
         </xsl:element>
     </xsl:template>
     

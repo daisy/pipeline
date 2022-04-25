@@ -14,11 +14,11 @@ import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
 

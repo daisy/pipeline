@@ -7,18 +7,9 @@
                 type="px:obfl-to-pef" name="main">
 
 	<p:input port="source" sequence="false"/>
-	<p:output port="result" sequence="false">
-		<p:pipe step="pef" port="result"/>
-	</p:output>
+	<p:output port="result" sequence="false"/>
 	<p:option name="identifier" required="false" select="''"/>
 	<p:input port="parameters" kind="parameter" primary="false"/>
-
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
-		<p:documentation>
-			px:add-parameters
-			px:merge-parameters
-		</p:documentation>
-	</p:import>
 
 	<p:declare-step type="pxi:obfl-to-pef">
 		<p:input port="source" sequence="false"/>
@@ -30,6 +21,7 @@
 		<p:option name="style-type" required="false" select="''"/>
 		<p:option name="css-text-transform-definitions" required="false" select="''"/>
 		<p:option name="css-counter-style-definitions" required="false" select="''"/>
+		<p:option name="has-volume-transition" required="true"/>
 		<p:input port="parameters" kind="parameter" primary="false"/>
 		<!--
 		    Implemented in ../../java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java
@@ -70,7 +62,7 @@
 		     will be added through the "braille-charset" option. -->
 	</p:delete>
 
-	<pxi:obfl-to-pef name="pef">
+	<pxi:obfl-to-pef>
 		<p:with-option name="locale" select="(/obfl:obfl/@xml:lang,'und')[1]"/>
 		<p:with-option name="mode" select="/obfl:obfl/obfl:meta/dp2:default-mode">
 			<p:pipe step="main" port="source"/>
@@ -88,36 +80,12 @@
 		<p:with-option name="css-counter-style-definitions" select="/obfl:obfl/obfl:meta/dp2:css-counter-style-definitions">
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
+		<p:with-option name="has-volume-transition" select="if (/*/obfl:volume-transition) then 'true' else 'false'">
+		   <p:pipe step="main" port="source"/>
+		</p:with-option>
 		<p:input port="parameters">
-			<p:pipe step="parameters" port="result"/>
+			<p:pipe step="main" port="parameters"/>
 		</p:input>
 	</pxi:obfl-to-pef>
-	<p:sink/>
-
-	<p:group name="parameters">
-		<p:output port="result"/>
-		<!--
-		    Follow the OBFL standard which says that "when volume-transition is present, the last page
-		    or sheet in each volume may be modified so that the volume break occurs earlier than usual:
-		    preferably between two blocks, or if that is not possible, between words"
-		    (http://braillespecs.github.io/obfl/obfl-specification.html#L8701). In other words, volumes
-		    should by default not be allowed to end on a hyphen.
-		-->
-		<px:add-parameters name="allow-ending-volume-on-hyphen">
-			<p:input port="source">
-				<p:empty/>
-			</p:input>
-			<p:with-param name="allow-ending-volume-on-hyphen"
-			              select="if (/*/obfl:volume-transition) then 'false' else 'true'">
-				<p:pipe step="main" port="source"/>
-			</p:with-param>
-		</px:add-parameters>
-		<px:merge-parameters>
-			<p:input port="source">
-				<p:pipe step="allow-ending-volume-on-hyphen" port="result"/>
-				<p:pipe step="main" port="parameters"/>
-			</p:input>
-		</px:merge-parameters>
-	</p:group>
 
 </p:declare-step>

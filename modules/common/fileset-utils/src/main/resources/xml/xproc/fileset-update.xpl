@@ -96,6 +96,12 @@
 				<p:pipe step="main" port="update.in-memory"/>
 			</p:input>
 		</px:fileset-filter-in-memory>
+		<p:sink/>
+		<p:identity>
+			<p:input port="source">
+				<p:pipe step="filter" port="result.in-memory"/>
+			</p:input>
+		</p:identity>
 		<!-- show error for documents not listed in update manifest -->
 		<px:assert message="Trying to update a fileset with documents that are not in the update manifest: $1" error-code="XXXXX">
 			<p:with-option name="test" select="not(/*/d:file)">
@@ -105,12 +111,6 @@
 				<p:pipe step="filter" port="not-in-manifest"/>
 			</p:with-option>
 		</px:assert>
-		<px:fileset-load>
-			<!-- this will just pick documents, everything is already loaded -->
-			<p:input port="in-memory">
-				<p:pipe step="main" port="update.in-memory"/>
-			</p:input>
-		</px:fileset-load>
 	</p:group>
 	<p:identity name="update.in-memory"/>
 	<p:sink/>

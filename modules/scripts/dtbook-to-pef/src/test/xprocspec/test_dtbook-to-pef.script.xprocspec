@@ -282,7 +282,7 @@
     </x:call>
     <x:scenario label="enabled">
       <x:call>
-        <x:option name="hyphenation" select="'true'"/>
+        <x:option name="hyphenation" select="'auto'"/>
         <x:option name="pef-output-dir" select="concat($temp-dir,'hyphenation/enabled/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/enabled/temp-dir/')"/>
       </x:call>
@@ -314,7 +314,7 @@
     </x:scenario>
     <x:scenario label="disabled">
       <x:call>
-        <x:option name="hyphenation" select="'false'"/>
+        <x:option name="hyphenation" select="'manual'"/>
         <x:option name="pef-output-dir" select="concat($temp-dir,'hyphenation/disabled/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/disabled/temp-dir/')"/>
       </x:call>

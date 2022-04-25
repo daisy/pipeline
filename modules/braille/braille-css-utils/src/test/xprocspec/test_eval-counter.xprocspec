@@ -18,9 +18,21 @@
                 <css:marker>
                   <css:counter name="list-item"/>
                 </css:marker>
+                <ul css:counter-reset="list-item">
+                  <li css:counter-increment="list-item">
+                    <css:marker>
+                      <css:counter name="list-item"/>
+                    </css:marker>
+                  </li>
+                  <li css:counter-increment="list-item">
+                    <css:marker>
+                      <css:counter name="list-item"/>
+                    </css:marker>
+                  </li>
+                </ul>
               </li>
             </ul>
-            <ul css:counter-reset="list-item">
+            <ul>
               <li css:counter-increment="list-item">
                 <css:marker>
                   <css:counter name="list-item"
@@ -47,24 +59,36 @@
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> 1 </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> 1. </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> 2 </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> 2. </css:box>
               </css:marker>
+              <ul>
+                <li>
+                  <css:marker>
+                    <css:box type="inline" css:text-transform="auto" xml:lang=""> 1. </css:box>
+                  </css:marker>
+                </li>
+                <li>
+                  <css:marker>
+                    <css:box type="inline" css:text-transform="auto" xml:lang=""> 2. </css:box>
+                  </css:marker>
+                </li>
+              </ul>
             </li>
           </ul>
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> * </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> * </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> † </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> † </css:box>
               </css:marker>
             </li>
           </ul>
@@ -78,11 +102,12 @@
       <x:option name="counter-styles" select="'@counter-style written-out {
                                                  system: fixed;
                                                  symbols: ''one'' ''two'' ''three'';
-                                                 fallback: upper-roman; }'"/>
+                                                 fallback: upper-roman;
+                                                 suffix: '' ''; }'"/>
       <x:input port="source">
         <x:document type="inline">
           <body>
-            <ul css:counter-reset="list-item">
+            <ul>
               <li css:counter-increment="list-item">
                 <css:marker>
                   <css:counter name="list-item" style="written-out"/>
@@ -117,22 +142,22 @@
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">one </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">one </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">two </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">two </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">three </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">three </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">IV </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">IV </css:box>
               </css:marker>
             </li>
           </ul>

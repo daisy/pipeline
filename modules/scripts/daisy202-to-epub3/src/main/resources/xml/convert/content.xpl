@@ -48,7 +48,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-create
-            px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
         </p:documentation>
     </p:import>
@@ -110,23 +110,16 @@
     </p:for-each>
     <p:identity name="result.content"/>
     
-    <px:fileset-create name="empty-fileset">
+    <px:fileset-create>
         <p:with-option name="base" select="$publication-dir">
             <p:empty/>
         </p:with-option>
     </px:fileset-create>
-    <p:for-each>
-        <p:iteration-source>
+    <px:fileset-add-entries>
+        <p:input port="entries">
             <p:pipe port="result" step="result.content"/>
-        </p:iteration-source>
-        <p:variable name="uri" select="base-uri(/*)"/>
-        <px:fileset-add-entry>
-            <p:input port="source">
-                <p:pipe port="result" step="empty-fileset"/>
-            </p:input>
-            <p:with-option name="href" select="$uri"/>
-        </px:fileset-add-entry>
-    </p:for-each>
+        </p:input>
+    </px:fileset-add-entries>
     <px:fileset-join/>
     <p:identity name="result.fileset"/>
 

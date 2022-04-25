@@ -8,8 +8,8 @@
             <p px:role="desc" xml:space="preserve">The depth of the table of contents hierarchy to include. '0' means no table of contents.
 
 A table of contents will be generated from the heading elements present in the document: from `h1`
-elements if the specified value for "depth" is 1, from `h1` and `h2` elements if the specified value
-is 2, etc. The resulting table of contents has the following nested structure:
+elements if the specified value for the depth is 1, from `h1` and `h2` elements if the specified
+value is 2, etc. The resulting table of contents has the following nested structure:
 
 ~~~xml
 &lt;ol id="generated-document-toc"&gt;
@@ -33,20 +33,22 @@ is 2, etc. The resulting table of contents has the following nested structure:
 
 Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
 IDs of the heading elements from which the list was constructed, and the content of the links are
-exact copies of the content of the heading elements. By default the list is not rendered. The list
-should be styled and positioned with CSS. The following rules are included by default:
+exact copies of the content of the heading elements. By default the lists are not rendered. The
+lists should be styled and positioned with CSS. The following rules are included by default:
 
 ~~~css
 #generated-document-toc {
   flow: document-toc;
   display: -obfl-toc;
   -obfl-toc-range: document;
+  list-style-type: none;
 }
 
 #generated-volume-toc {
   flow: volume-toc;
   display: -obfl-toc;
   -obfl-toc-range: volume;
+  list-style-type: none;
 }
 ~~~
 
@@ -70,15 +72,39 @@ content at the beginning of every other volume, include the following additional
 }
 ~~~
 
+By default, the table of contents is styled as a normal unordered list, only including the text of
+the headings. Including the braille page numbers of the headings can be done using the
+`target-counter` function. For example, to place the page number after the heading title, with a
+space in between:
+
+~~~css
+#generated-document-toc li > a,
+#generated-volume-toc li > a {
+  content: ' ' target-counter(attr(href), page);
+}
+~~~
+
+Note that there is only a single "depth" setting for both lists. If you wish to include less levels
+of headings in the document TOC, you have to achieve it through CSS styling. For example, to get
+only one level of headings in the document TOC, make all nested `ol` elements invisible:
+
+~~~css
+#generated-document-toc > li > ol {
+  display: none;
+}
+~~~
+
 See the CSS specification for more info:
 
 - the [`display:
-  obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
+  -obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
   value
 - the [`flow`](http://braillespecs.github.io/braille-css/#the-flow-property) property
 - the [`flow()`](http://braillespecs.github.io/braille-css/#h4_the-flow-function) function
 - the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
 - the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
+- the [`target-counter()`](http://braillespecs.github.io/braille-css/#h4_the-target-counter-function) function
+- the [`page`](http://braillespecs.github.io/braille-css/#h4_creating-and-inheriting-counters) counter
 </p>
         </p:documentation>
     </p:option>

@@ -79,6 +79,7 @@
         <p:documentation>
             px:fileset-create
             px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
             px:fileset-rebase
         </p:documentation>
@@ -216,18 +217,14 @@
 
     <p:choose>
         <p:when test="$compatibility-mode='true'">
-            <p:for-each>
-                <p:iteration-source>
-                    <p:pipe port="content" step="main"/>
-                </p:iteration-source>
-                <p:variable name="xml-base" select="base-uri(/*)"/>
-                <px:fileset-create>
-                    <p:with-option name="base" select="$content-dir"/>
-                </px:fileset-create>
-                <px:fileset-add-entry>
-                    <p:with-option name="href" select="$xml-base"/>
-                </px:fileset-add-entry>
-            </p:for-each>
+            <px:fileset-create>
+                <p:with-option name="base" select="$content-dir"/>
+            </px:fileset-create>
+            <px:fileset-add-entries>
+                <p:input port="entries">
+                    <p:pipe step="main" port="content"/>
+                </p:input>
+            </px:fileset-add-entries>
             <px:fileset-join name="ncx.spine"/>
             <p:sink/>
 

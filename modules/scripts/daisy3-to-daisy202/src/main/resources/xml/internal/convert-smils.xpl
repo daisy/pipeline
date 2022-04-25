@@ -35,7 +35,6 @@
         <p:documentation>
             px:fileset-rebase
             px:fileset-move
-            px:fileset-add-entry
             px:fileset-join
             px:fileset-load
         </p:documentation>

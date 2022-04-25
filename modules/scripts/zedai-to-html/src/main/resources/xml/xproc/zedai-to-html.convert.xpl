@@ -42,7 +42,7 @@
         <p:documentation>
             px:fileset-load
             px:fileset-create
-            px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
             px:fileset-filter
             px:fileset-filter-in-memory
@@ -150,21 +150,20 @@
                 <p:identity/>
             </p:otherwise>
         </p:choose>
-        <p:for-each>
-            <p:documentation>Construct HTML fileset</p:documentation>
-            <p:identity name="chunk"/>
-            <p:sink/>
-            <px:fileset-create>
-                <p:with-option name="base" select="$output-dir"/>
-            </px:fileset-create>
-            <px:fileset-add-entry media-type="application/xhtml+xml">
-                <p:input port="entry">
-                    <p:pipe step="chunk" port="result"/>
-                </p:input>
-            </px:fileset-add-entry>
-        </p:for-each>
+        <p:sink/>
+
+        <p:documentation>Construct HTML fileset</p:documentation>
+        <px:fileset-create>
+            <p:with-option name="base" select="$output-dir"/>
+        </px:fileset-create>
+        <px:fileset-add-entries media-type="application/xhtml+xml">
+            <p:input port="entries">
+                <p:pipe step="zedai-to-html.html-chunks" port="result"/>
+            </p:input>
+        </px:fileset-add-entries>
         <px:fileset-join name="zedai-to-html.fileset"/>
         <p:sink/>
+
         <px:fileset-compose name="compose-mapping">
             <p:input port="source">
                 <p:pipe step="zedai-to-html.html-single" port="mapping"/>

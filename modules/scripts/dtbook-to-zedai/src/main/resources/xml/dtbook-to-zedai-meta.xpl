@@ -3,7 +3,6 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 type="px:dtbook-to-zedai-meta"
-                name="dtbook-to-zedai-meta"
                 exclude-inline-prefixes="tmp p px">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -17,35 +16,6 @@
 
 	<p:input port="source"/>
 	<p:output port="result"/>
-	<p:input port="parameters" kind="parameter"/>
-
-	<p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-		<p:documentation>
-			Whether to stop processing and raise an error on validation issues.
-		</p:documentation>
-	</p:option>
-
-	<p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-		<p:documentation>
-			Collection of utilities for validation and reporting.
-		</p:documentation>
-	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
-		<p:documentation>
-			Schema selector used for DTBook validation.
-		</p:documentation>
-	</p:import>
-
-	<px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-	<px:validate-with-relax-ng-and-report>
-		<p:input port="source">
-			<p:pipe port="source" step="dtbook-to-zedai-meta"/>
-		</p:input>
-		<p:input port="schema">
-			<p:pipe port="result" step="dtbook-schema"/>
-		</p:input>
-		<p:with-option name="assert-valid" select="$assert-valid"/>
-	</px:validate-with-relax-ng-and-report>
 
 	<p:xslt>
 		<p:input port="stylesheet">
@@ -60,6 +30,9 @@
 					</xsl:template>
 				</xsl:stylesheet>
 			</p:inline>
+		</p:input>
+		<p:input port="parameters">
+			<p:empty/>
 		</p:input>
 	</p:xslt>
 

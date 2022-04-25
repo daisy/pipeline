@@ -1,3 +1,77 @@
+/*
+ * Default style sheet for HTML
+ *
+ * This style sheet simply puts "display:block" on all elements that are defined as
+ * block-level in the default CSS2 style sheet for HTML 4. The rules defined here
+ * can be reset with http://www.daisy.org/pipeline/modules/braille/html-to-pef/reset.css
+ *
+ * See also
+ * - http://www.w3.org/TR/CSS2/sample.html
+ * - http://www.w3.org/TR/html5/rendering.html
+ */
+
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+
+html, address,
+blockquote,
+body, dd, div,
+dl, dt, fieldset, form,
+frame, frameset,
+h1, h2, h3, h4,
+h5, h6, noframes,
+ol, p, ul, center,
+dir, hr, menu, pre,
+table,
+tr,
+thead,
+tbody,
+tfoot,
+/* td, th, */
+caption,
+button, textarea,
+input, select {
+	display: block
+}
+
+li {
+	display: list-item;
+}
+
+ol, ul {
+	counter-reset: list-item;
+}
+
+ol,
+ol[type="1"] { list-style-type: decimal;     }
+ol[type="a"] { list-style-type: lower-alpha; }
+ol[type="A"] { list-style-type: upper-alpha; }
+ol[type="i"] { list-style-type: lower-roman; }
+ol[type="I"] { list-style-type: upper-roman; }
+
+/* handle ol[start] and li[value] */
+@xslt "lists.xsl";
+
+head {
+	display: none
+}
+
+br::before {
+	content: "\A";
+	white-space: pre-line;
+}
+
+/* xml:space */
+[xml|space=preserve] {
+	white-space: pre-wrap;
+}
+
+@text-transform uncontracted {
+	system: braille;
+	contraction: no;
+}
+
+/* ======= Implementation of script options =============== */
+
 $hyphenation: true !default;
 $line-spacing: single !default;
 $capital-letters: true !default;
@@ -14,9 +88,9 @@ $include-production-notes: false !default;
 
 @namespace epub url(http://www.idpf.org/2007/ops);
 
-@if $hyphenation {
+@if $hyphenation != manual {
 	:root {
-		hyphens: auto;
+		hyphens: $hyphenation;
 	}
 }
 
@@ -49,9 +123,4 @@ caption {
 .prodnote,
 [epub|type~='z3998:production'] {
 	display: if($include-production-notes, block, none);
-}
-
-@text-transform uncontracted {
-	system: braille;
-	contraction: no;
 }

@@ -1,21 +1,19 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.TTSTimeout;
 import org.daisy.pipeline.tts.calabash.impl.TTSLog.ErrorCode;
-
-import org.slf4j.Logger;
 
 /**
  * Consumes a shared queue of PCM packets. PCM packets are then provided to
@@ -39,9 +37,8 @@ public class EncodingThread {
 	private Throwable criticalError;
 
 	void start(final AudioFileFormat.Type fileType, final AudioServices encoderRegistry,
-	        final BlockingQueue<ContiguousPCM> inputPCM, final Logger logger,
-	        final AudioFootprintMonitor audioFootprintMonitor, Map<String, String> TTSproperties,
-	        final TTSLog ttslog) {
+	        final BlockingQueue<ContiguousPCM> inputPCM, final AudioFootprintMonitor audioFootprintMonitor,
+	        Map<String, String> TTSproperties, final TTSLog ttslog, MessageAppender messageAppender) {
 
 		//max seconds of encoded audio per seconds of encoding
 		//it would be more accurate with a byte rate instead, but less intuitive
@@ -52,10 +49,10 @@ public class EncodingThread {
 			try {
 				encodingSpeed = Float.valueOf(speedParam);
 			} catch (NumberFormatException e) {
-				String msg = "wrong format for property " + speedProp
-				        + ". A float is expected, not " + speedParam;
-				logger.info(msg);
-				ttslog.addGeneralError(ErrorCode.WARNING, msg);
+				ttslog.addGeneralError(
+					ErrorCode.WARNING,
+					"wrong format for property " + speedProp + ". A float is expected, not " + speedParam,
+					e);
 			}
 		}
 
@@ -63,9 +60,7 @@ public class EncodingThread {
 		//we always employ the same encoder for every chunk of PCM
 		AudioEncoder encoder = encoderRegistry.newEncoder(fileType, TTSproperties).orElse(null);
 		if (encoder == null) {
-			String msg = "No audio encoder found";
-			logger.info(msg);
-			ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
+			ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, "No audio encoder found");
 		}
 
 		final AudioEncoder fencoder = encoder;
@@ -75,15 +70,19 @@ public class EncodingThread {
 		mThread = new Thread() {
 			@Override
 			public void run() {
+				// wrap the messages from this thread in a (empty) block so that there is always an
+				// active block for this thread, so that SLF4J log messages always have a destination
+				MessageAppender messageThread = messageAppender != null
+					? messageAppender.append(new MessageBuilder())
+					: null;
 				try {
 					while (!interrupted()) {
 						ContiguousPCM job;
 						try {
 							job = inputPCM.take();
 						} catch (InterruptedException e) {
-							String msg = "encoding thread has been interrupted";
-							logger.info(msg);
-							ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
+							ttslog.addGeneralError(
+								ErrorCode.CRITICAL_ERROR, "encoding thread has been interrupted");
 							break; //warning: encoding bytes are not freed
 						}
 						if (job.isEndOfQueue()) {
@@ -108,15 +107,17 @@ public class EncodingThread {
 								audio.close();
 								job.getURIholder().append(encodedFile.toURI().toString());
 							} catch (InterruptedException e) {
-								String msg = "timeout while encoding audio to "
-									+ job.getDestinationFilePrefix() + ": " + getStack(e);
-								ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
+								ttslog.addGeneralError(
+									ErrorCode.CRITICAL_ERROR,
+									"timeout while encoding audio to " + job.getDestinationFilePrefix(),
+									e);
 								audioFootprintMonitor.releaseEncodersMemory(jobSize);
 								throw new EncodingException(e);
 							} catch (Throwable t) {
-								String msg = "error while encoding audio to "
-									+ job.getDestinationFilePrefix() + ": " + getStack(t);
-								ttslog.addGeneralError(ErrorCode.CRITICAL_ERROR, msg);
+								ttslog.addGeneralError(
+									ErrorCode.CRITICAL_ERROR,
+									"error while encoding audio to " + job.getDestinationFilePrefix(),
+									t);
 								audioFootprintMonitor.releaseEncodersMemory(jobSize);
 								throw new EncodingException(t);
 							} finally {
@@ -127,6 +128,8 @@ public class EncodingThread {
 					}
 				} finally {
 					timeout.close();
+					if (messageThread != null)
+						messageThread.close();
 				}
 			}
 		};
@@ -148,14 +151,5 @@ public class EncodingThread {
 		} catch (InterruptedException e) {
 			throw new RuntimeException(); // should not happen
 		}
-	}
-
-	//TODO: move this method in some kind of utils/helpers
-	private static String getStack(Throwable t) {
-		StringWriter writer = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(writer);
-		t.printStackTrace(printWriter);
-		printWriter.flush();
-		return writer.toString();
 	}
 }

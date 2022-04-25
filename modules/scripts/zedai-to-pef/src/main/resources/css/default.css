@@ -1,4 +1,6 @@
 /*
+ * Default style sheet for ZedAI
+ *
  * This style sheet simply puts "display:block" on all elements that are in section or
  * block layer according to the book profile. The style sheet is constructed in such a
  * way that it is easy to extend. The rules defined here can be reset with

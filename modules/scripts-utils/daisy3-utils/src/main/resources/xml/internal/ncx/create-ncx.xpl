@@ -52,7 +52,7 @@
       <p:pipe step="ncx" port="result"/>
     </p:output>
     <p:output port="result.fileset">
-      <p:pipe step="fileset" port="result"/>
+      <p:pipe step="fileset" port="result.fileset"/>
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">

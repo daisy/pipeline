@@ -4,6 +4,7 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                script="../../main/resources/xml/xproc/fileset-fix-original-hrefs.xpl">
   
     <x:scenario label="test">
@@ -36,30 +37,47 @@
                 </x:document>
             </x:input>
         </x:call>
-        <x:context label="the fileset port">
-            <x:document type="port" port="result.fileset"/>
-        </x:context>
-        <x:expect label="the result fileset should be as expected" type="custom"
-                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
-            <x:document type="inline">
-                <d:fileset>
-                    <d:file href="samples/fileset2/b.jpg" original-href="samples/fileset2/b.jpg"/>
-                    <d:file href="samples/fileset2/c.gif" original-href="samples/fileset2/c.gif"/>
-                    <d:file href="samples/fileset2/c-gif.img"/>
-                    <d:file href="samples/fileset2/a.zip!/e.svg" original-href="samples/fileset2/a.zip!/e.svg"/>
-                    <d:file href="samples/fileset2/a/a.html" original-href="samples/fileset2/a/a.html"/>
-                    <d:file href="samples/fileset2/e.svg" original-href="samples/fileset2/e.svg"/>
-                    <d:file href="samples/fileset2/e%5Bxml%5D" original-href="samples/fileset2/e%5Bxml%5D"/>
-                    <!-- <d:file href="samples/fileset2/x/b.jpg"/> -->
-                    <!-- <d:file href="samples/fileset2/x/c.gif"/> -->
-                    <d:file href="samples/fileset2/x/c-gif.img" original-href="samples/fileset2/c.gif"/>
-                    <d:file href="samples/fileset2/x/a.zip!/e.svg" original-href="samples/fileset2/e.svg"/>
-                    <d:file href="samples/fileset2/x/a/a.html" original-href="samples/fileset2/a.zip!/a.html"/>
-                    <!-- <d:file href="samples/fileset2/x/e.svg"/> -->
-                    <!-- <d:file href="samples/fileset2/x/e.xml"/> -->
-                </d:fileset>
-            </x:document>
-        </x:expect>
+        <x:scenario label="dont-fail-on-missing">
+            <x:call>
+                <x:option name="fail-on-missing" select="false()"/>
+            </x:call>
+            <x:context label="the fileset port">
+                <x:document type="port" port="result.fileset"/>
+            </x:context>
+            <x:expect label="the result fileset should be as expected" type="custom"
+                      href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/b.jpg" original-href="samples/fileset2/b.jpg"/>
+                        <d:file href="samples/fileset2/c.gif" original-href="samples/fileset2/c.gif"/>
+                        <d:file href="samples/fileset2/c-gif.img"/>
+                        <d:file href="samples/fileset2/a.zip!/e.svg" original-href="samples/fileset2/a.zip!/e.svg"/>
+                        <d:file href="samples/fileset2/a/a.html" original-href="samples/fileset2/a/a.html"/>
+                        <d:file href="samples/fileset2/e.svg" original-href="samples/fileset2/e.svg"/>
+                        <d:file href="samples/fileset2/e%5Bxml%5D" original-href="samples/fileset2/e%5Bxml%5D"/>
+                        <!-- <d:file href="samples/fileset2/x/b.jpg"/> -->
+                        <!-- <d:file href="samples/fileset2/x/c.gif"/> -->
+                        <d:file href="samples/fileset2/x/c-gif.img" original-href="samples/fileset2/c.gif"/>
+                        <d:file href="samples/fileset2/x/a.zip!/e.svg" original-href="samples/fileset2/e.svg"/>
+                        <d:file href="samples/fileset2/x/a/a.html" original-href="samples/fileset2/a.zip!/a.html"/>
+                        <!-- <d:file href="samples/fileset2/x/e.svg"/> -->
+                        <!-- <d:file href="samples/fileset2/x/e.xml"/> -->
+                    </d:fileset>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="fail-on-missing">
+            <x:call>
+                <x:option name="fail-on-missing" select="true()"/>
+            </x:call>
+            <x:context label="the error">
+                <x:document type="errors"/>
+            </x:context>
+            <x:expect label="missing files should result in an error" type="xpath"
+                      test="/*/c:error[@code='PEZE00']
+                                      [starts-with(string(.),'Found document in fileset that is neither stored on disk nor in memory:')]
+                                      [ends-with(string(.),'samples/fileset2/x/b.jpg')]"/>
+        </x:scenario>
     </x:scenario>
 
 </x:description>

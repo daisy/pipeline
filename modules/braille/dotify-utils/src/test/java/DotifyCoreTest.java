@@ -5,10 +5,9 @@ import javax.inject.Inject;
 
 import org.daisy.braille.css.SimpleInlineStyle;
 
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import org.daisy.pipeline.braille.dotify.DotifyHyphenator;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.junit.AbstractTest;
 
 import org.junit.Test;
@@ -19,9 +18,6 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Inject
 	public DotifyTranslator.Provider provider;
-	
-	@Inject
-	public DotifyHyphenator.Provider hyphenatorProvider;
 	
 	@Override
 	protected String[] testDependencies() {
@@ -54,14 +50,6 @@ public class DotifyCoreTest extends AbstractTest {
 		             provider.get(query("(locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","")));
-	}
-	
-	@Test
-	public void testHyphenate() {
-		assertEquals("foo\u00ADbar",
-		             hyphenatorProvider.get(query("(document-locale:sv-SE)")).iterator().next()
-		                               .asFullHyphenator()
-		                               .transform(new String[]{"foobar"})[0]);
 	}
 	
 	@Test

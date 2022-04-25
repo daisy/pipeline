@@ -49,7 +49,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
-            px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-load
             px:fileset-join
         </p:documentation>
@@ -57,11 +57,6 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>
             px:epub3-store
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            px:tokenize
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
@@ -90,23 +85,16 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         <p:group name="load">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
-                <p:pipe step="html" port="result"/>
+                <p:pipe step="html-load" port="result.in-memory"/>
             </p:output>
-            <px:tokenize regex="\s+">
-                <p:with-option name="string" select="$html"/>
-            </px:tokenize>
-            <p:for-each name="html">
-                <p:output port="result" sequence="true"/>
-                <p:variable name="single-html" select="."/>
-                <px:fileset-add-entry media-type="application/xhtml+xml">
-                    <p:input port="source">
-                        <p:inline><d:fileset/></p:inline>
-                    </p:input>
-                    <p:with-option name="href" select="$single-html"/>
-                </px:fileset-add-entry>
-            </p:for-each>
+            <px:fileset-add-entries media-type="application/xhtml+xml">
+                <p:input port="source.fileset">
+                    <p:inline><d:fileset/></p:inline>
+                </p:input>
+                <p:with-option name="href" select="tokenize($html,'\s+')"/>
+            </px:fileset-add-entries>
             <px:fileset-join/>
-            <px:html-load/>
+            <px:html-load name="html-load"/>
         </p:group>
 
         <px:html-to-epub3 name="convert">

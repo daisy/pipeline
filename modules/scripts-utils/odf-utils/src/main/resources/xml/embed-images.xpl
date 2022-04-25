@@ -22,9 +22,24 @@
 		<p:pipe step="update" port="result.in-memory"/>
 	</p:output>
 	
-	<p:import href="get-file.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+	<p:import href="get-file.xpl">
+		<p:documentation>
+			odt:get-file
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+		<p:documentation>
+			px:fileset-create
+			px:fileset-add-entry
+			px:fileset-join
+			px:fileset-update
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:message
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="base" select="//d:file[starts-with(@media-type,'application/vnd.oasis.opendocument')]/resolve-uri(@href, base-uri(.))"/>
 	<p:variable name="numbering-offset"
@@ -52,7 +67,7 @@
 		</p:iteration-source>
 		<p:variable name="original-href" select="/*/resolve-uri(@xlink:href, base-uri(.))"/>
 		<px:fileset-add-entry>
-			<p:input port="source">
+			<p:input port="source.fileset">
 				<p:pipe step="base" port="result"/>
 			</p:input>
 			<p:with-option name="href" select="concat(
@@ -86,7 +101,7 @@
 			               select="substring-after(
 			                       (if (starts-with($original-href, $base))
 			                         then $original-href
-			                         else //d:file[resolve-uri(@original-href,base-uri(.))=$original-href]/resolve-uri(@href,base-uri(.))),
+			                         else //d:file[resolve-uri(@original-href,base-uri(.))=$original-href][1]/resolve-uri(@href,base-uri(.))),
 			                       $base)">
 				<p:pipe step="fileset.images" port="result"/>
 			</p:with-option>

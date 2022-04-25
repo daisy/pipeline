@@ -1,45 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-			   xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+               xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                script="../../main/resources/xml/dtbook-to-zedai.xpl">
 
 	<x:scenario label="minimal">
-        <x:call step="px:dtbook-to-zedai.script">
+		<x:call step="px:dtbook-to-zedai.script">
 			<x:input port="source">
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
 			<x:option name="zedai-filename" select="'result.xml'"/>
-            <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
-        </x:call>
-		<x:context label="the output ZedAI">
-            <x:document type="file" base-uri="temp-dir" href="minimal/output-dir/result.xml" select="//z:body"/>
+			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory contents">
+			<x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/"/>
 		</x:context>
-        <x:expect label="the output ZedAI"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
-            <x:document type="inline">
+		<x:expect label="the output directory contents" type="compare">
+			<x:document type="inline">
+				<c:directory name="output-dir">
+					<c:file name="image.jpg"/>
+					<c:file name="result.xml"/>
+					<c:file name="zedai-mods.xml"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+		<x:context label="the output ZedAI">
+			<x:document type="file" base-uri="temp-dir" href="minimal/output-dir/result.xml" select="//z:body"/>
+		</x:context>
+		<x:expect label="the output ZedAI" type="compare">
+			<x:document type="inline">
 				<body xmlns="http://www.daisy.org/ns/z3998/authoring/">
 					<frontmatter>
-						<section xml:id="a">
+						<section xml:id="id_1">
 							<h role="title">Minimal DTBook</h>
 							<p role="author">Bert</p>
 						</section>
 					</frontmatter>
 					<bodymatter>
-						<section xml:id="b">
+						<section xml:id="id_2">
 							<pagebreak value="1" xml:id="page_1"/>
 							<h>Chapter</h>
 							<p>Paragraph</p>
 							<pagebreak value="2" xml:id="page_2"/>
 							<p>Another paragraph</p>
+							<object src="image.jpg" xml:id="id_3">
+								<description ref="id_3">image</description>
+							</object>
 						</section>
 					</bodymatter>
 				</body>
 			</x:document>
-        </x:expect>
-    </x:scenario>
+		</x:expect>
+	</x:scenario>
 	
-    <x:scenario label="preserve significant white space (issue #94)">
+	<x:scenario label="preserve significant white space (issue #94)">
 		<x:call step="px:dtbook-to-zedai.script">
 			<x:input port="source">
 				<x:document type="inline">
@@ -62,7 +77,7 @@
 				</x:document>
 			</x:input>
 			<x:option name="zedai-filename" select="'result.xml'"/>
-			<x:option name="assert-valid" select="'false'"/>
+			<x:option name="validation" select="'report'"/>
 			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output ZedAI">

@@ -8,19 +8,19 @@
                xmlns:epub="http://www.idpf.org/2007/ops"
                xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:opf="http://www.idpf.org/2007/opf"
-               script="../../main/resources/xml/xproc/fileset-add-entry.xpl">
+               script="../../main/resources/xml/xproc/fileset-add-entries.xpl">
 
     <x:scenario label="add-entry">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -32,17 +32,17 @@
     </x:scenario>
 
     <x:scenario label="add-entry-with-media-type">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'doc.html'"/>
             <x:option name="media-type" select="'text/html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -54,10 +54,10 @@
     </x:scenario>
 
     <x:scenario label="add-entry-first">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'doc.html'"/>
             <x:option name="first" select="true()"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">
                         <d:file href="other"/>
@@ -66,7 +66,7 @@
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -79,16 +79,16 @@
     </x:scenario>
 
     <x:scenario label="add-entry-absolute">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -100,16 +100,16 @@
     </x:scenario>
 
     <x:scenario label="add-entry-absolute-same-base">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:/Users/me/dir/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -121,16 +121,16 @@
     </x:scenario>
     
     <x:scenario label="add-entry-absolute-same-base-triple-slash">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:///Users/me/dir/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -142,16 +142,16 @@
     </x:scenario>
     
     <x:scenario label="add-entry-absolute-root-directory">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:/Users/me/dir/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -163,16 +163,16 @@
     </x:scenario>
     
     <x:scenario label="add-entry-absolute-root-directory-triple-slash">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:///Users/me/dir/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
@@ -184,16 +184,16 @@
     </x:scenario>
     
     <x:scenario label="add-absolute-entry-no-fileset-base">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:/Users/me/dir/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should be a fileset still without a xml:base, and a file with an absolute href">
             <x:document type="inline">
@@ -205,17 +205,17 @@
     </x:scenario>
 
     <x:scenario label="add-entry-original-href">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'doc.html'"/>
             <x:option name="original-href" select="'file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result should have a original-href attribute">
             <x:document type="inline">
@@ -228,17 +228,17 @@
     </x:scenario>
     
     <x:scenario label="add-entry-original-href-no-fileset-base">
-        <x:call step="px:fileset-add-entry">
+        <x:call step="px:fileset-add-entries">
             <x:option name="href" select="'file:/Users/me/dir/doc.html'"/>
             <x:option name="original-href" select="'file:/private/var/folders/mr/f6s9zqtn03d8rgzxb96_2bh00000gn/T/-1kf6683sr37ic7r60abkgeaant/doc.html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect type="compare" label="the result file should have a original-href attribute">
             <x:document type="inline">
@@ -251,21 +251,21 @@
     </x:scenario>
     
     <x:scenario label="add-entry-document">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="entry">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="entries">
                 <x:document type="inline" xml:base="file:/Users/me/dir/doc.html">
                     <doc/>
                 </x:document>
             </x:input>
             <x:option name="media-type" select="'text/html'"/>
-            <x:input port="source">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
             </x:input>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the href of the new entry should be the base URI of the given document" type="compare">
             <x:document type="inline">
@@ -285,8 +285,8 @@
     </x:scenario>
 
     <x:scenario label="add-entry-with-attribute">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
@@ -295,7 +295,7 @@
             <x:param port="file-attributes" name="foo" select="'bar'"/>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the d:file should have the specified attribute" type="compare">
             <x:document type="inline">
@@ -307,8 +307,8 @@
     </x:scenario>
 
     <x:scenario label="add-disallowed-attribute">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/"/>
                 </x:document>
@@ -324,8 +324,8 @@
     </x:scenario>
 
     <x:scenario label="add-existing-entry">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">
                         <d:file href="doc.html" media-type="text/html" foo="bar"/>
@@ -335,7 +335,7 @@
             <x:option name="href" select="'file:/Users/me/dir/doc.html'"/>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the fileset should be unchanged" type="compare">
             <x:document type="inline">
@@ -347,8 +347,8 @@
     </x:scenario>
 
     <x:scenario label="add-mediatype-to-existing-entry">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">
                         <d:file href="doc.html" media-type="text/html"/>
@@ -360,7 +360,7 @@
             <x:option name="replace-attributes" select="true()"/>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the d:file should have the specified mediatype" type="compare">
             <x:document type="inline">
@@ -372,8 +372,8 @@
     </x:scenario>
 
     <x:scenario label="add-attribute-to-existing-entry">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">
                         <d:file href="doc.html" foo="bar"/>
@@ -385,7 +385,7 @@
             <x:option name="replace-attributes" select="true()"/>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the d:file should have the specified attribute" type="compare">
             <x:document type="inline">
@@ -397,8 +397,8 @@
     </x:scenario>
 
     <x:scenario label="replace-existing-entry">
-        <x:call step="px:fileset-add-entry">
-            <x:input port="source">
+        <x:call step="px:fileset-add-entries">
+            <x:input port="source.fileset">
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/dir/">
                         <d:file href="doc.html" media-type="text/html" foo="bar"/>
@@ -410,7 +410,7 @@
             <x:option name="replace" select="true()"/>
         </x:call>
         <x:context label="the result port">
-            <x:document type="port" port="result"/>
+            <x:document type="port" port="result.fileset"/>
         </x:context>
         <x:expect label="the fileset should be unchanged" type="compare">
             <x:document type="inline">

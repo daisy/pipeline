@@ -25,7 +25,8 @@
     <xsl:variable name="page-stylesheets" as="element(css:rule)*" select="/*/css:rule[@selector='@page']"/>
     <xsl:variable name="custom-counter-style-names" as="xs:string*"
                   select="map:keys(css:parse-counter-styles($counter-styles))"/>
-    <xsl:variable name="obfl-variables" as="xs:string*" select="('-obfl-volume',
+    <xsl:variable name="obfl-variables" as="xs:string*" select="('-obfl-page',
+                                                                 '-obfl-volume',
                                                                  '-obfl-volumes',
                                                                  '-obfl-sheets-in-document',
                                                                  '-obfl-sheets-in-volume',

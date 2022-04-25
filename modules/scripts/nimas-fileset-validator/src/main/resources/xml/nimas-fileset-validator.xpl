@@ -93,14 +93,26 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation>Utilities for representing a fileset.</p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
     </p:import>
-
-    <p:import href="nimas-fileset-validator.validate.xpl"/>
-    <p:import href="nimas-fileset-validator.store.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
+    <p:import href="nimas-fileset-validator.validate.xpl">
+        <p:documentation>
+            px:nimas-fileset-validator
+        </p:documentation>
+    </p:import>
+    <p:import href="nimas-fileset-validator.store.xpl">
+        <p:documentation>
+            pxi:nimas-fileset-validator.store
+        </p:documentation>
+    </p:import>
 
     <px:message>
         <p:with-option name="message" select="concat('Nimas fileset validator: ', $input-opf)"/>
@@ -112,7 +124,7 @@
 
     <px:fileset-add-entry media-type="application/oebps-package+xml">
         <p:with-option name="href" select="$input-opf"/>
-        <p:input port="source">
+        <p:input port="source.fileset">
             <p:inline>
                 <d:fileset/>
             </p:inline>

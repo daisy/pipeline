@@ -72,7 +72,7 @@
                 <p:variable name="imgpath" select="resolve-uri(*/@src, $dtbook-uri)"/>
                 <px:fileset-add-entry>
                     <p:with-option name="href" select="$imgpath"/>
-                    <p:input port="source">
+                    <p:input port="source.fileset">
                         <p:inline>
                             <d:fileset/>
                         </p:inline>
@@ -88,7 +88,7 @@
                 <p:variable name="imgpath" select="resolve-uri(*/@altimg, $dtbook-uri)"/>
                 <px:fileset-add-entry>
                     <p:with-option name="href" select="$imgpath"/>
-                    <p:input port="source">
+                    <p:input port="source.fileset">
                         <p:inline>
                             <d:fileset/>
                         </p:inline>

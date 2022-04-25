@@ -3,6 +3,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-inline-prefixes="#all"
                 type="px:css-cascade"
                 name="main">
@@ -17,9 +20,10 @@
 	
 	<p:input port="source" sequence="false" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>Style sheets can be attached to the source in several ways: linked (using the
-			<code>link</code> element), embedded (using the <code>style</code> element) and/or
-			inlined (using <code>style</code> attributes).</p>
+			<p>Style sheets can be associated with the source in several ways: linked (using an
+			<code>xml-stylesheet</code> processing instruction or a <code>link</code> element),
+			embedded (using a <code>style</code> element) and/or inlined (using <code>style</code>
+			attributes).</p>
 		</p:documentation>
 	</p:input>
 	
@@ -115,34 +119,58 @@
 		-->
 	</p:declare-step>
 	
-	<p:choose>
-		<p:when test="$default-stylesheet!=''
-		              or //*[local-name()='style']
-		                    [not(@media) or pf:media-query-matches(@media,$media)]
-		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
-		                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
-		              or //*[local-name()='link' and @rel='stylesheet']
-		                    [not(@media) or pf:media-query-matches($media,@media)]
-		                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
-		                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
-		                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
-		              or //@style">
-			<pxi:css-cascade>
-				<p:input port="context">
-					<p:pipe step="main" port="context"/>
-				</p:input>
-				<p:input port="parameters">
-					<p:pipe step="main" port="parameters"/>
-				</p:input>
-				<p:with-option name="default-stylesheet" select="$default-stylesheet"/>
-				<p:with-option name="media" select="$media"/>
-				<p:with-option name="type" select="$type"/>
-				<p:with-option name="attribute-name" select="$attribute-name"/>
-			</pxi:css-cascade>
-		</p:when>
-		<p:otherwise>
-			<p:identity/>
-		</p:otherwise>
-	</p:choose>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:parse-xml-stylesheet-instructions
+		</p:documentation>
+	</p:import>
+	
+	<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions" px:progress=".05"/>
+	<p:group px:progress=".95">
+		<p:variable name="stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
+		            select="/d:fileset/d:file
+		                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$media)]
+		                       [(@media-type=('text/css','text/x-scss') and @media-type=tokenize($type,'\s+'))]
+		                     /string(@href)">
+			<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
+		</p:variable>
+		<p:sink/>
+		<p:identity>
+			<p:input port="source">
+				<p:pipe step="main" port="source"/>
+			</p:input>
+		</p:identity>
+		<p:choose px:progress="1">
+			<p:when test="$default-stylesheet!=''
+			              or exists($stylesheets-from-xml-stylesheet-instructions)
+			              or //*[local-name()='style']
+			                    [not(@media) or pf:media-query-matches(@media,$media)]
+			                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+			                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
+			              or //*[local-name()='link' and @rel='stylesheet']
+			                    [not(@media) or pf:media-query-matches($media,@media)]
+			                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+			                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
+			                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]
+			              or //@style">
+				<pxi:css-cascade px:progress="1">
+					<p:input port="context">
+						<p:pipe step="main" port="context"/>
+					</p:input>
+					<p:input port="parameters">
+						<p:pipe step="main" port="parameters"/>
+					</p:input>
+					<p:with-option name="default-stylesheet"
+					               select="string-join(($default-stylesheet[not(.='')],$stylesheets-from-xml-stylesheet-instructions),' ')"/>
+					<p:with-option name="media" select="$media"/>
+					<p:with-option name="type" select="$type"/>
+					<p:with-option name="attribute-name" select="$attribute-name"/>
+				</pxi:css-cascade>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
+	</p:group>
 	
 </p:declare-step>

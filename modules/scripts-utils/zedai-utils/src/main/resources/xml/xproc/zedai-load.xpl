@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
-    type="px:zedai-load" exclude-inline-prefixes="#all" version="1.0">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
+                type="px:zedai-load" exclude-inline-prefixes="#all">
 
     <p:documentation>Loads a ZedAI (ANSI/NISO Z39.98-2012 Authoring and Interchange) fileset from disk.</p:documentation>
     <p:input port="source" primary="true" px:name="source"/>
@@ -13,10 +14,16 @@
     </p:output>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">For manipulating filesets.</p:documentation>
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+            px:fileset-join
+        </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">For identifying the media type of files.</p:documentation>
+      <p:documentation>
+            px:mediatype-detect
+        </p:documentation>
     </p:import>
 
     <!--=========================================================================-->

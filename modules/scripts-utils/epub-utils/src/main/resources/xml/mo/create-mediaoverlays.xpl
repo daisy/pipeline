@@ -67,7 +67,7 @@
             px:fileset-move
             px:fileset-load
             px:fileset-create
-            px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
         </p:documentation>
     </p:import>
@@ -169,16 +169,16 @@
             </p:for-each>
             <p:split-sequence test="/*/s:body/*"/>
             <p:identity name="smil.in-memory"/>
+            <p:sink/>
 
-            <p:for-each>
-                <p:variable name="mo-uri" select="base-uri(/*)"/>
-                <px:fileset-create>
-                    <p:with-option name="base" select="$mediaoverlay-dir"/>
-                </px:fileset-create>
-                <px:fileset-add-entry media-type="application/smil+xml">
-                    <p:with-option name="href" select="$mo-uri"/>
-                </px:fileset-add-entry>
-            </p:for-each>
+            <px:fileset-create>
+                <p:with-option name="base" select="$mediaoverlay-dir"/>
+            </px:fileset-create>
+            <px:fileset-add-entries media-type="application/smil+xml">
+                <p:input port="entries">
+                    <p:pipe step="smil.in-memory" port="result"/>
+                </p:input>
+            </px:fileset-add-entries>
             <px:fileset-join/>
             <p:identity name="smil.fileset"/>
             <p:sink/>

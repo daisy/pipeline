@@ -87,16 +87,16 @@
 	<p:sink/>
 	
 	<px:dtbook-to-zedai name="dtbook-to-zedai">
-		<p:input port="fileset.in">
+		<p:input port="source.fileset">
 			<p:pipe step="main" port="source.fileset"/>
 		</p:input>
-		<p:input port="in-memory.in">
+		<p:input port="source.in-memory">
 			<p:pipe step="dtbook-with-css" port="result"/>
 		</p:input>
-		<p:with-option name="opt-output-dir" select="concat($output-dir,'zedai/')"/>
-		<p:with-option name="opt-zedai-filename" select="concat($output-name,'.xml')"/>
-		<p:with-option name="opt-lang" select="$language"/>
-		<p:with-option name="opt-assert-valid" select="$assert-valid"/>
+		<p:with-option name="output-dir" select="concat($output-dir,'zedai/')"/>
+		<p:with-option name="zedai-filename" select="concat($output-name,'.xml')"/>
+		<p:with-option name="lang" select="$language"/>
+		<p:with-option name="validation" select="if ($assert-valid='true') then 'abort' else 'report'"/>
 	</px:dtbook-to-zedai>
 
 	<!--TODO better handle core media type filtering-->
@@ -108,7 +108,7 @@
 
 	<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false">
 		<p:input port="in-memory.in">
-			<p:pipe step="dtbook-to-zedai" port="in-memory.out"/>
+			<p:pipe step="dtbook-to-zedai" port="result.in-memory"/>
 		</p:input>
 		<p:input port="tts-config">
 			<p:pipe step="main" port="tts-config"/>

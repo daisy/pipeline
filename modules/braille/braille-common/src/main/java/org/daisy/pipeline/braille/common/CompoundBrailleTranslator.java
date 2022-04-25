@@ -14,6 +14,7 @@ import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
 import org.daisy.pipeline.braille.common.Hyphenator.NonStandardHyphenationException;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import com.google.common.collect.Iterables;
 

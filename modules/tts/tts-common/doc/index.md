@@ -51,7 +51,6 @@ configuration file format is as follows:
 ~~~xml
 <config>
   <property key="org.daisy.pipeline.tts.acapela.samplerate" value="44100"/>
-  <property key="org.daisy.pipeline.tts.log" value="true"/>
   <voice engine="acapela" name="claire" lang="fr" gender="female-adult" priority="12"/>
   <css href="css/aural.css"/>
   <lexicon href="lexicons/fr.pls"/>
@@ -154,16 +153,6 @@ properties. The following properties are available:
 `org.daisy.pipeline.tts.encoding.speed`
 : Maximum number of seconds of encoded audio per seconds of encoding
 : Defaults to "2.0"
-
-`org.daisy.pipeline.tts.log`
-: If set to "true", will result in the Pipeline logging stuff in the
-  output directory in a file named 'tts-log.xml'. The Pipeline will
-  log a great deal of information to this file, which can be quite
-  helpful for troubleshooting. Most of the log entries concern
-  particular chunks of text of the input document. For more general
-  errors, see the main server’s logs.
-: Defaults to "false"
-: dtbook-to-daisy3 only
 
 ### Acapela
 

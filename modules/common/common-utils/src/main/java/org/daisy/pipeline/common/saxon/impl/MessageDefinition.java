@@ -74,27 +74,10 @@ public class MessageDefinition extends ExtensionFunctionDefinition {
 					Level level = Level.valueOf(arguments[0].head().getStringValue().toUpperCase());
 					String msg = CharMatcher.WHITESPACE.trimAndCollapseFrom(
 						arguments[1].head().getStringValue(), ' ');
-					String[] args;
-					if (arguments.length > 2)
-						args = sequenceToArray(arguments[2]);
-					else
-						args = new String[]{};
-					switch (level) {
-					case ERROR:
-						logger.error(msg, (Object[])args);
-						break;
-					case WARN:
-						logger.warn(msg, (Object[])args);
-						break;
-					case INFO:
-						logger.info(msg, (Object[])args);
-						break;
-					case DEBUG:
-						logger.debug(msg, (Object[])args);
-						break;
-					case TRACE:
-						logger.trace(msg, (Object[])args);
-						break; }
+					String[] args = arguments.length > 1
+						? MessageDefinition.sequenceToArray(arguments[1])
+						: new String[]{};
+					log(level, msg, args);
 					return VOID; }
 				catch (Throwable e) {
 					throw new XPathException("Unexpected error in pf:message", e); }
@@ -102,7 +85,28 @@ public class MessageDefinition extends ExtensionFunctionDefinition {
 		};
 	}
 	
-	private static String[] sequenceToArray(Sequence seq) throws XPathException {
+	private static void log(Level level, String message, Object[] args) {
+		switch (level) {
+		case ERROR:
+			logger.error(message, (Object[])args);
+			break;
+		case WARN:
+			logger.warn(message, (Object[])args);
+			break;
+		case INFO:
+			logger.info(message, (Object[])args);
+			break;
+		case DEBUG:
+			logger.debug(message, (Object[])args);
+			break;
+		case TRACE:
+			logger.trace(message, (Object[])args);
+			break;
+		default:
+		}
+	}
+	
+	static String[] sequenceToArray(Sequence seq) throws XPathException {
 		List<String> list = new ArrayList<String>();
 		SequenceIterator iterator = seq.iterate();
 		for (Item item = iterator.next(); item != null; item = iterator.next())

@@ -23,10 +23,12 @@ $toc-exclude-class: '' !default;
 		flow: document-toc;
 		display: -obfl-toc;
 		-obfl-toc-range: document;
+		list-style-type: none;
 	}
 	#generated-volume-toc {
 		flow: volume-toc;
 		display: -obfl-toc;
 		-obfl-toc-range: volume;
+		list-style-type: none;
 	}
 }

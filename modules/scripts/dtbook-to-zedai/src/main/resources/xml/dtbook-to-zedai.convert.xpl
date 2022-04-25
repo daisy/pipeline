@@ -15,15 +15,14 @@
         Transforms DTBook XML into ZedAI XML.
     </p:documentation>
 
-    <p:input port="fileset.in" primary="true">
+    <p:input port="source.fileset" primary="true">
         <p:documentation>
             A fileset containing references to all the DTBook files and any resources they reference (images etc.).
             The xml:base is also set with an absolute URI for each file, and is intended to represent the "original file", while the href can change during
             conversions to reflect the path and filename of the resource in the output fileset.
         </p:documentation>
     </p:input>
-
-    <p:input port="in-memory.in" sequence="true">
+    <p:input port="source.in-memory" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             One or more DTBook documents to be transformed. In the case of multiple documents, a merge will be performed.
             While all resources are referenced in the fileset on the `fileset` output port, the `in-memory`-port can contain pre-loaded documents so that they won't
@@ -32,7 +31,7 @@
         </p:documentation>
     </p:input>
 
-    <p:output port="fileset.out" primary="true">
+    <p:output port="result.fileset" primary="true">
         <p:documentation>
             A fileset containing references to the DTBook file and any resources it references
             (images etc.). For each file that is not stored in memory, the xml:base is set with
@@ -42,8 +41,7 @@
         </p:documentation>
         <p:pipe port="result" step="result.fileset"/>
     </p:output>
-
-    <p:output port="in-memory.out" sequence="true">
+    <p:output port="result.in-memory" sequence="true">
         <p:documentation>The ZedAI and MODS metadata documents.</p:documentation>
         <p:pipe port="result" step="result.in-memory"/>
     </p:output>
@@ -56,40 +54,39 @@
         <p:pipe step="choose-to-merge-dtbook-files" port="mapping"/>
     </p:output>
 
-    <p:option name="opt-output-dir" required="true" px:dir="output" px:type="anyDirURI">
+    <p:option name="output-dir" required="true" px:type="anyDirURI">
         <p:documentation>
             The directory to store the generated files in.
         </p:documentation>
     </p:option>
 
-    <p:option name="opt-zedai-filename" required="false" px:dir="output" px:type="string"
-        select="''">
+    <p:option name="zedai-filename" required="false" cx:as="xs:string" select="'zedai.xml'">
         <p:documentation>
             Filename for the generated ZedAI file
         </p:documentation>
     </p:option>
-    <p:option name="opt-mods-filename" required="false" px:dir="output" px:type="string" select="''">
+    <p:option name="mods-filename" required="false" cx:as="xs:string" select="'zedai-mods.xml'">
         <p:documentation>
             Filename for the generated MODS file
         </p:documentation>
     </p:option>
-    <p:option name="opt-css-filename" required="false" px:dir="output" px:type="string" select="''">
+    <p:option name="css-filename" required="false" cx:as="xs:string" select="'zedai-css.css'">
         <p:documentation>
             Filename for the generated CSS file
         </p:documentation>
     </p:option>
-    <p:option name="opt-lang" required="false" px:dir="output" px:type="string" select="''">
+    <p:option name="lang" required="false" cx:type="xs:string" select="''">
         <p:documentation>
             Language code of the input document.
         </p:documentation>
     </p:option>
-    <p:option name="opt-assert-valid" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
+    <p:option name="validation" required="false" select="'abort'">
         <p:documentation>
-            Whether to stop processing and raise an error on validation issues.
+            Whether to stop processing and raise an error on validation issues (abort), only report
+            them (report), or to ignore any validation issues (off).
         </p:documentation>
     </p:option>
-
-    <p:option name="opt-copy-external-resources" select="'true'" cx:as="xs:string">
+    <p:option name="copy-external-resources" select="'true'" cx:as="xs:boolean">
         <p:documentation>
             Whether or not to include any referenced external resources like images and CSS-files in the output.
         </p:documentation>
@@ -128,7 +125,10 @@
             px:fileset-load
             px:fileset-create
             px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
+            px:fileset-intersect
+            px:fileset-copy
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
@@ -151,36 +151,19 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl">
+        <p:documentation>
+            px:validate-mods
+        </p:documentation>
+    </p:import>
 
 
-    <p:variable name="output-dir"
-        select="resolve-uri(
-                    if (ends-with($opt-output-dir, '/')) then $opt-output-dir
-                                                         else concat($opt-output-dir, '/')
-                )"/>
+    <p:variable name="output-dir-with-slash"
+                select="resolve-uri(if (ends-with($output-dir,'/')) then $output-dir else concat($output-dir,'/'))"/>
 
-    <p:variable name="default-zedai-filename" select="'zedai.xml'"/>
-    <p:variable name="default-mods-filename" select="'zedai-mods.xml'"/>
-    <p:variable name="default-css-filename" select="'zedai-css.css'"/>
-
-    <p:variable name="zedai-filename"
-        select="if (string-length($opt-zedai-filename) > 0)
-                    then $opt-zedai-filename
-                    else $default-zedai-filename"/>
-
-    <p:variable name="mods-filename"
-        select="if (string-length($opt-mods-filename) > 0)
-                    then $opt-mods-filename
-                    else $default-mods-filename"/>
-
-    <p:variable name="css-filename"
-        select="if (string-length($opt-css-filename) > 0)
-                    then $opt-css-filename
-                    else $default-css-filename"/>
-
-    <p:variable name="zedai-file" select="concat($output-dir, $zedai-filename)"/>
-    <p:variable name="mods-file" select="concat($output-dir, $mods-filename)"/>
-    <p:variable name="css-file" select="concat($output-dir, $css-filename)"/>
+    <p:variable name="zedai-file" select="concat($output-dir-with-slash, $zedai-filename)"/>
+    <p:variable name="mods-file" select="concat($output-dir-with-slash, $mods-filename)"/>
+    <p:variable name="css-file" select="concat($output-dir-with-slash, $css-filename)"/>
 
     <p:identity px:message-severity="DEBUG" px:message="ZedAI file name: {$zedai-filename}"/>
     <p:identity px:message-severity="DEBUG" px:message="MODS file name: {$mods-filename}"/>
@@ -193,7 +176,7 @@
         <p:output port="result" sequence="true"/>
         <px:fileset-load media-types="application/x-dtbook+xml">
             <p:input port="in-memory">
-                <p:pipe step="main" port="in-memory.in"/>
+                <p:pipe step="main" port="source.in-memory"/>
             </p:input>
         </px:fileset-load>
         <!-- TODO: describe the error on the wiki and insert correct error code -->
@@ -206,40 +189,94 @@
     <!-- =============================================================== -->
     <p:documentation>Upgrade the DTBook document(s) to 2005-3</p:documentation>
     <p:for-each name="upgrade-dtbook" px:progress="2/23" px:message="Upgrading DTBook to 2005-3">
-        <p:output port="result"/>
-        <px:dtbook-upgrade>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
-            <p:with-option name="assert-valid" select="'false'">
-                <p:empty/>
-            </p:with-option>
-        </px:dtbook-upgrade>
+        <p:output port="result" sequence="true"/>
+        <px:dtbook-upgrade/>
     </p:for-each>
+
+    <!-- =============================================================== -->
+    <!-- VALIDATE -->
+    <!-- =============================================================== -->
+    <p:documentation>Validate the DTBook input</p:documentation>
+    <p:group name="validate-dtbook" px:message="Validating DTBook" px:progress="3/23">
+        <p:output port="result" sequence="true"/>
+        <p:choose name="validate" px:progress="1">
+            <p:xpath-context>
+                <p:empty/>
+            </p:xpath-context>
+            <p:when test="$validation=('abort','report')" px:message="Validating">
+                <p:for-each px:progress="1">
+                    <px:css-speech-clean px:progress="1/3">
+                        <p:documentation>Remove the Aural CSS attributes before validation</p:documentation>
+                    </px:css-speech-clean>
+                    <px:validate-with-relax-ng-and-report px:progress="2/3">
+                        <p:input port="schema">
+                            <p:pipe port="result" step="dtbook-schema"/>
+                        </p:input>
+                        <p:with-option name="assert-valid" select="$validation='abort'"/>
+                    </px:validate-with-relax-ng-and-report>
+                </p:for-each>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
+        <p:sink/>
+        <p:identity cx:depends-on="validate">
+            <p:input port="source">
+                <p:pipe step="upgrade-dtbook" port="result"/>
+            </p:input>
+        </p:identity>
+    </p:group>
+    <p:sink/>
+    <p:documentation>Schema selector for DTBook validation</p:documentation>
+    <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
+    <p:sink/>
 
     <!-- =============================================================== -->
     <!-- MERGE -->
     <!-- =============================================================== -->
     <p:documentation>If there is more than one input DTBook document, merge them into a single
         document.</p:documentation>
-    <p:count name="num-input-documents" limit="2"/>
-
+    <p:count name="num-input-documents" limit="2">
+        <p:input port="source">
+            <p:pipe port="result" step="validate-dtbook"/>
+        </p:input>
+    </p:count>
     <p:choose name="choose-to-merge-dtbook-files" px:progress="2/23">
-        <p:when test=".//c:result[. > 1]">
+        <p:when test=".//c:result[. > 1]" px:message="Merging DTBook files">
             <p:output port="result" primary="true"/>
             <p:output port="mapping">
                 <p:pipe step="merge" port="mapping"/>
             </p:output>
-            <px:dtbook-merge name="merge" px:progress="1" px:message="Merging DTBook files">
-                <p:input port="parameters">
-                    <p:empty/>
-                </p:input>
+            <px:dtbook-merge name="merge" px:progress="0.75">
                 <p:input port="source">
-                    <p:pipe port="result" step="upgrade-dtbook"/>
+                    <p:pipe port="result" step="validate-dtbook"/>
                 </p:input>
-                <p:with-option name="assert-valid" select="$opt-assert-valid"/>
                 <p:with-option name="output-base-uri" select="$zedai-file"/>
             </px:dtbook-merge>
+            <p:choose px:progress="0.25" px:message="Validating">
+                <p:when test="$validation='abort'" px:message="Validating">
+                    <!-- input DTBooks are valid, so we expect the merged DTBook to be valid too -->
+                    <px:css-speech-clean px:progress="1/3">
+                        <p:documentation>Remove the Aural CSS attributes before validation</p:documentation>
+                    </px:css-speech-clean>
+                    <px:validate-with-relax-ng-and-report name="validate" px:progress="2/3" assert-valid="true">
+                        <p:input port="schema">
+                            <p:pipe port="result" step="dtbook-schema"/>
+                        </p:input>
+                    </px:validate-with-relax-ng-and-report>
+                    <p:sink/>
+                    <p:identity cx:depends-on="validate">
+                        <p:input port="source">
+                            <p:pipe step="merge" port="result"/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <!-- reporting validation issues in intermediary documents is not helpful for user -->
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
         </p:when>
         <p:otherwise>
             <p:output port="result" primary="true">
@@ -265,35 +302,10 @@
     </p:choose>
 
     <!-- =============================================================== -->
-    <!-- Validate the DTBook -->
-    <!-- =============================================================== -->
-    <p:documentation>Validate the DTBook input</p:documentation>
-
-    <p:documentation>Remove the Aural CSS attributes before validation</p:documentation>
-    <px:css-speech-clean name="dtbook-validation-input" px:progress="1/23"/>
-    <p:documentation>Schema selector for DTBook validation</p:documentation>
-    <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-    <px:validate-with-relax-ng-and-report name="validate-dtbook" px:message="Validating DTBook" px:progress="2/23">
-        <p:input port="source">
-            <p:pipe port="result" step="dtbook-validation-input"/>
-        </p:input>
-        <p:input port="schema">
-            <p:pipe port="result" step="dtbook-schema"/>
-        </p:input>
-        <p:with-option name="assert-valid" select="$opt-assert-valid"/>
-    </px:validate-with-relax-ng-and-report>
-    <p:sink/>
-
-    <!-- =============================================================== -->
     <!-- CREATE ZEDAI -->
     <!-- =============================================================== -->
 
     <p:documentation>Convert DTBook 2005-3 to ZedAI</p:documentation>
-    <p:identity>
-      <p:input port="source">
-	<p:pipe port="result" step="choose-to-merge-dtbook-files"/>
-      </p:input>
-    </p:identity>
     <pxi:dtbook2005-3-to-zedai name="transform-to-zedai" px:progress="5/23"/>
 
     <!-- =============================================================== -->
@@ -305,7 +317,7 @@
     -->
     <p:documentation>Generate CSS from the visual property attributes in the ZedAI
         document</p:documentation>
-    <p:xslt name="generate-css" px:progress="1/23" px:message="Generating CSS">
+    <p:xslt px:progress="1/23" px:message="Generating CSS">
         <p:with-param name="css-file" select="$css-file"/>
         <p:input port="stylesheet">
             <p:inline>
@@ -313,10 +325,8 @@
                 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                     xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp">
                     <xsl:import href="generate-css.xsl"/>
-                    <xsl:param name="css-file" required="yes"/>
                     <xsl:template match="/">
                         <tmp:wrapper>
-                            <xsl:attribute name="xml:base" select="$css-file"/>
                             <xsl:apply-imports/>
                         </tmp:wrapper>
                     </xsl:template>
@@ -324,6 +334,9 @@
             </p:inline>
         </p:input>
     </p:xslt>
+    <px:set-base-uri name="generate-css">
+        <p:with-option name="base-uri" select="$css-file"/>
+    </px:set-base-uri>
 
     <p:documentation>If CSS was generated, add a reference to the ZedAI document</p:documentation>
     <p:choose name="add-css-reference" px:progress="1/23">
@@ -395,28 +408,31 @@
     <!-- =============================================================== -->
     <p:documentation>Generate MODS metadata</p:documentation>
     <px:dtbook-to-mods-meta px:progress="2/23" px:message="Generating MODS metadata">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
         <p:input port="source">
-            <p:pipe step="validate-dtbook" port="result"/>
+            <p:pipe step="choose-to-merge-dtbook-files" port="result"/>
         </p:input>
-        <p:with-option name="assert-valid" select="$opt-assert-valid"/>
     </px:dtbook-to-mods-meta>
+    <p:choose>
+        <p:when test="$validation='abort'">
+            <!-- DTBook is valid, so we expect the resulting MODS document to be valid too -->
+            <px:validate-mods/>
+        </p:when>
+        <p:otherwise>
+            <!-- reporting validation issues in intermediary documents is not helpful for user -->
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
     <px:set-base-uri>
         <p:with-option name="base-uri" select="$mods-file"/>
     </px:set-base-uri>
     <p:add-xml-base name="generate-mods-metadata"/>
+    <p:sink/>
 
     <p:documentation>Generate ZedAI metadata</p:documentation>
     <px:dtbook-to-zedai-meta name="generate-zedai-metadata" px:progress="2/23" px:message="Generating ZedAI metadata">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
         <p:input port="source">
-            <p:pipe step="validate-dtbook" port="result"/>
+            <p:pipe step="choose-to-merge-dtbook-files" port="result"/>
         </p:input>
-        <p:with-option name="assert-valid" select="$opt-assert-valid"/>
     </px:dtbook-to-zedai-meta>
 
     <p:group name="insert-zedai-meta">
@@ -464,7 +480,7 @@
     <!-- unwrap the meta list that was wrapped with tmp:wrapper -->
     <p:unwrap name="unwrap-meta-list" match="//z:head/tmp:wrapper"/>
 
-    <!-- add xml:lang if not already present AND if specified by the opt-lang option -->
+    <!-- add xml:lang if not already present AND if specified by the lang option -->
     <p:documentation>Add the xml:lang attribute</p:documentation>
     <p:choose>
         <p:when test="//z:document/@xml:lang">
@@ -472,10 +488,10 @@
         </p:when>
         <p:otherwise>
             <p:choose>
-                <p:when test="string-length($opt-lang) > 0">
+                <p:when test="string-length($lang) > 0">
                     <p:add-attribute match="//z:document">
                         <p:with-option name="attribute-name" select="'xml:lang'"/>
-                        <p:with-option name="attribute-value" select="$opt-lang"/>
+                        <p:with-option name="attribute-value" select="$lang"/>
                     </p:add-attribute>
                 </p:when>
                 <p:otherwise>
@@ -502,12 +518,12 @@
         <p:output port="result"/>
         <p:variable name="dtbook-base"
             select="replace(//d:file[@media-type = 'application/x-dtbook+xml'][1]/resolve-uri(@href,base-uri(.)),'^(.*/)[^/]*$','$1')">
-            <p:pipe port="fileset.in" step="main"/>
+            <p:pipe step="main" port="source.fileset"/>
         </p:variable>
 
         <p:documentation>Add the ZedAI document to the fileset.</p:documentation>
         <px:fileset-create>
-            <p:with-option name="base" select="$output-dir"/>
+            <p:with-option name="base" select="$output-dir-with-slash"/>
         </px:fileset-create>
         <px:fileset-add-entry name="result.fileset.zedai">
             <p:with-option name="href" select="$zedai-file"/>
@@ -515,37 +531,30 @@
         </px:fileset-add-entry>
 
         <p:choose name="result.fileset.resources">
-            <p:when test="$opt-copy-external-resources = 'true'">
+            <p:when test="$copy-external-resources">
                 <p:documentation>Add all the auxiliary resources to the fileset.</p:documentation>
-                <p:output port="result" sequence="true">
-                    <p:pipe port="result" step="for-each-resource"/>
-                </p:output>
-                <p:for-each name="for-each-resource">
-                    <p:output port="result" sequence="true"/>
-                    <p:iteration-source select="//*[@src]">
+                <p:output port="result" sequence="true"/>
+                <px:fileset-create>
+                    <p:with-option name="base" select="$dtbook-base"/>
+                </px:fileset-create>
+                <px:fileset-add-entries name="referenced-from-dtbook">
+                    <p:with-option name="href" select="//*[@src]/string(@src)">
                         <p:pipe step="validate-zedai" port="result"/>
-                    </p:iteration-source>
-                    <p:variable name="src" select="/*/@src"/>
-                    <p:variable name="dtbook-source-uri" select="resolve-uri($src, $dtbook-base)"/>
-                    <p:variable name="source-uri"
-                        select="(//d:file[resolve-uri(@href,base-uri(.)) = $dtbook-source-uri]/@original-href, $dtbook-source-uri)[1]">
-                        <p:pipe port="fileset.in" step="main"/>
-                    </p:variable>
-                    <p:variable name="result-uri" select="resolve-uri($src, $output-dir)"/>
-
-                    <p:identity px:message-severity="DEBUG" px:message="{$source-uri} --> {$result-uri}"/>
-                    <p:sink/>
-
-                    <px:fileset-create>
-                        <p:with-option name="base" select="$output-dir"/>
-                    </px:fileset-create>
-                    <px:fileset-add-entry>
-                        <p:with-option name="href" select="resolve-uri($src,$zedai-file)"/>
-                    </px:fileset-add-entry>
-                    <p:add-attribute match="/*/*" attribute-name="original-href">
-                        <p:with-option name="attribute-value" select="$source-uri"/>
-                    </p:add-attribute>
-                </p:for-each>
+                    </p:with-option>
+                </px:fileset-add-entries>
+                <p:sink/>
+                <px:fileset-intersect>
+                    <p:input port="source">
+                        <p:pipe step="main" port="source.fileset"/>
+                        <p:pipe step="referenced-from-dtbook" port="result.fileset"/>
+                    </p:input>
+                </px:fileset-intersect>
+                <px:fileset-rebase>
+                    <p:with-option name="new-base" select="$dtbook-base"/>
+                </px:fileset-rebase>
+                <px:fileset-copy>
+                    <p:with-option name="target" select="$output-dir-with-slash"/>
+                </px:fileset-copy>
             </p:when>
             <p:otherwise px:message-severity="DEBUG" px:message="NOT copying external resources">
                 <p:output port="result" sequence="true"/>
@@ -566,7 +575,7 @@
             <p:when test="//tmp:wrapper/text()">
                 <p:output port="result"/>
                 <px:fileset-create>
-                    <p:with-option name="base" select="$output-dir">
+                    <p:with-option name="base" select="$output-dir-with-slash">
                         <p:empty/><!--required since the XPath context can be a sequence here, causing err:XD0008 -->
                     </p:with-option>
                 </px:fileset-create>
@@ -587,7 +596,7 @@
 
         <p:documentation>Add the MODS document to the fileset.</p:documentation>
         <px:fileset-create>
-            <p:with-option name="base" select="$output-dir"/>
+            <p:with-option name="base" select="$output-dir-with-slash"/>
         </px:fileset-create>
         <px:fileset-add-entry name="result.fileset.mods">
             <p:with-option name="href" select="$mods-file"/>
@@ -596,10 +605,10 @@
 
         <px:fileset-join>
             <p:input port="source">
-                <p:pipe port="result" step="result.fileset.zedai"/>
+                <p:pipe port="result.fileset" step="result.fileset.zedai"/>
                 <p:pipe port="result" step="result.fileset.resources"/>
                 <p:pipe port="result" step="result.fileset.generated-css"/>
-                <p:pipe port="result" step="result.fileset.mods"/>
+                <p:pipe port="result.fileset" step="result.fileset.mods"/>
             </p:input>
         </px:fileset-join>
         <p:documentation>Determine the media type of files</p:documentation>

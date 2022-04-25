@@ -35,7 +35,6 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
@@ -46,6 +45,7 @@ import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocale;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 
 import org.osgi.framework.FrameworkUtil;
@@ -114,13 +114,17 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		}
 	};
 	
+	private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+	
 	private String transform(String text, boolean hyphenate) {
 		if (hyphenate && !hyphenating)
-			throw new RuntimeException("'hyphens:auto' is not supported");
+			throw new RuntimeException("'hyphens: auto' is not supported");
 		try {
-			if (hyphenate && externalHyphenator != null)
-				return filter.filter(Translatable.text(externalHyphenator.asFullHyphenator().transform(text)).hyphenate(false).build());
-			else
+			if (hyphenate && externalHyphenator != null) {
+				String hyphenatedText = externalHyphenator.asFullHyphenator().transform(
+					Collections.singleton(new CSSStyledText(text, HYPHENS_AUTO))).iterator().next().getText();
+				return filter.filter(Translatable.text(hyphenatedText).hyphenate(false).build());
+			} else
 				return filter.filter(Translatable.text(text).hyphenate(hyphenate).build()); }
 		catch (TranslationException e) {
 			throw new RuntimeException(e); }

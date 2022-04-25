@@ -13,21 +13,31 @@
                 name="main">
     
     <p:input port="source.fileset" primary="true">
-        <p:documentation>DTBook fileset</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>DTBook fileset</p>
+        </p:documentation>
     </p:input>
     <p:input port="source.in-memory" sequence="true">
-        <p:documentation>DTBook files</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>DTBook files</p>
+        </p:documentation>
     </p:input>
     <p:output port="result" primary="true" sequence="true"> <!-- sequence=false when d:status result="ok" -->
-        <p:documentation>PEF</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>PEF</p>
+        </p:documentation>
     </p:output>
     <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
-        <p:documentation>OBFL</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>OBFL</p>
+        </p:documentation>
         <p:pipe step="transform" port="obfl"/>
     </p:output>
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation>Whether or not the conversion was successful. When include-obfl is true,
-        the conversion may fail but still output a document on the "obfl" port.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether or not the conversion was successful. When include-obfl is true, the
+            conversion may fail but still output a document on the "obfl" port.</p>
+        </p:documentation>
         <p:pipe step="transform" port="status"/>
     </p:output>
     
@@ -37,7 +47,15 @@
         </p:inline>
     </p:input>
     
-    <p:option name="default-stylesheet" required="false" select="'#default'"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The user agent's <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade">default
+            style sheet</a>.</p>
+            <p>The idea of this option is that a custom "DTBook to PEF" script could be written with
+            its own default style sheet (and its own set of options that correspond with the style
+            sheet parameters of this default style sheet).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="stylesheet" select="''"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
     <p:option name="include-obfl" select="'false'" cx:as="xs:string"/>
@@ -117,8 +135,7 @@
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&lt;$first-css-stylesheet-index],
                               if ($default-stylesheet!='#default')
                                 then $default-stylesheet
-                                else resolve-uri('../../css/default.css'),
-                              resolve-uri('../../css/default.scss'),
+                                else resolve-uri('../../css/default.scss'),
                               (tokenize($stylesheet,'\s+')[not(.='')])[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>

@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -14,9 +15,8 @@ import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
-import org.daisy.pipeline.braille.common.CSSStyledText;
-
 import org.daisy.pipeline.braille.css.CounterStyle;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 /**
  * {@link BrailleTranslator} that handles the <code>text-transform</code> value
@@ -49,10 +49,12 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 		String segment = null;
 		SimpleInlineStyle style = null;
+		Locale lang = null;
 		Map<String,String> attrs = null;
 		for (CSSStyledText st : styledText) {
 			String t = st.getText();
 			SimpleInlineStyle s = st.getStyle();
+			Locale l = st.getLanguage();
 			Map<String,String> a = st.getTextAttributes();
 			if (s != null) {
 				if (s.getProperty("text-transform") == TextTransform.list_values) {
@@ -87,12 +89,13 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 				}
 				s.removeProperty("-dotify-counter-style"); }
 			if (segment != null)
-				segments.add(new CSSStyledText(segment, style, attrs));
+				segments.add(new CSSStyledText(segment, style, lang, attrs));
 			segment = t;
 			style = s;
+			lang = l;
 			attrs = a; }
 		if (segment != null)
-			segments.add(new CSSStyledText(segment, style, attrs));
+			segments.add(new CSSStyledText(segment, style, lang, attrs));
 		return segments;
 	}
 }

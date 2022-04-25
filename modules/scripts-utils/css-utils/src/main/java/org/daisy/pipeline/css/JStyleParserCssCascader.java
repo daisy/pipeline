@@ -309,6 +309,14 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 						if (!invalid)
 							params.put(new QName(d.getProperty()), new InputValue<>(val));
 					}
+					Document doc; {
+						if (transformed != null) {
+							Mult<? extends XMLInputValue<?>> m = transformed.mult(2);
+							doc = (Document)m.get().ensureSingleItem().asNodeIterator().next();
+							transformed = m.get();
+						} else
+							doc = document;
+					}
 					params.put(
 						new QName("style"),
 						new InputValue<>(
@@ -316,13 +324,11 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 								StyleMap style = null;
 								public Optional<String> get(Element element, String property) {
 									if (style == null) {
-										// getting the document through getOwnerDocument() and not directly from
-										// the existing "document" variable because for some unknown reason the
-										// underlying NodeInfo are not equal
 										StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
 										s.addAll(defaultStyleSheet);
-										s = CSSFactory.getUsedStyles(element.getOwnerDocument(), null, nodeLocator, medium, cssReader, s);
-										style = new Analyzer(s).evaluateDOM(element.getOwnerDocument(), medium, true); }
+										// not using element.getOwnerDocument() because base URI is null/empty in some cases
+										s = CSSFactory.getUsedStyles(doc, null, nodeLocator, medium, cssReader, s);
+										style = new Analyzer(s).evaluateDOM(doc, medium, true); }
 									NodeData data = style.get(element);
 									if (data != null) {
 										Term<?> value = data.getValue(property, true);

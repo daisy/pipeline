@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-			   xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                script="../../main/resources/xml/dtbook-to-html.xpl">
 
-    <x:scenario label="minimal">
-        <x:call step="px:dtbook-to-html.script">
+	<x:scenario label="minimal">
+		<x:call step="px:dtbook-to-html.script">
 			<x:input port="source">
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
-            <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
-        </x:call>
+			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
+		</x:call>
 		<x:context label="the output HTML">
-            <x:document type="file" base-uri="temp-dir" href="minimal/output-dir/minimal.xhtml"/>
+			<x:document type="file" base-uri="temp-dir" href="minimal/output-dir/minimal.xhtml"/>
 		</x:context>
-        <x:expect label="the output HTML"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
-            <x:document type="inline">
+		<x:expect label="the output HTML"
+		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+			<x:document type="inline">
 				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 					<head>
 						<meta charset="UTF-8"/>
@@ -39,8 +40,8 @@
 							</section>
 						</section>
 				</body></html>
-            </x:document>
-        </x:expect>
-    </x:scenario>
-    
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

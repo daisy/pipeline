@@ -87,7 +87,7 @@
                         <px:fileset-add-entry>
                             <p:with-option name="href" select="$path"/>
                             <p:with-option name="media-type" select="$media-type"/>
-                            <p:input port="source">
+                            <p:input port="source.fileset">
                                 <p:pipe port="fileset" step="store-in-ocf"/>
                             </p:input>
                         </px:fileset-add-entry>
@@ -95,7 +95,7 @@
                     <p:otherwise>
                         <px:fileset-add-entry>
                             <p:with-option name="href" select="$path"/>
-                            <p:input port="source">
+                            <p:input port="source.fileset">
                                 <p:pipe port="fileset" step="store-in-ocf"/>
                             </p:input>
                         </px:fileset-add-entry>

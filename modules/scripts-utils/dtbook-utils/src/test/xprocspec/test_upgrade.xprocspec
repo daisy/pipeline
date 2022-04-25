@@ -22,7 +22,6 @@
                     </dtbook>
                 </x:document>
             </x:input>
-            <x:option name="assert-valid" select="'true'"/>
         </x:call>
         <x:context label="the dtbook 2005-3">
             <x:document type="port" port="result"/>

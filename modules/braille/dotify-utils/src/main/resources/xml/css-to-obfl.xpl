@@ -18,7 +18,12 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:option name="document-locale" select="'und'"/>
+    <p:option name="document-locale" select="'und'">
+      <!--
+          This option exists in case a xml:lang attribute on the root element is not present, but
+          language information is available e.g. from "dc:language" meta data.
+      -->
+    </p:option>
     <p:option name="text-transform" select="''"/>
     <p:option name="braille-charset" select="''"/>
     <p:option name="page-width" select="'40'"/>
@@ -480,6 +485,7 @@
         </p:documentation>
         <p:with-option name="exclude-counters" select="string-join(($page-counters,
                                                                     'volume',
+                                                                    '-obfl-page',
                                                                     '-obfl-volume',
                                                                     '-obfl-volumes',
                                                                     '-obfl-sheets-in-document',
@@ -540,11 +546,16 @@
         <p:for-each>
             <p:documentation>
                 Wrap unevaluated css:flow in block box so that we can be sure that when evaluated
-                later inline boxes have no descendant block boxes (see also css:make-anonymous-inline-boxes).
+                later inline boxes have no descendant block boxes (see also
+                css:make-anonymous-inline-boxes).
+                
+                Note that this is currently a pointless step because unless they are a descendant of
+                a "list-of-references" element, unevaluated css:flow elements will be ignored (and
+                result in a warning) later.
             </p:documentation>
             <p:wrap match="css:flow[not(ancestor::*[@css:_obfl-list-of-references])]"
                     wrapper="css:_block-box_"
-                    group-adjacent="?"/>
+                    group-adjacent="true()"/>
             <p:add-attribute match="css:_block-box_" attribute-name="type" attribute-value="block"/>
             <p:rename match="css:_block-box_" new-name="css:box"/>
         </p:for-each>

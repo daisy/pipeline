@@ -51,7 +51,7 @@
                         <string>
                     -->
                     <xsl:otherwise>
-                        <xsl:sequence select="substring(regex-group($css:SYMBOL_RE_string), 2, string-length(regex-group($css:SYMBOL_RE_string))-2)"/>
+                        <xsl:sequence select="css:parse-string(regex-group($css:SYMBOL_RE_string))/@value"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:matching-substring>

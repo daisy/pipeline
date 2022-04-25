@@ -68,7 +68,6 @@
     <module>tts/tts-adapters/tts-adapter-google</module>
     <module>tts/tts-adapters/tts-adapter-cereproc</module>
     <module>tts/tts-mocks</module>
-    <module>tts/zedai-to-ssml</module>
     <module>tts/mathml-to-ssml</module>
     <module>braille/braille-common</module>
     <module>braille/braille-css-utils</module>

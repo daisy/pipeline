@@ -15,43 +15,14 @@
 
     <p:input port="source"/>
     <p:output port="result"/>
-    <p:input port="parameters" kind="parameter"/>
 
-    <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-        <p:documentation>
-            Whether to stop processing and raise an error on validation issues.
-        </p:documentation>
-    </p:option>
-
-    <p:import href="dtbook-utils-library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>
-            Collection of utilities for validation and reporting.
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/metadata-utils/library.xpl">
-        <p:documentation>
-            For px:validate-mods
-        </p:documentation>
-    </p:import>
-
-    <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-    <px:validate-with-relax-ng-and-report name="validate-dtbook-input">
-        <p:input port="source">
-            <p:pipe port="source" step="dtbook-to-mods-meta"/>
-        </p:input>
-        <p:input port="schema">
-            <p:pipe port="result" step="dtbook-schema"/>
-        </p:input>
-        <p:with-option name="assert-valid" select="$assert-valid"/>
-    </px:validate-with-relax-ng-and-report>
-
-    <p:xslt name="generate-mods">
+    <p:xslt>
         <p:input port="stylesheet">
             <p:document href="dtbook-to-mods-meta.xsl"/>
         </p:input>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
     </p:xslt>
-
-    <px:validate-mods/>
 
 </p:declare-step>

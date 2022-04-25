@@ -1,4 +1,97 @@
-$hyphenation: true !default;
+/*
+ * Default style sheet for DTBook
+ *
+ * See also
+ * - http://www.cucat.org/projects/dtbook2005-3/dtbook-2005-3.dtd.html
+ * - http://www.daisy.org/z3986/2005/dtbook.2005.basic.css
+ */
+
+@namespace xml "http://www.w3.org/XML/1998/namespace";
+
+address,
+annotation,
+author,
+blockquote,
+bodymatter,
+book,
+bridgehead,
+byline,
+covertitle,
+dateline,
+div,
+dl,
+docauthor,
+doctitle,
+epigraph,
+frontmatter,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hd,
+img,
+imggroup,
+level,
+level1,
+level2,
+level3,
+level4,
+level5,
+level6,
+line,
+linegroup,
+list,
+note,
+p,
+poem,
+prodnote,
+rearmatter,
+sidebar,
+table {
+	display: block;
+}
+
+li {
+	display: list-item;
+}
+
+list {
+	counter-reset: list-item;
+}
+
+list[type="ol"],
+list[type="ol"][enum="1"] { list-style-type: decimal;     }
+list[type="ol"][enum="a"] { list-style-type: lower-alpha; }
+list[type="ol"][enum="U"] { list-style-type: upper-alpha; }
+list[type="ol"][enum="i"] { list-style-type: lower-roman; }
+list[type="ol"][enum="X"] { list-style-type: upper-roman; }
+
+/* handle list[start] */
+@xslt "lists.xsl";
+
+head {
+	display: none;
+}
+
+br::before {
+	content: "\A";
+	white-space: pre-line;
+}
+
+[xml|space=preserve] {
+	white-space: pre-wrap;
+}
+
+@text-transform uncontracted {
+	system: braille;
+	contraction: no;
+}
+
+/* ======= Implementation of script options =============== */
+
+$hyphenation: auto !default;
 $line-spacing: single !default;
 $capital-letters: true !default;
 $include-captions: true !default;
@@ -12,9 +105,9 @@ $include-production-notes: false !default;
 @import "volume-breaking.scss";
 @import "notes.scss";
 
-@if $hyphenation {
+@if $hyphenation != manual {
 	:root {
-		hyphens: auto;
+		hyphens: $hyphenation;
 	}
 }
 
@@ -46,9 +139,4 @@ linegroup line {
 
 prodnote {
 	display: if($include-production-notes, block, none);
-}
-
-@text-transform uncontracted {
-	system: braille;
-	contraction: no;
 }

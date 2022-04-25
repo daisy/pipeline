@@ -517,7 +517,7 @@
 		<xsl:variable name="src" select="resolve-uri(@src, base-uri(collection()[2]/*))"/>
 		<xsl:choose>
 			<xsl:when test="matches($src,'^https?://')
-			                or (matches($src,'^file:') and pf:file-exists(substring($src,6)))">
+			                or (matches($src,'^file:') and pf:file-exists($src))">
 				<xsl:variable name="image_dimensions" as="xs:integer*" select="pf:image-dimensions($src)"/>
 				<xsl:call-template name="text:p">
 					<xsl:with-param name="sequence">

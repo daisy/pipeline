@@ -38,11 +38,10 @@
 						<!-- from ../resources/tts-default-config.xml: -->
 						<!-- <voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/> -->
 						<voice engine="mock-tts" name="mock-nl" lang="nl" gender="male-adult"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="include-log" select="'true'"/> <!-- log can be found in "log" output -->
 		</x:call>
 		<x:context label="the status port">
 			<x:document type="port" port="status"/>
@@ -109,11 +108,10 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="mock-en" lang="en" gender="male-adult"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="include-log" select="'true'"/> <!-- log can be found in "log" output -->
 		</x:call>
 		<x:context label="the error">
 			<x:document type="errors"/>

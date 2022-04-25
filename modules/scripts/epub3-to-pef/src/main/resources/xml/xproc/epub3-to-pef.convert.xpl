@@ -18,7 +18,9 @@
                 name="main">
     
     <p:option name="epub" required="true">
-      <p:documentation>Base URI to resolve style sheets against</p:documentation>
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Base URI to resolve style sheets against</p>
+      </p:documentation>
     </p:option>
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
@@ -32,8 +34,10 @@
         <p:pipe step="transform" port="obfl"/>
     </p:output>
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation>Whether or not the conversion was successful. When include-obfl is true,
-        the conversion may fail but still output a document on the "obfl" port.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether or not the conversion was successful. When include-obfl is true, the
+            conversion may fail but still output a document on the "obfl" port.</p>
+        </p:documentation>
         <p:pipe step="transform" port="status"/>
     </p:output>
     
@@ -43,7 +47,15 @@
         </p:inline>
     </p:input>
     
-    <p:option name="default-stylesheet" required="false" select="'#default'"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The user agent's <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade">default
+            style sheet</a>.</p>
+            <p>The idea of this option is that a custom "EPUB 3 to PEF" script could be written with
+            its own default style sheet (and its own set of options that correspond with the style
+            sheet parameters of this default style sheet).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="stylesheet" select="''"/>
     <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
@@ -235,8 +247,7 @@
                               $abs-stylesheet[position()&lt;$first-css-stylesheet-index],
                               if ($default-stylesheet!='#default')
                                 then $default-stylesheet
-                                else resolve-uri('../../css/default.css'),
-                              resolve-uri('../../css/default.scss'),
+                                else resolve-uri('../../css/default.scss'),
                               $abs-stylesheet[position()&gt;=$first-css-stylesheet-index]),' ')">
             <p:inline><_/></p:inline>
         </p:variable>

@@ -32,8 +32,6 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>

@@ -11,6 +11,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
 
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
+import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultFullHyphenator;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
@@ -22,6 +23,8 @@ import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.util.Files.isAbsoluteFile;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.tex.TexHyphenator;
 
 import org.osgi.service.component.annotations.Activate;
@@ -140,31 +143,28 @@ public class TexHyphenatorSimpleImpl extends AbstractTransformProvider<TexHyphen
 			return fullHyphenator;
 		}
 		
-		private final FullHyphenator fullHyphenator = new FullHyphenator() {
-			public String transform(String text) {
-				return TexHyphenatorImpl.this.transform(text);
-			}
-			public String[] transform(String[] text) {
-				return TexHyphenatorImpl.this.transform(text);
-			}
-		};
+		private final FullHyphenator fullHyphenator = new DefaultFullHyphenator() {
+
+				private final static char SHY = '\u00AD';
+				private final static char ZWSP = '\u200B';
+
+				protected boolean isCodePointAware() { return true; }
+				protected boolean isLanguageAdaptive() { return true; }
 		
-		public String transform(String text) {
-			try {
-				return hyphenator.hyphenate(text); }
-			catch (Exception e) {
-				throw new RuntimeException("Error during TeX hyphenation", e); }
-		}
-		
-		public String[] transform(String[] text) {
-			String[] hyphenated = new String[text.length];
-			for (int i = 0; i < text.length; i++)
-				try {
-					hyphenated[i] = hyphenator.hyphenate(text[i]); }
-				catch (Exception e) {
-					throw new RuntimeException("Error during TeX hyphenation", e); }
-			return hyphenated;
-		}
+				/**
+				 * @param language ignored
+				 */
+				protected byte[] getHyphenationOpportunities(String textWithoutHyphens, Locale language) throws RuntimeException {
+					try {
+						Tuple2<String,byte[]> t = extractHyphens(
+							hyphenator.hyphenate(textWithoutHyphens), true, SHY, ZWSP);
+						if (!t._1.equals(textWithoutHyphens))
+							throw new RuntimeException("Unexpected output from " + hyphenator);
+						return t._2; }
+					catch (Exception e) {
+						throw new RuntimeException("Error during TeX hyphenation", e); }
+				}
+			};
 	}
 	
 	private URL resolveTable(URI table) {

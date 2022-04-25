@@ -4,32 +4,11 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:java="implemented-in-java">
 
-    <xsl:function name="pf:error">
-        <xsl:param name="msg" as="xs:string"/>
-        <xsl:sequence select="pf:error($msg, ())"/>
-    </xsl:function>
-
-    <xsl:function name="pf:error">
-        <xsl:param name="msg" as="xs:string"/>
-        <xsl:param name="args"/>
-        <xsl:sequence select="pf:error($msg, $args, true())"/>
-    </xsl:function>
-
-    <xsl:function name="pf:error">
-        <xsl:param name="msg" as="xs:string"/>
-        <xsl:param name="args"/>
-        <xsl:param name="terminate" as="xs:boolean"/>
-        <xsl:sequence select="pf:message('ERROR', $msg, $args)"/>
-        <xsl:if test="$terminate">
-            <xsl:message terminate="yes"/>
-        </xsl:if>
-    </xsl:function>
-
     <xsl:template name="pf:error">
         <xsl:param name="msg" as="xs:string" required="yes"/>
         <xsl:param name="args" required="no" select="()"/>
-        <xsl:param name="terminate" as="xs:boolean" required="no" select="true()"/>
-        <xsl:sequence select="pf:error($msg, $args, $terminate)"/>
+        <xsl:param name="code" as="xs:QName?" required="no" select="()"/>
+        <xsl:sequence select="pf:error($msg, $args, $code)"/>
     </xsl:template>
 
     <xsl:function name="pf:warn">
@@ -102,7 +81,7 @@
 
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
-            <p>Create a log message.</p>
+            <p>Log a message.</p>
         </desc>
     </doc>
     <java:function name="pf:message">
@@ -115,6 +94,27 @@
         <xsl:param name="args" as="xs:string*"/>
         <!--
             Implemented in ../../../java/org/daisy/pipeline/common/saxon/impl/MessageDefinition.java
+        -->
+    </java:function>
+
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Raise an error.</p>
+        </desc>
+    </doc>
+    <java:function name="pf:error">
+        <xsl:param name="msg" as="xs:string"/>
+    </java:function>
+    <java:function name="pf:error">
+        <xsl:param name="msg" as="xs:string"/>
+        <xsl:param name="args" as="xs:string*"/>
+    </java:function>
+    <java:function name="pf:error">
+        <xsl:param name="msg" as="xs:string"/>
+        <xsl:param name="args" as="xs:string*"/>
+        <xsl:param name="code" as="xs:QName?"/>
+        <!--
+            Implemented in ../../../java/org/daisy/pipeline/common/saxon/impl/ErrorDefinition.java
         -->
     </java:function>
 

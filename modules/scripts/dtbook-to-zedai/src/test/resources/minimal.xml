@@ -18,6 +18,7 @@
         <p>Paragraph</p>
         <pagenum id="page_2">2</pagenum>
         <p>Another paragraph</p>
+        <img alt="image" src="image.jpg"/>
       </level1>
     </bodymatter>
   </book>

@@ -99,6 +99,7 @@
 			px:fileset-unzip
 			px:fileset-from-dir
 			px:fileset-add-entry
+			px:fileset-add-entries
 			px:fileset-join
 			px:fileset-load
 		</p:documentation>
@@ -211,38 +212,19 @@
 			</p:choose>
 			<p:identity name="fileset-from-zip-or-dir-without-mediatype"/>
 			<p:delete match="//d:file" name="epub-base"/>
-			<p:sink/>
-			<p:for-each>
-				<p:iteration-source select="//d:file">
+			<px:fileset-add-entries>
+				<p:with-option name="href" select="//d:file/@href/string(.)">
 					<p:pipe step="fileset-from-zip-or-dir-without-mediatype" port="result"/>
-				</p:iteration-source>
-				<p:variable name="href" select="/*/@href"/>
-				<p:identity>
-					<p:input port="source">
-						<p:pipe step="epub-base" port="result"/>
-					</p:input>
-				</p:identity>
-				<p:choose>
-					<p:xpath-context>
+				</p:with-option>
+			</px:fileset-add-entries>
+			<px:fileset-add-entry href="META-INF/container.xml" media-type="application/xml" replace-attributes="true"/>
+			<p:group>
+				<px:fileset-add-entries media-type="application/oebps-package+xml" replace-attributes="true">
+					<p:with-option name="href" select="//ocf:rootfile/@full-path/string(.)">
 						<p:pipe step="container" port="result"/>
-					</p:xpath-context>
-					<p:when test="$href='META-INF/container.xml'">
-						<px:fileset-add-entry media-type="application/xml">
-							<p:with-option name="href" select="$href"/>
-						</px:fileset-add-entry>
-					</p:when>
-					<p:when test="//ocf:rootfile[@full-path=$href]">
-						<px:fileset-add-entry media-type="application/oebps-package+xml">
-							<p:with-option name="href" select="$href"/>
-						</px:fileset-add-entry>
-					</p:when>
-					<p:otherwise>
-						<px:fileset-add-entry>
-							<p:with-option name="href" select="$href"/>
-						</px:fileset-add-entry>
-					</p:otherwise>
-				</p:choose>
-			</p:for-each>
+					</p:with-option>
+				</px:fileset-add-entries>
+			</p:group>
 			<px:fileset-join name="fileset-from-zip-or-dir"/>
 			<p:sink/>
 			

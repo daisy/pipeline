@@ -1,9 +1,7 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
 import java.io.File;
-import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -24,9 +22,7 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAppender;
-import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
@@ -83,16 +79,14 @@ import com.google.common.collect.Iterables;
  * corresponding text into the list of audio clips.
  * 
  */
-public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
+public class SSMLtoAudio implements FormatSpecifications {
 	private TTSEngine mLastTTS; //used if no TTS is found for the current sentence
 	private TTSRegistry mTTSRegistry;
 	private Logger mLogger;
 	private ContiguousText mCurrentSection;
 	private File mAudioDir; //where all the sound files will be stored
 	private final AudioFileFormat.Type mAudioFileFormat;
-	private long mTotalTextSize; //used for the progress bar
-	private long mPrintedProgress;
-	private long mProgress;
+	private long mTotalTextSize;
 	private int mDocumentPosition;
 	private Map<TTSEngine, List<ContiguousText>> mOrganizedText;
 	private AudioFootprintMonitor mAudioFootprintMonitor;
@@ -162,15 +156,12 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				workingEngines.add(engine);
 				engineStatus.add("[x] " + service.getName());
 			} catch (Throwable e) {
-				// Show the full error with stack trace only in the TTS log. A short version is included
+				// Show the full error with stack trace only in the main and TTS log. A short version is included
 				// in the engine status summary. An engine that could not be activated is not an error
 				// unless no engines could be activated at all. This is to not confuse users because it
 				// is normal that only a part of the engines work.
-				String msg = service.getName() + " could not be activated: " + e.getMessage();
-				String stack = getStack(e);
-				mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
-				mLogger.debug(msg);
-				mLogger.debug(stack);
+				String msg = service.getName() + " could not be activated";
+				mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + e.getMessage(), e);
 				engineStatus.add("[ ] " + msg);
 			}
 
@@ -250,12 +241,10 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		TTSTimeout.ThreadFreeInterrupter interrupter = new ThreadFreeInterrupter() {
 			@Override
 			public void threadFreeInterrupt() {
-				String msg = "Timeout while initializing "
-				        + service.getName()
-				        + ". Forcing interruption of the current work of "
-				        + service.getName() + "... ";
-				mLogger.warn(msg);
-				mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
+				mTTSlog.addGeneralError(
+					ErrorCode.WARNING,
+					"Timeout while initializing " + service.getName()
+					+ ". Forcing interruption of the current work of " + service.getName() + "...");
 				fengine.interruptCurrentWork(res);
 			}
 		};
@@ -275,12 +264,10 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				try {
 					engine.releaseThreadResources(res);
 				} catch (Exception e) {
-					String msg = "Error while releasing resource of "
-					        + service.getName() + "; " + e.getMessage();
-					String stack = getStack(e);
-					mLogger.warn(msg);
-					mLogger.debug(stack);
-					mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + stack);
+					mTTSlog.addGeneralError(
+						ErrorCode.WARNING,
+						"Error while releasing resource of " + service.getName() + ": " + e.getMessage(),
+						e);
 				} finally {
 					timeout.disable();
 				}
@@ -352,7 +339,6 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			                + " or providing the language '" + lang + "'";
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			endSection();
-			mLogger.warn(err);
 			return false;
 		}
 
@@ -366,7 +352,6 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 				+ new Voice(voiceEngine, voiceName);
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			endSection();
-			mLogger.warn(err);
 			return false;
 		}
 
@@ -412,22 +397,15 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mCurrentSection = null;
 	}
 
-	private MessageAppender progress = null;
-
 	public Iterable<SoundFileLink> blockingRun(AudioServices audioServices)
 	        throws SynthesisException, InterruptedException, EncodingException {
 
-		MessageAppender activeBlock = MessageAppender.getActiveBlock();
-		if (activeBlock != null)
-			progress = activeBlock.append(new MessageBuilder().withProgress(BigDecimal.ONE));
-		try {
+		MessageAppender activeBlock = MessageAppender.getActiveBlock(); // px:ssml-to-audio step
 
 		//SSML mark splitter shared by the threads:
 		SSMLMarkSplitter ssmlSplitter = new StructuredSSMLSplitter(mProc);
 
 		reorganizeSections();
-		mProgress = 0;
-		mPrintedProgress = 0;
 
 		//threading layout
 		int reservedThreadNum = 0;
@@ -460,22 +438,37 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		if (text == null) {
 			text = Collections.EMPTY_LIST;
 		}
-		ConcurrentLinkedQueue<ContiguousText> stext = new ConcurrentLinkedQueue<ContiguousText>(
-		        text);
 		int i = 0;
-		for (; i < regularTTSthreadNum; ++i) {
-			tpt[i] = new TextToPcmThread();
-			tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter, this,
-			             mLogger, mAudioFootprintMonitor, maxMemPerTTSThread, mTTSlog);
+		ConcurrentLinkedQueue<ContiguousText> stext = new ConcurrentLinkedQueue<ContiguousText>(text);
+		if (regularTTSthreadNum > 0) {
+			long textSize = stext.stream().mapToLong(ContiguousText::getStringSize).sum();
+			BigDecimal portion = textSize == 0
+				? BigDecimal.ZERO
+				: new BigDecimal(textSize).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128)
+				                          .divide(new BigDecimal(regularTTSthreadNum), MathContext.DECIMAL128);
+			for (; i < regularTTSthreadNum; ++i) {
+				tpt[i] = new TextToPcmThread();
+				tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter,
+				             mLogger, mAudioFootprintMonitor, maxMemPerTTSThread, mTTSlog, activeBlock,
+				             mTotalTextSize, portion);
+			}
 		}
 		for (Map.Entry<TTSEngine, List<ContiguousText>> e : mOrganizedText.entrySet()) {
 			TTSEngine tts = e.getKey();
 			if (tts != null) { //tts = null is handled by the previous loop
 				stext = new ConcurrentLinkedQueue<ContiguousText>(e.getValue());
-				for (int j = 0; j < tts.reservedThreadNum(); ++i, ++j) {
-					tpt[i] = new TextToPcmThread();
-					tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter,
-					        this, mLogger, mAudioFootprintMonitor, maxMemPerTTSThread, mTTSlog);
+				if (tts.reservedThreadNum() > 0) {
+					long textSize = stext.stream().mapToLong(ContiguousText::getStringSize).sum();
+					BigDecimal portion = textSize == 0
+						? BigDecimal.ZERO
+						: new BigDecimal(textSize).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128)
+						                          .divide(new BigDecimal(tts.reservedThreadNum()), MathContext.DECIMAL128);
+					for (int j = 0; j < tts.reservedThreadNum(); ++i, ++j) {
+						tpt[i] = new TextToPcmThread();
+						tpt[i].start(stext, pcmQueue, mExecutor, mTTSRegistry, mVoiceManager, ssmlSplitter,
+						             mLogger, mAudioFootprintMonitor, maxMemPerTTSThread, mTTSlog,
+						             activeBlock, mTotalTextSize, portion);
+					}
 				}
 			}
 		}
@@ -485,8 +478,8 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		EncodingThread[] encodingTh = new EncodingThread[encodingThreadNum];
 		for (int j = 0; j < encodingTh.length; ++j) {
 			encodingTh[j] = new EncodingThread();
-			encodingTh[j].start(mAudioFileFormat, audioServices, pcmQueue, mLogger,
-					 mAudioFootprintMonitor, mProperties, mTTSlog);
+			encodingTh[j].start(mAudioFileFormat, audioServices, pcmQueue,
+			                    mAudioFootprintMonitor, mProperties, mTTSlog, activeBlock);
 		}
 		mLogger.info("Encoding threads started.");
 
@@ -519,34 +512,10 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		mLogger.info("Audio encoding finished.");
 
 		return Iterables.concat(fragments);
-
-		} finally {
-			if (progress != null)
-				progress.close();
-			progress = null;
-		}
 	}
 
 	int getErrorCount() {
 		return mErrorCounter;
-	}
-
-	@Override
-	synchronized public void notifyFinished(ContiguousText section) {
-		MessageBuilder m = new MessageBuilder()
-			.withProgress(
-				new BigDecimal(section.getStringSize()).divide(new BigDecimal(mTotalTextSize), MathContext.DECIMAL128));
-		mProgress += section.getStringSize();
-		if (mProgress - mPrintedProgress > mTotalTextSize / 15) {
-			int TTSMem = mAudioFootprintMonitor.getUnreleasedTTSMem() / 1000000;
-			int EncodeMem = mAudioFootprintMonitor.getUnreleasedEncondingMem() / 1000000;
-			m = m.withLevel(Level.INFO)
-			     .withText("progress: " + 100 * mProgress / mTotalTextSize + "%  [TTS: "
-			               + TTSMem + "MB encoding: " + EncodeMem + "MB]");
-			mPrintedProgress = mProgress;
-		}
-		if (progress != null)
-			progress.append(m).close();
 	}
 
 	private void reorganizeSections() {
@@ -615,23 +584,14 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		newSections.add(currentSection);
 	}
 
-	private static String getStack(Throwable t) {
-		StringWriter writer = new StringWriter();
-		PrintWriter printWriter = new PrintWriter(writer);
-		t.printStackTrace(printWriter);
-		printWriter.flush();
-		return writer.toString();
-	}
-
 	private int convertToInt(Map<String, String> params, String prop, int defaultVal) {
 		String str = params.get(prop);
 		if (str != null) {
 			try {
 				defaultVal = Integer.valueOf(str);
 			} catch (NumberFormatException e) {
-				String msg = str + " is not a valid value for property " + prop;
-				mLogger.warn(msg);
-				mTTSlog.addGeneralError(ErrorCode.WARNING, msg);
+				mTTSlog.addGeneralError(
+					ErrorCode.WARNING, str + " is not a valid value for property " + prop, e);
 			}
 		}
 		return defaultVal;

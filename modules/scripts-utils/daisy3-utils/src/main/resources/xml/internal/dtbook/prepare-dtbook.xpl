@@ -84,7 +84,7 @@
         <p:pipe step="dtbook" port="result"/>
       </p:with-option>
     </px:fileset-create>
-    <px:fileset-add-entry media-type="application/x-dtbook+xml" name="fileset">
+    <px:fileset-add-entry media-type="application/x-dtbook+xml">
       <p:input port="entry">
         <p:pipe step="dtbook" port="result"/>
       </p:input>

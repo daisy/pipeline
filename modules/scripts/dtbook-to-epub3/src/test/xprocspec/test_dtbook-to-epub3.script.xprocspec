@@ -261,7 +261,6 @@
                 <x:document type="inline">
                     <config>
                         <voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
-                        <!-- <property key="log" value="true"/> -->
                     </config>
                 </x:document>
             </x:input>

@@ -27,7 +27,7 @@
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Result fileset with a single file, the package document.</p>
       </p:documentation>
-      <p:pipe step="fileset" port="result"/>
+      <p:pipe step="fileset" port="result.fileset"/>
     </p:output>
 
     <p:option name="uid">

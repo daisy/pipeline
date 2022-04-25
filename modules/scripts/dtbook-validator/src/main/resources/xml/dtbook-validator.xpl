@@ -142,7 +142,7 @@
     
     <px:fileset-add-entry media-type="application/x-dtbook+xml">
         <p:with-option name="href" select="$input-dtbook"/>
-        <p:input port="source">
+        <p:input port="source.fileset">
             <p:inline>
                 <d:fileset/>
             </p:inline>

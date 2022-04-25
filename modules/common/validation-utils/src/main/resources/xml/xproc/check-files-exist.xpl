@@ -122,7 +122,7 @@
             </p:when>
             <p:otherwise>
                 <p:output port="result" sequence="true">
-                    <p:pipe port="result" step="create-fileset-entry"/>
+                    <p:pipe port="result.fileset" step="create-fileset-entry"/>
                 </p:output>
                 <p:output port="report" sequence="true">
                     <p:pipe port="result" step="empty-error"/>
@@ -137,7 +137,7 @@
                 
                 <px:fileset-add-entry name="create-fileset-entry">
                     <p:with-option name="href" select="$filepath"/>
-                    <p:input port="source">
+                    <p:input port="source.fileset">
                         <p:inline>
                             <d:fileset/>
                         </p:inline>

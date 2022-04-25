@@ -28,12 +28,10 @@
 			<x:call>
 				<x:input port="config">
 					<x:document type="inline">
-						<config>
-							<!-- log can be found in "log" output -->
-							<property key="log" value="true"/>
-						</config>
+						<config/>
 					</x:document>
 				</x:input>
+				<x:option name="include-log" select="'true'"/> <!-- log can be found in "log" output -->
 				<x:option name="temp-dir" select="resolve-uri('default/audio/',$temp-dir)"/>
 			</x:call>
 			<x:context label="the status port">
@@ -61,11 +59,10 @@
 					<x:document type="inline">
 						<config>
 							<voice engine="espeak" name="dutch" gender="male-adult" priority="100" lang="en"/>
-							<!-- log can be found in "log" output -->
-							<property key="log" value="true"/>
 						</config>
 					</x:document>
 				</x:input>
+				<x:option name="include-log" select="'true'"/> <!-- log can be found in "log" output -->
 				<x:option name="temp-dir" select="resolve-uri('override/audio/',$temp-dir)"/>
 			</x:call>
 			<x:context label="the status port">

@@ -62,6 +62,7 @@
             px:fileset-load
             px:fileset-create
             px:fileset-add-entry
+            px:fileset-add-entries
             px:fileset-join
             px:fileset-intersect
             px:fileset-update
@@ -113,7 +114,7 @@
     </p:documentation>
     <px:fileset-add-entry name="daisy202-with-opf"
                           media-type="application/oebps-package+xml">
-        <p:input port="source">
+        <p:input port="source.fileset">
             <p:pipe step="main" port="source.fileset"/>
         </p:input>
         <p:input port="entry">
@@ -175,7 +176,7 @@
         <p:documentation>Get the HTML file(s) that corresponds with this SMIL.</p:documentation>
         <p:variable name="smil-base" select="base-uri(/)"/>
         <!-- get manifest items with media-overlay attribute pointing to the SMIL -->
-        <p:filter>
+        <p:filter name="associated-xhtml.items">
             <p:input port="source">
                 <p:pipe step="opf" port="result"/>
             </p:input>
@@ -185,17 +186,19 @@
                                      return /opf:package/opf:manifest/opf:item[@media-overlay=$mo]
                                      ')"/>
         </p:filter>
+        <p:sink/>
         <!-- create fileset from the items -->
-        <p:for-each>
-            <px:fileset-add-entry>
-                <p:with-option name="href" select="/*/resolve-uri(@href,base-uri())"/>
-                <p:input port="source">
-                    <p:inline>
-                        <d:fileset/>
-                    </p:inline>
-                </p:input>
-            </px:fileset-add-entry>
-        </p:for-each>
+        <px:fileset-add-entries>
+            <p:with-option name="href" select="for $item in collection()
+                                               return string($item/*/resolve-uri(@href,base-uri(.)))">
+                <p:pipe step="associated-xhtml.items" port="result"/>
+            </p:with-option>
+            <p:input port="source.fileset">
+                <p:inline>
+                    <d:fileset/>
+                </p:inline>
+            </p:input>
+        </px:fileset-add-entries>
         <px:fileset-join name="associated-xhtml.fileset"/>
         <p:sink/>
         <!-- load in spine order (and drop items not in spine) -->
@@ -314,22 +317,25 @@
         Create new SMIL file with references to heading elements for every content document without
         media-overlay.
     </p:documentation>
-    <p:filter select="for $itemref in /opf:package/opf:spine/opf:itemref/@idref
+    <p:filter name="xhtml-without-mo.items"
+              select="for $itemref in /opf:package/opf:spine/opf:itemref/@idref
                       return /opf:package/opf:manifest/opf:item[@id=$itemref][not(@media-overlay)]">
         <p:input port="source">
             <p:pipe step="opf" port="result"/>
         </p:input>
     </p:filter>
-    <p:for-each>
-        <px:fileset-add-entry>
-            <p:with-option name="href" select="/*/resolve-uri(@href,base-uri())"/>
-            <p:input port="source">
-                <p:inline>
-                    <d:fileset/>
-                </p:inline>
-            </p:input>
-        </px:fileset-add-entry>
-    </p:for-each>
+    <p:sink/>
+    <px:fileset-add-entries>
+        <p:with-option name="href" select="for $item in collection()
+                                           return string($item/*/resolve-uri(@href,base-uri(.)))">
+            <p:pipe step="xhtml-without-mo.items" port="result"/>
+        </p:with-option>
+        <p:input port="source.fileset">
+            <p:inline>
+                <d:fileset/>
+            </p:inline>
+        </p:input>
+    </px:fileset-add-entries>
     <px:fileset-join name="xhtml-without-mo.fileset"/>
     <!-- add file attributes from source fileset -->
     <px:fileset-intersect>
@@ -433,16 +439,17 @@
             </p:xslt>
         </p:for-each>
     </p:for-each>
-    <p:for-each>
-        <px:fileset-add-entry media-type="application/smil+xml">
-            <p:with-option name="href" select="resolve-uri(base-uri(/*))"/>
-            <p:input port="source">
-                <p:inline>
-                    <d:fileset/>
-                </p:inline>
-            </p:input>
-        </px:fileset-add-entry>
-    </p:for-each>
+    <p:sink/>
+    <px:fileset-add-entries media-type="application/smil+xml">
+        <p:input port="source.fileset">
+            <p:inline>
+                <d:fileset/>
+            </p:inline>
+        </p:input>
+        <p:input port="entries">
+            <p:pipe step="new-smils" port="smil"/>
+        </p:input>
+    </px:fileset-add-entries>
     <px:fileset-join name="new-smils.fileset"/>
     <p:sink/>
 

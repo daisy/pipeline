@@ -19,7 +19,7 @@
             <p px:role="organization">DAISY Consortium</p>
         </div>
     </p:documentation>
-    
+
     <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook file(s)</h2>
@@ -33,25 +33,22 @@
             <p px:role="desc">The resulting ZedAI XML file.</p>
         </p:documentation>
     </p:option>
-    <p:option name="zedai-filename" required="false" px:type="string" select="''">
+    <p:option name="zedai-filename" required="false" px:type="string" select="'zedai.xml'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ZedAI filename</h2>
             <p px:role="desc">Filename for the generated ZedAI file</p>
         </p:documentation>
     </p:option>
-    <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Assert validity</h2>
-            <p px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
-        </p:documentation>
+    <p:option name="validation" select="'abort'">
+        <!-- defined in common-options.xpl -->
     </p:option>
-    <p:option name="mods-filename" required="false" px:type="string" select="''">
+    <p:option name="mods-filename" required="false" px:type="string" select="'zedai-mods.xml'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">MODS filename</h2>
             <p px:role="desc">Filename for the generated MODS file</p>
         </p:documentation>
     </p:option>
-    <p:option name="css-filename" required="false" px:type="string" select="''">
+    <p:option name="css-filename" required="false" px:type="string" select="'zedai-css.css'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">CSS filename</h2>
             <p px:role="desc">Filename for the generated CSS file</p>
@@ -69,28 +66,41 @@
             <p px:role="desc">Include any referenced external resources like images and CSS-files to the output.</p>
         </p:documentation>
     </p:option>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="dtbook-to-zedai.convert.xpl"/>
-    
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-load
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-store
+        </p:documentation>
+    </p:import>
+    <p:import href="dtbook-to-zedai.convert.xpl">
+        <p:documentation>
+            px:dtbook-to-zedai
+        </p:documentation>
+    </p:import>
+
     <px:dtbook-load name="load"/>
 
     <px:dtbook-to-zedai name="convert">
-        <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="load"/>
+        <p:input port="source.in-memory">
+            <p:pipe step="load" port="in-memory.out"/>
         </p:input>
-        <p:with-option name="opt-output-dir" select="$output-dir"/>
-        <p:with-option name="opt-zedai-filename" select="$zedai-filename"/>
-        <p:with-option name="opt-mods-filename" select="$mods-filename"/>
-        <p:with-option name="opt-css-filename" select="$css-filename"/>
-        <p:with-option name="opt-lang" select="$lang"/>
-        <p:with-option name="opt-assert-valid" select="$assert-valid"/>
-        <p:with-option name="opt-copy-external-resources" select="$copy-external-resources"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="zedai-filename" select="$zedai-filename"/>
+        <p:with-option name="mods-filename" select="$mods-filename"/>
+        <p:with-option name="css-filename" select="$css-filename"/>
+        <p:with-option name="lang" select="$lang"/>
+        <p:with-option name="validation" select="$validation"/>
+        <p:with-option name="copy-external-resources" select="$copy-external-resources='true'"/>
     </px:dtbook-to-zedai>
-    
+
     <px:fileset-store name="fileset-store">
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="convert"/>
+            <p:pipe step="convert" port="result.in-memory"/>
         </p:input>
     </px:fileset-store>
+
 </p:declare-step>

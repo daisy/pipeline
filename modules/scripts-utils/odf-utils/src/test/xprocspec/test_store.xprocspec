@@ -27,7 +27,7 @@
           <p:pipe step="main" port="source.fileset"/>
         </p:iteration-source>
         <px:fileset-add-entry>
-          <p:input port="source">
+          <p:input port="source.fileset">
             <p:pipe step="base" port="result"/>
           </p:input>
           <p:with-option name="href" select="/*/@href"/>

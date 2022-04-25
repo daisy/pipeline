@@ -73,9 +73,6 @@
 
     <p:import href="fileset-library.xpl">
         <p:documentation>
-            px:fileset-create
-            px:fileset-add-entry
-            px:fileset-load
             px:fileset-copy
             px:fileset-update
             px:fileset-invert
@@ -103,6 +100,7 @@
             px:set-xml-declaration
             px:normalize-uri
             px:set-base-uri
+            px:data
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl">
@@ -186,12 +184,12 @@
                 <p:variable name="unzip-dir" select="string(/*)">
                     <p:pipe step="unzip-dir" port="normalized"/>
                 </p:variable>
-                <px:fileset-create/>
-                <px:fileset-add-entry>
-                    <p:with-option name="href" select="$original-href"/>
-                    <p:with-param port="file-attributes" name="method" select="'binary'"/>
-                </px:fileset-add-entry>
-                <px:fileset-load/>
+                <p:sink/>
+                <px:data content-type="binary/octet-stream">
+                    <p:with-option name="href" select="if (contains($original-href,'!/'))
+                                                       then replace($original-href,'^file:','jar:file:')
+                                                       else $original-href"/>
+                </px:data>
                 <p:store cx:decode="true" encoding="base64" name="store-binary">
                     <!--
                         Note that if the final target location is a file inside a ZIP, the temporary
@@ -397,8 +395,14 @@
         fileset.</p:documentation>
     <p:viewport match="d:file" name="store">
         <p:output port="result"/>
+        <p:variable name="target" select="/*/resolve-uri(@href,base-uri(.))"/>
+        <p:choose>
+        <p:when test="contains($target,'!/')">
+        <p:documentation>File already zipped (handled above)</p:documentation>
+        <p:identity/>
+        </p:when>
+        <p:otherwise>
         <p:variable name="on-disk" select="(/*/@original-href, '')[1]"/>
-        <p:variable name="target" select="/*/resolve-uri(@href, base-uri(.))"/>
         <p:variable name="href" select="/*/@href"/>
         <p:variable name="media-type" select="/*/@media-type"/>
         <!--serialization options:-->
@@ -420,10 +424,6 @@
         <p:variable name="xml-declaration" select="/*/@xml-declaration"/>
 
         <p:choose>
-            <p:when test="contains($target, '!/')">
-                <p:documentation>File already zipped (handled above)</p:documentation>
-                <p:identity/>
-            </p:when>
             <p:when test="$on-disk">
                 <p:documentation>File is on disk and not in memory (handle below)</p:documentation>
                 <p:identity/>
@@ -540,7 +540,7 @@
         </p:choose>
 
         <p:choose>
-            <p:when test="$on-disk and not(contains($target, '!/'))">
+            <p:when test="$on-disk">
                 <p:documentation>File is on disk and not in memory; copy it to the new location.</p:documentation>
                 <p:variable name="target-dir" select="replace($target,'[^/]+$','')"/>
                 
@@ -641,7 +641,8 @@
                 <p:identity/>
             </p:otherwise>
         </p:choose>
-        
+        </p:otherwise>
+        </p:choose>
         <p:documentation>Add original-href attribute so that the in-memory documents can be
         discarded and px:fileset-store called again without resulting in a "neither stored on disk
         nor in memory" error.</p:documentation>

@@ -303,7 +303,7 @@
                 <p:pipe step="content-docs" port="result.fileset"/>
             </p:input>
             <p:input port="secondary">
-                <p:pipe step="nav-doc.fileset" port="result"/>
+                <p:pipe step="nav-doc.fileset" port="result.fileset"/>
             </p:input>
         </px:fileset-diff>
     </p:group>
@@ -549,7 +549,7 @@
             <p:pipe step="add-entry" port="result.in-memory"/>
         </p:output>
         <p:output port="fileset">
-            <p:pipe step="add-entry" port="result"/>
+            <p:pipe step="add-entry" port="result.fileset"/>
         </p:output>
         <p:insert match="/*" position="last-child">
             <p:input port="source">

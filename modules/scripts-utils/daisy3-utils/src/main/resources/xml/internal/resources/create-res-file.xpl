@@ -22,7 +22,7 @@
 	  <p>Fileset with as single file the provided or default resource file.</p>
     </p:documentation>
 
-	<p:pipe step="fileset" port="result"/>
+	<p:pipe step="fileset" port="result.fileset"/>
   </p:output>
   <p:output port="result.in-memory" sequence="true">
 	<p:pipe step="res-file" port="result"/>

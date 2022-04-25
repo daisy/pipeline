@@ -5,7 +5,7 @@
   
   <x:scenario label="test_01">
     <x:context>
-      <doc>
+      <doc xml:lang="en">
         <head css:display="none">
           <meta name="author" content="Bert" css:string-set="author 'Bert'"/>
         </head>
@@ -17,7 +17,7 @@
       </doc>
     </x:context>
     <x:expect label="result">
-      <css:box type="inline" name="doc">
+      <css:box type="inline" name="doc" xml:lang="en">
         <css:_ name="head">
           <css:_ name="meta" css:string-set="author 'Bert'"/>
         </css:_>

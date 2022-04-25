@@ -1,6 +1,9 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,13 +11,26 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.Voice;
 
+import org.slf4j.Logger;
+
 /**
  * A class to log structured messages in a big list. TTSLog is meant to be
  * allocated for every new Pipeline job and written to an external file after
  * the TTS work of the job is done.
  */
-public interface TTSLog {
-	enum ErrorCode {
+public class TTSLog {
+
+	private final Logger slf4jLogger;
+
+	public TTSLog() {
+		this(null);
+	}
+
+	public TTSLog(Logger slf4jLogger) {
+		this.slf4jLogger = slf4jLogger;
+	}
+
+	public enum ErrorCode {
 		UNEXPECTED_VOICE,
 		AUDIO_MISSING,
 		CRITICAL_ERROR,
@@ -23,9 +39,19 @@ public interface TTSLog {
 	}
 
 	public static class Error {
+
+		private final ErrorCode key;
+		private String message;
+		private Throwable cause;
+
 		public Error(ErrorCode key, String message) {
+			this(key, message, null);
+		}
+
+		public Error(ErrorCode key, String message, Throwable cause) {
 			this.key = key;
 			this.message = message;
+			this.cause = cause;
 		}
 
 		public ErrorCode getErrorCode() {
@@ -36,84 +62,210 @@ public interface TTSLog {
 			return message;
 		}
 
-		private ErrorCode key;
-		private String message;
+		public Throwable getCause() {
+			return cause;
+		}
 	}
 
-	interface Entry {
-		void addError(Error err);
+	public class Entry {
 
-		Collection<Error> getReadOnlyErrors();
+		private final String sentenceId;
+
+		private Entry(String sentenceId) {
+			this.sentenceId = sentenceId;
+		}
+
+		public void addError(Error err) {
+			errors.add(err);
+			String msg = err.getMessage();
+			if (err.getCause() != null)
+				msg += " (Please see detailed log and TTS log for more info.)";
+			else
+				msg += " (Please see TTS log for more info.)";
+			switch (err.getErrorCode()) {
+			case WARNING:
+			case ERROR:
+				break;
+			default:
+				msg = err.getErrorCode() + ": " + msg;
+			}
+			msg = "While processing sentence with ID " + sentenceId + ": " + msg;
+			switch (err.getErrorCode()) {
+			case WARNING:
+			case AUDIO_MISSING:
+				if (slf4jLogger != null)
+					slf4jLogger.warn(msg);
+				break;
+			default:
+				if (slf4jLogger != null)
+					slf4jLogger.error(msg);
+			}
+			if (err.getCause() != null)
+				if (slf4jLogger != null)
+					slf4jLogger.debug("Error stack trace:", err.getCause());
+		}
+
+		public Collection<Error> getReadOnlyErrors() {
+			return errors;
+		}
 
 		/**
 		 * @param ssml is the SSML before being converted to 'ttsinput'
 		 */
-		void setSSML(XdmNode ssml);
+		public void setSSML(XdmNode ssml) {
+			this.ssml = ssml;
+		}
 
-		XdmNode getSSML();
+		public XdmNode getSSML() {
+			return ssml;
+		}
 
 		/**
 		 * @param v is the voice selected by the top-level VoiceManager
 		 */
-		void setSelectedVoice(Voice v);
+		public void setSelectedVoice(Voice v) {
+			this.selectedVoice = v;
+		}
 
-		Voice getSelectedVoice();
+		public Voice getSelectedVoice() {
+			return selectedVoice;
+		}
 
 		/**
 		 * @param v is the actual voice used by the TTS processor (the same as
 		 *            selectedVoice in the general case, but can be different if
 		 *            something went wrong)
 		 */
-		void setActualVoice(Voice v);
+		public void setActualVoice(Voice v) {
+			this.actualVoice = v;
+		}
 
-		Voice getActualVoice();
+		public Voice getActualVoice() {
+			return actualVoice;
+		}
 
 		/**
 		 * @param soundfile is a path of a wave, mp3 or ogg file
 		 */
-		void setSoundfile(String soundfile);
+		public void setSoundfile(String soundfile) {
+			this.soundfile = soundfile;
+		}
 
-		String getSoundFile();
-
-		/**
-		 * @param secs is the timeout value used while synthesizing the entry
-		 */
-		void setTimeout(float secs);
-
-		float getTimeout();
-
-		/**
-		 * @param secs is the actual time elapsed while synthesizing the entry in seconds
-		 */
-		void setTimeElapsed(float secs);
-
-		float getTimeElapsed();
+		public String getSoundFile() {
+			return soundfile;
+		}
 
 		/**
 		 * @param begin offset in seconds
 		 * @param end offset in seconds
 		 */
-		void setPositionInFile(double begin, double end);
+		public void setPositionInFile(double begin, double end) {
+			this.beginInFile = begin;
+			this.endInFile = end;
+		}
 
-		double getBeginInFile();
+		public double getBeginInFile() {
+			return beginInFile;
+		}
 
-		double getEndInFile();
+		public double getEndInFile() {
+			return endInFile;
+		}
+
+		/**
+		 * @param secs is the timeout value used while synthesizing the entry
+		 */
+		public void setTimeout(float secs) {
+			this.timeout = secs;
+		}
+
+		public float getTimeout() {
+			return timeout;
+		}
+
+		/**
+		 * @param secs is the actual time elapsed while synthesizing the entry in seconds
+		 */
+		public void setTimeElapsed(float secs) {
+			this.timeElapsed = secs;
+		}
+
+		public float getTimeElapsed() {
+			return this.timeElapsed;
+		}
+
+		private List<Error> errors = new ArrayList<Error>();
+		private XdmNode ssml; //SSML
+		private Voice selectedVoice;
+		private Voice actualVoice;
+		private String soundfile; //
+		private double beginInFile; //in seconds
+		private double endInFile; //in seconds
+		private float timeout;
+		private float timeElapsed;
 	}
 
 	/**
 	 * Supposed to be called within a single-threaded context
 	 */
-	Entry getOrCreateEntry(String id);
+	public Entry getOrCreateEntry(String sentenceId) {
+		Entry res = mLog.get(sentenceId);
+		if (res != null)
+			return res;
+		res = new Entry(sentenceId);
+		mLog.put(sentenceId, res);
+		return res;
+	}
 
 	/**
 	 * Can be called within a multi-threaded context once all the calls to
 	 * getOrCreateEntry() are done.
 	 */
-	Entry getWritableEntry(String id);
+	public Entry getWritableEntry(String sentenceId) {
+		return mLog.get(sentenceId);
+	}
 
-	Set<Map.Entry<String, Entry>> getEntries();
+	public Set<Map.Entry<String, Entry>> getEntries() {
+		return mLog.entrySet();
+	}
 
-	void addGeneralError(ErrorCode errcode, String message);
+	public void addGeneralError(ErrorCode errcode, String message) {
+		addGeneralError(errcode, message, null);
+	}
 
-	Collection<Error> readonlyGeneralErrors();
+	public void addGeneralError(ErrorCode errcode, String message, Throwable cause) {
+		synchronized (generalErrors) {
+			generalErrors.add(new Error(errcode, message, cause));
+		}
+		if (cause != null)
+			message += " (Please see detailed log for more info.)";
+		switch (errcode) {
+		case WARNING:
+		case ERROR:
+			break;
+		default:
+			message = "" + errcode + ": " + message;
+		}
+		switch (errcode) {
+		case WARNING:
+		case AUDIO_MISSING:
+			if (slf4jLogger != null)
+				slf4jLogger.warn(message);
+			break;
+		default:
+			if (slf4jLogger != null)
+				slf4jLogger.error(message);
+		}
+		if (cause != null)
+			if (slf4jLogger != null)
+				slf4jLogger.debug("Error stack trace:", cause);
+	}
+
+	public Collection<Error> readonlyGeneralErrors() {
+		return generalErrors;
+	}
+
+	private List<Error> generalErrors = new ArrayList<Error>();
+	private Map<String, Entry> mLog = new HashMap<String, Entry>();
 }
+

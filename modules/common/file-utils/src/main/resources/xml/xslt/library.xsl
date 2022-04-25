@@ -11,10 +11,11 @@
     
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
-            <p>Tests whether the file denoted by this path exists.</p>
+            <p>Tests whether the file denoted by this path exists on disk. Also works for zipped
+            files.</p>
         </desc>
-        <param name="path">
-            <p>An absolute file path (not a URI)</p>
+        <param name="uri">
+            <p>An absolute file URI</p>
         </param>
         <return>
             <p>A boolean</p>

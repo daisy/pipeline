@@ -13,11 +13,11 @@ import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.BrailleCSSProperty.BrailleCharset;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
+import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
-import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +70,9 @@ public  class UnityBrailleTranslator extends AbstractBrailleTranslator implement
 										val = style.getProperty("white-space");
 										if (val != null)
 											style.removeProperty("white-space");
+										val = style.getProperty("text-transform");
+										if (val == TextTransform.NONE || val == TextTransform.AUTO)
+											style.removeProperty("text-transform");
 										val = style.getProperty("braille-charset");
 										if (val != null) {
 											if (val == BrailleCharset.CUSTOM)
@@ -141,6 +144,9 @@ public  class UnityBrailleTranslator extends AbstractBrailleTranslator implement
 											if (val == WhiteSpace.PRE_WRAP || val == WhiteSpace.PRE_LINE)
 												text = text.replaceAll("[\\n\\r]", "\u2028"); // LINE SEPARATOR
 											style.removeProperty("white-space"); }
+										val = style.getProperty("text-transform");
+										if (val == TextTransform.NONE || val == TextTransform.AUTO)
+											style.removeProperty("text-transform");
 										val = style.getProperty("braille-charset");
 										if (val != null) {
 											if (val == BrailleCharset.CUSTOM)

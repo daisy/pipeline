@@ -74,7 +74,7 @@
         <p:add-xml-base name="html"/>
         <p:sink/>
         <px:fileset-add-entry media-type="application/xhtml+xml">
-            <p:input port="source">
+            <p:input port="source.fileset">
                 <p:inline><d:fileset/></p:inline>
             </p:input>
             <p:input port="entry">

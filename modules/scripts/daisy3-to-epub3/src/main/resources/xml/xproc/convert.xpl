@@ -181,6 +181,7 @@
             <p:pipe port="result" step="dtbooks"/>
         </p:input>
         <p:with-option name="output-dir" select="$content-dir"/>
+        <p:with-option name="temp-dir" select="concat($temp-dir-checked,'dtbook-to-html/')"/>
         <p:with-option name="assert-valid" select="$assert-valid"/>
         <p:with-option name="chunk-size" select="$chunk-size"/>
         <p:with-option name="filename"

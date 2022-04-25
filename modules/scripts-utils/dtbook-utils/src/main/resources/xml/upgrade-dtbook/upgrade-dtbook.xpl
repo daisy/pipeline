@@ -26,35 +26,17 @@
             <p px:role="desc">Single DTBook file</p>
         </p:documentation>
     </p:input>
-    <p:input port="parameters" kind="parameter"/>
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">out</h2>
             <p px:role="desc">The result</p>
         </p:documentation>
     </p:output>
-    
-    <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-        <p:documentation>
-            Whether to stop processing and raise an error on validation issues.
-        </p:documentation>
-    </p:option>
-    
-    <p:import href="../validate-dtbook/dtbook-validator.select-schema.xpl">
-        <p:documentation>
-            px:dtbook-validator.select-schema
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>
-            px:validate-with-relax-ng-and-report
-        </p:documentation>
-    </p:import>
-    
+
     <p:variable name="version" select="(/dtb:dtbook|/dtbook)/@version"/>
-    
+
     <p:identity px:message="Input document version: {$version}" px:message-severity="DEBUG"/>
-    
+
     <p:choose name="main">
         <p:when test="$version = '1.1.0'">
             <p:output port="result"/>
@@ -62,15 +44,24 @@
                 <p:input port="stylesheet">
                     <p:document href="dtbook110to2005-1.xsl"/>
                 </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
             </p:xslt>
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document href="dtbook2005-1to2.xsl"/>
                 </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
             </p:xslt>
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document href="dtbook2005-2to3.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
                 </p:input>
             </p:xslt>
         </p:when>
@@ -80,10 +71,16 @@
                 <p:input port="stylesheet">
                     <p:document href="dtbook2005-1to2.xsl"/>
                 </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
             </p:xslt>
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document href="dtbook2005-2to3.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
                 </p:input>
             </p:xslt>
         </p:when>
@@ -92,6 +89,9 @@
             <p:xslt>
                 <p:input port="stylesheet">
                     <p:document href="dtbook2005-2to3.xsl"/>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
                 </p:input>
             </p:xslt>
         </p:when>
@@ -104,17 +104,5 @@
             <p:identity px:message="Version not identified: {$version}" px:message-severity="DEBUG"/>
         </p:otherwise>
     </p:choose>
-    
-    <p:identity name="dtbook-validation-input"/>
-    <px:dtbook-validator.select-schema name="dtbook-schema" dtbook-version="2005-3" mathml-version="2.0"/>
-    <px:validate-with-relax-ng-and-report name="validate-dtbook">
-        <p:input port="source">
-            <p:pipe port="result" step="dtbook-validation-input"/>
-        </p:input>
-        <p:input port="schema">
-            <p:pipe port="result" step="dtbook-schema"/>
-        </p:input>
-        <p:with-option name="assert-valid" select="$assert-valid"/>
-    </px:validate-with-relax-ng-and-report>
-    
+
 </p:declare-step>

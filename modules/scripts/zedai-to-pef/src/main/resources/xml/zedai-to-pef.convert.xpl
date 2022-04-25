@@ -14,7 +14,14 @@
     </p:input>
     <p:output port="result" px:media-type="application/x-pef+xml"/>
     
-    <p:option name="default-stylesheet" required="false" select="'#default'"/>
+    <p:option name="default-stylesheet" required="false" select="'#default'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>The user agent's <a href="https://www.w3.org/TR/CSS2/cascade.html#cascade">default
+            style sheet</a>.</p>
+            <p>The idea of this option is that a custom "ZedAI to PEF" script could be written with
+            its own default style sheet.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="stylesheet" required="false" select="''"/>
     <p:option name="transform" required="false" select="''"/>
     

@@ -59,8 +59,6 @@
   <p:option name="include-tts-log" select="'false'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Whether or not to make the TTS log available on the "tts-log" port.</p>
-      <p>Note that if this option is set to false, it can still be overwritten by the
-      "org.daisy.pipeline.tts.log" property.</p>
     </p:documentation>
   </p:option>
   <p:output port="tts-log" sequence="true">
@@ -284,7 +282,7 @@
       <p:with-option name="uid" select="$uid"/>
       <p:with-option name="output-base-uri" select="concat($output-fileset-base, replace(base-uri(/),'^.*/([^/]+)$','$1'))"/>
       <p:input port="mathml-altimg-fallback">
-        <p:pipe step="mathml-altimg-fallback" port="result"/>
+        <p:pipe step="mathml-altimg-fallback" port="result.fileset"/>
       </p:input>
     </px:daisy3-prepare-dtbook>
 

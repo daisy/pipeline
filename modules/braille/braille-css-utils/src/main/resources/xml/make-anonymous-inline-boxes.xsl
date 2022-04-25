@@ -26,6 +26,7 @@
                 <xsl:element name="css:_">
                     <xsl:sequence select="@css:*"/>
                     <xsl:call-template name="apply-templates">
+                        <xsl:with-param name="pending-lang" select="@xml:lang" tunnel="yes"/>
                         <xsl:with-param name="pending-properties" select="$properties" tunnel="yes"/>
                     </xsl:call-template>
                 </xsl:element>
@@ -33,25 +34,32 @@
             <xsl:otherwise>
                 <xsl:call-template name="apply-templates">
                     <xsl:with-param name="pending-properties" select="$properties" tunnel="yes"/>
+                    <xsl:with-param name="pending-lang" select="@xml:lang" tunnel="yes"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
     
     <xsl:template match="css:box">
+        <xsl:param name="pending-lang" as="attribute(xml:lang)?" select="()" tunnel="yes"/>
         <xsl:variable name="properties" as="element()*">
             <xsl:call-template name="inherit-properties"/>
         </xsl:variable>
         <xsl:copy>
             <xsl:sequence select="@* except @style"/>
             <xsl:sequence select="css:style-attribute(css:serialize-declaration-list($properties))"/>
+            <xsl:if test="not(@xml:lang)">
+                <xsl:sequence select="$pending-lang"/>
+            </xsl:if>
             <xsl:call-template name="apply-templates">
+                <xsl:with-param name="pending-lang" select="()" tunnel="yes"/>
                 <xsl:with-param name="pending-properties" select="()" tunnel="yes"/>
             </xsl:call-template>
         </xsl:copy>
     </xsl:template>
     
     <xsl:template name="apply-templates">
+        <xsl:param name="pending-lang" as="attribute(xml:lang)?" select="()" tunnel="yes"/>
         <xsl:param name="pending-properties" as="element()*" select="()" tunnel="yes"/>
         <xsl:variable name="this" as="element()" select="."/>
         <xsl:for-each-group select="*|text()"
@@ -77,7 +85,7 @@
                                      )[not(ancestor::css:box[@type='inline'
                                                              and not(descendant::css:box[@type=('block','table','table-cell')])])])">
                     <xsl:choose>
-                        <xsl:when test="exists($pending-properties)">
+                        <xsl:when test="exists($pending-lang) or exists($pending-properties)">
                             <xsl:apply-templates select="current-group()"/>
                         </xsl:when>
                         <xsl:otherwise>
@@ -88,6 +96,7 @@
                 <xsl:otherwise>
                     <css:box type="inline">
                         <xsl:sequence select="css:style-attribute(css:serialize-declaration-list($pending-properties))"/>
+                        <xsl:sequence select="$pending-lang"/>
                         <xsl:sequence select="current-group()"/>
                     </css:box>
                 </xsl:otherwise>

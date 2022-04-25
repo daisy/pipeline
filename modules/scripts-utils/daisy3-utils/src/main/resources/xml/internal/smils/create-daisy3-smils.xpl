@@ -85,7 +85,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
       <p:documentation>
         px:fileset-create
-        px:fileset-add-entry
+        px:fileset-add-entries
         px:fileset-join
       </p:documentation>
     </p:import>
@@ -208,21 +208,18 @@
     </p:choose>
     <p:identity name="smil-maybe-without-text"/>
 
-    <p:for-each>
-      <p:identity name="smil"/>
-      <p:sink/>
-      <px:fileset-create>
-	<p:with-option name="base" select="$smil-dir"/>
-      </px:fileset-create>
-      <px:fileset-add-entry media-type="application/smil">
-        <p:input port="entry">
-          <p:pipe step="smil" port="result"/>
-        </p:input>
-        <p:with-param port="file-attributes" name="indent" select="'true'"/>
-        <p:with-param port="file-attributes" name="doctype-public" select="'-//NISO//DTD dtbsmil 2005-2//EN'"/>
-        <p:with-param port="file-attributes" name="doctype-system" select="'http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd'"/>
-      </px:fileset-add-entry>
-    </p:for-each>
+    <p:sink/>
+    <px:fileset-create>
+      <p:with-option name="base" select="$smil-dir"/>
+    </px:fileset-create>
+    <px:fileset-add-entries media-type="application/smil">
+      <p:input port="entries">
+	<p:pipe step="smil-maybe-without-text" port="result"/>
+      </p:input>
+      <p:with-param port="file-attributes" name="indent" select="'true'"/>
+      <p:with-param port="file-attributes" name="doctype-public" select="'-//NISO//DTD dtbsmil 2005-2//EN'"/>
+      <p:with-param port="file-attributes" name="doctype-system" select="'http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd'"/>
+    </px:fileset-add-entries>
     <px:fileset-join px:message="SMIL fileset created." px:message-severity="DEBUG"
                      name="smil-fileset"/>
     <p:sink/>

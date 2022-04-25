@@ -5,28 +5,27 @@ import java.net.URL;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.csskit.TermIdentImpl;
 import cz.vutbr.web.csskit.TermListImpl;
 
-import org.daisy.braille.css.SimpleInlineStyle;
-
 import static org.daisy.common.file.URLs.asURL;
 
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.NativePath;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
 import org.daisy.pipeline.junit.OSGiLessRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 
@@ -61,10 +60,10 @@ public class LiblouisTranslatorJnaImplTest {
 	public void testLineBreaker() throws URISyntaxException, CompilationException {
 		
 		Hyphenator.LineBreaker hyphenator = new MockHyphenator();
-		Hyphenator.LineIterator lines = hyphenator.transform("volleyballederen");
+		Hyphenator.LineIterator lines = hyphenator.transform("volleyballederen", null);
 		assertEquals("volleyballederen", lines.nextLine(26, false));
 		assertFalse(lines.hasNext());
-		lines = hyphenator.transform("volleyballederen");
+		lines = hyphenator.transform("volleyballederen", null);
 		assertEquals("", lines.nextLine(9, false));
 		assertEquals("volleyballederen", lines.remainder());
 		lines.reset();
@@ -119,7 +118,7 @@ public class LiblouisTranslatorJnaImplTest {
 	public NativePath liblouisNativePath;
 	
 	private static class MockHyphenator extends AbstractHyphenator.util.DefaultLineBreaker {
-		protected Break breakWord(String word, int limit, boolean force) {
+		protected Break breakWord(String word, Locale language, int limit, boolean force) {
 			if (limit >= 10 && word.equals("volleyballederen"))
 				return new Break("volleyballlederen", 10, true);
 			else if (limit >= word.length())

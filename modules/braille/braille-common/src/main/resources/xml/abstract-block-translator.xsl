@@ -84,7 +84,7 @@
 				                            $result-style[@name='text-transform']/@value/string(.),
 				                            'auto'
 				                            )[1]='none')
-				                       then concat($lang,'-Brai')
+				                       then replace($lang,'^([a-zA-Z]{2,8})(-.+)?$','$1-Brai$2')
 				                       else $lang"/>
 			</xsl:if>
 			<xsl:variable name="is-block" as="xs:boolean"
@@ -483,7 +483,7 @@
 				                            $result-style[@name='text-transform']/@value/string(.),
 				                            'auto'
 				                            )[1]='none')
-				                       then concat($lang,'-Brai')
+				                       then replace($lang,'^([a-zA-Z]{2,8})(-.+)?$','$1-Brai$2')
 				                       else $lang"/>
 			</xsl:if>
 			<xsl:variable name="source-style" as="element()*">
@@ -543,7 +543,7 @@
 								<xsl:variable name="lang" as="xs:string" select="ancestor::*[@xml:lang][1]/@xml:lang"/>
 								<xsl:attribute name="xml:lang"
 								               select="if ($restored-style[@name='text-transform'][1]/@value='none')
-								                       then concat($lang,'-Brai')
+								                       then replace($lang,'^([a-zA-Z]{2,8})(-.+)?$','$1-Brai$2')
 								                       else $lang"/>
 							</xsl:if>
 							<xsl:value-of select="$new-text-nodes[1]"/>

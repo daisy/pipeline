@@ -56,19 +56,15 @@
       px:data
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/zip-utils/library.xpl">
-    <p:documentation>
-      px:unzip
-    </p:documentation>
-  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
     <p:documentation>
       px:message
     </p:documentation>
   </p:import>
-  <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" type="application/xslt+xml">
+  <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
     <p:documentation>
       pf:unescape-uri
+      pf:file-exists
     </p:documentation>
   </cx:import>
 
@@ -158,33 +154,9 @@
           <p:otherwise>
             <p:try>
               <p:group>
-                <px:message severity="DEBUG">
-                  <p:with-option name="message" select="concat('loading ',$target,' from disk: ',$on-disk)"/>
-                </px:message>
-                <p:sink/>
-
+                <p:identity px:message-severity="DEBUG" px:message="loading {$target} from disk {$on-disk}"/>
                 <p:choose>
-                  <p:when test="starts-with($on-disk,'file:')">
-                    <px:info>
-                      <p:with-option name="href" select="replace(resolve-uri($on-disk, base-uri()), '^([^!]+)(!/.+)?$', '$1')">
-                        <p:inline>
-                          <doc/>
-                        </p:inline>
-                      </p:with-option>
-                    </px:info>
-                  </p:when>
-                  <p:otherwise>
-                    <p:identity>
-                      <p:input port="source">
-                        <p:empty/>
-                      </p:input>
-                    </p:identity>
-                  </p:otherwise>
-                </p:choose>
-                <p:count name="file-exists"/>
-
-                <p:choose>
-                  <p:when test="number(.)=0 and starts-with($on-disk,'file:')">
+                  <p:when test="starts-with($on-disk,'file:') and not(pf:file-exists($on-disk))">
                     <p:error code="XC0011">
                       <p:input port="source">
                         <p:inline>
@@ -193,47 +165,27 @@
                       </p:input>
                     </p:error>
                   </p:when>
-
-                  <!-- Load from ZIP -->
                   <p:when test="contains($on-disk, '!/')">
                     <p:variable name="file" select="replace($on-disk, '^(jar:)?([^!]+)!/(.+)$', '$2')"/>
                     <p:variable name="path-in-zip" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
                     <p:variable name="escaped-path-in-zip" select="pf:unescape-uri($path-in-zip)"/>
-                    <p:sink/>
-                    <p:choose px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG">
-                      <p:when test="$method='html' or ($method='' and $media-type='text/html')">
-                        <!-- can not use px:unzip; use workaround instead -->
-                        <pxi:load-html>
-                          <p:with-option name="href" select="concat('jar:',$on-disk)"/>
-                        </pxi:load-html>
-                      </p:when>
-                      <p:when test="$method='text' or ($method=''
-                                                       and matches($media-type,'^text/')
-                                                       and not(matches($media-type,'.*/xml$') or matches($media-type,'.*\+xml$')))">
-                        <!-- can not use px:unzip; use workaround instead -->
-                        <px:data content-type="text/plain; charset=utf-8">
-                          <p:with-option name="href" select="concat('jar:',$on-disk)"/>
-                        </px:data>
-                      </p:when>
-                      <p:otherwise>
-                        <px:unzip>
-                          <p:with-option name="href" select="$file"/>
-                          <p:with-option name="file" select="$escaped-path-in-zip"/>
-                          <p:with-option name="content-type" select="if ($method='xml') then 'application/xml'
-                                                                     else if ($method='binary') then 'binary/octet-stream'
-                                                                     else $media-type"/>
-                        </px:unzip>
-                        <px:set-base-uri>
-                          <p:with-option name="base-uri" select="$target"/>
-                        </px:set-base-uri>
-                      </p:otherwise>
-                    </p:choose>
+                    <p:identity px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG"/>
                   </p:when>
+                  <p:otherwise>
+                    <p:identity/>
+                  </p:otherwise>
+                </p:choose>
+                <p:sink/>
+
+                <p:choose>
+                  <p:variable name="on-disk-maybe-in-zip" select="if (contains($on-disk,'!/'))
+                                                                  then replace($on-disk,'^file:','jar:file:')
+                                                                  else $on-disk"/>
 
                   <!-- Force HTML -->
                   <p:when test="$method='html'">
                     <pxi:load-html>
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </pxi:load-html>
                   </p:when>
 
@@ -242,7 +194,7 @@
                     <p:try>
                       <p:group>
                         <p:load>
-                          <p:with-option name="href" select="$on-disk"/>
+                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                         </p:load>
                       </p:group>
                       <p:catch>
@@ -259,21 +211,21 @@
                   <!-- Force text -->
                   <p:when test="$method='text'">
                     <px:data content-type="text/plain; charset=utf-8">
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- Force binary -->
                   <p:when test="$method='binary'">
                     <px:data content-type="binary/octet-stream">
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- HTML -->
                   <p:when test="$media-type='text/html' or $media-type='application/xhtml+xml'">
                     <pxi:load-html>
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </pxi:load-html>
                   </p:when>
 
@@ -282,7 +234,7 @@
                     <p:try>
                       <p:group>
                         <p:load>
-                          <p:with-option name="href" select="$on-disk"/>
+                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                         </p:load>
                       </p:group>
                       <p:catch>
@@ -293,7 +245,7 @@
                           <p:with-option name="message" select="concat('unable to load ',$on-disk,' as XML; trying as text...')"/>
                         </px:message>
                         <px:data content-type="text/plain; charset=utf-8">
-                          <p:with-option name="href" select="$on-disk"/>
+                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                         </px:data>
                       </p:catch>
                     </p:try>
@@ -302,21 +254,20 @@
                   <!-- text -->
                   <p:when test="matches($media-type,'^text/')">
                     <px:data content-type="text/plain; charset=utf-8">
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- binary -->
                   <p:otherwise>
                     <px:data content-type="binary/octet-stream">
-                      <p:with-option name="href" select="$on-disk"/>
+                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
                     </px:data>
                   </p:otherwise>
-
                 </p:choose>
-                
+
                 <p:choose>
-                  <p:when test="not($on-disk=$target)">
+                  <p:when test="not($on-disk=$target) or contains($on-disk,'!/')">
                     <px:set-base-uri>
                       <p:with-option name="base-uri" select="$target"/>
                     </px:set-base-uri>
@@ -449,7 +400,7 @@
         <p:pipe step="normalized.in-memory" port="result"/>
       </p:output>
       <p:output port="filesets" sequence="true" primary="true">
-        <p:pipe step="normalized.fileset" port="result"/>
+        <p:pipe step="normalized.fileset" port="result.fileset"/>
       </p:output>
       <p:variable name="base-uri" select="string(/*)">
         <p:pipe step="normalize-uri" port="normalized"/>
@@ -458,7 +409,7 @@
   
       <px:fileset-add-entry name="normalized.fileset">
         <p:with-option name="href" select="$base-uri"/>
-        <p:input port="source">
+        <p:input port="source.fileset">
           <p:pipe port="result" step="fileset.in-memory-base"/>
         </p:input>
       </px:fileset-add-entry>

@@ -69,7 +69,7 @@
         
         <px:fileset-add-entry>
             <p:with-option name="href" select="$filepath"/>
-            <p:input port="source">
+            <p:input port="source.fileset">
                 <p:inline>
                     <d:fileset/>
                 </p:inline>

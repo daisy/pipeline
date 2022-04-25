@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                stylesheet="http://www.daisy.org/pipeline/modules/braille/css-utils/transform/block-translator-from-text-transform.xsl">
   
   <x:param name="text-transform" select="'(document-locale:en-US)(grade:2)(hyphenator:hyphen)'"/>
@@ -7,7 +8,7 @@
   <x:scenario label="test_01">
     <x:context>
       <doc xml:lang="en">
-        <p style="display: block">
+        <p css:display="block">
           <span style="hyphens: auto; white-space: pre-wrap">
             foo<span style="font-weight: bold">bar</span>
           </span>
@@ -36,23 +37,39 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_03" pending="liblouis typeform broken">
+  <x:scenario label="test_03">
     <x:context>
       <doc xml:lang="en">
-        <p style="display: block">
-          <span style="text-transform: louis-ital">
-            foo <span style="text-transform: louis-bold">bar</span>
-          </span>
+        <p style="display: block; text-transform: louis-ital">
+          foo <span style="text-transform: louis-bold">bar</span>
         </p>
       </doc>
     </x:context>
     <x:expect label="result">
       <doc xml:lang="en-Brai" style="text-transform: none">
-        <p style="display: block">
-          <span>
-            ⠋⠕⠕ <span>⠃⠜</span>
-          </span>
+        <p style="display: block">           ⠨⠋⠕⠕ <span>⠸⠨⠨⠃⠜</span>         </p>
+      </doc>
+    </x:expect>
+  </x:scenario>
+
+  <!--
+      test that hyphenation rules are adapted to language
+  -->
+  <x:scenario label="test_04">
+    <x:context>
+      <doc xml:lang="en" style="hyphens: auto">
+        <p css:display="block">
+          foobar
         </p>
+        <p xml:lang="ja" css:display="block">
+          foobar <span xml:lang="en">foobar</span>
+        </p>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc xml:lang="en-Brai" style="text-transform: none">
+        <p style="display: block">           ⠋⠕⠕­⠃⠜         </p>
+        <p xml:lang="ja-Brai" style="display: block">           ⠋⠕⠕⠃⠜ <span xml:lang="en-Brai">⠋⠕⠕­⠃⠜</span>        </p>
       </doc>
     </x:expect>
   </x:scenario>

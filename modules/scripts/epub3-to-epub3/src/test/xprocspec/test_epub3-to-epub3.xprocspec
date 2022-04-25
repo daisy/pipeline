@@ -190,8 +190,6 @@
 					<x:document type="inline">
 						<config>
 							<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
-							<!-- log can be found in "log" output -->
-							<property key="log" value="true"/>
 							<css>
 								@namespace epub url(http://www.idpf.org/2007/ops);
 								[epub|type~=pagebreak]::before {
@@ -204,6 +202,7 @@
 						</config>
 					</x:document>
 				</x:input>
+				<x:option name="include-tts-log" select="'true'"/> <!-- log can be found in "tts-log" output -->
 			</x:call>
 			<x:context label="epub.out.fileset port">
 				<x:document type="port" port="epub.out.fileset"/>
@@ -858,11 +857,10 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
-						<!-- log can be found in "log" output -->
-						<property key="log" value="true"/>
 					</config>
 				</x:document>
 			</x:input>
+			<x:option name="include-tts-log" select="'true'"/> <!-- log can be found in "tts-log" output -->
 		</x:call>
 		<x:scenario label="braille-rendition">
 			<x:call>

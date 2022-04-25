@@ -11,8 +11,9 @@ OpenOffice/LibreOffice, Firefox, Chromium, etc.
 
 ```sh
 mvn generate-resources -Pgenerate-table-files
-rm src/main/resources/tables/*
 mv target/generated-resources/tables/* src/main/resources/tables/
+cp src/main/resources/tables/hyph_no_NO.dic src/main/resources/tables/hyph_nn_NO.dic
+cp src/main/resources/tables/hyph_no_NO.dic src/main/resources/tables/hyph_nb_NO.dic
 ```
 
 

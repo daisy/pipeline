@@ -1,6 +1,7 @@
-<p:library version="1.0" xmlns:p="http://www.w3.org/ns/xproc">
+<?xml version="1.0" encoding="UTF-8"?>
+<p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0">
 
-    <p:import href="fileset-add-entry.xpl"/>
+    <p:import href="fileset-add-entries.xpl"/>
     <p:import href="fileset-copy.xpl"/>
     <p:import href="fileset-create.xpl"/>
     <p:import href="fileset-delete.xpl"/>
@@ -31,5 +32,10 @@
         XProcSpec assertion steps
     -->
     <p:import href="xprocspec-fileset-compare.xpl"/>
+
+    <!--
+        for backwards compatibility
+    -->
+    <p:import href="fileset-add-entry.xpl"/>
 
 </p:library>
