@@ -29,9 +29,12 @@ endif
 help :
 	@err.println(                                                                 \
 		"make [default]:"                                                + "\n" + \
-		"    Builds the default package for the current platform"        + "\n" + \
-		"make dmg:"                                                      + "\n" + \
-		"    Builds a DMG image (Mac OS disk image)"                     + "\n" + \
+		"    Builds the default package for the current platform");               \
+	if (getOS() == OS.MACOSX)                                                     \
+		err.println(                                                              \
+			"make dmg:"                                                  + "\n" + \
+			"    Builds a DMG image (Mac OS disk image)");                        \
+	err.println(                                                                  \
 		"make exe:"                                                      + "\n" + \
 		"    Builds a EXE (Windows installer)"                           + "\n" + \
 		"make deb:"                                                      + "\n" + \
@@ -43,8 +46,6 @@ help :
 	err.println(                                                                  \
 		"make zip-linux:"                                                + "\n" + \
 		"    Builds a ZIP for Linux"                                     + "\n" + \
-		"make all:"                                                      + "\n" + \
-		"    Builds a DMG, a EXE, a DEB, a RPM and a ZIP for Linux"      + "\n" + \
 		"make zip-mac:"                                                  + "\n" + \
 		"    Builds a ZIP for Mac OS"                                    + "\n" + \
 		"make zip-win:"                                                  + "\n" + \
@@ -68,12 +69,6 @@ DEFAULT_MVN_LOCAL_REPOSITORY := $(shell println(System.getProperty("user.home").
 MVN_LOCAL_REPOSITORY         ?= $(DEFAULT_MVN_LOCAL_REPOSITORY)
 
 include deps.mk
-
-.PHONY : all
-all : dmg exe deb zip-linux
-ifeq ($(OS), REDHAT)
-all : rpm
-endif
 
 .PHONY : dmg exe deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
 
@@ -134,13 +129,41 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
-                                                                                                                       -Passemble-mac-dir \
-                                                                                                                       -Ppackage-mac-app
+                                                                                                                       -Passemble-mac-app-dir \
+                                                                                                                       -Pbuild-jre-mac
 ifndef DUMP_PROFILES
-	// we run package-dmg in a subsequent mvn call to avoid execution
-	// order issues when the package-mac-app and package-dmg profiles
-	// are activated together
-	exec("$(MVN)", "install", "-Ppackage-dmg");
+	rm("target/jpackage");                                                                               \
+	String[] guiJar = new File("target/assembly-$(assembly/VERSION)-mac-app/daisy-pipeline/system/gui")  \
+	                  .list((dir, name) -> name.matches("org\\.daisy\\.pipeline\\.gui-.*\\.jar"));       \
+	exitOnError(guiJar != null && guiJar.length == 1);                                                   \
+	String appVersion = "$(assembly/VERSION)".replaceAll("-.*$$", "");                                   \
+	exec("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7/Contents/Home/bin/jpackage", \
+	     "--dest", "target/jpackage",                                                                    \
+	     "--type", "dmg",                                                                                \
+	     "--app-version", appVersion,                                                                    \
+	     "--description", "A tool for automated production of accessible digital publication",           \
+	     "--name", "DAISY Pipeline 2",                                                                   \
+	     "--vendor", "DAISY Consortium",                                                                 \
+	     "--icon", "src/main/mac/pipeline.icns",                                                         \
+	     "--mac-package-identifier", "org.daisy.pipeline2",                                              \
+	     "--runtime-image", "target/maven-jlink/classifiers/jre-mac",                                    \
+	     "--input", "target/assembly-$(assembly/VERSION)-mac-app/daisy-pipeline",                        \
+	     "--main-jar", "system/gui/" + guiJar[0],                                                        \
+	     "--main-class", "org.daisy.pipeline.gui.GUIService",                                            \
+	     "--java-options", "--add-opens=java.base/java.lang=ALL-UNNAMED "                              + \
+	                       "-Dorg.daisy.pipeline.mode=gui "                                            + \
+	                       "-Dorg.daisy.pipeline.home=$$APPDIR "                                       + \
+	                       "-Dorg.daisy.pipeline.data=$$APPDIR/data "                                  + \
+	                       "-Dorg.daisy.pipeline.logdir=$$APPDIR/data/log "                            + \
+	                       "-Dorg.daisy.pipeline.ws.localfs=true "                                     + \
+	                       "-Dorg.daisy.pipeline.ws.authentication=false "                             + \
+	                       "-Dorg.daisy.pipeline.properties=$$APPDIR/etc/pipeline.properties "         + \
+	                       "-Dlogback.configurationFile=$$APPDIR/etc/config-logback.xml");
+	String appVersion = "$(assembly/VERSION)".replaceAll("-.*$$", "");                                   \
+	exec("$(MVN)", "install:install-file",                                                               \
+	               "-Dfile=target/jpackage/DAISY Pipeline 2-" + appVersion + ".dmg",                     \
+	               "-DpomFile=pom.xml",                                                                  \
+	               "-Dpackaging=dmg");
 	exit(new File("$@").exists());
 endif
 else
@@ -181,21 +204,10 @@ target/assembly-$(assembly/VERSION)-word-addin : mvn -Pwithout-osgi \
                                                      -Pcompile-simple-api \
                                                      -Pcopy-artifacts \
                                                      -Pbuild-jre-win32 \
-                                                     -Pbuild-jre-win64 \
-                                                     -Passemble-word-addin-dir
--Pbuild-jre-win64                              : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
--Pbuild-jre-win32                              : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8
-
-src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8 \
-src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : %.zip
-	unzip(new File("$<"), new File("$(dir $@)"));
-
-src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz \
-src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip \
-src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip :
-	mkdirs("$(dir $@)");                                                                                           \
-	copy(new URL("https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/$(notdir $@)"), \
-	     new File("$@"));
+                                                     -Pbuild-jre-win64
+ifndef DUMP_PROFILES
+	exec("$(MVN)", "install", "-Passemble-word-addin-dir");
+endif
 
 ifneq ($(OS), WINDOWS)
 
@@ -211,10 +223,6 @@ ifndef DUMP_PROFILES
 	exec(new File("target/docker"),                                                                 \
 	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline:latest-snapshot", ".");
 endif
-
-src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8 : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
-	mkdirs("$(dir $@)");                             \
-	exec("tar", "-zxvf", "$<", "-C", "$(dir $@)/");
 
 .PHONY : dev-launcher
 dev-launcher : target/dev-launcher/pipeline2
@@ -236,7 +244,6 @@ endif
 
 target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre
 target/maven-jlink/classifiers/jre-linux                               : mvn -Pbuild-jre-linux
--Pbuild-jre-linux                                                      : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pcompile-simple-api \
@@ -326,6 +333,7 @@ clean :
 # build-jre-linux                                                                                                   jlink-linux
 # build-jre-win32                                                                                                   jlink-win32
 # build-jre-win64                                                                                                   jlink-win64
+# build-jre-mac                                                                                                     jlink-mac
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
@@ -334,6 +342,7 @@ clean :
 # unpack-updater-win                           unpack-updater-win
 # unpack-updater-gui-win                       unpack-updater-gui-win
 # assemble-mac-dir                                                                            assemble-mac-dir
+# assemble-mac-app-dir                                                                                              assemble-mac-app-dir
 # assemble-linux-dir                                                                          assemble-linux-dir
 # assemble-win-dir                                                                            assemble-win-dir
 # assemble-mac-zip                                                                                                  assemble-mac-zip
@@ -341,10 +350,6 @@ clean :
 # assemble-win-zip                                                                                                  assemble-win-zip
 # assemble-minimal-zip                                                                                              assemble-minimal-zip
 # assemble-word-addin-dir                                                                                           assemble-word-addin-dir
-# package-mac-app                                                                                                   javapackager
-# package-dmg                                                                                 install-node
-#                                                                                             install-appdmg        package-appdmg
-#                                                                                             parse-version         attach-dmg
 # package-exe                                                                                 copy-nsis-resources   package-exe
 # package-deb                                                          filter-deb-resources                         package-deb
 # package-deb-cli                                                                                                   package-deb-cli
@@ -356,21 +361,16 @@ PROFILES :=                     \
 	compile-simple-api          \
 	generate-release-descriptor \
 	build-jre                   \
-	build-jre-linux             \
-	build-jre-win32             \
-	build-jre-win64             \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
+	assemble-mac-app-dir        \
 	assemble-mac-zip            \
 	assemble-win-dir            \
 	assemble-win-zip            \
-	assemble-word-addin-dir     \
 	assemble-minimal-zip        \
 	package-deb                 \
 	package-deb-cli             \
-	package-mac-app             \
-	package-dmg                 \
 	package-exe                 \
 	package-rpm                 \
 	package-rpm-cli             \
@@ -408,3 +408,73 @@ ifdef DUMP_PROFILES
 $(addprefix -P,$(PROFILES)) :
 	@println("$@");
 endif
+
+# profiles that are run separately because need to be run with specific JDKs
+
+.PHONY : -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64
+-Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : mvn # to make sure they are run after other profiles
+
+ifeq ($(OS), MACOSX)
+-Pbuild-jre-mac                                       : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7
+ifndef DUMP_PROFILES
+	rm("target/classes");                                \
+	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
+	     "$(MVN)", "package", "$@");
+endif
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8/jdk-11.0.13+8
+ifndef DUMP_PROFILES
+	rm("target/classes");                                \
+	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
+	     "$(MVN)", "package", "$@");
+endif
+else ifeq ($(OS), WINDOWS)
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+ifndef DUMP_PROFILES
+	rm("target/classes");                                \
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
+	     "$(MVN)", "package", "$@");
+endif
+else
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
+ifndef DUMP_PROFILES
+	rm("target/classes");                                \
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
+	     "$(MVN)", "package", "$@");
+endif
+endif
+
+# for dependencies to jmods
+-Pbuild-jre-mac   : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7
+-Pbuild-jre-linux : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-win32 : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+
+# JDKs
+
+src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8 \
+src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : %.zip
+	unzip(new File("$<"), new File("$(dir $@)"));
+
+ifneq ($(OS), WINDOWS)
+src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : | %.tar.gz
+	mkdirs("$(dir $@)");                                                                                       \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz", "-C", "$(dir $@)/");
+src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : | %.tar.gz
+	mkdirs("$(dir $@)");                                                                                       \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz", "-C", "$(dir $@)/");
+src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7   : %/jdk-17.0.3+7 : | %.tar.gz
+	mkdirs("$(dir $@)");                                                                                       \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz", "-C", "$(dir $@)/");
+endif
+
+src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz \
+src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz \
+src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip \
+src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip :
+	mkdirs("$(dir $@)");                                                                                           \
+	copy(new URL("https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/$(notdir $@)"), \
+	     new File("$@"));
+src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz :
+	mkdirs("$(dir $@)");                                                                                          \
+	copy(new URL("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/$(notdir $@)"), \
+	     new File("$@"));

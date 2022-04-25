@@ -11,7 +11,6 @@
       <excludes>
         <exclude>etc/pipeline.properties</exclude>
         <exclude>etc/felix.properties</exclude>
-        <exclude>etc/config-logback.xml</exclude>
       </excludes>
       <outputDirectory></outputDirectory>
     </fileSet>
@@ -20,7 +19,6 @@
       <includes>
         <include>etc/pipeline.properties</include>
         <include>etc/felix.properties</include>
-        <include>etc/config-logback.xml</include>
       </includes>
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>

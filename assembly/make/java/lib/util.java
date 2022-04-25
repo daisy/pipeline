@@ -15,7 +15,9 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -78,6 +80,19 @@ public class util {
 
 	public static void mkdirs(File directory) {
 		directory.mkdirs();
+	}
+
+	public static void rm(String fileOrDirectory) {
+		rm(new File(fileOrDirectory));
+	}
+
+	public static void rm(File fileOrDirectory) {
+		if (fileOrDirectory.exists()) {
+			if (fileOrDirectory.isDirectory())
+				for (File f : fileOrDirectory.listFiles())
+					rm(f);
+			fileOrDirectory.delete();
+		}
 	}
 
 	public static void copy(URL url, File file) throws FileNotFoundException, IOException {
@@ -147,6 +162,34 @@ public class util {
 		System.out.flush();
 		System.err.flush();
 		System.exit(rv);
+	}
+
+	public static void exec(Map<String,String> env, String... cmd) throws IOException, InterruptedException {
+		ProcessBuilder pb = new ProcessBuilder(cmd).redirectOutput(ProcessBuilder.Redirect.INHERIT)
+		                                           .redirectError(ProcessBuilder.Redirect.INHERIT);
+		if (env != null)
+			for (String v : env.keySet())
+				pb.environment().put(v, env.get(v));
+		int rv = pb.start().waitFor();
+		System.out.flush();
+		System.err.flush();
+		System.exit(rv);
+	}
+
+	public static Map<String,String> env(String... variables) {
+		Map<String,String> env = new HashMap<>();
+		String var = null;
+		for (String s : variables) {
+			if (s == null)
+				throw new RuntimeException();
+			if (var != null) {
+				env.put(var, s);
+				var = null; }
+			else
+				var = s; }
+		if (var != null)
+			throw new RuntimeException();
+		return env;
 	}
 
 	public static int captureOutput(List<String> cmd, Consumer<String> collect) throws IOException, InterruptedException {

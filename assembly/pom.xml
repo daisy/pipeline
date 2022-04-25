@@ -58,7 +58,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.3.0</version>
+        <version>1.3.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -83,7 +83,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.6</version>
+        <version>1.14.7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -198,16 +198,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.5.0</version>
-        </plugin>
-        <plugin>
-          <groupId>com.github.eirslett</groupId>
-          <artifactId>frontend-maven-plugin</artifactId>
-          <version>1.7.5</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>build-helper-maven-plugin</artifactId>
-          <version>3.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -398,6 +388,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>logging-appender</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>logging-activator</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
@@ -2001,195 +1995,31 @@
       </build>
     </profile>
     <profile>
-      <id>package-mac-app</id>
+      <id>assemble-mac-app-dir</id>
       <build>
         <plugins>
           <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
+            <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>parse-version</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>parse-version</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-              <execution>
-                <!--
-                    Note that this will include JRE 8. In order to include JRE 9 we have to set
-                    j2se="9.0+". Note however that the reason we depend on Java 9 is to avoid JAWS
-                    crashes, so it is only really required for Windows.
-                -->
-                <id>javapackager</id>
+                <id>assemble-mac-app-dir</id>
                 <phase>package</phase>
                 <goals>
-                  <goal>run</goal>
+                  <goal>single</goal>
                 </goals>
                 <configuration>
-                  <!-- requires Ant 1.7+ -->
-                  <target xmlns:fx="javafx:com.sun.javafx.tools.ant">
-                    <taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpath="${env.JAVA_HOME}/lib/ant-javafx.jar" />
-                    <path id="main.jar">
-                      <fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline/system">
-                        <include name="gui/org.daisy.pipeline.gui-*.jar" />
-                      </fileset>
-                    </path>
-                    <path id="classpath">
-                      <fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline/system">
-                        <include name="common/**/*" />
-                        <include name="no-osgi/**/*" />
-                        <include name="gui/**/*" />
-                        <include name="volatile/**/*" />
-                        <exclude name="osgi/**/*" />
-                        <exclude name="webservice/**/*" />
-                        <exclude name="persistence/**/*" />
-                        <exclude name="no-osgi/persistence/**/*" />
-                        <exclude name="gui/org.daisy.pipeline.gui-*.jar" />
-                      </fileset>
-                    </path>
-                    <manifestclasspath property="classpath" jarfile="${toString:main.jar}">
-                      <classpath refid="classpath" />
-                    </manifestclasspath>
-                    <jar update="true" file="${toString:main.jar}">
-                      <manifest>
-                        <attribute name="Class-Path" value="${classpath}" />
-                      </manifest>
-                    </jar>
-                    <fx:deploy outdir="${project.build.directory}/javapackager" outfile="dp2" nativeBundles="image">
-                      <fx:application id="org.daisy.pipeline2" name="DAISY Pipeline 2" version="${project.version}" mainClass="org.daisy.pipeline.gui.GUIService" />
-                      <fx:info description="A tool for automated production of accessible digital publication" title="DAISY Pipeline 2" vendor="DAISY Consortium">
-                        <fx:icon href="${project.basedir}/src/main/mac/pipeline-logo.icns" />
-                      </fx:info>
-                      <fx:platform j2se="8.0+">
-                        <fx:property name="org.daisy.pipeline.mode" value="gui" />
-                        <fx:property name="org.daisy.pipeline.home" value="." />
-                        <fx:property name="org.daisy.pipeline.data" value="data" />
-                        <fx:property name="org.daisy.pipeline.logdir" value="data/log" />
-                        <fx:property name="org.daisy.pipeline.ws.localfs" value="true" />
-                        <fx:property name="org.daisy.pipeline.ws.authentication" value="false" />
-                        <fx:property name="org.daisy.pipeline.properties" value="etc/pipeline.properties" />
-                        <fx:property name="logback.configurationFile" value="file:etc/config-logback.xml" />
-                        <fx:property name="org.daisy.pipeline.updater.bin" value="updater/pipeline-updater" />
-                        <fx:property name="org.daisy.pipeline.updater.deployPath" value="./" />
-                        <fx:property name="org.daisy.pipeline.updater.releaseDescriptor" value="etc/releaseDescriptor.xml" />
-                      </fx:platform>
-                      <fx:resources>
-                        <fx:fileset type="license" os="osx" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
-                          <include name="NOTICE.txt" />
-                        </fx:fileset>
-                        <fx:fileset type="jar" dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
-                          <include name="system/common/**/*" />
-                          <include name="system/no-osgi/**/*" />
-                          <include name="system/gui/**/*" />
-                          <include name="system/volatile/**/*" />
-                          <exclude name="system/osgi/**/*" />
-                          <exclude name="system/webservice/**/*" />
-                          <exclude name="system/persistence/**/*" />
-                          <exclude name="system/no-osgi/persistence/**/*" />
-                        </fx:fileset>
-                        <fx:fileset dir="${project.build.directory}/assembly-${project.version}-mac/daisy-pipeline">
-                          <include name="**/*" />
-                          <exclude name="system/**/*" />
-                          <exclude name="NOTICE.txt" />
-                          <exclude name="etc/felix.properties" />
-                        </fx:fileset>
-                      </fx:resources>
-                      <fx:bundleArgument arg="mac.CFBundleIdentifier" value="org.daisy.pipeline2" />
-                      <fx:bundleArgument arg="mac.CFBundleVersion" value="${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}" />
-                    </fx:deploy>
-                  </target>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>package-dmg</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>com.github.eirslett</groupId>
-            <artifactId>frontend-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>install-node</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>install-node-and-yarn</goal>
-                </goals>
-                <configuration>
-                  <nodeVersion>v11.10.0</nodeVersion>
-                  <yarnVersion>v1.13.0</yarnVersion>
-                </configuration>
-              </execution>
-              <execution>
-                <id>install-appdmg</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>yarn</goal>
-                </goals>
-                <configuration>
-                  <arguments>add appdmg</arguments>
-                </configuration>
-              </execution>
-            </executions>
-            <configuration>
-              <workingDirectory>${project.build.directory}</workingDirectory>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <!--
-                    this execution must come after javapackager
-                -->
-                <id>package-appdmg</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <executable>node/node</executable>
-                  <workingDirectory>${project.build.directory}</workingDirectory>
-                  <arguments>
-                    <argument>node_modules/appdmg/bin/appdmg.js</argument>
-                    <argument>${project.basedir}/src/main/mac/dmg.json</argument>
-                    <argument>assembly-${project.version}.dmg</argument>
-                  </arguments>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <!--
-                    this execution must come after package-appdmg
-                -->
-                <id>attach-dmg</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>attach-artifact</goal>
-                </goals>
-                <configuration>
-                  <artifacts>
-                    <artifact>
-                      <file>${project.build.directory}/assembly-${project.version}.dmg</file>
-                      <type>dmg</type>
-                    </artifact>
-                  </artifacts>
+                  <attach>false</attach>
+                  <formats>
+                    <format>dir</format>
+                  </formats>
+                  <descriptors>
+                    <descriptor>src/main/assembly/dist-mac-app.xml</descriptor>
+                  </descriptors>
+                  <filters>
+                    <filter>src/main/assembly/dist.properties</filter>
+                    <filter>src/main/assembly/dist-mac.properties</filter>
+                  </filters>
+                  <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
               </execution>
             </executions>
@@ -2276,7 +2106,6 @@
                         <include>bin/pipeline2</include>
                         <include>etc/felix.properties</include>
                         <include>etc/pipeline.properties</include>
-                        <include>etc/config-logback.xml</include>
                       </includes>
                     </resource>
                     <resource>
@@ -2374,7 +2203,7 @@
                     </data>
                     <data>
                       <type>file</type>
-                      <src>${project.build.directory}/filtered-resources/resources/etc/config-logback.xml</src>
+                      <src>src/main/resources/etc/config-logback.xml</src>
                       <dst>${deb.pipeline.config}/config-logback.xml</dst>
                     </data>
                     <data>
@@ -2602,7 +2431,6 @@
                           <includes>
                             <include>etc/pipeline.properties</include>
                             <include>etc/felix.properties</include>
-                            <include>etc/config-logback.xml</include>
                           </includes>
                           <filter>true</filter>
                         </source>
@@ -2763,7 +2591,8 @@
               <execution>
                 <id>jlink</id>
                 <!-- if done in package phase, will try to include target/classes and fail because
-                     of "target/classes does not contain a module-info.java file" error -->
+                     of "target/classes does not contain a module-info.java file" error (same for
+                     other "build-jre" profiles) -->
                 <phase>initialize</phase>
                 <!-- <phase>package</phase> -->
                 <goals>
@@ -2776,9 +2605,11 @@
                     <addModule>java.desktop</addModule>
                     <addModule>java.instrument</addModule>
                     <addModule>java.security.jgss</addModule>
+                    <addModule>java.scripting</addModule> <!-- for gui -->
                     <addModule>java.sql</addModule>
                     <addModule>java.xml</addModule>
                     <addModule>jdk.management.agent</addModule>
+                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
                     <addModule>jdk.zipfs</addModule>
                   </addModules>
                   <modulePaths>
@@ -2796,6 +2627,9 @@
       </build>
     </profile>
     <profile>
+      <!--
+          this profile needs to be run with JDK 11
+      -->
       <id>build-jre-linux</id>
       <build>
         <plugins>
@@ -2835,6 +2669,53 @@
       </build>
     </profile>
     <profile>
+      <!--
+          this profile needs to be run with JDK 17
+      -->
+      <id>build-jre-mac</id>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-jlink-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>jlink-mac</id>
+                <phase>initialize</phase>
+                <!-- <phase>package</phase> -->
+                <goals>
+                  <goal>jlink</goal>
+                </goals>
+                <configuration>
+                  <classifier>jre-mac</classifier>
+                  <addModules>
+                    <addModule>java.base</addModule>
+                    <addModule>java.desktop</addModule>
+                    <addModule>java.instrument</addModule>
+                    <addModule>java.security.jgss</addModule>
+                    <addModule>java.scripting</addModule> <!-- for gui -->
+                    <addModule>java.sql</addModule>
+                    <addModule>java.xml</addModule>
+                    <addModule>jdk.management.agent</addModule>
+                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
+                    <addModule>jdk.zipfs</addModule>
+                  </addModules>
+                  <modulePaths>
+                    <modulePath>src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7/Contents/Home/jmods</modulePath>
+                  </modulePaths>
+                  <noHeaderFiles>true</noHeaderFiles>
+                  <noManPages>true</noManPages>
+                  <compress>1</compress>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <!--
+          this profile needs to be run with JDK 11
+      -->
       <id>build-jre-win32</id>
       <build>
         <plugins>
@@ -2873,6 +2754,9 @@
       </build>
     </profile>
     <profile>
+      <!--
+          this profile needs to be run with JDK 11
+      -->
       <id>build-jre-win64</id>
       <build>
         <plugins>
@@ -3077,7 +2961,6 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.5.0</version>
             <executions>
               <execution>
                 <id>test-checkJavaVersion</id>

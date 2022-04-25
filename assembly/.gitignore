@@ -1,6 +1,7 @@
 # Makefile
 /make/java/*.java
 /make/java/*.class
+/src/main/jre/
 
 # Maven
 target/

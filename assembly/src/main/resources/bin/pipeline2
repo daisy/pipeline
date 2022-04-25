@@ -511,14 +511,6 @@ run() {
     
     # Logback configuration file
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/config-logback.xml\""
-    # XMLCalabash base configuration file
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.xproc.configuration=\"${PIPELINE2_HOME}/etc/config-calabash.xml\""
-    # Updater configuration
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.updater.bin=\"${PIPELINE2_HOME}/updater/${pipeline.updater}\"
-                                  -Dorg.daisy.pipeline.updater.deployPath=\"${PIPELINE2_HOME}/\"
-                                  -Dorg.daisy.pipeline.updater.releaseDescriptor=\"${PIPELINE2_HOME}/etc/releaseDescriptor.xml\""
-    # Workaround for encoding bugs on Windows
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dfile.encoding=UTF8"
 
     # to make ${org.daisy.pipeline.data}, ${org.daisy.pipeline.logdir} and ${org.daisy.pipeline.mode}
     # available in config-logback.xml and felix.properties
@@ -534,7 +526,7 @@ run() {
 
     if [ $JAVA_VERSION -lt 9 ]; then
         # java 8
-        eval exec echo "\"$JAVA"\" "$JAVA_OPTS" \
+        eval exec "\"$JAVA"\" "$JAVA_OPTS" \
              -Djava.endorsed.dirs="\"${JAVA_ENDORSED_DIRS}"\" \
              -Djava.ext.dirs="\"${JAVA_EXT_DIRS}"\" \
              $OSGI_OPTS \

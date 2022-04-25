@@ -2,10 +2,10 @@ Changes in release v1.14.6
 ==========================
 
 ### Modules
-- Changes to braille production scripts, see [release notes of braille modules v1.14.6](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1146)
+- Changes to braille production scripts, see [release notes of braille modules v1.14.7](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1147)
 
 ### Details
-- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.6)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.7)
 - [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.6)
 
 Changes in release v1.14.5
@@ -29,7 +29,7 @@ Changes in release v1.14.5
 - **FIX** Bug in DTBook to DAISY 3 script: `<?xml-stylesheet?>` processing instructions were getting
   lost in the conversion.
 - **FIX** Bug in EPUB Updater script: embedded TrueType fonts were not preserved.
-- Changes to braille production scripts, see [release notes of braille modules v1.14.5](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1145)
+- Changes to braille production scripts, see [release notes of braille modules v1.14.6](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1146)
 
 ### Details
 

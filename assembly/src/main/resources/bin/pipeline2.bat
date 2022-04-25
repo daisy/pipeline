@@ -263,12 +263,6 @@ goto :RUN_LOOP
 
     rem Logback configuration file
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dlogback.configurationFile="file:%PIPELINE2_HOME:\=/%/etc/config-logback.xml"
-    rem XMLCalabash base configuration file
-    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.xproc.configuration="%PIPELINE2_HOME:\=/%/etc/config-calabash.xml"
-    rem Updater configuration
-    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.updater.bin="%PIPELINE2_HOME:\=/%/updater/pipeline-updater" ^
-                                    -Dorg.daisy.pipeline.updater.deployPath="%PIPELINE2_HOME:\=/%/" ^
-                                    -Dorg.daisy.pipeline.updater.releaseDescriptor="%PIPELINE2_HOME:\=/%/etc/releaseDescriptor.xml"
     rem Workaround for encoding bugs on Windows
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dfile.encoding=UTF8
     rem to make ${org.daisy.pipeline.data}, ${org.daisy.pipeline.logdir} and ${org.daisy.pipeline.mode}
