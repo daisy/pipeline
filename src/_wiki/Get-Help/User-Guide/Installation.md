@@ -70,24 +70,30 @@ website. It comes in the form of a Docker image that you can obtain
 via the Docker command line interface:
 
 ~~~sh
-docker pull daisyorg/pipeline-assembly
+docker pull daisyorg/pipeline
 ~~~
 
 It is also possible to get a specific version:
 
 ~~~sh
-docker pull daisyorg/pipeline-assembly:<version>
+docker pull daisyorg/pipeline:<version>
+~~~
+
+or to get the latest development version:
+
+~~~sh
+docker pull daisyorg/pipeline:latest-snapshot
 ~~~
 
 You can find the available versions at
-[https://hub.docker.com/r/daisyorg/pipeline-assembly/tags](https://hub.docker.com/r/daisyorg/pipeline-assembly/tags). After
+[https://hub.docker.com/r/daisyorg/pipeline/tags](https://hub.docker.com/r/daisyorg/pipeline/tags). After
 having pulled the image you're ready to run the Pipeline web server:
 
 ~~~sh
 docker run --detach \
            -p 8181:8181 \
            -e PIPELINE2_WS_HOST=0.0.0.0 \
-           daisyorg/pipeline-assembly
+           daisyorg/pipeline
 ~~~
 
 This will make the web service available on the address
@@ -121,7 +127,7 @@ docker run --detach \
            --name pipeline \
            -e PIPELINE2_WS_HOST=0.0.0.0 \
            -e PIPELINE2_WS_AUTHENTICATION=false \
-           daisyorg/pipeline-assembly
+           daisyorg/pipeline
 docker run --detach \
            --link pipeline \
            -p 9000:9000 \
@@ -139,7 +145,7 @@ following content and run `docker-compose up`.
 version: "2.1"
 services:
   pipeline:
-    image: daisyorg/pipeline-assembly
+    image: daisyorg/pipeline
     environment:
       PIPELINE2_WS_HOST: "0.0.0.0"
       PIPELINE2_WS_AUTHENTICATION: "false"
