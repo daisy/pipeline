@@ -144,7 +144,7 @@ run-docker : dist-docker-image
 	docker run --name pipeline --detach \
 	       -e PIPELINE2_WS_HOST=0.0.0.0 \
            -e PIPELINE2_WS_AUTHENTICATION=false \
-	       -p 8181:8181 daisyorg/pipeline-assembly
+	       -p 8181:8181 daisyorg/pipeline:latest-snapshot
 
 SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES))
 
