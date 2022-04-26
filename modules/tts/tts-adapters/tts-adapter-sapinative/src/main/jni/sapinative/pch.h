@@ -9,13 +9,13 @@
 
 // ajouter les en-têtes à précompiler ici
 #include "framework.h"
-#include "Voice.hpp"
 #include "queue_stream.h"
 
-#include "org_daisy_pipeline_tts_sapinative_SAPILib.h"
-#include "org_daisy_pipeline_tts_sapinative_SAPILibResult.h"
+#include "org_daisy_pipeline_tts_onecore_SAPI.h"
+#include "org_daisy_pipeline_tts_onecore_SAPIResult.h"
 
-
-#include "jni_helper.h"
+// shared includes
+#include "../jni_helper.h"
+#include "../Voice.hpp"
 
 #endif //PCH_H

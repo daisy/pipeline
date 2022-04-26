@@ -19,52 +19,52 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\main\jni\framework.h" />
-    <ClInclude Include="src\main\jni\jni_helper.h" />
-    <ClInclude Include="src\main\jni\org_daisy_pipeline_tts_sapinative_SAPILib.h" />
-    <ClInclude Include="src\main\jni\pch.h" />
-    <ClInclude Include="src\main\jni\queue_stream.h" />
-    <ClInclude Include="src\main\jni\org_daisy_pipeline_tts_sapinative_SAPILibResult.h" />
-    <ClInclude Include="src\main\jni\Voice.hpp" />
+    <ClInclude Include="..\jni_helper.h" />
+    <ClInclude Include="..\Voice.hpp" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="org_daisy_pipeline_tts_onecore_SAPI.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="queue_stream.h" />
+    <ClInclude Include="org_daisy_pipeline_tts_onecore_SAPIResult.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\main\jni\dllmain.cpp" />
-    <ClCompile Include="src\main\jni\jni_helper.cpp" />
-    <ClCompile Include="src\main\jni\pch.cpp" />
-    <ClCompile Include="src\main\jni\org_daisy_pipeline_tts_sapinative_SAPILib.cpp" />
-    <ClCompile Include="src\main\jni\win_queue_stream.cpp" />
+    <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="jni_helper.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="org_daisy_pipeline_tts_onecore_SAPI.cpp" />
+    <ClCompile Include="win_queue_stream.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{161fec8c-cf12-4f78-a869-a26a98eb2640}</ProjectGuid>
     <RootNamespace>sapinative</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -90,29 +90,32 @@
     <PublicIncludeDirectories>%JAVA_HOME%\include;%JAVA_HOME%\include\win32;$(PublicIncludeDirectories)</PublicIncludeDirectories>
     <AllProjectIncludesArePublic>false</AllProjectIncludesArePublic>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\main\jni</IncludePath>
-    <OutDir>$(ProjectDir)src\main\resources\$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)src\main\resources\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)\build\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.dll</TargetExt>
-    <OutDir>$(ProjectDir)src\main\resources\$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)src\main\resources\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)\build\$(Platform)\$(Configuration)\</IntDir>
     <IncludePath>$(ProjectDir)src\main\jni;$(IncludePath)</IncludePath>
+    <PublicIncludeDirectories>%JAVA_HOME%\include;%JAVA_HOME%\include\win32;</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.dll</TargetExt>
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\main\jni</IncludePath>
-    <OutDir>$(ProjectDir)src\main\resources\$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>$(SolutionDir)src\main\resources\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <PublicIncludeDirectories>%JAVA_HOME%\include;%JAVA_HOME%\include\win32;</PublicIncludeDirectories>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <TargetExt>.dll</TargetExt>
-    <IncludePath>$(ProjectDir)src\main\jni;$(IncludePath)</IncludePath>
-    <OutDir>$(ProjectDir)src\main\resources\$(PlatformTarget)\</OutDir>
-    <IntDir>$(ProjectDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(ProjectDir)src\main\jni</IncludePath>
+    <OutDir>$(SolutionDir)src\main\resources\$(PlatformTarget)\</OutDir>
+    <IntDir>$(SolutionDir)\build\$(Platform)\$(Configuration)\</IntDir>
+    <PublicIncludeDirectories>%JAVA_HOME%\include;%JAVA_HOME%\include\win32;</PublicIncludeDirectories>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -211,7 +214,8 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>%JAVA_HOME%\lib\jvm.lib;Shlwapi.lib;sapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>%JAVA_HOME%\lib\jvm.lib;Shlwapi.lib;sapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseFastLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <PostBuildEvent>
       <Command>

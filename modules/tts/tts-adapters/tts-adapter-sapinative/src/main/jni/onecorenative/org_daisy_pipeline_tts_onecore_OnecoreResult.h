@@ -2,10 +2,10 @@
 
 /// <summary>
 /// List of return code. <br/>
-/// This list should match the one defined in org/daisy/pipeline/tts/sapinative/SAPILibResult.java
+/// This list should match the one defined in org/daisy/pipeline/tts/onecore/OnecoreResult.java
 /// </summary>
-enum SAPILibResult {
-    SAPINATIVE_OK = 0,
+enum OnecoreResult {
+    SAPI_OK = 0,
     UNSUPPORTED_FORMAT,
     TOO_LONG_VOICE_NAME,
     TOO_LONG_VOICE_VENDOR,

@@ -10,7 +10,7 @@
 		<relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.7-SNAPSHOT</version>
+  <version>3.1.0-SNAPSHOT</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -45,7 +45,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.sapinative.impl.SAPIservice
+      org.daisy.pipeline.tts.sapi.impl.SAPIService
     </expose-services>
   </properties>
 
@@ -94,9 +94,37 @@
 		</goals>
 		<configuration>
 		  <javahOS>windows</javahOS>
-		  <javahOutputDirectory>src/main/jni</javahOutputDirectory>
+		  <javahOutputDirectory>src/main/jni/sapinative</javahOutputDirectory>
 		  <javahClassNames>
-		    <javahClassName>org.daisy.pipeline.tts.sapinative.SAPILib</javahClassName>
+		    <javahClassName>org.daisy.pipeline.tts.onecore.SAPI</javahClassName>
+		  </javahClassNames>
+		</configuration>
+	      </execution>
+	    </executions>
+	  </plugin>
+	</plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Run mvn -Pgenerate-onecorenative-headers compile native:javah to generate again the C++ headers from the Java class -->
+      <id>generate-onecorenative-headers</id>
+      <build>
+	<plugins>
+	  <plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>native-maven-plugin</artifactId>
+	    <executions>
+	      <execution>
+		<phase>none</phase>
+		<id>default-cli</id>
+		<goals>
+		  <goal>javah</goal>
+		</goals>
+		<configuration>
+		  <javahOS>windows</javahOS>
+		  <javahOutputDirectory>src/main/jni/onecore</javahOutputDirectory>
+		  <javahClassNames>
+		    <javahClassName>org.daisy.pipeline.tts.onecore.Onecore</javahClassName>
 		  </javahClassNames>
 		</configuration>
 	      </execution>

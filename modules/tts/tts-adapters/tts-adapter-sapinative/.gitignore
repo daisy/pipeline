@@ -1,2 +1,15 @@
-build\
-.vs\
+# Visual Studio
+*.vcxproj.*
+/build/
+/packages/
+/src/main/jni/onecorenative/Generated Files
+/src/main/jni/onecorenative/Release
+/src/main/jni/onecorenative/x64
+/src/main/resources/x64/*
+/src/main/resources/x86/*
+
+# DLLs are committed
+!/src/main/resources/x64/sapinative.dll
+!/src/main/resources/x64/onecorenative.dll
+!/src/main/resources/x86/sapinative.dll
+!/src/main/resources/x86/onecorenative.dll

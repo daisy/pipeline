@@ -238,11 +238,13 @@ tts-adapter-attbin:
 `org.daisy.pipeline.tts.sapi.samplerate`
 : Sample rate (in Hz)
 : Defaults to "22050"
+: Only applies to legacy SAPI voices.
 : Can not be overridden at runtime. The server must be restarted to
   change this property.
 
 `org.daisy.pipeline.tts.sapi.bytespersample`
 : Defaults to "2"
+: Only applies to legacy SAPI voices.
 : Can not be overridden at runtime. The server must be restarted to
   change this property.
 

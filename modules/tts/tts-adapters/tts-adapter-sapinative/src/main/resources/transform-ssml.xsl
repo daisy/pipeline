@@ -1,8 +1,7 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:ssml="http://www.w3.org/2001/10/synthesis"
-    exclude-result-prefixes="#all"
-    version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+                exclude-result-prefixes="#all">
 
   <xsl:output omit-xml-declaration="yes"/>
 
@@ -14,7 +13,7 @@
       <xsl:apply-templates select="if (local-name()='speak') then node() else ." mode="copy"/>
       <ssml:break time="250ms"/>
       <xsl:if test="$ending-mark != ''">
-        <bookmark mark="{$ending-mark}"/>
+        <mark name="{$ending-mark}"/>
       </xsl:if>
     </ssml:speak>
   </xsl:template>
@@ -33,10 +32,5 @@
     <!-- tokens are not copied because they are not SSML1.0-compliant and not SAPI-compliant-->
     <xsl:apply-templates select="@*|node()" mode="copy"/>
   </xsl:template>
-
-  <xsl:template match="ssml:mark" mode="copy">
-     <bookmark mark="@name"/>
-  </xsl:template>
-
 
 </xsl:stylesheet>
