@@ -1,0 +1,13 @@
+namespace onecorenative
+{
+    [default_interface]
+    runtimeclass Connection
+    {
+        Connection();
+        Windows.Media.SpeechSynthesis.VoiceInformation[] voices();
+        UInt8[] speak(String ssml, String voiceName);
+        String[] marksNames();
+        Int64[] marksPositions();
+
+    }
+}

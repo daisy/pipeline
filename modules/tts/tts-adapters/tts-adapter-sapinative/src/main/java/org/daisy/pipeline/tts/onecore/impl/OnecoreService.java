@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.sapinative.impl;
+package org.daisy.pipeline.tts.onecore.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,8 +13,8 @@ import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.tts.AbstractTTSService;
-import org.daisy.pipeline.tts.sapinative.SAPILib;
-import org.daisy.pipeline.tts.sapinative.SAPILibResult;
+import org.daisy.pipeline.tts.onecore.OnecoreLib;
+import org.daisy.pipeline.tts.onecore.OnecoreLibResult;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -23,50 +23,39 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 
 @Component(
-	name = "sapinative-tts-service",
+	name = "onecore-tts-service",
 	service = { TTSService.class }
 )
-public class SAPIservice extends AbstractTTSService {
+public class OnecoreService extends AbstractTTSService {
 
 	private boolean mFirstLoad = true;
-	private AudioFormat mAudioFormat = null;
 
 	@Override
 	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
-		int sampleRate = convertToInt(params, "org.daisy.pipeline.tts.sapi.samplerate", 22050);
-		int bytesPerSample = convertToInt(params, "org.daisy.pipeline.tts.sapi.bytespersample", 2);
-		int priority = convertToInt(params, "org.daisy.pipeline.tts.sapi.priority", 7);
+		int priority = convertToInt(params, "org.daisy.pipeline.tts.onecore.priority", 7);
 
-		AudioFormat audioFormat = new AudioFormat(sampleRate, 8 * bytesPerSample, 1, true,
-		        false);
 
 		synchronized (this) {
-			if (mAudioFormat != null && !mAudioFormat.matches(audioFormat)) {
-				throw new InvalidAttributeValueException(
-				        "SAPI's audio properties cannot change at runtime.");
-			}
 
 			if (mFirstLoad) {
 				loadDLL();
 				mFirstLoad = false;
 			}
-			if (mAudioFormat == null) {
-				int res = SAPILib.initialize(sampleRate, (short)(8 * bytesPerSample));
-				if (res != SAPILibResult.SAPINATIVE_OK.value()) {
-					throw new SynthesisException(
-							"SAPI initialization failed with error code '" + res + "': " + SAPILibResult.valueOfCode(res));
-				}
-				mAudioFormat = audioFormat;
-			} 
+			int res = OnecoreLib.initialize();
+			if (res != OnecoreLibResult.SAPINATIVE_OK.value()) {
+				throw new SynthesisException(
+						"SAPI initialization failed with error code '" + res + "': " + OnecoreLibResult.valueOfCode(res));
+			}
+			
 		}
 
 		//allocate the engine
-		return new SAPIengine(this, audioFormat, priority);
+		return new OnecoreEngine(this, priority);
 	}
 
 	@Override
 	public String getName() {
-		return "sapi";
+		return "onecore";
 	}
 
 	@Override
@@ -76,12 +65,12 @@ public class SAPIservice extends AbstractTTSService {
 
 	@Activate
 	protected void loadSSMLadapter() {
-		super.loadSSMLadapter("/transform-ssml.xsl", SAPIservice.class);
+		super.loadSSMLadapter("/transform-ssml-onecore.xsl", OnecoreService.class);
 	}
 
 	@Deactivate
 	protected void deactivate() {
-		SAPILib.dispose();
+		OnecoreLib.dispose();
 	}
 
 	private static int convertToInt(Map<String, String> params, String prop, int defaultVal)
@@ -98,19 +87,20 @@ public class SAPIservice extends AbstractTTSService {
 		return defaultVal;
 	}
 
+
 	/**
-	 * Unpack and load onecore or sapinative.dll
+	 * Unpack and load onecore.dll
 	 */
 	static void loadDLL() throws SynthesisException {
 		if (!System.getProperty("os.name").toLowerCase().startsWith("windows"))
 			throw new SynthesisException("Not on Windows");
-		String dllName = "sapinative.dll";
+		String dllName = "onecorenative.dll";
 		URL dll; {
 			String arch = System.getProperty("os.arch").toLowerCase();
 			if (arch.equals("amd64") || arch.equals("x86_64"))
-				dll = URLs.getResourceFromJAR("x64/"+ dllName, SAPIservice.class);
+				dll = URLs.getResourceFromJAR("x64/"+ dllName, OnecoreService.class);
 			else
-				dll = URLs.getResourceFromJAR("x86/"+ dllName, SAPIservice.class);
+				dll = URLs.getResourceFromJAR("x86/"+ dllName, OnecoreService.class);
 		}
 		File dllFile; {
 			try {

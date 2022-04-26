@@ -63,34 +63,23 @@ struct Connection {
     {
         memset(sentence, 0, MAX_SENTENCE_SIZE / sizeof(wchar_t));
     }
-};
 
-
-
-namespace {
-    void release(Connection* conn) {
-        if(conn != NULL) {
-            if (conn->spVoice != 0) {
-                conn->spVoice->Release();
-            }
-            if (conn->spStream != 0) {
-                conn->spStream->Close();
-                conn->spStream->Release();
-            }
-            conn->qStream.dispose();
-
-            delete conn;
+    ~Connection() {
+        if (this->spVoice != 0) {
+            this->spVoice->Release();
         }
-       
+        if (this->spStream != 0) {
+            this->spStream->Close();
+            this->spStream->Release();
+        }
+        this->qStream.dispose();
     }
-}
-
+};
 
 ///////// GLOBAL VARIABLES ////////////
 SapiVoice::Map* gAllVoices = NULL;
 PWAVEFORMATEX gWaveFormat = NULL;
 ///////////////////////////////////////
-
 
 
 JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_initialize(JNIEnv* env, jclass, jint sampleRate, jshort bitsPerSample) {
@@ -238,7 +227,7 @@ JNIEXPORT jlong JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_openConne
         std::wcout << errorText << std::endl;
         LocalFree(errorText);
         errorText = NULL;
-        ::release(conn);
+        delete conn;
         return 0;
     }
     conn->spVoice->AddRef();
@@ -255,7 +244,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_closeConne
 #endif
     {
         Connection* conn = reinterpret_cast<Connection*>(connection);
-        ::release(conn);
+        if(conn != NULL) delete conn;
     }
     CoUninitialize();
     return SAPINATIVE_OK;
@@ -283,7 +272,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_speak(JNIE
     if (!(convertToUTF16(env, text, conn->sentence, MAX_SENTENCE_SIZE)))
         return TOO_LONG_TEXT;
 
-    if (FAILED(conn->spVoice->SetVoice(it->second.voicePointer)))
+    if (FAILED(conn->spVoice->SetVoice(it->second.rawVoice)))
         return COULD_NOT_SET_VOICE;
 
     ULONGLONG ullEventInterest = CROSS_PLATFORM_SPFEI(SPEI_END_INPUT_STREAM) |
@@ -323,7 +312,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_speak(JNIE
         std::wcout << errorText << std::endl;
         LocalFree(errorText);
         errorText = NULL;
-        //::release(conn);
+        //delete conn;
         return COULD_NOT_INIT_STREAM;
     }
 
@@ -475,111 +464,132 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_readStream
     return offset;
 }
 
+
+struct VoiceVendorToJString {
+    static jstring convert(const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->second.vendor.c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getVoiceVendors(JNIEnv* env, jclass) {
 #if _DEBUG
     std::wcout << "Getting voice vendors" << std::endl;
 #endif
     if (gAllVoices != NULL) {
-        return newJavaArray<SapiVoice::Map::iterator, jstring>(
+        return newJavaArray<SapiVoice::Map::iterator, VoiceVendorToJString>(
             env,
             gAllVoices->begin(),
-            [](const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
-                const wchar_t* str = it->second.vendor.c_str();
-                return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-            },
             gAllVoices->size(),
             "java/lang/String"
-        );
-    } else return emptyJavaArray(env, "java/lang/String");
+            );
+    }
+    else return emptyJavaArray(env, "java/lang/String");
 }
+
+
+
+struct VoiceNameToJString {
+    static jstring convert(const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->second.name.c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getVoiceNames(JNIEnv* env, jclass) {
 #if _DEBUG
     std::wcout << "Getting voice names" << std::endl;
 #endif
     if (gAllVoices != NULL) {
-        return newJavaArray<SapiVoice::Map::iterator, jstring>(
+        return newJavaArray<SapiVoice::Map::iterator, VoiceNameToJString>(
             env,
             gAllVoices->begin(),
-            [](const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
-                const wchar_t* str = it->second.name.c_str();
-                return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-            },
             gAllVoices->size(),
             "java/lang/String"
-        );
+            );
     }
     else return emptyJavaArray(env, "java/lang/String");
 }
 
+
+struct VoiceLocaleToJString {
+    static jstring convert(const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->second.language.c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getVoiceLocales(JNIEnv* env, jclass) {
 #if _DEBUG
     std::wcout << "Getting voice locales" << std::endl;
 #endif
     if (gAllVoices != NULL) {
-        return newJavaArray<SapiVoice::Map::iterator, jstring>(
+        return newJavaArray<SapiVoice::Map::iterator, VoiceLocaleToJString>(
             env,
             gAllVoices->begin(),
-            [](const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
-                const wchar_t* str = it->second.language.c_str();
-                return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-            },
             gAllVoices->size(),
             "java/lang/String"
-        );
+            );
     }
     else return emptyJavaArray(env, "java/lang/String");
 }
 
+
+struct VoiceGenderToJString {
+    static jstring convert(const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->second.gender.c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getVoiceGenders(JNIEnv* env, jclass)
 {
 #if _DEBUG
     std::wcout << "Getting voice genders" << std::endl;
 #endif
     if (gAllVoices != NULL) {
-        return newJavaArray<SapiVoice::Map::iterator, jstring>(
+        return newJavaArray<SapiVoice::Map::iterator, VoiceGenderToJString>(
             env,
             gAllVoices->begin(),
-            [](const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
-                const wchar_t* str = it->second.gender.c_str();
-                return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-            },
             gAllVoices->size(),
             "java/lang/String"
-        );
+            );
     }
     else return emptyJavaArray(env, "java/lang/String");
 }
 
+struct VoiceAgeToJString {
+    static jstring convert(const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->second.age.c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getVoiceAges(JNIEnv* env, jclass)
 {
 #if _DEBUG
     std::wcout << "Getting voice ages" << std::endl;
 #endif
     if (gAllVoices != NULL) {
-        return newJavaArray<SapiVoice::Map::iterator, jstring>(
+        return newJavaArray<SapiVoice::Map::iterator, VoiceAgeToJString>(
             env,
             gAllVoices->begin(),
-            [](const SapiVoice::Map::const_iterator& it, JNIEnv* env) {
-                const wchar_t* str = it->second.age.c_str();
-                return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-            },
             gAllVoices->size(),
             "java/lang/String"
-        );
+            );
     }
     else return emptyJavaArray(env, "java/lang/String");
+
 }
 
+
+struct BookMarkNamesToJString {
+    static jstring convert(const std::vector<std::wstring>::const_iterator& it, JNIEnv* env) {
+        const wchar_t* str = it->c_str();
+        return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
+    }
+};
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_getBookmarkNames(JNIEnv* env, jclass, jlong connection) {
     Connection* conn = reinterpret_cast<Connection*>(connection);
-    return newJavaArray<std::vector<std::wstring>::iterator, jstring>(
+    return newJavaArray<std::vector<std::wstring>::iterator, BookMarkNamesToJString>(
         env,
         conn->bookmarkNames.begin(),
-        [](const std::vector<std::wstring>::const_iterator& it, JNIEnv* env) {
-            const wchar_t* str = it->c_str();
-            return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
-        },
         conn->currentBookmarkIndex,
         "java/lang/String"
     );
@@ -605,8 +615,8 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_dispose(JN
         if (gAllVoices != NULL) {
             SapiVoice::Map::iterator it = gAllVoices->begin();
             for (; it != gAllVoices->end(); ++it) {
-                if (it->second.voicePointer != NULL) {
-                    it->second.voicePointer->Release();
+                if (it->second.rawVoice != NULL) {
+                    it->second.rawVoice->Release();
                 }
             }
             delete gAllVoices;
@@ -623,3 +633,4 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPILib_dispose(JN
 #endif
     return SAPINATIVE_OK;
 }
+

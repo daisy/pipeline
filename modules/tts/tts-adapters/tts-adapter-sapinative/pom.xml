@@ -6,8 +6,8 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.14.4-SNAPSHOT</version>
-		<relativePath>../../../parent</relativePath>
+    <version>1.14.4-SNAPSHOT</version>
+    <relativePath>../../../parent</relativePath>
   </parent>
 
   <version>3.0.6-SNAPSHOT</version>
@@ -42,52 +42,67 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.sapinative.impl.SAPIservice
+      org.daisy.pipeline.tts.sapinative.impl.SAPIservice,
+      org.daisy.pipeline.tts.onecore.impl.OnecoreService
     </expose-services>
   </properties>
 
   <build>
     <plugins>
       <plugin>
-	<groupId>org.apache.felix</groupId>
-	<artifactId>maven-bundle-plugin</artifactId>
-	<configuration>
-	  <instructions>
-	    <Import-Package>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <Import-Package>
 	      net.sf.saxon.*;version="${saxon.versionRange}",
 	      !org.daisy.common.spi,
 	      *
 	    </Import-Package>
-	  </instructions>
-	</configuration>
+          </instructions>
+        </configuration>
       </plugin>
 
       <!-- note: Run mvn compile native:javah to generate again the C++ headers from -->
       <!-- the Java class. -->
       <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>native-maven-plugin</artifactId>
-	<version>1.0-alpha-7</version>
-	<extensions>true</extensions>
-	<executions>
-	  <execution>
-	    <phase>none</phase>
-	    <id>default-cli</id>
-	    <goals>
-	      <goal>javah</goal>
-	    </goals>
-	    <configuration>
-	      <javahOS>windows</javahOS>
-	      <javahOutputDirectory>../../native-libs/sapi-nar/src/main/jni</javahOutputDirectory>
-	      <javahClassNames>
-		<javahClassName>org.daisy.pipeline.tts.sapinative.SAPILib</javahClassName>
-	      </javahClassNames>
-	    </configuration>
-	  </execution>
-	</executions>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>native-maven-plugin</artifactId>
+        <version>1.0-alpha-7</version>
+        <extensions>true</extensions>
+        <executions>
+          <execution>
+            <phase>none</phase>
+            <id>default-cli-2</id>
+            <goals>
+              <goal>javah</goal>
+            </goals>
+            <configuration>
+              <javahOS>windows</javahOS>
+              <javahOutputDirectory>src/main/jni/sapinative</javahOutputDirectory>
+              <javahClassNames>
+                <javahClassName>org.daisy.pipeline.tts.sapinative.SAPILib</javahClassName>
+              </javahClassNames>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>none</phase>
+            <id>default-cli</id>
+            <goals>
+              <goal>javah</goal>
+            </goals>
+            <configuration>
+              <javahOS>windows</javahOS>
+              <javahOutputDirectory>src/main/jni/onecore</javahOutputDirectory>
+              <javahClassNames>
+                <javahClassName>org.daisy.pipeline.tts.onecore.OnecoreLib</javahClassName>
+              </javahClassNames>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -97,56 +112,54 @@
     <profile>
       <id>generate-dll</id>
       <build>
-	<plugins>
-	  <plugin>
-	    <artifactId>maven-dependency-plugin</artifactId>
-	    <executions>
-	      <execution>
-		<phase>generate-resources</phase>
-		<goals>
-		  <goal>unpack</goal>
-		</goals>
-		<configuration>
-		  <artifactItems>
-		    <artifactItem>
-		      <groupId>org.daisy.pipeline.bindings</groupId>
-		      <artifactId>sapi-nar</artifactId>
-		      <version>1.0.0</version>
-		      <classifier>x64-Windows-msvc-jni</classifier>
-		      <type>nar</type>
-		    </artifactItem>
-		    <artifactItem>
-		      <groupId>org.daisy.pipeline.bindings</groupId>
-		      <artifactId>sapi-nar</artifactId>
-		      <version>1.0.0</version>
-		      <classifier>x86-Windows-msvc-jni</classifier>
-		      <type>nar</type>
-		    </artifactItem>
-		  </artifactItems>
-		</configuration>
-	      </execution>
-	    </executions>
-	  </plugin>
-	  <plugin>
-	    <artifactId>maven-antrun-plugin</artifactId>
-	    <executions>
-	      <execution>
-		<phase>generate-resources</phase>
-		<goals>
-		  <goal>run</goal>
-		</goals>
-		<configuration>
-		  <tasks>
-		    <copy file="target/dependency/lib/x64-Windows-msvc/jni/sapi-nar.dll"
-			  tofile="src/main/resources/x64/sapinative.dll"/>
-		    <copy file="target/dependency/lib/x86-Windows-msvc/jni/sapi-nar.dll"
-			  tofile="src/main/resources/x86/sapinative.dll"/>
-		  </tasks>
-		</configuration>
-	      </execution>
-	    </executions>
-	  </plugin>
-	</plugins>
+        <plugins>
+          <plugin>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline.bindings</groupId>
+                      <artifactId>sapi-nar</artifactId>
+                      <version>1.0.0</version>
+                      <classifier>x64-Windows-msvc-jni</classifier>
+                      <type>nar</type>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>org.daisy.pipeline.bindings</groupId>
+                      <artifactId>sapi-nar</artifactId>
+                      <version>1.0.0</version>
+                      <classifier>x86-Windows-msvc-jni</classifier>
+                      <type>nar</type>
+                    </artifactItem>
+                  </artifactItems>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <copy file="target/dependency/lib/x64-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x64/sapinative.dll" />
+                    <copy file="target/dependency/lib/x86-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x86/sapinative.dll" />
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
       </build>
     </profile>
   </profiles>
