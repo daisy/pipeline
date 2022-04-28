@@ -118,7 +118,10 @@ public class Buffer<I,O> {
 				throw new NoSuchElementException();
 			else
 				try {
-					return queue.remove().get().get();
+					Optional<I> next = queue.remove().get();
+					if (!next.isPresent())
+						throw new NoSuchElementException();
+					return next.get();
 				} catch (ExecutionException e) {
 					// if Buffer.setException() was previously called
 					try {

@@ -65,7 +65,12 @@ class ContextHydrator {
 	static List<PersistentOption> dehydrateOptions(JobId id, XProcInput input) {
 		List<PersistentOption> options = Lists.newLinkedList();
 		for (QName option : input.getOptions().keySet()) {
-			options.add(new PersistentOption(id, option, input.getOptions().get(option)));
+			Object val = input.getOptions().get(option);
+			try {
+				options.add(new PersistentOption(id, option, (String)val));
+			} catch (ClassCastException e) {
+				throw new RuntimeException("Expected string value for option " + option + " but got: " + val.getClass());
+			};
 		}
 		return options;
 	}

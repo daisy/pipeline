@@ -61,7 +61,9 @@ public class JavaFunction extends ExtensionFunctionDefinition {
 					}
 					throw new RuntimeException("foobar");
 				} catch (Throwable e) {
-					throw new XPathException("Unexpected error in " + funcname.getClarkName(), e);
+					XPathException xe = new XPathException("Unexpected error in " + funcname.getClarkName(), e);
+					xe.setErrorCodeQName(new StructuredQName("", "", "MYERR"));
+					throw xe;
 				}
 			}
 		};

@@ -23,7 +23,11 @@ public class XMLCalabashInputValue extends SaxonInputValue {
 		super(
 			new Iterator<XdmNode>() {
 				public boolean hasNext() {
-					return value.moreDocuments();
+					try {
+						return value.moreDocuments();
+					} catch (SaxonApiException e) {
+						throw new TransformerException(e);
+					}
 				}
 				public XdmNode next() throws NoSuchElementException, TransformerException {
 					if (!hasNext())

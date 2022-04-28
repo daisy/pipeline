@@ -86,12 +86,26 @@ public class JobResultSetBuilder {
 			String mediaType=script.getOptionMetadata(option.getName()).getMediaType();
 			//is file
 			if(XProcDecorator.TranslatableOption.ANY_FILE_URI.getName().equals(script.getOptionMetadata(option.getName()).getType())){
-				URI path=URI.create(inputs.getOptions().get(option.getName()));
+				URI path; {
+					Object val = inputs.getOptions().get(option.getName());
+					try {
+						path = URI.create((String)val);
+					} catch (ClassCastException e) {
+						throw new RuntimeException("Expected string value for option " + option.getName() + " but got: " + val.getClass());
+					}
+				}
 				JobResult result= singleResult(path,mapper,mediaType);
 				builder.addResult(option.getName(),result);
 				//is dir
 			}else if (XProcDecorator.TranslatableOption.ANY_DIR_URI.getName().equals(script.getOptionMetadata(option.getName()).getType())){
-				String dir=inputs.getOptions().get(option.getName());
+				String dir; {
+					Object val = inputs.getOptions().get(option.getName());
+					try {
+						dir = (String)val;
+					} catch (ClassCastException e) {
+						throw new RuntimeException("Expected string value for option " + option.getName() + " but got: " + val.getClass());
+					}
+				}
 				List<URI> ls=IOHelper.treeFileList(URI.create(dir));
 				for(URI path: ls){
 					JobResult result= singleResult(path,mapper,mediaType);

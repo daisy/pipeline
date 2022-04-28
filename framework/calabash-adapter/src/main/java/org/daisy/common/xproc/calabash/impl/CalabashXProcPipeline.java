@@ -3,6 +3,8 @@ package org.daisy.common.xproc.calabash.impl;
 import java.net.URI;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
@@ -12,8 +14,11 @@ import javax.xml.transform.sax.SAXSource;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
 
+import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.xproc.XProcError;
 import org.daisy.common.xproc.XProcErrorException;
@@ -44,6 +49,7 @@ import com.xmlcalabash.model.Input;
 import com.xmlcalabash.model.Option;
 import com.xmlcalabash.model.Output;
 import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.model.SequenceType;
 import com.xmlcalabash.runtime.XPipeline;
 
 import org.slf4j.Logger;
@@ -142,10 +148,9 @@ public class CalabashXProcPipeline implements XProcPipeline {
 					}
 					// options
 					for (Option option : declaration.options()) {
-						builder.withOption(new XProcOptionInfo(new QName(option
-								.getName().getNamespaceURI(), option.getName()
-								.getLocalName(), option.getName().getPrefix()),
-								option.getRequired(), option.getSelect()));
+						SequenceType sequenceType = option.getSequenceType();
+						if (sequenceType == null) sequenceType = SequenceType.XS_STRING;
+						builder.withOption(new CalabashXProcOptionInfo(option, sequenceType));
 					}
                                         instance.runtime.close();
 
@@ -246,10 +251,31 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		}
 		// bind options
 		for (QName optname : data.getOptions().keySet()) {
-			RuntimeValue value = new RuntimeValue(data.getOptions()
-					.get(optname));
-			pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname),
-					value);
+			XProcOptionInfo optionInfo = info.get().getOption(optname);
+			if (optionInfo != null) {
+				RuntimeValue value; {
+					if (pipeline.runtime.getAllowGeneralExpressions()) {
+						XdmValue xdmValue = ((CalabashXProcOptionInfo)optionInfo).sequenceType.cast(
+							SaxonHelper.xdmValueFromObject(data.getOptions().get(optname)),
+							// note that we're passing null as the "namespaceResolver" argument which could
+							// lead to a NullPointerException if we're trying to cast a xs:string to a xs:QName
+							null);
+						// because value might be accessed as string or untyped atomic, e.g. by p:in-scope-names
+						String stringValue = StreamSupport.stream(xdmValue.spliterator(), false)
+						                                  .map(XdmItem::getStringValue)
+						                                  .collect(Collectors.joining(""));
+						value = new RuntimeValue(stringValue, xdmValue, null, null);
+					} else {
+						Object val = data.getOptions().get(optname);
+						try {
+							value = new RuntimeValue((String)val);
+						} catch (ClassCastException e) {
+							throw new RuntimeException("Expected string value for option " + optname + " but got: " + val.getClass());
+						}
+					}
+				}
+				pipeline.xpipe.passOption(new net.sf.saxon.s9api.QName(optname), value);
+			} // else ignore the option
 		}
 
 		// bind parameters
@@ -265,8 +291,10 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		// run
 		try {
 			pipeline.xpipe.run();
-                //propagate possible errors
-			
+			// make sure all lazy code is executed by accessing all output ports
+			for (String port : pipeline.xpipe.getOutputs()) {
+				pipeline.xpipe.readFrom(port).moreDocuments();
+			}
 		} catch (XProcException e) {
 
 			// if multiple errors have been reported, log all except the last one (the last one
@@ -311,6 +339,21 @@ public class CalabashXProcPipeline implements XProcPipeline {
 		} catch (SaxonApiException sae) {
 			// TODO better exception handling
 			throw new RuntimeException(sae.getMessage(), sae);
+		}
+	}
+
+	private static class CalabashXProcOptionInfo extends XProcOptionInfo {
+
+		public final SequenceType sequenceType;
+
+		public CalabashXProcOptionInfo(Option option, SequenceType sequenceType) {
+			super(new QName(option.getName().getNamespaceURI(),
+			                option.getName().getLocalName(),
+			                option.getName().getPrefix()),
+			      sequenceType.toString(),
+			      option.getRequired(),
+			      option.getSelect());
+			this.sequenceType = sequenceType;
 		}
 	}
 

@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>4</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.14.7-SNAPSHOT</version>
+  <version>1.14.7</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.7-SNAPSHOT</version>
+        <version>1.14.7</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -246,7 +246,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -256,6 +256,28 @@
       </plugins>
     </pluginManagement>
   </build>
+
+  <profiles>
+    <profile>
+      <id>modules-with-java-test-exclusions</id>
+      <activation>
+        <file>
+          <exists>src/test/java/ignore</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <excludesFile>src/test/java/ignore</excludesFile>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
   <repositories>
     <!--
@@ -321,4 +343,8 @@
       </snapshots>
     </repository>
   </repositories>
+
+  <scm>
+    <tag>v1.14.7</tag>
+  </scm>
 </project>

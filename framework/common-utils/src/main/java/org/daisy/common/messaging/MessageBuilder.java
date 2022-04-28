@@ -69,7 +69,7 @@ public final class MessageBuilder {
 
 	public MessageBuilder withProgress(BigDecimal progress) {
 		if (progress.compareTo(BigDecimal.ZERO) < 0 || progress.compareTo(BigDecimal.ONE) > 0)
-			throw new IllegalArgumentException("progress must be a number between 0 and 1");
+			throw new IllegalArgumentException("progress must be a number between 0 and 1, but got " + progress);
 		this.portion = progress;
 		return this;
 	}

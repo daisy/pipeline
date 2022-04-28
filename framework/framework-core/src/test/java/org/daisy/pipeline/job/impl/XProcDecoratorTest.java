@@ -124,7 +124,7 @@ public class XProcDecoratorTest   {
 		trans.decorateInputOptions(optionInfos,input,builder);
 
 		XProcInput newInput = builder.build();
-		URI res1 = URI.create(newInput.getOptions().get(optName));
+		URI res1 = URI.create((String)newInput.getOptions().get(optName));
 		URI expected=URI.create(mapper.getInputBase()+testFile);
 		Assert.assertEquals(res1,expected);
 	}
@@ -144,7 +144,7 @@ public class XProcDecoratorTest   {
 		trans.decorateInputOptions(optionInfos,input,builder);
 
 		XProcInput newInput = builder.build();
-		String res= newInput.getOptions().get(optName);
+		String res= (String)newInput.getOptions().get(optName);
 		String expected1=URI.create(mapper.getInputBase()+testFile).toString();
 		String expected2=URI.create(mapper.getInputBase()+testFile2).toString();
 		Assert.assertEquals(res,expected1+XProcOptionMetadata.DEFAULT_SEPARATOR+expected2);
@@ -221,7 +221,7 @@ public class XProcDecoratorTest   {
 		XProcInput newInput = builder.build();
 
 		URI expected=URI.create(mapper.getOutputBase()+testFile);
-		URI reslut=URI.create( newInput.getOptions().get(optName) );
+		URI reslut=URI.create( (String)newInput.getOptions().get(optName) );
 		Assert.assertEquals(expected,reslut);
 	}
 
@@ -240,7 +240,7 @@ public class XProcDecoratorTest   {
 		XProcInput newInput = builder.build();
 
 		URI expected=URI.create(mapper.getOutputBase()+testDir);
-		URI reslut=URI.create( newInput.getOptions().get(optName) );
+		URI reslut=URI.create( (String)newInput.getOptions().get(optName) );
 		Assert.assertEquals(expected,reslut);
 	}
 
@@ -260,7 +260,7 @@ public class XProcDecoratorTest   {
 		XProcInput newInput = builder.build();
 		String generated=URITranslatorHelper.generateOptionOutput(script.getXProcPipelineInfo().getOption(optName),script);
 		URI expected=URI.create(mapper.getOutputBase()+generated);
-		URI reslut=URI.create( newInput.getOptions().get(optName) );
+		URI reslut=URI.create( (String)newInput.getOptions().get(optName) );
 		Assert.assertEquals(expected,reslut);
 	}
 
@@ -280,7 +280,7 @@ public class XProcDecoratorTest   {
 		XProcInput newInput = builder.build();
 		String generated=URITranslatorHelper.generateOptionOutput(script.getXProcPipelineInfo().getOption(optName),script);
 		URI expected=URI.create(mapper.getOutputBase()+generated);
-		URI reslut=URI.create( newInput.getOptions().get(optName) );
+		URI reslut=URI.create( (String)newInput.getOptions().get(optName) );
 		Assert.assertEquals(expected,reslut);
 	}
 

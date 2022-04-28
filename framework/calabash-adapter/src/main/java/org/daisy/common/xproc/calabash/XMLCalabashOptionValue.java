@@ -1,5 +1,6 @@
 package org.daisy.common.xproc.calabash;
 
+import java.net.URI;
 import java.util.Hashtable;
 
 import org.daisy.common.saxon.SaxonHelper;
@@ -33,7 +34,9 @@ public class XMLCalabashOptionValue extends StringWithNamespaceContext {
 			return new XMLCalabashOptionValue(
 				new RuntimeValue(value.toString(),
 				                 null,
-				                 new Hashtable<>(((StringWithNamespaceContext)value).getNamespaceBindingsAsMap())));
+				                 new Hashtable<>(((StringWithNamespaceContext)value).getNamespaceBindingsAsMap())) {
+					public URI getBaseURI() { // used e.g. in XSLT and would otherwise result in NPE
+						return URI.create(""); }});
 		else if (value instanceof SaxonInputValue) {
 			XdmValue xdmValue = new XdmValue(ImmutableList.copyOf(((SaxonInputValue)value).asXdmItemIterator()));
 			String stringValue = ""; {
@@ -44,7 +47,9 @@ public class XMLCalabashOptionValue extends StringWithNamespaceContext {
 				new RuntimeValue(stringValue,
 				                 xdmValue,
 				                 null,
-				                 new Hashtable<>()));
+				                 new Hashtable<>()) {
+					public URI getBaseURI() { // used e.g. in XSLT and would otherwise result in NPE
+						return URI.create(""); }});
 		} else {
 			try {
 				Object object = value.asObject();
@@ -53,7 +58,9 @@ public class XMLCalabashOptionValue extends StringWithNamespaceContext {
 					new RuntimeValue(object.toString(),
 					                 xdmValue,
 					                 null,
-					                 new Hashtable<>()));
+					                 new Hashtable<>()) {
+						public URI getBaseURI() { // used e.g. in XSLT and would otherwise result in NPE
+							return URI.create(""); }});
 			} catch (UnsupportedOperationException e) {
 			} catch (IllegalArgumentException e) {
 			}

@@ -37,7 +37,7 @@ public final class XProcInput {
 				.newHashMap();
 
 		/** The options. */
-		private final Map<QName, String> options = Maps.newHashMap();
+		private final Map<QName, Object> options = Maps.newHashMap();
 
 		/**
 		 * Instantiates a new builder.
@@ -81,7 +81,7 @@ public final class XProcInput {
 		 * @param value the value
 		 * @return the builder
 		 */
-		public Builder withOption(QName name, String value) {
+		public Builder withOption(QName name, Object value) {
 			// TODO check if compatible with info
 			options.put(name, value);
 			return this;
@@ -131,7 +131,7 @@ public final class XProcInput {
 	private final Map<String, Map<QName, String>> parameters;
 
 	/** The options. */
-	private final Map<QName, String> options;
+	private final Map<QName, Object> options;
 
 	/**
 	 * Instantiates a new x proc input.
@@ -142,7 +142,7 @@ public final class XProcInput {
 	 */
 	private XProcInput(Map<String, List<Supplier<Source>>> inputs,
 			Map<String, Map<QName, String>> parameters,
-			Map<QName, String> options) {
+			Map<QName, Object> options) {
 		ImmutableMap.Builder<String, List<Supplier<Source>>> inputsBuilder = ImmutableMap
 				.builder();
 		for (String key : inputs.keySet()) {
@@ -186,7 +186,7 @@ public final class XProcInput {
 	 *
 	 * @return the options
 	 */
-	public Map<QName, String> getOptions() {
+	public Map<QName, Object> getOptions() {
 		return options;
 	}
 

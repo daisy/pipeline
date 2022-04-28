@@ -24,7 +24,6 @@ public final class Properties {
 	private final static java.util.Properties systemProperties = System.getProperties();
 	private final static Map<String,String> systemEnv = System.getenv();
 	private final static Set<String> internalProperties = ImmutableSet.of(
-		"org.daisy.pipeline.xproc.configuration",
 		"org.daisy.pipeline.updater.bin",
 		"org.daisy.pipeline.updater.deployPath",
 		"org.daisy.pipeline.updater.releaseDescriptor");
@@ -94,13 +93,15 @@ public final class Properties {
 				if (!internalProperties.contains(key))
 					return expand(systemEnv.get(envKey));
 				else
-					logger().warn("Environment variable '{}' ignored; "
-					              + "expected to be specified through system property", envKey);
+					logger().warn("Environment variable '{}' ignored", envKey);
 		}
 		// then come system properties
 		String v = systemProperties.getProperty(key);
 		if (v != null)
-			return expand(v);
+			if (!internalProperties.contains(key))
+				return expand(v);
+			else
+				logger().warn("System property '{}' ignored", key);
 		// and finally properties defined in the pipeline.properties file
 		if (key.startsWith("org.daisy.pipeline.")) {
 			if (propertiesFromFile == null)
@@ -111,11 +112,20 @@ public final class Properties {
 					if (!internalProperties.contains(key))
 						return expand(v);
 					else
-						logger().warn("Property '{}' in pipeline.properties file ignored; "
-						              + "expected to be specified through system property", key);
+						logger().warn("Property '{}' in pipeline.properties file ignored", key);
 			}
 		}
-		return defaultValue != null ? expand(defaultValue) : null;
+		// internal properties are hard-coded
+		if ("org.daisy.pipeline.updater.deployPath".equals(key))
+			return expand("${org.daisy.pipeline.home}/");
+		else if ("org.daisy.pipeline.updater.bin".equals(key))
+			// pipeline-assembly is responsible for placing the file at this location
+			return expand("${org.daisy.pipeline.home}/updater/pipeline-updater");
+		else if ("org.daisy.pipeline.updater.releaseDescriptor".equals(key))
+			// pipeline-assembly is responsible for placing the file at this location
+			return expand("${org.daisy.pipeline.home}/etc/releaseDescriptor.xml");
+		// return default value
+		return defaultValue;
 	}
 
 	private static java.util.Properties readPropertiesFromFile() {

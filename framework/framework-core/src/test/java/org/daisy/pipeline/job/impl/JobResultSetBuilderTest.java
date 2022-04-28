@@ -55,7 +55,7 @@ public class JobResultSetBuilderTest {
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
                 input = new XProcInput.Builder().withOption(optDir,dir).withOption(optName,sysId).build();
                 input=trans.decorate(input);
-                Mock.populateDir(input.getOptions().get(optDir));
+                Mock.populateDir((String)input.getOptions().get(optDir));
                 bound=BoundXProcScript.from(script,input,output);
         }
 
@@ -63,7 +63,7 @@ public class JobResultSetBuilderTest {
         @After
         public void tearDown() {
                 QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
-                IOHelper.deleteDir(new File(input.getOptions().get(optDir)));
+                IOHelper.deleteDir(new File((String)input.getOptions().get(optDir)));
                 if(oldIoBase!=null)
                         System.setProperty("org.daisy.pipeline.data", oldIoBase);
                                 

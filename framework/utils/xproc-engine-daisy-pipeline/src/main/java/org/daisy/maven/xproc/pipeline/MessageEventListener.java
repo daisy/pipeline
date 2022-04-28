@@ -1,6 +1,7 @@
 package org.daisy.maven.xproc.pipeline;
 
 import java.math.BigDecimal;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -28,17 +29,27 @@ class MessageEventListener {
 		messages.unlisten(this::update);
 	}
 	
+	private AtomicInteger lastMessage = new AtomicInteger(-1);
+	
 	// notify of message updates
 	private void update(Integer sequenceNumber) {
 		if (sequenceNumber != null) {
-			flattenMessages(messages.createFilter()
-			                        .filterLevels(levels)
-			                        .inRange(sequenceNumber,sequenceNumber)
-			                        .getMessages().iterator(),
-			                sequenceNumber,
-			                0,
-			                null,
-			                messages.getProgress());
+			// The same sequence number may appear twice (once to close a message and once to open a message).
+			// By subtracting 1 from the sequence number we make sure that we never try to access a message
+			// that does not exist yet when a message is closed.
+			if (sequenceNumber > 0)
+				sequenceNumber --;
+			int last = lastMessage.getAndSet(sequenceNumber);
+			if (sequenceNumber > last) {
+				flattenMessages(messages.createFilter()
+				                        .filterLevels(levels)
+				                        .inRange(last + 1, sequenceNumber)
+				                        .getMessages().iterator(),
+				                last + 1,
+				                0,
+				                null,
+				                messages.getProgress());
+			}
 		}
 	}
 	

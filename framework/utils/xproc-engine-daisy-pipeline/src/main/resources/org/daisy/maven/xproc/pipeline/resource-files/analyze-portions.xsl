@@ -15,26 +15,22 @@
   </xsl:template>
   
   <xsl:template match="d:message[@portion]">
-    <xsl:choose>
-      <xsl:when test="count(parent::*/d:message[@portion]) &gt; 1">
-        <xsl:copy>
-          <xsl:apply-templates select="@*"/>
-          <xsl:attribute name="portion-actual"
-                         select="d:time(.) div sum(parent::*/d:message[@portion]/d:time(.))"/>
-          <xsl:apply-templates/>
-        </xsl:copy>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:next-match/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:copy>
+      <xsl:apply-templates select="@*"/>
+      <xsl:attribute name="portion-actual" select="d:time(.) div d:time(parent::*)"/>
+      <xsl:apply-templates/>
+    </xsl:copy>
   </xsl:template>
   
   <xsl:function name="d:time">
     <xsl:param name="message"/>
-    <xsl:sequence select="if ($message/following::d:message)
-                          then number($message/following::d:message[1]/@timeStamp) - number($message/@timeStamp)
-                          else 0"/>
+    <xsl:sequence select="if ($message/self::d:messages)
+                          then sum($message/*/d:time(.))
+                          else if ($message/following::d:message)
+                               then number($message/following::d:message[1]/@timeStamp) - number($message/@timeStamp)
+                               else if ($message/descendant::d:message)
+                               then number(($message/descendant::d:message)[last()]/@timeStamp) - number($message/@timeStamp)
+                               else 0"/>
   </xsl:function>
   
 </xsl:stylesheet>

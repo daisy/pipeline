@@ -1,11 +1,6 @@
 package org.daisy.common.xproc.calabash.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +14,6 @@ import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.properties.Properties;
 import org.daisy.common.saxon.SaxonConfigurator;
 import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
@@ -54,8 +48,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class DynamicXProcConfigurationFactory implements XProcConfigurationFactory, XProcStepRegistry {
 
-	public static final String CONFIG_PATH = "org.daisy.pipeline.xproc.configuration";
-
 	private static final Logger logger = LoggerFactory.getLogger(DynamicXProcConfigurationFactory.class);
 
 	private final Map<QName, XProcStepProvider> stepProviders = new HashMap<QName, XProcStepProvider>();
@@ -75,7 +67,6 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 		Processor processor = new Processor(false);
 		saxonConfigurator.configure(processor);
 		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
-		loadMainConfigurationFile(config);
 		for (ConfigurationFileProvider f : configurationFiles) {
 			logger.debug("Reading {}", f);
 			loadConfigurationFile(config, f.get());
@@ -161,29 +152,6 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 		XProcStepProvider stepProvider = stepProviders.get(type);
 		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
 				: null;
-	}
-
-	/**
-	 * Loads the custom configuration file located in CONFIG_PATH
-	 */
-	private void loadMainConfigurationFile(XProcConfiguration conf) {
-		// TODO cleanup and cache
-		String prop = Properties.getProperty(CONFIG_PATH);
-		if (prop != null) {
-			File configPath; {
-				if (prop.startsWith("file:")) {
-					configPath = new File(URI.create(prop));
-				} else {
-					configPath = new File(prop);
-				}
-			}
-			logger.debug("Reading Calabash configuration from {}", configPath);
-			try {
-				loadConfigurationFile(conf, new FileInputStream(configPath));
-			} catch (IOException e) {
-				throw new UncheckedIOException(e);
-			}
-		}
 	}
 
 	private void loadConfigurationFile(XProcConfiguration conf, InputStream config) {

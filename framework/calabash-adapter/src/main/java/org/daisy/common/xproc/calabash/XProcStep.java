@@ -18,6 +18,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.transform.InputValue;
+import org.daisy.common.transform.Mult;
 import org.daisy.common.transform.OutputValue;
 import org.daisy.common.transform.StringWithNamespaceContext;
 import org.daisy.common.transform.TransformerException;
@@ -43,6 +44,8 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 						XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
 						                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 					} else {
+						Mult<? extends InputValue<?>> m = i.mult(2);
+						i = m.get();
 						try {
 							Map<net.sf.saxon.s9api.QName,RuntimeValue> params
 								= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
@@ -51,6 +54,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 							for (net.sf.saxon.s9api.QName p : params.keySet())
 								XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
 						} catch (IllegalArgumentException e) {
+							i = m.get();
 							try {
 								XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
 								                         XMLCalabashOptionValue.of(i).asRuntimeValue());

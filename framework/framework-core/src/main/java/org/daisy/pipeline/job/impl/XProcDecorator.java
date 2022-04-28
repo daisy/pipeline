@@ -200,7 +200,14 @@ public class XProcDecorator {
 
 	void decorateInputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
 			for(XProcOptionInfo option: options){
-				String optionString= input.getOptions().get(option.getName());
+				String optionString; {
+					Object val = input.getOptions().get(option.getName());
+					try {
+						optionString = (String)val;
+					} catch (ClassCastException e) {
+						throw new RuntimeException("Expected string value for option " + option.getName() + " but got: " + val.getClass());
+					}
+				}
 				LinkedList<String> translated= Lists.newLinkedList();
 				//explode the content of the option
 				for (String optionUri : URITranslatorHelper.explode(optionString,option,this.script) ){
@@ -222,7 +229,14 @@ public class XProcDecorator {
 	void decorateOutputOptions(Collection<XProcOptionInfo> options,XProcInput input,XProcInput.Builder builder){
 			for(XProcOptionInfo option: options){
 
-				String optionUri= input.getOptions().get(option.getName());
+				String optionUri; {
+					Object val = input.getOptions().get(option.getName());
+					try {
+						optionUri = (String)val;
+					} catch (ClassCastException e) {
+						throw new RuntimeException("Expected string value for option " + option.getName() + " but got: " + val.getClass());
+					}
+				}
 				//explode the content of the option
 				if(!URITranslatorHelper.notEmpty(optionUri)){
 					//get the uri from select if possible otherwise generate

@@ -2,6 +2,8 @@ package org.daisy.common.xproc.calabash.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcResult;
@@ -72,13 +75,25 @@ public final class CalabashXProcResult implements XProcResult {
 				Supplier<Result> resultProvider = output.getResultProvider(port);
 
 				ReadablePipe rpipe = xpipeline.readFrom(port);
-				while (rpipe.moreDocuments()) {
+				while (true) {
+					try {
+						if (!rpipe.moreDocuments()) break;
+					} catch (SaxonApiException e) {
+						throw new RuntimeException(e); // should not happen
+					}
 					Serializer serializer = SerializationUtils.newSerializer(
 							xpipeline.getSerialization(port), configuration);
 					Result result = resultProvider.get();
 					if (result instanceof StreamResult) {
 						StreamResult streamResult = (StreamResult) result;
-						serializer.setOutputStream(streamResult.getOutputStream());
+						OutputStream os = streamResult.getOutputStream();
+						if (os != null)
+							serializer.setOutputStream(os);
+						else {
+							Writer w = streamResult.getWriter();
+							if (w != null)
+								serializer.setOutputWriter(w);
+						}
 					} else {
 						URI uri = null;
 						try {
@@ -102,10 +117,17 @@ public final class CalabashXProcResult implements XProcResult {
 							}
 						}
 					}
+					XdmNode node; {
+						try {
+							node = rpipe.read();
+						} catch (SaxonApiException e) {
+							throw new RuntimeException(e); // should not happen
+						}
+					}
 					try {
-						serializer.serializeNode(rpipe.read());
+						serializer.serializeNode(node);
 					} catch (SaxonApiException e) {
-						throw new RuntimeException("Error caught when writing results",e);
+						throw new RuntimeException("Error caught when writing results", e);
 					}
 				}
 			}

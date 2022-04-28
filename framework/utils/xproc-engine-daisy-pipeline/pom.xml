@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.7-SNAPSHOT</version>
+    <version>1.14.7</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
-  <version>1.14.3-SNAPSHOT</version>
+  <version>1.14.3</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline</name>
   
@@ -113,9 +113,7 @@
         <configuration>
           <instructions>
             <Import-Package>
-              org.daisy.pipeline.webserviceutils.xml;resolution:=optional,
               !org.daisy.common.spi,
-              !org.daisy.pipeline.webservice.xml,
               *
             </Import-Package>
             <_dsannotations>

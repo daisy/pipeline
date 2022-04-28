@@ -358,7 +358,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 m -> m.startsWith(
 			                     "job finished with error state\n" +
-			                     "Unexpected error in {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
+			                     "[MYERR] Unexpected error in {http://www.daisy.org/ns/pipeline/functions}java-function\n" +
 			                     "	at xsl:value-of/@select(java-function-runtime-error.xpl:26)\n" +
 			                     "	at {http://www.daisy.org/ns/pipeline/functions}user-function()(java-function-runtime-error.xpl:23)\n" +
 			                     "	at xsl:call-template name=\"b\"(java-function-runtime-error.xpl:20)\n" +
