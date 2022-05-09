@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.liblouis</groupId>
   <artifactId>liblouis-java</artifactId>
-  <version>5.0.1</version>
+  <version>5.0.2</version>
   <packaging>bundle</packaging>
   <name>liblouis-java</name>
   <description>JNA based Java bindings to liblouis, an open-source braille translator and back-translator.</description>
@@ -13,7 +13,7 @@
     <connection>scm:git:git@github.com:bertfrees/liblouis-java.git</connection>
     <developerConnection>scm:git:git@github.com:bertfrees/liblouis-java.git</developerConnection>
     <url>git@github.com:bertfrees/liblouis-java.git</url>
-    <tag>5.0.1</tag>
+    <tag>5.0.2</tag>
   </scm>
   <licenses>
     <license>
@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louis</artifactId>
-        <version>3.19.0</version>
+        <version>3.21.0-p1</version>
         <type>nar</type>
       </dependency>
     </dependencies>
@@ -310,9 +310,14 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
-            <version>1.4</version>
+            <version>3.0.1</version>
             <configuration>
               <useAgent>true</useAgent>
+              <!-- Prevent gpg from using pinentry programs -->
+              <gpgArguments>
+                <arg>--pinentry-mode</arg>
+                <arg>loopback</arg>
+              </gpgArguments>
             </configuration>
             <executions>
               <execution>
@@ -327,15 +332,31 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>staged-releases</id>
+      <repositories>
+        <repository>
+          <id>sonatype-nexus-staging</id>
+          <name>Nexus Release Repository</name>
+          <url>https://oss.sonatype.org/content/groups/staging/</url>
+          <releases>
+            <enabled>true</enabled>
+          </releases>
+          <snapshots>
+            <enabled>false</enabled>
+          </snapshots>
+        </repository>
+      </repositories>
+    </profile>
   </profiles>
   <distributionManagement>
     <repository>
-      <id>sonatype-nexus-staging</id>
+      <id>sonatype-nexus</id>
       <name>oss.sonatype.org Staging Repository</name>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
     <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
+      <id>sonatype-nexus</id>
       <name>oss.sonatype.org github Release Repository Snapshot Repository</name>
       <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
     </snapshotRepository>

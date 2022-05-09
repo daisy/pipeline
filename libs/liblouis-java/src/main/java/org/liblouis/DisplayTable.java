@@ -377,6 +377,8 @@ public interface DisplayTable {
 		@Override
 		public String encode(String s) {
 			int length = s.length();
+			if (length == 0)
+				return s;
 			WideCharString inbuf;
 			try {
 				inbuf = Translator.getWideCharBuffer("text-in", length).write(s); }
@@ -395,6 +397,8 @@ public interface DisplayTable {
 		@Override
 		public String decode(String s) {
 			int length = s.length();
+			if (length == 0)
+				return s;
 			WideCharString inbuf;
 			try {
 				inbuf = Translator.getWideCharBuffer("text-in", length).write(s); }

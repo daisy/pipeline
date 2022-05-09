@@ -17,11 +17,11 @@ public class DefaultTablesTest {
 	}
 	
 	@Test
-	public void testCountAvailableLocales() {
+	public void testCountAvailableLanguages() {
 		Set<String> locales = new HashSet<String>();
 		for (Table t : Louis.listTables())
-			locales.add(t.getInfo().get("locale"));
-		assertEquals(104, locales.size());
+			locales.add(t.getInfo().get("language"));
+		assertEquals(99, locales.size());
 	}
 	
 	@Test
@@ -31,6 +31,6 @@ public class DefaultTablesTest {
 			t.getTranslator();
 			count++;
 		}
-		assertEquals(181, count);
+		assertEquals(182, count);
 	}
 }

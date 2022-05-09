@@ -37,7 +37,7 @@ public class FindTableTest {
 	public void testListAvailableLocales() {
 		List<String> locales = new ArrayList<String>();
 		for (Table t : Louis.listTables())
-			locales.add(t.getInfo().get("locale"));
+			locales.add(t.getInfo().get("language"));
 		assertEquals(1, locales.size());
 		assertEquals("foo", locales.get(0));
 	}

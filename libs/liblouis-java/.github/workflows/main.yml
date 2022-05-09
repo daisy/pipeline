@@ -1,0 +1,42 @@
+name: verify
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+          server-id: sonatype-nexus
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-private-key: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+      - name: Cache downloaded dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build and test
+        run: mvn --batch-mode -Pstaged-releases clean verify
+      - name: Store any log files if tests failed
+        if: failure()
+        uses: actions/upload-artifact@v2
+        with:
+          path: target/it/**/build.log
+      - name: Deploy to Sonatype
+        # Note that this also deploys snapshots
+        run: mvn --batch-mode -Pstaged-releases clean -DskipTests -Dinvoker.skip=true -Psonatype-oss-release verify org.sonatype.plugins:nexus-staging-maven-plugin:1.6.8:deploy -DnexusUrl=https://oss.sonatype.org/ -DserverId=sonatype-nexus -DkeepStagingRepositoryOnCloseRuleFailure=true
+        env:
+          MAVEN_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}

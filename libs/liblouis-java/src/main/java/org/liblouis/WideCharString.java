@@ -2,6 +2,7 @@ package org.liblouis;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.Buffer;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
@@ -112,7 +113,7 @@ public final class WideCharString extends PointerType implements NativeMapped {
 					break;
 				if (cr.isOverflow()) {
 					CharBuffer b = CharBuffer.allocate(chars.limit() * 2);
-					chars.flip();
+					((Buffer)chars).flip();
 					b.put(chars);
 					chars = b;
 					continue;
@@ -131,7 +132,7 @@ public final class WideCharString extends PointerType implements NativeMapped {
 					throw new RuntimeException("Liblouis coding error", e);
 				}
 			}
-			chars.flip();
+			((Buffer)chars).flip();
 			return chars.toString();
 		}
 	}
