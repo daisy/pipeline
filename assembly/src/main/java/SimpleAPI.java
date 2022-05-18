@@ -1,22 +1,33 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Function;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+
+import javax.xml.namespace.QName;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageAccessor;
+import org.daisy.common.messaging.MessageBus;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.spi.CreateOnStart;
 import org.daisy.common.spi.ServiceLoader;
 import org.daisy.common.transform.LazySaxResultProvider;
 import org.daisy.common.transform.LazySaxSourceProvider;
+import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
+import org.daisy.common.xproc.XProcPipeline;
+import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.WebserviceStorage;
@@ -49,9 +60,31 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class SimpleAPI {
 
+	private static Level messagesThreshold;
+	static {
+		try {
+			messagesThreshold = Level.valueOf(
+				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
+		} catch (IllegalArgumentException e) {
+			messagesThreshold = Level.INFO;
+		}
+	}
+
+	private XProcEngine xprocEngine;
 	private ScriptRegistry scriptRegistry;
 	private WebserviceStorage webserviceStorage;
 	private JobManagerFactory jobManagerFactory;
+
+	@Reference(
+		name = "xproc-engine",
+		unbind = "-",
+		service = XProcEngine.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	public void setXProcEngine(XProcEngine xprocEngine) {
+		this.xprocEngine = xprocEngine;
+	}
 
 	@Reference(
 		name = "script-registry",
@@ -86,37 +119,43 @@ public class SimpleAPI {
 		this.jobManagerFactory = jobManagerFactory;
 	}
 
-	private JobManager jobManager = null;
-
-	private Job _startJob(String scriptName, Map<String,String> options) throws IOException {
-		XProcScriptService scriptService = scriptRegistry.getScript(scriptName);
-		if (scriptService == null)
-			throw new IllegalArgumentException(scriptName + " script not found");
-		XProcScript script = scriptService.load();
+	private static XProcInput buildXProcInput(Function<String,Optional<String>> inputValues,
+	                                          Function<QName,Optional<Object>> optionValues,
+	                                          XProcPipelineInfo pipelineInfo,
+	                                          Optional<XProcScript> script) throws IOException {
+		XProcInput.Builder inputs = new XProcInput.Builder();
 		File cwd = new File(System.getProperty("org.daisy.pipeline.cli.cwd", "."));
-		XProcInput.Builder inputs = new XProcInput.Builder(); {
-			for (XProcPortInfo port : script.getXProcPipelineInfo().getInputPorts()) {
-				if (options.containsKey(port.getName())) {
-					File file = new File(options.remove(port.getName()));
-					if (!file.isAbsolute())
-						file = new File(cwd, file.getPath()).getCanonicalFile();
-					if (!file.exists()) {
-						throw new FileNotFoundException(file.getPath());
-					}
-					inputs.withInput(port.getName(), new LazySaxSourceProvider(file.toURI().toURL().toString()));
-				} else if (script.getPortMetadata(port.getName()).isRequired()) {
-					throw new IllegalArgumentException("Required option " + port.getName() + " missing");
+		for (XProcPortInfo port : pipelineInfo.getInputPorts()) {
+			Optional<String> v = inputValues.apply(port.getName());
+			if (v.isPresent()) {
+				File file = new File(v.get());
+				if (!file.isAbsolute())
+					file = new File(cwd, file.getPath()).getCanonicalFile();
+				if (!file.exists()) {
+					throw new FileNotFoundException(file.getPath());
 				}
+				inputs.withInput(port.getName(), new LazySaxSourceProvider(file.toURI().toURL().toString()));
+			} else if (script.isPresent() && script.get().getPortMetadata(port.getName()).isRequired()) {
+				throw new IllegalArgumentException("Required option " + port.getName() + " missing");
 			}
-			for (XProcOptionInfo option : script.getXProcPipelineInfo().getOptions()) {
-				XProcOptionMetadata metadata = script.getOptionMetadata(option.getName());
-				if (metadata.getOutput() == XProcOptionMetadata.Output.TEMP)
-					continue;
-				if (options.containsKey(option.getName().toString())) {
-					String value = options.remove(option.getName().toString());
+		}
+		for (XProcOptionInfo option : pipelineInfo.getOptions()) {
+			XProcOptionMetadata metadata = script.map(s -> s.getOptionMetadata(option.getName())).orElse(null);
+			if (metadata != null && metadata.getOutput() == XProcOptionMetadata.Output.TEMP)
+				continue;
+			Optional<Object> v = optionValues.apply(option.getName());
+			if (v.isPresent()) {
+				Object value = v.get();
+				if (metadata != null) {
+					try {
+						value = (String)value;
+					} catch (ClassCastException e) {
+						throw new RuntimeException(
+							"Expected string value for option " + option.getName() + " but got: " + value.getClass());
+					}
 					String type = metadata.getType();
 					if ("anyFileURI".equals(type)) {
-						File file = new File(value);
+						File file = new File((String)value);
 						if (!file.isAbsolute())
 							file = new File(cwd, file.getPath()).getCanonicalFile();
 						if (metadata.getOutput() == XProcOptionMetadata.Output.RESULT) {
@@ -130,7 +169,7 @@ public class SimpleAPI {
 						}
 						value = file.toURI().toURL().toString();
 					} else if ("anyDirURI".equals(type)) {
-						File dir = new File(value);
+						File dir = new File((String)value);
 						if (!dir.isAbsolute())
 							dir = new File(cwd, dir.getPath()).getCanonicalFile();
 						if (dir.exists() && !dir.isDirectory()) {
@@ -147,42 +186,92 @@ public class SimpleAPI {
 						}
 						value = dir.toURI().toURL().toString();
 					}
-					inputs.withOption(option.getName(), value);
-				} else if (option.isRequired() && metadata.getOutput() != XProcOptionMetadata.Output.RESULT) {
-					throw new IllegalArgumentException("Required option " + option.getName() + " missing");
 				}
+				inputs.withOption(option.getName(), value);
+			} else if (option.isRequired() && !(metadata != null && metadata.getOutput() == XProcOptionMetadata.Output.RESULT)) {
+				throw new IllegalArgumentException("Required option " + option.getName() + " missing");
 			}
 		}
-		XProcOutput.Builder outputs = new XProcOutput.Builder(); {
-			for (XProcPortInfo port : script.getXProcPipelineInfo().getOutputPorts()) {
-				if (options.containsKey(port.getName())) {
-					String filePath = options.remove(port.getName());
-					File file = new File(filePath);
-					if (!file.isAbsolute())
-						file = new File(cwd, file.getPath()).getCanonicalFile();
-					if (file.isDirectory() || filePath.endsWith("/") || port.isSequence()) {
-						if (file.isDirectory()) {
-							if (file.list().length > 0) {
-								throw new IllegalArgumentException("Directory is not empty: " + file);
-							}
-						} else if (file.exists()) {
-							throw new IllegalArgumentException("Not a directory: " + file);
+		return inputs.build();
+	}
+
+	private static XProcOutput buildXProcOutput(Function<String,Optional<String>> outputValues,
+	                                            XProcPipelineInfo pipelineInfo) throws IOException {
+		XProcOutput.Builder outputs = new XProcOutput.Builder();
+		File cwd = new File(System.getProperty("org.daisy.pipeline.cli.cwd", "."));
+		for (XProcPortInfo port : pipelineInfo.getOutputPorts()) {
+			Optional<String> v = outputValues.apply(port.getName());
+			if (v.isPresent()) {
+				String filePath = v.get();
+				File file = new File(filePath);
+				if (!file.isAbsolute())
+					file = new File(cwd, file.getPath()).getCanonicalFile();
+				if (file.isDirectory() || filePath.endsWith("/") || port.isSequence()) {
+					if (file.isDirectory()) {
+						if (file.list().length > 0) {
+							throw new IllegalArgumentException("Directory is not empty: " + file);
 						}
-						filePath = file.toURI().toURL().toString() + "/";
-					} else {
-						if (file.exists()) {
-							throw new IllegalArgumentException("File exists: " + file);
-						}
-						filePath = file.toURI().toURL().toString();
+					} else if (file.exists()) {
+						throw new IllegalArgumentException("Not a directory: " + file);
 					}
-					outputs.withOutput(port.getName(), new LazySaxResultProvider(filePath));
+					filePath = file.toURI().toURL().toString() + "/";
+				} else {
+					if (file.exists()) {
+						throw new IllegalArgumentException("File exists: " + file);
+					}
+					filePath = file.toURI().toURL().toString();
 				}
+				outputs.withOutput(port.getName(), new LazySaxResultProvider(filePath));
 			}
+		}
+		return outputs.build();
+	}
+
+	private void _runStep(URI step, Map<String,String> inputs, Map<String,Object> options, Map<String,String> outputs)
+			throws IOException, XProcErrorException {
+		XProcPipeline pipeline = xprocEngine.load(step);
+		XProcInput input = buildXProcInput(port -> Optional.ofNullable(inputs.remove(port)),
+		                                   option -> Optional.ofNullable(options.remove(option.toString())),
+		                                   pipeline.getInfo(),
+		                                   Optional.empty());
+		for (String unknown : inputs.keySet()) {
+			throw new IllegalArgumentException("Unknown input: " + unknown);
 		}
 		for (String unknown : options.keySet()) {
 			throw new IllegalArgumentException("Unknown option: " + unknown);
 		}
-		BoundXProcScript boundScript = BoundXProcScript.from(script, inputs.build(), outputs.build());
+		XProcOutput output = buildXProcOutput(port -> Optional.ofNullable(outputs.remove(port)),
+		                                      pipeline.getInfo());
+		for (String unknown : outputs.keySet()) {
+			throw new IllegalArgumentException("Unknown output: " + unknown);
+		}
+		MessageBus messageBus = new MessageBus("some-id", messagesThreshold);
+		messageBus.listen(num -> consumeMessage(messageBus, num));
+		pipeline.run(input, () -> messageBus, null).writeTo(output);
+	}
+
+	private static void runStep(URI step, Map<String,String> inputs, Map<String,Object> options, Map<String,String> outputs)
+			throws IOException, XProcErrorException {
+		getInstance()._runStep(step, inputs, options, outputs);
+	}
+
+	private JobManager jobManager = null;
+
+	private Job _startJob(String scriptName, Map<String,String> options) throws IOException {
+		XProcScriptService scriptService = scriptRegistry.getScript(scriptName);
+		if (scriptService == null)
+			throw new IllegalArgumentException(scriptName + " script not found");
+		XProcScript script = scriptService.load();
+		XProcInput input = buildXProcInput(port -> Optional.ofNullable(options.remove(port)),
+		                                   option -> Optional.ofNullable(options.remove(option.toString())),
+		                                   script.getXProcPipelineInfo(),
+		                                   Optional.of(script));
+		XProcOutput output = buildXProcOutput(port -> Optional.ofNullable(options.remove(port)),
+		                                       script.getXProcPipelineInfo());
+		for (String unknown : options.keySet()) {
+			throw new IllegalArgumentException("Unknown option: " + unknown);
+		}
+		BoundXProcScript boundScript = BoundXProcScript.from(script, input, output);
 		if (jobManager == null) {
 			Client client = webserviceStorage.getClientStorage().defaultClient();
 			jobManager = jobManagerFactory.createFor(client);
