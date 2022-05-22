@@ -15,9 +15,7 @@ else
     if [[ -z ${HOST_PLATFORM} ]]; then
         # MAKECMDGOALS exported from main Makefile, but messes up recursive invocation of make
         unset MAKECMDGOALS
-        # unconditionally make targets because this is what was decided by super-project based on the dependency analysis
-        # ideally, the external dependency information should be passed to sub-project so that it can make the decision
-        eval $MAKE -B -C assembly "$@"
+        eval $MAKE -C assembly "$@"
     else
         exit 1
     fi

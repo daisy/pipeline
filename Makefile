@@ -20,6 +20,7 @@ ifneq ($(MAKECMDGOALS), dump-gradle-cmd)
 ifneq ($(MAKECMDGOALS), clean-website)
 include .make/main.mk
 assembly/BASEDIR := assembly
+assembly/SOURCES : assembly/.compile-dependencies
 include assembly/deps.mk
 -include webui/.deps.mk
 else
@@ -215,39 +216,39 @@ $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
 
 .SECONDARY : assembly/.install.deb
-assembly/.install.deb : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install.deb : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb)
 
 .SECONDARY : assembly/.install-linux.rpm
-assembly/.install-linux.rpm : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-linux.rpm : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
 
 .SECONDARY : assembly/.install-linux.zip
-assembly/.install-linux.zip : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-linux.zip : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-linux)
 
 .SECONDARY : assembly/.install-minimal.zip
-assembly/.install-minimal.zip : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-minimal.zip : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-minimal)
 
 .SECONDARY : assembly/.install-mac.zip
-assembly/.install-mac.zip : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-mac.zip : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
 
 .SECONDARY : assembly/.install-win.zip
-assembly/.install-win.zip : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-win.zip : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
 
 .SECONDARY : assembly/.install.dmg
-assembly/.install.dmg : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install.dmg : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,dmg)
 
 .SECONDARY : assembly/.install.exe
-assembly/.install.exe : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install.exe : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
 .SECONDARY : assembly/.install-cli.deb
-assembly/.install-cli.deb : assembly/.compile-dependencies | .maven-init .group-eval
+assembly/.install-cli.deb : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb-cli)
 
 webui/.deps.mk : webui/build.sbt
