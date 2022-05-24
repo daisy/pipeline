@@ -9,7 +9,7 @@ source 'https://rubygems.org' do
   gem 'rdf-turtle', '3.1.3'
   gem 'rdf-rdfa', '3.1.3'
   gem 'commaparty', '0.0.2'
-  gem 'nokogiri', '1.8.4'
+  gem 'nokogiri', '1.13.6'
   gem 'mustache', '1.0.2'
   gem 'github-markup', '1.4.0'
   gem 'coderay', '1.1.0'
