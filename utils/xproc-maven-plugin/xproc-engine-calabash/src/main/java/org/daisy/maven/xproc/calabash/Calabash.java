@@ -131,6 +131,14 @@ public class Calabash implements XProcEngine {
 				config.parse(nextDefaultConfig);
 			if (nextConfig != null)
 				config.parse(nextConfig);
+			if (config.saxonConfig != null) {
+				// because the above does not properly set Saxon configuration from "saxon-config" setting
+				config = new XProcConfiguration(config.saxonConfig);
+				if (nextDefaultConfig != null)
+					config.parse(nextDefaultConfig);
+				if (nextConfig != null)
+					config.parse(nextConfig);
+			}
 			currentRuntime = new XProcRuntime(config); }
 		if (nextURIResolver == null)
 			nextURIResolver = simpleURIResolver();
