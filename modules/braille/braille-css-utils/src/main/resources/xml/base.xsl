@@ -18,13 +18,11 @@
         <color>
     -->
     <xsl:variable name="css:COLOR_RE" select="'#[0-9A-F]{6}'"/>
-    <xsl:variable name="css:COLOR_RE_groups" select="0"/>
     
     <!--
         <braille-character>: http://braillespecs.github.io/braille-css/#dfn-braille-character
     -->
     <xsl:variable name="css:BRAILLE_CHAR_RE" select="'\p{IsBraillePatterns}'"/>
-    <xsl:variable name="css:BRAILLE_CHAR_RE_groups" select="0"/>
     
     <!--
         <braille-string>: http://braillespecs.github.io/braille-css/#dfn-braille-string
@@ -37,9 +35,6 @@
     -->
     <xsl:variable name="css:IDENT_RE" select="'(\p{L}|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:IDENT_RE_groups" select="2"/>
-    
-    <xsl:variable name="css:IDENT_LIST_RE" select="re:space-separated($css:IDENT_RE)"/>
-    <xsl:variable name="css:IDENT_LIST_RE_groups" select="re:space-separated-groups($css:IDENT_RE_groups)"/>
     
     <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|[0-9]|_)(\p{L}|[0-9]|_|-)*'"/>
     <xsl:variable name="css:VENDOR_PRF_IDENT_RE_groups" select="3"/>
@@ -54,13 +49,6 @@
         non-negative <integer>
     -->
     <xsl:variable name="css:NON_NEGATIVE_INTEGER_RE" select="'0|[1-9][0-9]*'"/>
-    <xsl:variable name="css:NON_NEGATIVE_INTEGER_RE_groups" select="0"/>
-    
-    <!--
-        positive <integer>
-    -->
-    <xsl:variable name="css:POSITIVE_INTEGER_RE" select="'[1-9][0-9]*'"/>
-    <xsl:variable name="css:POSITIVE_INTEGER_RE_groups" select="0"/>
     
     <!--
         positive <number> (normalized)
@@ -180,14 +168,9 @@
         -foo-bar([<ident>|<string>|<integer>][,[<ident>|<string>|<integer>]]*)
     -->
     <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE" select="re:or(($css:IDENT_RE,$css:STRING_RE,$css:INTEGER_RE))"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE_ident" select="1"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE_string" select="$css:VENDOR_PRF_FN_ARG_RE_ident + $css:IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE_integer" select="$css:VENDOR_PRF_FN_ARG_RE_string + $css:STRING_RE_groups + 1"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE_groups" select="$css:VENDOR_PRF_FN_ARG_RE_integer + $css:INTEGER_RE_groups"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE" select="concat('(',$css:VENDOR_PRF_IDENT_RE,')\(\s*(',re:comma-separated($css:VENDOR_PRF_FN_ARG_RE),')\s*\)')"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE_func" select="1"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE_args" select="$css:VENDOR_PRF_FN_RE_func + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_RE_groups" select="$css:VENDOR_PRF_FN_RE_args + re:comma-separated-groups($css:VENDOR_PRF_FN_ARG_RE_groups)"/>
     
     <xsl:variable name="css:CONTENT_RE" select="concat('(',$css:STRING_RE,')|
                                                         (',$css:CONTENT_FN_RE,')|
@@ -212,7 +195,6 @@
     <xsl:variable name="css:CONTENT_RE_counter_fn_ident" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_ident"/>
     <xsl:variable name="css:CONTENT_RE_counter_fn_style" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_style"/>
     <xsl:variable name="css:CONTENT_RE_target_text_fn" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_text_fn_url" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_url"/>
     <xsl:variable name="css:CONTENT_RE_target_text_fn_url_string" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_url_string"/>
     <xsl:variable name="css:CONTENT_RE_target_text_fn_url_attr" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_url_attr"/>
     <xsl:variable name="css:CONTENT_RE_target_string_fn" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_groups + 1"/>
@@ -221,7 +203,6 @@
     <xsl:variable name="css:CONTENT_RE_target_string_fn_url_attr" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_url_attr"/>
     <xsl:variable name="css:CONTENT_RE_target_string_fn_ident" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_ident"/>
     <xsl:variable name="css:CONTENT_RE_target_counter_fn" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn_url" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_url"/>
     <xsl:variable name="css:CONTENT_RE_target_counter_fn_url_string" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_url_string"/>
     <xsl:variable name="css:CONTENT_RE_target_counter_fn_url_attr" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_url_attr"/>
     <xsl:variable name="css:CONTENT_RE_target_counter_fn_ident" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_ident"/>
@@ -233,8 +214,6 @@
     <xsl:variable name="css:CONTENT_RE_leader_fn" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_groups + 1"/>
     <xsl:variable name="css:CONTENT_RE_leader_fn_pattern" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_pattern"/>
     <xsl:variable name="css:CONTENT_RE_leader_fn_position" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn_position_abs" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position_abs"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn_position_rel" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position_rel"/>
     <xsl:variable name="css:CONTENT_RE_leader_fn_alignment" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_alignment"/>
     <xsl:variable name="css:CONTENT_RE_flow_fn" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_groups + 1"/>
     <xsl:variable name="css:CONTENT_RE_flow_fn_ident" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_ident"/>
@@ -242,10 +221,8 @@
     <xsl:variable name="css:CONTENT_RE_vendor_prf_fn" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_groups + 1"/>
     <xsl:variable name="css:CONTENT_RE_vendor_prf_fn_func" select="$css:CONTENT_RE_vendor_prf_fn + $css:VENDOR_PRF_FN_RE_func"/>
     <xsl:variable name="css:CONTENT_RE_vendor_prf_fn_args" select="$css:CONTENT_RE_vendor_prf_fn + $css:VENDOR_PRF_FN_RE_args"/>
-    <xsl:variable name="css:CONTENT_RE_groups" select="$css:CONTENT_RE_vendor_prf_fn + $css:VENDOR_PRF_FN_RE_groups"/>
     
     <xsl:variable name="css:CONTENT_LIST_RE" select="re:space-separated($css:CONTENT_RE)"/>
-    <xsl:variable name="css:CONTENT_LIST_RE_groups" select="re:space-separated-groups($css:CONTENT_RE_groups)"/>
     
     <xsl:variable name="css:STRING_SET_PAIR_RE" select="concat('(',$css:IDENT_RE,')\s+(',$css:CONTENT_LIST_RE,')')"/>
     <xsl:variable name="css:STRING_SET_PAIR_RE_ident" select="1"/>
@@ -256,38 +233,10 @@
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_value" select="$css:COUNTER_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 2"/>
     
     <xsl:variable name="css:PROPERTY_VALUE_RE">([^'"\{\}@&amp;;:]+|'[^']*'|"[^"]*")*</xsl:variable>
-    <xsl:variable name="css:PROPERTY_VALUE_RE_groups" select="1"/>
     
     <xsl:variable name="css:DECLARATION_RE" select="concat('(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*:(',$css:PROPERTY_VALUE_RE,')')"/>
     <xsl:variable name="css:DECLARATION_RE_property" select="1"/>
     <xsl:variable name="css:DECLARATION_RE_value" select="$css:DECLARATION_RE_property + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:DECLARATION_RE_groups" select="$css:DECLARATION_RE_value + $css:PROPERTY_VALUE_RE_groups"/>
-    
-    <xsl:variable name="css:DECLARATION_LIST_RE" select="concat('\s*(', $css:DECLARATION_RE ,')?(;\s*(', $css:DECLARATION_RE ,')?)*')"/>
-    <xsl:variable name="css:DECLARATION_LIST_RE_groups" select="1 + $css:DECLARATION_RE_groups + 2 + $css:DECLARATION_RE_groups"/>
-    
-    <xsl:variable name="css:ATKEYWORD_RE" select="concat('@((',$css:IDENT_RE,')|(',$css:VENDOR_PRF_IDENT_RE,'))')"/>
-    <xsl:variable name="css:ATKEYWORD_RE_name" select="1"/>
-    <xsl:variable name="css:ATKEYWORD_RE_groups" select="$css:ATKEYWORD_RE_name + 1 + $css:IDENT_RE_groups + 1 + $css:VENDOR_PRF_IDENT_RE_groups"/>
-    
-    <xsl:variable name="css:NESTED_NESTED_NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{',$css:DECLARATION_LIST_RE,'\}')"/>
-    <xsl:variable name="css:NESTED_NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_NESTED_RULE_RE,')*)\}')"/>
-    <xsl:variable name="css:NESTED_RULE_RE" select="concat($css:ATKEYWORD_RE,'(',$css:PSEUDOCLASS_RE,')?\s+\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_NESTED_RULE_RE,')*)\}')"/>
-    
-    <xsl:variable name="css:PSEUDOCLASS_RE" select="concat(':(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\([1-9][0-9]*\))?')"/>
-    <xsl:variable name="css:PSEUDOCLASS_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
-    
-    <xsl:variable name="css:PSEUDOELEMENT_RE" select="concat('::(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')(\(',$css:IDENT_RE,'\))?')"/>
-    <xsl:variable name="css:PSEUDOELEMENT_RE_groups" select="1 + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1 + $css:IDENT_RE_groups"/>
-    
-    <xsl:variable name="css:RULE_RE" select="concat('((',$css:ATKEYWORD_RE,')(\s+(',$css:IDENT_RE,'))?(',$css:PSEUDOCLASS_RE,')?\s*|([^\s\{;@][^\{;@&amp;]*))\{((',$css:DECLARATION_LIST_RE,'|',$css:NESTED_RULE_RE,')*)\}')"/>
-    <xsl:variable name="css:RULE_RE_selector" select="1"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule" select="$css:RULE_RE_selector + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule_name" select="$css:RULE_RE_selector_atrule + $css:ATKEYWORD_RE_groups + 2"/>
-    <xsl:variable name="css:RULE_RE_selector_atrule_pseudoclass" select="$css:RULE_RE_selector_atrule_name + $css:IDENT_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_selector_relative" select="$css:RULE_RE_selector_atrule_pseudoclass + $css:PSEUDOCLASS_RE_groups + 1"/>
-    <xsl:variable name="css:RULE_RE_value" select="$css:RULE_RE_selector_relative + 1"/>
-    
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->
