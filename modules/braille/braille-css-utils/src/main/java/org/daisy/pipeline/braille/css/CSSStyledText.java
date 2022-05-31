@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.css;
 
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.Function;
 import java.util.HashMap;
 import java.util.Locale;
@@ -245,8 +246,9 @@ public class CSSStyledText implements Cloneable {
 		}
 	}
 
-	private static <K,V extends Cloneable> Function<K,V> memoize(Function<K,V> function) {
-		Map<K,V> cache = new HashMap<K,V>();
+	private static <K extends Comparable,V extends Cloneable> Function<K,V> memoize(Function<K,V> function) {
+		// Note: we should be careful not to use this function in such a way that the cache can keep growing.
+		Map<K,V> cache = new ConcurrentSkipListMap<K,V>();
 		return new Function<K,V>() {
 			public V apply(K key) {
 				V value;

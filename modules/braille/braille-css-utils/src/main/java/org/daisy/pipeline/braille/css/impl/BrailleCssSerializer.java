@@ -24,6 +24,7 @@ import cz.vutbr.web.csskit.OutputUtil;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -48,17 +49,17 @@ public final class BrailleCssSerializer {
 		return declaration.getProperty() + ": " + serializeTermList((List<Term<?>>)declaration) + ";";
 	}
 
-	public static String toString(BrailleCssTreeBuilder.Style style) {
+	public static String toString(BrailleCssStyle style) {
 		return toString(style, null);
 	}
 
-	private static String toString(BrailleCssTreeBuilder.Style style, String base) {
+	private static String toString(BrailleCssStyle style, String base) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder rel = new StringBuilder();
 		if (style.declarations != null)
 			b.append(serializeDeclarationList(style.declarations));
 		if (style.nestedStyles != null)
-			for (Map.Entry<String,BrailleCssTreeBuilder.Style> e : style.nestedStyles.entrySet()) {
+			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
 				if (base != null && e.getKey().startsWith("&")) {
 					if (rel.length() > 0) rel.append(" ");
 					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
@@ -79,7 +80,7 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(InlineStyle style) {
-		return toString(BrailleCssTreeBuilder.Style.of(style));
+		return toString(BrailleCssStyle.of(style, Context.ELEMENT));
 	}
 
 	public static String toString(SimpleInlineStyle style) {
@@ -142,10 +143,7 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(RulePage page) {
-		return toString(
-			new BrailleCssTreeBuilder.Style().add(
-				"@page",
-				BrailleCssTreeBuilder.Style.of(page)));
+		return toString(BrailleCssStyle.of(page));
 	}
 
 	public static String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
@@ -205,11 +203,11 @@ public final class BrailleCssSerializer {
 	private static final QName NAME = new QName("name");
 	private static final QName VALUE = new QName("value");
 
-	public static void toXml(BrailleCssTreeBuilder.Style style, XMLStreamWriter writer, boolean deep) throws XMLStreamException {
+	public static void toXml(BrailleCssStyle style, XMLStreamWriter writer, boolean deep) throws XMLStreamException {
 		toXml(style, writer, deep, false);
 	}
 
-	private static void toXml(BrailleCssTreeBuilder.Style style,
+	private static void toXml(BrailleCssStyle style,
 	                          XMLStreamWriter w,
 	                          boolean deep,
 	                          boolean recursive) throws XMLStreamException {
@@ -230,7 +228,7 @@ public final class BrailleCssSerializer {
 				w.writeEndElement();
 		}
 		if (style.nestedStyles != null)
-			for (Map.Entry<String,BrailleCssTreeBuilder.Style> e : style.nestedStyles.entrySet()) {
+			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
 				writeStartElement(w, CSS_RULE);
 				writeAttribute(w, SELECTOR, e.getKey());
 				if (!deep)
