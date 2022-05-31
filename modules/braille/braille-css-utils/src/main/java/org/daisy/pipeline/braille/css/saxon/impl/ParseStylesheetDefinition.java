@@ -21,10 +21,9 @@ import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
-import org.daisy.braille.css.InlineStyle;
 import org.daisy.common.saxon.SaxonOutputValue;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
-import org.daisy.pipeline.braille.css.impl.BrailleCssTreeBuilder.Style;
+import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -100,9 +99,8 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 								throw new RuntimeException(); }}}
 				List<NodeInfo> result = new ArrayList<>();
 				try {
-					Style style = Style.of(new InlineStyle(arg.getStringValue(), styleCtxt));
 					BrailleCssSerializer.toXml(
-						style,
+						BrailleCssStyle.of(arg.getStringValue(), styleCtxt),
 						new SaxonOutputValue(
 							item -> {
 								if (item instanceof XdmNode)
