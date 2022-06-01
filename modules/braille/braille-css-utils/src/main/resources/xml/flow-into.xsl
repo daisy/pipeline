@@ -27,7 +27,7 @@
                             <xsl:if test="not(@xml:lang)">
 	                            <xsl:sequence select="ancestor::*[@xml:lang][1]/@xml:lang"/>
                             </xsl:if>
-                            <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
+                            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet(
                                                   css:specified-properties(($css:properties,'#all'), true(), false(), false(), .)
                                                   [not(@value='initial')]))"/>
                             <xsl:if test="not(@css:anchor)">
