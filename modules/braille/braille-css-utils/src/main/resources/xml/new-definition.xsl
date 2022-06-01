@@ -52,7 +52,7 @@
                     <xsl:apply-templates select="$properties[self::keep]/*" mode="css:property-as-attribute"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:sequence select="css:style-attribute(css:serialize-declaration-list($properties[self::keep]/*))"/>
+                    <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($properties[self::keep]/*))"/>
                 </xsl:otherwise>
             </xsl:choose>
             <xsl:apply-templates>

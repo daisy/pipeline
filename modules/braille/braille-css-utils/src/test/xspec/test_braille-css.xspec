@@ -190,7 +190,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_15">
-		<x:call function="css:serialize-declaration-list">
+		<x:call function="css:serialize-stylesheet">
 			<x:param>
 				<css:property name="display" value="none"/>
 				<css:property name="string-set" value="print-page attr(value)"/>

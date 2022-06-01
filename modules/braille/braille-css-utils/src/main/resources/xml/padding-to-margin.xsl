@@ -70,7 +70,7 @@
                         <xsl:variable name="parent-properties" as="element(css:property)*"
                                       select="css:deep-parse-stylesheet(parent::*/ancestor::css:box[1]/@style)
                                               /self::css:rule[not(@selector)]/css:property"/>
-                        <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
+                        <xsl:sequence select="css:style-attribute(css:serialize-stylesheet(
                                                 for $p in $properties return
                                                   if ($p/@value='inherit' and not(css:is-inherited($p/@name)))
                                                     then $parent-properties[@name=$p/@name][last()]

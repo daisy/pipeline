@@ -100,7 +100,7 @@
                          css:_obfl-on-toc-end">
         <xsl:copy>
             <xsl:sequence select="@* except @style"/>
-            <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet(
                                   css:computed-properties(($css:properties,'#all'), true(), false(), false(), .)
                                   [not(@value='initial')]))"/>
             <xsl:apply-templates/>
