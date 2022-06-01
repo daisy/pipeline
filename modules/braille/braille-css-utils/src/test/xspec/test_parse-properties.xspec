@@ -18,7 +18,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p css:display="block" css:counter-reset="braille-page 1" style="margin-left: 2">
+          <p css:display="block" css:counter-reset="braille-page 0 braille-page 1" style="margin-left: 2">
             foo
           </p>
         </body>

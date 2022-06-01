@@ -113,7 +113,6 @@
             <xsl:call-template name="css:computed-properties">
                 <xsl:with-param name="concretize-inherit" select="false()"/>
                 <xsl:with-param name="concretize-initial" select="false()"/>
-                <xsl:with-param name="validate" select="false()"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:sequence select="for $p in distinct-values(($pending-properties/@name,$properties/@name))
