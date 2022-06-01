@@ -124,7 +124,7 @@
                               then $default-page-stylesheet/self::css:property
                               else $default-page-stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="size" as="xs:string"
-                      select="($default-page-properties[@name='size'][css:is-valid(.) and not(@value='auto')]/@value,
+                      select="($default-page-properties[@name='size'][not(@value='auto')]/@value,
                                concat($page-width,' ',$page-height)
                               )[1]"/>
         <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
@@ -298,13 +298,13 @@
                               then $stylesheet/self::css:property
                               else $stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="margin-top" as="xs:integer"
-                      select="max(($properties[@name='margin-top'][css:is-valid(.)]/xs:integer(@value),0))"/>
+                      select="max(($properties[@name='margin-top']/xs:integer(@value),0))"/>
         <xsl:variable name="margin-bottom" as="xs:integer"
-                      select="max(($properties[@name='margin-bottom'][css:is-valid(.)]/xs:integer(@value),0))"/>
+                      select="max(($properties[@name='margin-bottom']/xs:integer(@value),0))"/>
         <xsl:variable name="margin-left" as="xs:integer"
-                      select="max(($properties[@name='margin-left'][css:is-valid(.)]/xs:integer(@value),0))"/>
+                      select="max(($properties[@name='margin-left']/xs:integer(@value),0))"/>
         <xsl:variable name="margin-right" as="xs:integer"
-                      select="max(($properties[@name='margin-right'][css:is-valid(.)]/xs:integer(@value),0))"/>
+                      select="max(($properties[@name='margin-right']/xs:integer(@value),0))"/>
         <xsl:choose>
             <xsl:when test="exists(($top-left, $top-center, $top-right)) or $margin-top &gt; 0">
                 <xsl:call-template name="headers">

@@ -604,7 +604,6 @@
 	
 	<xsl:template name="css:cascaded-properties" as="element()*">
 		<xsl:param name="properties" as="xs:string*" select="('#all')"/>
-		<xsl:param name="validate" as="xs:boolean" select="false()"/>
 		<xsl:param name="context" as="element()" select="."/>
 		<xsl:param name="cascaded-properties" as="element(css:property)*" select="()" tunnel="yes"/>
 		<xsl:sequence select="for $name in distinct-values(
@@ -619,7 +618,6 @@
 		<xsl:param name="compute" as="xs:boolean" select="false()"/>
 		<xsl:param name="concretize-inherit" as="xs:boolean" select="true()"/>
 		<xsl:param name="concretize-initial" as="xs:boolean" select="true()"/>
-		<xsl:param name="validate" as="xs:boolean"/>
 		<xsl:param name="context" as="element()" select="."/>
 		<xsl:param name="parent-properties" as="element(css:property)*" select="()" tunnel="yes"/>
 		<xsl:choose>

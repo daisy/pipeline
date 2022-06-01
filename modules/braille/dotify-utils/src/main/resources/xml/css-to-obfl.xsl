@@ -394,7 +394,8 @@
                             page style to use in @begin and @end areas when no page property specified
                         -->
                         <xsl:variable name="default-page-style" as="xs:string" select="($sections/*[not(@css:flow)])[1]/string(@css:page)"/>
-                        <volume-template sheets-in-volume-max="{($properties[@name='max-length' and css:is-valid(.)]/string(@value),$no-upper-limit)[1]}">
+                        <volume-template sheets-in-volume-max="{($properties[@name='max-length'][not(@value='auto')]
+                                                                            /string(@value),$no-upper-limit)[1]}">
                             <xsl:if test="not($use-when='t')">
                                 <xsl:attribute name="use-when" select="$use-when"/>
                             </xsl:if>
@@ -665,7 +666,7 @@
                         <xsl:choose>
                             <xsl:when test="exists($style)">
                                 <!--
-                                    FIXME: values are not validated and inherited (css:new-definition)
+                                    FIXME: values are not inherited (css:new-definition)
                                     and negative values are not handled (css:adjust-boxes)
                                 -->
                                 <css:box type="block">

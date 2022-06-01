@@ -81,72 +81,6 @@
                  'table-header-policy',
                  '-obfl-right-text-indent')"/>
     
-    <xsl:variable name="css:values" as="xs:string*"
-        select="(re:exact(re:or(('block','inline','list-item','none','table',$css:VENDOR_PRF_IDENT_RE))),
-                 re:exact($css:IDENT_RE),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'auto'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'auto'))),
-                 re:exact($css:INTEGER_RE),
-                 re:exact($css:INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))),
-                 re:exact(re:or(('none','solid'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'thin','medium','thick'))),
-                 re:exact(re:or(('inner','center','outer'))),
-                 re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))),
-                 re:exact(re:or(('none','solid'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'thin','medium','thick'))),
-                 re:exact(re:or(('inner','middle','outer'))),
-                 re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))),
-                 re:exact(re:or(('none','solid'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'thin','medium','thick'))),
-                 re:exact(re:or(('inner','middle','outer'))),
-                 re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))),
-                 re:exact(re:or(('none','solid'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'thin','medium','thick'))),
-                 re:exact(re:or(('inner','middle','outer'))),
-                 re:exact($css:INTEGER_RE),
-                 re:exact(re:or(($css:IDENT_RE,$css:BRAILLE_STRING_RE,$css:SYMBOLS_FN_RE))),
-                 re:exact(re:or(('center','left','right'))),
-                 re:exact(re:or(('always','auto','avoid','left','right'))),
-                 re:exact(re:or(('always','auto','avoid','left','right'))),
-                 re:exact(re:or(('auto','avoid'))),
-                 re:exact(re:or(('always','auto','avoid','prefer'))),
-                 re:exact(re:or(('always','auto','avoid','prefer'))),
-                 re:exact(re:or(('auto','avoid',$css:VENDOR_PRF_FN_RE))),
-                 re:exact($css:INTEGER_RE),
-                 re:exact($css:INTEGER_RE),
-                 re:exact(re:or(($css:IDENT_RE,'auto'))),
-                 re:exact(re:or(('none',re:comma-separated($css:STRING_SET_PAIR_RE)))),
-                 re:exact(re:or(('none',re:space-separated($css:COUNTER_SET_PAIR_RE)))),
-                 re:exact(re:or(('none',re:space-separated($css:COUNTER_SET_PAIR_RE)))),
-                 re:exact(re:or(('none',re:space-separated($css:COUNTER_SET_PAIR_RE)))),
-                 re:exact(re:or(('none',$css:CONTENT_LIST_RE))),
-                 re:exact(re:or(('normal','pre-wrap','pre-line'))),
-                 re:exact(re:or(('auto','manual','none'))),
-                 re:exact(re:or(('auto',$css:BRAILLE_STRING_RE))),
-                 re:exact(re:or(('auto',concat('(',$css:NON_NEGATIVE_INTEGER_RE,')\s+(',$css:NON_NEGATIVE_INTEGER_RE,')')))),
-                 re:exact(re:or(('none',$css:NON_NEGATIVE_INTEGER_RE))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'auto'))),
-                 re:exact(re:or(($css:NON_NEGATIVE_INTEGER_RE,'auto'))),
-                 re:exact(re:or((re:space-separated(re:or(($css:IDENT_RE,$css:VENDOR_PRF_IDENT_RE))),'auto','none'))),
-                 re:exact(re:or(('unicode','custom'))),
-                 re:exact(re:or(('normal','italic','oblique'))),
-                 re:exact(re:or(('normal','bold','100','200','300','400','500','600','700','800','900'))),
-                 re:exact(re:or(('none','underline','overline','line-through','blink'))),
-                 re:exact($css:COLOR_RE),
-                 re:exact(re:or(($css:POSITIVE_NUMBER_RE,$css:POSITIVE_PERCENTAGE_RE))),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE),
-                 re:exact(re:or(('auto',re:comma-separated($css:IDENT_RE)))),
-                 re:exact(re:or(('once','always','front'))),
-                 re:exact($css:NON_NEGATIVE_INTEGER_RE))"/>
-    
     <xsl:variable name="css:applies-to" as="xs:string*"
         select="('.*',
                  '.*',
@@ -298,14 +232,6 @@
                  'braille-charset',
                  '-obfl-right-text-indent')"/>
     
-    <xsl:function name="css:is-valid" as="xs:boolean">
-        <xsl:param name="css:property" as="element(css:property)"/>
-        <xsl:variable name="index" select="index-of($css:properties, $css:property/@name)"/>
-        <xsl:sequence select="if ($index)
-                              then $css:property/@value=('inherit', 'initial') or matches($css:property/@value, $css:values[$index], 'x')
-                              else matches($css:property/@name, re:exact($css:VENDOR_PRF_IDENT_RE))"/> <!-- might be valid -->
-    </xsl:function>
-    
     <xsl:function name="css:initial-value" as="xs:string?">
         <xsl:param name="property" as="xs:string"/>
         <xsl:variable name="index" select="index-of($css:properties, $property)"/>
@@ -335,7 +261,6 @@
     <xsl:template match="css:property[@name='text-transform']" mode="css:compute">
         <xsl:param name="concretize-inherit" as="xs:boolean"/>
         <xsl:param name="concretize-initial" as="xs:boolean"/>
-        <xsl:param name="validate" as="xs:boolean"/>
         <xsl:param name="context" as="node()"/>
         <xsl:choose>
             <xsl:when test="@value='inherit'">
@@ -351,7 +276,6 @@
                         <xsl:with-param name="compute" select="true()"/>
                         <xsl:with-param name="concretize-inherit" select="true()"/>
                         <xsl:with-param name="concretize-initial" select="$concretize-initial"/>
-                        <xsl:with-param name="validate" select="$validate"/>
                         <xsl:with-param name="context" select="$context"/>
                     </xsl:call-template>
                 </xsl:variable>

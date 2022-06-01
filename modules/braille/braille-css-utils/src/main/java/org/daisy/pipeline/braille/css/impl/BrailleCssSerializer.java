@@ -58,7 +58,9 @@ public final class BrailleCssSerializer {
 	private static String toString(BrailleCssStyle style, String base) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder rel = new StringBuilder();
-		if (style.declarations != null)
+		if (style.simpleStyle != null)
+			b.append(toString(style.simpleStyle));
+		else if (style.declarations != null)
 			b.append(serializeDeclarationList(style.declarations));
 		if (style.nestedStyles != null)
 			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
@@ -235,20 +237,32 @@ public final class BrailleCssSerializer {
 	                          XMLStreamWriter w,
 	                          boolean deep,
 	                          boolean recursive) throws XMLStreamException {
-		if (style.declarations != null) {
+		if (style.simpleStyle != null || style.declarations != null) {
 			if (!deep || !recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
 			if (!deep)
-				writeAttribute(w, STYLE, serializeDeclarationList(style.declarations));
+				writeAttribute(w, STYLE, toString(style.simpleStyle));
 			if (deep) {
-				List<Declaration> declarations = new ArrayList<>();
-				declarations.addAll(style.declarations);
-				Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
-				for (Declaration d : declarations) {
-					writeStartElement(w, CSS_PROPERTY);
-					writeAttribute(w, NAME, d.getProperty());
-					writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
-					w.writeEndElement();
+				if (style.simpleStyle != null) {
+					List<String> properties = new ArrayList<>();
+					properties.addAll(style.simpleStyle.getPropertyNames());
+					Collections.sort(properties);
+					for (String p : properties) {
+						writeStartElement(w, CSS_PROPERTY);
+						writeAttribute(w, NAME, p);
+						writeAttribute(w, VALUE, serializePropertyValue(style.simpleStyle.get(p)));
+						w.writeEndElement();
+					}
+				} else {
+					List<Declaration> declarations = new ArrayList<>();
+					declarations.addAll(style.declarations);
+					Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
+					for (Declaration d : declarations) {
+						writeStartElement(w, CSS_PROPERTY);
+						writeAttribute(w, NAME, d.getProperty());
+						writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
+						w.writeEndElement();
+					}
 				}
 			}
 			if (!deep || !recursive || style.nestedStyles != null)

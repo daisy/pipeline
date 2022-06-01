@@ -45,17 +45,10 @@
                                                         else $property-names)
                               return $properties[@name=$n][last()]"/>
         <!--
-            validate
-        -->
-        <xsl:variable name="properties" as="element(css:property)*">
-            <xsl:apply-templates select="$properties" mode="css:validate"/>
-        </xsl:variable>
-        <!--
             inherit
         -->
         <xsl:variable name="properties" as="element(css:property)*">
             <xsl:apply-templates select="$properties" mode="css:inherit">
-                <xsl:with-param name="validate" select="true()"/>
                 <xsl:with-param name="context" select="parent::*"/>
             </xsl:apply-templates>
         </xsl:variable>
@@ -72,7 +65,6 @@
             <xsl:apply-templates select="$properties" mode="css:compute">
                 <xsl:with-param name="concretize-inherit" select="true()"/>
                 <xsl:with-param name="concretize-initial" select="true()"/>
-                <xsl:with-param name="validate" select="true()"/>
                 <xsl:with-param name="context" select="parent::*"/>
             </xsl:apply-templates>
         </xsl:variable>
