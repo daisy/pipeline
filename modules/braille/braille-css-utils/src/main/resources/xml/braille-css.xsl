@@ -299,7 +299,7 @@
                  '-obfl-right-text-indent')"/>
     
     <xsl:function name="css:is-valid" as="xs:boolean">
-        <xsl:param name="css:property" as="element()"/>
+        <xsl:param name="css:property" as="element(css:property)"/>
         <xsl:variable name="index" select="index-of($css:properties, $css:property/@name)"/>
         <xsl:sequence select="if ($index)
                               then $css:property/@value=('inherit', 'initial') or matches($css:property/@value, $css:values[$index], 'x')

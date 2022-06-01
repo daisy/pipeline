@@ -232,11 +232,6 @@
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_ident" select="1"/>
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_value" select="$css:COUNTER_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 2"/>
     
-    <xsl:variable name="css:PROPERTY_VALUE_RE">([^'"\{\}@&amp;;:]+|'[^']*'|"[^"]*")*</xsl:variable>
-    
-    <xsl:variable name="css:DECLARATION_RE" select="concat('(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*:(',$css:PROPERTY_VALUE_RE,')')"/>
-    <xsl:variable name="css:DECLARATION_RE_property" select="1"/>
-    <xsl:variable name="css:DECLARATION_RE_value" select="$css:DECLARATION_RE_property + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->
@@ -258,10 +253,23 @@
         <css:property name="{replace(local-name(),'^_','-')}" value="{string()}"/>
     </xsl:template>
     
-    <xsl:template match="css:property" mode="css:property-as-attribute" as="attribute()">
+    <xsl:template match="css:property[@value]" mode="css:property-as-attribute" as="attribute()">
         <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
     </xsl:template>
 
+    <xsl:template match="css:property[@name='content' and not(@value)]" mode="css:property-as-attribute" as="attribute()">
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="css:serialize" select="*"/>
+        </xsl:variable>
+        <xsl:variable name="property" as="element(css:property)">
+            <xsl:copy>
+                <xsl:sequence select="@name"/>
+                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,' ') else 'none'"/>
+            </xsl:copy>
+        </xsl:variable>
+        <xsl:apply-templates mode="#current" select="$property"/>
+    </xsl:template>
+    
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
             <p>Parse a style sheet.</p>
@@ -282,20 +290,6 @@
             Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
         -->
     </java:function>
-    
-    <xsl:function name="css:parse-declaration-list" as="element()*"> <!-- css:property* -->
-        <xsl:param name="declaration-list" as="xs:string?"/>
-        <xsl:if test="$declaration-list">
-            <xsl:analyze-string select="$declaration-list" regex="{$css:DECLARATION_RE}">
-                <xsl:matching-substring>
-                    <xsl:sequence select="css:property(
-                                            regex-group($css:DECLARATION_RE_property),
-                                            replace(regex-group($css:DECLARATION_RE_value), '(^\s+|\s+$)', '')
-                                            )"/>
-                </xsl:matching-substring>
-            </xsl:analyze-string>
-        </xsl:if>
-    </xsl:function>
     
     <xsl:template name="css:deep-parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet" required="yes"/>
@@ -581,7 +575,7 @@
         </xsl:if>
     </xsl:function>
     
-    <xsl:template mode="css:deep-parse" match="css:property[@name='content' and @value]">
+    <xsl:template mode="css:deep-parse" match="css:property[@name='content' and @value[not(.='inherit')]]">
         <xsl:param name="context" as="element()?" tunnel="yes" select="()"/>
         <xsl:copy>
             <xsl:apply-templates mode="#current" select="@* except @value"/>
@@ -602,8 +596,23 @@
     <!-- Validating, inheriting and defaulting -->
     <!-- ===================================== -->
     
-    <xsl:template match="css:property" mode="css:validate">
+    <xsl:template match="css:property[@value]" mode="css:validate">
         <xsl:if test="css:is-valid(.)">
+            <xsl:sequence select="."/>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template match="css:property[@name='content' and not(@value)]" mode="css:validate">
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="css:serialize" select="*"/>
+        </xsl:variable>
+        <xsl:variable name="property" as="element(css:property)">
+            <xsl:copy>
+                <xsl:sequence select="@name"/>
+                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,' ') else 'none'"/>
+            </xsl:copy>
+        </xsl:variable>
+        <xsl:if test="css:is-valid($property)">
             <xsl:sequence select="."/>
         </xsl:if>
     </xsl:template>
@@ -718,8 +727,7 @@
             <xsl:apply-templates select="$context/@css:*[replace(local-name(),'^_','-')=$properties]" mode="css:attribute-as-property"/>
         </xsl:variable>
         <xsl:variable name="declarations" as="element()*"
-            select="(css:parse-declaration-list(css:parse-stylesheet($context/@style)
-                       /self::css:rule[not(@selector)][last()]/@style),
+            select="(css:deep-parse-stylesheet($context/@style)/self::css:rule[not(@selector)][last()]/css:property,
                      $declarations)"/>
         <xsl:variable name="declarations" as="element()*"
             select="if ('#all'=$properties) then $declarations else $declarations[@name=$properties and not(@name='#all')]"/>
@@ -932,7 +940,13 @@
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="#current" select="*"/>
         </xsl:variable>
-        <xsl:sequence select="concat(@name,': ',if (exists($value)) then string-join($value,' ') else 'none')"/>
+        <xsl:variable name="property" as="element(css:property)">
+            <xsl:copy>
+                <xsl:sequence select="@name"/>
+                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,' ') else 'none'"/>
+            </xsl:copy>
+        </xsl:variable>
+        <xsl:apply-templates mode="#current" select="$property"/>
     </xsl:template>
     
     <xsl:template match="css:string-set" mode="css:serialize" as="xs:string">

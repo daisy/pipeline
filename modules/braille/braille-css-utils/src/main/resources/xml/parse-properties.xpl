@@ -40,7 +40,7 @@
         <p:input port="stylesheet">
             <p:document href="parse-properties.xsl"/>
         </p:input>
-        <p:with-param name="property-names" select="$properties"/>
+        <p:with-param name="property-names" select="tokenize(normalize-space($properties),' ')"/>
     </p:xslt>
     
 </p:declare-step>
