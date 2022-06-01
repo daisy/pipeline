@@ -7,8 +7,7 @@
     
     <xsl:include href="library.xsl"/>
     
-    <xsl:param name="property-names"/>
-    <xsl:variable name="property-names-list" as="xs:string*" select="tokenize(normalize-space($property-names), ' ')"/>
+    <xsl:param name="property-names" as="xs:string*"/>
     
     <xsl:template match="@*|node()">
         <xsl:copy>
@@ -21,39 +20,40 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:variable name="rules" as="element()*" select="css:parse-stylesheet(.)"/>
-        <xsl:variable name="properties" as="element()*"
-                      select="$rules[not(@selector)]/css:parse-declaration-list(@style)"/>
+        <xsl:variable name="rules" as="element(css:rule)*" select="css:deep-parse-stylesheet(.)"/>
+        <xsl:variable name="properties" as="element(css:property)*" select="$rules[not(@selector)]/css:property"/>
         <!--
             filter
         -->
-        <xsl:variable name="rules" as="element()*">
+        <xsl:variable name="rules" as="element(css:rule)*">
             <xsl:sequence select="$rules[@selector]"/>
             <xsl:if test="not($property-names='#all')">
-                <xsl:variable name="properties" as="element()*" select="$properties[not(@name=$property-names-list)]"/>
+                <xsl:variable name="properties" as="element(css:property)*" select="$properties[not(@name=$property-names)]"/>
                 <xsl:if test="exists($properties)">
-                    <css:rule style="{css:serialize-declaration-list($properties)}"/>
+                    <css:rule>
+                        <xsl:sequence select="$properties"/>
+                    </css:rule>
                 </xsl:if>
             </xsl:if>
         </xsl:variable>
         <xsl:if test="exists($rules)">
             <xsl:attribute name="style" select="css:serialize-stylesheet($rules)"/>
         </xsl:if>
-        <xsl:variable name="properties" as="element()*"
+        <xsl:variable name="properties" as="element(css:property)*"
                       select="for $n in distinct-values(if ($property-names='#all')
                                                         then $properties/@name
-                                                        else $property-names-list)
+                                                        else $property-names)
                               return $properties[@name=$n][last()]"/>
         <!--
             validate
         -->
-        <xsl:variable name="properties" as="element()*">
+        <xsl:variable name="properties" as="element(css:property)*">
             <xsl:apply-templates select="$properties" mode="css:validate"/>
         </xsl:variable>
         <!--
             inherit
         -->
-        <xsl:variable name="properties" as="element()*">
+        <xsl:variable name="properties" as="element(css:property)*">
             <xsl:apply-templates select="$properties" mode="css:inherit">
                 <xsl:with-param name="validate" select="true()"/>
                 <xsl:with-param name="context" select="parent::*"/>
@@ -62,13 +62,13 @@
         <!--
             default
         -->
-        <xsl:variable name="properties" as="element()*">
+        <xsl:variable name="properties" as="element(css:property)*">
             <xsl:apply-templates select="$properties" mode="css:default"/>
         </xsl:variable>
         <!--
             computed value
         -->
-        <xsl:variable name="properties" as="element()*">
+        <xsl:variable name="properties" as="element(css:property)*">
             <xsl:apply-templates select="$properties" mode="css:compute">
                 <xsl:with-param name="concretize-inherit" select="true()"/>
                 <xsl:with-param name="concretize-initial" select="true()"/>
