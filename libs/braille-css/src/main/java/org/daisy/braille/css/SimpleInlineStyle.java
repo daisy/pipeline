@@ -5,21 +5,18 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.SingleMapNodeData;
 
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
-	private final static SupportedCSS cssInstance = new SupportedBrailleCSS();
-	private static BrailleCSSDeclarationTransformer transformerInstance; static {
-		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
-		CSSFactory.registerSupportedCSS(cssInstance);
-		transformerInstance = new BrailleCSSDeclarationTransformer(); }
+	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
+	private static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
 	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
@@ -39,14 +36,15 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	}
 	
 	public SimpleInlineStyle(List<Declaration> declarations, SimpleInlineStyle parentStyle) {
-		super();
-		transformer = transformerInstance;
-		css = cssInstance;
+		this(declarations, parentStyle, transformerInstance, cssInstance);
+	}
+	
+	public SimpleInlineStyle(List<Declaration> declarations, SimpleInlineStyle parentStyle,
+	                         DeclarationTransformer transformer, SupportedCSS css) {
+		super(transformer, css);
 		if (declarations != null)
-			for (Declaration d : declarations) {
-				// SupportedCSS injected via CSSFactory in Repeater.assignDefaults, Variator.assignDefaults
-				CSSFactory.registerSupportedCSS(css);
-				push(d); }
+			for (Declaration d : declarations)
+				push(d);
 		if (parentStyle != null)
 			inheritFrom(parentStyle);
 	}

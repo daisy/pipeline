@@ -27,11 +27,13 @@ import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.LineHeight;
 import org.daisy.braille.css.BrailleCSSProperty.ListStyleType;
 import org.daisy.braille.css.BrailleCSSProperty.Margin;
+import org.daisy.braille.css.BrailleCSSProperty.MaxHeight;
 import org.daisy.braille.css.BrailleCSSProperty.MaxLength;
 import org.daisy.braille.css.BrailleCSSProperty.MinLength;
 import org.daisy.braille.css.BrailleCSSProperty.Padding;
 import org.daisy.braille.css.BrailleCSSProperty.Page;
 import org.daisy.braille.css.BrailleCSSProperty.RenderTableBy;
+import org.daisy.braille.css.BrailleCSSProperty.Size;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.BrailleCSSProperty.TableHeaderPolicy;
 import org.daisy.braille.css.BrailleCSSProperty.TextIndent;
@@ -43,6 +45,7 @@ import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
@@ -59,7 +62,11 @@ import cz.vutbr.web.domassign.Variator;
 public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	
 	public BrailleCSSDeclarationTransformer() {
-		super();
+		this(new SupportedBrailleCSS());
+	}
+	
+	public BrailleCSSDeclarationTransformer(SupportedCSS css) {
+		super(css);
 	}
 	
 	protected Map<String, Method> parsingMethods() {
@@ -324,7 +331,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final static Pattern customContentFuncName = Pattern.compile("^-.*"); // is the rest handled in ANTLR?
 	
 	@SuppressWarnings("unused")
-	private boolean processContent(Declaration d,
+	protected boolean processContent(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 
 		if (d.size() == 1 && genericOneIdent(Content.class, d, properties))
@@ -450,7 +457,11 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 			return true;
 		else
 			try {
-				if (TermString.class.isInstance(term)) {
+				if (term instanceof TermIdent) {
+					properties.put(propertyName, ListStyleType.counter_style_name);
+					values.put(propertyName, term);
+					return true; }
+				else if (TermString.class.isInstance(term)) {
 					properties.put(propertyName, ListStyleType.braille_string);
 					values.put(propertyName, term);
 					return true; }
@@ -496,6 +507,13 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		Repeater r = new MarginRepeater();
 		return r.repeatOverFourTermDeclaration(d, properties, values);
+	}
+	
+	@SuppressWarnings("unused")
+	private boolean processMaxHeight(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(MaxHeight.class, MaxHeight.integer, false,
+				d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
@@ -581,7 +599,34 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	}
 	
 	@SuppressWarnings("unused")
-	private boolean processStringSet(Declaration d,
+	private boolean processSize(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		if (d.size() == 1 && genericOneIdent(StringSet.class, d, properties))
+			return true;
+		TermInteger width = null;
+		TermInteger height = null;
+		for (Term<?> t : d.asList()) {
+			if (height != null || !(t instanceof TermInteger)) {
+				return false;
+			} else if (width == null) {
+				width = (TermInteger)t;
+			} else {
+				height = (TermInteger)t;
+			}
+		}
+		if (height == null) {
+			return false;
+		}
+		TermList size = tf.createList(2);
+		size.add(width);
+		size.add(height);
+		properties.put("size", Size.integer_pair);
+		values.put("size", size);
+		return true;
+	}
+	
+	@SuppressWarnings("unused")
+	protected boolean processStringSet(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		
 		if (d.size() == 1 && genericOneIdent(StringSet.class, d, properties))
@@ -770,7 +815,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final class MarginRepeater extends Repeater {
 
 		public MarginRepeater() {
-			super(4);
+			super(4, css);
 			type = Margin.class;
 			names.add("margin-top");
 			names.add("margin-right");
@@ -790,7 +835,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final class PaddingRepeater extends Repeater {
 			
 		public PaddingRepeater() {
-			super(4);
+			super(4, css);
 			type = Padding.class;
 			names.add("padding-top");
 			names.add("padding-right");
@@ -810,7 +855,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final class BorderStyleRepeater extends Repeater {
 		
 		public BorderStyleRepeater() {
-			super(4);
+			super(4, css);
 			this.type = BorderStyle.class;
 			names.add("border-top-style");
 			names.add("border-right-style");
@@ -829,7 +874,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final class BorderAlignRepeater extends Repeater {
 		
 		public BorderAlignRepeater() {
-			super(4);
+			super(4, css);
 			this.type = BorderAlign.class;
 			names.add("border-top-align");
 			names.add("border-right-align");
@@ -848,7 +893,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	private final class BorderWidthRepeater extends Repeater {
 		
 		public BorderWidthRepeater() {
-			super(4);
+			super(4, css);
 			this.type = BorderWidth.class;
 			names.add("border-top-width");
 			names.add("border-right-width");
@@ -879,7 +924,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 		private List<Repeater> repeaters;
 		
 		public BorderVariator() {
-			super(3);
+			super(3, css);
 			types.add(BorderWidth.class);
 			types.add(BorderStyle.class);
 			types.add(BorderAlign.class);
@@ -943,7 +988,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 		private final String borderPatternName;
 		
 		public BorderSideVariator(String side) {
-			super(3);
+			super(3, css);
 			names.add("border-" + side + "-align");
 			types.add(BorderAlign.class);
 			names.add("border-" + side + "-style");

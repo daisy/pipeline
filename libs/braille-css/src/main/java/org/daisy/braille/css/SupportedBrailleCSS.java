@@ -36,11 +36,13 @@ import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.LineHeight;
 import org.daisy.braille.css.BrailleCSSProperty.ListStyleType;
 import org.daisy.braille.css.BrailleCSSProperty.Margin;
+import org.daisy.braille.css.BrailleCSSProperty.MaxHeight;
 import org.daisy.braille.css.BrailleCSSProperty.MaxLength;
 import org.daisy.braille.css.BrailleCSSProperty.MinLength;
 import org.daisy.braille.css.BrailleCSSProperty.Padding;
 import org.daisy.braille.css.BrailleCSSProperty.Page;
 import org.daisy.braille.css.BrailleCSSProperty.RenderTableBy;
+import org.daisy.braille.css.BrailleCSSProperty.Size;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.BrailleCSSProperty.TableHeaderPolicy;
 import org.daisy.braille.css.BrailleCSSProperty.TextIndent;
@@ -60,7 +62,7 @@ public class SupportedBrailleCSS implements SupportedCSS {
 	
 	private static Logger log = LoggerFactory.getLogger(SupportedBrailleCSS.class);
 	
-	private static final int TOTAL_SUPPORTED_DECLARATIONS = 69;
+	private static final int TOTAL_SUPPORTED_DECLARATIONS = 70;
 	
 	private static final TermFactory tf = CSSFactory.getTermFactory();
 	
@@ -232,6 +234,9 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		setProperty("list-style-type", ListStyleType.NONE);
 		setProperty("list-style", allowShorthandProperties, ListStyleType.NONE);
 		
+		// @page rule
+		setProperty("size", Size.AUTO);
+		
 		// paged
 		setProperty("page", Page.AUTO);
 		setProperty("page-break-before", PageBreak.AUTO);
@@ -239,6 +244,9 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		setProperty("page-break-inside", PageBreakInside.AUTO);
 		setProperty("orphans", Orphans.integer, DEFAULT_UA_ORPHANS);
 		setProperty("widows", Widows.integer, DEFAULT_UA_WIDOWS);
+		
+		// @footnotes rule
+		setProperty("max-height", MaxHeight.NONE);
 		
 		// @volume rule
 		setProperty("min-length", MinLength.AUTO);

@@ -3,10 +3,8 @@ package org.daisy.braille.css;
 import java.util.HashMap;
 import java.util.Map;
 
-import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 
 public class PropertyValue implements Cloneable {
@@ -48,11 +46,8 @@ public class PropertyValue implements Cloneable {
 			return property.toString();
 	}
 	
-	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
-	private static BrailleCSSDeclarationTransformer transformerInstance; static {
-		// SupportedCSS injected via CSSFactory in DeclarationTransformer.<init>
-		CSSFactory.registerSupportedCSS(cssInstance);
-		transformerInstance = new BrailleCSSDeclarationTransformer(); }
+	private static BrailleCSSDeclarationTransformer transformerInstance
+		= new BrailleCSSDeclarationTransformer(new SupportedBrailleCSS(true, false));
 	private final static BrailleCSSParserFactory parserFactoryInstance = new BrailleCSSParserFactory();
 	
 	public static PropertyValue parse(String property, String value) {
@@ -62,8 +57,6 @@ public class PropertyValue implements Cloneable {
 	public static PropertyValue parse(Declaration declaration) {
 		Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
 		Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
-		// SupportedCSS injected via CSSFactory in Repeater.assignDefaults, Variator.assignDefaults
-		CSSFactory.registerSupportedCSS(cssInstance);
 		if (!transformerInstance.parseDeclaration(declaration, properties, terms))
 			return null;
 		String property = declaration.getProperty();

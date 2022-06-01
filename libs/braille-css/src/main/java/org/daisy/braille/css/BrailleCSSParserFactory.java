@@ -119,6 +119,8 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		ELEMENT,
 		PAGE,
 		VOLUME,
+		TEXT_TRANSFORM,
+		COUNTER_STYLE,
 		VENDOR_RULE
 	}
 	
@@ -244,6 +246,8 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			try {
 				switch (context) {
 				case ELEMENT:
+				case TEXT_TRANSFORM:
+				case COUNTER_STYLE:
 					return (CommonTree) parser.inlinestyle().getTree();
 				case PAGE:
 					return (CommonTree) parser.inline_pagestyle().getTree();

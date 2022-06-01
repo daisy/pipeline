@@ -365,7 +365,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum ListStyleType implements BrailleCSSProperty {
-		braille_string(""), symbols_fn(""),
+		braille_string(""), symbols_fn(""), counter_style_name(""),
 		DECIMAL("decimal"), LOWER_ALPHA("lower-alpha"), LOWER_ROMAN("lower-roman"),
 		NONE("none"), UPPER_ALPHA("upper-alpha"), UPPER_ROMAN("upper-roman"),
 		INHERIT("inherit"), INITIAL("initial");
@@ -421,12 +421,12 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 	
-	public enum MinLength implements BrailleCSSProperty {
-		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+	public enum MaxHeight implements BrailleCSSProperty {
+		integer(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
-		private MinLength(String text) {
+		private MaxHeight(String text) {
 			this.text = text;
 		}
 
@@ -454,6 +454,33 @@ public interface BrailleCSSProperty extends CSSProperty {
 		private String text;
 
 		private MaxLength(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+
+	public enum MinLength implements BrailleCSSProperty {
+		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private MinLength(String text) {
 			this.text = text;
 		}
 
@@ -535,6 +562,33 @@ public interface BrailleCSSProperty extends CSSProperty {
 		private String text;
 
 		private RenderTableBy(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+
+	public enum Size implements BrailleCSSProperty {
+		integer_pair(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private Size(String text) {
 			this.text = text;
 		}
 

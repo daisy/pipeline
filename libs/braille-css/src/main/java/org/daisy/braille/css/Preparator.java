@@ -15,8 +15,7 @@ public class Preparator extends SimplePreparator {
 	private final BrailleCSSParserFactory.Context context;
 	
 	public Preparator(Element e, boolean inlinePriority, BrailleCSSParserFactory.Context context) {
-		super(e, inlinePriority);
-		rf = ruleFactoryInstance;
+		super(e, inlinePriority, ruleFactoryInstance);
 		this.context = context;
 	}
 	
