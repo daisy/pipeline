@@ -18,7 +18,7 @@
         <xsl:apply-templates mode="copy" select="//*[@css:id=$target][1]/child::node()">
             <xsl:with-param name="anchor" select="$target"/>
             <xsl:with-param name="parent-style"
-                            select="css:computed-properties(($css:properties,'#all'), true(), true(), false(), .)"/>
+                            select="css:computed-properties(($css:properties,'#all'), true(), true(), .)"/>
         </xsl:apply-templates>
     </xsl:template>
     
@@ -26,7 +26,7 @@
         <xsl:param name="anchor" as="xs:string" required="yes"/>
         <xsl:param name="parent-style" as="element(css:property)*" required="yes"/>
         <xsl:variable name="style" as="element(css:property)*">
-            <xsl:for-each select="css:computed-properties(($css:properties,'#all'), true(), true(), false(), .)">
+            <xsl:for-each select="css:computed-properties(($css:properties,'#all'), true(), true(), .)">
                 <xsl:variable name="property" as="xs:string" select="@name"/>
                 <xsl:choose>
                     <xsl:when test="css:is-inherited($property) and $parent-style[@name=$property]">

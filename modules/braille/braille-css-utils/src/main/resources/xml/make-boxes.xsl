@@ -37,7 +37,7 @@
                         -->
                         <xsl:attribute name="css:counter-increment" select="'list-item'"/>
                         <xsl:variable name="list-style-type" as="xs:string"
-                                      select="css:specified-properties('list-style-type', true(), true(), true(), .)/@value"/>
+                                      select="css:specified-properties('list-style-type', true(), true(), .)/@value"/>
                         <xsl:if test="$list-style-type!='none'">
                             <css:box type="inline" name="css:marker">
                                 <xsl:choose>

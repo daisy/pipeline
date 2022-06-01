@@ -37,7 +37,6 @@
                 <!-- concretize inherit on top-level boxes only -->
                 <xsl:with-param name="concretize-inherit" select="not(exists(ancestor::css:box))"/>
                 <xsl:with-param name="concretize-initial" select="true()"/>
-                <xsl:with-param name="validate" select="true()"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="properties" as="element()*">

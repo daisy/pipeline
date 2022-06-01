@@ -30,6 +30,7 @@ import org.daisy.braille.css.InlineStyle.RuleRelativeHyphenationResource;
 import org.daisy.braille.css.InlineStyle.RuleRelativePage;
 import org.daisy.braille.css.InlineStyle.RuleRelativeVolume;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
+import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.RuleCounterStyle;
 import org.daisy.braille.css.RuleHyphenationResource;
 import org.daisy.braille.css.RuleTextTransform;
@@ -46,6 +47,7 @@ public final class BrailleCssStyle {
 
 	// these fields need to be package private because they are used in BrailleCssSerializer
 	// note that even though the declarations are assumed to not change, we don't assume they are unmodifiable
+	final SimpleInlineStyle simpleStyle;
 	final List<Declaration> declarations;
 	final SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
 
@@ -53,8 +55,11 @@ public final class BrailleCssStyle {
 
 	private BrailleCssStyle(Builder builder) {
 		this.context = builder.context;
-		this.declarations = builder.declarations != null  && !builder.declarations.isEmpty()
+		this.declarations = builder.declarations != null && !builder.declarations.isEmpty() && !builder.validate
 			? ImmutableList.copyOf(builder.declarations)
+			: null;
+		this.simpleStyle = builder.declarations != null && !builder.declarations.isEmpty() && builder.validate
+			? new SimpleInlineStyle(builder.declarations)
 			: null;
 		SortedMap<String,BrailleCssStyle> nested = builder.buildNestedStyles();
 		this.nestedStyles = nested != null
@@ -63,7 +68,7 @@ public final class BrailleCssStyle {
 	}
 
 	public boolean isEmpty() {
-		return declarations == null && nestedStyles == null;
+		return simpleStyle == null && declarations == null && nestedStyles == null;
 	}
 
 	private String serialized = null;
@@ -104,6 +109,10 @@ public final class BrailleCssStyle {
 	private static class Builder {
 
 		private final Context context;
+		/**
+		 * Whether to validate declarations (not of nested styles)
+		 */
+		private Boolean validate;
 		private List<Declaration> declarations;
 		private Map<String,Object> nestedStyles; // values are instances of Builder or BrailleCssStyle
 
@@ -126,9 +135,13 @@ public final class BrailleCssStyle {
 		/**
 		 * @param declaration assumed to not change
 		 */
-		private Builder add(Declaration declaration) {
+		private Builder add(Declaration declaration, boolean validate) {
 			if (declaration != null) {
-				if (this.declarations == null) this.declarations = new ArrayList<Declaration>();
+				if (this.declarations == null) {
+					this.declarations = new ArrayList<Declaration>();
+					this.validate = validate;
+				} else if (this.validate != validate)
+					throw new IllegalArgumentException();
 				declarations.add(declaration);
 			}
 			return this;
@@ -162,9 +175,12 @@ public final class BrailleCssStyle {
 		}
 
 		private Builder add(BrailleCssStyle style) {
-			if (style.declarations != null)
+			if (style.simpleStyle != null)
+				for (String p : style.simpleStyle.getPropertyNames())
+					add(style.simpleStyle.getSourceDeclaration(p), true);
+			else if (style.declarations != null)
 				for (Declaration d : style.declarations)
-					add(d);
+					add(d, false);
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet())
 					add(e.getKey(), e.getValue());
@@ -174,7 +190,7 @@ public final class BrailleCssStyle {
 		private Builder add(Builder style) {
 			if (style.declarations != null)
 				for (Declaration d : style.declarations)
-					add(d);
+					add(d, style.validate);
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,Object> e : style.nestedStyles.entrySet()) {
 					Object s = e.getValue();
@@ -224,11 +240,11 @@ public final class BrailleCssStyle {
 		Builder style = new Builder(Context.PAGE);
 		for (Rule<?> r : page)
 			if (r instanceof Declaration)
-				style.add((Declaration)r);
+				style.add((Declaration)r, true);
 			else if (r instanceof RuleMargin) {
 				Builder margin = new Builder();
 				for (Declaration d : (RuleMargin)r)
-					margin.add(d);
+					margin.add(d, true);
 				style.add("@" + ((RuleMargin)r).getMarginArea(), margin);
 			} else
 				throw new RuntimeException("coding error");
@@ -249,7 +265,7 @@ public final class BrailleCssStyle {
 		Builder style = new Builder();
 		for (Rule<?> r : volumeArea)
 			if (r instanceof Declaration)
-				style.add((Declaration)r);
+				style.add((Declaration)r, true);
 			else if (r instanceof RulePage)
 				style.add(of((RulePage)r));
 			else
@@ -272,7 +288,7 @@ public final class BrailleCssStyle {
 		Builder style = new Builder(Context.VOLUME);
 		for (Rule<?> r : volume)
 			if (r instanceof Declaration)
-				style.add((Declaration)r);
+				style.add((Declaration)r, true);
 			else if (r instanceof RuleVolumeArea)
 				style.add(of((RuleVolumeArea)r));
 			else
@@ -301,7 +317,7 @@ public final class BrailleCssStyle {
 	private static BrailleCssStyle of(RuleHyphenationResource hyphenationResource, boolean relative) {
 		Builder style = new Builder(Context.HYPHENATION_RESOURCE);
 		for (Declaration d : hyphenationResource)
-			style.add(d);
+			style.add(d, false);
 		Builder relativeRule = new Builder(Context.HYPHENATION_RESOURCE)
 			.add("&:lang(" + BrailleCssSerializer.serializeLanguageRanges(hyphenationResource.getLanguageRanges()) + ")", style);
 		if (relative)
@@ -317,7 +333,7 @@ public final class BrailleCssStyle {
 		Builder style = new Builder();
 		for (Rule<?> r : rule)
 			if (r instanceof Declaration)
-				style.add((Declaration)r);
+				style.add((Declaration)r, false);
 			else if (r instanceof VendorAtRule)
 				style.add("@" + ((VendorAtRule)r).getName(), of((VendorAtRule<? extends Rule<?>>)r));
 			else
@@ -333,16 +349,16 @@ public final class BrailleCssStyle {
 		Builder style = new Builder(context);
 		for (RuleBlock<?> rule : inlineStyle) {
 			if (rule instanceof RuleMainBlock)
-				// Note that the declarations have not been transformed by BrailleCSSDeclarationTransformer yet
+				// Note that the declarations have not been transformed by BrailleCSSDeclarationTransformer yet.
 				// This will be done when build() is called.
 				for (Declaration d : (RuleMainBlock)rule)
-					style.add(d);
+					style.add(d, context == Context.ELEMENT);
 			else if (rule instanceof RuleRelativeBlock) {
 				String[] selector = serializeSelector(((RuleRelativeBlock)rule).getSelector());
 				Builder decls = new Builder(); {
 					for (Rule<?> r : (RuleRelativeBlock)rule)
 						if (r instanceof Declaration)
-							decls.add((Declaration)r);
+							decls.add((Declaration)r, context == Context.ELEMENT);
 						else if (r instanceof RulePage)
 							decls.add(of((RulePage)r));
 						else
@@ -361,7 +377,7 @@ public final class BrailleCssStyle {
 				String name = ((RuleTextTransform)rule).getName();
 				Builder textTransform = new Builder(Context.TEXT_TRANSFORM);
 				for (Declaration d : (RuleTextTransform)rule)
-					textTransform.add(d);
+					textTransform.add(d, false);
 				if (name == null)
 					style.add("@text-transform", textTransform);
 				else
@@ -372,12 +388,12 @@ public final class BrailleCssStyle {
 				String name = ((RuleCounterStyle)rule).getName();
 				Builder counterStyle = new Builder(Context.COUNTER_STYLE);
 				for (Declaration d : (RuleCounterStyle)rule)
-					counterStyle.add(d);
+					counterStyle.add(d, false);
 				style.add("@counter-style", new Builder().add("& " + name, counterStyle)); }
 			else if (rule instanceof RuleMargin) {
 				Builder margin = new Builder();
 				for (Declaration d : (RuleMargin)rule)
-					margin.add(d);
+					margin.add(d, true);
 				style.add("@" + ((RuleMargin)rule).getMarginArea(), margin);
 			} else if (rule instanceof RuleVolumeArea)
 				style.add(of((RuleVolumeArea)rule));

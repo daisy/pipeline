@@ -26,7 +26,7 @@
     <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*[1-9]\s*\)</xsl:variable>
     
     <xsl:function name="new:is-valid" as="xs:boolean">
-        <xsl:param name="css:property" as="element()"/>
+        <xsl:param name="css:property" as="element(css:property)"/>
         <xsl:param name="context" as="element()"/>
         <xsl:variable name="valid" as="xs:boolean"
                       select="new:applies-to($css:property/@name, $context)
@@ -54,10 +54,9 @@
                                 else if ($css:property/@name=('volume-break-after',
                                                               'volume-break-before'))
                                 then $css:property/@value=('auto','always')
-                                else (
-                                  css:is-valid($css:property)
-                                  and not($css:property/@value=('inherit','initial'))
-                                )
+                                else
+                                  (: we assume that the property is valid according to braille CSS :)
+                                  not($css:property/@value=('inherit','initial'))
                               )"/>
         <!--
             TODO: move to css:new-definition?

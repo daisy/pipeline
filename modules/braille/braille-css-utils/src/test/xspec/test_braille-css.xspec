@@ -28,25 +28,88 @@
 			<x:param select="'#all invalid'"/>
 			<x:param select="true()"/>
 			<x:param select="true()"/>
-			<x:param select="true()"/>
 			<x:param select="//bar">
-				<foo css:orphans="3" css:page="size: 10 10">
-					<bar style="display: -foo-something;
-					            left: invalid;
-					            orphans: inherit;
-					            page-break-before: initial;
-					            string-set: print-page attr(num);
-					            someprop: someval;
-					            -foo-someprop: someval"/>
+				<foo css:orphans="3" css:_obfl-right-text-indent="2">
+					<bar style="display: -foo-something;                           /* valid */
+					            left: foo;                                         /* invalid */
+					            right: -1;                                         /* invalid */
+					            margin-right: -1;                                  /* valid */
+					            margin-top: -1;                                    /* invalid */
+					            orphans: inherit;                                  /* valid */
+					            page-break-before: initial;                        /* valid */
+					            page-break-after: foo;                             /* invalid */
+					            page-break-inside: avoid;                          /* valid */
+					            volume-break-before: always;                       /* valid */
+					            volume-break-after: foo;                           /* invalid */
+					            volume-break-inside: -obfl-keep(1);                /* valid */
+					            string-set: print-page attr(num);                  /* valid */
+					            counter-reset: foo bar;                            /* valid */
+					            counter-set: foo 2;                                /* valid */
+					            counter-increment: foo 1.5;                        /* invalid */
+					            flow: -foo;                                        /* invalid */
+					            list-style-type: symbols(cyclic '*' '†' '‡' '§');  /* valid */
+					            border-top-pattern: ⠒;                             /* valid */
+					            border-top-style: solid;                           /* valid */
+					            border-top-width: 2;                               /* valid */
+					            border-top-align: outer;                           /* valid */
+					            border-left-pattern: x;                            /* invalid */
+					            border-left-style: foo;                            /* invalid */
+					            border-left-width: 1.5;                            /* invalid */
+					            border-left-align: foo;                            /* invalid */
+					            min-length: -1;                                    /* invalid */
+					            max-length: 20;                                    /* valid */
+					            max-height: 1.5;                                   /* invalid */
+					            text-align: foo;                                   /* invalid */
+					            widows: -1;                                        /* invalid */
+					            page: -foo;                                        /* invalid */
+					            content: foo;                                      /* invalid */
+					            white-space: foo;                                  /* invalid */
+					            hyphens: foo;                                      /* invalid */
+					            hyphenate-character: '⠈';                          /* valid */
+					            size: 20 20;                                       /* valid */
+					            text-transform: foo -bar;                          /* valid */
+					            braille-charset: foo;                              /* invalid */
+					            line-height: 150%;                                 /* valid */
+					            letter-spacing: 1.5;                               /* invalid */
+					            word-spacing: -1;                                  /* invalid */
+					            render-table-by: 123;                              /* invalid */
+					            table-header-policy: foo;                          /* invalid */
+					            color: #000000;                                    /* invalid */
+					            someprop: someval;                                 /* invalid */
+					            -foo-someprop: someval;                            /* valid */
+					            -obfl-right-text-indent: inherit;                  /* valid */
+					            "/>
 				</foo>
 			</x:param>
 		</x:call>
 		<x:expect label="result">
 			<css:property name="-foo-someprop" value="someval"/>
+			<css:property name="-obfl-right-text-indent" value="2"/>
+			<css:property name="border-top-align" value="outer"/>
+			<css:property name="border-top-pattern" value="⠒"/>
+			<css:property name="border-top-style" value="solid"/>
+			<css:property name="border-top-width" value="2"/>
+			<css:property name="counter-reset" value ="foo 0 bar 0"/>
+			<css:property name="counter-set" value="foo 0 foo 2"/>
 			<css:property name="display" value="-foo-something"/>
+			<css:property name="hyphenate-character" value="'⠈'"/>
+			<css:property name="line-height" value="150%"/>
+			<css:property name="list-style-type" value="symbols(cyclic '*' '†' '‡' '§')"/>
+			<css:property name="margin-right" value="-1"/>
+			<css:property name="margin-top" value="0"/>
+			<css:property name="max-length" value="20"/>
+			<css:property name="min-length" value="0"/>
 			<css:property name="orphans" value="3"/>
 			<css:property name="page-break-before" value="auto"/>
+			<css:property name="page-break-inside" value="avoid"/>
+			<css:property name="right" value="0"/>
+			<css:property name="size" value="20 20"/>
 			<css:property name="string-set" value="print-page attr(num)"/>
+			<css:property name="text-transform" value="foo -bar"/>
+			<css:property name="volume-break-before" value="always"/>
+			<css:property name="volume-break-inside" value="-obfl-keep(1)"/>
+			<css:property name="widows" value="0"/>
+			<css:property name="word-spacing" value="0"/>
 		</x:expect>
 	</x:scenario>
 	
@@ -392,7 +455,6 @@
 	<x:scenario label="test_29">
 		<x:call function="css:computed-properties">
 			<x:param select="'text-transform'"/>
-			<x:param select="true()"/>
 			<x:param select="//foo">
 				<_ css:text-transform="bold">
 					<_>
@@ -409,7 +471,6 @@
 	<x:scenario label="test_30">
 		<x:call function="css:computed-properties">
 			<x:param select="'text-transform'"/>
-			<x:param select="true()"/>
 			<x:param select="//foo/_">
 				<_ css:text-transform="bold">
 					<_>
@@ -428,7 +489,6 @@
 	<x:scenario label="test_31">
 		<x:call function="css:computed-properties">
 			<x:param select="'hyphens'"/>
-			<x:param select="true()"/>
 			<x:param select="//p">
 				<css:block xml:lang="und" style="hyphens: auto">
 					<p>foobar</p>
@@ -634,7 +694,6 @@
 		<x:call function="css:specified-properties">
 			<x:param select="'#all text-transform'"/>
 			<x:param select="true()"/>
-			<x:param select="false()"/>
 			<x:param select="false()"/>
 			<x:param select="//foo">
 				<css:foo style="text-transform: auto">

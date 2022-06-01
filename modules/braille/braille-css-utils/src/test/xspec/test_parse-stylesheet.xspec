@@ -71,20 +71,20 @@
   
   <x:scenario label="test_06">
     <x:context>
-      <doc style="&amp;::list-item {{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }} &amp;::after::table-by(row) {{ x:y }}"/>
+      <doc style="&amp;::list-item {{ -my-prop:foo }} &amp;::table-by(row) {{ -my-prop:foo }} &amp;::table-by(row)::list-item {{ -my-prop:foo }} &amp;::after::table-by(row) {{ -my-prop:foo }}"/>
     </x:context>
     <x:expect label="result">
-      <doc style="&amp;::list-item {{ x: y }} &amp;::table-by(row) {{ x: y }} &amp;::table-by(row)::list-item {{ x: y }}"
-           css:after="&amp;::table-by(row) {{ x: y }}"/>
+      <doc style="&amp;::list-item {{ -my-prop: foo }} &amp;::table-by(row) {{ -my-prop: foo }} &amp;::table-by(row)::list-item {{ -my-prop: foo }}"
+           css:after="&amp;::table-by(row) {{ -my-prop: foo }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_07">
     <x:context>
-      <table style="&amp;:-obfl-alternate-scenario {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row) {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ x:y }}"/>
+      <table style="&amp;:-obfl-alternate-scenario {{ -my-prop: foo }} &amp;:-obfl-alternate-scenario::table-by(row) {{ -my-prop:foo }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ -my-prop:foo }}"/>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="x: y; &amp;::table-by(row) {{ x: y }} &amp;::table-by(row)::list-item {{ x: y }}" />
+      <table css:_obfl-alternate-scenario="-my-prop: foo; &amp;::table-by(row) {{ -my-prop: foo }} &amp;::table-by(row)::list-item {{ -my-prop: foo }}" />
     </x:expect>
   </x:scenario>
   
