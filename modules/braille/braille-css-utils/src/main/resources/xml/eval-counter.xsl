@@ -11,9 +11,6 @@
     <xsl:param name="exclude-counter-names"/>
     <xsl:param name="counter-styles" as="map(xs:string,element(css:counter-style))"/>
     
-    <xsl:variable name="counter-names-list" as="xs:string*" select="tokenize(normalize-space($counter-names), ' ')"/>
-    <xsl:variable name="exclude-counter-names-list" as="xs:string*" select="tokenize(normalize-space($exclude-counter-names), ' ')"/>
-    
     <xsl:variable name="context" select="collection()[2]"/>
     
     <!--
@@ -37,8 +34,8 @@
         </xsl:if>
         <xsl:choose>
             <xsl:when test="if ($counter-names='#all')
-                            then not(@name=$exclude-counter-names-list)
-                            else @name=$counter-names-list">
+                            then not(@name=$exclude-counter-names)
+                            else @name=$counter-names">
                 <xsl:variable name="style" as="xs:string" select="(@style,'decimal')[1]"/>
                 <xsl:variable name="text-with-text-transform" as="xs:string*">
                     <xsl:variable name="target" as="element()?">
@@ -88,8 +85,8 @@
         <xsl:variable name="name" as="xs:string"
                       select="replace(local-name(),'^counter-(set|reset|increment)-(.*)$','$2')"/>
         <xsl:if test="if ($counter-names='#all')
-                      then $name=$exclude-counter-names-list
-                      else not($name=$counter-names-list)">
+                      then $name=$exclude-counter-names
+                      else not($name=$counter-names)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>

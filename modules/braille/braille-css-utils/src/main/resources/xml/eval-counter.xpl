@@ -96,8 +96,8 @@
             <p:input port="stylesheet">
                 <p:document href="eval-counter.xsl"/>
             </p:input>
-            <p:with-param name="counter-names" select="$counters"/>
-            <p:with-param name="exclude-counter-names" select="$exclude-counters"/>
+            <p:with-param name="counter-names" select="tokenize(normalize-space($counters),' ')"/>
+            <p:with-param name="exclude-counter-names" select="tokenize(normalize-space($exclude-counters),' ')"/>
             <!--
                 the css:parse-counter-styles is only there for testing purposes (because we can not specify the styles as a map from XProcSpec)
             -->

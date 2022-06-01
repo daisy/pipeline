@@ -63,11 +63,13 @@
         <xsl:param name="concretize-inherit" as="xs:boolean" select="false()" tunnel="yes"/>
         <xsl:choose>
             <xsl:when test="$concretize-inherit">
-                <xsl:variable name="properties" as="element()*" select="css:parse-declaration-list(.)"/>
+                <xsl:variable name="properties" as="element(css:property)*"
+                              select="css:deep-parse-stylesheet(.)/self::css:rule[not(@selector)]/css:property"/>
                 <xsl:choose>
                     <xsl:when test="$properties[@value='inherit' and not(css:is-inherited(@name))]">
-                        <xsl:variable name="parent-properties" as="element()*"
-                                      select="css:parse-declaration-list(parent::*/ancestor::css:box[1]/@style)"/>
+                        <xsl:variable name="parent-properties" as="element(css:property)*"
+                                      select="css:deep-parse-stylesheet(parent::*/ancestor::css:box[1]/@style)
+                                              /self::css:rule[not(@selector)]/css:property"/>
                         <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
                                                 for $p in $properties return
                                                   if ($p/@value='inherit' and not(css:is-inherited($p/@name)))
