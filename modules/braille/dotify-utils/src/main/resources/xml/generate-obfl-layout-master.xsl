@@ -124,7 +124,9 @@
                               then $default-page-stylesheet/self::css:property
                               else $default-page-stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="size" as="xs:string"
-                      select="($default-page-properties[@name='size'][css:is-valid(.)]/@value,concat($page-width,' ',$page-height))[1]"/>
+                      select="($default-page-properties[@name='size'][css:is-valid(.) and not(@value='auto')]/@value,
+                               concat($page-width,' ',$page-height)
+                              )[1]"/>
         <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
         <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[2]))"/>
         <xsl:if test="$default-page-properties[@name='counter-set']">
