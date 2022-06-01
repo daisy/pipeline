@@ -47,7 +47,7 @@
         </xsl:variable>
         <xsl:copy>
             <xsl:sequence select="@* except @style"/>
-            <xsl:sequence select="css:style-attribute(css:serialize-declaration-list($properties))"/>
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($properties))"/>
             <xsl:if test="not(@xml:lang)">
                 <xsl:sequence select="$pending-lang"/>
             </xsl:if>
@@ -95,7 +95,7 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <css:box type="inline">
-                        <xsl:sequence select="css:style-attribute(css:serialize-declaration-list($pending-properties))"/>
+                        <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($pending-properties))"/>
                         <xsl:sequence select="$pending-lang"/>
                         <xsl:sequence select="current-group()"/>
                     </css:box>

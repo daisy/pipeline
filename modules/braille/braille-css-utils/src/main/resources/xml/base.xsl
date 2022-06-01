@@ -1106,14 +1106,6 @@
         <xsl:sequence select="string-join($serialized-rules,$newline)"/>
     </xsl:function>
     
-    <xsl:function name="css:serialize-declaration-list" as="xs:string">
-        <xsl:param name="declarations" as="element()*"/>
-        <xsl:variable name="serialized-declarations" as="xs:string*">
-            <xsl:apply-templates select="$declarations" mode="css:serialize"/>
-        </xsl:variable>
-        <xsl:sequence select="string-join($serialized-declarations, '; ')"/>
-    </xsl:function>
-    
     <xsl:function name="css:serialize-content-list" as="xs:string">
         <xsl:param name="components" as="element()*"/>
         <xsl:variable name="serialized-components" as="xs:string*">
