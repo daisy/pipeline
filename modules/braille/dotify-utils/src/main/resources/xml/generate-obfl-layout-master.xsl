@@ -38,7 +38,7 @@
     <xsl:function name="pxi:layout-master-name" as="xs:string">
         <xsl:param name="page-stylesheet" as="xs:string"/>
         <xsl:sequence select="concat('master_',
-                                     index-of($page-stylesheets/@style, $page-stylesheet)[1])"/>
+                                     index-of($page-stylesheets/@serialized, $page-stylesheet)[1])"/>
     </xsl:function>
     
     <xsl:template match="/*">
@@ -48,7 +48,7 @@
             <xsl:variable name="sequences" as="element()*" select="//obfl:sequence|//obfl:toc-sequence|//obfl:dynamic-sequence"/>
             <xsl:for-each select="distinct-values($sequences/@css:page)">
                 <xsl:variable name="layout-master-name" select="pxi:layout-master-name(.)"/>
-                <xsl:variable name="page-stylesheet" as="element()" select="$page-stylesheets[@style=current()][1]"/>
+                <xsl:variable name="page-stylesheet" as="element()" select="$page-stylesheets[@serialized=current()][1]"/>
                 <xsl:variable name="default-page-counter-names"
                               select="distinct-values(
                                         for $s in $sequences[@css:page=current()] return

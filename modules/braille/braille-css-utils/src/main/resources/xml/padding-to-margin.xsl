@@ -64,11 +64,11 @@
         <xsl:choose>
             <xsl:when test="$concretize-inherit">
                 <xsl:variable name="properties" as="element(css:property)*"
-                              select="css:deep-parse-stylesheet(.)/self::css:rule[not(@selector)]/css:property"/>
+                              select="css:parse-stylesheet(.)/self::css:rule[not(@selector)]/css:property"/>
                 <xsl:choose>
                     <xsl:when test="$properties[@value='inherit' and not(css:is-inherited(@name))]">
                         <xsl:variable name="parent-properties" as="element(css:property)*"
-                                      select="css:deep-parse-stylesheet(parent::*/ancestor::css:box[1]/@style)
+                                      select="css:parse-stylesheet(parent::*/ancestor::css:box[1]/@style)
                                               /self::css:rule[not(@selector)]/css:property"/>
                         <xsl:sequence select="css:style-attribute(css:serialize-stylesheet(
                                                 for $p in $properties return

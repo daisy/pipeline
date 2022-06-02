@@ -2157,30 +2157,30 @@
             <body style="@page { size: 14 8; margin-bottom: 1; @bottom-right { content: counter(page) }}">
               <frontmatter>
                 <toc style="display: block">
-                  <entry ref="chapter_1" style="&amp;::after {
-                                                  display: block;
-                                                  text-transform: auto;
-                                                  content: target-text(attr(ref))
-                                                           ' ⠄⠄⠄⠄⠄⠄⠄ '
-                                                           target-string(attr(ref), print-page)
-                                                           ' '
-                                                           target-counter(attr(ref), page); }"/>
-                  <entry ref="chapter_2" style="&amp;::after {
-                                                  display: block;
-                                                  text-transform: auto;
-                                                  content: target-text(attr(ref))
-                                                           ' ⠄⠄⠄⠄⠄⠄ '
-                                                           target-string(attr(ref), print-page)
-                                                           ' '
-                                                           target-counter(attr(ref), page); }"/>
-                  <entry ref="chapter_3" style="&amp;::after {
-                                                  display: block;
-                                                  text-transform: auto;
-                                                  content: target-text(attr(ref))
-                                                           ' ⠄⠄⠄⠄ '
-                                                           target-string(attr(ref), print-page)
-                                                           ' '
-                                                           target-counter(attr(ref), page); }"/>
+                  <entry ref="#chapter_1" style="&amp;::after {
+                                                   display: block;
+                                                   text-transform: auto;
+                                                   content: target-text(attr(ref))
+                                                            ' ⠄⠄⠄⠄⠄⠄⠄ '
+                                                            target-string(attr(ref), print-page)
+                                                            ' '
+                                                            target-counter(attr(ref), page); }"/>
+                  <entry ref="#chapter_2" style="&amp;::after {
+                                                   display: block;
+                                                   text-transform: auto;
+                                                   content: target-text(attr(ref))
+                                                            ' ⠄⠄⠄⠄⠄⠄ '
+                                                            target-string(attr(ref), print-page)
+                                                            ' '
+                                                            target-counter(attr(ref), page); }"/>
+                  <entry ref="#chapter_3" style="&amp;::after {
+                                                   display: block;
+                                                   text-transform: auto;
+                                                   content: target-text(attr(ref))
+                                                            ' ⠄⠄⠄⠄ '
+                                                             target-string(attr(ref), print-page)
+                                                            ' '
+                                                            target-counter(attr(ref), page); }"/>
                 </toc>
               </frontmatter>
               <bodymatter>
@@ -2349,18 +2349,18 @@
             <body style="@page { size: 15 5; margin-bottom: 1; @bottom-right { content: counter(page) }}">
               <frontmatter>
                 <toc style="display: block">
-                  <entry ref="chapter_1" style="&amp;::after {
-                                                  display: block;
-                                                  text-transform: auto;
-                                                  content: target-text(attr(ref))
-                                                           ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
-                                                           target-counter(attr(ref), page); }"/>
-                  <entry ref="chapter_2" style="&amp;::after {
-                                                  display: block;
-                                                  text-transform: auto;
-                                                  content: target-text(attr(ref))
-                                                           ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
-                                                           target-counter(attr(ref), page); }"/>
+                  <entry ref="#chapter_1" style="&amp;::after {
+                                                   display: block;
+                                                   text-transform: auto;
+                                                   content: target-text(attr(ref))
+                                                            ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
+                                                            target-counter(attr(ref), page); }"/>
+                  <entry ref="#chapter_2" style="&amp;::after {
+                                                   display: block;
+                                                   text-transform: auto;
+                                                   content: target-text(attr(ref))
+                                                            ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ '
+                                                            target-counter(attr(ref), page); }"/>
                 </toc>
               </frontmatter>
               <bodymatter style="display:block;page-break-before:always">
@@ -2372,24 +2372,24 @@
               </bodymatter>
               <rearmatter style="display:block;page-break-before:always">
                 <index>
-                  <entry ref="x" style="&amp;::after {
-                                          display: block;
-                                          text-transform: auto;
-                                          content: target-text(attr(ref))
-                                                   ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
-                                                   target-counter(attr(ref), page); }"/>
-                  <entry ref="y" style="&amp;::after {
-                                          display: block;
-                                          text-transform: auto;
-                                          content: target-text(attr(ref))
-                                                   ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
-                                                   target-counter(attr(ref), page); }"/>
-                  <entry ref="z" style="&amp;::after {
-                                          display: block;
-                                          text-transform: auto;
-                                          content: target-text(attr(ref))
-                                                   ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
-                                                   target-counter(attr(ref), page); }"/>
+                  <entry ref="#x" style="&amp;::after {
+                                           display: block;
+                                           text-transform: auto;
+                                           content: target-text(attr(ref))
+                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
+                                                    target-counter(attr(ref), page); }"/>
+                  <entry ref="#y" style="&amp;::after {
+                                           display: block;
+                                           text-transform: auto;
+                                           content: target-text(attr(ref))
+                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
+                                                    target-counter(attr(ref), page); }"/>
+                  <entry ref="#z" style="&amp;::after {
+                                           display: block;
+                                           text-transform: auto;
+                                           content: target-text(attr(ref))
+                                                    ' ⠄⠄⠄⠄⠄⠄⠄⠄ '
+                                                    target-counter(attr(ref), page); }"/>
                 </index>
               </rearmatter>
             </body>
@@ -2545,7 +2545,7 @@
         <x:document type="inline">
           <doc style="text-transform: none; @page { size: 14 8 }">
             <p style="display:block">
-              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
+              <a href="#foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               ⠤⠤⠤⠤
@@ -3910,7 +3910,7 @@
         <x:document type="inline">
           <doc style="text-transform:none">
             <p style="display:block">
-              <a href="foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
+              <a href="#foo" style="&amp;::after { content: target-counter(attr(href), page); text-transform: auto }"/>
             </p>
             <p style="display:block">
               <a id="foo"/>
@@ -6682,7 +6682,7 @@
                        @page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1"
+              <noteref ref="#note_1"
                        style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶
               </noteref>
@@ -6777,7 +6777,7 @@
                            content: '⠭⠭⠭'; }">
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -6785,7 +6785,7 @@
               </p>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -6989,7 +6989,7 @@
                        @page { size: 20 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1"
+              <noteref ref="#note_1"
                        style="counter-increment: footnote;
                               &amp;::after { content: '⠦' counter(footnote) '⠴'; }
                               &amp;::alternate {
@@ -6997,7 +6997,7 @@
                                 display: block;
                                 content: counter(footnote) ' ' target-content(attr(ref)); }"/>
               ⠤⠤⠤
-              <noteref ref="note_2"
+              <noteref ref="#note_2"
                        style="counter-increment: footnote;
                               &amp;::after { content: '⠦' counter(footnote) '⠴'; }
                               &amp;::alternate {
@@ -7006,7 +7006,7 @@
                                 content: target-content(attr(ref)); }
                               &amp;::alternate::before { content: counter(footnote) ' '; }"/>
               ⠤⠤⠤
-              <noteref ref="note_1"
+              <noteref ref="#note_1"
                        style="flow: null;
                               counter-increment: footnote;
                               &amp;::alternate { content: '⠦' counter(footnote) '⠴'; }
@@ -7126,7 +7126,7 @@
                            display: block;
                            &amp;::alternate { content:'⠶' }">⠿⠿⠿</note>
               ⠤⠤⠤
-              <noteref ref="note_2"
+              <noteref ref="#note_2"
                        style="&amp;::alternate {
                                 flow: chapter-notes;
                                 display: block;
@@ -7244,7 +7244,7 @@
             <section style="display: block;
                             &amp;::after { display:block; content: flow(chapter-notes)}">
               ⠤⠤⠤
-              <noteref ref="note_1"
+              <noteref ref="#note_1"
                        style="counter-increment: note;
                               &amp;::after { content: '⠦' counter(note) '⠴'; }
                               &amp;::alternate {
@@ -7252,7 +7252,7 @@
                                 display: block;
                                 content: counter(note) ' ' target-content(attr(ref)); }"/>
               ⠤⠤⠤
-              <noteref ref="note_2"
+              <noteref ref="#note_2"
                        style="counter-increment: note;
                               &amp;::after { content: '⠦' counter(note) '⠴'; }
                               &amp;::alternate {
@@ -7339,14 +7339,14 @@
           <body style="@page { size: 10 6; @footnotes { content: flow(footnotes, page) }}">
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶
               </noteref>
               ⠤⠤⠤
             </p>
             <note id="note_1" style="display:none">
               ⠿⠿⠿
-              <noteref ref="note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶⠶
               </noteref>
               ⠿⠿⠿
@@ -7441,11 +7441,11 @@
                            content: flow(endnotes, volume); }}">
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶
               </noteref>
               ⠤⠤⠤
-              <noteref ref="note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶⠶
               </noteref>
               ⠤⠤⠤
@@ -7560,11 +7560,11 @@
                            content: flow(endnotes, volume); }}">
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶
               </noteref>
               ⠤⠤⠤
-              <noteref ref="note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶⠶
               </noteref>
               ⠤⠤⠤
@@ -7703,21 +7703,21 @@
                           &amp;::-obfl-on-volume-start { content: counter(-obfl-started-volume-number) }
                           &amp;::duplicate { display:-obfl-toc; -obfl-toc-range:volume; flow:next-front; text-transform:auto }
                           &amp;::duplicate::-obfl-on-toc-start { content:'⠿⠿⠿' }">
-                <entry ref="ch_1" style="display: block;
-                                         &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                <entry ref="#ch_1" style="display: block;
+                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
                 <entry style="display: block; margin-left: 1">
-                  <entry ref="ch_1_1" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_1_2" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                  <entry ref="#ch_1_1" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                  <entry ref="#ch_1_2" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
-                <entry ref="ch_2" style="display: block;
-                                         &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                <entry ref="#ch_2" style="display: block;
+                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 <entry style="display: block; margin-left: 1">
-                  <entry ref="ch_2_1" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_2_2" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                  <entry ref="#ch_2_1" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                  <entry ref="#ch_2_2" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
               </toc>
             </front>
@@ -8058,15 +8058,15 @@
                             margin-bottom: 1;
                             text-transform: auto;
                             content: '0'; }">
-                <entry ref="ch_0" style="display: block;
-                                         &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 0 </entry>
-                <entry ref="ch_1" style="display: block;
-                                         &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                <entry ref="#ch_0" style="display: block;
+                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 0 </entry>
+                <entry ref="#ch_1" style="display: block;
+                                          &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
                 <entry style="display: block; margin-left: 1">
-                  <entry ref="ch_1_1" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-                  <entry ref="ch_1_2" style="display: block;
-                                             &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
+                  <entry ref="#ch_1_1" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
+                  <entry ref="#ch_1_2" style="display: block;
+                                              &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
                 </entry>
               </toc>
             </front>
@@ -8360,7 +8360,7 @@
             </level1>
             <list style="display: -obfl-toc; flow: front; page-break-before: always;">
               <li style="display:block">
-                <a href="ch_1" style="&amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(href), page) }"> ⠿⠿⠿ 1 </a>
+                <a href="#ch_1" style="&amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(href), page) }"> ⠿⠿⠿ 1 </a>
               </li>
             </list>
             <level1 style="display: block; page-break-before: always;">
@@ -9499,9 +9499,9 @@
                       @volume { max-length: 2 }
                       @volume:last { max-length: 2; @begin { content: flow(toc, document) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
-              <entry ref="ch_1"
+              <entry ref="#ch_1"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-              <entry ref="ch_2"
+              <entry ref="#ch_2"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
             </toc>
             <body style="display:block">
@@ -9681,9 +9681,9 @@
                       @volume { max-length: 2 }
                       @volume:last { max-length: 2; @end { content: flow(toc, document) }}">
             <toc style="display:-obfl-toc; flow:toc; text-transform:auto">
-              <entry ref="ch_1"
+              <entry ref="#ch_1"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 1 </entry>
-              <entry ref="ch_2"
+              <entry ref="#ch_2"
                      style="display: block; &amp;::after { content: ' ⠄⠄⠄⠄⠄⠄⠄⠄⠄ ' target-counter(attr(ref), page) }"> 2 </entry>
             </toc>
             <body style="display:block">
@@ -10243,11 +10243,11 @@
             </p>
             <p style="display:block">
               ⠤⠤⠤
-              <noteref ref="note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_1" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶
               </noteref>
               ⠤⠤⠤
-              <noteref ref="note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
+              <noteref ref="#note_2" style="&amp;::alternate { flow:footnotes; display:block; content:target-content(attr(ref)) }">
                 ⠶⠶
               </noteref>
               ⠤⠤⠤
@@ -10394,7 +10394,7 @@
             <br style="display: block; page-break-before: always"/>
             <p style="display: block; -obfl-underline: ⠒" id="a">
               ⠿⠿⠿⠿⠿⠿
-              <a href="a" style="&amp;::after { content: target-counter(attr(href), page) }"/>
+              <a href="#a" style="&amp;::after { content: target-counter(attr(href), page) }"/>
             </p>
             <br style="display: block; page-break-before: always"/>
             <p style="display: block; -obfl-underline: ⠒; margin-top: 1">
@@ -11622,14 +11622,14 @@
             <body>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </p>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -11799,14 +11799,14 @@
                            text-transform: auto; }">
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_1" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               </p>
               <p style="display:block">
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
-                <noteref ref="note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
+                <noteref ref="#note_2" style="&amp;::alternate { flow:endnotes; display:block; content:target-content(attr(ref)) }">
                   ⠶
                 </noteref>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -14456,49 +14456,49 @@
                            flow:next-front;
                            text-transform:auto }">
                 <li style="display: block">
-                  <a href="ch_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
-                                        &amp;::-obfl-on-resumed {
-                                          display: block;
-                                          content: '1 ⠄⠄⠄'}
-                                        &amp;::-obfl-on-resumed::after {
-                                          content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
+                  <a href="#ch_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                         &amp;::-obfl-on-resumed {
+                                           display: block;
+                                           content: '1 ⠄⠄⠄'}
+                                         &amp;::-obfl-on-resumed::after {
+                                           content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                      >1</a>
                   <ol style="display: block; margin-left: 1">
                     <li style="display: block">
-                      <a href="ch_1_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
+                      <a href="#ch_1_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
                          >1.1</a>
                     </li>
                     <li style="display: block">
-                      <a href="ch_1_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
+                      <a href="#ch_1_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }"
                          >1.2</a>
                     </li>
                   </ol>
                 </li>
                 <li style="display: block">
-                  <a href="ch_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
-                                        &amp;::-obfl-on-resumed {
-                                          display: block;
-                                          content: '2 ⠄⠄⠄'}
-                                        &amp;::-obfl-on-resumed::after {
-                                          content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
+                  <a href="#ch_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                         &amp;::-obfl-on-resumed {
+                                           display: block;
+                                           content: '2 ⠄⠄⠄'}
+                                         &amp;::-obfl-on-resumed::after {
+                                           content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                      >2</a>
                   <ol style="display: block; margin-left: 1">
                     <li style="display: block">
-                      <a href="ch_2_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
-                                              &amp;::-obfl-on-resumed {
-                                                display: block;
-                                                content: '2.1 ⠄⠄⠄'}
-                                              &amp;::-obfl-on-resumed::after {
-                                                content: ' ⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
+                      <a href="#ch_2_1" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                               &amp;::-obfl-on-resumed {
+                                                 display: block;
+                                                 content: '2.1 ⠄⠄⠄'}
+                                               &amp;::-obfl-on-resumed::after {
+                                                 content: ' ⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                          >2.1</a>
                     </li>
                     <li style="display: block">
-                      <a href="ch_2_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
-                                              &amp;::-obfl-on-resumed {
-                                                display: block;
-                                                content: '2.2 ⠄⠄⠄'}
-                                              &amp;::-obfl-on-resumed::after {
-                                                content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
+                      <a href="#ch_2_2" style="&amp;::after { content: ' ⠐⠐⠐⠐⠐⠐ ' target-counter(attr(href), page) }
+                                               &amp;::-obfl-on-resumed {
+                                                 display: block;
+                                                 content: '2.2 ⠄⠄⠄'}
+                                               &amp;::-obfl-on-resumed::after {
+                                                 content: ' ⠐⠐⠐⠐⠐ ' counter(-obfl-started-volume-first-content-page) }"
                          >2.2</a>
                     </li>
                   </ol>
@@ -15833,9 +15833,9 @@
             <list style="display: -obfl-toc; flow: front">
               <li style="display: block"/>
               <li style="display: block">
-                <a href="chapter" style="&amp;::after {
-                                      text-transform: auto;
-                                      content: ' ' target-counter(attr(href), page) }">⠿⠿⠿</a>
+                <a href="#chapter" style="&amp;::after {
+                                            text-transform: auto;
+                                            content: ' ' target-counter(attr(href), page) }">⠿⠿⠿</a>
               </li>
             </list>
             <h1 id="chapter" style="display: block">⠿⠿⠿</h1>

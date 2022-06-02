@@ -118,8 +118,12 @@
 			<x:param select="'orphans: 3; @page { size: 40 25;}   display:block'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule style="orphans: 3"/>
-			<css:rule selector="@page" style="size: 40 25"/>
+			<css:rule>
+				<css:property name="orphans" value="3"/>
+			</css:rule>
+			<css:rule selector="@page">
+				<css:property name="size" value="40 25"/>
+			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
@@ -128,7 +132,15 @@
 			<x:param select="'@volume { min-length: 20; max-length: 100; } @volume:nth(2) { max-length: 50; }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule selector="@volume" style="max-length: 100; min-length: 20; &amp;:nth(2) {{ max-length: 50 }}"/>
+			<css:rule selector="@volume">
+				<css:rule>
+					<css:property name="max-length" value="100"/>
+					<css:property name="min-length" value="20"/>
+				</css:rule>
+				<css:rule selector="&amp;:nth(2)">
+					<css:property name="max-length" value="50"/>
+				</css:rule>
+			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
@@ -144,14 +156,77 @@
 			                 @hyphenation-resource:lang(foo) { system: foo } @hyphenation-resource:lang(bar) { system: bar }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule style="display: block"/>
-			<css:rule selector="@hyphenation-resource" style="&amp;:lang(bar) {{ system: bar }} &amp;:lang(foo) {{ system: foo }}"/>
-			<css:rule selector="@page" style="size: 40 25; @top-right {{ content: ' }} ' }}"/>
-			<css:rule selector="@text-transform" style="&amp; bar {{ system: bar }} &amp; foo {{ system: foo }}"/>
-			<css:rule selector="@volume" style="@begin {{ content: flow(titlepage); @page {{ size: 15 5 }} @page:left {{ size: 15 5; @top-right {{ content: none }} }} }}"/>
-			<css:rule selector="&amp;:-obfl-alternate-scenario(1)" style="&amp; tr:blank::after {{ content: '(empty)' }}"/>
-			<css:rule selector="&amp;:-obfl-alternate-scenario(2)" style="display: table"/>
-			<css:rule selector="&amp;::before" style="content: ' }} ' -obfl-evaluate('\27 \A \27 ')"/>
+			<css:rule>
+				<css:property name="display" value="block"/>
+			</css:rule>
+			<css:rule selector="@hyphenation-resource">
+				<css:rule selector="&amp;:lang(bar)">
+					<css:property name="system" value="bar"/>
+				</css:rule>
+				<css:rule selector="&amp;:lang(foo)">
+					<css:property name="system" value="foo"/>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="@page">
+				<css:rule>
+					<css:property name="size" value="40 25"/>
+				</css:rule>
+				<css:rule selector="@top-right">
+					<css:property name="content">
+						<css:string value=" }} "/>
+					</css:property>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="@text-transform">
+				<css:rule selector="&amp; bar">
+					<css:property name="system" value="bar"/>
+				</css:rule>
+				<css:rule selector="&amp; foo">
+					<css:property name="system" value="foo"/>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="@volume">
+				<css:rule selector="@begin">
+					<css:rule>
+						<css:property name="content">
+							<css:flow from="titlepage"/>
+						</css:property>
+					</css:rule>
+					<css:rule selector="@page">
+						<css:rule>
+							<css:property name="size" value="15 5"/>
+						</css:rule>
+						<css:rule selector="&amp;:left">
+							<css:rule>
+								<css:property name="size" value="15 5"/>
+							</css:rule>
+							<css:rule selector="@top-right">
+								<css:property name="content"/>
+							</css:rule>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="&amp;:-obfl-alternate-scenario(1)">
+				<css:rule selector="&amp; tr">
+					<css:rule selector="&amp;:blank">
+						<css:rule selector="&amp;::after">
+							<css:property name="content">
+								<css:string value="(empty)"/>
+							</css:property>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+			</css:rule>
+			<css:rule selector="&amp;:-obfl-alternate-scenario(2)">
+				<css:property name="display" value="table"/>
+			</css:rule>
+			<css:rule selector="&amp;::before">
+				<css:property name="content">
+					<css:string value=" }} "/>
+					<css:custom-func name="-obfl-evaluate" arg1="'\27 \A \27 '"/>
+				</css:property>
+			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
@@ -162,7 +237,19 @@
 			                  &amp;::before::before::before { display: block }'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:rule selector="&amp;::before" style="display: block; &amp;::before {{ display: block }} &amp;::before::before {{ display: block }}"/>
+			<css:rule selector="&amp;::before">
+				<css:rule>
+					<css:property name="display" value="block"/>
+				</css:rule>
+				<css:rule selector="&amp;::before">
+					<css:rule>
+						<css:property name="display" value="block"/>
+					</css:rule>
+					<css:rule selector="&amp;::before">
+						<css:property name="display" value="block"/>
+					</css:rule>
+				</css:rule>
+			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
@@ -177,7 +264,6 @@
 	<x:scenario label="test_09">
 		<x:call function="css:parse-stylesheet">
 			<x:param select="'  display: none;  string-set : print-page attr(value) ;  '"/>
-			<x:param select="true()"/>
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
@@ -242,19 +328,85 @@
 	<x:scenario label="test_14">
 		<x:call function="css:serialize-stylesheet">
 			<x:param>
-				<css:rule selector="@page" style="size: 40 25; @bottom-center {{ content: &quot;foo&quot; }} &amp;:left {{ @bottom-left {{ content: counter(page) }} }}"/>
-				<css:rule style="display:block"/>
-				<css:rule selector="@volume" style="min-length: 20; max-length: 100; &amp;:nth(2) {{ max-length: 50; }}"/>
-				<css:rule selector="&amp;::before" style="content: &quot;foo&quot; &amp;::after {{ content: &quot;foo&quot; }}"/>
-				<css:rule selector="&amp;::table-by(foo)" style="&amp;::list-item::after {{ content: &quot;, &quot; }} &amp;::list-item:last-child::after {{ content: none }}"/>
-				<css:rule selector="@-obfl-volume-transition" style="@any-interrupted {{ content: -obfl-evaluate('$volume'); }}"/>
-				<css:rule selector="&amp;:-obfl-alternate-scenario(1)" style="&amp; tr:blank::after {{ content: '(empty)'; }}"/>
-				<css:rule selector="&amp;:-obfl-alternate-scenario(2)" style="display: table;"/>
-				<css:rule selector="@text-transform" style="&amp; bar {{ system: bar; }} &amp; foo {{ system: foo; }}"/>
-				<css:rule selector="@hyphenation-resource" style="&amp;:lang(bar) {{ system: bar; }} &amp;:lang(foo) {{ system: foo; }}"/>
+				<css:rule selector="@page">
+					<css:rule>
+						<css:property name="size" value="40 25"/>
+					</css:rule>
+					<css:rule selector="@bottom-center">
+						<css:property name="content" value="&quot;foo&quot;"/>
+					</css:rule>
+					<css:rule selector="&amp;:left">
+						<css:rule selector="@bottom-left">
+							<css:property name="content" value="counter(page)"/>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+				<css:rule>
+					<css:property name="display" value="block"/>
+				</css:rule>
+				<css:rule selector="@volume">
+					<css:property name="max-length" value="100"/>
+					<css:property name="min-length" value="20"/>
+					<css:rule selector="&amp;:nth(2)">
+						<css:property name="max-length" value="50"/>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="&amp;::before">
+					<css:rule>
+						<css:property name="content" value="&quot;foo&quot;"/>
+					</css:rule>
+					<css:rule selector="&amp;::after">
+						<css:property name="content" value="&quot;foo&quot;"/>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="&amp;::table-by(foo)">
+					<css:rule selector="&amp;::list-item">
+						<css:rule selector="&amp;::after">
+							<css:property name="content" value="&quot;, &quot;"/>
+						</css:rule>
+						<css:rule selector="&amp;:last-child">
+							<css:rule selector="&amp;::after">
+								<css:property name="content" value="none"/>
+							</css:rule>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="@-obfl-volume-transition">
+					<css:rule selector="@any-interrupted">
+						<css:property name="content" value="-obfl-evaluate('$volume')"/>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="&amp;:-obfl-alternate-scenario(1)">
+					<css:rule selector="&amp; tr">
+						<css:rule selector="&amp;:blank">
+							<css:rule selector="&amp;::after">
+								<css:property name="content" value="&quot;(empty)&quot;"/>
+							</css:rule>
+						</css:rule>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="&amp;:-obfl-alternate-scenario(2)">
+					<css:property name="display" value="table"/>
+				</css:rule>
+				<css:rule selector="@text-transform">
+					<css:rule selector="&amp; bar">
+						<css:property name="system" value="bar"/>
+					</css:rule>
+					<css:rule selector="&amp; foo">
+						<css:property name="system" value="foo"/>
+					</css:rule>
+				</css:rule>
+				<css:rule selector="@hyphenation-resource">
+					<css:rule selector="&amp;:lang(bar)">
+						<css:property name="system" value="bar"/>
+					</css:rule>
+					<css:rule selector="&amp;:lang(foo)">
+						<css:property name="system" value="foo"/>
+					</css:rule>
+				</css:rule>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'display:block; @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { max-length: 100; min-length: 20 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } @text-transform bar { system: bar } @text-transform foo { system: foo } @hyphenation-resource:lang(bar) { system: bar } @hyphenation-resource:lang(foo) { system: foo } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none } &amp;:-obfl-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; } &amp;:-obfl-alternate-scenario(2) { display: table }'"/>
+		<x:expect label="result" select="'display: block; @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { max-length: 100; min-length: 20 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } @text-transform bar { system: bar } @text-transform foo { system: foo } @hyphenation-resource:lang(bar) { system: bar } @hyphenation-resource:lang(foo) { system: foo } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none } &amp;:-obfl-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; } &amp;:-obfl-alternate-scenario(2) { display: table }'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_15">
@@ -499,8 +651,8 @@
 	</x:scenario>
 	
 	<x:scenario label="test_32">
-		<x:call template="css:deep-parse-stylesheet">
-			<x:param name="stylesheet" select="/a/@style">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="/a/@style">
 				<a href="#foo"
 				   style="display:block
 				          &amp;::before {{ content: &quot;x&quot; }}
@@ -596,7 +748,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_33">
-		<x:call function="css:deep-parse-stylesheet">
+		<x:call function="css:parse-stylesheet">
 			<x:param select="'@page { size: 32 27; @bottom-center { content: none } @bottom-left { content: none } }'"/>
 		</x:call>
 		<x:expect label="result">
@@ -719,7 +871,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_37">
-		<x:call function="css:deep-parse-stylesheet">
+		<x:call function="css:parse-stylesheet">
 			<x:param select="'string-set: print-page content(), foo &quot;''bar''&quot;;'"/>
 		</x:call>
 		<x:expect label="result">

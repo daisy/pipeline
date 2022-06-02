@@ -302,7 +302,7 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	private static void insertPageStyle(StringBuilder builder, RulePage pageRule) {
-		builder.append(BrailleCssSerializer.toString(pageRule)).append(" ");
+		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSS)).append(" ");
 	}
 
 	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {

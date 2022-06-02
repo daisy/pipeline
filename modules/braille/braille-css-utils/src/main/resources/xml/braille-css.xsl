@@ -392,7 +392,7 @@
                     </xsl:when>
                     <xsl:when test="string($stylesheet)=''"/>
                     <xsl:otherwise>
-                        <xsl:sequence select="css:deep-parse-stylesheet($stylesheet)[@selector='@counter-style']"/>
+                        <xsl:sequence select="css:parse-stylesheet($stylesheet)[@selector='@counter-style']"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
