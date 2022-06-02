@@ -278,7 +278,7 @@
               equals="'@page:left { margin-top: 2 }'"/>
   </x:scenario>
   
-  <x:scenario label="test_08" xfail="temporarily failing">
+  <x:scenario label="test_08">
     <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
@@ -301,6 +301,29 @@
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
               equals="'@page { @footnotes { border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1 } }'"/>
+  </x:scenario>
+  
+  <x:scenario label="test_09">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                @page {
+                  margin: 1;
+                }
+              </style>
+            </head>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//document"/>
+    </x:context>
+    <x:expect label="root-style" type="xpath" test="/*/@style"
+              equals="'@page { margin-bottom: 1; margin-left: 1; margin-right: 1; margin-top: 1 }'"/>
   </x:scenario>
   
 </x:description>

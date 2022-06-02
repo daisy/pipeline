@@ -20,7 +20,7 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:variable name="rules" as="element(css:rule)*" select="css:deep-parse-stylesheet(string(.))"/>
+        <xsl:variable name="rules" as="element(css:rule)*" select="css:parse-stylesheet(string(.))"/>
         <xsl:variable name="properties" as="element(css:property)*" select="$rules[not(@selector)]/css:property"/>
         <!--
             filter

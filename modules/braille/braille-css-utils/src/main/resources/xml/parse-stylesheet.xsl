@@ -13,11 +13,11 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:variable name="style" as="element()*" select="css:parse-stylesheet(.)"/> <!-- css:rule*-->
-        <xsl:variable name="extract-styles" as="element()*"
+        <xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(.)"/>
+        <xsl:variable name="extract-styles" as="element(css:rule)*"
                       select="$style/self::css:rule[@selector[not(matches(.,'^&amp;::table-by\(.+\)$') or
                                                                   .=('&amp;::list-item',
-                                                                     '&amp;::list-header'))]]"/> <!-- css:rule*-->
+                                                                     '&amp;::list-header'))]]"/>
         <xsl:if test="exists($style except $extract-styles)">
             <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($style except $extract-styles))"/>
         </xsl:if>
@@ -28,7 +28,7 @@
         <xsl:attribute name="css:{replace(replace(replace(@selector, '^(@|&amp;::|&amp;:)|\)' , ''  ),
                                                                      '^-'                     , '_' ),
                                                                      ' +|\('                  , '-' )}"
-                       select="@style"/>
+                       select="css:serialize-stylesheet(*)"/>
     </xsl:template>
     
 </xsl:stylesheet>

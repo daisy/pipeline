@@ -18,11 +18,7 @@
 	<xsl:template match="*" mode="translate">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
 		<xsl:variable name="source-style" as="element()*">
-			<xsl:variable name="stylesheet" as="element()*">
-				<xsl:call-template name="css:deep-parse-stylesheet">
-					<xsl:with-param name="stylesheet" select="@style"/>
-				</xsl:call-template>
-			</xsl:variable>
+			<xsl:variable name="stylesheet" as="element()*" select="css:parse-stylesheet(@style)"/>
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
 				<xsl:with-param name="context" select="$dummy-element"/>

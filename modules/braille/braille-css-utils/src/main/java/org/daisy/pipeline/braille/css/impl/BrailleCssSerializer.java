@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.css.impl;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -22,12 +23,27 @@ import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermString;
+import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.OutputUtil;
 
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
+import org.daisy.braille.css.BrailleCSSProperty.Content;
+import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.common.file.URLs;
+import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.CounterFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.CounterStyle;
+import org.daisy.pipeline.braille.css.impl.ContentList.FlowFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.LeaderFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.StringFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.TextFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.URL;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -44,7 +60,63 @@ public final class BrailleCssSerializer {
 	/* =================================================== */
 
 	public static String toString(Term<?> term) {
-		return CssSerializer.toString(term);
+		if (term instanceof ContentList)
+			return serializeTermList((List<Term<?>>)term);
+		else if (term instanceof AttrFunction) {
+			AttrFunction f = (AttrFunction)term;
+			String s = "attr(" + toString(f.name);
+			if (f.asURL)
+				s = s + " url";
+			s += ")";
+			return s; }
+		else if (term instanceof ContentFunction) {
+			ContentFunction f = (ContentFunction)term;
+			if (f.target.isPresent())
+				return "target-content(" + toString(f.target.get()) + ")";
+			else
+				return "content()"; }
+		else if (term instanceof StringFunction) {
+			StringFunction f = (StringFunction)term;
+			if (f.target.isPresent())
+				return "target-string(" + toString(f.target.get()) + ", " + toString(f.name) + ")";
+			else {
+				String s = "string(" + toString(f.name);
+				if (f.scope.isPresent())
+					s = s + ", " + f.scope.get().toString();
+				s += ")";
+				return s; }}
+		else if (term instanceof CounterFunction) {
+			CounterFunction f = (CounterFunction)term;
+			String s = "";
+			if (f.target.isPresent())
+				s = "target-counter(" + toString(f.target.get()) + ", " + toString(f.name);
+			else
+				s = "counter(" + toString(f.name);
+			if (f.style.isPresent())
+				s = s + ", " + toString(f.style.get());
+			s += ")";
+			return s; }
+		else if (term instanceof TextFunction) {
+			TextFunction f = (TextFunction)term;
+			return "target-text(" + toString(f.target) + ")"; }
+		else if (term instanceof LeaderFunction) {
+			LeaderFunction f = (LeaderFunction)term;
+			String s = "leader(" + toString(f.pattern);
+			if (f.position.isPresent())
+				s = s + ", " + toString(f.position.get());
+			if (f.alignment.isPresent())
+				s = s + ", " + f.alignment.get().toString();
+			s += ")";
+			return s; }
+		else if (term instanceof FlowFunction) {
+			FlowFunction f = (FlowFunction)term;
+			String s = "flow(" + toString(f.from);
+			if (f.scope.isPresent())
+				s = s + ", " + f.scope.get().toString();
+			s += ")";
+			return s; }
+		else
+			return CssSerializer.toString(term);
 	}
 
 	public static String toString(Declaration declaration) {
@@ -169,8 +241,8 @@ public final class BrailleCssSerializer {
 		return b.toString();
 	}
 
-	public static String toString(RulePage page) {
-		return toString(BrailleCssStyle.of(page));
+	public static String toString(RulePage page, SupportedBrailleCSS supportedCss) {
+		return toString(BrailleCssStyle.of(page, supportedCss));
 	}
 
 	public static String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
@@ -196,7 +268,7 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String serializeTermList(List<Term<?>> termList) {
-		return CssSerializer.serializeTermList(termList);
+		return CssSerializer.serializeTermList(termList, t -> toString(t));
 	}
 
 	public static String serializeLanguageRanges(List<LanguageRange> languageRanges) {
@@ -217,66 +289,205 @@ public final class BrailleCssSerializer {
 		return s.toString();
 	}
 
+	/* = PRIVATE ========================================= */
+
+	private static String toString(URL url) {
+		if (url.url != null)
+			return toString(url.url);
+		else
+			return toString(url.urlAttr);
+	}
+
+	private static String toString(CounterStyle style) {
+		if (style.name != null)
+			return style.name;
+		else if (style.symbol != null)
+			return toString(style.symbol);
+		else if (style.symbols != null)
+			return toString(style.symbols);
+		else
+			return "none";
+	}
+
 	/* =================================================== */
 	/* toXml                                               */
 	/* =================================================== */
 
-	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
-	private static final QName CSS_RULE = new QName(XMLNS_CSS, "rule", "css");
-	private static final QName CSS_PROPERTY = new QName(XMLNS_CSS, "property", "css");
-	private static final QName SELECTOR = new QName("selector");
-	private static final QName STYLE = new QName("style");
-	private static final QName NAME = new QName("name");
-	private static final QName VALUE = new QName("value");
+	private static final String XMLNS_CSS       = "http://www.daisy.org/ns/pipeline/braille-css";
+	private static final QName CSS_RULE         = new QName(XMLNS_CSS, "rule",     "css");
+	private static final QName CSS_PROPERTY     = new QName(XMLNS_CSS, "property", "css");
+	private static final QName CSS_STRING       = new QName(XMLNS_CSS, "string",   "css");
+	private static final QName CSS_CONTENT      = new QName(XMLNS_CSS, "content",  "css");
+	private static final QName CSS_ATTR         = new QName(XMLNS_CSS, "attr",     "css");
+	private static final QName CSS_COUNTER      = new QName(XMLNS_CSS, "counter",  "css");
+	private static final QName CSS_TEXT         = new QName(XMLNS_CSS, "text",     "css");
+	private static final QName CSS_LEADER       = new QName(XMLNS_CSS, "leader",   "css");
+	private static final QName CSS_FLOW         = new QName(XMLNS_CSS, "flow", "css");
+	private static final QName CSS_CUSTOM_FUNC  = new QName(XMLNS_CSS, "custom-func", "css");
+	private static final QName SELECTOR         = new QName("selector");
+	private static final QName NAME             = new QName("name");
+	private static final QName VALUE            = new QName("value");
+	private static final QName STYLE            = new QName("style");
+	private static final QName TARGET           = new QName("target");
+	private static final QName TARGET_ATTRIBUTE = new QName("target-attribute");
+	private static final QName SCOPE            = new QName("scope");
+	private static final QName PATTERN          = new QName("pattern");
+	private static final QName POSITION         = new QName("position");
+	private static final QName ALIGNMENT        = new QName("alignment");
+	private static final QName FROM             = new QName("from");
 
-	public static void toXml(BrailleCssStyle style, XMLStreamWriter writer, boolean deep) throws XMLStreamException {
-		toXml(style, writer, deep, false);
+	public static void toXml(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
+		toXml(style, writer, false);
 	}
 
-	private static void toXml(BrailleCssStyle style,
-	                          XMLStreamWriter w,
-	                          boolean deep,
-	                          boolean recursive) throws XMLStreamException {
+	public static void toXml(BrailleCssStyle style,
+	                         XMLStreamWriter w,
+	                         boolean recursive) throws XMLStreamException {
 		if (style.simpleStyle != null || style.declarations != null) {
-			if (!deep || !recursive || style.nestedStyles != null)
+			if (!recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
-			if (!deep)
-				writeAttribute(w, STYLE, toString(style.simpleStyle));
-			if (deep) {
-				if (style.simpleStyle != null) {
-					List<String> properties = new ArrayList<>();
-					properties.addAll(style.simpleStyle.getPropertyNames());
-					Collections.sort(properties);
-					for (String p : properties) {
-						writeStartElement(w, CSS_PROPERTY);
-						writeAttribute(w, NAME, p);
-						writeAttribute(w, VALUE, serializePropertyValue(style.simpleStyle.get(p)));
-						w.writeEndElement();
-					}
-				} else {
-					List<Declaration> declarations = new ArrayList<>();
-					declarations.addAll(style.declarations);
-					Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
-					for (Declaration d : declarations) {
-						writeStartElement(w, CSS_PROPERTY);
-						writeAttribute(w, NAME, d.getProperty());
-						writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
-						w.writeEndElement();
-					}
+			if (style.simpleStyle != null) {
+				List<String> properties = new ArrayList<>();
+				properties.addAll(style.simpleStyle.getPropertyNames());
+				Collections.sort(properties);
+				for (String p : properties)
+					toXml(p, style.simpleStyle.get(p), w);
+			} else {
+				List<Declaration> declarations = new ArrayList<>();
+				declarations.addAll(style.declarations);
+				Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
+				for (Declaration d : declarations) {
+					writeStartElement(w, CSS_PROPERTY);
+					writeAttribute(w, NAME, d.getProperty());
+					writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
+					w.writeEndElement();
 				}
 			}
-			if (!deep || !recursive || style.nestedStyles != null)
+			if (!recursive || style.nestedStyles != null)
 				w.writeEndElement();
 		}
 		if (style.nestedStyles != null)
 			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
 				writeStartElement(w, CSS_RULE);
 				writeAttribute(w, SELECTOR, e.getKey());
-				if (!deep)
-					writeAttribute(w, STYLE, e.getValue().toString());
-				if (deep)
-					toXml(e.getValue(), w, true, true);
+				toXml(e.getValue(), w, true);
 				w.writeEndElement();
 			}
+	}
+
+	private static void toXml(String property, PropertyValue value, XMLStreamWriter writer) throws XMLStreamException {
+		writeStartElement(writer, CSS_PROPERTY);
+		writeAttribute(writer, NAME, property);
+		if ("content".equals(property)) {
+			if (value.getCSSProperty() == Content.NONE || value.getCSSProperty() == Content.INITIAL)
+				;
+			else if (value.getCSSProperty() == Content.INHERIT)
+				writeAttribute(writer, VALUE, Content.INHERIT.toString());
+			else if (value.getCSSProperty() == Content.content_list)
+				if (value.getValue() instanceof ContentList)
+					contentListToXml((ContentList)value.getValue(), writer);
+				else
+					throw new IllegalArgumentException();
+		} else
+			writeAttribute(writer, VALUE, serializePropertyValue(value));
+		writer.writeEndElement();
+	}
+
+	private static void contentListToXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
+		for (Term<?> i : list)
+			if (i instanceof TermString || i instanceof TermURI) {
+				Term<String> s = (Term<String>)i;
+				writeStartElement(w, CSS_STRING);
+				writeAttribute(w, VALUE, s.getValue());
+				w.writeEndElement(); }
+			else if (i instanceof AttrFunction) {
+				AttrFunction f = (AttrFunction)i;
+				writeStartElement(w, CSS_ATTR);
+				writeAttribute(w, NAME, f.name.getValue());
+				w.writeEndElement(); }
+			else if (i instanceof ContentFunction) {
+				ContentFunction f = (ContentFunction)i;
+				writeStartElement(w, CSS_CONTENT);
+				if (f.target.isPresent())
+					if (f.target.get().url != null) {
+						TermURI t = f.target.get().url;
+						URI url = URLs.asURI(t.getValue());
+						if (t.getBase() != null)
+							url = URLs.resolve(URLs.asURI(t.getBase()), url);
+						writeAttribute(w, TARGET, url.toString());
+					} else
+						writeAttribute(w, TARGET_ATTRIBUTE, f.target.get().urlAttr.name.getValue());
+				w.writeEndElement(); }
+			else if (i instanceof StringFunction) {
+				StringFunction f = (StringFunction)i;
+				writeStartElement(w, CSS_STRING);
+				writeAttribute(w, NAME, f.name.getValue());
+				if (f.target.isPresent())
+					if (f.target.get().url != null) {
+						TermURI t = f.target.get().url;
+						URI url = URLs.asURI(t.getValue());
+						if (t.getBase() != null)
+							url = URLs.resolve(URLs.asURI(t.getBase()), url);
+						writeAttribute(w, TARGET, url.toString());
+					} else
+						writeAttribute(w, TARGET_ATTRIBUTE, f.target.get().urlAttr.name.getValue());
+				else if (f.scope.isPresent())
+					writeAttribute(w, SCOPE, f.scope.get().toString());
+				w.writeEndElement(); }
+			else if (i instanceof CounterFunction) {
+				CounterFunction f = (CounterFunction)i;
+				writeStartElement(w, CSS_COUNTER);
+				writeAttribute(w, NAME, f.name.getValue());
+				if (f.target.isPresent())
+					if (f.target.get().url != null) {
+						TermURI t = f.target.get().url;
+						URI url = URLs.asURI(t.getValue());
+						if (t.getBase() != null)
+							url = URLs.resolve(URLs.asURI(t.getBase()), url);
+						writeAttribute(w, TARGET, url.toString());
+					} else
+						writeAttribute(w, TARGET_ATTRIBUTE, f.target.get().urlAttr.name.getValue());
+				if (f.style.isPresent())
+					writeAttribute(w, STYLE, toString(f.style.get()));
+				w.writeEndElement(); }
+			else if (i instanceof TextFunction) {
+				TextFunction f = (TextFunction)i;
+				writeStartElement(w, CSS_TEXT);
+				if (f.target.url != null) {
+					TermURI t = f.target.url;
+					URI url = URLs.asURI(t.getValue());
+					if (t.getBase() != null)
+						url = URLs.resolve(URLs.asURI(t.getBase()), url);
+					writeAttribute(w, TARGET, url.toString());
+				} else
+					writeAttribute(w, TARGET_ATTRIBUTE, f.target.urlAttr.name.getValue());
+				w.writeEndElement(); }
+			else if (i instanceof LeaderFunction) {
+				LeaderFunction f = (LeaderFunction)i;
+				writeStartElement(w, CSS_LEADER);
+				writeAttribute(w, PATTERN, f.pattern.getValue());
+				if (f.position.isPresent())
+					writeAttribute(w, POSITION, toString(f.position.get()));
+				if (f.alignment.isPresent())
+					writeAttribute(w, ALIGNMENT, f.alignment.get().toString());
+				w.writeEndElement(); }
+			else if (i instanceof FlowFunction) {
+				FlowFunction f = (FlowFunction)i;
+				writeStartElement(w, CSS_FLOW);
+				writeAttribute(w, FROM, f.from.getValue());
+				if (f.scope.isPresent())
+					writeAttribute(w, SCOPE, f.scope.get().toString());
+				w.writeEndElement(); }
+			else if (i instanceof TermFunction) {
+				TermFunction f = (TermFunction)i;
+				writeStartElement(w, CSS_CUSTOM_FUNC);
+				writeAttribute(w, NAME, f.getFunctionName());
+				int k = 0;
+				for (Term<?> arg : f) {
+					k++;
+					writeAttribute(w, new QName("arg" + k), toString(arg)); }
+				w.writeEndElement(); }
+			else
+				throw new RuntimeException("coding error");
 	}
 }
