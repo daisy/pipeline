@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Supplier;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
 import cz.vutbr.web.css.Declaration;
@@ -256,6 +258,26 @@ public class CounterStyle {
 		this.suffix = suffix;
 	}
 
+	/**
+	 * Create a constant CounterStyle (cyclic with a single symbol)
+	 */
+	private CounterStyle(String symbol) {
+		this(Collections.singletonList(symbol));
+	}
+
+	/**
+	 * Create a cyclic CounterStyle
+	 */
+	private CounterStyle(List<String> symbols) {
+		system = System.CYCLIC;
+		this.symbols = symbols;
+		prefix = "";
+		suffix = " ";
+		additiveSymbols = null;
+		negative = null;
+		fallback = null;
+	}
+
 	private static final Map<String,CounterStyle> fromSymbolsCache = new HashMap<>();
 
 	/**
@@ -289,6 +311,20 @@ public class CounterStyle {
 				logger.warn(e.getMessage());
 			}
 		return namedStyles;
+	}
+
+	/**
+	 * Create a constant CounterStyle (cyclic with a single symbol)
+	 */
+	public static CounterStyle constant(String symbol) {
+		return new CounterStyle(symbol);
+	}
+
+	/**
+	 * Create a cyclic CounterStyle
+	 */
+	public static CounterStyle cycle(Iterable<String> symbols) {
+		return new CounterStyle(ImmutableList.copyOf(symbols));
 	}
 
 	public String format(int counterValue) {

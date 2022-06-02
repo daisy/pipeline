@@ -34,7 +34,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block" css:before="content: 'bar'; display: block; margin-left: 2">
+          <p style="display: block" css:before="content: &quot;bar&quot;; display: block; margin-left: 2">
             foo
           </p>
         </body>
@@ -104,7 +104,7 @@
       </table>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="&amp; tr:blank::after {{ content: '(empty)' }}">
+      <table css:_obfl-alternate-scenario="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}">
         <tr/>
       </table>
     </x:expect>

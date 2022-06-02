@@ -46,11 +46,7 @@
 		<!-- computed text properties of the parent element in the result -->
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="portion" required="yes"/>
-		<xsl:variable name="style" as="element(css:rule)*">
-			<xsl:call-template name="css:deep-parse-stylesheet">
-				<xsl:with-param name="stylesheet" select="@style"/>
-			</xsl:call-template>
-		</xsl:variable>
+		<xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(@style)"/>
 		<xsl:variable name="style" as="element(css:rule)*">
 			<css:rule>
 				<xsl:if test="@css:*">
@@ -217,15 +213,12 @@
 	              match="css:rule[@selector=('&amp;::after','&amp;::before',
 	                                         '@top-left','@top-center','@top-right','@right',
 	                                         '@bottom-right','@bottom-center','@bottom-left','@left')]
-	                             [css:property[@name='content']/*[not(self::css:string[@value]|self::css:attr)]]|
+	                             [css:property[@name='content']/*[not(self::css:string[@value])]]|
 	                     css:rule[@selector=('&amp;::after','&amp;::before')]
 	                             /css:rule[not(@selector)]
-	                             [css:property[@name='content']/*[not(self::css:string[@value]|self::css:attr)]]">
+	                             [css:property[@name='content']/*[not(self::css:string[@value])]]">
 		<xsl:next-match>
-			<!--
-			    Don't pre-translate when the content property has other values than strings or
-			    attr() values.
-			-->
+			<!-- Only pre-translate when the content property has no other values than strings. -->
 			<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
 		</xsl:next-match>
 	</xsl:template>
@@ -391,49 +384,28 @@
 		<xsl:message terminate="yes">Coding error: evaluation of attr() should already have been done</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="translate-style" match="css:property[@name='content' and @value[not(.='none')]]">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
-		<xsl:call-template name="translate-content-list">
-			<xsl:with-param name="content-list" select="css:parse-content-list(@value, $context)"/>
-		</xsl:call-template>
-	</xsl:template>
-	
 	<xsl:template mode="translate-style" match="css:property[@name='content' and not(@value)]" name="translate-content-list">
-		<xsl:param name="content-list" as="element()*" select="*"/>
-		<xsl:variable name="translated-content-list" as="element()*">
-			<xsl:apply-templates mode="#current" select="$content-list"/>
-		</xsl:variable>
-		<xsl:sequence select="css:property('content', if (exists($translated-content-list))
-		                                              then css:serialize-content-list($translated-content-list)
-		                                              else 'none')"/>
+		<xsl:copy>
+			<xsl:sequence select="@*"/>
+			<xsl:apply-templates mode="#current" select="*"/>
+		</xsl:copy>
 	</xsl:template>
 	
 	<!--
 	    FIXME: Pass context when translating segments of a single content property. If possible also
 	    pass context when translating inline pseudo-elements.
 	-->
-	<xsl:template mode="translate-style" match="css:string[@value]|css:attr" as="element()?">
+	<xsl:template mode="translate-style" match="css:string[@value]" as="element()?">
 		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:param name="source-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
-		<xsl:variable name="evaluated-string" as="xs:string">
-			<xsl:choose>
-				<xsl:when test="self::css:attr">
-					<xsl:variable name="name" select="string(@name)"/>
-					<xsl:sequence select="string($context/@*[name()=$name])"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:sequence select="@value"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>
 		<xsl:variable name="lang" as="xs:string?" select="($context/ancestor-or-self::*[@xml:lang][1]/@xml:lang,'und')[1]"/>
 		<xsl:variable name="block">
 			<xsl:element name="css:block">
 				<xsl:if test="$lang">
 					<xsl:attribute name="xml:lang" select="$lang"/>
 				</xsl:if>
-				<xsl:value-of select="$evaluated-string"/>
+				<xsl:value-of select="string(@value)"/>
 			</xsl:element>
 		</xsl:variable>
 		<xsl:variable name="source-style" as="element()*" select="$source-style"/>
@@ -461,9 +433,7 @@
 					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
 				</css:rule>
 			</xsl:if>
-			<xsl:call-template name="css:deep-parse-stylesheet">
-				<xsl:with-param name="stylesheet" select="@style"/>
-			</xsl:call-template>
+			<xsl:sequence select="css:parse-stylesheet(@style)"/>
 		</xsl:variable>
 		<xsl:variable name="style" as="element(css:rule)*"
 		              select="if (exists($style)) then $style else $empty-style"/>
@@ -630,6 +600,9 @@
 		<xsl:choose>
 			<xsl:when test="exists($parent-properties[@name=$property])">
 				<xsl:sequence select="$parent-properties[@name=$property][last()]"/>
+			</xsl:when>
+			<xsl:when test="$concretize-initial and $property='content'">
+				<css:property name="content"/>
 			</xsl:when>
 			<xsl:when test="$concretize-initial">
 				<xsl:sequence select="css:property($property, css:initial-value($property))"/>

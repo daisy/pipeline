@@ -3,11 +3,11 @@ package org.daisy.pipeline.braille.css.saxon.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamWriter;
 
 import cz.vutbr.web.css.SupportedCSS;
 
+import net.sf.saxon.dom.ElementOverNodeInfo;
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
@@ -18,9 +18,7 @@ import net.sf.saxon.om.StructuredQName;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 import static net.sf.saxon.type.Type.ATTRIBUTE;
-import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.EmptySequence;
-import net.sf.saxon.value.QNameValue;
 import net.sf.saxon.value.SequenceExtent;
 import net.sf.saxon.value.SequenceType;
 
@@ -45,34 +43,15 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 	
 	private static final StructuredQName funcname = new StructuredQName("css", XMLNS_CSS, "parse-stylesheet");
 	
-	private static final QName PAGE = new QName("page");
-	private static final QName VOLUME = new QName("volume");
-	private static final QName HYPHENATION_RESOURCE = new QName("hyphenation-resource");
-	private static final QName TEXT_TRANSFORM = new QName("text-transform");
-	private static final QName COUNTER_STYLE = new QName("counter-style");
-	private static final QName VENDOR_RULE = new QName("vendor-rule");
-	
 	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(true, false);
 	
 	public StructuredQName getFunctionQName() {
 		return funcname;
 	}
 	
-	@Override
-	public int getMinimumNumberOfArguments() {
-		return 1;
-	}
-	
-	@Override
-	public int getMaximumNumberOfArguments() {
-		return 3;
-	}
-	
 	public SequenceType[] getArgumentTypes() {
 		return new SequenceType[] {
-			SequenceType.OPTIONAL_ITEM,
-			SequenceType.SINGLE_BOOLEAN,
-			SequenceType.OPTIONAL_QNAME,
+			SequenceType.OPTIONAL_ITEM
 		};
 	}
 	
@@ -89,28 +68,10 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 				if (arg == null)
 					return EmptySequence.getInstance();
 				String style = arg.getStringValue();
-				boolean deep = arguments.length > 1
-					? ((BooleanValue)arguments[1]).getBooleanValue()
-					: false;
 				boolean argIsAttr = false;
+				boolean argIsPropertyAttr = false;
 				Context styleCtxt = Context.ELEMENT; {
-					if (arguments.length > 2 && arguments[2].head() != null) {
-						QName qn = ((QNameValue)arguments[2].head()).toJaxpQName();
-						if (qn.equals(PAGE))
-							styleCtxt = Context.PAGE;
-						else if (qn.equals(VOLUME))
-							styleCtxt = Context.VOLUME;
-						else if (qn.equals(HYPHENATION_RESOURCE))
-							styleCtxt = Context.HYPHENATION_RESOURCE;
-						else if (qn.equals(TEXT_TRANSFORM))
-							styleCtxt = Context.TEXT_TRANSFORM;
-						else if (qn.equals(COUNTER_STYLE))
-							styleCtxt = Context.COUNTER_STYLE;
-						else if (qn.equals(VENDOR_RULE))
-							styleCtxt = Context.VENDOR_RULE;
-						else
-							throw new RuntimeException();
-					} else if (arg instanceof NodeInfo && ((NodeInfo)arg).getNodeKind() == ATTRIBUTE) {
+					if (arg instanceof NodeInfo && ((NodeInfo)arg).getNodeKind() == ATTRIBUTE) {
 						argIsAttr = true;
 						if (XMLNS_CSS.equals(((NodeInfo)arg).getURI())) {
 							String name = ((NodeInfo)arg).getLocalPart().replaceAll("^_", "-");
@@ -125,14 +86,18 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 							} else if ("counter-style".equals(name)) {
 								styleCtxt = Context.COUNTER_STYLE;
 							} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
+								argIsPropertyAttr = true;
 								style = name + ": " + style;
 							}
 						}
 					}
 				}
 				BrailleCssStyle parsed = BrailleCssStyle.of(style, styleCtxt);
-				if (argIsAttr && styleCtxt != Context.ELEMENT)
-					parsed = BrailleCssStyle.of("@" + ((NodeInfo)arg).getLocalPart(), parsed);
+				if (argIsAttr)
+					if (styleCtxt != Context.ELEMENT)
+						parsed = BrailleCssStyle.of("@" + ((NodeInfo)arg).getLocalPart(), parsed);
+					else
+						parsed = parsed.evaluate((ElementOverNodeInfo)ElementOverNodeInfo.wrap(((NodeInfo)arg).getParent()));
 				List<NodeInfo> result = new ArrayList<>();
 				try {
 					XMLStreamWriter writer = new SaxonOutputValue(
@@ -144,7 +109,12 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 						},
 						context.getConfiguration()
 					).asXMLStreamWriter();
-					BrailleCssSerializer.toXml(parsed, writer, deep);
+					if (argIsPropertyAttr)
+						// <css:property>
+						BrailleCssSerializer.toXml(parsed, writer, true);
+					else
+						// <css:rule>
+						BrailleCssSerializer.toXml(parsed, writer);
 				} catch (Exception e) {
 					logger.error("Error happened while parsing " + arg, e);
 				}
