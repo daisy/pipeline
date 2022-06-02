@@ -69,10 +69,10 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template mode="serialize-page-styles" match="css:rule[@selector='@page' and not(@style)]">
+    <xsl:template mode="serialize-page-styles" match="css:rule[@selector='@page' and not(@serialized)]">
         <xsl:copy>
             <xsl:sequence select="@*"/>
-            <xsl:attribute name="style" select="css:serialize-stylesheet(*)"/>
+            <xsl:attribute name="serialized" select="css:serialize-stylesheet(*)"/>
             <xsl:sequence select="*"/>
         </xsl:copy>
     </xsl:template>
@@ -82,7 +82,7 @@
     </xsl:template>
     
     <xsl:variable name="page-stylesheets" as="element()*">
-        <css:rule selector="@page" style=""/>
+        <css:rule selector="@page" serialized=""/>
         <xsl:sequence select="$page-and-volume-styles[@selector='@page']"/>
         <xsl:for-each select="$volume-stylesheets">
             <xsl:sequence select="(.|*[matches(@selector,'^&amp;:')])
@@ -389,7 +389,7 @@
                                 <xsl:variable name="volume-area-style" as="element()*"
                                               select="$volume-area-rules[@selector=$volume-area][1]/*"/>
                                 <xsl:variable name="volume-area-page-style" as="xs:string?"
-                                              select="$volume-area-style[@selector='@page']/@style"/>
+                                              select="$volume-area-style[@selector='@page']/@serialized"/>
                                 <xsl:variable name="volume-area-properties" as="element()*"
                                               select="if ($volume-area-style/self::css:property)
                                                       then $volume-area-style
@@ -422,7 +422,7 @@
                                         <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
                                             <xsl:for-each-group select="current-group()" group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
                                                 <xsl:variable name="page-style" select="current-grouping-key()"/>
-                                                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
+                                                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@serialized=$page-style][1]"/>
                                                 <xsl:variable name="page-properties" as="element()*"
                                                               select="(if ($page-style/css:property)
                                                                        then $page-style/css:property
@@ -490,7 +490,7 @@
                                                                                         group-ending-with="obfl:list-of-references[not(starts-with(@collection,'meta/'))]">
                                                                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
                                                                         <xsl:element name="{if (current-group()/self::obfl:list-of-references) then 'dynamic-sequence' else 'sequence'}">
-                                                                            <xsl:attribute name="css:page" select="$page-style/@style"/>
+                                                                            <xsl:attribute name="css:page" select="$page-style/@serialized"/>
                                                                             <xsl:if test="$first">
                                                                                 <xsl:sequence select="$initial-page-number"/>
                                                                             </xsl:if>
@@ -520,7 +520,7 @@
                                                                 <xsl:variable name="on-toc-end" as="element()*"
                                                                               select="($sections/*[@css:flow=concat('-obfl-on-toc-end/',
                                                                                                                     $toc/@css:_obfl-on-toc-end)]/*)"/>
-                                                                <toc-sequence css:page="{$page-style/@style}" range="{$toc-range}">
+                                                                <toc-sequence css:page="{$page-style/@serialized}" range="{$toc-range}">
                                                                     <xsl:if test="$first">
                                                                         <xsl:sequence select="$initial-page-number"/>
                                                                     </xsl:if>
@@ -606,17 +606,30 @@
             Note that a volume-keep-priority attribute is not needed to prefer volume breaking
             before a block over inside a block, but for now we have the conditional anyway.
         -->
-        <xsl:variable name="volume-transition-rule" as="element()?">
+        <xsl:variable name="volume-transition-rule" as="element(css:rule)?">
             <xsl:if test="exists($volume-transition)">
-                <xsl:sequence select="css:deep-parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }'))"/>
+                <xsl:sequence select="css:parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }'))"/>
             </xsl:if>
+        </xsl:variable>
+        <xsl:variable name="volume-transition-rule" as="element(css:rule)?">
+            <xsl:for-each select="$volume-transition-rule/self::css:rule[@selector='@-obfl-volume-transition']">
+                <xsl:copy>
+                    <xsl:sequence select="@*"/>
+                    <xsl:for-each select="css:rule[matches(@selector,'@(sequence|any)-(interrupted|resumed)')]">
+                        <xsl:copy>
+                            <xsl:sequence select="@*"/>
+                            <!--
+                                validate properties and parse content property
+                            -->
+                            <xsl:sequence select="css:parse-stylesheet(css:serialize-stylesheet(css:property))/css:property"/>
+                        </xsl:copy>
+                    </xsl:for-each>
+                </xsl:copy>
+            </xsl:for-each>
         </xsl:variable>
         <xsl:if test="exists($volume-transition-rule) or $sections//@css:volume-break-inside">
             <volume-transition range="sheet">
-                <xsl:for-each select="$volume-transition-rule/css:rule[matches(@selector,'@(sequence|any)-(interrupted|resumed)')
-                                                                       and css:property[@name='content']]">
-                    <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"
-                                  select="css:property[@name='content'][1]/*"/>
+                <xsl:for-each select="$volume-transition-rule/css:rule[css:property[@name='content']]">
                     <xsl:variable name="pending-text-transform" as="xs:string?" select="css:property[@name='text-transform']/@value"/>
                     <xsl:variable name="pending-braille-charset" as="xs:string?" select="css:property[@name='braille-charset']/@value"/>
                     <xsl:variable name="pending-hyphens" as="xs:string?" select="css:property[@name='hyphens']/@value"/>
@@ -625,7 +638,7 @@
                     <xsl:variable name="white-space" as="xs:string?" select="css:property[@name='white-space']/@value"/>
                     <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- (css:_|css:box)* -->
                         <xsl:apply-templates mode="css:eval-sequence-interrupted-resumed-content-list"
-                                             select="$sequence-interrupted-resumed-content"/>
+                                             select="css:property[@name='content'][1]/*"/>
                     </xsl:variable>
                     <xsl:apply-templates mode="assert-nil-attr"
                                          select="$sequence-interrupted-resumed-content/self::css:_/(@* except @css:flow)"/>
@@ -719,7 +732,7 @@
             FIXME: duplication
         -->
         <xsl:variable name="default-page-style-uses-explicit-counter-page" as="xs:boolean"
-                      select="some $p in $page-stylesheets[@style=($sections/*[not(@css:flow)])[1]/string(@css:page)][1]
+                      select="some $p in $page-stylesheets[@serialized=($sections/*[not(@css:flow)])[1]/string(@css:page)][1]
                               satisfies
                                 (if ($p/css:property)
                                  then $p/css:property
@@ -745,7 +758,7 @@
             <xsl:for-each-group select="current-group()" group-adjacent="string(@css:page)">
                 <xsl:variable name="first-sequence" as="xs:boolean" select="$first-sequence and position()=1"/>
                 <xsl:variable name="page-style" select="current-grouping-key()"/>
-                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@style=$page-style][1]"/>
+                <xsl:variable name="page-style" as="element()" select="$page-stylesheets[@serialized=$page-style][1]"/>
                 <xsl:variable name="page-properties" as="element()*"
                               select="(if ($page-style/css:property)
                                        then $page-style/css:property
@@ -764,7 +777,7 @@
                     <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
                     <xsl:for-each-group select="current-group()" group-starting-with="css:_[*/@css:volume-break-before='always']">
                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
-                        <sequence css:page="{$page-style/@style}">
+                        <sequence css:page="{$page-style/@serialized}">
                             <xsl:variable name="counter-set" as="element()*"
                                           select="current-group()[1]/@css:counter-set/css:parse-counter-set(.,0)"/>
                             <xsl:if test="$counter-set[not(@name=$counter-increment/@name)]">
@@ -1828,7 +1841,7 @@
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:top-of-page">
-        <xsl:variable name="style" as="element(css:rule)*" select="css:deep-parse-stylesheet(.)"/>
+        <xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(.)"/>
         <xsl:choose>
             <xsl:when test="$style[not(@selector)]/css:property[@name='display']/@value='none'">
                 <xsl:attribute name="display-when" select="'(! $starts-at-top-of-page)'"/>

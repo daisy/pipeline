@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css;
 
 import java.net.URI;
+import java.util.function.Function;
 import java.util.List;
 
 import cz.vutbr.web.css.Declaration;
@@ -63,6 +64,10 @@ public final class CssSerializer {
 	}
 
 	public static String serializeTermList(List<Term<?>> termList) {
+		return serializeTermList(termList, t -> toString(t));
+	}
+
+	public static String serializeTermList(List<Term<?>> termList, Function<Term<?>,String> toStringFunction) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {
@@ -72,7 +77,7 @@ public final class CssSerializer {
 					case COMMA:
 						s += ","; }
 				s += " "; }
-			s += toString(t); }
+			s += toStringFunction.apply(t); }
 		return s;
 	}
 }

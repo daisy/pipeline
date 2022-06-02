@@ -27,7 +27,6 @@
                                   //css:counter[@target]|
                                   //css:content[@target]">
                 <xsl:variable name="target" as="xs:string" select="@target"/>
-                <xsl:variable name="target" as="xs:string" select="if (contains($target,'#')) then $target else concat('#',$target)"/>
                 <xsl:variable name="target" as="xs:anyURI" select="resolve-uri($target,base-uri(.))"/>
                 <xsl:variable name="target" as="xs:string" select="pf:normalize-uri($target)"/>
                 <xsl:sequence select="$target"/>

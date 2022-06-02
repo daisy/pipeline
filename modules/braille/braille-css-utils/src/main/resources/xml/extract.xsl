@@ -14,28 +14,28 @@
 		<xsl:apply-templates select="/*"/>
 		<xsl:result-document href="irrelevant">
 			<c:result content-type="text/plain">
-				<xsl:variable name="styles" as="element()*">
+				<xsl:variable name="styles" as="element(css:rule)*">
 					<xsl:for-each select="//*/@*[local-name()=$attribute-name and namespace-uri()='']">
 						<xsl:variable name="id" select="(parent::*/@id/string(.),parent::*/@xml:id/string(.),parent::*/generate-id(.))[1]"/>
-						<css:rule selector="#{$id}" style="{.}"/>
+						<css:rule selector="#{$id}" serialized="{.}"/>
 					</xsl:for-each>
 				</xsl:variable>
-				<xsl:variable name="styles" as="element()*">
-					<xsl:for-each select="distinct-values($styles/@style)">
+				<xsl:variable name="styles" as="element(css:rule)*">
+					<xsl:for-each select="distinct-values($styles/@serialized)">
 						<xsl:variable name="style" as="xs:string" select="."/>
-						<css:rule selector="{string-join($styles[@style=$style]/@selector,', ')}" serial="{$style}">
-							<xsl:sequence select="css:deep-parse-stylesheet($style)"/>
+						<css:rule selector="{string-join($styles[@serialized=$style]/@selector,', ')}" serialized="{$style}">
+							<xsl:sequence select="css:parse-stylesheet($style)"/>
 						</css:rule>
 					</xsl:for-each>
 				</xsl:variable>
-				<xsl:variable name="styles" as="element()*">
+				<xsl:variable name="styles" as="element(css:rule)*">
 					<xsl:apply-templates mode="serialize-page-styles" select="$styles"/>
 				</xsl:variable>
-				<xsl:variable name="page-styles" as="element()*">
-					<xsl:for-each select="distinct-values($styles//css:rule[@selector='@page']/@serial)">
+				<xsl:variable name="page-styles" as="element(css:rule)*">
+					<xsl:for-each select="distinct-values($styles//css:rule[@selector='@page']/@serialized)">
 						<xsl:variable name="style" as="xs:string" select="."/>
 						<xsl:variable name="name" select="concat('page-',position())"/>
-						<xsl:for-each select="$styles//css:rule[@selector='@page'][@serial=$style][1]">
+						<xsl:for-each select="$styles//css:rule[@selector='@page'][@serialized=$style][1]">
 							<xsl:copy>
 								<xsl:attribute name="name" select="$name"/>
 								<xsl:attribute name="selector" select="concat('@page ',$name)"/>
@@ -45,7 +45,7 @@
 						</xsl:for-each>
 					</xsl:for-each>
 				</xsl:variable>
-				<xsl:variable name="styles" as="element()*">
+				<xsl:variable name="styles" as="element(css:rule)*">
 					<xsl:apply-templates mode="substitute-named-pages" select="$styles">
 						<xsl:with-param name="page-styles" tunnel="yes" select="$page-styles"/>
 					</xsl:apply-templates>
@@ -58,15 +58,15 @@
 	
 	<xsl:template mode="serialize-page-styles" match="css:rule[@selector='@page']">
 		<xsl:copy>
-			<xsl:attribute name="serial" select="css:serialize-stylesheet(.)"/>
+			<xsl:attribute name="serialized" select="css:serialize-stylesheet(.)"/>
 			<xsl:sequence select="@*|node()"/>
 		</xsl:copy>
 	</xsl:template>
 	
 	<xsl:template mode="substitute-named-pages" match="css:rule[@selector='@page']">
 		<xsl:param name="page-styles" as="element()*" tunnel="yes" required="yes"/>
-		<xsl:variable name="serial" as="xs:string" select="@serial"/>
-		<css:property name="page" value="{$page-styles[@serial=$serial]/@name}"/>
+		<xsl:variable name="style" as="xs:string" select="@serialized"/>
+		<css:property name="page" value="{$page-styles[@serialized=$style]/@name}"/>
 	</xsl:template>
 	
 	<xsl:template match="*[not(@id)][@*[local-name()=$attribute-name and namespace-uri()='']]">

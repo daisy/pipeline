@@ -303,16 +303,15 @@
                 Evaluate css:string-set attributes.
             </p:documentation>
         </css:eval-string-set>
+        <css:parse-content px:progress=".015">
+            <p:documentation>
+                Make css:string, css:text, css:content, css:counter and css:custom-func elements and
+                text nodes from css:content attributes. <!-- depends on
+                pxi:recursive-parse-stylesheet-and-make-pseudo-elements to evaluate attr() values in
+                content properties -->
+            </p:documentation>
+        </css:parse-content>
     </p:for-each>
-    
-    <p:wrap-sequence wrapper="_"/>
-    <css:parse-content px:progress=".015">
-        <p:documentation>
-            Make css:string, css:text, css:content, css:counter and css:custom-func elements and
-            text nodes from css:content attributes. <!-- depends on make-pseudo-element -->
-        </p:documentation>
-    </css:parse-content>
-    <p:filter select="/_/*"/>
     
     <p:group px:progress=".04">
         <p:documentation>
