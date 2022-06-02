@@ -25,7 +25,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
-import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.Rule;
@@ -39,7 +38,9 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
+import cz.vutbr.web.csskit.DeclarationImpl;
 import cz.vutbr.web.csskit.RuleFactoryImpl;
+import cz.vutbr.web.csskit.TermURIImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import org.daisy.braille.css.BrailleCSSParserFactory;
@@ -51,7 +52,6 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.braille.css.VendorAtRule;
 import org.daisy.common.file.URLs;
@@ -199,11 +199,11 @@ public class BrailleCssCascader implements CssCascader {
 				boolean isRoot = (context.getParentNode().getNodeType() != Node.ELEMENT_NODE);
 				Map<String,RulePage> pageRule = getPageRule(mainStyle, pageRules);
 				if (pageRule != null) {
-					insertPageStyle(style, pageRule, true); }
+					insertPageStyle(style, pageRule); }
 				else if (isRoot) {
 					pageRule = getPageRule("auto", pageRules);
 					if (pageRule != null)
-						insertPageStyle(style, pageRule, true); }
+						insertPageStyle(style, pageRule); }
 				if (isRoot) {
 					Map<String,RuleVolume> volumeRule = getVolumeRule("auto", volumeRules);
 					if (volumeRule != null)
@@ -219,10 +219,11 @@ public class BrailleCssCascader implements CssCascader {
 							style.insert(0, "{ ");
 							style.append("} "); }
 						insertAtRule(style, r); }}}
-			if (!style.toString().replaceAll("\\s+", "").isEmpty())
-				return ImmutableMap.of(attributeName, style.toString().trim());
-			else
+			if (style.toString().trim().isEmpty())
 				return null;
+			if (style.length() > 1 && style.substring(style.length() - 2).equals("; "))
+				style.delete(style.length() - 2, style.length());
+			return ImmutableMap.of(attributeName, style.toString().trim());
 		}
 
 		protected String serializeValue(Term<?> value) {
@@ -253,20 +254,17 @@ public class BrailleCssCascader implements CssCascader {
 		}
 	};
 
-	// FIXME: move parts of this to BrailleCssSerializer
+	// FIXME: make more use of BrailleCssSerializer
 
 	private static void insertStyle(StringBuilder builder, NodeData nodeData) {
-		List<String> keys = new ArrayList<String>(nodeData.getPropertyNames());
-		keys.remove("page");
-		Collections.sort(keys);
-		for (String key : keys) {
-			Term<?> value = nodeData.getValue(key, false);
-			if (value != null)
-				builder.append(key).append(": ").append(BrailleCssSerializer.toString(value)).append("; ");
-			else {
-				CSSProperty prop = nodeData.getProperty(key, false);
-				if (prop != null) // can be null for unspecified inherited properties
-					builder.append(key).append(": ").append(prop).append("; "); }}
+		List<String> properties = new ArrayList<String>(nodeData.getPropertyNames());
+		properties.remove("page");
+		Collections.sort(properties);
+		for (String prop : properties) {
+			String val = BrailleCssSerializer.serializePropertyValue(nodeData, prop, false);
+			if (val != null) // can be null for unspecified inherited properties
+				builder.append(prop).append(": ").append(val).append("; ");
+		}
 	}
 
 	private static void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
@@ -292,41 +290,19 @@ public class BrailleCssCascader implements CssCascader {
 		insertStyle(builder, nodeData);
 		Map<String,RulePage> pageRule = getPageRule(nodeData, pageRules);
 		if (pageRule != null)
-			insertPageStyle(builder, pageRule, false);
+			insertPageStyle(builder, pageRule);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 
-	private static void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule, boolean topLevel) {
+	private static void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule) {
 		for (RulePage r : pageRule.values())
-			insertPageStyle(builder, r, topLevel);
+			insertPageStyle(builder, r);
 	}
 
-	private static void insertPageStyle(StringBuilder builder, RulePage pageRule, boolean topLevel) {
-		builder.append("@page");
-		String pseudo = pageRule.getPseudo();
-		if (pseudo != null && !"".equals(pseudo))
-			builder.append(":").append(pseudo);
-		builder.append(" { ");
-		for (Declaration decl : Iterables.filter(pageRule, Declaration.class))
-			insertDeclaration(builder, decl);
-		for (RuleMargin margin : Iterables.filter(pageRule, RuleMargin.class))
-			insertMarginStyle(builder, margin);
-		builder.append("} ");
-	}
-
-	private static void insertMarginStyle(StringBuilder builder, RuleMargin ruleMargin) {
-		builder.append("@").append(ruleMargin.getMarginArea()).append(" { ");
-		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleCSS));
-		builder.append("} ");
-	}
-
-	private static void insertDeclaration(StringBuilder builder, Declaration decl) {
-		StringBuilder s = new StringBuilder();
-		Iterator<Term<?>> it = decl.iterator();
-		while (it.hasNext()) {
-			s.append(BrailleCssSerializer.toString(it.next()));
-			if (it.hasNext()) s.append(" "); }
-		builder.append(decl.getProperty()).append(": ").append(s).append("; ");
+	private static void insertPageStyle(StringBuilder builder, RulePage pageRule) {
+		builder.append(BrailleCssSerializer.toString(pageRule)).append(" ");
 	}
 
 	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
@@ -432,10 +408,13 @@ public class BrailleCssCascader implements CssCascader {
 		if (pseudo != null && !"".equals(pseudo))
 			builder.append(":").append(pseudo);
 		builder.append(" { ");
-		for (Declaration decl : Iterables.filter(volumeRule.getValue(), Declaration.class))
-			insertDeclaration(builder, decl);
+		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
+		if (!declarations.isEmpty())
+			builder.append(declarations).append("; ");
 		for (RuleVolumeArea volumeArea : Iterables.filter(volumeRule.getValue(), RuleVolumeArea.class))
 			insertVolumeAreaStyle(builder, volumeArea, pageRules);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 
@@ -443,6 +422,7 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("@").append(ruleVolumeArea.getVolumeArea().value).append(" { ");
 		StringBuilder innerStyle = new StringBuilder();
 		Map<String,RulePage> pageRule = null;
+		List<Declaration> declarations = new ArrayList<>();
 		for (Declaration decl : Iterables.filter(ruleVolumeArea, Declaration.class))
 			if ("page".equals(decl.getProperty())) {
 				StringBuilder s = new StringBuilder();
@@ -452,9 +432,13 @@ public class BrailleCssCascader implements CssCascader {
 					if (it.hasNext()) s.append(" "); }
 				pageRule = getPageRule(s.toString(), pageRules); }
 			else
-				insertDeclaration(innerStyle, decl);
+				declarations.add(decl);
+		if (!declarations.isEmpty())
+			innerStyle.append(BrailleCssSerializer.serializeDeclarationList(declarations)).append("; ");
 		if (pageRule != null)
-			insertPageStyle(innerStyle, pageRule, false);
+			insertPageStyle(innerStyle, pageRule);
+		if (innerStyle.length() > 1 && innerStyle.substring(innerStyle.length() - 2).equals("; "))
+			innerStyle.replace(innerStyle.length() - 2, innerStyle.length(), " ");
 		builder.append(innerStyle).append("} ");
 	}
 
@@ -463,9 +447,10 @@ public class BrailleCssCascader implements CssCascader {
 		String name = rule.getName();
 		if (name != null) builder.append(' ').append(name);
 		builder.append(" { ");
-		for (Declaration decl : rule) {
-			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {
-				TermURI term = (TermURI)decl.get(0);
+		List<Declaration> declarationList = new ArrayList<>();
+		for (Declaration d : rule) {
+			if (d.size() == 1 && d.get(0) instanceof TermURI) {
+				TermURI term = (TermURI)d.get(0);
 				URI uri = URLs.asURI(term.getValue());
 				if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
 					// relative resource: make absolute and convert to "volatile-file" URI to bypass
@@ -482,12 +467,14 @@ public class BrailleCssCascader implements CssCascader {
 					} catch (IllegalArgumentException e) {
 						// not a file URI
 					}
+					d = createDeclaration(d.getProperty(), createTermURI(uri));
 				}
-				builder.append(decl.getProperty()).append(": ").append("url(\"" + uri + "\")").append("; ");
-				continue;
 			}
-			insertDeclaration(builder, decl);
+			declarationList.add(d);
 		}
+		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
@@ -495,9 +482,10 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("@hyphenation-resource");
 		builder.append(":lang(").append(BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
 		builder.append(" { ");
-		for (Declaration decl : rule) {
-			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {
-				TermURI term = (TermURI)decl.get(0);
+		List<Declaration> declarationList = new ArrayList<>();
+		for (Declaration d : rule) {
+			if (d.size() == 1 && d.get(0) instanceof TermURI) {
+				TermURI term = (TermURI)d.get(0);
 				URI uri = URLs.asURI(term.getValue());
 				if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
 					// relative resource: make absolute and convert to "volatile-file" URI to bypass
@@ -514,29 +502,53 @@ public class BrailleCssCascader implements CssCascader {
 					} catch (IllegalArgumentException e) {
 						// not a file URI
 					}
+					try {
+						d = createDeclaration(d.getProperty(), createTermURI(uri));
+					} catch (RuntimeException e) {
+						e.printStackTrace();
+						throw e;
+					}
 				}
-				builder.append(decl.getProperty()).append(": ").append("url(\"" + uri + "\")").append("; ");
-				continue;
 			}
-			insertDeclaration(builder, decl);
+			declarationList.add(d);
 		}
+		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
+	}
+
+	private static Declaration createDeclaration(String prop, Term<?> val) {
+		return new DeclarationImpl() {{
+			this.property = prop;
+			this.list = ImmutableList.of(val);
+		}};
+	}
+
+	private static TermURI createTermURI(URI uri) {
+		return new TermURIImpl() {{
+			this.value = uri.toString();
+		}};
 	}
 
 	private static void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
 		String name = rule.getName();
 		builder.append("@counter-style ").append(name).append(" { ");
-		for (Declaration decl : rule)
-			insertDeclaration(builder, decl);
+		String declarations = BrailleCssSerializer.serializeDeclarationList(rule);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
 	private static void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
 		builder.append("@").append(rule.getName()).append(" { ");
-		for (Declaration decl : Iterables.filter(rule, Declaration.class))
-			insertDeclaration(builder, decl);
+		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
+		if (!declarations.isEmpty())
+			builder.append(declarations).append("; ");
 		for (VendorAtRule<? extends Rule<?>> r : Iterables.filter(rule, VendorAtRule.class))
 			insertAtRule(builder, r);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 

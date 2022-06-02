@@ -29,7 +29,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1"/>
         </body>
       </x:document>
     </x:expect>
@@ -60,7 +60,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block; margin-left: 4;"/>
+          <h1 style="display: block; margin-left: 4"/>
           <p/>
         </body>
       </x:document>
@@ -95,7 +95,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1"/>
         </body>
       </x:document>
     </x:expect>
@@ -126,8 +126,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block;"/>
-          <p style="display: block;"/>
+          <h1 style="display: block"/>
+          <p style="display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -159,7 +159,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="orphans: 3;"/>
+          <p style="orphans: 3"/>
         </body>
       </x:document>
     </x:expect>
@@ -191,7 +191,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1"/>
         </body>
       </x:document>
     </x:expect>
@@ -223,7 +223,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="string-set: footer 'foo';"/>
+          <p style="string-set: footer 'foo'"/>
         </body>
       </x:document>
     </x:expect>
@@ -255,7 +255,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="hyphens: auto;"/>
+          <p style="hyphens: auto"/>
         </body>
       </x:document>
     </x:expect>
@@ -287,7 +287,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="hyphens: auto;"/>
+          <p style="hyphens: auto"/>
         </body>
       </x:document>
     </x:expect>
@@ -320,7 +320,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠿; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠿; border-top-style: none; border-top-width: 1;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠿; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠿; border-top-style: none; border-top-width: 1"/>
         </body>
       </x:document>
     </x:expect>
@@ -357,7 +357,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="margin-left: 3; margin-right: 2; padding-left: 3; padding-right: 2; padding-top: 0;"/>
+          <p style="margin-left: 3; margin-right: 2; padding-left: 3; padding-right: 2; padding-top: 0"/>
         </body>
       </x:document>
     </x:expect>
@@ -395,7 +395,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block; margin-left: 4;"/>
+          <h1 style="display: block; margin-left: 4"/>
           <p/>
         </body>
       </x:document>
@@ -442,7 +442,7 @@
       <x:document type="inline">
         <body>
           <table class="foo"/>
-          <table style="&amp;::table-by(row) { display: block; margin-left: 2; }"/>
+          <table style="&amp;::table-by(row) { display: block; margin-left: 2 }"/>
         </body>
       </x:document>
     </x:expect>
@@ -486,7 +486,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <div style="&amp;::after { content: 'foo'; } &amp;::after::after { content: 'bar'; text-transform: uppercase; }"/>
+          <div style="&amp;::after { content: 'foo' } &amp;::after::after { content: 'bar'; text-transform: uppercase }"/>
         </body>
       </x:document>
     </x:expect>
@@ -531,7 +531,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <table style="&amp;::table-by(row)::list-item { display: block; margin-left: 2; } &amp;::table-by(row)::list-item:first-child { text-indent: -2; }"/>
+          <table style="&amp;::table-by(row)::list-item { display: block; margin-left: 2 } &amp;::table-by(row)::list-item:first-child { text-indent: -2 }"/>
         </body>
       </x:document>
     </x:expect>

@@ -34,7 +34,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@volume { min-length: 80; max-length: 100; } @volume:last { min-length: 0; max-length: 100; } @volume:only { max-length: 120; min-length: 0; } @volume:nth(2) { max-length: auto; min-length: 80; } @volume:first { max-length: 120; min-length: 80; }'"/>
+              equals="'@volume { max-length: 100; min-length: 80 } @volume:last { max-length: 100; min-length: 0 } @volume:only { max-length: 120; min-length: 0 } @volume:nth(2) { max-length: auto; min-length: 80 } @volume:first { max-length: 120; min-length: 80 }'"/>
   </x:scenario>
   
   <x:scenario label="test_02">
@@ -65,7 +65,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals='"@volume { max-length: 100; @begin { content: flow(toc); } } @volume:first { max-length: 100; @begin { content: flow(cover) flow(toc); } }"'/>
+              equals='"@volume { max-length: 100; @begin { content: flow(toc) } } @volume:first { max-length: 100; @begin { content: flow(cover) flow(toc) } }"'/>
   </x:scenario>
   
   <x:scenario label="test_03">
@@ -93,7 +93,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@volume { max-length: 75; @begin { content: flow(volume-toc); } }'"/>
+              equals="'@volume { max-length: 75; @begin { content: flow(volume-toc) } }'"/>
   </x:scenario>
   
   <x:scenario label="test_04">
@@ -130,7 +130,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@page { size: 15 5; } @volume { max-length: 75; @begin { content: flow(frontmatter); @page { size: 15 5; @top-right { content: counter(page); } } } }'"/>
+              equals="'@page { size: 15 5 } @volume { max-length: 75; @begin { content: flow(frontmatter); @page { size: 15 5; @top-right { content: counter(page) } } } }'"/>
   </x:scenario>
   
   <x:scenario label="test_05">
@@ -156,7 +156,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@volume:first { max-length: 75; }'"/>
+              equals="'@volume:first { max-length: 75 }'"/>
   </x:scenario>
   
   <x:scenario label="test_06">
@@ -198,13 +198,13 @@
       <x:document type="inline">
         <body>
           <frontmatter/>
-          <bodymatter style="volume-break-before: always;">
-            <section style="volume-break-inside: -obfl-keep(2);">
-              <section style="volume-break-inside: avoid;"/>
+          <bodymatter style="volume-break-before: always">
+            <section style="volume-break-inside: -obfl-keep(2)">
+              <section style="volume-break-inside: avoid"/>
             </section>
-            <section style="volume-break-inside: -obfl-keep(2);"/>
+            <section style="volume-break-inside: -obfl-keep(2)"/>
           </bodymatter>
-          <rearmatter style="volume-break-before: always;"/>
+          <rearmatter style="volume-break-before: always"/>
         </body>
       </x:document>
     </x:expect>
@@ -232,7 +232,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@-obfl-volume-transition { @any-interrupted { content: flow(volume-end); } }'"/>
+              equals="'@-obfl-volume-transition { @any-interrupted { content: flow(volume-end) } }'"/>
   </x:scenario>
   
 </x:description>

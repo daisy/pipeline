@@ -33,7 +33,7 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="-x-foo: bar;"/>
+          <p id="2" style="-x-foo: bar"/>
         </body>
       </x:document>
     </x:expect>
@@ -68,7 +68,7 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="display: -x-foo;"/>
+          <p id="2" style="display: -x-foo"/>
         </body>
       </x:document>
     </x:expect>
@@ -105,8 +105,8 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="content: -x-foo(bar);"/>
-          <p id="3" style="content: -x-foo(bar, '⠿');"/>
+          <p id="2" style="content: -x-foo(bar)"/>
+          <p id="3" style="content: -x-foo(bar, '⠿')"/>
         </body>
       </x:document>
     </x:expect>
@@ -141,7 +141,7 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="&amp;::-x-foo { display: block; }"/>
+          <p id="2" style="&amp;::-x-foo { display: block }"/>
         </body>
       </x:document>
     </x:expect>

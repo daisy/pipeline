@@ -32,7 +32,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -70,7 +70,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="&amp;::after { content: 'Çüéâäů'; }"/>
+          <p style="&amp;::after { content: 'Çüéâäů' }"/>
         </body>
       </x:document>
     </x:expect>
@@ -107,7 +107,7 @@
     <x:expect label="the non-ASCII characters are misinterpreted" type="compare">
       <x:document type="inline">
         <body>
-          <p style="&amp;::after { content: '������'; }"/>
+          <p style="&amp;::after { content: '������' }"/>
         </body>
       </x:document>
     </x:expect>
@@ -145,7 +145,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block;"/>
+          <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -183,7 +183,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="display: block;"/>
+          <p style="display: block"/>
         </body>
       </x:document>
     </x:expect>

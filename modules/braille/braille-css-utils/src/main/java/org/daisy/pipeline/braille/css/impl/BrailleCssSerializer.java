@@ -11,8 +11,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Ordering;
 
+import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RulePage;
@@ -30,7 +33,6 @@ import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
 import org.daisy.braille.css.LanguageRange;
 import org.daisy.braille.css.PropertyValue;
-import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.css.CssSerializer;
 
 public final class BrailleCssSerializer {
@@ -46,7 +48,7 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(Declaration declaration) {
-		return declaration.getProperty() + ": " + serializeTermList((List<Term<?>>)declaration) + ";";
+		return declaration.getProperty() + ": " + serializeTermList((List<Term<?>>)declaration);
 	}
 
 	public static String toString(BrailleCssStyle style) {
@@ -64,7 +66,10 @@ public final class BrailleCssSerializer {
 					if (rel.length() > 0) rel.append(" ");
 					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
 				} else {
-					if (b.length() > 0) b.append(" ");
+					if (b.length() > 0) {
+						if (b.charAt(b.length() - 1) != '}') b.append(";");
+						b.append(" ");
+					}
 					b.append(toString(e.getValue(), e.getKey()));
 				}
 			}
@@ -73,7 +78,10 @@ public final class BrailleCssSerializer {
 			b.append(" }");
 		}
 		if (rel.length() > 0) {
-			if (b.length() > 0) b.append(" ");
+			if (b.length() > 0) {
+				if (b.charAt(b.length() - 1) != '}') b.append(";");
+				b.append(" ");
+			}
 			b.append(rel);
 		}
 		return b.toString();
@@ -83,10 +91,13 @@ public final class BrailleCssSerializer {
 		return toString(BrailleCssStyle.of(style, Context.ELEMENT));
 	}
 
-	public static String toString(SimpleInlineStyle style) {
+	public static String toString(NodeData style) {
 		List<String> declarations = new ArrayList<>();
-		for (String p : style.getPropertyNames())
-			declarations.add(p + ": " + serializePropertyValue(style.get(p)));
+		for (String p : style.getPropertyNames()) {
+			String v = serializePropertyValue(style, p);
+			if (v != null)
+				declarations.add(p + ": " + v);
+		}
 		Collections.sort(declarations);
 		StringBuilder s = new StringBuilder();
 		Iterator<String> it = declarations.iterator();
@@ -95,6 +106,20 @@ public final class BrailleCssSerializer {
 			if (it.hasNext()) s.append("; ");
 		}
 		return s.toString();
+	}
+
+	public static String serializePropertyValue(NodeData style, String property) {
+		return serializePropertyValue(style, property, true);
+	}
+
+	public static String serializePropertyValue(NodeData style, String property, boolean includeInherited) {
+		Term<?> value = style.getValue(property, includeInherited);
+		if (value != null)
+			return toString(value);
+		else {
+			CSSProperty p = style.getProperty(property, includeInherited);
+			return p != null ? p.toString() : null;
+		}
 	}
 
 	public static String serializePropertyValue(PropertyValue propValue) {
@@ -176,17 +201,16 @@ public final class BrailleCssSerializer {
 		return OutputUtil.appendList(new StringBuilder(), languageRanges, OutputUtil.SELECTOR_DELIM).toString();
 	}
 
-	/* = PRIVATE ========================================= */
-
-	private static String serializeDeclarationList(Iterable<Declaration> declarations) {
-		List<Declaration> sortedDeclarations = new ArrayList<Declaration>();
-		for (Declaration d : declarations) sortedDeclarations.add(d);
+	public static String serializeDeclarationList(Iterable<? extends Declaration> declarations) {
+		List<String> sortedDeclarations = new ArrayList<>();
+		for (Declaration d : declarations)
+			sortedDeclarations.add(BrailleCssSerializer.toString(d));
 		Collections.sort(sortedDeclarations);
 		StringBuilder s = new StringBuilder();
-		Iterator<Declaration> it = sortedDeclarations.iterator();
+		Iterator<String> it = sortedDeclarations.iterator();
 		while (it.hasNext()) {
-			s.append(BrailleCssSerializer.toString(it.next()));
-			if (it.hasNext()) s.append(" ");
+			s.append(it.next());
+			if (it.hasNext()) s.append("; ");
 		}
 		return s.toString();
 	}
@@ -217,7 +241,10 @@ public final class BrailleCssSerializer {
 			if (!deep)
 				writeAttribute(w, STYLE, serializeDeclarationList(style.declarations));
 			if (deep) {
-				for (Declaration d : style.declarations) {
+				List<Declaration> declarations = new ArrayList<>();
+				declarations.addAll(style.declarations);
+				Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
+				for (Declaration d : declarations) {
 					writeStartElement(w, CSS_PROPERTY);
 					writeAttribute(w, NAME, d.getProperty());
 					writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
