@@ -94,11 +94,11 @@
 	page: page-2
 }
 #c {
-	display: block;
 	border-bottom-align: center;
 	border-bottom-pattern: ⠒;
 	border-bottom-style: none;
-	border-bottom-width: 1
+	border-bottom-width: 1;
+	display: block
 }
 #d, #e {
 	display: block

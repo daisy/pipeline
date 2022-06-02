@@ -27,9 +27,9 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <body style="display: block;">
+        <body style="display: block">
           <h>foo</h>
-          <p style="display: block;">bar</p>
+          <p style="display: block">bar</p>
         </body>
       </x:document>
     </x:expect>

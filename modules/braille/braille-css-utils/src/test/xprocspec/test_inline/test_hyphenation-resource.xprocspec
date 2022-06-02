@@ -27,7 +27,7 @@
     <x:expect label="root-style" type="xpath" test="/*/@style"
               equals="concat('@hyphenation-resource:lang(en) { system: foo; x: url(&quot;volatile-',
                              resolve-uri('bar.dic',$test-base-uri),
-                             '&quot;); }')"/>
+                             '&quot;) }')"/>
   </x:scenario>
 
 </x:description>
