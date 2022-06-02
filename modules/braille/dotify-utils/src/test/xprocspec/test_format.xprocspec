@@ -12448,7 +12448,7 @@
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
           </meta>
-          <layout-master name="c" duplex="true" page-width="15" page-height="5">
+          <layout-master name="b" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
               <footer>
@@ -12474,23 +12474,10 @@
               </footer>
             </default-template>
           </layout-master>
-          <layout-master name="b" duplex="true" page-width="15" page-height="5">
-            <default-template>
-              <header/>
-              <footer>
-                <field>
-                  <string value=""/>
-                </field>
-                <field>
-                  <current-page number-format="default"/>
-                </field>
-              </footer>
-            </default-template>
-          </layout-master>
           <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume 1))"/>
           <volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
             <pre-content>
-              <sequence master="c" page-number-counter="custom-page" initial-page-number="11">
+              <sequence master="b" page-number-counter="custom-page" initial-page-number="11">
                 <block>
                   ⠿⠿⠿
                 </block>
@@ -16386,8 +16373,8 @@
             <dp2:style-type>text/css</dp2:style-type>
             <dp2:css-text-transform-definitions>
               @text-transform number {
-                system: braille-translator;
-                number-translator: true
+                number-translator: true;
+                system: braille-translator
               }
             </dp2:css-text-transform-definitions>
           </meta>
@@ -16476,9 +16463,9 @@
             <dp2:style-type>text/css</dp2:style-type>
             <dp2:css-counter-style-definitions>
               @counter-style dice {
-                system: additive;
                 additive-symbols: 6 '⠿', 5 '⠻', 4 '⠛', 3 '⠙', 2 '⠉', 1 '⠈';
                 suffix: ' ';
+                system: additive;
                 text-transform: none
               }
             </dp2:css-counter-style-definitions>

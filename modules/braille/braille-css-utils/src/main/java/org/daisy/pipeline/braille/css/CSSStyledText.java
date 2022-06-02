@@ -11,6 +11,7 @@ import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.SimpleInlineStyle;
+import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 import cz.vutbr.web.css.RuleBlock;
 
@@ -132,7 +133,7 @@ public class CSSStyledText implements Cloneable {
 	public String toString() {
 		String s = text;
 		if (style != null && style.properties != null && !style.properties.isEmpty())
-			s += "{" + style.properties + "}";
+			s += "{" + BrailleCssSerializer.serializeDeclarationList(style.properties) + "}";
 		if (language != null && !"und".equals(language.toLanguageTag()))
 			s += "{" + language.toLanguageTag() + "}";
 		return s;

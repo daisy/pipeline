@@ -24,8 +24,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block;"/>
-          <p style="display: block;"/>
+          <h1 style="display: block"/>
+          <p style="display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -51,8 +51,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: inline;"/>
-          <p style="display: inline;"/>
+          <h1 style="display: inline"/>
+          <p style="display: inline"/>
         </body>
       </x:document>
     </x:expect>
@@ -83,8 +83,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block;"/>
-          <p style="display: inline;"/>
+          <h1 style="display: block"/>
+          <p style="display: inline"/>
         </body>
       </x:document>
     </x:expect>

@@ -1083,7 +1083,11 @@
                 <xsl:when test="exists($base)">
                     <xsl:variable name="serialized-inner-rules" as="xs:string*">
                         <xsl:if test="exists($serialized-declarations)">
-                            <xsl:sequence select="string-join($serialized-declarations,string-join((';',$newline,$indent),''))"/>
+                            <xsl:sequence select="concat(
+                                                    string-join($serialized-declarations,string-join((';',$newline,$indent),'')),
+                                                    if (exists($serialized-at-rules))
+                                                      then ';'
+                                                      else '')"/>
                         </xsl:if>
                         <xsl:sequence select="$serialized-at-rules"/>
                     </xsl:variable>
@@ -1096,7 +1100,11 @@
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:if test="exists($serialized-declarations)">
-                        <xsl:sequence select="string-join($serialized-declarations,string-join((';',$newline),''))"/>
+                        <xsl:sequence select="concat(
+                                                string-join($serialized-declarations,string-join((';',$newline),'')),
+                                                if (exists($serialized-at-rules) or exists($serialized-pseudo-rules))
+                                                  then ';'
+                                                  else '')"/>
                     </xsl:if>
                     <xsl:sequence select="$serialized-at-rules"/>
                 </xsl:otherwise>

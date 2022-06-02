@@ -45,9 +45,9 @@
             }
         </style>
                         </head>
-                        <body style="hyphens: auto;">
-                            <h1 style="display: block; text-transform: foo;"/>
-                            <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1; display: block; margin-left: 2; margin-right: 1; padding-left: 2; padding-right: 1; padding-top: 1;"/>
+                        <body style="hyphens: auto">
+                            <h1 style="display: block; text-transform: foo"/>
+                            <p style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1; display: block; margin-left: 2; margin-right: 1; padding-left: 2; padding-right: 1; padding-top: 1"/>
                         </body>
                     </html>
                 </x:document>
@@ -71,9 +71,9 @@
             }
         </style>
                         </head>
-                        <body style="hyphens: auto;">
-                            <h1 style="display: block; text-transform: foo;"/>
-                            <p style="display: block;"/>
+                        <body style="hyphens: auto">
+                            <h1 style="display: block; text-transform: foo"/>
+                            <p style="display: block"/>
                         </body>
                     </html>
                 </x:document>

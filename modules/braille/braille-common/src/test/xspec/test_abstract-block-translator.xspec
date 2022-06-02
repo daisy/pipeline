@@ -17,7 +17,7 @@
     <x:expect label="result">
       <doc style="text-transform: none; braille-charset: custom">
         <h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-        <p style="display: block &amp;::after {{ content: &quot;BAR&quot; }} &amp;::before {{ content: &quot;bar&quot; counter(page); text-transform: auto }}">FOO</p>
+        <p style="display: block; &amp;::after {{ content: &quot;BAR&quot; }} &amp;::before {{ content: &quot;bar&quot; counter(page); text-transform: auto }}">FOO</p>
         <pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
       </doc>
     </x:expect>
@@ -57,7 +57,7 @@
     </x:context>
     <x:expect label="result">
       <doc style="text-transform: none; braille-charset: custom">
-        <div style="&amp;::after {{ content: &quot;FOO&quot; }} &amp;::after::before {{ display: block; content: &quot;BAR&quot; }}"/>
+        <div style="&amp;::after {{ content: &quot;FOO&quot; }} &amp;::after::before {{ content: &quot;BAR&quot;; display: block }}"/>
       </doc>
     </x:expect>
   </x:scenario>
@@ -99,7 +99,7 @@
                       text-transform: uncontracted; }} }}"/>
     </x:context>
     <x:expect label="result">
-      <doc style="text-transform: none; braille-charset: custom @page {{ @bottom-right {{ content: counter(page, lower-roman); text-transform: uncontracted }} }}">
+      <doc style="text-transform: none; braille-charset: custom; @page {{ @bottom-right {{ content: counter(page, lower-roman); text-transform: uncontracted }} }}">
 
       </doc>
     </x:expect>
@@ -118,8 +118,8 @@
       <doc style="text-transform: none; braille-charset: custom">
         <p style="display: block">FOO<span>BAR</span></p>
         <p style="display: block">FOO<span>BAR</span></p>
-        <p style="display: block &amp;::after {{ content: &quot;BAR&quot; }}">FOO</p>
-        <p style="display: block &amp;::after {{ content: leader(&quot;⠀&quot;) &quot;⠃⠁⠗&quot;; braille-charset: unicode }}">FOO</p>
+        <p style="display: block; &amp;::after {{ content: &quot;BAR&quot; }}">FOO</p>
+        <p style="display: block; &amp;::after {{ content: leader(&quot;⠀&quot;) &quot;⠃⠁⠗&quot;; braille-charset: unicode }}">FOO</p>
       </doc>
     </x:expect>
   </x:scenario>
