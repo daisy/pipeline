@@ -283,43 +283,44 @@
     
     <xsl:template name="css:deep-parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet" required="yes"/>
-        <xsl:param name="context" as="element()?" select="."/>
-        <xsl:variable name="stylesheet" as="element(css:rule)*">
-            <xsl:choose>
-                <xsl:when test="not(exists($stylesheet))"/>
-                <xsl:when test="$stylesheet instance of attribute()">
-                    <xsl:sequence select="css:parse-stylesheet(
-                                            $stylesheet,
-                                            true(),
-                                            if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@page'])
-                                              then QName('','page')
-                                              else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
-                                                then QName('','volume')
-                                                else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@hyphenation-resource'])
-                                                  then QName('','hyphenation-resource')
-                                                  else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@text-transform')])
-                                                    then QName('','text-transform')
-                                                    else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@counter-style')])
-                                                      then QName('','counter-style')
-                                                      else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
-                                                        then QName('','vendor-rule')
-                                                        else ())"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet">
-            <xsl:with-param name="context" tunnel="yes" select="$context"/>
-        </xsl:apply-templates>
+        <xsl:choose>
+            <xsl:when test="not(exists($stylesheet))"/>
+            <xsl:when test="$stylesheet instance of attribute()">
+                <xsl:variable name="context" as="element()" select="$stylesheet/parent::*"/>
+                <xsl:variable name="stylesheet" as="element(css:rule)*"
+                              select="css:parse-stylesheet(
+                                        $stylesheet,
+                                        true(),
+                                        if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@page'])
+                                          then QName('','page')
+                                          else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
+                                            then QName('','volume')
+                                            else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@hyphenation-resource'])
+                                              then QName('','hyphenation-resource')
+                                              else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@text-transform')])
+                                                then QName('','text-transform')
+                                                else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@counter-style')])
+                                                  then QName('','counter-style')
+                                                  else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
+                                                    then QName('','vendor-rule')
+                                                    else ())"/>
+                <xsl:apply-templates mode="css:deep-parse" select="$stylesheet">
+                    <xsl:with-param name="context" tunnel="yes" select="$context"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:variable name="stylesheet" as="element(css:rule)*" select="css:parse-stylesheet($stylesheet, true())"/>
+                <xsl:apply-templates mode="css:deep-parse" select="$stylesheet">
+                    <xsl:with-param name="context" tunnel="yes" select="()"/>
+                </xsl:apply-templates>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:function name="css:deep-parse-stylesheet" as="element(css:rule)*">
         <xsl:param name="stylesheet"/>
         <xsl:call-template name="css:deep-parse-stylesheet">
             <xsl:with-param name="stylesheet" select="$stylesheet"/>
-            <xsl:with-param name="context" select="()"/>
         </xsl:call-template>
     </xsl:function>
     
