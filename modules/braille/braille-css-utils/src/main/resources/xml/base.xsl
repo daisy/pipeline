@@ -263,17 +263,25 @@
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
             <p>Parse a style sheet.</p>
+            <p>The style sheet must be specified as a string or a node (or empty sequence). In case
+            of a node the string value is taken. Additional information may be provided by
+            specifying the style sheet as an attribute node. A `css:page` attribute is parsed as a
+            @page rule. A `css:volume` attribute is parsed as a @volume rule. A `css:text-transform`
+            attribute is parsed as a @text-transform rule. A `css:counter-style` attribute is parsed
+            as a @counter-style rule. A `css:*` attribute with the name of a property is parsed as a
+            property declaration.</p>
+            <p>Return value is a `Style` item.</p>
         </desc>
     </doc>
     <java:function name="css:parse-stylesheet" as="element(css:rule)*">
-        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
     </java:function>
     <java:function name="css:parse-stylesheet" as="element(css:rule)*">
-        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:param name="deep" as="xs:boolean"/>
     </java:function>
     <java:function name="css:parse-stylesheet" as="element(css:rule)*">
-        <xsl:param name="stylesheet" as="xs:string?"/>
+        <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:param name="deep" as="xs:boolean"/>
         <xsl:param name="context" as="xs:QName?"/>
         <!--
@@ -322,20 +330,6 @@
         <xsl:call-template name="css:deep-parse-stylesheet">
             <xsl:with-param name="stylesheet" select="$stylesheet"/>
         </xsl:call-template>
-    </xsl:function>
-    
-    <xsl:function name="css:deep-parse-page-stylesheet" as="element()*"> <!-- css:rule* -->
-        <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:variable name="stylesheet" as="element(css:rule)*"
-                      select="css:parse-stylesheet($stylesheet, true(), QName('','page'))"/>
-        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet"/>
-    </xsl:function>
-    
-    <xsl:function name="css:deep-parse-volume-stylesheet" as="element()*"> <!-- css:rule* -->
-        <xsl:param name="stylesheet" as="xs:string?"/>
-        <xsl:variable name="stylesheet" as="element(css:rule)*"
-                      select="css:parse-stylesheet($stylesheet, true(), QName('','volume'))"/>
-        <xsl:apply-templates mode="css:deep-parse" select="$stylesheet"/>
     </xsl:function>
     
     <xsl:function name="css:parse-string" as="element()?">

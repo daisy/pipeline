@@ -390,14 +390,7 @@
                     <xsl:when test="$stylesheet instance of element(css:rule)">
                         <xsl:sequence select="$stylesheet[@selector='@counter-style']"/>
                     </xsl:when>
-                    <xsl:when test="$stylesheet instance of attribute(css:counter-style)">
-                        <xsl:variable name="stylesheet" as="element(css:rule)">
-                            <css:rule selector="@counter-style" style="{string($stylesheet)}"/>
-                        </xsl:variable>
-                        <xsl:sequence select="css:deep-parse-stylesheet(css:serialize-stylesheet($stylesheet))
-                                              [@selector='@counter-style']"/>
-                    </xsl:when>
-                    <xsl:when test="$stylesheet=''"/>
+                    <xsl:when test="string($stylesheet)=''"/>
                     <xsl:otherwise>
                         <xsl:sequence select="css:deep-parse-stylesheet($stylesheet)[@selector='@counter-style']"/>
                     </xsl:otherwise>

@@ -422,6 +422,11 @@ public final class BrailleCssStyle {
 		return s;
 	}
 
+	// note that this BrailleCssStyle will never be cached because the context is unknown
+	public static BrailleCssStyle of(String selector, BrailleCssStyle style) {
+		return new Builder().add(selector, style).build();
+	}
+
 	private final static Cache cache = new Cache();
 
 	private static class Cache {
