@@ -8,16 +8,16 @@
     
     <xsl:template name="main">
         <_>
-            <xsl:for-each select="distinct-values(collection()//@css:volume)">
-                <css:rule selector="@volume" style="{.}">
-                    <xsl:sequence select="css:deep-parse-volume-stylesheet(.)"/>
+            <xsl:for-each-group select="collection()//@css:volume" group-by="string(.)">
+                <css:rule selector="@volume" style="{current-grouping-key()}">
+                    <xsl:sequence select="css:deep-parse-stylesheet(current())/*"/>
                 </css:rule>
-            </xsl:for-each>
-            <xsl:for-each select="distinct-values(collection()//@css:page)">
-                <css:rule selector="@page" style="{.}">
-                    <xsl:sequence select="css:deep-parse-page-stylesheet(.)"/>
+            </xsl:for-each-group>
+            <xsl:for-each-group select="collection()//@css:page" group-by="string(.)">
+                <css:rule selector="@page" style="{current-grouping-key()}">
+                    <xsl:sequence select="css:deep-parse-stylesheet(current())/*"/>
                 </css:rule>
-            </xsl:for-each>
+            </xsl:for-each-group>
         </_>
     </xsl:template>
     
