@@ -25,8 +25,8 @@
     <xsl:param name="page-counters" as="xs:string*" required="yes"/>
     <xsl:param name="volume-transition" as="xs:string?" required="no"/>
     <xsl:param name="default-text-transform" as="xs:string" required="yes"/>
-    <xsl:param name="text-transforms" as="xs:string?" required="no"/>
-    <xsl:param name="hyphenation-resources" as="xs:string?" required="no"/>
+    <xsl:param name="text-transforms" as="attribute(css:text-transform)?" required="no"/>
+    <xsl:param name="hyphenation-resources" as="attribute(css:hyphenation-resource)?" required="no"/>
     <xsl:param name="counter-styles" as="attribute(css:counter-style)?" required="no"/>
     <xsl:param name="page-and-volume-styles" as="element()*" required="no"/>
     
@@ -310,39 +310,24 @@
                 <xsl:if test="$default-text-transform!=''">
                     <dp2:default-mode><xsl:value-of select="$default-text-transform"/></dp2:default-mode>
                 </xsl:if>
-                <xsl:variable name="text-transform-rule" as="element(css:rule)?">
-                    <xsl:if test="exists($text-transforms) and not($text-transforms='')">
-                        <css:rule selector="@text-transform" style="{$text-transforms}"/>
-                    </xsl:if>
-                </xsl:variable>
-                <xsl:if test="exists($text-transform-rule)">
+                <xsl:if test="exists($text-transforms) and not(string($text-transforms)='')">
                     <dp2:css-text-transform-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet($text-transform-rule,(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($text-transforms),(),1,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-text-transform-definitions>
                 </xsl:if>
-                <xsl:variable name="hyphenation-resource-rule" as="element(css:rule)?">
-                    <xsl:if test="exists($hyphenation-resources) and not($hyphenation-resources='')">
-                        <css:rule selector="@hyphenation-resource" style="{$hyphenation-resources}"/>
-                    </xsl:if>
-                </xsl:variable>
-                <xsl:if test="exists($hyphenation-resource-rule)">
-                    <dp2:css-hyphenation-resource-definitions>
-                        <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet($hyphenation-resource-rule,(),1,'    ')"/>
-                        <xsl:text>&#xa;</xsl:text>
-                    </dp2:css-hyphenation-resource-definitions>
-                </xsl:if>
-                <xsl:variable name="counter-style-rule" as="element(css:rule)?">
-                    <xsl:if test="exists($counter-styles) and not($counter-styles='')">
-                        <css:rule selector="@counter-style" style="{$counter-styles}"/>
-                    </xsl:if>
-                </xsl:variable>
-                <xsl:if test="exists($counter-style-rule)">
+                <xsl:if test="exists($hyphenation-resources) and not(string($hyphenation-resources)='')">
+                     <dp2:css-hyphenation-resource-definitions>
+                         <xsl:text>&#xa;</xsl:text>
+                         <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($hyphenation-resources),(),1,'    ')"/>
+                         <xsl:text>&#xa;</xsl:text>
+                     </dp2:css-hyphenation-resource-definitions>
+                 </xsl:if>
+                <xsl:if test="exists($counter-styles) and not(string($counter-styles)='')">
                     <dp2:css-counter-style-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet($counter-style-rule,(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($counter-styles),(),1,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-counter-style-definitions>
                 </xsl:if>
