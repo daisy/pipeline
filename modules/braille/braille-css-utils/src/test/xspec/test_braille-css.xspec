@@ -211,8 +211,13 @@
 			<x:param select="'print-page &quot;page &quot; attr(num), running-header &quot;''foo''&quot;'"/>
 		</x:call>
 		<x:expect label="result">
-			<css:string-set name="print-page" value="&quot;page &quot; attr(num)"/>
-			<css:string-set name="running-header" value="&quot;'foo'&quot;"/>
+			<css:string-set name="print-page">
+				<css:string value="page "/>
+				<css:attr name="num"/>
+			</css:string-set>
+			<css:string-set name="running-header">
+				<css:string value="'foo'"/>
+			</css:string-set>
 		</x:expect>
 	</x:scenario>
 	
@@ -701,8 +706,13 @@
 	<x:scenario label="test_36">
 		<x:call function="css:serialize-string-set">
 			<x:param>
-				<css:string-set name="print-page" value="&quot;page &quot; attr(num)"/>
-				<css:string-set name="running-header" value="&quot;foo&quot;"/>
+				<css:string-set name="print-page">
+					<css:string value="page "/>
+					<css:attr name="num"/>
+				</css:string-set>
+				<css:string-set name="running-header">
+					<css:string value="foo"/>
+				</css:string-set>
 			</x:param>
 		</x:call>
 		<x:expect label="result" select="'print-page &quot;page &quot; attr(num), running-header &quot;foo&quot;'"/>

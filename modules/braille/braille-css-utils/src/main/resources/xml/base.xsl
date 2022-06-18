@@ -535,6 +535,12 @@
     
     <xsl:function name="css:parse-string-set" as="element()*">
         <xsl:param name="pairs" as="xs:string?"/>
+        <xsl:sequence select="css:parse-string-set($pairs, ())"/>
+    </xsl:function>
+    
+    <xsl:function name="css:parse-string-set" as="element()*">
+        <xsl:param name="pairs" as="xs:string?"/>
+        <xsl:param name="context" as="element()?"/>
         <!--
             force eager matching
         -->
@@ -542,8 +548,9 @@
         <xsl:if test="$pairs">
             <xsl:analyze-string select="$pairs" regex="{$regexp}" flags="x">
                 <xsl:matching-substring>
-                    <css:string-set name="{regex-group($css:STRING_SET_PAIR_RE_ident)}"
-                                    value="{regex-group($css:STRING_SET_PAIR_RE_list)}"/>
+                    <css:string-set name="{regex-group($css:STRING_SET_PAIR_RE_ident)}">
+                        <xsl:sequence select="css:parse-content-list(regex-group($css:STRING_SET_PAIR_RE_list), $context)"/>
+                    </css:string-set>
                 </xsl:matching-substring>
             </xsl:analyze-string>
         </xsl:if>
@@ -881,7 +888,10 @@
     </xsl:template>
     
     <xsl:template match="css:string-set" mode="css:serialize" as="xs:string">
-        <xsl:sequence select="concat(@name,' ',@value)"/>
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="#current" select="*"/>
+        </xsl:variable>
+        <xsl:sequence select="concat(@name,' ',if (exists($value)) then string-join($value,' ') else '&quot;&quot;')"/>
     </xsl:template>
     
     <xsl:template match="css:counter-set" mode="css:serialize" as="xs:string">
@@ -1092,12 +1102,12 @@
                 <xsl:choose>
                     <xsl:when test="$last-set
                                     intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
-                        <xsl:variable name="value" as="xs:string?"
-                                      select="css:parse-string-set($last-set/@css:string-set)
-                                              [@name=$name][last()]/@value"/>
+                        <xsl:variable name="value" as="element(css:string-set)?"
+                                      select="css:parse-string-set($last-set/@css:string-set, $last-set)
+                                              [@name=$name][last()]"/>
                         <xsl:choose>
-                            <xsl:when test="$value">
-                                <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                            <xsl:when test="exists($value)">
+                                <xsl:sequence select="$value/*"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:variable name="context" as="element()?"
@@ -1119,12 +1129,12 @@
                 </xsl:choose>
             </xsl:when>
             <xsl:when test="$last-set">
-                <xsl:variable name="value" as="xs:string?"
-                              select="css:parse-string-set($last-set/@css:string-set)
-                                      [@name=$name][last()]/@value"/>
+                <xsl:variable name="value" as="element(css:string-set)?"
+                              select="css:parse-string-set($last-set/@css:string-set, $last-set)
+                                      [@name=$name][last()]"/>
                 <xsl:choose>
-                    <xsl:when test="$value">
-                        <xsl:sequence select="css:parse-content-list($value, $context)"/>
+                    <xsl:when test="exists($value)">
+                        <xsl:sequence select="$value/*"/>
                     </xsl:when>
                     <xsl:otherwise>
                         <xsl:variable name="context" as="element()?" select="$last-set/(preceding::*|ancestor::*)[last()]"/>
