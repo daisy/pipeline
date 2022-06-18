@@ -307,9 +307,10 @@
 	</xsl:template>
 	
 	<xsl:template mode="translate-style" match="css:property[@name='string-set']">
+		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:if test="@value!='none'">
 			<xsl:variable name="evaluated-string-set" as="element()*">
-				<xsl:apply-templates mode="eval-string-set" select="css:parse-string-set(@value)"/>
+				<xsl:apply-templates mode="string-set" select="css:parse-string-set(@value,$context)"/>
 			</xsl:variable>
 			<xsl:copy>
 				<xsl:sequence select="@name"/>
@@ -323,32 +324,26 @@
 		<xsl:sequence select="."/>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:string-set" as="element()">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
+	<xsl:template mode="string-set" match="css:string-set" as="element(css:string-set)">
 		<xsl:copy>
 			<xsl:sequence select="@name"/>
-			<xsl:variable name="evaluated-content-list" as="element()*">
-				<xsl:apply-templates mode="#current" select="css:parse-content-list(@value, $context)">
-					<xsl:with-param name="string-name" select="@name" tunnel="yes"/>
-				</xsl:apply-templates>
-			</xsl:variable>
-			<xsl:attribute name="value" select="if (exists($evaluated-content-list))
-			                                    then css:serialize-content-list($evaluated-content-list)
-			                                    else '&quot;&quot;'"/>
+			<xsl:apply-templates mode="#current" select="*">
+				<xsl:with-param name="string-name" select="@name" tunnel="yes"/>
+			</xsl:apply-templates>
 		</xsl:copy>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:string[@value]" as="element(css:string)">
+	<xsl:template mode="string-set" match="css:string[@value]" as="element(css:string)">
 		<xsl:sequence select="."/>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:attr" as="element(css:string)">
+	<xsl:template mode="string-set" match="css:attr" as="element(css:string)">
 		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:variable name="name" select="string(@name)"/>
 		<css:string value="{string($context/@*[name()=$name])}"/>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:content[not(@target)]" as="element(css:string)?">
+	<xsl:template mode="string-set" match="css:content[not(@target|@target-attribute)]" as="element(css:string)?">
 		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:variable name="as-string" as="xs:string" select="string($context)"/>
 		<xsl:if test="not($as-string='')">
@@ -356,36 +351,44 @@
 		</xsl:if>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:string[@name][not(@target)]">
+	<xsl:template mode="string-set" match="css:string[@name][not(@target|@target-attribute)]">
 		<xsl:message>string() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:counter[not(@target)]">
+	<xsl:template mode="string-set" match="css:counter[not(@target|@target-attribute)]">
 		<xsl:message>counter() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:text[@target]">
+	<xsl:template mode="string-set" match="css:text[@target]">
 		<xsl:message>target-text() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:string[@name][@target]">
+	<xsl:template mode="string-set" match="css:string[@name][@target]">
 		<xsl:message>target-string() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:counter[@target]">
+	<xsl:template mode="string-set" match="css:counter[@target]">
 		<xsl:message>target-counter() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:content[@target]">
+	<xsl:template mode="string-set" match="css:content[@target]">
 		<xsl:message>target-content() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:leader">
+	<xsl:template mode="string-set" match="css:leader">
 		<xsl:message>leader() function not supported in string-set property</xsl:message>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:custom-func">
+	<xsl:template mode="string-set" match="css:custom-func">
 		<xsl:message><xsl:value-of select="@name"/>() function not supported in string-set property</xsl:message>
+	</xsl:template>
+
+	<xsl:template mode="string-set"
+	              match="css:text[@target-attribute]|
+	                     css:string[@name][@target-attribute]|
+	                     css:counter[@target-attribute]|
+	                     css:content[@target-attribute]">
+		<xsl:message terminate="yes">Coding error: evaluation of attr() should already have been done</xsl:message>
 	</xsl:template>
 	
 	<xsl:template mode="translate-style" match="css:property[@name='content' and @value[not(.='none')]]">

@@ -2567,7 +2567,7 @@
         <block>
             <xsl:for-each select="css:parse-string-set(.)">
                 <xsl:variable name="value" as="xs:string*">
-                    <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
+                    <xsl:apply-templates mode="css:eval-string-set" select="*"/>
                 </xsl:variable>
                 <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
                 <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
@@ -2585,7 +2585,7 @@
                          css:_/css:_/@css:string-set">
         <xsl:for-each select="css:parse-string-set(.)">
             <xsl:variable name="value" as="xs:string*">
-                <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
+                <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
             <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
             <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
@@ -2600,7 +2600,7 @@
                          css:_/css:_/@css:string-set">
         <xsl:for-each select="css:parse-string-set(.)">
             <xsl:variable name="value" as="xs:string*">
-                <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
+                <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
             <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
             <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
