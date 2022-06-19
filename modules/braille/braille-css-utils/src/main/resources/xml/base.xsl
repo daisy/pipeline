@@ -1076,29 +1076,6 @@
         </xsl:if>
     </xsl:function>
     
-    <!-- ========== -->
-    <!-- Evaluating -->
-    <!-- ========== -->
-    
-    <xsl:template match="css:string[@value]" mode="css:eval" as="xs:string">
-        <xsl:sequence select="string(@value)"/>
-    </xsl:template>
-    
-    <xsl:template match="css:content" mode="css:eval">
-        <xsl:param name="context" as="element()?" select="()"/>
-        <xsl:if test="$context">
-            <xsl:sequence select="$context/child::node()"/>
-        </xsl:if>
-    </xsl:template>
-    
-    <xsl:template match="css:attr" mode="css:eval" as="xs:string?">
-        <xsl:param name="context" as="element()?" select="()"/>
-        <xsl:if test="$context">
-            <xsl:variable name="name" select="string(@name)"/>
-            <xsl:sequence select="string($context/@*[name()=$name])"/>
-        </xsl:if>
-    </xsl:template>
-    
     <!-- ======= -->
     <!-- Strings -->
     <!-- ======= -->

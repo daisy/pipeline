@@ -2219,11 +2219,8 @@
     
     <xsl:template mode="css:eval-string"
                   match="css:string[@value]">
-        <xsl:variable name="evaluated" as="xs:string">
-            <xsl:apply-templates mode="css:eval" select="."/>
-        </xsl:variable>
         <xsl:call-template name="text">
-            <xsl:with-param name="text" select="$evaluated"/>
+            <xsl:with-param name="text" select="@value"/>
         </xsl:call-template>
     </xsl:template>
     

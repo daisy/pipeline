@@ -50,22 +50,13 @@
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="eval-content-list">
-        <xsl:variable name="string" as="xs:string">
-            <xsl:apply-templates select="." mode="css:eval"/>
-        </xsl:variable>
-        <xsl:value-of select="$string"/>
+        <xsl:value-of select="string(@value)"/>
     </xsl:template>
     
     <xsl:template match="css:attr" mode="eval-content-list">
         <xsl:param name="context" as="element()"/>
-        <xsl:variable name="string" as="xs:string?">
-            <xsl:apply-templates select="." mode="css:eval">
-                <xsl:with-param name="context" select="$context"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:if test="exists($string)">
-            <xsl:value-of select="$string"/>
-        </xsl:if>
+        <xsl:variable name="name" as="xs:string" select="string(@name)"/>
+        <xsl:value-of select="string($context/@*[name()=$name])"/>
     </xsl:template>
     
     <xsl:template match="css:text[@target]|

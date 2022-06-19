@@ -262,13 +262,6 @@
 		<x:expect label="result" select="'display: none; string-set: print-page attr(value)'"/>
 	</x:scenario>
 	
-	<x:scenario label="test_16">
-		<x:context mode="css:eval">
-			<css:string value="foobar"/>
-		</x:context>
-		<x:expect label="result" select="&quot;foobar&quot;"/>
-	</x:scenario>
-	
 	<x:scenario label="test_17">
 		<x:call function="css:counter-value">
 			<x:param select="'list-item'"/>
