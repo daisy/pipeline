@@ -23,7 +23,6 @@
         <braille-string>: http://braillespecs.github.io/braille-css/#dfn-braille-string
     -->
     <xsl:variable name="css:BRAILLE_STRING_RE">'\p{IsBraillePatterns}*?'|"\p{IsBraillePatterns}*?"</xsl:variable>
-    <xsl:variable name="css:BRAILLE_STRING_RE_groups" select="0"/>
     
     <!--
         <ident>
@@ -32,7 +31,6 @@
     <xsl:variable name="css:IDENT_RE_groups" select="2"/>
     
     <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|[0-9]|_)(\p{L}|[0-9]|_|-)*'"/>
-    <xsl:variable name="css:VENDOR_PRF_IDENT_RE_groups" select="3"/>
     
     <!--
         <integer>
@@ -51,7 +49,6 @@
     -->
     <xsl:variable name="css:POSITIVE_PERCENTAGE_RE" select="concat('(',$css:POSITIVE_NUMBER_RE,')%')"/>
     <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_number" select="1"/>
-    <xsl:variable name="css:POSITIVE_PERCENTAGE_RE_groups" select="1 + $css:POSITIVE_NUMBER_RE_groups"/>
 
     <!--
         <string>
@@ -60,163 +57,10 @@
     <xsl:variable name="css:STRING_RE_groups" select="0"/>
     
     <!--
-        content()
-    -->
-    <xsl:variable name="css:CONTENT_FN_RE" select="'content\(\)'"/>
-    <xsl:variable name="css:CONTENT_FN_RE_groups" select="0"/>
-    
-    <!--
-        attr(<name>)
-    -->
-    <xsl:variable name="css:ATTR_FN_RE" select="concat('attr\(\s*(',$css:IDENT_RE,')\s*\)')"/>
-    <xsl:variable name="css:ATTR_FN_RE_name" select="1"/>
-    <xsl:variable name="css:ATTR_FN_RE_groups" select="$css:ATTR_FN_RE_name + $css:IDENT_RE_groups"/>
-    
-    <!--
-        url(<string>) | attr(<name> url)
-    -->
-    <xsl:variable name="css:URL_RE" select="concat('url\(\s*(',$css:STRING_RE,')\s*\)|attr\(\s*(',$css:IDENT_RE,')(\s+url)?\s*\)')"/>
-    <xsl:variable name="css:URL_RE_string" select="1"/>
-    <xsl:variable name="css:URL_RE_attr" select="$css:URL_RE_string + $css:STRING_RE_groups + 1"/>
-    <xsl:variable name="css:URL_RE_groups" select="$css:URL_RE_attr + $css:IDENT_RE_groups + 1"/>
-    
-    <!--
-        string(<ident>): http://braillespecs.github.io/braille-css/#dfn-string
-    -->
-    <xsl:variable name="css:STRING_FN_RE" select="concat('string\(\s*(',$css:IDENT_RE,')\s*(,\s*(',$css:IDENT_RE,')\s*)?\)')"/>
-    <xsl:variable name="css:STRING_FN_RE_ident" select="1"/>
-    <xsl:variable name="css:STRING_FN_RE_scope" select="$css:STRING_FN_RE_ident + $css:IDENT_RE_groups + 2"/>
-    <xsl:variable name="css:STRING_FN_RE_groups" select="$css:STRING_FN_RE_scope + $css:IDENT_RE_groups"/>
-    
-    <!--
-        counter(<ident>,<counter-style>?): http://braillespecs.github.io/braille-css/#dfn-counter
-    -->
-    <xsl:variable name="css:COUNTER_FN_RE" select="concat('counter\(\s*(',$css:IDENT_RE,'|',$css:VENDOR_PRF_IDENT_RE,')\s*(,\s*(',$css:COUNTER_STYLE_RE,')\s*)?\)')"/>
-    <xsl:variable name="css:COUNTER_FN_RE_ident" select="1"/>
-    <xsl:variable name="css:COUNTER_FN_RE_style" select="$css:COUNTER_FN_RE_ident + $css:IDENT_RE_groups + $css:VENDOR_PRF_IDENT_RE_groups + 2"/>
-    <xsl:variable name="css:COUNTER_FN_RE_groups" select="$css:COUNTER_FN_RE_style + $css:COUNTER_STYLE_RE_groups"/>
-    
-    <!--
-        target-text(<url>): http://braillespecs.github.io/braille-css/#dfn-target-text
-    -->
-    <xsl:variable name="css:TARGET_TEXT_FN_RE" select="concat('target-text\(\s*(',$css:URL_RE,')\s*\)')"/>
-    <xsl:variable name="css:TARGET_TEXT_FN_RE_url" select="1"/>
-    <xsl:variable name="css:TARGET_TEXT_FN_RE_url_string" select="$css:TARGET_TEXT_FN_RE_url + $css:URL_RE_string"/>
-    <xsl:variable name="css:TARGET_TEXT_FN_RE_url_attr" select="$css:TARGET_TEXT_FN_RE_url + $css:URL_RE_attr"/>
-    <xsl:variable name="css:TARGET_TEXT_FN_RE_groups" select="$css:TARGET_TEXT_FN_RE_url + $css:URL_RE_groups"/>
-    
-    <!--
-        target-string(<url>,<ident>): http://braillespecs.github.io/braille-css/#dfn-target-string
-    -->
-    <xsl:variable name="css:TARGET_STRING_FN_RE" select="concat('target-string\(\s*(',$css:URL_RE,')\s*,\s*(',$css:IDENT_RE,')\s*\)')"/>
-    <xsl:variable name="css:TARGET_STRING_FN_RE_url" select="1"/>
-    <xsl:variable name="css:TARGET_STRING_FN_RE_url_string" select="$css:TARGET_STRING_FN_RE_url + $css:URL_RE_string"/>
-    <xsl:variable name="css:TARGET_STRING_FN_RE_url_attr" select="$css:TARGET_STRING_FN_RE_url + $css:URL_RE_attr"/>
-    <xsl:variable name="css:TARGET_STRING_FN_RE_ident" select="$css:TARGET_STRING_FN_RE_url + $css:URL_RE_groups + 1"/>
-    <xsl:variable name="css:TARGET_STRING_FN_RE_groups" select="$css:TARGET_STRING_FN_RE_ident + $css:IDENT_RE_groups"/>
-    
-    <!--
-        target-counter(<url>,<ident>,<counter-style>?): http://braillespecs.github.io/braille-css/#dfn-target-counter
-    -->
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE" select="concat('target-counter\(\s*(',$css:URL_RE,')\s*,\s*(',$css:IDENT_RE,')\s*(,\s*(',$css:COUNTER_STYLE_RE,')\s*)?\)')"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_url" select="1"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_url_string" select="$css:TARGET_COUNTER_FN_RE_url + $css:URL_RE_string"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_url_attr" select="$css:TARGET_COUNTER_FN_RE_url + $css:URL_RE_attr"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_ident" select="$css:TARGET_COUNTER_FN_RE_url + $css:URL_RE_groups + 1"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_style" select="$css:TARGET_COUNTER_FN_RE_ident + $css:IDENT_RE_groups + 2"/>
-    <xsl:variable name="css:TARGET_COUNTER_FN_RE_groups" select="$css:TARGET_COUNTER_FN_RE_style + $css:COUNTER_STYLE_RE_groups"/>
-    
-    <!--
-        target-content(<url>)
-    -->
-    <xsl:variable name="css:TARGET_CONTENT_FN_RE" select="concat('target-content\(\s*(',$css:URL_RE,')\s*\)')"/>
-    <xsl:variable name="css:TARGET_CONTENT_FN_RE_url" select="1"/>
-    <xsl:variable name="css:TARGET_CONTENT_FN_RE_url_string" select="$css:TARGET_CONTENT_FN_RE_url + $css:URL_RE_string"/>
-    <xsl:variable name="css:TARGET_CONTENT_FN_RE_url_attr" select="$css:TARGET_CONTENT_FN_RE_url + $css:URL_RE_attr"/>
-    <xsl:variable name="css:TARGET_CONTENT_FN_RE_groups" select="$css:TARGET_CONTENT_FN_RE_url + $css:URL_RE_groups"/>
-    
-    <!--
-        leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?): http://braillespecs.github.io/braille-css/#dfn-leader
-    -->
-    <xsl:variable name="css:LEADER_FN_RE" select="concat('leader\(\s*(',$css:BRAILLE_STRING_RE,')\s*(,\s*((',$css:POSITIVE_NUMBER_RE,')|(',$css:POSITIVE_PERCENTAGE_RE,'))\s*(,\s*(left|center|right))?)?\s*\)')"/>
-    <xsl:variable name="css:LEADER_FN_RE_pattern" select="1"/>
-    <xsl:variable name="css:LEADER_FN_RE_position" select="$css:LEADER_FN_RE_pattern + $css:BRAILLE_STRING_RE_groups + 2"/>
-    <xsl:variable name="css:LEADER_FN_RE_position_abs" select="$css:LEADER_FN_RE_position + 1"/>
-    <xsl:variable name="css:LEADER_FN_RE_position_rel" select="$css:LEADER_FN_RE_position_abs + $css:POSITIVE_NUMBER_RE_groups + 1"/>
-    <xsl:variable name="css:LEADER_FN_RE_alignment" select="$css:LEADER_FN_RE_position_rel + $css:POSITIVE_PERCENTAGE_RE_groups + 2"/>
-    <xsl:variable name="css:LEADER_FN_RE_groups" select="$css:LEADER_FN_RE_alignment"/>
-    
-    <!--
-        flow(<ident>[,<scope>]?): http://braillespecs.github.io/braille-css/#dfn-flow-1
-    -->
-    <xsl:variable name="css:FLOW_FN_RE" select="concat('flow\(\s*(',$css:IDENT_RE,')\s*(,\s*(document|volume|page)\s*)?\)')"/>
-    <xsl:variable name="css:FLOW_FN_RE_ident" select="1"/>
-    <xsl:variable name="css:FLOW_FN_RE_scope" select="$css:FLOW_FN_RE_ident + $css:IDENT_RE_groups + 2"/>
-    <xsl:variable name="css:FLOW_FN_RE_groups" select="$css:FLOW_FN_RE_scope"/>
-    
-    <!--
         -foo-bar([<ident>|<string>|<integer>][,[<ident>|<string>|<integer>]]*)
     -->
     <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE" select="re:or(($css:IDENT_RE,$css:STRING_RE,$css:INTEGER_RE))"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE" select="concat('(',$css:VENDOR_PRF_IDENT_RE,')\(\s*(',re:comma-separated($css:VENDOR_PRF_FN_ARG_RE),')\s*\)')"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_RE_func" select="1"/>
-    <xsl:variable name="css:VENDOR_PRF_FN_RE_args" select="$css:VENDOR_PRF_FN_RE_func + $css:VENDOR_PRF_IDENT_RE_groups + 1"/>
-    
-    <xsl:variable name="css:CONTENT_RE" select="concat('(',$css:STRING_RE,')|
-                                                        (',$css:CONTENT_FN_RE,')|
-                                                        (',$css:ATTR_FN_RE,')|
-                                                        (',$css:STRING_FN_RE,')|
-                                                        (',$css:COUNTER_FN_RE,')|
-                                                        (',$css:TARGET_TEXT_FN_RE,')|
-                                                        (',$css:TARGET_STRING_FN_RE,')|
-                                                        (',$css:TARGET_COUNTER_FN_RE,')|
-                                                        (',$css:TARGET_CONTENT_FN_RE,')|
-                                                        (',$css:LEADER_FN_RE,')|
-                                                        (',$css:FLOW_FN_RE,')|
-                                                        (',$css:VENDOR_PRF_FN_RE,')')"/>
-    <xsl:variable name="css:CONTENT_RE_string" select="1"/>
-    <xsl:variable name="css:CONTENT_RE_content_fn" select="$css:CONTENT_RE_string + $css:STRING_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_attr_fn" select="$css:CONTENT_RE_content_fn + $css:CONTENT_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_attr_fn_name" select="$css:CONTENT_RE_attr_fn + $css:ATTR_FN_RE_name"/>
-    <xsl:variable name="css:CONTENT_RE_string_fn" select="$css:CONTENT_RE_attr_fn + $css:ATTR_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_string_fn_ident" select="$css:CONTENT_RE_string_fn + $css:STRING_FN_RE_ident"/>
-    <xsl:variable name="css:CONTENT_RE_string_fn_scope" select="$css:CONTENT_RE_string_fn + $css:STRING_FN_RE_scope"/>
-    <xsl:variable name="css:CONTENT_RE_counter_fn" select="$css:CONTENT_RE_string_fn + $css:STRING_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_counter_fn_ident" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_ident"/>
-    <xsl:variable name="css:CONTENT_RE_counter_fn_style" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_style"/>
-    <xsl:variable name="css:CONTENT_RE_target_text_fn" select="$css:CONTENT_RE_counter_fn + $css:COUNTER_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_text_fn_url_string" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_url_string"/>
-    <xsl:variable name="css:CONTENT_RE_target_text_fn_url_attr" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_url_attr"/>
-    <xsl:variable name="css:CONTENT_RE_target_string_fn" select="$css:CONTENT_RE_target_text_fn + $css:TARGET_TEXT_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_string_fn_url" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_url"/>
-    <xsl:variable name="css:CONTENT_RE_target_string_fn_url_string" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_url_string"/>
-    <xsl:variable name="css:CONTENT_RE_target_string_fn_url_attr" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_url_attr"/>
-    <xsl:variable name="css:CONTENT_RE_target_string_fn_ident" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_ident"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn" select="$css:CONTENT_RE_target_string_fn + $css:TARGET_STRING_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn_url_string" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_url_string"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn_url_attr" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_url_attr"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn_ident" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_ident"/>
-    <xsl:variable name="css:CONTENT_RE_target_counter_fn_style" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_style"/>
-    <xsl:variable name="css:CONTENT_RE_target_content_fn" select="$css:CONTENT_RE_target_counter_fn + $css:TARGET_COUNTER_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_target_content_fn_url" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_url"/>
-    <xsl:variable name="css:CONTENT_RE_target_content_fn_url_string" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_url_string"/>
-    <xsl:variable name="css:CONTENT_RE_target_content_fn_url_attr" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_url_attr"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn" select="$css:CONTENT_RE_target_content_fn + $css:TARGET_CONTENT_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn_pattern" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_pattern"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn_position" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_position"/>
-    <xsl:variable name="css:CONTENT_RE_leader_fn_alignment" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_alignment"/>
-    <xsl:variable name="css:CONTENT_RE_flow_fn" select="$css:CONTENT_RE_leader_fn + $css:LEADER_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_flow_fn_ident" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_ident"/>
-    <xsl:variable name="css:CONTENT_RE_flow_fn_scope" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_scope"/>
-    <xsl:variable name="css:CONTENT_RE_vendor_prf_fn" select="$css:CONTENT_RE_flow_fn + $css:FLOW_FN_RE_groups + 1"/>
-    <xsl:variable name="css:CONTENT_RE_vendor_prf_fn_func" select="$css:CONTENT_RE_vendor_prf_fn + $css:VENDOR_PRF_FN_RE_func"/>
-    <xsl:variable name="css:CONTENT_RE_vendor_prf_fn_args" select="$css:CONTENT_RE_vendor_prf_fn + $css:VENDOR_PRF_FN_RE_args"/>
-    
-    <xsl:variable name="css:CONTENT_LIST_RE" select="re:space-separated($css:CONTENT_RE)"/>
-    
-    <xsl:variable name="css:STRING_SET_PAIR_RE" select="concat('(',$css:IDENT_RE,')\s+(',$css:CONTENT_LIST_RE,')')"/>
-    <xsl:variable name="css:STRING_SET_PAIR_RE_ident" select="1"/>
-    <xsl:variable name="css:STRING_SET_PAIR_RE_list" select="$css:STRING_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 1"/>
     
     <xsl:variable name="css:COUNTER_SET_PAIR_RE" select="concat('(',$css:IDENT_RE,')(\s+(',$css:INTEGER_RE,'))?')"/>
     <xsl:variable name="css:COUNTER_SET_PAIR_RE_ident" select="1"/>
@@ -260,6 +104,19 @@
         <xsl:apply-templates mode="#current" select="$property"/>
     </xsl:template>
     
+    <xsl:template match="css:property[@name='string-set' and not(@value)]" mode="css:property-as-attribute" as="attribute()">
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="css:serialize" select="*"/>
+        </xsl:variable>
+        <xsl:variable name="property" as="element(css:property)">
+            <xsl:copy>
+                <xsl:sequence select="@*"/>
+                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,', ') else 'none'"/>
+            </xsl:copy>
+        </xsl:variable>
+        <xsl:apply-templates mode="#current" select="$property"/>
+    </xsl:template>
+    
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
             <p>Parse a style sheet.</p>
@@ -269,7 +126,8 @@
             @page rule. A `css:volume` attribute is parsed as a @volume rule. A `css:text-transform`
             attribute is parsed as a @text-transform rule. A `css:counter-style` attribute is parsed
             as a @counter-style rule. A `css:*` attribute with the name of a property is parsed as a
-            property declaration. `attr()` values in `content` properties are evaluated.</p>
+            property declaration. `attr()` values in `content` and `string-set` properties are
+            evaluated.</p>
             <p>Return value is a `Style` item.</p>
         </desc>
     </doc>
@@ -288,219 +146,6 @@
                                   '\\A\s?','&#xA;'),
                                   '\\27\s?',''''),
                                   '\\22\s?','&quot;')}"/>
-        </xsl:if>
-    </xsl:function>
-    
-    <xsl:template name="css:parse-content-list" as="element()*">
-        <xsl:param name="content-list" as="xs:string?"/>
-        <xsl:param name="context" as="element()?" select="."/>
-        <xsl:if test="$content-list">
-            <xsl:analyze-string select="$content-list" regex="{$css:CONTENT_RE}" flags="x">
-                <xsl:matching-substring>
-                    <xsl:choose>
-                        <!--
-                            <string>
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_string)!=''">
-                            <xsl:sequence select="css:parse-string(regex-group($css:CONTENT_RE_string))"/>
-                        </xsl:when>
-                        <!--
-                            content()
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_content_fn)!=''">
-                            <css:content/>
-                        </xsl:when>
-                        <!--
-                            attr(<name>)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_attr_fn)!=''">
-                            <css:attr name="{regex-group($css:CONTENT_RE_attr_fn_name)}"/>
-                        </xsl:when>
-                        <!--
-                            string(<ident>,<scope>?)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_string_fn)!=''">
-                            <css:string name="{regex-group($css:CONTENT_RE_string_fn_ident)}">
-                                <xsl:if test="regex-group($css:CONTENT_RE_string_fn_scope)!=''">
-                                    <xsl:attribute name="scope" select="regex-group($css:CONTENT_RE_string_fn_scope)"/>
-                                </xsl:if>
-                            </css:string>
-                        </xsl:when>
-                        <!--
-                            counter(<ident>,<counter-style>?)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_counter_fn)!=''">
-                            <xsl:element name="css:counter">
-                                <xsl:attribute name="name" select="regex-group($css:CONTENT_RE_counter_fn_ident)"/>
-                                <xsl:if test="regex-group($css:CONTENT_RE_counter_fn_style)!=''">
-                                    <xsl:attribute name="style" select="regex-group($css:CONTENT_RE_counter_fn_style)"/>
-                                </xsl:if>
-                            </xsl:element>
-                        </xsl:when>
-                        <!--
-                            target-text(<url>)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_target_text_fn)!=''">
-                            <xsl:element name="css:text">
-                                <xsl:choose>
-                                    <xsl:when test="regex-group($css:CONTENT_RE_target_text_fn_url_string)!=''">
-                                        <xsl:attribute name="target"
-                                                       select="substring(regex-group($css:CONTENT_RE_target_text_fn_url_string),
-                                                                         2,
-                                                                         string-length(regex-group($css:CONTENT_RE_target_text_fn_url_string))-2)"/>
-                                    </xsl:when>
-                                    <xsl:when test="exists($context)">
-                                        <xsl:attribute name="target"
-                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_text_fn_url_attr)])"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_text_fn_url_attr)"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:element>
-                        </xsl:when>
-                        <!--
-                            target-string(<url>,<ident>)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_target_string_fn)!=''">
-                            <xsl:element name="css:string">
-                                <xsl:choose>
-                                    <xsl:when test="regex-group($css:CONTENT_RE_target_string_fn_url_string)!=''">
-                                        <xsl:attribute name="target"
-                                                       select="substring(regex-group($css:CONTENT_RE_target_string_fn_url_string),
-                                                                         2,
-                                                                         string-length(regex-group($css:CONTENT_RE_target_string_fn_url_string))-2)"/>
-                                    </xsl:when>
-                                    <xsl:when test="exists($context)">
-                                        <xsl:attribute name="target"
-                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_string_fn_url_attr)])"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_string_fn_url_attr)"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <xsl:attribute name="name" select="regex-group($css:CONTENT_RE_target_string_fn_ident)"/>
-                            </xsl:element>
-                        </xsl:when>
-                        <!--
-                            target-counter(<url>,<ident>,<counter-style>?)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_target_counter_fn)!=''">
-                            <xsl:element name="css:counter">
-                                <xsl:choose>
-                                    <xsl:when test="regex-group($css:CONTENT_RE_target_counter_fn_url_string)!=''">
-                                        <xsl:attribute name="target"
-                                                       select="substring(regex-group($css:CONTENT_RE_target_counter_fn_url_string),
-                                                                         2,
-                                                                         string-length(regex-group($css:CONTENT_RE_target_counter_fn_url_string))-2)"/>
-                                    </xsl:when>
-                                    <xsl:when test="exists($context)">
-                                        <xsl:attribute name="target"
-                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_counter_fn_url_attr)])"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_counter_fn_url_attr)"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                                <xsl:attribute name="name" select="regex-group($css:CONTENT_RE_target_counter_fn_ident)"/>
-                                <xsl:if test="regex-group($css:CONTENT_RE_target_counter_fn_style)!=''">
-                                    <xsl:attribute name="style" select="regex-group($css:CONTENT_RE_target_counter_fn_style)"/>
-                                </xsl:if>
-                            </xsl:element>
-                        </xsl:when>
-                        <!--
-                            target-content(<url>)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_target_content_fn)!=''">
-                            <xsl:element name="css:content">
-                                <xsl:choose>
-                                    <xsl:when test="regex-group($css:CONTENT_RE_target_content_fn_url_string)!=''">
-                                        <xsl:attribute name="target"
-                                                       select="substring(regex-group($css:CONTENT_RE_target_content_fn_url_string),
-                                                                         2,
-                                                                         string-length(regex-group($css:CONTENT_RE_target_content_fn_url_string))-2)"/>
-                                    </xsl:when>
-                                    <xsl:when test="exists($context)">
-                                        <xsl:attribute name="target"
-                                                       select="string($context/@*[name()=regex-group($css:CONTENT_RE_target_content_fn_url_attr)])"/>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <xsl:attribute name="target-attribute" select="regex-group($css:CONTENT_RE_target_content_fn_url_attr)"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
-                            </xsl:element>
-                        </xsl:when>
-                        <!--
-                            leader(<braille-string>[,[<integer>|<percentage>][,[left|center|right]]?]?)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_leader_fn)!=''">
-                            <css:leader pattern="{substring(regex-group($css:CONTENT_RE_leader_fn_pattern),
-                                                            2, string-length(regex-group($css:CONTENT_RE_leader_fn_pattern))-2)}">
-                                <xsl:if test="regex-group($css:CONTENT_RE_leader_fn_position)!=''">
-                                    <xsl:attribute name="position" select="regex-group($css:CONTENT_RE_leader_fn_position)"/>
-                                    <xsl:if test="regex-group($css:CONTENT_RE_leader_fn_alignment)!=''">
-                                        <xsl:attribute name="alignment" select="regex-group($css:CONTENT_RE_leader_fn_alignment)"/>
-                                    </xsl:if>
-                                </xsl:if>
-                            </css:leader>
-                        </xsl:when>
-                        <!--
-                            flow(<ident>[,<scope>]?)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_flow_fn)!=''">
-                            <css:flow from="{regex-group($css:CONTENT_RE_flow_fn_ident)}">
-                                <xsl:if test="regex-group($css:CONTENT_RE_flow_fn_scope)!=''">
-                                    <xsl:attribute name="scope" select="regex-group($css:CONTENT_RE_flow_fn_scope)"/>
-                                </xsl:if>
-                            </css:flow>
-                        </xsl:when>
-                        <!--
-                            -foo-bar([<ident>|<string>|<integer>][,[<ident>|<string>|<integer>]]*)
-                        -->
-                        <xsl:when test="regex-group($css:CONTENT_RE_vendor_prf_fn)!=''">
-                            <css:custom-func name="{regex-group($css:CONTENT_RE_vendor_prf_fn_func)}">
-                                <xsl:analyze-string select="regex-group($css:CONTENT_RE_vendor_prf_fn_args)" regex="{$css:VENDOR_PRF_FN_ARG_RE}">
-                                    <xsl:matching-substring>
-                                        <xsl:attribute name="arg{(position()+1) idiv 2}" select="."/>
-                                    </xsl:matching-substring>
-                                </xsl:analyze-string>
-                            </css:custom-func>
-                        </xsl:when>
-                    </xsl:choose>
-                </xsl:matching-substring>
-            </xsl:analyze-string>
-        </xsl:if>
-    </xsl:template>
-    
-    <xsl:function name="css:parse-content-list" as="element()*">
-        <xsl:param name="content-list" as="xs:string?"/>
-        <xsl:param name="context" as="element()?"/>
-        <xsl:call-template name="css:parse-content-list">
-            <xsl:with-param name="content-list" select="$content-list"/>
-            <xsl:with-param name="context" select="$context"/>
-        </xsl:call-template>
-    </xsl:function>
-    
-    <xsl:function name="css:parse-string-set" as="element()*">
-        <xsl:param name="pairs" as="xs:string?"/>
-        <xsl:sequence select="css:parse-string-set($pairs, ())"/>
-    </xsl:function>
-    
-    <xsl:function name="css:parse-string-set" as="element()*">
-        <xsl:param name="pairs" as="xs:string?"/>
-        <xsl:param name="context" as="element()?"/>
-        <!--
-            force eager matching
-        -->
-        <xsl:variable name="regexp" select="concat($css:STRING_SET_PAIR_RE,'(\s*,|$)')"/>
-        <xsl:if test="$pairs">
-            <xsl:analyze-string select="$pairs" regex="{$regexp}" flags="x">
-                <xsl:matching-substring>
-                    <css:string-set name="{regex-group($css:STRING_SET_PAIR_RE_ident)}">
-                        <xsl:sequence select="css:parse-content-list(regex-group($css:STRING_SET_PAIR_RE_list), $context)"/>
-                    </css:string-set>
-                </xsl:matching-substring>
-            </xsl:analyze-string>
         </xsl:if>
     </xsl:function>
     
@@ -544,7 +189,7 @@
     
     <xsl:template match="css:property" mode="css:default">
         <xsl:choose>
-            <xsl:when test="@value='initial' and @name='content'">
+            <xsl:when test="@value='initial' and @name=('content','string-set')">
                 <xsl:copy>
                     <xsl:sequence select="@* except @value"/>
                 </xsl:copy>
@@ -611,8 +256,8 @@
                     <xsl:with-param name="context" select="$parent"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$concretize-initial and $property='content'">
-                <css:property name="content"/>
+            <xsl:when test="$concretize-initial and $property=('content','string-set')">
+                <css:property name="{$property}"/>
             </xsl:when>
             <xsl:when test="$concretize-initial">
                 <xsl:sequence select="css:property($property, css:initial-value($property))"/>
@@ -815,6 +460,19 @@
         <xsl:apply-templates mode="#current" select="$property"/>
     </xsl:template>
     
+    <xsl:template match="css:property[@name='string-set' and not(@value)]" mode="css:serialize" as="xs:string">
+        <xsl:variable name="value" as="xs:string*">
+            <xsl:apply-templates mode="#current" select="*"/>
+        </xsl:variable>
+        <xsl:variable name="property" as="element(css:property)">
+            <xsl:copy>
+                <xsl:sequence select="@name"/>
+                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,', ') else 'none'"/>
+            </xsl:copy>
+        </xsl:variable>
+        <xsl:apply-templates mode="#current" select="$property"/>
+    </xsl:template>
+    
     <xsl:template match="css:string-set" mode="css:serialize" as="xs:string">
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="#current" select="*"/>
@@ -982,14 +640,6 @@
         <xsl:sequence select="string-join($serialized-rules,$newline)"/>
     </xsl:function>
     
-    <xsl:function name="css:serialize-string-set" as="xs:string">
-        <xsl:param name="pairs" as="element()*"/>
-        <xsl:variable name="serialized-pairs" as="xs:string*">
-            <xsl:apply-templates select="$pairs" mode="css:serialize"/>
-        </xsl:variable>
-        <xsl:sequence select="string-join($serialized-pairs, ', ')"/>
-    </xsl:function>
-    
     <xsl:function name="css:serialize-counter-set" as="xs:string">
         <xsl:param name="pairs" as="element()*"/>
         <xsl:variable name="serialized-pairs" as="xs:string*">
@@ -1022,7 +672,7 @@
                     <xsl:when test="$last-set
                                     intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
                         <xsl:variable name="value" as="element(css:string-set)?"
-                                      select="css:parse-string-set($last-set/@css:string-set, $last-set)
+                                      select="css:parse-stylesheet($last-set/@css:string-set)/css:string-set
                                               [@name=$name][last()]"/>
                         <xsl:choose>
                             <xsl:when test="exists($value)">
@@ -1049,7 +699,7 @@
             </xsl:when>
             <xsl:when test="$last-set">
                 <xsl:variable name="value" as="element(css:string-set)?"
-                              select="css:parse-string-set($last-set/@css:string-set, $last-set)
+                              select="css:parse-stylesheet($last-set/@css:string-set)/css:string-set
                                       [@name=$name][last()]"/>
                 <xsl:choose>
                     <xsl:when test="exists($value)">

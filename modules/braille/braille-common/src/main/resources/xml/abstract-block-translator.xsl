@@ -299,15 +299,11 @@
 		<css:property name="braille-charset" value="{if ($braille-charset!='') then 'custom' else 'unicode'}"/>
 	</xsl:template>
 	
-	<xsl:template mode="translate-style" match="css:property[@name='string-set']">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
-		<xsl:if test="@value!='none'">
-			<xsl:variable name="evaluated-string-set" as="element()*">
-				<xsl:apply-templates mode="string-set" select="css:parse-string-set(@value,$context)"/>
-			</xsl:variable>
+	<xsl:template mode="translate-style" match="css:property[@name='string-set'][not(@value)]">
+		<xsl:if test="exists(css:string-set)">
 			<xsl:copy>
-				<xsl:sequence select="@name"/>
-				<xsl:attribute name="value" select="css:serialize-string-set($evaluated-string-set)"/>
+				<xsl:sequence select="@*"/>
+				<xsl:apply-templates mode="string-set" select="css:string-set"/>
 			</xsl:copy>
 		</xsl:if>
 	</xsl:template>
@@ -328,12 +324,6 @@
 	
 	<xsl:template mode="string-set" match="css:string[@value]" as="element(css:string)">
 		<xsl:sequence select="."/>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:attr" as="element(css:string)">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
-		<xsl:variable name="name" select="string(@name)"/>
-		<css:string value="{string($context/@*[name()=$name])}"/>
 	</xsl:template>
 	
 	<xsl:template mode="string-set" match="css:content[not(@target|@target-attribute)]" as="element(css:string)?">
@@ -377,7 +367,8 @@
 	</xsl:template>
 
 	<xsl:template mode="string-set"
-	              match="css:text[@target-attribute]|
+	              match="css:attr|
+	                     css:text[@target-attribute]|
 	                     css:string[@name][@target-attribute]|
 	                     css:counter[@target-attribute]|
 	                     css:content[@target-attribute]">
@@ -601,8 +592,8 @@
 			<xsl:when test="exists($parent-properties[@name=$property])">
 				<xsl:sequence select="$parent-properties[@name=$property][last()]"/>
 			</xsl:when>
-			<xsl:when test="$concretize-initial and $property='content'">
-				<css:property name="content"/>
+			<xsl:when test="$concretize-initial and $property=('content','string-set')">
+				<css:property name="{$property}"/>
 			</xsl:when>
 			<xsl:when test="$concretize-initial">
 				<xsl:sequence select="css:property($property, css:initial-value($property))"/>

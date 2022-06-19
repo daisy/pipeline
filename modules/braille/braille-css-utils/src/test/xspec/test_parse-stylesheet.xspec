@@ -147,4 +147,21 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_14">
+    <x:context>
+      <doc>
+        <body>
+          <pagenum num="1" style="string-set: print-page attr(num)"/>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <pagenum num="1" style="string-set: print-page &quot;1&quot;"/>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

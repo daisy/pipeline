@@ -28,6 +28,7 @@ import cz.vutbr.web.css.TermList;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
+import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -86,12 +87,12 @@ public final class BrailleCssStyle implements Cloneable {
 	private boolean evaluated = false;
 
 	/**
-	 * Evaluate <code>attr()</code> values.
+	 * Evaluate <code>attr()</code> values in <code>content</code> and <code>string-set</code> properties.
 	 */
 	public BrailleCssStyle evaluate(Element context) {
 		if (evaluated) return this;
 		BrailleCssStyle copy = null;
-		if (simpleStyle != null)
+		if (simpleStyle != null) {
 			if (simpleStyle.getProperty("content") == Content.content_list) {
 				Term<?> value = simpleStyle.getValue("content");
 				if (value instanceof ContentList) {
@@ -101,6 +102,17 @@ public final class BrailleCssStyle implements Cloneable {
 				} else
 					throw new IllegalStateException(); // coding error
 			}
+			if (simpleStyle.getProperty("string-set") == StringSet.list_values) {
+				Term<?> value = simpleStyle.getValue("string-set");
+				if (value instanceof StringSetList) {
+					if (copy == null) {
+						copy = clone();
+						copy.simpleStyle = (SimpleInlineStyle)simpleStyle.clone(); }
+					((StringSetList)copy.simpleStyle.getValue("string-set")).evaluate(context); // this mutates the value
+				} else
+					throw new IllegalStateException(); // coding error
+			}
+		}
 		if (nestedStyles != null) {
 			SortedMap<String,BrailleCssStyle> nestedStylesCopy = new TreeMap<>(sortSelectors);
 			for (Map.Entry<String,BrailleCssStyle> e : nestedStyles.entrySet()) {
@@ -661,6 +673,18 @@ public final class BrailleCssStyle implements Cloneable {
 									throw new IllegalArgumentException("unexpected term in content list: " + t);
 							values.put("content", l);
 						} else
+							throw new IllegalStateException(); // should not happen
+					}
+					return true;
+				} else
+					return false;
+			} else if ("string-set".equalsIgnoreCase(d.getProperty())) {
+				if (super.processStringSet(d, properties, values)) {
+					if (properties.get("string-set") == StringSet.list_values) {
+						Term<?> value = values.get("string-set");
+						if (value instanceof TermList)
+							values.put("string-set", StringSetList.of((TermList)value));
+						else
 							throw new IllegalStateException(); // should not happen
 					}
 					return true;
