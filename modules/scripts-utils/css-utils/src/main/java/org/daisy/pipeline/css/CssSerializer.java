@@ -53,7 +53,7 @@ public final class CssSerializer {
 		else if (term instanceof TermPair) {
 			TermPair<?,?> pair = (TermPair<?,?>)term;
 			Object val = pair.getValue();
-			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val, toStringFunction) : val.toString()); }
+			return "" + pair.getKey() + " " + (val instanceof Term ? toStringFunction.apply((Term<?>)val) : val.toString()); }
 		else if (term instanceof TermURI) {
 			TermURI termURI = (TermURI)term;
 			URI uri = URLs.asURI(termURI.getValue());

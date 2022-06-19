@@ -30,7 +30,8 @@
 			<x:param select="true()"/>
 			<x:param select="//bar">
 				<foo css:orphans="3" css:_obfl-right-text-indent="2">
-					<bar style="display: -foo-something;                           /* valid */
+					<bar num="1"
+					     style="display: -foo-something;                           /* valid */
 					            left: foo;                                         /* invalid */
 					            right: -1;                                         /* invalid */
 					            margin-right: -1;                                  /* valid */
@@ -104,7 +105,11 @@
 			<css:property name="page-break-inside" value="avoid"/>
 			<css:property name="right" value="0"/>
 			<css:property name="size" value="20 20"/>
-			<css:property name="string-set" value="print-page attr(num)"/>
+			<css:property name="string-set">
+				<css:string-set name="print-page">
+					<css:string value="1"/>
+				</css:string-set>
+			</css:property>
 			<css:property name="text-transform" value="foo -bar"/>
 			<css:property name="volume-break-before" value="always"/>
 			<css:property name="volume-break-inside" value="-obfl-keep(1)"/>
@@ -263,47 +268,60 @@
 	
 	<x:scenario label="test_09">
 		<x:call function="css:parse-stylesheet">
-			<x:param select="'  display: none;  string-set : print-page attr(value) ;  '"/>
+			<x:param select="/*/@style">
+				<pagenum value="1" style="  display: none;  string-set : print-page attr(value) ;  "/>
+			</x:param>
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
 				<css:property name="display" value="none"/>
-				<css:property name="string-set" value="print-page attr(value)"/>
+				<css:property name="string-set">
+					<css:string-set name="print-page">
+						<css:string value="1"/>
+					</css:string-set>
+				</css:property>
 			</css:rule>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="test_10">
-		<x:call function="css:parse-content-list">
-			<x:param select="'target-string(attr(ref url), print-page) target-counter(attr(ref url), braille-page, lower-roman) -x-foo(bar, baz) string(print-page, start) flow(foo, volume) counter(list-item, symbols(cyclic &quot;*&quot; &quot;†&quot; &quot;‡&quot; &quot;§&quot;))'"/>
-			<x:param select="//a">
+		<x:call function="css:parse-stylesheet">
+			<x:param select="//a/@css:content">
 				<doc>
-					<a ref="#foo">foo</a>
+					<a ref="#foo"
+					   css:content="target-string(attr(ref url), print-page) target-counter(attr(ref url), braille-page, lower-roman) -x-foo(bar, baz) string(print-page, start) flow(foo, volume) counter(list-item, symbols(cyclic &quot;*&quot; &quot;†&quot; &quot;‡&quot; &quot;§&quot;))"
+					   >foo</a>
 				</doc>
 			</x:param>
 		</x:call>
 		<x:expect label="result">
-			<css:string target="#foo" name="print-page"/>
-			<css:counter target="#foo" name="braille-page" style="lower-roman"/>
-			<css:custom-func name="-x-foo" arg1="bar" arg2="baz"/>
-			<css:string name="print-page" scope="start"/>
-			<css:flow from="foo" scope="volume"/>
-			<css:counter name="list-item" style='symbols(cyclic "*" "†" "‡" "§")'/>
+			<css:property name="content">
+				<css:string target="#foo" name="print-page"/>
+				<css:counter target="#foo" name="braille-page" style="lower-roman"/>
+				<css:custom-func name="-x-foo" arg1="bar" arg2="baz"/>
+				<css:string name="print-page" scope="start"/>
+				<css:flow from="foo" scope="volume"/>
+				<css:counter name="list-item" style="symbols(cyclic '*' '†' '‡' '§')"/>
+			</css:property>
 		</x:expect>
 	</x:scenario>
 	
 	<x:scenario label="test_11">
-		<x:call function="css:parse-string-set">
-			<x:param select="'print-page &quot;page &quot; attr(num), running-header &quot;''foo''&quot;'"/>
+		<x:call function="css:parse-stylesheet">
+			<x:param select="/*/@css:string-set">
+				<doc num="1" css:string-set="print-page &quot;page &quot; attr(num), running-header &quot;'foo'&quot;"/>
+			</x:param>
 		</x:call>
 		<x:expect label="result">
-			<css:string-set name="print-page">
-				<css:string value="page "/>
-				<css:attr name="num"/>
-			</css:string-set>
-			<css:string-set name="running-header">
-				<css:string value="'foo'"/>
-			</css:string-set>
+			<css:property name="string-set">
+				<css:string-set name="print-page">
+					<css:string value="page "/>
+					<css:string value="1"/>
+				</css:string-set>
+				<css:string-set name="running-header">
+					<css:string value="'foo'"/>
+				</css:string-set>
+			</css:property>
 		</x:expect>
 	</x:scenario>
 	
@@ -413,7 +431,11 @@
 		<x:call function="css:serialize-stylesheet">
 			<x:param>
 				<css:property name="display" value="none"/>
-				<css:property name="string-set" value="print-page attr(value)"/>
+				<css:property name="string-set">
+					<css:string-set name="print-page">
+						<css:attr name="value"/>
+					</css:string-set>
+				</css:property>
 			</x:param>
 		</x:call>
 		<x:expect label="result" select="'display: none; string-set: print-page attr(value)'"/>
@@ -856,18 +878,20 @@
 	</x:scenario>
 	
 	<x:scenario label="test_36">
-		<x:call function="css:serialize-string-set">
+		<x:call function="css:serialize-stylesheet">
 			<x:param>
-				<css:string-set name="print-page">
-					<css:string value="page "/>
-					<css:attr name="num"/>
-				</css:string-set>
-				<css:string-set name="running-header">
-					<css:string value="foo"/>
-				</css:string-set>
+				<css:property name="string-set">
+					<css:string-set name="print-page">
+						<css:string value="page "/>
+						<css:attr name="num"/>
+					</css:string-set>
+					<css:string-set name="running-header">
+						<css:string value="foo"/>
+					</css:string-set>
+				</css:property>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'print-page &quot;page &quot; attr(num), running-header &quot;foo&quot;'"/>
+		<x:expect label="result" select="'string-set: print-page &quot;page &quot; attr(num), running-header &quot;foo&quot;'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_37">
@@ -876,7 +900,14 @@
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
-				<css:property name="string-set" value="print-page content(), foo '\27 bar\27 '"/>
+				<css:property name="string-set">
+					<css:string-set name="print-page">
+						<css:content/>
+					</css:string-set>
+					<css:string-set name="foo">
+						<css:string value="'bar'"/>
+					</css:string-set>
+				</css:property>
 			</css:rule>
 		</x:expect>
 	</x:scenario>
