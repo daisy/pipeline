@@ -338,19 +338,17 @@
 		</xsl:copy>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:string[@value]|css:attr" as="element()?">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
-		<xsl:variable name="evaluated-string" as="xs:string?">
-			<xsl:apply-templates mode="css:eval" select=".">
-				<xsl:with-param name="context" select="$context"/>
-			</xsl:apply-templates>
-		</xsl:variable>
-		<xsl:if test="exists($evaluated-string)">
-			<css:string value="{$evaluated-string}"/>
-		</xsl:if>
+	<xsl:template mode="eval-string-set" match="css:string[@value]" as="element(css:string)">
+		<xsl:sequence select="."/>
 	</xsl:template>
 	
-	<xsl:template mode="eval-string-set" match="css:content[not(@target)]" as="element()?">
+	<xsl:template mode="eval-string-set" match="css:attr" as="element(css:string)">
+		<xsl:param name="context" as="element()" tunnel="yes"/>
+		<xsl:variable name="name" select="string(@name)"/>
+		<css:string value="{string($context/@*[name()=$name])}"/>
+	</xsl:template>
+	
+	<xsl:template mode="eval-string-set" match="css:content[not(@target)]" as="element(css:string)?">
 		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:variable name="as-string" as="xs:string" select="string($context)"/>
 		<xsl:if test="not($as-string='')">
@@ -416,9 +414,15 @@
 		<xsl:param name="source-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:variable name="evaluated-string" as="xs:string">
-			<xsl:apply-templates mode="css:eval" select=".">
-				<xsl:with-param name="context" select="$context"/>
-			</xsl:apply-templates>
+			<xsl:choose>
+				<xsl:when test="self::css:attr">
+					<xsl:variable name="name" select="string(@name)"/>
+					<xsl:sequence select="string($context/@*[name()=$name])"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:sequence select="@value"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="lang" as="xs:string?" select="($context/ancestor-or-self::*[@xml:lang][1]/@xml:lang,'und')[1]"/>
 		<xsl:variable name="block">
