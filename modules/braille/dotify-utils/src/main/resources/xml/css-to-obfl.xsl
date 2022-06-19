@@ -2578,7 +2578,7 @@
                                 not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                          //@css:string-set">
         <block>
-            <xsl:for-each select="css:parse-string-set(.)">
+            <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
                 <xsl:variable name="value" as="xs:string*">
                     <xsl:apply-templates mode="css:eval-string-set" select="*"/>
                 </xsl:variable>
@@ -2596,7 +2596,7 @@
                   match="css:box[@type='inline']/@css:string-set|
                          css:box[@type='inline']/css:_/@css:string-set|
                          css:_/css:_/@css:string-set">
-        <xsl:for-each select="css:parse-string-set(.)">
+        <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
@@ -2611,7 +2611,7 @@
                   match="css:box[@type='inline']/@css:string-set|
                          css:box[@type='inline']/css:_/@css:string-set|
                          css:_/css:_/@css:string-set">
-        <xsl:for-each select="css:parse-string-set(.)">
+        <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
