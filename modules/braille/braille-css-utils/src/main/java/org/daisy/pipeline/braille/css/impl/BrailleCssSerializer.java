@@ -24,6 +24,7 @@ import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.OutputUtil;
@@ -33,6 +34,7 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
+import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
@@ -60,7 +62,8 @@ public final class BrailleCssSerializer {
 	/* =================================================== */
 
 	public static String toString(Term<?> term) {
-		if (term instanceof ContentList)
+		if (term instanceof ContentList ||
+		    term instanceof StringSetList)
 			return serializeTermList((List<Term<?>>)term);
 		else if (term instanceof AttrFunction) {
 			AttrFunction f = (AttrFunction)term;
@@ -115,6 +118,11 @@ public final class BrailleCssSerializer {
 				s = s + ", " + f.scope.get().toString();
 			s += ")";
 			return s; }
+		// for StringSet
+		else if (term instanceof TermPair) {
+			TermPair<?,?> pair = (TermPair<?,?>)term;
+			Object val = pair.getValue();
+			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val) : val.toString()); }
 		else
 			return CssSerializer.toString(term);
 	}
@@ -324,6 +332,7 @@ public final class BrailleCssSerializer {
 	private static final QName CSS_LEADER       = new QName(XMLNS_CSS, "leader",   "css");
 	private static final QName CSS_FLOW         = new QName(XMLNS_CSS, "flow", "css");
 	private static final QName CSS_CUSTOM_FUNC  = new QName(XMLNS_CSS, "custom-func", "css");
+	private static final QName CSS_STRING_SET   = new QName(XMLNS_CSS, "string-set", "css");
 	private static final QName SELECTOR         = new QName("selector");
 	private static final QName NAME             = new QName("name");
 	private static final QName VALUE            = new QName("value");
@@ -386,6 +395,20 @@ public final class BrailleCssSerializer {
 			else if (value.getCSSProperty() == Content.content_list)
 				if (value.getValue() instanceof ContentList)
 					contentListToXml((ContentList)value.getValue(), writer);
+				else
+					throw new IllegalArgumentException();
+		} else if ("string-set".equals(property)) {
+			if (value.getCSSProperty() == StringSet.NONE || value.getCSSProperty() == StringSet.INITIAL)
+				;
+			else if (value.getCSSProperty() == StringSet.INHERIT)
+				writeAttribute(writer, VALUE, StringSet.INHERIT.toString());
+			else if (value.getCSSProperty() == StringSet.list_values)
+				if (value.getValue() instanceof StringSetList)
+					for (StringSetList.StringSet ss : (StringSetList)value.getValue()) {
+						writeStartElement(writer, CSS_STRING_SET);
+						writeAttribute(writer, NAME, ss.getKey());
+						contentListToXml(ss.getValue(), writer);
+						writer.writeEndElement(); }
 				else
 					throw new IllegalArgumentException();
 		} else
