@@ -592,7 +592,11 @@
 			<xsl:when test="exists($parent-properties[@name=$property])">
 				<xsl:sequence select="$parent-properties[@name=$property][last()]"/>
 			</xsl:when>
-			<xsl:when test="$concretize-initial and $property=('content','string-set')">
+			<xsl:when test="$concretize-initial and $property=('content',
+			                                                   'string-set',
+			                                                   'counter-set',
+			                                                   'counter-reset',
+			                                                   'counter-increment')">
 				<css:property name="{$property}"/>
 			</xsl:when>
 			<xsl:when test="$concretize-initial">

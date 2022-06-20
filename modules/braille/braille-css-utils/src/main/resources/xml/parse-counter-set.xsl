@@ -21,20 +21,24 @@
     <xsl:template match="@css:counter-reset|
                          @css:counter-set|
                          @css:counter-increment">
-        <xsl:variable name="pairs" as="element()*"
-                      select="css:parse-counter-set(., if (local-name()='counter-increment') then 1 else 0)"/>
+        <xsl:variable name="pairs" as="element(css:counter-set)*" select="css:parse-stylesheet(.)/css:counter-set"/>
         <xsl:variable name="property" as="xs:string" select="local-name()"/>
         <xsl:for-each select="if ($counter-names='#all')
                               then $pairs[not(@name=$exclude-counter-names-list)]
                               else $pairs[@name=$counter-names-list]">
             <xsl:attribute name="css:{$property}-{@name}" select="@value"/>
         </xsl:for-each>
-        <xsl:variable name="other-pairs" as="element()*"
+        <xsl:variable name="other-pairs" as="element(css:counter-set)*"
                       select="if ($counter-names='#all')
                               then $pairs[@name=$exclude-counter-names-list]
                               else $pairs[not(@name=$counter-names-list)]"/>
         <xsl:if test="$other-pairs">
-            <xsl:attribute name="css:{$property}" select="css:serialize-counter-set($other-pairs)"/>
+            <xsl:variable name="other-pairs" as="element(css:property)">
+                <css:property name="{$property}">
+                    <xsl:sequence select="$other-pairs"/>
+                </css:property>
+            </xsl:variable>
+            <xsl:apply-templates mode="css:property-as-attribute" select="$other-pairs"/>
         </xsl:if>
     </xsl:template>
     
