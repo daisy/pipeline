@@ -90,8 +90,13 @@
 			<css:property name="border-top-pattern" value="⠒"/>
 			<css:property name="border-top-style" value="solid"/>
 			<css:property name="border-top-width" value="2"/>
-			<css:property name="counter-reset" value ="foo 0 bar 0"/>
-			<css:property name="counter-set" value="foo 0 foo 2"/>
+			<css:property name="counter-reset">
+				<css:counter-set name="foo" value="0"/>
+				<css:counter-set name="bar" value="0" />
+			</css:property>
+			<css:property name="counter-set">
+				<css:counter-set name="foo" value="2"/>
+			</css:property>
 			<css:property name="display" value="-foo-something"/>
 			<css:property name="hyphenate-character" value="'⠈'"/>
 			<css:property name="line-height" value="150%"/>
@@ -326,13 +331,16 @@
 	</x:scenario>
 	
 	<x:scenario label="test_12">
-		<x:call function="css:parse-counter-set">
-			<x:param select="'foo 2 bar'"/>
-			<x:param select="0"/>
+		<x:call function="css:parse-stylesheet">
+			<x:param select="/*/@css:counter-set">
+				<doc css:counter-set="foo 2 bar"/>
+			</x:param>
 		</x:call>
 		<x:expect label="result">
-			<css:counter-set name="foo" value="2"/>
-			<css:counter-set name="bar" value="0"/>
+			<css:property name="counter-set">
+				<css:counter-set name="foo" value="2"/>
+				<css:counter-set name="bar" value="0"/>
+			</css:property>
 		</x:expect>
 	</x:scenario>
 	
