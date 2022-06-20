@@ -135,25 +135,31 @@
                 <xsl:text> not supported inside @page</xsl:text>
             </xsl:message>
         </xsl:if>
-        <xsl:variable name="counter-increment" as="element()*"
-                      select="css:parse-counter-set(
-                                ($default-page-properties[@name='counter-increment']/@value,$default-page-counter-name)[1],
-                                1)"/>
-        <xsl:if test="count($counter-increment)&gt;1">
-            <xsl:message terminate="yes">
-                <xsl:value-of select="$default-page-properties[@name='counter-increment'][1]"/>
-                <xsl:text>: a page can only have one page counter</xsl:text>
-            </xsl:message>
-        </xsl:if>
-        <xsl:variable name="counter-increment" as="element()" select="$counter-increment[last()]"/>
-        <xsl:if test="not($counter-increment/@value='1')">
-            <xsl:message terminate="yes">
-                <xsl:value-of select="$default-page-properties[@name='counter-increment'][1]"/>
-                <xsl:text>: a page counter can not be incremented by </xsl:text>
-                <xsl:value-of select="$counter-increment/@value"/>
-            </xsl:message>
-        </xsl:if>
-        <xsl:variable name="page-counter-name" as="xs:string" select="$counter-increment/@name"/>
+        <xsl:variable name="page-counter-name" as="xs:string">
+            <xsl:variable name="counter-increment" as="element(css:counter-set)*"
+                          select="$default-page-properties[@name='counter-increment']/css:counter-set"/>
+            <xsl:choose>
+                <xsl:when test="exists($counter-increment)">
+                    <xsl:if test="count($counter-increment)&gt;1">
+                        <xsl:message terminate="yes">
+                            <xsl:value-of select="css:serialize-stylesheet($counter-increment/..)"/>
+                            <xsl:text>: a page can only have one page counter</xsl:text>
+                        </xsl:message>
+                    </xsl:if>
+                    <xsl:if test="not($counter-increment/@value='1')">
+                        <xsl:message terminate="yes">
+                            <xsl:value-of select="css:serialize-stylesheet($counter-increment/..)"/>
+                            <xsl:text>: a page counter can not be incremented by </xsl:text>
+                            <xsl:value-of select="$counter-increment/@value"/>
+                        </xsl:message>
+                    </xsl:if>
+                    <xsl:sequence select="$counter-increment/@name"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="$default-page-counter-name"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xsl:variable name="footnotes-properties" as="element()*"
                       select="$default-page-stylesheet[@selector='@footnotes'][1]/css:property"/>
         <xsl:variable name="footnotes-content" as="element()*" select="$footnotes-properties[@name='content'][1]/*"/>

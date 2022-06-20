@@ -15,6 +15,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 import cz.vutbr.web.css.CSSProperty;
+import cz.vutbr.web.css.CSSProperty.CounterIncrement;
+import cz.vutbr.web.css.CSSProperty.CounterSet;
+import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.Rule;
@@ -62,7 +65,8 @@ public final class BrailleCssSerializer {
 
 	public static String toString(Term<?> term) {
 		if (term instanceof ContentList ||
-		    term instanceof StringSetList)
+		    term instanceof StringSetList ||
+		    term instanceof CounterSetList)
 			return serializeTermList((List<Term<?>>)term);
 		else if (term instanceof AttrFunction) {
 			AttrFunction f = (AttrFunction)term;
@@ -327,6 +331,7 @@ public final class BrailleCssSerializer {
 	private static final QName CSS_FLOW         = new QName(XMLNS_CSS, "flow", "css");
 	private static final QName CSS_CUSTOM_FUNC  = new QName(XMLNS_CSS, "custom-func", "css");
 	private static final QName CSS_STRING_SET   = new QName(XMLNS_CSS, "string-set", "css");
+	private static final QName CSS_COUNTER_SET  = new QName(XMLNS_CSS, "counter-set", "css");
 	private static final QName SELECTOR         = new QName("selector");
 	private static final QName NAME             = new QName("name");
 	private static final QName VALUE            = new QName("value");
@@ -402,6 +407,28 @@ public final class BrailleCssSerializer {
 						writeStartElement(writer, CSS_STRING_SET);
 						writeAttribute(writer, NAME, ss.getKey());
 						contentListToXml(ss.getValue(), writer);
+						writer.writeEndElement(); }
+				else
+					throw new IllegalArgumentException();
+		} else if ("counter-set".equals(property) ||
+		           "counter-reset".equals(property) ||
+		           "counter-increment".equals(property)) {
+			if (value.getCSSProperty() == CounterSet.NONE || value.getCSSProperty() == CounterSet.INITIAL ||
+			    value.getCSSProperty() == CounterReset.NONE || value.getCSSProperty() == CounterReset.INITIAL ||
+			    value.getCSSProperty() == CounterIncrement.NONE || value.getCSSProperty() == CounterIncrement.INITIAL)
+				;
+			else if (value.getCSSProperty() == CounterSet.INHERIT ||
+			         value.getCSSProperty() == CounterReset.INHERIT ||
+			         value.getCSSProperty() == CounterIncrement.INHERIT)
+				writeAttribute(writer, VALUE, "inherit");
+			else if (value.getCSSProperty() == CounterSet.list_values ||
+			         value.getCSSProperty() == CounterReset.list_values ||
+			         value.getCSSProperty() == CounterIncrement.list_values)
+				if (value.getValue() instanceof CounterSetList)
+					for (CounterSetList.CounterSet ss : (CounterSetList)value.getValue()) {
+						writeStartElement(writer, CSS_COUNTER_SET);
+						writeAttribute(writer, NAME, ss.getKey());
+						writeAttribute(writer, VALUE, "" + ss.getValue());
 						writer.writeEndElement(); }
 				else
 					throw new IllegalArgumentException();
