@@ -62,10 +62,6 @@
     <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE" select="re:or(($css:IDENT_RE,$css:STRING_RE,$css:INTEGER_RE))"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE" select="concat('(',$css:VENDOR_PRF_IDENT_RE,')\(\s*(',re:comma-separated($css:VENDOR_PRF_FN_ARG_RE),')\s*\)')"/>
     
-    <xsl:variable name="css:COUNTER_SET_PAIR_RE" select="concat('(',$css:IDENT_RE,')(\s+(',$css:INTEGER_RE,'))?')"/>
-    <xsl:variable name="css:COUNTER_SET_PAIR_RE_ident" select="1"/>
-    <xsl:variable name="css:COUNTER_SET_PAIR_RE_value" select="$css:COUNTER_SET_PAIR_RE_ident + $css:IDENT_RE_groups + 2"/>
-    
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->
@@ -91,7 +87,9 @@
         <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
     </xsl:template>
 
-    <xsl:template match="css:property[@name='content' and not(@value)]" mode="css:property-as-attribute" as="attribute()">
+    <xsl:template match="css:property[@name='content' and not(@value)]|
+                         css:property[@name=('counter-set','counter-reset','counter-increment') and not(@value)]"
+                  mode="css:property-as-attribute" as="attribute()">
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="css:serialize" select="*"/>
         </xsl:variable>
@@ -149,21 +147,6 @@
         </xsl:if>
     </xsl:function>
     
-    <xsl:function name="css:parse-counter-set" as="element()*">
-        <xsl:param name="pairs" as="xs:string?"/>
-        <xsl:param name="initial" as="xs:integer"/>
-        <xsl:if test="$pairs">
-            <xsl:analyze-string select="$pairs" regex="{$css:COUNTER_SET_PAIR_RE}" flags="x">
-                <xsl:matching-substring>
-                    <css:counter-set name="{regex-group($css:COUNTER_SET_PAIR_RE_ident)}"
-                                     value="{if (regex-group($css:COUNTER_SET_PAIR_RE_value)!='')
-                                             then regex-group($css:COUNTER_SET_PAIR_RE_value)
-                                             else format-number($initial,'0')}"/>
-                </xsl:matching-substring>
-            </xsl:analyze-string>
-        </xsl:if>
-    </xsl:function>
-    
     <!-- ===================================== -->
     <!-- Validating, inheriting and defaulting -->
     <!-- ===================================== -->
@@ -189,7 +172,11 @@
     
     <xsl:template match="css:property" mode="css:default">
         <xsl:choose>
-            <xsl:when test="@value='initial' and @name=('content','string-set')">
+            <xsl:when test="@value='initial' and @name=('content',
+                                                        'string-set',
+                                                        'counter-set',
+                                                        'counter-reset',
+                                                        'counter-increment')">
                 <xsl:copy>
                     <xsl:sequence select="@* except @value"/>
                 </xsl:copy>
@@ -256,7 +243,11 @@
                     <xsl:with-param name="context" select="$parent"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$concretize-initial and $property=('content','string-set')">
+            <xsl:when test="$concretize-initial and $property=('content',
+                                                               'string-set',
+                                                               'counter-set',
+                                                               'counter-reset',
+                                                               'counter-increment')">
                 <css:property name="{$property}"/>
             </xsl:when>
             <xsl:when test="$concretize-initial">
@@ -447,7 +438,9 @@
         <xsl:sequence select="concat(@name,': ',@value)"/>
     </xsl:template>
     
-    <xsl:template match="css:property[@name='content' and not(@value)]" mode="css:serialize" as="xs:string">
+    <xsl:template match="css:property[@name='content' and not(@value)]|
+                         css:property[@name=('counter-set','counter-reset','counter-increment') and not(@value)]"
+                  mode="css:serialize" as="xs:string">
         <xsl:variable name="value" as="xs:string*">
             <xsl:apply-templates mode="#current" select="*"/>
         </xsl:variable>
@@ -638,14 +631,6 @@
             <xsl:sequence select="$serialized-pseudo-rules"/>
         </xsl:variable>
         <xsl:sequence select="string-join($serialized-rules,$newline)"/>
-    </xsl:function>
-    
-    <xsl:function name="css:serialize-counter-set" as="xs:string">
-        <xsl:param name="pairs" as="element()*"/>
-        <xsl:variable name="serialized-pairs" as="xs:string*">
-            <xsl:apply-templates select="$pairs" mode="css:serialize"/>
-        </xsl:variable>
-        <xsl:sequence select="string-join($serialized-pairs, ' ')"/>
     </xsl:function>
     
     <xsl:function name="css:style-attribute" as="attribute()?">

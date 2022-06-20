@@ -14,6 +14,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import cz.vutbr.web.css.CSSProperty;
+import cz.vutbr.web.css.CSSProperty.CounterIncrement;
+import cz.vutbr.web.css.CSSProperty.CounterSet;
+import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
@@ -438,7 +441,10 @@ public final class BrailleCssStyle implements Cloneable {
 				// Note that the declarations have not been transformed by SupportedBrailleCSS yet.
 				// This will be done when build() is called.
 				for (Declaration d : (RuleMainBlock)rule)
-					style.add(d, Optional.ofNullable(context == Context.ELEMENT ? DEFAULT_VALIDATOR : null));
+					style.add(d, Optional.ofNullable(
+					                 (context == Context.ELEMENT ||
+					                  context == Context.PAGE ||
+					                  context == Context.VOLUME) ? DEFAULT_VALIDATOR : null));
 			else if (rule instanceof RuleRelativeBlock) {
 				String[] selector = serializeSelector(((RuleRelativeBlock)rule).getSelector());
 				Builder decls = new Builder(); {
@@ -684,6 +690,42 @@ public final class BrailleCssStyle implements Cloneable {
 						Term<?> value = values.get("string-set");
 						if (value instanceof TermList)
 							values.put("string-set", StringSetList.of((TermList)value));
+						else
+							throw new IllegalStateException(); // should not happen
+					}
+					return true;
+				} else
+					return false;
+			} else if ("counter-set".equalsIgnoreCase(d.getProperty())) {
+				if (super.processCounterSet(d, properties, values)) {
+					if (properties.get("counter-set") == CounterSet.list_values) {
+						Term<?> value = values.get("counter-set");
+						if (value instanceof TermList)
+							values.put("counter-set", CounterSetList.of((TermList)value));
+						else
+							throw new IllegalStateException(); // should not happen
+					}
+					return true;
+				} else
+					return false;
+			} else if ("counter-reset".equalsIgnoreCase(d.getProperty())) {
+				if (super.processCounterReset(d, properties, values)) {
+					if (properties.get("counter-reset") == CounterReset.list_values) {
+						Term<?> value = values.get("counter-reset");
+						if (value instanceof TermList)
+							values.put("counter-reset", CounterSetList.of((TermList)value));
+						else
+							throw new IllegalStateException(); // should not happen
+					}
+					return true;
+				} else
+					return false;
+			} else if ("counter-increment".equalsIgnoreCase(d.getProperty())) {
+				if (super.processCounterIncrement(d, properties, values)) {
+					if (properties.get("counter-increment") == CounterIncrement.list_values) {
+						Term<?> value = values.get("counter-increment");
+						if (value instanceof TermList)
+							values.put("counter-increment", CounterSetList.of((TermList)value));
 						else
 							throw new IllegalStateException(); // should not happen
 					}
