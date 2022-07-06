@@ -79,11 +79,6 @@
 			px:assert
 		</p:documentation>
 	</p:import>
-	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			px:set-base-uri
-		</p:documentation>
-	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			px:fileset-create
@@ -170,27 +165,17 @@
 				<p:when test="ends-with(lower-case($href),'.epub')">
 					<p:choose>
 						<p:when test="$store-to-disk='true'">
-							<p:output port="result">
-								<p:pipe step="unzip" port="fileset"/>
-							</p:output>
-							<px:fileset-unzip store-to-disk="true" name="unzip" cx:depends-on="check-temp-dir">
+							<p:output port="result"/>
+							<px:fileset-unzip store-to-disk="true" cx:depends-on="check-temp-dir">
 								<p:with-option name="href" select="$href"/>
 								<p:with-option name="unzipped-basedir" select="concat($temp-dir,'unzip/')"/>
 							</px:fileset-unzip>
-							<p:sink/>
 						</p:when>
 						<p:otherwise>
 							<p:output port="result"/>
-							<px:fileset-unzip name="unzip">
+							<px:fileset-unzip>
 								<p:with-option name="href" select="$href"/>
 							</px:fileset-unzip>
-							<p:sink/>
-							<px:set-base-uri>
-								<p:input port="source">
-									<p:pipe step="unzip" port="fileset"/>
-								</p:input>
-								<p:with-option name="base-uri" select="concat($href,'!/')"/>
-							</px:set-base-uri>
 							<p:add-xml-base/>
 						</p:otherwise>
 					</p:choose>

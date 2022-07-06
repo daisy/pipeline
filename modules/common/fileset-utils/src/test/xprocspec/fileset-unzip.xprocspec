@@ -1,290 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description script="../../../src/main/resources/xml/xproc/fileset-unzip.xpl" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    
-    <x:scenario label="Scenario for testing px:fileset-unzip - XProc test suite unzip-001">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/sample-tests.zip', base-uri(.))"/>
-        </x:call>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../../src/main/resources/xml/xproc/fileset-unzip.xpl">
 
+    <x:scenario label="without unzipped-basedir">
+        <x:call step="px:fileset-unzip">
+            <x:option name="href" select="resolve-uri('samples/test.epub',base-uri(.))"/>
+        </x:call>
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="There must be exactly 4 /c:zipfile/c:file elements in the result" type="xpath" test="count(/c:zipfile/c:file)" equals="4"/>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:fileset-unzip - XProc test suite unzip-002">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/sample-tests.zip', base-uri(.))"/>
-            <x:option name="file" select="'pipe.xpl'"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="The result must be as expected" type="compare">
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
             <x:document type="inline">
-                <p:declare-step xmlns:p="http://www.w3.org/ns/xproc">
-                    <p:input port="source">
-                        <p:inline><doc>Congratulations! You've run your first pipeline!</doc></p:inline>
-                    </p:input>
-                    <p:output port="result"/>
-                    <p:identity/>
-                </p:declare-step>
-            </x:document>
-        </x:expect>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:fileset-unzip">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="file" select="'EPUB/package.opf'"/>
-            <x:option name="load-to-memory" select="'false'"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="There must be exactly one entry in the zip manifest" type="xpath" test="count(/*/*)" equals="1"/>
-        <x:expect label="The file 'EPUB/package.opf' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/package.opf'"/>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset" select="/*/*"/>
-        </x:context>
-        <x:expect label="There must be exactly 9 files in the fileset" type="count" min="1" max="1"/>
-        <x:expect label="The fileset should be as expected" type="compare">
-            <x:document type="inline" select="/*/*">
-                <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data">
-                    <d:file href="package.opf"/>
+                <d:fileset>
+                    <d:file href="samples/test.epub!/EPUB/324123-001-cover.xhtml"
+                            original-href="samples/test.epub!/EPUB/324123-001-cover.xhtml"/>
+                    <d:file href="samples/test.epub!/EPUB/324123-002-frontmatter.xhtml"
+                            original-href="samples/test.epub!/EPUB/324123-002-frontmatter.xhtml"/>
+                    <d:file href="samples/test.epub!/EPUB/css/accessibility.css"
+                            original-href="samples/test.epub!/EPUB/css/accessibility.css"/>
+                    <d:file href="samples/test.epub!/EPUB/images/Thumbs.db"
+                            original-href="samples/test.epub!/EPUB/images/Thumbs.db"/>
+                    <d:file href="samples/test.epub!/EPUB/images/image.png"
+                            original-href="samples/test.epub!/EPUB/images/image.png"/>
+                    <d:file href="samples/test.epub!/EPUB/nav.xhtml"
+                            original-href="samples/test.epub!/EPUB/nav.xhtml"/>
+                    <d:file href="samples/test.epub!/EPUB/package.opf"
+                            original-href="samples/test.epub!/EPUB/package.opf"/>
+                    <d:file href="samples/test.epub!/META-INF/container.xml"
+                            original-href="samples/test.epub!/META-INF/container.xml"/>
+                    <d:file href="samples/test.epub!/mimetype"
+                            original-href="samples/test.epub!/mimetype"/>
                 </d:fileset>
             </x:document>
         </x:expect>
-
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
-        </x:context>
-        <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
     </x:scenario>
 
-    <x:scenario label="Scenario for testing px:fileset-unzip">
+    <x:scenario label="with unzipped-basedir">
         <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="unzipped-basedir" select="replace($temp-dir,'//+','/')"/>
-            <x:option name="load-to-memory" select="'true'"/>
+            <x:option name="href" select="resolve-uri('samples/test.epub',base-uri(.))"/>
+            <x:option name="unzipped-basedir" select="resolve-uri('unzipped-basedir/',base-uri(.))"/>
         </x:call>
-
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="There must be exactly 9 documents on the result port" type="count" min="9" max="9"/>
-        <x:expect label="The documents must be based in the `unzipped-basedir` directory" type="xpath" test="substring(base-uri(), 1, string-length(replace($temp-dir,'//+','/')))" equals="replace($temp-dir,'//+','/')"/>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset"/>
-        </x:context>
-        <x:expect label="There must be exactly 9 files in the fileset" type="xpath" test="count(/*/*)" equals="9"/>
-        <x:expect label="The file 'mimetype' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'mimetype'"/>
-        <x:expect label="The file 'EPUB/images/image.png' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/image.png'"/>
-        <x:expect label="The file 'EPUB/324123-001-cover.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-001-cover.xhtml'"/>
-        <x:expect label="The file 'EPUB/324123-002-frontmatter.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-002-frontmatter.xhtml'"/>
-        <x:expect label="The file 'EPUB/css/accessibility.css' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/css/accessibility.css'"/>
-        <x:expect label="The file 'EPUB/images/Thumbs.db' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/Thumbs.db'"/>
-        <x:expect label="The file 'EPUB/nav.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/nav.xhtml'"/>
-        <x:expect label="The file 'EPUB/package.opf' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/package.opf'"/>
-        <x:expect label="The file 'META-INF/container.xml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'META-INF/container.xml'"/>
-
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
-        </x:context>
-        <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:fileset-unzip">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="load-to-memory" select="'true'"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly 9 documents on the result port" type="count" min="9" max="9"/>
-        <x:expect label="The documents should not have been rebased into the `unzipped-basedir` directory" type="xpath" test="substring(base-uri(), 1, string-length(replace($temp-dir,'//+','/')))" equals="replace($temp-dir,'//+','/')"
-            xfail="true"/>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset"/>
-        </x:context>
-        <x:expect label="There must be exactly 9 files in the fileset" type="xpath" test="count(/*/*)" equals="9"/>
-        <x:expect label="The file 'mimetype' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'mimetype'"/>
-        <x:expect label="The file 'EPUB/images/image.png' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/image.png'"/>
-        <x:expect label="The file 'EPUB/324123-001-cover.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-001-cover.xhtml'"/>
-        <x:expect label="The file 'EPUB/324123-002-frontmatter.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-002-frontmatter.xhtml'"/>
-        <x:expect label="The file 'EPUB/css/accessibility.css' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/css/accessibility.css'"/>
-        <x:expect label="The file 'EPUB/images/Thumbs.db' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/Thumbs.db'"/>
-        <x:expect label="The file 'EPUB/nav.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/nav.xhtml'"/>
-        <x:expect label="The file 'EPUB/package.opf' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/package.opf'"/>
-        <x:expect label="The file 'META-INF/container.xml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'META-INF/container.xml'"/>
-
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
-        </x:context>
-        <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:fileset-unzip">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="load-to-memory" select="'false'"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="There must be exactly 11 entries in the zip manifest" type="xpath" test="count(/*/*)" equals="11"/>
-        <x:expect label="The file 'mimetype' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'mimetype'"/>
-        <x:expect label="The file 'EPUB/images/image.png' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/images/image.png'"/>
-        <x:expect label="The file 'EPUB/324123-001-cover.xhtml' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/324123-001-cover.xhtml'"/>
-        <x:expect label="The file 'EPUB/324123-002-frontmatter.xhtml' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/324123-002-frontmatter.xhtml'"/>
-        <x:expect label="The directory 'EPUB/css/' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/css/'"/>
-        <x:expect label="The file 'EPUB/css/accessibility.css' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/css/accessibility.css'"/>
-        <x:expect label="The directory 'EPUB/images/' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/images/'"/>
-        <x:expect label="The file 'EPUB/images/Thumbs.db' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/images/Thumbs.db'"/>
-        <x:expect label="The file 'EPUB/nav.xhtml' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/nav.xhtml'"/>
-        <x:expect label="The file 'EPUB/package.opf' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'EPUB/package.opf'"/>
-        <x:expect label="The file 'META-INF/container.xml' must exist in the zip manifest" type="xpath" test="/*/*/@name" equals="'META-INF/container.xml'"/>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset"/>
-        </x:context>
-        <x:expect label="There must be exactly 9 files in the fileset" type="xpath" test="count(/*/*)" equals="9"/>
-        <x:expect label="The file 'mimetype' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'mimetype'"/>
-        <x:expect label="The file 'EPUB/images/image.png' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/image.png'"/>
-        <x:expect label="The file 'EPUB/324123-001-cover.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-001-cover.xhtml'"/>
-        <x:expect label="The file 'EPUB/324123-002-frontmatter.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/324123-002-frontmatter.xhtml'"/>
-        <x:expect label="The file 'EPUB/css/accessibility.css' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/css/accessibility.css'"/>
-        <x:expect label="The file 'EPUB/images/Thumbs.db' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/images/Thumbs.db'"/>
-        <x:expect label="The file 'EPUB/nav.xhtml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/nav.xhtml'"/>
-        <x:expect label="The file 'EPUB/package.opf' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'EPUB/package.opf'"/>
-        <x:expect label="The file 'META-INF/container.xml' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'META-INF/container.xml'"/>
-
-        <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
-        </x:context>
-        <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
-    </x:scenario>
-
-    <x:scenario label="Scenario for testing px:fileset-unzip">
-        <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="file" select="'EPUB/package.opf'"/>
-            <x:option name="unzipped-basedir" select="replace($temp-dir,'//+','/')"/>
-        </x:call>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="The document should be a OPF" type="xpath" test="concat('{',namespace-uri(/*),'}',local-name(/*))" equals="'{http://www.idpf.org/2007/opf}package'"/>
-        <x:expect label="The documents base URI should place the document in the `unzipped-basedir` directory" type="xpath" test="substring(base-uri(/*), 1, string-length(replace($temp-dir,'//+','/')))"
-            equals="replace($temp-dir,'//+','/')"/>
-
-        <x:context label="the result port">
-            <x:document type="port" port="result" select="/*/*"/>
-        </x:context>
-        <x:expect label="The contents of the OPF should be as expected" type="compare">
-            <x:document type="inline" select="/*/*">
-                <package xmlns="http://www.idpf.org/2007/opf" xmlns:dc="http://purl.org/dc/elements/1.1/" prefix="nordic: http://www.mtm.se/epub/" unique-identifier="pub-identifier" version="3.0">
-                    <metadata>
-                        <dc:title xmlns:dcterms="http://purl.org/dc/terms/">Musta tuntuu punaiselta, kuvataiteellinen toiminta varhaisiässä</dc:title>
-                        <dc:identifier id="pub-identifier">324123</dc:identifier>
-                        <dc:language xmlns:dcterms="http://purl.org/dc/terms/" id="language_1">fi</dc:language>
-                        <dc:format xmlns:dcterms="http://purl.org/dc/terms/" id="format">EPUB3</dc:format>
-                    </metadata>
-                    <manifest>
-                        <item id="item_2" href="324123-001-cover.xhtml" media-type="application/xhtml+xml"/>
-                        <item id="item_3" href="324123-002-frontmatter.xhtml" media-type="application/xhtml+xml"/>
-                    </manifest>
-                    <spine>
-                        <itemref idref="item_2" linear="no"/>
-                        <itemref idref="item_3" linear="yes"/>
-                    </spine>
-                </package>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="unzipped-basedir/EPUB/324123-001-cover.xhtml"
+                            original-href="samples/test.epub!/EPUB/324123-001-cover.xhtml"/>
+                    <d:file href="unzipped-basedir/EPUB/324123-002-frontmatter.xhtml"
+                            original-href="samples/test.epub!/EPUB/324123-002-frontmatter.xhtml"/>
+                    <d:file href="unzipped-basedir/EPUB/css/accessibility.css"
+                            original-href="samples/test.epub!/EPUB/css/accessibility.css"/>
+                    <d:file href="unzipped-basedir/EPUB/images/Thumbs.db"
+                            original-href="samples/test.epub!/EPUB/images/Thumbs.db"/>
+                    <d:file href="unzipped-basedir/EPUB/images/image.png"
+                            original-href="samples/test.epub!/EPUB/images/image.png"/>
+                    <d:file href="unzipped-basedir/EPUB/nav.xhtml"
+                            original-href="samples/test.epub!/EPUB/nav.xhtml"/>
+                    <d:file href="unzipped-basedir/EPUB/package.opf"
+                            original-href="samples/test.epub!/EPUB/package.opf"/>
+                    <d:file href="unzipped-basedir/META-INF/container.xml"
+                            original-href="samples/test.epub!/META-INF/container.xml"/>
+                    <d:file href="unzipped-basedir/mimetype"
+                            original-href="samples/test.epub!/mimetype"/>
+                </d:fileset>
             </x:document>
         </x:expect>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset"/>
-        </x:context>
-        <x:expect label="There must be exactly 1 file in the fileset" type="xpath" test="count(/*/*)" equals="1"/>
-        <x:expect label="The file 'package.opf' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'package.opf'"/>
-
         <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
+            <x:document type="directory" href="unzipped-basedir/" recursive="true" ordered="true"/>
         </x:context>
         <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
     </x:scenario>
 
-    <x:scenario label="Scenario for testing px:fileset-unzip">
+    <x:scenario label="store-to-disk">
         <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="file" select="'EPUB/package.opf'"/>
-            <x:option name="content-type" select="'application/octet-stream'"/>
+            <x:option name="href" select="resolve-uri('samples/test.epub',base-uri(.))"/>
+            <x:option name="unzipped-basedir" select="resolve-uri('store-to-disk/',$temp-dir)"/>
+            <x:option name="store-to-disk" select="true()"/>
         </x:call>
-
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
-        <x:expect label="There must be exactly one document on the result port" type="count" min="1" max="1"/>
-        <x:expect label="The documents base URI should not place the document in the `unzipped-basedir` directory" type="xpath" test="substring(base-uri(/*), 1, string-length(replace($temp-dir,'//+','/')))"
-            equals="replace($temp-dir,'//+','/')" xfail="true"/>
-        <x:expect label="The contents of the OPF should be base64 encoded" type="compare">
-            <x:document xml:space="preserve" type="inline">
-<c:data name="EPUB/package.opf" content-type="application/octet-stream" encoding="base64">77u/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4NCjxwYWNrYWdlIHhtbG5z
-PSJodHRwOi8vd3d3LmlkcGYub3JnLzIwMDcvb3BmIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3Jn
-L2RjL2VsZW1lbnRzLzEuMS8iIHByZWZpeD0ibm9yZGljOiBodHRwOi8vd3d3Lm10bS5zZS9lcHVi
-LyIgdW5pcXVlLWlkZW50aWZpZXI9InB1Yi1pZGVudGlmaWVyIiB2ZXJzaW9uPSIzLjAiPg0KPG1l
-dGFkYXRhPg0KPGRjOnRpdGxlIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJt
-cy8iPk11c3RhIHR1bnR1dSBwdW5haXNlbHRhLCBrdXZhdGFpdGVlbGxpbmVuIHRvaW1pbnRhIHZh
-cmhhaXNpw6Rzc8OkPC9kYzp0aXRsZT4NCjxkYzppZGVudGlmaWVyIGlkPSJwdWItaWRlbnRpZmll
-ciI+MzI0MTIzPC9kYzppZGVudGlmaWVyPg0KPGRjOmxhbmd1YWdlIHhtbG5zOmRjdGVybXM9Imh0
-dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIGlkPSJsYW5ndWFnZV8xIj5maTwvZGM6bGFuZ3VhZ2U+
-DQo8ZGM6Zm9ybWF0IHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIGlk
-PSJmb3JtYXQiPkVQVUIzPC9kYzpmb3JtYXQ+DQo8L21ldGFkYXRhPg0KPG1hbmlmZXN0Pg0KPGl0
-ZW0gaWQ9Iml0ZW1fMiIgaHJlZj0iMzI0MTIzLTAwMS1jb3Zlci54aHRtbCIgbWVkaWEtdHlwZT0i
-YXBwbGljYXRpb24veGh0bWwreG1sIi8+DQo8aXRlbSBpZD0iaXRlbV8zIiBocmVmPSIzMjQxMjMt
-MDAyLWZyb250bWF0dGVyLnhodG1sIiBtZWRpYS10eXBlPSJhcHBsaWNhdGlvbi94aHRtbCt4bWwi
-Lz4NCjwvbWFuaWZlc3Q+DQo8c3BpbmU+DQo8aXRlbXJlZiBpZHJlZj0iaXRlbV8yIiBsaW5lYXI9
-Im5vIi8+DQo8aXRlbXJlZiBpZHJlZj0iaXRlbV8zIiBsaW5lYXI9InllcyIvPg0KPC9zcGluZT4N
-CjwvcGFja2FnZT4NCg==
-</c:data>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline" base-uri="temp-dir">
+                <d:fileset>
+                    <d:file href="store-to-disk/EPUB/324123-001-cover.xhtml"
+                            original-href="store-to-disk/EPUB/324123-001-cover.xhtml"/>
+                    <d:file href="store-to-disk/EPUB/324123-002-frontmatter.xhtml"
+                            original-href="store-to-disk/EPUB/324123-002-frontmatter.xhtml"/>
+                    <d:file href="store-to-disk/EPUB/css/accessibility.css"
+                            original-href="store-to-disk/EPUB/css/accessibility.css"/>
+                    <d:file href="store-to-disk/EPUB/images/Thumbs.db"
+                            original-href="store-to-disk/EPUB/images/Thumbs.db"/>
+                    <d:file href="store-to-disk/EPUB/images/image.png"
+                            original-href="store-to-disk/EPUB/images/image.png"/>
+                    <d:file href="store-to-disk/EPUB/nav.xhtml"
+                            original-href="store-to-disk/EPUB/nav.xhtml"/>
+                    <d:file href="store-to-disk/EPUB/package.opf"
+                            original-href="store-to-disk/EPUB/package.opf"/>
+                    <d:file href="store-to-disk/META-INF/container.xml"
+                            original-href="store-to-disk/META-INF/container.xml"/>
+                    <d:file href="store-to-disk/mimetype"
+                            original-href="store-to-disk/mimetype"/>
+                </d:fileset>
             </x:document>
         </x:expect>
-
-        <x:context label="the fileset port">
-            <x:document type="port" port="fileset"/>
-        </x:context>
-        <x:expect label="There must be exactly 1 file in the fileset" type="xpath" test="count(/*/*)" equals="1"/>
-        <x:expect label="The file 'package.opf' must exist in the fileset" type="xpath" test="/*/*/@href" equals="'package.opf'"/>
-
         <x:context label="the output directory">
-            <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>
+            <x:document type="directory" base-uri="temp-dir" href="store-to-disk/" recursive="true" ordered="true"/>
         </x:context>
-        <x:expect label="There should be no files in the output directory" type="xpath" test="count(/*/*)" equals="0"/>
+        <x:expect label="should be as expected" type="compare">
+            <x:document type="inline">
+                <c:directory name="store-to-disk">
+                    <c:directory name="EPUB">
+                        <c:file name="324123-001-cover.xhtml"/>
+                        <c:file name="324123-002-frontmatter.xhtml"/>
+                        <c:directory name="css">
+                            <c:file name="accessibility.css"/>
+                        </c:directory>
+                        <c:directory name="images">
+                            <c:file name="Thumbs.db"/>
+                            <c:file name="image.png"/>
+                        </c:directory>
+                        <c:file name="nav.xhtml"/>
+                        <c:file name="package.opf"/>
+                    </c:directory>
+                    <c:directory name="META-INF">
+                        <c:file name="container.xml"/>
+                    </c:directory>
+                    <c:file name="mimetype"/>
+                </c:directory>
+            </x:document>
+        </x:expect>
     </x:scenario>
 
-    <x:scenario label="Scenario for testing px:fileset-unzip">
+    <x:scenario label="store-to-disk without unzipped-basedir">
         <x:call step="px:fileset-unzip">
-            <x:option name="href" select="resolve-uri('samples/test.epub', base-uri(.))"/>
-            <x:option name="load-to-memory" select="'false'"/>
-            <x:option name="store-to-disk" select="'true'"/>
+            <x:option name="href" select="resolve-uri('samples/test.epub',base-uri(.))"/>
+            <x:option name="store-to-disk" select="true()"/>
         </x:call>
-
         <x:context label="the errors">
             <x:document type="errors"/>
         </x:context>
