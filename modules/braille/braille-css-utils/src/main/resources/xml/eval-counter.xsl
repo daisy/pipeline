@@ -70,7 +70,7 @@
                 <xsl:if test="exists($text-with-text-transform)">
                     <xsl:variable name="text" as="xs:string" select="$text-with-text-transform[1]"/>
                     <xsl:variable name="text-transform" as="xs:string" select="($text-with-text-transform[2],'auto')[1]"/>
-                    <css:box type="inline" xml:lang="" css:text-transform="{$text-transform}">
+                    <css:box type="inline" css:text-transform="{$text-transform}">
                         <xsl:if test="@target">
                             <xsl:attribute name="css:anchor" select="@target"/>
                         </xsl:if>

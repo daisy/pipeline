@@ -25,12 +25,12 @@
             or if the element has one or more css:* attributes or if it's the document element,
             renamed to css:_. For such elements, the inherited properties (specified in the
             element's style attribute) are moved to the next preserved descendant box, and 'inherit'
-            values on the next preserved descendant box are concretized. xml:lang attributes are
-            moved to the next preserved descendant box as well. css:_ elements are retained. All
-            adjacent nodes that are not boxes or css:_ elements containing a box and that are not
-            already contained in an inline box are wrapped into an anonymous one, unless they are
-            all white space nodes or empty css:_ elements. Additional anonymous inline boxes are
-            created in order to ensure that all block boxes have at least one descendant box.
+            values on the next preserved descendant box are concretized. css:_ elements are
+            retained. All adjacent nodes that are not boxes or css:_ elements containing a box and
+            that are not already contained in an inline box are wrapped into an anonymous one,
+            unless they are all white space nodes or empty css:_ elements. Additional anonymous
+            inline boxes are created in order to ensure that all block boxes have at least one
+            descendant box.
         </p:documentation>
     </p:output>
     

@@ -46,7 +46,7 @@
             get an css:anchor attribute that matches the css:id attribute of the the
             pseudo-element. Style attributes are added in the output in such a way that for each
             element, its computed style at the output is equal to its computed style in the
-            input. Similarly, xml:lang attributes are added to the elements.</p>
+            input.</p>
         </p:documentation>
         <p:pipe step="result" port="secondary"/>
     </p:output>

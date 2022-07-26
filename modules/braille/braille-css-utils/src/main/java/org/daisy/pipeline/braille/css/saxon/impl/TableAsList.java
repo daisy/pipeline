@@ -22,7 +22,6 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.XMLConstants;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
@@ -64,7 +63,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 
 	private static final QName _STYLE = new QName("style");
 	private static final QName _ID = new QName("id");
-	private static final QName XML_LANG = new QName(XMLConstants.XML_NS_URI, "lang", XMLConstants.XML_NS_PREFIX);
 
 	private static final String XMLNS_HTML = "http://www.w3.org/1999/xhtml";
 	private static final String XMLNS_DTB = "http://www.daisy.org/z3986/2005/dtbook/";
@@ -135,7 +133,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 			int col = 1;
 			String namespace = null;
 			Deque<SimpleInlineStyle> inheritedStyle = new LinkedList<>();
-			Deque<String> inheritedLang = new LinkedList<>();
 			while (reader.hasNext()) {
 				switch (reader.next()) {
 					case START_ELEMENT: {
@@ -170,12 +167,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 							// FIXME: We assume that not both a tbody/thead/tfoot and a child tr have a text-transform property,
 							// because two text-transform properties can not always simply be replaced with a single one.
 							inheritedStyle.push(new SimpleInlineStyle(style, inheritedStyle.isEmpty() ? null : inheritedStyle.peek()));
-							String lang = null; {
-								for (int i = 0; i < reader.getAttributeCount(); i++) {
-									if (XML_LANG.equals(reader.getAttributeName(i))) {
-										lang = reader.getAttributeValue(i);
-										break; }}}
-							inheritedLang.push(lang != null ? lang : inheritedLang.isEmpty() ? null : inheritedLang.peek());
 							break; }
 						else if (isHTMLorDTBookElement(COLGROUP, name) || isHTMLorDTBookElement(COL, name))
 							throw new RuntimeException("Elements colgroup and col not supported yet.");
@@ -197,7 +188,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 										style = reader.getAttributeValue(i);
 										break; }}}
 							withinCell.style = new SimpleInlineStyle(style, inheritedStyle.isEmpty() ? null : inheritedStyle.peek());
-							withinCell.lang = inheritedLang.isEmpty() ? null : inheritedLang.peek();
 							writeActions = withinCell.content; }
 						else {
 							if (withinCell != null) {
@@ -352,12 +342,10 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 						    || isHTMLorDTBookElement(TFOOT, name)
 						    || isHTMLorDTBookElement(TBODY, name)) {
 							inheritedStyle.pop();
-							inheritedLang.pop();
 							rowGroup++;
 							break; }
 						else if (isHTMLorDTBookElement(TR, name)) {
 							inheritedStyle.pop();
-							inheritedLang.pop();
 							row++;
 							col = 1;
 							while (isCovered(row, col)) col++;
@@ -1238,7 +1226,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 		int colspan = 1;
 		String ns;
 		SimpleInlineStyle style = null;
-		String lang = null;
 		List<WriterEvent> content = new ArrayList<WriterEvent>();
 
 		private AtomicReference<Boolean> written = new AtomicReference<Boolean>(false);
@@ -1262,8 +1249,6 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 					s.append(it.next());
 					if (it.hasNext()) s.append(" "); }
 				writeAttribute(writer, _HEADERS, s.toString()); }
-			if (lang != null)
-				writeAttribute(writer, XML_LANG, lang);
 			if (style != null) {
 				String styleAttr = BrailleCssSerializer.toString(style);
 				if (styleAttr != null && !"".equals(styleAttr))

@@ -14,9 +14,9 @@ import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
+import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.TransformProvider;
-import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.ops4j.pax.exam.util.PathUtils;
 

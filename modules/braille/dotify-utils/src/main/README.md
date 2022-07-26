@@ -18,6 +18,10 @@
 
   Dotify based braille translator, see [user documentation](../../doc/)
 
+- [`(hyphenator:dotify)`](java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.java)
+  
+  Dotify based hyphenator, see [user documentation](../../doc/)
+
 ## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
 - [`{http://www.daisy.org/ns/pipeline/xproc/internal}obfl-to-pef`](java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java)

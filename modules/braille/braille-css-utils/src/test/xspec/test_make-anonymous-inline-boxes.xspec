@@ -144,23 +144,4 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_06">
-    <x:context>
-      <css:box type="inline" xml:lang="en">
-        <css:box type="block">
-          ⠤⠤⠤
-        </css:box>
-      </css:box>
-    </x:context>
-    <x:expect label="result">
-      <css:_>
-        <css:box type="block" xml:lang="en">
-          <css:box type="inline">
-          ⠤⠤⠤
-        </css:box>
-        </css:box>
-      </css:_>
-    </x:expect>
-  </x:scenario>
-  
 </x:description>

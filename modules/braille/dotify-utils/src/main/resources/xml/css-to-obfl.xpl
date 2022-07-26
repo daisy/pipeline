@@ -18,12 +18,7 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:option name="document-locale" select="'und'">
-      <!--
-          This option exists in case a xml:lang attribute on the root element is not present, but
-          language information is available e.g. from "dc:language" meta data.
-      -->
-    </p:option>
+    <p:option name="document-locale" select="'und'"/>
     <p:option name="text-transform" select="''"/>
     <p:option name="braille-charset" select="''"/>
     <p:option name="page-width" select="'40'"/>

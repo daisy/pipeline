@@ -10,14 +10,12 @@
 	<xsl:param name="text-transform"/>
 	
 	<xsl:template match="css:block">
-		<xsl:variable name="text" as="text()*" select=".//text()"/>
+		<xsl:variable name="text" as="text()*" select="//text()"/>
 		<xsl:variable name="style" as="xs:string*">
 			<xsl:apply-templates mode="style"/>
 		</xsl:variable>
-		<xsl:variable name="lang" as="xs:string*"
-		              select="for $t in .//text() return ($t/ancestor::*[@xml:lang][1]/string(@xml:lang),'und')[1]"/>
 		<xsl:apply-templates select="node()[1]" mode="treewalk">
-			<xsl:with-param name="new-text-nodes" select="pf:text-transform($text-transform, $text, $style, $lang)"/>
+			<xsl:with-param name="new-text-nodes" select="pf:text-transform($text-transform, $text, $style)"/>
 		</xsl:apply-templates>
 	</xsl:template>
 	

@@ -75,6 +75,12 @@
     the math code used is Marburg. If the locale is "nl" the math code
     used is the Woluwe code.
 
+## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
+
+- [`{http://liblouis.org/liblouis}hyphenate`](java/org/daisy/pipeline/braille/liblouis/saxon/impl/HyphenateDefinition.java)
+
+  Hyphenate a text string using Liblouis, see [XSLT documentation](resources/xml/library.xsl)
+
 ## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
 
 - [`{http://liblouis.org/liblouis}translate-file`](java/org/daisy/pipeline/braille/liblouis/calabash/impl/TranslateFileStep.java)
@@ -91,5 +97,6 @@
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/liblouis/impl/LiblouisCSSStyledDocumentTransform.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/liblouis/impl/LiblouisHyphenatorJnaImplProvider.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/liblouis/impl/LiblouisMathMLTransform.java"/>
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/liblouis/saxon/impl/HyphenateDefinition.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/liblouis/calabash/impl/TranslateFileStep.java"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>

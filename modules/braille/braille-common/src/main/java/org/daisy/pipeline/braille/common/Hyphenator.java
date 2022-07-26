@@ -1,30 +1,23 @@
 package org.daisy.pipeline.braille.common;
 
-import java.util.Locale;
-
-import org.daisy.pipeline.braille.css.CSSStyledText;
-
 /**
- * Hyphenation means morphological breaking within <em>words</em>. However this class is
- * not only responsible for providing hyphenation opportunities, but all soft wrap
- * opportunities (including but not restricted to those defined by the Unicode line
- * breaking rules [UAX14]).
+ * Hyphenating means breaking within words.
  */
 public interface Hyphenator extends Transform {
 	
 	/**
-	 * Indicate all soft wrap opportunities by inserting soft hyphens and zero width
-	 * spaces. Don't add new soft wrap opportunities to words that already have a soft
-	 * hyphen or zero width space in them. Soft wrap opportunities at white space may also
-	 * be omitted. Apart from the insertion of these special characters no other
-	 * transformations are allowed. This means that non-standard hyphenation can not be
-	 * supported through this interface.
+	 * Hyphenate by inserting soft hyphens and zero width spaces in order to indicate all
+	 * the break opportunities within words. Don't add new break opportunities to words
+	 * that already have a soft hyphen or zero width space it them. Apart from the
+	 * insertion of these special characters no other transformations are allowed. This
+	 * means that non-standard hyphenation can not be supported through this interface.
 	 */
 	public FullHyphenator asFullHyphenator() throws UnsupportedOperationException;
 	
 	/**
-	 * Break the input into lines of a preferred and maximal length. Transformations such
-	 * as non-standard hyphenation are allowed.
+	 * Hyphenate by breaking an input into lines of a preferred and maximal
+	 * length. Transformations such as non-standard hyphenation are
+	 * allowed.
 	 */
 	public LineBreaker asLineBreaker() throws UnsupportedOperationException;
 	
@@ -34,7 +27,8 @@ public interface Hyphenator extends Transform {
 	
 	public interface FullHyphenator {
 		
-		public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> text) throws NonStandardHyphenationException;
+		public String transform(String text) throws NonStandardHyphenationException;
+		public String[] transform(String[] text) throws NonStandardHyphenationException;
 		
 	}
 	
@@ -44,7 +38,7 @@ public interface Hyphenator extends Transform {
 	
 	public interface LineBreaker {
 		
-		public LineIterator transform(String input, Locale language);
+		public LineIterator transform(String input);
 		
 	}
 	

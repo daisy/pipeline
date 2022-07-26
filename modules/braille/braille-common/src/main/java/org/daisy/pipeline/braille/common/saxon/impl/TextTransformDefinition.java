@@ -1,7 +1,9 @@
 package org.daisy.pipeline.braille.common.saxon.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -18,10 +20,9 @@ import net.sf.saxon.value.StringValue;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
+import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
-import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -97,8 +98,10 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 							List<String> lang = sequenceToList(arguments[3]);
 							if (lang.size() != text.size())
 								throw new XPathException("Lengths of text and lang sequences must match");
-							for (int i = 0; i < text.size(); i++)
-								styledText.add(new CSSStyledText(text.get(i), style.get(i), parseLocale(lang.get(i)))); }
+							for (int i = 0; i < text.size(); i++) {
+								Map<String,String> attrs = new HashMap<String,String>();
+								attrs.put("lang", lang.get(i));
+								styledText.add(new CSSStyledText(text.get(i), style.get(i), attrs)); }}
 						else
 							for (int i = 0; i < text.size(); i++)
 								styledText.add(new CSSStyledText(text.get(i), style.get(i))); }

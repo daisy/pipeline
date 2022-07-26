@@ -83,6 +83,23 @@ can be selected using a transformer query that contains
 
 No other features are allowed.
 
+# Dotify based hyphenation
+
+Dotify based
+[hyphenators](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#hyphenation)
+can be selected using a transformer query that contains
+`(hyphenator:dotify)`. Recognized features are:
+
+`hyphenator`
+: Will only match if the value is "dotify".
+
+No other features are allowed.
+
+The document locale is used to select the hyphenator. An automatic
+fallback mechanism is used: if no hyphenator is found for
+language-COUNTRY-variant, then language-COUNTRY is searched, then
+language.
+
 
 [Dotify]: https://github.com/mtmse/dotify.formatter.impl
 [OBFL]: https://mtmse.github.io/obfl/

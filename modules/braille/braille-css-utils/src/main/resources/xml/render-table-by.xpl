@@ -34,8 +34,7 @@
             elements are determined by the '::table-by()', '::list-item' and '::list-header'
             pseudo-elements declared on the table element. Style attributes of th and td elements in
             the output are transformed (or added) in such a way that the computed style in the
-            output equals the computed style of the element in the input. Similarly, xml:lang
-            attributes are added to th and td elements.</p>
+            output equals the computed style of the element in the input.</p>
         </p:documentation>
     </p:output>
     

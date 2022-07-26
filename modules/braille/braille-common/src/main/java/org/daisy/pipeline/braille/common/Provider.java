@@ -16,7 +16,6 @@ import static com.google.common.collect.Iterables.concat;
 import static com.google.common.collect.Iterables.transform;
 
 import org.daisy.pipeline.braille.common.util.Function2;
-import org.daisy.pipeline.braille.common.util.Iterables;
 
 public interface Provider<Q,X> {
 	
@@ -57,7 +56,7 @@ public interface Provider<Q,X> {
 		public static <Q,X> MemoizingProvider<Q,X> memoize(final Provider<Q,X> provider) {
 			return new Memoize<Q,X>() {
 				protected Iterable<X> _get(Q query) {
-					return Iterables.memoize(provider.get(query));
+					return provider.get(query);
 				}
 			};
 		}
@@ -65,7 +64,7 @@ public interface Provider<Q,X> {
 		public static abstract class Memoize<Q,X> extends Memoizing.util.AbstractMemoizing<Q,Iterable<X>> implements MemoizingProvider<Q,X> {
 			protected abstract Iterable<X> _get(Q query);
 			public final Iterable<X> get(Q query) {
-				return apply(query);
+				return _get(query);
 			}
 			protected final Iterable<X> _apply(Q query) {
 				return _get(query);

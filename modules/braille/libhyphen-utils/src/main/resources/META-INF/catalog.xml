@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri name="http://www.daisy.org/pipeline/modules/braille/libhyphen-utils/library.xsl" uri="../xml/library.xsl"/>
   <uri name="http://www.libreoffice.org/dictionaries/hyphen/" uri="../tables/"
        px:content-type="libhyphen-tables" px:id="libreoffice-hyphen-tables"/>
 </catalog>

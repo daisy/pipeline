@@ -150,9 +150,6 @@
         </px:apply-stylesheets>
     </p:group>
     
-    <!-- copy @lang attributes as @xml:lang -->
-    <p:label-elements match="*[@lang]" attribute="xml:lang" label="@lang" replace="false"/>
-    
     <p:viewport match="math:math" px:progress=".10" px:message="Transforming MathML">
         <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]">
             <p:pipe step="html" port="result"/>
@@ -170,9 +167,7 @@
     </p:viewport>
     
     <p:choose name="transform" px:progress=".76">
-        <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]">
-            <p:pipe step="html" port="result"/>
-        </p:variable>
+        <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]"/>
         <p:variable name="locale-query" select="concat('(document-locale:',$lang,')')"/>
         <p:when test="$include-obfl='true'">
             <p:output port="pef" primary="true" sequence="true"/>

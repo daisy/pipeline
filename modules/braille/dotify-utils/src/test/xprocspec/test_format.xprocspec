@@ -17,7 +17,6 @@
       <p:output port="obfl" sequence="false">
         <p:pipe step="obfl-final" port="result"/>
       </p:output>
-      <p:option name="document-locale" select="'und'"/>
       <p:option name="text-transform" select="'(input:braille)'"/>
       <p:option name="braille-charset" select="''"/>
       <p:option name="skip-margin-top-of-page" select="'false'"/>
@@ -26,8 +25,7 @@
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
-                       duplex="true">
-        <p:with-option name="document-locale" select="$document-locale"/>
+                       duplex="true" document-locale="und">
         <p:with-option name="text-transform" select="$text-transform"/>
         <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
@@ -2107,13 +2105,13 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block><span translate="" xml:lang="">1. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">2. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">i. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">ii. </span>⠤⠤⠤ </block>
+            <block><span translate="">1. </span>⠤⠤⠤ </block>
+            <block><span translate="">2. </span>⠤⠤⠤ </block>
+            <block><span translate="">i. </span>⠤⠤⠤ </block>
+            <block><span translate="">ii. </span>⠤⠤⠤ </block>
             <block>⠶ ⠤⠤⠤ </block>
             <block>⠶ ⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">3. </span>⠤⠤⠤ </block>
+            <block><span translate="">3. </span>⠤⠤⠤ </block>
           </sequence>
         </obfl>
       </x:document>
@@ -2760,7 +2758,7 @@
   
   <x:scenario label="test_25">
     <x:documentation>
-      Tests pre-hyphenated text.
+      Tests (pre-)hyphenation.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -3989,8 +3987,8 @@
   
   <x:scenario label="test_41">
     <x:documentation>
-      Tests hyphens:none and text-transform. hyphens:none is currently handled with a style
-      element. text-transform is handled with a style element and/or translate attributes.
+      Tests hyphens:none, text-transform. hyphens:none is currently handled in XSLT (not in
+      Dotify). text-transform is handled in Dotify.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -6357,9 +6355,9 @@
                 <tbody>
                   <tr>
                     <td>
-                      <block><span xml:lang="" translate="">1.</span></block>
-                      <block><span xml:lang="" translate="">2.</span></block>
-                      <block><span xml:lang="" translate="">3.</span></block>
+                      <block><span translate="">1.</span></block>
+                      <block><span translate="">2.</span></block>
+                      <block><span translate="">3.</span></block>
                     </td>
                     <td>⠤⠤⠤</td>
                     <td>⠤⠤⠤</td>
@@ -7040,27 +7038,27 @@
           <collection name="footnotes">
             <item id="a">
               <block translate="pre-translated-text-css">
-                <span xml:lang="" translate="">1</span> ⠿⠿⠿
+                <span translate="">1</span> ⠿⠿⠿
               </block>
             </item>
             <item id="b">
               <block translate="pre-translated-text-css">
-                <span xml:lang="" translate="">2</span> ⠿⠿⠿
+                <span translate="">2</span> ⠿⠿⠿
               </block>
             </item>
             <item id="c">
               <block translate="pre-translated-text-css">
-                <span xml:lang="" translate="">3</span> ⠿⠿⠿
+                <span translate="">3</span> ⠿⠿⠿
               </block>
             </item>
           </collection>
           <sequence master="main">
             <block translate="pre-translated-text-css">
-              ⠤⠤⠤ ⠦<span xml:lang="" translate="">1</span>⠴
+              ⠤⠤⠤ ⠦<span translate="">1</span>⠴
               <anchor item="a"/>
-              ⠤⠤⠤ ⠦<span xml:lang="" translate="">2</span>⠴
+              ⠤⠤⠤ ⠦<span translate="">2</span>⠴
               <anchor item="b"/>
-              ⠤⠤⠤ ⠦<span xml:lang="" translate="">3</span>⠴
+              ⠤⠤⠤ ⠦<span translate="">3</span>⠴
               <anchor item="c"/>
             </block>
           </sequence>
@@ -7283,10 +7281,10 @@
           </layout-master>
           <sequence master="main">
             <block>
-              <block> ⠤⠤⠤ ⠦<span xml:lang="" translate="">1</span>⠴ ⠤⠤⠤ ⠦<span xml:lang="" translate="">2</span>⠴ ⠤⠤⠤ </block>
+              <block> ⠤⠤⠤ ⠦<span translate="">1</span>⠴ ⠤⠤⠤ ⠦<span translate="">2</span>⠴ ⠤⠤⠤ </block>
               <block>
-                <block><span xml:lang="" translate="">1</span> ⠿⠿⠿ </block>
-                <block><span xml:lang="" translate="">2</span> ⠿⠿⠿ </block>
+                <block><span translate="">1</span> ⠿⠿⠿ </block>
+                <block><span translate="">2</span> ⠿⠿⠿ </block>
               </block>
             </block>
           </sequence>
@@ -16475,13 +16473,13 @@
             </pre-content>
           </volume-template>
           <sequence master="master">
-            <block><span xml:lang="">⠈</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠉</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠙</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠛</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠻</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠿</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠿⠈</span> ⠤⠤⠤</block>
+            <block>⠈ ⠤⠤⠤</block>
+            <block>⠉ ⠤⠤⠤</block>
+            <block>⠙ ⠤⠤⠤</block>
+            <block>⠛ ⠤⠤⠤</block>
+            <block>⠻ ⠤⠤⠤</block>
+            <block>⠿ ⠤⠤⠤</block>
+            <block>⠿⠈ ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -16817,167 +16815,6 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_141">
-    <x:documentation>
-      Tests hyphenation during formatting.
-    </x:documentation>
-    <x:call step="dotify:format">
-      <x:input port="source">
-        <x:document type="inline">
-          <doc style="@page { size: 12 30; }">
-            <p style="display: block; hyphens: none">
-              xxxxxx foo-bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: manual">
-              xxxxxx foo-bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: auto">
-              xxxxxx foo-bar xxxxxx
-            </p>
-            <p style="display: block" xml:lang="und">
-              xxxxxx foo-bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: none">
-              xxxxxx foo­bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: manual">
-              xxxxxx foo­bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: auto">
-              xxxxxx foo­bar xxxxxx
-            </p>
-            <p style="display: block" xml:lang="und">
-              xxxxxx foo­bar xxxxxx
-            </p>
-            <p style="display: block; hyphens: none">
-              xxxxxx foobar xxxxxx
-            </p>
-            <p style="display: block; hyphens: manual">
-              xxxxxx foobar xxxxxx
-            </p>
-            <p style="display: block; hyphens: auto">
-              xxxxxx foobar xxxxxx
-            </p>
-            <p style="display: block; hyphens: auto" xml:lang="und">
-              xxxxxx foobar xxxxxx
-            </p>
-          </doc>
-        </x:document>
-      </x:input>
-      <x:option name="document-locale" select="'en'"/>
-      <x:option name="text-transform" select="'(system:ueb)(grade:1)'"/>
-    </x:call>
-    <x:context label="obfl">
-      <x:document type="port" port="obfl"/>
-    </x:context>
-    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
-      <x:document type="inline">
-        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en" hyphenate="false">
-          <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
-            <dp2:style-type>text/css</dp2:style-type>
-          </meta>
-          <layout-master name="a" page-width="12" page-height="30" duplex="true">
-            <default-template>
-              <header/>
-              <footer/>
-            </default-template>
-          </layout-master>
-          <sequence master="a">
-            <block>
-              <style name="hyphens: none">xxxxxx foo-bar xxxxxx</style>
-            </block>
-            <block>
-              xxxxxx foo-bar xxxxxx
-            </block>
-            <block hyphenate="true">
-              xxxxxx foo-bar xxxxxx
-            </block>
-            <block xml:lang="und">
-              xxxxxx foo-bar xxxxxx
-            </block>
-            <block>
-              <style name="hyphens: none">xxxxxx foo­bar xxxxxx</style>
-            </block>
-            <block>
-              xxxxxx foo­bar xxxxxx
-            </block>
-            <block hyphenate="true">
-              xxxxxx foo­bar xxxxxx
-            </block>
-            <block xml:lang="und">
-              xxxxxx foo­bar xxxxxx
-            </block>
-            <block>
-              <style name="hyphens: none">xxxxxx foobar xxxxxx</style>
-            </block>
-            <block>
-              xxxxxx foobar xxxxxx
-            </block>
-            <block hyphenate="true">
-              xxxxxx foobar xxxxxx
-            </block>
-            <block xml:lang="und" hyphenate="true">
-              xxxxxx foobar xxxxxx
-            </block>
-          </sequence>
-        </obfl>
-      </x:document>
-    </x:expect>
-    <x:context label="pef">
-      <x:document type="port" port="result"/>
-    </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
-      <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
-          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <meta>
-              <dc:format>application/x-pef+xml</dc:format>
-            </meta>
-          </head>
-          <body>
-            <volume cols="12" rows="30" rowgap="0" duplex="true">
-              <section>
-                <page>
-                  <!-- foo-bar -->
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <!-- foo­bar -->
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠋⠕⠕⠃⠁⠗</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <!-- foobar -->
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠋⠕⠕⠃⠁⠗</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠋⠕⠕⠃⠁⠗</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
-                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                  <row>⠋⠕⠕⠃⠁⠗</row>
-                  <row>⠭⠭⠭⠭⠭⠭</row>
-                </page>
-              </section>
-            </volume>
-          </body>
-        </pef>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-
   <x:scenario label="test_142">
     <x:documentation>
       Tests that content in top margin is trimmed when needed. (Note that if

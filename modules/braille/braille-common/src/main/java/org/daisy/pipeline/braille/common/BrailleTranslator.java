@@ -1,7 +1,6 @@
 package org.daisy.pipeline.braille.common;
 
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
-import org.daisy.pipeline.braille.css.CSSStyledText;
 
 public interface BrailleTranslator extends Transform {
 	

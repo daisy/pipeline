@@ -18,17 +18,16 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermString;
 
+import org.daisy.dotify.api.table.BrailleConverter;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.braille.css.BrailleCSSProperty.HyphenateCharacter;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
-import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
-import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
-import static org.daisy.pipeline.braille.common.util.Tuple2;
-import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.slf4j.Logger;
 

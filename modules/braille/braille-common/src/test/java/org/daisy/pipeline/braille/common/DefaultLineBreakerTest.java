@@ -1,19 +1,19 @@
 package org.daisy.pipeline.braille.common;
 
 import java.util.ArrayList;
-import static java.util.Collections.singleton;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.daisy.braille.css.SimpleInlineStyle;
-import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
-import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+
+import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
+import org.daisy.pipeline.braille.common.AbstractHyphenator;
+import org.daisy.pipeline.braille.common.CSSStyledText;
+import org.daisy.pipeline.braille.common.BrailleTranslator;
+import org.daisy.pipeline.braille.common.Hyphenator;
 
 public class DefaultLineBreakerTest {
 	
@@ -186,19 +186,18 @@ public class DefaultLineBreakerTest {
 			return fullHyphenator;
 		}
 		
-		private static final FullHyphenator fullHyphenator = new AbstractHyphenator.util.DefaultFullHyphenator() {
-
-			private final static char SHY = '\u00AD';
-			private final static char ZWSP = '\u200B';
-
-			protected boolean isCodePointAware() { return false; }
-			protected boolean isLanguageAdaptive() { return false; }
-		
-			protected byte[] getHyphenationOpportunities(String text, Locale language) throws RuntimeException {
+		private static final FullHyphenator fullHyphenator = new FullHyphenator() {
+			public String transform(String text) {
 				if (text.contains("busstopp"))
 					throw new RuntimeException("text contains non-standard break points");
 				else
-					return extractHyphens(text, false, SHY, ZWSP)._2;
+					return text;
+			}
+			public String[] transform(String[] text) {
+				String[] r = new String[text.length];
+				for (int i = 0; i < r.length; i++)
+					r[i] = transform(text[i]);
+				return r;
 			}
 		};
 		
@@ -208,7 +207,7 @@ public class DefaultLineBreakerTest {
 		}
 		
 		private final LineBreaker lineBreaker = new AbstractHyphenator.util.DefaultLineBreaker() {
-			protected Break breakWord(String word, Locale language, int limit, boolean force) {
+			protected Break breakWord(String word, int limit, boolean force) {
 				if (limit >= 4 && word.equals("busstopp"))
 					return new Break("bussstopp", 4, true);
 				else if (limit >= word.length())
@@ -230,7 +229,6 @@ public class DefaultLineBreakerTest {
 		}
 		
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
-		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
 			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
@@ -258,8 +256,7 @@ public class DefaultLineBreakerTest {
 							pos = end; }
 						else {
 							try {
-								next = hyphenator.asFullHyphenator().transform(
-									singleton(new CSSStyledText(text.substring(pos), HYPHENS_AUTO))).iterator().next().getText();
+								next = hyphenator.asFullHyphenator().transform(text.substring(pos));
 								pos = end; }
 							catch (Exception e) {
 								Matcher m = WORD_SPLITTER.matcher(text.substring(pos));
@@ -276,7 +273,7 @@ public class DefaultLineBreakerTest {
 										else if (available <= 0)
 											break;
 										else {
-											Hyphenator.LineIterator lines = hyphenator.asLineBreaker().transform(word, null);
+											Hyphenator.LineIterator lines = hyphenator.asLineBreaker().transform(word);
 											String line = lines.nextLine(available, force, allowHyphens);
 											if (line.length() == available && lines.lineHasHyphen()) {
 												lines.reset();

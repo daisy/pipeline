@@ -259,10 +259,6 @@
     <!-- Start -->
     <!-- ===== -->
     
-    <xsl:variable name="initial-language" as="xs:string"
-                  select="if (count(distinct-values(for $box in $sections/css:_/css:box return ($box/@xml:lang,$document-locale)[1]))=1)
-                          then (($sections/css:_/css:box)[1]/@xml:lang,$document-locale)[1]
-                          else $document-locale"/>
     <!-- these defaults must match initial values defined in obfl-css-definition.xsl -->
     <xsl:variable name="initial-text-transform" as="xs:string"
                   select="if ($sections/css:_/css:box[not(@css:text-transform='none')])
@@ -293,10 +289,9 @@
         <xsl:call-template name="pf:progress">
             <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
         </xsl:call-template>
-        <obfl version="2011-1">
+        <obfl version="2011-1" xml:lang="{$document-locale}">
             <xsl:variable name="translate" as="xs:string" select="if ($initial-text-transform='none') then 'pre-translated-text-css' else ''"/>
             <xsl:variable name="hyphenate" as="xs:string" select="string($initial-hyphens='auto')"/>
-            <xsl:attribute name="xml:lang" select="$initial-language"/>
             <xsl:attribute name="hyphenate" select="$hyphenate"/>
             <xsl:if test="$translate!=''">
                 <xsl:attribute name="translate" select="$translate"/>
@@ -335,7 +330,6 @@
                 </xsl:if>
             </meta>
             <xsl:call-template name="_start">
-                <xsl:with-param name="language" tunnel="yes" select="$initial-language"/>
                 <xsl:with-param name="text-transform" tunnel="yes" select="$initial-text-transform"/>
                 <xsl:with-param name="braille-charset" tunnel="yes" select="$initial-braille-charset"/>
                 <xsl:with-param name="hyphens" tunnel="yes" select="$initial-hyphens"/>
@@ -990,7 +984,6 @@
     <xsl:template mode="display-obfl-list-of-references"
                   match="css:box[@type='block' and @css:_obfl-list-of-references]">
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@type|
-                                                                       @xml:lang|
                                                                        @css:text-transform|
                                                                        @css:braille-charset|
                                                                        @css:hyphens|
@@ -1009,7 +1002,6 @@
         <xsl:apply-templates mode="assert-nil-attr" select="@css:id"/>
         <xsl:apply-templates mode="#current" select="@* except (@type|
                                                                 @css:id|
-                                                                @xml:lang|
                                                                 @css:text-transform|
                                                                 @css:braille-charset|
                                                                 @css:hyphens|
@@ -1186,23 +1178,16 @@
                   mode="block toc-block"
                   match="css:box[@type='block']"
                   name="insert-text-attributes-and-next-match">
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes" select="()"/>
-        <xsl:variable name="new-language" as="xs:string?">
-            <xsl:apply-templates mode="lang" select="."/>
-        </xsl:variable>
         <xsl:variable name="new-text-transform" as="xs:string?">
             <xsl:apply-templates mode="css:text-transform" select="."/>
         </xsl:variable>
         <xsl:variable name="new-hyphens" as="xs:string?">
             <xsl:apply-templates mode="css:hyphens" select="."/>
         </xsl:variable>
-        <xsl:call-template name="lang">
-            <xsl:with-param name="new-language" select="$new-language"/>
-        </xsl:call-template>
         <xsl:call-template name="obfl:translate">
             <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
         </xsl:call-template>
@@ -1214,10 +1199,8 @@
         <xsl:variable name="pending-hyphenate-character" as="xs:string?"
                       select="(@css:hyphenate-character/string(),$pending-hyphenate-character)[1]"/>
         <xsl:next-match>
-            <xsl:with-param name="language" tunnel="yes" select="($new-language,$language)[1]"/>
             <xsl:with-param name="text-transform" tunnel="yes" select="($new-text-transform,$text-transform)[1]"/>
             <xsl:with-param name="hyphens" tunnel="yes" select="($new-hyphens,$hyphens)[1]"/>
-            <xsl:with-param name="pending-language" tunnel="yes" select="()"/>
             <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
             <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
             <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
@@ -1233,7 +1216,7 @@
                   match="css:box[@type='block']">
         <xsl:apply-templates mode="block-attr"
                              select="@* except (@type|
-                                                @xml:lang|@css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
                                                 @css:line-height|@css:text-align|@css:text-indent|@css:_obfl-right-text-indent|@css:_obfl-underline|
                                                 @css:page-break-inside|@css:margin-top-skip-if-top-of-page|
                                                 @css:padding-top|@css:padding-bottom|@css:padding-left|@css:padding-right|
@@ -1456,9 +1439,8 @@
     
     <xsl:template mode="sequence block"
                   match="css:box[@type='table']">
-        <xsl:apply-templates mode="table-attr"
-                             select="@* except (@type|@css:render-table-by|
-                                                @xml:lang|@css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
+        <xsl:apply-templates mode="table-attr" select="@* except (@type|@css:render-table-by|
+                                                                  @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
         <xsl:variable name="render-table-by" as="xs:string*" select="tokenize(@css:render-table-by,'\s*,\s*')[not(.='')]"/>
         <xsl:variable name="render-table-by" as="xs:string" select="string-join($render-table-by,', ')"/>
         <xsl:if test="not($render-table-by=('',
@@ -1573,7 +1555,7 @@
         </xsl:if>
         <xsl:apply-templates mode="td-attr"
                              select="@* except (@type|
-                                                @xml:lang|@css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character|
                                                 @css:table-header-group|
                                                 @css:table-row-group|
                                                 @css:table-footer-group|
@@ -1597,16 +1579,12 @@
     
     <xsl:template mode="block td toc-entry"
                   match="css:box[@type='inline']">
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
-        <xsl:param name="pending-language" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes" select="()"/>
-        <xsl:variable name="pending-language" as="xs:string?"
-                      select="(@xml:lang/string(),$pending-language)[1]"/>
         <xsl:variable name="pending-text-transform" as="xs:string?"
                       select="(@css:text-transform/string(),$pending-text-transform)[1]"/>
         <xsl:variable name="pending-braille-charset" as="xs:string?"
@@ -1622,14 +1600,13 @@
                                                 @css:id|
                                                 @css:string-set|
                                                 @css:_obfl-marker|
-                                                @xml:lang|@css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
+                                                @css:text-transform|@css:braille-charset|@css:hyphens|@css:hyphenate-character)"/>
         <xsl:for-each-group select="node()" group-adjacent="boolean(
                                                               self::css:box[@type='inline'] or
                                                               self::css:leader)">
             <xsl:choose>
                 <xsl:when test="current-grouping-key()">
                     <xsl:apply-templates mode="#current" select="current-group()">
-                        <xsl:with-param name="pending-language" tunnel="yes" select="$pending-language"/>
                         <xsl:with-param name="pending-text-transform" tunnel="yes" select="$pending-text-transform"/>
                         <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                         <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
@@ -1654,13 +1631,9 @@
                     <xsl:apply-templates mode="#current" select="current-group()"/>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:variable name="new-language" as="xs:string" select="($pending-language,$language)[1]"/>
                     <xsl:variable name="new-text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
                     <xsl:variable name="new-hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
                     <xsl:variable name="attrs" as="attribute()*">
-                        <xsl:call-template name="lang">
-                            <xsl:with-param name="new-language" select="$new-language"/>
-                        </xsl:call-template>
                         <xsl:call-template name="obfl:translate">
                             <xsl:with-param name="new-text-transform" select="$new-text-transform"/>
                         </xsl:call-template>
@@ -1673,12 +1646,10 @@
                             <span>
                                 <xsl:sequence select="$attrs"/>
                                 <xsl:apply-templates mode="span" select="current-group()">
-                                    <xsl:with-param name="pending-language" tunnel="yes" select="()"/>
                                     <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
                                     <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                                     <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
                                     <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
-                                    <xsl:with-param name="language" tunnel="yes" select="$new-language"/>
                                     <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
                                     <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                                 </xsl:apply-templates>
@@ -1686,12 +1657,10 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:apply-templates mode="#current" select="current-group()">
-                                <xsl:with-param name="pending-language" tunnel="yes" select="()"/>
                                 <xsl:with-param name="pending-text-transform" tunnel="yes" select="()"/>
                                 <xsl:with-param name="pending-braille-charset" tunnel="yes" select="$pending-braille-charset"/>
                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="()"/>
                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
-                                <xsl:with-param name="language" tunnel="yes" select="$new-language"/>
                                 <xsl:with-param name="text-transform" tunnel="yes" select="$new-text-transform"/>
                                 <xsl:with-param name="hyphens" tunnel="yes" select="$new-hyphens"/>
                             </xsl:apply-templates>
@@ -1727,11 +1696,6 @@
     <!-- Text attributes -->
     <!-- =============== -->
     
-    <xsl:template mode="lang" match="css:box" as="xs:string?">
-        <xsl:param name="pending-language" as="xs:string?" tunnel="yes" select="()"/>
-        <xsl:sequence select="(@xml:lang/string(),$pending-language)[1]"/>
-    </xsl:template>
-    
     <xsl:template mode="css:text-transform" match="css:box" as="xs:string?">
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:sequence select="(@css:text-transform/string(),$pending-text-transform)[1]"/>
@@ -1742,21 +1706,13 @@
         <xsl:sequence select="(@css:hyphens/string(),$pending-hyphens)[1]"/>
     </xsl:template>
     
-    <xsl:template name="lang" as="attribute(xml:lang)?">
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
-        <xsl:param name="new-language" as="xs:string?"/>
-        <xsl:if test="exists($new-language[not(.=$language)])">
-            <xsl:attribute name="xml:lang" select="$new-language"/>
-        </xsl:if>
-    </xsl:template>
-    
-    <xsl:template name="obfl:hyphenate" as="attribute(hyphenate)?">
+    <xsl:template name="obfl:hyphenate" as="attribute()?"> <!-- @hyphenate? -->
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="new-hyphens" as="xs:string?"/>
         <!--
             'hyphens:auto' corresponds with 'hyphenate="true"'. 'hyphens:manual' corresponds with
-            'hyphenate="false"'. 'hyphens:none' is handled through style elements and text-style
-            attributes.
+            'hyphenate="false"'. For 'hyphens:none' all SHY and ZWSP characters are removed from the
+            text.
         -->
         <xsl:choose>
             <xsl:when test="not(exists($new-hyphens))"/>
@@ -1769,7 +1725,7 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template name="obfl:translate" as="attribute(translate)?">
+    <xsl:template name="obfl:translate" as="attribute()?"> <!-- @translate? -->
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="new-text-transform" as="xs:string?"/>
         <!--
@@ -2304,20 +2260,17 @@
     <xsl:template mode="span block toc-entry"
                   match="css:counter[@target][@name=$page-counters]|
                          css:counter[not(@target)][@name=('volume',$obfl-variables)]">
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
-        <xsl:param name="pending-language" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="inside-span" as="xs:boolean" select="false()"/>
-        <xsl:if test="$pending-language[not(.=$language)]
-                      or ($pending-text-transform[not(.='none')] and $text-transform='none')
+        <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
                       or ($pending-hyphens[not(.='auto')] and $hyphens='auto')">
             <xsl:message terminate="yes">Coding error</xsl:message>
         </xsl:if>
@@ -2429,20 +2382,17 @@
     
     <xsl:template mode="block toc-entry span"
                   match="css:custom-func[@name='-obfl-evaluate'][matches(@arg1,$css:STRING_RE) and not (@arg2)]">
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
-        <xsl:param name="pending-language" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="inside-span" as="xs:boolean" select="false()"/>
-        <xsl:if test="$pending-language[not(.=$language)]
-                      or ($pending-text-transform[not(.='none')] and $text-transform='none')
+        <xsl:if test="($pending-text-transform[not(.='none')] and $text-transform='none')
                       or ($pending-hyphens[not(.='auto')] and $hyphens='auto')">
             <xsl:message terminate="yes">Coding error</xsl:message>
         </xsl:if>
@@ -2661,30 +2611,19 @@
     -->
     <xsl:template name="text">
         <xsl:param name="text" as="xs:string" required="yes"/>
-        <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
-        <xsl:param name="pending-language" as="xs:string?" tunnel="yes"/>
-        <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-braille-charset" as="xs:string?" tunnel="yes"/>
-        <xsl:param name="pending-hyphens" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-hyphenate-character" as="xs:string?" tunnel="yes"/>
         
         <xsl:call-template name="pf:progress">
             <xsl:with-param name="progress" select="concat('1/',$progress-total)"/>
         </xsl:call-template>
 
-        <xsl:if test="$pending-language[not(.=$language)]
-                      or ($pending-text-transform[not(.='none')] and $text-transform='none')
-                      or ($pending-hyphens[not(.='auto')] and $hyphens='auto')">
-            <xsl:message terminate="yes">Coding error</xsl:message>
-        </xsl:if>
-        <xsl:variable name="text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
-        <xsl:variable name="hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
         <xsl:choose>
             <xsl:when test="$white-space=('pre-wrap','pre-line') and matches($text,'\n')">
                 <!--
