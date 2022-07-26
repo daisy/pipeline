@@ -12,13 +12,12 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.14.7</version>
+  <version>1.14.8-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
 
   <properties>
-    <benchmark.version>0.7.2</benchmark.version>
     <calabash.version>1.1.20-p10-98</calabash.version>
     <commons.fileupload.version>1.3.3</commons.fileupload.version>
     <commons.io.version>2.6</commons.io.version>
@@ -30,11 +29,8 @@
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
     <jing.version>20151127.0.1</jing.version>
     <jetty.version>7.6.5.v20120716</jetty.version>
-    <junit.version>4.10</junit.version>
     <logback.version>1.0.11</logback.version>
-    <mockito.version>2.25.1</mockito.version>
     <osgi.version>5.0.0</osgi.version>
-    <powermock.version>2.0.2</powermock.version>
     <restlet.version>2.1-RC6</restlet.version>
     <saxon-he.version>9.8.0.8-1</saxon-he.version>
     <slf4j.version>1.7.32</slf4j.version>
@@ -421,81 +417,6 @@
         <version>${slf4j.version}</version>
       </dependency>
 
-
-      <!-- Third-Party Libraries required by GUI -->
-      <dependency>
-        <groupId>de.jangassen</groupId>
-        <artifactId>nsmenufx</artifactId>
-        <version>2.1.8</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>pegdown</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.libs</groupId>
-        <artifactId>parboiled</artifactId>
-        <version>1.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.parboiled</groupId>
-        <artifactId>parboiled-core</artifactId>
-        <version>1.1.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-analysis</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-tree</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ow2.asm</groupId>
-        <artifactId>asm-util</artifactId>
-        <version>5.0.3</version>
-      </dependency>
-
-
-      <!-- Testing -->
-      <dependency>
-        <groupId>junit</groupId>
-        <artifactId>junit</artifactId>
-        <version>${junit.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.carrotsearch</groupId>
-        <artifactId>junit-benchmarks</artifactId>
-        <version>${benchmark.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.mockito</groupId>
-        <artifactId>mockito-core</artifactId>
-        <version>${mockito.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.powermock</groupId>
-        <artifactId>powermock-module-junit4</artifactId>
-        <version>${powermock.version}</version>
-     </dependency>
-     <dependency>
-        <groupId>org.powermock</groupId>
-        <artifactId>powermock-api-mockito2</artifactId>
-        <version>${powermock.version}</version>
-     </dependency>
-
     </dependencies>
   </dependencyManagement>
-
-  <scm>
-    <tag>v1.14.7</tag>
-  </scm>
 </project>
