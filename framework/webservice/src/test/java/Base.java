@@ -57,7 +57,6 @@ public abstract class Base extends AbstractTest {
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
-			"org.daisy.libs:servlet-api:?",
 			// for some reason logging-activator needs to start before restlet but after jersey-client (clientlib-java-jaxb)
 			"org.daisy.pipeline:logging-activator:?",
 			"org.restlet.osgi:org.restlet:?",

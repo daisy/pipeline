@@ -118,7 +118,6 @@ public class TestMessagesWithDerby extends Base {
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
-			"org.daisy.libs:servlet-api:?",
 			"org.daisy.pipeline:logging-activator:?",
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
