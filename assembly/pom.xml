@@ -761,34 +761,42 @@
                 <dependency>
                   <groupId>de.jangassen</groupId>
                   <artifactId>nsmenufx</artifactId>
+                  <version>2.1.8</version>
                 </dependency>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>pegdown</artifactId>
+                  <version>1.0.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>parboiled</artifactId>
+                  <version>1.0.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-analysis</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-tree</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-util</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.parboiled</groupId>
                   <artifactId>parboiled-core</artifactId>
+                  <version>1.1.7</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
