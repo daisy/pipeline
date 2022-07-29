@@ -445,10 +445,6 @@
                   <artifactId>saxon-he</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>servlet-api</artifactId>
-                </artifactItem>
-                <artifactItem>
                   <groupId>com.google.guava</groupId>
                   <artifactId>guava</artifactId>
                   <!-- FIXME: remove when framework-bom updated -->
@@ -696,42 +692,6 @@
                 <artifactItem>
                   <groupId>org.restlet.osgi</groupId>
                   <artifactId>org.restlet.ext.xml</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.restlet.osgi</groupId>
-                  <artifactId>org.restlet.ext.jetty</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.restlet.osgi</groupId>
-                  <artifactId>org.restlet.ext.ssl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-server</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-ajp</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-util</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-http</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-io</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-continuation</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jsslutils</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
