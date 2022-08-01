@@ -20,7 +20,6 @@
         <exclude>etc/pipeline.properties</exclude>
         <exclude>etc/felix.properties</exclude>
         <exclude>etc/org.apache.felix.fileinstall-modules.cfg</exclude>
-        <exclude>etc/keystore</exclude>
       </excludes>
       <outputDirectory></outputDirectory>
     </fileSet>
