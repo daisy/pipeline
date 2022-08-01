@@ -41,7 +41,8 @@ public class JobBatchResource extends JobsResource{
                 JobsXmlWriter writer = new JobsXmlWriter(
                         jobMan.getJobs(),
                         getJobManager(getStorage().getClientStorage().defaultClient()).getExecutionQueue(),
-                        getRequest().getRootRef().toString());
+                        getRequest().getRootRef().toString(),
+                        getWebSocketRootRef().toString());
                 if (getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }

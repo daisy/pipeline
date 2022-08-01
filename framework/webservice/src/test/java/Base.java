@@ -61,9 +61,16 @@ public abstract class Base extends AbstractTest {
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
+			"org.eclipse.jetty.websocket:javax-websocket-server-impl:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:calabash-adapter:?",
+			// required for javax-websocket-server-impl
+			// (Note that PaxExam tests were already failing before the javax-websocket-server-impl
+			// dependency was added, so I haven't been able to verify whether adding these two
+			// artifacts does the trick.)
+			"javax.transaction:javax.transaction-api:1.3",
+			"javax.enterprise:cdi-api:2.0.SP1",
 		};
 	}
 	

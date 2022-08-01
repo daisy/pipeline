@@ -84,7 +84,8 @@ public class JobsResource extends AuthenticatedResource {
                 JobsXmlWriter writer = new JobsXmlWriter(
                         jobMan.getJobs(),
                         getJobManager(getStorage().getClientStorage().defaultClient()).getExecutionQueue(),
-                        getRequest().getRootRef().toString());
+                        getRequest().getRootRef().toString(),
+                        getWebSocketRootRef().toString());
                 if (getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -191,11 +192,15 @@ public class JobsResource extends AuthenticatedResource {
 
                 // Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
                 // filtering of messages on log level already happens in MessageBus and JobProgressAppender.
-                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
+                JobXmlWriter writer = new JobXmlWriter(job.get(),
+                                                       getRequest().getRootRef().toString(),
+                                                       getWebSocketRootRef().toString());
                 if (job.get().getStatus() == Job.Status.IDLE) {
                         writer.withPriority(getJobPriority(job.get()));
                 }
-                Document jobXml = writer.withScriptDetails().getXmlDocument();
+                Document jobXml = writer.withScriptDetails()
+                                        .withNotificationsAttribute()
+                                        .getXmlDocument();
 
                 // initiate callbacks
                 registerCallbacks(job.get(), doc);
