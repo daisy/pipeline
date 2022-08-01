@@ -5,7 +5,6 @@ import java.util.Collection;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.webservice.xml.QueueXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -38,7 +37,7 @@ public class QueueResource extends AuthenticatedResource {
 
 		setStatus(Status.SUCCESS_OK);
                 Collection<? extends Prioritizable<Job>> jobs=webservice().getJobManager(this.getClient()).getExecutionQueue().asCollection();
-		QueueXmlWriter writer = XmlWriterFactory.createXmlWriterForQueue(jobs);
+		QueueXmlWriter writer = new QueueXmlWriter(jobs);
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
 		logResponse(dom);

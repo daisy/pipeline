@@ -9,7 +9,6 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -82,7 +81,7 @@ public class JobResource extends AuthenticatedResource {
                 }
 
                 setStatus(Status.SUCCESS_OK);
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
+                JobXmlWriter writer = new JobXmlWriter(job.get());
         
                 writer.withFullResults(true);
                 if(this.webservice().getConfiguration().isLocalFS()){

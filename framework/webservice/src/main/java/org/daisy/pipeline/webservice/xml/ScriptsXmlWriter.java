@@ -33,7 +33,7 @@ public class ScriptsXmlWriter {
 		scriptsElm.setAttribute("href", baseUri + Routes.SCRIPTS_ROUTE);
 		
 		for (XProcScript script : scripts) {
-			ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(script);
+			ScriptXmlWriter writer = new ScriptXmlWriter(script);
 			writer.addAsElementChild(scriptsElm);
 		}
 		

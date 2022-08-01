@@ -161,7 +161,7 @@ public class JobXmlWriter {
                         XProcScript script=job.getContext().getScript();
                         //return if no script was loadeded
                         if(script.getDescriptor()!=null){
-                                ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(script);
+                                ScriptXmlWriter writer = new ScriptXmlWriter(script);
                                 writer.addAsElementChild(element);
                         }
                 }

@@ -34,7 +34,7 @@ public class ClientsXmlWriter {
 		Element clientsElm = doc.getDocumentElement();
 		clientsElm.setAttribute("href", baseUri + Routes.CLIENTS_ROUTE);
 		for (Client client : clients) {
-			ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(client);
+			ClientXmlWriter writer = new ClientXmlWriter(client);
 			writer.addAsElementChild(clientsElm);
 		}
 		// for debugging only

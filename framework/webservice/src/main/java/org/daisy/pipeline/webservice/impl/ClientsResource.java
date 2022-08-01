@@ -11,7 +11,6 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.webservice.xml.ClientXmlWriter;
 import org.daisy.pipeline.webservice.xml.ClientsXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlValidator;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -55,7 +54,7 @@ public class ClientsResource extends AdminResource {
     	}
 
     	setStatus(Status.SUCCESS_OK);
-    	ClientsXmlWriter writer = XmlWriterFactory.createXmlWriterForClients(webservice().getStorage().getClientStorage().getAll());
+    	ClientsXmlWriter writer = new ClientsXmlWriter(webservice().getStorage().getClientStorage().getAll());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 
@@ -121,7 +120,7 @@ public class ClientsResource extends AdminResource {
 	    }
 
 	    setStatus(Status.SUCCESS_CREATED);
-	    ClientXmlWriter writer = XmlWriterFactory.createXmlWriterForClient(newClient.get());
+	    ClientXmlWriter writer = new ClientXmlWriter(newClient.get());
 	    DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 	    logResponse(dom);
 	    return dom;

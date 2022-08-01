@@ -20,7 +20,6 @@ import org.daisy.pipeline.webservice.Authenticator;
 import org.daisy.pipeline.webservice.Callback;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +34,7 @@ public class Poster {
 	public static void postMessages(Job job, List<Message> messages, int newerThan, BigDecimal progress, Callback callback) {
 		logger.debug("Posting messages to " + callback.getHref());
 		URI url = callback.getHref();
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+		JobXmlWriter writer = new JobXmlWriter(job);
 		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);
 		Document doc = writer.getXmlDocument();
@@ -45,7 +44,7 @@ public class Poster {
 	public static void postStatusUpdate(Job job, Status status,Callback callback) {
 		logger.debug("Posting status '" + status + "' to " + callback.getHref());
 		URI url = callback.getHref();
-		JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job);
+		JobXmlWriter writer = new JobXmlWriter(job);
 		writer.overwriteStatus(status);
 		Document doc = writer.getXmlDocument();
 		postXml(doc, url, callback.getClient());
