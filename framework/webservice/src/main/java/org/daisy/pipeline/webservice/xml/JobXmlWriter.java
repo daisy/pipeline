@@ -17,6 +17,8 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webservice.Routes;
 
+import org.restlet.Request;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import org.w3c.dom.Element;
 
 public class JobXmlWriter {
         
+        private final String baseUrl;
         private Job job = null;
         private List<Message> messages = null;
         private long messagesNewerThan = -1;
@@ -48,8 +51,15 @@ public class JobXmlWriter {
                     MSG_LEVELS.add(Level.DEBUG);
         }
 
-        public JobXmlWriter(Job job) {
+        /**
+         * @param baseUrl Prefix to be included at the beginning of <code>href</code>
+         *                attributes (the resource paths). Set this to {@link Request#getRootRef()}
+         *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
+         *                absolute paths relative to the domain name.
+         */
+        public JobXmlWriter(Job job, String baseUrl) {
                 this.job = job;
+                this.baseUrl = baseUrl;
         }
 
         public Document getXmlDocument() {
@@ -134,9 +144,8 @@ public class JobXmlWriter {
         
         private void addElementData(Job job, Element element) {
                 Document doc = element.getOwnerDocument();
-                String baseUri = new Routes().getBaseUri();
                 Job.Status status = (this.statusOverWrite==null)?job.getStatus():this.statusOverWrite;
-                String jobHref = baseUri + Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                String jobHref = baseUrl + Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                 
                 element.setAttribute("id", job.getId().toString());
                 element.setAttribute("href", jobHref);
@@ -161,7 +170,7 @@ public class JobXmlWriter {
                         XProcScript script=job.getContext().getScript();
                         //return if no script was loadeded
                         if(script.getDescriptor()!=null){
-                                ScriptXmlWriter writer = new ScriptXmlWriter(script);
+                                ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
                                 writer.addAsElementChild(element);
                         }
                 }
@@ -185,7 +194,7 @@ public class JobXmlWriter {
                 
                 if (job.getStatus() == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL) {
                         Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
-                        String logHref = baseUri + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                        String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                         logElm.setAttribute("href", logHref);
                         element.appendChild(logElm);
                         if(this.fullResult)
@@ -224,9 +233,8 @@ public class JobXmlWriter {
                         return;
                 }
                 Document doc = jobElem.getOwnerDocument();
-                String baseUri = new Routes().getBaseUri();
                 Element resultsElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "results");
-                String resultHref = baseUri + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                String resultHref = baseUrl + Routes.RESULT_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                 resultsElm.setAttribute("href", resultHref);
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);

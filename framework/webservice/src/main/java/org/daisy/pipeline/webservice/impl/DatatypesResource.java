@@ -42,7 +42,9 @@ public class DatatypesResource extends AuthenticatedResource {
                 Iterable<DatatypeService> datatypes = webservice().getDatatypeRegistry().getDatatypes();
                 try {
                         dom = new DomRepresentation(MediaType.APPLICATION_XML,
-                                                    new DatatypesXmlWriter(datatypes).getXmlDocument());
+                                                    new DatatypesXmlWriter(datatypes,
+                                                                           getRequest().getRootRef().toString())
+                                                        .getXmlDocument());
                 } catch (Exception e) {
 
                         setStatus(Status.SERVER_ERROR_INTERNAL);

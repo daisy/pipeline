@@ -67,7 +67,7 @@ public class ScriptResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("Script not found");
 		}
 		setStatus(Status.SUCCESS_OK);
-		ScriptXmlWriter writer = new ScriptXmlWriter(script);
+		ScriptXmlWriter writer = new ScriptXmlWriter(script, getRequest().getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(
 				MediaType.APPLICATION_XML,
 				writer.withDetails().getXmlDocument());

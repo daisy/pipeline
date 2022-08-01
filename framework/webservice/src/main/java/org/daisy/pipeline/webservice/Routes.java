@@ -37,7 +37,6 @@ public class Routes {
 	private static final int PORT=8181;
 	private int portNumber = 0;
 	private String host = "localhost";
-	private String proto="http://";
 
 	public Routes() {
 		readOptions();
@@ -52,9 +51,6 @@ public class Routes {
 	public int getPort() {
 		return portNumber;
 	}
-	public String getBaseUri() {
-		return proto+host + ":" + String.valueOf(portNumber) + path;
-	}
 
 	private void readOptions() {
 		String path = Properties.PATH.get();
@@ -68,9 +64,6 @@ public class Routes {
 		String hostname = Properties.HOST.get();
 		if (hostname != null) {
 			host = hostname;
-		}
-		if (Properties.SSL.get()!=null&&Properties.SSL.get().equalsIgnoreCase("true")){
-			proto="https://";
 		}
 
 		String port = Properties.PORT.get();

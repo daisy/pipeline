@@ -33,17 +33,22 @@ public class PosterCallback extends Callback {
 
 	private final URI url;
 	private final Client client;
+	private final String requestRootUrl;
 	private static Logger logger = LoggerFactory.getLogger(PosterCallback.class.getName());
 
-	public PosterCallback(Job job, CallbackType type, int frequency, URI url, Client client) {
+	/**
+	 * @param requestRootUrl Root URL of the /jobs POST request that declared the callback.
+	 */
+	public PosterCallback(Job job, CallbackType type, int frequency, URI url, Client client, String requestRootUrl) {
 		super(job, type, frequency);
 		this.url = url;
 		this.client = client;
+		this.requestRootUrl = requestRootUrl;
 	}
 
 	public boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress) {
 		logger.debug("Posting messages to " + url);
-		JobXmlWriter writer = new JobXmlWriter(getJob());
+		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);
 		Document doc = writer.getXmlDocument();
@@ -52,7 +57,7 @@ public class PosterCallback extends Callback {
 
 	public boolean postStatusUpdate(Status status) {
 		logger.debug("Posting status '" + status + "' to " + url);
-		JobXmlWriter writer = new JobXmlWriter(getJob());
+		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.overwriteStatus(status);
 		Document doc = writer.getXmlDocument();
 		return postXml(doc, url, client);

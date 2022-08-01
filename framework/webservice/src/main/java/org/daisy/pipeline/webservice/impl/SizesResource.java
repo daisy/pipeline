@@ -33,7 +33,8 @@ public class SizesResource extends AdminResource {
 
 		setStatus(Status.SUCCESS_OK);
 
-		JobsSizeXmlWriter writer = new JobsSizeXmlWriter(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()));
+		JobsSizeXmlWriter writer = new JobsSizeXmlWriter(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()),
+		                                                 getRequest().getRootRef().toString());
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
 		logResponse(dom);

@@ -55,7 +55,7 @@ public class ScriptsResource extends AuthenticatedResource {
     	}		
 		
 		this.setStatus(Status.SUCCESS_OK);
-		ScriptsXmlWriter writer = new ScriptsXmlWriter(scripts);
+		ScriptsXmlWriter writer = new ScriptsXmlWriter(scripts, getRequest().getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		logResponse(dom);

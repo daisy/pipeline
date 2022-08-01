@@ -8,6 +8,8 @@ import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.webservice.Routes;
 
+import org.restlet.Request;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,13 +22,21 @@ import com.google.common.collect.Iterables;
 
 public class ScriptXmlWriter {
 	
+	private final String baseUrl;
 	XProcScript script = null;
 	boolean details = false;
 	private static Logger logger = LoggerFactory.getLogger(ScriptXmlWriter.class.getName());
 
 
-	public ScriptXmlWriter(XProcScript script) {
+	/**
+	 * @param baseUrl Prefix to be included at the beginning of <code>href</code>
+	 *                attributes (the resource paths). Set this to {@link Request#getRootRef()}
+	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
+	 *                absolute paths relative to the domain name.
+	 */
+	public ScriptXmlWriter(XProcScript script, String baseUrl) {
 		this.script = script;
+		this.baseUrl = baseUrl;
 	}
 	
 	public ScriptXmlWriter withDetails() {
@@ -66,8 +76,7 @@ public class ScriptXmlWriter {
 	// element is <script> but it's empty
 	private void addElementData(XProcScript script, Element element) {
 		Document doc = element.getOwnerDocument();
-		String baseUri = new Routes().getBaseUri();
-		String scriptHref = baseUri + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getId());
+		String scriptHref = baseUrl + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getId());
 
 		element.setAttribute("id", script.getDescriptor().getId());
 		element.setAttribute("href", scriptHref);

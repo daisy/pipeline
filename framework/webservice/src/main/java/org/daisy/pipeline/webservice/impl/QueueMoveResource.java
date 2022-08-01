@@ -56,7 +56,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
                 setStatus(Status.SUCCESS_OK);
                 this.move(this.queue,this.job.get().getId());
                 Collection<? extends Prioritizable< Job>> jobs=this.queue.asCollection();
-                QueueXmlWriter writer = new QueueXmlWriter(jobs);
+                QueueXmlWriter writer = new QueueXmlWriter(jobs, getRequest().getRootRef().toString());
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
                 logResponse(dom);

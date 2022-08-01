@@ -81,7 +81,7 @@ public class JobResource extends AuthenticatedResource {
                 }
 
                 setStatus(Status.SUCCESS_OK);
-                JobXmlWriter writer = new JobXmlWriter(job.get());
+                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
         
                 writer.withFullResults(true);
                 if(this.webservice().getConfiguration().isLocalFS()){

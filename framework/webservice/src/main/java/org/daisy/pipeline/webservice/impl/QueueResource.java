@@ -37,7 +37,7 @@ public class QueueResource extends AuthenticatedResource {
 
 		setStatus(Status.SUCCESS_OK);
                 Collection<? extends Prioritizable<Job>> jobs=webservice().getJobManager(this.getClient()).getExecutionQueue().asCollection();
-		QueueXmlWriter writer = new QueueXmlWriter(jobs);
+		QueueXmlWriter writer = new QueueXmlWriter(jobs, getRequest().getRootRef().toString());
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
 		logResponse(dom);
