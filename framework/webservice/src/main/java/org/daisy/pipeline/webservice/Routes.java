@@ -36,6 +36,7 @@ public class Routes {
 	private String path = "/ws";
 	private static final int PORT=8181;
 	private int portNumber = 0;
+	private int webSocketPortNumber = 0;
 	private String host = "localhost";
 
 	public Routes() {
@@ -48,8 +49,17 @@ public class Routes {
 	public String getPath() {
 		return path;
 	}
+	/**
+	 * The port on which the http server should run, or 0 if the port is to be allocated automatically.
+	 */
 	public int getPort() {
 		return portNumber;
+	}
+	/**
+	 * The port on which the websocket server should run, or 0 if the port is to be allocated automatically.
+	 */
+	public int getWebSocketPort() {
+		return webSocketPortNumber;
 	}
 
 	private void readOptions() {
@@ -72,21 +82,37 @@ public class Routes {
 				int portnum = Integer.parseInt(port);
 				if (portnum >= 0 && portnum <= 65535) {
 					portNumber = portnum;
-				}
-				else {
+				} else {
 					logger.error(String.format(
-							"Value specified in option %s (%d) is not valid. Using default value of %d.",
-							Properties.PORT, portnum, portNumber));
+							"Value specified in option %s (%d) is not valid. Automatically allocating a free port.",
+							Properties.PORT, portnum));
 				}
 			} catch (NumberFormatException e) {
 				logger.error(String.format(
-						"Value specified in option %s (%s) is not a valid numeric value. Using default value of %d.",
-						Properties.PORT, port, portNumber));
+						"Value specified in option %s (%s) is not a valid numeric value. Automatically allocating a free port.",
+						Properties.PORT, port));
 			}
 		} else {
 			portNumber =PORT;
 		}
 
+		port = Properties.WEBSOCKET_PORT.get();
+		if (port != null) {
+			try {
+				int portnum = Integer.parseInt(port);
+				if (portnum >= 0 && portnum <= 65535) {
+					webSocketPortNumber = portnum;
+				} else {
+					logger.error(String.format(
+							"Value specified in option %s (%d) is not valid. Automatically allocating a free port.",
+							Properties.WEBSOCKET_PORT, portnum));
+				}
+			} catch (NumberFormatException e) {
+				logger.error(String.format(
+						"Value specified in option %s (%s) is not a valid numeric value. Automatically allocating a free port.",
+						Properties.WEBSOCKET_PORT, port));
+			}
+		}
 	}
 
 

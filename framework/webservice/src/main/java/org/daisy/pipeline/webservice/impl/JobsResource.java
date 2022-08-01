@@ -99,7 +99,8 @@ public class JobsResource extends AuthenticatedResource {
                         jobMan.getJobs(),
                         webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
                                     .getExecutionQueue(),
-                        getRequest().getRootRef().toString());
+                        getRequest().getRootRef().toString(),
+                        getWebSocketRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -199,11 +200,15 @@ public class JobsResource extends AuthenticatedResource {
                 webservice().getStorage().getJobConfigurationStorage()
                     .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
-                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
+                JobXmlWriter writer = new JobXmlWriter(job.get(),
+                                                       getRequest().getRootRef().toString(),
+                                                       getWebSocketRootRef().toString());
                 if (job.get().getStatus() == Job.Status.IDLE) {
                         writer.withPriority(getJobPriority(job.get()));
                 }
-                Document jobXml = writer.withScriptDetails().getXmlDocument();
+                Document jobXml = writer.withScriptDetails()
+                                        .withNotificationsAttribute()
+                                        .getXmlDocument();
 
                 // initiate callbacks
                 registerCallbacks(job.get(), doc);

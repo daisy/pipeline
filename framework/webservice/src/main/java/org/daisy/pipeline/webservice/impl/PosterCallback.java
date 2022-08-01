@@ -48,7 +48,7 @@ public class PosterCallback extends Callback {
 
 	public boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress) {
 		logger.debug("Posting messages to " + url);
-		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
+		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl, "");
 		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);
 		Document doc = writer.getXmlDocument();
@@ -57,7 +57,7 @@ public class PosterCallback extends Callback {
 
 	public boolean postStatusUpdate(Status status) {
 		logger.debug("Posting status '" + status + "' to " + url);
-		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
+		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl, "");
 		writer.overwriteStatus(status);
 		Document doc = writer.getXmlDocument();
 		return postXml(doc, url, client);

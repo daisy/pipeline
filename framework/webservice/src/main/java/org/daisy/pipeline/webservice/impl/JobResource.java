@@ -83,8 +83,10 @@ public class JobResource extends AuthenticatedResource {
                 }
 
                 setStatus(Status.SUCCESS_OK);
-                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
-        
+                JobXmlWriter writer = new JobXmlWriter(job.get(),
+                                                       getRequest().getRootRef().toString(),
+                                                       getWebSocketRootRef().toString());
+                writer.withNotificationsAttribute();
                 writer.withFullResults(true);
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();

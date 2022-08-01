@@ -7,6 +7,7 @@ public enum Properties {
 	AUTHENTICATION("org.daisy.pipeline.ws.authentication"),
 	LOCALFS("org.daisy.pipeline.ws.localfs"),
 	PORT("org.daisy.pipeline.ws.port"),
+	WEBSOCKET_PORT("org.daisy.pipeline.ws.websocket.port"),
 	PATH("org.daisy.pipeline.ws.path"),
 	HOST("org.daisy.pipeline.ws.host"),
 	SSL("org.daisy.pipeline.ws.ssl"),

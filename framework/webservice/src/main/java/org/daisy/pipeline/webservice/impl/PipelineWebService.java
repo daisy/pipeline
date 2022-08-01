@@ -54,7 +54,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
  * The Class PipelineWebService.
  */
 @org.osgi.service.component.annotations.Component(
-    name = "org.daisy.pipeline.webservice",
+    name = "webservice",
     immediate = true
 )
 public class PipelineWebService extends Application {
@@ -64,7 +64,12 @@ public class PipelineWebService extends Application {
         
         public static final String KEY_FILE_NAME="dp2key.txt";
         PipelineWebServiceConfiguration conf = new PipelineWebServiceConfiguration();
-        
+
+        /** The http server **/
+        private Server server;
+        /** The websocket server **/
+        private WebSocketServer websocketServer;
+
         /** The job manager. */
         private JobManagerFactory jobManagerFactory;
 
@@ -143,10 +148,10 @@ public class PipelineWebService extends Application {
                                 routes.getPort()));
                 component = new Component();
                 if (!conf.isSsl()){
-                        component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
+                        server = component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
                         logger.debug("Using HTTP");
                 }else{
-                        Server server = component.getServers().add(Protocol.HTTPS, routes.getHost(),routes.getPort());
+                        server = component.getServers().add(Protocol.HTTPS, routes.getHost(),routes.getPort());
                         server.getContext().getParameters().add("keystorePath",conf.getSslKeystore()); 
                         server.getContext().getParameters().add("keystorePassword",conf.getSslKeystorePassword());
                         server.getContext().getParameters().add("keyPassword",conf.getSslKeyPassword());
@@ -158,6 +163,15 @@ public class PipelineWebService extends Application {
                         component.start();
                         logger.debug("component started");
                         generateStopKey();
+
+                        // start websocket server
+                        websocketServer = new WebSocketServer(this);
+                        try {
+                            websocketServer.start();
+                        } catch (Exception innerException) {
+                            throw new Exception("Failed to start websocket server", innerException);
+                        }
+
                 } catch (Exception e) {
                         logger.error("Shutting down the framework because of:"+e.getMessage());
                         try{
@@ -264,6 +278,20 @@ public class PipelineWebService extends Application {
                 } catch (Exception e) {
                         logger.error("Error stopping the web service:" + e.getMessage());
                 }
+        }
+
+        /**
+         * The port on which the http server is running.
+         */
+        public int getPort() {
+                return server.getActualPort();
+        }
+
+        /**
+         * The port on which the websocket server is running.
+         */
+        public int getWebSocketPort() {
+                return websocketServer.getActualPort();
         }
 
         /**

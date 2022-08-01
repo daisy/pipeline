@@ -42,7 +42,8 @@ public class JobBatchResource extends JobsResource{
                         jobMan.getJobs(),
                         webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
                                     .getExecutionQueue(),
-                        getRequest().getRootRef().toString());
+                        getRequest().getRootRef().toString(),
+                        getWebSocketRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }

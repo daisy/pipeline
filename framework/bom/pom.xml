@@ -28,7 +28,7 @@
     <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
     <jing.version>20151127.0.1</jing.version>
-    <jetty.version>7.6.5.v20120716</jetty.version>
+    <jetty.version>9.4.48.v20220622</jetty.version>
     <logback.version>1.0.11</logback.version>
     <osgi.version>5.0.0</osgi.version>
     <restlet.version>2.1-RC6</restlet.version>
@@ -318,6 +318,13 @@
         <artifactId>servlet-api</artifactId>
         <version>${javax.servlet-api.version}</version>
       </dependency>
+      <!-- FIXME: change javax.servlet-api.version to 3.1.0 -->
+      <!-- FIXME: needed if org.daisy.libs also included? -->
+      <dependency>
+        <groupId>javax.servlet</groupId>
+        <artifactId>javax.servlet-api</artifactId>
+        <version>3.1.0</version>
+      </dependency>
       <dependency>
         <groupId>org.restlet.osgi</groupId>
         <artifactId>org.restlet.ext.jetty</artifactId>
@@ -352,6 +359,57 @@
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-ajp</artifactId>
         <version>${jetty.version}</version>
+      </dependency>
+      <!-- FIXME: not sure if jetty-security is needed -->
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-security</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-servlet</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>javax-websocket-client-impl</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>javax-websocket-server-impl</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-api</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-client</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-common</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-server</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.jetty.websocket</groupId>
+        <artifactId>websocket-servlet</artifactId>
+        <version>${jetty.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.websocket</groupId>
+        <artifactId>javax.websocket-api</artifactId>
+        <version>1.0</version>
       </dependency>
 
 
