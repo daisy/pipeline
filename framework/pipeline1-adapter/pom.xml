@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.15.1</version>
+    <version>1.15.2-SNAPSHOT</version>
     <relativePath>../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>pipeline1-adapter</artifactId>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Pipeline 1 backend</name>

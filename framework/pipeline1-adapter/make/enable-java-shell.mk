@@ -2,10 +2,11 @@ ifneq ($(firstword $(sort $(MAKE_VERSION) 3.82)), 3.82)
 $(error "GNU Make 3.82 is required to run this script")
 endif
 
-ifeq ($(OS),Windows_NT)
+ifneq (,$(findstring Windows,$(OS))$(findstring WINDOWS,$(OS)))
 EVAL_JAVA := $(dir $(lastword $(MAKEFILE_LIST)))bin/windows_amd64/eval-java.exe
 SHELL := $(EVAL_JAVA)
 else
+ifneq ($(patsubst %.exe,%,$(notdir $(SHELL))),eval-java)
 UNAME_S := $(shell uname -s)
 UNAME_P := $(shell uname -m)
 ifeq ($(UNAME_S),Darwin)
@@ -31,6 +32,7 @@ ifneq ($(shell                                                                  
 $(error Failed to compile eval-java.c)
 else
 SHELL := $(EVAL_JAVA)
+endif
 endif
 endif
 

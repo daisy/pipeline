@@ -12,13 +12,12 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.15.1</version>
+  <version>1.15.2</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
 
   <properties>
-    <calabash.version>1.1.20-p17-98-SNAPSHOT</calabash.version>
     <commons.fileupload.version>1.3.3</commons.fileupload.version>
     <commons.io.version>2.6</commons.io.version>
     <eclipse.persistence.version>2.4.2</eclipse.persistence.version>
@@ -133,7 +132,7 @@
       <dependency>
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
-        <version>${calabash.version}</version>
+        <version>1.1.20-p17-98</version>
         <exclusions>
           <exclusion>
             <groupId>org.apache.logging.log4j</groupId>
@@ -410,6 +409,6 @@
   </dependencyManagement>
 
   <scm>
-    <tag>v1.15.1</tag>
+    <tag>v1.15.2</tag>
   </scm>
 </project>
