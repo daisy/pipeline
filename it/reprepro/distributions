@@ -1,7 +1,0 @@
-Origin: Your Name
-Label: Your label
-Suite: testing
-Codename: testing
-Architectures: amd64 i386 source
-Components: main contrib non-free
-Description: Your description
