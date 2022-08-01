@@ -421,6 +421,15 @@ public class JobsResource extends AuthenticatedResource {
          */
         private void registerCallbacks(Job job, Document doc) {
                 NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
+                if (callbacks.getLength() > 0) {
+                        // show deprecation warning in server logs
+                        logger.warn("Deprecated <callback/> element used. Push notifications should be retrieved through websocket connection.");
+                        // show deprecation warning in response header
+                        addWarningHeader(
+                                199,
+                                "\"Deprecated API\": "
+                                + "<callback/> is deprecated, push notifications should be retrieved through websocket connection");
+                }
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
                         CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());

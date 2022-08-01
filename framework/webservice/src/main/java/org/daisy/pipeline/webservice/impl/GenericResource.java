@@ -83,6 +83,15 @@ public abstract class GenericResource extends ServerResource {
 		logger.debug(status.toString());
 	}
 
+	protected void addWarningHeader(int code, String description) {
+		Series<Header> headers = (Series<Header>)getResponse().getAttributes().get(HeaderConstants.ATTRIBUTE_HEADERS);
+		if (headers == null) {
+			headers = new Series<>(Header.class);
+			getResponse().getAttributes().put(HeaderConstants.ATTRIBUTE_HEADERS, headers);
+		}
+		headers.add(new Header("Warning", "" + code + " - " + description));
+	}
+
 	private static boolean shouldEnableCORS = Properties.CORS.get("false").equalsIgnoreCase("true");
 
 	protected void maybeEnableCORS() {
