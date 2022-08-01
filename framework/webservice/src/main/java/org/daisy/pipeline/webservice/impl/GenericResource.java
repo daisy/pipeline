@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import org.daisy.pipeline.webservice.xml.ErrorWriter;
 
 import org.restlet.data.MediaType;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
@@ -20,6 +21,13 @@ public abstract class GenericResource extends ServerResource {
 
 	protected PipelineWebService webservice() {
 		return (PipelineWebService) getApplication();
+	}
+
+	protected Reference getWebSocketRootRef() {
+		Reference websocketRootRef = new Reference(getRequest().getRootRef());
+		websocketRootRef.setScheme("ws");
+		websocketRootRef.setHostPort(webservice().getWebSocketPort());
+		return websocketRootRef;
 	}
 
 	protected Representation getErrorRepresentation(Throwable error){

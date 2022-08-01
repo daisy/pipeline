@@ -37,7 +37,9 @@ public class JobBatchResource extends JobsResource{
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient(),this.batchId);
-                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs(), getRequest().getRootRef().toString());
+                JobsXmlWriter writer = new JobsXmlWriter(jobMan.getJobs(),
+                                                         getRequest().getRootRef().toString(),
+                                                         getWebSocketRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }

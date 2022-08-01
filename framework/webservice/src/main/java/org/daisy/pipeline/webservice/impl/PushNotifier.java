@@ -284,10 +284,11 @@ public class PushNotifier implements CallbackHandler {
 
                 @Override
                 public synchronized void run() {
-                        for (JobId j : finishedJobs) unlistenJob(j);
-                        finishedJobs.clear();
+                        Set<JobId> finishedJobs = new HashSet<>(this.finishedJobs);
+                        this.finishedJobs.clear();
                         postMessages();
                         postStatus();
+                        for (JobId j : finishedJobs) unlistenJob(j);
                 }
 
                 private void postStatus() {
@@ -335,6 +336,7 @@ public class PushNotifier implements CallbackHandler {
                                 // after the first new message event (first event after the callback has
                                 // been registered) has arrived.
                                 JobId job = jobForAccessor.get(accessor);
+                                if (job == null) continue;
                                 List<Callback> callbacks; {
                                         synchronized (PushNotifier.this.callbacks) {
                                                 callbacks = PushNotifier.this.callbacks.get(job);

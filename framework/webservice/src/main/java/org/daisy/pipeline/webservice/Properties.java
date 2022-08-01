@@ -8,6 +8,7 @@ public enum Properties {
 	LOCALFS("org.daisy.pipeline.ws.localfs"),
 	RELEASE_DESCRIPTOR("org.daisy.pipeline.updater.releaseDescriptor"),
 	PORT("org.daisy.pipeline.ws.port"),
+	WEBSOCKET_PORT("org.daisy.pipeline.ws.websocket.port"),
 	PATH("org.daisy.pipeline.ws.path"),
 	HOST("org.daisy.pipeline.ws.host"),
 	SSL("org.daisy.pipeline.ws.ssl"),

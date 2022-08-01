@@ -14,6 +14,7 @@ import org.w3c.dom.Element;
 public class JobsXmlWriter {
 	
 	private final String baseUrl;
+	private final String notificationBaseUrl;
 	Iterable<? extends Job> jobs = null;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
         private boolean localPaths=false; 
@@ -23,10 +24,14 @@ public class JobsXmlWriter {
 	 *                attributes (the resource paths). Set this to {@link Request#getRootRef()}
 	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
 	 *                absolute paths relative to the domain name.
+	 * @param notificationBaseUrl Prefix to be included at the beginning of
+	 *                            <code>notifications</code> attributes. Must be a fully
+	 *                            qualified ws:// URL.
 	 */
-	public JobsXmlWriter(Iterable<? extends Job> jobs, String baseUrl) {
+	public JobsXmlWriter(Iterable<? extends Job> jobs, String baseUrl, String notificationBaseUrl) {
 		this.jobs = jobs;
 		this.baseUrl = baseUrl;
+		this.notificationBaseUrl = notificationBaseUrl;
 	}
 
 
@@ -44,9 +49,10 @@ public class JobsXmlWriter {
 		jobsElm.setAttribute("href", baseUrl + Routes.JOBS_ROUTE);
 		
 		for (Job job : jobs) {
-			JobXmlWriter writer = new JobXmlWriter(job, baseUrl);
+			JobXmlWriter writer = new JobXmlWriter(job, baseUrl, notificationBaseUrl);
                         writer.withFullResults(true);
                         writer.withOnlyPrimaries(true);
+                        writer.withNotificationsAttribute();
                         if(this.localPaths){
                                 writer.withLocalPaths();
                         }

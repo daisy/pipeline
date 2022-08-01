@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.xml.namespace.QName;
 
+import com.google.common.collect.Iterables;
+
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
@@ -28,6 +30,7 @@ import org.w3c.dom.Element;
 public class JobXmlWriter {
         
         private final String baseUrl;
+        private final String notificationBaseUrl;
         private Job job = null;
         private List<Message> messages = null;
         private long messagesNewerThan = -1;
@@ -36,6 +39,7 @@ public class JobXmlWriter {
         private boolean fullResult=false;
         private boolean localPaths=false; 
         private boolean onlyPrimaries=false; 
+        private boolean notificationsAttribute = false;
 
         private Job.Status statusOverWrite = null;
         private int queuePosition = -1;
@@ -56,10 +60,14 @@ public class JobXmlWriter {
          *                attributes (the resource paths). Set this to {@link Request#getRootRef()}
          *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
          *                absolute paths relative to the domain name.
+         * @param notificationBaseUrl Prefix to be included at the beginning of
+         *                            <code>notifications</code> attributes. Must be a fully
+         *                            qualified ws:// URL.
          */
-        public JobXmlWriter(Job job, String baseUrl) {
+        public JobXmlWriter(Job job, String baseUrl, String notificationBaseUrl) {
                 this.job = job;
                 this.baseUrl = baseUrl;
+                this.notificationBaseUrl = notificationBaseUrl;
         }
 
         public Document getXmlDocument() {
@@ -119,6 +127,14 @@ public class JobXmlWriter {
                 return this;
         }
 
+        /**
+         * Include attribute for getting notifications for this job over a websocket.
+         */
+        public JobXmlWriter withNotificationsAttribute() {
+                this.notificationsAttribute = true;
+                return this;
+        }
+
         public void withFullResults(boolean fullResult) {
                 this.fullResult =fullResult;
         }
@@ -145,14 +161,31 @@ public class JobXmlWriter {
         private void addElementData(Job job, Element element) {
                 Document doc = element.getOwnerDocument();
                 Job.Status status = (this.statusOverWrite==null)?job.getStatus():this.statusOverWrite;
-                String jobHref = baseUrl + Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                String jobPath = Routes.JOB_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
                 
                 element.setAttribute("id", job.getId().toString());
-                element.setAttribute("href", jobHref);
+                element.setAttribute("href", baseUrl + jobPath);
                 element.setAttribute("status", status.toString());
                 element.setAttribute("priority", job.getPriority().toString().toLowerCase());
                 if (this.queuePosition != -1){
                         element.setAttribute("queue-position",String.format("%d",this.queuePosition));
+                }
+                if (notificationsAttribute) {
+                        int lastReceivedMessage = -1; {
+                                if (messages != null && messages.size() > 0) {
+                                        Message m = messages.get(messages.size() - 1);
+                                        if (m instanceof ProgressMessage) {
+                                                ProgressMessage p = (ProgressMessage)m;
+                                                while (p != null) {
+                                                        m = p;
+                                                        p = Iterables.getLast(p, null);
+                                                }
+                                        }
+                                        lastReceivedMessage = m.getSequence();
+                                }
+                        }
+                        element.setAttribute("notifications", notificationBaseUrl + jobPath
+                                             + (lastReceivedMessage >= 0 ? ("?msqSeq=" + lastReceivedMessage) : ""));
                 }
 
                 if(!job.getContext().getName().isEmpty()){
