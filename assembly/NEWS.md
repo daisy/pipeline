@@ -1,3 +1,19 @@
+Changes in release v1.14.7
+==========================
+
+### Framework
+
+- Engine optimizations
+
+### Modules
+
+- Improvements to TTS log
+- The `org.daisy.pipeline.tts.log` setting is deprecated. Since v1.14.3 there is a dedicated script option to enable the TTS log.
+- Changes to braille production scripts, see [release notes of braille modules v1.14.8](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1148)
+- Various optimizations
+- Various other improvements and bugfixes
+
+
 Changes in release v1.14.6
 ==========================
 
