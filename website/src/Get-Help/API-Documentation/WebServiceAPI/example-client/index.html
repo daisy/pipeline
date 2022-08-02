@@ -1,0 +1,31 @@
+---
+---
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+	<head>
+		<title>Sample client</title>
+		<script type="text/javascript" src="{{site.baseurl}}/Get-Help/API-Documentation/WebServiceAPI/example-client/client.js"></script>
+	</head>
+	<body>
+		<h1>Sample client</h1>
+		<div>
+			<label for="ws-url">Web service base address:</label>
+			<input type="text" id="ws-url" name="ws-url" value="http://localhost:8181/ws"></input>
+		</div>
+		<div>
+			<label for="clientkey">Client key:</label>
+			<input type="text" id="clientkey" name="clientkey" value="clientid"></input>
+		</div>
+		<div>
+			<label for="clientkey">Client secret:</label>
+			<input type="text" id="clientsecret" name="clientsecret" value="supersecret"></input>
+		</div>
+		<h2>Jobs</h2>
+		<button type="button" id="refresh-button">Refresh</button>
+		<ul id="jobs">
+		</ul>
+		<ol id="messages">
+		</ol>
+	</body>
+</html>
+
