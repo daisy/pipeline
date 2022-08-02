@@ -673,6 +673,10 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>servlet-api</artifactId>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>javax.servlet</groupId>
+                  <artifactId>javax.servlet-api</artifactId>
+                </artifactItem>
                 <!-- Jetty -->
                 <artifactItem>
                   <groupId>org.restlet.osgi</groupId>
@@ -685,6 +689,13 @@
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
                   <artifactId>jetty-continuation</artifactId>
+                <artifactItem>
+                  <groupId>javax.websocket</groupId>
+                  <artifactId>javax.websocket-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-client</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
@@ -696,11 +707,47 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-security</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
                   <artifactId>jetty-server</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-servlet</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
                   <artifactId>jetty-util</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>javax-websocket-client-impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>javax-websocket-server-impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-client</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-common</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-server</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-servlet</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
