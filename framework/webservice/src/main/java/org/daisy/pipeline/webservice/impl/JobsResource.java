@@ -37,7 +37,6 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webservice.Callback;
 import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
@@ -397,27 +396,21 @@ public class JobsResource extends AuthenticatedResource {
                 NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
-                        String href = elm.getAttribute("href");
                         CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
                         String frequency = elm.getAttribute("frequency");
-                        Callback callback = null;
                         int freq = 0;
                         if (frequency.length() > 0) {
                                 freq = Integer.parseInt(frequency);
                         }
-
                         try {
-                                callback = new Callback(newJob.get(), this.getClient(), new URI(href), type, freq);
-                        } catch (URISyntaxException e) {
-                                logger.warn("Cannot create callback: " + e.getMessage());
-                        }
-
-                        if (callback != null) {
-                                CallbackHandler pushNotifier = webservice().getCallbackHandler();
-                                if (pushNotifier == null) {
+                                URI href = new URI(elm.getAttribute("href"));
+                                CallbackHandler handler = webservice().getCallbackHandler();
+                                if (handler == null) {
                                         throw new RuntimeException("No push notifier");
                                 }
-                                pushNotifier.addCallback(callback);
+                                handler.addCallback(new PosterCallback(newJob.get(), type, freq, href, getClient()));
+                        } catch (URISyntaxException e) {
+                                logger.warn("Cannot create callback: " + e.getMessage());
                         }
                 }
                 return newJob;

@@ -73,7 +73,6 @@ public class PushNotifier implements CallbackHandler {
 
         @Activate
         public void init() {
-                logger = LoggerFactory.getLogger(Poster.class.getName());
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.createFor(clientStorage.defaultClient());
                 callbacks = new HashMap<>();
@@ -245,7 +244,7 @@ public class PushNotifier implements CallbackHandler {
                                 if (callbacks != null) {
                                         for (Callback callback : callbacks) {
                                                 if (callback.getType() == CallbackType.STATUS) {
-                                                        Poster.postStatusUpdate(job, holder.status, callback);
+                                                        callback.postStatusUpdate(holder.status);
                                                 }
                                         }
                                 }
@@ -288,7 +287,7 @@ public class PushNotifier implements CallbackHandler {
                                 }
                                 for (Callback callback : callbacks) {
                                         if (callback.getType() == CallbackType.MESSAGES) {
-                                                Poster.postMessages(job, messages, newerThan, progress, callback);
+                                                callback.postMessages(messages, newerThan, progress);
                                         }
                                 }
                         }
