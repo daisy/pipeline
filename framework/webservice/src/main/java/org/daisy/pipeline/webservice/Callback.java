@@ -13,12 +13,17 @@ public abstract class Callback {
 
 	private final CallbackType type;
 	private final Job job;
-	private int frequency = 1;
+	private final int frequency;
+	private final int firstMessage;
 
-	public Callback(Job job, CallbackType type, int frequency) {
+	/**
+	 * @param firstMessage sequence number of the first expected message (0-based).
+	 */
+	public Callback(Job job, CallbackType type, int frequency, int firstMessage) {
 		this.type = type;
 		this.job = job;
 		this.frequency = frequency;
+		this.firstMessage = firstMessage;
 	}
 
 	public Job getJob() {
@@ -31,6 +36,13 @@ public abstract class Callback {
 
 	public int getFrequency() {
 		return frequency;
+	}
+
+	/**
+	 * Sequence number of the first expected message.
+	 */
+	public int getFirstMessage() {
+		return firstMessage;
 	}
 
 	public abstract boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress);

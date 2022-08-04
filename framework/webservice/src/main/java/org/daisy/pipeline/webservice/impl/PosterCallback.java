@@ -40,7 +40,7 @@ public class PosterCallback extends Callback {
 	 * @param requestRootUrl Root URL of the /jobs POST request that declared the callback.
 	 */
 	public PosterCallback(Job job, CallbackType type, int frequency, URI url, Client client, String requestRootUrl) {
-		super(job, type, frequency);
+		super(job, type, frequency, 0);
 		this.url = url;
 		this.client = client;
 		this.requestRootUrl = requestRootUrl;

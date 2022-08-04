@@ -194,7 +194,11 @@ public class JobsResource extends AuthenticatedResource {
                         .add(job.get().getId(),XmlUtils.DOMToString(doc));
 
                 JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
-                Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
+                Document jobXml = writer.withScriptDetails().getXmlDocument();
+
+                // initiate callbacks
+                registerCallbacks(job.get(), doc);
+
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
                 logResponse(dom);
@@ -386,13 +390,17 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 boolean mapping=!webservice().getConfiguration().isLocalFS();
                 //logger.debug("MAPPING "+mapping);
-                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping)
+                return jobMan.newJob(bound).isMapping(mapping)
                         .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
                         .withPriority(priority).withResources(resourceCollection).build();
-                if(!newJob.isPresent()){
-                        return Optional.absent();
-                }
+        }
 
+        /**
+         * Initiate callbacks declared in the job request XML.
+         *
+         * @param doc The job request XML.
+         */
+        private void registerCallbacks(Job job, Document doc) {
                 NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
@@ -408,13 +416,12 @@ public class JobsResource extends AuthenticatedResource {
                                 if (handler == null) {
                                         throw new RuntimeException("No push notifier");
                                 }
-                                handler.addCallback(new PosterCallback(newJob.get(), type, freq, href, getClient(),
+                                handler.addCallback(new PosterCallback(job, type, freq, href, getClient(),
                                                                        getRequest().getRootRef().toString()));
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
                 }
-                return newJob;
         }
 
         /**
