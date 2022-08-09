@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.8-SNAPSHOT</version>
+    <version>1.14.9-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   
   <artifactId>saxon-adapter</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Adapter for Saxon</name>
@@ -20,6 +20,10 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -137,7 +141,7 @@
             </goals>
             <configuration>
               <includes>
-                MyClass$Provider
+                MyClassProvider
               </includes>
             </configuration>
           </execution>

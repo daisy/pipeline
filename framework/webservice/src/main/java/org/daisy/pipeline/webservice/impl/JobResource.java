@@ -72,6 +72,7 @@ public class JobResource extends AuthenticatedResource {
         @Get("xml")
         public Representation getResource() {
                 logRequest();
+                maybeEnableCORS();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -130,6 +131,7 @@ public class JobResource extends AuthenticatedResource {
         @Delete
         public void deleteResource() {
                 logRequest();
+                maybeEnableCORS();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return;

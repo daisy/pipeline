@@ -53,24 +53,6 @@ public class VolatileMessageStorageTest {
 	}
 
 	@Test
-	public void addAndWait() throws InterruptedException {
-		VolatileMessageStorage.setTimeOut(1);
-		storage.add(m1);
-		Thread sleeper=new Thread() {
-			public void run() {
-				try {
-					Thread.sleep(1100);
-				} catch (InterruptedException e) {
-				}
-			}
-
-		};
-		sleeper.start();
-		sleeper.join();
-		Assert.assertEquals(storage.get(jobId).size(), 0);
-
-	}
-	@Test
 	public void addDebug() {
 		storage.add(m3);
 		Assert.assertEquals(0,storage.get(jobId).size());

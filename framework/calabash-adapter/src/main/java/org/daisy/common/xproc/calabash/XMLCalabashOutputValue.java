@@ -1,15 +1,19 @@
 package org.daisy.common.xproc.calabash;
 
+import java.util.function.Consumer;
+
+import com.xmlcalabash.core.XProcRunnable;
 import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.Pipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.Step;
 
+import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 
-import java.util.function.Consumer;
-
 import org.daisy.common.saxon.SaxonOutputValue;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import org.daisy.common.transform.OutputValue;
 import org.daisy.common.transform.TransformerException;
 
@@ -49,6 +53,30 @@ public class XMLCalabashOutputValue extends SaxonOutputValue {
 	 */
 	public Consumer<XdmItem> asXdmItemConsumer() {
 		return super.asXdmItemConsumer();
+	}
+
+	/**
+	 * Lazily write an XML stream.
+	 *
+	 *@param lazyStream may throw a {@link TransformerException}
+	 */
+	@Override
+	public void writeXMLStream(Consumer<BaseURIAwareXMLStreamWriter> lazyStream) throws UnsupportedOperationException {
+		BaseURIAwareXMLStreamWriter writer = asXMLStreamWriter();
+		((Pipe)pipe).onRead(
+			new XProcRunnable() {
+				private boolean done = false;
+				public void run() throws SaxonApiException {
+					if (!done)
+						try {
+							lazyStream.accept(writer);
+						} catch (TransformerException e) {
+							throw new SaxonApiException(e);
+						} finally {
+							done = true;
+						}
+				}
+			});
 	}
 
 	private static WritablePipe createWritablePipe(Consumer<XdmItem> consumer) {

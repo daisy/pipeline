@@ -38,7 +38,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 					InputValue<?> i = input.get(n);
 					if (i instanceof SaxonInputValue) {
 						if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
-							throw new IllegalArgumentException("unexpected value on input port " + n);
+							throw new IllegalArgumentException("unexpected value on input port '" + n + "'");
 						XProcStep.this.setInput(n.getLocalPart(), XMLCalabashInputValue.of(i).asReadablePipe());
 					} else if (i instanceof StringWithNamespaceContext) {
 						XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
@@ -50,7 +50,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 							Map<net.sf.saxon.s9api.QName,RuntimeValue> params
 								= XMLCalabashParameterInputValue.of(i).asRuntimeValueMap();
 							if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
-								throw new IllegalArgumentException("unexpected value on input port " + n);
+								throw new IllegalArgumentException("unexpected value on input port '" + n + "'");
 							for (net.sf.saxon.s9api.QName p : params.keySet())
 								XProcStep.this.setParameter(n.getLocalPart(), p, params.get(p));
 						} catch (IllegalArgumentException e) {
@@ -59,7 +59,7 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 								XProcStep.this.setOption(new net.sf.saxon.s9api.QName(n),
 								                         XMLCalabashOptionValue.of(i).asRuntimeValue());
 							} catch (IllegalArgumentException ee) {
-								throw new IllegalArgumentException("unexpected value on input port " + n);
+								throw new IllegalArgumentException("unexpected value on input port '" + n + "'");
 							}
 						}
 					}
@@ -67,11 +67,11 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 				for (QName n : output.keySet()) {
 					OutputValue<?> o = output.get(n);
 					if (n.getNamespaceURI() != null && !"".equals(n.getNamespaceURI()))
-						throw new IllegalArgumentException("unexpected value on output port " + n);
+						throw new IllegalArgumentException("unexpected value on output port '" + n + "'");
 					try {
 						XProcStep.this.setOutput(n.getLocalPart(), XMLCalabashOutputValue.of(o).asWritablePipe());
 					} catch (IllegalArgumentException e) {
-						throw new IllegalArgumentException("unexpected value on output port " + n);
+						throw new IllegalArgumentException("unexpected value on output port '" + n + "'");
 					}
 				}
 			} catch (IllegalArgumentException e) {

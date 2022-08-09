@@ -4,30 +4,27 @@ import java.util.Map;
 
 import javax.xml.namespace.QName;
 
+import com.google.common.collect.ImmutableMap;
+
 /**
  * {@link XMLTransformer} with one XML input (named "source"), one XML output (named "result"), and
  * a "parameters" port with QName/String pairs.
  */
 public abstract class SingleInSingleOutXMLTransformer implements XMLTransformer {
 
+	private static final QName _SOURCE = new QName("source");
+	private static final QName _RESULT = new QName("result");
+	private static final QName _PARAMETERS = new QName("parameters");
+
 	public Runnable transform(Map<QName,InputValue<?>> input, Map<QName,OutputValue<?>> output) {
-		QName _source = new QName("source");
-		QName _result = new QName("result");
-		QName _parameters = new QName("parameters");
-		for (QName n : input.keySet())
-			if (!n.equals(_source) && !n.equals(_parameters))
-				throw new IllegalArgumentException("unexpected value on input port " + n);
-		for (QName n : output.keySet())
-			if (!n.equals(_result))
-				throw new IllegalArgumentException("unexpected value on output port " + n);
-		InputValue<?> source = input.get(_source);
-		if (source != null && !(source instanceof XMLInputValue))
-			throw new IllegalArgumentException("input on 'source' port is not XML");
-		InputValue<?> params = input.get(_parameters);
-		OutputValue<?> result = output.get(_result);
-		if (result != null && !(result instanceof XMLOutputValue))
-			throw new IllegalArgumentException("output on 'result' port is not XML");
-		return transform((XMLInputValue<?>)source, (XMLOutputValue<?>)result, params);
+		input = XMLTransformer.validateInput(input,
+		                                     ImmutableMap.of(_SOURCE,     InputType.MANDATORY_NODE_SEQUENCE,
+		                                                     _PARAMETERS, InputType.OPTIONAL_ITEM_SEQUENCE));
+		output = XMLTransformer.validateOutput(output,
+		                                       ImmutableMap.of(_RESULT,   OutputType.NODE_SEQUENCE));
+		return transform((XMLInputValue<?>)input.get(_SOURCE),
+		                 (XMLOutputValue<?>)output.get(_RESULT),
+		                 input.get(_PARAMETERS));
 	}
 
 	public abstract Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params);

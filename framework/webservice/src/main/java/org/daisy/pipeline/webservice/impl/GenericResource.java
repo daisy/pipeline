@@ -2,14 +2,18 @@ package org.daisy.pipeline.webservice.impl;
 
 import java.io.StringWriter;
 
+import org.daisy.pipeline.webservice.Properties;
 import org.daisy.pipeline.webservice.xml.ErrorWriter;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
+import org.restlet.engine.header.Header;
+import org.restlet.engine.header.HeaderConstants;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.Request;
 import org.restlet.resource.ServerResource;
+import org.restlet.util.Series;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,5 +73,21 @@ public abstract class GenericResource extends ServerResource {
 
 	private void logStatus(Status status) {
 		logger.debug(status.toString());
+	}
+
+	private static boolean shouldEnableCORS = Properties.CORS.get("false").equalsIgnoreCase("true");
+
+	protected void maybeEnableCORS() {
+		if (shouldEnableCORS)
+			enableCORS("*");
+	}
+
+	private void enableCORS(String domain) {
+		Series<Header> headers = (Series<Header>)getResponse().getAttributes().get(HeaderConstants.ATTRIBUTE_HEADERS);
+		if (headers == null) {
+			headers = new Series<>(Header.class);
+			getResponse().getAttributes().put(HeaderConstants.ATTRIBUTE_HEADERS, headers);
+		}
+		headers.add(new Header("Access-Control-Allow-Origin", domain));
 	}
 }

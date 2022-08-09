@@ -54,6 +54,13 @@ public class XMLOutputValue<V> extends OutputValue<V> {
 	}
 
 	/**
+	 * The purpose of this method is to be overridden by subclasses, e.g. to implement a lazy output.
+	 */
+	public void writeXMLStream(Consumer<BaseURIAwareXMLStreamWriter> stream) throws UnsupportedOperationException {
+		stream.accept(asXMLStreamWriter());
+	}
+
+	/**
 	 * A sequence of XML events, as a {@link XMLEventWriter}.
 	 */
 	public XMLEventWriter asXMLEventWriter() throws UnsupportedOperationException {

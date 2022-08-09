@@ -262,7 +262,12 @@ public class CalabashXProcPipeline implements XProcPipeline {
 							null);
 						// because value might be accessed as string or untyped atomic, e.g. by p:in-scope-names
 						String stringValue = StreamSupport.stream(xdmValue.spliterator(), false)
-						                                  .map(XdmItem::getStringValue)
+						                                  .map(item -> {
+						                                          try {
+						                                              return item.getStringValue(); }
+						                                          catch (UnsupportedOperationException e) {
+						                                              // don't know how to create string value from this item
+						                                              return ""; }})
 						                                  .collect(Collectors.joining(""));
 						value = new RuntimeValue(stringValue, xdmValue, null, null);
 					} else {

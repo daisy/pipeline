@@ -33,6 +33,7 @@ public class JobBatchResource extends JobsResource{
         @Get("xml")
         public Representation getResource() {
                 logRequest();
+                maybeEnableCORS();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;
@@ -51,6 +52,7 @@ public class JobBatchResource extends JobsResource{
         @Delete
         public void deleteResource() {
                 logRequest();
+                maybeEnableCORS();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return;

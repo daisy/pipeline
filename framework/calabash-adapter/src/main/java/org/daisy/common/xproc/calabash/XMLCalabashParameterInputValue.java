@@ -41,6 +41,7 @@ public class XMLCalabashParameterInputValue extends InputValue<Map<QName,XMLCala
 					throw new IllegalArgumentException("unsupported interface for parameter input");
 				name = (QName)k;
 			}
+			// note that XMLCalabash converts parameter values to strings
 			RuntimeValue val; {
 				Object v = map.get(k);
 				if (!(v instanceof InputValue))
