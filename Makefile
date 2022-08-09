@@ -235,11 +235,11 @@ assembly/.install-minimal.zip : | .maven-init .group-eval
 
 .SECONDARY : assembly/.install-mac.zip
 assembly/.install-mac.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac -- --without-osgi --without-gui --without-cli --without-updater --without-persistence)
 
 .SECONDARY : assembly/.install-win.zip
 assembly/.install-win.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
+	+$(call eval-for-host-platform,./assembly-make.sh,zip-win -- --without-osgi --without-gui --without-cli --without-updater --without-persistence)
 
 .SECONDARY : assembly/.install.dmg
 assembly/.install.dmg : | .maven-init .group-eval
