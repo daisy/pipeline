@@ -107,13 +107,21 @@ $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-mac \
                                                                                                                        -Punpack-updater-mac \
-                                                                                                                       -Passemble-mac-zip
+                                                                                                                       -Pbuild-jre-mac
+ifndef DUMP_PROFILES
+	exec("$(MVN)", "install", "-Passemble-mac-zip");
+	exit(new File("$@").exists());
+endif
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip     : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-cli-win \
                                                                                                                        -Punpack-updater-win \
                                                                                                                        -Punpack-updater-gui-win \
-                                                                                                                       -Passemble-win-zip
+                                                                                                                       -Pbuild-jre-win64
+ifndef DUMP_PROFILES
+	exec("$(MVN)", "install", "-Passemble-win-zip");
+	exit(new File("$@").exists());
+endif
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip : mvn -Pcopy-artifacts \
                                                                                                                        -Pgenerate-release-descriptor \
                                                                                                                        -Punpack-updater-mac \
@@ -195,6 +203,7 @@ endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
 dir-word-addin : target/assembly-$(assembly/VERSION)-word-addin
+target/assembly-$(assembly/VERSION)-word-addin : assembly/SOURCES
 target/assembly-$(assembly/VERSION)-word-addin : mvn -Pwithout-osgi \
                                                      -Pwithout-persistence \
                                                      -Pwithout-webservice \
@@ -263,8 +272,6 @@ endif # neq ($(OS), WINDOWS)
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip \
 $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb \
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2 \

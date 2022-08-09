@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/maven-jlink/classifiers/jre-mac</directory>
+      <outputDirectory>jre</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>
+
+
