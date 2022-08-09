@@ -28,7 +28,7 @@
     <javax.persistence.version>2.0.3</javax.persistence.version>
     <javax.servlet-api.version>2.5.0</javax.servlet-api.version>
     <jing.version>20151127.0.1</jing.version>
-    <jetty.version>7.6.5.v20120716</jetty.version>
+    <jetty.version>9.4.41.v20210516</jetty.version>
     <logback.version>1.0.11</logback.version>
     <osgi.version>5.0.0</osgi.version>
     <restlet.version>2.1-RC6</restlet.version>
