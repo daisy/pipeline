@@ -254,13 +254,15 @@ endif
 target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre
 target/maven-jlink/classifiers/jre-linux                               : mvn -Pbuild-jre-linux
 
-target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
+target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pwithout-persistence \
+                                                                             -Pcopy-artifacts \
                                                                              -Pcompile-simple-api \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
-target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
+target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pwithout-persistence \
+                                                                             -Pcopy-artifacts \
                                                                              -Pcompile-simple-api \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
