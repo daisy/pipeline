@@ -175,6 +175,12 @@ pathCanonical() {
 
 locateJava() {
     # Setup the Java Virtual Machine
+
+    # first check if JRE is embedded with Pipeline distribution
+    if [ -x "$DIRNAME/../jre/bin/java" ]; then
+        JAVA=$(pathCanonical "$DIRNAME/../jre/bin/java")
+        JAVA_HOME="$(dirname "$(dirname "$JAVA")")"
+    fi
     if $cygwin ; then
         [ -n "$JAVA" ] && JAVA=`cygpath --unix "$JAVA"`
         [ -n "$JAVA_HOME" ] && JAVA_HOME=`cygpath --unix "$JAVA_HOME"`
@@ -208,7 +214,7 @@ locateJava() {
         fi
     fi
     if [ "x$JAVA_HOME" = "x" ]; then
-        JAVA_HOME="$(dirname $(dirname $(pathCanonical "$JAVA")))"
+        JAVA_HOME="$(dirname "$(dirname "$(pathCanonical "$JAVA")")")"
     fi
 }
 
