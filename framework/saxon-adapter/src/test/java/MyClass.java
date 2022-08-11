@@ -1,3 +1,6 @@
+import java.util.HashMap;
+import java.util.Map;
+
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
 
@@ -28,5 +31,11 @@ public class MyClass {
 
 	public MyClass uppercase() {
 		return new MyClass(value.toUpperCase());
+	}
+
+	public Map<String,MyClass> wrapInMap() {
+		Map<String,MyClass> map = new HashMap<>();
+		map.put("result", this);
+		return map;
 	}
 }

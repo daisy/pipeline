@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.xpath.XPath;
@@ -33,6 +34,7 @@ import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
 import net.sf.saxon.lib.ExtensionFunctionDefinition;
 import net.sf.saxon.ma.arrays.ArrayItem;
+import net.sf.saxon.ma.map.HashTrieMap;
 import net.sf.saxon.ma.map.KeyValuePair;
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.om.Item;
@@ -121,10 +123,9 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			for (Type t : method.getGenericParameterTypes())
 				if (!t.equals(XPath.class) && !t.equals(DocumentBuilder.class))
 					argumentTypes[i++] = sequenceTypeFromType(t);
-			SequenceType resultType = (method instanceof Constructor
-			                           || ((Method)method).getReturnType().equals(declaringClass))
+			SequenceType resultType = method instanceof Constructor
 				? SequenceType.SINGLE_ITEM // special wrapper item
-				: sequenceTypeFromType(((Method)method).getGenericReturnType());
+				: sequenceTypeFromType(((Method)method).getGenericReturnType(), Collections.singleton(declaringClass));
 			return new ExtensionFunctionDefinition() {
 				@Override
 				public SequenceType[] getArgumentTypes() {
@@ -192,12 +193,10 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										throw new RuntimeException(); // should not happen
 									}
 								}
-								if (declaringClass.isInstance(result))
-									return new ObjectValue<>(result);
-								else if (result instanceof Optional)
+								if (result instanceof Optional)
 									return SaxonHelper.sequenceFromObject(((Optional<?>)result).orElse(null));
 								else
-									return SaxonHelper.sequenceFromObject(result);
+									return SaxonHelper.sequenceFromObject(result, Collections.singleton(declaringClass));
 							} catch (RuntimeException e) {
 								throw new XPathException("Unexpected error in " + getFunctionQName().getClarkName(), e);
 							}
@@ -209,7 +208,16 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	private static SequenceType sequenceTypeFromType(Type type) throws IllegalArgumentException {
-		if (type.equals(Void.TYPE))
+		return sequenceTypeFromType(type, null);
+	}
+
+	/**
+	 * @param externalObjectClasses Classes of objects that are wrapped in a XPath value.
+	 */
+	private static SequenceType sequenceTypeFromType(Type type, Set<Class<?>> externalObjectClasses) throws IllegalArgumentException {
+		if (externalObjectClasses != null && externalObjectClasses.contains(type))
+			return SequenceType.SINGLE_ITEM; // special wrapper item
+		else if (type.equals(Void.TYPE))
 			return SequenceType.EMPTY_SEQUENCE;
 		else if (type.equals(String.class))
 			return SequenceType.SINGLE_STRING;
@@ -244,14 +252,14 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					return SequenceType.STRING_SEQUENCE;
 			} else if (rawType.equals(List.class)) {
 				Type itemType = ((ParameterizedType)type).getActualTypeArguments()[0];
-				sequenceTypeFromType(itemType);
-				return SequenceType.SINGLE_ITEM; // SINGLE_ARRAY
+				sequenceTypeFromType(itemType, externalObjectClasses);
+				return ArrayItem.SINGLE_ARRAY_TYPE;
 			} else if (rawType.equals(Map.class)) {
 				Type keyType = ((ParameterizedType)type).getActualTypeArguments()[0];
 				Type valueType = ((ParameterizedType)type).getActualTypeArguments()[1];
 				if (keyType.equals(String.class)) {
-					sequenceTypeFromType(valueType);
-					return SequenceType.SINGLE_ITEM; // SINGLE_MAP
+					sequenceTypeFromType(valueType, externalObjectClasses);
+					return HashTrieMap.SINGLE_MAP_TYPE;
 				}
 			}
 		}
