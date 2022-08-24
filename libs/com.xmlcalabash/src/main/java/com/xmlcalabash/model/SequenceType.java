@@ -32,26 +32,16 @@ public class SequenceType {
 	public static final SequenceType XS_STRING = new SequenceType(XProcConstants.xs_string,
 	                                                              OccurrenceIndicator.ONE);
 
-	private final ItemType itemType;
-	private final OccurrenceIndicator cardinality;
+	private final net.sf.saxon.s9api.SequenceType underlyingType;
 
 	private static Processor proc = null;
 
-	private SequenceType(ItemType itemType, OccurrenceIndicator cardinality) {
-		this.itemType = itemType;
-		this.cardinality = cardinality;
+	private SequenceType(net.sf.saxon.s9api.SequenceType sequenceType) {
+		this.underlyingType = sequenceType;
 	}
 
-	private SequenceType(QName type, OccurrenceIndicator cardinality) {
-		if (proc == null)
-			// doesn't matter if no user-defined types or types that reference element or attributes names are used
-			proc = new Processor(false);
-		try {
-			this.itemType = new ItemTypeFactory(proc).getAtomicType(type);
-			this.cardinality = cardinality;
-		} catch (SaxonApiException e) {
-			throw new IllegalArgumentException("Unsupported type: " + type, e);
-		}
+	private SequenceType(ItemType itemType, OccurrenceIndicator cardinality) {
+		this(net.sf.saxon.s9api.SequenceType.makeSequenceType(itemType, cardinality));
 	}
 
 	/**
@@ -74,8 +64,16 @@ public class SequenceType {
 			QName qname = new QName(type, namespaceResolver);
 			if (XProcConstants.xs_string.equals(qname) && cardinality == OccurrenceIndicator.ONE)
 				return XS_STRING;
-			else
-				return new SequenceType(qname, cardinality);
+			else {
+				if (proc == null)
+					// doesn't matter if no user-defined types or types that reference element or attributes names are used
+					proc = new Processor(false);
+				try {
+					return new SequenceType(new ItemTypeFactory(proc).getAtomicType(qname), cardinality);
+				} catch (SaxonApiException e) {
+					throw new IllegalArgumentException("Unsupported type: " + type, e);
+				}
+			}
 		} else {
 			throw new IllegalArgumentException("Unsupported type: " + type);
 		}
@@ -87,6 +85,8 @@ public class SequenceType {
 	 *                          that needs to be cast to a QName.
 	 */
 	public XdmValue cast(XdmValue value, XdmNode namespaceResolver) throws XProcException {
+		ItemType itemType = underlyingType.getItemType();
+		OccurrenceIndicator cardinality = underlyingType.getOccurrenceIndicator();
 		switch (value.size()) {
 		case 0:
 			switch (cardinality) {
@@ -153,19 +153,18 @@ public class SequenceType {
 
 	@Override
 	public String toString() {
-		return itemType.toString() + cardinality.toString();
+		return underlyingType.getItemType().toString() + underlyingType.getOccurrenceIndicator().toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return itemType.hashCode() ^ (cardinality.hashCode() << 17);
+		return underlyingType.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof SequenceType))
 			return false;
-		return itemType.equals(((SequenceType)o).itemType)
-			&& cardinality.equals(((SequenceType)o).cardinality);
+		return underlyingType.equals(((SequenceType)o).underlyingType);
 	}
 }
