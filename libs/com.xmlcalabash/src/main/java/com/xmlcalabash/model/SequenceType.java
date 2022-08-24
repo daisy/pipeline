@@ -29,8 +29,7 @@ import net.sf.saxon.value.AtomicValue;
  */
 public class SequenceType {
 
-	public static final SequenceType XS_STRING = new SequenceType(XProcConstants.xs_string,
-	                                                              OccurrenceIndicator.ONE);
+	public static final SequenceType XS_STRING = new SequenceType(ItemType.STRING, OccurrenceIndicator.ONE);
 
 	private final net.sf.saxon.s9api.SequenceType underlyingType;
 
@@ -60,14 +59,36 @@ public class SequenceType {
 		} else {
 			cardinality = OccurrenceIndicator.ONE;
 		}
+		if (type.equals("map(*)"))
+			return new SequenceType(ItemType.ANY_MAP, cardinality);
+		if (type.matches("map\\(.+,.+\\)")) {
+			SequenceType keyType = parse(type.substring(4, type.indexOf(",")), namespaceResolver);
+			if (keyType.underlyingType.getOccurrenceIndicator() != OccurrenceIndicator.ONE)
+				throw new IllegalArgumentException("Key type of a map must be atomic but got " + keyType);
+			SequenceType valueType = parse(type.substring(type.indexOf(",") + 1, type.length() - 1), namespaceResolver);
+			if (proc == null)
+				// doesn't matter if no user-defined types or types that reference element or attributes names are used
+				proc = new Processor(false);
+			return new SequenceType(
+				new ItemTypeFactory(proc).getMapType(keyType.underlyingType.getItemType(), valueType.underlyingType),
+				cardinality);
+		}
+		if (type.equals("array(*)"))
+			return new SequenceType(ItemType.ANY_ARRAY, cardinality);
+		if (type.matches("array\\(.+\\)")) {
+			SequenceType memberType = parse(type.substring(6, type.length() - 1), namespaceResolver);
+			if (proc == null)
+				proc = new Processor(false);
+			return new SequenceType(
+				new ItemTypeFactory(proc).getArrayType(memberType.underlyingType),
+				cardinality);
+		}
 		if (type.contains(":")) {
 			QName qname = new QName(type, namespaceResolver);
 			if (XProcConstants.xs_string.equals(qname) && cardinality == OccurrenceIndicator.ONE)
 				return XS_STRING;
 			else {
-				if (proc == null)
-					// doesn't matter if no user-defined types or types that reference element or attributes names are used
-					proc = new Processor(false);
+				if (proc == null) proc = new Processor(false);
 				try {
 					return new SequenceType(new ItemTypeFactory(proc).getAtomicType(qname), cardinality);
 				} catch (SaxonApiException e) {
