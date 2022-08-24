@@ -6,6 +6,7 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
@@ -25,11 +26,15 @@ public class XProcEngineTest extends AbstractTest {
 	public XProcEngine xprocEngine;
 
 	@Test
-	public void testStepWithNonStringOption() throws XProcErrorException {
+	public void testStepWithNonStringOptions() throws XProcErrorException {
 		XProcPipeline pipeline = xprocEngine.load(new File(new File(PathUtils.getBaseDir()), "src/test/resources/step.xpl").toURI());
 		Writer result = new StringWriter();
 		pipeline.run(
-			new XProcInput.Builder().withOption(new QName("option-1"), ImmutableList.of("foo", "bar", "baz")).build()
+			new XProcInput.Builder().withOption(new QName("option-1"), ImmutableList.of("1", "2", "3"))
+			                        .withOption(new QName("option-2"), ImmutableMap.of("1", "foo",
+			                                                                           "2", "bar",
+			                                                                           "3", "baz"))
+			                        .build()
 		).writeTo(
 			new XProcOutput.Builder().withOutput("result", () -> new StreamResult(result)).build()
 		);
