@@ -27,6 +27,14 @@
        <artifactId>nlp-common</artifactId>
       <scope>runtime</scope>
     </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   
   <properties>

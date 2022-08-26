@@ -1,18 +1,20 @@
 package org.daisy.pipeline.file.calabash.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Files;
 
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.pipeline.file.FileUtils;
 
 import com.xmlcalabash.core.XProcConstants;
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -65,21 +67,32 @@ public class PeekProvider implements XProcStepProvider {
 
 			RuntimeValue href = getOption(_href);
 			URI sourceUri = href.getBaseURI().resolve(href.getString());
-			File file = new File(sourceUri.getPath());
-			
-			if (file.isDirectory()) {
-				throw new XProcException(step, "Cannot peek into file: file is a directory: " + file.getAbsolutePath());
+			Path file; {
+				try {
+					file = FileUtils.asPath(sourceUri);
+				} catch (IllegalArgumentException|URISyntaxException e) {
+					throw XProcStep.raiseError(new IllegalArgumentException("Illegal value for href option: " + href.getString(), e), step);
+				}
 			}
-			
+
+			if (Files.isDirectory(file)) {
+				throw XProcStep.raiseError(new IllegalArgumentException("Cannot peek into file: file is a directory: " + file), step);
+			}
+
 			byte[] resultBytes = null;
 			try {
 				resultBytes = Peek.read(file, offset, length);
-				
 			} catch (IOException | IndexOutOfBoundsException e) {
-				logger.error("px:file-peek failed to read from "+file+" (offset: "+offset+", length: "+length+", filesize: "+(file==null?'?':file.length())+")", e);
+				String fileSize; {
+					try {
+						fileSize = "" + Files.size(file);
+					} catch (IOException ee) {
+						fileSize = "?";
+					}
+				}
+				logger.error("px:file-peek failed to read from "+file+" (offset: "+offset+", length: "+length+", filesize: "+fileSize+")", e);
 				e.printStackTrace();
 			}
-
 
 			TreeWriter tree = new TreeWriter(runtime);
 			tree.startDocument(step.getNode().getBaseURI());
@@ -89,7 +102,14 @@ public class PeekProvider implements XProcStepProvider {
 			tree.startContent();
 			
 			if (resultBytes == null) {
-				tree.addAttribute(new QName("error"), "px:file-peek failed to read from "+file+" (offset: "+offset+", length: "+length+", filesize: "+(file==null?'?':file.length())+")");
+				String fileSize; {
+					try {
+						fileSize = "" + Files.size(file);
+					} catch (IOException ee) { // should not happen
+						fileSize = "?";
+					}
+				}
+				tree.addAttribute(new QName("error"), "px:file-peek failed to read from "+file+" (offset: "+offset+", length: "+length+", filesize: "+fileSize+")");
 			} else {
 				tree.addText(Peek.encodeBase64(resultBytes));
 			}
@@ -100,21 +120,22 @@ public class PeekProvider implements XProcStepProvider {
 			result.write(tree.getResult());
 		}
 		
-		public static byte[] read(File file, int offset, int length) throws IOException, IndexOutOfBoundsException {
-			if (offset > file.length()) {
+		public static byte[] read(Path file, int offset, int length) throws IOException, IndexOutOfBoundsException {
+			long fileSize = Files.size(file);
+			if (offset > fileSize) {
 				offset = 0;
 				length = 0;
 			}
-			if (length + offset > file.length()) {
-				length = (int) (file.length() - offset);
+			if (length + offset > fileSize) {
+				length = (int) (fileSize - offset);
 			}
 
-			FileInputStream fis = null;
+			InputStream fis = null;
 			byte[] resultBytes = new byte[length];
 			if (length > 0) {
 				try {
-					if (file.exists() && file.canRead()) {
-						fis = new FileInputStream(file);
+					if (Files.exists(file) && Files.isReadable(file)) {
+						fis = Files.newInputStream(file);
 						fis.skip(offset);
 						fis.read(resultBytes, 0, length);
 					}

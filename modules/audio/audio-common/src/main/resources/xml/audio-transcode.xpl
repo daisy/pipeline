@@ -5,6 +5,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:audio-transcode"
                 name="main">
 
@@ -61,7 +62,12 @@
 	<p:output port="mapping">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>A <code>d:fileset</code> document that contains the mapping from the original audio
-			files (<code>@original-href</code>) to the transcoded versions (<code>@href</code>).</p>
+			files (<code>@original-href</code>) to the transcoded versions (<code>@href</code>). The
+			<code>d:file</code> elements can have an optional <code>d:clip</code> child with
+			attributes <code>clipBegin</code>, <code>clipEnd</code>, <code>original-clipBegin</code>
+			and <code>original-clipEnd</code>, to indicate if the audio contained in the original
+			audio file starts at an offset within the transcoded audio file. The attributes values
+			are positive and are expressed in seconds (with millisecond precision).</p>
 		</p:documentation>
 		<p:pipe step="mapping" port="result"/>
 	</p:output>
@@ -105,10 +111,10 @@
 			<!--
 			    initially place new audio files in temporary directory
 			-->
-			<p:with-param name="new-audio-dir" select="string(/*)">
+			<p:with-param name="new-audio-dir" select="xs:anyURI(string(/*))">
 				<p:pipe step="temp-dir" port="result"/>
 			</p:with-param>
-			<p:with-param name="temp-dir" select="string(/*)">
+			<p:with-param name="temp-dir" select="xs:anyURI(string(/*))">
 				<p:pipe step="temp-dir" port="result"/>
 			</p:with-param>
 		</p:xslt>

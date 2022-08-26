@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,10 @@ import javax.sound.sampled.AudioInputStream;
 
 import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.shell.CommandRunner.Consumer;
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioEncoder;
 import static org.daisy.pipeline.audio.AudioFileTypes.MP3;
+import org.daisy.pipeline.audio.AudioUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,10 +40,11 @@ public class LameEncoder implements AudioEncoder {
 	}
 
 	@Override
-	public void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile) throws Throwable {
+	public AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile) throws Throwable {
 		if (!MP3.equals(outputFileType))
 			throw new IllegalArgumentException();
 
+		AudioClip clip = new AudioClip(outputFile, Duration.ZERO, AudioUtils.getDuration(pcm));
 		AudioFormat audioFormat = pcm.getFormat();
 		String freq = String.valueOf((Float.valueOf(audioFormat.getSampleRate()) / 1000));
 		String bitwidth = String.valueOf(audioFormat.getSampleSizeInBits());
@@ -151,5 +155,6 @@ public class LameEncoder implements AudioEncoder {
 			.feedInput(lameInput)
 			.consumeError(mLogger)
 			.run();
+		return clip;
 	}
 }

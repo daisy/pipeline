@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook v1.1.0//EN" "dtbook110.dtd">
+<dtbook version="1.1.0">
+	<book>
+		<bodymatter>
+			<level1>
+				<h1 id="h1" smilref="mo.smil#sh1">
+					Part 1
+				</h1>
+				<level2>
+					<h2 id="h2" smilref="mo.smil#sh2">
+						Chapter 1.1
+					</h2>
+				</level2>
+			</level1>
+		</bodymatter>
+	</book>
+</dtbook>

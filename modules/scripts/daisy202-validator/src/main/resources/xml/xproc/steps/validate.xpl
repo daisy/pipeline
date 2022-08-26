@@ -123,7 +123,19 @@
         </p:iteration-source>
         <p:variable name="base-uri-xpath" select="concat('&quot;',replace(resolve-uri(/*/@href,base-uri(/*)),'&quot;','&quot;&quot;'),'&quot;')"/>
         <p:choose>
-            <p:when test="/*/@media-type=('application/xhtml+xml','text/html','application/smil+xml','audio/mpeg3','audio/mpeg','audio/wav','image/jpeg','image/gif','image/png','text/css')">
+            <p:when test="/*/@media-type=('application/xhtml+xml',
+                                          'text/html',
+                                          'application/smil+xml',
+                                          'audio/mpeg3',
+                                          'audio/mpeg',
+                                          'audio/wav',
+                                          'audio/wave',
+                                          'audio/x-wav',
+                                          'audio/vnd.wave',
+                                          'image/jpeg',
+                                          'image/gif',
+                                          'image/png',
+                                          'text/css')">
                 <p:output port="result" sequence="true"/>
                 <p:identity>
                     <p:input port="source">

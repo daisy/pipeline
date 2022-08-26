@@ -16,11 +16,11 @@
                 type="px:epub3-to-epub3"
                 name="main">
     
-    <p:input port="epub.in.fileset" primary="true"/>
-    <p:input port="epub.in.in-memory" sequence="true"/>
+    <p:input port="source.fileset" primary="true"/>
+    <p:input port="source.in-memory" sequence="true"/>
     
-    <p:output port="epub.out.fileset" primary="true"/>
-    <p:output port="epub.out.in-memory" sequence="true">
+    <p:output port="result.fileset" primary="true"/>
+    <p:output port="result.in-memory" sequence="true">
         <p:pipe step="add-braille-rendition" port="in-memory"/>
     </p:output>
     
@@ -162,7 +162,7 @@
     
     <p:identity>
         <p:input port="source">
-            <p:pipe step="main" port="epub.in.fileset"/>
+            <p:pipe step="main" port="source.fileset"/>
         </p:input>
     </p:identity>
     
@@ -187,23 +187,23 @@
     <!--
         copy EPUB to new location
     -->
-    <p:choose name="maybe-copy">
+    <p:choose name="maybe-copy" px:progress="2/16">
         <p:when test="p:value-available('result-base')">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="copy" port="result.in-memory"/>
             </p:output>
-            <px:fileset-copy name="copy">
+            <px:fileset-copy name="copy" px:progress="1">
                 <p:with-option name="target" select="$result-base"/>
                 <p:input port="source.in-memory">
-                    <p:pipe step="main" port="epub.in.in-memory"/>
+                    <p:pipe step="main" port="source.in-memory"/>
                 </p:input>
             </px:fileset-copy>
         </p:when>
         <p:otherwise>
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
-                <p:pipe step="main" port="epub.in.in-memory"/>
+                <p:pipe step="main" port="source.in-memory"/>
             </p:output>
             <p:identity/>
         </p:otherwise>
@@ -218,7 +218,7 @@
             <p:pipe step="main" port="metadata"/>
         </p:input>
     </p:count>
-    <p:choose name="add-metadata">
+    <p:choose name="add-metadata" px:progress="1/16">
         <p:when test="/*=0">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
@@ -237,7 +237,7 @@
                 <p:pipe step="add" port="result.in-memory"/>
             </p:output>
             <p:sink/>
-            <px:epub3-add-metadata name="add">
+            <px:epub3-add-metadata name="add" px:message="Adding metadata" px:progress="1">
                 <p:input port="source.fileset">
                     <p:pipe step="maybe-copy" port="fileset"/>
                 </p:input>
@@ -254,7 +254,7 @@
     <!--
         Update metadata in content documents and lang attributes in package and content documents
     -->
-    <p:choose name="update-lang-attributes-and-html-meta">
+    <p:choose name="update-lang-attributes-and-html-meta" px:progress="2/16">
         <p:when test="'true'=($update-lang-attributes,
                               $update-identifier-in-content-docs,
                               $update-title-in-content-docs)">
@@ -267,18 +267,21 @@
                     <p:pipe step="add-metadata" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
-            <p:choose name="update-package-doc">
+            <p:choose name="update-package-doc" px:progress="1/10">
                 <!-- only do something when there is exactly one dc:language -->
                 <p:when test="($update-lang-attributes='true' and count(/*/opf:metadata/dc:language)=1)">
                     <p:output port="fileset" primary="true"/>
                     <p:output port="in-memory" sequence="true">
                         <p:pipe step="update" port="result.in-memory"/>
                     </p:output>
-                    <p:add-attribute match="/*" attribute-name="xml:lang" name="package-doc-with-new-lang">
-                        <p:with-option name="attribute-value" select="/*/opf:metadata/dc:language/string(.)"/>
+                    <p:variable name="language" select="/*/opf:metadata/dc:language/string(.)"/>
+                    <p:add-attribute px:message="Updating dc:language in OPF to '{$language}'"
+                                     px:progress="1/10"
+                                     match="/*" attribute-name="xml:lang" name="package-doc-with-new-lang">
+                        <p:with-option name="attribute-value" select="$language"/>
                     </p:add-attribute>
                     <p:sink/>
-                    <px:fileset-update name="update">
+                    <px:fileset-update name="update" px:progress="9/10">
                         <p:input port="source.fileset">
                             <p:pipe step="add-metadata" port="fileset"/>
                         </p:input>
@@ -306,7 +309,7 @@
                     </p:identity>
                 </p:otherwise>
             </p:choose>
-            <p:choose name="update-html">
+            <p:choose name="update-html" px:progress="9/10">
                 <p:xpath-context>
                     <p:pipe step="package-doc" port="result"/>
                 </p:xpath-context>
@@ -321,12 +324,12 @@
                     <p:output port="in-memory" sequence="true">
                         <p:pipe step="update" port="result.in-memory"/>
                     </p:output>
-                    <px:opf-spine-to-fileset>
+                    <px:opf-spine-to-fileset px:progress="1/10">
                         <p:input port="source.in-memory">
                             <p:pipe step="update-package-doc" port="in-memory"/>
                         </p:input>
                     </px:opf-spine-to-fileset>
-                    <px:fileset-load media-types="application/xhtml+xml" name="html">
+                    <px:fileset-load media-types="application/xhtml+xml" name="html" px:progress="8/10">
                         <p:input port="in-memory">
                             <p:pipe step="update-package-doc" port="in-memory"/>
                         </p:input>
@@ -396,7 +399,7 @@
                         </p:xslt>
                     </p:for-each>
                     <p:sink/>
-                    <px:fileset-update name="update">
+                    <px:fileset-update name="update" px:progress="1/10">
                         <p:input port="source.fileset">
                             <p:pipe step="update-package-doc" port="fileset"/>
                         </p:input>
@@ -432,22 +435,22 @@
     <!--
         Add missing headings
     -->
-    <p:choose name="add-missing-headings">
-        <p:when test="$ensure-section-headings='true'">
+    <p:choose name="add-missing-headings" px:progress="1/16">
+        <p:when test="$ensure-section-headings='true'" px:message="Adding headings for sections that don't have one">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">
                 <p:pipe step="update" port="result.in-memory"/>
             </p:output>
-            <px:fileset-load media-types="application/xhtml+xml" name="html">
+            <px:fileset-load media-types="application/xhtml+xml" name="html" px:progress="1/10">
                 <p:input port="in-memory">
                     <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
                 </p:input>
             </px:fileset-load>
-            <p:for-each name="fixed-html">
+            <p:for-each name="fixed-html" px:progress="1/10">
                 <p:output port="result"/>
-                <p:choose>
+                <p:choose px:progress="1">
                     <p:when test="(//html:body|//html:section|//html:nav|//html:article|//html:aside)/@aria-label">
-                        <px:html-outline fix-untitled-sections="imply-heading-from-aria-label">
+                        <px:html-outline fix-untitled-sections="imply-heading-from-aria-label" px:progress="1">
                             <p:input port="input-toc">
                                 <p:pipe step="toc" port="result"/>
                             </p:input>
@@ -459,22 +462,22 @@
                 </p:choose>
             </p:for-each>
             <p:sink/>
-            <p:group name="toc">
+            <p:group name="toc" px:progress="1/10">
                 <p:output port="result"/>
                 <p:identity>
                     <p:input port="source">
                         <p:pipe step="update-lang-attributes-and-html-meta" port="fileset"/>
                     </p:input>
                 </p:identity>
-                <p:choose>
+                <p:choose px:progress="1">
                     <p:when test="exists(//d:file[@role='nav'])">
-                        <px:fileset-load>
+                        <px:fileset-load px:progress="1/2">
                             <p:input port="in-memory">
                                 <p:pipe step="update-lang-attributes-and-html-meta" port="in-memory"/>
                             </p:input>
                             <p:with-option name="href" select="//d:file[@role='nav'][1]/@href"/>
                         </px:fileset-load>
-                        <p:add-xml-base>
+                        <p:add-xml-base px:progress="1/2">
                             <!-- Not sure why this is needed. Omitted this triggers a base URI error
                                  in px:html-outline. Bug? -->
                         </p:add-xml-base>
@@ -490,7 +493,7 @@
                 </p:choose>
             </p:group>
             <p:sink/>
-            <px:fileset-update name="update">
+            <px:fileset-update name="update" px:progress="7/10">
                 <p:input port="source.fileset">
                     <p:pipe step="update-lang-attributes-and-html-meta" port="fileset"/>
                 </p:input>
@@ -517,7 +520,7 @@
     <!--
         Page number fixes
     -->
-    <p:group name="fix-pagenum">
+    <p:group name="fix-pagenum" px:progress="2/16">
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
             <p:pipe step="update" port="result.in-memory"/>
@@ -526,7 +529,7 @@
             Read navigation document and label page break elements with epub:type="pagebreak" if
             missing (and also add title attribute if missing)
         -->
-        <px:epub3-label-pagebreaks-from-nav name="label-pagebreaks-from-nav">
+        <px:epub3-label-pagebreaks-from-nav name="label-pagebreaks-from-nav" px:progress="5/10">
             <p:input port="source.in-memory">
                 <p:pipe step="add-missing-headings" port="in-memory"/>
             </p:input>
@@ -536,17 +539,29 @@
                 <p:pipe step="label-pagebreaks-from-nav" port="result.in-memory"/>
             </p:input>
         </px:fileset-load>
-        <p:for-each name="fixed-html">
+        <p:choose>
+            <p:xpath-context>
+                <p:empty/>
+            </p:xpath-context>
+            <p:when test="$ensure-pagenum-text=('true','hidden')">
+                <p:identity px:message="Fixing empty page numbers"/>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
+        <p:for-each name="fixed-html" px:progress="1/10">
             <p:output port="result"/>
             <!--
                 Convert DPUB-ARIA role="doc-pagebreak" to epub:type="pagebreak"
             -->
             <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
-                              label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"/>
+                              label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"
+                              px:progress="1/2"/>
             <!--
                 Generate text for empty page numbers
             -->
-            <p:choose name="ensure-pagenum-text">
+            <p:choose name="ensure-pagenum-text" px:progress="1/2">
                 <p:when test="$ensure-pagenum-text=('true','hidden')">
                     <p:xslt>
                         <p:input port="stylesheet">
@@ -560,7 +575,7 @@
                 </p:otherwise>
             </p:choose>
         </p:for-each>
-        <px:fileset-update name="update">
+        <px:fileset-update name="update" px:progress="4/10">
             <p:input port="source.fileset">
                 <p:pipe step="label-pagebreaks-from-nav" port="result.fileset"/>
             </p:input>
@@ -579,7 +594,7 @@
     <!--
         Perform TTS or only sentence detection or nothing
     -->
-    <p:group name="add-mediaoverlays" px:progress="1/2">
+    <p:group name="add-mediaoverlays" px:progress="1/4">
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
             <p:pipe step="skip-if-disabled" port="in-memory"/>
@@ -642,7 +657,7 @@
                         </p:input>
                         <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
-                        <p:with-option name="temp-dir" select="$temp-dir"/>
+                        <p:with-option name="temp-dir" select="if ($temp-dir='') then $temp-dir else concat($temp-dir,'tts/')"/>
                     </px:tts-for-epub3>
                     <p:sink/>
                     <px:fileset-update name="update">
@@ -784,7 +799,7 @@
         </p:choose>
     </p:group>
     
-    <p:choose name="add-braille-rendition" px:progress="1/2">
+    <p:choose name="add-braille-rendition" px:progress="1/4">
         <p:when test="not($braille='true')">
             <p:output port="fileset" primary="true"/>
             <p:output port="in-memory" sequence="true">

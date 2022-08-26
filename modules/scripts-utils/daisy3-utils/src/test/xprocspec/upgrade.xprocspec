@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"
+               xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
+               script="../../main/resources/xml/internal/upgrade.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:daisy3-upgrade">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/1.1.0/book.opf" media-type="application/oebps-package+xml" media-version="1.0.1"
+						        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Package//EN"
+						        doctype-system="oebpkg101.dtd"/>
+						<d:file href="../resources/1.1.0/mo.smil" media-type="application/smil+xml" media-version="dtb-1.1.0"
+						        doctype-public="-//NISO//DTD dtbsmil v1.1.0//EN"
+						        doctype-system="dtbsmil110.dtd"/>
+						<d:file href="../resources/1.1.0/content.xml" media-type="application/x-dtbook+xml" media-version="1.1.0"
+						        doctype-public="-//NISO//DTD dtbook v1.1.0//EN"
+						        doctype-system="dtbook110.dtd"/>
+						<d:file href="../resources/1.1.0/navigation.ncx" media-type="application/x-dtbncx+xml" media-version="1.1.0"
+						        doctype-public="-//NISO//DTD ncx v1.1.0//EN"
+						        doctype-system="ncx110.dtd"/>
+						<d:file href="../resources/1.1.0/audio.wav" media-type="audio/x-wav"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result.fileset">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/1.1.0/book.opf" media-type="application/oebps-package+xml" media-version="1.2"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
+					<d:file href="../resources/1.1.0/mo.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+					<d:file href="../resources/1.1.0/content.xml" media-type="application/x-dtbook+xml" media-version="2005-3"
+					        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+					<d:file href="../resources/1.1.0/navigation.ncx" media-type="application/x-dtbncx+xml" media-version="2005-1"
+					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
+					<d:file href="../resources/1.1.0/audio.wav" media-type="audio/x-wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the NCX document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('../resources/1.1.0/navigation.ncx')]"/>
+		</x:context>
+		<x:expect label="the NCX document" type="compare">
+			<x:document type="inline">
+				<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+					<head>
+						<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+						<meta name="dtb:uid" content="uid"/>
+						<meta name="dtb:depth" content="02"/>
+						<meta name="dtb:totalPageCount" content="0"/>
+						<meta name="dtb:maxPageNumber" content="0"/>
+						<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+						<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+						<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+						<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+						<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+					</head>
+					<docTitle/>
+					<navMap>
+						<navPoint playOrder="1" id="ncx-1">
+							<navLabel>
+								<text>Part 1</text>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.500" src="audio.wav"/>
+							</navLabel>
+							<content src="mo.smil#s1"/>
+							<navPoint playOrder="2" id="ncx-2">
+								<navLabel>
+									<text>Chapter 1.1</text>
+									<audio clipBegin="0:00:01.500" clipEnd="0:00:04.000" src="audio.wav"/>
+								</navLabel>
+								<content src="mo.smil#s2"/>
+							</navPoint>
+						</navPoint>
+					</navMap>
+				</ncx>
+			</x:document>
+		</x:expect>
+		<x:context label="the package document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('../resources/1.1.0/book.opf')]"/>
+		</x:context>
+		<x:expect label="the package document" type="compare">
+			<x:document type="inline">
+				<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+					<metadata>
+						<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+							<dc:Language>en</dc:Language>
+							<dc:Date>2020-06-29</dc:Date>
+							<dc:Publisher>Publisher</dc:Publisher>
+							<dc:Title>Title</dc:Title>
+							<dc:Identifier id="uid">urn:uuid:123</dc:Identifier>
+							<dc:Author>Author</dc:Author>
+						</dc-metadata>
+						<x-metadata>
+							<meta name="dtb:multimediaType" content="audioFullText"/>
+							<meta name="dtb:totalTime" content="0:00:04"/>
+							<meta name="dtb:multimediaContent" content="audio,text"/>
+							<meta name="dtb:audioFormat" content="wav"/>
+						</x-metadata>
+					</metadata>
+					<manifest>
+						<item href="book.opf" id="opf" media-type="text/xml"/>
+						<item href="content.xml" id="content" media-type="text/xml"/>
+						<item href="mo.smil" id="mo" media-type="application/smil"/>
+						<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+						<item href="audio.wav" id="audio" media-type="audio/x-wav"/>
+						<item href="ncx110.dtd" id="ncx_dtd" media-type="text/xml"/>
+						<item href="oebpkg101.dtd" id="pkg_dtd" media-type="text/xml"/>
+						<item href="oeb1.ent" id="pkg_ent" media-type="text/xml"/>
+						<item href="dtbsmil110.dtd" id="smil_dtd" media-type="text/xml"/>
+						<item href="dtbook110.dtd" id="dtbook_dtd" media-type="text/xml"/>
+					</manifest>
+					<spine>
+						<itemref idref="mo"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="the content document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('../resources/1.1.0/content.xml')]"/>
+		</x:context>
+		<x:expect label="the content document"
+		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+			<x:document type="inline">
+				<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
+					<book id="book">
+						<bodymatter>
+							<level1>
+								<h1 id="h1" smilref="mo.smil#sh1">Part 1</h1>
+								<level2>
+									<h2 id="h2" smilref="mo.smil#sh2">Chapter 1.1</h2>
+									<p/>
+								</level2>
+							</level1>
+						</bodymatter>
+					</book>
+				</dtbook>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

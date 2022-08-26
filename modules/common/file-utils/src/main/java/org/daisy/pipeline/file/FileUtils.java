@@ -6,6 +6,9 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.ProviderNotFoundException;
 import java.util.Optional;
 
 import org.daisy.common.file.URLs;
@@ -34,6 +37,41 @@ public final class FileUtils {
 	/* ============= */
 	/* URI functions */
 	/* ============= */
+
+	/**
+	 * Convert an absolute file URI to a {@link Path} denoting a file or an entry in a zip file.
+	 */
+	public static Path asPath(URI uri) throws IllegalArgumentException, URISyntaxException {
+		if (!uri.isAbsolute())
+			throw new IllegalArgumentException("expected absolute URI");
+		String protocol = uri.getScheme();
+		if (!"file".equals(protocol))
+			throw new IllegalArgumentException("expected file URI");
+		String query = uri.getQuery();
+		if (query != null && !query.isEmpty())
+			throw new IllegalArgumentException("expected URI without query");
+		String fragment = uri.getFragment();
+		if (fragment != null && !fragment.isEmpty())
+			throw new IllegalArgumentException("expected URI without fragment");
+		String path = uri.getPath();
+		String zipPath = null;
+		if (path.contains("!/")) {
+			// it is a path to a ZIP entry
+			zipPath = path.substring(path.indexOf("!/")+1);
+			path = path.substring(0, path.indexOf("!/"));
+		}
+		File file = new File(new URI(protocol, null, path, null, null));
+		if (file.exists() && zipPath != null)
+			try {
+				return FileSystems.newFileSystem(file.toPath(), null).getPath(zipPath);
+			} catch (ProviderNotFoundException e) {
+				throw new RuntimeException(e); // file is not a zip file
+			} catch (IOException e) {
+				throw new RuntimeException(e); // should not happen
+			}
+		else
+			return file.toPath();
+	}
 
 	/**
 	 * Relativize a URI against a base URI.

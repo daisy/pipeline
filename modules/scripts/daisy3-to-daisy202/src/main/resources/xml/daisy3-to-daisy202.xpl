@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
-                type="px:daisy3-to-daisy202.script" version="1.0" name="main">
+                type="px:daisy3-to-daisy202.script"
+                name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 3 to DAISY 2.02</h1>
@@ -51,6 +52,8 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
             px:fileset-store
         </p:documentation>
     </p:import>
@@ -81,6 +84,14 @@
     <!--=========================================================================-->
     <!-- LOAD THE DAISY 3 FILESET                                                -->
     <!--=========================================================================-->
+    <px:fileset-create>
+        <p:with-option name="base" select="resolve-uri('./',base-uri(/*))"/>
+    </px:fileset-create>
+    <px:fileset-add-entry media-type="application/oebps-package+xml">
+        <p:input port="entry">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entry>
     <px:daisy3-load name="load" px:message="Loading DAISY 3"/>
 
     <!--=========================================================================-->
@@ -88,7 +99,7 @@
     <!--=========================================================================-->
     <px:daisy3-to-daisy202 name="convert" px:message="Downgrading DAISY 3 to DAISY 2.02">
         <p:input port="in-memory.in">
-            <p:pipe port="in-memory.out" step="load"/>
+            <p:pipe step="load" port="result.in-memory"/>
         </p:input>
         <p:with-option name="output-dir" select="$output-dir-checked"/>
     </px:daisy3-to-daisy202>

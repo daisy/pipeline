@@ -1,6 +1,8 @@
 package org.daisy.pipeline.audio;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -16,6 +18,9 @@ public interface AudioDecoder {
 	 *                                       the file format of <code>inputFile</code>
 	 * @throws Throwable when some other error happens
 	 */
-	AudioInputStream decode(File inputFile) throws UnsupportedAudioFileException, Throwable;
+	default AudioInputStream decode(File inputFile) throws UnsupportedAudioFileException, Throwable {
+		return decode(new FileInputStream(inputFile));
+	}
 
+	AudioInputStream decode(InputStream input) throws UnsupportedAudioFileException, Throwable;
 }

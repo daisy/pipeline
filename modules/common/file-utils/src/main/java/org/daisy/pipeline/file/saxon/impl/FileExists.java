@@ -1,11 +1,8 @@
 package org.daisy.pipeline.file.saxon.impl;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.FileSystems;
 
 import net.sf.saxon.expr.XPathContext;
 import net.sf.saxon.lib.ExtensionFunctionCall;
@@ -18,6 +15,7 @@ import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.SequenceType;
 
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.file.FileUtils;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -68,37 +66,10 @@ public class FileExists extends ExtensionFunctionDefinition {
 	 * Whether the file or ZIP entry denoted by this absolute URI exists.
 	 */
 	private static boolean exists(URI uri) throws URISyntaxException {
-		if (!uri.isAbsolute()) {
+		try {
+			return Files.exists(FileUtils.asPath(uri));
+		} catch (IllegalArgumentException e) {
 			return false;
 		}
-		String protocol = uri.getScheme();
-		if (!"file".equals(protocol)) {
-			return false;
-		}
-		String query = uri.getQuery();
-		if (query != null && !query.isEmpty()) {
-			return false;
-		}
-		String fragment = uri.getFragment();
-		if (fragment != null && !fragment.isEmpty()) {
-			return false;
-		}
-		String path = uri.getPath();
-		String zipPath = null;
-		if (path.contains("!/")) {
-			// it is a path to a ZIP entry
-			zipPath = path.substring(path.indexOf("!/")+1);
-			path = path.substring(0, path.indexOf("!/"));
-		}
-		File file = new File(new URI(protocol, null, path, null, null));
-		if (!file.exists())
-			return false;
-		if (zipPath != null)
-			try {
-				return Files.exists(FileSystems.newFileSystem(file.toPath(), null).getPath(zipPath));
-			} catch (IOException e) {
-				throw new RuntimeException(e); // should not happen
-			}
-		return true;
 	}
 }

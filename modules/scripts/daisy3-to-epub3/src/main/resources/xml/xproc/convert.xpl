@@ -23,6 +23,11 @@
     <!-- IMPORTS                                                                 -->
     <!--=========================================================================-->
 
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:assert
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-to-html/library.xpl">
         <p:documentation>
             px:dtbook-to-html
@@ -63,14 +68,19 @@
     <!--=========================================================================-->
     <!-- LOAD THE DAISY 3 FILESET                                                -->
     <!--=========================================================================-->
-    <px:fileset-load media-types="application/oebps-package+xml" name="opf">
-        <p:input port="fileset">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
+    <p:group name="opf">
+        <p:output port="result"/>
+        <px:fileset-load media-types="application/oebps-package+xml">
+            <p:input port="fileset">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <px:assert test-count-min="1" test-count-max="1" error-code="XXXX"
+                   message="The input fileset must contain exactly one OPF file"/>
+    </p:group>
     <px:fileset-load media-types="application/smil" name="smils">
         <p:input port="fileset">
             <p:pipe step="main" port="source.fileset"/>
@@ -87,14 +97,19 @@
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:fileset-load>
-    <px:fileset-load media-types="application/x-dtbncx+xml" name="ncx">
-        <p:input port="fileset">
-            <p:pipe step="main" port="source.fileset"/>
-        </p:input>
-        <p:input port="in-memory">
-            <p:pipe step="main" port="source.in-memory"/>
-        </p:input>
-    </px:fileset-load>
+    <p:group name="ncx">
+        <p:output port="result"/>
+        <px:fileset-load media-types="application/x-dtbncx+xml">
+            <p:input port="fileset">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:input>
+            <p:input port="in-memory">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:input>
+        </px:fileset-load>
+        <px:assert test-count-min="1" test-count-max="1" error-code="XXXX"
+                   message="The input fileset must contain exactly one NCX file"/>
+    </p:group>
 
     <!--
         Make sure that the base uri of the fileset is the directory containing the OPF. This should

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/internal/load/load.xpl">
+
+	<x:scenario label="1.1.0">
+		<x:call step="px:daisy3-load">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="../resources/1.1.0/book.opf" media-type="application/oebps-package+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the fileset" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<!--
+			    note that we're not testing the order of the files in the fileset
+			-->
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="../resources/1.1.0/book.opf" media-type="application/oebps-package+xml" media-version="1.0.1"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Package//EN"
+					        doctype-system="oebpkg101.dtd"/>
+					<d:file href="../resources/1.1.0/mo.smil" media-type="application/smil+xml" media-version="dtb-1.1.0"
+					        doctype-public="-//NISO//DTD dtbsmil v1.1.0//EN"
+					        doctype-system="dtbsmil110.dtd"/>
+					<d:file href="../resources/1.1.0/content.xml" media-type="application/x-dtbook+xml" media-version="1.1.0"
+					        doctype-public="-//NISO//DTD dtbook v1.1.0//EN"
+					        doctype-system="dtbook110.dtd"/>
+					<d:file href="../resources/1.1.0/navigation.ncx" media-type="application/x-dtbncx+xml" media-version="1.1.0"
+					        doctype-public="-//NISO//DTD ncx v1.1.0//EN"
+					        doctype-system="ncx110.dtd"/>
+					<d:file href="../resources/1.1.0/audio.wav" media-type="audio/x-wav"/>
+					<d:file href="../resources/1.1.0/ncx110.dtd" media-type="text/xml"/>
+					<d:file href="../resources/1.1.0/oebpkg101.dtd" media-type="text/xml"/>
+					<d:file href="../resources/1.1.0/oeb1.ent" media-type="text/xml"/>
+					<d:file href="../resources/1.1.0/dtbsmil110.dtd" media-type="text/xml"/>
+					<d:file href="../resources/1.1.0/dtbook110.dtd" media-type="text/xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

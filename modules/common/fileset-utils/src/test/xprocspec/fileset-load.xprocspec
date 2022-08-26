@@ -532,6 +532,79 @@
         </x:expect>
     </x:scenario>
 
+    <x:scenario label="test-unfiltered-result">
+        <x:call step="px:fileset-load">
+            <x:option name="media-types" select="'application/smil+xml'"/>
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/epub/META-INF/container.xml" media-type="application/xml"
+                                original-href="samples/fileset2/epub/META-INF/container.xml"/>
+                        <d:file href="samples/fileset2/epub/Publication/Content/1_Jamen__Benny.mp3" media-type="audio/mpeg"
+                                original-href="samples/fileset2/epub/Publication/Content/1_Jamen__Benny.mp3"/>
+                        <d:file href="samples/fileset2/epub/Publication/Content/mqia0001.xhtml" media-type="application/xhtml+xml"
+                                original-href="samples/fileset2/epub/Publication/Content/mqia0001.xhtml"/>
+                        <d:file href="samples/fileset2/epub/Publication/Content/mqia0001.smil" media-type="application/smil+xml"
+                                original-href="samples/fileset2/epub/Publication/Content/mqia0001.smil"/>
+                        <d:file href="samples/fileset2/epub/Publication/Content/tjcs0000.jpg" media-type="image/jpeg"
+                                original-href="samples/fileset2/epub/Publication/Content/tjcs0000.jpg"/>
+                        <d:file href="samples/fileset2/epub/Publication/Content/41077stor.jpg" media-type="image/jpeg"
+                                original-href="samples/fileset2/epub/Publication/Content/41077stor.jpg"/>
+                        <d:file href="samples/fileset2/epub/Publication/navigation.xhtml" media-type="application/xhtml+xml"
+                                original-href="samples/fileset2/epub/Publication/navigation.xhtml"/>
+                        <d:file href="samples/fileset2/epub/Publication/ncx.xml" media-type="application/x-dtbncx+xml"
+                                original-href="samples/fileset2/epub/Publication/ncx.xml"/>
+                        <d:file href="samples/fileset2/epub/Publication/package.opf" media-type="application/oebps-package+xml"
+                                original-href="samples/fileset2/epub/Publication/package.opf"/>
+                        <d:file href="samples/fileset2/epub/mimetype" media-type="application/octet-stream"
+                                original-href="samples/fileset2/epub/mimetype"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+        </x:call>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="samples/fileset2/epub/Publication/Content/mqia0001.smil" media-type="application/smil+xml"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+        <x:context label="the unfiltered.fileset port">
+            <x:document type="port" port="unfiltered.fileset"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="samples/fileset2/epub/META-INF/container.xml" media-type="application/xml"
+                            original-href="samples/fileset2/epub/META-INF/container.xml"/>
+                    <d:file href="samples/fileset2/epub/Publication/Content/1_Jamen__Benny.mp3" media-type="audio/mpeg"
+                            original-href="samples/fileset2/epub/Publication/Content/1_Jamen__Benny.mp3"/>
+                    <d:file href="samples/fileset2/epub/Publication/Content/mqia0001.xhtml" media-type="application/xhtml+xml"
+                            original-href="samples/fileset2/epub/Publication/Content/mqia0001.xhtml"/>
+                    <d:file href="samples/fileset2/epub/Publication/Content/mqia0001.smil" media-type="application/smil+xml"/>
+                    <d:file href="samples/fileset2/epub/Publication/Content/tjcs0000.jpg" media-type="image/jpeg"
+                            original-href="samples/fileset2/epub/Publication/Content/tjcs0000.jpg"/>
+                    <d:file href="samples/fileset2/epub/Publication/Content/41077stor.jpg" media-type="image/jpeg"
+                            original-href="samples/fileset2/epub/Publication/Content/41077stor.jpg"/>
+                    <d:file href="samples/fileset2/epub/Publication/navigation.xhtml" media-type="application/xhtml+xml"
+                            original-href="samples/fileset2/epub/Publication/navigation.xhtml"/>
+                    <d:file href="samples/fileset2/epub/Publication/ncx.xml" media-type="application/x-dtbncx+xml"
+                            original-href="samples/fileset2/epub/Publication/ncx.xml"/>
+                    <d:file href="samples/fileset2/epub/Publication/package.opf" media-type="application/oebps-package+xml"
+                            original-href="samples/fileset2/epub/Publication/package.opf"/>
+                    <d:file href="samples/fileset2/epub/mimetype" media-type="application/octet-stream"
+                            original-href="samples/fileset2/epub/mimetype"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
     <x:scenario label="test-fail-on-not-found-false">
         <x:call step="px:fileset-load">
             <x:input port="fileset">
@@ -702,5 +775,31 @@
         </x:context>
         <x:expect type="count" label="a file should be read from memory" min="1"/>
     </x:scenario>
-    
+
+    <x:scenario label="test-detect-serialization-properties">
+        <x:call step="px:fileset-load">
+            <x:input port="fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="samples/fileset2/a.zip!/e.svg" media-type="image/svg+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="in-memory"/>
+            <x:option name="detect-serialization-properties" select="true()"/>
+        </x:call>
+        <x:context label="the result.fileset port">
+            <x:document type="port" port="result.fileset"/>
+        </x:context>
+        <x:expect label="should be as expected" type="custom"
+                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="samples/fileset2/a.zip!/e.svg" media-type="image/svg+xml"
+                            doctype="&lt;!DOCTYPE svg PUBLIC &quot;-//W3C//DTD SVG 1.1//EN&quot; &quot;http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd&quot; [&#xD;&#xA;&#x9;&lt;!ENTITY ns_svg &quot;http://www.w3.org/2000/svg&quot;&gt;&#xD;&#xA;&#x9;&lt;!ENTITY ns_xlink &quot;http://www.w3.org/1999/xlink&quot;&gt;&#xD;&#xA;]&gt;"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
 </x:description>

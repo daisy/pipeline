@@ -52,10 +52,10 @@
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The intermediary EPUB 3 fileset</p>
 		</p:documentation>
-		<p:pipe step="tts" port="epub.out.fileset"/>
+		<p:pipe step="tts" port="result.fileset"/>
 	</p:output>
 	<p:output port="epub3.in-memory" sequence="true">
-		<p:pipe step="tts" port="epub.out.in-memory"/>
+		<p:pipe step="tts" port="result.in-memory"/>
 	</p:output>
 	<p:output port="daisy202.fileset">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -143,7 +143,7 @@
 	</p:choose>
 
 	<px:epub3-to-epub3 braille="false" name="tts" px:progress="1/4">
-		<p:input port="epub.in.in-memory">
+		<p:input port="source.in-memory">
 			<p:pipe step="upgrade" port="in-memory"/>
 		</p:input>
 		<p:with-option name="tts" select="$tts"/>
@@ -175,7 +175,7 @@
 
 			<px:epub3-to-daisy202 name="daisy202" px:progress="1/2" px:message="Converting to DAISY 2.02">
 				<p:input port="source.in-memory">
-					<p:pipe step="tts" port="epub.out.in-memory"/>
+					<p:pipe step="tts" port="result.in-memory"/>
 				</p:input>
 				<p:with-option name="output-dir" select="$daisy202-output-dir"/>
 			</px:epub3-to-daisy202>
@@ -183,10 +183,10 @@
 
 			<px:epub3-to-daisy3 name="daisy3" px:progress="1/2" px:message="Converting to DAISY 3">
 				<p:input port="source.fileset">
-					<p:pipe step="tts" port="epub.out.fileset"/>
+					<p:pipe step="tts" port="result.fileset"/>
 				</p:input>
 				<p:input port="source.in-memory">
-					<p:pipe step="tts" port="epub.out.in-memory"/>
+					<p:pipe step="tts" port="result.in-memory"/>
 				</p:input>
 				<p:with-option name="output-dir" select="$daisy3-output-dir"/>
 			</px:epub3-to-daisy3>

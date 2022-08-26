@@ -9,6 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
@@ -100,12 +101,12 @@ public class EncodingThread {
 								File encodedFile = new File(
 									job.getDestinationDirectory(),
 									job.getDestinationFilePrefix() + "." + fileType.getExtension());
-								fencoder.encode(
+								AudioClip clip = fencoder.encode(
 									audio,
 									fileType,
 									encodedFile);
 								audio.close();
-								job.getURIholder().append(encodedFile.toURI().toString());
+								job.getDestinationFile().set(clip);
 							} catch (InterruptedException e) {
 								ttslog.addGeneralError(
 									ErrorCode.CRITICAL_ERROR,
@@ -140,16 +141,16 @@ public class EncodingThread {
 	}
 
 	void waitToFinish() throws EncodingException {
-		if (criticalError != null) {
-			if (criticalError instanceof EncodingException)
-				throw (EncodingException)criticalError;
-			else
-				throw new RuntimeException("coding error");
-		}
 		try {
 			mThread.join();
 		} catch (InterruptedException e) {
 			throw new RuntimeException(); // should not happen
+		}
+		if (criticalError != null) {
+			if (criticalError instanceof EncodingException)
+				throw (EncodingException)criticalError;
+			else
+				throw new RuntimeException("coding error", criticalError); // should not happen
 		}
 	}
 }

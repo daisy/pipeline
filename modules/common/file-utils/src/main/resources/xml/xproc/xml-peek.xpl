@@ -3,10 +3,16 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 type="px:file-xml-peek"
                 exclude-inline-prefixes="#all">
 
-    <p:option name="href" required="true"/>
+    <p:option name="href" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>URI pointing to a file on disk.</p>
+            <p>May also be an entry inside a ZIP file.</p>
+        </p:documentation>
+    </p:option>
 
     <p:output port="result" primary="true">
         <p:pipe port="result" step="unescaped"/>
@@ -39,13 +45,18 @@
     </p:xslt>
     <p:identity name="parse"/>
 
-    <p:identity>
-        <p:input port="source" select="/*/c:root-element">
-            <p:pipe port="result" step="parse"/>
-        </p:input>
-    </p:identity>
-    <p:unescape-markup/>
-    <p:filter select="/*/*"/>
+    <p:group cx:pure="true">
+        <p:identity>
+            <p:input port="source" select="/*/c:root-element">
+                <p:pipe port="result" step="parse"/>
+            </p:input>
+        </p:identity>
+        <!--
+            note that this may unescape references to entities that are declared in the doctype, which will result in an error
+        -->
+        <p:unescape-markup/>
+        <p:filter select="/*/*"/>
+    </p:group>
     <p:identity name="unescaped"/>
 
     <p:delete match="/*/c:root-element">

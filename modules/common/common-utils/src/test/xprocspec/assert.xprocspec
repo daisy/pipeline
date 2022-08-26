@@ -14,6 +14,7 @@
         <x:context label="the error">
             <x:document type="errors"/>
         </x:context>
+        <x:expect label="there should be errors" type="count" min="1"/>
         <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foobar'"/>
     </x:scenario>
 
@@ -35,6 +36,7 @@
             <x:context label="the error">
                 <x:document type="errors"/>
             </x:context>
+            <x:expect label="there should be errors" type="count" min="1"/>
             <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foobar (was: 1)'"/>
         </x:scenario>
     </x:scenario>
@@ -50,6 +52,7 @@
         <x:context label="the error">
             <x:document type="errors"/>
         </x:context>
+        <x:expect label="there should be errors" type="count" min="1"/>
         <x:expect label="the error" type="xpath" test="/*/c:error[@code='FOO']/normalize-space(string())" equals="'foo-bar'"/>
     </x:scenario>
     

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -28,10 +29,12 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioEncoderService;
 import static org.daisy.pipeline.audio.AudioFileTypes.MP3;
 import org.daisy.pipeline.audio.AudioServices;
+import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.TTSEngine;
@@ -186,11 +189,12 @@ public class SSMLtoAudioTest {
 			return Optional.of(
 				new AudioEncoder() {
 					@Override
-					public void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
+					public AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
 							throws Throwable {
 						synchronized (DefaultAudioEncoder.this) {
 							++count;
 						}
+						return new AudioClip(outputFile, Duration.ZERO, AudioUtils.getDuration(pcm));
 					}
 				}
 			);
@@ -199,15 +203,15 @@ public class SSMLtoAudioTest {
 
 	public void runTest(TTSService ttsservice, DynamicMarkHandler markHandler,
 	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors)
-	        throws SynthesisException, InterruptedException, SaxonApiException {
+	        throws SynthesisException, EncodingException, InterruptedException, SaxonApiException {
 		runTest(ttsservice, markHandler, audioEncoder, expectedGeneralErrors,
 		        expectedSentErrors, new CustomVoiceConfig());
 	}
 
 	public void runTest(TTSService ttsservice, DynamicMarkHandler markHandler,
 	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors,
-	        VoiceConfigExtension config) throws SynthesisException, InterruptedException,
-	        SaxonApiException {
+	        VoiceConfigExtension config) throws SynthesisException, EncodingException,
+	        InterruptedException, SaxonApiException {
 		runTest(ttsservice, markHandler, audioEncoder, expectedGeneralErrors,
 		        expectedSentErrors, config, "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>",
 		        "<ssml xml:lang=\"en\" id=\"s2\">test</ssml>");
@@ -233,7 +237,6 @@ public class SSMLtoAudioTest {
 			for (String text : ssml) {
 				ssmlToAudio.dispatchSSML(SSMLinXML(text));
 			}
-			ssmlToAudio.endSection();
 
 			AudioServices audioRegistry = new AudioServices();
 			audioRegistry.addEncoderService(audioEncoder);
@@ -539,7 +542,7 @@ public class SSMLtoAudioTest {
 				return Optional.of(
 					new AudioEncoder() {
 						@Override
-						public void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
+						public AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
 								throws Throwable {
 							throw new RuntimeException();
 						}
@@ -568,11 +571,12 @@ public class SSMLtoAudioTest {
 				return Optional.of(
 					new AudioEncoder() {
 						@Override
-						public void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
+						public AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
 								throws Throwable {
 							try {
 								Thread.sleep(5000);
-							} catch (Exception e) {
+								return new AudioClip(outputFile, Duration.ZERO, AudioUtils.getDuration(pcm));
+							} catch (InterruptedException e) {
 								interrupted.set(true);
 								throw e;
 							}
@@ -582,9 +586,13 @@ public class SSMLtoAudioTest {
 			}
 		};
 
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 1, 0,
-		        new VoiceConfigForSingleThread(),
-		        "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>");
+		try {
+			runTest(service, (DynamicMarkHandler) service.engine, encoder, 1, 0,
+			        new VoiceConfigForSingleThread(),
+			        "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>");
+			Assert.fail("EncodingException expected");
+		} catch (EncodingException e) {}
+
 		Assert.assertTrue("The audio encoding should have been interrupted", interrupted.get());
 	}
 

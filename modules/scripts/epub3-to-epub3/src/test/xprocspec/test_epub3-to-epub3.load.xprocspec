@@ -4,16 +4,17 @@
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="../../main/resources/xml/epub3-to-epub3.load.xpl">
+               script="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
 	
 	<x:scenario label="zipped">
-		<x:call step="px:epub3-to-epub3.load">
-			<x:option name="epub" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+		<x:call step="px:epub-load">
+			<x:option name="href" select="resolve-uri('../resources/valentin.epub',base-uri(.))"/>
+            <x:option name="version" select="'3'"/>
 		</x:call>
-		<x:context label="fileset">
-			<x:document type="port"  port="fileset"/>
+		<x:context label="the result.fileset port">
+			<x:document type="port"  port="result.fileset"/>
 		</x:context>
-		<x:expect label="fileset"
+		<x:expect label="the result.fileset port"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
@@ -42,8 +43,8 @@
 				</d:fileset>
 			</x:document>
 		</x:expect>
-		<x:context label="in-memory">
-			<x:document type="port"  port="in-memory"/>
+		<x:context label="the result.in-memory port">
+			<x:document type="port"  port="result.in-memory"/>
 		</x:context>
 		<x:expect label="the package document" type="compare">
 			<x:document type="file" href="../resources/valentin/EPUB/package.opf"/>
@@ -53,13 +54,14 @@
 	</x:scenario>
 	
 	<x:scenario label="unzipped">
-		<x:call step="px:epub3-to-epub3.load">
-			<x:option name="epub" select="resolve-uri('../resources/valentin/mimetype',base-uri(.))"/>
+		<x:call step="px:epub-load">
+			<x:option name="href" select="resolve-uri('../resources/valentin/mimetype',base-uri(.))"/>
+            <x:option name="version" select="'3'"/>
 		</x:call>
-		<x:context label="fileset">
-			<x:document type="port"  port="fileset"/>
+		<x:context label="the result.fileset port">
+			<x:document type="port"  port="result.fileset"/>
 		</x:context>
-		<x:expect label="fileset"
+		<x:expect label="the result.fileset port"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<!--
 			    note that the files are sorted differently

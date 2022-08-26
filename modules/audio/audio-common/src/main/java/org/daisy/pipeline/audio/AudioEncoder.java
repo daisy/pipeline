@@ -14,9 +14,13 @@ public interface AudioEncoder {
 	 * @param pcm is the raw input audio.
 	 * @param outputFileType the file format the encoder should write in
 	 * @param outputFile is the output audio file
+	 * return {@link AudioClip} object to convey a possible offset in the resulting file. Guaranteed
+	 *        to point to the specified output file and to have the length of the provided audio
+	 *        stream (apart from any rounding errors due to sampling), but may start at a position
+	 *        greater than 0.
 	 * @throws IllegalArgumentException if this decoder does not support <code>outputFileType</code>
 	 * @throws Throwable when some other error happens
 	 */
-	void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile) throws Throwable;
+	AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile) throws Throwable;
 
 }

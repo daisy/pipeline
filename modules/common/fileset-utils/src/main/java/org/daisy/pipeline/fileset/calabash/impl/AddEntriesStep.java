@@ -14,7 +14,6 @@ import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import javax.xml.XMLConstants;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
@@ -39,6 +38,7 @@ import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.pipeline.file.FileUtils;
+import org.daisy.pipeline.fileset.Fileset;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -58,15 +58,10 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 		}
 	}
 
-	private static final QName _HREF = new QName("href");
-	private static final QName _MEDIA_TYPE = new QName("media-type");
-	private static final QName _ORIGINAL_HREF = new QName("original-href");
 	private static final net.sf.saxon.s9api.QName _FIRST = new net.sf.saxon.s9api.QName("first");
 	private static final net.sf.saxon.s9api.QName _REPLACE = new net.sf.saxon.s9api.QName("replace");
 	private static final net.sf.saxon.s9api.QName _REPLACE_ATTRIBUTES = new net.sf.saxon.s9api.QName("replace-attributes");
 	private static final net.sf.saxon.s9api.QName _ASSERT_SINGLE_ENTRY = new net.sf.saxon.s9api.QName("assert-single-entry");
-	private static final QName XML_BASE = new QName(XMLConstants.XML_NS_URI, "base", "xml");
-	private static final QName D_FILE = new QName("http://www.daisy.org/ns/pipeline/data", "file", "d");
 
 	private ReadablePipe sourceFilesetPipe = null;
 	private ReadablePipe sourceInMemoryPipe = null;
@@ -124,7 +119,7 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 			List<File> entries; {
 				entries = new ArrayList<>();
 				boolean assertSingleEntry = getOption(_ASSERT_SINGLE_ENTRY, false);
-				RuntimeValue href = getOption(new net.sf.saxon.s9api.QName(_HREF));
+				RuntimeValue href = getOption(new net.sf.saxon.s9api.QName(Fileset.XMLConstants._HREF));
 				if (href != null)
 					for (XdmItem i : href.getValue())
 						entries.add(new File(URI.create(i.getStringValue())));
@@ -149,13 +144,13 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 						new IllegalArgumentException("Expected 1 document on the entry port (got 0)"));
 			}
 			URI originalHref; {
-				String option = getOption(new net.sf.saxon.s9api.QName(_ORIGINAL_HREF), "");
+				String option = getOption(new net.sf.saxon.s9api.QName(Fileset.XMLConstants._ORIGINAL_HREF), "");
 				if ("".equals(option))
 					originalHref = null;
 				else
 					originalHref = URI.create(option);
 			}
-			String mediaType = getOption(new net.sf.saxon.s9api.QName(_MEDIA_TYPE), "");
+			String mediaType = getOption(new net.sf.saxon.s9api.QName(Fileset.XMLConstants._MEDIA_TYPE), "");
 			if ("".equals(mediaType)) mediaType = null;
 			for (File f : entries) {
 				f.originalHref = originalHref;
@@ -208,7 +203,7 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 					else if (depth == 0) {
 						// <d:fileset>
 						for (int i = 0; i < source.getAttributeCount(); i++)
-							if (XML_BASE.equals(source.getAttributeName(i))) {
+							if (Fileset.XMLConstants.XML_BASE.equals(source.getAttributeName(i))) {
 								hasXmlBase = true;
 								filesetBase = filesetBase.resolve(source.getAttributeValue(i));
 								break;
@@ -233,7 +228,7 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 						// <d:file>
 						File match = null; {
 							for (int i = 0; i < source.getAttributeCount(); i++)
-								if (_HREF.equals(source.getAttributeName(i))) {
+								if (Fileset.XMLConstants._HREF.equals(source.getAttributeName(i))) {
 									URI base = FileUtils.normalizeURI(filesetBase.resolve(source.getAttributeValue(i)));
 									for (File f : entries)
 										if (f.base.equals(base)) {
@@ -306,14 +301,14 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 	                                        URI originalHref, String mediaType, Map<QName,String> otherAttributes)
 			throws XMLStreamException {
 		if (originalHref != null)
-			XMLStreamWriterHelper.writeAttribute(result, _ORIGINAL_HREF, originalHref.toASCIIString());
+			XMLStreamWriterHelper.writeAttribute(result, Fileset.XMLConstants._ORIGINAL_HREF, originalHref.toASCIIString());
 		if (mediaType != null)
-			XMLStreamWriterHelper.writeAttribute(result, _MEDIA_TYPE, mediaType);
+			XMLStreamWriterHelper.writeAttribute(result, Fileset.XMLConstants._MEDIA_TYPE, mediaType);
 		if (otherAttributes != null)
 			for (QName attr : otherAttributes.keySet())
-				if (_HREF.equals(attr) ||
-				    _ORIGINAL_HREF.equals(attr) ||
-				    _MEDIA_TYPE.equals(attr))
+				if (Fileset.XMLConstants._HREF.equals(attr) ||
+				    Fileset.XMLConstants._ORIGINAL_HREF.equals(attr) ||
+				    Fileset.XMLConstants._MEDIA_TYPE.equals(attr))
 					throw TransformerException.wrap(
 						new IllegalArgumentException(
 							"href, original-href and media-type are not allowed file attributes"));
@@ -321,8 +316,8 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 					XMLStreamWriterHelper.writeAttribute(result, attr, otherAttributes.get(attr));
 		if (existingAttributes != null)
 			for (QName attr : existingAttributes.keySet())
-				if ((originalHref == null || !_ORIGINAL_HREF.equals(attr)) &&
-				    (mediaType == null || !_MEDIA_TYPE.equals(attr)) &&
+				if ((originalHref == null || !Fileset.XMLConstants._ORIGINAL_HREF.equals(attr)) &&
+				    (mediaType == null || !Fileset.XMLConstants._MEDIA_TYPE.equals(attr)) &&
 				    (otherAttributes == null || !otherAttributes.containsKey(attr)))
 					XMLStreamWriterHelper.writeAttribute(result, attr, existingAttributes.get(attr));
 	}
@@ -344,12 +339,13 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 		}
 	}
 
+	@SuppressWarnings("serial")
 	private static class FileSet extends ArrayList<File> implements FutureWriterEvent {
 		boolean ready = false;
 		public void writeTo(XMLStreamWriter writer) throws XMLStreamException {
 			for (File f : this) {
-				XMLStreamWriterHelper.writeStartElement(writer, D_FILE);
-				XMLStreamWriterHelper.writeAttribute(writer, _HREF, f.href.toASCIIString());
+				XMLStreamWriterHelper.writeStartElement(writer, Fileset.XMLConstants.D_FILE);
+				XMLStreamWriterHelper.writeAttribute(writer, Fileset.XMLConstants._HREF, f.href.toASCIIString());
 				writeFileAttributes(writer, null, f.originalHref, f.mediaType, f.otherAttributes);
 				writer.writeEndElement();
 			}

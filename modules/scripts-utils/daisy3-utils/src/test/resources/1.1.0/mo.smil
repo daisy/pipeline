@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE smil PUBLIC "-//NISO//DTD dtbsmil v1.1.0//EN" "dtbsmil110.dtd">
+<smil>
+	<head>
+		<meta name="dtb:totalElapsedTime" content="0:00:00"/>
+	</head>
+	<body>
+		<seq id="root-seq">
+			<par id="s1" class="sent">
+				<text src="content.xml#h1"/>
+				<audio src="audio.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+			</par>
+			<par id="s2" class="sent">
+				<text src="content.xml#h2"/>
+				<audio src="audio.wav" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+			</par>
+		</seq>
+	</body>
+</smil>

@@ -6,16 +6,26 @@
                 exclude-inline-prefixes="#all">
 
     <p:option name="href" required="true">
-        <p:documentation>URI to the file you want to read bytes from.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>URI to the file you want to read bytes from.</p>
+            <p>May also be an entry inside a ZIP file.</p>
+        </p:documentation>
     </p:option>
     <p:option name="offset" required="true">
-        <p:documentation>Number of bytes to skip into the file.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Number of bytes to skip into the file.</p>
+        </p:documentation>
     </p:option>
     <p:option name="length" required="true">
-        <p:documentation>Number of bytes to include in the result.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Number of bytes to include in the result.</p>
+        </p:documentation>
     </p:option>
     <p:option name="use-base64" select="'false'">
-        <p:documentation>By default, the output will be hex-ecoded, which is normally easier to manipulate. If you want base64-encoded output then you can set this to true.</p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <p>By default, the output will be hex-ecoded, which is normally easier to manipulate. If you
+        want base64-encoded output then you can set this to true.</p>
+    </p:documentation>
     </p:option>
 
     <p:output port="result"/>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../../src/main/resources/xml/xproc/read-doctype.xpl">
+
+    <x:scenario label="read doctype">
+        <x:call step="px:read-doctype">
+            <x:option name="href" select="resolve-uri('samples/read-doctype.xml',base-uri())"/>
+        </x:call>
+        <x:context label="the result port">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="should be as expected" type="compare">
+            <x:document type="inline">
+                <c:result has-doctype-declaration="true"
+                          name="html"
+                          doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN"
+                          doctype-system="../../../../../../scripts-utils/html-utils/src/main/resources/xml/dtd/xhtml1-strict.dtd"
+                          doctype-declaration="&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;../../../../../../scripts-utils/html-utils/src/main/resources/xml/dtd/xhtml1-strict.dtd&quot;&gt;"/>
+            </x:document>
+        </x:expect>
+        <x:expect label="should have the correct base URI" type="xpath"
+                  test="base-uri(/*)"
+                  equals="resolve-uri('samples/read-doctype.xml',$test-base-uri)"/>
+    </x:scenario>
+
+</x:description>

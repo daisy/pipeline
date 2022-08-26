@@ -71,6 +71,12 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="recursive" select="false()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Don't use this option.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="fileset-library.xpl">
         <p:documentation>
             px:fileset-copy
@@ -111,35 +117,52 @@
 
     <p:variable name="fileset-base" select="base-uri(/*)"/>
 
-    <pxi:fileset-fix-original-hrefs name="fix" purge="true">
-        <p:documentation>
-            Make the original-href attributes reflect what is actually stored on disk. Also normalizes
-            @xml:base, @href and @original-href, relativizes @href against @xml:base, makes
-            @original-href absolute, and removes @xml:base from d:file.
-        </p:documentation>
-        <p:input port="source.in-memory">
-            <p:pipe step="main" port="in-memory.in"/>
-        </p:input>
-        <p:with-option name="fail-on-missing" select="$fail-on-error"/>
-    </pxi:fileset-fix-original-hrefs>
+    <p:choose name="normalize">
+        <p:when test="$recursive">
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="main" port="in-memory.in"/>
+            </p:output>
+            <!-- skip checks and normalization -->
+            <p:identity/>
+        </p:when>
+        <p:otherwise>
+            <p:output port="fileset" primary="true"/>
+            <p:output port="in-memory" sequence="true">
+                <p:pipe step="fix-hrefs" port="result.in-memory"/>
+            </p:output>
 
-    <p:viewport match="d:file">
-        <p:documentation>Fail if the file is outside of the base directory (URI is absolute or
-        starts with "..")</p:documentation>
-        <p:choose>
-            <p:when test="/*/@href[matches(.,'^[^/]+:') or starts-with(.,'..')]">
-                <px:error code="XXXX" message="File outside base directory $1: $2">
-                    <p:with-option name="param1" select="base-uri(/*)">
-                        <p:pipe step="fix" port="result.fileset"/>
-                    </p:with-option>
-                    <p:with-option name="param2" select="/*/@href"/>
-                </px:error>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-    </p:viewport>
+            <pxi:fileset-fix-original-hrefs name="fix-hrefs" purge="true">
+                <p:documentation>
+                    Make the original-href attributes reflect what is actually stored on disk. Also
+                    normalizes @xml:base, @href and @original-href, relativizes @href against
+                    @xml:base, makes @original-href absolute, and removes @xml:base from d:file.
+                </p:documentation>
+                <p:input port="source.in-memory">
+                    <p:pipe step="main" port="in-memory.in"/>
+                </p:input>
+                <p:with-option name="fail-on-missing" select="$fail-on-error"/>
+            </pxi:fileset-fix-original-hrefs>
+
+            <p:viewport match="d:file">
+                <p:documentation>Fail if the file is outside of the base directory (URI is absolute
+                or starts with "..")</p:documentation>
+                <p:choose>
+                    <p:when test="/*/@href[matches(.,'^[^/]+:') or starts-with(.,'..')]">
+                        <px:error code="XXXX" message="File outside base directory $1: $2">
+                            <p:with-option name="param1" select="base-uri(/*)">
+                                <p:pipe step="fix-hrefs" port="result.fileset"/>
+                            </p:with-option>
+                            <p:with-option name="param2" select="/*/@href"/>
+                        </px:error>
+                    </p:when>
+                    <p:otherwise>
+                        <p:identity/>
+                    </p:otherwise>
+                </p:choose>
+            </p:viewport>
+        </p:otherwise>
+    </p:choose>
 
     <p:documentation>Load zipped files into memory because px:zip and px:copy does not support these
     hrefs (includes `bundle:' and `jar:' files). For performance reasons, and also to avoid that the
@@ -287,7 +310,7 @@
                                 <p:pipe step="unzip-dir" port="normalized"/>
                             </p:with-option>
                             <p:input port="source.in-memory">
-                                <p:pipe step="fix" port="result.in-memory"/>
+                                <p:pipe step="normalize" port="in-memory"/>
                             </p:input>
                         </px:fileset-copy>
                         <!-- change zip files to directories -->
@@ -310,7 +333,7 @@
                         </p:for-each>
                         <p:sink/>
                     </p:group>
-                    <px:fileset-store name="store-to-temp">
+                    <px:fileset-store name="store-to-temp" recursive="true">
                         <p:input port="in-memory.in">
                             <p:pipe step="copy-to-temp" port="result.in-memory"/>
                         </p:input>
@@ -338,7 +361,7 @@
                             <p:pipe step="zip-fileset" port="result"/>
                         </p:input>
                         <p:input port="source.in-memory">
-                            <p:pipe step="fix" port="result.in-memory"/>
+                            <p:pipe step="normalize" port="in-memory"/>
                         </p:input>
                         <p:input port="update.fileset">
                             <p:pipe step="zip-from-temp" port="result"/>
@@ -351,7 +374,7 @@
                 <p:otherwise>
                     <p:output port="fileset" primary="true"/>
                     <p:output port="in-memory" sequence="true">
-                        <p:pipe step="fix" port="result.in-memory"/>
+                        <p:pipe step="normalize" port="in-memory"/>
                     </p:output>
                     <p:identity/>
                 </p:otherwise>
@@ -438,7 +461,7 @@
                     <p:with-option name="test"
                         select="concat('base-uri(/*)=&quot;',$target,'&quot;')"/>
                     <p:input port="source">
-                        <p:pipe step="fix" port="result.in-memory"/>
+                        <p:pipe step="normalize" port="in-memory"/>
                     </p:input>
                 </p:split-sequence>
                 <!-- guaranteed to return a single document (because purge option set on pxi:fileset-fix-original-hrefs above) -->

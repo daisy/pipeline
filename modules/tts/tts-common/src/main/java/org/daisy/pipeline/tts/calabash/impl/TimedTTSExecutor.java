@@ -20,7 +20,7 @@ class TimedTTSExecutor {
 	private static final int FIRST_CHARACTERS = 2500;
 	private static final int SHORT_SENTENCE_THRESHOLD = 25;
 	private Map<TTSEngine,Integer> totalCharacters = new HashMap<>(); // only count first 2500 characters
-	private Map<TTSEngine,Integer> maxMicrosecPerCharacter = new HashMap<>();
+	private Map<TTSEngine,Integer> maxMillisecPerCharacter = new HashMap<>();
 	private Map<TTSEngine,Integer> maxMillisecOfShortSentence = new HashMap<>(); // shorter than 25 characters
 
 	/**
@@ -46,22 +46,22 @@ class TimedTTSExecutor {
 			if (n == null)
 				return safeMillisec;
 			else {
-				// in the long run base timeout on maxMicrosecPerCharacter and maxMillisecOfShortSentence
-				Integer estimatedMicrosec = multiplyExact(maxMicrosecPerCharacter.get(engine), sentenceSize);
+				// in the long run base timeout on maxMillisecPerCharacter and maxMillisecOfShortSentence
+				Integer estimatedMillisec = multiplyExact(maxMillisecPerCharacter.get(engine), sentenceSize);
 				Integer minMillisec = maxMillisecOfShortSentence.get(engine);
 				if (minMillisec != null) {
-					if (estimatedMicrosec < multiplyExact(minMillisec, 1000))
-						estimatedMicrosec = multiplyExact(minMillisec, 1000);
+					if (estimatedMillisec < minMillisec)
+						estimatedMillisec = minMillisec;
 				} else if (sentenceSize < SHORT_SENTENCE_THRESHOLD)
-					estimatedMicrosec = multiplyExact(maxMicrosecPerCharacter.get(engine), SHORT_SENTENCE_THRESHOLD);
+					estimatedMillisec = multiplyExact(maxMillisecPerCharacter.get(engine), SHORT_SENTENCE_THRESHOLD);
 				if (n < FIRST_CHARACTERS)
 					// interpolate
 					return toIntExact(
 						addExact(
 							multiplyExact((long)safeMillisec, FIRST_CHARACTERS - n) / FIRST_CHARACTERS,
-							multiplyExact((long)estimatedMicrosec, 3 * n) / 1000 / FIRST_CHARACTERS));
+							multiplyExact((long)estimatedMillisec, 3 * n) / FIRST_CHARACTERS));
 				else
-					return multiplyExact(3, estimatedMicrosec) / 1000;
+					return multiplyExact(3, estimatedMillisec);
 			}
 		}
 	}
@@ -83,16 +83,16 @@ class TimedTTSExecutor {
 			if (log != null)
 				log.setTimeElapsed((float)millisecElapsed / 1000);
 			synchronized(totalCharacters) {
-				Long microsecElapsedPerCharacter = sentenceSize == 0
+				Long millisecElapsedPerCharacter = sentenceSize == 0
 					? 0
-					: multiplyExact(millisecElapsed, 1000) / sentenceSize;
-				int max = 1000; // don't go below 1 ms
-				if (maxMicrosecPerCharacter.containsKey(engine))
-					max = maxMicrosecPerCharacter.get(engine);
+					: millisecElapsed / sentenceSize;
+				int max = 1; // don't go below 1 ms
+				if (maxMillisecPerCharacter.containsKey(engine))
+					max = maxMillisecPerCharacter.get(engine);
 				else
-					maxMicrosecPerCharacter.put(engine, max);
-				if (microsecElapsedPerCharacter > max)
-					maxMicrosecPerCharacter.put(engine, toIntExact(microsecElapsedPerCharacter));
+					maxMillisecPerCharacter.put(engine, max);
+				if (millisecElapsedPerCharacter > max)
+					maxMillisecPerCharacter.put(engine, toIntExact(millisecElapsedPerCharacter));
 				if (sentenceSize < SHORT_SENTENCE_THRESHOLD
 				    && maxMillisecOfShortSentence.containsKey(engine)
 				    && millisecElapsed > maxMillisecOfShortSentence.get(engine))

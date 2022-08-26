@@ -38,14 +38,19 @@
 			documents).</p>
 		</p:documentation>
 	</p:option>
+	<p:option name="warn-on-missing" select="true()" cx:as="xs:boolean">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether to raise warnings for files that exist neither on disk or in memory.</p>
+		</p:documentation>
+	</p:option>
 	<p:option name="fail-on-missing" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>Whether to raise an error for files that are neither on disk or exist in memory.</p>
+			<p>Whether to raise an error for files that exist neither on disk or in memory.</p>
 		</p:documentation>
 	</p:option>
 	<p:option name="purge" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>Whether to remove files that are neither on disk or exist in memory.</p>
+			<p>Whether to remove files that exist neither on disk or in memory.</p>
 		</p:documentation>
 	</p:option>
 
@@ -94,6 +99,7 @@
 		<p:with-param name="detect-existing" select="$detect-existing"/>
 		<p:with-param name="fail-on-missing" select="$fail-on-missing"/>
 		<p:with-param name="purge" select="$purge"/>
+		<p:with-param name="warn-on-missing" select="$warn-on-missing"/>
 		<p:with-param name="in-memory-fileset" select="/*">
 			<p:pipe step="in-memory-fileset" port="result"/>
 		</p:with-param>

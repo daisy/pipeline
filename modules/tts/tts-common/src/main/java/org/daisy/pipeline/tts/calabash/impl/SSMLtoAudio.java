@@ -17,10 +17,12 @@ import java.util.concurrent.PriorityBlockingQueue;
 import javax.sound.sampled.AudioFileFormat;
 import javax.xml.transform.sax.SAXSource;
 
+import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.pipeline.audio.AudioServices;
@@ -80,12 +82,19 @@ import com.google.common.collect.Iterables;
  * 
  */
 public class SSMLtoAudio implements FormatSpecifications {
+
+	/*
+	 * The maximum number of sentences that a section (ContiguousText) can contain.
+	 */
+	private static int MAX_SENTENCES_PER_SECTION = 100;
+
 	private TTSEngine mLastTTS; //used if no TTS is found for the current sentence
 	private TTSRegistry mTTSRegistry;
 	private Logger mLogger;
 	private ContiguousText mCurrentSection;
 	private File mAudioDir; //where all the sound files will be stored
 	private final AudioFileFormat.Type mAudioFileFormat;
+	private int mSentenceCounter = 0;
 	private long mTotalTextSize;
 	private int mDocumentPosition;
 	private Map<TTSEngine, List<ContiguousText>> mOrganizedText;
@@ -300,12 +309,37 @@ public class SSMLtoAudio implements FormatSpecifications {
 	}
 
 	/**
+	 * @param node Document node of SSML document
+	 */
+	public void feedSSML(XdmNode doc) throws SynthesisException {
+		XdmSequenceIterator iter = doc.axisIterator(Axis.CHILD);
+		if (iter.hasNext()) {
+			traverse((XdmNode)iter.next());
+		}
+		endSection();
+	}
+
+	private void traverse(XdmNode node) throws SynthesisException {
+		if (SentenceTag.equals(node.getNodeName())) {
+			if (!dispatchSSML(node))
+				mErrorCounter++;
+			if (++mSentenceCounter % MAX_SENTENCES_PER_SECTION == 0)
+				endSection();
+		} else {
+			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
+			while (iter.hasNext())
+				traverse((XdmNode)iter.next());
+		}
+	}
+
+	/**
 	 * The SSML is assumed to be pushed in document order.
 	 *
 	 * @param ssml The input SSML
 	 * @return true when the SSML was successfully converted to speech, false when there was an error
 	 **/
-	public boolean dispatchSSML(XdmNode ssml) throws SynthesisException {
+	// package private for tests
+	boolean dispatchSSML(XdmNode ssml) throws SynthesisException {
 		String voiceEngine = ssml.getAttributeValue(Sentence_attr_select1);
 		String voiceName = ssml.getAttributeValue(Sentence_attr_select2);
 		String gender = ssml.getAttributeValue(Sentence_attr_gender);
@@ -393,7 +427,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 		return true;
 	}
 
-	public void endSection() {
+	private void endSection() {
 		mCurrentSection = null;
 	}
 
@@ -514,8 +548,8 @@ public class SSMLtoAudio implements FormatSpecifications {
 		return Iterables.concat(fragments);
 	}
 
-	int getErrorCount() {
-		return mErrorCounter;
+	double getErrorRate() {
+		return (double)mErrorCounter/mSentenceCounter;
 	}
 
 	private void reorganizeSections() {

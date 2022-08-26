@@ -73,6 +73,7 @@
             <x:context label="the error">
                 <x:document type="errors"/>
             </x:context>
+            <x:expect label="there should be errors" type="count" min="1"/>
             <x:expect label="missing files should result in an error" type="xpath"
                       test="/*/c:error[@code='PEZE00']
                                       [starts-with(string(.),'Found document in fileset that is neither stored on disk nor in memory:')]

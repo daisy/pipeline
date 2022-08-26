@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.stream.StreamSource;
 
 import com.google.common.io.ByteStreams;
@@ -30,6 +29,7 @@ import com.sun.net.httpserver.HttpServer;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry;
@@ -165,7 +165,7 @@ public class MockGoogle {
 									engine.releaseThreadResources(threadResources);
 							}
 							if (!audioFormat.equals(audio.getFormat()))
-								audio = AudioSystem.getAudioInputStream(audioFormat, audio);
+								audio = AudioUtils.convertAudioStream(audioFormat, audio);
 						}
 						String response = new JSONObject().put(
 							"audioContent",

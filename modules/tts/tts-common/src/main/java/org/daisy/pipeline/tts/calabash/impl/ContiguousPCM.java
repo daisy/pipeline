@@ -1,9 +1,11 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
 import java.io.File;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.sound.sampled.AudioInputStream;
 
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 
 /**
@@ -25,10 +27,10 @@ class ContiguousPCM implements Comparable<ContiguousPCM> {
 	}
 
 	ContiguousPCM(AudioInputStream audio, File destdir, String destFilePrefix) {
-		mDestURI = new StringBuilder();
 		mAudio = audio;
 		mDestDir = destdir;
 		mDestFilePrefix = destFilePrefix;
+		mDestFile = new AtomicReference<>();
 		int size = AudioFootprintMonitor.getFootprint(audio);
 		mSizeInBytes = minByteSize() + size;
 		mEncodingTimeApprox = size / audio.getFormat().getSampleSizeInBits();
@@ -51,8 +53,8 @@ class ContiguousPCM implements Comparable<ContiguousPCM> {
 		return mAudio;
 	}
 
-	StringBuilder getURIholder() {
-		return mDestURI;
+	AtomicReference<AudioClip> getDestinationFile() {
+		return mDestFile;
 	}
 
 	public int sizeInBytes() {
@@ -68,6 +70,6 @@ class ContiguousPCM implements Comparable<ContiguousPCM> {
 	private int mSizeInBytes; //used for monitoring the memory footprint
 	private File mDestDir;
 	private String mDestFilePrefix;
-	private StringBuilder mDestURI; //simple way to hold a string
+	private AtomicReference<AudioClip> mDestFile;
 
 }

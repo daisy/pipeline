@@ -1,6 +1,6 @@
 package org.daisy.pipeline.audio;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -43,10 +43,10 @@ public class AudioServices {
 		Iterator<AudioDecoderService> decoderServices = this.decoderServices.iterator();
 		return Optional.of(
 			new AudioDecoder() {
-				public AudioInputStream decode(File inputFile) throws UnsupportedAudioFileException, Throwable {
+				public AudioInputStream decode(InputStream input) throws UnsupportedAudioFileException, Throwable {
 					for (AudioDecoder d : decoders) {
 						try {
-							return d.decode(inputFile);
+							return d.decode(input);
 						} catch (UnsupportedAudioFileException e) {
 						}
 					}
@@ -55,7 +55,7 @@ public class AudioServices {
 						if (d.isPresent()) {
 							decoders.add(d.get());
 							try {
-								return d.get().decode(inputFile);
+								return d.get().decode(input);
 							} catch (UnsupportedAudioFileException e) {
 							}
 						}

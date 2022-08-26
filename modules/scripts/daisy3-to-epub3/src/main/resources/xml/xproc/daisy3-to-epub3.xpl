@@ -70,17 +70,20 @@
         </p:documentation>
     </p:option>-->
 
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-create
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/daisy3-utils/library.xpl">
         <p:documentation>
             px:daisy3-load
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">For putting it all into a ZIP container.</p>
-            <ul>
-                <li>px:epub3-store</li>
-            </ul>
+        <p:documentation>
+            px:epub3-store
         </p:documentation>
     </p:import>
     <p:import href="convert.xpl"/>
@@ -88,11 +91,19 @@
     <p:variable name="output-dir-checked" select="resolve-uri(replace($output-dir,'(.+?)/?$','$1/'))"/>
     <p:variable name="epub-file" select="concat($output-dir-checked,'result.epub')"/>
 
+    <px:fileset-create>
+        <p:with-option name="base" select="resolve-uri('./',base-uri(/*))"/>
+    </px:fileset-create>
+    <px:fileset-add-entry media-type="application/oebps-package+xml">
+        <p:input port="entry">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entry>
     <px:daisy3-load name="load" px:progress="1/10" px:message="Loading DAISY 3"/>
 
     <px:daisy3-to-epub3 name="convert" px:progress="8/10">
         <p:input port="source.in-memory">
-            <p:pipe step="load" port="in-memory.out"/>
+            <p:pipe step="load" port="result.in-memory"/>
         </p:input>
         <p:with-option name="mediaoverlays" select="$mediaoverlays"/>
         <p:with-option name="assert-valid" select="$assert-valid"/>

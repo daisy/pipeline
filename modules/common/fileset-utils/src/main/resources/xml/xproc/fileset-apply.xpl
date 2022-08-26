@@ -59,7 +59,7 @@
         Normalize input fileset, make href absolute, and make the original-href attributes reflect
         what is actually stored on disk.
     </p:documentation>
-    <pxi:fileset-fix-original-hrefs detect-existing="true" name="fix">
+    <pxi:fileset-fix-original-hrefs detect-existing="true" warn-on-missing="false" name="fix">
         <p:input port="source.in-memory">
             <p:pipe step="main" port="source.in-memory"/>
         </p:input>

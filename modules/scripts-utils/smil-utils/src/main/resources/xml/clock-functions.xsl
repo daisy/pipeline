@@ -7,7 +7,7 @@
                 xpath-default-namespace=""
                 exclude-result-prefixes="#all">
 
-    <xsl:function name="pf:smil-clock-value-to-seconds" as="xs:double">
+    <xsl:function name="pf:smil-clock-value-to-seconds" as="xs:decimal">
         <xsl:param name="string" as="xs:string"/>
         <xsl:variable name="stringTokenized" as="xs:string*"
             select="reverse(
@@ -21,17 +21,29 @@
                         1, 3)
                     )"/>
         <xsl:sequence
-            select=" (number($stringTokenized[1]) + (if (count($stringTokenized)&gt;=2) then number($stringTokenized[2])*60 else 0) + (if (count($stringTokenized)=3) then number($stringTokenized[3])*3600 else 0))
-            *(if (ends-with($string,'ms')) then 0.001 else (if (ends-with($string,'min')) then 60 else (if (ends-with($string,'h')) then 3600 else 1)))"/>
+            select="(  xs:decimal($stringTokenized[1])
+                     + (if (count($stringTokenized) &gt;= 2)
+                        then xs:decimal($stringTokenized[2]) * 60
+                        else 0)
+                     + (if (count($stringTokenized) = 3)
+                        then xs:decimal($stringTokenized[3]) * 3600
+                        else 0))
+                    * (if (ends-with($string,'ms'))
+                       then 0.001
+                       else if (ends-with($string,'min'))
+                       then 60
+                       else if (ends-with($string,'h'))
+                       then 3600
+                       else 1)"/>
     </xsl:function>
 
     <xsl:function name="pf:smil-seconds-to-timecount" as="xs:string">
-        <xsl:param name="number" as="xs:double"/>
+        <xsl:param name="number"/> <!-- as="xs:numeric" -->
         <xsl:value-of select="pf:smil-seconds-to-timecount($number,'s')"/>
     </xsl:function>
 
     <xsl:function name="pf:smil-seconds-to-timecount" as="xs:string">
-        <xsl:param name="number" as="xs:double"/>
+        <xsl:param name="number"/> <!-- as="xs:numeric" -->
         <xsl:param name="metric" as="xs:string"/>
         <xsl:choose>
             <xsl:when test="$metric='s'">
@@ -54,7 +66,7 @@
     </xsl:function>
 
     <xsl:function name="pf:smil-seconds-to-full-clock-value" as="xs:string">
-        <xsl:param name="number" as="xs:double"/>
+        <xsl:param name="number"/> <!-- as="xs:numeric" -->
         <xsl:variable name="HH"
             select="string(floor($number div 3600))"/>
         <xsl:variable name="MM"
@@ -67,7 +79,7 @@
     </xsl:function>
 
     <xsl:function name="pf:smil-seconds-to-partial-clock-value" as="xs:string">
-        <xsl:param name="number" as="xs:double"/>
+        <xsl:param name="number"/> <!-- as="xs:numeric" -->
         <!-- TODO: Throw error or warning if $number > 3600 ? -->
         <xsl:variable name="MM"
             select="concat(if (($number div 60) &lt; 10) then '0' else '', string(floor($number div 60)))"/>
@@ -77,7 +89,7 @@
     </xsl:function>
 
     <xsl:function name="pf:smil-seconds-to-clock-value" as="xs:string">
-        <xsl:param name="number" as="xs:double"/>
+        <xsl:param name="number"/> <!-- as="xs:numeric" -->
         <xsl:choose>
             <xsl:when test="$number &lt; 60">
                 <xsl:value-of select="pf:smil-seconds-to-timecount($number)"/>
@@ -91,7 +103,7 @@
         </xsl:choose>
     </xsl:function>
 
-    <xsl:function name="pf:smil-total-seconds" as="xs:double">
+    <xsl:function name="pf:smil-total-seconds" as="xs:decimal">
         <xsl:param name="smil" as="element()"/>
         <xsl:choose>
             <xsl:when test="$smil/self::mo:*">

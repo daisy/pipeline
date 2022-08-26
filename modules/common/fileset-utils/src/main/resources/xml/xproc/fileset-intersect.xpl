@@ -10,6 +10,7 @@
       <p>A fileset that contains only the files that are in all input filesets. Only the attributes
       from the <code>d:file</code> elements of the first input fileset are retained. Only the
       xml:base attribute of the first <code>d:fileset</code> is retained.</p>
+      <p>The fileset is normalized.</p>
     </p:documentation>
   </p:output>
 

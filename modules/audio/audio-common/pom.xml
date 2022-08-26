@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.9-SNAPSHOT</version>
+    <version>1.14.9</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>4.0.1-SNAPSHOT</version>
+  <version>5.0.0</version>
   <artifactId>audio-common</artifactId>
   <packaging>bundle</packaging>
 
@@ -19,26 +19,37 @@
 
   <dependencies>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
-      <artifactId>saxon-he</artifactId>
+      <artifactId>com.xmlcalabash</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>com.googlecode.soundlibs</groupId>
+        <artifactId>jlayer</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <!--
-          runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>file-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>fileset-utils</artifactId>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
   
@@ -46,7 +57,9 @@
     <expose-services>
       org.daisy.pipeline.audio.AudioServices,
       org.daisy.pipeline.audio.impl.SystemAudioDecoder,
+      org.daisy.pipeline.audio.impl.JLayerMP3Decoder,
       org.daisy.pipeline.audio.impl.SystemAudioEncoder,
+      org.daisy.pipeline.audio.calabash.impl.AudioRearrangeStep$Provider,
       org.daisy.pipeline.audio.saxon.impl.TranscodeAudioFileDefinition,
       org.daisy.pipeline.modules.impl.Module_audio_common
     </expose-services>

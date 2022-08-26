@@ -13,6 +13,9 @@
   <p:input port="fileset" primary="true"/>
   <p:input port="in-memory" sequence="true">
     <p:empty/>
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The input fileset.</p>
+    </p:documentation>
   </p:input>
 
   <p:output port="result.fileset">
@@ -25,8 +28,21 @@
       <p>All files are loaded into memory, unless if the "load-if-not-in-memory" option is set, then
       the "result" port will only contain documents that were already present in the "in-memory"
       input.</p>
+      <p>The fileset ("xml:base" and "href" attributes and base URIs of documents) is normalized.</p>
       <p>"original-href" attributes are removed from the manifest.</p>
     </p:documentation>
+  </p:output>
+
+  <p:output port="unfiltered.fileset">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>The unfiltered result.</p>
+      <p>A copy of the source fileset but with all matched files (matched by the <code>href</code>,
+      <code>media-types</code> and <code>not-media-types</code> options) loaded into memory.</p>
+    </p:documentation>
+    <p:pipe step="unfiltered" port="result.fileset"/>
+  </p:output>
+  <p:output port="unfiltered.in-memory" sequence="true">
+    <p:pipe step="unfiltered" port="result.in-memory"/>
   </p:output>
 
   <p:option name="href" select="''"/>
@@ -34,6 +50,20 @@
   <p:option name="not-media-types" select="''"/>
   <p:option name="fail-on-not-found" select="'false'"/>
   <p:option name="load-if-not-in-memory" select="'true'"/>
+  <p:option name="detect-serialization-properties" cx:as="xs:boolean" select="false()">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Whether to detect serialization properties of XML documents when loaded from disk. The
+      properties are added as attributes to the <code>d:file</code>. The following properties are
+      detected:</p>
+      <ul>
+          <li>doctype</li>
+          <li>doctype-public</li>
+          <li>doctype-system</li>
+      </ul>
+      <p>These attributes are expected not to be present in the input unless the file is already
+      loaded into memory (if they are present they will not be overwritten).</p>
+    </p:documentation>
+  </p:option>
 
   <p:import href="fileset-library.xpl">
     <p:documentation>
@@ -41,6 +71,7 @@
       px:fileset-create
       px:fileset-add-entry
       px:fileset-join
+      px:fileset-update
     </p:documentation>
   </p:import>
   <p:import href="load-html.xpl">
@@ -54,6 +85,7 @@
       px:set-base-uri
       px:normalize-uri
       px:data
+      px:read-doctype
     </p:documentation>
   </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -95,39 +127,96 @@
     <p:documentation>Normalize @href</p:documentation>
   </px:fileset-join>
   <p:identity name="filtered-normalized"/>
-  <p:delete match="@original-href" name="result.fileset"/>
-  <p:for-each>
-    <p:iteration-source select="/*/*"/>
-    <p:identity/>
-  </p:for-each>
-  <p:count limit="1" name="filtered.count"/>
-  <p:identity>
-    <p:input port="source">
-      <p:pipe port="result" step="filtered-normalized"/>
-    </p:input>
-  </p:identity>
+  <p:delete match="@original-href"/>
+  <p:choose>
+    <p:when test="$detect-serialization-properties">
+      <p:identity name="fileset-without-serialization-properties"/>
+      <p:sink/>
+      <px:fileset-join>
+        <p:input port="source">
+          <p:pipe step="fileset-without-serialization-properties" port="result"/>
+          <p:pipe step="load" port="newly-loaded-files-with-doctype"/>
+        </p:input>
+      </px:fileset-join>
+    </p:when>
+    <p:otherwise>
+      <p:identity/>
+    </p:otherwise>
+  </p:choose>
+  <p:identity name="result.fileset"/>
+  <p:sink/>
 
+  <!--
+      input fileset updated with result fileset
+  -->
+  <p:choose name="unfiltered" cx:pure="true">
+    <p:when test="$href='' and $media-types='' and $not-media-types=''">
+      <p:output port="result.fileset" primary="true"/>
+      <p:output port="result.in-memory" sequence="true">
+        <p:pipe step="load" port="result"/>
+      </p:output>
+      <p:identity>
+        <p:input port="source">
+          <p:pipe step="result.fileset" port="result"/>
+        </p:input>
+      </p:identity>
+    </p:when>
+    <p:otherwise>
+      <p:output port="result.fileset" primary="true"/>
+      <p:output port="result.in-memory" sequence="true">
+        <p:pipe step="update" port="result.in-memory"/>
+      </p:output>
+      <px:fileset-update name="update">
+        <p:input port="source.fileset">
+          <p:pipe step="main" port="fileset"/>
+        </p:input>
+        <p:input port="source.in-memory">
+          <p:pipe step="main" port="in-memory"/>
+        </p:input>
+        <p:input port="update.fileset">
+          <p:pipe step="result.fileset" port="result"/>
+        </p:input>
+        <p:input port="update.in-memory">
+          <p:pipe step="load" port="result"/>
+        </p:input>
+      </px:fileset-update>
+    </p:otherwise>
+  </p:choose>
+  <p:sink/>
+
+  <p:count limit="1">
+    <p:input port="source" select="/*/*">
+      <p:pipe step="filtered-normalized" port="result"/>
+    </p:input>
+  </p:count>
   <p:choose name="load">
     <p:when test="number(/*)&gt;0">
-      <p:xpath-context>
-        <p:pipe port="result" step="filtered.count"/>
-      </p:xpath-context>
-      <p:output port="result" sequence="true"/>
-      <p:for-each>
-        <p:output port="result" sequence="true"/>
-        <p:iteration-source select="//d:file"/>
+      <p:output port="result" primary="true" sequence="true"/>
+      <p:output port="newly-loaded-files-with-doctype" sequence="true">
+        <p:pipe step="for-each" port="newly-loaded-files-with-doctype"/>
+      </p:output>
+      <p:for-each name="for-each">
+        <p:output port="result" primary="true" sequence="true"/>
+        <p:output port="newly-loaded-files-with-doctype" sequence="true">
+          <p:pipe step="choose" port="newly-loaded-files-with-doctype"/>
+        </p:output>
+        <p:iteration-source select="//d:file">
+          <p:pipe step="filtered-normalized" port="result"/>
+        </p:iteration-source>
         <p:variable name="target" select="/*/resolve-uri(@href, base-uri(.))"/>
-        <p:variable name="on-disk" select="/*/resolve-uri((@original-href,@href)[1], base-uri(.))"/>
         <p:variable name="media-type" select="/*/@media-type"/>
         <p:variable name="method" select="/*/@method"/>
-
-        <p:choose>
-          <p:xpath-context>
-            <p:pipe port="result" step="fileset.in-memory"/>
-          </p:xpath-context>
+        <p:variable name="exists-in-memory" cx:as="xs:boolean" select="$target=//d:file/resolve-uri(@href,base-uri(.))">
+          <p:pipe step="fileset.in-memory" port="result"/>
+        </p:variable>
+        <p:choose name="choose">
 
           <!-- from memory -->
-          <p:when test="$target = //d:file/resolve-uri(@href,base-uri(.))">
+          <p:when test="$exists-in-memory">
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="newly-loaded-files-with-doctype" sequence="true">
+              <p:empty/>
+            </p:output>
             <p:split-sequence px:message="processing file from memory: {$target}" px:message-severity="DEBUG">
               <p:input port="source">
                 <p:pipe port="in-memory" step="normalized"/>
@@ -142,6 +231,10 @@
 
           <!-- not in memory, but don't load it from disk -->
           <p:when test="not($load-if-not-in-memory = 'true')">
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="newly-loaded-files-with-doctype" sequence="true">
+              <p:empty/>
+            </p:output>
             <p:sink/>
             <p:identity>
               <p:input port="source">
@@ -152,11 +245,18 @@
 
           <!-- load file into memory (from disk, HTTP, etc) -->
           <p:otherwise>
+            <p:output port="result" primary="true" sequence="true">
+                <p:pipe step="newly-loaded" port="result"/>
+            </p:output>
+            <p:output port="newly-loaded-files-with-doctype" sequence="true">
+              <p:pipe step="newly-loaded-files-with-doctype" port="result"/>
+            </p:output>
+            <p:variable name="href" select="replace(/*/resolve-uri((@original-href,@href)[1], base-uri(.)),'^(jar|bundle):','')"/>
             <p:try>
               <p:group>
-                <p:identity px:message-severity="DEBUG" px:message="loading {$target} from disk {$on-disk}"/>
+                <p:identity px:message-severity="DEBUG" px:message="loading {$target} from disk {$href}"/>
                 <p:choose>
-                  <p:when test="starts-with($on-disk,'file:') and not(pf:file-exists($on-disk))">
+                  <p:when test="starts-with($href,'file:') and not(pf:file-exists($href))">
                     <p:error code="XC0011">
                       <p:input port="source">
                         <p:inline>
@@ -165,9 +265,9 @@
                       </p:input>
                     </p:error>
                   </p:when>
-                  <p:when test="contains($on-disk, '!/')">
-                    <p:variable name="file" select="replace($on-disk, '^(jar:)?([^!]+)!/(.+)$', '$2')"/>
-                    <p:variable name="path-in-zip" select="replace($on-disk, '^([^!]+)!/(.+)$', '$2')"/>
+                  <p:when test="matches($href,'^file:') and contains($href,'!/')">
+                    <p:variable name="file" select="replace($href, '^([^!]+)!/(.+)$', '$2')"/>
+                    <p:variable name="path-in-zip" select="replace($href, '^([^!]+)!/(.+)$', '$2')"/>
                     <p:variable name="escaped-path-in-zip" select="pf:unescape-uri($path-in-zip)"/>
                     <p:identity px:message="Loading {$escaped-path-in-zip} from ZIP {$file}" px:message-severity="DEBUG"/>
                   </p:when>
@@ -176,16 +276,15 @@
                   </p:otherwise>
                 </p:choose>
                 <p:sink/>
-
                 <p:choose>
-                  <p:variable name="on-disk-maybe-in-zip" select="if (contains($on-disk,'!/'))
-                                                                  then replace($on-disk,'^file:','jar:file:')
-                                                                  else $on-disk"/>
+                  <p:variable name="href-maybe-in-zip" select="if (matches($href,'^file:') and contains($href,'!/'))
+                                                               then replace($href,'^file:','jar:file:')
+                                                               else $href"/>
 
                   <!-- Force HTML -->
                   <p:when test="$method='html'">
                     <pxi:load-html>
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </pxi:load-html>
                   </p:when>
 
@@ -194,7 +293,7 @@
                     <p:try>
                       <p:group>
                         <p:load>
-                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                          <p:with-option name="href" select="$href-maybe-in-zip"/>
                         </p:load>
                       </p:group>
                       <p:catch>
@@ -202,7 +301,7 @@
                           <p:input port="source">
                             <p:empty/>
                           </p:input>
-                          <p:with-option name="message" select="concat('unable to load ',$on-disk,' as XML')"/>
+                          <p:with-option name="message" select="concat('unable to load ',$href,' as XML')"/>
                         </px:message>
                       </p:catch>
                     </p:try>
@@ -211,21 +310,21 @@
                   <!-- Force text -->
                   <p:when test="$method='text'">
                     <px:data content-type="text/plain; charset=utf-8">
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- Force binary -->
                   <p:when test="$method='binary'">
                     <px:data content-type="binary/octet-stream">
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- HTML -->
                   <p:when test="$media-type='text/html' or $media-type='application/xhtml+xml'">
                     <pxi:load-html>
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </pxi:load-html>
                   </p:when>
 
@@ -234,7 +333,7 @@
                     <p:try>
                       <p:group>
                         <p:load>
-                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                          <p:with-option name="href" select="$href-maybe-in-zip"/>
                         </p:load>
                       </p:group>
                       <p:catch>
@@ -242,10 +341,10 @@
                           <p:input port="source">
                             <p:empty/>
                           </p:input>
-                          <p:with-option name="message" select="concat('unable to load ',$on-disk,' as XML; trying as text...')"/>
+                          <p:with-option name="message" select="concat('unable to load ',$href,' as XML; trying as text...')"/>
                         </px:message>
                         <px:data content-type="text/plain; charset=utf-8">
-                          <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                          <p:with-option name="href" select="$href-maybe-in-zip"/>
                         </px:data>
                       </p:catch>
                     </p:try>
@@ -254,20 +353,20 @@
                   <!-- text -->
                   <p:when test="matches($media-type,'^text/')">
                     <px:data content-type="text/plain; charset=utf-8">
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </px:data>
                   </p:when>
 
                   <!-- binary -->
                   <p:otherwise>
                     <px:data content-type="binary/octet-stream">
-                      <p:with-option name="href" select="$on-disk-maybe-in-zip"/>
+                      <p:with-option name="href" select="$href-maybe-in-zip"/>
                     </px:data>
                   </p:otherwise>
                 </p:choose>
 
                 <p:choose>
-                  <p:when test="not($on-disk=$target) or contains($on-disk,'!/')">
+                  <p:when test="not($href=$target) or (matches($href,'^file:') and contains($href,'!/'))">
                     <px:set-base-uri>
                       <p:with-option name="base-uri" select="$target"/>
                     </px:set-base-uri>
@@ -321,18 +420,78 @@
                 </p:identity>
               </p:catch>
             </p:try>
+            <p:identity name="newly-loaded"/>
+            <p:for-each>
+              <p:choose>
+                <p:when test="$detect-serialization-properties and not(exists(/c:data))">
+                  <p:sink/>
+                  <px:read-doctype>
+                    <p:with-option name="href" select="$href"/>
+                  </px:read-doctype>
+                  <p:for-each>
+                    <p:choose>
+                      <p:when test="/*/@doctype-public and /*/@doctype-system">
+                        <px:fileset-add-entry>
+                          <p:input port="source.fileset">
+                              <p:inline exclude-inline-prefixes="#all"><d:fileset/></p:inline>
+                          </p:input>
+                          <p:with-option name="href" select="$target"/>
+                          <p:with-param port="file-attributes" name="doctype-public" select="/*/@doctype-public"/>
+                          <p:with-param port="file-attributes" name="doctype-system" select="/*/@doctype-system"/>
+                        </px:fileset-add-entry>
+                      </p:when>
+                      <p:when test="/*/@doctype-declaration">
+                        <px:fileset-add-entry>
+                          <p:input port="source.fileset">
+                              <p:inline exclude-inline-prefixes="#all"><d:fileset/></p:inline>
+                          </p:input>
+                          <p:with-option name="href" select="$target"/>
+                          <p:with-param port="file-attributes" name="doctype" select="/*/@doctype-declaration"/>
+                        </px:fileset-add-entry>
+                      </p:when>
+                      <p:otherwise>
+                        <p:identity>
+                          <p:input port="source">
+                            <p:empty/>
+                          </p:input>
+                        </p:identity>
+                      </p:otherwise>
+                    </p:choose>
+                  </p:for-each>
+                </p:when>
+                <p:otherwise>
+                  <p:sink/>
+                  <p:identity>
+                    <p:input port="source">
+                      <p:empty/>
+                    </p:input>
+                  </p:identity>
+                </p:otherwise>
+              </p:choose>
+            </p:for-each>
+            <p:identity name="newly-loaded-files-with-doctype"/>
+            <p:sink/>
           </p:otherwise>
         </p:choose>
       </p:for-each>
-
     </p:when>
     <p:otherwise>
-      <p:output port="result" sequence="true"/>
+      <p:output port="result" primary="true" sequence="true"/>
+      <p:output port="newly-loaded-files-with-doctype" sequence="true">
+        <p:empty/>
+      </p:output>
       <!-- no files matched filter criteria (or fileset empty) -->
-      <p:variable name="file-not-found-message"
-        select="if (not($href='')) then concat('File is not part of fileset: ',$href) else 'Fileset empty or no files matched filter criteria. No files loaded.'"/>
+      <p:identity>
+        <p:input port="source">
+          <p:empty/>
+        </p:input>
+      </p:identity>
       <p:choose>
         <p:when test="not($href='') and $fail-on-not-found='true'">
+          <p:variable name="file-not-found-message"
+                      select="if (not($href=''))
+                              then concat('File is not part of fileset: ',$href)
+                              else 'Fileset empty or no files matched filter criteria. No files loaded.'"/>
           <p:in-scope-names name="vars"/>
           <p:template name="error">
             <p:input port="template">
@@ -357,11 +516,6 @@
           <p:identity/>
         </p:otherwise>
       </p:choose>
-      <p:identity>
-        <p:input port="source">
-          <p:empty/>
-        </p:input>
-      </p:identity>
     </p:otherwise>
   </p:choose>
   <p:sink/>

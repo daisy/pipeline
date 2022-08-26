@@ -12,7 +12,7 @@
 	<x:scenario label="minimal">
 		<x:call step="px:epub3-to-epub3">
 			<x:option name="result-base" select="resolve-uri('result/')"/>
-			<x:input port="epub.in.fileset">
+			<x:input port="source.fileset">
 				<x:document type="inline">
 					<d:fileset>
 						<d:file href="mimetype" media-type="text/plain" compression-method="stored"/>
@@ -25,7 +25,7 @@
 					</d:fileset>
 				</x:document>
 			</x:input>
-			<x:input port="epub.in.in-memory">
+			<x:input port="source.in-memory">
 				<x:document type="inline" xml:base="mimetype">
 					<c:data content-type="text/plain">application/epub+zip</c:data>
 				</x:document>
@@ -204,10 +204,10 @@
 				</x:input>
 				<x:option name="include-tts-log" select="'true'"/> <!-- log can be found in "tts-log" output -->
 			</x:call>
-			<x:context label="epub.out.fileset port">
-				<x:document type="port" port="epub.out.fileset"/>
+			<x:context label="result.fileset port">
+				<x:document type="port" port="result.fileset"/>
 			</x:context>
-			<x:expect label="epub.out.fileset port" type="custom"
+			<x:expect label="result.fileset port" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
@@ -222,29 +222,29 @@
 						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml"/>
 						<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
 						<d:file href="result/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0000_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0000_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0001_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0001_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0001_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0001_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0001_02_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0001_02_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0002_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0002_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0002_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0002_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0002_02_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0002_02_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_03_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0002_03_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0002_03_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_04_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/audio/part0002_04_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0002_04_000.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
 			<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
 			<x:context label="package.opf">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
 			</x:context>
 			<x:expect label="package.opf" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
@@ -293,7 +293,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="nav.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
 			</x:context>
 			<x:expect label="nav.xhtml" type="compare">
 				<x:document type="inline">
@@ -326,7 +326,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="cover.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
 			</x:context>
 			<x:expect label="cover.xhtml" type="compare">
 				<x:document type="inline">
@@ -346,7 +346,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="front.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]"/>
 			</x:context>
 			<x:expect label="front.xhtml" type="compare">
 				<x:document type="inline">
@@ -390,7 +390,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="chapter.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
 			</x:context>
 			<x:expect label="chapter.xhtml" type="compare">
 				<x:document type="inline">
@@ -438,7 +438,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="cover.smil">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/cover.smil')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/cover.smil')]"/>
 			</x:context>
 			<x:expect label="cover.smil" type="compare">
 				<x:document type="inline">
@@ -453,7 +453,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="front.smil">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/front.smil')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/front.smil')]"/>
 			</x:context>
 			<x:expect label="front.smil" type="compare">
 				<x:document type="inline">
@@ -506,7 +506,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="chapter.smil">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/chapter.smil')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/mo/chapter.smil')]"/>
 			</x:context>
 			<x:expect label="chapter.smil" type="compare">
 				<x:document type="inline">
@@ -572,7 +572,7 @@
 				<x:option name="ensure-pagenum-text" select="'hidden'"/>
 			</x:call>
 			<x:context label="front.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]
 				                                                          //html:div[@id='page_front_4']"/>
 			</x:context>
 			<x:expect label="front.xhtml" type="compare">
@@ -590,10 +590,10 @@
 				<x:option name="sentence-detection" select="true()"/>
 				<x:option name="sentence-class" select="'sentence'"/>
 			</x:call>
-			<x:context label="epub.out.fileset port">
-				<x:document type="port" port="epub.out.fileset"/>
+			<x:context label="result.fileset port">
+				<x:document type="port" port="result.fileset"/>
 			</x:context>
-			<x:expect label="epub.out.fileset port" type="custom"
+			<x:expect label="result.fileset port" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
@@ -609,7 +609,7 @@
 			</x:expect>
 			<x:expect label="mimetype is first entry" type="xpath" test="contains(/*/d:file[1]/@href,'mimetype')"/>
 			<x:context label="package.opf">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
 			</x:context>
 			<x:expect label="package.opf" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
@@ -639,7 +639,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="nav.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/nav.xhtml')]"/>
 			</x:context>
 			<x:expect label="nav.xhtml" type="compare">
 				<x:document type="inline">
@@ -672,7 +672,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="chapter.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
 			</x:context>
 			<x:expect label="chapter.xhtml" type="compare">
 				<x:document type="inline">
@@ -742,10 +742,10 @@
 					</x:document>
 				</x:input>
 			</x:call>
-			<x:context label="epub.out.fileset port">
-				<x:document type="port" port="epub.out.fileset"/>
+			<x:context label="result.fileset port">
+				<x:document type="port" port="result.fileset"/>
 			</x:context>
-			<x:expect label="epub.out.fileset port" type="custom"
+			<x:expect label="result.fileset port" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
@@ -760,7 +760,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="package.opf">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package.opf')]"/>
 			</x:context>
 			<x:expect label="package.opf" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
@@ -797,7 +797,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="cover.xhtml">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/cover.xhtml')]"/>
 			</x:context>
 			<x:expect label="cover.xhtml" type="compare">
 				<x:document type="inline">
@@ -819,7 +819,7 @@
 	
 	<x:scenario label="valentin">
 		<x:call step="px:epub3-to-epub3">
-			<x:input port="epub.in.fileset">
+			<x:input port="source.fileset">
 				<x:document type="inline">
 					<d:fileset>
 						<d:file href="../resources/valentin.epub!/mimetype" compression-method="stored"/>
@@ -847,7 +847,7 @@
 					</d:fileset>
 				</x:document>
 			</x:input>
-			<x:input port="epub.in.in-memory"/>
+			<x:input port="source.in-memory"/>
 			<x:option name="result-base" select="resolve-uri('result/')"/>
 			<x:option name="braille-translator" select="'(translator:liblouis)'"/>
 			<x:option name="stylesheet" select="''"/>
@@ -868,10 +868,10 @@
 				<x:option name="tts" select="false()"/>
 				<x:option name="sentence-detection" select="false()"/>
 			</x:call>
-			<x:context label="epub.out.fileset port">
-				<x:document type="port" port="epub.out.fileset"/>
+			<x:context label="result.fileset port">
+				<x:document type="port" port="result.fileset"/>
 			</x:context>
-			<x:expect label="epub.out.fileset port" type="custom"
+			<x:expect label="result.fileset port" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
@@ -935,7 +935,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="the package document">
-				<x:document type="port" port="epub.out.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package-braille.opf')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/package-braille.opf')]"/>
 			</x:context>
 			<x:expect label="the package document" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
@@ -1004,7 +1004,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="the container document">
-				<x:document type="port" port="epub.out.in-memory"
+				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/META-INF/container.xml')]"/>
 			</x:context>
 			<x:expect label="the in-memory output port contains the container document" type="compare">
@@ -1022,13 +1022,13 @@
 				</x:document>
 			</x:expect>
 			<x:context label="the first content document">
-				<x:document type="port" port="epub.out.in-memory"
+				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/EPUB/C00000-1-cover_braille.xhtml')]"/>
 			</x:context>
 			<x:expect label="cross-references should be correct" type="xpath"
 			          test="/html:html/html:head/html:link[@rel='next']/@href" equals="'C00000-2-frontmatter_braille.xhtml'"/>
 			<x:context label="the renditionMapping document">
-				<x:document type="port" port="epub.out.in-memory"
+				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/EPUB/renditionMapping.html')]"/>
 			</x:context>
 			<x:expect label="the renditionMapping document should be as expected" type="compare">
@@ -1124,10 +1124,10 @@
 				<x:option name="tts-audio-file-type" select="'audio/x-wav'"/>
 				<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_epub3-to-epub3/valentin/')"/>
 			</x:call>
-			<x:context label="epub.out.fileset port">
-				<x:document type="port" port="epub.out.fileset"/>
+			<x:context label="result.fileset port">
+				<x:document type="port" port="result.fileset"/>
 			</x:context>
-			<x:expect label="epub.out.fileset port" type="custom"
+			<x:expect label="result.fileset port" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
@@ -1174,72 +1174,72 @@
 						<d:file href="result/EPUB/mo/C00000-2-frontmatter.smil" media-type="application/smil+xml"/>
 						<d:file href="result/EPUB/mo/C00000-3-chapter.smil" media-type="application/smil+xml"/>
 						<d:file href="result/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0000_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0000_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0001_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0001_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0002_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0002_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0003_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0003_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0003_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0004_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0004_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0004_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0005_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0005_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0005_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0006_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0006_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0006_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0007_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0007_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0007_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0007_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0007_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0007_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0008_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0008_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0008_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0008_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0008_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0008_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0009_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0009_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0009_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0009_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0009_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0009_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0010_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0010_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0010_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0010_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0010_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0010_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0011_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0011_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0011_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0011_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0011_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0011_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0012_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0012_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0012_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0012_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0012_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0012_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0013_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0013_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0013_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0013_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0013_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0013_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0014_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0014_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0014_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0015_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0015_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0015_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0016_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0016_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0016_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0017_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0017_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0017_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0018_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0018_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0018_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0019_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0019_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0019_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0019_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0019_01_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0019_01_000.wav"/>
 						<d:file href="result/EPUB/audio/part0020_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0020_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0020_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0021_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0021_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0021_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0022_00_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/audio/part0022_00_000.wav"/>
+						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0022_00_000.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
 			<x:context label="the C00000-1-cover.xhtml document">
-				<x:document type="port" port="epub.out.in-memory"
+				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/EPUB/C00000-1-cover.xhtml')]/html:body"/>
 			</x:context>
 			<x:expect label="the C00000-1-cover.xhtml document" type="compare">
@@ -1277,7 +1277,7 @@
 				</x:document>
 			</x:expect>
 			<x:context label="the C00000-1-cover.smil document">
-				<x:document type="port" port="epub.out.in-memory"
+				<x:document type="port" port="result.in-memory"
 				            select="/*[base-uri()=resolve-uri('result/EPUB/mo/C00000-1-cover.smil')]"/>
 			</x:context>
 			<x:expect label="the C00000-1-cover.smil document" type="compare">

@@ -90,6 +90,7 @@
         <x:context label="the error">
             <x:document type="errors"/>
         </x:context>
+        <x:expect label="there should be errors" type="count" min="1"/>
         <x:expect label="error expected" type="xpath" test="/c:errors/c:error/normalize-space(string())"
                   equals="'Trying to update a fileset with a file that is not in the source manifest: file:/foo/file_3.xml'"/>
     </x:scenario>

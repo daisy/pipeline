@@ -1,0 +1,85 @@
+<!-- Resource File 2005-1 DTD 2005-06-26
+ file: resource-2005-1.dtd
+
+Authors v1.1.0: Tom McLaughlin, Michael Moodie, Thomas Kjellberg Christensen
+Change list v1.1.0:
+2001-12-06  M. Moodie. Changed content model of resource element to eliminate ambiguity.
+2002-02-12  M. Moodie. Changed dtd version from 1.0.1 to 1.1.0 per changes in other DTDs.
+2002-02-27 M. Moodie. Grammatical changes suggested by editor.
+
+Authors v1.1.4: Markus Gylling, Ole Holst Andersen, George Kerscher
+Change list v1.1.5:
+2004-09-15 M. Moodie.  Corrected path in formal identifier.
+2004-09-16 M. Moodie.  Changed version to 1.2.0
+2005-06-26 M. Gylling. Changed pid, sid, ns uri, and filename for Z3986-2005
+
+The following identifiers apply to this DTD:
+"-//NISO//DTD resource 2005-1//EN"
+"http://www.daisy.org/z3986/2005/resource-2005-1.dtd"
+-->
+
+<!-- languagecode: An RFC3066 two or three letter language code. -->
+<!ENTITY % languagecode "NMTOKEN">
+
+<!-- SMILtimeVal: Subset of W3C SMIL 2.0 clock value. Subset defined in Z39.86-2005 section 7.7 -->
+<!ENTITY % SMILtimeVal "CDATA">
+
+<!-- URI: An RFC2396 uniform resource identifier -->
+<!ENTITY % URI "CDATA">
+
+<!-- XpathSubset: Subset of W3C XPath 1.0. Subset defined in Z3986.2005 section 10.3 -->
+<!ENTITY % XpathSubset "CDATA" >
+
+<!ELEMENT resources  (head?, scope+) >
+<!ATTLIST resources
+  version  CDATA      #FIXED  '2005-1'
+  xmlns    CDATA      #FIXED  'http://www.daisy.org/z3986/2005/resource/'
+  id       ID         #IMPLIED
+>
+
+<!ELEMENT head  (meta*) >
+
+<!ELEMENT meta EMPTY >
+<!ATTLIST meta
+  name      CDATA    #REQUIRED
+  content   CDATA    #REQUIRED
+  scheme    CDATA    #IMPLIED
+>
+
+<!ELEMENT scope  (nodeSet+) >
+<!ATTLIST scope
+  nsuri     %URI;    #REQUIRED
+  id        ID       #IMPLIED
+>
+
+<!ELEMENT nodeSet  (resource+) >
+<!ATTLIST nodeSet
+  select  %XpathSubset;  #REQUIRED
+  id      ID             #REQUIRED
+>
+
+<!ELEMENT resource  (((text, audio?) | audio), img?) >
+<!ATTLIST resource
+  xml:lang    %languagecode;  #REQUIRED
+  id          ID              #IMPLIED
+>
+
+<!ELEMENT text  (#PCDATA) >
+<!ATTLIST text
+  id     ID           #IMPLIED
+  dir    (ltr|rtl)    #IMPLIED
+>
+
+<!ELEMENT audio  EMPTY >
+<!ATTLIST audio
+  src        %URI;          #REQUIRED
+  clipBegin  %SMILtimeVal;  #REQUIRED
+  clipEnd    %SMILtimeVal;  #REQUIRED
+  id         ID             #IMPLIED
+>
+
+<!ELEMENT img  EMPTY >
+<!ATTLIST img
+  src    %URI;    #REQUIRED
+  id     ID       #IMPLIED
+>

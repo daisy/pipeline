@@ -11,6 +11,7 @@
 	<xsl:param name="detect-existing" as="xs:boolean" required="yes"/>
 	<xsl:param name="fail-on-missing" as="xs:boolean" required="yes"/>
 	<xsl:param name="purge" as="xs:boolean" required="yes"/>
+	<xsl:param name="warn-on-missing" as="xs:boolean" required="yes"/>
 	<xsl:param name="in-memory-fileset" as="element(d:fileset)" required="yes"/>
 
 	<xsl:template match="@*|node()">
@@ -79,19 +80,18 @@
 											<xsl:with-param name="code" select="QName('','PEZE01')"/>
 										</xsl:call-template>
 									</xsl:when>
-									<xsl:when test="$purge">
-										<xsl:call-template name="pf:warn">
-											<xsl:with-param name="msg" select="$message"/>
-										</xsl:call-template>
-									</xsl:when>
 									<xsl:otherwise>
-										<xsl:call-template name="pf:warn">
-											<xsl:with-param name="msg" select="$message"/>
-										</xsl:call-template>
-										<xsl:copy>
-											<xsl:apply-templates select="@* except @original-href"/>
-											<xsl:apply-templates/>
-										</xsl:copy>
+										<xsl:if test="$warn-on-missing">
+											<xsl:call-template name="pf:warn">
+												<xsl:with-param name="msg" select="$message"/>
+											</xsl:call-template>
+										</xsl:if>
+										<xsl:if test="not($purge)">
+											<xsl:copy>
+												<xsl:apply-templates select="@* except @original-href"/>
+												<xsl:apply-templates/>
+											</xsl:copy>
+										</xsl:if>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:when>
@@ -110,16 +110,15 @@
 									<xsl:with-param name="code" select="QName('','PEZE00')"/>
 								</xsl:call-template>
 							</xsl:when>
-							<xsl:when test="$purge">
-								<xsl:call-template name="pf:warn">
-									<xsl:with-param name="msg" select="$message"/>
-								</xsl:call-template>
-							</xsl:when>
 							<xsl:otherwise>
-								<xsl:call-template name="pf:warn">
-									<xsl:with-param name="msg" select="$message"/>
-								</xsl:call-template>
-								<xsl:next-match/>
+								<xsl:if test="$warn-on-missing">
+									<xsl:call-template name="pf:warn">
+										<xsl:with-param name="msg" select="$message"/>
+									</xsl:call-template>
+								</xsl:if>
+								<xsl:if test="not($purge)">
+									<xsl:next-match/>
+								</xsl:if>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:otherwise>

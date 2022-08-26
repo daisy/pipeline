@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:dc="http://purl.org/dc/elements/1.1/"
+               xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/"
+               xmlns:ncx="http://www.daisy.org/z3986/2005/ncx/"
+               script="../../main/resources/xml/internal/audio-transcode.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:daisy3-audio-transcode">
+			<x:option name="new-audio-file-type" select="'audio/aiff'"/>
+			<x:option name="new-audio-dir" select="resolve-uri('./')"/>
+			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_audio-transcode/')"/>
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="book.opf" media-type="application/oebps-package+xml"/>
+						<d:file href="mo.smil" media-type="application/smil+xml"/>
+						<d:file href="content.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="navigation.ncx" media-type="application/x-dtbncx+xml"/>
+						<d:file href="resources.res" media-type="application/x-dtbresource+xml"/>
+						<d:file href="audio.wav" media-type="audio/x-wav" original-href="../resources/1.1.0/audio.wav"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="book.opf">
+					<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+						<metadata>
+							<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+								<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+								<dc:Language>en</dc:Language>
+								<dc:Date>2020-06-29</dc:Date>
+								<dc:Publisher>Publisher</dc:Publisher>
+								<dc:Title>Title</dc:Title>
+								<dc:Identifier id="uid">urn:uuid:123</dc:Identifier>
+								<dc:Author>Author</dc:Author>
+							</dc-metadata>
+							<x-metadata>
+								<meta name="dtb:multimediaType" content="audioFullText"/>
+								<meta name="dtb:totalTime" content="0:00:04"/>
+								<meta name="dtb:multimediaContent" content="audio,text"/>
+								<meta name="dtb:audioFormat" content="wav"/>
+							</x-metadata>
+						</metadata>
+						<manifest>
+							<item href="book.opf" id="opf" media-type="text/xml"/>
+							<item href="content.xml" id="content" media-type="application/x-dtbook+xml"/>
+							<item href="mo.smil" id="mo" media-type="application/smil"/>
+							<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+							<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
+							<item href="audio.wav" id="audio" media-type="audio/x-wav"/>
+						</manifest>
+						<spine>
+							<itemref idref="mo"/>
+						</spine>
+					</package>
+				</x:document>
+				<x:document type="inline" xml:base="content.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+						<book>
+							<bodymatter>
+								<level1>
+									<h1 id="h1" smilref="mo.smil#sh1">
+										Part 1
+									</h1>
+									<level2>
+										<h2 id="h2" smilref="mo.smil#sh2">
+											Chapter 1.1
+										</h2>
+									</level2>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+				<x:document type="inline" xml:base="navigation.ncx">
+					<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+						<head>
+							<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+							<meta name="dtb:uid" content="uid"/>
+							<meta name="dtb:depth" content="02"/>
+							<meta name="dtb:totalPageCount" content="0"/>
+							<meta name="dtb:maxPageNumber" content="0"/>
+							<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+							<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+							<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+							<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+							<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+							<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+							<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+						</head>
+						<docTitle/>
+						<navMap>
+							<navPoint playOrder="1" id="ncx-1">
+								<navLabel>
+									<text>Part 1</text>
+									<audio clipBegin="0:00:00.000" clipEnd="0:00:01.500" src="audio.wav"/>
+								</navLabel>
+								<content src="mo.smil#s1"/>
+								<navPoint playOrder="2" id="ncx-2">
+									<navLabel>
+										<text>Chapter 1.1</text>
+										<audio clipBegin="0:00:01.500" clipEnd="0:00:04.000" src="audio.wav"/>
+									</navLabel>
+									<content src="mo.smil#s2"/>
+								</navPoint>
+							</navPoint>
+						</navMap>
+					</ncx>
+				</x:document>
+				<x:document type="inline" xml:base="mo.smil" xmlns="http://www.w3.org/2001/SMIL20/">
+					<smil>
+						<head>
+							<meta name="dtb:totalElapsedTime" content="0:00:00"/>
+						</head>
+						<body>
+							<seq id="root-seq">
+								<par id="s1" class="sent">
+									<text src="content.xml#h1"/>
+									<audio src="audio.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+								</par>
+								<par id="s2" class="sent">
+									<text src="content.xml#h2"/>
+									<audio src="audio.wav" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+								</par>
+							</seq>
+						</body>
+					</smil>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result.fileset">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="book.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="mo.smil" media-type="application/smil+xml"/>
+					<d:file href="content.xml" media-type="application/x-dtbook+xml"/>
+					<d:file href="navigation.ncx" media-type="application/x-dtbncx+xml"/>
+					<d:file href="resources.res" media-type="application/x-dtbresource+xml"/>
+					<d:file href="audio.aif" media-type="audio/aiff"
+					        original-href="../../../target/xprocspec/test_audio-transcode/audio.aif"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the OPF document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('book.opf')]"/>
+		</x:context>
+		<x:expect label="the OPF document" type="compare">
+			<x:document type="inline" xmlns="http://openebook.org/namespaces/oeb-package/1.0/">
+				<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="uid">
+					<metadata>
+						<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+							<dc:Format>ANSI/NISO Z39.86-2005</dc:Format>
+							<dc:Language>en</dc:Language>
+							<dc:Date>2020-06-29</dc:Date>
+							<dc:Publisher>Publisher</dc:Publisher>
+							<dc:Title>Title</dc:Title>
+							<dc:Identifier id="uid">urn:uuid:123</dc:Identifier>
+							<dc:Author>Author</dc:Author>
+						</dc-metadata>
+						<x-metadata>
+							<meta name="dtb:multimediaType" content="audioFullText"/>
+							<meta name="dtb:totalTime" content="0:00:04"/>
+							<meta name="dtb:multimediaContent" content="audio,text"/>
+						</x-metadata>
+					</metadata>
+					<manifest>
+						<item href="book.opf" id="opf" media-type="text/xml"/>
+						<item href="content.xml" id="content" media-type="application/x-dtbook+xml"/>
+						<item href="mo.smil" id="mo" media-type="application/smil"/>
+						<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
+						<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
+						<item href="audio.aif" id="audio" media-type="audio/aiff"/>
+					</manifest>
+					<spine>
+						<itemref idref="mo"/>
+					</spine>
+				</package>
+			</x:document>
+		</x:expect>
+		<x:context label="the NCX document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('navigation.ncx')]//ncx:navMap"/>
+		</x:context>
+		<x:expect label="the NCX document" type="compare">
+			<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/ncx/">
+				<navMap>
+					<navPoint playOrder="1" id="ncx-1">
+						<navLabel>
+							<text>Part 1</text>
+							<audio clipBegin="0:00:00.000" clipEnd="0:00:01.500" src="audio.aif"/>
+						</navLabel>
+						<content src="mo.smil#s1"/>
+						<navPoint playOrder="2" id="ncx-2">
+							<navLabel>
+								<text>Chapter 1.1</text>
+								<audio clipBegin="0:00:01.500" clipEnd="0:00:04.000" src="audio.aif"/>
+							</navLabel>
+							<content src="mo.smil#s2"/>
+						</navPoint>
+					</navPoint>
+				</navMap>
+			</x:document>
+		</x:expect>
+		<x:context label="the SMIL document">
+			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('mo.smil')]"/>
+		</x:context>
+		<x:expect label="the SMIL document" type="compare">
+			<x:document type="inline" xmlns="http://www.w3.org/2001/SMIL20/">
+				<smil>
+					<head>
+						<meta name="dtb:totalElapsedTime" content="0:00:00"/>
+					</head>
+					<body>
+						<seq id="root-seq">
+							<par id="s1" class="sent">
+								<text src="content.xml#h1"/>
+								<audio src="audio.aif" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+							</par>
+							<par id="s2" class="sent">
+								<text src="content.xml#h2"/>
+								<audio src="audio.aif" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+							</par>
+						</seq>
+					</body>
+				</smil>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

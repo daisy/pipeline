@@ -6,6 +6,10 @@
         uri="../xml/clock-functions.xsl"/>
    <public publicId='-//W3C//DTD SMIL 1.0//EN' uri='../xml/dtd/SMIL10.dtd'/>
    <system systemId='http://www.w3.org/TR/REC-smil/SMIL10.dtd' uri='../xml/dtd/SMIL10.dtd'/>
+   <public publicId='-//NISO//DTD dtbsmil v1.1.0//EN' uri='../xml/dtd/dtbsmil110.dtd'/>
+   <system systemId='http://www.loc.gov/nls/z3986/v100/dtbsmil110.dtd' uri='../xml/dtd/dtbsmil110.dtd'/>
+   <public publicId='-//NISO//DTD dtbsmil 2005-1//EN' uri='../xml/dtd/dtbsmil-2005-1.dtd'/>
+   <system systemId='http://www.daisy.org/z3986/2005/dtbsmil-2005-1.dtd' uri='../xml/dtd/dtbsmil-2005-1.dtd'/>
    <public publicId='-//NISO//DTD dtbsmil 2005-2//EN' uri='../xml/dtd/dtbsmil-2005-2.dtd'/>
    <system systemId='http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd' uri='../xml/dtd/dtbsmil-2005-2.dtd'/>
    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>

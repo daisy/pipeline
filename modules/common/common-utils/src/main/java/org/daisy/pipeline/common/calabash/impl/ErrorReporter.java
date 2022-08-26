@@ -9,6 +9,8 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import com.google.common.collect.ImmutableMap;
+
 import org.daisy.common.transform.InputValue;
 import org.daisy.common.transform.OutputValue;
 import org.daisy.common.transform.TransformerException;
@@ -18,6 +20,7 @@ import org.daisy.common.xproc.XProcError;
 
 public class ErrorReporter implements XMLTransformer {
 
+	private final static QName _SOURCE = new QName("source");
 	private static final QName C_ERROR = new QName("http://www.w3.org/ns/xproc-step", "error");
 
 	private final Consumer<XProcError> reporter;
@@ -28,16 +31,10 @@ public class ErrorReporter implements XMLTransformer {
 
 	@Override
 	public Runnable transform(Map<QName,InputValue<?>> input, Map<QName,OutputValue<?>> output) {
-		QName _source = new QName("source");
-		for (QName n : input.keySet())
-			if (!n.equals(_source))
-				throw new IllegalArgumentException("unexpected value on input port " + n);
-		for (QName n : output.keySet())
-			throw new IllegalArgumentException("unexpected value on output port " + n);
-		InputValue<?> source = input.get(_source);
-		if (source != null && !(source instanceof XMLInputValue))
-			throw new IllegalArgumentException("input on 'source' port is not XML");
-		return () -> report(((XMLInputValue<?>)source).ensureSingleItem().asXMLStreamReader());
+		input = XMLTransformer.validateInput(input, ImmutableMap.of(_SOURCE, InputType.MANDATORY_NODE_SINGLE));
+		output = XMLTransformer.validateOutput(output, null);
+		XMLInputValue<?> source = (XMLInputValue<?>)input.get(_SOURCE);
+		return () -> report(source.asXMLStreamReader());
 	}
 
 	private void report(XMLStreamReader reader) throws TransformerException {

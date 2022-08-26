@@ -3,15 +3,18 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioEncoderService;
 import static org.daisy.pipeline.audio.AudioFileTypes.MP3;
+import org.daisy.pipeline.audio.AudioUtils;
 
 import org.ops4j.pax.exam.util.PathUtils;
 
@@ -39,7 +42,7 @@ public class MockEncoder implements AudioEncoderService {
 		return Optional.of(
 			new AudioEncoder() {
 				@Override
-				public void encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
+				public AudioClip encode(AudioInputStream pcm, AudioFileFormat.Type outputFileType, File outputFile)
 						throws Throwable {
 					if (!MP3.equals(outputFileType))
 						throw new IllegalArgumentException();
@@ -61,6 +64,7 @@ public class MockEncoder implements AudioEncoderService {
 						if (from != null) from.close();
 						if (to != null) to.close();
 					}
+					return new AudioClip(outputFile, Duration.ZERO, AudioUtils.getDuration(pcm));
 				}
 			}
 		);

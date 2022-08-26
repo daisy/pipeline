@@ -22,6 +22,7 @@
         <x:context label="Should result in error">
             <x:document type="errors"/>
         </x:context>
+        <x:expect label="Should result in error" type="count" min="1"/>
         <x:expect label="Should result in a XC0011 error: https://www.w3.org/TR/xproc/#err.D0011"
                   type="xpath" test="//c:error/@code" equals="'err:XC0011'"/>
     </x:scenario>

@@ -138,7 +138,8 @@
         <x:context label="the error">
             <x:document type="errors"/>
         </x:context>
-        <x:expect label="should be as expected" type="xpath" test="contains(string(//c:error),'File outside base directory')"/>
+        <x:expect label="there should be errors" type="count" min="1"/>
+        <x:expect label="the error should be as expected" type="xpath" test="contains(string(//c:error),'File outside base directory')"/>
     </x:scenario>
     
     <x:scenario label="copy fileset with flatten">

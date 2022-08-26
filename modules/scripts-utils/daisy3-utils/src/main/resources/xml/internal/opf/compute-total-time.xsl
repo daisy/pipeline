@@ -11,9 +11,9 @@
 		<!-- Get the last SMIL file. -->
 		<xsl:variable name="last-smil" as="document-node(element(s:smil))" select="collection()[last()]"/>
 		<!-- Assumes that it has the dtb:totalElapsedTime metadata. -->
-		<xsl:variable name="time-elapsed" as="xs:double"
+		<xsl:variable name="time-elapsed" as="xs:decimal"
 		              select="pf:smil-clock-value-to-seconds($last-smil/s:smil/s:head/s:meta[@name='dtb:totalElapsedTime']/@content)"/>
-		<xsl:variable name="time-in-this-smil" as="xs:double" select="pf:smil-total-seconds($last-smil/*)"/>
+		<xsl:variable name="time-in-this-smil" as="xs:decimal" select="pf:smil-total-seconds($last-smil/*)"/>
 		<total-time>
 			<xsl:value-of select="pf:smil-seconds-to-full-clock-value($time-elapsed + $time-in-this-smil)"/>
 		</total-time>

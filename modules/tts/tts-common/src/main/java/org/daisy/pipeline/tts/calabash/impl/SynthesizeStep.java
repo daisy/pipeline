@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Random;
@@ -12,13 +13,11 @@ import java.util.concurrent.Semaphore;
 
 import javax.sound.sampled.AudioFileFormat;
 
-import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmNode;
-import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioFileTypes;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
@@ -47,11 +46,6 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 	private static QName ENCODING_ERROR = new QName("TTS01");
 
-	/*
-	 * The maximum number of sentences that a section (ContiguousText) can contain.
-	 */
-	private static int MAX_SENTENCES_PER_SECTION = 100;
-	
 	private ReadablePipe source = null;
 	private ReadablePipe config = null;
 	private WritablePipe result = null;
@@ -66,23 +60,17 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 	private String mTempDirOpt;
 	private boolean mIncludeLogOpt;
 	private AudioFileFormat.Type mAudioFileType;
-	private int mSentenceCounter = 0;
-	private int mErrorCounter = 0;
 
-	private static String convertSecondToString(double seconds) {
-		int iseconds = (int) (Math.floor(seconds));
-		int milliseconds = (int) (Math.floor(1000 * (seconds - iseconds)));
-		return String.format("%d:%02d:%02d.%03d", iseconds / 3600, (iseconds / 60) % 60,
-		        (iseconds % 60), milliseconds);
-	}
-
-	public static XdmNode getFirstChild(XdmNode node) {
-		XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
-		if (iter.hasNext()) {
-			return (XdmNode) iter.next();
-		} else {
-			return null;
-		}
+	private static String convertDurationToString(Duration duration) {
+		long hours = duration.toHours();
+		long minutes = duration.toMinutes();
+		long seconds = duration.getSeconds();
+		long milliseconds = duration.getNano() / 1000000;
+		return String.format("%d:%02d:%02d.%03d",
+		                     hours,
+		                     minutes,
+		                     seconds,
+		                     milliseconds);
 	}
 
 	public SynthesizeStep(XProcRuntime runtime, XAtomicStep step, TTSRegistry ttsRegistry,
@@ -140,20 +128,6 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		logOutput.resetWriter();
 	}
 
-	public void traverse(XdmNode node, SSMLtoAudio pool) throws SynthesisException {
-		if (SentenceTag.equals(node.getNodeName())) {
-			if (!pool.dispatchSSML(node))
-				mErrorCounter++;
-			if (++mSentenceCounter % MAX_SENTENCES_PER_SECTION == 0)
-				pool.endSection();
-		} else {
-			XdmSequenceIterator iter = node.axisIterator(Axis.CHILD);
-			while (iter.hasNext()) {
-				traverse((XdmNode) iter.next(), pool);
-			}
-		}
-	}
-
 	public void run() throws SaxonApiException {
 		super.run();
 
@@ -183,7 +157,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			if (mTempDirOpt != null && !mTempDirOpt.isEmpty()) {
 				try {
 					audioOutputDir = new File(new URI(mTempDirOpt));
-				} catch (URISyntaxException e) {
+				} catch (URISyntaxException|IllegalArgumentException e) {
 					throw new RuntimeException("temp-dir option invalid: " + mTempDirOpt);
 				}
 				if (audioOutputDir.exists())
@@ -207,15 +181,11 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		        mAudioFootprintMonitor, mRuntime.getProcessor(), configExt, log);
 
 		Iterable<SoundFileLink> soundFragments = Collections.EMPTY_LIST;
-		mErrorCounter = 0;
-		mSentenceCounter = 0;
 		try {
 			while (source.moreDocuments()) {
-				traverse(getFirstChild(source.read()), ssmltoaudio);
-				ssmltoaudio.endSection();
+				ssmltoaudio.feedSSML(source.read());
 			}
 			Iterable<SoundFileLink> newfrags = ssmltoaudio.blockingRun(mAudioServices);
-			mErrorCounter += ssmltoaudio.getErrorCount();
 			soundFragments = Iterables.concat(soundFragments, newfrags);
 		} catch (SynthesisException e) {
 			logger.error("Synthesis failed", e);
@@ -239,25 +209,25 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		tw.addStartElement(OutputRootTag);
 
 		int num = 0;
-		for (SoundFileLink sf : soundFragments) {
-			String soundFileURI = sf.soundFileURIHolder.toString();
-			if (!soundFileURI.isEmpty()) {
-				if (sf.clipBegin < sf.clipEnd){
-					//sf.clipBegin = sf.clipEnd if the input text is empty. Those clips are not useful
-					//and they can eventually lead to validation errors
+		for (SoundFileLink link : soundFragments) {
+			AudioClip clip = link.getAudioFragment(log);
+			if (clip != null) {
+				if (!clip.clipEnd.equals(clip.clipBegin)) { // empty clips are not useful and can eventually
+				                                            // lead to validation errors
 					tw.addStartElement(ClipTag);
-					tw.addAttribute(Audio_attr_id, sf.xmlid);
-					tw.addAttribute(Audio_attr_clipBegin, convertSecondToString(sf.clipBegin));
-					tw.addAttribute(Audio_attr_clipEnd, convertSecondToString(sf.clipEnd));
-					tw.addAttribute(Audio_attr_src, soundFileURI);
+					tw.addAttribute(Audio_attr_id, link.getTextFragment());
+					tw.addAttribute(Audio_attr_clipBegin,
+					                convertDurationToString(clip.clipBegin));
+					tw.addAttribute(Audio_attr_clipEnd,
+					                convertDurationToString(clip.clipEnd));
+					tw.addAttribute(Audio_attr_src, clip.src.toString());
 					tw.addEndElement();
 				}
 				++num;
-				TTSLog.Entry entry = log.getOrCreateEntry(sf.xmlid);
-				entry.setSoundfile(soundFileURI);
-				entry.setPositionInFile(sf.clipBegin, sf.clipEnd);
+				TTSLog.Entry entry = log.getOrCreateEntry(link.getTextFragment());
+				entry.setClip(clip);
 			} else {
-				log.getOrCreateEntry(sf.xmlid).addError(
+				log.getOrCreateEntry(link.getTextFragment()).addError(
 				        new TTSLog.Error(ErrorCode.AUDIO_MISSING,
 				                "not synthesized or not encoded"));
 			}
@@ -278,12 +248,11 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		tw = new TreeWriter(runtime);
 		tw.startDocument(runtime.getStaticBaseURI());
 		tw.addStartElement(StatusRootTag);
-		if (mErrorCounter == 0)
+		if (ssmltoaudio.getErrorRate() == 0)
 			tw.addAttribute(Status_attr_result, "ok");
 		else {
 			tw.addAttribute(Status_attr_result, "error");
-			tw.addAttribute(Status_attr_success_rate,
-			                (int)Math.floor(100 * (1 - (double)mErrorCounter/mSentenceCounter)) + "%");
+			tw.addAttribute(Status_attr_success_rate, (int)Math.floor(100 * (1 - ssmltoaudio.getErrorRate())) + "%");
 		}
 		tw.addEndElement();
 		tw.endDocument();
@@ -306,11 +275,11 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 				xmlLog.addStartElement(LogTextTag);
 
 				xmlLog.addAttribute(Log_attr_id, entry.getKey());
-				if (le.getSoundFile() != null) {
-					String basename = new File(le.getSoundFile()).getName();
+				if (le.getClip() != null) {
+					String basename = new File(le.getClip().src).getName();
 					xmlLog.addAttribute(Log_attr_file, basename);
-					xmlLog.addAttribute(Log_attr_begin, String.valueOf(le.getBeginInFile()));
-					xmlLog.addAttribute(Log_attr_end, String.valueOf(le.getEndInFile()));
+					xmlLog.addAttribute(Log_attr_begin, String.valueOf(le.getClip().clipBegin)); // ISO-8601 seconds based representation
+					xmlLog.addAttribute(Log_attr_end, String.valueOf(le.getClip().clipEnd));
 				}
 
 				xmlLog.addAttribute(Log_attr_timeout, "" + le.getTimeout() + "s");

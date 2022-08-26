@@ -22,7 +22,7 @@
 	    epub2-to-epub3
 	    epub3-to-daisy202
 	    epub3-to-daisy3
-        dtbook-to-zedai
+	    dtbook-to-zedai
 	-->
 	<p:option name="validation" required="false" select="'off'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -62,7 +62,7 @@
 	    dtbook-to-epub3
 	    zedai-to-epub3
 	-->
-	<p:input port="tts-config">
+	<p:input port="tts-config" px:media-type="application/vnd.pipeline.tts-config+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Text-to-speech configuration file</h2>
 			<p px:role="desc" xml:space="preserve">Configuration file for the text-to-speech.

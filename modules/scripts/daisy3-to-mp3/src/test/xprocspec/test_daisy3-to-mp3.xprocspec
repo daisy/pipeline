@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/daisy3-to-mp3.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:daisy3-to-mp3">
+			<x:input port="source.fileset">
+				<x:document type="inline" xml:base="../../../../daisy3-to-daisy202/src/test/resources/Chimpanzee/">
+					<d:fileset>
+						<d:file href="0001.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0002.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0003.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0004.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0005.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0006.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0007.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0008.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0009.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0010.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0011.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0012.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0013.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0014.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0015.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0016.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0017.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0018.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0019.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="0020.smil" media-type="application/smil+xml" media-version="dtb-2005-2"
+						        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+						<d:file href="navigation.ncx" media-type="application/x-dtbncx+xml" media-version="2005-1"
+						        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
+						<d:file href="package.opf" media-type="application/oebps-package+xml" media-version="1.2"
+						        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+						        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
+						<d:file href="aud001.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud002.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud003.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud004.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud005.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud006.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud007.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud008.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud009.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud010.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud011.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud012.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud013.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud014.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud015.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud016.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud017.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud018.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud019.mp3" media-type="audio/mpeg"/>
+						<d:file href="aud020.mp3" media-type="audio/mpeg"/>
+						<d:file href="tpbnarrator.res" media-type="application/x-dtbresource+xml" media-version="2005-1"
+						        doctype-public="-//NISO//DTD resource 2005-1//EN"
+						        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"/>
+						<d:file href="tpbnarrator_res.mp3" media-type="audio/mpeg"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+			<x:option name="output-dir" select="resolve-uri('test/output-dir/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('test/temp-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline" base-uri="temp-dir">
+				<d:fileset>
+					<d:file href="test/output-dir/001/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp1.mp3"/>
+					<d:file href="test/output-dir/002/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp2.mp3"/>
+					<d:file href="test/output-dir/003/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp3.mp3"/>
+					<d:file href="test/output-dir/004/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp4.mp3"/>
+					<d:file href="test/output-dir/005/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp5.mp3"/>
+					<d:file href="test/output-dir/006/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp6.mp3"/>
+					<d:file href="test/output-dir/007/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp7.mp3"/>
+					<d:file href="test/output-dir/008/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp8.mp3"/>
+					<d:file href="test/output-dir/009/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp9.mp3"/>
+					<d:file href="test/output-dir/010/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp10.mp3"/>
+					<d:file href="test/output-dir/011/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp11.mp3"/>
+					<d:file href="test/output-dir/012/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp12.mp3"/>
+					<d:file href="test/output-dir/013/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp13.mp3"/>
+					<d:file href="test/output-dir/014/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp14.mp3"/>
+					<d:file href="test/output-dir/015/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp15.mp3"/>
+					<d:file href="test/output-dir/015/002/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp16.mp3"/>
+					<d:file href="test/output-dir/015/003/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp17.mp3"/>
+					<d:file href="test/output-dir/015/004/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp18.mp3"/>
+					<d:file href="test/output-dir/016/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp19.mp3"/>
+					<d:file href="test/output-dir/017/001/001.mp3" media-type="audio/mpeg" original-href="test/temp-dir/tmp20.mp3"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

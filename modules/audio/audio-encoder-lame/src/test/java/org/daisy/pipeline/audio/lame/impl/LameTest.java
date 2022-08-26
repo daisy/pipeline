@@ -1,250 +1,203 @@
 package org.daisy.pipeline.audio.lame.impl;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
-import java.util.Random;
+import java.util.Optional;
 
+import javax.inject.Inject;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioFormat.Encoding;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 
-import org.daisy.common.shell.BinaryFinder;
+import org.daisy.pipeline.audio.AudioDecoder;
 import org.daisy.pipeline.audio.AudioEncoder;
 import static org.daisy.pipeline.audio.AudioFileTypes.MP3;
+import org.daisy.pipeline.audio.AudioServices;
+import org.daisy.pipeline.audio.AudioUtils;
+import org.daisy.pipeline.junit.AbstractTest;
+
+import com.google.common.io.ByteStreams;
 
 import org.junit.Assert;
 import org.junit.Assume;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.google.common.io.Files;
-
 /**
  * Pre-requisites:
- * 
- * - avconv installed
+ *
  * - Read and write permissions on the OS' tmp directory
  */
-public class LameTest {
 
-	private static byte[] mp3ToPCM(AudioFormat originalFormat, String mp3File)
-	        throws IOException, InterruptedException {
+public class LameTest extends AbstractTest {
 
-		Assume.assumeTrue("Test can not be run because avconv not present",
-		                  BinaryFinder.find("avconv").isPresent());
-		
-		String tmp = System.getProperty("java.io.tmpdir");
-		File pcmFile = new File(tmp, "converted.pcm");
+	@Inject
+	public AudioServices audioServices;
+
+	/**
+	 * Decode MP3 file to PCM data
+	 */
+	private AudioInputStream mp3ToPCM(AudioFormat pcmFormat, File mp3File) {
+		Optional<AudioDecoder> decoder = audioServices.newDecoder(MP3, new HashMap<String,String>());
+		if (!decoder.isPresent())
+			throw new RuntimeException("No MP3 decoder found"); // should not happen
 		try {
-			pcmFile.delete();
-		} catch (Exception e) {
-			//file already exists
+			AudioInputStream pcm = decoder.get().decode(mp3File);
+			if (!pcmFormat.matches(pcm.getFormat())) {
+				pcm = AudioUtils.convertAudioStream(pcmFormat, pcm);
+			}
+			return pcm;
+		} catch (Throwable e) {
+			throw new RuntimeException(e);
 		}
-		String f = "";
-		if (originalFormat.getEncoding() == AudioFormat.Encoding.PCM_SIGNED) {
-			f += "s";
-		} else if (originalFormat.getEncoding() == AudioFormat.Encoding.PCM_UNSIGNED) {
-			f += "u";
-		} else if (originalFormat.getEncoding() == AudioFormat.Encoding.PCM_FLOAT) {
-			f += "f";
-		}
-
-		f += originalFormat.getSampleSizeInBits();
-
-		if (originalFormat.getSampleSizeInBits() > 8) {
-			if (originalFormat.isBigEndian())
-				f += "be";
-			else
-				f += "le";
-		}
-
-		//convert to PCM file with AVCONV
-		//TODO: check that it does not output WAV instead of PCM (the difference of size is rather suspicious)
-		ProcessBuilder ps = new ProcessBuilder("avconv", "-loglevel", "warning", "-i",
-		        mp3File, "-f", f, "-ar", String
-		                .valueOf((int) (originalFormat.getSampleRate())), "-acodec", "pcm_"
-		                + f, pcmFile.toString());
-		ps.redirectErrorStream(true);
-		Process p = ps.start();
-		String line;
-		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-		while ((line = in.readLine()) != null) {
-			System.out.println("avconv output: " + line);
-		}
-		in.close();
-		p.waitFor();
-
-		return Files.toByteArray(pcmFile);
 	}
 
 	private static byte[] ref;
 	private static AudioFormat refFormat;
-	private static String mp3ref;
+	private static File mp3ref;
 	private static AudioEncoder lame;
 
 	@BeforeClass
 	public static void buildReference() throws Throwable {
-		
-		refFormat = new AudioFormat(8000, 8, 1, true, true); //8 bits signed big-endian (for easy comparisons)
 
-		ref = new byte[1024 * 100];
-		Random r = new Random();
-		r.setSeed(0);
-		ref[0] = (byte) r.nextInt(256);
-		for (int i = 1; i < ref.length; ++i) {
-			int next = (r.nextInt(3) - 1) + ref[i - 1];
-			if (next > 127)
-				next = 127;
-			else if (next < -127)
-				next = -127;
-			ref[i] = (byte) next;
-		}
-
-		//dump the reference on the disk using Lame
+		// initialize Lame
 		lame = new LameEncoderService().newEncoder(new HashMap<String,String>()).orElse(null);
 		Assume.assumeTrue("Test can not be run because lame not present", lame != null);
 
-		AudioInputStream audioStream = new AudioInputStream(
-			new ByteArrayInputStream(ref),
-			refFormat,
-			ref.length / refFormat.getFrameSize());
-		File encodedFile = new File(new File(System.getProperty("java.io.tmpdir")), "mp3ref.mp3");
-		lame.encode(audioStream, MP3, encodedFile);
-		mp3ref = encodedFile.toURI().toString();
+		// build reference (as PCM data and as MP3 file)
+		refFormat = new AudioFormat(8000, 8, 1, true, true); //8 bits signed big-endian (for easy comparisons)
+		// not using AudioDecoder because audioServices object is not static
+		AudioInputStream stream = AudioSystem.getAudioInputStream(LameTest.class.getResource("/blah.wav"));
+		if (!stream.getFormat().matches(refFormat))
+			stream = AudioUtils.convertAudioStream(refFormat, stream);
+		ref = ByteStreams.toByteArray(stream);
+		mp3ref = File.createTempFile("ref", ".mp3");
+		mp3ref.deleteOnExit();
+		lame.encode(
+			AudioUtils.createAudioStream(refFormat, ref),
+			MP3,
+			mp3ref);
 	}
 
-	private boolean isValid(AudioFormat sourceFormat) throws Throwable {
+	private void test(AudioFormat sourceFormat) throws AssertionError, Throwable {
 
-		//use avconv to create a new version of the PCM reference encoded with sourceFormat
-		byte[] audio = mp3ToPCM(sourceFormat, mp3ref);
+		//create a new version of the PCM reference encoded with sourceFormat
+		AudioInputStream audio = mp3ToPCM(sourceFormat, mp3ref);
 
 		//use lame to convert it to MP3
-		AudioInputStream audioStream = new AudioInputStream(
-			new ByteArrayInputStream(audio),
-			sourceFormat,
-			audio.length / sourceFormat.getFrameSize());
-		File encodedFile = new File(new File(System.getProperty("java.io.tmpdir")), "lametest.mp3");
-		lame.encode(audioStream, MP3, encodedFile);
-		String lameMp3 = encodedFile.toURI().toString();
+		File lameMp3 = File.createTempFile("lametest", ".mp3");
+		lameMp3.deleteOnExit();
+		lame.encode(audio, MP3, lameMp3);
 
 		//convert it back to PCM in order to compare them
-		byte[] lameAudio = mp3ToPCM(refFormat, lameMp3);
+		byte[] lameAudio = ByteStreams.toByteArray(mp3ToPCM(refFormat, lameMp3));
 
 		//compare
 		//TODO: proper convolution or frequency-based comparison (after FFT)
 		byte[] small = ref;
 		byte[] big = lameAudio;
-		if (ref.length > lameAudio.length) {
-			big = ref;
-			small = lameAudio;
-		}
+
+		// FIXME: There is a difference in length due to padding added by Lame (not by the MP3
+		// decoder, this has been checked with ffmpeg). The exact amount of padding is not very
+		// predictable. It seems that the padding at the beginning of the file is always bigger than
+		// the padding at the end, and depends on the sampling rate.
 		int diff = big.length - small.length;
-		if (diff > 3 * ref.length / 100) {
-			System.err.println("size differs too much");
-			return false;
-		}
+		Assert.assertTrue(diff >= 0);
+		if (diff > 3000) // 3000 bytes = 0.375 sec
+			Assert.fail("size differs too much: " + big.length + " != " + small.length);
 		int window = Math.min(ref.length, lameAudio.length);
 		long minerror = Long.MAX_VALUE;
+		long minerror_padding = Long.MAX_VALUE;
 		for (int d = 0; d < diff; d += 2) {
 			long e = 0;
-			for (int i = 0; i < window; ++i) {
-				e += Math.abs(small[i] - big[i + d]);
+			long e_padding = 0;
+			for (int i = 0; i < d; i++)
+				e_padding += Math.abs(big[i]);
+			for (int i = d; i < d + window; i++)
+				e += Math.abs(big[i] - small[i - d]);
+			for (int i = d + window; i < big.length; i++)
+				e_padding += Math.abs(big[i]);
+			if (e < minerror) {
+				minerror = e;
+				minerror_padding = e_padding;
 			}
-			minerror = Math.min(minerror, e);
 		}
-		double error = ((double) minerror) / window;
-
-		return (error < 10.0);
+		double error = ((double)minerror) / window;
+		double error_padding = ((double)minerror_padding) / diff;
+		if (error >= 3.6) // 3.6 = 1.4 % of 256
+			Assert.fail("data differs");
+		if (error_padding >= 0.05)
+			Assert.fail("data differs");
 	}
 
 	@Test
 	public void sampleRate8Khz() throws Throwable {
-		boolean valid = isValid(new AudioFormat(8000, 8, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(8000, 8, 1, true, true));
 	}
 
 	@Test
 	public void sampleRate16Khz() throws Throwable {
-		boolean valid = isValid(new AudioFormat(16000, 8, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(16000, 8, 1, true, true));
 	}
 
 	@Test
 	public void sampleRate32Khz() throws Throwable {
-		boolean valid = isValid(new AudioFormat(32000, 8, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(32000, 8, 1, true, true));
 	}
 
 	@Test
 	public void sampleRate48Khz() throws Throwable {
-		boolean valid = isValid(new AudioFormat(48000, 8, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(48000, 8, 1, true, true));
 	}
 
 	@Test
 	public void width16bits() throws Throwable {
-		boolean valid = isValid(new AudioFormat(16000, 16, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(16000, 16, 1, true, true));
 	}
 
 	@Test
 	public void width32bits() throws Throwable {
-		boolean valid = isValid(new AudioFormat(16000, 32, 1, true, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(16000, 32, 1, true, true));
 	}
 
 	@Test
 	public void litteEndian16bits() throws Throwable {
-		boolean valid = isValid(new AudioFormat(16000, 16, 1, true, false));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(16000, 16, 1, true, false));
 	}
 
 	@Test
 	public void unsigned8bits() throws Throwable {
-		boolean valid = isValid(new AudioFormat(8000, 8, 1, false, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(8000, 8, 1, false, true));
 	}
 
 	@Test
 	public void unsigned16bitsBigEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(8000, 16, 1, false, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(8000, 16, 1, false, true));
 	}
 
 	@Test
 	public void unsigned16bitsLittleEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(8000, 16, 1, false, false));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(8000, 16, 1, false, false));
 	}
 
 	@Test
 	public void floatingpoint32bigEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(Encoding.PCM_FLOAT, 8000, 32, 1, 4, 8000, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(Encoding.PCM_FLOAT, 8000, 32, 1, 4, 8000, true));
 	}
 
 	@Test
 	public void floatingpoint32littleEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(Encoding.PCM_FLOAT, 8000, 32, 1, 4, 8000,
-		        false));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(Encoding.PCM_FLOAT, 8000, 32, 1, 4, 8000, false));
 	}
 
 	@Test
 	public void floatingpoint64bigEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(Encoding.PCM_FLOAT, 8000, 64, 1, 8, 8000, true));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(Encoding.PCM_FLOAT, 8000, 64, 1, 8, 8000, true));
 	}
 
 	@Test
 	public void floatingpoint64littleEndian() throws Throwable {
-		boolean valid = isValid(new AudioFormat(Encoding.PCM_FLOAT, 8000, 64, 1, 8, 8000,
-		        false));
-		Assert.assertTrue(valid);
+		test(new AudioFormat(Encoding.PCM_FLOAT, 8000, 64, 1, 8, 8000, false));
 	}
 }

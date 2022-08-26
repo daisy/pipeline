@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data">
+
+	<x:script>
+		<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0" type="px:sentence-detect">
+			<p:input port="source"/>
+			<p:output port="result" primary="true"/>
+			<p:output port="sentence-ids">
+				<p:pipe step="break-detect" port="sentence-ids"/>
+			</p:output>
+			<p:import href="../../main/resources/xml/library.xpl"/>
+			<px:html-break-detect name="break-detect"
+			                      sentence-attr="class"
+			                      sentence-attr-val="sentence"/>
+			<px:html-unwrap-words/>
+		</p:declare-step>
+	</x:script>
+
+	<x:scenario label="sentence detection">
+		<x:call step="px:sentence-detect">
+			<x:input port="source">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<p>This is a paragraph.</p>
+							<p>First sentence of paragraph. Second sentence of paragraph.</p>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body>
+						<p>
+							<span id="st1" class="sentence">This is a paragraph.</span>
+						</p>
+						<p>
+							<span id="st2" class="sentence">First sentence of paragraph.</span>
+							<span id="st3" class="sentence">Second sentence of paragraph.</span>
+						</p>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+		<x:context label="the sentence-ids port">
+			<x:document type="port" port="sentence-ids"/>
+		</x:context>
+		<x:expect label="the sentence-ids" type="compare">
+			<x:document type="inline">
+				<d:sentences>
+					<d:sentence id="st1"/>
+					<d:sentence id="st2"/>
+					<d:sentence id="st3"/>
+				</d:sentences>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="sentence detection when text contains spans" xfail="spans mess up sentence detection">
+		<x:call step="px:sentence-detect">
+			<x:input port="source">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<p><span>This</span> <span>is</span> <span>a</span> <span>paragraph</span>.</p>
+							<p><span>First sentence of paragraph,</span> <span>second sentence of paragraph.</span></p>
+							<p><span>First sentence of paragraph.</span> <span>Second sentence of paragraph.</span></p>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body>
+						<p>
+							<span id="st1" class="sentence">
+								<span>This</span> <span>is</span> <span>a</span> <span>paragraph</span>.</span>
+						</p>
+						<p>
+							<span id="st2" class="sentence">
+								<span>First sentence of paragraph,</span>
+								<span>second sentence of paragraph.</span>
+							</span>
+						</p>
+						<p>
+							<span id="st3" class="sentence">First sentence of paragraph.</span>
+							<span id="st4" class="sentence">Second sentence of paragraph.</span>
+						</p>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="sentence detection when sentence detection has already been performed" xfail="spans mess up sentence detection">
+		<x:call step="px:sentence-detect">
+			<x:input port="source">
+				<x:document type="inline">
+					<html xmlns="http://www.w3.org/1999/xhtml">
+						<body>
+							<p>
+								<span class="sentence">First sentence of paragraph.</span>
+								<span class="sentence">Second sentence of paragraph.</span>
+							</p>
+							<p>
+								<span class="sentence">First sentence of paragraph,</span>
+								<span class="sentence">second sentence of paragraph.</span>
+							</p>
+						</body>
+					</html>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml">
+					<body>
+						<p>
+							<span id="st1" class="sentence">First sentence of paragraph.</span>
+							<span id="st2" class="sentence">Second sentence of paragraph.</span>
+						</p>
+						<p>
+							<span id="st3" class="sentence">First sentence of paragraph,</span>
+							<span id="st4" class="sentence">second sentence of paragraph.</span>
+						</p>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

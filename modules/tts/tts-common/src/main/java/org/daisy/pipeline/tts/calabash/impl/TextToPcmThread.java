@@ -1,7 +1,5 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -9,10 +7,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -28,6 +24,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
+import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.AudioFootprintMonitor.MemoryException;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
@@ -82,6 +79,7 @@ public class TextToPcmThread implements FormatSpecifications {
 	private VoiceManager mVoiceManager;
 	private TTSLog mTTSLog;
 	private int mErrorCounter;
+	private Throwable uncaughtException;
 
 	/**
 	 * Java counterpart of SSML's marks
@@ -190,6 +188,9 @@ public class TextToPcmThread implements FormatSpecifications {
 				}
 			}
 		};
+		mThread.setUncaughtExceptionHandler(
+			(thread, throwable) -> { uncaughtException = throwable; }
+		);
 		mThread.start();
 	}
 
@@ -202,6 +203,9 @@ public class TextToPcmThread implements FormatSpecifications {
 				mLogger.warn("TextToPCMThread interruption");
 			}
 			mThread = null;
+			if (uncaughtException != null) {
+				throw new RuntimeException("unexpected error", uncaughtException); // should not happen
+			}
 		}
 
 		return mSoundFileLinks;
@@ -234,10 +238,10 @@ public class TextToPcmThread implements FormatSpecifications {
 				        .getDocumentPosition(), section.getDocumentSplitPosition(),
 				        mFileNrInSection);
 
-				ContiguousPCM pcm = new ContiguousPCM(concat(mAudioOfCurrentFile),
-				        section.getAudioOutputDir(), filePrefix);
-				for (SoundFileLink clip : mLinksOfCurrentFile) {
-					clip.soundFileURIHolder = pcm.getURIholder();
+				ContiguousPCM pcm = new ContiguousPCM(
+					AudioUtils.concat(mAudioOfCurrentFile), section.getAudioOutputDir(), filePrefix);
+				for (SoundFileLink link : mLinksOfCurrentFile) {
+					link.clipBase = pcm.getDestinationFile();
 				}
 				try {
 					mAudioFootprintMonitor.transferToEncoding(mMemFootprint, pcm.sizeInBytes());
@@ -274,6 +278,8 @@ public class TextToPcmThread implements FormatSpecifications {
 			SynthesisResult result = mExecutor.synthesizeWithTimeout(
 				timeout, interrupter, logEntry, sentence.getText(), sentence.getSize(), tts, voice,
 				threadResources);
+			if (!AudioUtils.isPCM(result.audio.getFormat()))
+				throw new IllegalArgumentException();
 			List<Integer> markOffsets = result.marks;
 			if (markNames.size() != markOffsets.size()) {
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
@@ -292,12 +298,19 @@ public class TextToPcmThread implements FormatSpecifications {
 			Collection<Chunk> chunks = mSSMLSplitter.split(sentence.getText());
 			List<AudioInputStream> result = new ArrayList<>();
 			int offset = 0;
+			AudioFormat format = null;
 			for (Chunk chunk : chunks) {
 				logEntry.setActualVoice(voice);
 				try {
 					AudioInputStream stream = mExecutor.synthesizeWithTimeout(
 						timeout, interrupter, logEntry, chunk.ssml(), Sentence.computeSize(chunk.ssml()),
 						tts, voice, threadResources).audio;
+					if (format == null) {
+						format = stream.getFormat();
+						if (!AudioUtils.isPCM(format))
+							throw new IllegalArgumentException("AudioInputStream must be PCM encoded, but got: "+ format);
+					} else if (!format.matches(stream.getFormat()))
+						throw new IllegalArgumentException("All AudioInputStream must have the same format");
 					if (chunk.leftMark() != null) {
 						marks.add(new Mark(chunk.leftMark(), offset));
 					}
@@ -483,11 +496,11 @@ public class TextToPcmThread implements FormatSpecifications {
 
 		// keep track of where the sound begins and where it ends within the audio file
 		if (marks.size() == 0) {
-			SoundFileLink sf = new SoundFileLink();
-			sf.xmlid = sentence.getID();
-			sf.clipBegin = convertBytesToSecond(mLastFormat, begin);
-			sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile);
-			mLinksOfCurrentFile.add(sf);
+			mLinksOfCurrentFile.add(
+				new SoundFileLink(
+					sentence.getID(),
+					AudioUtils.getDuration(mLastFormat, begin),
+					AudioUtils.getDuration(mLastFormat, mOffsetInFile)));
 		} else {
 			Map<String, Integer> starts = new HashMap<String, Integer>();
 			Map<String, Integer> ends = new HashMap<String, Integer>();
@@ -505,17 +518,17 @@ public class TextToPcmThread implements FormatSpecifications {
 				}
 			}
 			for (String id : all) {
-				SoundFileLink sf = new SoundFileLink();
-				sf.xmlid = id;
-				if (starts.containsKey(id))
-					sf.clipBegin = convertBytesToSecond(mLastFormat, begin + starts.get(id));
-				else
-					sf.clipBegin = convertBytesToSecond(mLastFormat, begin);
-				if (ends.containsKey(id))
-					sf.clipEnd = convertBytesToSecond(mLastFormat, begin + ends.get(id));
-				else
-					sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile);
-				mLinksOfCurrentFile.add(sf);
+				mLinksOfCurrentFile.add(
+					new SoundFileLink(
+						id,
+						AudioUtils.getDuration(mLastFormat,
+						                       starts.containsKey(id)
+						                           ? begin + starts.get(id)
+						                           : begin),
+						AudioUtils.getDuration(mLastFormat,
+						                       ends.containsKey(id)
+						                           ? begin + ends.get(id)
+						                           : mOffsetInFile)));
 			}
 			/*
 			 * note: if marks.size() > 0 but all.size() == 0, it means that no
@@ -550,76 +563,5 @@ public class TextToPcmThread implements FormatSpecifications {
 			mMemFootprint += size;
 		}
 		mAudioOfCurrentFile = Iterables.concat(mAudioOfCurrentFile, toadd);
-	}
-
-	/**
-	 * Concatenate a sequence of {@link AudioInputStream} into a single {@link AudioInputStream}.
-	 */
-	private static AudioInputStream concat(Iterable<AudioInputStream> streams) {
-		int count = 0;
-		long _totalLength = 0;
-		AudioFormat format = null;
-		for (AudioInputStream s : streams) {
-			count++;
-			_totalLength += s.getFrameLength();
-			if (format == null)
-				format = s.getFormat();
-			else if (!format.matches(s.getFormat()))
-				throw new IllegalArgumentException("Can not concatenate AudioInputStream with different audio formats");
-		}
-		if (count == 0)
-			throw new IllegalArgumentException("At least one AudioInputStream expected");
-		if (count == 1)
-			return streams.iterator().next();
-		long totalLength = _totalLength;
-		int frameSize = format.getFrameSize();
-		return new AudioInputStream(
-			new InputStream() {
-				Iterator<AudioInputStream> nextStreams = streams.iterator();
-				AudioInputStream stream = null;
-				byte[] frame = new byte[frameSize];
-				long availableFrames = totalLength;
-				int availableInFrame = 0;
-				public int read() throws IOException {
-					if (availableFrames == 0 && availableInFrame == 0)
-						return -1;
-					if (availableInFrame > 0)
-						return frame[frameSize - (availableInFrame--)] & 0xFF;
-					if (stream != null) {
-						availableInFrame = stream.read(frame);
-						if (availableInFrame > 0) {
-							availableFrames--;
-							return frame[frameSize - (availableInFrame--)] & 0xFF;
-						}
-					}
-					try {
-						if (stream != null)
-							stream.close();
-						stream = nextStreams.next();
-					} catch (NoSuchElementException e) {
-						return -1;
-					}
-					return read();
-				}
-				public int available() {
-					try {
-						return Math.toIntExact(Math.multiplyExact(availableFrames, frameSize)) + availableInFrame;
-					} catch (ArithmeticException e) {
-						return Integer.MAX_VALUE;
-					}
-				}
-				public void close() throws IOException {
-					if (stream != null)
-						stream.close();
-					while (nextStreams.hasNext())
-						nextStreams.next().close();
-				}
-			},
-			format,
-			totalLength);
-	}
-
-	private static double convertBytesToSecond(AudioFormat format, int bytes) {
-		return (bytes / (format.getFrameRate() * format.getFrameSize()));
 	}
 }

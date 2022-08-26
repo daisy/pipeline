@@ -1,7 +1,6 @@
 package org.daisy.pipeline.tts;
 
 import java.net.URL;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.IOException;
@@ -10,11 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.io.ByteStreams;
-
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import net.sf.saxon.Configuration;
@@ -23,6 +19,7 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
 import org.daisy.common.xslt.XslTransformCompiler;
+import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 
@@ -219,15 +216,11 @@ public abstract class TTSEngine {
 	 * Create an {@link AudioInputStream} from an {@link AudioFormat} and the audio data.
 	 */
 	protected static AudioInputStream createAudioStream(AudioFormat format, byte[] data) {
-		return createAudioStream(format, new ByteArrayInputStream(data));
+		return AudioUtils.createAudioStream(format, data);
 	}
 
 	protected static AudioInputStream createAudioStream(AudioFormat format, ByteArrayInputStream data) {
-		return new AudioInputStream(data,
-		                            format,
-		                            // ByteArrayInputStream.available() returns
-		                            // the total number of bytes
-		                            data.available() / format.getFrameSize());
+		return AudioUtils.createAudioStream(format, data);
 	}
 
 	/**
@@ -239,10 +232,6 @@ public abstract class TTSEngine {
 	 */
 	protected static AudioInputStream createAudioStream(InputStream stream)
 			throws UnsupportedAudioFileException, IOException {
-		AudioInputStream audio = AudioSystem.getAudioInputStream(new BufferedInputStream(stream));
-		byte[] data = ByteStreams.toByteArray(audio);
-		audio.close();
-		audio = createAudioStream(audio.getFormat(), data);
-		return audio;
+		return AudioUtils.createAudioStream(stream);
 	}
 }

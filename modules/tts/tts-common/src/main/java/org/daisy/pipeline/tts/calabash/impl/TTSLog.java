@@ -9,6 +9,7 @@ import java.util.Set;
 
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.tts.Voice;
 
 import org.slf4j.Logger;
@@ -145,31 +146,14 @@ public class TTSLog {
 		}
 
 		/**
-		 * @param soundfile is a path of a wave, mp3 or ogg file
+		 * @param clip is a path of a wave, mp3 or ogg file, with begin and end offsets
 		 */
-		public void setSoundfile(String soundfile) {
-			this.soundfile = soundfile;
+		public void setClip(AudioClip clip) {
+			this.clip = clip;
 		}
 
-		public String getSoundFile() {
-			return soundfile;
-		}
-
-		/**
-		 * @param begin offset in seconds
-		 * @param end offset in seconds
-		 */
-		public void setPositionInFile(double begin, double end) {
-			this.beginInFile = begin;
-			this.endInFile = end;
-		}
-
-		public double getBeginInFile() {
-			return beginInFile;
-		}
-
-		public double getEndInFile() {
-			return endInFile;
+		public AudioClip getClip() {
+			return clip;
 		}
 
 		/**
@@ -198,9 +182,7 @@ public class TTSLog {
 		private XdmNode ssml; //SSML
 		private Voice selectedVoice;
 		private Voice actualVoice;
-		private String soundfile; //
-		private double beginInFile; //in seconds
-		private double endInFile; //in seconds
+		private AudioClip clip;
 		private float timeout;
 		private float timeElapsed;
 	}

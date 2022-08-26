@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
+    <public publicId='-//NISO//DTD ncx v1.1.0//EN' uri='../xml/dtd/ncx110.dtd'/>
+    <system systemId='http://www.loc.gov/nls/z3986/v100/ncx110.dtd' uri='../xml/dtd/ncx110.dtd'/>
+
     <public publicId='-//NISO//DTD ncx 2005-1//EN' uri='../xml/dtd/ncx-2005-1.dtd'/>
     <system systemId='http://www.daisy.org/z3986/2005/ncx-2005-1.dtd' uri='../xml/dtd/ncx-2005-1.dtd'/>
+
+    <public publicId='-//NISO//DTD resource v1.1.0//EN' uri='../xml/dtd/resource110.dtd'/>
+    <system systemId='http://www.loc.gov/nls/z3986/v100/resource110.dtd' uri='../xml/dtd/resource110.dtd'/>
+
+    <public publicId='-//NISO//DTD resource 2005-1//EN' uri='../xml/dtd/resource-2005-1.dtd'/>
+    <system systemId='http://www.daisy.org/z3986/2005/resource-2005-1.dtd' uri='../xml/dtd/resource-2005-1.dtd'/>
+
+    <public publicId='+//ISBN 0-9673008-1-9//DTD OEB 1.0.1 Package//EN' uri='../xml/dtd/oebpkg101.dtd'/>
+    <system systemId='http://openebook.org/dtds/oeb-1.0.1/oebpkg101.dtd' uri='../xml/dtd/oebpkg101.dtd'/>
+
+    <public publicId='+//ISBN 0-9673008-1-9//DTD OEB 1.0 Entities//EN' uri='../xml/dtd/oeb1.ent'/>
 
     <public publicId='+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN' uri='../xml/dtd/oebpkg12.dtd'/>
     <system systemId='http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd' uri='../xml/dtd/oebpkg12.dtd'/>

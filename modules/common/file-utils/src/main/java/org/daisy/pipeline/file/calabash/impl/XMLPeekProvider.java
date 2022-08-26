@@ -1,24 +1,25 @@
 package org.daisy.pipeline.file.calabash.impl;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Files;
+
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
 import org.daisy.pipeline.file.calabash.impl.PeekProvider.Peek;
+import org.daisy.pipeline.file.FileUtils;
 
 import com.xmlcalabash.core.XProcConstants;
-import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -79,10 +80,16 @@ public class XMLPeekProvider implements XProcStepProvider {
 
 			RuntimeValue href = getOption(_href);
 			URI sourceUri = href.getBaseURI().resolve(href.getString());
-			File file = new File(sourceUri.getPath());
+			Path file; {
+				try {
+					file = FileUtils.asPath(sourceUri);
+				} catch (IllegalArgumentException|URISyntaxException e) {
+					throw XProcStep.raiseError(new IllegalArgumentException("Illegal value for href option: " + href.getString(), e), step);
+				}
+			}
 
-			if (file.isDirectory()) {
-				throw new XProcException(step, "Cannot peek into XML-file: file is a directory: " + file.getAbsolutePath());
+			if (Files.isDirectory(file)) {
+				throw XProcStep.raiseError(new IllegalArgumentException("Cannot peek into XML-file: file is a directory: " + file), step);
 			}
 
 			String bomType = null;
@@ -130,7 +137,7 @@ public class XMLPeekProvider implements XProcStepProvider {
 			Reader reader = null, buffer = null;
 			InputStream in = null;
 			try {
-				in = new FileInputStream(file);
+				in = Files.newInputStream(file);
 				try {
 					reader = new InputStreamReader(in, "UTF-8");
 				} catch (UnsupportedEncodingException e) {

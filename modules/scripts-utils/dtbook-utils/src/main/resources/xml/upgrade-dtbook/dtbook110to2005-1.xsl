@@ -22,7 +22,9 @@
      April 2006
 -->
 <!-- Modified by Alex Bernier, BrailleNet, Jan 2009 -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+
 	<xsl:output omit-xml-declaration="no" 
 		    encoding="UTF-8"
 		    doctype-public="-//NISO//DTD dtbook 2005-1//EN"

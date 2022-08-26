@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ncx PUBLIC "-//NISO//DTD ncx v1.1.0//EN" "ncx110.dtd">
+<ncx version="1.1.0">
+	<head>
+		<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+		<meta name="dtb:uid" content="uid"/>
+		<meta name="dtb:depth" content="02"/>
+		<meta name="dtb:totalPageCount" content="0"/>
+		<meta name="dtb:maxPageNumber" content="0"/>
+		<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+		<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+		<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+		<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+		<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+		<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+		<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+	</head>
+	<docTitle/>
+	<navMap>
+		<navPoint id="ncx-1">
+			<navLabel>
+				<text>Part 1</text>
+				<audio clipBegin="0:00:00.000" clipEnd="0:00:01.500" src="audio.wav"/>
+			</navLabel>
+			<content src="mo.smil#s1"/>
+			<navPoint id="ncx-2">
+				<navLabel>
+					<text>Chapter 1.1</text>
+					<audio clipBegin="0:00:01.500" clipEnd="0:00:04.000" src="audio.wav"/>
+				</navLabel>
+				<content src="mo.smil#s2"/>
+			</navPoint>
+		</navPoint>
+	</navMap>
+</ncx>

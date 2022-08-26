@@ -81,6 +81,7 @@
 		<x:context label="the errors">
 			<x:document type="errors"/>
 		</x:context>
+		<x:expect label="there should be errors" type="count" min="1"/>
 		<x:expect label="the error" type="xpath"
 		          test="/c:errors/c:error/concat('[',@code,'] ',normalize-space(string(.)))"
 		          equals="'[err:EOU002] No OPF was found in the source file set.'"/>

@@ -30,7 +30,7 @@
 				<d:fileset>
 					<d:file href="blah.aif" media-type="audio/aiff"/>
 					<d:file href="blah_2.aif" media-type="audio/aiff"
-					        original-href="../../../target/xprocspec/test_audio-transcode/blah.aif" />
+					        original-href="../../../target/xprocspec/test_audio-transcode/blah.aif"/>
 					<d:file href="foo.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
@@ -43,6 +43,45 @@
 			<x:document type="inline">
 				<d:fileset>
 					<d:file href="blah_2.aif" original-href="blah.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="from mp3 to wav">
+		<x:call step="px:audio-transcode">
+			<x:input port="source">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="blah.mp3" media-type="audio/mpeg" original-href="../resources/blah.mp3"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:option name="media-types" select="'audio/*'"/>
+			<x:option name="new-audio-file-type" select="'audio/x-wav'"/>
+			<x:option name="new-audio-dir" select="resolve-uri('./')"/>
+			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_audio-transcode/')"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result port" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="blah.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_audio-transcode/blah.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the mapping port">
+			<x:document type="port" port="mapping"/>
+		</x:context>
+		<x:expect label="the mapping port" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="blah.wav" original-href="blah.mp3"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

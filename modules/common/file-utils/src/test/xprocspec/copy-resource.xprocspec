@@ -30,7 +30,7 @@
         <x:context label="the errors">
             <x:document type="errors"/>
         </x:context>
-        <x:expect label="the step should execute successfully without throwing any errors" type="count" min="1"/>
+        <x:expect label="there should be errors" type="count" min="1"/>
     </x:scenario>
     
     <x:scenario label="resource from catalog" pending="new daisy website does show something at this address">
