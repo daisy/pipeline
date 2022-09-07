@@ -467,6 +467,11 @@ src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7   : %/jdk-17.0
 	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz", "-C", "$(dir $@)/");
 endif
 
+.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz
+.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
+.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip
+.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip
+
 src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz \
 src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz \
 src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip \
