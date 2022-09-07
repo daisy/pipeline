@@ -899,7 +899,6 @@ configuration file format is as follows:</p>
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
   <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">org.daisy.pipeline.tts.acapela.samplerate</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">44100</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">org.daisy.pipeline.tts.log</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">true</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;voice</span> <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">claire</span><span class="delimiter">"</span></span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr</span><span class="delimiter">"</span></span> <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">female-adult</span><span class="delimiter">"</span></span> <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">12</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;css</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">css/aural.css</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;lexicon</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">lexicons/fr.pls</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
@@ -1011,15 +1010,6 @@ attempt to use, or 500 Mb if there is no such limit</dd>
   <dt><code>org.daisy.pipeline.tts.encoding.speed</code></dt>
   <dd>Maximum number of seconds of encoded audio per seconds of encoding</dd>
   <dd>Defaults to “2.0”</dd>
-  <dt><code>org.daisy.pipeline.tts.log</code></dt>
-  <dd>If set to “true”, will result in the Pipeline logging stuff in the
-output directory in a file named ‘tts-log.xml’. The Pipeline will
-log a great deal of information to this file, which can be quite
-helpful for troubleshooting. Most of the log entries concern
-particular chunks of text of the input document. For more general
-errors, see the main server’s logs.</dd>
-  <dd>Defaults to “false”</dd>
-  <dd>dtbook-to-daisy3 only</dd>
 </dl>
 
 <h3 id="acapela">Acapela</h3>

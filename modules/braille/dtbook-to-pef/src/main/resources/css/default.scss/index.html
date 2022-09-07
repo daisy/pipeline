@@ -843,7 +843,100 @@ if (window.addEventListener) {
 
 <div class="language-sass highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="variable">$hyphenation</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">
+ * Default style sheet for DTBook
+ *
+ * See also
+ * - http://www.cucat.org/projects/dtbook2005-3/dtbook-2005-3.dtd.html
+ * - http://www.daisy.org/z3986/2005/dtbook.2005.basic.css
+ */</span></span>
+
+<span class="directive">@namespace</span> <span class="value">xml</span> <span class="string"><span class="delimiter">"</span><span class="content">http://www.w3.org/XML/1998/namespace</span><span class="delimiter">"</span></span>;
+
+<span class="tag">address</span>,
+<span class="tag">annotation</span>,
+<span class="tag">author</span>,
+<span class="tag">blockquote</span>,
+<span class="tag">bodymatter</span>,
+<span class="tag">book</span>,
+<span class="tag">bridgehead</span>,
+<span class="tag">byline</span>,
+<span class="tag">covertitle</span>,
+<span class="tag">dateline</span>,
+<span class="tag">div</span>,
+<span class="tag">dl</span>,
+<span class="tag">docauthor</span>,
+<span class="tag">doctitle</span>,
+<span class="tag">epigraph</span>,
+<span class="tag">frontmatter</span>,
+<span class="tag">h1</span>,
+<span class="tag">h2</span>,
+<span class="tag">h3</span>,
+<span class="tag">h4</span>,
+<span class="tag">h5</span>,
+<span class="tag">h6</span>,
+<span class="tag">hd</span>,
+<span class="tag">img</span>,
+<span class="tag">imggroup</span>,
+<span class="tag">level</span>,
+<span class="tag">level1</span>,
+<span class="tag">level2</span>,
+<span class="tag">level3</span>,
+<span class="tag">level4</span>,
+<span class="tag">level5</span>,
+<span class="tag">level6</span>,
+<span class="tag">line</span>,
+<span class="tag">linegroup</span>,
+<span class="tag">list</span>,
+<span class="tag">note</span>,
+<span class="tag">p</span>,
+<span class="tag">poem</span>,
+<span class="tag">prodnote</span>,
+<span class="tag">rearmatter</span>,
+<span class="tag">sidebar</span>,
+<span class="tag">table</span> {
+        <span class="key">display</span>: <span class="value">block</span>;
+}
+
+<span class="tag">li</span> {
+        <span class="key">display</span>: <span class="value">list-item</span>;
+}
+
+<span class="tag">list</span> {
+        <span class="key">counter-reset</span>: <span class="value">list-item</span>;
+}
+
+<span class="tag">list</span>[<span class="attribute-name">type="ol"</span>],
+<span class="key">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="1"</span>] { <span class="key">list-style-type</span>: <span class="value">decimal</span>;     }
+<span class="key">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="a"</span>] { <span class="key">list-style-type</span>: <span class="value">lower-alpha</span>; }
+<span class="key">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="U"</span>] { <span class="key">list-style-type</span>: <span class="value">upper-alpha</span>; }
+<span class="key">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="i"</span>] { <span class="key">list-style-type</span>: <span class="value">lower-roman</span>; }
+<span class="key">list</span>[<span class="attribute-name">type="ol"</span>][<span class="attribute-name">enum="X"</span>] { <span class="key">list-style-type</span>: <span class="value">upper-roman</span>; }
+
+<span class="comment"><span class="delimiter">/*</span><span class="content"> handle list[start] */</span></span>
+<span class="directive">@xslt</span> <span class="string"><span class="delimiter">"</span><span class="content">lists.xsl</span><span class="delimiter">"</span></span>;
+
+<span class="tag">head</span> {
+        <span class="key">display</span>: <span class="value">none</span>;
+}
+
+<span class="key">br</span><span class="pseudo-class">::before</span> {
+        <span class="key">content</span>: <span class="string"><span class="delimiter">"</span><span class="content">\A</span><span class="delimiter">"</span></span>;
+        <span class="key">white-space</span>: <span class="value">pre-line</span>;
+}
+
+[<span class="attribute-name">xml|space=preserve</span>] {
+        <span class="key">white-space</span>: <span class="value">pre-wrap</span>;
+}
+
+<span class="directive">@text-transform</span> <span class="value">uncontracted</span> {
+        <span class="key">system</span>: <span class="value">braille</span>;
+        <span class="key">contraction</span>: <span class="value">no</span>;
+}
+
+<span class="comment"><span class="delimiter">/*</span><span class="content"> ======= Implementation of script options =============== */</span></span>
+
+<span class="variable">$hyphenation</span>: <span class="value">auto</span> <span class="error">!</span><span class="value">default</span>;
 <span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
 <span class="variable">$capital-letters</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
 <span class="variable">$include-captions</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
@@ -857,9 +950,9 @@ if (window.addEventListener) {
 <span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
 <span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">notes.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
 
-<span class="directive">@if</span> <span class="variable">$hyphenation</span> {
+<span class="directive">@if</span> <span class="variable">$hyphenation</span> != <span class="value">manual</span> {
         :<span class="value">root</span> {
-                <span class="key">hyphens</span>: <span class="value">auto</span>;
+                <span class="key">hyphens</span>: <span class="variable">$hyphenation</span>;
         }
 }
 
@@ -891,11 +984,6 @@ if (window.addEventListener) {
 
 <span class="tag">prodnote</span> {
         <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-production-notes</span>, <span class="value">block</span>, <span class="value">none</span>);
-}
-
-<span class="directive">@text-transform</span> <span class="value">uncontracted</span> {
-        <span class="key">system</span>: <span class="value">braille</span>;
-        <span class="key">contraction</span>: <span class="value">no</span>;
 }
 </pre></div>
 </div>

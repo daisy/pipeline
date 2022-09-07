@@ -909,19 +909,6 @@ Whether or not to include media overlays and associated audio files (true or fal
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
@@ -937,6 +924,19 @@ split up if they exceed the given maximum size.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -992,12 +992,12 @@ Options:</pre>
 <td>Include Media Overlays (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

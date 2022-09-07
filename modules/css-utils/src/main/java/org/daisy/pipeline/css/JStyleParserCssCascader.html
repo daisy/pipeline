@@ -318,162 +318,168 @@
 <a class="jxr_linenumber" name="L309" href="#L309">309</a> 						<strong class="jxr_keyword">if</strong> (!invalid)
 <a class="jxr_linenumber" name="L310" href="#L310">310</a> 							params.put(<strong class="jxr_keyword">new</strong> QName(d.getProperty()), <strong class="jxr_keyword">new</strong> InputValue&lt;&gt;(val));
 <a class="jxr_linenumber" name="L311" href="#L311">311</a> 					}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					params.put(
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 						<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"style"</span>),
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 						<strong class="jxr_keyword">new</strong> InputValue&lt;&gt;(
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 							<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/StyleAccessor.html">StyleAccessor</a>() {
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 								StyleMap style = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 								<strong class="jxr_keyword">public</strong> Optional&lt;String&gt; get(Element element, String property) {
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 									<strong class="jxr_keyword">if</strong> (style == <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 										<em class="jxr_comment">// getting the document through getOwnerDocument() and not directly from</em>
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 										<em class="jxr_comment">// the existing "document" variable because for some unknown reason the</em>
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 										<em class="jxr_comment">// underlying NodeInfo are not equal</em>
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 										StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 										s.addAll(defaultStyleSheet);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 										s = CSSFactory.getUsedStyles(element.getOwnerDocument(), <strong class="jxr_keyword">null</strong>, nodeLocator, medium, cssReader, s);
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 										style = <strong class="jxr_keyword">new</strong> Analyzer(s).evaluateDOM(element.getOwnerDocument(), medium, <strong class="jxr_keyword">true</strong>); }
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 									NodeData data = style.get(element);
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 									<strong class="jxr_keyword">if</strong> (data != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 										Term&lt;?&gt; value = data.getValue(property, <strong class="jxr_keyword">true</strong>);
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 										<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 											<strong class="jxr_keyword">return</strong> Optional.of(serializeValue(value));
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 										<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 											CSSProperty p = data.getProperty(property);
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 											<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 												<strong class="jxr_keyword">return</strong> Optional.of(p.toString()); }}
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 									<strong class="jxr_keyword">return</strong> Optional.empty();
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 								}
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 								Map&lt;String,List&lt;CombinedSelector&gt;&gt; selectorCache = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// cache of compiled selectors</em>
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 								<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(Element element, String selector) {
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 									List&lt;CombinedSelector&gt; compiledSelector;
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 									<strong class="jxr_keyword">if</strong> (selectorCache == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 										selectorCache = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 									<strong class="jxr_keyword">if</strong> (selectorCache.containsKey(selector))
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 										compiledSelector = selectorCache.get(selector);
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 									<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 										compiledSelector = parserFactory.parseSelector(selector, r.namespaces);
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 										<strong class="jxr_keyword">if</strong> (compiledSelector != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 											selectorCache.put(selector, compiledSelector); }
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 									<strong class="jxr_keyword">if</strong> (compiledSelector == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 										<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 									<strong class="jxr_keyword">for</strong> (CombinedSelector sel : compiledSelector) {
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 										<strong class="jxr_keyword">boolean</strong> match = false;
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 										Combinator combinator = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 										<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = sel.size() - 1; i &gt;= 0; i--) {
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 											Selector s = sel.get(i);
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 											<strong class="jxr_keyword">if</strong> (combinator == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 												match = s.matches(element);
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.ADJACENT) {
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> 												Node adjacent = element.getPreviousSibling();
-<a class="jxr_linenumber" name="L360" href="#L360">360</a> 												<strong class="jxr_keyword">while</strong> (adjacent != <strong class="jxr_keyword">null</strong> &amp;&amp; !(adjacent instanceof Element))
-<a class="jxr_linenumber" name="L361" href="#L361">361</a> 													adjacent = adjacent.getPreviousSibling();
-<a class="jxr_linenumber" name="L362" href="#L362">362</a> 												match = adjacent != <strong class="jxr_keyword">null</strong> &amp;&amp; s.matches((Element)adjacent); }
-<a class="jxr_linenumber" name="L363" href="#L363">363</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.PRECEDING) {
-<a class="jxr_linenumber" name="L364" href="#L364">364</a> 												match = false;
-<a class="jxr_linenumber" name="L365" href="#L365">365</a> 												Node preceding = element.getPreviousSibling();
-<a class="jxr_linenumber" name="L366" href="#L366">366</a> 												<strong class="jxr_keyword">while</strong> (!match) {
-<a class="jxr_linenumber" name="L367" href="#L367">367</a> 													<strong class="jxr_keyword">while</strong> (preceding != <strong class="jxr_keyword">null</strong> &amp;&amp; !(preceding instanceof Element))
-<a class="jxr_linenumber" name="L368" href="#L368">368</a> 														preceding = preceding.getPreviousSibling();
-<a class="jxr_linenumber" name="L369" href="#L369">369</a> 													<strong class="jxr_keyword">if</strong> (preceding != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L370" href="#L370">370</a> 														<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 													match = s.matches((Element)preceding);
-<a class="jxr_linenumber" name="L372" href="#L372">372</a> 													preceding = preceding.getPreviousSibling(); }}
-<a class="jxr_linenumber" name="L373" href="#L373">373</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.DESCENDANT) {
-<a class="jxr_linenumber" name="L374" href="#L374">374</a> 												match = false;
-<a class="jxr_linenumber" name="L375" href="#L375">375</a> 												Node ancestor = element.getParentNode();
-<a class="jxr_linenumber" name="L376" href="#L376">376</a> 												<strong class="jxr_keyword">while</strong> (!match &amp;&amp; ancestor != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L377" href="#L377">377</a> 													match = s.matches((Element)ancestor);
-<a class="jxr_linenumber" name="L378" href="#L378">378</a> 													ancestor = ancestor.getParentNode(); }}
-<a class="jxr_linenumber" name="L379" href="#L379">379</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.CHILD) {
-<a class="jxr_linenumber" name="L380" href="#L380">380</a> 												Element parent = (Element)element.getParentNode();
-<a class="jxr_linenumber" name="L381" href="#L381">381</a> 												match = parent != <strong class="jxr_keyword">null</strong> &amp;&amp; s.matches(parent); }
-<a class="jxr_linenumber" name="L382" href="#L382">382</a> 											combinator = s.getCombinator();
-<a class="jxr_linenumber" name="L383" href="#L383">383</a> 											<strong class="jxr_keyword">if</strong> (!match)
-<a class="jxr_linenumber" name="L384" href="#L384">384</a> 												<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L385" href="#L385">385</a> 										}
-<a class="jxr_linenumber" name="L386" href="#L386">386</a> 										<strong class="jxr_keyword">if</strong> (match == <strong class="jxr_keyword">true</strong>)
-<a class="jxr_linenumber" name="L387" href="#L387">387</a> 											<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L388" href="#L388">388</a> 									}
-<a class="jxr_linenumber" name="L389" href="#L389">389</a> 									<strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L390" href="#L390">390</a> 								}
-<a class="jxr_linenumber" name="L391" href="#L391">391</a> 							}
-<a class="jxr_linenumber" name="L392" href="#L392">392</a> 						)
-<a class="jxr_linenumber" name="L393" href="#L393">393</a> 					);
-<a class="jxr_linenumber" name="L394" href="#L394">394</a> 					transformed = xsltProcessor.transform(
-<a class="jxr_linenumber" name="L395" href="#L395">395</a> 						URLs.resolve(URLs.asURI(r.base), URLs.asURI(r.uri)),
-<a class="jxr_linenumber" name="L396" href="#L396">396</a> 						transformed != <strong class="jxr_keyword">null</strong> ? transformed : source.get(),
-<a class="jxr_linenumber" name="L397" href="#L397">397</a> 						params);
-<a class="jxr_linenumber" name="L398" href="#L398">398</a> 				}
-<a class="jxr_linenumber" name="L399" href="#L399">399</a> 				<strong class="jxr_keyword">if</strong> (transformed != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L400" href="#L400">400</a> 					node = transformed.ensureSingleItem().asNodeIterator().next();
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 					<strong class="jxr_keyword">if</strong> (!(node instanceof Document))
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 							<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"XsltProcessor must return a (single) document"</span>));
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 					document = (Document)node;
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 					<em class="jxr_comment">// We assume that base URI did not change.</em>
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					<em class="jxr_comment">// We need to recompute the stylesheet because of any possible inline styles, which</em>
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					<em class="jxr_comment">// are attached to an element in the original document.</em>
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 					styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 					styleSheet.addAll(defaultStyleSheet);
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 					styleSheet = CSSFactory.getUsedStyles(document, <strong class="jxr_keyword">null</strong>, nodeLocator, medium, cssReader, styleSheet);
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 				}
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 				styleMap = <strong class="jxr_keyword">new</strong> Analyzer(styleSheet).evaluateDOM(document, medium, false);
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			}
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			writer.setBaseURI(baseURI);
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			writer.writeStartDocument();
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			traverse(document.getDocumentElement(), styleMap, writer);
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 			writer.writeEndDocument();
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 		} <strong class="jxr_keyword">catch</strong> (TransformerException e) {
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			<strong class="jxr_keyword">throw</strong> e;
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			styleSheet = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		}
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 	}
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeStyle(NodeData mainStyle, Map&lt;PseudoElement,NodeData&gt; pseudoStyles, Element context);
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeValue(Term&lt;?&gt; value);
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	<strong class="jxr_keyword">protected</strong> StyleSheet getParsedStyleSheet() {
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">if</strong> (styleSheet == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException();
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		<strong class="jxr_keyword">return</strong> styleSheet;
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	}
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					Document doc; {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 						<strong class="jxr_keyword">if</strong> (transformed != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 							Mult&lt;? <strong class="jxr_keyword">extends</strong> XMLInputValue&lt;?&gt;&gt; m = transformed.mult(2);
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 							doc = (Document)m.get().ensureSingleItem().asNodeIterator().next();
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 							transformed = m.get();
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 						} <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 							doc = document;
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					}
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					params.put(
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 						<strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"style"</span>),
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 						<strong class="jxr_keyword">new</strong> InputValue&lt;&gt;(
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 							<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/StyleAccessor.html">StyleAccessor</a>() {
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 								StyleMap style = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 								<strong class="jxr_keyword">public</strong> Optional&lt;String&gt; get(Element element, String property) {
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 									<strong class="jxr_keyword">if</strong> (style == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 										StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 										s.addAll(defaultStyleSheet);
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 										<em class="jxr_comment">// not using element.getOwnerDocument() because base URI is null/empty in some cases</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 										s = CSSFactory.getUsedStyles(doc, <strong class="jxr_keyword">null</strong>, nodeLocator, medium, cssReader, s);
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 										style = <strong class="jxr_keyword">new</strong> Analyzer(s).evaluateDOM(doc, medium, <strong class="jxr_keyword">true</strong>); }
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 									NodeData data = style.get(element);
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 									<strong class="jxr_keyword">if</strong> (data != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 										Term&lt;?&gt; value = data.getValue(property, <strong class="jxr_keyword">true</strong>);
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 										<strong class="jxr_keyword">if</strong> (value != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 											<strong class="jxr_keyword">return</strong> Optional.of(serializeValue(value));
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 										<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 											CSSProperty p = data.getProperty(property);
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 											<strong class="jxr_keyword">if</strong> (p != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 												<strong class="jxr_keyword">return</strong> Optional.of(p.toString()); }}
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 									<strong class="jxr_keyword">return</strong> Optional.empty();
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 								}
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 								Map&lt;String,List&lt;CombinedSelector&gt;&gt; selectorCache = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// cache of compiled selectors</em>
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 								<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> matches(Element element, String selector) {
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 									List&lt;CombinedSelector&gt; compiledSelector;
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 									<strong class="jxr_keyword">if</strong> (selectorCache == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 										selectorCache = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 									<strong class="jxr_keyword">if</strong> (selectorCache.containsKey(selector))
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 										compiledSelector = selectorCache.get(selector);
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 									<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 										compiledSelector = parserFactory.parseSelector(selector, r.namespaces);
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 										<strong class="jxr_keyword">if</strong> (compiledSelector != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 											selectorCache.put(selector, compiledSelector); }
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 									<strong class="jxr_keyword">if</strong> (compiledSelector == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 										<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 									<strong class="jxr_keyword">for</strong> (CombinedSelector sel : compiledSelector) {
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 										<strong class="jxr_keyword">boolean</strong> match = false;
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 										Combinator combinator = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 										<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = sel.size() - 1; i &gt;= 0; i--) {
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 											Selector s = sel.get(i);
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 											<strong class="jxr_keyword">if</strong> (combinator == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 												match = s.matches(element);
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.ADJACENT) {
+<a class="jxr_linenumber" name="L365" href="#L365">365</a> 												Node adjacent = element.getPreviousSibling();
+<a class="jxr_linenumber" name="L366" href="#L366">366</a> 												<strong class="jxr_keyword">while</strong> (adjacent != <strong class="jxr_keyword">null</strong> &amp;&amp; !(adjacent instanceof Element))
+<a class="jxr_linenumber" name="L367" href="#L367">367</a> 													adjacent = adjacent.getPreviousSibling();
+<a class="jxr_linenumber" name="L368" href="#L368">368</a> 												match = adjacent != <strong class="jxr_keyword">null</strong> &amp;&amp; s.matches((Element)adjacent); }
+<a class="jxr_linenumber" name="L369" href="#L369">369</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.PRECEDING) {
+<a class="jxr_linenumber" name="L370" href="#L370">370</a> 												match = false;
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 												Node preceding = element.getPreviousSibling();
+<a class="jxr_linenumber" name="L372" href="#L372">372</a> 												<strong class="jxr_keyword">while</strong> (!match) {
+<a class="jxr_linenumber" name="L373" href="#L373">373</a> 													<strong class="jxr_keyword">while</strong> (preceding != <strong class="jxr_keyword">null</strong> &amp;&amp; !(preceding instanceof Element))
+<a class="jxr_linenumber" name="L374" href="#L374">374</a> 														preceding = preceding.getPreviousSibling();
+<a class="jxr_linenumber" name="L375" href="#L375">375</a> 													<strong class="jxr_keyword">if</strong> (preceding != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L376" href="#L376">376</a> 														<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L377" href="#L377">377</a> 													match = s.matches((Element)preceding);
+<a class="jxr_linenumber" name="L378" href="#L378">378</a> 													preceding = preceding.getPreviousSibling(); }}
+<a class="jxr_linenumber" name="L379" href="#L379">379</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.DESCENDANT) {
+<a class="jxr_linenumber" name="L380" href="#L380">380</a> 												match = false;
+<a class="jxr_linenumber" name="L381" href="#L381">381</a> 												Node ancestor = element.getParentNode();
+<a class="jxr_linenumber" name="L382" href="#L382">382</a> 												<strong class="jxr_keyword">while</strong> (!match &amp;&amp; ancestor != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L383" href="#L383">383</a> 													match = s.matches((Element)ancestor);
+<a class="jxr_linenumber" name="L384" href="#L384">384</a> 													ancestor = ancestor.getParentNode(); }}
+<a class="jxr_linenumber" name="L385" href="#L385">385</a> 											<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (combinator == Combinator.CHILD) {
+<a class="jxr_linenumber" name="L386" href="#L386">386</a> 												Element parent = (Element)element.getParentNode();
+<a class="jxr_linenumber" name="L387" href="#L387">387</a> 												match = parent != <strong class="jxr_keyword">null</strong> &amp;&amp; s.matches(parent); }
+<a class="jxr_linenumber" name="L388" href="#L388">388</a> 											combinator = s.getCombinator();
+<a class="jxr_linenumber" name="L389" href="#L389">389</a> 											<strong class="jxr_keyword">if</strong> (!match)
+<a class="jxr_linenumber" name="L390" href="#L390">390</a> 												<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L391" href="#L391">391</a> 										}
+<a class="jxr_linenumber" name="L392" href="#L392">392</a> 										<strong class="jxr_keyword">if</strong> (match == <strong class="jxr_keyword">true</strong>)
+<a class="jxr_linenumber" name="L393" href="#L393">393</a> 											<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L394" href="#L394">394</a> 									}
+<a class="jxr_linenumber" name="L395" href="#L395">395</a> 									<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L396" href="#L396">396</a> 								}
+<a class="jxr_linenumber" name="L397" href="#L397">397</a> 							}
+<a class="jxr_linenumber" name="L398" href="#L398">398</a> 						)
+<a class="jxr_linenumber" name="L399" href="#L399">399</a> 					);
+<a class="jxr_linenumber" name="L400" href="#L400">400</a> 					transformed = xsltProcessor.transform(
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 						URLs.resolve(URLs.asURI(r.base), URLs.asURI(r.uri)),
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 						transformed != <strong class="jxr_keyword">null</strong> ? transformed : source.get(),
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 						params);
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 				}
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 				<strong class="jxr_keyword">if</strong> (transformed != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 					node = transformed.ensureSingleItem().asNodeIterator().next();
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 					<strong class="jxr_keyword">if</strong> (!(node instanceof Document))
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 							<strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"XsltProcessor must return a (single) document"</span>));
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 					document = (Document)node;
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 					<em class="jxr_comment">// We assume that base URI did not change.</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 					<em class="jxr_comment">// We need to recompute the stylesheet because of any possible inline styles, which</em>
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 					<em class="jxr_comment">// are attached to an element in the original document.</em>
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 					styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 					styleSheet.addAll(defaultStyleSheet);
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 					styleSheet = CSSFactory.getUsedStyles(document, <strong class="jxr_keyword">null</strong>, nodeLocator, medium, cssReader, styleSheet);
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				}
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				styleMap = <strong class="jxr_keyword">new</strong> Analyzer(styleSheet).evaluateDOM(document, medium, false);
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 			}
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 			writer.setBaseURI(baseURI);
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 			writer.writeStartDocument();
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			traverse(document.getDocumentElement(), styleMap, writer);
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 			writer.writeEndDocument();
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		} <strong class="jxr_keyword">catch</strong> (TransformerException e) {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">throw</strong> e;
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		} <strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(e);
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			styleSheet = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 	}
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeStyle(NodeData mainStyle, Map&lt;PseudoElement,NodeData&gt; pseudoStyles, Element context);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">abstract</strong> String serializeValue(Term&lt;?&gt; value);
 <a class="jxr_linenumber" name="L436" href="#L436">436</a> 
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> traverse(Node node, StyleMap styleMap, BaseURIAwareXMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.ELEMENT_NODE) {
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			Element elem = (Element)node;
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 			writeStartElement(writer, elem);
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			NamedNodeMap attributes = node.getAttributes();
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; attributes.getLength(); i++) {
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 				Node attr = attributes.item(i);
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 				<strong class="jxr_keyword">if</strong> (!(attr.getPrefix() == <strong class="jxr_keyword">null</strong> &amp;&amp; <span class="jxr_string">"style"</span>.equals(attr.getLocalName())))
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 					writeAttribute(writer, attr); }
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			Map&lt;PseudoElement,NodeData&gt; pseudoStyles = <strong class="jxr_keyword">new</strong> java.util.HashMap&lt;&gt;(); {
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 				<strong class="jxr_keyword">for</strong> (PseudoElement pseudo : styleMap.pseudoSet(elem))
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 					pseudoStyles.put(pseudo, styleMap.get(elem, pseudo)); }
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			String style = serializeStyle(
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				styleMap.get(elem),
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 				pseudoStyles,
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 				elem);
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">if</strong> (style != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 				writeAttribute(writer, attributeName, style);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			<strong class="jxr_keyword">for</strong> (Node child = node.getFirstChild(); child != <strong class="jxr_keyword">null</strong>; child = child.getNextSibling())
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				traverse(child, styleMap, writer);
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			writer.writeEndElement(); }
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.COMMENT_NODE)
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			writeComment(writer, node);
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.TEXT_NODE)
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			writeCharacters(writer, node);
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE)
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			writeProcessingInstruction(writer, node);
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Unexpected node type"</span>);
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 	}
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> }
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 	<strong class="jxr_keyword">protected</strong> StyleSheet getParsedStyleSheet() {
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		<strong class="jxr_keyword">if</strong> (styleSheet == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException();
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">return</strong> styleSheet;
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 	}
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">void</strong> traverse(Node node, StyleMap styleMap, BaseURIAwareXMLStreamWriter writer) <strong class="jxr_keyword">throws</strong> XMLStreamException {
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.ELEMENT_NODE) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			Element elem = (Element)node;
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			writeStartElement(writer, elem);
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 			NamedNodeMap attributes = node.getAttributes();
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; attributes.getLength(); i++) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 				Node attr = attributes.item(i);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 				<strong class="jxr_keyword">if</strong> (!(attr.getPrefix() == <strong class="jxr_keyword">null</strong> &amp;&amp; <span class="jxr_string">"style"</span>.equals(attr.getLocalName())))
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 					writeAttribute(writer, attr); }
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 			Map&lt;PseudoElement,NodeData&gt; pseudoStyles = <strong class="jxr_keyword">new</strong> java.util.HashMap&lt;&gt;(); {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 				<strong class="jxr_keyword">for</strong> (PseudoElement pseudo : styleMap.pseudoSet(elem))
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 					pseudoStyles.put(pseudo, styleMap.get(elem, pseudo)); }
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 			String style = serializeStyle(
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 				styleMap.get(elem),
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 				pseudoStyles,
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 				elem);
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 			<strong class="jxr_keyword">if</strong> (style != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 				writeAttribute(writer, attributeName, style);
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			<strong class="jxr_keyword">for</strong> (Node child = node.getFirstChild(); child != <strong class="jxr_keyword">null</strong>; child = child.getNextSibling())
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> 				traverse(child, styleMap, writer);
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			writer.writeEndElement(); }
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.COMMENT_NODE)
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			writeComment(writer, node);
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.TEXT_NODE)
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			writeCharacters(writer, node);
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE)
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			writeProcessingInstruction(writer, node);
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Unexpected node type"</span>);
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 	}
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2022 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

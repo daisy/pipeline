@@ -15,10 +15,11 @@
     
     &lt;<span class="code-xml-element-local-name">doc</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.oxygenxml.com/ns/doc/xsl"</span>&gt;
         &lt;<span class="code-xml-element-local-name">desc</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span>&gt;Tests whether the file denoted by this path exists.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;Tests whether the file denoted by this path exists on disk. Also works for zipped
+            files.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-local-name">desc</span>&gt;
-        &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"path"</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span>&gt;An absolute file path (not a URI)&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+        &lt;<span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"uri"</span>&gt;
+            &lt;<span class="code-xml-element-local-name">p</span>&gt;An absolute file URI&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-local-name">param</span>&gt;
         &lt;<span class="code-xml-element-local-name">return</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;A boolean&lt;/<span class="code-xml-element-local-name">p</span>&gt;

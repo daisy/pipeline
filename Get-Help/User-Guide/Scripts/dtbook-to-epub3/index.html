@@ -924,15 +924,34 @@ The resulting EPUB 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-name">Assert validity</div>
 <div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
+Whether to stop processing and raise an error on validation issues.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -963,34 +982,15 @@ Language code of the input document.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
 <div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
+Whether to use a speech synthesizer to produce audio files.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1048,8 +1048,12 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
@@ -1060,12 +1064,8 @@ Options:</pre>
 <td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
 </tr>
 <tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

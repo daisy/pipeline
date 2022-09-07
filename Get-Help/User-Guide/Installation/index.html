@@ -924,7 +924,7 @@ via the Docker command line interface:</p>
 
 <div class="language-sh highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre>docker pull daisyorg/pipeline-assembly
+  <div class="code"><pre>docker pull daisyorg/pipeline
 </pre></div>
 </div>
 </div>
@@ -933,13 +933,22 @@ via the Docker command line interface:</p>
 
 <div class="language-sh highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre>docker pull daisyorg/pipeline-assembly:&lt;version&gt;
+  <div class="code"><pre>docker pull daisyorg/pipeline:&lt;version&gt;
+</pre></div>
+</div>
+</div>
+
+<p>or to get the latest development version:</p>
+
+<div class="language-sh highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre>docker pull daisyorg/pipeline:latest-snapshot
 </pre></div>
 </div>
 </div>
 
 <p>You can find the available versions at
-<a href="https://hub.docker.com/r/daisyorg/pipeline-assembly/tags" class="external-link" target="_blank">https://hub.docker.com/r/daisyorg/pipeline-assembly/tags</a>. After
+<a href="https://hub.docker.com/r/daisyorg/pipeline/tags" class="external-link" target="_blank">https://hub.docker.com/r/daisyorg/pipeline/tags</a>. After
 having pulled the image you’re ready to run the Pipeline web server:</p>
 
 <div class="language-sh highlighter-coderay">
@@ -947,7 +956,7 @@ having pulled the image you’re ready to run the Pipeline web server:</p>
   <div class="code"><pre>docker run --detach \
            -p 8181:8181 \
            -e PIPELINE2_WS_HOST=0.0.0.0 \
-           daisyorg/pipeline-assembly
+           daisyorg/pipeline
 </pre></div>
 </div>
 </div>
@@ -990,7 +999,7 @@ web service to the host:</p>
            --name pipeline \
            -e PIPELINE2_WS_HOST=0.0.0.0 \
            -e PIPELINE2_WS_AUTHENTICATION=false \
-           daisyorg/pipeline-assembly
+           daisyorg/pipeline
 docker run --detach \
            --link pipeline \
            -p 9000:9000 \
@@ -1011,7 +1020,7 @@ following content and run <code>docker-compose up</code>.</p>
   <div class="code"><pre><span class="key">version</span>: <span class="string"><span class="delimiter">"</span><span class="content">2.1</span><span class="delimiter">"</span></span>
 <span class="key">services</span>:
   <span class="key">pipeline</span>:
-    <span class="key">image</span>: <span class="string"><span class="content">daisyorg/pipeline-assembly</span></span>
+    <span class="key">image</span>: <span class="string"><span class="content">daisyorg/pipeline</span></span>
     <span class="key">environment</span>:
       <span class="key">PIPELINE2_WS_HOST</span>: <span class="string"><span class="delimiter">"</span><span class="content">0.0.0.0</span><span class="delimiter">"</span></span>
       <span class="key">PIPELINE2_WS_AUTHENTICATION</span>: <span class="string"><span class="delimiter">"</span><span class="content">false</span><span class="delimiter">"</span></span>
