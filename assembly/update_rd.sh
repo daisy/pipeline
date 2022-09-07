@@ -24,7 +24,7 @@ if [ $# != 0 ]; then
 fi
 
 echo "Generating release descriptor"
-make release-descriptor
+${MAKE:=make} release-descriptor
 
 descriptor=target/release-descriptor/releaseDescriptor.xml
 version=$(xmllint --pretty 2 $descriptor | grep version | sed -n '2p' | sed  's/ //g'| sed -n 's/version="\(.*\)"/\1/p')
