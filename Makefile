@@ -35,6 +35,8 @@ endif
 else
 .SILENT: help
 endif
+else
+.SILENT: help
 endif
 
 USER_HOME := $(shell echo ~)
