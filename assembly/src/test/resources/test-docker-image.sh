@@ -52,9 +52,9 @@ while ! curl localhost:8181/ws/alive >/dev/null 2>/dev/null; do
 done
 
 # run the cli
-if ! docker run --name cli --rm -it --link pipeline \
+if ! docker run --name cli --rm --link pipeline \
             --entrypoint /opt/daisy-pipeline2/cli/dp2 \
-            --volume="$(pwd):$MOUNT_POINT:rw" \
+            --volume="$(pwd):${MOUNT_POINT}:rw" \
             daisyorg/pipeline:latest-snapshot \
             --host http://pipeline \
             --starting false \
