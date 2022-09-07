@@ -1,3 +1,25 @@
+Changes in release v1.14.8
+==========================
+
+## Framework
+
+- **NEW** `org.daisy.pipeline.ws.cors` setting to permit cross-origin requests from browsers (Cross-Origin Resource Sharing).
+
+## Modules
+
+- **NEW** Script to transform a DAISY 3 into a folder structure with MP3 files (experimental)
+- **FIX** DAISY 2.02 validator did not support WAVE audio file type
+- Optimizations
+- Bugfixes
+
+## Details
+
+- [Closed issues in pipeline](https://github.com/issues?q=repo%3Adaisy%2Fpipeline+milestone%3Av1.14.8)
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.8)
+- [Closed issues in pipeline-cli-go](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-cli-go+milestone%3Av1.14.8)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.8)
+- [Closed issues in pipeline-modules](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.8)
+
 Changes in release v1.14.7
 ==========================
 
@@ -14,6 +36,7 @@ Changes in release v1.14.7
 - Various other improvements and bugfixes
 
 ### Details
+
 - [Closed issues in pipeline-assembly](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.7)
 - [Closed issues in pipeline-framework](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.7)
 - [Closed issues in pipeline-gui](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.14.7)
@@ -24,9 +47,11 @@ Changes in release v1.14.6
 ==========================
 
 ### Modules
+
 - Changes to braille production scripts, see [release notes of braille modules v1.14.7](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1147)
 
 ### Details
+
 - [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.7)
 - [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.6)
 

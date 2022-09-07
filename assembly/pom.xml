@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.8-SNAPSHOT</version>
+  <version>1.14.8</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,10 +17,10 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.14.8</tag>
   </scm>
   <properties>
-    <cli.version>2.1.6</cli.version>
+    <cli.version>2.1.7</cli.version>
     <javafx.version>11.0.1</javafx.version>
     <!--
         for package-exe
@@ -83,14 +83,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.7</version>
+        <version>1.14.9</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.8</version>
+        <version>1.14.9</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -761,34 +761,42 @@
                 <dependency>
                   <groupId>de.jangassen</groupId>
                   <artifactId>nsmenufx</artifactId>
+                  <version>2.1.8</version>
                 </dependency>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>pegdown</artifactId>
+                  <version>1.0.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>parboiled</artifactId>
+                  <version>1.0.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-analysis</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-tree</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.ow2.asm</groupId>
                   <artifactId>asm-util</artifactId>
+                  <version>5.0.3</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.parboiled</groupId>
                   <artifactId>parboiled-core</artifactId>
+                  <version>1.1.7</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -956,6 +964,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>daisy3-to-epub3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>daisy3-to-mp3</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1296,6 +1308,13 @@
                 <artifactItem>
                   <groupId>org.json</groupId>
                   <artifactId>json</artifactId>
+                </artifactItem>
+                <!--
+                    for audio-common
+                -->
+                <artifactItem>
+                  <groupId>com.googlecode.soundlibs</groupId>
+                  <artifactId>jlayer</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
