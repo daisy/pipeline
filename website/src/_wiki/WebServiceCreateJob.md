@@ -26,9 +26,37 @@ The inputs and options for a script can be retrieved by requesting a
 description of that particular script. This data is then used when
 building the job request.
 
-A job can be created using inline XML or a multi-part upload.
+A job can be created using local file system references, inline XML or a multi-part upload.
 
-## 1. Inline XML
+## 1. Local file system references
+
+This method is appropriate when the Pipeline server is running in
+"local file system" mode (see
+[configuration](Configuration-Files)). In this case the `input` and
+`option` elements may reference absolute file URIs. An example:
+
+~~~xml
+<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+    <script href='http://example.org/ws/scripts/dtbook-to-zedai'/>
+    <input name='source'>
+        <item value='file:///home/user/dtbook-basic.xml'/>
+    </input>
+    <option name='opt-mods-filename'>the-mods-file.xml</option>
+    <option name='opt-css-filename'>the-css-file.css</option>
+    <option name='opt-zedai-filename'>the-zedai-file.xml</option>
+</jobRequest>
+~~~
+
+Another example to demonstrate absolute URIs in an `option`:
+
+~~~xml
+<jobRequest xmlns='http://www.daisy.org/ns/pipeline/data'>
+   <script href='http://localhost:8181/ws/scripts/epub3-to-epub3'/>
+   <option name='source'>file:///home/user/accessible_epub_3.epub</option>
+</jobRequest>
+~~~
+
+## 2. Inline XML
 
 This method is appropriate if the only files involved are XML, and no
 external files (e.g. JPEGs) are required. The input XML document(s),
@@ -70,7 +98,7 @@ If a sequence of documents is being passed to a port, then a series of
 ~~~
 
 
-## 2. Multipart zip upload
+## 3. Multipart zip upload
 
 Sometimes the input file's context is required in order to perform the
 operation. An example is when the input file references images, and
@@ -95,6 +123,8 @@ is an XML file describing the job request:
     <option name='opt-zedai-filename'>the-zedai-file.xml</option>
 </jobRequest>
 ~~~
+
+Both parts are mandatory.
 
 The `<input>` element contains one or more `<item>` element children,
 each referring to a file in the attached zip by its relative path

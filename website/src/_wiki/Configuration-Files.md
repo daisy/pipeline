@@ -86,6 +86,12 @@ the `pipeline.properties` file.
 : **Allowed values**: A non-empty string
 : **Required**: Yes, if `org.daisy.pipeline.ws.ssl` is set
 
+`org.daisy.pipeline.ws.cors`
+: Whether to permit cross-origin requests from browsers (Cross-Origin Resource Sharing)
+: **Allowed values**: "true" or "false"
+: **Required**: No
+: **Default**: "false"
+
 `org.daisy.pipeline.ws.maxrequesttime`
 : Maximum amount of time (in ms) that a web service request is considered valid
 : **Allowed values**: A positive long number
