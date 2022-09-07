@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.7-SNAPSHOT</version>
+  <version>1.14.8-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -2614,7 +2614,7 @@
                   </addModules>
                   <modulePaths>
                     <!-- otherwise build fails with "Error: no value given for -module-path" -->
-                    <modulePath/>
+                    <modulePath />
                   </modulePaths>
                   <noHeaderFiles>true</noHeaderFiles>
                   <noManPages>true</noManPages>

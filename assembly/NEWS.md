@@ -13,6 +13,12 @@ Changes in release v1.14.7
 - Various optimizations
 - Various other improvements and bugfixes
 
+### Details
+- [Closed issues in pipeline-assembly](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.7)
+- [Closed issues in pipeline-framework](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.7)
+- [Closed issues in pipeline-gui](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-gui+milestone%3Av1.14.7)
+- [Closed issues in pipeline-modules](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.7)
+- [Closed issues in pipeline-tasks](tps://github.com/issues?q=repo%3Adaisy%2Fpipeline-tasks+milestone%3Av1.14.7)
 
 Changes in release v1.14.6
 ==========================
