@@ -32,7 +32,7 @@ In Visual Studio, first select the "Release" configuration and then build the DL
 - Select the "x86" platform and launch the build with the menu action "Build/Build the solution"
 - Select the "x64" platform and launch the build with the menu action "Build/Build the solution"
 
-If the build was successful, this should have updated the DLLs under `src/main/resources/(x86|x64)/sapinative.dll`
+If the build was successful, this should have updated the DLLs under `src/main/resources/(x86|x64)/`
 
 Alternatively, you can also open the developer command line with the menu "Tools/Command line/Developer command line" and launch the following commands: 
 ```

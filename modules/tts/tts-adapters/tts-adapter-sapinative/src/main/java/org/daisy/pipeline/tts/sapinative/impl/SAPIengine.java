@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
@@ -17,10 +18,10 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.tts.sapinative.SAPILib;
 import org.daisy.pipeline.tts.sapinative.SAPILibResult;
+import org.daisy.pipeline.tts.SimpleTTSEngine;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.Voice;
 
@@ -46,10 +47,10 @@ public class SAPIengine extends TTSEngine {
 		mOverallPriority = priority;
 	}
 
-	@Override
-	public boolean handlesMarks() {
-		return true;
-	}
+	// @Override
+	// public String endingMark() {
+	// 	return "ending-mark";
+	// }
 
 	@Override
 	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource resource)
@@ -81,9 +82,11 @@ public class SAPIengine extends TTSEngine {
 		}
 
 		int size = SAPILib.getStreamSize(tr.connection);
-		byte[] data = new byte[size];
-		SAPILib.readStream(tr.connection, data, 0);
 
+		AudioBuffer result = bufferAllocator.allocateBuffer(size);
+		SAPILib.readStream(tr.connection, result.data, 0);
+
+		String[] names = SAPILib.getBookmarkNames(tr.connection);
 		long[] pos = SAPILib.getBookmarkPositions(tr.connection);
 
 		float sampleRate = mAudioFormat.getSampleRate();
@@ -126,50 +129,49 @@ public class SAPIengine extends TTSEngine {
 				switch (currentGender.toLowerCase()) {
 					case "male":
 						switch(currentAge.toLowerCase()){
-							case "child":
+							 // i have no example of child and elderly voice attribute for now
+							case "child" :
 								selected = Gender.MALE_CHILD;
 								break;
-							case "elderly":
+							case "elderly" :
 								selected = Gender.MALE_ELDERY;
 								break;
-							case "adult":
+							case "adult" : // default to adult
 							default:
 								selected = Gender.MALE_ADULT;
 								break;
 						}
 						break;
-					case "female":
+					case "female": // default to female
 					default:
 						switch(currentAge.toLowerCase()){
-							case "child":
+								// i have no example of child and elderly voice attribute for now
+							case "child" :
 								selected = Gender.FEMALE_CHILD;
 								break;
-							case "elderly":
+							case "elderly" :
 								selected = Gender.FEMALE_ELDERY;
 								break;
-							case "adult":
+							case "adult" : // default to adult
 							default:
 								selected = Gender.FEMALE_ADULT;
 								break;
 						}
 						break;
 				}
-				try {
-					mVoiceFormatConverter.put(
-						names[i].toLowerCase(),
-						new Voice(
-							vendors[i],
-							names[i],
-							VoiceInfo.tagToLocale(locale[i]),
-							selected
-						)
-					);
-				} catch (VoiceInfo.UnknownLanguage e) {
-					Logger.debug("Not a valid locale: " + locale[i]);
-				}
+				mVoiceFormatConverter.put(
+					names[i].toLowerCase(),
+					new Voice(
+						vendors[i],
+				        names[i],
+						Locale.forLanguageTag(locale[i]),
+						selected
+					)
+				);
 			}
 		}
 		List<Voice> voices = new ArrayList<Voice>();
+		
 		for (String sapiVoice : mVoiceFormatConverter.keySet()) {
 			Voice original = mVoiceFormatConverter.get(sapiVoice);
 			voices.add(

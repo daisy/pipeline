@@ -14,7 +14,7 @@
       <xsl:apply-templates select="if (local-name()='speak') then node() else ." mode="copy"/>
       <ssml:break time="250ms"/>
       <xsl:if test="$ending-mark != ''">
-	      <bookmark mark="{$ending-mark}"/>
+	      <mark name="{$ending-mark}"/>
       </xsl:if>
     </ssml:speak>
   </xsl:template>
@@ -32,12 +32,6 @@
   <xsl:template match="ssml:token" mode="copy">
     <!-- tokens are not copied because they are not SSML1.0-compliant and not SAPI-compliant-->
     <xsl:apply-templates select="@*|node()" mode="copy"/>
-  </xsl:template>
-
-  <!-- with the sapinative adapter, marks are not supported if the xml:lang is not set in the speak tag (in unit tests)
-    so we use the sapi bookmark as the xml:lang attribute is removed in this xslt -->
-  <xsl:template match="ssml:mark" mode="copy">
-     <bookmark mark="@name"/>
   </xsl:template>
 
 

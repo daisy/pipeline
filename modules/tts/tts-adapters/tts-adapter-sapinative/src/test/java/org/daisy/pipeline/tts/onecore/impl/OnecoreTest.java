@@ -1,7 +1,7 @@
-package org.daisy.pipeline.tts.sapinative.impl;
+package org.daisy.pipeline.tts.onecore.impl;
 
-import org.daisy.pipeline.tts.sapinative.SAPILib;
-import org.daisy.pipeline.tts.sapinative.impl.*;
+import org.daisy.pipeline.tts.onecore.OnecoreLib;
+import org.daisy.pipeline.tts.onecore.impl.*;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.Voice;
@@ -15,12 +15,12 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class SAPINativeTest {
+public class OnecoreTest {
 
 	@BeforeClass
 	public static void load() throws SynthesisException {
-		SAPIservice.loadDLL();
-		SAPILib.initialize(8000, (short) 16);
+		OnecoreService.loadDLL();
+		OnecoreLib.initialize();
 	}
 
 	@AfterClass
@@ -29,44 +29,44 @@ public class SAPINativeTest {
 		System.out.println("This exception does not prevent the tests and build to complete in success, and has not yet occured in real-world production tests.");
 		System.out.println("You can ignore it and the error log.");
 
-		SAPILib.dispose();
+		OnecoreLib.dispose();
 	}
 
 	@Test
 	public void getVoiceNames() {
-		String[] voices = SAPILib.getVoiceNames();
+		String[] voices = OnecoreLib.getVoiceNames();
 		Assert.assertTrue(voices.length > 0);
 	}
 
 	@Test
 	public void getVoiceVendors() {
-		String[] vendors = SAPILib.getVoiceVendors();
+		String[] vendors = OnecoreLib.getVoiceVendors();
 		Assert.assertTrue(vendors.length > 0);
 	}
 
 	@Test
 	public void getVoiceLocales() {
-		String[] locales = SAPILib.getVoiceLocales();
+		String[] locales = OnecoreLib.getVoiceLocales();
 		Assert.assertTrue(locales.length > 0);
 	}
 
 	@Test
 	public void getVoiceGenders() {
-		String[] genders = SAPILib.getVoiceGenders();
+		String[] genders = OnecoreLib.getVoiceGenders();
 		Assert.assertTrue(genders.length > 0);
 	}
 
 	@Test
 	public void getVoiceAges() {
-		String[] ages = SAPILib.getVoiceAges();
+		String[] ages = OnecoreLib.getVoiceAges();
 		Assert.assertTrue(ages.length > 0);
 	}
 
 	@Test
 	public void manageConnection() {
-		long connection = SAPILib.openConnection();
+		long connection = OnecoreLib.openConnection();
 		Assert.assertNotSame(0, connection);
-		SAPILib.closeConnection(connection);
+		OnecoreLib.closeConnection(connection);
 	}
 
 	
@@ -76,35 +76,38 @@ public class SAPINativeTest {
 		Assert.assertTrue(voices.size() > 1);
 	}
 
-	// Note / fun fact :
-	// if the xml:lang is set on the speak tag, ssml marks are recognised.
-	// but we don't copy xml:lang attribute in transform-ssml so we need the bookmark sapi tag
-	// this issue does not occure on onecore
+	// https://github.com/microsoft/Windows-universal-samples/tree/main/Samples/SpeechRecognitionAndSynthesis
+	// <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis'
+	// xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+	// xsi:schemaLocation='http://www.w3.org/2001/10/synthesis  http://www.w3.org/TR/speech-synthesis/synthesis.xsd'
+	//"<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis'><s>" + x + "</s></speak>";
+	// <ssml:speak xmlns:ssml="http://www.w3.org/2001/10/synthesis" version="1.0"><s:s xmlns:tmp="http://" xmlns:s="http://www.w3.org/2001/10/synthesis" id="s1">small sentence</s:s><ssml:break time="250ms"/></ssml:speak>
 	static String SSML(String x) {
-		return "<speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis'><s>" + x
+		return "<speak xmlns='http://www.w3.org/2001/10/synthesis' version='1.0'><s>" + x
 		        + "</s></speak>";
 	}
 
 	static long speakCycle(String text) {
-		String[] names = SAPILib.getVoiceNames();
-		String[] vendors = SAPILib.getVoiceVendors();
-		String[] locales = SAPILib.getVoiceLocales();
+		String[] names = OnecoreLib.getVoiceNames();
+		String[] vendors = OnecoreLib.getVoiceVendors();
+		String[] locales = OnecoreLib.getVoiceLocales();
+		
 		Assert.assertTrue(names.length > 0);
 		Assert.assertTrue(vendors.length > 0);
 
-		long connection = SAPILib.openConnection();
+		long connection = OnecoreLib.openConnection();
 		Assert.assertNotSame(0, connection);
 
-		int error = SAPILib.speak(connection, vendors[0], names[0], text);
+		int error = OnecoreLib.speak(connection, vendors[0], names[0], text);
 
 		int spoken = -1;
 		if (error == 0) {
 			
-			spoken = SAPILib.getStreamSize(connection);
+			spoken = OnecoreLib.getStreamSize(connection);
 			if (spoken > 0) {
 				int offset = 5000;
 				byte[] audio = new byte[offset + spoken];
-				SAPILib.readStream(connection, audio, offset);
+				OnecoreLib.readStream(connection, audio, offset);
 			}
 			if (spoken <= 200) {
 				error = -1;
@@ -112,47 +115,49 @@ public class SAPINativeTest {
 		}
 
 		if (error != 0)
-			SAPILib.closeConnection(connection);
+			OnecoreLib.closeConnection(connection);
 
 		Assert.assertSame(0, error);
 
 		return connection;
 	}
 
+	
+
 	@Test
 	public void speakEasy() {
 		long connection = speakCycle(SSML("this is a test"));
-		SAPILib.closeConnection(connection);
+		OnecoreLib.closeConnection(connection);
 	}
 
-	private static SAPIengine allocateEngine() throws Throwable {
-		SAPIservice s = new SAPIservice();
-		return (SAPIengine) s.newEngine(new HashMap<String, String>());
+	private static OnecoreEngine allocateEngine() throws Throwable {
+		OnecoreService s = new OnecoreService();
+		return (OnecoreEngine) s.newEngine(new HashMap<String, String>());
 	}
 
 
 	@Test
 	public void speakTwice() {
-		String[] names = SAPILib.getVoiceNames();
-		String[] vendors = SAPILib.getVoiceVendors();
+		String[] names = OnecoreLib.getVoiceNames();
+		String[] vendors = OnecoreLib.getVoiceVendors();
 		Assert.assertTrue(names.length > 0);
 		Assert.assertTrue(vendors.length > 0);
 
-		long connection = SAPILib.openConnection();
+		long connection = OnecoreLib.openConnection();
 		Assert.assertNotSame(0, connection);
 
 		String text = SSML("small test");
 
-		int error1 = SAPILib.speak(connection, vendors[0], names[0], text);
-		int spoken1 = SAPILib.getStreamSize(connection);
+		int error1 = OnecoreLib.speak(connection, vendors[0], names[0], text);
+		int spoken1 = OnecoreLib.getStreamSize(connection);
 		if (spoken1 > 0) {
-			SAPILib.readStream(connection, new byte[spoken1], 0); //skip data
+			OnecoreLib.readStream(connection, new byte[spoken1], 0); //skip data
 		}
 
-		int error2 = SAPILib.speak(connection, vendors[0], names[0], text);
-		int spoken2 = SAPILib.getStreamSize(connection);
+		int error2 = OnecoreLib.speak(connection, vendors[0], names[0], text);
+		int spoken2 = OnecoreLib.getStreamSize(connection);
 
-		SAPILib.closeConnection(connection);
+		OnecoreLib.closeConnection(connection);
 
 		Assert.assertSame(0, error1);
 		Assert.assertSame(0, error2);
@@ -163,10 +168,10 @@ public class SAPINativeTest {
 
 	@Test
 	public void bookmarkReply() {
-		long connection = speakCycle(SSML("this is <bookmark mark=\"t\"/> a bookmark"));
-		String[] names = SAPILib.getBookmarkNames(connection);
-		long[] pos = SAPILib.getBookmarkPositions(connection);
-		SAPILib.closeConnection(connection);
+		long connection = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
+		String[] names = OnecoreLib.getBookmarkNames(connection);
+		long[] pos = OnecoreLib.getBookmarkPositions(connection);
+		OnecoreLib.closeConnection(connection);
 
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
@@ -175,11 +180,11 @@ public class SAPINativeTest {
 	@Test
 	public void oneBookmark() {
 		String bookmark = "bmark";
-		long connection = speakCycle(SSML("this is <bookmark mark=\"" + bookmark
+		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark
 		        + "\"/> a bookmark"));
-		String[] names = SAPILib.getBookmarkNames(connection);
-		long[] pos = SAPILib.getBookmarkPositions(connection);
-		SAPILib.closeConnection(connection);
+		String[] names = OnecoreLib.getBookmarkNames(connection);
+		long[] pos = OnecoreLib.getBookmarkPositions(connection);
+		OnecoreLib.closeConnection(connection);
 
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
@@ -194,9 +199,9 @@ public class SAPINativeTest {
 	// 	String bookmark = "endingmark";
 	// 	long connection = speakCycle(SSML("this is an ending mark <bookmark mark=\"" + bookmark
 	// 	        + "\"/> "));
-	// 	String[] names = SAPILib.getBookmarkNames(connection);
-	// 	long[] pos = SAPILib.getBookmarkPositions(connection);
-	// 	SAPILib.closeConnection(connection);
+	// 	String[] names = OnecoreLib.getBookmarkNames(connection);
+	// 	long[] pos = OnecoreLib.getBookmarkPositions(connection);
+	// 	OnecoreLib.closeConnection(connection);
 	// 	Assert.assertSame(1, names.length);
 	// 	Assert.assertSame(1, pos.length);
 	// 	Assert.assertEquals(bookmark, names[0]);
@@ -206,11 +211,11 @@ public class SAPINativeTest {
 	public void twoBookmarks() {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
-		long connection = speakCycle(SSML("one two three four <bookmark mark=\"" + b1
-		        + "\"/> five six <bookmark mark=\"" + b2 + "\"/> seven"));
-		String[] names = SAPILib.getBookmarkNames(connection);
-		long[] pos = SAPILib.getBookmarkPositions(connection);
-		SAPILib.closeConnection(connection);
+		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
+		        + "\"/> five six <mark name=\"" + b2 + "\"/> seven"));
+		String[] names = OnecoreLib.getBookmarkNames(connection);
+		long[] pos = OnecoreLib.getBookmarkPositions(connection);
+		OnecoreLib.closeConnection(connection);
 
 		Assert.assertSame(2, names.length);
 		Assert.assertSame(2, pos.length);
@@ -224,8 +229,8 @@ public class SAPINativeTest {
 
 	static private int[] findSize(final String[] sentences, int startShift)
 	        throws InterruptedException {
-		final String[] names = SAPILib.getVoiceNames();
-		final String[] vendors = SAPILib.getVoiceVendors();
+		final String[] names = OnecoreLib.getVoiceNames();
+		final String[] vendors = OnecoreLib.getVoiceVendors();
 		final int[] foundSize = new int[sentences.length];
 		Thread[] threads = new Thread[sentences.length];
 
@@ -233,10 +238,10 @@ public class SAPINativeTest {
 			final int j = i;
 			threads[i] = new Thread() {
 				public void run() {
-					long connection = SAPILib.openConnection();
-					SAPILib.speak(connection, vendors[0], names[0], sentences[j]);
-					foundSize[j] = SAPILib.getStreamSize(connection);
-					SAPILib.closeConnection(connection);
+					long connection = OnecoreLib.openConnection();
+					OnecoreLib.speak(connection, vendors[0], names[0], sentences[j]);
+					foundSize[j] = OnecoreLib.getStreamSize(connection);
+					OnecoreLib.closeConnection(connection);
 				}
 			};
 		}
