@@ -8,3 +8,8 @@ src/main/resources/x86/*
 !src/main/resources/x86/sapinative.dll
 !src/main/resources/x86/onecorenative.dll
 build/
+./.apt*
+src/main/jni/onecorenative/Generated Files
+src/main/jni/onecorenative/Release
+src/main/jni/onecorenative/x64
+packages/
