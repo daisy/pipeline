@@ -74,7 +74,7 @@ func (c *Cli) AddClientCommand(link PipelineLink) {
 		return link.Client(args[0])
 	}
 
-	newCommandBuilder("client", "Prints the detailed client inforamtion").
+	newCommandBuilder("client", "Prints the detailed client information").
 		withCall(fn).withTemplate(TmplClient).buildAdmin(c).SetArity(1, "CLIENT_ID")
 }
 func (c *Cli) AddModifyClientCommand(link PipelineLink) {
@@ -149,7 +149,7 @@ func (c *Cli) AddSizesCommand(link PipelineLink) {
 	unitFormatter := func(size int) string {
 		return fmt.Sprintf("%d", size)
 	}
-	cmd := c.AddAdminCommand("sizes", "Prits the total size or a detailed list of job data stored in the server",
+	cmd := c.AddAdminCommand("sizes", "Prints the total size or a detailed list of job data stored in the server",
 		func(command string, args ...string) error {
 			sizes, err := link.Sizes()
 			if err != nil {
