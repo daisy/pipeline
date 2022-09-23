@@ -26,6 +26,7 @@ public class SizesResource extends AdminResource {
 	@Get("xml")
 	public Representation getResource() {
 		logRequest();
+		maybeEnableCORS();
 		if (!isAuthorized()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;

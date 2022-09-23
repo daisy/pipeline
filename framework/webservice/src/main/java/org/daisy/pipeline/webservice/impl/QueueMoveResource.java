@@ -44,6 +44,7 @@ public abstract class QueueMoveResource extends AuthenticatedResource {
         @Get("xml")
         public Representation getResource() {
                 logRequest();
+                maybeEnableCORS();
                 if (!isAuthenticated()) {
                         setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
                         return null;

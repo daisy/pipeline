@@ -48,6 +48,7 @@ public class ClientsResource extends AdminResource {
     @Get("xml")
     public Representation getResource() {
     	logRequest();
+    	maybeEnableCORS();
     	if (!isAuthorized()) {
     		setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
     		return null;
@@ -66,6 +67,7 @@ public class ClientsResource extends AdminResource {
     @Post
     public Representation createResource(Representation representation) {
 	logRequest();
+	maybeEnableCORS();
 	    if (!isAuthorized()) {
 		    setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 		    return null;

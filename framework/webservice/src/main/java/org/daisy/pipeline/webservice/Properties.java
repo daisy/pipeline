@@ -17,7 +17,8 @@ public enum Properties {
 	CLEAN_UP_ON_START_UP("org.daisy.pipeline.ws.cleanuponstartup"),
 	SSL_KEYPASSWORD("org.daisy.pipeline.ws.ssl.keypassword"),
 	CLIENT_KEY("org.daisy.pipeline.ws.authentication.key"),
-	CLIENT_SECRET("org.daisy.pipeline.ws.authentication.secret");
+	CLIENT_SECRET("org.daisy.pipeline.ws.authentication.secret"),
+	CORS("org.daisy.pipeline.ws.cors");
 
 	private final String key;
 	

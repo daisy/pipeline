@@ -23,6 +23,7 @@ public class AliveResource extends AuthenticatedResource{
     public Representation getResource() {
     	logRequest();
 
+    	maybeEnableCORS();
     	setStatus(Status.SUCCESS_OK);
     	AliveXmlWriter writer = new AliveXmlWriter();
     	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
