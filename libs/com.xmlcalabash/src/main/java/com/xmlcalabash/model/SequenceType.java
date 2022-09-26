@@ -29,29 +29,18 @@ import net.sf.saxon.value.AtomicValue;
  */
 public class SequenceType {
 
-	public static final SequenceType XS_STRING = new SequenceType(XProcConstants.xs_string,
-	                                                              OccurrenceIndicator.ONE);
+	public static final SequenceType XS_STRING = new SequenceType(ItemType.STRING, OccurrenceIndicator.ONE);
 
-	private final ItemType itemType;
-	private final OccurrenceIndicator cardinality;
+	private final net.sf.saxon.s9api.SequenceType underlyingType;
 
 	private static Processor proc = null;
 
-	private SequenceType(ItemType itemType, OccurrenceIndicator cardinality) {
-		this.itemType = itemType;
-		this.cardinality = cardinality;
+	private SequenceType(net.sf.saxon.s9api.SequenceType sequenceType) {
+		this.underlyingType = sequenceType;
 	}
 
-	private SequenceType(QName type, OccurrenceIndicator cardinality) {
-		if (proc == null)
-			// doesn't matter if no user-defined types or types that reference element or attributes names are used
-			proc = new Processor(false);
-		try {
-			this.itemType = new ItemTypeFactory(proc).getAtomicType(type);
-			this.cardinality = cardinality;
-		} catch (SaxonApiException e) {
-			throw new IllegalArgumentException("Unsupported type: " + type, e);
-		}
+	private SequenceType(ItemType itemType, OccurrenceIndicator cardinality) {
+		this(net.sf.saxon.s9api.SequenceType.makeSequenceType(itemType, cardinality));
 	}
 
 	/**
@@ -70,12 +59,42 @@ public class SequenceType {
 		} else {
 			cardinality = OccurrenceIndicator.ONE;
 		}
+		if (type.equals("map(*)"))
+			return new SequenceType(ItemType.ANY_MAP, cardinality);
+		if (type.matches("map\\(.+,.+\\)")) {
+			SequenceType keyType = parse(type.substring(4, type.indexOf(",")), namespaceResolver);
+			if (keyType.underlyingType.getOccurrenceIndicator() != OccurrenceIndicator.ONE)
+				throw new IllegalArgumentException("Key type of a map must be atomic but got " + keyType);
+			SequenceType valueType = parse(type.substring(type.indexOf(",") + 1, type.length() - 1), namespaceResolver);
+			if (proc == null)
+				// doesn't matter if no user-defined types or types that reference element or attributes names are used
+				proc = new Processor(false);
+			return new SequenceType(
+				new ItemTypeFactory(proc).getMapType(keyType.underlyingType.getItemType(), valueType.underlyingType),
+				cardinality);
+		}
+		if (type.equals("array(*)"))
+			return new SequenceType(ItemType.ANY_ARRAY, cardinality);
+		if (type.matches("array\\(.+\\)")) {
+			SequenceType memberType = parse(type.substring(6, type.length() - 1), namespaceResolver);
+			if (proc == null)
+				proc = new Processor(false);
+			return new SequenceType(
+				new ItemTypeFactory(proc).getArrayType(memberType.underlyingType),
+				cardinality);
+		}
 		if (type.contains(":")) {
 			QName qname = new QName(type, namespaceResolver);
 			if (XProcConstants.xs_string.equals(qname) && cardinality == OccurrenceIndicator.ONE)
 				return XS_STRING;
-			else
-				return new SequenceType(qname, cardinality);
+			else {
+				if (proc == null) proc = new Processor(false);
+				try {
+					return new SequenceType(new ItemTypeFactory(proc).getAtomicType(qname), cardinality);
+				} catch (SaxonApiException e) {
+					throw new IllegalArgumentException("Unsupported type: " + type, e);
+				}
+			}
 		} else {
 			throw new IllegalArgumentException("Unsupported type: " + type);
 		}
@@ -87,6 +106,8 @@ public class SequenceType {
 	 *                          that needs to be cast to a QName.
 	 */
 	public XdmValue cast(XdmValue value, XdmNode namespaceResolver) throws XProcException {
+		ItemType itemType = underlyingType.getItemType();
+		OccurrenceIndicator cardinality = underlyingType.getOccurrenceIndicator();
 		switch (value.size()) {
 		case 0:
 			switch (cardinality) {
@@ -153,19 +174,18 @@ public class SequenceType {
 
 	@Override
 	public String toString() {
-		return itemType.toString() + cardinality.toString();
+		return underlyingType.getItemType().toString() + underlyingType.getOccurrenceIndicator().toString();
 	}
 
 	@Override
 	public int hashCode() {
-		return itemType.hashCode() ^ (cardinality.hashCode() << 17);
+		return underlyingType.hashCode();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || !(o instanceof SequenceType))
 			return false;
-		return itemType.equals(((SequenceType)o).itemType)
-			&& cardinality.equals(((SequenceType)o).cardinality);
+		return underlyingType.equals(((SequenceType)o).underlyingType);
 	}
 }

@@ -28,7 +28,6 @@ public class ReadOnlyPipe implements ReadablePipe {
 		this.runtime = runtime;
 		documents = seq;
 		id = ++idCounter;
-		seq.addReader();
 	}
 
 	public void canReadSequence(boolean sequence) {

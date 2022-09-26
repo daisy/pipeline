@@ -432,10 +432,10 @@ public class XAtomicStep extends XStep {
                 throw XProcException.dynamicError(19);
             }
         } finally {
-            for (String port : outputs.keySet()) {
-                WritablePipe wpipe = outputs.get(port);
-                wpipe.close(); // Indicate we're done
-            }
+            // Note that closing the output pipes is the responsibility of the XProcStep. It may
+            // choose to write an output lazily, when the port is read. If the XProcStep never
+            // closes a pipe, that is fine too. The pipe will automatically be closed when it is
+            // read for the first time.
             runtime.finish(this);
             data.closeFrame();
         }

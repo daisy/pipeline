@@ -124,6 +124,8 @@ public class Pipe extends ReadOnlyPipe implements ReadablePipe, WritablePipe {
                 }
                 runOnRead = r;
             }
+            // assert that no more documents are written after the pipe has been read
+            close();
         }
 
         @Override
