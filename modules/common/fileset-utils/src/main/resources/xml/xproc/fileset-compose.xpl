@@ -16,8 +16,10 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The input mapping documents (one or more).</p>
             <p>A mapping document is a <code>d:fileset</code> document that maps files from
-            <code>@original-href</code> to <code>@href</code> and anchors from
-            <code>@original-id</code> to <code>@id</code>.</p>
+            <code>@original-href</code> to <code>@href</code>, anchors from
+            <code>@original-id</code> to <code>@id</code>, and audio clips from
+            <code>@original-clipBegin</code>/<code>@original-clipEnd</code> to
+            <code>@clipBegin</code>/<code>@clipEnd</code>.</p>
         </p:documentation>
     </p:input>
 
@@ -30,8 +32,8 @@
 
     <p:option name="limit-scope" cx:as="xs:boolean" select="false()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>Limit the scope of the result mapping document to the files and anchors contained in
-            the first input document.</p>
+            <p>Limit the scope of the result mapping document to the files, anchors and clips
+            contained in the first input document.</p>
             <p>If this option is not set, all input documents contribute to the scope of the result
             mapping document.</p>
         </p:documentation>
@@ -90,6 +92,6 @@
         <p:with-option name="limit-scope" select="$limit-scope"/>
     </pxi:fileset-compose-recursively>
 
-    <p:delete match="d:file[not(d:anchor|@original-href)]"/>
+    <p:delete match="d:file[not(d:anchor|d:clip|@original-href)]"/>
 
 </p:declare-step>

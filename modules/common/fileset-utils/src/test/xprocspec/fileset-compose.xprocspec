@@ -22,6 +22,12 @@
                             <d:anchor id="h"/>
                         </d:file>
                         <d:file href="yet_another.xml" original-href="yet_another.html"/>
+                        <d:file href="part1.mp3" original-href="part1.wav">
+                            <d:clip clipBegin="0.1" clipEnd="2.1" original-clipBegin="0" original-clipEnd="2"/>
+                        </d:file>
+                        <d:file href="part2.mp3" original-href="part2.wav">
+                            <d:clip clipBegin="0.1" clipEnd="5.1" original-clipBegin="0" original-clipEnd="5"/>
+                        </d:file>
                     </d:fileset>
                 </x:document>
                 <x:document type="inline">
@@ -47,6 +53,15 @@
                             <d:anchor id="n"/>
                         </d:file>
                         <d:file href="images/img.png" original-href="../in/img.png"/>
+                        <d:file href="audio/rearranged_1.mp3" original-href="../in/part1.mp3">
+                            <d:clip clipBegin="0.1" clipEnd="2.2" original-clipBegin="0" original-clipEnd="2.1"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_1.mp3" original-href="../in/part2.mp3">
+                            <d:clip clipBegin="2.2" clipEnd="4.3" original-clipBegin="0" original-clipEnd="2.1"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_2.mp3" original-href="../in/part2.mp3">
+                            <d:clip clipBegin="0.1" clipEnd="3.1" original-clipBegin="2.1" original-clipEnd="5.1"/>
+                        </d:file>
                     </d:fileset>
                 </x:document>
             </x:input>
@@ -80,6 +95,17 @@
                         <d:file href="yet_another_split_3.xml" original-href="file:/Users/me/in/yet_another.html">
                             <d:anchor id="n"/>
                         </d:file>
+                        <d:file href="audio/rearranged_1.mp3" original-href="file:/Users/me/in/part1.wav">
+                            <d:clip clipBegin="0.2" clipEnd="2.2" original-clipBegin="0" original-clipEnd="2"/>
+                            <d:clip clipBegin="0.1" clipEnd="0.2" original-clipBegin="0" original-clipEnd="0.1"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_1.mp3" original-href="file:/Users/me/in/part2.wav">
+                            <d:clip clipBegin="2.3" clipEnd="4.3" original-clipBegin="0" original-clipEnd="2"/>
+                            <d:clip clipBegin="2.2" clipEnd="2.3" original-clipBegin="0" original-clipEnd="0.1"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_2.mp3" original-href="file:/Users/me/in/part2.wav">
+                            <d:clip clipBegin="0.1" clipEnd="3.1" original-clipBegin="2" original-clipEnd="5"/>
+                        </d:file>
                         <d:file href="images/img.png" original-href="file:/Users/me/in/img.png"/>
                     </d:fileset>
                 </x:document>
@@ -112,6 +138,15 @@
                         <d:file href="yet_another_split_1.xml" original-href="file:/Users/me/in/yet_another.html"/>
                         <d:file href="yet_another_split_2.xml" original-href="file:/Users/me/in/yet_another.html"/>
                         <d:file href="yet_another_split_3.xml" original-href="file:/Users/me/in/yet_another.html"/>
+                        <d:file href="audio/rearranged_1.mp3" original-href="file:/Users/me/in/part1.wav">
+                            <d:clip clipBegin="0.2" clipEnd="2.2" original-clipBegin="0" original-clipEnd="2"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_1.mp3" original-href="file:/Users/me/in/part2.wav">
+                            <d:clip clipBegin="2.3" clipEnd="4.3" original-clipBegin="0" original-clipEnd="2"/>
+                        </d:file>
+                        <d:file href="audio/rearranged_2.mp3" original-href="file:/Users/me/in/part2.wav">
+                            <d:clip clipBegin="0.1" clipEnd="3.1" original-clipBegin="2" original-clipEnd="5"/>
+                        </d:file>
                     </d:fileset>
                 </x:document>
             </x:expect>
