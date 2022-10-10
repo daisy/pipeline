@@ -3,7 +3,7 @@ package org.daisy.pipeline.tts.onecore;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum OnecoreLibResult {
+public enum OnecoreResult {
 	SAPINATIVE_OK(0, "Success"),
     UNSUPPORTED_FORMAT(1, "Unsupported format"),
     TOO_LONG_VOICE_NAME(2, "Voice name is too long"),
@@ -33,19 +33,19 @@ public enum OnecoreLibResult {
 	private final int code;
 	private final String texte;
 	
-	OnecoreLibResult(int code, String texte) { this.code = code; this.texte = texte; }
+	OnecoreResult(int code, String texte) { this.code = code; this.texte = texte; }
 	
 	public int value() { return code; }
 	public String texte() { return texte; }
 	
-	private static final Map<Integer, OnecoreLibResult> BY_CODE = new HashMap<>();
+	private static final Map<Integer, OnecoreResult> BY_CODE = new HashMap<>();
 	static {
-        for (OnecoreLibResult e : values()) {
+        for (OnecoreResult e : values()) {
         	BY_CODE.put(e.code, e);
         }
     }
 	
-	public static OnecoreLibResult valueOfCode(int code) {
+	public static OnecoreResult valueOfCode(int code) {
 		return BY_CODE.get(code);
 	}
 	

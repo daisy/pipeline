@@ -12,8 +12,8 @@
 
 #include "../Voice.hpp"
 #include "../jni_helper.h"
-#include "org_daisy_pipeline_tts_onecore_OnecoreLib.h"
-#include "org_daisy_pipeline_tts_onecore_OnecoreLibResult.h"
+#include "org_daisy_pipeline_tts_onecore_Onecore.h"
+#include "org_daisy_pipeline_tts_onecore_OnecoreResult.h"
 
 #include <iostream>
 

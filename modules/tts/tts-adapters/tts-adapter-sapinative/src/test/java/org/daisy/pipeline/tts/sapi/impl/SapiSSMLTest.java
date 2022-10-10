@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.sapinative.impl;
+package org.daisy.pipeline.tts.sapi.impl;
 
 import java.io.IOException;
 import java.io.InputStream;

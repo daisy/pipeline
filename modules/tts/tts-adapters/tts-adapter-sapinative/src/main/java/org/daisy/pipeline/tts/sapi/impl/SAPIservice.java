@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.sapinative.impl;
+package org.daisy.pipeline.tts.sapi.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,8 +12,8 @@ import javax.naming.directory.InvalidAttributeValueException;
 import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.tts.sapinative.SAPILib;
-import org.daisy.pipeline.tts.sapinative.SAPILibResult;
+import org.daisy.pipeline.tts.onecore.SAPI;
+import org.daisy.pipeline.tts.onecore.SAPIResult;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -49,17 +49,17 @@ public class SAPIservice implements TTSService {
 				mFirstLoad = false;
 			}
 			if (mAudioFormat == null) {
-				int res = SAPILib.initialize(sampleRate, (short)(8 * bytesPerSample));
-				if (res != SAPILibResult.SAPINATIVE_OK.value()) {
+				int res = SAPI.initialize(sampleRate, (short)(8 * bytesPerSample));
+				if (res != SAPIResult.SAPINATIVE_OK.value()) {
 					throw new SynthesisException(
-					        "SAPI initialization failed with error code '" + res + "': " + SAPILibResult.valueOfCode(res));
+					        "SAPI initialization failed with error code '" + res + "': " + SAPIResult.valueOfCode(res));
 				}
 				mAudioFormat = audioFormat;
 			} 
 		}
 
 		//allocate the engine
-		return new SAPIengine(this, audioFormat, priority);
+		return new SAPIEngine(this, audioFormat, priority);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class SAPIservice implements TTSService {
 
 	@Deactivate
 	protected void deactivate() {
-		SAPILib.dispose();
+		SAPI.dispose();
 	}
 
 	private static int convertToInt(Map<String, String> params, String prop, int defaultVal)

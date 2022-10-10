@@ -1,168 +1,203 @@
 package org.daisy.pipeline.tts.onecore.impl;
 
-import java.io.BufferedInputStream;
+
+import java.io.IOException;
 import java.io.ByteArrayInputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
+import java.net.URL;
 
-import javax.sound.sampled.AudioFormat;
-
-import net.sf.saxon.s9api.XdmNode;
-
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
-import org.daisy.pipeline.tts.onecore.OnecoreLib;
-import org.daisy.pipeline.tts.onecore.OnecoreLibResult;
-import org.daisy.pipeline.tts.SimpleTTSEngine;
-import org.daisy.pipeline.tts.TTSEngine;
-import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
-import org.daisy.pipeline.tts.TTSService.Mark;
-import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.Voice;
+import net.sf.saxon.s9api.QName;
+import org.daisy.pipeline.tts.onecore.SAPI;
+import org.daisy.pipeline.tts.onecore.SAPIResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.sound.sampled.AudioFormat;
+
+
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.pipeline.tts.onecore.Onecore;
+import org.daisy.pipeline.tts.onecore.OnecoreResult;
+
+import org.daisy.common.file.URLs;
+import org.daisy.pipeline.tts.TTSEngine;
+import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
+import org.daisy.pipeline.tts.TTSService.SynthesisException;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.Voice;
+
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 
-import org.daisy.pipeline.tts.SoundUtil;
-import org.daisy.pipeline.audio.AudioBuffer;
-import org.daisy.pipeline.tts.AudioBufferAllocator;
-import org.daisy.pipeline.tts.AudioBufferAllocator.MemoryException;
+public class OnecoreEngine extends TTSEngine {
 
-public class OnecoreEngine extends SimpleTTSEngine {
+	private static final Logger Logger = LoggerFactory.getLogger(OnecoreEngine.class);
+	private static final URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml-onecore.xsl", OnecoreEngine.class);
 
-	private Logger Logger = LoggerFactory.getLogger(OnecoreEngine.class);
+	private final int mOverallPriority;
 
-	private AudioFormat mAudioFormat;
-	private int mOverallPriority;
+	private final AudioFormat mAudioFormat;
+
+	private final boolean onecoreLoaded;
+	private final boolean sapiLoaded;
+
 	private Map<String, Voice> mVoiceFormatConverter = null;
 	private final static int MIN_CHUNK_SIZE = 2048;
 
 	private static class ThreadResource extends TTSResource {
-		long connection;
+		long onecoreConnection;
+		long SAPIConnection;
+
+
 	}
 
-	public OnecoreEngine(OnecoreService service, int priority) {
+	public OnecoreEngine(OnecoreService service, int priority, AudioFormat audioFormat, boolean onecoreLoaded, boolean sapiLoaded) {
 		super(service);
+		this.onecoreLoaded = onecoreLoaded;
+		this.sapiLoaded = sapiLoaded;
+		this.mAudioFormat = audioFormat;
 		mOverallPriority = priority;
 	}
 
-	// @Override
-	// public String endingMark() {
-	// 	return "ending-mark";
-	// }
 
+	private static final QName xmlLang = new QName("xml","http://www.w3.org/XML/1998/namespace","lang");
 	@Override
-	public Collection<AudioBuffer> synthesize(String ssml, Voice voice,
-	        TTSResource resource, List<Mark> marks, AudioBufferAllocator bufferAllocator,
-	        boolean retry) throws SynthesisException, InterruptedException, MemoryException {
+	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource resource)
+		throws SynthesisException, InterruptedException {
 
-		return speak(ssml, voice, resource, marks, bufferAllocator);
+		Map<String,Object> xsltParams = new HashMap<>(); {
+			xsltParams.put("voice", voice.name);
+		}
+		try {
+			List<Integer> marks = new ArrayList<>();
+			AudioInputStream audio = speak(transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams),
+			             voice, resource, marks);
+			return new SynthesisResult(audio, marks);
+		} catch (IOException | SaxonApiException e) {
+			throw new SynthesisException(e);
+		}
 	}
 
-	public Collection<AudioBuffer> speak(String ssml, Voice voice, TTSResource resource,
-	        List<Mark> marks, AudioBufferAllocator bufferAllocator) throws SynthesisException,
-	        MemoryException {
+	public AudioInputStream speak(String ssml, Voice voice, TTSResource resource,
+	        List<Integer> marks) throws SynthesisException {
 
-		Collection<AudioBuffer> result = new ArrayList<AudioBuffer>();
-		try {
-			voice = mVoiceFormatConverter.get(voice.name.toLowerCase());
+		voice = mVoiceFormatConverter.get(voice.name.toLowerCase());
 
-			ThreadResource tr = (ThreadResource) resource;
-			int res = OnecoreLib.speak(tr.connection, voice.engine, voice.name, ssml);
-			if (res != OnecoreLibResult.SAPINATIVE_OK.value()) {
-				throw new SynthesisException("SAPI-Onecore speak error " + res + " raised with voice "
-						+ voice + ": " +  OnecoreLibResult.valueOfCode(res));
+		ThreadResource tr = (ThreadResource) resource;
+		if(voice.engine.equals("sapi") ){
+			int res = SAPI.speak(tr.SAPIConnection, voice.engine, voice.name, ssml);
+			if (res != SAPIResult.SAPINATIVE_OK.value()) {
+				throw new SynthesisException("SAPI-legacy speak error " + res + " raised with voice "
+						+ voice + ": " +  SAPIResult.valueOfCode(res)+"\nFor text :"
+					+ ssml);
 			}
 
-			int size = OnecoreLib.getStreamSize(tr.connection);
-			// onecore returns the full 
-			//AudioBuffer result = bufferAllocator.allocateBuffer(size);
-			byte[] waveOutput = new byte[size];
-			OnecoreLib.readStream(tr.connection, waveOutput, 0);
+			int size = SAPI.getStreamSize(tr.SAPIConnection);
 
-			// read the wave on the standard output
-			BufferedInputStream in = new BufferedInputStream(new ByteArrayInputStream(waveOutput));
-			AudioInputStream fi = AudioSystem.getAudioInputStream(in);
+			byte[] data = new byte[size];
+			SAPI.readStream(tr.SAPIConnection, data, 0);
 
-			if (mAudioFormat == null)
-				mAudioFormat = fi.getFormat();
+			String[] names = SAPI.getBookmarkNames(tr.SAPIConnection);
+			long[] bookmarksPositions = SAPI.getBookmarkPositions(tr.SAPIConnection);
 
-			String[] names = OnecoreLib.getBookmarkNames(tr.connection);
-			long[] pos = OnecoreLib.getBookmarkPositions(tr.connection);
-			
 			float sampleRate = mAudioFormat.getSampleRate();
 			int bytesPerSample = mAudioFormat.getSampleSizeInBits() / 8;
-			for (int i = 0; i < names.length; ++i) {
-				int offset = (int) ((pos[i] * sampleRate * bytesPerSample) / 1000);
-				marks.add(new Mark(names[i], offset));
+			for (long position : bookmarksPositions) {
+				int offset = (int) ((position * sampleRate * bytesPerSample) / 1000);
+				marks.add(offset);
+			}
+			return createAudioStream(mAudioFormat, data);
+
+		} else { // use onecore engine
+			int res = Onecore.speak(tr.onecoreConnection, voice.engine, voice.name, ssml);
+			if (res != OnecoreResult.SAPINATIVE_OK.value()) {
+				throw new SynthesisException("SAPI-Onecore speak error " + res + " raised with voice "
+						+ voice + ": " +  OnecoreResult.valueOfCode(res)+"\nFor text :"
+						+ ssml);
 			}
 
-			while (true) {
-				AudioBuffer b = bufferAllocator
-				        .allocateBuffer(MIN_CHUNK_SIZE + fi.available());
-				int ret = fi.read(b.data, 0, b.size);
-				if (ret == -1) {
-					//note: perhaps it would be better to call allocateBuffer()
-					//somewhere else in order to avoid this extra call:
-					bufferAllocator.releaseBuffer(b);
-					break;
-				}
-				b.size = ret;
-				result.add(b);
+			int size = Onecore.getStreamSize(tr.onecoreConnection);
+
+			byte[] data = new byte[size];
+			Onecore.readStream(tr.onecoreConnection, data, 0);
+
+			String[] names = Onecore.getBookmarkNames(tr.onecoreConnection);
+			long[] pos = Onecore.getBookmarkPositions(tr.onecoreConnection);
+			AudioInputStream result;
+			try{
+				result = createAudioStream(new ByteArrayInputStream(data));
+			} catch (Exception e) {
+				throw new SynthesisException(e);
 			}
 
-			fi.close();
-		} catch (MemoryException e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			throw e;
-		} catch (Throwable e) {
-			SoundUtil.cancelFootPrint(result, bufferAllocator);
-			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
-			throw new SynthesisException(e);
-		} finally {
+			AudioFormat resultFormat = result.getFormat();
+			float sampleRate = resultFormat.getSampleRate();
+			int bytesPerSample = resultFormat.getSampleSizeInBits() / 8;
+			for (long po : pos) {
+				int offset = (int) ((po * sampleRate * bytesPerSample) / 1000);
+				marks.add(offset);
+			}
+
+			return result;
 		}
-		return result;
+
 	}
 
 	@Override
 	public TTSResource allocateThreadResources() throws SynthesisException {
-		long connection = OnecoreLib.openConnection();
-
-		if (connection == 0) {
-			throw new SynthesisException("could not open SAPI-Onecore context.");
-		}
 
 		ThreadResource tr = new ThreadResource();
-		tr.connection = connection;
+		if(this.onecoreLoaded){
+			long connection = Onecore.openConnection();
+			if (connection == 0) {
+				throw new SynthesisException("could not open SAPI-Onecore context.");
+			}
+			tr.onecoreConnection = connection;
+		}
+		if(this.sapiLoaded){
+			long connection = SAPI.openConnection();
+			if (connection == 0) {
+				throw new SynthesisException("could not open SAPI-Onecore context.");
+			}
+			tr.SAPIConnection = connection;
+		}
+
 		return tr;
 	}
 
 	@Override
-	public Collection<Voice> getAvailableVoices() throws SynthesisException,
-	        InterruptedException {
+	public Collection<Voice> getAvailableVoices() {
 		if (mVoiceFormatConverter == null) {
-			mVoiceFormatConverter = new HashMap<String, Voice>();
-			String[] names = OnecoreLib.getVoiceNames();
-			String[] vendors = OnecoreLib.getVoiceVendors();
-			String[] locale = OnecoreLib.getVoiceLocales();
-			String[] gender = OnecoreLib.getVoiceGenders();
-			String[] age = OnecoreLib.getVoiceAges();
-			for (int i = 0; i < names.length; ++i) {
-				String currentGender = gender[i];
-				String currentAge = age[i];
+			mVoiceFormatConverter = new HashMap<>();
+
+			ArrayList<String> names = new ArrayList<>();
+
+			ArrayList<String> vendors = new ArrayList<>();
+			ArrayList<String> locale = new ArrayList<>();
+			ArrayList<String> gender = new ArrayList<>();
+			ArrayList<String> age = new ArrayList<>();
+			if(this.sapiLoaded){
+				// first load sapi voices
+				names.addAll(Arrays.asList(SAPI.getVoiceNames()));
+				vendors.addAll(Arrays.asList(SAPI.getVoiceVendors()));
+				locale.addAll(Arrays.asList(SAPI.getVoiceLocales()));
+				gender.addAll(Arrays.asList(SAPI.getVoiceGenders()));
+				age.addAll(Arrays.asList(SAPI.getVoiceAges()));
+			}
+			if(this.onecoreLoaded){
+				// then load onecore voices
+				names.addAll(Arrays.asList(Onecore.getVoiceNames()));
+				vendors.addAll(Arrays.asList(Onecore.getVoiceVendors()));
+				locale.addAll(Arrays.asList(Onecore.getVoiceLocales()));
+				gender.addAll(Arrays.asList(Onecore.getVoiceGenders()));
+				age.addAll(Arrays.asList(Onecore.getVoiceAges()));
+			}
+
+			for (int i = 0; i < names.size(); ++i) {
+				String currentGender = gender.get(i);
+				String currentAge = age.get(i);
+				// Default selection
 				Gender selected = Gender.FEMALE_ADULT;
 				switch (currentGender.toLowerCase()) {
 					case "male":
@@ -192,43 +227,42 @@ public class OnecoreEngine extends SimpleTTSEngine {
 								break;
 							case "adult" : // default to adult
 							default:
-								selected = Gender.FEMALE_ADULT;
 								break;
 						}
 						break;
 				}
+				// merge the sapi and onecore lists using the keys
+				// Note that since onecore voice are added after sapi,
+				// they are overwriting matching sapi voices to avoid duplicates
 				mVoiceFormatConverter.put(
-					names[i].toLowerCase(),
+					names.get(i).toLowerCase(),
 					new Voice(
-						vendors[i],
-				        names[i],
-						Locale.forLanguageTag(locale[i]),
+						vendors.get(i),
+						names.get(i),
+						Locale.forLanguageTag(locale.get(i)),
 						selected
 					)
 				);
+
 			}
 		}
 
-		List<Voice> voices = new ArrayList<Voice>();
+		List<Voice> voices = new ArrayList<>();
 		
 		for (String sapiVoice : mVoiceFormatConverter.keySet()) {
 			Voice original = mVoiceFormatConverter.get(sapiVoice);
 			voices.add(
 				new Voice(
-					getProvider().getName(),
+					original.engine, // should be sapi or onecore, required for speak interactions (see the native libs code)
 					sapiVoice,
 					original.getLocale().get(),
 					original.getGender().get()
 				)
 			);
+
+			Logger.info("Voice available : " + original.toString());
 		}
-
 		return voices;
-	}
-
-	@Override
-	public AudioFormat getAudioOutputFormat() {
-		return mAudioFormat;
 	}
 
 	@Override

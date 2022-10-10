@@ -1,1 +1,7 @@
-#org/daisy/pipeline/tts/sapinative/impl/SAPINativeTest.java
+# comment those 2 test class and uncomment the last one to test only native calls
+org/daisy/pipeline/tts/sapi/impl/SAPINativeTest.java
+org/daisy/pipeline/tts/onecore/impl/OnecoreNativeTest.java
+
+# Due to concurrent attempt to load or dispose of library,
+# we cannot launch native calls and service tests concurrently
+#org/daisy/pipeline/tts/onecore/impl/OnecoreImplTest.java

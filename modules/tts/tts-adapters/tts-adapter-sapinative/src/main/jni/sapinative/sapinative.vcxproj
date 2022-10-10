@@ -22,16 +22,16 @@
     <ClInclude Include="..\jni_helper.h" />
     <ClInclude Include="..\Voice.hpp" />
     <ClInclude Include="framework.h" />
-    <ClInclude Include="org_daisy_pipeline_tts_sapinative_SAPILib.h" />
+    <ClInclude Include="org_daisy_pipeline_tts_onecore_SAPI.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="queue_stream.h" />
-    <ClInclude Include="org_daisy_pipeline_tts_sapinative_SAPILibResult.h" />
+    <ClInclude Include="org_daisy_pipeline_tts_onecore_SAPIResult.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="jni_helper.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="org_daisy_pipeline_tts_sapinative_SAPILib.cpp" />
+    <ClCompile Include="org_daisy_pipeline_tts_onecore_SAPI.cpp" />
     <ClCompile Include="win_queue_stream.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -1,6 +1,6 @@
 package org.daisy.pipeline.tts.onecore;
 
-public class OnecoreLib {
+public class SAPI {
 
 	public static native long openConnection();
 
@@ -28,7 +28,7 @@ public class OnecoreLib {
 	/* in milliseconds */
 	public static native long[] getBookmarkPositions(long connection);
 
-	public static native int initialize();
+	public static native int initialize(int sampleRate, short bitsPerSample);
 
 	public static native int dispose();
 

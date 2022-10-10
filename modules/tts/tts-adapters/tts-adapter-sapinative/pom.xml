@@ -44,8 +44,8 @@
   </dependencies>
 
   <properties>
+    <!--org.daisy.pipeline.tts.sapi.impl.SAPIservice,-->
     <expose-services>
-      org.daisy.pipeline.tts.sapinative.impl.SAPIservice,
       org.daisy.pipeline.tts.onecore.impl.OnecoreService
     </expose-services>
   </properties>
@@ -84,7 +84,7 @@
               <javahOS>windows</javahOS>
               <javahOutputDirectory>src/main/jni/sapinative</javahOutputDirectory>
               <javahClassNames>
-                <javahClassName>org.daisy.pipeline.tts.sapinative.SAPILib</javahClassName>
+                <javahClassName>org.daisy.pipeline.tts.onecore.SAPI</javahClassName>
               </javahClassNames>
             </configuration>
           </execution>
@@ -98,7 +98,7 @@
               <javahOS>windows</javahOS>
               <javahOutputDirectory>src/main/jni/onecore</javahOutputDirectory>
               <javahClassNames>
-                <javahClassName>org.daisy.pipeline.tts.onecore.OnecoreLib</javahClassName>
+                <javahClassName>org.daisy.pipeline.tts.onecore.Onecore</javahClassName>
               </javahClassNames>
             </configuration>
           </execution>

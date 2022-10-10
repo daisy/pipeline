@@ -9,6 +9,8 @@
 #include <vector>
 #include <functional>
 
+#include <regex> // To check for the presence of "xml:lang" attribute in tags
+#include <sstream>
 
 //#import "libid:C866CA3A-32F7-11D2-9602-00C04F8EE628" named_guids rename_namespace("SAPI") //v5.4
 #include <sapi.h>

@@ -1,9 +1,9 @@
-package org.daisy.pipeline.tts.sapinative;
+package org.daisy.pipeline.tts.onecore;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum SAPILibResult {
+public enum SAPIResult {
 	SAPINATIVE_OK(0, "Success"),
     UNSUPPORTED_FORMAT(1, "Unsupported format"),
     TOO_LONG_VOICE_NAME(2, "Voice name is too long"),
@@ -33,19 +33,19 @@ public enum SAPILibResult {
 	private final int code;
 	private final String texte;
 	
-	SAPILibResult(int code, String texte) { this.code = code; this.texte = texte; }
+	SAPIResult(int code, String texte) { this.code = code; this.texte = texte; }
 	
 	public int value() { return code; }
 	public String texte() { return texte; }
 	
-	private static final Map<Integer, SAPILibResult> BY_CODE = new HashMap<>();
+	private static final Map<Integer, SAPIResult> BY_CODE = new HashMap<>();
 	static {
-        for (SAPILibResult e : values()) {
+        for (SAPIResult e : values()) {
         	BY_CODE.put(e.code, e);
         }
     }
 	
-	public static SAPILibResult valueOfCode(int code) {
+	public static SAPIResult valueOfCode(int code) {
 		return BY_CODE.get(code);
 	}
 	

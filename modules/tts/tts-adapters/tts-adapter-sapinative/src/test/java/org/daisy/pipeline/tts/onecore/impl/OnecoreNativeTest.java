@@ -1,9 +1,7 @@
 package org.daisy.pipeline.tts.onecore.impl;
 
-import org.daisy.pipeline.tts.onecore.OnecoreLib;
-import org.daisy.pipeline.tts.onecore.impl.*;
+import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.Voice;
 
 
@@ -15,12 +13,13 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class OnecoreTest {
+public class OnecoreNativeTest {
 
 	@BeforeClass
 	public static void load() throws SynthesisException {
-		OnecoreService.loadDLL();
-		OnecoreLib.initialize();
+		OnecoreService.loadOnecoreDLL();
+		Onecore.initialize();
+
 	}
 
 	@AfterClass
@@ -29,44 +28,44 @@ public class OnecoreTest {
 		System.out.println("This exception does not prevent the tests and build to complete in success, and has not yet occured in real-world production tests.");
 		System.out.println("You can ignore it and the error log.");
 
-		OnecoreLib.dispose();
+		Onecore.dispose();
 	}
 
 	@Test
 	public void getVoiceNames() {
-		String[] voices = OnecoreLib.getVoiceNames();
+		String[] voices = Onecore.getVoiceNames();
 		Assert.assertTrue(voices.length > 0);
 	}
 
 	@Test
 	public void getVoiceVendors() {
-		String[] vendors = OnecoreLib.getVoiceVendors();
+		String[] vendors = Onecore.getVoiceVendors();
 		Assert.assertTrue(vendors.length > 0);
 	}
 
 	@Test
 	public void getVoiceLocales() {
-		String[] locales = OnecoreLib.getVoiceLocales();
+		String[] locales = Onecore.getVoiceLocales();
 		Assert.assertTrue(locales.length > 0);
 	}
 
 	@Test
 	public void getVoiceGenders() {
-		String[] genders = OnecoreLib.getVoiceGenders();
+		String[] genders = Onecore.getVoiceGenders();
 		Assert.assertTrue(genders.length > 0);
 	}
 
 	@Test
 	public void getVoiceAges() {
-		String[] ages = OnecoreLib.getVoiceAges();
+		String[] ages = Onecore.getVoiceAges();
 		Assert.assertTrue(ages.length > 0);
 	}
 
 	@Test
 	public void manageConnection() {
-		long connection = OnecoreLib.openConnection();
+		long connection = Onecore.openConnection();
 		Assert.assertNotSame(0, connection);
-		OnecoreLib.closeConnection(connection);
+		Onecore.closeConnection(connection);
 	}
 
 	
@@ -88,26 +87,26 @@ public class OnecoreTest {
 	}
 
 	static long speakCycle(String text) {
-		String[] names = OnecoreLib.getVoiceNames();
-		String[] vendors = OnecoreLib.getVoiceVendors();
-		String[] locales = OnecoreLib.getVoiceLocales();
+		String[] names = Onecore.getVoiceNames();
+		String[] vendors = Onecore.getVoiceVendors();
+		String[] locales = Onecore.getVoiceLocales();
 		
 		Assert.assertTrue(names.length > 0);
 		Assert.assertTrue(vendors.length > 0);
 
-		long connection = OnecoreLib.openConnection();
+		long connection = Onecore.openConnection();
 		Assert.assertNotSame(0, connection);
 
-		int error = OnecoreLib.speak(connection, vendors[0], names[0], text);
+		int error = Onecore.speak(connection, vendors[0], names[0], text);
 
 		int spoken = -1;
 		if (error == 0) {
 			
-			spoken = OnecoreLib.getStreamSize(connection);
+			spoken = Onecore.getStreamSize(connection);
 			if (spoken > 0) {
 				int offset = 5000;
 				byte[] audio = new byte[offset + spoken];
-				OnecoreLib.readStream(connection, audio, offset);
+				Onecore.readStream(connection, audio, offset);
 			}
 			if (spoken <= 200) {
 				error = -1;
@@ -115,7 +114,7 @@ public class OnecoreTest {
 		}
 
 		if (error != 0)
-			OnecoreLib.closeConnection(connection);
+			Onecore.closeConnection(connection);
 
 		Assert.assertSame(0, error);
 
@@ -127,7 +126,7 @@ public class OnecoreTest {
 	@Test
 	public void speakEasy() {
 		long connection = speakCycle(SSML("this is a test"));
-		OnecoreLib.closeConnection(connection);
+		Onecore.closeConnection(connection);
 	}
 
 	private static OnecoreEngine allocateEngine() throws Throwable {
@@ -138,26 +137,26 @@ public class OnecoreTest {
 
 	@Test
 	public void speakTwice() {
-		String[] names = OnecoreLib.getVoiceNames();
-		String[] vendors = OnecoreLib.getVoiceVendors();
+		String[] names = Onecore.getVoiceNames();
+		String[] vendors = Onecore.getVoiceVendors();
 		Assert.assertTrue(names.length > 0);
 		Assert.assertTrue(vendors.length > 0);
 
-		long connection = OnecoreLib.openConnection();
+		long connection = Onecore.openConnection();
 		Assert.assertNotSame(0, connection);
 
 		String text = SSML("small test");
 
-		int error1 = OnecoreLib.speak(connection, vendors[0], names[0], text);
-		int spoken1 = OnecoreLib.getStreamSize(connection);
+		int error1 = Onecore.speak(connection, vendors[0], names[0], text);
+		int spoken1 = Onecore.getStreamSize(connection);
 		if (spoken1 > 0) {
-			OnecoreLib.readStream(connection, new byte[spoken1], 0); //skip data
+			Onecore.readStream(connection, new byte[spoken1], 0); //skip data
 		}
 
-		int error2 = OnecoreLib.speak(connection, vendors[0], names[0], text);
-		int spoken2 = OnecoreLib.getStreamSize(connection);
+		int error2 = Onecore.speak(connection, vendors[0], names[0], text);
+		int spoken2 = Onecore.getStreamSize(connection);
 
-		OnecoreLib.closeConnection(connection);
+		Onecore.closeConnection(connection);
 
 		Assert.assertSame(0, error1);
 		Assert.assertSame(0, error2);
@@ -169,9 +168,9 @@ public class OnecoreTest {
 	@Test
 	public void bookmarkReply() {
 		long connection = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
-		String[] names = OnecoreLib.getBookmarkNames(connection);
-		long[] pos = OnecoreLib.getBookmarkPositions(connection);
-		OnecoreLib.closeConnection(connection);
+		String[] names = Onecore.getBookmarkNames(connection);
+		long[] pos = Onecore.getBookmarkPositions(connection);
+		Onecore.closeConnection(connection);
 
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
@@ -182,9 +181,9 @@ public class OnecoreTest {
 		String bookmark = "bmark";
 		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark
 		        + "\"/> a bookmark"));
-		String[] names = OnecoreLib.getBookmarkNames(connection);
-		long[] pos = OnecoreLib.getBookmarkPositions(connection);
-		OnecoreLib.closeConnection(connection);
+		String[] names = Onecore.getBookmarkNames(connection);
+		long[] pos = Onecore.getBookmarkPositions(connection);
+		Onecore.closeConnection(connection);
 
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
@@ -213,9 +212,9 @@ public class OnecoreTest {
 		String b2 = "bmark2";
 		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
 		        + "\"/> five six <mark name=\"" + b2 + "\"/> seven"));
-		String[] names = OnecoreLib.getBookmarkNames(connection);
-		long[] pos = OnecoreLib.getBookmarkPositions(connection);
-		OnecoreLib.closeConnection(connection);
+		String[] names = Onecore.getBookmarkNames(connection);
+		long[] pos = Onecore.getBookmarkPositions(connection);
+		Onecore.closeConnection(connection);
 
 		Assert.assertSame(2, names.length);
 		Assert.assertSame(2, pos.length);
@@ -229,8 +228,8 @@ public class OnecoreTest {
 
 	static private int[] findSize(final String[] sentences, int startShift)
 	        throws InterruptedException {
-		final String[] names = OnecoreLib.getVoiceNames();
-		final String[] vendors = OnecoreLib.getVoiceVendors();
+		final String[] names = Onecore.getVoiceNames();
+		final String[] vendors = Onecore.getVoiceVendors();
 		final int[] foundSize = new int[sentences.length];
 		Thread[] threads = new Thread[sentences.length];
 
@@ -238,10 +237,10 @@ public class OnecoreTest {
 			final int j = i;
 			threads[i] = new Thread() {
 				public void run() {
-					long connection = OnecoreLib.openConnection();
-					OnecoreLib.speak(connection, vendors[0], names[0], sentences[j]);
-					foundSize[j] = OnecoreLib.getStreamSize(connection);
-					OnecoreLib.closeConnection(connection);
+					long connection = Onecore.openConnection();
+					Onecore.speak(connection, vendors[0], names[0], sentences[j]);
+					foundSize[j] = Onecore.getStreamSize(connection);
+					Onecore.closeConnection(connection);
 				}
 			};
 		}

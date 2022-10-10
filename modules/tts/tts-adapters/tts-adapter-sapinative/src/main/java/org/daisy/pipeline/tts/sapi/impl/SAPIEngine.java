@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.sapinative.impl;
+package org.daisy.pipeline.tts.sapi.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -16,9 +16,8 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.tts.sapinative.SAPILib;
-import org.daisy.pipeline.tts.sapinative.SAPILibResult;
-import org.daisy.pipeline.tts.SimpleTTSEngine;
+import org.daisy.pipeline.tts.onecore.SAPI;
+import org.daisy.pipeline.tts.onecore.SAPIResult;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
@@ -28,10 +27,10 @@ import org.daisy.pipeline.tts.Voice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SAPIengine extends TTSEngine {
+public class SAPIEngine extends TTSEngine {
 
-	private static final Logger Logger = LoggerFactory.getLogger(SAPIengine.class);
-	private static final URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml.xsl", SAPIengine.class);
+	private static final Logger Logger = LoggerFactory.getLogger(SAPIEngine.class);
+	private static final URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml.xsl", SAPIEngine.class);
 
 	private final AudioFormat mAudioFormat;
 	private final int mOverallPriority;
@@ -41,7 +40,7 @@ public class SAPIengine extends TTSEngine {
 		long connection;
 	}
 
-	public SAPIengine(SAPIservice service, AudioFormat audioFormat, int priority) {
+	public SAPIEngine(SAPIservice service, AudioFormat audioFormat, int priority) {
 		super(service);
 		mAudioFormat = audioFormat;
 		mOverallPriority = priority;
@@ -54,7 +53,7 @@ public class SAPIengine extends TTSEngine {
 
 	@Override
 	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource resource)
-		throws SynthesisException, InterruptedException {
+		throws SynthesisException {
 
 		Map<String,Object> xsltParams = new HashMap<>(); {
 			xsltParams.put("voice", voice.name);
@@ -75,33 +74,32 @@ public class SAPIengine extends TTSEngine {
 		voice = mVoiceFormatConverter.get(voice.name.toLowerCase());
 
 		ThreadResource tr = (ThreadResource) resource;
-		int res = SAPILib.speak(tr.connection, voice.engine, voice.name, ssml);
-		if (res != SAPILibResult.SAPINATIVE_OK.value()) {
+		int res = SAPI.speak(tr.connection, voice.engine, voice.name, ssml);
+		if (res != SAPIResult.SAPINATIVE_OK.value()) {
 			throw new SynthesisException("SAPI speak error " + res + " raised with voice "
-			        + voice + ": " +  SAPILibResult.valueOfCode(res));
+			        + voice + ": " +  SAPIResult.valueOfCode(res));
 		}
 
-		int size = SAPILib.getStreamSize(tr.connection);
+		int size = SAPI.getStreamSize(tr.connection);
 
-		AudioBuffer result = bufferAllocator.allocateBuffer(size);
-		SAPILib.readStream(tr.connection, result.data, 0);
+		byte[] data = new byte[size];
+		SAPI.readStream(tr.connection, data, 0);
 
-		String[] names = SAPILib.getBookmarkNames(tr.connection);
-		long[] pos = SAPILib.getBookmarkPositions(tr.connection);
+		String[] names = SAPI.getBookmarkNames(tr.connection);
+		long[] bookmarksPositions = SAPI.getBookmarkPositions(tr.connection);
 
 		float sampleRate = mAudioFormat.getSampleRate();
 		int bytesPerSample = mAudioFormat.getSampleSizeInBits() / 8;
-		for (int i = 0; i < pos.length; ++i) {
-			int offset = (int) ((pos[i] * sampleRate * bytesPerSample) / 1000);
+		for (long position : bookmarksPositions) {
+			int offset = (int) ((position * sampleRate * bytesPerSample) / 1000);
 			marks.add(offset);
 		}
-
 		return createAudioStream(mAudioFormat, data);
 	}
 
 	@Override
 	public TTSResource allocateThreadResources() throws SynthesisException {
-		long connection = SAPILib.openConnection();
+		long connection = SAPI.openConnection();
 
 		if (connection == 0) {
 			throw new SynthesisException("could not open SAPI context.");
@@ -116,12 +114,12 @@ public class SAPIengine extends TTSEngine {
 	public Collection<Voice> getAvailableVoices() throws SynthesisException,
 	        InterruptedException {
 		if (mVoiceFormatConverter == null) {
-			mVoiceFormatConverter = new HashMap<String, Voice>();
-			String[] names = SAPILib.getVoiceNames();
-			String[] vendors = SAPILib.getVoiceVendors();
-			String[] locale = SAPILib.getVoiceLocales();
-			String[] gender = SAPILib.getVoiceGenders();
-			String[] age = SAPILib.getVoiceAges();
+			mVoiceFormatConverter = new HashMap<>();
+			String[] names = SAPI.getVoiceNames();
+			String[] vendors = SAPI.getVoiceVendors();
+			String[] locale = SAPI.getVoiceLocales();
+			String[] gender = SAPI.getVoiceGenders();
+			String[] age = SAPI.getVoiceAges();
 			for (int i = 0; i < names.length; ++i) {
 				String currentGender = gender[i];
 				String currentAge = age[i];
@@ -154,7 +152,6 @@ public class SAPIengine extends TTSEngine {
 								break;
 							case "adult" : // default to adult
 							default:
-								selected = Gender.FEMALE_ADULT;
 								break;
 						}
 						break;
@@ -170,8 +167,7 @@ public class SAPIengine extends TTSEngine {
 				);
 			}
 		}
-		List<Voice> voices = new ArrayList<Voice>();
-		
+		List<Voice> voices = new ArrayList<>();
 		for (String sapiVoice : mVoiceFormatConverter.keySet()) {
 			Voice original = mVoiceFormatConverter.get(sapiVoice);
 			voices.add(
