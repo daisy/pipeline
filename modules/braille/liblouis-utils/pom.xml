@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.9-SNAPSHOT</version>
+    <version>1.14.10-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -384,26 +384,26 @@
               <tasks>
                 <copy todir="target/generated-resources/native/liblouis">
                   <fileset dir="target/dependency/liblouis">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
                 <copy todir="target/generated-resources/native/liblouisutdml">
                   <fileset dir="target/dependency/liblouisutdml">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
-                    <include name="**/file2brl" />
-                    <include name="**/file2brl.exe" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
+                    <include name="**/file2brl"/>
+                    <include name="**/file2brl.exe"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
               </tasks>
@@ -505,7 +505,7 @@
               <instructions combine.self="replace">
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.linux.LiblouisNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-linux</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.linux
@@ -532,7 +532,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.mac.LiblouisNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-mac</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.mac
@@ -558,7 +558,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-windows</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.windows
