@@ -114,12 +114,12 @@ public class util {
 	}
 
 	public static void unzip(File zipFile, File directory) throws IOException {
-		directory.mkdirs();
 		try (ZipInputStream zip = new ZipInputStream(new FileInputStream(zipFile))) {
 			ZipEntry entry;
 			while ((entry = zip.getNextEntry()) != null) {
 				File destFile = new File(directory, entry.getName());
 				if (!entry.isDirectory()) {
+					destFile.getParentFile().mkdirs();
 					try (BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(destFile))) {
 						byte[] bytes = new byte[1024];
 						int read = 0;

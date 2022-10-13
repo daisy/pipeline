@@ -9,10 +9,15 @@ SHELL := make/eval-java
 endif
 .SHELLFLAGS :=
 
-MVN ?= mvn
-DOCKER := docker
-
 OS := $(shell println(getOS());)
+
+ifeq ($(OS), WINDOWS)
+MVN ?= mvn.cmd
+else
+MVN ?= mvn
+endif
+
+DOCKER := docker
 
 .PHONY : default
 ifeq ($(OS), WINDOWS)

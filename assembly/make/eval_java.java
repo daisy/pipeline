@@ -9,10 +9,12 @@ import java.util.regex.Pattern;
 public class eval_java {
 
 	public static void main(String[] args) {
+		File thisExecutable = new File(args[0]); // path of eval-java(.exe) relative to current directory
+		String javaCode = args[1];
 		if ("true".equals(System.getenv("ECHO")))
-			System.err.println(args[0]);
+			System.err.println(javaCode);
 		try {
-			String javaCode =
+			javaCode =
 				"import java.io.*;\n"
 				+ "import static java.lang.System.err;\n"
 				+ "import java.net.*;\n"
@@ -21,13 +23,14 @@ public class eval_java {
 				+ "import static lib.util.*;\n\n"
 				+ "public class [CLASSNAME] {\n\n"
 				+ "public static void main(String args[]) throws Throwable {\n\n"
-				+ Pattern.compile(" *\\\\$", Pattern.MULTILINE).matcher(args[0]).replaceAll("") + "\n\n"
+				+ Pattern.compile(" *\\\\$", Pattern.MULTILINE).matcher(javaCode).replaceAll("") + "\n\n"
 				+ "}\n}\n";
 			String className = "temp_" + md5(javaCode);
 			javaCode = javaCode.replace("[CLASSNAME]", className);
-			File classFile = new File(new File("make/java"), className + ".class");
+			File javaDir = new File(thisExecutable.getParentFile(), "java");
+			File classFile = new File(javaDir, className + ".class");
 			if (!classFile.exists()) {
-				File javaFile = new File(new File("make/java"), className + ".java");
+				File javaFile = new File(javaDir, className + ".java");
 				try (OutputStream os = new FileOutputStream(javaFile)) {
 					os.write(javaCode.getBytes("UTF-8"));
 					os.flush();
@@ -42,7 +45,7 @@ public class eval_java {
 					if (f.exists())
 						javac = f.getAbsolutePath();
 				}
-				int rv = new ProcessBuilder(javac, "-cp", "make/java", javaFile.getAbsolutePath()).inheritIO().start().waitFor();
+				int rv = new ProcessBuilder(javac, "-cp", javaDir.getAbsolutePath(), javaFile.getAbsolutePath()).inheritIO().start().waitFor();
 				System.out.flush();
 				System.err.flush();
 				if (rv != 0)

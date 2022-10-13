@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<component>
+  <fileSets>
+    <fileSet>
+      <directory>target/maven-jlink/classifiers/jre-win32</directory>
+      <outputDirectory>jre</outputDirectory>
+    </fileSet>
+  </fileSets>
+</component>

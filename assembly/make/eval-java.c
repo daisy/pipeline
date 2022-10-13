@@ -36,11 +36,25 @@ char *quote(char *string) {
 	return quoted;
 }
 
-void exec_java(char *java_executable, char *java_code) {
+#ifdef _WIN32
+#define PATH_SEPARATOR ';'
+#else
+#define PATH_SEPARATOR ':'
+#endif
+
+void exec_java(char *this_executable, char *java_executable, char *java_code) {
+	char *classpath = malloc(2 * strlen(this_executable) + 13);
+	*classpath = '\0';
+	strcat(classpath, this_executable);
+	strcat(classpath, "/..");
+	char sep = PATH_SEPARATOR;
+	strncat(classpath, &sep, 1);
+	strcat(classpath, this_executable);
+	strcat(classpath, "/../java");
 #ifdef _WIN32
 	// because of how spawnvp works we need to quote the arguments
 	// (see https://docs.microsoft.com/en-us/cpp/c-runtime-library/spawn-wspawn-functions)
-	char *java_argv[6] = { quote(java_executable), "-classpath", "make;make/java", "eval_java", quote(java_code), NULL };
+	char *java_argv[7] = { quote(java_executable), "-classpath", classpath, "eval_java", quote(this_executable), quote(java_code), NULL };
 	int child_status = spawnvp(P_WAIT, java_executable, java_argv);
 	if (child_status == -1) {
 		fprintf(stderr, "error running command `%s' (%s)\n", java_executable, strerror(errno));
@@ -48,7 +62,7 @@ void exec_java(char *java_executable, char *java_code) {
 	}
 	exit(child_status);
 #else
-	char *java_argv[6] = { java_executable, "-classpath", "make:make/java", "eval_java", java_code, NULL };
+	char *java_argv[7] = { java_executable, "-classpath", classpath, "eval_java", this_executable, java_code, NULL };
 	pid_t child_pid;
 	pid_t w;
 	int child_status;
@@ -80,13 +94,8 @@ void exec_java(char *java_executable, char *java_code) {
 #endif
 }
 
-#ifdef _WIN32
-#define PATH_SEPARATOR ';'
-#else
-#define PATH_SEPARATOR ':'
-#endif
-
 int main(int argc, char **argv) {
+	char *this_executable_path = argv[0];
 	char *java_code = argv[1];
 	char *JAVA_HOME = getenv("JAVA_HOME");
 	if (JAVA_HOME) {
@@ -100,7 +109,7 @@ int main(int argc, char **argv) {
 		FILE *f;
 		if ((f = fopen(java, "r"))) {
 			fclose(f);
-			exec_java(java, java_code);
+			exec_java(this_executable_path, java, java_code);
 		}
 		free(java);
 	}
@@ -121,7 +130,7 @@ int main(int argc, char **argv) {
 		FILE *f;
 		if ((f = fopen(java, "r"))) {
 			fclose(f);
-			exec_java(java, java_code);
+			exec_java(this_executable_path, java, java_code);
 		}
 		free(java);
 		dir = sep ? sep + 1 : NULL;

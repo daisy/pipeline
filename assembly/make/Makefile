@@ -1,4 +1,4 @@
-all : eval_java.class java/lib/util.class eval-java.exe
+all : eval_java.class java/lib/util.class eval-java.exe eval-java
 
 eval_java.class java/lib/util.class : %.class : %.java
 	javac $<
