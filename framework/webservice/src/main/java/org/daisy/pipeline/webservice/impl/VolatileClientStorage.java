@@ -10,6 +10,7 @@ import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.clients.ClientStorage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

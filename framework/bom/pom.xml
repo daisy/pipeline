@@ -45,12 +45,12 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
-        <version>5.2.0</version>
+        <version>5.2.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>common-utils</artifactId>
-        <version>5.6.0</version>
+        <version>5.7.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -61,11 +61,6 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-persistence</artifactId>
         <version>2.1.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>logging-activator</artifactId>
-        <version>2.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -95,7 +90,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>webservice</artifactId>
-        <version>3.1.0</version>
+        <version>3.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -139,6 +134,20 @@
         <groupId>org.daisy.libs</groupId>
         <artifactId>com.xmlcalabash</artifactId>
         <version>${calabash.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>nu.validator.htmlparser</groupId>

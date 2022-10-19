@@ -57,12 +57,11 @@ public abstract class Base extends AbstractTest {
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
-			// for some reason logging-activator needs to start before restlet but after jersey-client (clientlib-java-jaxb)
-			"org.daisy.pipeline:logging-activator:?",
+			// for some reason logging-activator (now in common-utils) needs to start before restlet but after jersey-client (clientlib-java-jaxb)
+			"org.daisy.pipeline:common-utils:?",
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",
 			"org.restlet.osgi:org.restlet.ext.xml:?",
-			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:calabash-adapter:?",
