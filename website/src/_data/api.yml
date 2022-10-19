@@ -21,8 +21,6 @@ javadoc:
   artifact: modules-registry
 - group: org.daisy.pipeline
   artifact: saxon-adapter
-- group: org.daisy.pipeline
-  artifact: xmlcatalog
 - group: org.daisy.pipeline.modules
   artifact: audio-common
 - group: org.daisy.pipeline.modules
@@ -114,8 +112,6 @@ xprocdoc:
   artifact: liblouis-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: pef-utils
-- group: org.daisy.pipeline.modules.braille
-  artifact: texhyph-utils
 - group: org.daisy.pipeline.modules.braille
   artifact: obfl-utils
   version: 2.0.1

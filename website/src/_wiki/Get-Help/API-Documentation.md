@@ -15,12 +15,12 @@ dependencies:
 <dependency>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>clientlib-java</artifactId>
-  <version>4.8.2</version>
+  <version>5.0.1</version>
 </dependency>
 <dependency>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>clientlib-java-httpclient</artifactId>
-  <version>2.0.3</version>
+  <version>2.1.1</version>
 </dependency>
 ~~~
   
@@ -66,34 +66,10 @@ These are the most important classes in the Java API:
 [`org.daisy.common.messaging.MessageAccessor`](http://daisy.github.io/pipeline/api/org/daisy/common/messaging/MessageAccessor.html)
 : Access job messages.
 
-<!--
-FIXME: should not be in API but is currently needed to create a JobManager
-[`org.daisy.pipeline.clients.ClientStorage`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/clients/ClientStorage.html)
-: Create, delete and access clients.
--->
-
-The `ScriptRegistry`, `DatatypeRegistry` and `JobManagerFactory`
-objects are OSGi services that can be injected as follows:
-
-~~~java
-import org.daisy.pipeline.script.ScriptRegistry;
-
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
-...
-
-@Reference(
-    name = "ScriptRegistry",
-    service = ScriptRegistry.class,
-    cardinality = ReferenceCardinality.MANDATORY,
-    policy = ReferencePolicy.STATIC
-)
-public void setScriptRegistry(ScriptRegistry registry) {
-    ...
-}
-~~~
+Providers of the `ScriptRegistry`, `DatatypeRegistry` and
+`JobManagerFactory` services can be loaded using the
+[`ServiceLoader`](https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html)
+mechanism or using OSGi.
 
 ## Complete Javadocs
 

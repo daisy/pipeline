@@ -1,9 +1,36 @@
 ## Generate with:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.9 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.10 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.14.10"
+  sort: "1.14.10"
+  state: stable
+  github_tab: "v1.14.10"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.10"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+      interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+      DEB files). The DEB does not include the command line interface.
+  files:
+  - platform: debian
+    package: deb
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.10/pipeline2-1.14.10_debian.deb"
+    size: 127633694
+  - platform: linux
+    package: zip
+    content: [gui, server, cli]
+    url: 'https://github.com/daisy/pipeline-assembly/releases/download/v1.14.10/pipeline2-1.14.10_linux.zip'
+    size: 104393848
+  - platform: windows
+    package: installer
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.10/pipeline2-1.14.10_windows.exe"
+    size: 128799699
 
 - group: main
   version: "1.14.9"
-  sort: "1.14.9"
+  sort: "1.14.09"
   state: stable
   github_tab: "v1.14.9"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.9"
@@ -30,7 +57,7 @@
 
 - group: main
   version: "1.14.8"
-  sort: "1.14.8"
+  sort: "1.14.08"
   state: stable
   github_tab: "v1.14.8"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.8"
@@ -57,7 +84,7 @@
 
 - group: main
   version: "1.14.7"
-  sort: "1.14.7"
+  sort: "1.14.07"
   state: stable
   github_tab: "v1.14.7"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.7"
@@ -84,7 +111,7 @@
 
 - group: main
   version: "1.14.6"
-  sort: "1.14.6"
+  sort: "1.14.06"
   state: stable
   github_tab: "v1.14.6"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.6"
@@ -118,7 +145,7 @@
 
 - group: main
   version: "1.14.5"
-  sort: "1.14.5"
+  sort: "1.14.05"
   state: stable
   github_tab: "v1.14.5"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.5"
@@ -174,7 +201,7 @@
 
 - group: main
   version: "1.14.4"
-  sort: "1.14.4"
+  sort: "1.14.04"
   state: stable
   github_tab: "v1.14.4"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.4"
@@ -208,7 +235,7 @@
 
 - group: main
   version: "1.14.3"
-  sort: "1.14.3"
+  sort: "1.14.03"
   state: stable
   github_tab: "v1.14.3"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.3"
@@ -242,7 +269,7 @@
 
 - group: main
   version: "1.14.2"
-  sort: "1.14.2"
+  sort: "1.14.02"
   state: stable
   github_tab: "v1.14.2"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.2"
@@ -276,7 +303,7 @@
 
 - group: main
   version: "1.14.1"
-  sort: "1.14.1"
+  sort: "1.14.01"
   state: stable
   github_tab: "v1.14.1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.1"
