@@ -161,7 +161,7 @@ public class PipelineApplication extends Application {
         private static Optional<ServiceRegistry> loadServices() {
                 try {
                         ServiceRegistry services = ServiceRegistry.getInstance();
-                        // timeout after 20 seconds
+                        // timeout after 60 seconds
                         if (services.waitUntilReady(60000))
                                 return Optional.of(services);
                         else

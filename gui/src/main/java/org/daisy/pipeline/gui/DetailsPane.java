@@ -134,9 +134,9 @@ public class DetailsPane extends VBox {
 			resultsLabel.getStyleClass().add("subtitle");
 	    	resultsGrid.addRow(resultsLabel);
 	    	
-	    	resultsGrid.addFinderLinkRow("Log file", job.getJob().getContext().getLogFile().toString());
+	    	resultsGrid.addFinderLinkRow("Log file", job.getJob().getLogFile().toString());
 	    	
-	    	Iterable<JobResult> results = job.getJob().getContext().getResults().getResults();
+	    	Iterable<JobResult> results = job.getJob().getResults().getResults();
 	    	for (JobResult result : results) {
 	    		File f = new File(result.getPath());
 	    		resultsGrid.addFinderLinkRow(f.getName(), result.getPath().toString());

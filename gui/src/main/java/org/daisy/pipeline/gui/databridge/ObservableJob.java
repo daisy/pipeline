@@ -36,7 +36,7 @@ public class ObservableJob implements Comparable<ObservableJob> {
 		setStatus(job.getStatus());
 		messages = FXCollections.observableArrayList();
 		addInitialMessages();
-		JobMonitor monitor = job.getContext().getMonitor();
+		JobMonitor monitor = job.getMonitor();
 		MessageAccessor accessor = monitor.getMessageAccessor();
 		accessor.listen(new Consumer<Integer>() {
 				public void accept(Integer sequence) {
@@ -81,7 +81,7 @@ public class ObservableJob implements Comparable<ObservableJob> {
 		return boundScript;
 	}
 	private void addInitialMessages() {
-		flattenMessages(job.getContext().getMonitor().getMessageAccessor().getAll().iterator(), 0);
+		flattenMessages(job.getMonitor().getMessageAccessor().getAll().iterator(), 0);
 	}
 	private static String statusToString(Status status) {
 		if (status == Status.SUCCESS) {

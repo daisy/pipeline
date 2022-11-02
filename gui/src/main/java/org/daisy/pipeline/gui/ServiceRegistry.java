@@ -6,8 +6,6 @@ import java.util.List;
 
 import com.google.common.util.concurrent.Monitor;
 
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
@@ -42,8 +40,6 @@ public class ServiceRegistry {
         private ScriptRegistry scriptRegistry = null;
         private JobManager jobManager = null;
         private JobManagerFactory jobManagerFactory = null;
-        private WebserviceStorage webserviceStorage = null;
-        private Client client = null;
         private DatatypeRegistry datatypeRegistry = null;
         private GUIService guiService = null;
 
@@ -53,7 +49,6 @@ public class ServiceRegistry {
                         return instance != null &&
                                 ServiceRegistry.this.scriptRegistry != null &&
                                 ServiceRegistry.this.jobManagerFactory != null &&
-                                ServiceRegistry.this.webserviceStorage != null &&
                                 ServiceRegistry.this.datatypeRegistry != null &&
                                 ServiceRegistry.this.guiService != null;
                 }
@@ -107,9 +102,10 @@ public class ServiceRegistry {
          * @return the jobManager
          */
         public JobManager getJobManager() {
-                if (jobManagerFactory != null && getClient() != null) {
-                        if (jobManager == null)
-                                jobManager = jobManagerFactory.createFor(getClient());
+                if (jobManager != null)
+                        return jobManager;
+                else if (jobManagerFactory != null) {
+                        jobManager = jobManagerFactory.create();
                         return jobManager;
                 } else
                         return null;
@@ -121,24 +117,6 @@ public class ServiceRegistry {
         public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
                 this.monitor.enter();
                 this.jobManagerFactory = jobManagerFactory;
-                this.monitor.leave();
-        }
-
-        private Client getClient() {
-                if (webserviceStorage != null) {
-                        if (client == null)
-                                client = webserviceStorage.getClientStorage().defaultClient();
-                        return client;
-                } else
-                        return null;
-        }
-
-        /**
-         * @param webserviceStorage the webserviceStorage to set
-         */
-        public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
-                this.monitor.enter();
-                this.webserviceStorage = webserviceStorage;
                 this.monitor.leave();
         }
 
@@ -199,20 +177,6 @@ public class ServiceRegistry {
                 }
                 public void unsetJobManagerFactory(JobManagerFactory jobManagerFactory) {
                         registry.setJobManagerFactory(null);
-                }
-
-                @Reference(
-                        name = "webservice-storage",
-                        unbind = "unsetWebserviceStorage",
-                        service = WebserviceStorage.class,
-                        cardinality = ReferenceCardinality.MANDATORY,
-                        policy = ReferencePolicy.DYNAMIC
-                )
-                public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
-                        registry.setWebserviceStorage(webserviceStorage);
-                }
-                public void unsetWebserviceStorage(WebserviceStorage webserviceStorage) {
-                        registry.setWebserviceStorage(null);
                 }
 
                 @Reference(

@@ -1,7 +1,6 @@
 package org.daisy.pipeline.gui;
 
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
 
@@ -17,7 +16,6 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class ServiceRegistryTest {
         @Mock ScriptRegistry scriptRegistry;
         @Mock JobManagerFactory jobManagerFactory;
-        @Mock WebserviceStorage webserviceStorage;
         @Mock DatatypeRegistry datatypeRegistry;
         @Mock GUIService guiService;
         @Mock PipelineApplication app;
@@ -44,7 +42,6 @@ public class ServiceRegistryTest {
                 Assert.assertTrue(t.isAlive());
                 reg.setDatatypeRegistry(datatypeRegistry);
                 Assert.assertTrue(t.isAlive());
-                reg.setWebserviceStorage(webserviceStorage);
                 try {
                         t.join(500L);
                 } catch (InterruptedException e) {
