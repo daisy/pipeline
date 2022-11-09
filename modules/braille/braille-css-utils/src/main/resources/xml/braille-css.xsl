@@ -290,11 +290,15 @@
                         <xsl:sequence select="."/>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:sequence select="css:property(@name, string-join(
-                                                distinct-values((
-                                                  tokenize(normalize-space(@value), ' '),
-                                                  tokenize(normalize-space($parent-computed/@value), ' '))),
-                                                ' '))"/>
+                        <xsl:copy>
+                            <xsl:sequence select="@* except @value"/>
+                            <xsl:attribute name="value"
+                                           select="string-join(
+                                                     distinct-values((
+                                                       tokenize(normalize-space(@value), ' '),
+                                                       tokenize(normalize-space($parent-computed/@value), ' '))),
+                                                     ' ')"/>
+                        </xsl:copy>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:otherwise>

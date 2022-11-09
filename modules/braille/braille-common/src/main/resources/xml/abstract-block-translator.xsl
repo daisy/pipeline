@@ -600,10 +600,10 @@
 				<css:property name="{$property}"/>
 			</xsl:when>
 			<xsl:when test="$concretize-initial">
-				<xsl:sequence select="css:property($property, css:initial-value($property))"/>
+				<css:property name="{$property}" value="{css:initial-value($property)}"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:sequence select="css:property($property, 'initial')"/>
+				<css:property name="{$property}" value="initial"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
