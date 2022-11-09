@@ -66,19 +66,6 @@
     <!-- Parsing -->
     <!-- ======= -->
     
-    <xsl:function name="css:property">
-        <xsl:param name="name"/>
-        <xsl:param name="value"/>
-        <xsl:choose>
-            <xsl:when test="$value instance of xs:integer">
-                <css:property name="{$name}" value="{format-number($value, '0')}"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <css:property name="{$name}" value="{$value}"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-    
     <xsl:template match="@css:*" mode="css:attribute-as-property" as="element()">
         <css:property name="{replace(local-name(),'^_','-')}" value="{string()}"/>
     </xsl:template>
@@ -251,10 +238,10 @@
                 <css:property name="{$property}"/>
             </xsl:when>
             <xsl:when test="$concretize-initial">
-                <xsl:sequence select="css:property($property, css:initial-value($property))"/>
+                <css:property name="{$property}" value="{css:initial-value($property)}"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:sequence select="css:property($property, 'initial')"/>
+                <css:property name="{$property}" value="initial"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -291,12 +278,17 @@
         </xsl:variable>
         <xsl:variable name="properties" as="xs:string*" select="$properties[not(.='#all')]"/>
         <xsl:variable name="properties" as="xs:string*" select="$properties[.=$css:properties]"/>
-        <xsl:variable name="declarations" as="element()*"
-            select="($declarations,
-                     for $property in distinct-values($properties) return
-                       if ($declarations/self::css:property[@name=$property]) then ()
-                       else if (css:is-inherited($property)) then css:property($property, 'inherit')
-                       else css:property($property, 'initial'))"/>
+        <xsl:variable name="declarations" as="element()*">
+            <xsl:sequence select="$declarations"/>
+            <xsl:for-each select="distinct-values($properties)">
+                <xsl:variable name="property" as="xs:string" select="."/>
+                <xsl:if test="not($declarations/self::css:property[@name=$property])">
+                    <css:property name="{$property}" value="{if (css:is-inherited($property))
+                                                             then 'inherit'
+                                                             else 'initial'}"/>
+                </xsl:if>
+            </xsl:for-each>
+        </xsl:variable>
         <xsl:variable name="declarations" as="element()*">
             <xsl:choose>
                 <xsl:when test="$concretize-inherit">
