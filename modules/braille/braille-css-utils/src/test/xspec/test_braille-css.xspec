@@ -3,26 +3,6 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                stylesheet="../../main/resources/xml/braille-css.xsl">
 	
-	<x:scenario label="test_01">
-		<x:call function="css:property">
-			<x:param select="'left'"/>
-			<x:param select="'auto'"/>
-		</x:call>
-		<x:expect label="result">
-			<css:property name="left" value="auto"/>
-		</x:expect>
-	</x:scenario>
-	
-	<x:scenario label="test_02">
-		<x:call function="css:property">
-			<x:param select="'left'"/>
-			<x:param select="xs:integer(2)"/>
-		</x:call>
-		<x:expect label="result">
-			<css:property name="left" value="2"/>
-		</x:expect>
-	</x:scenario>
-	
 	<x:scenario label="test_03">
 		<x:call function="css:specified-properties">
 			<x:param select="'#all invalid'"/>
