@@ -130,41 +130,7 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(BrailleCssStyle style) {
-		return toString(style, null);
-	}
-
-	private static String toString(BrailleCssStyle style, String base) {
-		StringBuilder b = new StringBuilder();
-		StringBuilder rel = new StringBuilder();
-		if (style.simpleStyle != null)
-			b.append(toString(style.simpleStyle));
-		else if (style.declarations != null)
-			b.append(serializeDeclarationList(style.declarations));
-		if (style.nestedStyles != null)
-			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
-				if (base != null && e.getKey().startsWith("&")) {
-					if (rel.length() > 0) rel.append(" ");
-					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
-				} else {
-					if (b.length() > 0) {
-						if (b.charAt(b.length() - 1) != '}') b.append(";");
-						b.append(" ");
-					}
-					b.append(toString(e.getValue(), e.getKey()));
-				}
-			}
-		if (base != null && b.length() > 0) {
-			b.insert(0, base + " { ");
-			b.append(" }");
-		}
-		if (rel.length() > 0) {
-			if (b.length() > 0) {
-				if (b.charAt(b.length() - 1) != '}') b.append(";");
-				b.append(" ");
-			}
-			b.append(rel);
-		}
-		return b.toString();
+		return style.toString();
 	}
 
 	public static String toString(InlineStyle style) {
