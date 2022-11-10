@@ -126,7 +126,10 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(Declaration declaration) {
-		return declaration.getProperty() + ": " + serializeTermList((List<Term<?>>)declaration);
+		if (declaration instanceof PropertyValue)
+			return declaration.getProperty() + ": " + serializePropertyValue((PropertyValue)declaration);
+		else
+			return declaration.getProperty() + ": " + serializeTermList(declaration);
 	}
 
 	public static String toString(BrailleCssStyle style) {
@@ -317,26 +320,14 @@ public final class BrailleCssSerializer {
 	public static void toXml(BrailleCssStyle style,
 	                         XMLStreamWriter w,
 	                         boolean recursive) throws XMLStreamException {
-		if (style.simpleStyle != null || style.declarations != null) {
+		if (style.declarations != null) {
 			if (!recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
-			if (style.simpleStyle != null) {
-				List<String> properties = new ArrayList<>();
-				properties.addAll(style.simpleStyle.getPropertyNames());
-				Collections.sort(properties);
-				for (String p : properties)
-					toXml(p, style.simpleStyle.get(p), w);
-			} else {
-				List<Declaration> declarations = new ArrayList<>();
-				declarations.addAll(style.declarations);
-				Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
-				for (Declaration d : declarations) {
-					writeStartElement(w, CSS_PROPERTY);
-					writeAttribute(w, NAME, d.getProperty());
-					writeAttribute(w, VALUE, serializeTermList((List<Term<?>>)d));
-					w.writeEndElement();
-				}
-			}
+			List<Declaration> declarations = new ArrayList<>();
+			for (Declaration d : style.declarations) declarations.add(d);
+			Collections.sort(declarations, Ordering.natural().onResultOf(Declaration::getProperty));
+			for (Declaration d : declarations)
+				toXml(d, w);
 			if (!recursive || style.nestedStyles != null)
 				w.writeEndElement();
 		}
@@ -349,56 +340,63 @@ public final class BrailleCssSerializer {
 			}
 	}
 
-	private static void toXml(String property, PropertyValue value, XMLStreamWriter writer) throws XMLStreamException {
+	public static void toXml(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
+		if (declaration instanceof PropertyValue)
+			toXml((PropertyValue)declaration, writer);
+		else {
+			writeStartElement(writer, CSS_PROPERTY);
+			writeAttribute(writer, NAME, declaration.getProperty());
+			writeAttribute(writer, VALUE, serializeTermList(declaration));
+			writer.writeEndElement();
+		}
+	}
+
+	public static void toXml(PropertyValue value, XMLStreamWriter writer) throws XMLStreamException {
 		writeStartElement(writer, CSS_PROPERTY);
-		writeAttribute(writer, NAME, property);
-		if ("content".equals(property)) {
-			if (value.getCSSProperty() == Content.NONE || value.getCSSProperty() == Content.INITIAL)
-				;
-			else if (value.getCSSProperty() == Content.INHERIT)
-				writeAttribute(writer, VALUE, Content.INHERIT.toString());
-			else if (value.getCSSProperty() == Content.content_list)
-				if (value.getValue() instanceof ContentList)
-					contentListToXml((ContentList)value.getValue(), writer);
-				else
-					throw new IllegalArgumentException();
-		} else if ("string-set".equals(property)) {
-			if (value.getCSSProperty() == StringSet.NONE || value.getCSSProperty() == StringSet.INITIAL)
-				;
-			else if (value.getCSSProperty() == StringSet.INHERIT)
-				writeAttribute(writer, VALUE, StringSet.INHERIT.toString());
-			else if (value.getCSSProperty() == StringSet.list_values)
-				if (value.getValue() instanceof StringSetList)
-					for (StringSetList.StringSet ss : (StringSetList)value.getValue()) {
-						writeStartElement(writer, CSS_STRING_SET);
-						writeAttribute(writer, NAME, ss.getKey());
-						contentListToXml(ss.getValue(), writer);
-						writer.writeEndElement(); }
-				else
-					throw new IllegalArgumentException();
-		} else if ("counter-set".equals(property) ||
-		           "counter-reset".equals(property) ||
-		           "counter-increment".equals(property)) {
-			if (value.getCSSProperty() == CounterSet.NONE || value.getCSSProperty() == CounterSet.INITIAL ||
-			    value.getCSSProperty() == CounterReset.NONE || value.getCSSProperty() == CounterReset.INITIAL ||
-			    value.getCSSProperty() == CounterIncrement.NONE || value.getCSSProperty() == CounterIncrement.INITIAL)
-				;
-			else if (value.getCSSProperty() == CounterSet.INHERIT ||
-			         value.getCSSProperty() == CounterReset.INHERIT ||
-			         value.getCSSProperty() == CounterIncrement.INHERIT)
-				writeAttribute(writer, VALUE, "inherit");
-			else if (value.getCSSProperty() == CounterSet.list_values ||
-			         value.getCSSProperty() == CounterReset.list_values ||
-			         value.getCSSProperty() == CounterIncrement.list_values)
-				if (value.getValue() instanceof CounterSetList)
-					for (CounterSetList.CounterSet ss : (CounterSetList)value.getValue()) {
-						writeStartElement(writer, CSS_COUNTER_SET);
-						writeAttribute(writer, NAME, ss.getKey());
-						writeAttribute(writer, VALUE, "" + ss.getValue());
-						writer.writeEndElement(); }
-				else
-					throw new IllegalArgumentException();
-		} else
+		writeAttribute(writer, NAME, value.getProperty());
+		CSSProperty p = value.getCSSProperty();
+		if (p == Content.NONE || p == Content.INITIAL)
+			;
+		else if (p == Content.INHERIT)
+			writeAttribute(writer, VALUE, Content.INHERIT.toString());
+		else if (p == Content.content_list) {
+			if (value.getValue() instanceof ContentList)
+				contentListToXml((ContentList)value.getValue(), writer);
+			else
+				throw new IllegalArgumentException();
+		} else if (p == StringSet.NONE || p == StringSet.INITIAL)
+			;
+		else if (p == StringSet.INHERIT)
+			writeAttribute(writer, VALUE, StringSet.INHERIT.toString());
+		else if (p == StringSet.list_values)
+			if (value.getValue() instanceof StringSetList)
+				for (StringSetList.StringSet ss : (StringSetList)value.getValue()) {
+					writeStartElement(writer, CSS_STRING_SET);
+					writeAttribute(writer, NAME, ss.getKey());
+					contentListToXml(ss.getValue(), writer);
+					writer.writeEndElement(); }
+			else
+				throw new IllegalArgumentException();
+		else if (p == CounterSet.NONE || p == CounterSet.INITIAL ||
+		         p == CounterReset.NONE || p == CounterReset.INITIAL ||
+		         p == CounterIncrement.NONE || p == CounterIncrement.INITIAL)
+			;
+		else if (p == CounterSet.INHERIT ||
+		         p == CounterReset.INHERIT ||
+		         p == CounterIncrement.INHERIT)
+			writeAttribute(writer, VALUE, "inherit");
+		else if (p == CounterSet.list_values ||
+		         p == CounterReset.list_values ||
+		         p == CounterIncrement.list_values)
+			if (value.getValue() instanceof CounterSetList)
+				for (CounterSetList.CounterSet ss : (CounterSetList)value.getValue()) {
+					writeStartElement(writer, CSS_COUNTER_SET);
+					writeAttribute(writer, NAME, ss.getKey());
+					writeAttribute(writer, VALUE, "" + ss.getValue());
+					writer.writeEndElement(); }
+			else
+				throw new IllegalArgumentException();
+		else
 			writeAttribute(writer, VALUE, serializePropertyValue(value));
 		writer.writeEndElement();
 	}

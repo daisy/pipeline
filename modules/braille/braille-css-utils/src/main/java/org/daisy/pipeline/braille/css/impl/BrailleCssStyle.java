@@ -61,30 +61,28 @@ public final class BrailleCssStyle implements Cloneable {
 
 	// these fields need to be package private because they are used in BrailleCssSerializer
 	// note that even though the declarations are assumed to not change, we don't assume they are unmodifiable
-	SimpleInlineStyle simpleStyle;
-	final List<Declaration> declarations;
+	Iterable<? extends Declaration> declarations;
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
 
 	private final Context context;
 
 	private BrailleCssStyle(Builder builder) {
 		this.context = builder.context;
-		this.declarations = builder.declarations != null && !builder.declarations.isEmpty() && !builder.validate.isPresent()
-			? ImmutableList.copyOf(builder.declarations)
-			: null;
-		this.simpleStyle = builder.declarations != null && !builder.declarations.isEmpty() && builder.validate.isPresent()
-			? new SimpleInlineStyle(builder.declarations,
-			                        null,
-			                        builder.validate.get())
-			: null;
-		SortedMap<String,BrailleCssStyle> nested = builder.buildNestedStyles();
-		this.nestedStyles = nested != null
-			? ImmutableSortedMap.copyOfSorted(nested)
+		this.declarations = builder.declarations == null || builder.declarations.isEmpty()
+			? null
+			: builder.validate.isPresent()
+				? new SimpleInlineStyle(builder.declarations,
+				                        null,
+				                        builder.validate.get())
+				: ImmutableList.copyOf(builder.declarations)
+			;
+		this.nestedStyles = builder.nestedStyles != null && !builder.nestedStyles.isEmpty()
+			? ImmutableSortedMap.copyOfSorted(builder.buildNestedStyles())
 			: null;
 	}
 
 	public boolean isEmpty() {
-		return simpleStyle == null && declarations == null && nestedStyles == null;
+		return declarations == null && nestedStyles == null;
 	}
 
 	private boolean evaluated = false;
@@ -95,25 +93,37 @@ public final class BrailleCssStyle implements Cloneable {
 	public BrailleCssStyle evaluate(Element context) {
 		if (evaluated) return this;
 		BrailleCssStyle copy = null;
-		if (simpleStyle != null) {
-			if (simpleStyle.getProperty("content") == Content.content_list) {
-				Term<?> value = simpleStyle.getValue("content");
-				if (value instanceof ContentList) {
-					copy = clone();
-					copy.simpleStyle = (SimpleInlineStyle)simpleStyle.clone();
-					((ContentList)copy.simpleStyle.getValue("content")).evaluate(context); // this mutates the value
-				} else
-					throw new IllegalStateException(); // coding error
-			}
-			if (simpleStyle.getProperty("string-set") == StringSet.list_values) {
-				Term<?> value = simpleStyle.getValue("string-set");
-				if (value instanceof StringSetList) {
-					if (copy == null) {
-						copy = clone();
-						copy.simpleStyle = (SimpleInlineStyle)simpleStyle.clone(); }
-					((StringSetList)copy.simpleStyle.getValue("string-set")).evaluate(context); // this mutates the value
-				} else
-					throw new IllegalStateException(); // coding error
+		if (declarations != null) {
+			for (Declaration d : declarations) {
+				if (d instanceof PropertyValue) {
+					PropertyValue pv = (PropertyValue)d;
+					CSSProperty p = pv.getCSSProperty();
+					if (p == Content.content_list) {
+						Term<?> v = pv.getValue();
+						if (v instanceof ContentList) {
+							if (copy == null) {
+								copy = clone();
+								copy.declarations = copyDeclarations(); }
+							// find value in cloned declarations
+							for (Declaration dd : copy.declarations)
+								if (((PropertyValue)dd).getCSSProperty() == Content.content_list)
+									((ContentList)((PropertyValue)dd).getValue()).evaluate(context); // this mutates the value
+						} else
+							throw new IllegalStateException(); // coding error
+					} else if (p == StringSet.list_values) {
+						Term<?> v = pv.getValue();
+						if (v instanceof StringSetList) {
+							if (copy == null) {
+								copy = clone();
+								copy.declarations = copyDeclarations(); }
+							// find value in cloned declarations
+							for (Declaration dd : copy.declarations)
+								if (((PropertyValue)dd).getCSSProperty() == StringSet.list_values)
+									((StringSetList)((PropertyValue)dd).getValue()).evaluate(context); // this mutates the value
+						} else
+							throw new IllegalStateException(); // coding error
+					}
+				}
 			}
 		}
 		if (nestedStyles != null) {
@@ -134,6 +144,20 @@ public final class BrailleCssStyle implements Cloneable {
 			return copy;
 		} else
 			return this;
+	}
+
+	/**
+	 * @return a deep copy of the {@code declarations} field
+	 */
+	private Iterable<? extends Declaration> copyDeclarations() {
+		if (declarations instanceof SimpleInlineStyle)
+			return (SimpleInlineStyle)((SimpleInlineStyle)declarations).clone();
+		else {
+			List<Declaration> declarationsCopy = new ArrayList<>();
+			for (Declaration dd : declarations)
+				declarationsCopy.add((Declaration)dd.clone());
+			return ImmutableList.copyOf(declarationsCopy);
+		}
 	}
 
 	@Override
@@ -169,9 +193,7 @@ public final class BrailleCssStyle implements Cloneable {
 	private static String toString(BrailleCssStyle style, String base) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder rel = new StringBuilder();
-		if (style.simpleStyle != null)
-			b.append(BrailleCssSerializer.toString(style.simpleStyle));
-		else if (style.declarations != null)
+		if (style.declarations != null)
 			b.append(BrailleCssSerializer.serializeDeclarationList(style.declarations));
 		if (style.nestedStyles != null)
 			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
@@ -291,12 +313,12 @@ public final class BrailleCssStyle implements Cloneable {
 		}
 
 		private Builder add(BrailleCssStyle style) {
-			if (style.simpleStyle != null)
-				for (PropertyValue p : style.simpleStyle)
-					add(p, p.getSupportedBrailleCSS());
-			else if (style.declarations != null)
-				for (Declaration d : style.declarations)
-					add(d, Optional.empty());
+			if (style.declarations != null)
+				for (Declaration d : style.declarations) {
+					if (d instanceof PropertyValue)
+						add(d, ((PropertyValue)d).getSupportedBrailleCSS());
+					else
+						add(d, Optional.empty()); }
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet())
 					add(e.getKey(), e.getValue());
