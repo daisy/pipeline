@@ -17,7 +17,7 @@ import cz.vutbr.web.domassign.SingleMapNodeData;
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
 	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
-	private static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
+	private final static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
 	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
@@ -74,9 +74,13 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			}
 			public PropertyValue next() {
 				String prop = props.next();
+				Declaration d = getSourceDeclaration(prop);
+				if (d == null) throw new IllegalStateException(); // can not happen
 				return new PropertyValue(
+					prop,
 					SimpleInlineStyle.this.getProperty(prop),
-					SimpleInlineStyle.this.getValue(prop));
+					SimpleInlineStyle.this.getValue(prop),
+					d);
 			}
 			public void remove() {
 				props.remove();
@@ -88,7 +92,9 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		CSSProperty p = getProperty(property);
 		if (p == null)
 			return null;
-		return new PropertyValue(p, getValue(property));
+		Declaration d = getSourceDeclaration(property);
+		if (d == null) throw new IllegalStateException(); // can not happen
+		return new PropertyValue(property, p, getValue(property), d);
 	}
 
 	@Override
