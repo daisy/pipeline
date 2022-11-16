@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-result-prefixes="#all">
 	
@@ -24,7 +25,7 @@
 	<xsl:template mode="style" match="*" as="xs:string*">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
 		<xsl:variable name="source-style" as="element()*">
-			<xsl:variable name="stylesheet" as="element()*" select="css:parse-stylesheet(@style)"/>
+			<xsl:variable name="stylesheet" as="element()*" select="s:toXml(css:parse-stylesheet(@style))"/>
 			<xsl:call-template name="css:computed-properties">
 				<xsl:with-param name="properties" select="$text-properties"/>
 				<xsl:with-param name="context" select="$dummy-element"/>

@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all">
     
@@ -396,7 +397,7 @@
                     </xsl:when>
                     <xsl:when test="string($stylesheet)=''"/>
                     <xsl:otherwise>
-                        <xsl:sequence select="css:parse-stylesheet($stylesheet)[@selector='@counter-style']"/>
+                        <xsl:sequence select="s:toXml(css:parse-stylesheet($stylesheet))[@selector='@counter-style']"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>

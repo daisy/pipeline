@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -48,7 +49,7 @@
                     <xsl:sequence select="$style"/>
                 </css:rule>
             </xsl:if>
-            <xsl:sequence select="css:parse-stylesheet(@style)[@selector]"/>
+            <xsl:sequence select="s:toXml(css:parse-stylesheet(@style))[@selector]"/>
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="self::*">

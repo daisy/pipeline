@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-result-prefixes="#all">
 	
@@ -46,7 +47,7 @@
 		<!-- computed text properties of the parent element in the result -->
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="portion" required="yes"/>
-		<xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(@style)"/>
+		<xsl:variable name="style" as="element(css:rule)*" select="s:toXml(css:parse-stylesheet(@style))"/>
 		<xsl:variable name="style" as="element(css:rule)*">
 			<css:rule>
 				<xsl:if test="@css:*">
@@ -424,7 +425,7 @@
 					<xsl:apply-templates mode="css:attribute-as-property" select="@css:*"/>
 				</css:rule>
 			</xsl:if>
-			<xsl:sequence select="css:parse-stylesheet(@style)"/>
+			<xsl:sequence select="s:toXml(css:parse-stylesheet(@style))"/>
 		</xsl:variable>
 		<xsl:variable name="style" as="element(css:rule)*"
 		              select="if (exists($style)) then $style else $empty-style"/>
