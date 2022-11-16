@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 exclude-result-prefixes="#all"
                 version="2.0">
@@ -24,7 +25,7 @@
 					<xsl:for-each select="distinct-values($styles/@serialized)">
 						<xsl:variable name="style" as="xs:string" select="."/>
 						<css:rule selector="{string-join($styles[@serialized=$style]/@selector,', ')}" serialized="{$style}">
-							<xsl:sequence select="css:parse-stylesheet($style)"/>
+							<xsl:sequence select="s:toXml(css:parse-stylesheet($style))"/>
 						</css:rule>
 					</xsl:for-each>
 				</xsl:variable>

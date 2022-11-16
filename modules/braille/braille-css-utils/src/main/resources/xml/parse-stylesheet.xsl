@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -13,7 +14,7 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(.)"/>
+        <xsl:variable name="style" as="element(css:rule)*" select="s:toXml(css:parse-stylesheet(.))"/>
         <xsl:variable name="extract-styles" as="element(css:rule)*"
                       select="$style/self::css:rule[@selector[not(matches(.,'^&amp;::table-by\(.+\)$') or
                                                                   .=('&amp;::list-item',

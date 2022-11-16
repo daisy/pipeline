@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -20,7 +21,7 @@
     </xsl:template>
     
     <xsl:template match="@style">
-        <xsl:variable name="rules" as="element(css:rule)*" select="css:parse-stylesheet(string(.))"/>
+        <xsl:variable name="rules" as="element(css:rule)*" select="s:toXml(css:parse-stylesheet(string(.)))"/>
         <xsl:variable name="properties" as="element(css:property)*" select="$rules[not(@selector)]/css:property"/>
         <!--
             filter

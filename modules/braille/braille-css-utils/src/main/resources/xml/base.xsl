@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:re="regex-utils"
                 xmlns:java="implemented-in-java"
                 exclude-result-prefixes="#all"
@@ -116,7 +117,7 @@
             <p>Return value is a `Style` item.</p>
         </desc>
     </doc>
-    <java:function name="css:parse-stylesheet" as="element()*"> <!-- element(css:rule|css:property)* -->
+    <java:function name="css:parse-stylesheet" as="item()">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <!--
             Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
@@ -253,7 +254,7 @@
             <xsl:apply-templates select="$context/@css:*[replace(local-name(),'^_','-')=$properties]" mode="css:attribute-as-property"/>
         </xsl:variable>
         <xsl:variable name="declarations" as="element(css:property)*"
-            select="(css:parse-stylesheet($context/@style)/self::css:rule[not(@selector)][last()]/css:property,
+            select="(s:toXml(css:parse-stylesheet($context/@style))/self::css:rule[not(@selector)][last()]/css:property,
                      $declarations)"/>
         <xsl:variable name="declarations" as="element(css:property)*"
             select="if ('#all'=$properties) then $declarations else $declarations[@name=$properties and not(@name='#all')]"/>
@@ -649,7 +650,7 @@
                     <xsl:when test="$last-set
                                     intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
                         <xsl:variable name="value" as="element(css:string-set)?"
-                                      select="css:parse-stylesheet($last-set/@css:string-set)/css:string-set
+                                      select="s:toXml(css:parse-stylesheet($last-set/@css:string-set))/css:string-set
                                               [@name=$name][last()]"/>
                         <xsl:choose>
                             <xsl:when test="exists($value)">
@@ -676,7 +677,7 @@
             </xsl:when>
             <xsl:when test="$last-set">
                 <xsl:variable name="value" as="element(css:string-set)?"
-                              select="css:parse-stylesheet($last-set/@css:string-set)/css:string-set
+                              select="s:toXml(css:parse-stylesheet($last-set/@css:string-set))/css:string-set
                                       [@name=$name][last()]"/>
                 <xsl:choose>
                     <xsl:when test="exists($value)">
@@ -691,6 +692,15 @@
                 </xsl:choose>
             </xsl:when>
         </xsl:choose>
+    </xsl:function>
+    
+    <!--
+        for unit tests
+    -->
+    
+    <xsl:function name="css:parse-stylesheet-to-xml" as="element()*"> <!-- element(css:rule|css:property)* -->
+        <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
+        <xsl:sequence select="s:toXml(css:parse-stylesheet($stylesheet))"/>
     </xsl:function>
     
 </xsl:stylesheet>

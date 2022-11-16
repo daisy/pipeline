@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -18,7 +19,7 @@
             <xsl:if test="@css:string-set!='none'">
                 <xsl:variable name="evaluated-string-set" as="element(css:property)*">
                     <xsl:variable name="context" as="element()" select="."/>
-                    <xsl:for-each select="css:parse-stylesheet(@css:string-set)">
+                    <xsl:for-each select="s:toXml(css:parse-stylesheet(@css:string-set))">
                         <xsl:copy>
                             <xsl:sequence select="@*"/>
                             <xsl:apply-templates mode="string-set" select="css:string-set">

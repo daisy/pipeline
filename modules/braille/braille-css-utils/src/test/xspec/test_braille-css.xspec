@@ -104,7 +104,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_04">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'orphans: 3; @page { size: 40 25;}   display:block'"/>
 		</x:call>
 		<x:expect label="result">
@@ -118,7 +118,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_05">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'@volume { min-length: 20; max-length: 100; } @volume:nth(2) { max-length: 50; }'"/>
 		</x:call>
 		<x:expect label="result">
@@ -135,7 +135,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_06">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'display:block
 			                 &amp;::before { content: &quot; } &quot; -obfl-evaluate(&quot;''\A''&quot;) }
 			                 @page { size: 40 25 @top-right { content: &quot; } &quot; }}
@@ -221,7 +221,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_07">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'&amp;::before { display: block }
 			                  &amp;::before::before { display: block }
 			                  &amp;::before::before::before { display: block }'"/>
@@ -244,7 +244,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_08">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'@page { size: 15 15; @bottom-right { content: counter(braille-page, lower-roman) }'"/>
 		</x:call>
 		<x:expect label="result">
@@ -252,7 +252,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_09">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="/*/@style">
 				<pagenum value="1" style="  display: none;  string-set : print-page attr(value) ;  "/>
 			</x:param>
@@ -270,7 +270,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_10">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="//a/@css:content">
 				<doc>
 					<a ref="#foo"
@@ -292,7 +292,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_11">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="/*/@css:string-set">
 				<doc num="1" css:string-set="print-page &quot;page &quot; attr(num), running-header &quot;'foo'&quot;"/>
 			</x:param>
@@ -311,7 +311,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_12">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="/*/@css:counter-set">
 				<doc css:counter-set="foo 2 bar"/>
 			</x:param>
@@ -661,7 +661,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_32">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="/a/@style">
 				<a href="#foo"
 				   style="display:block
@@ -758,7 +758,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_33">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'@page { size: 32 27; @bottom-center { content: none } @bottom-left { content: none } }'"/>
 		</x:call>
 		<x:expect label="result">
@@ -883,7 +883,7 @@
 	</x:scenario>
 	
 	<x:scenario label="test_37">
-		<x:call function="css:parse-stylesheet">
+		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="'string-set: print-page content(), foo &quot;''bar''&quot;;'"/>
 		</x:call>
 		<x:expect label="result">
