@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -124,7 +125,7 @@
                                 <!-- merge @style and @css:_obfl-alternate-scenario* -->
                                 <xsl:attribute name="style" select="css:serialize-stylesheet(
                                                                       for $s in $style return
-                                                                        css:parse-stylesheet($s))"/>
+                                                                        s:toXml(css:parse-stylesheet($s)))"/>
                             </xsl:otherwise>
                         </xsl:choose>
                         <!-- skip all css:* attributes except property attributes but including css:flow

@@ -43,6 +43,10 @@
       <artifactId>commons-io</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
@@ -70,6 +74,7 @@
       org.daisy.pipeline.braille.css.impl.BrailleCssCascader,
       org.daisy.pipeline.braille.css.calabash.impl.CssShiftIdStep$Provider,
       org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
+      org.daisy.pipeline.braille.css.saxon.impl.StyleFunctionProvider,
       org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition,
       org.daisy.pipeline.braille.css.saxon.impl.RenderTableByDefinition
     </expose-services>
