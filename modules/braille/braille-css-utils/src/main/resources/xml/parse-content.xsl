@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -27,7 +28,7 @@
         <xsl:copy>
             <xsl:sequence select="@* except @css:content"/>
             <xsl:apply-templates select="css:before"/>
-            <xsl:apply-templates mode="content-list" select="css:parse-stylesheet(@css:content)/*"/>
+            <xsl:apply-templates mode="content-list" select="s:toXml(css:parse-stylesheet(@css:content))/*"/>
             <xsl:apply-templates select="css:after"/>
         </xsl:copy>
     </xsl:template>

@@ -9,6 +9,7 @@
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
@@ -313,21 +314,21 @@
                 <xsl:if test="exists($text-transforms) and not(string($text-transforms)='')">
                     <dp2:css-text-transform-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($text-transforms),(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet(s:toXml(css:parse-stylesheet($text-transforms)),(),1,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-text-transform-definitions>
                 </xsl:if>
                 <xsl:if test="exists($hyphenation-resources) and not(string($hyphenation-resources)='')">
                      <dp2:css-hyphenation-resource-definitions>
                          <xsl:text>&#xa;</xsl:text>
-                         <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($hyphenation-resources),(),1,'    ')"/>
+                         <xsl:value-of select="css:serialize-stylesheet(s:toXml(css:parse-stylesheet($hyphenation-resources)),(),1,'    ')"/>
                          <xsl:text>&#xa;</xsl:text>
                      </dp2:css-hyphenation-resource-definitions>
                  </xsl:if>
                 <xsl:if test="exists($counter-styles) and not(string($counter-styles)='')">
                     <dp2:css-counter-style-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet(css:parse-stylesheet($counter-styles),(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet(s:toXml(css:parse-stylesheet($counter-styles)),(),1,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-counter-style-definitions>
                 </xsl:if>
@@ -446,7 +447,7 @@
                                                 </xsl:variable>
                                                 <xsl:variable name="counter-set" as="element(css:counter-set)*"
                                                               select="($volume-area-counter-set,
-                                                                       current-group()[1]/@css:counter-set/css:parse-stylesheet(.)/css:counter-set)"/>
+                                                                       current-group()[1]/@css:counter-set/s:toXml(css:parse-stylesheet(.))/css:counter-set)"/>
                                                 <xsl:if test="$counter-set[not(@name=$page-counter-name)]">
                                                     <xsl:message terminate="yes">
                                                         <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$page-counter-name)][1]"/>
@@ -616,7 +617,7 @@
         -->
         <xsl:variable name="volume-transition-rule" as="element(css:rule)?">
             <xsl:if test="exists($volume-transition)">
-                <xsl:sequence select="css:parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }'))"/>
+                <xsl:sequence select="s:toXml(css:parse-stylesheet(concat('@-obfl-volume-transition { ',$volume-transition,' }')))"/>
             </xsl:if>
         </xsl:variable>
         <xsl:variable name="volume-transition-rule" as="element(css:rule)?">
@@ -629,7 +630,7 @@
                             <!--
                                 validate properties and parse content property
                             -->
-                            <xsl:sequence select="css:parse-stylesheet(css:serialize-stylesheet(css:property))/css:property"/>
+                            <xsl:sequence select="s:toXml(css:parse-stylesheet(css:serialize-stylesheet(css:property)))/css:property"/>
                         </xsl:copy>
                     </xsl:for-each>
                 </xsl:copy>
@@ -795,7 +796,7 @@
                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
                         <sequence css:page="{$page-style/@serialized}">
                             <xsl:variable name="counter-set" as="element(css:counter-set)*"
-                                          select="current-group()[1]/@css:counter-set/css:parse-stylesheet(.)/css:counter-set"/>
+                                          select="current-group()[1]/@css:counter-set/s:toXml(css:parse-stylesheet(.))/css:counter-set"/>
                             <xsl:if test="$counter-set[not(@name=$page-counter-name)]">
                                 <xsl:message terminate="yes">
                                     <xsl:apply-templates mode="css:serialize" select="$counter-set[not(@name=$page-counter-name)][1]"/>
@@ -1857,7 +1858,7 @@
     
     <xsl:template mode="block-attr"
                   match="css:box[@type='block']/@css:top-of-page">
-        <xsl:variable name="style" as="element(css:rule)*" select="css:parse-stylesheet(.)"/>
+        <xsl:variable name="style" as="element(css:rule)*" select="s:toXml(css:parse-stylesheet(.))"/>
         <xsl:choose>
             <xsl:when test="$style[not(@selector)]/css:property[@name='display']/@value='none'">
                 <xsl:attribute name="display-when" select="'(! $starts-at-top-of-page)'"/>
@@ -2594,7 +2595,7 @@
                                 not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                          //@css:string-set">
         <block>
-            <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
+            <xsl:for-each select="s:toXml(css:parse-stylesheet(.))/css:string-set">
                 <xsl:variable name="value" as="xs:string*">
                     <xsl:apply-templates mode="css:eval-string-set" select="*"/>
                 </xsl:variable>
@@ -2612,7 +2613,7 @@
                   match="css:box[@type='inline']/@css:string-set|
                          css:box[@type='inline']/css:_/@css:string-set|
                          css:_/css:_/@css:string-set">
-        <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
+        <xsl:for-each select="s:toXml(css:parse-stylesheet(.))/css:string-set">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
@@ -2627,7 +2628,7 @@
                   match="css:box[@type='inline']/@css:string-set|
                          css:box[@type='inline']/css:_/@css:string-set|
                          css:_/css:_/@css:string-set">
-        <xsl:for-each select="css:parse-stylesheet(.)/css:string-set">
+        <xsl:for-each select="s:toXml(css:parse-stylesheet(.))/css:string-set">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="*"/>
             </xsl:variable>
