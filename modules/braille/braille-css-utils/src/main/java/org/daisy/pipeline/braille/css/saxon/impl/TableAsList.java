@@ -56,6 +56,7 @@ import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeElement;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 public class TableAsList extends SingleInSingleOutXMLTransformer {
@@ -169,7 +170,11 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 							// FIXME: if (non-default) block-level style present, warn that style is ignored
 							// FIXME: We assume that not both a tbody/thead/tfoot and a child tr have a text-transform property,
 							// because two text-transform properties can not always simply be replaced with a single one.
-							inheritedStyle.push(new SimpleInlineStyle(style, inheritedStyle.isEmpty() ? null : inheritedStyle.peek()));
+							if (style == null) style = "";
+							SimpleInlineStyle s = new CSSStyledText("x", style).getStyle();
+							if (!inheritedStyle.isEmpty())
+								s = s.inheritFrom(inheritedStyle.peek()).concretize();
+							inheritedStyle.push(s);
 							String lang = null; {
 								for (int i = 0; i < reader.getAttributeCount(); i++) {
 									if (XML_LANG.equals(reader.getAttributeName(i))) {
@@ -196,7 +201,10 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 									if (_STYLE.equals(reader.getAttributeName(i))) {
 										style = reader.getAttributeValue(i);
 										break; }}}
-							withinCell.style = new SimpleInlineStyle(style, inheritedStyle.isEmpty() ? null : inheritedStyle.peek());
+							if (style == null) style = "";
+							withinCell.style = new CSSStyledText("x", style).getStyle();
+							if (!inheritedStyle.isEmpty())
+								withinCell.style = withinCell.style.inheritFrom(inheritedStyle.peek()).concretize();
 							withinCell.lang = inheritedLang.isEmpty() ? null : inheritedLang.peek();
 							writeActions = withinCell.content; }
 						else {

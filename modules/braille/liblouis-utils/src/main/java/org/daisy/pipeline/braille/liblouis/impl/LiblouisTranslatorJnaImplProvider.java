@@ -1554,7 +1554,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return hyphenator.transform(text);
 		}
 		
-		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+		private final static SimpleInlineStyle HYPHENS_AUTO = new CSSStyledText("x", "hyphens: auto").getStyle();
 		
 		public byte[] hyphenate(String text, Locale language) {
 			return extractHyphens(
