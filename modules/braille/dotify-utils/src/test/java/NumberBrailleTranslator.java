@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +8,7 @@ import com.google.common.base.Optional;
 import static com.google.common.collect.Iterables.size;
 
 import cz.vutbr.web.css.CSSProperty;
+import cz.vutbr.web.css.TermIdent;
 
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
@@ -102,7 +104,7 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 				noTransform = true;
 				style.removeProperty("text-transform");
 			} else if (textTransform == TextTransform.list_values
-			           && style.getValue("text-transform").toString().equals("downshift")) {
+			           && ((List<TermIdent>)style.getValue("text-transform")).get(0).getValue().equals("downshift")) {
 				downShift = true;
 				style.removeProperty("text-transform");
 			}
