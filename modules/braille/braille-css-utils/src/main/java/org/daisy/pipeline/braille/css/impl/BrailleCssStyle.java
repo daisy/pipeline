@@ -2,21 +2,16 @@ package org.daisy.pipeline.braille.css.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.concurrent.TimeUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.google.common.cache.CacheBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import cz.vutbr.web.css.CSSProperty;
-import cz.vutbr.web.css.CSSProperty.CounterIncrement;
-import cz.vutbr.web.css.CSSProperty.CounterSet;
-import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
@@ -27,7 +22,6 @@ import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.SelectorPart;
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermList;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
@@ -48,7 +42,7 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.VendorAtRule;
-import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.DeepDeclarationTransformer;
 
 import org.w3c.dom.Element;
 
@@ -59,7 +53,7 @@ import org.w3c.dom.Element;
  */
 public final class BrailleCssStyle implements Cloneable {
 
-	// these fields need to be package private because they are used in BrailleCssSerializer
+	// these fields need to be package private because they are used in BrailleCssSerializer and BrailleCssParser
 	// note that even though the declarations are assumed to not change, we don't assume they are unmodifiable
 	Iterable<? extends Declaration> declarations;
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
@@ -151,6 +145,8 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	private Iterable<? extends Declaration> copyDeclarations() {
 		if (declarations instanceof SimpleInlineStyle)
+			// make sure that declarations field stays a SimpleInlineStyle object because
+			// it is assumed throughout the code
 			return (SimpleInlineStyle)((SimpleInlineStyle)declarations).clone();
 		else {
 			List<Declaration> declarationsCopy = new ArrayList<>();
@@ -177,11 +173,11 @@ public final class BrailleCssStyle implements Cloneable {
 			serialized = toString(this);
 			// cache
 			if (context != null) // context not set if caching is not allowed
-				cache.put(context, serialized, this);
+				BrailleCssParser.cache.put(context, serialized, this);
 		} else {
 			// access cache to keep entry longer in it
 			if (context != null)
-				cache.get(context, serialized);
+				BrailleCssParser.cache.get(context, serialized);
 		}
 		return serialized;
 	}
@@ -567,10 +563,10 @@ public final class BrailleCssStyle implements Cloneable {
 	public static BrailleCssStyle of(String inlineStyle, Context context) {
 		if (context == null)
 			throw new IllegalArgumentException();
-		BrailleCssStyle s = cache.get(context, inlineStyle);
+		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle);
 		if (s == null) {
 			s = of(new InlineStyle(inlineStyle, context), context);
-			cache.put(context, inlineStyle, s);
+			BrailleCssParser.cache.put(context, inlineStyle, s);
 		}
 		return s;
 	}
@@ -578,58 +574,6 @@ public final class BrailleCssStyle implements Cloneable {
 	// note that this BrailleCssStyle will never be cached because the context is unknown
 	public static BrailleCssStyle of(String selector, BrailleCssStyle style) {
 		return new Builder().add(selector, style).build();
-	}
-
-	private final static Cache cache = new Cache();
-
-	private static class Cache {
-
-		private final Map<CacheKey,BrailleCssStyle> cache = CacheBuilder.newBuilder()
-		                                                                .expireAfterAccess(60, TimeUnit.SECONDS)
-		                                                                .<CacheKey,BrailleCssStyle>build()
-		                                                                .asMap();
-
-		void put(Context context, String serializedStyle, BrailleCssStyle style) {
-			CacheKey key = new CacheKey(context, serializedStyle);
-			cache.put(key, style);
-		}
-
-		BrailleCssStyle get(Context context, String serializedStyle) {
-			CacheKey key = new CacheKey(context, serializedStyle);
-			return cache.get(key);
-		}
-
-		private static class CacheKey implements Comparable<CacheKey> {
-			private final Context context;
-			private final String style;
-			public CacheKey(Context context, String style) {
-				this.context = context;
-				this.style = style;
-			}
-			public int compareTo(CacheKey that) {
-				int i = this.context.compareTo(that.context);
-				if (i != 0)
-					return i;
-				return this.style.compareTo(that.style);
-			}
-			public int hashCode() {
-				final int prime = 31;
-				int hash = 1;
-				hash = prime * hash + context.hashCode();
-				hash = prime * hash + style.hashCode();
-				return hash;
-			}
-			public boolean equals(Object o) {
-				if (o == null)
-					return false;
-				if (!(o instanceof CacheKey))
-					return false;
-				CacheKey that = (CacheKey)o;
-				if (this.context != that.context)
-					return false;
-				return this.style.equals(that.style);
-			}
-		}
 	}
 
 	private static final Comparator<String> sortSelectors = new Comparator<String>() {
@@ -720,80 +664,4 @@ public final class BrailleCssStyle implements Cloneable {
 
 	private static final SupportedBrailleCSS DEFAULT_VALIDATOR = new DeepDeclarationTransformer(true, false);
 
-	private static class DeepDeclarationTransformer extends SupportedBrailleCSS {
-
-		private DeepDeclarationTransformer(boolean allowComponentProperties, boolean allowShorthandProperties) {
-			super(allowComponentProperties, allowShorthandProperties);
-		}
-
-		@Override
-		public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
-			if ("content".equalsIgnoreCase(d.getProperty())) {
-				if (super.processContent(d, properties, values)) {
-					if (properties.get("content") == Content.content_list) {
-						Term<?> value = values.get("content");
-						if (value instanceof TermList) {
-							ContentList l = ContentList.of((TermList)value);
-							for (Term<?> t : l)
-								if (t instanceof ContentFunction && !((ContentFunction)t).target.isPresent())
-									throw new IllegalArgumentException("unexpected term in content list: " + t);
-							values.put("content", l);
-						} else
-							throw new IllegalStateException(); // should not happen
-					}
-					return true;
-				} else
-					return false;
-			} else if ("string-set".equalsIgnoreCase(d.getProperty())) {
-				if (super.processStringSet(d, properties, values)) {
-					if (properties.get("string-set") == StringSet.list_values) {
-						Term<?> value = values.get("string-set");
-						if (value instanceof TermList)
-							values.put("string-set", StringSetList.of((TermList)value));
-						else
-							throw new IllegalStateException(); // should not happen
-					}
-					return true;
-				} else
-					return false;
-			} else if ("counter-set".equalsIgnoreCase(d.getProperty())) {
-				if (super.processCounterSet(d, properties, values)) {
-					if (properties.get("counter-set") == CounterSet.list_values) {
-						Term<?> value = values.get("counter-set");
-						if (value instanceof TermList)
-							values.put("counter-set", CounterSetList.of((TermList)value));
-						else
-							throw new IllegalStateException(); // should not happen
-					}
-					return true;
-				} else
-					return false;
-			} else if ("counter-reset".equalsIgnoreCase(d.getProperty())) {
-				if (super.processCounterReset(d, properties, values)) {
-					if (properties.get("counter-reset") == CounterReset.list_values) {
-						Term<?> value = values.get("counter-reset");
-						if (value instanceof TermList)
-							values.put("counter-reset", CounterSetList.of((TermList)value));
-						else
-							throw new IllegalStateException(); // should not happen
-					}
-					return true;
-				} else
-					return false;
-			} else if ("counter-increment".equalsIgnoreCase(d.getProperty())) {
-				if (super.processCounterIncrement(d, properties, values)) {
-					if (properties.get("counter-increment") == CounterIncrement.list_values) {
-						Term<?> value = values.get("counter-increment");
-						if (value instanceof TermList)
-							values.put("counter-increment", CounterSetList.of((TermList)value));
-						else
-							throw new IllegalStateException(); // should not happen
-					}
-					return true;
-				} else
-					return false;
-			} else
-				return super.parseDeclaration(d, properties, values);
-		}
-	}
 }

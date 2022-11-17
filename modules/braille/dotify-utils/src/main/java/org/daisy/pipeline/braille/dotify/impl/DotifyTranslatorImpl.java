@@ -131,7 +131,7 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		}
 	};
 	
-	private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+	private final static SimpleInlineStyle HYPHENS_AUTO = new CSSStyledText("x", "hyphens: auto").getStyle();
 	
 	private String transform(String text, boolean hyphenate) {
 		if (hyphenate && !hyphenating)
