@@ -1,19 +1,18 @@
 package org.daisy.pipeline.braille.css;
 
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.function.Function;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.lang.reflect.InvocationTargetException;
 
 import org.daisy.braille.css.SimpleInlineStyle;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 /**
  * Note that <code>CSSStyledText</code> objects are not immutable because {@link SimpleInlineStyle}
- * is mutable (due to {@link SimpleInlineStyle#removeProperty(String)} and {@link
- * SimpleInlineStyle#iterator()} methods).
+ * is mutable (due to the {@link SimpleInlineStyle#removeProperty(String)} and {@link
+ * SimpleInlineStyle#iterator()} methods and because the {@link cz.vutbr.web.css.Term} and {@link
+ * cz.vutbr.web.css.Declaration} objects are not immutable).
  */
 public class CSSStyledText implements Cloneable {
 	
@@ -21,8 +20,6 @@ public class CSSStyledText implements Cloneable {
 	private final Locale language;
 	private Map<String,String> textAttributes;
 	private SimpleInlineStyle style;
-	
-	private static final Function<String,SimpleInlineStyle> parseCSS = memoize(SimpleInlineStyle::new);
 	
 	public CSSStyledText(String text, SimpleInlineStyle style) {
 		this(text, style, null, null);
@@ -60,7 +57,7 @@ public class CSSStyledText implements Cloneable {
 		if (style == null)
 			this.style = null;
 		else
-			this.style = parseCSS.apply(style);
+			this.style = BrailleCssParser.parseSimpleInlineStyle(style);
 		this.language = language;
 		this.textAttributes = textAttributes;
 	}
@@ -153,34 +150,5 @@ public class CSSStyledText implements Cloneable {
 		hash = prime * hash + (textAttributes == null ? 0 : textAttributes.hashCode());
 		hash = prime * hash + (style == null ? 0 : style.hashCode());
 		return hash;
-	}
-
-	private static <K extends Comparable,V extends Cloneable> Function<K,V> memoize(Function<K,V> function) {
-		// Note: we should be careful not to use this function in such a way that the cache can keep growing.
-		Map<K,V> cache = new ConcurrentSkipListMap<K,V>();
-		return new Function<K,V>() {
-			public V apply(K key) {
-				V value;
-				if (cache.containsKey(key))
-					value = cache.get(key);
-				else {
-					value = function.apply(key);
-					if (value != null)
-						cache.put(key, value); }
-				if (value == null)
-					return null;
-				else {
-					try {
-						return (V)value.getClass().getMethod("clone").invoke(value); }
-					catch (IllegalAccessException
-					       | IllegalArgumentException
-					       | InvocationTargetException
-					       | NoSuchMethodException
-					       | SecurityException e) {
-						throw new RuntimeException("Could not invoke clone() method", e);
-					}
-				}
-			}
-		};
 	}
 }
