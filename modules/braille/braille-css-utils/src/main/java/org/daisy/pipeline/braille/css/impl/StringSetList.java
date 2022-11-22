@@ -145,8 +145,8 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 	 * Evaluate <code>attr()</code> values.
 	 *
 	 * This method is mutating, but we can still say that the object is immutable because the method
-	 * is package private and only used by {@link BrailleCssStyle} _before_ the object is made
-	 * available.
+	 * is package private and only used by {@link BrailleCssStyle} and {@link BrailleCssParser}
+	 * _before_ the object is made available.
 	 */
 	void evaluate(Element context) {
 		for (int i = 0; i < list.size(); i++)

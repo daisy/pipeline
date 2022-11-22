@@ -4,25 +4,30 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
-import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.xpath.Style;
 
 public class Declaration implements Style {
 
-	private final BrailleCssStyle declaration;
+	public final static Declaration EMPTY = new Declaration(null);
 
-	public Declaration(BrailleCssStyle declaration) {
+	private final cz.vutbr.web.css.Declaration declaration;
+
+	public Declaration(cz.vutbr.web.css.Declaration declaration) {
 		this.declaration = declaration;
 	}
 
 	@Override
 	public String toString() {
-		return declaration.toString();
+		if (declaration != null)
+			return BrailleCssSerializer.toString(declaration);
+		else
+			return "";
 	}
 
 	@Override
 	public void toXml(XMLStreamWriter writer) throws XMLStreamException {
-		// <css:property>
-		BrailleCssSerializer.toXml(declaration, writer, true);
+		if (declaration != null)
+			// <css:property>
+			BrailleCssSerializer.toXml(declaration, writer);
 	}
 }

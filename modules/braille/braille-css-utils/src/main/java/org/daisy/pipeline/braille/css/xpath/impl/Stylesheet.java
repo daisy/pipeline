@@ -20,7 +20,7 @@ public class Stylesheet implements Style {
 	@Override
 	public String toString() {
 		if (style != null)
-			return style.toString();
+			return BrailleCssSerializer.toString(style);
 		else
 			return "";
 	}

@@ -2,6 +2,8 @@ package org.daisy.pipeline.braille.css.impl;
 
 import java.util.concurrent.TimeUnit;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.google.common.cache.CacheBuilder;
 
@@ -21,11 +23,33 @@ import org.daisy.braille.css.SupportedBrailleCSS;
 
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
+import org.w3c.dom.Element;
+
 public class BrailleCssParser {
 
 	private BrailleCssParser() {}
 
-	public static SimpleInlineStyle parseSimpleInlineStyle(String style) {
+	/**
+	 * Style assumed to be specified in the context of a (pseudo-)element.
+	 *
+	 * @param context element for evaluating attr() values against.
+	 * @param mutable Whether the caller wishes to mutate the returned declaration.
+	 */
+	public static Optional<Declaration> parseDeclaration(String property, String value, Element context, boolean mutable) {
+		String style = String.format("%s: %s", property, value);
+		try {
+			return Optional.of(parseSimpleInlineStyle(style, context, mutable).iterator().next());
+		} catch (NoSuchElementException e) {
+			return Optional.empty();
+		}
+	}
+
+	/**
+	 * @param style assumed to be specified in the context of a (pseudo-)element
+	 * @param context element for evaluating attr() values against.
+	 * @param mutable Whether the caller wishes to mutate the returned style object.
+	 */
+	public static SimpleInlineStyle parseSimpleInlineStyle(String style, Element context, boolean mutable) {
 		BrailleCssStyle s = BrailleCssStyle.of(style, Context.ELEMENT);
 		if (s.nestedStyles != null)
 			throw new IllegalArgumentException("not a simple inline style");
@@ -33,10 +57,13 @@ public class BrailleCssParser {
 			return SimpleInlineStyle.EMPTY;
 		if (!(s.declarations instanceof SimpleInlineStyle))
 			throw new IllegalStateException(); // coding error
-		SimpleInlineStyle ss = (SimpleInlineStyle)s.declarations;
-		// we clone the SimpleInlineStyle objects because SimpleInlineStyle is mutable (and needs to be)
-		ss = (SimpleInlineStyle)ss.clone();
-		return ss;
+		// evaluate attr() values in content and string-set properties
+		BrailleCssStyle evaluated = context != null ? s.evaluate(context) : s;
+		SimpleInlineStyle declarations = (SimpleInlineStyle)evaluated.declarations;
+		if (mutable && evaluated == s) {
+			return (SimpleInlineStyle)declarations.clone();
+		}
+		return declarations;
 	}
 
 	/* =================================================================== */
