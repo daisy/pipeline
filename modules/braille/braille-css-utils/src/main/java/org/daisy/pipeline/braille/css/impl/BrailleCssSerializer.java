@@ -323,9 +323,9 @@ public final class BrailleCssSerializer {
 		toXml(style, writer, false);
 	}
 
-	public static void toXml(BrailleCssStyle style,
-	                         XMLStreamWriter w,
-	                         boolean recursive) throws XMLStreamException {
+	private static void toXml(BrailleCssStyle style,
+	                          XMLStreamWriter w,
+	                          boolean recursive) throws XMLStreamException {
 		if (style.declarations != null) {
 			if (!recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
