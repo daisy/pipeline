@@ -32,15 +32,15 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			parentStyle);
 	}
 	
-	public SimpleInlineStyle(List<Declaration> declarations) {
+	public SimpleInlineStyle(Iterable<? extends Declaration> declarations) {
 		this(declarations, null);
 	}
 	
-	public SimpleInlineStyle(List<Declaration> declarations, SimpleInlineStyle parentStyle) {
+	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle) {
 		this(declarations, parentStyle, transformerInstance, cssInstance);
 	}
 	
-	public SimpleInlineStyle(List<Declaration> declarations, SimpleInlineStyle parentStyle,
+	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle,
 	                         DeclarationTransformer transformer, SupportedCSS css) {
 		super(transformer, css);
 		if (declarations != null)
