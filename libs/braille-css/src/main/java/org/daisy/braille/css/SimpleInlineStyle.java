@@ -45,9 +45,9 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		super(transformer, css);
 		if (declarations != null)
 			for (Declaration d : declarations)
-				push(d);
+				super.push(d);
 		if (parentStyle != null)
-			inheritFrom(parentStyle);
+			super.inheritFrom(parentStyle);
 	}
 	
 	public Term<?> getValue(String name) {
@@ -134,5 +134,20 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public NodeData push(Declaration d) {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public NodeData inheritFrom(NodeData parent) throws ClassCastException {
+		throw new UnsupportedOperationException();
+	}
+	
+	@Override
+	public NodeData concretize() {
+		throw new UnsupportedOperationException();
 	}
 }
