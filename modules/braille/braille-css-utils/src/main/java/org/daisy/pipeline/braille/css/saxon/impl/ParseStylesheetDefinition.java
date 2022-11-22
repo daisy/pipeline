@@ -1,7 +1,10 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
+import java.util.Optional;
+
 import javax.xml.namespace.QName;
 
+import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.SupportedCSS;
 
 import net.sf.saxon.dom.ElementOverNodeInfo;
@@ -19,6 +22,7 @@ import net.sf.saxon.value.SequenceType;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.xpath.impl.DeclarationStyle;
 import org.daisy.pipeline.braille.css.xpath.impl.FullStyle;
@@ -77,8 +81,6 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 
 	private static Style parse(String argStringValue, boolean argIsAttr, QName attrName, Element context) {
 		Context styleCtxt = Context.ELEMENT;
-		String styleAsString = argStringValue;
-		boolean returnSingleProperty = false;
 		if (argIsAttr) {
 			if (XMLNS_CSS.equals(attrName.getNamespaceURI())) {
 				String name = attrName.getLocalPart().replaceAll("^_", "-");
@@ -93,21 +95,25 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 				} else if ("counter-style".equals(name)) {
 					styleCtxt = Context.COUNTER_STYLE;
 				} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
-					returnSingleProperty = true;
-					styleAsString = name + ": " + argStringValue;
+					// assuming that context is a (pseudo-)element
+					// not assuming that attr() values have already been evaluated (although normally they will)
+					Optional<Declaration> declaration = BrailleCssParser.parseDeclaration(name, argStringValue, context, false);
+					if (declaration.isPresent())
+						return new DeclarationStyle(declaration.get());
+					else
+						return DeclarationStyle.EMPTY;
 				}
 			}
 		}
-		BrailleCssStyle style = BrailleCssStyle.of(styleAsString, styleCtxt);
+		BrailleCssStyle style = BrailleCssStyle.of(argStringValue, styleCtxt);
+		if (style.isEmpty())
+			return FullStyle.EMPTY;
 		if (argIsAttr)
 			if (styleCtxt == Context.ELEMENT)
 				style = style.evaluate(context);
 			else
 				style = BrailleCssStyle.of("@" + attrName.getLocalPart(), style);
-		if (returnSingleProperty)
-			return new DeclarationStyle(style);
-		else
-			return new FullStyle(style);
+		return new FullStyle(style);
 	}
 
 	private static final ObjectValue<Style> EMPTY = new ObjectValue<>(FullStyle.EMPTY);

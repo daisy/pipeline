@@ -57,7 +57,8 @@ public class CSSStyledText implements Cloneable {
 		if (style == null)
 			this.style = null;
 		else
-			this.style = BrailleCssParser.parseSimpleInlineStyle(style);
+			// clone because we make SimpleInlineStyle available and SimpleInlineStyle is mutable (and we want it to be)
+			this.style = BrailleCssParser.parseSimpleInlineStyle(style, null, true);
 		this.language = language;
 		this.textAttributes = textAttributes;
 	}
