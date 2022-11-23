@@ -21,7 +21,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	private Term<?> declaration; // not final for clone()
 	private final Declaration sourceDeclaration;
 	
-	PropertyValue(String propertyName, final CSSProperty property, Term<?> value, Declaration sourceDeclaration) {
+	protected PropertyValue(String propertyName, final CSSProperty property, Term<?> value, Declaration sourceDeclaration) {
 		this.propertyName = propertyName;
 		this.property = property;
 		this.value = value;
@@ -33,7 +33,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	private void init() {
 		if (value != null)
 			declaration = value;
-		else if (sourceDeclaration.getProperty().equals(propertyName))
+		else if (sourceDeclaration != null && sourceDeclaration.getProperty().equals(propertyName))
 			declaration = sourceDeclaration.get(0); // assuming sourceDeclaration is a single TermIdent
 		else
 			// repeater and/or variator was applied
@@ -72,12 +72,12 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	
 	@Override
 	public boolean isImportant() {
-		return sourceDeclaration.isImportant();
+		return sourceDeclaration != null ? sourceDeclaration.isImportant() : false;
 	}
 	
 	@Override
 	public SourceLocator getSource() {
-		return sourceDeclaration.getSource();
+		return sourceDeclaration != null ? sourceDeclaration.getSource() : null;
 	}
 	
 	@Override public void setProperty(String p) { throw new UnsupportedOperationException("immutable"); }

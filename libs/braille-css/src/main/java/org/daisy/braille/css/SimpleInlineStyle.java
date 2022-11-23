@@ -73,14 +73,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 				return props.hasNext();
 			}
 			public PropertyValue next() {
-				String prop = props.next();
-				Declaration d = getSourceDeclaration(prop);
-				if (d == null) throw new IllegalStateException(); // can not happen
-				return new PropertyValue(
-					prop,
-					SimpleInlineStyle.this.getProperty(prop),
-					SimpleInlineStyle.this.getValue(prop),
-					d);
+				return SimpleInlineStyle.this.get(props.next());
 			}
 			public void remove() {
 				props.remove();
