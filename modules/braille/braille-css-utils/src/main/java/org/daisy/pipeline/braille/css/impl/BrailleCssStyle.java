@@ -1,7 +1,9 @@
 package org.daisy.pipeline.braille.css.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -242,6 +244,48 @@ public final class BrailleCssStyle implements Cloneable {
 		return declarationMap;
 	}
 
+	public Iterable<String> getPropertyNames() {
+		if (declarations != null)
+			return getDeclarationMap().keySet();
+		else
+			return Collections.emptyList();
+	}
+
+	/**
+	 * Caller must guarantee that the {@link Declaration} objects will not be modified.
+	 */
+	public Iterable<Declaration> getDeclarations() {
+		if (declarations != null)
+			return getDeclarationMap().values();
+		else
+			return Collections.emptyList();
+	}
+
+	public Iterable<String> getSelectors() {
+		if (nestedStyles != null)
+			return nestedStyles.keySet();
+		else
+			return Collections.emptyList();
+	}
+
+	private List<BrailleCssStyle> rules = null;
+
+	public Iterable<BrailleCssStyle> getRules() {
+		if (nestedStyles != null) {
+			synchronized (this) {
+				if (rules == null) {
+					rules = new ArrayList<>();
+					for (Map.Entry<String,BrailleCssStyle> e : nestedStyles.entrySet()) {
+						String selector = e.getKey();
+						rules.add(new Builder(context).add(selector, e.getValue()).build());
+					}
+				}
+			}
+			return rules;
+		} else
+			return Collections.emptyList();
+	}
+
 	/**
 	 * Return the style as a {@link SimpleInlineStyle} object.
 	 *
@@ -301,10 +345,93 @@ public final class BrailleCssStyle implements Cloneable {
 	 * Caller must guarantee that the object will not be modified.
 	 */
 	public Declaration getDeclaration(String propertyName) {
-		if (declarations != null)
-			return getDeclarationMap().get(propertyName);
+		return getDeclaration(propertyName, false);
+	}
+
+	/**
+	 * @param includeInitial Whether to include the initial value if the style does not contain the property.
+	 */
+	public Declaration getDeclaration(String propertyName, boolean includeInitial) {
+		if (declarations != null) {
+			Declaration d = getDeclarationMap().get(propertyName);
+			if (d != null)
+				return d;
+		}
+		if (includeInitial)
+			return getDefaultPropertyValue(propertyName);
+		return null;
+	}
+
+	/**
+	 * Get the nested style for the given selector.
+	 */
+	public BrailleCssStyle getNestedStyle(String selector) {
+		if (nestedStyles != null)
+			return nestedStyles.get(selector);
 		else
 			return null;
+	}
+
+	/**
+	 * Remove declaration if key is a property name, or nested style if key is a selector.
+	 */
+	public BrailleCssStyle remove(String key) {
+		if (getDeclaration(key) != null ||
+			nestedStyles != null && nestedStyles.containsKey(key))
+			return new Builder(this).remove(key).build();
+		else
+			return this;
+	}
+
+	/**
+	 * Add other styles to this style. Properties are overwritten by properties declared in
+	 * following style items.
+	 *
+	 * @param styles objects must be of type {@link BrailleCssStyle} or {@link Declaration}.
+	 */
+	public BrailleCssStyle add(Iterator<Object> styles) {
+		Builder b = null;
+		while (styles.hasNext()) {
+			Object s = styles.next();
+			if (s instanceof BrailleCssStyle) {
+				if (((BrailleCssStyle)s).isEmpty())
+					continue;
+				if (b == null) b = new Builder(this);
+				b.add((BrailleCssStyle)s);
+			} else if (s instanceof Declaration) {
+				if (b == null) b = new Builder(this);
+				Declaration d = (Declaration)s;
+				if (d instanceof PropertyValue)
+					b.add(d, ((PropertyValue)d).getSupportedBrailleCSS());
+				else
+					b.add(d, Optional.empty());
+			} else
+				throw new IllegalArgumentException();
+		}
+		if (b != null)
+			return b.build();
+		else
+			return this;
+	}
+
+	/**
+	 * Add a declaration. If a declaration for the same property already exists, it is overwritten.
+	 */
+	public BrailleCssStyle add(Declaration declaration) {
+		Builder b = new Builder(this);
+		if (declaration instanceof PropertyValue)
+			b.add(declaration, ((PropertyValue)declaration).getSupportedBrailleCSS());
+		else
+			b.add(declaration, Optional.empty());
+		return b.build();
+	}
+
+	/**
+	 * Add a rule. If a rule with the same selector already exists, the rules are merged. Properties
+	 * in the existing rule are overwritten by properties in the new rule.
+	 */
+	public BrailleCssStyle add(String key, BrailleCssStyle nestedStyle) {
+		return new Builder(this).add(key, nestedStyle).build();
 	}
 
 	@Override
@@ -487,6 +614,33 @@ public final class BrailleCssStyle implements Cloneable {
 			return a.equals(b);
 	}
 
+	// cache initial property values (initial according DEFAULT_VALIDATOR)
+	private final static Map<String,PropertyValue> defaultPropertyValues = new TreeMap<>();
+
+	private static PropertyValue getDefaultPropertyValue(String name) {
+		synchronized (defaultPropertyValues) {
+			PropertyValue def = defaultPropertyValues.get(name);
+			if (def == null) {
+				def = new PropertyValue(
+					name,
+					DEFAULT_VALIDATOR.getDefaultProperty(name),
+					DEFAULT_VALIDATOR.getDefaultValue(name),
+					null,
+					DEFAULT_VALIDATOR) {};
+				defaultPropertyValues.put(name, def);
+			}
+			return def;
+		}
+	}
+
+	private static PropertyValue getDefaultPropertyValue(PropertyValue p) {
+		PropertyValue def = p.getDefault();
+		if (def != null)
+			return def;
+		else
+			return getDefaultPropertyValue(p.getProperty());
+	}
+
 	private static class Builder {
 
 		private final Context context;
@@ -634,7 +788,7 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param declaration assumed to not change
 	 */
-	private static BrailleCssStyle of(Declaration declaration, Context context) {
+	public static BrailleCssStyle of(Declaration declaration, Context context) {
 		Builder style = new Builder(context);
 		if (declaration instanceof PropertyValue)
 			style.add(declaration, ((PropertyValue)declaration).getSupportedBrailleCSS());
