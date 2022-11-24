@@ -367,7 +367,7 @@ public final class BrailleCssSerializer {
 			writeAttribute(writer, VALUE, Content.INHERIT.toString());
 		else if (p == Content.content_list) {
 			if (value.getValue() instanceof ContentList)
-				contentListToXml((ContentList)value.getValue(), writer);
+				toXml((ContentList)value.getValue(), writer);
 			else
 				throw new IllegalArgumentException();
 		} else if (p == StringSet.NONE || p == StringSet.INITIAL)
@@ -376,11 +376,7 @@ public final class BrailleCssSerializer {
 			writeAttribute(writer, VALUE, StringSet.INHERIT.toString());
 		else if (p == StringSet.list_values)
 			if (value.getValue() instanceof StringSetList)
-				for (StringSetList.StringSet ss : (StringSetList)value.getValue()) {
-					writeStartElement(writer, CSS_STRING_SET);
-					writeAttribute(writer, NAME, ss.getKey());
-					contentListToXml(ss.getValue(), writer);
-					writer.writeEndElement(); }
+				toXml((StringSetList)value.getValue(), writer);
 			else
 				throw new IllegalArgumentException();
 		else if (p == CounterSet.NONE || p == CounterSet.INITIAL ||
@@ -395,11 +391,7 @@ public final class BrailleCssSerializer {
 		         p == CounterReset.list_values ||
 		         p == CounterIncrement.list_values)
 			if (value.getValue() instanceof CounterSetList)
-				for (CounterSetList.CounterSet ss : (CounterSetList)value.getValue()) {
-					writeStartElement(writer, CSS_COUNTER_SET);
-					writeAttribute(writer, NAME, ss.getKey());
-					writeAttribute(writer, VALUE, "" + ss.getValue());
-					writer.writeEndElement(); }
+				toXml((CounterSetList)value.getValue(), writer);
 			else
 				throw new IllegalArgumentException();
 		else
@@ -407,7 +399,7 @@ public final class BrailleCssSerializer {
 		writer.writeEndElement();
 	}
 
-	private static void contentListToXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
+	public static void toXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
 		for (Term<?> i : list)
 			if (i instanceof TermString || i instanceof TermURI) {
 				Term<String> s = (Term<String>)i;
@@ -503,5 +495,31 @@ public final class BrailleCssSerializer {
 				w.writeEndElement(); }
 			else
 				throw new RuntimeException("coding error");
+	}
+
+	public static void toXml(StringSetList list, XMLStreamWriter w) throws XMLStreamException {
+		for (Term<?> i : list) {
+			if (i instanceof StringSetList.StringSet) {
+				StringSetList.StringSet s = (StringSetList.StringSet)i;
+				writeStartElement(w, CSS_STRING_SET);
+				writeAttribute(w, NAME, s.getKey());
+				toXml(s.getValue(), w);
+				w.writeEndElement(); }
+			else
+				throw new RuntimeException("coding error");
+		}
+	}
+
+	public static void toXml(CounterSetList list, XMLStreamWriter w) throws XMLStreamException {
+		for (Term<?> i : list) {
+			if (i instanceof CounterSetList.CounterSet) {
+				CounterSetList.CounterSet s = (CounterSetList.CounterSet)i;
+				writeStartElement(w, CSS_COUNTER_SET);
+				writeAttribute(w, NAME, s.getKey());
+				writeAttribute(w, VALUE, "" + s.getValue());
+				w.writeEndElement(); }
+			else
+				throw new RuntimeException("coding error");
+		}
 	}
 }

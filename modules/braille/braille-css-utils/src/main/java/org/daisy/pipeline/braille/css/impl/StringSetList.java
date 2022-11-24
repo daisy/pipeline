@@ -12,12 +12,14 @@ import cz.vutbr.web.css.TermString;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
+import org.daisy.braille.css.SupportedBrailleCSS;
+
 import org.w3c.dom.Element;
 
 /**
  * This class is immutable
  */
-public class StringSetList extends AbstractList<StringSetList.StringSet> implements Term<StringSetList> {
+public class StringSetList extends AbstractList<Term<?>> implements Term<StringSetList> {
 
 	/**
 	 * This class is immutable
@@ -68,9 +70,9 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 		}
 	}
 
-	private List<StringSet> list;
+	private List<Term<?>> list;
 
-	private StringSetList(List<StringSet> list) {
+	private StringSetList(List<Term<?>> list) {
 		super();
 		this.list = list;
 	}
@@ -78,15 +80,15 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 	/**
 	 * @param list assumed to not change
 	 */
-	public static StringSetList of(TermList list) throws IllegalArgumentException {
-		List<StringSet> pairs = new ArrayList<>();
+	public static StringSetList of(TermList list, SupportedBrailleCSS css) throws IllegalArgumentException {
+		List<Term<?>> pairs = new ArrayList<>();
 		for (Term<?> t : list) {
 			if (t instanceof TermPair) {
 				TermPair pair = (TermPair)t;
 				Object k = pair.getKey();
 				Object v = pair.getValue();
 				if (k instanceof String && v instanceof TermList)
-					pairs.add(new StringSet((String)k, ContentList.of((TermList)v), t.getOperator()));
+					pairs.add(new StringSet((String)k, ContentList.of((TermList)v, css), t.getOperator()));
 				else
 					throw new IllegalArgumentException("unexpected term in string-set list: " + t);
 			} else
@@ -96,7 +98,7 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 	}
 
 	@Override
-	public StringSet get(int index) {
+	public Term<?> get(int index) {
 		return list.get(index);
 	}
 
@@ -150,6 +152,6 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 	 */
 	void evaluate(Element context) {
 		for (int i = 0; i < list.size(); i++)
-			list.set(i, list.get(i).evaluate(context));
+			list.set(i, ((StringSet)list.get(i)).evaluate(context));
 	}
 }

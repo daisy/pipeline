@@ -7,13 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
 
 /**
  * This class is immutable
  */
-public class CounterSetList extends AbstractList<CounterSetList.CounterSet> implements Term<CounterSetList> {
+public class CounterSetList extends AbstractList<Term<?>> implements Term<CounterSetList> {
 
 	/**
 	 * This class is immutable
@@ -40,9 +39,9 @@ public class CounterSetList extends AbstractList<CounterSetList.CounterSet> impl
 		}
 	}
 
-	private List<CounterSet> list;
+	private List<Term<?>> list;
 
-	private CounterSetList(List<CounterSet> list) {
+	private CounterSetList(List<Term<?>> list) {
 		super();
 		this.list = list;
 	}
@@ -50,7 +49,7 @@ public class CounterSetList extends AbstractList<CounterSetList.CounterSet> impl
 	/**
 	 * @param list assumed to not change
 	 */
-	public static CounterSetList of(TermList list) {
+	public static CounterSetList of(List<Term<?>> list) {
 		Map<String,Integer> pairs = new LinkedHashMap<>(); // preserves order of insertion
 		for (Term<?> t : list) {
 			if (t instanceof TermPair) {
@@ -65,14 +64,14 @@ public class CounterSetList extends AbstractList<CounterSetList.CounterSet> impl
 			} else
 				throw new IllegalArgumentException("unexpected term in counter-set list: " + t);
 		}
-		List<CounterSet> pairsList = new ArrayList();
+		List<Term<?>> pairsList = new ArrayList();
 		for (Map.Entry<String,Integer> e : pairs.entrySet())
 			pairsList.add(new CounterSet(e.getKey(), e.getValue()));
 		return new CounterSetList(pairsList);
 	}
 
 	@Override
-	public CounterSet get(int index) {
+	public Term<?> get(int index) {
 		return list.get(index);
 	}
 

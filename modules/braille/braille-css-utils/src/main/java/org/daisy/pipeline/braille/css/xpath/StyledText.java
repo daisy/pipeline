@@ -24,7 +24,7 @@ public interface StyledText {
 	 */
 	public static Optional<Style> getStyle(CSSStyledText t) {
 		SimpleInlineStyle s = t.getStyle();
-		if (s == null)
+		if (s == null || s.isEmpty())
 			return Optional.empty();
 		return Optional.of(new Stylesheet(BrailleCssStyle.of(s, Context.ELEMENT)));
 	}

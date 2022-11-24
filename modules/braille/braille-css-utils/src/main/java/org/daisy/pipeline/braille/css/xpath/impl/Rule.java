@@ -7,38 +7,45 @@ import java.util.Optional;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import com.google.common.collect.Iterables;
+
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
+import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.xpath.Style;
 
-public class Declaration extends Style {
+public class Rule extends Stylesheet {
 
-	public final cz.vutbr.web.css.Declaration declaration;
+	private final String selector;
 
-	public Declaration(cz.vutbr.web.css.Declaration declaration) {
-		if (declaration == null)
+	/**
+	 * @param rule style with a single nested style
+	 */
+	public Rule(BrailleCssStyle rule) {
+		super(rule);
+		if (rule == null || rule.getPropertyNames().iterator().hasNext())
 			throw new IllegalArgumentException();
-		this.declaration = declaration;
+		this.selector = Iterables.getOnlyElement(rule.getSelectors());
 	}
 
 	@Override
 	protected Iterable<String> keys() {
-		return Collections.singleton(declaration.getProperty());
+		return Collections.singleton(selector);
 	}
 
 	@Override
 	protected Optional<String> property() {
-		return Optional.of(declaration.getProperty());
-	}
-
-	@Override
-	protected Optional<String> selector() {
 		return Optional.empty();
 	}
 
 	@Override
+	protected Optional<String> selector() {
+		return Optional.of(selector);
+	}
+
+	@Override
 	protected Optional<Style> get(String key) {
-		if (declaration.getProperty().equals(key))
-			return Optional.of(new Value(declaration));
+		if (selector.equals(key))
+			return Optional.of(new Stylesheet(style.getNestedStyle(key)));
 		else
 			return Optional.empty();
 	}
@@ -49,15 +56,12 @@ public class Declaration extends Style {
 	}
 
 	@Override
-	protected String toString(Style parent) {
-		if (parent != null)
-			throw new UnsupportedOperationException();
-		return BrailleCssSerializer.toString(declaration);
+	public String toString() {
+		return BrailleCssSerializer.toString(style);
 	}
 
 	@Override
-	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
-		// <css:property>
-		BrailleCssSerializer.toXml(declaration, writer);
+	protected String toString(Style parent) {
+		return toString();
 	}
 }

@@ -252,7 +252,7 @@ public class BrailleCssParser {
 					if (properties.get("content") == Content.content_list) {
 						Term<?> value = values.get("content");
 						if (value instanceof TermList) {
-							ContentList l = ContentList.of((TermList)value);
+							ContentList l = ContentList.of((TermList)value, this);
 							for (Term<?> t : l)
 								if (t instanceof ContentFunction && !((ContentFunction)t).target.isPresent())
 									throw new IllegalArgumentException("unexpected term in content list: " + t);
@@ -268,7 +268,7 @@ public class BrailleCssParser {
 					if (properties.get("string-set") == StringSet.list_values) {
 						Term<?> value = values.get("string-set");
 						if (value instanceof TermList)
-							values.put("string-set", StringSetList.of((TermList)value));
+							values.put("string-set", StringSetList.of((TermList)value, this));
 						else
 							throw new IllegalStateException(); // should not happen
 					}
