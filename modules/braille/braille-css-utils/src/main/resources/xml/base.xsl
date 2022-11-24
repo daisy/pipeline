@@ -114,10 +114,10 @@
             property declaration. `attr()` values in `content` and `string-set` properties are
             evaluated.</p>
             <p>An optional parent style may be specified as a `Style` item().</p>
-            <p>Return value is a `Style` item.</p>
+            <p>Return value is an optional `Style` item.</p>
         </desc>
     </doc>
-    <xsl:function name="css:parse-stylesheet" as="item()">
+    <xsl:function name="css:parse-stylesheet" as="item()?">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:sequence select="ParseStylesheet:parse($stylesheet)"
                       xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
@@ -126,7 +126,7 @@
             -->
         </xsl:sequence>
     </xsl:function>
-    <xsl:function name="css:parse-stylesheet" as="item()">
+    <xsl:function name="css:parse-stylesheet" as="item()?">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:param name="parent" as="item()?"/>
         <xsl:sequence select="ParseStylesheet:parse($stylesheet,$parent)"

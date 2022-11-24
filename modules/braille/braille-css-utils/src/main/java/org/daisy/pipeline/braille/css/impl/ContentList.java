@@ -13,13 +13,13 @@ import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermLengthOrPercent;
-import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.TermStringImpl;
 import cz.vutbr.web.csskit.TermURIImpl;
 
+import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
 
 import org.w3c.dom.Attr;
@@ -31,19 +31,30 @@ import org.w3c.dom.Element;
 public class ContentList extends AbstractList<Term<?>> implements Term<ContentList> {
 
 	private List<Term<?>> list;
+	private final SupportedBrailleCSS css;
 
-	private ContentList(List<Term<?>> list) {
+	private ContentList(List<Term<?>> list, SupportedBrailleCSS css) {
 		super();
 		this.list = list;
+		this.css = css;
 	}
 
 	/**
 	 * @param list assumed to not change
 	 */
-	public static ContentList of(TermList list) {
+	public static ContentList of(List<Term<?>> list, SupportedBrailleCSS css) {
 		List<Term<?>> items = new ArrayList<>();
 		for (Term<?> t : list) {
-			if (t instanceof TermString)
+			if (t instanceof UnmodifiableTermString ||
+			         t instanceof AttrFunction ||
+			         t instanceof ContentFunction ||
+			         t instanceof StringFunction ||
+			         t instanceof CounterFunction ||
+			         t instanceof TextFunction ||
+			         t instanceof LeaderFunction ||
+			         t instanceof FlowFunction)
+				items.add(t);
+			else if (t instanceof TermString)
 				items.add(new UnmodifiableTermString((TermString)t));
 			else if (t instanceof TermFunction) {
 				TermFunction func = (TermFunction)t;
@@ -74,7 +85,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 			} else
 				throw new IllegalArgumentException("unexpected term in content list: " + t);
 		}
-		return new ContentList(items);
+		return new ContentList(items, css);
 	}
 
 	@Override
@@ -121,6 +132,13 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 	@Override
 	public ContentList setOperator(Operator operator) {
 		throw new UnsupportedOperationException("Unmodifiable");
+	}
+
+	/**
+	 * {@link SupportedBrailleCSS} instance that was used to create this {@link ContentList}.
+	 */
+	public SupportedBrailleCSS getSupportedBrailleCSS() {
+		return css;
 	}
 
 	/**

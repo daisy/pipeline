@@ -38,21 +38,21 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 	
 	public static class ParseStylesheet {
 
-		public static Style parse(Optional<Object> style) {
+		public static Optional<Style> parse(Optional<Object> style) {
 			return parse(style.orElse(null), null, false);
 		}
 
-		public static Style parse(Optional<Object> style, Optional<Style> parentStyle) {
+		public static Optional<Style> parse(Optional<Object> style, Optional<Style> parentStyle) {
 			return parse(style.orElse(null), parentStyle.orElse(null), true);
 		}
 
-		private static Style parse(Object style, Style parentStyle, boolean concretizeInherit) {
+		private static Optional<Style> parse(Object style, Style parentStyle, boolean concretizeInherit) {
 			String argStringValue;
 			Attr attr = null;
 			Element element = null;
 			if (style == null) {
 				if (parentStyle == null)
-					return FullStyle.EMPTY;
+					return Optional.empty();
 				else
 					argStringValue = "";
 			} else if (style instanceof Attr) {
@@ -87,9 +87,9 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 						// not assuming that attr() values have already been evaluated (although normally they will)
 						Optional<Declaration> declaration = BrailleCssParser.parseDeclaration(name, argStringValue, element, false);
 						if (declaration.isPresent())
-							return new DeclarationStyle(declaration.get());
+							return Optional.of(new DeclarationStyle(declaration.get()));
 						else
-							return DeclarationStyle.EMPTY;
+							return Optional.empty();
 					}
 				}
 			}
@@ -97,13 +97,13 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 				? BrailleCssStyle.of(argStringValue, styleCtxt, parentStyle != null ? ((FullStyle)parentStyle).style : null)
 				: BrailleCssStyle.of(argStringValue, styleCtxt);
 			if (s.isEmpty())
-				return FullStyle.EMPTY;
+				return Optional.empty();
 			if (attr != null)
 				if (styleCtxt == Context.ELEMENT)
 					s = s.evaluate(element);
 				else
 					s = BrailleCssStyle.of("@" + attr.getLocalName(), s);
-			return new FullStyle(s);
+			return Optional.of(new FullStyle(s));
 		}
 	}
 }

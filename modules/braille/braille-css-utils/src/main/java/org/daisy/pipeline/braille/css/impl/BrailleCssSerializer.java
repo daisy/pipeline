@@ -373,7 +373,7 @@ public final class BrailleCssSerializer {
 			writeAttribute(writer, VALUE, Content.INHERIT.toString());
 		else if (p == Content.content_list) {
 			if (value.getValue() instanceof ContentList)
-				contentListToXml((ContentList)value.getValue(), writer);
+				toXml((ContentList)value.getValue(), writer);
 			else
 				throw new IllegalArgumentException();
 		} else if (p == StringSet.NONE || p == StringSet.INITIAL)
@@ -385,7 +385,7 @@ public final class BrailleCssSerializer {
 				for (StringSetList.StringSet ss : (StringSetList)value.getValue()) {
 					writeStartElement(writer, CSS_STRING_SET);
 					writeAttribute(writer, NAME, ss.getKey());
-					contentListToXml(ss.getValue(), writer);
+					toXml(ss.getValue(), writer);
 					writer.writeEndElement(); }
 			else
 				throw new IllegalArgumentException();
@@ -405,7 +405,8 @@ public final class BrailleCssSerializer {
 					writeStartElement(writer, CSS_COUNTER_SET);
 					writeAttribute(writer, NAME, ss.getKey());
 					writeAttribute(writer, VALUE, "" + ss.getValue());
-					writer.writeEndElement(); }
+					writer.writeEndElement();
+				}
 			else
 				throw new IllegalArgumentException();
 		else
@@ -413,7 +414,7 @@ public final class BrailleCssSerializer {
 		writer.writeEndElement();
 	}
 
-	private static void contentListToXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
+	public static void toXml(ContentList list, XMLStreamWriter w) throws XMLStreamException {
 		for (Term<?> i : list)
 			if (i instanceof TermString || i instanceof TermURI) {
 				Term<String> s = (Term<String>)i;
