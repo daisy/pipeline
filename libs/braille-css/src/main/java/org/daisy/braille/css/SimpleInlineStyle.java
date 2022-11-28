@@ -26,6 +26,14 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		this(style, null);
 	}
 	
+	/**
+	 * @param parentStyle if a parent style is provided (not <code>null</code>), all <a
+	 *                    href="https://www.w3.org/TR/CSS2/cascade.html#inheritance">inherited</a>
+	 *                    properties are included, and all "<a
+	 *                    href="https://www.w3.org/TR/CSS2/cascade.html#value-def-inherit
+	 *                    >inherit</a>" values are concretized. If no parent style is provided,
+	 *                    nothing gets inherited or concretized.
+	 */
 	public SimpleInlineStyle(String style, SimpleInlineStyle parentStyle) {
 		this(
 			(style != null && !"".equals(style)) ? parserFactory.parseSimpleInlineStyle(style) : (List<Declaration>)null,
@@ -47,8 +55,9 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			for (Declaration d : declarations)
 				super.push(d);
 		if (parentStyle != null) {
-			super.inheritFrom(parentStyle);
-			inherited = true;
+			super.inheritFrom(parentStyle.concretize());
+			super.concretize();
+			inherited = concretized = true;
 		}
 	}
 	
@@ -175,9 +184,9 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			throw new UnsupportedOperationException("Can only inherit from another SimpleInlineStyle");
 		else {
 			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
-			copy.copiedForInherit = true;
-			copy.inheritFrom((SimpleInlineStyle)parent);
-			copy.copiedForInherit = false;
+			copy.copiedForInherit = copy.copiedForConcretize = true;
+			copy.inheritFrom(((SimpleInlineStyle)parent).concretize()).concretize();
+			copy.copiedForInherit = copy.copiedForConcretize = false;
 			return copy;
 		}
 	}
