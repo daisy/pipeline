@@ -136,6 +136,26 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		return false;
 	}
 	
+	private boolean concretized = false;
+	private boolean copiedForConcretize = false;
+
+	@Override
+	public SimpleInlineStyle concretize() {
+		if (concretized)
+			return this;
+		else if (copiedForConcretize) {
+			super.concretize();
+			concretized = true;
+			return this;
+		} else {
+			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
+			copy.copiedForConcretize = true;
+			copy.concretize();
+			copy.copiedForConcretize = false;
+			return copy;
+		}
+	}
+	
 	@Override
 	public NodeData push(Declaration d) {
 		throw new UnsupportedOperationException();
@@ -143,11 +163,6 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	
 	@Override
 	public NodeData inheritFrom(NodeData parent) throws ClassCastException {
-		throw new UnsupportedOperationException();
-	}
-	
-	@Override
-	public NodeData concretize() {
 		throw new UnsupportedOperationException();
 	}
 }
