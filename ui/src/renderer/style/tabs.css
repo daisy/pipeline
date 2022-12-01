@@ -1,0 +1,83 @@
+:root {
+  --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+  --fw-font-family: monospace;
+  --font-size: 1rem;
+  --pad: 1rem;
+  --border-radius: 4px;
+  --tab-panel-height: 90vh;
+  --primary-color-1: black;
+  --primary-color-2: #555;
+  --primary-color-3: lightgray;
+  --secondary-color-2: #173d63;
+  --secondary-color-3: #f2f7fc;
+  --secondary-2-contrast: white;
+  --background-color: white;
+  --error-message-color: red;
+  --warning-message-color: brown;
+  --info-message-color: var(--primary-color-1);
+  --debug-message-color: green;
+  --trace-message-color: green;
+  --success-color: rgba(0, 255, 0, 0.3);
+  --failure-color: rgba(255, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color-1: white;
+    --primary-color-2: lightgray;
+    --primary-color-3: #444;
+    --secondary-color-2: #173d63;
+    --secondary-color-3: #173d63;
+    --background-color: #151515;
+  }
+}
+.tab {
+  padding: var(--pad);
+  border-radius: var(--border-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border: thin solid;
+  border-bottom: none;
+  font-weight: normal;
+  font-size: larger;
+  color: var(--primary-color-2);
+  display: flex;
+  gap: calc(var(--pad) / 2);
+  font-size: large;
+}
+.tab button {
+  padding: 0;
+  border: none;
+  background-color: inherit;
+  color: inherit;
+  font-size: inherit;
+}
+.tab button.close-tab:hover {
+  background-color: var(--primary-color-3);
+  color: var(--primary-color-1);
+}
+.tab:has([aria-selected=false]):hover {
+  background-color: var(--secondary-color-2);
+  color: var(--secondary-2-contrast);
+}
+.tab:has([aria-selected=true]) {
+  background-color: var(--secondary-color-2);
+  color: var(--secondary-2-contrast);
+  border-bottom-color: var(--background-color);
+  border-bottom-width: 1px;
+  margin-bottom: -1px;
+}
+
+[role=tablist] {
+  display: flex;
+  flex-direction: row;
+}
+
+[role=tabpanel] {
+  padding: calc(var(--pad) / 2);
+  border: thin solid;
+  border-top-left-radius: 0;
+  height: var(--tab-panel-height);
+}
+
+/*# sourceMappingURL=tabs.css.map */

@@ -1,0 +1,45 @@
+:root {
+    --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+    --fw-font-family: monospace;
+    --font-size: 1rem;
+    --pad: 1rem;
+    --border-radius: 4px;
+    --tab-panel-height: 90vh;
+
+    --primary-color-1: black;
+    --primary-color-2: #555;
+    --primary-color-3: lightgray;
+    --secondary-color-2: #173d63;
+    --secondary-color-3: #f2f7fc;
+    --secondary-2-contrast: white;
+    --background-color: white;
+    --background-light-alpha: rgba(0, 0, 0, 0);
+    --error-message-color: red;
+    --warning-message-color: brown;
+    --info-message-color: var(--primary-color-1);
+    --debug-message-color: green;
+    --trace-message-color: green;
+    --success-color: rgba(0, 255, 0, 0.3);
+    --failure-color: rgba(255, 0, 0, 0.3);
+    
+    --scrollshadow-cover: white; /* background color */
+    --scrollshadow-cover-alpha0: rgba(255, 255, 255, 0); /* background color */
+    --scrollshadow-alpha02: rgba(0, 0, 0, 0.2); /* primary color */
+    --scrollshadow-alpha0: rgba(0, 0, 0, 0) /* primary color */
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --primary-color-1: white;
+        --primary-color-2: lightgray;
+        --primary-color-3: #444;
+        --secondary-color-2: #173d63;
+        --secondary-color-3: #173d63;
+        --background-color: #151515;
+
+        --scrollshadow-cover: #151515; /* background color */
+        --scrollshadow-cover-alpha0: #15151500; /* background color */
+        --scrollshadow-alpha02: rgba(255, 255, 255, 0.2); /* primary color */
+        --scrollshadow-alpha0: rgba(255, 255, 255, 0) /* primary color */
+    }
+}

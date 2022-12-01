@@ -1,0 +1,59 @@
+@use 'vars.scss' as *;
+
+// a row of tabs, each with a close icon
+// and an empty space for the tab panel, of a fixed height (defined in vars)
+// otherwise no influence on the contents of the tab panel
+
+.tab {
+    padding: var(--pad);
+    border-radius: var(--border-radius);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border: thin solid;
+    border-bottom: none;
+    
+    font-weight: normal;
+    font-size: larger;
+    color: var(--primary-color-2);
+
+    display: flex;
+    gap: calc(var(--pad)/2);
+    font-size: large;
+
+    button {
+        padding: 0;
+        border: none;
+        background-color: inherit;
+        color: inherit;
+        font-size: inherit;
+    }
+    
+    button.close-tab:hover {
+        background-color: var(--primary-color-3);
+        color: var(--primary-color-1);
+    }
+    // TODO reinstate :has after upgrading electron
+    &:has([aria-selected=false]):hover {
+        background-color: var(--secondary-color-2);
+        color: var(--secondary-2-contrast);
+    }
+    &:has([aria-selected=true]) {
+        background-color: var(--secondary-color-2);
+        color: var(--secondary-2-contrast);
+        border-bottom-color: var(--background-color);
+        border-bottom-width: 1px;
+        margin-bottom: -1px;
+    }
+}
+
+[role=tablist] {
+    display: flex;
+    flex-direction: row;
+}
+
+[role=tabpanel] {
+    padding: calc(var(--pad)/2);
+    border: thin solid;
+    border-top-left-radius: 0;
+    height: var(--tab-panel-height);
+}

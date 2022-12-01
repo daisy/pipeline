@@ -1,0 +1,61 @@
+:root {
+  --font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont;
+  --fw-font-family: monospace;
+  --font-size: 1rem;
+  --pad: 1rem;
+  --border-radius: 4px;
+  --tab-panel-height: 90vh;
+  --primary-color-1: black;
+  --primary-color-2: #555;
+  --primary-color-3: lightgray;
+  --secondary-color-2: #173d63;
+  --secondary-color-3: #f2f7fc;
+  --secondary-2-contrast: white;
+  --background-color: white;
+  --error-message-color: red;
+  --warning-message-color: brown;
+  --info-message-color: var(--primary-color-1);
+  --debug-message-color: green;
+  --trace-message-color: green;
+  --success-color: rgba(0, 255, 0, 0.3);
+  --failure-color: rgba(255, 0, 0, 0.3);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color-1: white;
+    --primary-color-2: lightgray;
+    --primary-color-3: #444;
+    --secondary-color-2: #173d63;
+    --secondary-color-3: #173d63;
+    --background-color: #151515;
+  }
+}
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.settings-form input[type=button] {
+  display: inline-block;
+  width: min-content;
+  white-space: nowrap;
+  padding: 0.25em;
+  border: thin black solid;
+}
+.settings-form div {
+  display: flex;
+  gap: 1em;
+}
+.settings-form .settings-field {
+  display: flex;
+  flex-direction: column;
+}
+.settings-form .description {
+  display: block;
+}
+.settings-form .save-button {
+  align-self: flex-end;
+}
+
+/*# sourceMappingURL=settings.css.map */

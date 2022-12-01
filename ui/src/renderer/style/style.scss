@@ -1,0 +1,262 @@
+@use 'vars.scss' as *;
+@use 'tabs.scss' as *;
+@use 'settings.scss' as *;
+@use 'scrollshadow.scss' as *;
+
+body {
+    margin: calc(.25 * var(--pad));
+    font-family: var(--font-family);
+    font-size: var(--font-size);
+    border-color: var(--primary-color-2);
+    background-color: var(--background-color);
+    color: var(--primary-color-1);
+}
+h2, h3 {
+    font-weight: normal;
+}
+
+button {
+    background-color: var(--background-color);
+    border: thin solid var(--primary-color-2);
+    padding: calc(var(--pad)/2);
+    border-radius: var(--border-radius);
+    width: min-content;
+    white-space: nowrap;
+    height: min-content;
+    color: var(--primary-color-1);
+}
+
+input {
+    display: block;
+}
+input:invalid {
+    border-color: var(--error-message-color);
+}
+input[type=checkbox] {
+    width: calc(1.5 * var(--font-size));
+    height: calc(1.5 * var(--font-size));
+}
+
+
+.form-field {
+    display: flex;
+    flex-flow: column;
+    gap: calc(var(--pad)/2);    
+}
+.file-or-folder {
+    display: flex;
+    gap: calc(var(--pad)/2);
+    
+    input {
+        width: 100%;
+    }
+}
+.description {
+    font-style: italic;
+    font-size: smaller;
+}
+.filelink {
+    color: var(--primary-color-1);
+    // text-decoration: underline;
+}
+
+[role=tabpanel] {
+    // i.e. a button that's not a tab but rater in the main body of the tab panel
+    button:hover {
+        background-color: var(--secondary-color-2);
+        color: var(--secondary-2-contrast);
+    }
+
+    a {
+        color: var(--primary-color-1);
+    }
+    a:hover {
+        text-decoration-thickness: 2px;
+    }
+}
+
+.fixed-height-layout {
+    display: flex;
+    flex-direction: column;
+    gap: var(--pad);
+    max-height: var(--tab-panel-height);
+    min-height: var(--tab-panel-height);
+}
+
+// the tab panel "header" 
+.header {
+    line-height: .8;
+    display: grid;
+    grid-template-columns: 60% auto;
+    padding-bottom: var(--pad);
+    // border-bottom: thin solid var(--primary-color-2);
+    font-size: large;
+
+    h1 span {
+        font-size: small;
+        display: block;
+    }
+
+    button {
+        font-size: larger;
+        font-weight: normal;
+        align-self: center;
+        cursor: pointer;
+    }
+}
+// show sections as columns and make each one scroll independently
+.details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,25rem);
+    gap: calc(2 * var(--pad));
+    overflow-y: scroll;
+
+    > * {
+        overflow-y: scroll;
+        min-width: 25rem;
+    }
+
+    section {
+        h2 {
+            position: sticky;
+            top: 0;
+            background-color: var(--background-color);
+            color: var(--primary-color-1);
+            text-decoration: underline;
+            text-decoration-color: var(--primary-color-3);
+            text-decoration-thickness: 5px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: calc(var(--pad)/2);
+        }
+    }
+}
+
+.job {
+    
+    .status {
+        font-size: large;
+        font-weight: bold;
+        width: min-content;
+        white-space: nowrap;
+        
+        &.success {
+            border-bottom: 4px var(--success-color) solid;
+        }
+        &.error {
+            border-bottom: 4px var(--failure-color) solid;
+        }
+    }
+
+    .details {
+        flex-grow: 2;
+        > * {
+            padding: 7px;
+        }
+        .job-messages {
+            ul {
+                font-family: var(--fw-font-family);
+                
+                .error {
+                    color: var(--error-message-color);
+                }
+                .info {
+                    color: var(--info-message-color);
+                }
+                .warning {
+                    color: var(--warning-message-color);
+                }
+                .debug {
+                    color: var(--debug-message-color);
+                }
+                .trace {
+                    color: var(--trace-message-color);
+                }
+            }
+        }
+
+        .job-settings {
+            li {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                border-bottom: thin solid var(--primary-color-3);
+                gap: calc(var(--pad)/2);
+
+                span:first-of-type {
+                    max-width: 50%;
+                }
+                span:last-of-type {
+                    font-family: var(--fw-font-family);
+                }
+            }
+            li:nth-of-type(even) {
+                background-color: var(--secondary-color-3);
+            }
+        }
+
+        .job-results {
+            width: min-content;
+            white-space: nowrap;
+        }
+    }
+}
+
+.script {
+    .select-script {
+        display: flex;
+        flex-direction: row;
+        gap: calc(var(--pad)*2);
+        font-size: x-large;
+        
+        select {
+            font-size: large;
+            border: thin solid;
+            border-radius: 4px;
+        }
+        border-bottom: thin solid var(--primary-color-2);
+        padding-top: calc(var(--pad));
+        padding-bottom: calc(var(--pad));
+        padding-left: 2px;
+    }
+
+    .details {
+        height: 100%;
+        grid-template-columns: 100%;
+        gap: var(--pad);
+        
+        ul.fields {
+            padding: revert;
+            display: flex;
+            flex-direction: column;
+            gap: var(--pad);
+        
+            li {
+                padding-bottom: var(--pad);
+                display: flex;
+                gap: var(--pad);
+                align-items: center;        
+                > * {
+                    flex-basis: 20rem;
+                }
+                > input[type=checkbox] {
+                    flex-basis: 2rem;
+                    accent-color: var(--secondary-color-2);
+                }
+                &:not(:last-child) {
+                    border-bottom: thin var(--primary-color-1) solid;
+                }
+            }
+        }
+    }
+}
+
+/* settings dialog */
+.confirm-save {
+    font-size: smaller;
+    font-style: italic;
+}

@@ -1,0 +1,32 @@
+// @use 'vars.scss' as *;
+
+/* scrolling shadow */
+/* Thanks to https://lea.verou.me/2012/04/background-attachment-local/ */
+.details section {
+	overflow: auto;
+	border: thin solid var(--primary-color-3);
+    border-radius: var(--border-radius);
+
+	background:
+		/* Shadow covers */
+		linear-gradient(var(--scrollshadow-cover) 30%, var(--scrollshadow-cover-alpha0)),
+		linear-gradient(var(--scrollshadow-cover-alpha0), var(--scrollshadow-cover) 70%) 0 100%,
+		
+		/* Shadows */
+		radial-gradient(50% 0, farthest-side, var(--scrollshadow-alpha02), var(--scrollshadow-alpha0)),
+		radial-gradient(50% 100%,farthest-side, var(--scrollshadow-alpha02), var(--scrollshadow-alpha0)) 0 100%;
+	background:
+		/* Shadow covers */
+		linear-gradient(var(--scrollshadow-cover) 30%, var(--scrollshadow-cover-alpha0)),
+		linear-gradient(var(--scrollshadow-cover-alpha0), var(--scrollshadow-cover) 70%) 0 100%,
+		
+		/* Shadows */
+		radial-gradient(farthest-side at 50% 0, var(--scrollshadow-alpha02), var(--scrollshadow-alpha0)),
+		radial-gradient(farthest-side at 50% 100%, var(--scrollshadow-alpha02), var(--scrollshadow-alpha0)) 0 100%;
+	background-repeat: no-repeat;
+	background-color: var(--background-color);
+	background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+	
+	/* Opera doesn't support this in the shorthand */
+	background-attachment: local, local, scroll, scroll;
+}

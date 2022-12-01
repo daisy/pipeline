@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>DAISY Pipeline</title>
+    <link rel="stylesheet" href="./src/renderer/style/style.css">
+</head>
+
+<body>
+    <main>
+        <div role="tablist">
+            <div class="tab">
+                <button id="tab-0" role="tab" aria-selected="false" tabIndex="-1" aria-controls="tabpanel-0" type="button">
+                    EPUB 3 Validator
+                </button>
+                <button class="close-tab" type="button" aria-labelledby="tab-0-close-tab">
+                    <svg id="tab-0-close-tab" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><title>Close tab EPUB validator</title><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+            
+            <div class="tab">
+                <button role="tab" aria-selected="true" tabIndex="0" id="tab-1" aria-controls="tabpanel-1" type="button">
+                    New Job
+                </button>
+                <button class="close-tab" type="button" aria-labelledby="tab-1-close-tab">
+                    <svg id="tab-1-close-tab" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><title>Close tab New Job</title><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+        <div role="tabpanel" aria-labelledby="tab-0" hidden id="tabpanel-0">
+            <div class="fixed-height-layout">
+                <section class="header" aria-labelledby="tab-0-heading">
+                    <div>
+                        <h1 id="tab-0-heading">EPUB 3 Validator</h1>
+                        <p>Validate an EPUB</p>
+                        <p aria-live="polite" class="status success">Job status: Completed</p>
+                    </div>
+                    <button>Show results folder</button>
+                </section>
+                <div class="flexgrid">
+                    <section class="job-settings" aria-labelledby="tab-0-job-settings">
+                        <h2 id="tab-0-job-settings">Settings</h2>
+                        <ul>
+                            <li><span>Input HTML</span><span>file:///Users/marisa/dev/file.html</span></li>
+                            <li><span>Style sheets </span><span>value</span></li>
+                            <li><span>Style sheet parameters </span><span>value</span></li>
+                            <li><span>Braille code </span><span>value</span></li>
+                            <li><span>Transformer features </span><span>value</span></li>
+                            <li><span>Include preview </span><span>value</span></li>
+                            <li><span>Include PEF </span><span>value</span></li>
+                            <li><span>Include OBFL </span><span>value</span></li>
+                            <li><span>Output file format </span><span>value</span></li>
+                            <li><span>ASCII braille table for HTML preview </span><span>value</span></li>
+                            <li><span>Page layout: Page width </span><span>value</span></li>
+                            <li><span>Page layout: Page height </span><span>value</span></li>
+                            <li><span>Page layout: Duplex </span><span>value</span></li>
+                            <li><span>Headers/footers: Levels in footer </span><span>value</span></li>
+                            <li><span>Translation/formatting of text: Hyphenation </span><span>value</span></li>
+                            <li><span>Translation/formatting of text: Hyphenation at page boundaries
+                                </span><span>value</span></li>
+                            <li><span>Translation/formatting of text: Line spacing </span><span>value</span></li>
+                            <li><span>Translation/formatting of text: Capital letters </span><span>value</span></li>
+                            <li><span>Block elements: Include captions </span><span>value</span></li>
+                            <li><span>Block elements: Include images </span><span>value</span></li>
+                            <li><span>Block elements: Include line groups </span><span>value</span></li>
+                            <li><span>Inline elements: Include production notes </span><span>value</span></li>
+                            <li><span>Page numbers: Show braille page numbers </span><span>value</span></li>
+                            <li><span>Page numbers: Show print page numbers </span><span>value</span></li>
+                            <li><span>Page numbers: Force braille page break </span><span>value</span></li>
+                            <li><span>Table of contents: Table of contents depth </span><span>value</span></li>
+                            <li><span>Table of contents: Exclude headings </span><span>value</span></li>
+                            <li><span>Volumes: Maximum number of sheets </span><span>value</span></li>
+                            <li><span>Volumes: Allow breaks within sections. </span><span>value</span></li>
+                            <li><span>Volumes: Prefer breaks at higher level sections. </span><span>value</span></li>
+                            <li><span>Placement of content: Notes placement </span><span>value</span></li>
+                        </ul>
+                    </section>
+                    <section class="job-messages" aria-labelledby="tab-0-job-messages">
+                        <h2 id="tab-0-job-messages">Messages</h2>
+                        <ul aria-live="polite">
+                            <li class="info">NaN - INFO: Loading DAISY 3</li>
+                            <li class="info">NaN - INFO: Converting DTBook to XHTML</li>
+                            <li class="info">NaN - INFO: Converting DTBook to ZedAI</li>
+                            <li class="trace">NaN - TRACE: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="trace">NaN - TRACE: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="info">NaN - INFO: Upgrading DTBook to 2005-3</li>
+                            <li class="info">NaN - INFO: Validating DTBook</li>
+                            <li class="info">NaN - INFO: Validating</li>
+                            <li class="info">NaN - INFO: Generating MODS metadata</li>
+                            <li class="info">NaN - INFO: Generating ZedAI metadata</li>
+                            <li class="debug">NaN - DEBUG: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="info">NaN - INFO: Generating CSS</li>
+                            <li class="info">NaN - INFO: Adding CSS PI</li>
+                            <li class="info">NaN - INFO: Validating ZedAI</li>
+                            <li class="info">NaN - INFO: Converting ZedAI to XHTML 5</li>
+                            <li class="warning">NaN - WARNING: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="info">NaN - INFO: Converting NCX to EPUB navigation document</li>
+                            <li class="error">NaN - ERROR: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="error">NaN - ERROR: Lorem ipsum dolor sit, amet consectetur</li>
+                            <li class="info">NaN - INFO: Creating EPUB media overlay documents</li>
+                            <li class="info">NaN - INFO: Creating EPUB package document</li>
+                            <li class="info">NaN - INFO: Discarding property 'dcterms:modified' with value
+                                '2022-11-02T00:55:48Z'. A new
+                                value is generated.</li>
+                            <li class="info">NaN - INFO: Storing EPUB 3</li>
+                        </ul>
+                    </section>
+
+                    <section class="job-results" aria-labelledby="tab-0-job-results">
+                        <h2 id="tab-0-job-results">Results</h2>
+
+                        <ul aria-live="polite">
+                            <li><span>The output file</span></li>
+                        </ul>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+        <div role="tabpanel" aria-labelledby="tab-1" tabIndex="0" id="tabpanel-1">
+            <div class="fixed-height-layout">
+                <section class="select-script" aria-labelledby="tab-1-select-script">
+                    <label id="tab-1-select-script" for="script">Select a script:</label>
+                    <select id="script">
+                        <option>None</option>
+                        <option value="daisy3-to-epub3">DAISY 3 to EPUB 3</option>
+                        <option value="dtbook-validator">DTBook Validator</option>
+                        <option value="epub2-to-epub3">EPUB Upgrader</option>
+                        <option value="epub3-to-daisy202">EPUB 3 to DAISY 2.02</option>
+                        <option value="dtbook-to-epub3">DTBook to EPUB 3</option>
+                        <option value="html-to-epub3">HTML to EPUB 3</option>
+                        <option value="epub3-validator">EPUB 3 Validator</option>
+                        <option value="zedai-to-html">ZedAI to HTML</option>
+                        <option value="html-to-pef">HTML to braille</option>
+                        <option value="dtbook-to-daisy3">DTBook to DAISY 3</option>
+                        <option value="nimas-fileset-validator">NIMAS Fileset Validator</option>
+                        <option value="dtbook-to-zedai">DTBook to ZedAI</option>
+                        <option value="epub3-to-epub3">EPUB 3 Enhancer</option>
+                        <option value="daisy3-to-daisy202">DAISY 3 to DAISY 2.02</option>
+                        <option value="daisy202-to-daisy3">DAISY 2.02 to DAISY 3</option>
+                        <option value="dtbook-to-rtf">DTBook to RTF</option>
+                        <option value="daisy202-to-epub3" selected>DAISY 2.02 to EPUB 3</option>
+                        <option value="daisy202-validator">DAISY 2.02 Validator</option>
+                        <option value="dtbook-to-pef">DTBook to braille</option>
+                        <option value="epub3-to-pef">EPUB 3 to braille</option>
+                        <option value="zedai-to-pef">ZedAI to braille</option>
+                        <option value="dtbook-to-html">DTBook to HTML</option>
+                        <option value="zedai-to-epub3">ZedAI to EPUB 3</option>
+                        <option value="dtbook-to-odt">DTBook to ODT</option>
+                        <option value="epub-to-daisy">EPUB to DAISY</option>
+                        <option value="epub3-to-daisy3">EPUB 3 to DAISY 3</option>
+                    </select>
+                </section>
+                
+                <section class="header" aria-labelledby="tab-1-heading">
+                    <div>
+                        <h1 id="tab-1-heading">DAISY 2.02 to EPUB 3</h1>
+                        <p>Convert a blah to a blegh</p>
+                    </div>
+                    <button class="run">Run</button>
+                </section>
+
+                <div class="flexgrid">
+                    <section class="required-fields" aria-labelledby="tab-1-required-heading">
+                        <h2 id="tab-1-required-heading">Required information</h2>
+                        <ul class="fields">
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">OPF</label>
+                                    <span class="description">The package file of the input DTB.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-source">file://path/to/file.xml</span>
+                                    <button type="button" id="tab-1-button-source" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">MP3</label>
+                                    <span class="description">An audio file containing the narration.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-mp3">file://path/to/file.mp3</span>
+                                    <button type="button" id="tab-1-button-mp3" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">OPF</label>
+                                    <span class="description">The package file of the input DTB.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-source">file://path/to/file.xml</span>
+                                    <button type="button" id="tab-1-button-source" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">MP3</label>
+                                    <span class="description">An audio file containing the narration.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-mp3">file://path/to/file.mp3</span>
+                                    <button type="button" id="tab-1-button-mp3" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">OPF</label>
+                                    <span class="description">The package file of the input DTB.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-source">file://path/to/file.xml</span>
+                                    <button type="button" id="tab-1-button-source" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">MP3</label>
+                                    <span class="description">An audio file containing the narration.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-mp3">file://path/to/file.mp3</span>
+                                    <button type="button" id="tab-1-button-mp3" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">OPF</label>
+                                    <span class="description">The package file of the input DTB.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-source">file://path/to/file.xml</span>
+                                    <button type="button" id="tab-1-button-source" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-button-source">MP3</label>
+                                    <span class="description">An audio file containing the narration.</span>
+                                </div>
+                                <div class="file-input">
+                                    <span class="value" tabindex="0" id="tab-1-text-mp3">file://path/to/file.mp3</span>
+                                    <button type="button" id="tab-1-button-mp3" data-required="true"
+                                        data-kind="input">Browse</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="optional-fields" aria-labelledby="tab-1-optional-heading">
+                        <h2 id="tab-1-optional-heading">Options</h2>
+                        <ul class="fields">
+                            <li>
+                                <div>
+                                    <label for="tab-1-gen-xyz">Generate XYZ?</label>
+                                    <span class="description">Creates an additional XYZ</span>
+                                </div>
+                                <input type="checkbox" checked id="tab-1-gen-xyz">
+                            </li>
+                            <li>
+                                <div>
+                                    <label for="tab-1-zipresults">Zip of results?</label>
+                                    <span class="description">Provide the results in a zip container</span>
+                                </div>
+                                <input type="checkbox" checked id="tab-1-zipresults">
+                            </li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+    <script>
+        let selectedTab = "tab-0";
+        Array.from(document.querySelectorAll(".tab")).map(tab => tab.addEventListener('click', (e) => {
+            // act like the button was clicked
+            e.target.querySelector("[role=tab]")?.click();
+        }));
+        Array.from(document.querySelectorAll("[role=tab]")).map(tab => tab.addEventListener('click', (e) => {
+            // reset everything
+            Array.from(document.querySelectorAll("[role=tab]")).map(tab_ => {
+                tab_.setAttribute('tabIndex', -1);
+                tab_.setAttribute('aria-selected', false);
+            });
+            Array.from(document.querySelectorAll("[role=tabpanel]")).map(tabPanel => {
+                tabPanel.hidden = true;
+                tabPanel.setAttribute('tabIndex', -1);
+            });
+
+            let selectedTab = e.target;
+            let selectedTabPanel = document.querySelector(`[aria-labelledby=${selectedTab.id}`);
+
+            selectedTabPanel.hidden = false;
+            selectedTabPanel.setAttribute('tabIndex', '0');
+
+            selectedTab.setAttribute('tabIndex', "0");
+            selectedTab.setAttribute('aria-selected', true);
+        }));
+
+        
+    </script>
+</body>
+
+</html>

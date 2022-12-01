@@ -1,0 +1,23 @@
+@use 'vars.scss' as *;
+
+.settings-form {
+    padding-left: 3px;
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--pad) * 2);
+    width: 100%;
+
+    .filename {
+        width: 80%;
+        overflow: scroll;
+    }
+    label {
+        font-weight: bold;
+    }
+}
+
+.save-settings {
+    display: flex;
+    gap: var(--pad);
+    align-items: center;
+}
