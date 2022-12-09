@@ -32,6 +32,7 @@ The tree below shows the structure of the project:
 - updater
   - [cli](https://github.com/daisy/pipeline-updater)
   - [gui](https://github.com/daisy/pipeline-updater-gui)
+- [ui](https://github.com/daisy/pipeline-ui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
   - [xprocspec](https://github.com/daisy/xprocspec)
@@ -44,7 +45,7 @@ See http://daisy.github.io/pipeline/Contribute/Developer-Guide/Sources/ for more
 
 ## Issues
 
-This is also a common issue tracker for the Pipeline. Use the individual issue trackers of the sub-projects listed above for issues that clearly belong to a specific sub-project. Before creating a new issue, please first check the [existing open issues](https://github.com/search?l=&q=is%3Aopen++repo%3Adaisy%2Fpipeline++repo%3Adaisy%2Fpipeline-assembly++repo%3Adaisy%2Fpipeline-build-utils++repo%3Adaisy%2Fpipeline-cli-go++repo%3Adaisy%2Fpipeline-clientlib-go++repo%3Adaisy%2Fpipeline-clientlib-java++repo%3Adaisy%2Fpipeline-framework++repo%3Adaisy%2Fpipeline-gui++repo%3Adaisy%2Fpipeline-it++repo%3Adaisy%2Fpipeline-mod-audio++repo%3Adaisy%2Fpipeline-mod-braille++repo%3Adaisy%2Fpipeline-mod-nlp++repo%3Adaisy%2Fpipeline-mod-tts++repo%3Adaisy%2Fpipeline-modules++repo%3Adaisy%2Fpipeline-modules-common++repo%3Adaisy%2Fpipeline-samples++repo%3Adaisy%2Fpipeline-scripts++repo%3Adaisy%2Fpipeline-scripts-utils++repo%3Adaisy%2Fpipeline-updater++repo%3Adaisy%2Fpipeline-updater-gui++repo%3Adaisy%2Fpipeline-webui++repo%3Adaisy%2Fbraille-css++repo%3Adaisy%2FjStyleParser++repo%3Adaisy%2Fosgi-libs++repo%3Adaisy%2Fxmlcalabash1++repo%3Adaisy%2Fxprocspec++repo%3Adaisy%2Fxproc-maven-plugin++repo%3Adaisy%2Fxspec-maven-plugin++repo%3Asnaekobbi%2Fpipeline-mod-braille&ref=advsearch&type=Issues&utf8=%E2%9C%93).
+This is also a common issue tracker for the Pipeline. Use the individual issue trackers of the sub-projects listed above for issues that clearly belong to a specific sub-project. Before creating a new issue, please first check the [existing open issues](https://github.com/search?l=&q=is%3Aopen++repo%3Adaisy%2Fpipeline++repo%3Adaisy%2Fpipeline-assembly++repo%3Adaisy%2Fpipeline-build-utils++repo%3Adaisy%2Fpipeline-cli-go++repo%3Adaisy%2Fpipeline-clientlib-go++repo%3Adaisy%2Fpipeline-clientlib-java++repo%3Adaisy%2Fpipeline-framework++repo%3Adaisy%2Fpipeline-gui++repo%3Adaisy%2Fpipeline-ui++repo%3Adaisy%2Fpipeline-it++repo%3Adaisy%2Fpipeline-mod-audio++repo%3Adaisy%2Fpipeline-mod-braille++repo%3Adaisy%2Fpipeline-mod-nlp++repo%3Adaisy%2Fpipeline-mod-tts++repo%3Adaisy%2Fpipeline-modules++repo%3Adaisy%2Fpipeline-modules-common++repo%3Adaisy%2Fpipeline-samples++repo%3Adaisy%2Fpipeline-scripts++repo%3Adaisy%2Fpipeline-scripts-utils++repo%3Adaisy%2Fpipeline-updater++repo%3Adaisy%2Fpipeline-updater-gui++repo%3Adaisy%2Fpipeline-webui++repo%3Adaisy%2Fbraille-css++repo%3Adaisy%2FjStyleParser++repo%3Adaisy%2Fosgi-libs++repo%3Adaisy%2Fxmlcalabash1++repo%3Adaisy%2Fxprocspec++repo%3Adaisy%2Fxproc-maven-plugin++repo%3Adaisy%2Fxspec-maven-plugin++repo%3Asnaekobbi%2Fpipeline-mod-braille&ref=advsearch&type=Issues&utf8=%E2%9C%93).
 
 
 ## Website
