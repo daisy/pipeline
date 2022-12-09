@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/library.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:audio-rearrange">
+			<x:input port="source">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="aud001.mp3" media-type="audio/mpeg"
+						        original-href="../../../../../scripts/daisy3-to-daisy202/src/test/resources/Chimpanzee/aud001.mp3"/>
+						<d:file href="aud002.mp3" media-type="audio/mpeg"
+						        original-href="../../../../../scripts/daisy3-to-daisy202/src/test/resources/Chimpanzee/aud002.mp3"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="desired">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="001.wav" original-href="aud001.mp3" media-type="audio/x-wav">
+							<d:clip original-clipBegin="0"          original-clipEnd="2.4829932"  clipBegin="0"          clipEnd="2.4829932"/>
+						</d:file>
+						<d:file href="001.wav" original-href="aud002.mp3" media-type="audio/x-wav">
+							<d:clip original-clipBegin="0"          original-clipEnd="2.3460091"  clipBegin="2.4829932"  clipEnd="4.8290023" />
+							<d:clip original-clipBegin="2.3460091"  original-clipEnd="5.3929932"  clipBegin="4.8290023"  clipEnd="7.8759864" />
+							<d:clip original-clipBegin="5.3929932"  original-clipEnd="8.5849887"  clipBegin="7.8759864"  clipEnd="11.0679819"/>
+							<d:clip original-clipBegin="8.5849887"  original-clipEnd="11.1179819" clipBegin="11.0679819" clipEnd="13.6009751"/>
+							<d:clip original-clipBegin="11.1179819" original-clipEnd="20.1039909" clipBegin="13.6009751" clipEnd="22.5869841"/>
+						</d:file>
+						<d:file href="002.wav" original-href="aud002.mp3" media-type="audio/x-wav">
+							<d:clip original-clipBegin="20.1039909" original-clipEnd="33.7299773" clipBegin="0"           clipEnd="13.6259864"/>
+							<d:clip original-clipBegin="33.7299773" original-clipEnd="44.2579819" clipBegin="13.6259864"  clipEnd="24.153991" />
+							<d:clip original-clipBegin="44.2579819" original-clipEnd="50.4649887" clipBegin="24.153991"   clipEnd="30.3609978"/>
+							<d:clip original-clipBegin="50.4649887" original-clipEnd="53.5409751" clipBegin="30.3609978"  clipEnd="33.4369842"/>
+							<d:clip original-clipBegin="53.5409751" original-clipEnd="57.4579819" clipBegin="33.4369842"  clipEnd="37.353991" />
+							<d:clip original-clipBegin="57.4579819" original-clipEnd="63.4769841" clipBegin="37.353991"   clipEnd="43.3729932"/>
+							<d:clip original-clipBegin="63.4769841" original-clipEnd="67.3589796" clipBegin="43.3729932"  clipEnd="47.2549887"/>
+							<d:clip original-clipBegin="67.3589796" original-clipEnd="71.9359864" clipBegin="47.2549887"  clipEnd="51.8319955"/>
+							<d:clip original-clipBegin="71.9359864" original-clipEnd="76.7849887" clipBegin="51.8319955"  clipEnd="56.6809978"/>
+						</d:file>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_audio-rearrange/')"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="001.wav" media-type="audio/x-wav" original-href="../../../target/xprocspec/test_audio-rearrange/tmp1.wav"/>
+					<d:file href="002.wav" media-type="audio/x-wav" original-href="../../../target/xprocspec/test_audio-rearrange/tmp2.wav"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

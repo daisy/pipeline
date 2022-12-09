@@ -54,6 +54,7 @@
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation>
 			px:fileset-load
+			px:fileset-purge
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/audio-common/library.xpl">
@@ -119,10 +120,16 @@
 	<p:add-xml-base name="mapping"/>
 	<p:sink/>
 
-	<px:audio-rearrange name="rearrange" px:progress="4/5">
-		<p:input port="source">
+	<px:fileset-purge warn-on-missing="false">
+		<p:documentation>
+			Remove files that exist in memory only because currently px:audio-rearrange does not
+			handle it.
+		</p:documentation>
+		<p:input port="source.fileset">
 			<p:pipe step="main" port="source.fileset"/>
 		</p:input>
+	</px:fileset-purge>
+	<px:audio-rearrange name="rearrange" px:progress="4/5">
 		<p:input port="desired">
 			<p:pipe step="mapping" port="result"/>
 		</p:input>

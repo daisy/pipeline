@@ -123,6 +123,14 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 					} catch (IllegalArgumentException e) {}}
 			return null;
 		}
+		
+		@Override
+		public String toString() {
+			return MoreObjects.toStringHelper(this)
+			                  .add("translator", super.toString())
+			                  .add("displayTable", displayTable)
+			                  .toString();
+		}
 	}
 	
 	private LiblouisTableRegistry tableRegistry;
@@ -329,7 +337,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								if (q.containsKey("locale")) {
 									// locale is shorthand for language + region
 									String locale = q.removeOnly("locale").getValue().get();
-									q.add("locale", locale);
+									q.add("language", locale);
 									q.add("region", locale);
 								}
 								for (Feature f : q)

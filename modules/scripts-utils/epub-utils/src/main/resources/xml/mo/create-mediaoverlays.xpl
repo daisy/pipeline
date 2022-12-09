@@ -178,6 +178,7 @@
                 <p:input port="entries">
                     <p:pipe step="smil.in-memory" port="result"/>
                 </p:input>
+                <p:with-param port="file-attributes" name="indent" select="'true'"/>
             </px:fileset-add-entries>
             <px:fileset-join/>
             <p:identity name="smil.fileset"/>

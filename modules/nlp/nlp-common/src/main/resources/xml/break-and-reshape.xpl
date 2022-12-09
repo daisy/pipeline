@@ -125,11 +125,6 @@
     </p:documentation>
   </p:output>
 
-  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-    <p:documentation>
-      px:message
-    </p:documentation>
-  </p:import>
   <p:import href="break-detect.xpl">
     <p:documentation>
       px:break-detect
@@ -148,7 +143,7 @@
   <p:variable name="tmp-sentence-tag" select="'tmp:ss'"/>
 
   <!-- run the java-based lexing step -->
-  <px:break-detect name="break">
+  <px:break-detect>
     <p:with-option name="inline-tags" select="$inline-tags"/>
     <p:with-option name="ensure-word-before" select="$ensure-word-before"/>
     <p:with-option name="ensure-word-after" select="$ensure-word-after"/>
@@ -157,7 +152,6 @@
     <p:with-option name="output-word-tag" select="$tmp-word-tag"/>
     <p:with-option name="output-sentence-tag" select="$tmp-sentence-tag"/>
   </px:break-detect>
-  <px:message message="Java-based break detection done." severity="DEBUG"/>
 
   <px:reshape name="reshape">
     <p:with-option name="can-contain-sentences" select="$can-contain-sentences"/>
@@ -177,6 +171,5 @@
     <p:with-option name="exclusive-sentence-tag" select="$exclusive-sentence-tag"/>
     <p:with-option name="id-prefix" select="$id-prefix"/>
   </px:reshape>
-  <px:message message="Full break detection done" severity="DEBUG"/>
 
 </p:declare-step>

@@ -22,7 +22,7 @@
     <p:option name="name-pattern" required="false" select="''"/>
     <p:option name="single-volume-name" required="false" select="''"/>
     <p:option name="number-width" required="false" select="''"/>
-    <p:option name="pef-href" required="false"/> <!-- URI -->
+    <p:option name="pef-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-table" required="false" select="''"/> <!-- query -->
     

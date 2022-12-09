@@ -246,7 +246,6 @@ public final class AudioUtils {
 	}
 
 	/**
-	 * @param format must be PCM encoded
 	 * @param duration must not be negative
 	 * @return <code>null</code> if <code>duration</code> is too short
 	 */
@@ -261,6 +260,7 @@ public final class AudioUtils {
 	}
 
 	/**
+	 * @param format must be PCM encoded
 	 * @param frames must not be negative
 	 * @return <code>null</code> if <code>frames</code> is <code>0</code>
 	 */
@@ -270,7 +270,23 @@ public final class AudioUtils {
 			throw new IllegalArgumentException();
 		if (frames == 0)
 			return null;
-		throw new UnsupportedOperationException("Not implemented"); // FIXME
+		byte[] data = new byte[Math.multiplyExact(Math.toIntExact(frames), format.getFrameSize())]; // initialized to all zeros
+		Encoding encoding = format.getEncoding();
+		if (encoding == Encoding.PCM_SIGNED)
+			return createAudioStream(format, data);
+		else if (encoding == Encoding.PCM_UNSIGNED)
+			return convertAudioStream(
+				format,
+				createAudioStream(new AudioFormat(Encoding.PCM_SIGNED,
+				                                  format.getSampleRate(),
+				                                  format.getSampleSizeInBits(),
+				                                  format.getChannels(),
+				                                  format.getFrameSize(),
+				                                  format.getFrameRate(),
+				                                  format.isBigEndian()),
+				                  data));
+		else // encoding == Encoding.PCM_FLOAT
+			throw new UnsupportedOperationException("Not implemented"); // FIXME
 	}
 
 	/**

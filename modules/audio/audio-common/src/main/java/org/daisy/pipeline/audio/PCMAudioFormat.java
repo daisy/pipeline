@@ -21,6 +21,8 @@ public class PCMAudioFormat extends AudioFormat {
 	 *                                  not specified.
 	 */
 	public static PCMAudioFormat of(AudioFormat format) {
+		if (format instanceof PCMAudioFormat)
+			return (PCMAudioFormat)format;
 		if (!AudioUtils.isPCM(format))
 			throw new IllegalArgumentException();
 		if (format.getFrameRate() == AudioSystem.NOT_SPECIFIED)

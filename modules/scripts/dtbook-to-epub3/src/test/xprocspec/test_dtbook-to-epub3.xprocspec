@@ -61,9 +61,9 @@
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_02_000.wav" original-href="epub3/temp/audio/part0002_02_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_03_000.wav" original-href="epub3/temp/audio/part0002_03_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_04_000.wav" original-href="epub3/temp/audio/part0002_04_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml"/>
-					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml"/>
-					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml"/>
+					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>

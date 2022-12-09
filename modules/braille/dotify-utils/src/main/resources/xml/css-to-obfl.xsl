@@ -1125,7 +1125,7 @@
                     <xsl:apply-templates mode="marker" select="$string-set-on-first-inline"/>
                     <xsl:apply-templates mode="#current" select="$id-on-first-inline"/>
                     <xsl:next-match>
-                        <xsl:with-param name="page-break-before-handled" tunnel="yes" select="true()"/>
+                        <xsl:with-param name="page-break-before-handled" tunnel="yes" select="@css:page-break-before"/>
                         <xsl:with-param name="string-set-handled" tunnel="yes" select="$string-set-on-first-inline"/>
                         <xsl:with-param name="id-handled" tunnel="yes" select="$id-on-first-inline"/>
                     </xsl:next-match>
@@ -1139,8 +1139,8 @@
     <xsl:template priority="0.73"
                   mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-before">
-        <xsl:param name="page-break-before-handled" tunnel="yes" select="false()"/>
-        <xsl:if test="not($page-break-before-handled)">
+        <xsl:param name="page-break-before-handled" as="attribute()*" tunnel="yes" select="()"/>
+        <xsl:if test="not(. intersect $page-break-before-handled)">
             <xsl:next-match/>
         </xsl:if>
     </xsl:template>
@@ -2866,6 +2866,13 @@
                   match="css:flow[@from]">
         <xsl:call-template name="pf:warn">
             <xsl:with-param name="msg">The range of a flow() function inside a volume area must be either 'volume' or 'document'</xsl:with-param>
+        </xsl:call-template>
+    </xsl:template>
+    
+    <xsl:template mode="css:eval-sequence-interrupted-resumed-content-list"
+                  match="css:flow[@from]">
+        <xsl:call-template name="pf:warn">
+            <xsl:with-param name="msg">The range of a flow() function inside a volume transition must be 'document'</xsl:with-param>
         </xsl:call-template>
     </xsl:template>
     

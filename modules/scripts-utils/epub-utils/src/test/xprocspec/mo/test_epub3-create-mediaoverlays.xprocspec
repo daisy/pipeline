@@ -81,7 +81,7 @@
 					<d:file href="out/EPUB/audio/part_1.mp3" original-href="part_1.mp3" media-type="audio/mpeg"/>
 					<d:file href="out/EPUB/audio/part_2.mp3" original-href="part_2.mp3" media-type="audio/mpeg"/>
 					<d:file href="out/EPUB/audio/part_3.mp3" original-href="part_3.mp3" media-type="audio/mpeg"/>
-					<d:file href="out/EPUB/mo/foo.smil" media-type="application/smil+xml"/>
+					<d:file href="out/EPUB/mo/foo.smil" media-type="application/smil+xml" indent="true"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

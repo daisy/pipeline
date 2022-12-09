@@ -65,9 +65,9 @@
 					        original-href="../../../../epub2-to-epub3/src/test/resources/minimal.epub/META-INF/container.xml"/>
 					<d:file href="out/epub3/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="out/epub3/EPUB/package.opf" media-type="application/oebps-package+xml" media-version="2.0" indent="true"/>
-					<d:file href="out/epub3/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
-					<d:file href="out/epub3/EPUB/mo/cover.smil" media-type="application/smil+xml"/>
-					<d:file href="out/epub3/EPUB/mo/front.smil" media-type="application/smil+xml"/>
+					<d:file href="out/epub3/EPUB/mo/chapter.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="out/epub3/EPUB/mo/cover.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="out/epub3/EPUB/mo/front.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="out/epub3/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
 					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_01_000.wav"/>
 					<d:file href="out/epub3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
@@ -143,13 +143,13 @@
 					<d:file href="out/daisy202/id/ncc.html" media-type="application/xhtml+xml"
 					        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
 					        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
-					<d:file href="out/daisy202/id/cover.smil" media-type="application/smil+xml"
+					<d:file href="out/daisy202/id/cover.smil" media-type="application/smil+xml" indent="true"
 					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
 					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
-					<d:file href="out/daisy202/id/front.smil" media-type="application/smil+xml"
+					<d:file href="out/daisy202/id/front.smil" media-type="application/smil+xml" indent="true"
 					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
 					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
-					<d:file href="out/daisy202/id/chapter.smil" media-type="application/smil+xml"
+					<d:file href="out/daisy202/id/chapter.smil" media-type="application/smil+xml" indent="true"
 					        doctype-public="-//W3C//DTD SMIL 1.0//EN"
 					        doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
 					<d:file href="out/daisy202/id/content.html" media-type="application/xhtml+xml"

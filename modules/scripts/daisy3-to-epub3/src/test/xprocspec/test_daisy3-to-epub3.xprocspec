@@ -35,8 +35,8 @@
 					<d:file href="result/epub/EPUB/book-1.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="result/epub/EPUB/book-2.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="result/epub/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/epub/EPUB/mo/book-1.smil" media-type="application/smil+xml"/>
-					<d:file href="result/epub/EPUB/mo/book-2.smil" media-type="application/smil+xml"/>
+					<d:file href="result/epub/EPUB/mo/book-1.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="result/epub/EPUB/mo/book-2.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="result/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>

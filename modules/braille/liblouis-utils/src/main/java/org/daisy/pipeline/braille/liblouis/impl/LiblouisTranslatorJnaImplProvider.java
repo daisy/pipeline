@@ -1579,6 +1579,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		public ToStringHelper toStringHelper() {
 			return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTranslatorJnaImplProvider$LiblouisTranslatorImpl")
 				.add("translator", translator)
+				.add("displayTable", displayTable)
 				.add("hyphenator", hyphenator);
 		}
 	

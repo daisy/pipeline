@@ -182,7 +182,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 					} catch (URISyntaxException e) {
 						throw new RuntimeException("temp-dir option invalid: " + tempDirOption);
 					}
-					if (tempDir.exists())
+					if (tempDir.exists() && tempDir.listFiles().length > 0)
 						throw new RuntimeException("temp-dir option must be a non-existing directory: " + tempDirOption);
 				} else {
 					try {
@@ -406,20 +406,32 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 									throw new TransformerException(
 										new RuntimeException("All input audio must have the same format"));
 							}
+							// convert clip begin/end times to frames
+							long sourceClipBegin = AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipBegin);
+							long sourceClipEnd = AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipEnd);
+							long destinationClipBegin = AudioUtils.getLengthInFrames(audioFormat, destinationClip.clipBegin);
+							long destinationClipEnd = AudioUtils.getLengthInFrames(audioFormat, destinationClip.clipEnd);
+							if (sourceClipBegin < currentSourceElapsed)
+								throw new IllegalStateException(); // can not happen because clips are in order and don't overlap
 							AudioInputStream clipPCM; {
+								long sourceClipLength = sourceClipEnd - sourceClipBegin;
+								long destinationClipLength = destinationClipEnd - destinationClipBegin;
+								long clipLength = Math.min(sourceClipLength, destinationClipLength);
 								Iterator<AudioInputStream> chunks = AudioUtils.split(
 									currentSourcePCM,
-									AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipBegin) - currentSourceElapsed,
-									AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipEnd) - currentSourceElapsed
+									sourceClipBegin - currentSourceElapsed,
+									sourceClipBegin - currentSourceElapsed + clipLength
 								).iterator();
 								currentSourceElapsed += chunks.next().getFrameLength();
 								clipPCM = chunks.next();
 								currentSourcePCM = chunks.next();
 								currentSourceElapsed += clipPCM.getFrameLength();
 							}
+							if (destinationClipBegin < currentDestinationElapsed)
+								throw new IllegalStateException(); // can not happen because clips are in order and don't overlap
 							AudioInputStream silence = AudioUtils.createSilence(
 								clipPCM.getFormat(),
-								AudioUtils.getLengthInFrames(audioFormat, destinationClip.clipBegin) - currentDestinationElapsed);
+								destinationClipBegin - currentDestinationElapsed);
 							if (silence != null) {
 								currentDestinationPCM.add(silence);
 								currentDestinationElapsed += silence.getFrameLength();

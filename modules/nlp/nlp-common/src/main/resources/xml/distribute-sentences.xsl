@@ -94,16 +94,23 @@
 			group-adjacent="self::text() or not(@pxi:cannot-be-sentence-child)">
       <xsl:choose>
 	<xsl:when test="current-grouping-key()">
-	  <!-- assuming the tmp words are inserted at the lowest possible level. -->
-	  <xsl:element name="{local-name-from-QName($tmp-sentence-tag)}"
-		       namespace="{namespace-uri-from-QName($tmp-sentence-tag)}">
-	    <xsl:if test="$lang != ''">
-	      <xsl:attribute namespace="http://www.w3.org/XML/1998/namespace" name="lang">
-		<xsl:value-of select="$lang"/>
-	      </xsl:attribute>
-	    </xsl:if>
-	    <xsl:copy-of select="current-group()"/> <!-- including the <tmp:word> nodes. -->
-	  </xsl:element>
+	  <xsl:choose>
+	    <xsl:when test="empty(current-group()[self::* or normalize-space()])">
+	      <xsl:sequence select="current-group()"/>
+	    </xsl:when>
+	    <xsl:otherwise>
+	      <!-- assuming the tmp words are inserted at the lowest possible level. -->
+	      <xsl:element name="{local-name-from-QName($tmp-sentence-tag)}"
+			   namespace="{namespace-uri-from-QName($tmp-sentence-tag)}">
+		<xsl:if test="$lang != ''">
+		  <xsl:attribute namespace="http://www.w3.org/XML/1998/namespace" name="lang">
+		    <xsl:value-of select="$lang"/>
+		  </xsl:attribute>
+		</xsl:if>
+		<xsl:copy-of select="current-group()"/> <!-- including the <tmp:word> nodes. -->
+	      </xsl:element>
+	    </xsl:otherwise>
+	  </xsl:choose>
 	</xsl:when>
 	<xsl:otherwise>
 	  <xsl:apply-templates select="current-group()" mode="split-sentence">

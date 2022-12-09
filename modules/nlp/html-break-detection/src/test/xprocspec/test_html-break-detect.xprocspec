@@ -104,7 +104,7 @@
 		</x:expect>
 	</x:scenario>
 
-	<x:scenario label="sentence detection when sentence detection has already been performed" xfail="spans mess up sentence detection">
+	<x:scenario label="sentence detection when sentence detection has already been performed">
 		<x:call step="px:sentence-detect">
 			<x:input port="source">
 				<x:document type="inline">

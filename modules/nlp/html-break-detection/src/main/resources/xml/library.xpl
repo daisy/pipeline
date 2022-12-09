@@ -18,13 +18,16 @@
 
     <p:option name="sentence-attr" required="false" select="''">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p>Attribute to be added to sentence spans.</p>
+        <p>Attribute to be added to sentence <code>span</code> elements.</p>
       </p:documentation>
     </p:option>
 
     <p:option name="sentence-attr-val" required="false" select="''">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Corresponding attribute value.</p>
+        <p><code>span</code> elements in the input that are already marked up as sentences using the
+        specified attribute and value are preserved. No additional sentence detection is performed
+        within such elements.</p>
       </p:documentation>
     </p:option>
 
@@ -33,6 +36,13 @@
         px:break-and-reshape
       </p:documentation>
     </p:import>
+
+    <p:variable name="existing-sentence-match-pattern"
+                select="if ($sentence-attr!='')
+                        then concat('html:span[@',$sentence-attr,'=&quot;',
+                                    replace($sentence-attr-val,'&quot;','&quot;&quot;'),
+                                    '&quot;]')
+                        else ''"/>
 
     <!-- Based on the containers of phrasing, flow and transparent content of HTML5, the
          "can-contain-sentences" elements are the following: -->
@@ -63,6 +73,11 @@
       <p:with-option name="id-prefix" select="$id-prefix"/>
       <p:with-option name="sentence-attr" select="$sentence-attr"/>
       <p:with-option name="sentence-attr-val" select="$sentence-attr-val"/>
+      <p:with-option name="special-sentences" select="$existing-sentence-match-pattern"/>
+      <p:with-option name="cannot-be-sentence-child"
+                     select="if ($existing-sentence-match-pattern!='')
+                             then concat('*[descendant-or-self::',$existing-sentence-match-pattern,']')
+                             else ''"/>
     </px:break-and-reshape>
 
   </p:declare-step>

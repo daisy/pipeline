@@ -218,9 +218,9 @@
 						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml" indent="true"/>
 						<d:file href="result/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_epub3-to-epub3/minimal/tts/audio/part0000_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
@@ -1164,15 +1164,15 @@
 						        original-href="../resources/valentin.epub!/EPUB/images/valentin.jpg"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"
 						        original-href="../resources/valentin.epub!/META-INF/container.xml"/>
-						<d:file href="result/EPUB/mo/C00000-1-cover.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-9-footnotes.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-5-chapter.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-6-rearnotes.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-7-chapter.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-8-conclusion.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-4-chapter.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-2-frontmatter.smil" media-type="application/smil+xml"/>
-						<d:file href="result/EPUB/mo/C00000-3-chapter.smil" media-type="application/smil+xml"/>
+						<d:file href="result/EPUB/mo/C00000-1-cover.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-9-footnotes.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-5-chapter.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-6-rearnotes.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-7-chapter.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-8-conclusion.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-4-chapter.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-2-frontmatter.smil" media-type="application/smil+xml" indent="true"/>
+						<d:file href="result/EPUB/mo/C00000-3-chapter.smil" media-type="application/smil+xml" indent="true"/>
 						<d:file href="result/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_epub3-to-epub3/valentin/tts/audio/part0000_00_000.wav"/>
 						<d:file href="result/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"

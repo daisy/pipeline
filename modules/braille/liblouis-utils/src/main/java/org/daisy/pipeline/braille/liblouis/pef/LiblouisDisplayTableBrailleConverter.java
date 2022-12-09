@@ -10,8 +10,8 @@ import org.liblouis.DisplayTable;
 
 public class LiblouisDisplayTableBrailleConverter implements BrailleConverter {
 	
-	private static final Map<Character,Character> b2t = new HashMap<Character,Character>();
-	private static final Map<Character,Character> t2b = new HashMap<Character,Character>();
+	private final Map<Character,Character> b2t = new HashMap<Character,Character>();
+	private final Map<Character,Character> t2b = new HashMap<Character,Character>();
 	
 	private final DisplayTable table;
 

@@ -350,51 +350,53 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private FormatterEngine newFormatterEngine(FormatterConfiguration config,
 	                                           PagedMediaWriter writer,
 	                                           BrailleConverter brailleCharset) {
-		if (brailleCharset != null) {
-			// HACK: We create a new TextBorderFactoryMakerService that uses the default
-			// TextBorderFactoryService to create Unicode braille patterns and encodes them with the
-			// given BrailleConverter. We then make the default FormatterEngineFactoryService,
-			// FormatterFactory and ObflParserFactoryService use this TextBorderFactoryMakerService
-			// by using reflection. This assumes that the FormatterEngineFactoryService is a
-			// org.daisy.dotify.formatter.impl.engine.LayoutEngineFactoryImpl, the FormatterFactory
-			// is a org.daisy.dotify.formatter.impl.FormatterFactoryImpl, and the
-			// ObflParserFactoryService is a
-			// org.daisy.dotify.formatter.impl.obfl.ObflParserFactoryImpl, and that these are the
-			// only classes that bind a TextBorderFactoryMakerService.
-			TextBorderFactoryMakerService asciiTextBorderFactoryMakerService = new TextBorderFactoryMakerService() {
-					public TextBorderStyle newTextBorderStyle(Map<String,Object> features)
-							throws TextBorderConfigurationException {
-						TextBorderFactory f = textBorderFactoryService.newFactory();
-						for (String k : features.keySet())
-							f.setFeature(k, features.get(k));
-						TextBorderStyle style = f.newTextBorderStyle();
-						return new TextBorderStyle.Builder()
-							.topLeftCorner    (brailleCharset.toText(style.getTopLeftCorner()))
-							.topBorder        (brailleCharset.toText(style.getTopBorder()))
-							.topRightCorner   (brailleCharset.toText(style.getTopRightCorner()))
-							.leftBorder       (brailleCharset.toText(style.getLeftBorder()))
-							.rightBorder      (brailleCharset.toText(style.getRightBorder()))
-							.bottomLeftCorner (brailleCharset.toText(style.getBottomLeftCorner()))
-							.bottomBorder     (brailleCharset.toText(style.getBottomBorder()))
-							.bottomRightCorner(brailleCharset.toText(style.getBottomRightCorner()))
-							.build();
-					}
-				};
-			for (Object object : new Object[]{formatterEngineFactoryService,
-			                                  formatterFactory,
-			                                  obflParserFactoryService}) {
-				try {
-					object.getClass()
-						.getMethod(object == formatterFactory ? "setTextBorderFactory" : "setTextBorderFactoryMaker",
-						           TextBorderFactoryMakerService.class)
-						.invoke(object, asciiTextBorderFactoryMakerService);
-				} catch (NoSuchMethodException |
-				         SecurityException |
-				         IllegalAccessException |
-				         IllegalArgumentException |
-				         InvocationTargetException e) {
-					throw new RuntimeException(e);
+		// HACK: If a BrailleConverter is specified, we create a new TextBorderFactoryMakerService
+		// that uses the default TextBorderFactoryService to create Unicode braille patterns and
+		// encodes them with the given BrailleConverter. We then make the default
+		// FormatterEngineFactoryService, FormatterFactory and ObflParserFactoryService use this
+		// TextBorderFactoryMakerService by using reflection. This assumes that the
+		// FormatterEngineFactoryService is a
+		// org.daisy.dotify.formatter.impl.engine.LayoutEngineFactoryImpl, the FormatterFactory is a
+		// org.daisy.dotify.formatter.impl.FormatterFactoryImpl, and the ObflParserFactoryService is
+		// a org.daisy.dotify.formatter.impl.obfl.ObflParserFactoryImpl, and that these are the only
+		// classes that bind a TextBorderFactoryMakerService. If no BrailleConverter is specified,
+		// we need to reset the TextBorderFactoryMakerService of the default
+		// FormatterEngineFactoryService, FormatterFactory and ObflParserFactoryService.
+		TextBorderFactoryMakerService asciiTextBorderFactoryMakerService = new TextBorderFactoryMakerService() {
+				public TextBorderStyle newTextBorderStyle(Map<String,Object> features)
+						throws TextBorderConfigurationException {
+					TextBorderFactory f = textBorderFactoryService.newFactory();
+					for (String k : features.keySet())
+						f.setFeature(k, features.get(k));
+					TextBorderStyle style = f.newTextBorderStyle();
+					if (brailleCharset == null)
+						return style;
+					return new TextBorderStyle.Builder()
+						.topLeftCorner    (brailleCharset.toText(style.getTopLeftCorner()))
+						.topBorder        (brailleCharset.toText(style.getTopBorder()))
+						.topRightCorner   (brailleCharset.toText(style.getTopRightCorner()))
+						.leftBorder       (brailleCharset.toText(style.getLeftBorder()))
+						.rightBorder      (brailleCharset.toText(style.getRightBorder()))
+						.bottomLeftCorner (brailleCharset.toText(style.getBottomLeftCorner()))
+						.bottomBorder     (brailleCharset.toText(style.getBottomBorder()))
+						.bottomRightCorner(brailleCharset.toText(style.getBottomRightCorner()))
+						.build();
 				}
+			};
+		for (Object object : new Object[]{formatterEngineFactoryService,
+		                                  formatterFactory,
+		                                  obflParserFactoryService}) {
+			try {
+				object.getClass()
+					.getMethod(object == formatterFactory ? "setTextBorderFactory" : "setTextBorderFactoryMaker",
+					           TextBorderFactoryMakerService.class)
+					.invoke(object, asciiTextBorderFactoryMakerService);
+			} catch (NoSuchMethodException |
+			         SecurityException |
+			         IllegalAccessException |
+			         IllegalArgumentException |
+			         InvocationTargetException e) {
+				throw new RuntimeException(e);
 			}
 		}
 		return formatterEngineFactoryService.newFormatterEngine(config, writer);

@@ -63,8 +63,8 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 	private static String convertDurationToString(Duration duration) {
 		long hours = duration.toHours();
-		long minutes = duration.toMinutes();
-		long seconds = duration.getSeconds();
+		long minutes = duration.toMinutes() % 60;
+		long seconds = duration.getSeconds() % 60;
 		long milliseconds = duration.getNano() / 1000000;
 		return String.format("%d:%02d:%02d.%03d",
 		                     hours,
