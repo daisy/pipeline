@@ -17,27 +17,19 @@
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"xml:base"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"replace(base-uri(.),'[^/]+$','')"</span>/&gt;
 
             
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smils"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"smils"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element(item)*"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"spine/itemref"</span>&gt;
                     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//manifest/item[@id=current()/@idref]"</span>/&gt;
                 &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
             &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
-
-            
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"dtbooks"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"element()*"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"manifest/item[@media-type='application/x-dtbook+xml']"</span>/&gt;
-                
-                
-            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
-            
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$smils"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$dtbooks"</span>/&gt;
-            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"manifest/item[not(@media-type=('application/smil','application/x-dtbook+xml'))]"</span>/&gt;
+
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"manifest/item[not(@media-type='application/smil')]"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">fileset</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"item"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{@href}"</span> <span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"{             if(@media-type='application/smil') then 'application/smil+xml'             else if (@media-type='text/xml' and ends-with(@href,'.opf')) then 'application/oebps-package+xml'             else if (@media-type='text/xml' and ends-with(@href,'.ncx')) then 'application/x-dtbncx+xml'             else @media-type}"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">d:</span><span class="code-xml-element-local-name">file</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"{@href}"</span> <span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"{             if (@media-type='application/smil')                          then 'application/smil+xml'             else if (@media-type='text/xml' and ends-with(@href,'.opf')) then 'application/oebps-package+xml'             else if (@media-type='text/xml' and ends-with(@href,'.ncx')) then 'application/x-dtbncx+xml'             else if (@media-type='text/xml' and ends-with(@href,'.xml')) then 'application/x-dtbook+xml'             else if (@media-type='text/xml' and ends-with(@href,'.res')) then 'application/x-dtbresource+xml'             else @media-type}"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"text()"</span>/&gt;

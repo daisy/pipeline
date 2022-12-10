@@ -909,19 +909,6 @@ Whether to stop processing and raise an error on validation issues.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Language code</div>
-<div class="synopsis-option-desc">
-Language code of the input document.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
@@ -937,6 +924,19 @@ split up if they exceed the given maximum size.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Language code</div>
+<div class="synopsis-option-desc">
+Language code of the input document.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -992,12 +992,12 @@ Options:</pre>
 <td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--language [<span style="text-transform: uppercase">language</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

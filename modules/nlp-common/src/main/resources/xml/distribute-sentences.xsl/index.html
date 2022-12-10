@@ -82,15 +82,22 @@
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each-group</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"node()"</span> <span class="code-xml-attribute-local-name">group-adjacent</span>=<span class="code-xml-attribute-value">"self::text() or not(@pxi:cannot-be-sentence-child)"</span>&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
 	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"current-grouping-key()"</span>&gt;
-	  
-	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{local-name-from-QName($tmp-sentence-tag)}"</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"{namespace-uri-from-QName($tmp-sentence-tag)}"</span>&gt;
-	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$lang != ''"</span>&gt;
-	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/XML/1998/namespace"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>&gt;
-		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$lang"</span>/&gt;
-	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
-	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
-	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt; 
-	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"empty(current-group()[self::* or normalize-space()])"</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	      
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{local-name-from-QName($tmp-sentence-tag)}"</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"{namespace-uri-from-QName($tmp-sentence-tag)}"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$lang != ''"</span>&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"http://www.w3.org/XML/1998/namespace"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>&gt;
+		    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$lang"</span>/&gt;
+		  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span>/&gt; 
+	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
 	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
 	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
 	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current-group()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"split-sentence"</span>&gt;

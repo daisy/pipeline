@@ -883,9 +883,43 @@ XML document to represent the job request:</p>
 description of that particular script. This data is then used when
 building the job request.</p>
 
-<p>A job can be created using inline XML or a multi-part upload.</p>
+<p>A job can be created using local file system references, inline XML or a multi-part upload.</p>
 
-<h2 id="1-inline-xml">1. Inline XML</h2>
+<h2 id="1-local-file-system-references">1. Local file system references</h2>
+
+<p>This method is appropriate when the Pipeline server is running in
+“local file system” mode (see
+<a href="/pipeline/Configuration-Files">configuration</a>). In this case the <code>input</code> and
+<code>option</code> elements may reference absolute file URIs. An example:</p>
+
+<div class="language-xml highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;jobRequest</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://example.org/ws/scripts/dtbook-to-zedai</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>
+<span class="inline">    <span class="tag">&lt;input</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">'</span><span class="content">source</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
+        <span class="tag">&lt;item</span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">'</span><span class="content">file:///home/user/dtbook-basic.xml</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>
+    <span class="tag">&lt;/input&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">'</span><span class="content">opt-mods-filename</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>the-mods-file.xml<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">'</span><span class="content">opt-css-filename</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>the-css-file.css<span class="tag">&lt;/option&gt;</span>
+    <span class="tag">&lt;option</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">'</span><span class="content">opt-zedai-filename</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>the-zedai-file.xml<span class="tag">&lt;/option&gt;</span>
+&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">jobRequest&gt;
+</span></span></span></pre></div>
+</div>
+</div>
+
+<p>Another example to demonstrate absolute URIs in an <code>option</code>:</p>
+
+<div class="language-xml highlighter-coderay">
+<div class="CodeRay">
+  <div class="code"><pre><span class="tag">&lt;jobRequest</span> <span class="attribute-name">xmlns</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://www.daisy.org/ns/pipeline/data</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>
+   <span class="tag">&lt;script</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">'</span><span class="content">http://localhost:8181/ws/scripts/epub3-to-epub3</span><span class="delimiter">'</span></span><span class="tag">/&gt;</span>
+<span class="inline">   <span class="tag">&lt;option</span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">'</span><span class="content">source</span><span class="delimiter">'</span></span><span class="tag">&gt;</span>file:///home/user/accessible_epub_3.epub<span class="tag">&lt;/option&gt;</span>
+&lt;<span class="regexp"><span class="delimiter">/</span><span class="content">jobRequest&gt;
+</span></span></span></pre></div>
+</div>
+</div>
+
+<h2 id="2-inline-xml">2. Inline XML</h2>
 
 <p>This method is appropriate if the only files involved are XML, and no
 external files (e.g. JPEGs) are required. The input XML document(s),
@@ -932,7 +966,7 @@ in this case DTBook documents, are nested in the job request itself:</p>
 </div>
 </div>
 
-<h2 id="2-multipart-zip-upload">2. Multipart zip upload</h2>
+<h2 id="3-multipart-zip-upload">3. Multipart zip upload</h2>
 
 <p>Sometimes the input file’s context is required in order to perform the
 operation. An example is when the input file references images, and
@@ -960,6 +994,8 @@ is an XML file describing the job request:</p>
 </span></span></span></pre></div>
 </div>
 </div>
+
+<p>Both parts are mandatory.</p>
 
 <p>The <code>&lt;input&gt;</code> element contains one or more <code>&lt;item&gt;</code> element children,
 each referring to a file in the attached zip by its relative path

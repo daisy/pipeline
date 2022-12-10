@@ -858,22 +858,6 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">HTML document(s)</div>
-<div class="synopsis-input-desc">
-List of the HTML documents to convert.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="https://www.w3.org/TR/html5/" class="media-type external-link" target="_blank">application/xhtml+xml</a></li>
-<li>text/html</li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-input-name">Metadata</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Metadata to be included in the EPUB.
@@ -888,6 +872,22 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
 <b>Media-type</b>:
 <ul class="media-types">
 <li>application/xml</li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: yes</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">HTML document(s)</div>
+<div class="synopsis-input-desc">
+List of the HTML documents to convert.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="https://www.w3.org/TR/html5/" class="media-type external-link" target="_blank">application/xhtml+xml</a></li>
+<li>text/html</li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -949,15 +949,15 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
-<td>--html <span style="text-transform: uppercase">html</span>
-</td>
-<td>List of the HTML documents to convert.</td>
-</tr>
-<tr>
 <td>--metadata <span style="text-transform: uppercase">metadata</span>
 </td>
 <td>Metadata to be included in the EPUB.
 </td>
+</tr>
+<tr>
+<td>--html <span style="text-transform: uppercase">html</span>
+</td>
+<td>List of the HTML documents to convert.</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

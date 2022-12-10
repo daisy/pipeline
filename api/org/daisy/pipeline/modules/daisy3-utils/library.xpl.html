@@ -24,10 +24,13 @@
 </h2>
 <h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DAISY 3 Utilities</h1>
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">A collection of utilities for DAISY 3 filesets.</p>
-<div xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
+<div xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author">
             <p px:role="name">Romain Deltour</p>
             <a href="mailto:rdeltour@gmail.com" px:role="contact">rdeltour@gmail.com</a>
             <p px:role="organization">DAISY Consortium</p>
+        </div>
+<div xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
+            <p px:role="name">Bert Frees</p>
         </div>
 <h3>Steps</h3>
 <table border="1">
@@ -38,7 +41,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e195.html">daisy3-add-smilrefs</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e237.html">daisy3-add-smilrefs</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Add smilref attributes to a DTBook based on a set of SMIL documents that
       reference the DTBook.
@@ -47,46 +50,53 @@
       references.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e286.html">daisy3-create-ncx</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e674.html">daisy3-audio-transcode</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Transcode audio files in DAISY 3 publication.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e328.html">daisy3-create-ncx</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e439.html">daisy3-create-opf</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e481.html">daisy3-create-opf</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e599.html">daisy3-create-res-file</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e641.html">daisy3-create-res-file</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e99.html">daisy3-create-smils</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e141.html">daisy3-create-smils</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e49.html">daisy3-load</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e60.html">daisy3-load</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
-<td>Creates a fileset document based on a DAISY 3 package file.
-        The fileset entries are ordered as the appear in the manifest element of the
-            input OPF document, except for SMIL documents which are listed in the spine
-            order. If more than one DTBook document is found in [...]</td>
+<td>Creates a fileset document based on a DAISY 3 package file.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e539.html">daisy3-prepare-dtbook</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e581.html">daisy3-prepare-dtbook</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Add missing elements to a DTBook so as to make the NCX/OPF/SMIL generation easier.
       Also add UID metadata and set DOCTYPE.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e245.html">daisy3-smil-add-elapsed-time</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e287.html">daisy3-smil-add-elapsed-time</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Add dtb:totalElapsedTime metadata to SMIL documents.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1135e396.html">ncx-update-links</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e738.html">daisy3-update-links</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Update cross-references in OPF, NCX and SMIL documents</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1406e438.html">ncx-update-links</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Update the links in a NCX document document after resources have been relocated.</td>
 </tr>

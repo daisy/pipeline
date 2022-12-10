@@ -29,7 +29,7 @@
 <a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> FIRST_CHARACTERS = 2500;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">int</strong> SHORT_SENTENCE_THRESHOLD = 25;
 <a class="jxr_linenumber" name="L22" href="#L22">22</a>  	<strong class="jxr_keyword">private</strong> Map&lt;TTSEngine,Integer&gt; totalCharacters = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(); <em class="jxr_comment">// only count first 2500 characters</em>
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">private</strong> Map&lt;TTSEngine,Integer&gt; maxMicrosecPerCharacter = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  	<strong class="jxr_keyword">private</strong> Map&lt;TTSEngine,Integer&gt; maxMillisecPerCharacter = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
 <a class="jxr_linenumber" name="L24" href="#L24">24</a>  	<strong class="jxr_keyword">private</strong> Map&lt;TTSEngine,Integer&gt; maxMillisecOfShortSentence = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;(); <em class="jxr_comment">// shorter than 25 characters</em>
 <a class="jxr_linenumber" name="L25" href="#L25">25</a>  
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<em class="jxr_javadoccomment">/**</em>
@@ -55,22 +55,22 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">if</strong> (n == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  				<strong class="jxr_keyword">return</strong> safeMillisec;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  			<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  				<em class="jxr_comment">// in the long run base timeout on maxMicrosecPerCharacter and maxMillisecOfShortSentence</em>
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  				Integer estimatedMicrosec = multiplyExact(maxMicrosecPerCharacter.get(engine), sentenceSize);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  				<em class="jxr_comment">// in the long run base timeout on maxMillisecPerCharacter and maxMillisecOfShortSentence</em>
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  				Integer estimatedMillisec = multiplyExact(maxMillisecPerCharacter.get(engine), sentenceSize);
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  				Integer minMillisec = maxMillisecOfShortSentence.get(engine);
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  				<strong class="jxr_keyword">if</strong> (minMillisec != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  					<strong class="jxr_keyword">if</strong> (estimatedMicrosec &lt; multiplyExact(minMillisec, 1000))
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  						estimatedMicrosec = multiplyExact(minMillisec, 1000);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  					<strong class="jxr_keyword">if</strong> (estimatedMillisec &lt; minMillisec)
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  						estimatedMillisec = minMillisec;
 <a class="jxr_linenumber" name="L55" href="#L55">55</a>  				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (sentenceSize &lt; SHORT_SENTENCE_THRESHOLD)
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  					estimatedMicrosec = multiplyExact(maxMicrosecPerCharacter.get(engine), SHORT_SENTENCE_THRESHOLD);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  					estimatedMillisec = multiplyExact(maxMillisecPerCharacter.get(engine), SHORT_SENTENCE_THRESHOLD);
 <a class="jxr_linenumber" name="L57" href="#L57">57</a>  				<strong class="jxr_keyword">if</strong> (n &lt; FIRST_CHARACTERS)
 <a class="jxr_linenumber" name="L58" href="#L58">58</a>  					<em class="jxr_comment">// interpolate</em>
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  					<strong class="jxr_keyword">return</strong> toIntExact(
 <a class="jxr_linenumber" name="L60" href="#L60">60</a>  						addExact(
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  							multiplyExact((<strong class="jxr_keyword">long</strong>)safeMillisec, FIRST_CHARACTERS - n) / FIRST_CHARACTERS,
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  							multiplyExact((<strong class="jxr_keyword">long</strong>)estimatedMicrosec, 3 * n) / 1000 / FIRST_CHARACTERS));
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  							multiplyExact((<strong class="jxr_keyword">long</strong>)estimatedMillisec, 3 * n) / FIRST_CHARACTERS));
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  					<strong class="jxr_keyword">return</strong> multiplyExact(3, estimatedMicrosec) / 1000;
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  					<strong class="jxr_keyword">return</strong> multiplyExact(3, estimatedMillisec);
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  			}
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		}
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  	}
@@ -92,16 +92,16 @@
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			<strong class="jxr_keyword">if</strong> (log != <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  				log.setTimeElapsed((<strong class="jxr_keyword">float</strong>)millisecElapsed / 1000);
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  			<strong class="jxr_keyword">synchronized</strong>(totalCharacters) {
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  				Long microsecElapsedPerCharacter = sentenceSize == 0
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  				Long millisecElapsedPerCharacter = sentenceSize == 0
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  					? 0
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					: multiplyExact(millisecElapsed, 1000) / sentenceSize;
-<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">int</strong> max = 1000; <em class="jxr_comment">// don't go below 1 ms</em>
-<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				<strong class="jxr_keyword">if</strong> (maxMicrosecPerCharacter.containsKey(engine))
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					max = maxMicrosecPerCharacter.get(engine);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  					: millisecElapsed / sentenceSize;
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  				<strong class="jxr_keyword">int</strong> max = 1; <em class="jxr_comment">// don't go below 1 ms</em>
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  				<strong class="jxr_keyword">if</strong> (maxMillisecPerCharacter.containsKey(engine))
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  					max = maxMillisecPerCharacter.get(engine);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  				<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					maxMicrosecPerCharacter.put(engine, max);
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<strong class="jxr_keyword">if</strong> (microsecElapsedPerCharacter &gt; max)
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					maxMicrosecPerCharacter.put(engine, toIntExact(microsecElapsedPerCharacter));
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  					maxMillisecPerCharacter.put(engine, max);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  				<strong class="jxr_keyword">if</strong> (millisecElapsedPerCharacter &gt; max)
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  					maxMillisecPerCharacter.put(engine, toIntExact(millisecElapsedPerCharacter));
 <a class="jxr_linenumber" name="L96" href="#L96">96</a>  				<strong class="jxr_keyword">if</strong> (sentenceSize &lt; SHORT_SENTENCE_THRESHOLD
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  				    &amp;&amp; maxMillisecOfShortSentence.containsKey(engine)
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  				    &amp;&amp; millisecElapsed &gt; maxMillisecOfShortSentence.get(engine))

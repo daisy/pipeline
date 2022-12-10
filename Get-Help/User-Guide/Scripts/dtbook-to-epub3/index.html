@@ -867,6 +867,12 @@ if (window.addEventListener) {
 <p><a href="/pipeline/Get-Help/User-Guide/Text-To-Speech">More details on the configuration file format</a>.</p>
 </div>
 </div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>application/vnd.pipeline.tts-config+xml</li>
+</ul>
+</div>
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
 </li>
@@ -924,19 +930,6 @@ The resulting EPUB 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
@@ -965,6 +958,19 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1048,16 +1054,16 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>

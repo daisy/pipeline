@@ -82,7 +82,7 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
-<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Attribute to be added to sentence spans.</p></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Attribute to be added to sentence <code>span</code> elements.</p></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
@@ -90,7 +90,12 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">''</td>
-<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Corresponding attribute value.</p></td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Corresponding attribute value.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc"><code>span</code> elements in the input that are already marked up as sentences using the
+        specified attribute and value are preserved. No additional sentence detection is performed
+        within such elements.</p>
+</td>
 </tr>
 </tbody>
 </table>

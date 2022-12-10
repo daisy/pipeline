@@ -129,11 +129,6 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
 
-  &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/common-utils/src/main/resources/xml/xproc/library.xpl" class="source">http://www.daisy.org/pipeline/modules/common-utils/library.xpl</a>"</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-      px:message
-    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/nlp-common/src/main/resources/xml/break-detect.xpl" class="source">break-detect.xpl</a>"</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
       px:break-detect
@@ -150,7 +145,7 @@
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"tmp-sentence-tag"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'tmp:ss'"</span>/&gt;
 
   
-  &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">break-detect</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"break"</span>&gt;
+  &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">break-detect</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"inline-tags"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$inline-tags"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ensure-word-before"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ensure-word-before"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"ensure-word-after"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$ensure-word-after"</span>/&gt;
@@ -159,7 +154,6 @@
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-word-tag"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$tmp-word-tag"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"output-sentence-tag"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$tmp-sentence-tag"</span>/&gt;
   &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">break-detect</span>&gt;
-  &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Java-based break detection done."</span> <span class="code-xml-attribute-local-name">severity</span>=<span class="code-xml-attribute-value">"DEBUG"</span>/&gt;
 
   &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">reshape</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reshape"</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"can-contain-sentences"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$can-contain-sentences"</span>/&gt;
@@ -179,7 +173,6 @@
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"exclusive-sentence-tag"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$exclusive-sentence-tag"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"id-prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$id-prefix"</span>/&gt;
   &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">reshape</span>&gt;
-  &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">message</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"Full break detection done"</span> <span class="code-xml-attribute-local-name">severity</span>=<span class="code-xml-attribute-value">"DEBUG"</span>/&gt;
 
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
 </html>
