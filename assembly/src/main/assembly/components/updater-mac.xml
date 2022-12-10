@@ -10,11 +10,4 @@
       <fileMode>0755</fileMode>
     </fileSet>
   </fileSets>
-  <files>
-          <file>
-                  <source>target/release-descriptor/releaseDescriptor.xml</source>
-                  <outputDirectory>etc</outputDirectory>
-                  <destName>releaseDescriptor.xml</destName>
-          </file>
-  </files>
 </component>

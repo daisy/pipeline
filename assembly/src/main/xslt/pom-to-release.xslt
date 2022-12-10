@@ -63,9 +63,6 @@
                                                 <xsl:when test="pom:id = 'copy-persistence-no-osgi'">
                                                         <xsl:value-of select="'system/no-osgi/persistence'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-volatile'">
-                                                        <xsl:value-of select="'system/common'"/>
-                                                </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-gui'">
                                                         <xsl:value-of select="'system/gui'"/>
                                                 </xsl:when>

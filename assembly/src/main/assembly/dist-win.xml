@@ -13,6 +13,7 @@
       <componentDescriptor>src/main/assembly/components/jars-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/updater-win.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/jre-win64.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/simple-api.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/jre-win.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>

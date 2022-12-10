@@ -1259,17 +1259,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-volatile</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>framework-volatile</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-framework</id>
                         <configuration>
                             <artifactItems>

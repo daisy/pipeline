@@ -25,15 +25,18 @@ public class eval_java {
 				+ "public static void main(String args[]) throws Throwable {\n\n"
 				+ Pattern.compile(" *\\\\$", Pattern.MULTILINE).matcher(javaCode).replaceAll("") + "\n\n"
 				+ "}\n}\n";
-			String className = "temp_" + md5(javaCode);
+			String className = "temp_" + md5(javaCode) + "_" + getJavaVersion();
 			javaCode = javaCode.replace("[CLASSNAME]", className);
 			File javaDir = new File(thisExecutable.getParentFile(), "java");
 			File classFile = new File(javaDir, className + ".class");
 			if (!classFile.exists()) {
 				File javaFile = new File(javaDir, className + ".java");
-				try (OutputStream os = new FileOutputStream(javaFile)) {
+				OutputStream os = new FileOutputStream(javaFile);
+				try {
 					os.write(javaCode.getBytes("UTF-8"));
 					os.flush();
+				} finally {
+					os.close();
 				}
 				String javac = "javac";
 				String JAVA_HOME = System.getenv("JAVA_HOME");
@@ -67,5 +70,14 @@ public class eval_java {
 			         .toString((bytes[i] & 0xff) + 0x100, 16)
 			         .substring(1));
 		return s.toString();
+	}
+
+	public static int getJavaVersion() {
+		String v = System.getProperty("java.version");
+		if (v.startsWith("1."))
+			v = v.substring(2, 3);
+		else
+			v = v.replaceAll("\\..*", "");
+		return Integer.parseInt(v);
 	}
 }

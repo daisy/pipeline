@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.10-SNAPSHOT</version>
+  <version>1.14.11-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -22,11 +22,8 @@
   <properties>
     <cli.version>2.1.7</cli.version>
     <javafx.version>11.0.1</javafx.version>
-    <!--
-        for package-exe
-    -->
-    <nsis.scriptfile>${project.build.directory}/nsis/installer.nsi</nsis.scriptfile>
-    <nsis.output.file>assembly-${project.version}-win.exe</nsis.output.file>
+    <classifier />
+    <classifier.dash /> <!-- classifier followed by "-" -->
     <!--
         for package-deb
     -->
@@ -58,7 +55,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>gui</artifactId>
-        <version>1.3.1</version>
+        <version>1.3.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -78,19 +75,19 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.9</version>
+        <version>1.14.10</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.10</version>
+        <version>1.14.11</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -403,10 +400,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>xmlcatalog</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>xproc-api</artifactId>
                 </artifactItem>
                 <!--
@@ -443,10 +436,6 @@
                 <artifactItem>
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>saxon-he</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>servlet-api</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>com.google.guava</groupId>
@@ -546,21 +535,6 @@
                   <groupId>org.atteo.classindex</groupId>
                   <artifactId>classindex</artifactId>
                   <version>3.3</version>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-volatile</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/volatile</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>framework-volatile</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -696,42 +670,6 @@
                 <artifactItem>
                   <groupId>org.restlet.osgi</groupId>
                   <artifactId>org.restlet.ext.xml</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.restlet.osgi</groupId>
-                  <artifactId>org.restlet.ext.jetty</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.restlet.osgi</groupId>
-                  <artifactId>org.restlet.ext.ssl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-server</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-ajp</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-util</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-http</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-io</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-continuation</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jsslutils</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -944,6 +882,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>daisy202-to-epub3</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>daisy202-to-mp3</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
@@ -1466,7 +1408,7 @@
       </build>
     </profile>
     <profile>
-      <id>compile-simple-api</id>
+      <id>with-simple-api</id>
       <dependencies>
         <dependency>
           <groupId>org.daisy.pipeline</groupId>
@@ -1519,8 +1461,8 @@
                   <goal>compile</goal>
                 </goals>
                 <configuration>
-                  <source>1.8</source>
-                  <target>1.8</target>
+                  <source>10</source>
+                  <target>10</target>
                 </configuration>
               </execution>
             </executions>
@@ -1862,7 +1804,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <attach>true</attach>
+                  <attach>false</attach> <!-- installed by Makefile -->
                   <formats>
                     <format>zip</format>
                   </formats>
@@ -1895,7 +1837,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <attach>true</attach>
+                  <attach>false</attach> <!-- installed by Makefile -->
                   <formats>
                     <format>zip</format>
                   </formats>
@@ -1928,45 +1870,12 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <attach>true</attach>
+                  <attach>false</attach> <!-- installed by Makefile -->
                   <formats>
                     <format>zip</format>
                   </formats>
                   <descriptors>
                     <descriptor>src/main/assembly/dist-win.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-win.properties</filter>
-                  </filters>
-                  <appendAssemblyId>true</appendAssemblyId>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>assemble-word-addin-dir</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>assemble-word-addin-dir</id>
-                <phase>prepare-package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <formats>
-                    <format>dir</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-word-addin.xml</descriptor>
                   </descriptors>
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
@@ -1994,7 +1903,7 @@
                   <goal>single</goal>
                 </goals>
                 <configuration>
-                  <attach>true</attach>
+                  <attach>false</attach> <!-- installed by Makefile -->
                   <formats>
                     <format>zip</format>
                   </formats>
@@ -2048,6 +1957,9 @@
     </profile>
     <profile>
       <id>package-exe</id>
+      <properties>
+        <nsis.scriptfile>${project.build.directory}/nsis/installer.nsi</nsis.scriptfile>
+      </properties>
       <build>
         <plugins>
           <plugin>
@@ -2094,6 +2006,7 @@
                 </goals>
                 <configuration>
                   <attach>true</attach>
+                  <classifier>${classifier}</classifier>
                 </configuration>
               </execution>
             </executions>
@@ -2158,6 +2071,7 @@
                 <configuration>
                   <controlDir>${project.build.directory}/filtered-resources/deb/DEBIAN</controlDir>
                   <timestamped>true</timestamped>
+                  <classifier>${classifier}</classifier>
                   <deb>${project.build.directory}/assembly-${project.version}.deb</deb>
                   <dataSet>
                     <!-- ======== -->
@@ -2200,7 +2114,7 @@
                       <src>src/main/resources/etc</src>
                       <excludes>
                         felix.properties,
-                        config-logback.xml,
+                        logback.xml,
                         pipeline.properties
                       </excludes>
                       <mapper>
@@ -2222,20 +2136,14 @@
                     </data>
                     <data>
                       <type>file</type>
-                      <src>src/main/resources/etc/config-logback.xml</src>
-                      <dst>${deb.pipeline.config}/config-logback.xml</dst>
+                      <src>src/main/resources/etc/logback.xml</src>
+                      <dst>${deb.pipeline.config}/logback.xml</dst>
                     </data>
                     <data>
                       <type>link</type>
                       <symlink>true</symlink>
                       <linkName>${deb.pipeline.config}/pipeline.properties</linkName>
                       <linkTarget>${deb.pipeline.home}/etc/pipeline.properties</linkTarget>
-                    </data>
-                    <data>
-                      <type>link</type>
-                      <symlink>true</symlink>
-                      <linkName>${deb.pipeline.config}/tts-default-config.xml</linkName>
-                      <linkTarget>${deb.pipeline.home}/etc/tts-default-config.xml</linkTarget>
                     </data>
                     <data>
                       <type>file</type>
@@ -2358,7 +2266,7 @@
                 <configuration>
                   <controlDir>${project.build.directory}/filtered-resources/deb/DEBIAN.cli</controlDir>
                   <timestamped>true</timestamped>
-                  <classifier>cli</classifier>
+                  <classifier>${classifier.dash}cli</classifier>
                   <deb>${project.build.directory}/assembly-${project.version}-cli.deb</deb>
                   <dataSet>
                     <!-- ============ -->
@@ -2415,7 +2323,7 @@
                 <configuration>
                   <name>pipeline2</name>
                   <group>daisy-pipeline2</group>
-                  <classifier>linux</classifier>
+                  <classifier>${classifier}</classifier>
                   <description>daisy-pipeline2</description>
                   <needarch>x86_64</needarch>
                   <mappings>
@@ -2555,7 +2463,7 @@
                   <name>pipeline2-cli</name>
                   <group>daisy-pipeline2-cli</group>
                   <projversion>${cli.version}</projversion>
-                  <classifier>cli</classifier>
+                  <classifier>${classifier.dash}cli</classifier>
                   <description>daisy-pipeline2-cli</description>
                   <needarch>x86_64</needarch>
                   <mappings>
@@ -2601,51 +2509,6 @@
       </build>
     </profile>
     <profile>
-      <id>build-jre</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jlink-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jlink</id>
-                <!-- if done in package phase, will try to include target/classes and fail because
-                     of "target/classes does not contain a module-info.java file" error (same for
-                     other "build-jre" profiles) -->
-                <phase>initialize</phase>
-                <!-- <phase>package</phase> -->
-                <goals>
-                  <goal>jlink</goal>
-                </goals>
-                <configuration>
-                  <classifier>jre</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.security.jgss</addModule>
-                    <addModule>java.scripting</addModule> <!-- for gui -->
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
-                  <modulePaths>
-                    <!-- otherwise build fails with "Error: no value given for -module-path" -->
-                    <modulePath />
-                  </modulePaths>
-                  <noHeaderFiles>true</noHeaderFiles>
-                  <noManPages>true</noManPages>
-                  <compress>1</compress>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <!--
           this profile needs to be run with JDK 11
       -->
@@ -2657,6 +2520,9 @@
             <executions>
               <execution>
                 <id>jlink-linux</id>
+                <!-- if done in package phase, will try to include target/classes and fail because
+                     of "target/classes does not contain a module-info.java file" error (same for
+                     other "build-jre" profiles) -->
                 <phase>initialize</phase>
                 <!-- <phase>package</phase> -->
                 <goals>
@@ -2669,9 +2535,11 @@
                     <addModule>java.desktop</addModule>
                     <addModule>java.instrument</addModule>
                     <addModule>java.security.jgss</addModule>
+                    <addModule>java.scripting</addModule> <!-- for gui -->
                     <addModule>java.sql</addModule>
                     <addModule>java.xml</addModule>
                     <addModule>jdk.management.agent</addModule>
+                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
                     <addModule>jdk.zipfs</addModule>
                   </addModules>
                   <modulePaths>

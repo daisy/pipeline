@@ -74,6 +74,15 @@ public class util {
 			throw new RuntimeException("Unsupported OS: " + name);
 	}
 
+	public static int getJavaVersion() {
+		String v = System.getProperty("java.version");
+		if (v.startsWith("1."))
+			v = v.substring(2, 3);
+		else
+			v = v.replaceAll("\\..*", "");
+		return Integer.parseInt(v);
+	}
+
 	public static void mkdirs(String directory) {
 		mkdirs(new File(directory));
 	}

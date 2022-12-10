@@ -83,6 +83,13 @@ void exec_java(char *this_executable, char *java_executable, char *java_code) {
 				exit(EXIT_FAILURE);
 			}
 			if (WIFEXITED(child_status))
+				// Note that trying to run this class with Java < 8 will result in:
+				//
+				//    Exception in thread "main" java.lang.UnsupportedClassVersionError: eval_java :
+				//    Unsupported major.minor version 52.0
+				//
+				// This error can not be caught in Java and because the exit code is 1 it can not be
+				// caught in C either.
 				exit(WEXITSTATUS(child_status));
 			else {
 				fprintf(stderr, "command `%s' did not exit normally\n", java_executable);
@@ -136,6 +143,6 @@ int main(int argc, char **argv) {
 		dir = sep ? sep + 1 : NULL;
 	} while (dir != NULL);
 	free(PATH);
-	fprintf(stderr, "java not found in JAVA_HOME or on PATH\n");
+	fprintf(stderr, "Java is required to run this script (but not found in JAVA_HOME or on PATH)\n");
 	exit(EXIT_FAILURE);
 }

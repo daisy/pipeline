@@ -18,11 +18,8 @@ import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.JobManagerFactory;
+import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -36,12 +33,10 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
- * A simplified Java API consisting of a {@link #startJob()} method
- * that accepts a script name and a list of options and returns a
- * {@link Job}, a {@link #deleteJob()} method, and a {@link
- * #getNewMessages()} method. It is used to build a simple Java CLI
- * (see the {@link #main()} method). The simplified API also makes it
- * easier to bridge with other programming languages using JNI.
+ * A simplified Java API consisting of a {@link #startJob()} method that accepts a script name and a
+ * list of options and returns a {@link Job}, and a {@link #getNewMessages()} method. It is used to
+ * build a simple Java CLI (see the {@link #main()} method). The simplified API also makes it easier
+ * to bridge with other programming languages using JNI.
  */
 @Component(
 	name = "SimpleAPI",
@@ -50,8 +45,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class SimpleAPI {
 
 	private ScriptRegistry scriptRegistry;
-	private WebserviceStorage webserviceStorage;
-	private JobManagerFactory jobManagerFactory;
+	private JobFactory jobFactory;
 
 	@Reference(
 		name = "script-registry",
@@ -65,28 +59,15 @@ public class SimpleAPI {
 	}
 
 	@Reference(
-		name = "webservice-storage",
+		name = "job-factory",
 		unbind = "-",
-		service = WebserviceStorage.class,
+		service = JobFactory.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
-		this.webserviceStorage = webserviceStorage;
+	public void setJobFactory(JobFactory jobFactory) {
+		this.jobFactory = jobFactory;
 	}
-
-	@Reference(
-		name = "job-manager-factory",
-		unbind = "-",
-		service = JobManagerFactory.class,
-		cardinality = ReferenceCardinality.MANDATORY,
-		policy = ReferencePolicy.STATIC
-	)
-	public void setJobManagerFactory(JobManagerFactory jobManagerFactory) {
-		this.jobManagerFactory = jobManagerFactory;
-	}
-
-	private JobManager jobManager = null;
 
 	private Job _startJob(String scriptName, Map<String,String> options) throws IOException {
 		XProcScriptService scriptService = scriptRegistry.getScript(scriptName);
@@ -183,28 +164,19 @@ public class SimpleAPI {
 			throw new IllegalArgumentException("Unknown option: " + unknown);
 		}
 		BoundXProcScript boundScript = BoundXProcScript.from(script, inputs.build(), outputs.build());
-		if (jobManager == null) {
-			Client client = webserviceStorage.getClientStorage().defaultClient();
-			jobManager = jobManagerFactory.createFor(client);
-		}
-		Job job = jobManager.newJob(boundScript).isMapping(true).build().get();
-		MessageAccessor accessor = job.getContext().getMonitor().getMessageAccessor();
+		Job job = jobFactory.newJob(boundScript).isMapping(true).build().get();
+		MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 		accessor.listen(
 			num -> {
 				consumeMessage(accessor, num);
 			}
 		);
+		new Thread(job).start();
 		return job;
 	}
 
 	public static Job startJob(String scriptName, Map<String,String> options) throws IOException {
 		return getInstance()._startJob(scriptName, options);
-	}
-
-	private static void deleteJob(Job job) {
-		if (INSTANCE == null || INSTANCE.jobManager == null)
-			throw new IllegalStateException();
-		INSTANCE.jobManager.deleteJob(job.getId());
 	}
 
 	/**

@@ -23,5 +23,12 @@
       <filtered>true</filtered>
       <outputDirectory></outputDirectory>
     </fileSet>
+    <fileSet>
+      <directory>target/release-descriptor</directory>
+      <includes>
+        <include>releaseDescriptor.xml</include>
+      </includes>
+      <outputDirectory>etc</outputDirectory>
+    </fileSet>
   </fileSets>
 </component>

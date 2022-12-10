@@ -9,6 +9,15 @@ SHELL := make/eval-java
 endif
 .SHELLFLAGS :=
 
+JAVA_VERSION := $(shell println(getJavaVersion());)
+
+ifeq ($(JAVA_VERSION),)
+# probably because java not found or exited with a UnsupportedClassVersionError
+$(error "Java 8 is required to run this script")
+else ifeq ($(shell println($(JAVA_VERSION) >= 8);), false)
+$(error "Java 8 is required to run this script")
+endif
+
 OS := $(shell println(getOS());)
 
 ifeq ($(OS), WINDOWS)
@@ -18,6 +27,8 @@ MVN ?= mvn
 endif
 
 DOCKER := docker
+--classifier ?=
+CLASSIFIER := $(shell println("$(--classifier)".replaceAll("^.+$$", "-$$0"));)
 
 .PHONY : default
 ifeq ($(OS), WINDOWS)
@@ -72,88 +83,122 @@ assembly/VERSION             := $(shell println(xpath(new File("pom.xml"), "/*/*
 assembly/BASEDIR             := .
 DEFAULT_MVN_LOCAL_REPOSITORY := $(shell println(System.getProperty("user.home").replace("\\", "/"));)/.m2/repository
 MVN_LOCAL_REPOSITORY         ?= $(DEFAULT_MVN_LOCAL_REPOSITORY)
+INSTALL_DIR                  := $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)
 
 include deps.mk
 
 .PHONY : dmg exe deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
 
-dmg         : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg
-exe         : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe
-deb         : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb
-rpm         : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm
-zip-linux   : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip
-zip-mac     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip
-zip-win     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip
-zip-minimal : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip
-deb-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb
-rpm-cli     : $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm
+dmg         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).dmg
+exe         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe
+deb         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb
+rpm         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm
+zip-linux   : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip
+zip-mac     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip
+zip-win     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip
+zip-minimal : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip
+deb-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb
+rpm-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm
 
 .PHONY : release-descriptor
 release-descriptor : target/release-descriptor/releaseDescriptor.xml
 target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descriptor
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe         : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-win \
-                                                                                                                       -Punpack-updater-win \
-                                                                                                                       -Punpack-updater-gui-win \
-                                                                                                                       -Passemble-win-dir \
-                                                                                                                       -Ppackage-exe
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb         : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-updater-linux \
-                                                                                                                       -Ppackage-deb
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip   : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-linux \
-                                                                                                                       -Punpack-updater-linux \
-                                                                                                                       -Passemble-linux-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip     : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-mac \
-                                                                                                                       -Punpack-updater-mac \
-                                                                                                                       -Pbuild-jre-mac
+# some artifacts are installed through command line
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).dmg         \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip   \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip     \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install", "-Passemble-mac-zip");
+	exec("$(MVN)", "install:install-file",                                                                               \
+	               "-Dfile=$<",                                                                                          \
+	               "-DpomFile=pom.xml",                                                                                  \
+	               "-Dclassifier=$(patsubst -%,%,$(patsubst assembly-$(assembly/VERSION)%,%,$(basename $(notdir $@))))", \
+	               "-Dpackaging=$(patsubst .%,%,$(suffix $@))");
 	exit(new File("$@").exists());
 endif
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip     : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-win \
-                                                                                                                       -Punpack-updater-win \
-                                                                                                                       -Punpack-updater-gui-win \
-                                                                                                                       -Pbuild-jre-win64
+
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe                  : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-cli-win \
+                                                                                    -Punpack-updater-win \
+                                                                                    -Punpack-updater-gui-win \
+                                                                                    -Passemble-win-dir \
+                                                                                    -Ppackage-exe
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb                  : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-updater-linux \
+                                                                                    -Ppackage-deb
+target/assembly-$(assembly/VERSION)-linux.zip                                 : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-cli-linux \
+                                                                                    -Punpack-updater-linux \
+                                                                                    -Passemble-linux-zip
+target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-cli-mac \
+                                                                                    -Punpack-updater-mac
+ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
+target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Passemble-mac-zip
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install", "-Passemble-win-zip");
 	exit(new File("$@").exists());
 endif
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-updater-mac \
-                                                                                                                       -Punpack-updater-linux \
-                                                                                                                       -Punpack-updater-win \
-                                                                                                                       -Passemble-minimal-zip
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb     : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-linux \
-                                                                                                                       -Ppackage-deb-cli
+else
+target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pbuild-jre-mac
+# -Passemble-mac-zip run separately because -Pbuild-jre-mac also run separately
+ifndef DUMP_PROFILES
+	exec("$(MVN)", "package", "-Passemble-mac-zip");
+	exit(new File("$@").exists());
+endif
+endif # --without-jre
+target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-cli-win \
+                                                                                    -Punpack-updater-win \
+                                                                                    -Punpack-updater-gui-win
+ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
+target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Passemble-win-zip
+ifndef DUMP_PROFILES
+	exit(new File("$@").exists());
+endif
+else
+target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pbuild-jre-win64
+ifeq (--with-jre32,$(filter --with-jre32,$(MAKECMDGOALS)))
+target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pbuild-jre-win32
+endif # --with-jre32
+# -Passemble-win-zip run separately because -Pbuild-jre-win64 also run separately
+ifndef DUMP_PROFILES
+	exec("$(MVN)", "package", "-Passemble-win-zip");
+	exit(new File("$@").exists());
+endif
+endif # --without-jre
+target/assembly-$(assembly/VERSION)-minimal.zip                               : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-updater-mac \
+                                                                                    -Punpack-updater-linux \
+                                                                                    -Punpack-updater-win \
+                                                                                    -Passemble-minimal-zip
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb              : mvn -Pcopy-artifacts \
+                                                                                    -Pgenerate-release-descriptor \
+                                                                                    -Punpack-cli-linux \
+                                                                                    -Ppackage-deb-cli
 ifeq ($(OS), MACOSX)
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-mac \
-                                                                                                                       -Punpack-updater-mac \
-                                                                                                                       -Passemble-mac-app-dir \
-                                                                                                                       -Pbuild-jre-mac
+app_version := $(shell println("$(assembly/VERSION)".replaceAll("-.*$$", ""));)
+target/assembly-$(assembly/VERSION).dmg                                        : mvn -Pcopy-artifacts \
+                                                                                     -Pgenerate-release-descriptor \
+                                                                                     -Punpack-updater-mac \
+                                                                                     -Passemble-mac-app-dir \
+                                                                                     -Pbuild-jre-mac
 ifndef DUMP_PROFILES
 	rm("target/jpackage");                                                                               \
 	String[] guiJar = new File("target/assembly-$(assembly/VERSION)-mac-app/daisy-pipeline/system/gui")  \
 	                  .list((dir, name) -> name.matches("org\\.daisy\\.pipeline\\.gui-.*\\.jar"));       \
 	exitOnError(guiJar != null && guiJar.length == 1);                                                   \
-	String appVersion = "$(assembly/VERSION)".replaceAll("-.*$$", "");                                   \
 	exec("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7/Contents/Home/bin/jpackage", \
 	     "--dest", "target/jpackage",                                                                    \
 	     "--type", "dmg",                                                                                \
-	     "--app-version", appVersion,                                                                    \
+	     "--app-version", "$(app_version)",                                                              \
 	     "--description", "A tool for automated production of accessible digital publication",           \
 	     "--name", "DAISY Pipeline 2",                                                                   \
 	     "--vendor", "DAISY Consortium",                                                                 \
@@ -164,68 +209,62 @@ ifndef DUMP_PROFILES
 	     "--main-jar", "system/gui/" + guiJar[0],                                                        \
 	     "--main-class", "org.daisy.pipeline.gui.GUIService",                                            \
 	     "--java-options", "--add-opens=java.base/java.lang=ALL-UNNAMED "                              + \
-	                       "-Dorg.daisy.pipeline.mode=gui "                                            + \
 	                       "-Dorg.daisy.pipeline.home=$$APPDIR "                                       + \
 	                       "-Dorg.daisy.pipeline.data=$$APPDIR/data "                                  + \
-	                       "-Dorg.daisy.pipeline.logdir=$$APPDIR/data/log "                            + \
-	                       "-Dorg.daisy.pipeline.ws.localfs=true "                                     + \
-	                       "-Dorg.daisy.pipeline.ws.authentication=false "                             + \
+	                       "-Dorg.daisy.pipeline.logdir=$$APPDIR/log "                                 + \
 	                       "-Dorg.daisy.pipeline.properties=$$APPDIR/etc/pipeline.properties "         + \
-	                       "-Dlogback.configurationFile=$$APPDIR/etc/config-logback.xml");
-	String appVersion = "$(assembly/VERSION)".replaceAll("-.*$$", "");                                   \
-	exec("$(MVN)", "install:install-file",                                                               \
-	               "-Dfile=target/jpackage/DAISY Pipeline 2-" + appVersion + ".dmg",                     \
-	               "-DpomFile=pom.xml",                                                                  \
-	               "-Dpackaging=dmg");
-	exit(new File("$@").exists());
+	                       "-Dlogback.configurationFile=$$APPDIR/etc/logback.xml");
+	exec("mv", "target/jpackage/DAISY Pipeline 2-$(app_version).dmg", "$@");
 endif
 else
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg         :
+target/assembly-$(assembly/VERSION).dmg :
 	@err.println("Can not build DMG because not running MacOS"); \
 	exit(1);
 endif # eq ($(OS), MACOSX)
 ifeq ($(OS), REDHAT)
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm   : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Passemble-linux-dir \
-                                                                                                                       -Ppackage-rpm
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm                   : mvn -Pcopy-artifacts \
+                                                                                     -Pgenerate-release-descriptor \
+                                                                                     -Passemble-linux-dir \
+                                                                                     -Ppackage-rpm
 ifndef DUMP_PROFILES
 	exit(new File("$@").exists());
 endif
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm     : mvn -Pcopy-artifacts \
-                                                                                                                       -Pgenerate-release-descriptor \
-                                                                                                                       -Punpack-cli-linux \
-                                                                                                                       -Ppackage-rpm-cli
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm               : mvn -Pcopy-artifacts \
+                                                                                     -Pgenerate-release-descriptor \
+                                                                                     -Punpack-cli-linux \
+                                                                                     -Ppackage-rpm-cli
 ifndef DUMP_PROFILES
 	exit(new File("$@").exists());
 endif
 else
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.rpm :
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm :
 	@err.println("Can not build RPM because not running RedHat/CentOS"); \
 	exit(1);
 endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
-dir-word-addin : target/assembly-$(assembly/VERSION)-word-addin
-target/assembly-$(assembly/VERSION)-word-addin : assembly/SOURCES
-target/assembly-$(assembly/VERSION)-word-addin : mvn -Pwithout-osgi \
-                                                     -Pwithout-persistence \
-                                                     -Pwithout-webservice \
-                                                     -Pwithout-gui \
-                                                     -Pwithout-cli \
-                                                     -Pwithout-updater \
-                                                     -Pcompile-simple-api \
-                                                     -Pcopy-artifacts \
-                                                     -Pbuild-jre-win32 \
-                                                     -Pbuild-jre-win64
+# Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-osgi, --without-persistence,
+# --without-webservice, --without-gui, --without-cli, --without-updater and --with-simple-api were also specified.
+dir-word-addin                                                                 : assembly/SOURCES
+dir-word-addin                                                                 : mvn -Pwithout-osgi \
+                                                                                     -Pwithout-persistence \
+                                                                                     -Pwithout-webservice \
+                                                                                     -Pwithout-gui \
+                                                                                     -Pwithout-cli \
+                                                                                     -Pwithout-updater \
+                                                                                     -Pwith-simple-api \
+                                                                                     -Pcopy-artifacts \
+                                                                                     -Pbuild-jre-win32 \
+                                                                                     -Pbuild-jre-win64
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install", "-Passemble-word-addin-dir");
+	exec("$(MVN)", "install", "-Passemble-win-dir");
 endif
 
 ifneq ($(OS), WINDOWS)
 
 .PHONY : docker
+# Note that when `docker' is enabled together with other targets, it is as if --without-gui and --without-osgi were also specified.
 docker : mvn -Pwithout-gui -Pwithout-osgi \
          target/maven-jlink/classifiers/jre-linux \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
@@ -241,10 +280,11 @@ endif
 .PHONY : dev-launcher
 dev-launcher : target/dev-launcher/pipeline2
 target/dev-launcher/pipeline2 : pom.xml
+ifdef BUILD_JRE_FOR_DEV_LAUNCHER
 ifeq ($(OS), MACOSX)
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre-mac target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 else
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
 ifndef DUMP_PROFILES
 	mkdirs("$(dir $@)");                                \
@@ -255,20 +295,31 @@ ifndef DUMP_PROFILES
 	write(f, "$(CURDIR)/$(word 2,$^) \"$$@\"\n");       \
 	exec("chmod", "+x", "$@");
 endif
+else
+ifeq ($(OS), MACOSX)
+target/dev-launcher/pipeline2 : target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+else
+target/dev-launcher/pipeline2 : target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+endif
+ifndef DUMP_PROFILES
+	mkdirs("$(dir $@)");                                \
+	File f = new File("$@");                            \
+	f.delete();                                         \
+	write(f, "#!/usr/bin/env bash\n");                  \
+	write(f, "$(CURDIR)/$< \"$$@\"\n");                 \
+	exec("chmod", "+x", "$@");
+endif
+endif
 
-target/maven-jlink/classifiers/jre                                     : mvn -Pbuild-jre
+target/maven-jlink/classifiers/jre-mac                                 : mvn -Pbuild-jre-mac
 target/maven-jlink/classifiers/jre-linux                               : mvn -Pbuild-jre-linux
 
-target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pwithout-persistence \
-                                                                             -Pcopy-artifacts \
-                                                                             -Pcompile-simple-api \
+target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
                                                                              -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
-target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pwithout-persistence \
-                                                                             -Pcopy-artifacts \
-                                                                             -Pcompile-simple-api \
+target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
                                                                              -Punpack-updater-linux \
@@ -276,12 +327,12 @@ target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pw
 
 endif # neq ($(OS), WINDOWS)
 
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip \
-$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb \
-target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2 \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe           \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb           \
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb       \
+target/assembly-$(assembly/VERSION)-linux.zip             \
+target/assembly-$(assembly/VERSION)-minimal.zip           \
+target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   \
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 :
 ifndef DUMP_PROFILES
 	exit(new File("$@").exists());
@@ -296,25 +347,9 @@ check-docker :
 	exec("bash", "src/test/resources/test-docker-image.sh");
 endif # neq ($(OS), WINDOWS)
 
-.PHONY : --without-persistence
---without-persistence : -Pwithout-persistence
-
-.PHONY : --without-osgi
---without-osgi : -Pwithout-osgi
-
-.PHONY : --without-gui
---without-gui : -Pwithout-gui
-
-.PHONY : --without-webservice
---without-webservice : -Pwithout-webservice
-
-.PHONY : --without-cli
---without-cli : -Pwithout-cli
-
-.PHONY : --without-updater
---without-updater : -Pwithout-updater
-
+.PHONY : clean
 clean :
+	exec("$(MVN)", "clean");
 	for (File f : new File("make/java/").listFiles())  \
 		if (f.getName().matches(".*\\.(java|class)"))  \
 			f.delete();
@@ -327,7 +362,6 @@ clean :
 #                         copy-framework
 #                         copy-framework-osgi
 #                         copy-framework-no-osgi
-#                         copy-volatile
 #                         copy-persistence
 #                         copy-persistence-osgi
 #                         copy-persistence-no-osgi
@@ -343,7 +377,6 @@ clean :
 #                         copy-modules-win
 # generate-release-descriptor                  generate-effective-pom
 #                                              generate-release-descriptor
-# build-jre                                                                                                         jlink
 # build-jre-linux                                                                                                   jlink-linux
 # build-jre-win32                                                                                                   jlink-win32
 # build-jre-win64                                                                                                   jlink-win64
@@ -363,7 +396,6 @@ clean :
 # assemble-linux-zip                                                                                                assemble-linux-zip
 # assemble-win-zip                                                                                                  assemble-win-zip
 # assemble-minimal-zip                                                                                              assemble-minimal-zip
-# assemble-word-addin-dir                                                                                           assemble-word-addin-dir
 # package-exe                                                                                 copy-nsis-resources   package-exe
 # package-deb                                                          filter-deb-resources                         package-deb
 # package-deb-cli                                                                                                   package-deb-cli
@@ -372,9 +404,7 @@ clean :
 
 PROFILES :=                     \
 	copy-artifacts              \
-	compile-simple-api          \
 	generate-release-descriptor \
-	build-jre                   \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
@@ -394,13 +424,69 @@ PROFILES :=                     \
 	unpack-updater-linux        \
 	unpack-updater-mac          \
 	unpack-updater-win          \
-	unpack-updater-gui-win      \
-	without-persistence         \
-	without-osgi                \
-	without-gui                 \
-	without-webservice          \
-	without-cli                 \
-	without-updater
+	unpack-updater-gui-win
+
+.PHONY : --with-persistence --without-persistence
+--without-persistence : -Pwithout-persistence
+ifneq (--with-persistence,$(filter --with-persistence,$(MAKECMDGOALS)))
+PROFILES += without-persistence
+else
+.PHONY : -Pwithout-persistence
+endif
+
+.PHONY : --with-osgi --without-osgi
+--without-osgi : -Pwithout-osgi
+ifneq (--with-osgi,$(filter --with-osgi,$(MAKECMDGOALS)))
+PROFILES += without-osgi
+else
+.PHONY : -Pwithout-osgi
+endif
+
+.PHONY : --with-gui --without-gui
+--without-gui : -Pwithout-gui
+ifneq (--with-gui,$(filter --with-gui,$(MAKECMDGOALS)))
+PROFILES += without-gui
+else
+.PHONY : -Pwithout-gui
+endif
+
+.PHONY : --with-webservice --without-webservice
+--without-webservice : -Pwithout-webservice
+ifneq (--with-webservice,$(filter --with-webservice,$(MAKECMDGOALS)))
+PROFILES += without-webservice
+else
+.PHONY : -Pwithout-webservice
+endif
+
+.PHONY : --with-cli --without-cli
+--without-cli : -Pwithout-cli
+ifneq (--with-cli,$(filter --with-cli,$(MAKECMDGOALS)))
+PROFILES += without-cli
+else
+.PHONY : -Pwithout-cli
+endif
+
+.PHONY : --with-updater --without-updater
+--without-updater : -Pwithout-updater
+ifneq (--with-updater,$(filter --with-updater,$(MAKECMDGOALS)))
+PROFILES += without-updater
+else
+.PHONY : -Pwithout-updater
+endif
+
+.PHONY : --with-simple-api --without-simple-api
+--with-simple-api : -Pwith-simple-api
+ifneq (--without-simple-api,$(filter --without-simple-api,$(MAKECMDGOALS)))
+PROFILES += with-simple-api
+else
+.PHONY : -Pwith-simple-api
+endif
+
+# handled above (zip-mac and zip-win)
+.PHONY : --with-jre --without-jre
+
+# handled above (zip-win)
+.PHONY : --with-jre32 --without-jre32
 
 .PHONY : mvn
 mvn :
@@ -409,6 +495,8 @@ ifndef DUMP_PROFILES
 	cmd.add("$(MVN)");                                                                                                     \
 	cmd.add("clean");                                                                                                      \
 	cmd.add("install");                                                                                                    \
+	cmd.add("-Dclassifier=$(--classifier)");                                                                               \
+	cmd.add("-Dclassifier.dash=$(shell println("$(--classifier)".replaceAll("^.+$$", "$$0-"));)");                         \
 	exitOnError(                                                                                                           \
 		captureOutput(                                                                                                     \
 			Arrays.asList("$(MAKE) -s --no-print-directory ECHO=true DUMP_PROFILES=true -- $(MAKECMDGOALS)".split("\\s")), \
@@ -423,7 +511,19 @@ $(addprefix -P,$(PROFILES)) :
 	@println("$@");
 endif
 
-# profiles that are run separately because need to be run with specific JDKs
+# profiles that require Java 10
+
+ifdef DUMP_PROFILES
+ifeq ($(shell println($(JAVA_VERSION) >= 10);), false)
+-Pwith-simple-api : require-java-10
+.PHONY : require-java-10
+require-java-10 :
+	@err.println("Java 10 is required to compile SimpleAPI.java"); \
+	exit(1);
+endif
+endif
+
+# profiles that are run separately because need to be run with specific JDKs, and because they should not be installed
 
 .PHONY : -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64
 -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : mvn # to make sure they are run after other profiles
@@ -497,3 +597,11 @@ src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz :
 	mkdirs("$(dir $@)");                                                                                          \
 	copy(new URL("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/$(notdir $@)"), \
 	     new File("$@"));
+
+.PHONY : clean-jdk
+clean : clean-jdk
+clean-jdk :
+	rm("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7");          \
+	rm("src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8");      \
+	rm("src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8");    \
+	rm("src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8");

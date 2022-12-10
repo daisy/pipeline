@@ -127,10 +127,10 @@ locateData() {
 locateLog() {
     if [ "x$PIPELINE2_LOGDIR" != "x" ]; then
         if [ ! -d "$PIPELINE2_LOGDIR" ]; then
-                mkdir -p $PIPELINE2_LOG
+                mkdir -p $PIPELINE2_LOGDIR
         fi
     else
-        PIPELINE2_LOGDIR=$PIPELINE2_DATA/log
+        PIPELINE2_LOGDIR=$PIPELINE2_HOME/log
     fi
 }
 
@@ -459,8 +459,6 @@ run() {
         else
             PATHS="$PATHS system/no-osgi/persistence"
         fi
-    else
-        PATHS="$PATHS system/volatile"
     fi
     if [ "$ENABLE_OSGI" = "true" ]; then
         if [ "$MODE" = "gui" ]; then
@@ -516,14 +514,15 @@ run() {
     export PIPELINE2_WS_AUTHENTICATION
     
     # Logback configuration file
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/config-logback.xml\""
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/logback.xml\""
 
-    # to make ${org.daisy.pipeline.data}, ${org.daisy.pipeline.logdir} and ${org.daisy.pipeline.mode}
-    # available in config-logback.xml and felix.properties
-    # note that config-logback.xml is the only place where ${org.daisy.pipeline.mode} is used
-    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.data=\"$PIPELINE2_DATA\"
-                                  -Dorg.daisy.pipeline.logdir=\"$PIPELINE2_LOGDIR\"
-                                  -Dorg.daisy.pipeline.mode=$MODE"
+    # to make ${org.daisy.pipeline.data} available in felix.properties (for felix.cache.rootdir)
+    if [ "$ENABLE_OSGI" = "true" ]; then
+        SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.data=\"$PIPELINE2_DATA\""
+    fi
+
+    # to make ${org.daisy.pipeline.logdir} available in logback.xml
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Dorg.daisy.pipeline.logdir=\"$PIPELINE2_LOGDIR\""
 
     # to resolve relative file paths in CLI
     if [ "$MODE" = "cli" ]; then
