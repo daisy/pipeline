@@ -1,5 +1,59 @@
 ## Generate with:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.7 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.9 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.14.9"
+  sort: "1.14.9"
+  state: stable
+  github_tab: "v1.14.9"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.9"
+  description: >
+      Includes the standalone desktop application, the server, and the command line
+      interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+      DEB files). The DEB does not include the command line interface.
+  files:
+  - platform: debian
+    package: deb
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.9/pipeline2-1.14.9_debian.deb"
+    size: 128235180
+  - platform: linux
+    package: zip
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.9/pipeline2-1.14.9_linux.zip"
+    size: 102306880
+  - platform: windows
+    package: installer
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.9/pipeline2-1.14.9_windows.exe"
+    size: 126323722
+
+- group: main
+  version: "1.14.8"
+  sort: "1.14.8"
+  state: stable
+  github_tab: "v1.14.8"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.8"
+  description: >
+      Includes the standalone desktop application, the server, and the command line
+      interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+      DEB files). The DEB does not include the command line interface.
+  files:
+  - platform: windows
+    package: installer
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.8/pipeline2-1.14.8_windows.exe"
+    size: 126321787
+  - platform: linux
+    package: zip
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.8/pipeline2-1.14.8_linux.zip"
+    size: 102304955
+  - platform: debian
+    package: deb
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.8/pipeline2-1.14.8_debian.deb"
+    size: 128233034
 
 - group: main
   version: "1.14.7"
@@ -9,20 +63,14 @@
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.7"
   description: >
       Includes the standalone desktop application, the server, and the command line
-      interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
-      image containing a standard Mac OS application) and Linux (ZIP and DEB
-      files). The DEB does not include the command line interface.
+      interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+      DEB files). The DEB does not include the command line interface.
   files:
   - platform: windows
     package: installer
     content: [gui, server, cli]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.7/pipeline2-1.14.7_windows.exe"
     size: 126108016
-  - platform: macosx
-    package: dmg
-    content: [gui, server, cli]
-    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.7/pipeline2-1.14.7_mac.dmg"
-    size: 113974273
   - platform: linux
     package: zip
     content: [gui, server, cli]
@@ -44,7 +92,8 @@
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
     image containing a standard Mac OS application) and Linux (ZIP and DEB
-    files). The DEB does not include the command line interface.
+    files). The DMG does not include the server. The DEB does not include the command
+    command line interface.
   files:
   - platform: windows
     package: installer
@@ -53,7 +102,7 @@
     size: 125660157
   - platform: macosx
     package: dmg
-    content: [gui, server, cli]
+    content: [gui, server]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.6/pipeline2-1.14.6_mac.dmg"
     size: 142186540
   - platform: linux
@@ -77,7 +126,8 @@
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
     image containing a standard Mac OS application) and Linux (ZIP and DEB
-    files). The DEB does not include the command line interface.
+    files). The DMG does not include the server. The DEB does not include the command
+    command line interface.
   files:
   - platform: windows
     package: installer
@@ -86,7 +136,7 @@
     size: 125535686
   - platform: macosx
     package: dmg
-    content: [gui, server, cli]
+    content: [gui, server]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.5/pipeline2-1.14.5_mac.dmg"
     size: 142122551
   - platform: linux
@@ -132,7 +182,8 @@
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
     image containing a standard Mac OS application) and Linux (ZIP and DEB
-    files). The DEB does not include the command line interface.
+    files). The DMG does not include the server. The DEB does not include the command
+    command line interface.
   files:
   - platform: windows
     package: installer
@@ -141,7 +192,7 @@
     size: 124178969
   - platform: macosx
     package: dmg
-    content: [gui, server, cli]
+    content: [gui, server]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.4/pipeline2-1.14.4_mac.dmg"
     size: 140926022
   - platform: linux
@@ -165,7 +216,8 @@
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
     image containing a standard Mac OS application) and Linux (ZIP and DEB
-    files). The DEB does not include the command line interface.
+    files). The DMG does not include the server. The DEB does not include the command
+    command line interface.
   files:
   - platform: windows
     package: installer
@@ -174,7 +226,7 @@
     size: 123103531
   - platform: macosx
     package: dmg
-    content: [gui, server, cli]
+    content: [gui, server]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.3/pipeline2-1.14.3_mac.dmg"
     size: 139853486
   - platform: linux
@@ -198,7 +250,8 @@
     Includes the standalone desktop application, the server, and the command line
     interface. Versions available for Windows (an installer EXE), Mac OS (a DMG disk
     image containing a standard Mac OS application) and Linux (ZIP and DEB
-    files). The DEB does not include the command line interface.
+    files). The DMG does not include the server. The DEB does not include the command
+    command line interface.
   files:
   - platform: windows
     package: installer
@@ -207,7 +260,7 @@
     size: 117912502
   - platform: macosx
     package: dmg
-    content: [gui, server, cli]
+    content: [gui, server]
     url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.2/pipeline2-1.14.2_mac.dmg"
     size: 134614185
   - platform: linux

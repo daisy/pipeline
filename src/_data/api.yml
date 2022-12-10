@@ -160,6 +160,8 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: zedai-utils
 - group: org.daisy.pipeline.modules
+  artifact: audio-common
+- group: org.daisy.pipeline.modules
   artifact: css-speech
 - group: org.daisy.pipeline.modules
   artifact: tts-common
