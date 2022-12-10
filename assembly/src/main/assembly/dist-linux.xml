@@ -8,7 +8,7 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/base-linux.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/bin-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/jars.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/jars-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-linux.xml</componentDescriptor>

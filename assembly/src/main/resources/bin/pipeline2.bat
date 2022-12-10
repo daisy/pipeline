@@ -216,7 +216,7 @@ goto :RUN_LOOP
                 rem )
             )
         )
-        set MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
+        set MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
     )
 
     rem Execute the Java Virtual Machine
@@ -224,8 +224,7 @@ goto :RUN_LOOP
 
     rem Logback configuration file
     set SYSTEM_PROPS=%SYSTEM_PROPS% -Dlogback.configurationFile="file:%PIPELINE2_HOME:\=/%/etc/logback.xml"
-    rem Workaround for encoding bugs on Windows
-    set SYSTEM_PROPS=%SYSTEM_PROPS% -Dfile.encoding=UTF8
+    set SYSTEM_PROPS=%SYSTEM_PROPS% -Djava.util.logging.config.file="%PIPELINE2_HOME:\=/%/etc/logging.properties"
     rem to make ${org.daisy.pipeline.data} available in felix.properties (for felix.cache.rootdir)
     if %ENABLE_OSGI% == true (
         set SYSTEM_PROPS=%SYSTEM_PROPS% -Dorg.daisy.pipeline.data="%PIPELINE2_DATA%"

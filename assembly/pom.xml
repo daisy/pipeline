@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.13</version>
+        <version>1.14.14-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.14</version>
+        <version>1.14.15-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -140,16 +140,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-appender</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-activator</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -1357,26 +1347,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-core-asl</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.codehaus.jackson</groupId>
-      <artifactId>jackson-mapper-asl</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>*</groupId>
-          <artifactId>*</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <exclusions>
@@ -1821,10 +1791,6 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>logging-activator</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
                   <artifactId>modules-registry</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -1902,10 +1868,16 @@
                   <groupId>org.slf4j</groupId>
                   <artifactId>slf4j-api</artifactId>
                 </artifactItem>
-                <artifactItem>
+                <!--
+                    Disabled because for some reason (and it's not because logging-activator was
+                    merged into common-utils) it does not work anymore when used in the
+                    assembly. (It does work in unit tests.) As a workaround, log JUL messages to
+                    stdout through the logging.properties configuration file.
+                -->
+                <!--<artifactItem>
                   <groupId>org.slf4j</groupId>
                   <artifactId>jul-to-slf4j</artifactId>
-                </artifactItem>
+                </artifactItem>-->
                 <artifactItem>
                   <groupId>org.slf4j</groupId>
                   <artifactId>jcl-over-slf4j</artifactId>
@@ -2527,14 +2499,6 @@
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-compress</artifactId>
                 </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-core-asl</artifactId>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.codehaus.jackson</groupId>
-                  <artifactId>jackson-mapper-asl</artifactId>
-                </artifactItem>
                 <!--
                     for tts-adapter-google
                 -->
@@ -2568,6 +2532,17 @@
                   <groupId>org.daisy.libs</groupId>
                   <artifactId>jing</artifactId>
                   <version>20120724.0.0</version>
+                </artifactItem>
+                <!--
+                    epubcheck requires jackson even though we don't use JSON reporting
+                -->
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-core-asl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.codehaus.jackson</groupId>
+                  <artifactId>jackson-mapper-asl</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -3339,6 +3314,7 @@
                       <excludes>
                         felix.properties,
                         logback.xml,
+                        logging.properties,
                         pipeline.properties
                       </excludes>
                       <mapper>
@@ -3362,6 +3338,11 @@
                       <type>file</type>
                       <src>src/main/resources/etc/logback.xml</src>
                       <dst>${deb.pipeline.config}/logback.xml</dst>
+                    </data>
+                    <data>
+                      <type>file</type>
+                      <src>src/main/resources/etc/logging.properties</src>
+                      <dst>${deb.pipeline.config}/logging.properties</dst>
                     </data>
                     <data>
                       <type>link</type>

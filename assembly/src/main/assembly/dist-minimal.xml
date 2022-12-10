@@ -8,8 +8,8 @@
   <baseDirectory>daisy-pipeline</baseDirectory>
   <componentDescriptors>
       <componentDescriptor>src/main/assembly/components/base.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/base-linux.xml</componentDescriptor> <!-- same as mac -->
-      <componentDescriptor>src/main/assembly/components/base-win.xml</componentDescriptor>
+      <componentDescriptor>src/main/assembly/components/bin-linux.xml</componentDescriptor> <!-- same as mac -->
+      <componentDescriptor>src/main/assembly/components/bin-win.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/updater-all.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>

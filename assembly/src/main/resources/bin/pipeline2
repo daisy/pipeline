@@ -464,7 +464,7 @@ run() {
             CLASSPATH="$CLASSPATH:system/simple-api"
         fi
         if [ "$MODE" = "webservice" ]; then
-            MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
+            MAIN=org.daisy.pipeline.webservice.restlet.impl.PipelineWebService
         else
             MAIN=SimpleAPI
         fi
@@ -492,6 +492,7 @@ run() {
     
     # Logback configuration file
     SYSTEM_PROPS="${SYSTEM_PROPS} -Dlogback.configurationFile=\"file:${PIPELINE2_CONFIG}/logback.xml\""
+    SYSTEM_PROPS="${SYSTEM_PROPS} -Djava.util.logging.config.file=${PIPELINE2_CONFIG}/logging.properties"
 
     # to make ${org.daisy.pipeline.data} available in felix.properties (for felix.cache.rootdir)
     if [ "$ENABLE_OSGI" = "true" ]; then

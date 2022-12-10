@@ -1,2 +1,3 @@
 ${deb.pipeline.config}/logback.xml
+${deb.pipeline.config}/logging.properties
 /etc/default/daisy-pipeline2
