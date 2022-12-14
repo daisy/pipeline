@@ -241,10 +241,16 @@ if [ $github_owner == "daisy" ]; then
     # export GITHUB_USER=bertfrees
     # export GITHUB_ASK_PASS="pass github.com | head -1"
     
-    [[ -n ${GITHUB_USER+x} ]] || echo "  echo -n \"Enter Github user name: \" >&2 && read user && \\"
+    if [[ -n ${GITHUB_USER+x} ]]; then
+		:
+	else
+		echo "WARNING: GITHUB_USER variable not set" >&2
+		echo "  echo -n \"Enter Github user name: \" >&2 && read user && \\"
+	fi
     if [[ -n ${GITHUB_ASK_PASS+x} ]]; then
         echo -n "  pass=\$($GITHUB_ASK_PASS)"
     else
+		echo "WARNING: GITHUB_ASK_PASS variable not set" >&2
         echo -n "  echo -n \"Enter password for Github user ${GITHUB_USER-"\$user"}: \" >&2 && read -s pass && echo \"***\" >&2"
     fi
     echo " && \\"
