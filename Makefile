@@ -120,11 +120,11 @@ dp2 : $(dp2)
 
 .PHONY : run
 run : $(dev_launcher)
-	$<
+	$< local
 
 .PHONY : run-with-osgi
 run-with-osgi : $(dev_launcher)
-	$< osgi shell
+	$< local osgi shell
 
 .PHONY : run-gui
 run-gui : $(dev_launcher)
@@ -205,7 +205,7 @@ pipeline2-$(assembly/VERSION)_debian.deb \
 	+$(EVAL) cp $< $@
 
 pipeline2-$(assembly/VERSION)_redhat.rpm \
-	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.rpm \
+	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).rpm \
 	| .group-eval
 	+$(EVAL) cp $< $@
 
@@ -215,14 +215,14 @@ cli-$(cli/VERSION)-linux_386.deb \
 	+$(EVAL) cp $< $@
 
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher)
+	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher -- --without-persistence)
 
 .SECONDARY : assembly/.install.deb
 assembly/.install.deb : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,deb)
 
-.SECONDARY : assembly/.install-linux.rpm
-assembly/.install-linux.rpm : | .maven-init .group-eval
+.SECONDARY : assembly/.install.rpm
+assembly/.install.rpm : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
 
 .SECONDARY : assembly/.install-linux.zip
