@@ -1,9 +1,25 @@
+v1.14.11
+========
+
+Changes
+-------
+- Update to Liblouis [3.24.0](https://github.com/liblouis/liblouis/releases/tag/v3.24.0)
+
+v1.14.10
+========
+
+Changes
+-------
+- Various bugfixes
+
 v1.14.8
 =======
 
 Changes
 -------
 - New option to control hyphenation at page and volume boundaries
+  (https://github.com/daisy/pipeline-modules/issues/47,
+  https://github.com/mtmse/dotify.library/pull/39)
 - Allow disabling hyphenation completely (also where there are soft hyphens)
 - Default handling of lists, including support for `start` and `value` attributes
 - Changed default suffix of counter styles to ". "
@@ -23,6 +39,11 @@ Components
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+Closed issues
+-------------
+- https://github.com/daisy/pipeline-modules/issues/47
+- https://github.com/mtmse/dotify.library/pull/39
 
 v1.14.7
 =======

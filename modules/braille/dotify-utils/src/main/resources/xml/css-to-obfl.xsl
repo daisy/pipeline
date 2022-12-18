@@ -789,15 +789,15 @@
                                 <xsl:attribute name="break-before" select="'volume'"/>
                             </xsl:if>
                             <xsl:apply-templates mode="sequence-attr"
-                                                 select="current-group()[1]/(@* except (@css:page|@css:volume|@css:string-entry|@css:counter-set))"/>
+                                                 select="current-group()[1]/(@* except (@css:page|@css:volume|@css:counter-set))"/>
                             <xsl:apply-templates mode="sequence"
-                                                 select="current-group()[1]/(@css:string-entry|*)">
+                                                 select="current-group()[1]/*">
                                 <xsl:with-param name="volume-break-handled" tunnel="yes"
                                                 select="current-group()/*/(@css:volume-break-before[.='always']|
                                                                            @css:volume-break-after[.='always'])"/>
                             </xsl:apply-templates>
                             <xsl:apply-templates mode="assert-nil-attr"
-                                                 select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume|@css:string-entry))"/>
+                                                 select="current-group()[position()&gt;1]/(@* except (@css:page|@css:volume))"/>
                             <xsl:apply-templates mode="sequence"
                                                  select="current-group()[position()&gt;1]/*">
                                 <xsl:with-param name="volume-break-handled" tunnel="yes"
@@ -1021,26 +1021,6 @@
             <xsl:value-of select="pxi:get-path(.)"/>
             <xsl:text> inside element with 'display: -obfl-list-of-references'</xsl:text>
         </xsl:message>
-    </xsl:template>
-    
-    <!-- ======== -->
-    <!-- Sequence -->
-    <!-- ======== -->
-    
-    <xsl:template mode="sequence
-                        sequence-interrupted-resumed"
-                  match="/css:_/@css:string-entry">
-        <block>
-            <xsl:apply-templates mode="css:parse-string-entry" select="css:parse-string-set(.)"/>
-        </block>
-    </xsl:template>
-    
-    <xsl:template mode="css:parse-string-entry"
-                  match="css:string-set">
-        <xsl:variable name="value" as="xs:string*">
-            <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
-        </xsl:variable>
-        <marker class="{@name}/entry" value="{replace(string-join($value,''),'^\s+|\s+$','')}"/>
     </xsl:template>
     
     <!-- ===== -->

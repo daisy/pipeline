@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.14.11-SNAPSHOT</version>
+  <version>1.14.11</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -21,58 +21,58 @@
   <modules>
     <module>bom</module>
     <module>parent</module>
-    <module>common/common-utils</module>
-    <module>common/file-utils</module>
-    <module>common/fileset-utils</module>
-    <module>common/image-utils</module>
-    <module>common/mediatype-utils</module>
-    <module>common/validation-utils</module>
-    <module>common/zip-utils</module>
-    <module>scripts-utils/ace-adapter</module>
-    <module>scripts-utils/asciimath-utils</module>
-    <module>scripts-utils/css-utils</module>
-    <module>scripts-utils/html-utils</module>
+    <!--<module>common/common-utils</module>-->
+    <!--<module>common/file-utils</module>-->
+    <!--<module>common/fileset-utils</module>-->
+    <!--<module>common/image-utils</module>-->
+    <!--<module>common/mediatype-utils</module>-->
+    <!--<module>common/validation-utils</module>-->
+    <!--<module>common/zip-utils</module>-->
+    <!--<module>scripts-utils/ace-adapter</module>-->
+    <!--<module>scripts-utils/asciimath-utils</module>-->
+    <!--<module>scripts-utils/css-utils</module>-->
+    <!--<module>scripts-utils/html-utils</module>-->
     <module>scripts-utils/daisy202-utils</module>
-    <module>scripts-utils/daisy3-utils</module>
-    <module>scripts-utils/dtbook-utils</module>
-    <module>scripts-utils/epub-utils</module>
-    <module>scripts-utils/epubcheck-adapter</module>
-    <module>scripts-utils/epub3-to-html</module>
-    <module>scripts-utils/mathml-utils</module>
-    <module>scripts-utils/smil-utils</module>
-    <module>scripts-utils/metadata-utils</module>
-    <module>scripts-utils/odf-utils</module>
-    <module>scripts-utils/zedai-utils</module>
-    <module>nlp/nlp-common</module>
-    <module>nlp/lexers/ruled-lexer</module>
-    <module>nlp/lexers/light-lexer</module>
-    <module>nlp/lexers/omnilang-lexer</module>
-    <module>nlp/zedai-break-detection</module>
-    <module>nlp/html-break-detection</module>
-    <module>nlp/dtbook-break-detection</module>
+    <!--<module>scripts-utils/daisy3-utils</module>-->
+    <!--<module>scripts-utils/dtbook-utils</module>-->
+    <!--<module>scripts-utils/epub-utils</module>-->
+    <!--<module>scripts-utils/epubcheck-adapter</module>-->
+    <!--<module>scripts-utils/epub3-to-html</module>-->
+    <!--<module>scripts-utils/mathml-utils</module>-->
+    <!--<module>scripts-utils/smil-utils</module>-->
+    <!--<module>scripts-utils/metadata-utils</module>-->
+    <!--<module>scripts-utils/odf-utils</module>-->
+    <!--<module>scripts-utils/zedai-utils</module>-->
+    <!--<module>nlp/nlp-common</module>-->
+    <!--<module>nlp/lexers/ruled-lexer</module>-->
+    <!--<module>nlp/lexers/light-lexer</module>-->
+    <!--<module>nlp/lexers/omnilang-lexer</module>-->
+    <!--<module>nlp/zedai-break-detection</module>-->
+    <!--<module>nlp/html-break-detection</module>-->
+    <!--<module>nlp/dtbook-break-detection</module>-->
     <module>audio/audio-common</module>
-    <module>audio/audio-encoder-lame</module>
+    <!--<module>audio/audio-encoder-lame</module>-->
     <!-- att-nar is excluded because it is platform-specific. -->
     <!-- tts-adapter-attnative is excluded because it depends on att-nar which cannot be publicly
          deployed according to the AT&T's license. -->
-    <module>tts/css-speech</module>
-    <module>tts/dtbook-tts</module>
+    <!--<module>tts/css-speech</module>-->
+    <!--<module>tts/dtbook-tts</module>-->
     <module>tts/epub3-tts</module>
-    <module>tts/text-to-ssml</module>
-    <module>tts/tts-common</module>
-    <module>tts/tts-adapters/tts-adapter-espeak</module>
+    <!--<module>tts/text-to-ssml</module>-->
+    <!--<module>tts/tts-common</module>-->
+    <!--<module>tts/tts-adapters/tts-adapter-espeak</module>-->
     <module>tts/tts-adapters/tts-adapter-acapela</module>
-    <module>tts/tts-adapters/tts-adapter-osx</module>
+    <!--<module>tts/tts-adapters/tts-adapter-osx</module>-->
     <module>tts/tts-adapters/tts-adapter-sapinative</module>
-    <module>tts/tts-adapters/tts-adapter-qfrency</module>
-    <module>tts/tts-adapters/tts-adapter-google</module>
-    <module>tts/tts-adapters/tts-adapter-cereproc</module>
-    <module>tts/tts-mocks</module>
-    <module>tts/mathml-to-ssml</module>
-    <module>braille/braille-common</module>
+    <!--<module>tts/tts-adapters/tts-adapter-qfrency</module>-->
+    <!--<module>tts/tts-adapters/tts-adapter-google</module>-->
+    <!--<module>tts/tts-adapters/tts-adapter-cereproc</module>-->
+    <!--<module>tts/tts-mocks</module>-->
+    <!--<module>tts/mathml-to-ssml</module>-->
+    <!--<module>braille/braille-common</module>-->
     <module>braille/braille-css-utils</module>
-    <module>braille/pef-utils</module>
-    <module>braille/obfl-utils</module>
+    <!--<module>braille/pef-utils</module>-->
+    <!--<module>braille/obfl-utils</module>-->
     <module>braille/liblouis-utils</module>
     <module>braille/dotify-utils</module>
     <module>braille/libhyphen-utils</module>
@@ -80,6 +80,7 @@
     <module>scripts/daisy202-to-epub3</module>
     <module>scripts/daisy202-validator</module>
     <module>scripts/daisy202-to-daisy3</module>
+    <module>scripts/daisy202-to-mp3</module>
     <module>scripts/daisy3-to-daisy202</module>
     <module>scripts/daisy3-to-epub3</module>
     <module>scripts/daisy3-to-mp3</module>
@@ -100,7 +101,7 @@
     <module>scripts/epub3-validator</module>
     <module>scripts/html-to-dtbook</module>
     <module>scripts/html-to-epub3</module>
-    <module>scripts/html-to-pef</module>
+    <!--<module>scripts/html-to-pef</module>-->
     <module>scripts/nimas-fileset-validator</module>
     <module>scripts/zedai-to-epub3</module>
     <module>scripts/zedai-to-html</module>
@@ -139,4 +140,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>v1.14.11</tag>
+  </scm>
 </project>

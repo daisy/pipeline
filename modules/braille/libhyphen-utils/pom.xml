@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.11-SNAPSHOT</version>
+    <version>1.14.11</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>libhyphen-utils</artifactId>
-  <version>2.2.1-SNAPSHOT</version>
+  <version>3.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: libhyphen-utils</name>
@@ -67,11 +67,9 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_libhyphen_utils,
       org.daisy.pipeline.braille.libhyphen.impl.LibhyphenJnaImpl,
       org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTableRegistry,
-      org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTablePath_libreoffice_hyphen_tables,
-      org.daisy.pipeline.braille.libhyphen.saxon.impl.HyphenateDefinition,
+      org.daisy.pipeline.braille.libhyphen.impl.LibhyphenTablePath_libreoffice_hyphen_tables
     </expose-services>
   </properties>
 
@@ -229,8 +227,7 @@
             </Import-Package>
             <Private-Package>
               ${generated-packages}
-              org.daisy.pipeline.braille.libhyphen.impl,
-              org.daisy.pipeline.braille.libhyphen.saxon.impl
+              org.daisy.pipeline.braille.libhyphen.impl
             </Private-Package>
             <!--
                 exclude native and META-INF/services/org.daisy.pipeline.braille.common.NativePath
@@ -239,8 +236,6 @@
               src/main/resources/,
               tables/hyph_de_DE.dic
                =target/dependency/sbs-hyphenation-tables/tables/hyph_de_DE.dic,
-              META-INF/catalog.xml
-               =target/generated-resources/process-catalog/META-INF/catalog.xml,
               META-INF/services
                =target/generated-resources/spi/META-INF/services,
               META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
@@ -270,7 +265,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-linux</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.linux
                 </Private-Package>
@@ -294,7 +289,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-mac</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.mac
                 </Private-Package>
@@ -318,7 +313,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-windows</Bundle-SymbolicName>
-                <Export-Package/>
+                <Export-Package />
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.windows
                 </Private-Package>
@@ -387,18 +382,6 @@
                     src/main/resources/tables/,
                     src/main/resources/tables/*
                   </includes>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.daisy.pipeline.build</groupId>
-            <artifactId>modules-build-helper</artifactId>
-            <executions>
-              <execution>
-                <id>xprocdoc</id>
-                <configuration>
-                  <catalogXmlBaseURI>http://daisy.github.io/pipeline/modules/braille/${project.artifactId}/src/main/resources/META-INF/catalog.xml</catalogXmlBaseURI>
                 </configuration>
               </execution>
             </executions>
@@ -502,16 +485,16 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout"/>
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
+                    <mkdir dir="target/checkout" />
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
                     <unzip dest="target/generated-resources/tables" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic"/>
-                        <exclude name="**/hyph_de.dic"/>
-                        <exclude name="**/hyph_nb_NO.dic"/>
-                        <exclude name="**/hyph_nn_NO.dic"/>
+                        <include name="**/hyph_*.dic" />
+                        <exclude name="**/hyph_de.dic" />
+                        <exclude name="**/hyph_nb_NO.dic" />
+                        <exclude name="**/hyph_nn_NO.dic" />
                       </patternset>
-                      <mapper type="flatten"/>
+                      <mapper type="flatten" />
                     </unzip>
                   </tasks>
                 </configuration>

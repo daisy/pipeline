@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +26,9 @@ import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
+import org.daisy.pipeline.tts.VoiceInfo;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import org.daisy.pipeline.tts.acapela.impl.NscubeLibrary.PNSC_FNSPEECH_DATA;
 import org.daisy.pipeline.tts.acapela.impl.NscubeLibrary.PNSC_FNSPEECH_EVENT;
 
@@ -366,8 +370,28 @@ public class AcapelaEngine extends TTSEngine {
 		        .getSampleRate(), 0, 0, voiceData, voiceEnumerator);
 		while (ret == NscubeLibrary.NSC_OK) {
 			if (voiceData.nInitialCoding == NscubeLibrary.NSC_VOICE_ENCODING_PCM) {
-				result.add(new Voice(getProvider().getName(),
-				        nullTerminatedString(voiceData.cSpeakerName)));
+				String engine = getProvider().getName();
+				String name = nullTerminatedString(voiceData.cSpeakerName);
+				try {
+					if ("heather".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("en-us"), Gender.FEMALE_ADULT));
+					else if ("will".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("en-us"), Gender.MALE_ADULT));
+					else if ("tracy".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("en-us"), Gender.FEMALE_ADULT));
+					else if ("antoine".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("fr"), Gender.MALE_ADULT));
+					else if ("claire".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("fr"), Gender.FEMALE_ADULT));
+					else if ("alice".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("fr"), Gender.FEMALE_ADULT));
+					else if ("bruno".equals(name))
+						result.add(new Voice(engine, name, VoiceInfo.tagToLocale("fr"), Gender.MALE_ADULT));
+					else
+						result.add(new Voice(engine, name));
+				} catch (UnknownLanguage e) {
+					throw new IllegalStateException(e); // should not happen
+				}
 			}
 			ret = lib.nscFindNextVoice(voiceEnumerator.getValue(), voiceData);
 		}

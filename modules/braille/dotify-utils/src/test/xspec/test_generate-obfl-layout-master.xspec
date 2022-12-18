@@ -427,16 +427,10 @@
                                 scope="spread-content"
                                 start-offset="-1"
                                 text-style="text-transform: print-page"/>
-              <compound-marker-reference>
-                <marker-reference marker="slash-print-page"
-                                  direction="backward"
-                                  scope="sequence"
-                                  text-style="text-transform: print-page"/>
-                <marker-reference marker="slash-print-page/entry"
-                                  direction="backward"
-                                  scope="sequence"
-                                  text-style="text-transform: print-page"/>
-              </compound-marker-reference>
+              <marker-reference marker="slash-print-page"
+                                direction="backward"
+                                scope="document"
+                                text-style="text-transform: print-page"/>
             </field>
             <field>
               <compound-marker-reference>
@@ -446,10 +440,7 @@
                                   start-offset="-1"/>
                 <marker-reference marker="running-footer"
                                   direction="backward"
-                                  scope="sequence"/>
-                <marker-reference marker="running-footer/entry"
-                                  direction="backward"
-                                  scope="sequence"/>
+                                  scope="document"/>
               </compound-marker-reference>
             </field>
             <field>

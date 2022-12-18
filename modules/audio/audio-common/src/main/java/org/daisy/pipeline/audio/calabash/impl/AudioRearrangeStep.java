@@ -333,6 +333,19 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 					} catch (XMLStreamException e) {
 						throw new TransformerException(e);
 					}
+					// check that destination clips don't overlap (they are already in order)
+					{
+						AudioClip prevClip = null;
+						for (AudioClip clip : desired.keySet()) {
+							if (prevClip == null) {
+								prevClip = clip;
+								continue;
+							}
+							if (prevClip.src.equals(clip.src) && clip.clipBegin.compareTo(prevClip.clipEnd) < 0)
+								throw new IllegalArgumentException("Invalid input: overlapping clips: " + prevClip + ", " + clip);
+							prevClip = clip;
+						}
+					}
 				}
 				List<Fileset.File> tempFiles = new ArrayList<>();
 				List<Fileset.File> result = new ArrayList<>(); {
@@ -341,6 +354,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						Optional<AudioEncoder> encoder = audioServices.newEncoder(resultFileType, new HashMap<String,String>());
 						if (!encoder.isPresent())
 							throw new RuntimeException("No encoder found for file type " + resultFileType);
+						AudioClip prevSourceClip = null;
 						Fileset.File currentSourceFile = null;
 						PCMAudioFormat audioFormat = null;
 						AudioInputStream currentSourcePCM = null;
@@ -350,7 +364,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						long currentDestinationElapsed = 0; // in frames
 						int fileCounter = 0;
 						for (Map.Entry<AudioClip,AudioClip> entry : desired.entrySet()) {
-							AudioClip destinationClip = entry.getKey();
+							AudioClip destinationClip = entry.getKey(); // destination clips are in order and don't overlap
 							AudioClip sourceClip = entry.getValue();
 							if (currentDestinationFile == null)
 								currentDestinationFile = destinationClip.src;
@@ -371,7 +385,10 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 								currentDestinationPCM = new ArrayList<>();
 								currentDestinationElapsed = 0;
 							}
-							if (currentSourceFile == null || !currentSourceFile.href.equals(sourceClip.src)) {
+							if (currentSourceFile == null                                     // first clip
+							    || !currentSourceFile.href.equals(sourceClip.src)             // new file
+							    || sourceClip.clipBegin.compareTo(prevSourceClip.clipEnd) < 0 // clips in same audio file overlap or are not in order
+							) {
 								currentSourceFile = source.get(sourceClip.src);
 								Optional<AudioFileFormat.Type> sourceFileType; {
 									Optional<String> sourceMediaType = currentSourceFile.mediaType;
@@ -412,7 +429,8 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							long destinationClipBegin = AudioUtils.getLengthInFrames(audioFormat, destinationClip.clipBegin);
 							long destinationClipEnd = AudioUtils.getLengthInFrames(audioFormat, destinationClip.clipEnd);
 							if (sourceClipBegin < currentSourceElapsed)
-								throw new IllegalStateException(); // can not happen because clips are in order and don't overlap
+								throw new IllegalStateException(); // can not happen because if clips overlap or are not in
+								                                   // order, the audio file is read again
 							AudioInputStream clipPCM; {
 								long sourceClipLength = sourceClipEnd - sourceClipBegin;
 								long destinationClipLength = destinationClipEnd - destinationClipBegin;
@@ -438,6 +456,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							}
 							currentDestinationPCM.add(clipPCM);
 							currentDestinationElapsed += clipPCM.getFrameLength();
+							prevSourceClip = sourceClip;
 						}
 						File resultFile = new File(currentDestinationFile);
 						File tempFile = new File(tempDir, "tmp" + (++fileCounter) + "." + getFileExtension(resultFile.getName()));

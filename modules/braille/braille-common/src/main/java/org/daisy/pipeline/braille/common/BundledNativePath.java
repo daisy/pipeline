@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.daisy.common.spi.ActivationException;
 import static org.daisy.pipeline.braille.common.util.OS;
 
 public class BundledNativePath extends StandardNativePath {
@@ -24,8 +25,15 @@ public class BundledNativePath extends StandardNativePath {
 		if (properties.get(OS_FAMILY) == null
 				|| properties.get(OS_FAMILY).toString().isEmpty()) {
 			throw new IllegalArgumentException(OS_FAMILY + " property must not be empty"); }
-		if (OS.Family.valueOf(properties.get(OS_FAMILY).toString().toUpperCase()) != OS.getFamily())
-			throw new RuntimeException(toString() + " does not work on " + OS.getFamily());
+		if (OS.Family.valueOf(properties.get(OS_FAMILY).toString().toUpperCase()) != OS.getFamily()) {
+			String errorMessage = "does not work on " + OS.getFamily();
+			try {
+				SPIHelper.failToActivate(errorMessage);
+			} catch (NoClassDefFoundError e) {
+				// we are probably in OSGi context
+				throw new RuntimeException(errorMessage);
+			}
+		}
 		if (properties.get(BundledResourcePath.UNPACK) != null)
 			throw new IllegalArgumentException(BundledResourcePath.UNPACK + " property not supported");
 		Map<Object,Object> props = new HashMap<Object,Object>(properties);
@@ -57,5 +65,13 @@ public class BundledNativePath extends StandardNativePath {
 		if (getClass() != object.getClass())
 			return false;
 		return super.equals((BundledNativePath)object);
+	}
+
+	// static nested class in order to delay class loading
+	private static class SPIHelper {
+		private SPIHelper() {}
+		public static void failToActivate(String message) throws ActivationException {
+			throw new ActivationException(message);
+		}
 	}
 }

@@ -3919,10 +3919,9 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="marker-reference-across-sequence-workaround">
+  <x:scenario label="marker-reference-document-backward">
     <x:documentation>
-      Tests marker-reference with multiple sequences. Currently marker-reference doesn't search
-      across sequences. As a workaround I repeat markers at the start of a new sequence when needed.
+      Tests marker-reference with scope sequence and direction backward.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -3933,10 +3932,7 @@
                 <header/>
                 <footer>
                   <field>
-                    <compound-marker-reference>
-                      <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                      <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
-                    </compound-marker-reference>
+                    <marker-reference marker="foo" direction="backward" scope="document"/>
                   </field>
                   <field/>
                 </footer>
@@ -3951,9 +3947,6 @@
               </block>
             </sequence>
             <sequence master="a">
-              <block>
-                <marker class="foo/entry" value="1"/>
-              </block>
               <block>
                 ⠁⠁⠁⠁⠁
               </block>

@@ -7,12 +7,12 @@
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
     <version>5</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-parent</artifactId>
-  <version>1.14.11-SNAPSHOT</version>
+  <version>1.14.11</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Parent POM</name>
@@ -213,17 +213,12 @@
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>modules-registry</artifactId>
-              <version>4.0.1</version>
-            </dependency>
-            <dependency>
-              <groupId>org.daisy.pipeline</groupId>
-              <artifactId>xmlcatalog</artifactId>
-              <version>2.0.7</version>
+              <version>4.1.0</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>calabash-adapter</artifactId>
-              <version>5.1.1</version>
+              <version>5.1.2</version>
             </dependency>
             <dependency>
               <groupId>org.daisy.libs</groupId>
@@ -238,7 +233,7 @@
             <dependency>
               <groupId>org.daisy.pipeline</groupId>
               <artifactId>ds-to-spi-runtime</artifactId>
-              <version>1.1.0</version>
+              <version>1.2.0</version>
             </dependency>
           </dependencies>
         </plugin>
@@ -275,7 +270,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -288,7 +283,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -301,7 +296,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -314,7 +309,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -327,7 +322,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -340,7 +335,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -368,7 +363,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -381,7 +376,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -396,7 +391,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore/>
+                    <ignore />
                   </action>
                 </pluginExecution>
                 <pluginExecution>
@@ -409,7 +404,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <execute/>
+                    <execute />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
@@ -425,21 +420,21 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.11-SNAPSHOT</version>
+        <version>1.14.11</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.9</version>
+        <version>1.14.10</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
       </dependency>
       <!--
           test dependencies
@@ -457,7 +452,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-test-helper</artifactId>
-        <version>2.2.1</version>
+        <version>2.2.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>
@@ -496,10 +491,6 @@
         <dependency>
           <groupId>org.daisy.pipeline</groupId>
           <artifactId>modules-registry</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>xmlcatalog</artifactId>
         </dependency>
       </dependencies>
       <build>
@@ -637,16 +628,7 @@
         </file>
       </activation>
       <dependencies>
-        <!--
-            for MessageStorage, needed by JobMonitorFactory
-            FIXME: make optional
-        -->
-        <dependency>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>framework-volatile</artifactId>
-          <scope>test</scope>
-        </dependency>
-        <!-- for org.daisy.pipeline.junit.AbstractTest etc. -->
+        <!-- for AbstractTest, AbstractXSpecAndXProcSpecTest, etc. -->
         <dependency>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>modules-test-helper</artifactId>
@@ -1038,4 +1020,8 @@
       </snapshots>
     </repository>
   </repositories>
+
+  <scm>
+    <tag>v1.14.11</tag>
+  </scm>
 </project>

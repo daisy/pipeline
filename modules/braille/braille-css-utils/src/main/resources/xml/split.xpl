@@ -39,10 +39,9 @@
             means deleting the element and its preceding nodes from the second copy and deleting the
             element's following nodes from the first copy. css:box elements that are split get a
             part attribute with value 'first', 'middle' or 'last'. The attributes css:id,
-            css:string-set, css:string-entry, css:counter-set, css:counter-reset,
-            css:counter-increment, css:counter-set-*, css:counter-reset-* and
-            css:counter-increment-* are omitted on css:box elements with a part attribute equal to
-            'middle' or 'last'.
+            css:string-set, css:counter-set, css:counter-reset, css:counter-increment,
+            css:counter-set-*, css:counter-reset-* and css:counter-increment-* are omitted on
+            css:box elements with a part attribute equal to 'middle' or 'last'.
         </p:documentation>
     </p:output>
     
@@ -67,8 +66,7 @@
         <p:label-elements match="css:box[@part=('head','tail')]" attribute="part" replace="true"
                           label="if (@part='head') then 'first' else 'last'"/>
         <p:delete match="*[@part=('middle','last')]/@css:*[local-name(.)=('id',
-                                                                          'string-set',
-                                                                          'string-entry')
+                                                                          'string-set')
                                                            or matches(local-name(.),'^counter-(set|reset|increment).*')]"/>
     </p:for-each>
     

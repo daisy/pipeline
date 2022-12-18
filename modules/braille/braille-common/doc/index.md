@@ -49,7 +49,6 @@ braille system. The known hyphenator implementations are:
 
 - [`(hyphenator:hyphen)`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/Hyphenation/Hyphen/)
 - [`(hyphenator:tex)`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/Hyphenation/TeX/)
-- [`(hyphenator:dotify)`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/Dotify/#dotify-based-hyphenation)
 <!-- `(hyphenator:liblouis)`: hidden from the user because I'd like to remove the ability to do hyphenation from Liblouis -->
 
 

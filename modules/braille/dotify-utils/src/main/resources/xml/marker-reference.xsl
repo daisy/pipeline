@@ -18,11 +18,7 @@
                 <xsl:when test="$scope=('first','page-first')">
                     <compound-marker-reference>
                         <marker-reference marker="{@name}" direction="forward" scope="page"/>
-                        <!--
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
-                        -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence"/>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
+                        <marker-reference marker="{@name}" direction="backward" scope="document"/>
                     </compound-marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope=('start','page-start')">
@@ -37,10 +33,8 @@
                         <marker-reference marker="{@name}/prev" direction="forward" scope="page-content"/>
                         <!--
                             TODO: check that this does not match too much at the end of the page!
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
                         -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence"/>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
+                        <marker-reference marker="{@name}" direction="backward" scope="document"/>
                     </compound-marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope=('start-except-last','page-start-except-last')">
@@ -58,21 +52,11 @@
                 <xsl:when test="$scope=('start-except-first','page-start-except-first','volume-start-except-first')">
                     <compound-marker-reference>
                         <marker-reference marker="{@name}/if-not-set-next/prev" direction="forward" scope="page-content"/>
-                        <!--
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
-                        -->
-                        <marker-reference marker="{@name}/if-not-set-next" direction="backward" scope="sequence" offset="-1"/>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
+                        <marker-reference marker="{@name}/if-not-set-next" direction="backward" scope="document" offset="-1"/>
                     </compound-marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope=('last','page-last')">
-                    <compound-marker-reference>
-                        <!--
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
-                        -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence"/>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
-                    </compound-marker-reference>
+                    <marker-reference marker="{@name}" direction="backward" scope="document"/>
                 </xsl:when>
                 <xsl:when test="$scope=('last-except-start','page-last-except-start')">
                     <xsl:message terminate="yes"
@@ -85,15 +69,11 @@
                                 <xsl:attribute name="start-offset" select="'-1'"/>
                             </xsl:if>
                         </marker-reference>
-                        <!--
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
-                        -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence">
+                        <marker-reference marker="{@name}" direction="backward" scope="document">
                             <xsl:if test="$page-side='right'">
                                 <xsl:attribute name="start-offset" select="'-1'"/>
                             </xsl:if>
                         </marker-reference>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
                     </compound-marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope='spread-start'">
@@ -111,14 +91,12 @@
                         </marker-reference>
                         <!--
                             TODO: check that this does not match too much at the end of the page!
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
                         -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence">
+                        <marker-reference marker="{@name}" direction="backward" scope="document">
                             <xsl:if test="$page-side='left'">
                                 <xsl:attribute name="start-offset" select="'1'"/>
                             </xsl:if>
                         </marker-reference>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
                     </compound-marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope='spread-start-except-last'">
@@ -135,17 +113,11 @@
                     </marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope='spread-last'">
-                    <compound-marker-reference>
-                        <!--
-                            FIXME: replace with scope="document" (not implemented yet) and remove second marker-reference
-                        -->
-                        <marker-reference marker="{@name}" direction="backward" scope="sequence">
-                            <xsl:if test="$page-side='left'">
-                                <xsl:attribute name="start-offset" select="'1'"/>
-                            </xsl:if>
-                        </marker-reference>
-                        <marker-reference marker="{@name}/entry" direction="backward" scope="sequence"/>
-                    </compound-marker-reference>
+                    <marker-reference marker="{@name}" direction="backward" scope="document">
+                        <xsl:if test="$page-side='left'">
+                            <xsl:attribute name="start-offset" select="'1'"/>
+                        </xsl:if>
+                    </marker-reference>
                 </xsl:when>
                 <xsl:when test="$scope='spread-last-except-start'">
                     <xsl:message terminate="yes"

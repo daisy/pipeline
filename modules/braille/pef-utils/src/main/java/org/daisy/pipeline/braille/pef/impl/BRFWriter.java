@@ -39,12 +39,14 @@ public abstract class BRFWriter implements EmbosserWriter {
 	protected abstract void add(byte b) throws IOException;
 	protected abstract void addAll(byte[] b) throws IOException;
 	
+	@Override
 	public void newLine() throws IOException {
 		for (int i=0; i<((rowgap / 4)+1); i++) {
 			lineFeed();
 		}
 	}
 	
+	@Override
 	public void setRowGap(int value) {
 		if (value<0) {
 			throw new IllegalArgumentException("Non negative integer expected.");
@@ -53,10 +55,12 @@ public abstract class BRFWriter implements EmbosserWriter {
 		}
 	}
 	
+	@Override
 	public int getRowGap() {
 		return rowgap;
 	}
 	
+	@Override
 	public void open(boolean duplex) throws IOException {
 		charsOnRow = 0;
 		rowsOnPage = 0;
@@ -66,31 +70,25 @@ public abstract class BRFWriter implements EmbosserWriter {
 		currentDuplex = duplex;
 	}
 	
-	public int currentPage() {
-		return currentPage;
-	}
-	
-	public boolean pageIsEmpty() {
-		return (charsOnRow+rowsOnPage)==0;
-	}
-	
+	@Override
 	public void close() throws IOException {
 		isClosed=true;
 		isOpen=false;
 	}
 
+	@Override
 	public void write(String braille) throws IOException {
 		charsOnRow += braille.length();
 		addAll(String.valueOf(getTable().toText(braille)).getBytes(getCharset().name()));
 	}
 	
-	protected void lineFeed() throws IOException {
+	private void lineFeed() throws IOException {
 		rowsOnPage++;
 		charsOnRow = 0;
 		addAll(getLinebreakStyle().getString().getBytes());
 	}
 	
-	protected void formFeed() throws IOException {
+	private void formFeed() throws IOException {
 		rowsOnPage++;
 		switch (getPaddingStyle()) {
 			case BEFORE:
@@ -110,6 +108,7 @@ public abstract class BRFWriter implements EmbosserWriter {
 		charsOnRow = 0;
 	}
 	
+	@Override
 	public void newPage() throws IOException {
 		if (!currentDuplex && (currentPage % 2)==1) {
 			formFeed();
@@ -117,6 +116,7 @@ public abstract class BRFWriter implements EmbosserWriter {
 		formFeed();
 	}
 
+	@Override
 	public void newSectionAndPage(boolean duplex) throws IOException {
 		if ((currentPage % 2)==1) {
 			formFeed();
@@ -125,26 +125,27 @@ public abstract class BRFWriter implements EmbosserWriter {
 		currentDuplex = duplex;
 	}
 
+	@Override
 	public void newVolumeSectionAndPage(boolean duplex) throws IOException {
 		newSectionAndPage(duplex);
 	}
 
+	@Override
 	public boolean isOpen() {
 		return isOpen;
 	}
 
+	@Override
 	public boolean isClosed() {
 		return isClosed;
 	}
 
-	public int getMaxHeight() {
-		return Integer.MAX_VALUE;
-	}
-
+	@Override
 	public int getMaxWidth() {
 		return Integer.MAX_VALUE;
 	}
 
+	@Override
 	public boolean supportsAligning() {
 		return false;
 	}

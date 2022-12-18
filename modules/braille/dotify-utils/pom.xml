@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.11-SNAPSHOT</version>
+    <version>1.14.11</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>5.2.2-SNAPSHOT</version>
+  <version>6.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
@@ -124,7 +124,6 @@
       org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl,
       org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl,
       org.daisy.pipeline.braille.dotify.impl.DotifyCSSStyledDocumentTransform$Provider,
-      org.daisy.pipeline.braille.dotify.impl.DotifyHyphenatorImpl$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyTranslatorImpl$Provider,
       org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider

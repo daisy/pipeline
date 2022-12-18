@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+    <uri uri="../xml/xproc/fix-audio-file-order.script.xpl" px:content-type="script" px:id="daisy202-unscrambler"/>
 
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"
          uri="../xml/xproc/daisy202-library.xpl"/>

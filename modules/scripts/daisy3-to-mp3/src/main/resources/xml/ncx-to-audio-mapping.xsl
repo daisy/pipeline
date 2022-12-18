@@ -8,6 +8,8 @@
 
 	<xsl:param name="smils" as="document-node(element(smil:smil))*" required="yes"/> <!-- in reading order -->
 	<xsl:param name="depth" as="xs:integer" required="no" select="3"/> <!-- positive number (1 means no folders, 2 means 1 level of folders) -->
+	<xsl:param name="max-folder-name-length" as="xs:integer" required="no" select="58"/>
+	<xsl:param name="max-file-name-length" as="xs:integer" required="no" select="185"/>
 
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
@@ -32,6 +34,7 @@
 				<xsl:param name="from-smil-doc" as="xs:integer" select="0"/> <!-- index in $smils -->
 				<xsl:param name="from-smil-elem" as="element()?" select="()"/> <!-- par|seq -->
 				<xsl:param name="dest-file" as="xs:integer*" select="for $x in 1 to $depth return 0"/> <!-- (0,0,0,...) -->
+				<xsl:param name="label" as="xs:string" select="''"/>
 				<xsl:param name="clips-for-dest-file" as="element(smil:audio)*" select="()"/> <!-- with absolute and normalized @src -->
 				<xsl:on-completion>
 					<xsl:variable name="clips-for-dest-file" as="element(smil:audio)*">
@@ -47,7 +50,12 @@
 					</xsl:variable>
 					<xsl:call-template name="add-clips-to-dest-file">
 						<xsl:with-param name="audio-clips" select="$clips-for-dest-file"/>
-						<xsl:with-param name="dest-file" select="$dest-file"/>
+						<xsl:with-param name="dest-file">
+							<xsl:call-template name="dest-file">
+								<xsl:with-param name="index" select="$dest-file"/>
+								<xsl:with-param name="label" select="$label"/>
+							</xsl:call-template>
+						</xsl:with-param>
 					</xsl:call-template>
 				</xsl:on-completion>
 				<xsl:variable name="next-playOrder" as="xs:integer" select="xs:integer(@playOrder)"/>
@@ -92,7 +100,12 @@
 							<xsl:when test="count(ancestor::ncx:navPoint)&lt;$depth">
 								<xsl:call-template name="add-clips-to-dest-file">
 									<xsl:with-param name="audio-clips" select="$clips-for-dest-file"/>
-									<xsl:with-param name="dest-file" select="$dest-file"/>
+									<xsl:with-param name="dest-file">
+										<xsl:call-template name="dest-file">
+											<xsl:with-param name="index" select="$dest-file"/>
+											<xsl:with-param name="label" select="$label"/>
+										</xsl:call-template>
+									</xsl:with-param>
 								</xsl:call-template>
 								<xsl:next-iteration>
 									<xsl:with-param name="playOrder" select="$next-playOrder"/>
@@ -103,6 +116,7 @@
 									                        return (for $x in 1 to $level - 1 return $dest-file[$x],
 									                                $dest-file[$level] + 1,
 									                                for $x in $level + 1 to $depth return 1)"/>
+									<xsl:with-param name="label" select="string(ncx:navLabel/ncx:text)"/>
 									<xsl:with-param name="clips-for-dest-file" select="()"/>
 								</xsl:next-iteration>
 							</xsl:when>
@@ -163,12 +177,7 @@
 
 	<xsl:template name="add-clips-to-dest-file">
 		<xsl:param name="audio-clips" as="element(smil:audio)*" required="yes"/>
-		<xsl:param name="dest-file" as="xs:integer*" required="yes"/>
-		<xsl:variable name="dest-file" as="xs:string"
-		              select="concat(
-		                        string-join(for $x in $dest-file return format-number($x,'000'),'/'),
-		                        '.',
-		                        $file-extension)"/>
+		<xsl:param name="dest-file" as="xs:string" required="yes"/>
 		<xsl:variable name="clips" as="element(d:clip)*">
 			<xsl:iterate select="$audio-clips">
 				<xsl:param name="clipBegin" as="xs:decimal" select="0"/>
@@ -195,5 +204,30 @@
 			</d:file>
 		</xsl:for-each-group>
 	</xsl:template>
-
+	
+	<xsl:template name="dest-file" as="xs:string">
+		<xsl:param name="index" as="xs:integer*" required="yes"/>
+		<xsl:param name="label" as="xs:string" required="yes"/>
+		<xsl:variable name="folder-index" as="xs:integer*" select="$index[position()&lt;last()]"/>
+		<xsl:variable name="file-index" as="xs:integer" select="$index[last()]"/>
+		<xsl:sequence select="concat(
+		                        string-join(for $x in $folder-index return
+		                                      substring(
+		                                        format-number($x,'000'),
+		                                        1,
+		                                        $max-folder-name-length),
+		                                    '/'),
+		                        '/',
+		                        encode-for-uri(
+		                          substring(
+		                            concat(
+		                              format-number($file-index,'000'),
+		                              ' ',
+		                              $label),
+		                            1,
+		                            $max-file-name-length)),
+		                        '.',
+		                        $file-extension)"/>
+	</xsl:template>
+	
 </xsl:stylesheet>

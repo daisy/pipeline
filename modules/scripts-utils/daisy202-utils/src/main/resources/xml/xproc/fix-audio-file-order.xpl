@@ -8,6 +8,9 @@
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<p>Rename audio files in a DAISY 2.02 publication in such a way that when sorted
 		alphabetically, they are also sorted according to the reading order.</p>
+		<p>Note that within the flow of a document audio files are not necessarily played in a
+		continuous manner. "Sorted according to reading order" therefore means that the position of
+		an audio file is determined by the position of its first clip in the flow.</p>
 	</p:documentation>
 
 	<p:input port="source.fileset" primary="true"/>
@@ -79,7 +82,7 @@
 	</px:fileset-intersect>
 
 	<px:fileset-load media-types="application/smil+xml">
-        <p:input port="in-memory">
+		<p:input port="in-memory">
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
 	</px:fileset-load>

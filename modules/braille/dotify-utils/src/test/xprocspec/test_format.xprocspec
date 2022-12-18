@@ -215,8 +215,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="running-header" direction="forward" scope="page"/>
-                    <marker-reference marker="running-header" direction="backward" scope="sequence"/>
-                    <marker-reference marker="running-header/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-header" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
@@ -230,15 +229,13 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="running-footer" direction="forward" scope="page"/>
-                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
-                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page" direction="forward" scope="page"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
               </footer>
@@ -384,15 +381,13 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="running-footer" direction="forward" scope="page"/>
-                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
-                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page" direction="forward" scope="page"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
               </footer>
@@ -408,10 +403,6 @@
             </block>
           </sequence>
           <sequence master="b">
-            <block>
-              <marker class="print-page/entry" value="⠤"/>
-              <marker class="running-footer/entry" value="⠤⠤"/>
-            </block>
             <block break-before="sheet">
               ⠤⠤⠤
             </block>
@@ -4748,17 +4739,11 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
-                  </compound-marker-reference>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
                 </field>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="spread-content" start-offset="-1"/>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
-                  </compound-marker-reference>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
                 </field>
               </header>
               <footer>
@@ -4766,8 +4751,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
@@ -4779,8 +4763,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page/prev" direction="forward" scope="spread-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="spread"/>
                 </field>
@@ -4794,10 +4777,7 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
-                  </compound-marker-reference>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
                 </field>
                 <field>
                   <string value=""/>
@@ -4808,8 +4788,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                   <marker-reference marker="dash-print-page" direction="backward" scope="page"/>
                 </field>
@@ -5021,8 +5000,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
@@ -5174,8 +5152,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
@@ -5798,15 +5775,13 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="foo" direction="forward" scope="page"/>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="foo" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="foo/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="foo" direction="backward" scope="sequence"/>
-                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="foo" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
               </footer>
@@ -11155,8 +11130,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="running-footer" direction="forward" scope="page"/>
-                    <marker-reference marker="running-footer" direction="backward" scope="sequence"/>
-                    <marker-reference marker="running-footer/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
@@ -11482,10 +11456,7 @@
               <header>
                 <field>
                   <marker-reference marker="print-page-dash/prev" direction="forward" scope="page-content"/>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
-                  </compound-marker-reference>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
                 </field>
                 <field>
                   <string value=""/>
@@ -13158,15 +13129,11 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="print-page" direction="forward" scope="page"/>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
                   </compound-marker-reference>
                 </field>
                 <field>
-                  <compound-marker-reference>
-                    <marker-reference marker="print-page" direction="backward" scope="sequence"/>
-                    <marker-reference marker="print-page/entry" direction="backward" scope="sequence"/>
-                  </compound-marker-reference>
+                  <marker-reference marker="print-page" direction="backward" scope="document"/>
                 </field>
               </footer>
             </default-template>
@@ -14880,8 +14847,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="foo/if-not-set-next/prev" direction="forward" scope="page-content"/>
-                    <marker-reference marker="foo/if-not-set-next" direction="backward" scope="sequence" offset="-1"/>
-                    <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                    <marker-reference marker="foo/if-not-set-next" direction="backward" scope="document" offset="-1"/>
                   </compound-marker-reference>
                 </field>
                 <field>
@@ -15022,8 +14988,7 @@
                 <field>
                   <compound-marker-reference>
                     <marker-reference marker="foo" direction="forward" scope="page" text-style="white-space: pre-wrap"/>
-                    <marker-reference marker="foo" direction="backward" scope="sequence" text-style="white-space: pre-wrap"/>
-                    <marker-reference marker="foo/entry" direction="backward" scope="sequence" text-style="white-space: pre-wrap"/>
+                    <marker-reference marker="foo" direction="backward" scope="document" text-style="white-space: pre-wrap"/>
                   </compound-marker-reference>
                   <string value=" "/>
                   <current-page number-format="default" text-style="white-space: pre-wrap"/>
@@ -15151,8 +15116,7 @@
               <block>
                 <compound-marker-reference>
                   <marker-reference marker="foo/if-not-set-next/prev" direction="forward" scope="page-content"/>
-                  <marker-reference marker="foo/if-not-set-next" direction="backward" scope="sequence" offset="-1"/>
-                  <marker-reference marker="foo/entry" direction="backward" scope="sequence"/>
+                  <marker-reference marker="foo/if-not-set-next" direction="backward" scope="document" offset="-1"/>
                 </compound-marker-reference>
               </block>
             </any-resumed>

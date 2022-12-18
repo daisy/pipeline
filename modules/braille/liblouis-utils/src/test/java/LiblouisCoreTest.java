@@ -74,7 +74,6 @@ public class LiblouisCoreTest extends AbstractTest {
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
-			brailleModule("libhyphen-utils"),
 			brailleModule("braille-common"),
 			brailleModule("braille-css-utils"),
 			brailleModule("pef-utils"),

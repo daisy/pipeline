@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../main/resources/xml/daisy202-to-mp3.xpl">
+
+	<x:scenario label="dontworrybehappy">
+		<x:call step="px:daisy202-to-mp3">
+			<x:input port="source.fileset">
+				<x:document type="inline" xml:base="../../../../daisy202-to-daisy3/src/test/resources/daisy202/dontworrybehappy/">
+					<d:fileset>
+						<d:file href="content.html" media-type="application/xhtml+xml" media-version="4.0"/>
+						<d:file href="default.css" media-type="text/css" kind="stylesheet"/>
+						<d:file href="ncc.html" media-type="application/xhtml+xml" media-version="4.0"/>
+						<d:file href="speechgen0001.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0002.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0003.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0004.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0005.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0006.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0007.smil" media-type="application/smil+xml"/>
+						<d:file href="speechgen0001.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0002.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0003.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0004.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0005.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0006.mp3" media-type="audio/mpeg"/>
+						<d:file href="speechgen0007.mp3" media-type="audio/mpeg"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+			<x:option name="output-dir" select="resolve-uri('dontworrybehappy/output-dir/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('dontworrybehappy/temp-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the result port">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="the result fileset"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline" base-uri="temp-dir">
+				<d:fileset>
+					<d:file href="dontworrybehappy/output-dir/001/001/001%20Don't%20Worry,%20Be%20Happy.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp1.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/002/001/001%20Introductio.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp2.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/003/001/001%20Versa%20media,%20pre%20peripetum.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp3.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/003/002/001%20Culmen%20interludiaris.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp4.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/004/001/001%20Concludio.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp5.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/004/002/001%20Repetitio%20ad%20nauseam.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp6.mp3"/>
+					<d:file href="dontworrybehappy/output-dir/005/001/001%20Notes.mp3"
+					        media-type="audio/mpeg"
+					        original-href="dontworrybehappy/temp-dir/tmp7.mp3"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

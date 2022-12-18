@@ -1212,7 +1212,7 @@
         <xsl:param name="context" as="element()"/>
         <xsl:variable name="last-set" as="element()?"
                       select="$context/(self::*|preceding::*|ancestor::*)
-                              [contains(@css:string-set,$name) or contains(@css:string-entry,$name)]
+                              [contains(@css:string-set,$name)]
                               [last()]"/>
         <xsl:choose>
             <xsl:when test="$context/ancestor::*/@css:flow[not(.='normal')]">
@@ -1220,8 +1220,7 @@
                     <xsl:when test="$last-set
                                     intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
                         <xsl:variable name="value" as="xs:string?"
-                                      select="(css:parse-string-set($last-set/@css:string-entry),
-                                               css:parse-string-set($last-set/@css:string-set))
+                                      select="css:parse-string-set($last-set/@css:string-set)
                                               [@name=$name][last()]/@value"/>
                         <xsl:choose>
                             <xsl:when test="$value">
@@ -1248,8 +1247,7 @@
             </xsl:when>
             <xsl:when test="$last-set">
                 <xsl:variable name="value" as="xs:string?"
-                              select="(css:parse-string-set($last-set/@css:string-entry),
-                                       css:parse-string-set($last-set/@css:string-set))
+                              select="css:parse-string-set($last-set/@css:string-set)
                                       [@name=$name][last()]/@value"/>
                 <xsl:choose>
                     <xsl:when test="$value">

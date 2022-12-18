@@ -1,13 +1,14 @@
 #pragma once
 
-#include "pch.h"
+#include <string>
+#include <map>
 
 /// <summary>
 /// Voice template to be used for sapi and onecore calls.<br/>
 /// This class also expose a Map subclass to manage Voice dictionnary using a (name,vendor) paire as reference key.
 /// </summary>
 /// <typeparam name="TokenPointerType">Type of token used by the API to select a voice for speaking action</typeparam>
-template<typename TokenPointerType>
+template<typename RawVoiceType>
 class Voice {
 public:
     /// <summary>
@@ -41,25 +42,25 @@ public:
     std::wstring age = L"";
 
     /// <summary>
-    /// Pointer to the voice original data structure or identifier, the should be use to select it in the corresponding API
+    /// Voice original data structure or identifier, 
+    /// that should be use to select the voice to use it in the corresponding API
     /// </summary>
-    TokenPointerType voicePointer;
+    const RawVoiceType rawVoice;
 
-    Voice<TokenPointerType>(
-        TokenPointerType voicePointer,
+    Voice<RawVoiceType>(
+        const RawVoiceType& rawVoice,
         std::wstring name,
         std::wstring vendor,
         std::wstring language = L"",
         std::wstring gender = L"",
         std::wstring age = L""
-    ) {
-        this->voicePointer = voicePointer;
-        this->name = name;
-        this->vendor = vendor;
-        this->language = language;
-        this->gender = gender;
-        this->age = age;
-    }
+    ) : rawVoice(rawVoice),
+        name(name),
+        vendor(vendor),
+        language(language),
+        gender(gender),
+        age(age)
+    { }
 
 };
 

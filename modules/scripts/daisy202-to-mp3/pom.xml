@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.14.11</version>
+    <relativePath>../../parent/</relativePath>
+  </parent>
+
+  <artifactId>daisy202-to-mp3</artifactId>
+  <version>1.0.0</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: DAISY 2.02 to MP3</name>
+
+  <dependencies>
+    <!-- for XProcScriptService -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-common</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>smil-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.script.impl.XProcScript_daisy202_to_mp3
+    </expose-services>
+  </properties>
+
+</project>

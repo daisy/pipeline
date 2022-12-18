@@ -5,11 +5,11 @@ import java.net.URI;
 import java.util.Hashtable;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.braille.common.NativePath;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 
@@ -29,8 +29,9 @@ public class LiblouisExternalNativePath implements NativePath {
 	 */
 	@Activate
 	protected void activate() throws RuntimeException {
+		// only called when created with SPI
 		if (!LIBLOUIS_EXTERNAL)
-			throw new RuntimeException("Using external Liblouis is not allowed");
+			SPIHelper.failToActivate("Using external Liblouis is not allowed");
 	}
 	
 	public URI getIdentifier() { return URLs.asURI("http://www.liblouis.org/native/EXTERNAL"); }
@@ -40,8 +41,8 @@ public class LiblouisExternalNativePath implements NativePath {
 	
 	// Throwing an exception from the activate method, although permitted by the spec
 	// (https://osgi.org/specification/osgi.cmpn/7.0.0/service.component.html#service.component-activate.method),
-	// breaks bindings with cardinality 0..1 in Felix. For this reason the DS annotations are used
-	// only to create the SPI wrapper, and for OSGi we use an activator.
+	// breaks bindings with cardinality 0..1 or 1..1 in Felix. For this reason the DS annotations are used
+	// only to create the SPI wrapper (see pom.xml), and for OSGi we use an activator.
 	public static class Activator implements BundleActivator {
 		
 		public void start(BundleContext context) throws Exception {
@@ -55,5 +56,13 @@ public class LiblouisExternalNativePath implements NativePath {
 		
 		public void stop(BundleContext context) throws Exception {}
 		
+	}
+
+	// static nested class in order to delay class loading
+	private static class SPIHelper {
+		private SPIHelper() {}
+		public static void failToActivate(String message) throws ActivationException {
+			throw new ActivationException(message);
+		}
 	}
 }

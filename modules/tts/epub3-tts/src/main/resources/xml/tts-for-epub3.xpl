@@ -275,7 +275,7 @@
           </p:input>
           <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
         </px:isolate-skippable>
-        <px:epub3-to-ssml name="ssml" px:progress="1/2" px:message="Generating SSML from EPUB 3">
+        <px:epub3-to-ssml name="ssml" px:progress="1/2" px:message="Generating SSML from HTML">
           <p:input port="sentence-ids">
             <p:pipe port="sentence-ids" step="lexing"/>
           </p:input>

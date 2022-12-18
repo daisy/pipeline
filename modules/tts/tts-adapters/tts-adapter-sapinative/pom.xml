@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-		<version>1.14.11-SNAPSHOT</version>
+		<version>1.14.11</version>
 		<relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.0.7-SNAPSHOT</version>
+  <version>3.1.0</version>
   <artifactId>tts-adapter-sapinative</artifactId>
   <packaging>bundle</packaging>
 
@@ -45,7 +45,7 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.tts.sapinative.impl.SAPIservice
+      org.daisy.pipeline.tts.sapi.impl.SAPIService
     </expose-services>
   </properties>
 
@@ -64,82 +64,68 @@
 	  </instructions>
 	</configuration>
       </plugin>
-
-      <!-- note: Run mvn compile native:javah to generate again the C++ headers from -->
-      <!-- the Java class. -->
-      <plugin>
-	<groupId>org.codehaus.mojo</groupId>
-	<artifactId>native-maven-plugin</artifactId>
-	<version>1.0-alpha-7</version>
-	<extensions>true</extensions>
-	<executions>
-	  <execution>
-	    <phase>none</phase>
-	    <id>default-cli</id>
-	    <goals>
-	      <goal>javah</goal>
-	    </goals>
-	    <configuration>
-	      <javahOS>windows</javahOS>
-	      <javahOutputDirectory>../../native-libs/sapi-nar/src/main/jni</javahOutputDirectory>
-	      <javahClassNames>
-		<javahClassName>org.daisy.pipeline.tts.sapinative.SAPILib</javahClassName>
-	      </javahClassNames>
-	    </configuration>
-	  </execution>
-	</executions>
-      </plugin>
     </plugins>
+    <pluginManagement>
+      <plugins>
+	<plugin>
+	  <groupId>org.codehaus.mojo</groupId>
+	  <artifactId>native-maven-plugin</artifactId>
+	  <version>1.0-alpha-7</version>
+	</plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <profiles>
-    <!-- Extract the libraries from the NAR package -->
     <profile>
-      <id>generate-dll</id>
+      <!-- Run mvn -Pgenerate-sapinative-headers compile native:javah to generate again the C++ headers from the Java class -->
+      <id>generate-sapinative-headers</id>
       <build>
 	<plugins>
 	  <plugin>
-	    <artifactId>maven-dependency-plugin</artifactId>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>native-maven-plugin</artifactId>
 	    <executions>
 	      <execution>
-		<phase>generate-resources</phase>
+		<phase>none</phase>
+		<id>default-cli</id>
 		<goals>
-		  <goal>unpack</goal>
+		  <goal>javah</goal>
 		</goals>
 		<configuration>
-		  <artifactItems>
-		    <artifactItem>
-		      <groupId>org.daisy.pipeline.bindings</groupId>
-		      <artifactId>sapi-nar</artifactId>
-		      <version>1.0.0</version>
-		      <classifier>x64-Windows-msvc-jni</classifier>
-		      <type>nar</type>
-		    </artifactItem>
-		    <artifactItem>
-		      <groupId>org.daisy.pipeline.bindings</groupId>
-		      <artifactId>sapi-nar</artifactId>
-		      <version>1.0.0</version>
-		      <classifier>x86-Windows-msvc-jni</classifier>
-		      <type>nar</type>
-		    </artifactItem>
-		  </artifactItems>
+		  <javahOS>windows</javahOS>
+		  <javahOutputDirectory>src/main/jni/sapinative</javahOutputDirectory>
+		  <javahClassNames>
+		    <javahClassName>org.daisy.pipeline.tts.onecore.SAPI</javahClassName>
+		  </javahClassNames>
 		</configuration>
 	      </execution>
 	    </executions>
 	  </plugin>
+	</plugins>
+      </build>
+    </profile>
+    <profile>
+      <!-- Run mvn -Pgenerate-onecorenative-headers compile native:javah to generate again the C++ headers from the Java class -->
+      <id>generate-onecorenative-headers</id>
+      <build>
+	<plugins>
 	  <plugin>
-	    <artifactId>maven-antrun-plugin</artifactId>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>native-maven-plugin</artifactId>
 	    <executions>
 	      <execution>
-		<phase>generate-resources</phase>
+		<phase>none</phase>
+		<id>default-cli</id>
 		<goals>
-		  <goal>run</goal>
+		  <goal>javah</goal>
 		</goals>
 		<configuration>
-		  <tasks>
-		    <copy file="target/dependency/lib/x64-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x64/sapinative.dll"/>
-		    <copy file="target/dependency/lib/x86-Windows-msvc/jni/sapi-nar.dll" tofile="src/main/resources/x86/sapinative.dll"/>
-		  </tasks>
+		  <javahOS>windows</javahOS>
+		  <javahOutputDirectory>src/main/jni/onecore</javahOutputDirectory>
+		  <javahClassNames>
+		    <javahClassName>org.daisy.pipeline.tts.onecore.Onecore</javahClassName>
+		  </javahClassNames>
 		</configuration>
 	      </execution>
 	    </executions>

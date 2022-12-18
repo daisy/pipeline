@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.11-SNAPSHOT</version>
+    <version>1.14.11</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>epub3-to-pef</artifactId>
-  <version>6.0.1-SNAPSHOT</version>
+  <version>6.0.1</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 to PEF</name>
@@ -87,11 +87,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-activator</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

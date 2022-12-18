@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.11-SNAPSHOT</version>
+    <version>1.14.11</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>daisy202-to-daisy3</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DAISY 2.02 to DAISY 3</name>

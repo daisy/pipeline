@@ -58,7 +58,6 @@
         css:parse-stylesheet
         css:preserve-white-space
         css:render-table-by
-        css:repeat-string-set
         css:shift-id
         css:shift-string-set
         css:split
@@ -713,7 +712,7 @@
         <p:documentation>
             Split flows into sections.
         </p:documentation>
-        <p:for-each px:progress=".40">
+        <p:for-each px:progress=".50">
             <pxi:propagate-page-break px:progress=".80">
                 <p:documentation>
                     Insert forced page breaks to satisfy the 'page' and 'volume' properties. <!--
@@ -748,7 +747,7 @@
                 </p:documentation>
             </css:split>
         </p:for-each>
-        <p:for-each px:progress=".45">
+        <p:for-each px:progress=".50">
             <p:group px:progress=".10">
                 <p:documentation>
                     Move css:page, css:counter-set and css:volume attributes to css:_ root element.
@@ -833,19 +832,6 @@
                 </p:group>
             </p:group>
         </p:for-each>
-        <p:group px:progress=".15">
-            <p:documentation>
-                Repeat css:string-set attributes at the beginning of sections as css:string-entry.
-            </p:documentation>
-            <p:split-sequence test="/*[not(@css:flow)]" name="_1"/>
-            <css:repeat-string-set name="_2" px:progress="1"/>
-            <p:identity>
-                <p:input port="source">
-                    <p:pipe step="_2" port="result"/>
-                    <p:pipe step="_1" port="not-matched"/>
-                </p:input>
-            </p:identity>
-        </p:group>
     </p:group>
     
     <p:for-each px:progress=".01">
