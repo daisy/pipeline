@@ -46,8 +46,10 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		if (declarations != null)
 			for (Declaration d : declarations)
 				super.push(d);
-		if (parentStyle != null)
+		if (parentStyle != null) {
 			super.inheritFrom(parentStyle);
+			inherited = true;
+		}
 	}
 	
 	public Term<?> getValue(String name) {
@@ -147,13 +149,30 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		concretized = true;
 	}
 
-	@Override
-	public NodeData push(Declaration d) {
-		throw new UnsupportedOperationException();
-	}
+	private boolean inherited = false;
 	
 	@Override
-	public NodeData inheritFrom(NodeData parent) throws ClassCastException {
+	public SimpleInlineStyle inheritFrom(NodeData parent) throws ClassCastException {
+		if (inherited)
+			throw new UnsupportedOperationException("Can not inherit from more than one parent style");
+		else if (concretized)
+			throw new UnsupportedOperationException("Can not inherit from a parent style: 'inherit' values were already concretized.");
+		else if (!(parent instanceof SimpleInlineStyle))
+			throw new UnsupportedOperationException("Can only inherit from another SimpleInlineStyle");
+		else {
+			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
+			copy.noCopyInheritFrom(((SimpleInlineStyle)parent));
+			return copy;
+		}
+	}
+
+	private void noCopyInheritFrom(NodeData parent) {
+		super.inheritFrom(parent);
+		inherited = true;
+	}
+
+	@Override
+	public NodeData push(Declaration d) {
 		throw new UnsupportedOperationException();
 	}
 }
