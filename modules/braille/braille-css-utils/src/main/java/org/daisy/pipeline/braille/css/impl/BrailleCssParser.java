@@ -141,28 +141,55 @@ public class BrailleCssParser {
 		                                                                .<CacheKey,BrailleCssStyle>build()
 		                                                                .asMap();
 		void put(Context context, String serializedStyle, BrailleCssStyle style) {
-			CacheKey key = new CacheKey(context, serializedStyle);
+			put(context, serializedStyle, null, false, style);
+		}
+
+		void put(Context context, String serializedStyle, SimpleInlineStyle parent, boolean concretizeInherit, BrailleCssStyle style) {
+			CacheKey key = new CacheKey(context, serializedStyle, parent, concretizeInherit);
 			cache.put(key, style);
 		}
 
 		BrailleCssStyle get(Context context, String serializedStyle) {
-			CacheKey key = new CacheKey(context, serializedStyle);
+			return get(context, serializedStyle, null, false);
+		}
+
+		BrailleCssStyle get(Context context, String serializedStyle, SimpleInlineStyle parent, boolean concretizeInherit) {
+			CacheKey key = new CacheKey(context, serializedStyle, parent, concretizeInherit);
 			return cache.get(key);
 		}
 
 		private static class CacheKey implements Comparable<CacheKey> {
 			private final Context context;
 			private final String style;
-			public CacheKey(Context context, String style) {
+			private final String parent;
+			private final boolean concretizeInherit;
+			public CacheKey(Context context, String style, SimpleInlineStyle parent, boolean concretizeInherit) {
+				if (parent != null && context != Context.ELEMENT)
+					throw new IllegalArgumentException();
 				this.context = context;
 				this.style = style;
+				this.parent = parent != null ? BrailleCssSerializer.toString(parent) : null;
+				this.concretizeInherit = concretizeInherit;
 			}
 			@Override
 			public int compareTo(CacheKey that) {
 				int i = this.context.compareTo(that.context);
 				if (i != 0)
 					return i;
-				return this.style.compareTo(that.style);
+				i = this.style.compareTo(that.style);
+				if (i != 0)
+					return i;
+				if (this.parent == null)
+					return that.parent == null ? 0 : -1;
+				else if (that.parent == null)
+					return 1;
+				i = this.parent.compareTo(that.parent);
+				if (i != 0)
+					return i;
+				if (this.concretizeInherit == that.concretizeInherit)
+					return 0;
+				else
+					return this.concretizeInherit ? -1 : 1;
 			}
 			@Override
 			public int hashCode() {
@@ -170,6 +197,8 @@ public class BrailleCssParser {
 				int hash = 1;
 				hash = prime * hash + context.hashCode();
 				hash = prime * hash + style.hashCode();
+				hash = prime * hash + (parent == null ? 0 : parent.hashCode());
+				hash = prime * hash + Boolean.hashCode(concretizeInherit);
 				return hash;
 			}
 			@Override
@@ -181,7 +210,16 @@ public class BrailleCssParser {
 				CacheKey that = (CacheKey)o;
 				if (this.context != that.context)
 					return false;
-				return this.style.equals(that.style);
+				if (!this.style.equals(that.style))
+					return false;
+				if (this.parent == null)
+					return that.parent == null;
+				else if (that.parent == null)
+					return false;
+				else if (!this.parent.equals(that.parent))
+					return false;
+				else
+					return this.concretizeInherit == that.concretizeInherit;
 			}
 		}
 	}
