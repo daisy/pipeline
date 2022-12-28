@@ -15,6 +15,12 @@ public interface Style {
 	 */
 	public String toString();
 
+	/**
+	 * @param relativeTo Include only those declarations that are needed to reconstruct the
+	 *                   style with <code>relativeTo</code> as the parent style.
+	 */
+	public String toString(Style relativeTo);
+
 	public void toXml(XMLStreamWriter writer) throws XMLStreamException;
 
 }

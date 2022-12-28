@@ -113,12 +113,23 @@
             as a @counter-style rule. A `css:*` attribute with the name of a property is parsed as a
             property declaration. `attr()` values in `content` and `string-set` properties are
             evaluated.</p>
+            <p>An optional parent style may be specified as a `Style` item().</p>
             <p>Return value is a `Style` item.</p>
         </desc>
     </doc>
     <xsl:function name="css:parse-stylesheet" as="item()">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
         <xsl:sequence select="ParseStylesheet:parse($stylesheet)"
+                      xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
+    <xsl:function name="css:parse-stylesheet" as="item()">
+        <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
+        <xsl:param name="parent" as="item()?"/>
+        <xsl:sequence select="ParseStylesheet:parse($stylesheet,$parent)"
                       xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
             <!--
                 Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java

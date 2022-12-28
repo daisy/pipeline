@@ -17,7 +17,7 @@
 		CSS and <a href="https://sass-lang.com/documentation">SCSS</a> style sheets in XML.</p>
 		<p>Inlining is done with <code>style</code> attributes with the <a
 		href="http://braillespecs.github.io/braille-css/#h2_style-attribute">syntax</a> described in
-		braille CSS.</p>
+		braille CSS. Note that concretizing "inherit" is not part of cascading.</p>
 	</p:documentation>
 	
 	<p:input port="source" primary="true"/>
