@@ -10,6 +10,7 @@ import java.util.TreeMap;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Iterables;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
@@ -21,6 +22,7 @@ import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.SelectorPart;
+import cz.vutbr.web.css.SourceLocator;
 import cz.vutbr.web.css.Term;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
@@ -248,8 +250,57 @@ public final class BrailleCssStyle implements Cloneable {
 
 	@Override
 	public String toString() {
+		return toString(null);
+	}
+
+	/**
+	 * @param relativeTo If not <code>null</code>, include only those declarations that are needed
+	 *                   to reconstruct the style with <code>relativeTo</code> as the parent
+	 *                   style. Relativizes even if the parent style is empty.
+	 */
+	public String toString(BrailleCssStyle relativeTo) {
+		if (relativeTo != null) {
+			if (declarations != null && !(declarations instanceof SimpleInlineStyle))
+				throw new IllegalArgumentException();
+			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof SimpleInlineStyle))
+				throw new IllegalArgumentException();
+			Builder relative = new Builder(this);
+			if (relativeTo.declarations != null)
+				for (Declaration d : relativeTo.getDeclarationMap().values()) {
+					PropertyValue p = (PropertyValue)d;
+					if (p.getCSSProperty().inherited()) {
+						PropertyValue pp = (PropertyValue)getDeclaration(p.getProperty());
+						if (pp != null) {
+							if (equal(p, pp))
+								relative.remove(p.getProperty());
+						} else {
+							PropertyValue def = p.getDefault();
+							if (def != null && !equalIgnoreSource(p, def))
+								relative.add(def, def.getSupportedBrailleCSS());
+						}
+					}
+				}
+			// omit properties that have the default value and are not inherited or don't exist in the parent style
+			if (declarations != null)
+				for (Declaration d : getDeclarationMap().values()) {
+					PropertyValue p = (PropertyValue)d;
+					PropertyValue def = p.getDefault();
+					if ((!p.getCSSProperty().inherited() || relativeTo.getDeclaration(p.getProperty()) == null) && equal(p, def))
+						relative.remove(p.getProperty());
+				}
+			String s = relative.build().toString();
+			if (context != null) // context not set if caching is not allowed
+				BrailleCssParser.cache.put(context,
+				                           s,
+				                           relativeTo.declarations != null
+				                               ? (SimpleInlineStyle)relativeTo.declarations
+				                               : SimpleInlineStyle.EMPTY,
+				                           true,
+				                           this);
+			return s;
+		}
 		if (serialized == null) {
-			serialized = toString(this);
+			serialized = toString(this, null);
 			// cache
 			if (context != null) // context not set if caching is not allowed
 				BrailleCssParser.cache.put(context, serialized, this);
@@ -259,10 +310,6 @@ public final class BrailleCssStyle implements Cloneable {
 				BrailleCssParser.cache.get(context, serialized);
 		}
 		return serialized;
-	}
-
-	private static String toString(BrailleCssStyle style) {
-		return toString(style, null);
 	}
 
 	private static String toString(BrailleCssStyle style, String base) {
@@ -313,6 +360,61 @@ public final class BrailleCssStyle implements Cloneable {
 	@Override
 	public int hashCode() {
 		return toString().hashCode();
+	}
+
+	private static boolean equal(PropertyValue a, PropertyValue b) {
+		return equal(a, b, false);
+	}
+
+	private static boolean equalIgnoreSource(PropertyValue a, PropertyValue b) {
+		return equal(a, b, true);
+	}
+
+	private static boolean equal(PropertyValue a, PropertyValue b, boolean ignoreSource) {
+		if (a == null)
+			return b == null;
+		else if (b == null)
+			return false;
+		else {
+			if (a.getCSSProperty() != b.getCSSProperty())
+				return false;
+			Term<?> va = a.getValue();
+			Term<?> vb = b.getValue();
+			if (!equal(va != null ? BrailleCssSerializer.toString(va) : null,
+			           vb != null ? BrailleCssSerializer.toString(vb) : null))
+				return false;
+			if (!ignoreSource && !equal(a.getSource(), b.getSource()))
+				return false;
+		}
+		return true;
+	}
+
+	private static boolean equal(SourceLocator a, SourceLocator b) {
+		if (a != null && a.getURL() == null)
+			a = null;
+		if (b != null && b.getURL() == null)
+			b = null;
+		if (a == null)
+			return b == null;
+		else if (b == null)
+			return false;
+		else if (!equal(a.getURL(), b.getURL()))
+			return false;
+		else if (a.getLineNumber() != b.getLineNumber())
+			return false;
+		else if (a.getColumnNumber() != b.getColumnNumber())
+			return false;
+		else
+			return true;
+	}
+
+	private static boolean equal(Object a, Object b) {
+		if (a == null)
+			return b == null;
+		else if (b == null)
+			return false;
+		else
+			return a.equals(b);
 	}
 
 	private static class Builder {
@@ -412,6 +514,17 @@ public final class BrailleCssStyle implements Cloneable {
 					else
 						add(e.getKey(), (BrailleCssStyle)s);
 				}
+			return this;
+		}
+
+		/**
+		 * @param key property name or selector
+		 */
+		private Builder remove(String key) {
+			if (this.declarations != null && this.declarations.remove(key) != null)
+				;
+			else if (this.nestedStyles != null)
+				this.nestedStyles.remove(key);
 			return this;
 		}
 
@@ -669,6 +782,52 @@ public final class BrailleCssStyle implements Cloneable {
 			if (s == null)
 				s = of(new InlineStyle(inlineStyle, context), context);
 			BrailleCssParser.cache.put(context, inlineStyle, s);
+		}
+		return s;
+	}
+
+	/**
+	 * Concretizes "inherit" even if the parent style is null or empty.
+	 */
+	public static BrailleCssStyle of(String inlineStyle, Context context, BrailleCssStyle parent) {
+		if (context != Context.ELEMENT)
+			throw new IllegalArgumentException();
+		SimpleInlineStyle parentDecls; {
+			if (parent == null || parent.declarations == null)
+				parentDecls = SimpleInlineStyle.EMPTY;
+			else if (!(parent.declarations instanceof SimpleInlineStyle))
+				throw new IllegalArgumentException();
+			else
+				parentDecls = (SimpleInlineStyle)parent.declarations;
+		}
+		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle, parentDecls, true);
+		if (s == null) {
+			s = of(inlineStyle, context);
+			SimpleInlineStyle decls = s.declarations != null
+				? (SimpleInlineStyle)s.declarations
+				: SimpleInlineStyle.EMPTY;
+			if (!parentDecls.isEmpty())
+				decls = decls.inheritFrom(parentDecls);
+			decls = decls.concretize();
+			if (!decls.isEmpty())
+				// Make sure that the resulting SimpleInlineStyle is not based on a parent and that
+				// it is not concretized because that would result in an exception when
+				// inheritFrom() is called on it. Note that concretize() does not have the same
+				// effect.
+				decls = new SimpleInlineStyle(
+					Iterables.transform(decls, d -> new PropertyValue(
+					                                    d.getProperty(),
+					                                    d.getCSSProperty(),
+					                                    d.getValue(),
+					                                    d.getSourceDeclaration(),
+					                                    d.getSupportedBrailleCSS())));
+			if (s.declarations != null || !decls.isEmpty()) {
+				s = s.clone();
+				s.declarations = decls.isEmpty() ? null : decls;
+				s.declarationMap = null;
+				s.serialized = null;
+			}
+			BrailleCssParser.cache.put(context, inlineStyle, parentDecls, true, s);
 		}
 		return s;
 	}

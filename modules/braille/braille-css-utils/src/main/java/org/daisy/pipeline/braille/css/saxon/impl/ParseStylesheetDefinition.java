@@ -38,16 +38,23 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 	public static class ParseStylesheet {
 
 		public static Style parse(Optional<Object> style) {
-			return parse(style.orElse(null));
+			return parse(style.orElse(null), null, false);
 		}
 
-		private static Style parse(Object style) {
-			if (style == null)
-				return Stylesheet.EMPTY;
+		public static Style parse(Optional<Object> style, Optional<Style> parentStyle) {
+			return parse(style.orElse(null), parentStyle.orElse(null), true);
+		}
+
+		private static Style parse(Object style, Style parentStyle, boolean concretizeInherit) {
 			String argStringValue;
 			Attr attr = null;
 			Element element = null;
-			if (style instanceof Attr) {
+			if (style == null) {
+				if (parentStyle == null)
+					return Stylesheet.EMPTY;
+				else
+					argStringValue = "";
+			} else if (style instanceof Attr) {
 				attr = (Attr)style;
 				argStringValue = attr.getNodeValue();
 				element = (Element)attr.getParentNode();
@@ -57,6 +64,8 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 				argStringValue = (String)style;
 			} else
 				throw new IllegalArgumentException("Unexpected type for first argument");
+			if (parentStyle != null && !(parentStyle instanceof Stylesheet))
+				throw new IllegalArgumentException("Unexpected type for second argument: " + parentStyle);
 			Context styleCtxt = Context.ELEMENT;
 			if (attr != null) {
 				if (XMLNS_CSS.equals(attr.getNamespaceURI())) {
@@ -84,7 +93,9 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 					}
 				}
 			}
-			BrailleCssStyle s = BrailleCssStyle.of(argStringValue, styleCtxt);
+			BrailleCssStyle s = concretizeInherit
+				? BrailleCssStyle.of(argStringValue, styleCtxt, parentStyle != null ? ((Stylesheet)parentStyle).style : null)
+				: BrailleCssStyle.of(argStringValue, styleCtxt);
 			if (s.isEmpty())
 				return Stylesheet.EMPTY;
 			if (attr != null)

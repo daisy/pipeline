@@ -18,6 +18,13 @@ public class Declaration implements Style {
 
 	@Override
 	public String toString() {
+		return toString(null);
+	}
+
+	@Override
+	public String toString(Style parent) {
+		if (parent != null)
+			throw new UnsupportedOperationException();
 		if (declaration != null)
 			return BrailleCssSerializer.toString(declaration);
 		else
