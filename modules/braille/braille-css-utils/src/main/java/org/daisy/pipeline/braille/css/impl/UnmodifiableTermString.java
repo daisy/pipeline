@@ -1,12 +1,13 @@
 package org.daisy.pipeline.braille.css.impl;
 
+import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermString;
 
 class UnmodifiableTermString extends UnmodifiableTerm<String> implements TermString {
 
-	private final TermString string;
+	private final Term<String> string;
 
-	UnmodifiableTermString(TermString string) {
+	UnmodifiableTermString(Term<String> string) {
 		this.string = string;
 	}
 

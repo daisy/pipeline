@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.css.impl;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SortedMap;
@@ -10,7 +11,6 @@ import java.util.TreeMap;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.Iterables;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
@@ -29,6 +29,7 @@ import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
+import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -63,14 +64,30 @@ public final class BrailleCssStyle implements Cloneable {
 
 	private final Context context;
 
+	/**
+	 * {@link SimpleInlineStyle} that is part of a {@link BrailleCssStyle}.
+	 *
+	 * Objects are mutable, but should be regarded as being immutable outside this class, unless the
+	 * {@code locked} field was set to {@code false}.
+	 */
+	// also used in BrailleCssParser
+	static class ValidatedDeclarations extends SimpleInlineStyle {
+		private static final ValidatedDeclarations EMPTY = new ValidatedDeclarations(null);
+		private ValidatedDeclarations(Iterable<PropertyValue> validatedDeclarations) {
+			super(validatedDeclarations);
+		}
+		private ValidatedDeclarations(Iterable<? extends Declaration> declarations, SupportedBrailleCSS validator) {
+			super(declarations, null, validator);
+		}
+		private boolean locked = true;
+	}
+
 	private BrailleCssStyle(Builder builder) {
 		this.context = builder.context;
 		this.declarations = builder.declarations == null || builder.declarations.isEmpty()
 			? null
 			: builder.validate.isPresent()
-				? new SimpleInlineStyle(builder.declarations.values(),
-				                        null,
-				                        builder.validate.get())
+				? new ValidatedDeclarations(builder.declarations.values(), builder.validate.get())
 				: ImmutableList.copyOf(builder.declarations.values())
 			;
 		this.nestedStyles = builder.nestedStyles != null && !builder.nestedStyles.isEmpty()
@@ -193,10 +210,10 @@ public final class BrailleCssStyle implements Cloneable {
 	 * @return a deep copy of the {@code declarations} field
 	 */
 	private Iterable<? extends Declaration> copyDeclarations() {
-		if (declarations instanceof SimpleInlineStyle)
-			// make sure that declarations field stays a SimpleInlineStyle object because
+		if (declarations instanceof ValidatedDeclarations)
+			// make sure that declarations field stays a ValidatedDeclarations object because
 			// it is assumed throughout the code
-			return (SimpleInlineStyle)((SimpleInlineStyle)declarations).clone();
+			return (ValidatedDeclarations)((ValidatedDeclarations)declarations).clone();
 		else {
 			List<Declaration> declarationsCopy = new ArrayList<>();
 			for (Declaration dd : declarations)
@@ -223,6 +240,59 @@ public final class BrailleCssStyle implements Cloneable {
 			}
 		}
 		return declarationMap;
+	}
+
+	/**
+	 * Return the style as a {@link SimpleInlineStyle} object.
+	 *
+	 * @param mutable Whether the caller wishes to mutate the returned object.
+	 * @throws UnsupportedOperationException if this is not a simple inline style
+	 */
+	public SimpleInlineStyle asSimpleInlineStyle(boolean mutable) {
+		if (isEmpty())
+			return SimpleInlineStyle.EMPTY;
+		else if (nestedStyles != null
+		         || context != Context.ELEMENT)
+			throw new UnsupportedOperationException("not a simple inline style");
+		else {
+			if (!(declarations instanceof ValidatedDeclarations))
+				throw new IllegalStateException(); // coding error
+			ValidatedDeclarations s = (ValidatedDeclarations)declarations;
+			if (mutable) {
+				s = (ValidatedDeclarations)s.clone(); // make a deep copy
+				for (Declaration d : s) {
+					if (d instanceof PropertyValue) {
+						PropertyValue pv = (PropertyValue)d;
+						CSSProperty p = pv.getCSSProperty();
+						if (p == TextTransform.list_values) {
+							Term<?> v = pv.getValue();
+							if (v instanceof TextTransformList)
+								((TextTransformList)v).locked = false;
+							break;
+						}
+					}
+				}
+				// mark as mutable
+				s.locked = false;
+			}
+			return s;
+		}
+	}
+
+	// used in BrailleCssParser
+	static Declaration unlockDeclaration(Declaration declaration) {
+		if (!(declaration instanceof PropertyValue))
+			return declaration;
+		PropertyValue pv = (PropertyValue)declaration;
+		if (pv.getCSSProperty() == TextTransform.list_values) {
+			if (pv.getValue() instanceof TextTransformList) {
+				// clone because we're going to make the value mutable
+				pv = (PropertyValue)pv.clone();
+				((TextTransformList)pv.getValue()).locked = false;
+			} else
+				throw new IllegalStateException(); // coding error
+		}
+		return pv;
 	}
 
 	/**
@@ -260,9 +330,9 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	public String toString(BrailleCssStyle relativeTo) {
 		if (relativeTo != null) {
-			if (declarations != null && !(declarations instanceof SimpleInlineStyle))
+			if (declarations != null && !(declarations instanceof ValidatedDeclarations))
 				throw new IllegalArgumentException();
-			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof SimpleInlineStyle))
+			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof ValidatedDeclarations))
 				throw new IllegalArgumentException();
 			Builder relative = new Builder(this);
 			if (relativeTo.declarations != null)
@@ -293,8 +363,8 @@ public final class BrailleCssStyle implements Cloneable {
 				BrailleCssParser.cache.put(context,
 				                           s,
 				                           relativeTo.declarations != null
-				                               ? (SimpleInlineStyle)relativeTo.declarations
-				                               : SimpleInlineStyle.EMPTY,
+				                               ? (ValidatedDeclarations)relativeTo.declarations
+				                               : ValidatedDeclarations.EMPTY,
 				                           true,
 				                           this);
 			return s;
@@ -793,35 +863,63 @@ public final class BrailleCssStyle implements Cloneable {
 	public static BrailleCssStyle of(String inlineStyle, Context context, BrailleCssStyle parent) {
 		if (context != Context.ELEMENT)
 			throw new IllegalArgumentException();
-		SimpleInlineStyle parentDecls; {
+		ValidatedDeclarations parentDecls; {
 			if (parent == null || parent.declarations == null)
-				parentDecls = SimpleInlineStyle.EMPTY;
-			else if (!(parent.declarations instanceof SimpleInlineStyle))
+				parentDecls = ValidatedDeclarations.EMPTY;
+			else if (!(parent.declarations instanceof ValidatedDeclarations))
 				throw new IllegalArgumentException();
 			else
-				parentDecls = (SimpleInlineStyle)parent.declarations;
+				parentDecls = (ValidatedDeclarations)parent.declarations;
 		}
 		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle, parentDecls, true);
 		if (s == null) {
 			s = of(inlineStyle, context);
-			SimpleInlineStyle decls = s.declarations != null
-				? (SimpleInlineStyle)s.declarations
-				: SimpleInlineStyle.EMPTY;
+			ValidatedDeclarations decls = s.declarations != null
+				? (ValidatedDeclarations)s.declarations
+				: ValidatedDeclarations.EMPTY;
 			if (!parentDecls.isEmpty())
-				decls = decls.inheritFrom(parentDecls);
-			decls = decls.concretize();
-			if (!decls.isEmpty())
+				decls = (ValidatedDeclarations)decls.inheritFrom(parentDecls);
+			decls = (ValidatedDeclarations)decls.concretize();
+			if (!decls.isEmpty()) {
 				// Make sure that the resulting SimpleInlineStyle is not based on a parent and that
 				// it is not concretized because that would result in an exception when
 				// inheritFrom() is called on it. Note that concretize() does not have the same
 				// effect.
-				decls = new SimpleInlineStyle(
-					Iterables.transform(decls, d -> new PropertyValue(
-					                                    d.getProperty(),
-					                                    d.getCSSProperty(),
-					                                    d.getValue(),
-					                                    d.getSourceDeclaration(),
-					                                    d.getSupportedBrailleCSS())));
+				// Also perform special inheritance of text-transform.
+				List<PropertyValue> list = new ArrayList<>();
+				decls.forEach(list::add);
+				ListIterator<PropertyValue> i = list.listIterator();
+				while (i.hasNext()) {
+					PropertyValue v = i.next();
+					PropertyValue flat = null;
+					if (!parentDecls.isEmpty() && v.getCSSProperty() instanceof TextTransform)
+						for (PropertyValue vv : parentDecls)
+							if (vv.getCSSProperty() instanceof TextTransform) {
+								TextTransformList t = TextTransformList.of(v);
+								t.inheritFrom(TextTransformList.of(vv)); // this mutates the value
+								if (t != v.getValue())
+									flat = new PropertyValue(
+										v.getProperty(),
+										t.equalsAuto() ? TextTransform.AUTO
+										               : t.equalsInitial() ? TextTransform.INITIAL
+										                                   : t.equalsNone() ? TextTransform.NONE
+										                                                    : TextTransform.list_values,
+										t.equalsAuto() || t.equalsInitial() || t.equalsNone() ? null : t,
+										v.getSourceDeclaration(),
+										v.getSupportedBrailleCSS());
+								break;
+							}
+					if (flat == null)
+						flat = new PropertyValue(
+							v.getProperty(),
+							v.getCSSProperty(),
+							v.getValue(),
+							v.getSourceDeclaration(),
+							v.getSupportedBrailleCSS());
+					i.set(flat);
+				}
+				decls = new ValidatedDeclarations(list);
+			}
 			if (s.declarations != null || !decls.isEmpty()) {
 				s = s.clone();
 				s.declarations = decls.isEmpty() ? null : decls;
