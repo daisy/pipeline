@@ -17,9 +17,11 @@ import cz.vutbr.web.css.TermList;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
+import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssStyle.ValidatedDeclarations;
 
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
@@ -49,8 +51,12 @@ public class BrailleCssParser {
 			if (evaluated != declaration)
 				return Optional.of(evaluated);
 		}
-		if (mutable)
+		if (mutable) {
+			Declaration unlocked = BrailleCssStyle.unlockDeclaration(declaration);
+			if (unlocked != declaration)
+				return Optional.of(unlocked);
 			return Optional.of((Declaration)declaration.clone());
+		}
 		return Optional.of(declaration);
 	}
 
@@ -61,19 +67,14 @@ public class BrailleCssParser {
 	 */
 	public static SimpleInlineStyle parseSimpleInlineStyle(String style, Element context, boolean mutable) {
 		BrailleCssStyle s = BrailleCssStyle.of(style, Context.ELEMENT);
-		if (s.nestedStyles != null)
-			throw new IllegalArgumentException("not a simple inline style");
-		if (s.declarations == null)
-			return SimpleInlineStyle.EMPTY;
-		if (!(s.declarations instanceof SimpleInlineStyle))
-			throw new IllegalStateException(); // coding error
 		// evaluate attr() values in content and string-set properties
-		BrailleCssStyle evaluated = context != null ? s.evaluate(context) : s;
-		SimpleInlineStyle declarations = (SimpleInlineStyle)evaluated.declarations;
-		if (mutable && evaluated == s) {
-			return (SimpleInlineStyle)declarations.clone();
+		if (context != null)
+			s = s.evaluate(context);
+		try {
+			return s.asSimpleInlineStyle(mutable);
+		} catch (UnsupportedOperationException e) {
+			throw new IllegalArgumentException(e);
 		}
-		return declarations;
 	}
 
 	final static Map<String,Declaration> declCache = CacheBuilder.newBuilder()
@@ -146,7 +147,7 @@ public class BrailleCssParser {
 			put(context, serializedStyle, null, false, style);
 		}
 
-		void put(Context context, String serializedStyle, SimpleInlineStyle parent, boolean concretizeInherit, BrailleCssStyle style) {
+		void put(Context context, String serializedStyle, ValidatedDeclarations parent, boolean concretizeInherit, BrailleCssStyle style) {
 			CacheKey key = new CacheKey(context, serializedStyle, parent, concretizeInherit);
 			cache.put(key, style);
 		}
@@ -155,7 +156,7 @@ public class BrailleCssParser {
 			return get(context, serializedStyle, null, false);
 		}
 
-		BrailleCssStyle get(Context context, String serializedStyle, SimpleInlineStyle parent, boolean concretizeInherit) {
+		BrailleCssStyle get(Context context, String serializedStyle, ValidatedDeclarations parent, boolean concretizeInherit) {
 			CacheKey key = new CacheKey(context, serializedStyle, parent, concretizeInherit);
 			return cache.get(key);
 		}
@@ -165,7 +166,7 @@ public class BrailleCssParser {
 			private final String style;
 			private final String parent;
 			private final boolean concretizeInherit;
-			public CacheKey(Context context, String style, SimpleInlineStyle parent, boolean concretizeInherit) {
+			public CacheKey(Context context, String style, ValidatedDeclarations parent, boolean concretizeInherit) {
 				if (parent != null && context != Context.ELEMENT)
 					throw new IllegalArgumentException();
 				this.context = context;
@@ -234,7 +235,19 @@ public class BrailleCssParser {
 
 		@Override
 		public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
-			if ("content".equalsIgnoreCase(d.getProperty())) {
+			if ("text-transform".equalsIgnoreCase(d.getProperty())) {
+				if (super.processTextTransform(d, properties, values)) {
+					if (properties.get("text-transform") == TextTransform.list_values) {
+						Term<?> value = values.get("text-transform");
+						if (value instanceof TermList)
+							values.put("text-transform", TextTransformList.of((TermList)value));
+						else
+							throw new IllegalStateException(); // should not happen
+					}
+					return true;
+				} else
+					return false;
+			} else if ("content".equalsIgnoreCase(d.getProperty())) {
 				if (super.processContent(d, properties, values)) {
 					if (properties.get("content") == Content.content_list) {
 						Term<?> value = values.get("content");

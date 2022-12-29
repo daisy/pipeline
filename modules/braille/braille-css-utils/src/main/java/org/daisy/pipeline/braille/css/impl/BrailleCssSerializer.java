@@ -66,7 +66,8 @@ public final class BrailleCssSerializer {
 	/* =================================================== */
 
 	public static String toString(Term<?> term) {
-		if (term instanceof ContentList ||
+		if (term instanceof TextTransformList ||
+		    term instanceof ContentList ||
 		    term instanceof StringSetList ||
 		    term instanceof CounterSetList)
 			return serializeTermList((List<Term<?>>)term);
