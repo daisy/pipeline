@@ -152,14 +152,12 @@
     <!-- Validating, inheriting and defaulting -->
     <!-- ===================================== -->
     
-    <xsl:template match="css:property" mode="css:inherit">
-        <xsl:param name="compute" as="xs:boolean" select="false()"/>
+    <xsl:template match="css:property" mode="css:inherit" as="element(css:property)?">
         <xsl:param name="context" as="node()"/>
         <xsl:choose>
             <xsl:when test="@value='inherit'">
                 <xsl:call-template name="css:parent-property">
                     <xsl:with-param name="property" select="@name"/>
-                    <xsl:with-param name="compute" select="$compute"/>
                     <xsl:with-param name="concretize-inherit" select="true()"/>
                     <xsl:with-param name="concretize-initial" select="false()"/>
                     <xsl:with-param name="context" select="$context"/>
@@ -346,39 +344,16 @@
         <xsl:variable name="declarations" as="element()*">
             <xsl:call-template name="css:specified-properties">
                 <xsl:with-param name="properties" select="$properties"/>
-                <xsl:with-param name="concretize-inherit" select="false()"/>
-                <xsl:with-param name="concretize-initial" select="false()"/>
+                <xsl:with-param name="concretize-inherit" select="$concretize-inherit"/>
+                <xsl:with-param name="concretize-initial" select="$concretize-initial"/>
                 <xsl:with-param name="context" select="$context"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="declarations" as="element()*">
-            <xsl:apply-templates select="$declarations" mode="css:compute">
-                <xsl:with-param name="concretize-inherit" select="false()"/>
-                <xsl:with-param name="concretize-initial" select="false()"/>
-                <xsl:with-param name="context" select="$context"/>
-            </xsl:apply-templates>
-        </xsl:variable>
-        <xsl:variable name="declarations" as="element()*">
-            <xsl:choose>
-                <xsl:when test="$concretize-inherit">
-                    <xsl:apply-templates select="$declarations" mode="css:inherit">
-                        <xsl:with-param name="compute" select="true()"/>
-                        <xsl:with-param name="context" select="$context"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$declarations"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:choose>
-            <xsl:when test="$concretize-initial">
-                <xsl:apply-templates select="$declarations" mode="css:default"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="$declarations"/>
-            </xsl:otherwise>
-        </xsl:choose>
+        <xsl:apply-templates select="$declarations" mode="css:compute">
+            <xsl:with-param name="concretize-inherit" select="$concretize-inherit"/>
+            <xsl:with-param name="concretize-initial" select="$concretize-initial"/>
+            <xsl:with-param name="context" select="$context"/>
+        </xsl:apply-templates>
     </xsl:template>
     
     <xsl:function name="css:computed-properties" as="element()*">
