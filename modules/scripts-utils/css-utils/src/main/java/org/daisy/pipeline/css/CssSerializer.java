@@ -7,6 +7,7 @@ import java.util.List;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumber;
@@ -63,6 +64,9 @@ public final class CssSerializer {
 		else if (term instanceof TermString) {
 			TermString string = (TermString)term;
 			return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }
+		else if (term instanceof TermIdent) {
+			TermIdent ident = (TermIdent)term;
+			return ident.getValue(); }
 		else
 			return term.toString().replaceAll("^[,/ ]+", "");
 	}
