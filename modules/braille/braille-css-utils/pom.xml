@@ -119,7 +119,8 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.modules.impl.Module_test_module
+                org.daisy.pipeline.modules.impl.Module_test_module,
+                MockCSSExtension
               </includes>
             </configuration>
           </execution>

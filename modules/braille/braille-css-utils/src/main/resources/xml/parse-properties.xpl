@@ -16,10 +16,9 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="properties" select="'#all'">
+    <p:option name="properties" required="true">
         <p:documentation>
-            The 'properties' option must be a space separated list of property names, or the word
-            '#all'.
+            The 'properties' option must be a space separated list of property names.
         </p:documentation>
     </p:option>
     
@@ -31,8 +30,7 @@
             attributes in the input with the same name will be overwritten. The property values
             'inherit' and 'initial' are concretized. Invalid declarations are dropped. Declarations
             whose property names are not specified in the 'properties' option are retained in the
-            style attribute, which is dropped when empty. If the 'properties' option is '#all', all
-            declarations are extracted.
+            style attribute, which is dropped when empty.
         </p:documentation>
     </p:output>
     

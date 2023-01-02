@@ -2,10 +2,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
-                version="2.0">
+                version="3.0">
     
     <xsl:include href="library.xsl"/>
     
@@ -36,9 +37,20 @@
                             implied by display: list-item
                         -->
                         <xsl:attribute name="css:counter-increment" select="'list-item'"/>
-                        <xsl:variable name="list-style-type" as="xs:string"
-                                      select="css:specified-properties('list-style-type', true(), true(), .)/@value"/>
-                        <xsl:if test="$list-style-type!='none'">
+                        <xsl:variable name="list-style-type" as="xs:string?">
+                            <xsl:iterate select="reverse(ancestor-or-self::*[not(self::css:_)])">
+                                <xsl:variable name="style" as="item()?" select="s:get(css:parse-stylesheet(@style),'list-style-type')"/>
+                                <xsl:choose>
+                                    <xsl:when test="exists($style)">
+                                        <xsl:break select="string($style)"/>
+                                    </xsl:when>
+                                    <xsl:otherwise>
+                                        <xsl:next-iteration/>
+                                    </xsl:otherwise>
+                                </xsl:choose>
+                            </xsl:iterate>
+                        </xsl:variable>
+                        <xsl:if test="$list-style-type[not(.=('none','inherit','initial'))]">
                             <css:box type="inline" name="css:marker">
                                 <css:counter name="list-item" style="{$list-style-type}"/>
                             </css:box>
@@ -113,8 +125,11 @@
         <xsl:sequence select="."/>
     </xsl:template>
     
+    <xsl:template match="@style">
+        <xsl:sequence select="css:style-attribute(s:remove(css:parse-stylesheet(.),'list-style-type'))"/>
+    </xsl:template>
+    
     <xsl:template match="@css:display|
-                         @css:list-style-type|
                          @css:table|
                          @css:table-caption|
                          @css:table-cell"/>

@@ -6,62 +6,20 @@
                 xmlns:t="org.daisy.pipeline.braille.css.xpath.StyledText"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-result-prefixes="#all">
-	
+
 	<xsl:import href="abstract-block-translator.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
 
 	<xsl:param name="text-transform"/>
-	
+
 	<xsl:template match="css:block">
-		<xsl:variable name="text" as="text()*" select=".//text()"/>
-		<xsl:variable name="style" as="xs:string*">
-			<xsl:apply-templates mode="style"/>
+		<xsl:variable name="text" as="item()*">
+			<xsl:apply-templates mode="text-items"/>
 		</xsl:variable>
-		<xsl:variable name="lang" as="xs:string*"
-		              select="for $t in .//text() return ($t/ancestor::*[@xml:lang][1]/string(@xml:lang),'und')[1]"/>
-		<xsl:variable name="text" as="item()*" select="for $i in 1 to count($text) return t:of($text[$i], $style[$i], $lang[$i])"/>
-		<xsl:variable name="text" as="xs:string*" select="for $t in pf:text-transform($text-transform, $text) return t:getText($t)"/>
+		<xsl:variable name="text" as="item()*" select="pf:text-transform($text-transform, $text)"/>
 		<xsl:apply-templates select="node()[1]" mode="treewalk">
 			<xsl:with-param name="new-text-nodes" select="$text"/>
 		</xsl:apply-templates>
 	</xsl:template>
-	
-	<xsl:template mode="style" match="*" as="xs:string*">
-		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
-		<xsl:variable name="source-style" as="element()*">
-			<xsl:variable name="stylesheet" as="element()*" select="s:toXml(css:parse-stylesheet(@style))"/>
-			<xsl:call-template name="css:computed-properties">
-				<xsl:with-param name="properties" select="$text-properties"/>
-				<xsl:with-param name="context" select="$dummy-element"/>
-				<xsl:with-param name="cascaded-properties" tunnel="yes" select="$stylesheet[not(@selector)]/css:property"/>
-				<xsl:with-param name="parent-properties" tunnel="yes" select="$source-style"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:apply-templates mode="#current">
-			<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
-		</xsl:apply-templates>
-	</xsl:template>
-	
-	<xsl:template mode="style" match="text()" as="xs:string">
-		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
-		<xsl:sequence select="css:serialize-stylesheet($source-style[not(@name=('word-spacing','hyphenate-character'))
-		                                                             and not(@value=css:initial-value(@name))])"/>
-	</xsl:template>
-	
-	<xsl:template mode="translate-style" match="css:property[@name=('word-spacing','hyphenate-character')]">
-		<xsl:sequence select="."/>
-	</xsl:template>
-	
-	<xsl:template mode="translate-style"
-	              match="css:property[@name=('letter-spacing',
-	                                         'font-style',
-	                                         'font-weight',
-	                                         'text-decoration',
-	                                         'color')]"/>
-	
-	<xsl:template mode="translate-style" match="css:property[@name='hyphens' and @value='auto']">
-		<xsl:param name="result-style" as="element()*" tunnel="yes"/>
-		<css:property name="hyphens" value="manual"/>
-	</xsl:template>
-	
+
 </xsl:stylesheet>
