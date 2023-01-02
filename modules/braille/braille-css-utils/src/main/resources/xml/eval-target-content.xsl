@@ -4,7 +4,7 @@
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
-                version="2.0">
+                version="3.0">
     
     <xsl:include href="library.xsl"/>
     
@@ -14,49 +14,41 @@
         </xsl:copy>
     </xsl:template>
     
+    <xsl:template match="*[not(self::css:_)]" priority="1">
+        <xsl:param name="style" as="item()?" tunnel="yes" select="()"/>
+        <xsl:next-match>
+            <xsl:with-param name="style" tunnel="yes" select="css:parse-stylesheet(@style,$style)"/>
+        </xsl:next-match>
+    </xsl:template>
+    
     <xsl:template match="css:content[@target]">
+        <xsl:param name="style" as="item()?" tunnel="yes"/>
         <xsl:variable name="target" select="@target"/>
         <xsl:apply-templates mode="copy" select="//*[@css:id=$target][1]/child::node()">
             <xsl:with-param name="anchor" select="$target"/>
-            <xsl:with-param name="parent-style"
-                            select="css:computed-properties(($css:properties,'#all'), true(), true(), .)"/>
+            <xsl:with-param name="parent-style" select="$style"/>
         </xsl:apply-templates>
     </xsl:template>
     
     <xsl:template mode="copy" match="*|text()">
         <xsl:param name="anchor" as="xs:string" required="yes"/>
-        <xsl:param name="parent-style" as="element(css:property)*" required="yes"/>
-        <xsl:variable name="style" as="element(css:property)*">
-            <xsl:for-each select="css:computed-properties(($css:properties,'#all'), true(), true(), .)">
-                <xsl:variable name="property" as="xs:string" select="@name"/>
-                <xsl:choose>
-                    <xsl:when test="css:is-inherited($property) and $parent-style[@name=$property]">
-                        <xsl:if test="@value!=$parent-style[@name=$property]/@value">
-                            <xsl:sequence select="."/>
-                        </xsl:if>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:if test="@value!=css:initial-value($property)">
-                            <xsl:sequence select="."/>
-                        </xsl:if>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:for-each>
-        </xsl:variable>
-        <xsl:variable name="style" as="element(css:rule)*">
-            <xsl:if test="exists($style)">
-                <css:rule>
-                    <xsl:sequence select="$style"/>
-                </css:rule>
-            </xsl:if>
-            <xsl:sequence select="s:toXml(css:parse-stylesheet(@style))[@selector]"/>
-        </xsl:variable>
+        <xsl:param name="parent-style" as="item()?" required="yes"/>
+        <xsl:param name="style" as="item()?">
+            <xsl:iterate select="ancestor-or-self::*[not(self::css:_)]">
+                <xsl:param name="style" as="item()?" select="()"/>
+                <xsl:on-completion select="$style"/>
+                <xsl:next-iteration>
+                    <xsl:with-param name="style" select="css:parse-stylesheet(@style,$style)"/>
+                </xsl:next-iteration>
+            </xsl:iterate>
+        </xsl:param>
+        <xsl:variable name="style" as="attribute()?" select="css:style-attribute(s:toString($style,$parent-style))"/>
         <xsl:choose>
             <xsl:when test="self::*">
                 <xsl:copy>
                     <xsl:sequence select="@* except @style"/>
                     <xsl:if test="exists($style)">
-                        <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($style))"/>
+                        <xsl:sequence select="$style"/>
                     </xsl:if>
                     <xsl:if test="not(@css:anchor)">
                         <xsl:attribute name="css:anchor" select="$anchor"/>
@@ -67,7 +59,7 @@
             <xsl:when test="exists($style)">
                 <!-- create anonymous box for attaching style -->
                 <css:box type="inline">
-                    <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($style))"/>
+                    <xsl:sequence select="$style"/>
                     <xsl:sequence select="."/>
                 </css:box>
             </xsl:when>
@@ -83,10 +75,5 @@
                          css:duplicate|
                          css:alternate|
                          css:footnote-call"/>
-
-    <!--
-        prevent already parsed properties to be serialized again
-    -->
-    <xsl:template match="@css:*" mode="css:attribute-as-property"/>
 
 </xsl:stylesheet>

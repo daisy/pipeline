@@ -46,10 +46,10 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom">
-					<h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-					<p style="display: block; &amp;::after { content: 'BAR' } &amp;::before { content: 'BAR' } &amp;::before::after { content: counter(page); text-transform: auto }">FOO</p>
-					<pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
+				<doc style="braille-charset: custom; text-transform: none">
+					<h style="display: block; string-set: running-footer 'foobar'">FOOBAR</h>
+					<p style="display: block; &amp;::after { content: 'BAR' } &amp;::before { content: 'BAR' } &amp;::before::after { braille-charset: unicode; content: counter(page); text-transform: auto }">FOO</p>
+					<pagenum style="display: none; string-set: print-page 'ii', foo 'bar'">II</pagenum>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -70,7 +70,7 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc xml:lang="en-Brai" style="text-transform: none; braille-charset: custom">
+				<doc xml:lang="en-Brai" style="braille-charset: custom; text-transform: none">
 					<br style="&amp;::before { content: '\A '; white-space: pre-line }"/>
 				</doc>
 			</x:document>
@@ -94,10 +94,10 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<div style="text-transform: none; braille-charset: custom">
+				<div style="braille-charset: custom; text-transform: none">
 					<p>FOO=BAR</p>
-					<p><_ style="hyphens: auto; text-transform: auto">busstopp</_></p>
-					<p style="&amp;::after { content: 'busstopp'; hyphens: auto; text-transform: auto }"/>
+					<p><_ style="braille-charset: unicode; hyphens: auto; text-transform: auto">busstopp</_></p>
+					<p style="&amp;::after { braille-charset: unicode; content: 'busstopp'; hyphens: auto; text-transform: auto }"/>
 				</div>
 			</x:document>
 		</x:expect>
@@ -118,7 +118,7 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom">
+				<doc style="braille-charset: custom; text-transform: none">
 					<div style="&amp;::after { content: 'FOO' } &amp;::after::before { content: 'BAR'; display: block }"/>
 				</doc>
 			</x:document>
@@ -141,8 +141,8 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom">
-					<div style="&amp;::table-by(foo)::list-item::after { content: &quot;, &quot;; text-transform: auto } &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
+				<doc style="braille-charset: custom; text-transform: none">
+					<div style="&amp;::table-by(foo) { braille-charset: unicode; text-transform: auto } &amp;::table-by(foo)::list-item { braille-charset: unicode; text-transform: auto } &amp;::table-by(foo)::list-item::after { content: ', ' } &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -166,8 +166,8 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom">
-					<a href="#foo" style="&amp;::after { content: target-counter(url(&quot;file:/test.xml#foo&quot;), page) target-string(url(&quot;file:/test.xml#foo&quot;), print-page) target-text(url(&quot;file:/test.xml#foo&quot;)) target-content(url(&quot;file:/test.xml#foo&quot;)); text-transform: auto }"/>
+				<doc style="braille-charset: custom; text-transform: none">
+					<a href="#foo" style="&amp;::after { braille-charset: unicode; content: target-counter(url(&quot;file:/test.xml#foo&quot;), page) target-string(url(&quot;file:/test.xml#foo&quot;), print-page) target-text(url(&quot;file:/test.xml#foo&quot;)) target-content(url(&quot;file:/test.xml#foo&quot;)); text-transform: auto }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -189,7 +189,7 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom; @page { @bottom-right { content: counter(page, lower-roman); text-transform: uncontracted } }"/>
+				<doc style="braille-charset: custom; text-transform: none; @page { @bottom-right { content: counter(page, lower-roman); text-transform: uncontracted } }"/>
 			</x:document>
 		</x:expect>
 	</x:scenario>
@@ -200,7 +200,7 @@
 				<x:document type="inline">
 					<doc>
 						<p style="display: block">foo<span style="text-transform: none">⠃⠁⠗</span></p>
-						<p style="display: block">foo<span style="text-transform: none; braille-charset: custom">BAR</span></p>
+						<p style="display: block">foo<span style="braille-charset: custom; text-transform: none">BAR</span></p>
 						<p style="display: block; &amp;::after { content: '⠃⠁⠗'; text-transform: none }">foo</p>
 						<p style="display: block; &amp;::after { content: leader('⠀') '⠃⠁⠗'; text-transform: none }">foo</p>
 					</doc>
@@ -212,7 +212,7 @@
 		</x:context>
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
-				<doc style="text-transform: none; braille-charset: custom">
+				<doc style="braille-charset: custom; text-transform: none">
 					<p style="display: block">FOO<span>BAR</span></p>
 					<p style="display: block">FOO<span>BAR</span></p>
 					<p style="display: block; &amp;::after { content: 'BAR' }">FOO</p>

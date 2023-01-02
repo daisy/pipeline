@@ -28,7 +28,8 @@
         <xsl:copy>
             <xsl:sequence select="@* except @css:content"/>
             <xsl:apply-templates select="css:before"/>
-            <xsl:apply-templates mode="content-list" select="s:toXml(css:parse-stylesheet(@css:content))/*"/>
+            <xsl:apply-templates mode="content-list" select="for $s in s:get(css:parse-stylesheet(@css:content),'content')
+                                                             return s:toXml($s)"/>
             <xsl:apply-templates select="css:after"/>
         </xsl:copy>
     </xsl:template>

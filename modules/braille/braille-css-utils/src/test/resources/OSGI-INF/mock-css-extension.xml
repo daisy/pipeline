@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<component name="mock-css-extension">
+  <implementation class="MockCSSExtension"/>
+  <service>
+    <provide interface="org.daisy.braille.css.BrailleCSSExtension"/>
+  </service>
+</component>

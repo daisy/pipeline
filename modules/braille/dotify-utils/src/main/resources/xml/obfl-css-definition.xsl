@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:new="css:new-definition"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:re="regex-utils">
@@ -31,29 +32,11 @@
         <xsl:variable name="valid" as="xs:boolean"
                       select="new:applies-to($css:property/@name, $context)
                               and (
-                                if ($css:property/@name='-obfl-vertical-align')
-                                then $css:property/@value=('before','center','after')
-                                else if ($css:property/@name=('-obfl-vertical-position',
-                                                              '-obfl-table-col-spacing',
-                                                              '-obfl-table-row-spacing',
-                                                              '-obfl-preferred-empty-space'))
-                                then matches($css:property/@value,'^auto|0|[1-9][0-9]*$')
-                                else if ($css:property/@name='-obfl-toc-range')
-                                then ($context/@css:_obfl-toc and $css:property/@value=('document','volume'))
-                                else if ($css:property/@name='-obfl-use-when-collection-not-empty')
-                                then matches($css:property/@value,re:exact($css:IDENT_RE))
-                                else if ($css:property/@name='-obfl-underline')
-                                then matches($css:property/@value,re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))))
-                                else if ($css:property/@name=('-obfl-keep-with-previous-sheets',
-                                                              '-obfl-keep-with-next-sheets'))
-                                then matches($css:property/@value,'^[0-9]$')
+                                if ($css:property/@name=('volume-break-after',
+                                                         'volume-break-before'))
+                                then $css:property/@value=('auto','always')
                                 else if ($css:property/@name='volume-break-inside')
                                 then matches($css:property/@value,re:exact(re:or(('auto',$_OBFL_KEEP_FN_RE))))
-                                else if ($css:property/@name='-obfl-scenario-cost')
-                                then matches($css:property/@value,re:exact(re:or(('none',$css:INTEGER_RE,$css:VENDOR_PRF_FN_RE))))
-                                else if ($css:property/@name=('volume-break-after',
-                                                              'volume-break-before'))
-                                then $css:property/@value=('auto','always')
                                 else
                                   (: we assume that the property is valid according to braille CSS :)
                                   not($css:property/@value=('inherit','initial'))
@@ -72,27 +55,9 @@
     <xsl:function name="new:initial-value" as="xs:string">
         <xsl:param name="property" as="xs:string"/>
         <xsl:param name="context" as="element()"/>
-        <xsl:sequence select="if ($property='-obfl-vertical-align')
-                              then 'after'
-                              else if ($property='-obfl-vertical-position')
-                              then 'auto'
-                              else if ($property='-obfl-toc-range')
-                              then 'document'
-                              else if ($property=('-obfl-table-col-spacing','-obfl-table-row-spacing'))
-                              then '0'
-                              else if ($property='-obfl-preferred-empty-space')
-                              then '2'
-                              else if ($property='-obfl-use-when-collection-not-empty')
-                              then 'normal'
-                              else if ($property='-obfl-underline')
-                              then 'none'
-                              else if ($property=('-obfl-keep-with-previous-sheets','-obfl-keep-with-next-sheets'))
-                              then '0'
-                              else if ($property='-obfl-scenario-cost')
-                              then 'none'
-                              else if ($property='braille-charset')
-                              then $initial-braille-charset
-                              else css:initial-value($property)"/>
+        <xsl:sequence select="if ($property='braille-charset') then $initial-braille-charset
+                              else for $value in s:get(css:parse-stylesheet(concat($property,': initial')), $property)
+                                   return string($value)"/>
     </xsl:function>
     
     <xsl:function name="new:is-inherited" as="xs:boolean">

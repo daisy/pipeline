@@ -9,7 +9,7 @@
     <x:context>
       <doc>
         <body>
-          <p style="display: block; margin-left: 2; counter-reset: braille-page 1">
+          <p style="display: initial; margin-left: 2; counter-reset: braille-page 1">
             foo
           </p>
         </body>
@@ -18,7 +18,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p css:display="block" css:counter-reset="braille-page 1" style="margin-left: 2">
+          <p css:display="inline" css:counter-reset="braille-page 1" style="margin-left: 2">
             foo
           </p>
         </body>

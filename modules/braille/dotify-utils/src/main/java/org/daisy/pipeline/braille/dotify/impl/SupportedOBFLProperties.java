@@ -193,6 +193,7 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 
 	@SuppressWarnings("unused")
 	private boolean processFallbackFlow(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
+		log.warn("Correct spelling of '" + prefix + "fallback-flow' is '" + prefix + "fallback-collection'");
 		return processFallbackCollection(d, properties, values);
 	}
 
