@@ -4,11 +4,20 @@
                stylesheet="../../main/resources/xml/braille-css.xsl">
 	
 	<x:scenario label="test_03">
-		<x:call function="css:specified-properties">
-			<x:param select="'#all invalid'"/>
-			<x:param select="true()"/>
-			<x:param select="true()"/>
-			<x:param select="//bar">
+		<x:call template="css:specified-properties">
+			<x:param name="properties"
+			         select="('display',             'border-top-pattern',  'volume-break-after',  'white-space',         'line-height',
+			                  'flow',                'border-top-style',    'volume-break-inside', 'hyphens',             'letter-spacing',
+			                  'left',                'border-top-width',    'orphans',             'hyphenate-character', 'word-spacing',
+			                  'right',               'border-top-align',    'widows',              'size',                'render-table-by',
+			                  'margin-right',        'list-style-type',     'page',                'max-height',          'table-header-policy',
+			                  'margin-top',          'text-align',          'string-set',          'min-length',          '-obfl-right-text-indent',
+			                  'border-left-pattern', 'page-break-before',   'counter-reset',       'max-length',          '-foo-someprop',
+			                  'border-left-style',   'page-break-after',    'counter-set',         'text-transform',      'someprop',
+			                  'border-left-width',   'page-break-inside',   'counter-increment',   'braille-charset',
+			                  'border-left-align',   'volume-break-before', 'content',             'color'                )"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//bar">
 				<foo css:orphans="3" css:_obfl-right-text-indent="2">
 					<bar num="1"
 					     style="display: -foo-something;                           /* valid */
@@ -100,6 +109,27 @@
 			<css:property name="volume-break-inside" value="-obfl-keep(1)"/>
 			<css:property name="widows" value="0"/>
 			<css:property name="word-spacing" value="0"/>
+
+			<css:property name="volume-break-after" value="auto"/>
+			<css:property name="white-space" value="normal"/>
+			<css:property name="flow" value="normal"/>
+			<css:property name="hyphens" value="manual"/>
+			<css:property name="letter-spacing" value="0"/>
+			<css:property name="left" value="auto"/>
+			<css:property name="render-table-by" value="auto"/>
+			<css:property name="page" value="auto"/>
+			<css:property name="max-height" value="none"/>
+			<css:property name="table-header-policy" value="once"/>
+			<css:property name="text-align" value="left"/>
+			<css:property name="border-left-pattern" value="none"/>
+			<css:property name="border-left-style" value="none"/>
+			<css:property name="page-break-after" value="auto"/>
+			<css:property name="border-left-width" value="1"/>
+			<css:property name="counter-increment"/>
+			<css:property name="braille-charset" value="unicode"/>
+			<css:property name="border-left-align" value="center"/>
+			<css:property name="content"/>
+			<css:property name="color" value="#000000"/>
 		</x:expect>
 	</x:scenario>
 	
@@ -449,12 +479,13 @@
 	</x:scenario>
 	
 	<x:scenario label="test_29">
-		<x:call function="css:computed-properties">
-			<x:param select="'text-transform'"/>
-			<x:param select="//foo">
-				<_ css:text-transform="bold">
+		<x:call template="css:computed-properties">
+			<x:param name="properties" select="'text-transform'"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//foo">
+				<_ style="text-transform: bold">
 					<_>
-						<foo css:text-transform="italic"/>
+						<foo style="text-transform: italic"/>
 					</_>
 				</_>
 			</x:param>
@@ -465,12 +496,13 @@
 	</x:scenario>
 	
 	<x:scenario label="test_30">
-		<x:call function="css:computed-properties">
-			<x:param select="'text-transform'"/>
-			<x:param select="//foo/_">
-				<_ css:text-transform="bold">
+		<x:call template="css:computed-properties">
+			<x:param name="properties" select="'text-transform'"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//foo/_">
+				<_ style="text-transform: bold">
 					<_>
-						<foo css:text-transform="italic">
+						<foo style="text-transform: italic">
 							<_/>
 						</foo>
 					</_>
@@ -483,9 +515,10 @@
 	</x:scenario>
 	
 	<x:scenario label="test_31">
-		<x:call function="css:computed-properties">
-			<x:param select="'hyphens'"/>
-			<x:param select="//p">
+		<x:call template="css:computed-properties">
+			<x:param name="properties" select="'hyphens'"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//p">
 				<css:block xml:lang="und" style="hyphens: auto">
 					<p>foobar</p>
 				</css:block>
@@ -686,11 +719,10 @@
 	</x:scenario>
 	
 	<x:scenario label="test_35">
-		<x:call function="css:specified-properties">
-			<x:param select="'#all text-transform'"/>
-			<x:param select="true()"/>
-			<x:param select="false()"/>
-			<x:param select="//foo">
+		<x:call template="css:specified-properties">
+			<x:param name="properties" select="'text-transform'"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//foo">
 				<css:foo style="text-transform: auto">
 					<foo/>
 				</css:foo>

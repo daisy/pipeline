@@ -361,9 +361,9 @@
     
     <p:for-each px:progress=".20">
         <css:parse-properties px:progress=".20"
-                              properties="white-space display list-style-type">
+                              properties="white-space display">
             <p:documentation>
-                Make css:white-space, css:display and css:list-style-type attributes.
+                Make css:white-space and css:display attributes.
             </p:documentation>
         </css:parse-properties>
         <css:preserve-white-space px:progress=".10">
@@ -407,8 +407,8 @@
         </css:make-table-grid>
         <css:make-boxes px:progress=".20">
             <p:documentation>
-                Make css:box elements based on css:display and css:list-style-type attributes. <!--
-                depends on flow-into, label-targets and make-table-grid -->
+                Make css:box elements based on css:display attributes and list-style-type
+                properties. <!-- depends on flow-into, label-targets and make-table-grid -->
             </p:documentation>
         </css:make-boxes>
         <p:add-attribute px:progress=".01"

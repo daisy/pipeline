@@ -334,7 +334,6 @@
     
     <xsl:template match="css:property[@name='text-transform']" mode="css:compute">
         <xsl:param name="concretize-inherit" as="xs:boolean"/>
-        <xsl:param name="concretize-initial" as="xs:boolean"/>
         <xsl:param name="context" as="node()"/>
         <xsl:choose>
             <xsl:when test="@value='inherit'">
@@ -349,7 +348,6 @@
                         <xsl:with-param name="property" select="@name"/>
                         <xsl:with-param name="compute" select="true()"/>
                         <xsl:with-param name="concretize-inherit" select="true()"/>
-                        <xsl:with-param name="concretize-initial" select="$concretize-initial"/>
                         <xsl:with-param name="context" select="$context"/>
                     </xsl:call-template>
                 </xsl:variable>
