@@ -2,13 +2,12 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:new="css:new-definition"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
     <xsl:include href="library.xsl"/>
-    
-    <xsl:variable name="properties-as-attributes" as="xs:boolean" select="true()"/>
     
     <xsl:template match="*">
         <xsl:copy>
@@ -23,6 +22,9 @@
     
     <xsl:template match="css:box">
         <xsl:param name="parent-properties" as="element()*" select="()" tunnel="yes"/>
+        <xsl:param name="source-style" as="item()?" select="()" tunnel="yes"/>
+        <xsl:variable name="source-style" as="item()" select="css:parse-stylesheet(@style,$source-style)"/>
+        <xsl:variable name="source-style" as="item()" select="s:merge(($source-style,@css:*/css:parse-stylesheet(.)))"/>
         <!--
             in: properties as specified
             out:
@@ -30,14 +32,10 @@
             - drop: properties that don't have to be put on this box because they are the default
             - pending: properties that for some reason can't be put on this box but can't be ignored either
         -->
-        <xsl:variable name="properties" as="element()*">
-            <!-- properties must already have been computed! -->
-            <xsl:call-template name="css:specified-properties">
-                <xsl:with-param name="properties" select="$new:properties"/>
-                <!-- concretize inherit on top-level boxes only -->
-                <xsl:with-param name="concretize-inherit" select="not(exists(ancestor::css:box))"/>
-                <xsl:with-param name="concretize-initial" select="true()"/>
-            </xsl:call-template>
+        <xsl:variable name="properties" as="element(css:property)*">
+            <xsl:for-each select="$new:properties">
+                <css:property name="{.}" value="{string(s:getOrDefault($source-style,.))}"/>
+            </xsl:for-each>
         </xsl:variable>
         <xsl:variable name="properties" as="element()*">
             <xsl:apply-templates select="$properties" mode="property">
@@ -46,14 +44,7 @@
         </xsl:variable>
         <xsl:copy>
             <xsl:sequence select="@* except (@style|@css:*[replace(local-name(),'^_','-')=$new:properties])"/>
-            <xsl:choose>
-                <xsl:when test="$properties-as-attributes">
-                    <xsl:apply-templates select="$properties[self::keep]/*" mode="css:property-as-attribute"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($properties[self::keep]/*))"/>
-                </xsl:otherwise>
-            </xsl:choose>
+            <xsl:apply-templates select="$properties[self::keep]/*" mode="css:property-as-attribute"/>
             <xsl:apply-templates>
                 <!--
                     TODO: use css:inherit and override css:parent-property
@@ -66,6 +57,7 @@
                                 select="($properties[self::pending]/*[not(@value='inherit')],
                                          for $p in $properties[self::pending]/*[@value='inherit']/@name
                                            return $parent-properties[@name=$p])"/>
+                <xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
             </xsl:apply-templates>
         </xsl:copy>
     </xsl:template>

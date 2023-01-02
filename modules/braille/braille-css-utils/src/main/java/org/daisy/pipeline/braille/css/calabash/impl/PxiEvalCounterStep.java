@@ -169,7 +169,6 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 	private static final QName CSS_BOX = new QName(XMLNS_CSS, "box", "css");
 	private static final QName _TYPE = new QName("type");
 	private static final QName XML_LANG = new QName(XMLConstants.XML_NS_URI, "lang", XMLConstants.XML_NS_PREFIX);
-	private static final QName CSS_TEXT_TRANSFORM = new QName(XMLNS_CSS, "text-transform", "css");
 	private static final QName CSS_MARKER = new QName(XMLNS_CSS, "marker", "css");
 	private static final QName CSS_ID = new QName(XMLNS_CSS, "id", "css");
 	private static final QName CSS_ANCHOR = new QName(XMLNS_CSS, "anchor", "css");
@@ -248,7 +247,7 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 										writeStartElement(writer, CSS_BOX);
 										writeAttribute(writer, _TYPE, "inline");
 										writeAttribute(writer, XML_LANG, "");
-										writeAttribute(writer, CSS_TEXT_TRANSFORM, counterStyle.getTextTransform(value));
+										writeAttribute(writer, _STYLE, String.format("text-transform: %s", counterStyle.getTextTransform(value)));
 										writer.writeCharacters(counterStyle.format(value, insideMarker >= 0));
 										writer.writeEndElement();
 									}

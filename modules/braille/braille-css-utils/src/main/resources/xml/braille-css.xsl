@@ -12,10 +12,6 @@
     <!-- Property Definitions -->
     <!-- ==================== -->
     
-    <!--
-        FIXME: needs to contain the OBFL-specific -obfl-right-text-indent because inheritance
-        wouldn't work otherwise
-    -->
     <xsl:variable name="css:properties" as="xs:string*"
         select="('display',
                  'flow',
@@ -79,8 +75,7 @@
                  'letter-spacing',
                  'word-spacing',
                  'render-table-by',
-                 'table-header-policy',
-                 '-obfl-right-text-indent')"/>
+                 'table-header-policy')"/>
     
     <xsl:variable name="css:applies-to" as="xs:string*"
         select="('.*',
@@ -148,72 +143,6 @@
                  '.*',
                  '^(block|list-item)$')"/>
     
-    <xsl:variable name="css:initial-values" as="xs:string*"
-        select="('inline',
-                 'normal',
-                 'auto',
-                 'auto',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 '0',
-                 'none',
-                 'left',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 '0',
-                 '0',
-                 'auto',
-                 'none',
-                 'none',
-                 'none',
-                 'none',
-                 'none',
-                 'normal',
-                 'manual',
-                 'auto',
-                 'auto',
-                 'none',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'unicode',
-                 'normal',
-                 'normal',
-                 'none',
-                 '#000000',
-                 '1',
-                 '0',
-                 '1',
-                 'auto',
-                 'once',
-                 '0')"/>
-    
     <xsl:variable name="css:inherited-properties" as="xs:string*"
         select="('text-indent',
                  'list-style-type',
@@ -230,16 +159,7 @@
                  'letter-spacing',
                  'word-spacing',
                  'text-transform',
-                 'braille-charset',
-                 '-obfl-right-text-indent')"/>
-    
-    <xsl:function name="css:initial-value" as="xs:string?">
-        <xsl:param name="property" as="xs:string"/>
-        <xsl:variable name="index" select="index-of($css:properties, $property)"/>
-        <xsl:if test="$index">
-            <xsl:sequence select="$css:initial-values[$index]"/>
-        </xsl:if>
-    </xsl:function>
+                 'braille-charset')"/>
     
     <xsl:function name="css:is-inherited" as="xs:boolean">
         <xsl:param name="property" as="xs:string"/>
@@ -254,57 +174,6 @@
                               then matches($display, $css:applies-to[$index])
                               else matches($property, re:exact($css:VENDOR_PRF_IDENT_RE))"/> <!-- might apply -->
     </xsl:function>
-    
-    <!-- ================== -->
-    <!-- Special inheriting -->
-    <!-- ================== -->
-    
-    <xsl:template match="css:property[@name='text-transform']" mode="css:compute">
-        <xsl:param name="concretize-inherit" as="xs:boolean"/>
-        <xsl:param name="concretize-initial" as="xs:boolean"/>
-        <xsl:param name="context" as="node()"/>
-        <xsl:choose>
-            <xsl:when test="@value='inherit'">
-                <xsl:sequence select="."/>
-            </xsl:when>
-            <xsl:when test="@value='none'">
-                <xsl:sequence select="."/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:variable name="parent-computed" as="element()">
-                    <xsl:call-template name="css:parent-property">
-                        <xsl:with-param name="property" select="@name"/>
-                        <xsl:with-param name="compute" select="true()"/>
-                        <xsl:with-param name="concretize-inherit" select="true()"/>
-                        <xsl:with-param name="concretize-initial" select="$concretize-initial"/>
-                        <xsl:with-param name="context" select="$context"/>
-                    </xsl:call-template>
-                </xsl:variable>
-                <xsl:choose>
-                    <xsl:when test="@value=('initial','auto') and $parent-computed/@value='none'">
-                        <xsl:sequence select="."/>
-                    </xsl:when>
-                    <xsl:when test="@value=('initial','auto')">
-                        <xsl:sequence select="$parent-computed"/>
-                    </xsl:when>
-                    <xsl:when test="$parent-computed/@value=('auto','none','initial')">
-                        <xsl:sequence select="."/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:copy>
-                            <xsl:sequence select="@* except @value"/>
-                            <xsl:attribute name="value"
-                                           select="string-join(
-                                                     distinct-values((
-                                                       tokenize(normalize-space(@value), ' '),
-                                                       tokenize(normalize-space($parent-computed/@value), ' '))),
-                                                     ' ')"/>
-                        </xsl:copy>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
     
     <!-- ============== -->
     <!-- Counter Styles -->
@@ -334,13 +203,9 @@
                 </xsl:choose>
             </xsl:variable>
             <xsl:for-each select="for $s in $stylesheet return s:keys($s)">
-                <xsl:variable name="selector" as="xs:string" select="."/>
-                <xsl:variable name="name" as="xs:string" select="replace($selector,'^&amp; ','')"/>
-                <xsl:if test="matches($name,re:exact($css:IDENT_RE))">
-                    <xsl:map-entry key="$name">
-                        <xsl:sequence select="s:get($stylesheet,$selector)"/>
-                    </xsl:map-entry>
-                </xsl:if>
+                <xsl:map-entry key="replace(.,'^&amp; ','')">
+                    <xsl:sequence select="s:get($stylesheet,.)"/>
+                </xsl:map-entry>
             </xsl:for-each>
         </xsl:map>
     </xsl:function>
@@ -350,27 +215,19 @@
     -->
     <xsl:function name="css:round-line-height" as="xs:string">
         <xsl:param name="line-height" as="xs:string"/>
-        <xsl:analyze-string select="$line-height"
-                            regex="^(({$css:POSITIVE_NUMBER_RE})|({$css:POSITIVE_PERCENTAGE_RE}))$">
-            <xsl:matching-substring>
-                <xsl:variable name="value" as="xs:double">
-                    <xsl:choose>
-                        <xsl:when test="regex-group(2)!=''">
-                            <xsl:sequence select="number(regex-group(2))"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="number(regex-group(2 + $css:POSITIVE_NUMBER_RE_groups + 1 + $css:POSITIVE_PERCENTAGE_RE_number))
-                                                  div 100"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:variable>
-                <xsl:variable name="value" as="xs:double" select="round($value * 4) div 4"/>
-                <xsl:sequence select="format-number($value, '0.##')"/>
-            </xsl:matching-substring>
-            <xsl:non-matching-substring>
-                <xsl:message terminate="yes" select="concat('Not a valid line-height: ',$line-height)"/>
-            </xsl:non-matching-substring>
-        </xsl:analyze-string>
+        <xsl:variable name="value" as="xs:double">
+            <xsl:choose>
+                <xsl:when test="ends-with($line-height,'%')">
+                    <xsl:sequence select="number(substring($line-height,1,string-length($line-height)-1))
+                                          div 100"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="number($line-height)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="value" as="xs:double" select="round($value * 4) div 4"/>
+        <xsl:sequence select="format-number($value, '0.##')"/>
     </xsl:function>
     
 </xsl:stylesheet>

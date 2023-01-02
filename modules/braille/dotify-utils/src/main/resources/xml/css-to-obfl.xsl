@@ -192,33 +192,20 @@
         </xsl:choose>
     </xsl:function>
     
-    <xsl:variable name="_OBFL_SCENARIO_COST_RE" select="concat('none|(',$css:INTEGER_RE,')|-obfl-evaluate\((',$css:STRING_RE,')\)')"/>
-    <xsl:variable name="_OBFL_SCENARIO_COST_RE_integer" select="1"/>
-    <xsl:variable name="_OBFL_SCENARIO_COST_RE_eval" select="$_OBFL_SCENARIO_COST_RE_integer + $css:INTEGER_RE_groups + 1"/>
-    
     <xsl:function name="pxi:parse-scenario-cost" as="xs:string">
         <xsl:param name="cost-attr" as="attribute()?"/>
-        <xsl:analyze-string select="($cost-attr/string(),'none')[1]" regex="^{$_OBFL_SCENARIO_COST_RE}$">
-            <xsl:matching-substring>
-                <xsl:choose>
-                    <xsl:when test=".='none'">
-                        <xsl:sequence select="'0'"/>
-                    </xsl:when>
-                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_integer)!=''">
-                        <xsl:sequence select="regex-group($_OBFL_SCENARIO_COST_RE_integer)"/>
-                    </xsl:when>
-                    <xsl:when test="regex-group($_OBFL_SCENARIO_COST_RE_eval)!=''">
-                        <xsl:sequence select="substring(regex-group($_OBFL_SCENARIO_COST_RE_eval),
-                                                        2, string-length(regex-group($_OBFL_SCENARIO_COST_RE_eval))-2)"/>
-                    </xsl:when>
-                </xsl:choose>
-            </xsl:matching-substring>
-            <xsl:non-matching-substring>
-                <xsl:call-template name="coding-error">
-                    <xsl:with-param name="context" select="$cost-attr"/>
-                </xsl:call-template>
-            </xsl:non-matching-substring>
-        </xsl:analyze-string>
+        <xsl:variable name="cost" as="xs:string" select="($cost-attr/string(),'none')[1]"/>
+        <xsl:choose>
+            <xsl:when test="$cost='none'">
+                <xsl:sequence select="'0'"/>
+            </xsl:when>
+            <xsl:when test="starts-with($cost,'-obfl-evaluate(')">
+                <xsl:sequence select="substring($cost,17,string-length($cost)-18)"/>
+            </xsl:when>
+            <xsl:otherwise> <!-- integer -->
+                <xsl:sequence select="$cost"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:function>
     
     <xsl:key name="renderer" match="css:box[@type='block'][@css:_obfl-scenarios]" use="pxi:renderer-to-string(.)"/>
@@ -2361,7 +2348,7 @@
         <xsl:variable name="style" as="xs:string*">
             <xsl:variable name="text-transform" as="xs:string*">
                 <xsl:if test="@style=$custom-counter-style-names
-                              or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                              or starts-with(@style,'symbols(')">
                     <xsl:sequence select="'-dotify-counter'"/>
                 </xsl:if>
                 <!-- 'none' and 'auto' already handled -->
@@ -2385,7 +2372,7 @@
                 <xsl:sequence select="concat('white-space: ',$white-space)"/>
             </xsl:if>
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or starts-with(@style,'symbols(')">
                 <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
             </xsl:if>
         </xsl:variable>
@@ -2423,7 +2410,7 @@
     <xsl:template mode="block td toc-entry span"
                   match="css:leader">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
-        <xsl:if test="@position[not(matches(.,re:exact($css:POSITIVE_NUMBER_RE)))]">
+        <xsl:if test="@position[ends-with(.,'%')]">
             <!--
                 Percentages not supported because they are relative to the box width, but
                 css:adjust-boxes changes the box dimensions

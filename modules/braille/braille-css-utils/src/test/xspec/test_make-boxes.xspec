@@ -38,7 +38,7 @@
       </ul>
     </x:context>
     <x:expect label="result">
-      <css:box type="inline" name="ul" style="list-style-type: decimal">
+      <css:box type="inline" name="ul">
         <css:box type="block" name="li" css:counter-increment="list-item">
           <css:box type="inline" name="css:marker">
             <css:counter name="list-item" style="decimal" />

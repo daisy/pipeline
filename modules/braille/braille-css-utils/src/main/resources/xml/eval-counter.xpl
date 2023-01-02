@@ -55,10 +55,10 @@
             option, or not specified in the 'exclude-counters' option if the 'counters' option is
             '#all', the counter value is computed and the counter representation for that value and
             the specified counter style is wrapped in an inline css:box element and inserted in
-            place of the css:counter element. The css:box element has a css:text-transform attribute
-            that represents the 'text-transform' descriptor of the counter style (default
-            'auto'). If the css:counter element represents a target-counter() value, the css:box
-            element has a css:anchor attribute with the target ID.</p>
+            place of the css:counter element. The css:box element has a style attribute with
+            'text-transform' property that corresponds to the 'text-transform' descriptor of the
+            counter style (default 'auto'). If the css:counter element represents a target-counter()
+            value, the css:box element has a css:anchor attribute with the target ID.</p>
         </p:documentation>
     </p:output>
 

@@ -69,14 +69,14 @@
       <x:input port="source">
         <x:document type="inline">
           <css:_>
-            <css:box type="block" style="-foo-bar: 5"/>
+            <css:box type="block" style="-foo-right-text-indent: 5"/>
           </css:_>
         </x:document>
       </x:input>
       <x:input port="definition">
         <x:document type="inline">
           <xsl:stylesheet version="2.0" xmlns:new="css:new-definition">
-            <xsl:variable name="new:properties" as="xs:string*" select="('-foo-bar')"/>
+            <xsl:variable name="new:properties" as="xs:string*" select="('-foo-right-text-indent')"/>
             <xsl:function name="new:is-valid" as="xs:boolean">
               <xsl:param name="css:property" as="element()"/>
               <xsl:param name="context" as="element()"/>
@@ -107,7 +107,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <css:_>
-          <css:box type="block" css:_foo-bar="5"/>
+          <css:box type="block" css:_foo-right-text-indent="5"/>
         </css:_>
       </x:document>
     </x:expect>

@@ -2,15 +2,11 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
-                version="2.0">
+                version="3.0">
     
     <xsl:include href="library.xsl"/>
-    
-    <!--
-        override template in order to prevent already parsed properties to be serialized again
-    -->
-    <xsl:template match="@css:*" mode="css:attribute-as-property"/>
     
     <xsl:template match="/">
         <xsl:variable name="root" as="element()" select="/*"/>
@@ -27,9 +23,18 @@
                             <xsl:if test="not(@xml:lang)">
 	                            <xsl:sequence select="ancestor::*[@xml:lang][1]/@xml:lang"/>
                             </xsl:if>
-                            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet(
-                                                  css:specified-properties(($css:properties,'#all'), true(), false(), .)
-                                                  [not(@value='initial')]))"/>
+                            <xsl:variable name="style" as="item()?">
+                                <xsl:iterate select="(ancestor-or-self::*)[not(self::css:_)]">
+                                    <xsl:param name="style" select="()"/>
+                                    <xsl:on-completion>
+                                        <xsl:sequence select="$style"/>
+                                    </xsl:on-completion>
+                                    <xsl:next-iteration>
+                                        <xsl:with-param name="style" select="css:parse-stylesheet(string(@style),$style)"/>
+                                    </xsl:next-iteration>
+                                </xsl:iterate>
+                            </xsl:variable>
+                            <xsl:sequence select="css:style-attribute($style)"/>
                             <xsl:if test="not(@css:anchor)">
                                 <xsl:attribute name="css:anchor" select="if (@css:id) then string(@css:id) else generate-id(.)"/>
                             </xsl:if>

@@ -8,9 +8,10 @@
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:re="regex-utils"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 exclude-result-prefixes="#all"
-                version="2.0">
+                version="3.0">
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
@@ -22,7 +23,30 @@
     <xsl:param name="braille-charset-table" as="xs:string" required="yes"/>
     <xsl:param name="counter-styles" as="attribute(css:counter-style)?" required="no"/>
     
-    <xsl:variable name="page-stylesheets" as="element(css:rule)*" select="/*/css:rule[@selector='@page']"/>
+    <xsl:variable name="page-stylesheets" as="map(xs:string,item())">
+        <xsl:iterate select="/*/css:rule[@selector='@page']">
+            <xsl:param name="map" as="map(xs:string,item())" select="map{}"/>
+            <xsl:on-completion>
+                <xsl:sequence select="$map"/>
+            </xsl:on-completion>
+            <xsl:variable name="serialized" as="xs:string" select="if (exists(@serialized))
+                                                                   then string(@serialized)
+                                                                   else css:serialize-stylesheet(*)"/>
+            <xsl:choose>
+                <xsl:when test="map:contains($map,$serialized)">
+                    <xsl:next-iteration/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:next-iteration>
+                        <xsl:with-param name="map" select="map:put(
+                                                             $map,
+                                                             $serialized,
+                                                             s:get(css:parse-stylesheet(css:serialize-stylesheet(.)),'@page'))"/>
+                    </xsl:next-iteration>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:iterate>
+    </xsl:variable>
     <xsl:variable name="custom-counter-style-names" as="xs:string*"
                   select="map:keys(css:parse-counter-styles($counter-styles))"/>
     <xsl:variable name="obfl-variables" as="xs:string*" select="('-obfl-page',
@@ -38,7 +62,7 @@
     <xsl:function name="pxi:layout-master-name" as="xs:string">
         <xsl:param name="page-stylesheet" as="xs:string"/>
         <xsl:sequence select="concat('master_',
-                                     index-of($page-stylesheets/@serialized, $page-stylesheet)[1])"/>
+                                     index-of(map:keys($page-stylesheets), $page-stylesheet)[1])"/>
     </xsl:function>
     
     <xsl:template match="/*">
@@ -48,17 +72,25 @@
             <xsl:variable name="sequences" as="element()*" select="//obfl:sequence|//obfl:toc-sequence|//obfl:dynamic-sequence"/>
             <xsl:for-each select="distinct-values($sequences/@css:page)">
                 <xsl:variable name="layout-master-name" select="pxi:layout-master-name(.)"/>
-                <xsl:variable name="page-stylesheet" as="element()" select="$page-stylesheets[@serialized=current()][1]"/>
+                <xsl:variable name="page-stylesheet" as="item()">
+                    <xsl:if test="not(map:contains($page-stylesheets,current()))">
+                        <xsl:call-template name="pf:error">
+                            <xsl:with-param name="msg">coding error</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:if>
+                    <xsl:sequence select="map:get($page-stylesheets,current())"/>
+                </xsl:variable>
                 <xsl:variable name="default-page-counter-names"
                               select="distinct-values(
                                         for $s in $sequences[@css:page=current()] return
                                           if ($s/parent::obfl:pre-content) then 'pre-page'
                                           else if ($s/parent::obfl:post-content) then 'post-page'
                                           else 'page')"/>
-                <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
-                    <xsl:with-param name="name" tunnel="yes" select="$layout-master-name"/>
-                    <xsl:with-param name="default-page-counter-name" tunnel="yes" select="$default-page-counter-names[1]"/>
-                </xsl:apply-templates>
+                <xsl:call-template name="obfl:generate-layout-master">
+                    <xsl:with-param name="page-stylesheet" select="$page-stylesheet"/>
+                    <xsl:with-param name="name" select="$layout-master-name"/>
+                    <xsl:with-param name="default-page-counter-name" select="$default-page-counter-names[1]"/>
+                </xsl:call-template>
                 <!--
                     The result of calling obfl:generate-layout-master is the same regardless of the
                     default-page-counter-name passed. Therefore only the first result is
@@ -68,10 +100,11 @@
                 -->
                 <xsl:for-each select="$default-page-counter-names[position()&gt;1]">
                     <xsl:variable name="_">
-                        <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
-                            <xsl:with-param name="name" tunnel="yes" select="$layout-master-name"/>
-                            <xsl:with-param name="default-page-counter-name" tunnel="yes" select="."/>
-                        </xsl:apply-templates>
+                        <xsl:call-template name="obfl:generate-layout-master">
+                            <xsl:with-param name="page-stylesheet" select="$page-stylesheet"/>
+                            <xsl:with-param name="name" select="$layout-master-name"/>
+                            <xsl:with-param name="default-page-counter-name" select="."/>
+                        </xsl:call-template>
                     </xsl:variable>
                 </xsl:for-each>
             </xsl:for-each>
@@ -97,6 +130,8 @@
     <!-- CSS page style to OBFL layout-master -->
     <!-- ==================================== -->
     
+    <xsl:variable name="empty-page-stylesheet" as="item()" select="s:get(css:parse-stylesheet(()),'@page')"/>
+    
     <xsl:variable name="empty-string" as="element()">
         <string value=""/>
     </xsl:variable>
@@ -111,33 +146,31 @@
         <field allow-text-flow="true"/>
     </xsl:variable>
     
-    <xsl:template mode="obfl:generate-layout-master" match="css:rule[@selector='@page']">
-        <xsl:param name="name" tunnel="yes" as="xs:string"/>
-        <xsl:param name="default-page-counter-name" tunnel="yes" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
-        <xsl:variable name="page-stylesheet" as="element()*" select="*"/>
+    <xsl:template name="obfl:generate-layout-master">
+        <xsl:param name="page-stylesheet" as="item()?" required="yes"/>
+        <xsl:param name="name" as="xs:string"/>
+        <xsl:param name="default-page-counter-name" as="xs:string"/> <!-- "page"|"pre-page"|"post-page" -->
+        <xsl:variable name="page-stylesheet" as="item()" select="($page-stylesheet,$empty-page-stylesheet)[1]"/>
         <xsl:variable name="duplex" as="xs:boolean" select="$duplex='true'"/>
-        <xsl:variable name="right-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:right']/*"/>
-        <xsl:variable name="left-page-stylesheet" as="element()*" select="$page-stylesheet[@selector='&amp;:left']/*"/>
-        <xsl:variable name="default-page-stylesheet" as="element()*" select="$page-stylesheet"/>
-        <xsl:variable name="default-page-properties" as="element()*"
-                      select="if ($default-page-stylesheet/self::css:property)
-                              then $default-page-stylesheet/self::css:property
-                              else $default-page-stylesheet[not(@selector)]/css:property"/>
+        <xsl:variable name="right-page-stylesheet" as="item()?" select="s:get($page-stylesheet,'&amp;:right')"/>
+        <xsl:variable name="left-page-stylesheet" as="item()?" select="s:get($page-stylesheet,'&amp;:left')"/>
         <xsl:variable name="size" as="xs:string"
-                      select="($default-page-properties[@name='size'][not(@value='auto')]/@value,
-                               concat($page-width,' ',$page-height)
-                              )[1]"/>
+                      select="string((s:get($page-stylesheet,'size')[not(string(.)='auto')],
+                                      concat($page-width,' ',$page-height)
+                                     )[1])"/>
         <xsl:variable name="page-width" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[1]))"/>
         <xsl:variable name="page-height" as="xs:integer" select="xs:integer(number(tokenize($size, '\s+')[2]))"/>
-        <xsl:if test="$default-page-properties[@name='counter-set']">
+
+        <xsl:if test="exists(s:get($page-stylesheet,'counter-set')[not(string(.)='none')])">
             <xsl:message>
-                <xsl:apply-templates mode="css:serialize" select="$default-page-properties[@name='counter-set'][1]"/>
+                <xsl:value-of select="string(s:get($page-stylesheet,'counter-set'))"/>
                 <xsl:text> not supported inside @page</xsl:text>
             </xsl:message>
         </xsl:if>
         <xsl:variable name="page-counter-name" as="xs:string">
             <xsl:variable name="counter-increment" as="element(css:counter-set)*"
-                          select="$default-page-properties[@name='counter-increment']/css:counter-set"/>
+                          select="s:toXml(s:iterate($page-stylesheet)[s:property(.)='counter-increment'])
+                                  /css:counter-set"/>
             <xsl:choose>
                 <xsl:when test="exists($counter-increment)">
                     <xsl:if test="count($counter-increment)&gt;1">
@@ -160,12 +193,11 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:variable name="footnotes-properties" as="element()*"
-                      select="$default-page-stylesheet[@selector='@footnotes'][1]/css:property"/>
-        <xsl:variable name="footnotes-content" as="element()*" select="$footnotes-properties[@name='content'][1]/*"/>
+        <xsl:variable name="footnotes-style" as="item()?" select="s:get($page-stylesheet,'@footnotes')"/>
+        <xsl:variable name="footnotes-content" as="element()*" select="s:toXml(s:get($footnotes-style,'content'))"/>
         <layout-master name="{$name}" duplex="{$duplex}"
                        page-width="{$page-width}" page-height="{$page-height}">
-            <xsl:if test="$right-page-stylesheet">
+            <xsl:if test="exists(s:iterate($right-page-stylesheet))">
                 <!--
                     FIXME: need better way to determine whether we are on right or left page: https://github.com/mtmse/obfl/issues/22
                 -->
@@ -177,7 +209,7 @@
                     </xsl:call-template>
                 </template>
             </xsl:if>
-            <xsl:if test="$left-page-stylesheet">
+            <xsl:if test="exists(s:iterate($left-page-stylesheet))">
                 <template use-when="(= (% $page 2) 0)">
                     <xsl:call-template name="template">
                         <xsl:with-param name="stylesheet" select="$left-page-stylesheet"/>
@@ -188,7 +220,7 @@
             </xsl:if>
             <default-template>
                 <xsl:call-template name="template">
-                    <xsl:with-param name="stylesheet" select="$default-page-stylesheet"/>
+                    <xsl:with-param name="stylesheet" select="$page-stylesheet"/>
                     <xsl:with-param name="page-counter-name" tunnel="yes" select="$page-counter-name"/>
                 </xsl:call-template>
             </default-template>
@@ -215,23 +247,17 @@
             </xsl:if>
             <xsl:for-each select="$footnotes-content[self::css:flow[@from]][1]">
                 <xsl:variable name="footnotes-border-top" as="xs:string"
-                              select="($footnotes-properties[@name='border-top-pattern'][1]/@value,css:initial-value('border-top-pattern'))[1]"/>
+                              select="string(s:getOrDefault($footnotes-style,'border-top-pattern'))"/>
                 <xsl:variable name="footnotes-max-height" as="xs:string"
-                              select="($footnotes-properties[@name='max-height'][1]/@value,css:initial-value('max-height'))[1]"/>
+                              select="string(s:getOrDefault($footnotes-style,'max-height'))"/>
                 <xsl:variable name="footnotes-max-height" as="xs:integer"
                               select="if ($footnotes-max-height='none')
                                       then $page-height idiv 2
                                       else xs:integer(number($footnotes-max-height))"/>
                 <xsl:variable name="footnotes-fallback-collection" as="xs:string?"
-                              select="$footnotes-properties[@name=('-obfl-fallback-collection','-obfl-fallback-flow')][1]/@value"/>
-                <xsl:if test="$footnotes-properties[@name='-obfl-fallback-flow']">
-                    <xsl:call-template name="pf:warn">
-                        <xsl:with-param name="msg">Correct spelling of '-obfl-fallback-flow' is '-obfl-fallback-collection'</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:if>
+                              select="s:getOrDefault($footnotes-style,'-obfl-fallback-collection')[not(.='normal')]"/>
                 <page-area align="bottom" max-height="{$footnotes-max-height}" collection="{@from}">
                     <xsl:if test="exists($footnotes-fallback-collection)
-                                  and matches($footnotes-fallback-collection, re:exact($css:IDENT_RE))
                                   and not($footnotes-fallback-collection='normal')">
                         <fallback>
                             <rename collection="{@from}" to="{$footnotes-fallback-collection}"/>
@@ -261,49 +287,45 @@
     </xsl:template>
     
     <xsl:template name="template">
-        <xsl:param name="stylesheet" as="element()*" required="yes"/> <!-- css:rule*|css:property* -->
+        <xsl:param name="stylesheet" as="item()" required="yes"/>
         <xsl:variable name="top-left" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-left'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@top-left')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-center" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-center'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@top-center')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="top-right" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@top-right'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@top-right')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-left" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-left'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@bottom-left')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-center" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-center'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@bottom-center')"/>
             </xsl:call-template>
         </xsl:variable>
         <xsl:variable name="bottom-right" as="element()*">
             <xsl:call-template name="fields">
-                <xsl:with-param name="properties" select="$stylesheet[@selector='@bottom-right'][1]/css:property"/>
+                <xsl:with-param name="properties" select="s:get($stylesheet,'@bottom-right')"/>
             </xsl:call-template>
         </xsl:variable>
-        <xsl:variable name="properties" as="element()*"
-                      select="if ($stylesheet/self::css:property)
-                              then $stylesheet/self::css:property
-                              else $stylesheet[not(@selector)]/css:property"/>
         <xsl:variable name="margin-top" as="xs:integer"
-                      select="max(($properties[@name='margin-top']/xs:integer(@value),0))"/>
+                      select="max((xs:integer(string(s:getOrDefault($stylesheet,'margin-top'))),0))"/>
         <xsl:variable name="margin-bottom" as="xs:integer"
-                      select="max(($properties[@name='margin-bottom']/xs:integer(@value),0))"/>
+                      select="max((xs:integer(string(s:getOrDefault($stylesheet,'margin-bottom'))),0))"/>
         <xsl:variable name="margin-left" as="xs:integer"
-                      select="max(($properties[@name='margin-left']/xs:integer(@value),0))"/>
+                      select="max((xs:integer(string(s:getOrDefault($stylesheet,'margin-left'))),0))"/>
         <xsl:variable name="margin-right" as="xs:integer"
-                      select="max(($properties[@name='margin-right']/xs:integer(@value),0))"/>
+                      select="max((xs:integer(string(s:getOrDefault($stylesheet,'margin-right'))),0))"/>
         <xsl:choose>
             <xsl:when test="exists(($top-left, $top-center, $top-right)) or $margin-top &gt; 0">
                 <xsl:call-template name="headers">
@@ -331,12 +353,12 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="margin-region">
-            <xsl:with-param name="properties" select="$stylesheet[@selector='@left'][1]/css:property"/>
+            <xsl:with-param name="properties" select="s:get($stylesheet,'@left')"/>
             <xsl:with-param name="side" select="'left'"/>
             <xsl:with-param name="min-width" select="$margin-left"/>
         </xsl:call-template>
         <xsl:call-template name="margin-region">
-            <xsl:with-param name="properties" select="$stylesheet[@selector='@right'][1]/css:property"/>
+            <xsl:with-param name="properties" select="s:get($stylesheet,'@right')"/>
             <xsl:with-param name="side" select="'right'"/>
             <xsl:with-param name="min-width" select="$margin-right"/>
         </xsl:call-template>
@@ -385,11 +407,11 @@
     </xsl:template>
     
     <xsl:template name="fields" as="element()*"> <!-- obfl:field* -->
-        <xsl:param name="properties" as="element()*"/> <!-- css:property* -->
-        <xsl:variable name="white-space" as="xs:string" select="($properties[@name='white-space']/@value,'normal')[1]"/>
-        <xsl:variable name="text-transform" as="xs:string" select="($properties[@name='text-transform']/@value,'auto')[1]"/>
+        <xsl:param name="properties" as="item()?"/>
+        <xsl:variable name="white-space" as="item()?" select="s:getOrDefault($properties,'white-space')"/>
+        <xsl:variable name="text-transform" as="item()?" select="s:getOrDefault($properties,'text-transform')"/>
         <xsl:variable name="content" as="element()*">
-            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-top-bottom">
+            <xsl:apply-templates select="s:toXml(s:get($properties,'content'))" mode="eval-content-list-top-bottom">
                 <xsl:with-param name="white-space" select="$white-space"/>
                 <xsl:with-param name="text-transform" select="$text-transform"/>
             </xsl:apply-templates>
@@ -404,13 +426,13 @@
     </xsl:template>
     
     <xsl:template name="margin-region" as="element()?"> <!-- obfl:margin-region? -->
-        <xsl:param name="properties" as="element()*"/> <!-- css:property* -->
+        <xsl:param name="properties" as="item()?"/>
         <xsl:param name="side" as="xs:string" required="yes"/>
         <xsl:param name="min-width" as="xs:integer" required="yes"/>
-        <xsl:variable name="white-space" as="xs:string" select="($properties[@name='white-space']/@value,'normal')[1]"/>
-        <xsl:variable name="text-transform" as="xs:string" select="($properties[@name='text-transform']/@value,'auto')[1]"/>
+        <xsl:variable name="white-space" as="item()?" select="s:getOrDefault($properties,'white-space')"/>
+        <xsl:variable name="text-transform" as="item()?" select="s:getOrDefault($properties,'text-transform')"/>
         <xsl:variable name="indicators" as="element()*">
-            <xsl:apply-templates select="$properties[@name='content'][1]/*" mode="eval-content-list-left-right">
+            <xsl:apply-templates select="s:toXml(s:get($properties,'content'))" mode="eval-content-list-left-right">
                 <xsl:with-param name="white-space" select="$white-space"/>
                 <xsl:with-param name="text-transform" select="$text-transform"/>
             </xsl:apply-templates>
@@ -425,10 +447,10 @@
     </xsl:template>
     
     <xsl:template match="css:string[@value]" mode="eval-content-list-top-bottom">
-        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
-        <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <xsl:param name="white-space" as="item()?"/>
+        <xsl:param name="text-transform" as="item()?"/>
         <xsl:choose>
-            <xsl:when test="$white-space=('pre-wrap','pre-line')">
+            <xsl:when test="$white-space[string(.)=('pre-wrap','pre-line')]">
                 <!--
                     TODO: wrapping is not allowed, warn if content is clipped
                 -->
@@ -438,17 +460,17 @@
                     </xsl:matching-substring>
                     <xsl:non-matching-substring>
                         <xsl:choose>
-                            <xsl:when test="$white-space='pre-wrap'">
+                            <xsl:when test="string($white-space)='pre-wrap'">
                                 <string value="{replace(.,'\s','&#x00A0;')}">
-                                    <xsl:if test="not($text-transform='auto')">
-                                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
+                                    <xsl:if test="$text-transform[not(string(.)='auto')]">
+                                        <xsl:attribute name="text-style" select="concat('text-transform:',string($text-transform))"/>
                                     </xsl:if>
                                 </string>
                             </xsl:when>
                             <xsl:otherwise>
                                 <string value="{.}">
-                                    <xsl:if test="not($text-transform='auto')">
-                                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
+                                    <xsl:if test="$text-transform[not(string(.)='auto')]">
+                                        <xsl:attribute name="text-style" select="concat('text-transform:',string($text-transform))"/>
                                     </xsl:if>
                                 </string>
                             </xsl:otherwise>
@@ -458,8 +480,8 @@
             </xsl:when>
             <xsl:otherwise>
                 <string value="{string(@value)}">
-                    <xsl:if test="not($text-transform='auto')">
-                        <xsl:attribute name="text-style" select="concat('text-transform:',$text-transform)"/>
+                    <xsl:if test="$text-transform[not(string(.)='auto')]">
+                        <xsl:attribute name="text-style" select="concat('text-transform:',string($text-transform))"/>
                     </xsl:if>
                 </string>
             </xsl:otherwise>
@@ -467,8 +489,8 @@
     </xsl:template>
     
     <xsl:template match="css:counter[not(@target)]" priority="1" mode="eval-content-list-top-bottom">
-        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
-        <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <xsl:param name="white-space" as="item()?"/>
+        <xsl:param name="text-transform" as="item()?"/>
         <xsl:param name="page-counter-name" as="xs:string" tunnel="yes"/>
         <xsl:if test="not(@name=($page-counter-name,'volume',$obfl-variables))">
             <xsl:choose>
@@ -494,22 +516,22 @@
         </xsl:if>
         <xsl:variable name="text-transform" as="xs:string*">
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or starts-with(@style,'symbols(')">
                 <xsl:sequence select="'-dotify-counter'"/>
             </xsl:if>
             <!-- Note that '-dotify-counter' does not replace 'none', as would be the case with a
                  real text-transform. The text-transform property is merely used as a hack here. -->
-            <xsl:sequence select="$text-transform[not(.='auto')]"/>
+            <xsl:sequence select="$text-transform[not(string(.)='auto')]"/>
         </xsl:variable>
         <xsl:variable name="text-style" as="xs:string*">
             <xsl:if test="exists($text-transform)">
                 <xsl:sequence select="concat('text-transform: ',string-join($text-transform,' '))"/>
             </xsl:if>
-            <xsl:if test="not($white-space='normal')">
-                <xsl:sequence select="concat('white-space: ',$white-space)"/>
+            <xsl:if test="$white-space[not(string(.)='normal')]">
+                <xsl:sequence select="concat('white-space: ',string($white-space))"/>
             </xsl:if>
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or starts-with(@style,'symbols(')">
                 <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
             </xsl:if>
         </xsl:variable>
@@ -534,8 +556,8 @@
     </xsl:template>
     
     <xsl:template match="css:string[@name][not(@target)]" mode="eval-content-list-top-bottom">
-        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
-        <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <xsl:param name="white-space" as="item()?"/>
+        <xsl:param name="text-transform" as="item()?"/>
         <xsl:param name="page-side" as="xs:string" tunnel="yes" select="'both'"/> <!-- right|left|both -->
         <xsl:if test="$page-side='both' and @scope=('spread-first','spread-start','spread-last','spread-last-except-start')">
             <!--
@@ -556,14 +578,14 @@
     
     <xsl:template match="css:custom-func[@name='-obfl-marker-indicator']"
                   mode="eval-content-list-left-right" priority="1">
-        <xsl:param name="white-space" as="xs:string" select="'normal'"/>
-        <xsl:param name="text-transform" as="xs:string" select="'auto'"/>
+        <xsl:param name="white-space" as="item()?"/>
+        <xsl:param name="text-transform" as="item()?"/>
         <xsl:variable name="text-style" as="xs:string*">
-            <xsl:if test="not($text-transform='auto')">
-                <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
+            <xsl:if test="$text-transform[not(string(.)='auto')]">
+                <xsl:sequence select="concat('text-transform: ',string($text-transform))"/>
             </xsl:if>
-            <xsl:if test="not($white-space='normal')">
-                <xsl:sequence select="concat('white-space: ',$white-space)"/>
+            <xsl:if test="$white-space[not(string(.)='normal')]">
+                <xsl:sequence select="concat('white-space: ',string($white-space))"/>
             </xsl:if>
         </xsl:variable>
         <marker-indicator markers="indicator/{@arg1}" indicator="{substring(@arg2,2,string-length(@arg2)-2)}">
@@ -649,17 +671,6 @@
         <xsl:call-template name="pf:error">
             <xsl:with-param name="msg">Coding error</xsl:with-param>
         </xsl:call-template>
-    </xsl:template>
-    
-    <!-- for XSpec -->
-    <xsl:template name="obfl:generate-layout-master">
-        <xsl:param name="page-stylesheet" as="element(css:rule)"/>
-        <xsl:param name="name" as="xs:string"/>
-        <xsl:param name="default-page-counter-name" as="xs:string"/>
-        <xsl:apply-templates mode="obfl:generate-layout-master" select="$page-stylesheet">
-            <xsl:with-param name="name" tunnel="yes" select="$name"/>
-            <xsl:with-param name="default-page-counter-name" tunnel="yes" select="$default-page-counter-name"/>
-        </xsl:apply-templates>
     </xsl:template>
     
 </xsl:stylesheet>
