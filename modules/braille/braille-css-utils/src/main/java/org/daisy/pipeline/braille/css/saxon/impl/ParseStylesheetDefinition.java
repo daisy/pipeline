@@ -2,22 +2,7 @@ package org.daisy.pipeline.braille.css.saxon.impl;
 
 import java.util.Optional;
 
-import javax.xml.namespace.QName;
-
 import cz.vutbr.web.css.SupportedCSS;
-
-import net.sf.saxon.dom.ElementOverNodeInfo;
-import net.sf.saxon.expr.XPathContext;
-import net.sf.saxon.lib.ExtensionFunctionCall;
-import net.sf.saxon.lib.ExtensionFunctionDefinition;
-import net.sf.saxon.om.Item;
-import net.sf.saxon.om.NodeInfo;
-import net.sf.saxon.om.Sequence;
-import net.sf.saxon.om.StructuredQName;
-import net.sf.saxon.trans.XPathException;
-import static net.sf.saxon.type.Type.ATTRIBUTE;
-import net.sf.saxon.value.ObjectValue;
-import net.sf.saxon.value.SequenceType;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.SupportedBrailleCSS;
@@ -27,95 +12,87 @@ import org.daisy.pipeline.braille.css.xpath.impl.Declaration;
 import org.daisy.pipeline.braille.css.xpath.impl.Stylesheet;
 import org.daisy.pipeline.braille.css.xpath.Style;
 
+import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
+import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
+
 import org.osgi.service.component.annotations.Component;
 
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 @Component(
-	name = "css:parse-stylesheet",
-	service = { ExtensionFunctionDefinition.class }
+	name = "ParseStylesheet",
+	service = { ExtensionFunctionProvider.class }
 )
-public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
-	
-	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
-	
-	private static final StructuredQName funcname = new StructuredQName("css", XMLNS_CSS, "parse-stylesheet");
-	
-	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(true, false);
-	
-	public StructuredQName getFunctionQName() {
-		return funcname;
-	}
-	
-	public SequenceType[] getArgumentTypes() {
-		return new SequenceType[] {
-			SequenceType.OPTIONAL_ITEM
-		};
-	}
-	
-	public SequenceType getResultType(SequenceType[] suppliedArgumentTypes) {
-		return SequenceType.SINGLE_ITEM; // ObjectValue
-	}
-	
-	public ExtensionFunctionCall makeCallExpression() {
-		return new ExtensionFunctionCall() {
-			public Sequence call(XPathContext context, Sequence[] arguments) throws XPathException {
-				if (arguments.length == 0)
-					return EMPTY;
-				Item arg = arguments[0].head();
-				if (arg == null)
-					return EMPTY;
-				String argStringValue = arg.getStringValue();
-				boolean argIsAttr = (arg instanceof NodeInfo && ((NodeInfo)arg).getNodeKind() == ATTRIBUTE);
-				QName attrName = argIsAttr
-					? new QName(((NodeInfo)arg).getURI(), ((NodeInfo)arg).getLocalPart())
-					: null;
-				Element parentElement = argIsAttr
-					?  (ElementOverNodeInfo)ElementOverNodeInfo.wrap(((NodeInfo)arg).getParent())
-					: null;
-				return new ObjectValue<>(parse(argStringValue, argIsAttr, attrName, parentElement));
-			}
-		};
-	}
+public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvider {
 
-	private static Style parse(String argStringValue, boolean argIsAttr, QName attrName, Element context) {
-		Context styleCtxt = Context.ELEMENT;
-		if (argIsAttr) {
-			if (XMLNS_CSS.equals(attrName.getNamespaceURI())) {
-				String name = attrName.getLocalPart().replaceAll("^_", "-");
-				if ("page".equals(name)) {
-					styleCtxt = Context.PAGE;
-				} else if ("volume".equals(name)) {
-					styleCtxt = Context.VOLUME;
-				} else if ("hyphenation-resource".equals(name)) {
-					styleCtxt = Context.HYPHENATION_RESOURCE;
-				} else if ("text-transform".equals(name)) {
-					styleCtxt = Context.TEXT_TRANSFORM;
-				} else if ("counter-style".equals(name)) {
-					styleCtxt = Context.COUNTER_STYLE;
-				} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
-					// assuming that context is a (pseudo-)element
-					// not assuming that attr() values have already been evaluated (although normally they will)
-					Optional<cz.vutbr.web.css.Declaration> declaration
-						= BrailleCssParser.parseDeclaration(name, argStringValue, context, false);
-					if (declaration.isPresent())
-						return new Declaration(declaration.get());
-					else
-						return Declaration.EMPTY;
+	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
+
+	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(true, false);
+
+	public ParseStylesheetDefinition() {
+		super(ParseStylesheet.class);
+	}
+	
+	public static class ParseStylesheet {
+
+		public static Style parse(Optional<Object> style) {
+			return parse(style.orElse(null));
+		}
+
+		private static Style parse(Object style) {
+			if (style == null)
+				return Stylesheet.EMPTY;
+			String argStringValue;
+			Attr attr = null;
+			Element element = null;
+			if (style instanceof Attr) {
+				attr = (Attr)style;
+				argStringValue = attr.getNodeValue();
+				element = (Element)attr.getParentNode();
+			} else if (style instanceof Node) {
+				argStringValue = ((Node)style).getTextContent();
+			} else if (style instanceof String) {
+				argStringValue = (String)style;
+			} else
+				throw new IllegalArgumentException("Unexpected type for first argument");
+			Context styleCtxt = Context.ELEMENT;
+			if (attr != null) {
+				if (XMLNS_CSS.equals(attr.getNamespaceURI())) {
+					String name = attr.getLocalName().replaceAll("^_", "-");
+					if ("page".equals(name)) {
+						styleCtxt = Context.PAGE;
+					} else if ("volume".equals(name)) {
+						styleCtxt = Context.VOLUME;
+					} else if ("hyphenation-resource".equals(name)) {
+						styleCtxt = Context.HYPHENATION_RESOURCE;
+					} else if ("text-transform".equals(name)) {
+						styleCtxt = Context.TEXT_TRANSFORM;
+					} else if ("counter-style".equals(name)) {
+						styleCtxt = Context.COUNTER_STYLE;
+					} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
+						// assuming that context is a (pseudo-)element
+						// assuming that the value is not "inherit"
+						// not assuming that attr() values have already been evaluated (although normally they will)
+						Optional<cz.vutbr.web.css.Declaration> declaration
+							= BrailleCssParser.parseDeclaration(name, argStringValue, element, false);
+						if (declaration.isPresent())
+							return new Declaration(declaration.get());
+						else
+							return Declaration.EMPTY;
+					}
 				}
 			}
+			BrailleCssStyle s = BrailleCssStyle.of(argStringValue, styleCtxt);
+			if (s.isEmpty())
+				return Stylesheet.EMPTY;
+			if (attr != null)
+				if (styleCtxt == Context.ELEMENT)
+					s = s.evaluate(element);
+				else
+					s = BrailleCssStyle.of("@" + attr.getLocalName(), s);
+			return new Stylesheet(s);
 		}
-		BrailleCssStyle style = BrailleCssStyle.of(argStringValue, styleCtxt);
-		if (style.isEmpty())
-			return Stylesheet.EMPTY;
-		if (argIsAttr)
-			if (styleCtxt == Context.ELEMENT)
-				style = style.evaluate(context);
-			else
-				style = BrailleCssStyle.of("@" + attrName.getLocalPart(), style);
-		return new Stylesheet(style);
 	}
-
-	private static final ObjectValue<Style> EMPTY = new ObjectValue<>(Stylesheet.EMPTY);
-
 }

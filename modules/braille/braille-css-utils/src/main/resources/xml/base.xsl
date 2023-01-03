@@ -4,7 +4,6 @@
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:re="regex-utils"
-                xmlns:java="implemented-in-java"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -117,12 +116,15 @@
             <p>Return value is a `Style` item.</p>
         </desc>
     </doc>
-    <java:function name="css:parse-stylesheet" as="item()">
+    <xsl:function name="css:parse-stylesheet" as="item()">
         <xsl:param name="stylesheet" as="item()?"/> <!-- xs:string|attribute() -->
-        <!--
-            Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
-        -->
-    </java:function>
+        <xsl:sequence select="ParseStylesheet:parse($stylesheet)"
+                      xmlns:ParseStylesheet="org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition$ParseStylesheet">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
     
     <xsl:function name="css:parse-string" as="element()?">
         <xsl:param name="string" as="xs:string"/>
