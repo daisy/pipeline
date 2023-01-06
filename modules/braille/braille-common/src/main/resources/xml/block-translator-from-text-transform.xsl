@@ -3,6 +3,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
+                xmlns:t="org.daisy.pipeline.braille.css.xpath.StyledText"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-result-prefixes="#all">
 	
@@ -18,8 +19,10 @@
 		</xsl:variable>
 		<xsl:variable name="lang" as="xs:string*"
 		              select="for $t in .//text() return ($t/ancestor::*[@xml:lang][1]/string(@xml:lang),'und')[1]"/>
+		<xsl:variable name="text" as="item()*" select="for $i in 1 to count($text) return t:of($text[$i], $style[$i], $lang[$i])"/>
+		<xsl:variable name="text" as="xs:string*" select="for $t in pf:text-transform($text-transform, $text) return t:getText($t)"/>
 		<xsl:apply-templates select="node()[1]" mode="treewalk">
-			<xsl:with-param name="new-text-nodes" select="pf:text-transform($text-transform, $text, $style, $lang)"/>
+			<xsl:with-param name="new-text-nodes" select="$text"/>
 		</xsl:apply-templates>
 	</xsl:template>
 	

@@ -620,6 +620,18 @@ public final class BrailleCssStyle implements Cloneable {
 	}
 
 	/**
+	 * @param declarations assumed to not change
+	 */
+	public static BrailleCssStyle of(SimpleInlineStyle declarations, Context context) {
+		BrailleCssStyle style = new Builder(context).build();
+		style.declarations = declarations instanceof ValidatedDeclarations
+			? declarations
+			// assuming that declarations originate from a ValidatedDeclarations
+			: new ValidatedDeclarations(declarations); // shallow copy
+		return style;
+	}
+
+	/**
 	 * @param declaration assumed to not change
 	 */
 	private static BrailleCssStyle of(Declaration declaration, Context context) {

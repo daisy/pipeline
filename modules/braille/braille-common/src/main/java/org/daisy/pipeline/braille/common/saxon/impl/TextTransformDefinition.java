@@ -1,8 +1,6 @@
 package org.daisy.pipeline.braille.common.saxon.impl;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
@@ -11,7 +9,6 @@ import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBrail
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
-import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
@@ -48,38 +45,11 @@ public class TextTransformDefinition extends ReflexiveExtensionFunctionProvider 
 
 	public class TextTransform {
 
-		public Iterator<String> transform(String query, Iterator<String> text) {
-			return transform(query, text, null);
-		}
-
-		public Iterator<String> transform(String query, Iterator<String> text, Iterator<String> style) {
-			return transform(query, text, style, null);
-		}
-
-		public Iterator<String> transform(String query, Iterator<String> text, Iterator<String> style, Iterator<String> lang) {
-			List<CSSStyledText> styledText = new ArrayList<>();
-			while (text.hasNext()) {
-				String t = text.next();
-				if (style != null) {
-					if (!style.hasNext())
-						throw new IllegalArgumentException("Lengths of text and style sequences must match");
-					if (lang != null) {
-						if (!lang.hasNext())
-							throw new IllegalArgumentException("Lengths of text and lang sequences must match");
-						styledText.add(new CSSStyledText(t, style.next(), parseLocale(lang.next())));
-					} else
-						styledText.add(new CSSStyledText(t, style.next()));
-				} else
-					styledText.add(new CSSStyledText(t));
-			}
-			if (style != null && style.hasNext())
-				throw new IllegalArgumentException("Lengths of text and style sequences must match");
-			if (lang != null && lang.hasNext())
-				throw new IllegalArgumentException("Lengths of text and lang sequences must match");
+		public Iterator<CSSStyledText> transform(String query, Iterable<CSSStyledText> styledText) {
 			return transform(query(query), styledText);
 		}
 
-		private Iterator<String> transform(Query query, List<CSSStyledText> styledText) {
+		private Iterator<CSSStyledText> transform(Query query, Iterable<CSSStyledText> styledText) {
 			for (BrailleTranslator t : translatorRegistry.getWithHyphenator(query)) {
 				FromStyledTextToBraille fsttb;
 				try {
@@ -89,11 +59,7 @@ public class TextTransformDefinition extends ReflexiveExtensionFunctionProvider 
 					continue;
 				}
 				try {
-					// FIXME: don't ignore result style
-					List<String> braille = new ArrayList<>();
-					for (CSSStyledText b : fsttb.transform(styledText))
-						braille.add(b.getText());
-					return braille.iterator();
+					return fsttb.transform(styledText).iterator();
 				} catch (Exception e) {
 					logger.debug("Failed to translate string with translator " + t);
 					throw e; }
