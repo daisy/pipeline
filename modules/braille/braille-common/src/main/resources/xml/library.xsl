@@ -16,33 +16,10 @@
             <p>Apply a text transformer to a string sequence.</p>
         </desc>
     </doc>
-    <xsl:function name="pf:text-transform" as="xs:string*">
+    <xsl:function name="pf:text-transform" as="item()*">
         <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-        <xsl:sequence select="TextTransform:transform(TextTransform:new(),$query,$text)"
-                      xmlns:TextTransform="org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition$TextTransform">
-            <!--
-                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java
-            -->
-        </xsl:sequence>
-    </xsl:function>
-    <xsl:function name="pf:text-transform" as="xs:string*">
-        <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-        <xsl:param name="style" as="xs:string*"/>
-        <xsl:sequence select="TextTransform:transform(TextTransform:new(),$query,$text,$style)"
-                      xmlns:TextTransform="org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition$TextTransform">
-            <!--
-                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java
-            -->
-        </xsl:sequence>
-    </xsl:function>
-    <xsl:function name="pf:text-transform" as="xs:string*">
-        <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-        <xsl:param name="style" as="xs:string*"/>
-        <xsl:param name="lang" as="xs:string*"/>
-        <xsl:sequence select="TextTransform:transform(TextTransform:new(),$query,$text,$style,$lang)"
+        <xsl:param name="styled-text" as="item()*"/>
+        <xsl:sequence select="TextTransform:transform(TextTransform:new(),$query,$styled-text)"
                       xmlns:TextTransform="org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition$TextTransform">
             <!--
                 Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java
