@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-               stylesheet="../resources/phony.xsl">
+               stylesheet="../../main/resources/xml/library.xsl">
   
   <x:scenario label="test_01">
     <x:call function="pf:text-transform">
