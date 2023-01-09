@@ -42,14 +42,14 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 	}
 	
 	private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
-		public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+		public java.lang.Iterable<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
 			int size = size(styledText);
 			if (to < 0) to = size;
-			String[] braille = new String[to - from];
+			CSSStyledText[] braille = new CSSStyledText[to - from];
 			int i = 0;
 			for (CSSStyledText t : styledText) {
 				if (i >= from && i < to)
-					braille[i - from] = NumberBrailleTranslator.this.transform(t);
+					braille[i - from] = new CSSStyledText(NumberBrailleTranslator.this.transform(t));
 				i++; }
 			return Arrays.asList(braille);
 		}
