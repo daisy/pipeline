@@ -46,7 +46,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testTranslate() {
-		assertEquals(braille("⠋⠕⠕⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","")));
@@ -54,7 +54,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testTranslateAndHyphenate() {
-		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕\u00AD⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)(document-locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","hyphens:auto")));
@@ -63,7 +63,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test(expected=RuntimeException.class)
 	public void testTranslateAndNotHyphenate() {
-		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕\u00AD⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","hyphens:auto")));
@@ -82,9 +82,5 @@ public class DotifyCoreTest extends AbstractTest {
 		if (textSet)
 			throw new RuntimeException();
 		return styledText;
-	}
-	
-	private Iterable<String> braille(String... text) {
-		return Arrays.asList(text);
 	}
 }

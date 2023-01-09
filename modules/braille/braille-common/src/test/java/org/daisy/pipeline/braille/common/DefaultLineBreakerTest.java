@@ -83,16 +83,16 @@ public class DefaultLineBreakerTest {
 				new AbstractBrailleTranslator() {
 					public BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille() {
 						return new BrailleTranslator.FromStyledTextToBraille() {
-							public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+							public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to) {
 								if (from < 0 || (to >= 0 && from > to))
 									throw new IndexOutOfBoundsException();
-								List<String> transformed = new ArrayList<>();
+								List<CSSStyledText> transformed = new ArrayList<>();
 								int i = 0;
 								for (CSSStyledText t : styledText) {
 									if (to >= 0 && i >= to)
 										break;
 									if (i >= from)
-										transformed.add(t.getText().toUpperCase());
+										transformed.add(new CSSStyledText(t.getText().toUpperCase()));
 									i++;
 								}
 								return transformed;

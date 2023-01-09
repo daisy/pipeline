@@ -87,11 +87,6 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	
 	private final BrailleTranslatorFactory factory = new BrailleTranslatorFactoryImpl();
 	
-	/*
-	 * Mode for pre-translated text with support for text-level CSS and line
-	 * breaking according to CSS. Corresponds with translator query
-	 * `(input:braille)(input:text-css)(output:braille)`
-	 */
 	private class BrailleTranslatorFactoryImpl implements BrailleTranslatorFactory {
 		public BrailleTranslator newTranslator(String locale, String mode) throws TranslatorConfigurationException {
 			Matcher m = QUERY.matcher(mode);
