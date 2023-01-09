@@ -22,6 +22,7 @@ import cz.vutbr.web.css.TermString;
 
 import org.daisy.braille.css.BrailleCSSProperty.HyphenateCharacter;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
+import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
@@ -33,10 +34,13 @@ import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractBrailleTranslator extends AbstractTransform implements BrailleTranslator {
 	
 	private final BrailleConverter brailleCharset;
+
+	private static final Logger logger = LoggerFactory.getLogger(AbstractBrailleTranslator.class);
 
 	protected AbstractBrailleTranslator() {
 		this(null, null);
@@ -129,22 +133,31 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 
 		protected BrailleStream translateAndHyphenate(Iterable<CSSStyledText> styledText, int from, int to) {
 			List<String> braille = new ArrayList<>();
-			Iterator<CSSStyledText> style = styledText.iterator();
-			for (String s : fromStyledTextToBraille.transform(styledText)) {
-				SimpleInlineStyle st = style.next().getStyle();
-				if (st != null) {
-					if (st.getProperty("hyphens") == Hyphens.NONE) {
-						s = s.replaceAll("[\u00AD\u200B]","");
-						st.removeProperty("hyphens"); }
-					CSSProperty ws = st.getProperty("white-space");
+			for (CSSStyledText t : fromStyledTextToBraille.transform(styledText)) {
+				String b = t.getText();
+				SimpleInlineStyle s = t.getStyle();
+				if (s != null) {
+					Hyphens h = s.getProperty("hyphens");
+					if (h == Hyphens.NONE || h == Hyphens.MANUAL) {
+						if (h == Hyphens.NONE)
+							b = b.replaceAll("[\u00AD\u200B]","");
+						s.removeProperty("hyphens"); }
+					WhiteSpace ws = s.getProperty("white-space");
 					if (ws != null) {
 						if (ws == WhiteSpace.PRE_WRAP)
-							s = s.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
+							b = b.replaceAll("[\\x20\t\\u2800]+", "$0\u200B")
 								.replaceAll("[\\x20\t\\u2800]", "\u00A0");
 						if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-							s = s.replaceAll("[\\n\\r]", "\u2028");
-						st.removeProperty("white-space"); }}
-				braille.add(s);
+							b = b.replaceAll("[\\n\\r]", "\u2028");
+						s.removeProperty("white-space"); }
+					TextTransform tt = s.getProperty("text-transform");
+					if (tt == TextTransform.NONE)
+						s.removeProperty("text-transform");
+					s.removeProperty("braille-charset");
+					for (String prop : s.getPropertyNames())
+						logger.warn("'{}: {}' not supported", prop, s.get(prop));
+				}
+				braille.add(b);
 			}
 			StringBuilder brailleString = new StringBuilder();
 			int fromChar = 0;
@@ -231,6 +244,8 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 			 * opportunities, including those within words, regardless of the "allowHyphens"
 			 * argument. There is a break opportunity after each string returned by the {@link
 			 * BrailleStream}.
+			 *
+			 * @param text The {@link CSSStyledText} must not be modified.
 			 */
 			protected abstract BrailleStream translateAndHyphenate(Iterable<CSSStyledText> text, int from, int to);
 			

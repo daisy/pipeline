@@ -113,7 +113,11 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 							logger.trace("Translator does not implement the FromStyledTextToBraille interface: " + t);
 							continue; }
 						try {
-							return iterableToSequence(fsttb.transform(styledText)); }
+							// FIXME: don't ignore result style
+							List<StringValue> braille = new ArrayList<>();
+							for (CSSStyledText b : fsttb.transform(styledText))
+								braille.add(new StringValue(b.getText()));
+							return new SequenceExtent(braille); }
 						catch (Exception e) {
 							logger.debug("Failed to translate string with translator " + t);
 							throw e; }
@@ -133,13 +137,6 @@ public class TextTransformDefinition extends ExtensionFunctionDefinition {
 		for (Item item = iterator.next(); item != null; item = iterator.next())
 			list.add(item.getStringValue());
 		return list;
-	}
-	
-	private static Sequence iterableToSequence(Iterable<String> iterable) {
-		List<StringValue> list = new ArrayList<StringValue>();
-		for (String s : iterable)
-			list.add(new StringValue(s));
-		return new SequenceExtent(list);
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(TextTransformDefinition.class);
