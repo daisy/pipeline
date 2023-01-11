@@ -85,6 +85,41 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 		return sourceDeclaration;
 	}
 	
+	private boolean concretized = false;
+	
+	/**
+	 * Does not mutate the object. Returns a new object if needed.
+	 */
+	public PropertyValue concretize() {
+		if (concretized)
+			return this;
+		else {
+			Quadruple q = (Quadruple)propertyValue.clone();
+			q.concretize();
+			PropertyValue concretized = new PropertyValue(propertyName, q);
+			concretized.concretized = true;
+			return concretized;
+		}
+	}
+
+	private boolean inherited = false;
+	
+	/**
+	 * Does not mutate the object. Returns a new object if needed.
+	 */
+	public PropertyValue inheritFrom(PropertyValue parent) {
+		if (inherited)
+			throw new UnsupportedOperationException("Can not inherit from more than one parent style");
+		else if (concretized)
+			throw new UnsupportedOperationException("Can not inherit from a parent style: 'inherit' values were already concretized.");
+		Quadruple q = (Quadruple)propertyValue.clone();
+		q.inheritFrom(parent.concretize().propertyValue);
+		q.concretize();
+		PropertyValue inherited = new PropertyValue(propertyName, q);
+		inherited.inherited = inherited.concretized = true;
+		return inherited;
+	}
+	
 	/* ===== Declaration ===== */
 	
 	@Override
