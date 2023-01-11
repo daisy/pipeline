@@ -9,28 +9,50 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.SourceLocator;
+import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.TermIdentImpl;
+import cz.vutbr.web.domassign.SingleMapNodeData.Quadruple;
 
 public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, Declaration {
 	
 	private final String propertyName;
-	private final CSSProperty property;
+	protected Quadruple propertyValue; // not final for clone()
+	private CSSProperty property; // not final for clone()
 	private Term<?> value; // not final for clone()
 	private Term<?> declaration; // not final for clone()
-	private final Declaration sourceDeclaration;
+	private Declaration sourceDeclaration; // not final for clone()
 	
-	protected PropertyValue(String propertyName, final CSSProperty property, Term<?> value, Declaration sourceDeclaration) {
+	public PropertyValue(String propertyName,
+	                     final CSSProperty property,
+	                     final Term<?> value,
+	                     final Declaration sourceDeclaration,
+	                     SupportedCSS css) {
+		this(propertyName, new Quadruple(css, propertyName) {{
+			curProp = property;
+			curValue = value;
+			curSource = sourceDeclaration;
+		}});
+	}
+	
+	public PropertyValue(PropertyValue propertyValue) {
+		this(propertyValue.propertyName, propertyValue.propertyValue);
+	}
+	
+	PropertyValue(String propertyName, Quadruple propertyValue) {
+		if (propertyValue.isEmpty())
+			throw new IllegalArgumentException();
 		this.propertyName = propertyName;
-		this.property = property;
-		this.value = value;
-		this.sourceDeclaration = sourceDeclaration;
+		this.propertyValue = propertyValue;
 		init();
 	}
 
 	// called from constructor and from clone()
 	private void init() {
+		property = propertyValue.getProperty(true);
+		value = propertyValue.getValue(true);
+		sourceDeclaration = propertyValue.getSourceDeclaration(true);
 		if (value != null)
 			declaration = value;
 		else if (sourceDeclaration != null && sourceDeclaration.getProperty().equals(propertyName))
@@ -133,8 +155,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 				clone = (PropertyValue)super.clone(); }
 			catch (CloneNotSupportedException e) {
 				throw new InternalError("coding error"); }}
-		if (value != null)
-			clone.value = (Term<?>)value.clone();
+		clone.propertyValue = (Quadruple)propertyValue.clone();
 		clone.init();
 		return clone;
 	}
@@ -149,20 +170,21 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	
 	/* ============================= */
 	
-	private static BrailleCSSDeclarationTransformer transformerInstance
-		= new BrailleCSSDeclarationTransformer(new SupportedBrailleCSS(true, false));
-	private final static BrailleCSSParserFactory parserFactoryInstance = new BrailleCSSParserFactory();
-	
 	public static PropertyValue parse(String property, String value) {
-		return parse(parserFactoryInstance.parseDeclaration(property + ":" + value));
+		return parse(SimpleInlineStyle.parserFactory.parseDeclaration(property + ":" + value));
 	}
 	
-	public static PropertyValue parse(Declaration declaration) {
-		Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
-		Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
-		if (!transformerInstance.parseDeclaration(declaration, properties, terms))
+	public static PropertyValue parse(final Declaration declaration) {
+		final Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
+		final Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
+		if (!SimpleInlineStyle.transformerInstance.parseDeclaration(declaration, properties, terms))
 			return null;
-		String propertyName = declaration.getProperty();
-		return new PropertyValue(propertyName, properties.get(propertyName), terms.get(propertyName), declaration);
+		final String propertyName = declaration.getProperty();
+		return new PropertyValue(
+			propertyName,
+			properties.get(propertyName),
+			terms.get(propertyName),
+			declaration,
+			SimpleInlineStyle.cssInstance);
 	}
 }
