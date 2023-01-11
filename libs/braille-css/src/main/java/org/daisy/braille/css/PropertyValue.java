@@ -85,6 +85,20 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 		return sourceDeclaration;
 	}
 	
+	/**
+	 * Returns <code>null</code> if the property is unknown.
+	 */
+	public PropertyValue getDefault() {
+		Quadruple q = propertyValue.getDefault();
+		if (q == propertyValue)
+			return this;
+		else if (q.isEmpty())
+			// unknown property
+			return null;
+		else
+			return new PropertyValue(propertyName, q);
+	}
+	
 	private boolean concretized = false;
 	
 	/**
