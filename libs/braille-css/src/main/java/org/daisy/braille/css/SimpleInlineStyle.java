@@ -16,9 +16,9 @@ import cz.vutbr.web.domassign.SingleMapNodeData;
 
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
-	private final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
-	private final static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
-	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
+	final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
+	final static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
+	final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
 
@@ -48,12 +48,23 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		this(declarations, parentStyle, transformerInstance, cssInstance);
 	}
 	
+	/**
+	 * @param transformer {@link DeclarationTransformer} to be used for declarations that are not
+	 *                    {@link PropertyValue} instances.
+	 * @param css         {@link SupportedCSS} to be used for declarations that are not {@link
+	 *                    PropertyValue} instances.
+	 */
 	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle,
 	                         DeclarationTransformer transformer, SupportedCSS css) {
 		super(transformer, css);
 		if (declarations != null)
-			for (Declaration d : declarations)
-				super.push(d);
+			for (Declaration d : declarations) {
+				if (d instanceof PropertyValue) {
+					PropertyValue v = (PropertyValue)d;
+					map.put(v.getProperty(), v.propertyValue);
+				} else
+					super.push(d);
+			}
 		if (parentStyle != null) {
 			super.inheritFrom(parentStyle.concretize());
 			super.concretize();
@@ -85,13 +96,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			}
 			public PropertyValue next() {
 				String prop = props.next();
-				Declaration d = getSourceDeclaration(prop);
-				if (d == null) throw new IllegalStateException(); // can not happen
-				return new PropertyValue(
-					prop,
-					SimpleInlineStyle.this.getProperty(prop),
-					SimpleInlineStyle.this.getValue(prop),
-					d);
+				return new PropertyValue(prop, map.get(prop));
 			}
 			public void remove() {
 				props.remove();
@@ -100,12 +105,10 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	}
 	
 	public PropertyValue get(String property) {
-		CSSProperty p = getProperty(property);
-		if (p == null)
+		Quadruple q = map.get(property);
+		if (q == null)
 			return null;
-		Declaration d = getSourceDeclaration(property);
-		if (d == null) throw new IllegalStateException(); // can not happen
-		return new PropertyValue(property, p, getValue(property), d);
+		return new PropertyValue(property, q);
 	}
 
 	@Override
@@ -121,7 +124,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			if (value != null)
 				sb.append(value);
 			else
-				sb.append(getProperty(key)); }
+				sb.append(getProperty(key).toString()); }
 		return sb.toString();
 	}
 	
