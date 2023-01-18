@@ -8,6 +8,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [DAISY 2.02 to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3/)
 * [DAISY 3 to DAISY 2.02](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202/)
 * [DAISY 3 to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3/)
+* [DAISY 3 to MP3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/)
 * [DTBook Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/)
 * [DTBook to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3/)
 * [DTBook to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3/)
