@@ -3,6 +3,7 @@ package org.daisy.pipeline.persistence.impl.job;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
@@ -20,13 +21,14 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcResult;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
+import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -50,6 +52,7 @@ public final class PersistentJobContext extends AbstractJobContext {
         public static final long serialVersionUID=1L;
         private static final Logger logger = LoggerFactory.getLogger(PersistentJobContext.class);
 
+        private String scriptId = null;
 
         //embedded mapper
         @Embedded
@@ -82,7 +85,7 @@ public final class PersistentJobContext extends AbstractJobContext {
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
         private List<PersistentOptionResult> optionResults= new ArrayList<PersistentOptionResult>();
 
-        PersistentJobContext(AbstractJobContext ctxt) {
+        PersistentJobContext(AbstractJobContext ctxt, PersistentClientStorage clientStorage) {
                 super(ctxt);
                 // Map complex objects to their Persistent representation
                 logger.debug("coping the objects to the model ");
@@ -90,7 +93,18 @@ public final class PersistentJobContext extends AbstractJobContext {
                 this.inputPorts = ContextHydrator.dehydrateInputPorts(this.getId(), this.getScript(), this.input);
                 this.options = ContextHydrator.dehydrateOptions(this.getId(), this.input);
                 this.parameters = ContextHydrator.dehydrateParameters(this.getId(), this.getScript(), this.input);
-                this.pClient = (PersistentClient)this.getClient();
+                if (this.getClient() instanceof PersistentClient)
+                        this.pClient = (PersistentClient)this.getClient();
+                else if (clientStorage == null)
+                        throw new IllegalArgumentException("expected client to be of type PersistenceClient");
+                else if (this.getClient() == Client.DEFAULT_ADMIN)
+                        this.pClient = (PersistentClient)clientStorage.defaultClient();
+                else
+                        try {
+                                this.pClient = (PersistentClient)clientStorage.get(this.getClient().getId()).get();
+                        } catch (NoSuchElementException e) {
+                                throw new IllegalArgumentException("client does not exist");
+                        }
                 //everything is inmutable but this
                 this.updateResults();
         }
@@ -125,7 +139,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                 this.results = rBuilder.build();
         }
 
-        private void updateResults(){
+        void updateResults() {
                 if(this.portResults.size()==0)
                         this.portResults=ContextHydrator.dehydratePortResults(this);
                 if(this.optionResults.size()==0)
@@ -174,28 +188,18 @@ public final class PersistentJobContext extends AbstractJobContext {
         @Column(name="script_id")
         @Access(AccessType.PROPERTY)
         private String getScriptId() {
-                if(this.getScript()!=null){
+                if (scriptId != null) {
+                        return scriptId;
+                } else if (this.getScript() != null) {
                         return this.getScript().getDescriptor().getId();
-                }else{
-                        //throw new IllegalStateException("Script is null");
-                        return "";
+                } else {
+                        throw new IllegalStateException("Script is null");
                 }
         }
 
         @SuppressWarnings("unused") //used by jpa
         private void setScriptId(String id) {
-                if(registry!=null){
-                        XProcScriptService service=registry.getScript(id);
-                        if (service!=null){
-                                XProcScript xcript=service.load();
-                                logger.debug(String.format("load script %s",xcript));
-                                this.script = xcript;
-                                return;
-                        }
-                }
-                throw new IllegalStateException(
-                                String.format("Illegal state for recovering XProcScript: registry %s"
-                                        ,this.getScript(),registry));
+                scriptId = id;
         }
 
         @Column(name="nice_name")
@@ -210,23 +214,18 @@ public final class PersistentJobContext extends AbstractJobContext {
                 this.niceName = Name;
         }
 
-        @Override
-        protected boolean collectResults(XProcResult result) {
-                //build the result set
-                boolean status = super.collectResults(result);
-                //and make sure that the new values get stored
-                this.updateResults();
-                return status;
-        }
-
-        @Transient
-        private static ScriptRegistry registry;
-        static void setScriptRegistry(ScriptRegistry sregistry) {
-                registry=sregistry;
-        }
-
-        void setMonitor(JobMonitorFactory monitorFactory) {
-                this.monitor = monitorFactory.newJobMonitor(id);
+        void finalize(ScriptRegistry registry, JobMonitorFactory monitorFactory) {
+                if (registry != null) {
+                        XProcScriptService service = registry.getScript(scriptId);
+                        if (service == null)
+                                throw new IllegalStateException(
+                                        String.format("Illegal state for recovering XProcScript %s: registry %s",
+                                                      scriptId, registry));
+                        script = service.load();
+                        logger.debug(String.format("load script %s", script));
+                }
+                if (monitorFactory != null)
+                        monitor = monitorFactory.newJobMonitor(id);
         }
 
         // for unit tests

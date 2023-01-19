@@ -20,9 +20,9 @@ import javax.persistence.TypedQuery;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,23 +50,18 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	@Transient
 	Database db=null;
 
-	PersistentJob(Database db, AbstractJobContext ctxt) {
-		this(db, ctxt, null);
-	}
-
-	PersistentJob(Database db, AbstractJobContext ctxt, Priority priority) {
-		super(new PersistentJobContext(ctxt), priority);
+	PersistentJob(Database db, AbstractJob job, PersistentClientStorage clientStorage) {
+		super(new PersistentJobContext(job.getContext(), clientStorage), job.getPriority(), job.xprocEngine, true);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 		this.db.addObject(this);
-		changeStatus(Status.IDLE);
 	}
 
 	/**
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null,null);
+		super(null, null, null, true);
 	}
 
 	@Enumerated(EnumType.ORDINAL)
@@ -76,9 +71,9 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 		return super.getStatus();
 	}
 
-	// public for unit test
+	// used by jpa
 	@Override
-	public void setStatus(Status status) {
+	protected void setStatus(Status status) {
 		super.setStatus(status);
 	}
 
@@ -114,14 +109,12 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 			      db.getEntityManager().createNamedQuery("Job.getAll", AbstractJob.class);
 		List<AbstractJob> jobs=query.getResultList();
 		return jobs;
-		
-
 	}
 
 	//this will watch for changes in the status and update the db
 	@Override
-	protected synchronized void onStatusChanged(Job.Status to) {
-		logger.info("Changing Status:"+to);	
+	protected synchronized void onStatusChanged() {
+		logger.info("Changing Status:"+status);
 		if(this.db!=null){
 			logger.debug("Updating object");	
 			db.updateObject(this);
@@ -132,6 +125,12 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 		}else{
 			logger.warn("Object not updated as the Database is null");
 		}
+	}
+
+	@Override
+	protected void onResultsChanged() {
+		// make sure that the new values get stored
+		((PersistentJobContext)ctxt).updateResults();
 	}
 
 	void setDatabase(Database db){

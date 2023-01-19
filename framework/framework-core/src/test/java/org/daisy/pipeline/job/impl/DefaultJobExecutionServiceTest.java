@@ -7,9 +7,11 @@ import org.daisy.common.fuzzy.InferenceEngine;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.job.AbstractJob;
+import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobContext;
 import org.daisy.pipeline.job.JobId;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -17,12 +19,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.carrotsearch.junitbenchmarks.BenchmarkOptions;
 import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Monitor;
@@ -34,7 +38,7 @@ public class DefaultJobExecutionServiceTest {
         public TestRule benchmarkRun = new BenchmarkRule();
         static int execCount=0;
         static char[] animation=new char[]{'|','/','-','\\'};
-        Job[] jobs = new Job[100];
+        AbstractJob[] jobs = new AbstractJob[100];
         DefaultJobExecutionService service;
         RunnableTracker tracker;
         Monitor mon;
@@ -57,11 +61,11 @@ public class DefaultJobExecutionServiceTest {
                 mon = new Monitor();
                 tracker = new RunnableTracker();
                 service = Mockito.spy(new DefaultJobExecutionService());
-                jobs = new Job[100];
+                jobs = new AbstractJob[100];
                 for (int i=0;i<100;i++){
-                        JobContext ctxt = Mockito.mock(JobContext.class);
+                        AbstractJobContext ctxt = Mockito.mock(AbstractJobContext.class);
                         Client client = Mockito.mock(Client.class);
-                        Job job = Mockito.mock(Job.class);
+                        AbstractJob job = Mockito.mock(AbstractJob.class);
                         JobId id = Mockito.mock(JobId.class);
 
                         Mockito.when(client.getPriority()).thenReturn(Priority.LOW);

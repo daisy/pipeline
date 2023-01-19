@@ -1,12 +1,14 @@
 package org.daisy.pipeline.job;
 
-import org.daisy.common.priority.Priority;
-import org.daisy.common.xproc.XProcEngine;
+import java.net.URI;
+
+import org.daisy.pipeline.clients.Client;
+import org.daisy.pipeline.script.XProcScript;
 
 /**
  * The Class Job defines the execution unit.
  */
-public interface Job {
+public interface Job extends Runnable, AutoCloseable {
 
     public enum Status {
         IDLE,
@@ -19,28 +21,36 @@ public interface Job {
     /**
      * @return the job ID.
      */
-    public default JobId getId() {
-        return getContext().getId();
-    }
+    public JobId getId();
+
+    public String getNiceName();
+
+    public XProcScript getScript();
 
     /**
      * @return the job status
      */
     public Status getStatus();
 
-    /**
-     * @return the job priority
-     */
-    public Priority getPriority();
+    public JobMonitor getMonitor();
+
+    public URI getLogFile();
+
+    public JobResultSet getResults();
+
+    public JobBatchId getBatchId();
+
+    public Client getClient();
+
+    /////// AutoCloseable ///////
 
     /**
-     * @return The context of this job.
+     * Close the job. Will clean up any resources associated with the job and will make it
+     * impossible to call any methods on it.
+     *
+     * Call this method before discarding the job. This method should not be called when the job is
+     * managed by a {@link JobManager}.
      */
-    public JobContext getContext();
-
-    /**
-     * Run the job using the {@link XProcEngine}.
-     */
-    public void run(XProcEngine engine);
+    public void close();
 
 }

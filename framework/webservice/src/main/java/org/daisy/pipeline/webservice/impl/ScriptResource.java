@@ -4,7 +4,6 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
 import org.daisy.pipeline.webservice.xml.ScriptXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -69,7 +68,7 @@ public class ScriptResource extends AuthenticatedResource {
 			return this.getErrorRepresentation("Script not found");
 		}
 		setStatus(Status.SUCCESS_OK);
-		ScriptXmlWriter writer = XmlWriterFactory.createXmlWriterForScript(script);
+		ScriptXmlWriter writer = new ScriptXmlWriter(script, getRequest().getRootRef().toString());
 		DomRepresentation dom = new DomRepresentation(
 				MediaType.APPLICATION_XML,
 				writer.withDetails().getXmlDocument());

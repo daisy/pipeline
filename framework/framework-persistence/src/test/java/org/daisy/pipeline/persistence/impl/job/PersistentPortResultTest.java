@@ -2,11 +2,11 @@ package org.daisy.pipeline.persistence.impl.job;
 
 import java.net.URI;
 
-import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.persistence.impl.Database;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,14 +19,12 @@ public class PersistentPortResultTest {
 	URI path=URI.create("file:/tmp/file.xml");
 	String idx="file.xml";
 	JobId id1;
-	JobResult result;
 	@Before	
 	public void setUp(){
-		result= new JobResult.Builder().withPath(path).withIdx(idx).build();
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
 
-		pi1=new PersistentPortResult(id1,result,name);
+		pi1=new PersistentPortResult(id1, new JobResult(idx, path, null) {}, name);
 		db.addObject(pi1);
 	}	
 
@@ -36,17 +34,10 @@ public class PersistentPortResultTest {
 	}	
 
 	@Test
-	public void portName() throws Exception{
-		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,new Index(idx)));
+	public void testPersistPortResult() throws Exception{
+		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1, idx));
 		Assert.assertEquals(name,stored.getPortName());
-		
+		Assert.assertEquals(idx, stored.getIdx());
+		Assert.assertEquals(path, stored.getPath());
 	}
-
-	@Test
-	public void result() throws Exception{
-		PersistentPortResult stored=db.getEntityManager().find(PersistentPortResult.class,new PersistentPortResult.PK(id1,new Index(idx)));
-		Assert.assertEquals(result,stored.getJobResult());
-		
-	}
-	
 }

@@ -6,13 +6,15 @@ import org.daisy.pipeline.script.BoundXProcScript;
 import com.google.common.base.Optional;
 
 /**
- * The Interface JobManager offers a simple way of managing jobs.
+ * The interface JobManager offers a simple way of managing jobs.
  */
-public interface JobManager {
+public interface JobManager extends JobFactory {
 
 	/**
-	 * Creates a job for the given script
+	 * Creates a job builder for the given script with bound inputs and outputs. Upon creating the
+	 * job, it will be added to the storage and the execution queue.
 	 */
+	@Override
 	public JobBuilder newJob(BoundXProcScript boundScript);
 
 	/**
@@ -46,12 +48,14 @@ public interface JobManager {
 
 	public JobQueue getExecutionQueue();
 
-	public interface JobBuilder {
+	public interface JobBuilder extends JobFactory.JobBuilder {
+		@Override
 		public JobBuilder isMapping(boolean mapping);
+		@Override
 		public JobBuilder withResources(JobResources resources);
+		@Override
 		public JobBuilder withNiceName(String niceName);
 		public JobBuilder withPriority(Priority priority);
 		public JobBuilder withBatchId(JobBatchId id);
-		public Optional<Job> build();
 	}
 }

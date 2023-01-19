@@ -60,7 +60,6 @@ public class TestLocalJobs extends Base {
 		Assert.assertEquals("Nice name is set", "NICE_NAME",
 		                    ((JAXBElement)job.getNicenameOrBatchIdOrScript().get(0)).getValue().toString());
 		Assert.assertTrue("Status is set", job.getStatus().value().length() > 0);
-		Assert.assertEquals("The priority is low", "low", job.getPriority().toString().toLowerCase());
 	}
 	
 	@Test

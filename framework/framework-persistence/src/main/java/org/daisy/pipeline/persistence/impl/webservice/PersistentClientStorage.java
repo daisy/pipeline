@@ -9,6 +9,7 @@ import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.persistence.impl.Database;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,10 +21,7 @@ public class PersistentClientStorage implements ClientStorage {
         private static Logger logger = LoggerFactory
                 .getLogger(PersistentClientStorage.class);
 
-        //This client is the default client for "non client-aware" uses of the api
-        final static PersistentClient DEFAULT = new PersistentClient(
-                        "DEFAULT_PERSISTENT_CLIENT_1685216", "", Role.ADMIN, "",
-                        Priority.MEDIUM);
+        private PersistentClient defaultClient = null;
 
         private Database database;
 
@@ -33,14 +31,14 @@ public class PersistentClientStorage implements ClientStorage {
 
         @Override
         public List<? extends Client> getAll() {
-                //ignore default
-                return database.runQuery(String.format("select c from PersistentClient as c where c.id <>'%s'",DEFAULT.getId()),
-                                PersistentClient.class);
+                // ignore default client
+                return database.runQuery(
+                        String.format("select c from PersistentClient as c where c.id <>'%s'", Client.DEFAULT_ADMIN.getId()),
+                        PersistentClient.class);
         }
 
         @Override
         public Optional<Client> get(String id) {
-                //get null?
                 String q = String.format(
                                 "select c from PersistentClient as c where c.id='%s'", id);
                 try {
@@ -53,8 +51,8 @@ public class PersistentClientStorage implements ClientStorage {
 
         @Override
         public boolean delete(String id) {
-                //check if it's default
-                if(DEFAULT.getId().equals(id)){
+                // don't delete the default client
+                if (Client.DEFAULT_ADMIN.getId().equals(id)) {
                         return false;
                 }
                 Optional<Client>clientInDb = get(id);
@@ -68,13 +66,11 @@ public class PersistentClientStorage implements ClientStorage {
         public Optional<Client> update(String id,String secret, Role role,
                         String contactInfo, Priority priority) {
                 Optional<Client> optClient=this.get(id);
-                //no such client
                 if(!optClient.isPresent()){
                         return optClient;
                 }
-
-
-                if(optClient.get().getId().equals(DEFAULT.getId())){
+                // don't update default client
+                if (optClient.get().getId().equals(Client.DEFAULT_ADMIN.getId())) {
                         return Optional.absent();
                 }
                 PersistentClient pClient=(PersistentClient)optClient.get(); 
@@ -108,13 +104,13 @@ public class PersistentClientStorage implements ClientStorage {
 
         @Override
         public Client defaultClient() {
-                //try and get the client from the db
-                Optional<Client> def = this.get(DEFAULT.getId());
-                if (!def.isPresent()) {
-                        this.database.addObject(DEFAULT);
+                // add client to database if needed
+                if (defaultClient == null) {
+                        defaultClient = new PersistentClient(Client.DEFAULT_ADMIN);
+                        if (!get(defaultClient.getId()).isPresent()) {
+                                database.addObject(defaultClient);
+                        }
                 }
-                return DEFAULT;
+                return defaultClient;
         }
-
-
 }

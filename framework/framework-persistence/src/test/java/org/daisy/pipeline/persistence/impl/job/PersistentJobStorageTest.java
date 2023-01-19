@@ -38,10 +38,13 @@ public class PersistentJobStorageTest {
         PersistentClient cl = new PersistentClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
         PersistentClient clAdmin = new PersistentClient("power_paco","asdf",Role.ADMIN,"afasd",Priority.LOW);
         @Mock ScriptRegistry registry;
+        String oldBase;
 
         @Before
         public void setUp() {
 		db=DatabaseProvider.getDatabase();
+                oldBase = System.getProperty("org.daisy.pipeline.data", "");
+                System.setProperty("org.daisy.pipeline.data", System.getProperty("java.io.tmpdir"));
                 storage=new PersistentJobStorage();
                 storage.setEntityManagerFactory(DatabaseProvider.getEMF());
                 storage.setRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
@@ -49,8 +52,8 @@ public class PersistentJobStorageTest {
                 db.addObject(this.clAdmin);
                 clientsToDel.add(this.cl);
                 clientsToDel.add(this.clAdmin);
-                
         }
+
         @After
         public void tearDown() {
                 //for (Job j: jobsToDel){
@@ -62,25 +65,22 @@ public class PersistentJobStorageTest {
                 for (Client c : clientsToDel) {
                         this. db.deleteObject(c);
                 }
-                
+                System.setProperty("org.daisy.pipeline.data", oldBase);
         }
         @Test
         public void addJob() throws Exception{
-                AbstractJobContext ctxt = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job=this.storage.add(Priority.MEDIUM, ctxt);
+                Optional<AbstractJob> job = this.storage.add(Mocks.buildJob((Client)cl));
                 this.jobsToDel.add(job.get());
                 Assert.assertTrue("Job was created",job.isPresent());
         }
 
         @Test
         public void getJob() throws Exception{
-                AbstractJobContext ctxt=Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxt);
-                this.jobsToDel.add(job.get());
-
-                Optional<AbstractJob> fromDatabase = this.storage.get(ctxt.getId());
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(job);
+                Optional<AbstractJob> fromDatabase = this.storage.get(job.getId());
                 Assert.assertTrue("A job was found",fromDatabase.isPresent());
-                Assert.assertEquals("And happens to be the one we're looking for",ctxt.getId(),fromDatabase.get().getId());
+                Assert.assertEquals("And happens to be the one we're looking for", job.getId(), fromDatabase.get().getId());
         }
 
         @Test
@@ -92,16 +92,12 @@ public class PersistentJobStorageTest {
 
         @Test
         public void remove() throws Exception{
-                AbstractJobContext ctxt = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxt);
-                this.jobsToDel.add(job.get());
-
-                Optional<AbstractJob> deleted = this.storage.remove(ctxt.getId());
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(job);
+                Optional<AbstractJob> deleted = this.storage.remove(job.getId());
                 Assert.assertTrue("The job's been removed",deleted.isPresent());
-
-                Optional<AbstractJob> fromDatabase = this.storage.get(ctxt.getId());
+                Optional<AbstractJob> fromDatabase = this.storage.get(job.getId());
                 Assert.assertFalse("The job shouldn't exist no more",fromDatabase.isPresent());
-
         }
 
         @Test
@@ -113,86 +109,57 @@ public class PersistentJobStorageTest {
 
         @Test
         public void iterate() throws Exception{
-
-                AbstractJobContext ctxt = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxt);
-                this.jobsToDel.add(job.get());
-
-                ctxt=Mocks.buildContext((Client)cl);
-                job=this.storage.add(Priority.MEDIUM,ctxt);
-                this.jobsToDel.add(job.get());
-
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(job);
+                job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(job);
                 Assert.assertEquals("Two jobs is what we have in store",2,Iterables.size(this.storage));
                 
         }
-        
 
         @Test
         public void byClientGetJob() throws Exception{
-                AbstractJobContext ctxtMine = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxtMine);
-                this.jobsToDel.add(job.get());
-
-                AbstractJobContext ctxtOther = Mocks.buildContext();
-                job = this.storage.add(Priority.MEDIUM, ctxtOther);
-                this.jobsToDel.add(job.get());
-                this.clientsToDel.add(ctxtOther.getClient());
-
-                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).get(ctxtMine.getId());
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(jobMine);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                this.jobsToDel.add(jobOther);
+                this.clientsToDel.add(jobOther.getClient());
+                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).get(jobMine.getId());
                 Assert.assertTrue("A job was found",fromDatabase.isPresent());
-                Assert.assertEquals("And it's mine",ctxtMine.getId(),fromDatabase.get().getId());
-
-                fromDatabase=this.storage.filterBy(this.cl).get(ctxtOther.getId());
+                Assert.assertEquals("And it's mine", jobMine.getId(),fromDatabase.get().getId());
+                fromDatabase=this.storage.filterBy(this.cl).get(jobOther.getId());
                 Assert.assertFalse("Someone else's job is not found",fromDatabase.isPresent());
         }
 
         @Test
         public void byClientRemoveJob() throws Exception{
-
-                AbstractJobContext ctxtMine = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxtMine);
-                this.jobsToDel.add(job.get());
-
-                AbstractJobContext ctxtOther = Mocks.buildContext();
-                job=this.storage.add(Priority.MEDIUM,ctxtOther);
-                this.jobsToDel.add(job.get());
-                this.clientsToDel.add(ctxtOther.getClient());
-
-                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).remove(ctxtMine.getId());
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(jobMine);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                this.jobsToDel.add(jobOther);
+                this.clientsToDel.add(jobOther.getClient());
+                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).remove(jobMine.getId());
                 Assert.assertTrue("A job was removed",fromDatabase.isPresent());
-
-                fromDatabase=this.storage.filterBy(this.cl).remove(ctxtOther.getId());
+                fromDatabase=this.storage.filterBy(this.cl).remove(jobOther.getId());
                 Assert.assertFalse("Someone else's job is not removed",fromDatabase.isPresent());
-
-                fromDatabase=this.storage.get(ctxtMine.getId());
+                fromDatabase=this.storage.get(jobMine.getId());
                 Assert.assertFalse("My job can't be found",fromDatabase.isPresent());
-
-                fromDatabase=this.storage.get(ctxtOther.getId());
+                fromDatabase=this.storage.get(jobOther.getId());
                 Assert.assertTrue("But the other job is still there",fromDatabase.isPresent());
-
         }
 
         @Test
         public void byClientIterate() throws Exception{
-
-                AbstractJobContext ctxtMine = Mocks.buildContext((Client)cl);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxtMine);
-                this.jobsToDel.add(job.get());
-
-                ctxtMine=Mocks.buildContext((Client)cl);
-                job=this.storage.add(Priority.MEDIUM,ctxtMine);
-                this.jobsToDel.add(job.get());
-
-                AbstractJobContext ctxtOther = Mocks.buildContext();
-                job=this.storage.add(Priority.MEDIUM,ctxtOther);
-                this.jobsToDel.add(job.get());
-                this.clientsToDel.add(ctxtOther.getClient());
-
-                ctxtOther=Mocks.buildContext();
-                job=this.storage.add(Priority.MEDIUM,ctxtOther);
-                this.jobsToDel.add(job.get());
-                this.clientsToDel.add(ctxtOther.getClient());
-
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(jobMine);
+                jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                this.jobsToDel.add(jobMine);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                this.jobsToDel.add(jobOther);
+                this.clientsToDel.add(jobOther.getClient());
+                jobOther = this.storage.add(Mocks.buildJob()).get();
+                this.jobsToDel.add(jobOther);
+                this.clientsToDel.add(jobOther.getClient());
                 Assert.assertEquals("I have two jobs",2,Iterables.size(this.storage.filterBy(cl)));
                 Assert.assertEquals("But everyone have four",4,Iterables.size(this.storage));
 
@@ -209,20 +176,15 @@ public class PersistentJobStorageTest {
         public void byClientAndBatchIdGetJob() throws Exception{
                 JobBatchId id1=JobIdFactory.newBatchId();
                 JobBatchId id2=JobIdFactory.newBatchId();
-                AbstractJobContext ctxtMineId1 = Mocks.buildContext((Client)cl,id1);
-                Optional<AbstractJob> job = this.storage.add(Priority.MEDIUM, ctxtMineId1);
-                this.jobsToDel.add(job.get());
-
-                AbstractJobContext ctxtOtherId2 = Mocks.buildContext((Client)cl,id2);
-                job=this.storage.add(Priority.MEDIUM,ctxtOtherId2);
-                this.jobsToDel.add(job.get());
-                this.clientsToDel.add(ctxtOtherId2.getClient());
-
-                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).filterBy(id1).get(ctxtMineId1.getId());
+                AbstractJob jobMineId1 = this.storage.add(Mocks.buildJob((Client)cl, id1)).get();
+                this.jobsToDel.add(jobMineId1);
+                AbstractJob jobOtherId2 = this.storage.add(Mocks.buildJob((Client)cl, id2)).get();
+                this.jobsToDel.add(jobOtherId2);
+                this.clientsToDel.add(jobOtherId2.getClient());
+                Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).filterBy(id1).get(jobMineId1.getId());
                 Assert.assertTrue("A job was found",fromDatabase.isPresent());
-                Assert.assertEquals("And it's from my batch",ctxtMineId1.getId(),fromDatabase.get().getId());
-
-                fromDatabase=this.storage.filterBy(this.cl).filterBy(id1).get(ctxtOtherId2.getId());
+                Assert.assertEquals("And it's from my batch", jobMineId1.getId(), fromDatabase.get().getId());
+                fromDatabase=this.storage.filterBy(this.cl).filterBy(id1).get(jobOtherId2.getId());
                 Assert.assertFalse("Someone else's job is not found",fromDatabase.isPresent());
         }
 

@@ -12,8 +12,6 @@ import java.util.List;
 
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.URIMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * IO related utities.
@@ -25,11 +23,6 @@ public class IOHelper {
 
 	/** The Constant BLOCK_SIZE. */
 	private static final int BLOCK_SIZE = 1024;
-
-
-
-	private static final Logger logger = LoggerFactory
-			.getLogger(IOHelper.class);
 
 	public static File makeDirs(String ...pathParts) throws IOException{
 		StringBuilder builder = new StringBuilder();
@@ -127,21 +120,5 @@ public class IOHelper {
 			}
 
 		return result;
-	}
-
-	public static boolean delete(URI parent){
-		return deleteDir(new File(parent));
-	}
-	public static boolean deleteDir(File parent){
-		logger.debug("Deleting directory:"+parent);
-		File[] fList=parent.listFiles();
-		if (fList!=null)
-		for( File f: parent.listFiles()){
-			if (f.isDirectory()){
-				IOHelper.deleteDir(f);
-			}
-			f.delete();
-		}
-		return parent.delete();
 	}
 }

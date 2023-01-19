@@ -16,7 +16,6 @@ import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobBatchId;
-import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -72,14 +71,12 @@ public class PipelineWebService extends Application {
         /** The script registry. */
         private ScriptRegistry scriptRegistry;
 
-        private WebserviceStorage webserviceStorage;
-        private CallbackHandler callbackHandler = null;
+        private WebserviceStorage webserviceStorage = null;
+        private PushNotifier pushNotifier = null;
 
         private long shutDownKey=0L;
 
         private Component component;
-
-        private JobExecutionService executionQueue;
 
         private DatatypeRegistry datatypeRegistry;
 
@@ -129,8 +126,9 @@ public class PipelineWebService extends Application {
          */
         @Activate
         public void init() {
+                if (webserviceStorage == null)
+                        webserviceStorage = new VolatileWebserviceStorage();
                 if (!checkAuthenticationSanity()){
-
                         try {
                                 this.halt();
                         } catch (Exception e) {
@@ -141,11 +139,9 @@ public class PipelineWebService extends Application {
                 //get rid of stale jobs
                 this.cleanUp();
                 Routes routes = new Routes();
-                
                 logger.info(String.format("Starting webservice on port %d",
                                 routes.getPort()));
                 component = new Component();
-                
                 if (!conf.isSsl()){
                         component.getServers().add(Protocol.HTTP, routes.getHost(),routes.getPort());
                         logger.debug("Using HTTP");
@@ -156,12 +152,9 @@ public class PipelineWebService extends Application {
                         server.getContext().getParameters().add("keyPassword",conf.getSslKeyPassword());
                         logger.debug("Using HTTPS");
                 }
-                
-                
                 component.getDefaultHost().attach(routes.getPath(), this);
                 this.setStatusService(new PipelineStatusService());
                 try {
-
                         component.start();
                         logger.debug("component started");
                         generateStopKey();
@@ -172,8 +165,8 @@ public class PipelineWebService extends Application {
                         }catch (Exception innerException) {
                                 logger.error("Error shutting down:"+e.getMessage());
                         }
-
                 }
+                pushNotifier = new PushNotifier(jobManagerFactory);
         }
 
         private void cleanUp() {
@@ -263,6 +256,7 @@ public class PipelineWebService extends Application {
         @Deactivate
         public void close() {
                 try {
+                        pushNotifier.close();
                         if (this.component!=null)
                                 this.component.stop();
                         this.stop();
@@ -329,18 +323,6 @@ public class PipelineWebService extends Application {
                 this.scriptRegistry = scriptRegistry;
         }
 
-        @Reference(
-           name = "callback-handler",
-           unbind = "-",
-           service = CallbackHandler.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setCallbackHandler(CallbackHandler callbackHandler) {
-                this.callbackHandler = callbackHandler;
-        }
-
-
         /**
          * @return the webserviceStorage
          */
@@ -355,7 +337,7 @@ public class PipelineWebService extends Application {
            name = "webservice-storage",
            unbind = "-",
            service = WebserviceStorage.class,
-           cardinality = ReferenceCardinality.MANDATORY,
+           cardinality = ReferenceCardinality.OPTIONAL,
            policy = ReferencePolicy.STATIC
         )
         public void setWebserviceStorage(WebserviceStorage webserviceStorage) {
@@ -363,7 +345,7 @@ public class PipelineWebService extends Application {
         }
 
         public CallbackHandler getCallbackHandler() {
-                return callbackHandler;
+                return pushNotifier;
         }
 
         @Reference(

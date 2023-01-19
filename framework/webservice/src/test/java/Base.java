@@ -57,7 +57,6 @@ public abstract class Base extends AbstractTest {
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
-			"org.daisy.libs:servlet-api:?",
 			// for some reason logging-activator needs to start before restlet but after jersey-client (clientlib-java-jaxb)
 			"org.daisy.pipeline:logging-activator:?",
 			"org.restlet.osgi:org.restlet:?",
@@ -66,7 +65,6 @@ public abstract class Base extends AbstractTest {
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:xproc-api:?",
-			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:calabash-adapter:?",
 		};
 	}
@@ -111,6 +109,7 @@ public abstract class Base extends AbstractTest {
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.ws.authentication", "false");
 		p.setProperty("org.daisy.pipeline.ws.localfs", "true");
+		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
 	}
 	

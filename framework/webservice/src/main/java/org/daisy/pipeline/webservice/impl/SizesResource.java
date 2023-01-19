@@ -2,8 +2,6 @@ package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.job.JobSize;
 import org.daisy.pipeline.webservice.xml.JobsSizeXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -36,7 +34,8 @@ public class SizesResource extends AdminResource {
 
 		setStatus(Status.SUCCESS_OK);
 
-		JobsSizeXmlWriter writer = XmlWriterFactory.createXmlWriterForJobSizes(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()));
+		JobsSizeXmlWriter writer = new JobsSizeXmlWriter(JobSize.getSizes(webservice().getJobManager(this.getClient()).getJobs()),
+		                                                 getRequest().getRootRef().toString());
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
                                 writer.getXmlDocument());
 		logResponse(dom);

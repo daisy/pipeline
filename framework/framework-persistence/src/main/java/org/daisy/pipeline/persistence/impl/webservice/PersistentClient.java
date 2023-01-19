@@ -31,12 +31,20 @@ public class PersistentClient implements Client {
         public PersistentClient() {
         }
 
-        public PersistentClient(String id, String secret, Role role, String contactInfo,Priority priority) {
+        public PersistentClient(String id, String secret, Role role, String contactInfo, Priority priority) {
                 this.id = id;
                 this.secret = secret;
                 this.role = role;
                 this.contactInfo = contactInfo;
                 this.priority=priority;
+        }
+
+        public PersistentClient(Client client) {
+                this(client.getId(),
+                     client.getSecret(),
+                     client.getRole(),
+                     client.getContactInfo(),
+                     client.getPriority());
         }
 
         public String getId() {

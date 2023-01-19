@@ -3,6 +3,7 @@ package org.daisy.pipeline.job;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -13,8 +14,6 @@ import java.util.zip.ZipOutputStream;
 import javax.xml.namespace.QName;
 
 import org.daisy.pipeline.job.impl.IOHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Lists;
@@ -22,40 +21,27 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 
 public final class JobResultSet {
-        private static final Logger logger = LoggerFactory.getLogger(JobResultSet.class);
+
+        public final static JobResultSet EMPTY = new Builder().build();
+
         public static class Builder{
-                private final Multimap<String,JobResult> outputPorts=LinkedListMultimap.create();
-                private final Multimap<QName,JobResult> options=LinkedListMultimap.create();
 
-                /**
-                 * Constructs a new instance.
-                 */
-                public Builder() {
-                }
+                protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+                protected final Multimap<QName,JobResult> options = LinkedListMultimap.create();
 
-                public Builder addResult(String port,JobResult result){
-                        outputPorts.put(port,result);   
+                public Builder addResult(String port, String idx, URI path, String mediaType) {
+                        outputPorts.put(port, new JobResult(idx, path, mediaType));
                         return this;
                 }
 
-                public Builder addResults(QName option,Collection<JobResult> results){
-                        options.putAll(option,results); 
-                        return this;
-                }
-                public Builder addResults(String port,Collection<JobResult> results){
-                        outputPorts.putAll(port,results);       
+                public Builder addResult(QName option, String idx, URI path, String mediaType) {
+                        options.put(option, new JobResult(idx, path, mediaType));
                         return this;
                 }
 
-                public Builder addResult(QName option,JobResult result){
-                        logger.debug(String.format("Adding result %s",result));
-                        options.put(option,result);     
-                        return this;
+                public JobResultSet build() {
+                        return new JobResultSet(outputPorts, options);
                 }
-                public JobResultSet build(){
-                        return new JobResultSet(outputPorts,options);
-                }
-        
         }
 
         private final Multimap<String,JobResult> outputPorts;
@@ -98,7 +84,7 @@ public final class JobResultSet {
                                                         return 0;
                                                 }
                                                 JobResult result = resultsIt.next();
-                                                ZipEntry entry = new ZipEntry(result.getIdx().toString());
+                                                ZipEntry entry = new ZipEntry(URI.create(result.getIdx()).getPath());
                                                 zipos.putNextEntry(entry);
                                                 InputStream is = result.getPath().toURL().openStream();
                                                 IOHelper.dump(is, zipos);

@@ -1,32 +1,33 @@
 package org.daisy.pipeline.webservice;
 
-import java.net.URI;
+import java.math.BigDecimal;
+import java.util.List;
 
-import org.daisy.pipeline.clients.Client;
+import org.daisy.common.messaging.Message;
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.Job.Status;
 
-public class Callback {
+public abstract class Callback {
+
 	public enum CallbackType {STATUS, MESSAGES}
 
-	private final URI href;
 	private final CallbackType type;
 	private final Job job;
-	private int frequency = 1;
-	private final Client client;
+	private final int frequency;
+	private final int firstMessage;
 
-	public Callback(Job job, Client client, URI href, CallbackType type, int frequency) {
-		this.href = href;
+	/**
+	 * @param firstMessage sequence number of the first expected message (0-based).
+	 */
+	public Callback(Job job, CallbackType type, int frequency, int firstMessage) {
 		this.type = type;
 		this.job = job;
-		this.client = client;
 		this.frequency = frequency;
-	}
-	public Job getJob() {
-		return job;
+		this.firstMessage = firstMessage;
 	}
 
-	public URI getHref() {
-		return href;
+	public Job getJob() {
+		return job;
 	}
 
 	public CallbackType getType() {
@@ -37,12 +38,15 @@ public class Callback {
 		return frequency;
 	}
 
-	public Client getClient() {
-		return client;
+	/**
+	 * Sequence number of the first expected message.
+	 */
+	public int getFirstMessage() {
+		return firstMessage;
 	}
 
-	@Override
-	public String toString() {
-		return "Callback [href='" + href+ "'; client=" + client + "]";
-	}
+	public abstract boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress);
+
+	public abstract boolean postStatusUpdate(Status status);
+
 }

@@ -41,22 +41,14 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 import com.google.common.io.CharStreams;
 
-import org.apache.commons.io.FileUtils;
-
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobManager;
-import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.JobMonitor;
-import org.daisy.pipeline.job.JobMonitorFactory;
+import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -78,27 +70,20 @@ import org.slf4j.LoggerFactory;
 public class FrameworkCoreTest extends AbstractTest {
 	
 	@Inject
-	public JobManagerFactory jobManagerFactory;
-	
-	@Inject
-	public WebserviceStorage webserviceStorage;
+	public JobFactory jobFactory;
 	
 	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public JobMonitorFactory jobMonitorFactory;
 	
 	@Test
 	public void testCaughtError() throws IOException {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			OutputPortReader resultPort = new OutputPortReader();
-			Job job = newJob("catch-xproc-error",
-			                 new XProcInput.Builder().build(),
-			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
+		OutputPortReader resultPort = new OutputPortReader();
+		try (Job job = newJob("catch-xproc-error",
+		                      new XProcInput.Builder().build(),
+		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -125,8 +110,7 @@ public class FrameworkCoreTest extends AbstractTest {
 					"\\E$"
 				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				Assert.assertFalse(messages.hasNext());
@@ -147,11 +131,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xproc-error");
+		try (Job job = newJob("xproc-error")) {
 			waitForStatus(Job.Status.ERROR, job, 2000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -181,11 +163,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("cx-eval-error");
+		try (Job job = newJob("cx-eval-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -217,11 +197,10 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
 			OutputPortReader resultPort = new OutputPortReader();
-			Job job = newJob("catch-xslt-terminate-error",
-			                 new XProcInput.Builder().build(),
-			                 new XProcOutput.Builder().withOutput("result", resultPort).build());
+		try (Job job = newJob("catch-xslt-terminate-error",
+		                      new XProcInput.Builder().build(),
+		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
 			Iterator<Reader> results = resultPort.read();
 			Assert.assertTrue(results.hasNext());
@@ -245,8 +224,7 @@ public class FrameworkCoreTest extends AbstractTest {
 					"\\E$"
 				).apply(errorXml));
 			Assert.assertFalse(results.hasNext());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				Assert.assertFalse(messages.hasNext());
@@ -267,11 +245,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xslt-terminate-error");
+		try (Job job = newJob("xslt-terminate-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -300,11 +276,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("java-step-runtime-error");
+		try (Job job = newJob("java-step-runtime-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -334,11 +308,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("java-function-runtime-error");
+		try (Job job = newJob("java-function-runtime-error")) {
 			waitForStatus(Job.Status.ERROR, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -377,11 +349,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xslt-warning");
+		try (Job job = newJob("xslt-warning")) {
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -409,11 +379,9 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("xproc-warning");
+		try (Job job = newJob("xproc-warning")) {
 			waitForStatus(Job.Status.SUCCESS, job, 1000);
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			MessageAccessor accessor = monitor.getMessageAccessor();
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Iterator<Message> messages = printMessages(accessor.getAll().iterator());
 			try {
 				int seq = 0;
@@ -436,10 +404,8 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		try {
-			Job job = newJob("progress-messages");
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			final MessageAccessor accessor = monitor.getMessageAccessor();
+		try (Job job = newJob("progress-messages")) {
+			MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
 				Iterator<BigDecimal> mustSee = stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();
@@ -537,15 +503,15 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
-		Client client = webserviceStorage.getClientStorage().defaultClient();
-		JobManager jobManager = jobManagerFactory.createFor(client);
 		XProcScriptService script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))
-		                 .isMapping(true)
-		                 .withNiceName("nice")
-		                 .build()
-		                 .get();
+		Job job = jobFactory.newJob(BoundXProcScript.from(script.load(), input, output))
+		                    .isMapping(true)
+		                    .withNiceName("nice")
+		                    .build()
+		                    .get();
+		new Thread(job).start();
+		return job;
 	}
 	
 	static void waitForStatus(Job.Status status, Job job, long timeout) {
@@ -684,7 +650,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			throwable.getThrowable().printStackTrace(out);
 	}
 	
-	// FIXME: can dependencies on modules-registry, framework-volatile be eliminated?
+	// FIXME: can dependencies on modules-registry be eliminated?
 	@Override
 	public String[] testDependencies() {
 		return new String[]{
@@ -700,34 +666,19 @@ public class FrameworkCoreTest extends AbstractTest {
 			"org.apache.httpcomponents:httpclient-osgi:?",
 			"org.apache.httpcomponents:httpcore-osgi:?",
 			"org.daisy.libs:jing:?",
-			"org.daisy.pipeline:framework-volatile:?",
 			"org.daisy.pipeline:logging-appender:?"
 		};
 	}
 	
-	static final File PIPELINE_BASE = new File(new File(PathUtils.getBaseDir()), "target/tmp");
-	static final File PIPELINE_DATA = new File(PIPELINE_BASE, "data");
-
 	@Override
 	protected Properties systemProperties() {
 		Properties p = new Properties();
-		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "false");
 		return p;
 	}
 	
-	@OSGiLessConfiguration
-	public void setup() {
-		try {
-			FileUtils.deleteDirectory(PIPELINE_BASE);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Override @Configuration
 	public Option[] config() {
-		setup();
 		return super.config();
 	}
 

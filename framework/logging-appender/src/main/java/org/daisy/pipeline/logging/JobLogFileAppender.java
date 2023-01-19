@@ -70,9 +70,9 @@ public class JobLogFileAppender extends SiftingAppender {
 								FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>() {{
 										this.name = "FILE-" + jobId;
 										// FIXME: We know that the log file is stored in this location because
-										// AbstractJobContext also calls JobURIUtils.getLogFile(). Still, it would be
-										// nicer to use JobContext.getLogFile(). The problem with this however is that
-										// we can not bind the JobManager OSGi service because we're in a fragment (not
+										// DefaultJobBuilder also calls JobURIUtils.getLogFile(). Still, it would be
+										// nicer to use Job.getLogFile(). The problem with this however is that we
+										// can not bind the JobManager OSGi service because we're in a fragment (not
 										// a bundle).
 										this.fileName = JobURIUtils.getLogFile(jobId).getAbsolutePath();
 										this.append = false;

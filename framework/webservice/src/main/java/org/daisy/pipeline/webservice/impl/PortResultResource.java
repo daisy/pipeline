@@ -12,6 +12,6 @@ public class PortResultResource extends NamedResultResource{
 
 	@Override
 	protected Collection<JobResult> gatherResults(Job job, String name) {
-		return job.getContext().getResults().getResults(name);
+		return job.getResults().getResults(name);
 	}
 }

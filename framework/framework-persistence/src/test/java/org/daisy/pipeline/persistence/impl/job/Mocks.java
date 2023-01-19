@@ -14,6 +14,7 @@ import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
@@ -47,10 +48,6 @@ public class Mocks   {
 	public static final URI in=URI.create("file:/tmp/in/");
 	public static final URI out=URI.create("file:/tmp/out/");
 	public static final String portResult="res"; 
-
-	
-	public static final JobResult res1= new JobResult.Builder().withPath(in).withIdx(value1).build();
-	public static final JobResult res2= new JobResult.Builder().withPath(out).withIdx(value2).build();
 
 	public static class DummyScriptService implements ScriptRegistry{
 
@@ -122,6 +119,22 @@ public class Mocks   {
 		return script;
 	}
 
+	public static AbstractJob buildJob() {
+		return buildJob(Priority.MEDIUM);
+	}
+
+	public static AbstractJob buildJob(Priority priority) {
+		return new AbstractJob(buildContext(), priority, null, true) {};
+	}
+
+	public static AbstractJob buildJob(Client client) {
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, true) {};
+	}
+
+	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, true) {};
+	}
+
 	public static AbstractJobContext buildContext(){  
                 return buildContext(null,null);
 	}
@@ -130,15 +143,15 @@ public class Mocks   {
                 return buildContext(client,null);
         }
 	public static AbstractJobContext buildContext(Client client,JobBatchId batchId){  
-                //new RuntimeException().printStackTrace();
 		final XProcScript script = Mocks.buildScript();
-		//ScriptRegistryHolder.setScriptRegistry(new Mocks.DummyScriptService(script));
 		//Input setup
 		final XProcInput input= new XProcInput.Builder().withInput("source",new Mocks.SimpleSourceProvider(file1)).withInput("source", new Mocks.SimpleSourceProvider(file2)).withOption(opt1Qname,value1).withOption(opt2Qname,value2).withParameter(paramPort,new QName(qparam),paramVal).build();
 		
 		final JobId id = JobIdFactory.newId();
 		final URIMapper mapper= new URIMapper(in,out);
-		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult,res1).addResult(opt1Qname,res2).build();
+		final JobResultSet rSet=new JobResultSet.Builder().addResult(portResult, value1, in, null)
+		                                                  .addResult(opt1Qname, value2, out, null)
+		                                                  .build();
                 //add to the db
                 if ( client ==null){
                         client=new PersistentClient("Client_"+Math.random(),"b",Role.ADMIN,"a@a",Priority.LOW);

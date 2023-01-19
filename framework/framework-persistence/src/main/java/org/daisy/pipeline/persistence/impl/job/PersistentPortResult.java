@@ -9,7 +9,6 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
@@ -30,7 +29,7 @@ public class PersistentPortResult   {
 	String mediaType;
 
 	public PersistentPortResult(JobId jobId, JobResult result,String port) {
-		Index idx = null;
+		String idx = null;
 		try {
 			idx = result.getIdx();
 		} catch (Exception e) {
@@ -111,9 +110,6 @@ public class PersistentPortResult   {
 		return this.id.getIdx();
 	}
 
-	public JobResult getJobResult(){
-		return new JobResult.Builder().withPath(this.getPath()).withIdx(this.getIdx()).withMediaType(this.getMediaType()).build();
-	}
 	@Embeddable
 	public static class PK implements Serializable{
 
@@ -130,9 +126,9 @@ public class PersistentPortResult   {
 		 * @param jobId The jobId for this instance.
 		 * @param name The name for this instance.
 		 */
-		public PK(JobId jobId, Index idx) {
+		public PK(JobId jobId, String idx) {
 			this.jobId = jobId.toString();
-			this.idx = idx.toString();
+			this.idx = idx;
 		}
 
 		/**

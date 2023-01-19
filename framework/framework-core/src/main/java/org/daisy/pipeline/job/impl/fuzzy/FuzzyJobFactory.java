@@ -5,6 +5,7 @@ import org.daisy.common.fuzzy.FuzzyVariable;
 import org.daisy.common.fuzzy.InferenceEngine;
 import org.daisy.common.fuzzy.MembershipFunctions;
 import org.daisy.common.priority.PrioritizableRunnable;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
 
 import com.google.common.base.Supplier;
@@ -13,7 +14,7 @@ public class FuzzyJobFactory {
         
 
 
-        public static PrioritizableRunnable<Job> newFuzzyRunnable(final Job job,Runnable runnable){
+        public static PrioritizableRunnable<Job> newFuzzyRunnable(final AbstractJob job, Runnable runnable){
                 return new PrioritizableRunnable<Job>(runnable,
                                 new FuzzyPriorityCalculator<Job>(ENGINE,
                                         new Supplier<double[]>() {

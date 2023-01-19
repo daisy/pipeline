@@ -40,13 +40,13 @@ class ContextHydrator {
 
 	static void hydrateResultPorts(JobResultSet.Builder builder,List<PersistentPortResult> portResults){
 		for(PersistentPortResult pRes: portResults){
-			builder.addResult(pRes.getPortName(),pRes.getJobResult());
+			builder.addResult(pRes.getPortName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
 		}
 	}
 
 	static void hydrateResultOptions(JobResultSet.Builder builder,List<PersistentOptionResult> optionResults){
 		for(PersistentOptionResult pRes: optionResults){
-			builder.addResult(pRes.getOptionName(),pRes.getJobResult());
+			builder.addResult(pRes.getOptionName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
 		}
 	}
 	

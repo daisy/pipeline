@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 public class PipelineWebServiceConfiguration {
 
         
-        private boolean usesAuthentication = true;
+        private boolean usesAuthentication = false;
         private long maxRequestTime = 600000; // 10 minutes in ms
         private String tmpDir=System.getProperty("java.io.tmpdir","/tmp");
         private boolean ssl=false;

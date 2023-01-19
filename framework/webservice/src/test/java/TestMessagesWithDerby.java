@@ -30,10 +30,10 @@ public class TestMessagesWithDerby extends Base {
 		Assert.assertTrue("The request is present", req.isPresent());
 		Job job = client().sendJob(req.get());
 		deleteAfterTest(job);
-		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.SUCCESS, 500, 10000) {
+		Callable<Job> poller = new JobPoller(client(), job.getId(), JobStatus.SUCCESS, 500, 20000) {
 			BigDecimal lastProgress = BigDecimal.ZERO;
-			Iterator<BigDecimal> mustSee = TestMessages.stream(".25", ".375", ".5", ".55", ".675", ".8", "1")
-			                                           .map(d -> new BigDecimal(d)).iterator();
+			Iterator<BigDecimal> mustSee = TestMessages.stream(".25", ".375", ".5", ".55", ".675", ".8", ".9", "1")
+			                                           .map(BigDecimal::new).iterator();
 			BigDecimal mustSeeNext = mustSee.next();
 			List<BigDecimal> seen = new ArrayList<BigDecimal>();
 			@Override
@@ -106,6 +106,7 @@ public class TestMessagesWithDerby extends Base {
 		Properties p = super.systemProperties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
+		p.setProperty("org.daisy.pipeline.persistence", "true");
 		p.setProperty("org.daisy.pipeline.messaging.cache.buffer", "5");
 		return p;
 	}
@@ -118,7 +119,6 @@ public class TestMessagesWithDerby extends Base {
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
-			"org.daisy.libs:servlet-api:?",
 			"org.daisy.pipeline:logging-activator:?",
 			"org.restlet.osgi:org.restlet:?",
 			"org.restlet.osgi:org.restlet.ext.fileupload:?",

@@ -87,8 +87,8 @@ public abstract class MessageAccessor {
 	 * sequence number can then be used to get the list of all messages affected by the change, via
 	 * createFilter().inRange(...).getMessages().
 	 *
-	 * A sequence number is never lower than the sequence numbers previously received, but the same
-	 * sequence number may occur more than once.
+	 * A sequence number is never null and never lower than the sequence numbers previously
+	 * received, but the same sequence number may occur more than once.
 	 */
 	public abstract void listen(Consumer<Integer> callback);
 	public abstract void unlisten(Consumer<Integer> callback);

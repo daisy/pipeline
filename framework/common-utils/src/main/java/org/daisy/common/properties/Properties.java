@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.google.common.collect.ImmutableSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,10 +21,6 @@ public final class Properties {
 	private static java.util.Properties propertiesFromFile = null;
 	private final static java.util.Properties systemProperties = System.getProperties();
 	private final static Map<String,String> systemEnv = System.getenv();
-	private final static Set<String> internalProperties = ImmutableSet.of(
-		"org.daisy.pipeline.updater.bin",
-		"org.daisy.pipeline.updater.deployPath",
-		"org.daisy.pipeline.updater.releaseDescriptor");
 	private static Logger logger;
 	private static Logger logger() {
 		if (logger == null) logger = LoggerFactory.getLogger(Properties.class);
@@ -42,16 +36,14 @@ public final class Properties {
 			propertiesFromFile = readPropertiesFromFile();
 		if (propertiesFromFile != null)
 			for (String p : propertiesFromFile.stringPropertyNames())
-				if (p.startsWith("org.daisy.pipeline.") && !internalProperties.contains(p))
+				if (p.startsWith("org.daisy.pipeline."))
 					keys.add(p);
 		for (String p : systemProperties.stringPropertyNames())
-			if (!internalProperties.contains(p))
-				keys.add(p);
+			keys.add(p);
 		for (String envKey : systemEnv.keySet())
 			if (envKey.startsWith("PIPELINE2_")) {
 				String p = "org.daisy.pipeline." + envKey.substring(10).replace('_','.').toLowerCase();
-				if (!internalProperties.contains(p))
-					keys.add(p); }
+				keys.add(p); }
 		return keys;
 	}
 
@@ -90,18 +82,12 @@ public final class Properties {
 		if (key.startsWith("org.daisy.pipeline.")) {
 			String envKey = "PIPELINE2_" + key.substring(19).replace('.', '_').toUpperCase();
 			if (systemEnv.containsKey(envKey))
-				if (!internalProperties.contains(key))
-					return expand(systemEnv.get(envKey));
-				else
-					logger().warn("Environment variable '{}' ignored", envKey);
+				return expand(systemEnv.get(envKey));
 		}
 		// then come system properties
 		String v = systemProperties.getProperty(key);
 		if (v != null)
-			if (!internalProperties.contains(key))
-				return expand(v);
-			else
-				logger().warn("System property '{}' ignored", key);
+			return expand(v);
 		// and finally properties defined in the pipeline.properties file
 		if (key.startsWith("org.daisy.pipeline.")) {
 			if (propertiesFromFile == null)
@@ -109,21 +95,9 @@ public final class Properties {
 			if (propertiesFromFile != null) {
 				v = propertiesFromFile.getProperty(key);
 				if (v != null)
-					if (!internalProperties.contains(key))
-						return expand(v);
-					else
-						logger().warn("Property '{}' in pipeline.properties file ignored", key);
+					return expand(v);
 			}
 		}
-		// internal properties are hard-coded
-		if ("org.daisy.pipeline.updater.deployPath".equals(key))
-			return expand("${org.daisy.pipeline.home}/");
-		else if ("org.daisy.pipeline.updater.bin".equals(key))
-			// pipeline-assembly is responsible for placing the file at this location
-			return expand("${org.daisy.pipeline.home}/updater/pipeline-updater");
-		else if ("org.daisy.pipeline.updater.releaseDescriptor".equals(key))
-			// pipeline-assembly is responsible for placing the file at this location
-			return expand("${org.daisy.pipeline.home}/etc/releaseDescriptor.xml");
 		// return default value
 		return defaultValue;
 	}

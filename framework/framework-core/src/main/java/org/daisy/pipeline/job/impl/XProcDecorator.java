@@ -37,7 +37,7 @@ public class XProcDecorator {
 	/** The m generated outputs. */
 	private final HashSet<String> generatedOutputs = Sets.newHashSet();
 	
-	enum TranslatableOption{
+	public enum TranslatableOption{
 		ANY_DIR_URI("anyDirURI"),
 		ANY_FILE_URI("anyFileURI");
 		private final String name;

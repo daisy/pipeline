@@ -16,6 +16,8 @@ import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.Database;
+import org.daisy.pipeline.script.ScriptRegistry;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -26,6 +28,7 @@ import com.google.common.base.Supplier;
 
 public class PersistentJobContextTest  {
 
+	ScriptRegistry scriptRegistry;
 	Database db;
 	PersistentJobContext ctxt;
 	JobId id;
@@ -33,9 +36,8 @@ public class PersistentJobContextTest  {
 	URI logFile;
 	@Before	
 	public void setUp(){
-		//script setup
-		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		ctxt=new PersistentJobContext(Mocks.buildContext(null,JobIdFactory.newBatchId()));
+		scriptRegistry = new Mocks.DummyScriptService(Mocks.buildScript());
+		ctxt=new PersistentJobContext(Mocks.buildContext(null, JobIdFactory.newBatchId()), null);
 		logFile=ctxt.getLogFile();
 		id=ctxt.getId();
 		batchId=ctxt.getBatchId();
@@ -59,6 +61,7 @@ public class PersistentJobContextTest  {
 	@Test
 	public void storeInput(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
+		jCtxt.finalize(scriptRegistry, null);
 		Assert.assertEquals(jCtxt.getId(),id);
 		Assert.assertEquals(jCtxt.getScript().getDescriptor().getId(),Mocks.scriptId);
 		Assert.assertEquals(jCtxt.getLogFile(),this.logFile);
@@ -102,14 +105,14 @@ public class PersistentJobContextTest  {
 	@Test
 	public void resultPortTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.portResult));
-		Assert.assertEquals(l.get(0),Mocks.res1);
+		Assert.assertEquals(jCtxt.getResults().getResults(Mocks.portResult),
+		                    ctxt.getResults().getResults(Mocks.portResult));
 	}
 	@Test
 	public void resultOptionTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class,id.toString());
-		List<JobResult> l=new LinkedList<JobResult>(jCtxt.getResults().getResults(Mocks.opt1Qname));
-		Assert.assertEquals(l.get(0),Mocks.res2);
+		Assert.assertEquals(jCtxt.getResults().getResults(Mocks.opt1Qname),
+		                    ctxt.getResults().getResults(Mocks.opt1Qname));
 	}
 	@Test
 	public void batchIdTest(){

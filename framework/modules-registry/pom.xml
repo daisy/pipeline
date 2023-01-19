@@ -6,45 +6,61 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.9-SNAPSHOT</version>
+    <version>1.14.10</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>modules-registry</artifactId>
-  <version>4.0.2-SNAPSHOT</version>
+  <version>4.1.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Module Registry</name>
 
   <dependencies>
-      <dependency>
-        <!-- for OSGIModuleBuilder -->
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.core</artifactId>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.compendium</artifactId>
-        <scope>provided</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>common-utils</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>xmlcatalog</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>ds-to-spi-runtime</artifactId>
-        <scope>provided</scope>
-      </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <!-- for OSGIModuleBuilder -->
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies (for javax.xml.stream.XMLInputFactory)
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>woodstox-osgi-adapter</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -56,9 +72,16 @@
           <instructions>
             <_dsannotations>
               org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-              org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry
+              org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+              org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
+            <!-- FIXME: this is a temporary solution to not break the many bundles that depend on
+                 the package, eventually we'll want to give it the same version as the bundle -->
+            <Export-Package>
+              org.daisy.pipeline.modules,
+              org.daisy.pipeline.xmlcatalog;version=2.0.8
+            </Export-Package>
           </instructions>
         </configuration>
       </plugin>
@@ -75,7 +98,8 @@
             <configuration>
               <includes>
                 org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-                org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry
+                org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+                org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
               </includes>
             </configuration>
           </execution>

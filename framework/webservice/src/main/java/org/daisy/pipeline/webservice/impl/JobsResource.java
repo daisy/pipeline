@@ -37,13 +37,11 @@ import org.daisy.pipeline.script.ScriptRegistry;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.webservice.Callback;
 import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -97,7 +95,11 @@ public class JobsResource extends AuthenticatedResource {
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient());
-                JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+                JobsXmlWriter writer = new JobsXmlWriter(
+                        jobMan.getJobs(),
+                        webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                    .getExecutionQueue(),
+                        getRequest().getRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }
@@ -170,7 +172,7 @@ public class JobsResource extends AuthenticatedResource {
                         }
                 }
                 if (logger.isDebugEnabled())
-                        logger.debug(XmlUtils.DOMToString(doc));
+                        logger.debug(XmlUtils.nodeToString(doc));
 
                 ValidationStatus status= Validator.validateJobRequest(doc, webservice());
 
@@ -195,15 +197,27 @@ public class JobsResource extends AuthenticatedResource {
                 
                 //store the config
                 webservice().getStorage().getJobConfigurationStorage()
-                        .add(job.get().getId(),XmlUtils.DOMToString(doc));
+                    .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
-                Document jobXml = writer.withAllMessages().withScriptDetails().getXmlDocument();
+                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
+                if (job.get().getStatus() == Job.Status.IDLE) {
+                        writer.withPriority(getJobPriority(job.get()));
+                }
+                Document jobXml = writer.withScriptDetails().getXmlDocument();
+
+                // initiate callbacks
+                registerCallbacks(job.get(), doc);
+
                 DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, jobXml);
                 setStatus(Status.SUCCESS_CREATED);
                 logResponse(dom);
                 return dom;
 
+        }
+
+        private Priority getJobPriority(Job job) {
+                return webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                   .getExecutionQueue().getJobPriority(job.getId());
         }
 
         private Representation badRequest(Exception e) {
@@ -390,40 +404,38 @@ public class JobsResource extends AuthenticatedResource {
                 }
                 boolean mapping=!webservice().getConfiguration().isLocalFS();
                 //logger.debug("MAPPING "+mapping);
-                Optional<Job> newJob= jobMan.newJob(bound).isMapping(mapping)
+                return jobMan.newJob(bound).isMapping(mapping)
                         .withNiceName(niceName).withBatchId(JobIdFactory.newBatchIdFromString(batchId))
                         .withPriority(priority).withResources(resourceCollection).build();
-                if(!newJob.isPresent()){
-                        return Optional.absent();
-                }
+        }
 
+        /**
+         * Initiate callbacks declared in the job request XML.
+         *
+         * @param doc The job request XML.
+         */
+        private void registerCallbacks(Job job, Document doc) {
                 NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
-                        String href = elm.getAttribute("href");
                         CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
                         String frequency = elm.getAttribute("frequency");
-                        Callback callback = null;
                         int freq = 0;
                         if (frequency.length() > 0) {
                                 freq = Integer.parseInt(frequency);
                         }
-
                         try {
-                                callback = new Callback(newJob.get(), this.getClient(), new URI(href), type, freq);
+                                URI href = new URI(elm.getAttribute("href"));
+                                CallbackHandler handler = webservice().getCallbackHandler();
+                                if (handler == null) {
+                                        throw new RuntimeException("No push notifier");
+                                }
+                                handler.addCallback(new PosterCallback(job, type, freq, href, getClient(),
+                                                                       getRequest().getRootRef().toString()));
                         } catch (URISyntaxException e) {
                                 logger.warn("Cannot create callback: " + e.getMessage());
                         }
-
-                        if (callback != null) {
-                                CallbackHandler pushNotifier = webservice().getCallbackHandler();
-                                if (pushNotifier == null) {
-                                        throw new RuntimeException("No push notifier");
-                                }
-                                pushNotifier.addCallback(callback);
-                        }
                 }
-                return newJob;
         }
 
         /**

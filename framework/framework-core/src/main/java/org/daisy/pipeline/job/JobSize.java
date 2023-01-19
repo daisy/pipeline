@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import org.daisy.pipeline.job.impl.JobURIUtils;
+
 import com.google.common.io.Files;
 
 public final class JobSize {

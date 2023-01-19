@@ -8,24 +8,22 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.impl.IOHelper;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 public class JobResultSetTest   {
 
-	JobResult jres1;
-	JobResult jres2;
 	String content1="Bonjour le monde!";
 	String content2="Hei verden!";
 	InputStream is;
@@ -50,12 +48,12 @@ public class JobResultSetTest   {
 		PrintWriter pw2= new PrintWriter(new FileOutputStream(new File(res2)));
 		pw2.append(content2);
 		pw2.close();
-		
-		jres1= new JobResult.Builder().withPath(res1).withIdx(new Index(uri1.toString())).build();
-		jres2= new JobResult.Builder().withPath(res2).withIdx(new Index(uri2.toString())).build();
-		List<JobResult> results= new LinkedList<JobResult>();
-		results.add(jres1);
-		results.add(jres2);
+
+		Collection<JobResult> results = new JobResultSet.Builder().addResult("foo", uri1.toString(), res1, null)
+		                                                          .addResult("foo", uri2.toString(), res2, null)
+		                                                          .build()
+		                                                          .getResults("foo");
+
 		InputStream is=JobResultSet.asZip(results);
 		tmpFile=File.createTempFile("diasy_test",".zip");
 		IOHelper.dump(is,new FileOutputStream(tmpFile));

@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.9-SNAPSHOT</version>
+    <version>1.14.10</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>webservice</artifactId>
-  <version>2.6.1-SNAPSHOT</version>
+  <version>3.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Web Service</name>
@@ -32,10 +32,6 @@
     <dependency>
       <groupId>commons-io</groupId>
       <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.libs</groupId>
-      <artifactId>servlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -86,11 +82,6 @@
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -164,8 +155,7 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.webservice.impl.PipelineWebService,
-                org.daisy.pipeline.webservice.impl.PushNotifier
+                org.daisy.pipeline.webservice.impl.PipelineWebService
               </includes>
             </configuration>
           </execution>
@@ -192,8 +182,7 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.webservice.impl.PipelineWebService,
-              org.daisy.pipeline.webservice.impl.PushNotifier
+              org.daisy.pipeline.webservice.impl.PipelineWebService
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
           </instructions>
@@ -243,11 +232,16 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <skip>true</skip>
+          <!--<skip>true</skip>-->
           <reuseForks>false</reuseForks>
           <systemPropertyVariables>
             <pax.exam.logging>none</pax.exam.logging>
-            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
+            <!--
+                PaxExam tests disabled by default because they often fail due to "The forked VM
+                terminated without properly saying goodbye." errors. (It is possible that it happens
+                when tests are run with OSGiLessRunner too, but less likely.)
+            -->
+            <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
           <trimStackTrace>false</trimStackTrace>
         </configuration>
@@ -283,7 +277,7 @@
       </dependencies>
     </profile>
     <profile>
-      <id>noSkipTests</id>
+      <id>noSkipPaxExamTests</id>
       <build>
         <plugins>
           <plugin>
@@ -291,6 +285,9 @@
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
               <skip>false</skip>
+              <systemPropertyVariables>
+                <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
+              </systemPropertyVariables>
             </configuration>
           </plugin>
         </plugins>

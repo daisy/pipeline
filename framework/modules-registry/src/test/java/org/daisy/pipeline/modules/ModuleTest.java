@@ -26,13 +26,15 @@ public class ModuleTest {
 		StaxXmlCatalogParser catalogParser = new StaxXmlCatalogParser();
 		catalogParser.setFactory(XMLInputFactory.newInstance());
 		catalogParser.activate();
-		final File resourcesDir = new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile());
-		URI catalogUri = new File(resourcesDir, "catalog.xml").toURI();
+		final File moduleDir = new File(
+			new File(this.getClass().getProtectionDomain().getCodeSource().getLocation().getFile()),
+			"module");
+		URI catalogUri = new File(moduleDir, "catalog.xml").toURI();
 		XmlCatalog catalog = catalogParser.parse(catalogUri);
 		ResourceLoader resourceLoader = new ResourceLoader() {
 			public URL loadResource(String path) {
 				try {
-					return new File(resourcesDir, path).toURI().toURL(); }
+					return new File(moduleDir, path).toURI().toURL(); }
 				catch (MalformedURLException e) {
 					throw new RuntimeException(e); }
 			}

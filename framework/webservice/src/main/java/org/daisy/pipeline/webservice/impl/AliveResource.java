@@ -1,7 +1,6 @@
 package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.webservice.xml.AliveXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -26,7 +25,8 @@ public class AliveResource extends AuthenticatedResource{
 
     	maybeEnableCORS();
     	setStatus(Status.SUCCESS_OK);
-    	AliveXmlWriter writer = XmlWriterFactory.createXmlWriter(); 
+    	AliveXmlWriter writer = new AliveXmlWriter(webservice().getConfiguration().isLocalFS(),
+    	                                           webservice().getConfiguration().isAuthenticationEnabled());
     	DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
 				writer.getXmlDocument());
 		logResponse(dom);

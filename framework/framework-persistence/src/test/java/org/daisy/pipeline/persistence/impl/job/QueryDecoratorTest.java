@@ -43,22 +43,20 @@ public class QueryDecoratorTest {
         @Mock Predicate pred;
         AbstractJob job;
         Database db;
+
         @Before
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
                 dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
-
-		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		job = new PersistentJob(db, Mocks.buildContext());
-
+                job = new PersistentJob(db, Mocks.buildJob(), null);
         }
+
 	@After
 	public void tearDown(){
 		db.deleteObject(job);
 		db.deleteObject(job.getContext().getClient());
         }
-
 
         @Test
         public void decorate(){
@@ -67,7 +65,6 @@ public class QueryDecoratorTest {
                 dec1.decorateWhere(holder,pred);
                 Mockito.verify(dec1,Mockito.times(1)).getPredicate(holder);
                 Mockito.verify(dec2,Mockito.times(1)).getPredicate(holder);
-                
         }
 
         @Test
@@ -78,5 +75,4 @@ public class QueryDecoratorTest {
                 Mockito.verify(dec,Mockito.times(1)).getPredicate(Mockito.any(QueryHolder.class));
                 Assert.assertEquals("Finds the job",1,query.getResultList().size());
         }
-        
 }

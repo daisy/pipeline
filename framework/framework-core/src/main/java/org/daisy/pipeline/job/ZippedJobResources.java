@@ -47,14 +47,6 @@ public final class ZippedJobResources implements JobResources {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.daisy.pipeline.job.ResourceCollection#getResources()
-	 */
-	@Override
-	public Iterable<Supplier<InputStream>> getResources() {
-		return resources.values();
-	}
-
-	/* (non-Javadoc)
 	 * @see org.daisy.pipeline.job.ResourceCollection#getResource(java.lang.String)
 	 */
 	@Override

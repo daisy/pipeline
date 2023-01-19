@@ -4,7 +4,7 @@ public interface Prioritizable<T>  {
        /**
         * Returns the priority.
         */
-        public abstract double getPriority();
+        public double getPriority();
 
        /**
         * Returns the timestamp.

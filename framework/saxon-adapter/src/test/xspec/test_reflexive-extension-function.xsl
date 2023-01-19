@@ -7,8 +7,13 @@
 	<xsl:function name="x:test" as="xs:string">
 		<xsl:variable name="x" select="MyClass:new('foobar')"/>
 		<xsl:variable name="x" select="MyClass:uppercase($x)"/>
+		<xsl:variable name="x" select="MyClass:innerClass($x)"/>
+		<xsl:variable name="x" select="MyClass:outerClass($x)"/>
+		<xsl:variable name="x" select="MyClass:wrapInArray($x)"/>
+		<xsl:variable name="x" select="$x(1)"/>
 		<xsl:variable name="x" select="MyClass:wrapInMap($x)"/>
-		<xsl:sequence select="string($x('result'))"/>
+		<xsl:variable name="x" select="$x('result')"/>
+		<xsl:sequence select="string($x)"/>
 	</xsl:function>
 
 </xsl:stylesheet>

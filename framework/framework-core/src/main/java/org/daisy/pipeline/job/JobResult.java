@@ -28,64 +28,8 @@ public class JobResult {
                 return String.format("JobResult [#=%s path='%s']", this.idx,this.path);
         }
 
-
-        public static class Builder{
-                private Index idx;
-                private URI path;
-                private String mediaType;
-
-                /**
-                 * Constructs a new instance.
-                 */
-                public Builder() {
-                }
-
-                /**
-                 * Sets the idx for this instance.
-                 *
-                 * @param idx The idx.
-                 */
-                public Builder withIdx(Index idx) {
-                        this.idx = idx;
-                        return this;
-                }
-                /**
-                 * Sets the idx for this instance.
-                 *
-                 * @param idx The idx.
-                 */
-                public Builder withIdx(String idx) {
-                        this.idx = new Index(idx);
-                        return this;
-                }
-
-                /**
-                 * Sets the path for this instance.
-                 *
-                 * @param path The path.
-                 */
-                public Builder withPath(URI path) {
-                        this.path = path;
-                        return this;
-                }
-
-                /**
-                 * Sets the mediaType for this instance.
-                 *
-                 * @param mediaType The mediaType.
-                 */
-                public Builder withMediaType(String mediaType) {
-                        this.mediaType = mediaType;
-                        return this;
-                }
-                
-                public JobResult build(){
-                        return new  JobResult(this.idx,this.path,this.mediaType);
-                }
-        }
-
         //short index for the result 
-        private Index idx;
+        private String idx;
 
         // path to the actual file
         private URI path;
@@ -100,7 +44,7 @@ public class JobResult {
          * @param path The path for this instance.
          * @param mediaType The mediaType for this instance.
          */
-        private JobResult(Index idx, URI path, String mediaType) {
+        protected JobResult(String idx, URI path, String mediaType) {
                 this.idx = idx;
                 this.path = path;
                 this.mediaType = mediaType;
@@ -112,7 +56,15 @@ public class JobResult {
          *
          */
         public JobResult strip(){
-                return new  JobResult(this.idx.stripPrefix(),this.path,this.mediaType);
+                return new JobResult(stripPrefix(idx), path, mediaType);
+        }
+
+        private static String stripPrefix(String index) {
+                int idx = index.indexOf('/');
+                if (idx != 0)
+                        return index.substring(idx + 1);
+                else
+                        return index;
         }
 
         /**
@@ -120,10 +72,10 @@ public class JobResult {
          *
          * @return The idx.
          */
-        public Index getIdx() {
+        public String getIdx() {
                 if (path == null || path.toString().isEmpty())
                         throw new RuntimeException("the document was not stored to disk");
-                return this.idx;
+                return idx;
         }
 
         /**
@@ -161,6 +113,4 @@ public class JobResult {
                         throw new RuntimeException("Error calculating result size",e);
                 }
         }
-
-
 }

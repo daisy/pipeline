@@ -20,12 +20,6 @@ public class JobSizeXmlWriter   {
                 Document doc = XmlUtils.createDom("jobSize");
                 Element jobSizeElm = doc.getDocumentElement();
                 addElementData(size, jobSizeElm);
-                
-                // for debugging only
-                //if (!XmlValidator.validate(doc, XmlValidator.JOBSIZE_SCHEMA_URL)) {
-                        //logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-                //}
-
                 return doc;
         }
 

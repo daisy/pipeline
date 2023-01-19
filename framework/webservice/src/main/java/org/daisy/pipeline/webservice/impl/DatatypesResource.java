@@ -1,7 +1,7 @@
 package org.daisy.pipeline.webservice.impl;
 
 import org.daisy.pipeline.datatypes.DatatypeService;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
+import org.daisy.pipeline.webservice.xml.DatatypesXmlWriter;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -42,9 +42,10 @@ public class DatatypesResource extends AuthenticatedResource {
                 DomRepresentation dom;
                 Iterable<DatatypeService> datatypes = webservice().getDatatypeRegistry().getDatatypes();
                 try {
-                        dom = new DomRepresentation(MediaType.APPLICATION_XML, 
-                                        XmlWriterFactory.
-                                        createXmlWriterForDatatypes(datatypes).getXmlDocument());
+                        dom = new DomRepresentation(MediaType.APPLICATION_XML,
+                                                    new DatatypesXmlWriter(datatypes,
+                                                                           getRequest().getRootRef().toString())
+                                                        .getXmlDocument());
                 } catch (Exception e) {
 
                         setStatus(Status.SERVER_ERROR_INTERNAL);

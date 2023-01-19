@@ -7,11 +7,13 @@
       <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
     </encoder>
   </appender>
+
+  <appender name="JOB_FILE" class="org.daisy.pipeline.logging.JobLogFileAppender">
+    <encoder>
+      <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+    </encoder>
+  </appender>
   
-  <!--
-      Note that this appender is only started within the OSGi container. Within the test runner the
-      appender will fail to start.
-  -->
   <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
     <filter class="org.daisy.pipeline.logging.ThresholdFilter">
       <rootLevel>INFO</rootLevel>
@@ -25,6 +27,7 @@
 
   <root level="DEBUG">
     <appender-ref ref="TEST_LOG"/>
+    <appender-ref ref="JOB_FILE"/>
     <appender-ref ref="JOB"/>
   </root>
 

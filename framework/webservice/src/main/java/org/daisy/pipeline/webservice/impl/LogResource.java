@@ -76,7 +76,7 @@ public class LogResource extends AuthenticatedResource {
 		setStatus(Status.SUCCESS_OK);
 
 		FileRepresentation logfile;
-		URI logfileUri = job.get().getContext().getLogFile();
+		URI logfileUri = job.get().getLogFile();
 		if (logfileUri != null) {
 			logfile = new FileRepresentation(new File(logfileUri), MediaType.TEXT_PLAIN);
 			return logfile;

@@ -5,7 +5,6 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -39,7 +38,11 @@ public class JobBatchResource extends JobsResource{
                         return null;
                 }
                 JobManager jobMan = webservice().getJobManager(this.getClient(),this.batchId);
-                JobsXmlWriter writer = XmlWriterFactory.createXmlWriterForJobs(jobMan.getJobs());
+                JobsXmlWriter writer = new JobsXmlWriter(
+                        jobMan.getJobs(),
+                        webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                    .getExecutionQueue(),
+                        getRequest().getRootRef().toString());
                 if(this.webservice().getConfiguration().isLocalFS()){
                 	writer.withLocalPaths();
                 }

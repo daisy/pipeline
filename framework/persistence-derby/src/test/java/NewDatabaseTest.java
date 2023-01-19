@@ -5,16 +5,14 @@ import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Optional;
 
-import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.clients.WebserviceStorage;
-import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContextFactory;
-import org.daisy.pipeline.job.JobMonitorFactory;
+import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobManager;
+import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundXProcScript;
 import org.daisy.pipeline.script.XProcScriptService;
@@ -32,9 +30,6 @@ public class NewDatabaseTest extends TestBase {
 	
 	@Inject
 	public XProcScriptService script;
-	
-	@Inject
-	public JobMonitorFactory monitorFactory;
 	
 	@Test
 	public void testClientStorage() {
@@ -55,7 +50,6 @@ public class NewDatabaseTest extends TestBase {
 		ClientStorage clientStorage = webserviceStorage.getClientStorage();
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
-		JobContextFactory jobContextFactory = new JobContextFactory(client.get(), monitorFactory);
 		Assert.assertEquals("my-script", script.getId());
 		BoundXProcScript boundScript = BoundXProcScript.from(
 			script.load(),
@@ -63,8 +57,16 @@ public class NewDatabaseTest extends TestBase {
 			new XProcOutput.Builder()
 			    .withOutput("result", () -> new StreamResult(new ByteArrayOutputStream()))
 			    .build());
-		AbstractJobContext jobContext = jobContextFactory.newJobContext(false, "my-job", null, boundScript, null);
-		Optional<AbstractJob> job = jobStorage.add(Priority.MEDIUM, jobContext);
+		JobManager jobManager; {
+			JobManagerFactory factory = new JobManagerFactory() {{
+				setJobStorage(jobStorage);
+				init(); }};
+			jobManager = factory.createFor(client.get());
+		}
+		Optional<Job> job = jobManager.newJob(boundScript)
+		                              .isMapping(false)
+		                              .withNiceName("my-job")
+		                              .build();
 		Assert.assertTrue(job.isPresent());
 		jobStorage.remove(job.get().getId());
 		Assert.assertFalse(jobStorage.iterator().hasNext());

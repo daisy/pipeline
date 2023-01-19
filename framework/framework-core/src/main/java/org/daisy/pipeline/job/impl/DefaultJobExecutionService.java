@@ -6,42 +6,27 @@ import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.common.priority.timetracking.TimeFunctions;
 import org.daisy.common.priority.timetracking.TimeTrackerFactory;
 import org.daisy.common.properties.Properties;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.Client.Role;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
-import org.daisy.pipeline.job.JobExecutionService;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.Marker;
-import org.slf4j.MarkerFactory;
-import org.slf4j.MDC;
 
 import com.google.common.base.Predicate;
-
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
-@Component(
-    name = "job-execution-service",
-    service = { JobExecutionService.class }
-)
 public class DefaultJobExecutionService implements JobExecutionService {
 
         static final String NUM_PROCS="org.daisy.pipeline.procs";
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
                         .getLogger(DefaultJobExecutionService.class);
-        /** The xproc engine. */
-        private XProcEngine xprocEngine;
 
         private PriorityThreadPoolExecutor<Job> executor;
         private JobQueue executionQueue;
@@ -65,37 +50,15 @@ public class DefaultJobExecutionService implements JobExecutionService {
                 return executor;
         }
 
-        public DefaultJobExecutionService(){
+        public DefaultJobExecutionService() {
                 this.executor=DefaultJobExecutionService.configureExecutor();
                 this.executionQueue=new DefaultJobQueue(this.executor); 
         }
-        /**
-         * @param xprocEngine
-         * @param executor
-         * @param executionQueue
-         */
-        public DefaultJobExecutionService(XProcEngine xprocEngine,
-                        PriorityThreadPoolExecutor<Job> executor, JobQueue executionQueue) {
-                this.xprocEngine = xprocEngine;
+
+        private DefaultJobExecutionService(PriorityThreadPoolExecutor<Job> executor,
+                                           JobQueue executionQueue) {
                 this.executor = executor;
                 this.executionQueue = executionQueue;
-        }
-
-        /**
-         * Sets the x proc engine.
-         *
-         * @param xprocEngine
-         *            the new x proc engine
-         */
-        @Reference(
-           name = "xproc-engine",
-           unbind = "-",
-           service = XProcEngine.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        public void setXProcEngine(XProcEngine xprocEngine) {
-                this.xprocEngine = xprocEngine;
         }
 
         /*
@@ -107,29 +70,22 @@ public class DefaultJobExecutionService implements JobExecutionService {
          */
         @Override
         public void submit(final Job job) {
-                //logger.info("Submitting job");
+                if (!(job instanceof AbstractJob))
+                        // should not happen because DefaultJobManager creates AbstractJob objects
+                        throw new IllegalStateException();
+
                 //Make the runnable ready to submit to the fuzzy-prioritized thread pool
-                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(job,
-                                this.getRunnable(job));
+                PrioritizableRunnable<Job> runnable = FuzzyJobFactory.newFuzzyRunnable(
+                        (AbstractJob)job,
+                        getRunnable((AbstractJob)job));
                 //Conviniently wrap it in a PrioritizedJob for later access
                 this.executor.execute(runnable);
         }
 
-        // see  ch.qos.logback.classic.ClassicConstants
-        private static final Marker FINALIZE_SESSION_MARKER = MarkerFactory.getMarker("FINALIZE_SESSION");
-
-        Runnable getRunnable(final Job job) {
-                return new ThreadWrapper(new Runnable() {
-                        @Override
-                        public void run() {
-                                // used in JobLogFileAppender
-                                MDC.put("jobid", job.getId().toString());
-                                logger.info("Starting to log to job's log file too:" + job.getId().toString());
-                                job.run(xprocEngine);
-                                logger.info(FINALIZE_SESSION_MARKER,"Stopping logging to job's log file");
-                                MDC.remove("jobid");
-                        }
-                });
+        // package private for unit tests
+        Runnable getRunnable(final AbstractJob job) {
+                // job.run() will throw an exception
+                return () -> job.managedRun();
         }
 
         /**
@@ -180,19 +136,28 @@ public class DefaultJobExecutionService implements JobExecutionService {
 
         @Override
         public JobExecutionService filterBy(final Client client) {
-                if (client.getRole()==Role.ADMIN){
+                if (client.getRole() == Role.ADMIN) {
                         return this;
-                }else{
-                        return new DefaultJobExecutionService(this.xprocEngine, this.executor, 
-                                        new FilteredJobQueue(this.executor,
-                                                new Predicate<Prioritizable<Job>>() {
-                                                        @Override
-                                                        public boolean apply(Prioritizable<Job> pJob) {
-                                                                return pJob.prioritySource().getContext()
-                                                .getClient().getId().equals(client.getId());
+                } else {
+                        return new DefaultJobExecutionService(
+                                this.executor,
+                                new FilteredJobQueue(
+                                        this.executor,
+                                        new Predicate<Prioritizable<Job>>() {
+                                                @Override
+                                                public boolean apply(Prioritizable<Job> pJob) {
+                                                        try {
+                                                                AbstractJob j = ((AbstractJob)pJob.prioritySource());
+                                                                return j.getContext().getClient().getId().equals(client.getId());
+                                                        } catch (ClassCastException e) {
+                                                                // can not happen because we make sure that no jobs are submitted
+                                                                // that are not of type AbstractJob
+                                                                throw new IllegalStateException("coding error");
                                                         }
                                                 }
-                        ));
+                                        }
+                                )
+                        );
                 }
         }
 }

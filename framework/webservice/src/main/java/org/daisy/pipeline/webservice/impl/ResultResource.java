@@ -79,7 +79,7 @@ public class ResultResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job status different to SUCCESS");
                 }
 
-                Collection<JobResult> results = job.get().getContext().getResults()
+                Collection<JobResult> results = job.get().getResults()
                                 .getResults();
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);

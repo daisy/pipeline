@@ -1,7 +1,10 @@
 package org.daisy.pipeline.webservice.xml;
 
 import org.daisy.pipeline.job.Job;
+import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.webservice.Routes;
+
+import org.restlet.Request;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,16 +14,25 @@ import org.w3c.dom.Element;
 
 public class JobsXmlWriter {
 	
-	Iterable<? extends Job> jobs = null;
+	private final String baseUrl;
+	private final Iterable<? extends Job> jobs;
+	private final JobQueue queue;
 	private static Logger logger = LoggerFactory.getLogger(JobsXmlWriter.class.getName());
         private boolean localPaths=false; 
-	
-	public JobsXmlWriter(Iterable<? extends Job> jobs) {
+
+	/**
+	 * @param baseUrl Prefix to be included at the beginning of <code>href</code>
+	 *                attributes (the resource paths). Set this to {@link Request#getRootRef()}
+	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
+	 *                absolute paths relative to the domain name.
+	 */
+	public JobsXmlWriter(Iterable<? extends Job> jobs, JobQueue queue, String baseUrl) {
 		this.jobs = jobs;
+		this.queue = queue;
+		this.baseUrl = baseUrl;
 	}
 
 
-	
 	public Document getXmlDocument() {
 		if (jobs == null) {
 			logger.warn("Could not create XML for null jobs");
@@ -30,24 +42,26 @@ public class JobsXmlWriter {
 	}
 	
 	private Document jobsToXml(Iterable<? extends Job> jobs) {
-		String baseUri = new Routes().getBaseUri();
 		Document doc = XmlUtils.createDom("jobs");
 		Element jobsElm = doc.getDocumentElement();
-		jobsElm.setAttribute("href", baseUri + Routes.JOBS_ROUTE);
+		jobsElm.setAttribute("href", baseUrl + Routes.JOBS_ROUTE);
 		
 		for (Job job : jobs) {
-			JobXmlWriter writer = new JobXmlWriter(job);
+			JobXmlWriter writer = new JobXmlWriter(job, baseUrl);
                         writer.withFullResults(true);
                         writer.withOnlyPrimaries(true);
                         if(this.localPaths){
                                 writer.withLocalPaths();
                         }
+			if (job.getStatus() == Job.Status.IDLE) {
+				writer.withPriority(queue.getJobPriority(job.getId()));
+			}
 			writer.addAsElementChild(jobsElm);
 		}
 		
 		// for debugging only
 		if (!XmlValidator.validate(doc, XmlValidator.JOBS_SCHEMA_URL)) {
-			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
+			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
 
 		return doc;

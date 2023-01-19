@@ -16,7 +16,7 @@ public class MyClassProvider extends ReflexiveExtensionFunctionProvider {
 		super(MyClass.class);
 	}
 
-	public class MyClass {
+	public static class MyClass {
 
 		private final String value;
 
@@ -33,10 +33,26 @@ public class MyClassProvider extends ReflexiveExtensionFunctionProvider {
 			return new MyClass(value.toUpperCase());
 		}
 
+		public MyInnerClass innerClass() {
+			return new MyInnerClass();
+		}
+
+		public static MyClass outerClass(MyInnerClass innerClass) {
+			return innerClass.outerClass;
+		}
+
+		public MyClass[] wrapInArray() {
+			return new MyClass[]{this};
+		}
+
 		public Map<String,MyClass> wrapInMap() {
 			Map<String,MyClass> map = new HashMap<>();
 			map.put("result", this);
 			return map;
+		}
+
+		public class MyInnerClass {
+			private final MyClass outerClass = MyClass.this;
 		}
 	}
 }

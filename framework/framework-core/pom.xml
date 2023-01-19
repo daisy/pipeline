@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.9-SNAPSHOT</version>
+    <version>1.14.10</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>5.1.2-SNAPSHOT</version>
+  <version>6.0.0</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -82,6 +82,11 @@
       <artifactId>mockito-core</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -117,8 +122,6 @@
             <_dsannotations>
               org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
               org.daisy.pipeline.event.EventBusProvider,
-              org.daisy.pipeline.event.JobMonitorFactoryImpl,
-              org.daisy.pipeline.job.impl.DefaultJobExecutionService,
               org.daisy.pipeline.job.JobManagerFactory,
               org.daisy.pipeline.job.RuntimeConfigurator,
               org.daisy.pipeline.script.impl.DefaultScriptRegistry,
@@ -158,9 +161,6 @@
               <includes>
                 org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
                 org.daisy.pipeline.event.EventBusProvider,
-                org.daisy.pipeline.event.JobMonitorFactoryImpl,
-                org.daisy.pipeline.event.MessageEventListener,
-                org.daisy.pipeline.job.impl.DefaultJobExecutionService,
                 org.daisy.pipeline.job.JobManagerFactory,
                 org.daisy.pipeline.job.RuntimeConfigurator,
                 org.daisy.pipeline.script.impl.DefaultScriptRegistry,

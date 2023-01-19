@@ -12,13 +12,6 @@ import com.google.common.base.Supplier;
 public interface JobResources {
 
 	/**
-	 * Gets the resources.
-	 *
-	 * @return the resources
-	 */
-	Iterable<Supplier<InputStream>> getResources();
-
-	/**
 	 * Gets the names.
 	 *
 	 * @return the names

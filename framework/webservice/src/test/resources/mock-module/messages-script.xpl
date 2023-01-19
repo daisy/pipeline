@@ -22,16 +22,16 @@
         
             <!-- 0 -->
             
-            <px:sleep milliseconds="1000" px:message="b" px:progress=".5"/>
+            <px:sleep milliseconds="2000" px:message="b" px:progress=".5"/>
             <p:group px:message="c" px:progress=".5">
                 
                 <!-- .25 -->
                 
-                <px:sleep milliseconds="1000" px:message="d" px:progress=".5"/>
+                <px:sleep milliseconds="2000" px:message="d" px:progress=".5"/>
                 
                 <!-- .375 -->
                 
-                <px:sleep milliseconds="1000" px:message="e" px:progress=".5"/>
+                <px:sleep milliseconds="2000" px:message="e" px:progress=".5"/>
             </p:group>
         </p:when>
         <p:otherwise>
@@ -41,23 +41,25 @@
     
     <!-- .5 -->
     
-    <px:sleep milliseconds="1000" px:progress=".05"/>
+    <px:sleep milliseconds="2000" px:progress=".05"/>
     
     <p:group px:progress=".25">
         
         <!-- .55 -->
         
-        <px:sleep milliseconds="1000" px:message="f" px:progress=".5"/>
+        <px:sleep milliseconds="2000" px:message="f" px:progress=".5"/>
         
         <!-- .675 -->
         
-        <px:sleep milliseconds="1000" px:message="g" px:progress=".5"/>
+        <px:sleep milliseconds="2000" px:message="g" px:progress=".5"/>
     </p:group>
     
     <!-- .8 -->
     
-    <px:sleep milliseconds="1000" px:message="h" px:progress=".1"/>
+    <px:sleep milliseconds="2000" px:message="h" px:progress=".1"/>
     
     <!-- .9 -->
+    
+    <px:sleep milliseconds="2000"/>
     
 </p:declare-step>

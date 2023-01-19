@@ -15,25 +15,55 @@ import javax.xml.namespace.QName;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 
+import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.JobContext;
-import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.impl.XProcDecorator;
+import org.daisy.pipeline.job.JobBatchId;
+import org.daisy.pipeline.job.JobId;
+import org.daisy.pipeline.job.JobIdFactory;
+import org.daisy.pipeline.job.JobMonitor;
+import org.daisy.pipeline.job.StatusNotifier;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
 
 import com.google.common.base.Supplier;
 
-class Mock   {
-        public static JobContext mockContext(JobId jobId) {
+public class Mock   {
+        public static AbstractJobContext mockContext(JobId jobId) {
                 return new AbstractJobContext() {{
                         this.id = jobId;
                         this.niceName = "";
                 }};
+        }
+
+        static class MockedJobContext extends AbstractJobContext {
+
+                public MockedJobContext(Client client) {
+                        this(client, null);
+                }
+
+                public MockedJobContext(Client client, JobBatchId batchId) {
+                        super();
+                        this.client = client;
+                        this.id = JobIdFactory.newId();
+                        this.batchId = batchId;
+                        this.niceName = "";
+                        this.monitor = new JobMonitor() {
+                                        @Override
+                                        public MessageAccessor getMessageAccessor() {
+                                                return null;
+                                        }
+                                        @Override
+                                        public StatusNotifier getStatusUpdates() {
+                                                return null;
+                                        }
+                                };
+                }
         }
 
         public static class MockSource implements Source,Supplier<Source>{

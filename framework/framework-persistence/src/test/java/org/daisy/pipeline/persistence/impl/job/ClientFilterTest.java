@@ -28,9 +28,8 @@ public class ClientFilterTest{
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
 
-		PersistentJobContext.setScriptRegistry(new Mocks.DummyScriptService(Mocks.buildScript()));
-		job = new PersistentJob(db, Mocks.buildContext());
-		job2 = new PersistentJob(db, Mocks.buildContext());
+		job = new PersistentJob(db, Mocks.buildJob(), null);
+		job2 = new PersistentJob(db, Mocks.buildJob(), null);
                 client=new PersistentClient("cli","sadfsa",Role.ADMIN,"asdf",Priority.LOW);
         }
 	@After

@@ -2,6 +2,7 @@ package org.daisy.pipeline.webservice.impl;
 
 import java.util.Collection;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
@@ -9,7 +10,6 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
-import org.daisy.pipeline.webservice.xml.XmlWriterFactory;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -83,7 +83,7 @@ public class JobResource extends AuthenticatedResource {
                 }
 
                 setStatus(Status.SUCCESS_OK);
-                JobXmlWriter writer = XmlWriterFactory.createXmlWriterForJob(job.get());
+                JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
         
                 writer.withFullResults(true);
                 if(this.webservice().getConfiguration().isLocalFS()){
@@ -95,7 +95,8 @@ public class JobResource extends AuthenticatedResource {
                 else {
                         writer = writer.withNewMessages(msgSeq);
                 }
-                if(job.get().getStatus() == Job.Status.IDLE){
+                if (job.get().getStatus() == Job.Status.IDLE) {
+                        writer.withPriority(getJobPriority(job.get()));
                         int pos = getPositionInQueue(job.get());
                         writer.withQueuePosition(pos);
                 }
@@ -107,22 +108,19 @@ public class JobResource extends AuthenticatedResource {
                 return dom;
         }
 
-        int getPositionInQueue(Job job){
+        private int getPositionInQueue(Job job) {
+                int pos = webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                      .getExecutionQueue().getPositionInQueue(job.getId());
+                if (pos < 0) // should not happen because we've checked above that the job is idle, meaning it is in the queue
+                        return pos;
+                else
+                        // As this is targeted for end-usures the position starts at 1
+                        return pos + 1;
+        }
 
-                Client client = webservice().getStorage().
-                        getClientStorage().defaultClient();
-                Collection<? extends Prioritizable<Job>> queue = webservice().getJobManager(client).getExecutionQueue().asCollection();
-                int pos = 0;
-
-                //As this is targeted for end-usures the position starts at 1
-                for (Prioritizable<Job> pJob: queue){
-                        pos++;
-                        if (pJob.prioritySource().getId().equals(job.getId())){
-                                return pos;
-                        }
-                }
-                return -1;
-
+        private Priority getJobPriority(Job job) {
+                return webservice().getJobManager(webservice().getStorage().getClientStorage().defaultClient())
+                                   .getExecutionQueue().getJobPriority(job.getId());
         }
 
         /**

@@ -6,7 +6,6 @@ public enum Properties {
 	TMPDIR("org.daisy.pipeline.ws.tmpdir"),
 	AUTHENTICATION("org.daisy.pipeline.ws.authentication"),
 	LOCALFS("org.daisy.pipeline.ws.localfs"),
-	RELEASE_DESCRIPTOR("org.daisy.pipeline.updater.releaseDescriptor"),
 	PORT("org.daisy.pipeline.ws.port"),
 	PATH("org.daisy.pipeline.ws.path"),
 	HOST("org.daisy.pipeline.ws.host"),

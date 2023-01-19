@@ -26,40 +26,6 @@ public class XmlUtils {
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtils.class);
 	
 	/**
-	 * DOM to string.
-	 *
-	 * @param doc
-	 *            the doc
-	 * @return the string
-	 */
-	/*
-	 * from:
-	 * http://www.journaldev.com/71/utility-java-class-to-format-xml-document
-	 * -to-xml-string-and-xml-to-document
-	 */
-	public static String DOMToString(Document doc) {
-		String xmlString = "";
-		if (doc != null) {
-			try {
-				TransformerFactory transfac = TransformerFactory.newInstance();
-				Transformer trans = transfac.newTransformer();
-				trans.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
-				trans.setOutputProperty(OutputKeys.INDENT, "yes");
-				StringWriter sw = new StringWriter();
-				StreamResult result = new StreamResult(sw);
-				DOMSource source = new DOMSource(doc);
-				trans.transform(source, result);
-				xmlString = sw.toString();
-			} catch (Exception e) {
-				logger.warn("Error converting dom to string ",e);		
-				
-			}
-		}
-		return xmlString;
-	}
-
-	
-	/**
 	 * Node to string.
 	 *
 	 * @param node
@@ -67,9 +33,8 @@ public class XmlUtils {
 	 * @return the string
 	 */
 	public static String nodeToString(Node node) {
-		Document doc = node.getOwnerDocument();
-		DOMImplementationLS domImplLS = (DOMImplementationLS) doc
-				.getImplementation();
+		Document doc = node instanceof Document ? (Document)node : node.getOwnerDocument();
+		DOMImplementationLS domImplLS = (DOMImplementationLS)doc.getImplementation();
 		LSSerializer serializer = domImplLS.createLSSerializer();
 		serializer.getDomConfig().setParameter("xml-declaration", false);
 		String string = serializer.writeToString(node);

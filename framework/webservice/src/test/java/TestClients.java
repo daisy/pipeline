@@ -72,7 +72,6 @@ public class TestClients extends Base {
 		Assert.assertEquals("Client secret", exp.getSecret(), act.getSecret());
 		Assert.assertEquals("Client role", exp.getRole(), act.getRole());
 		Assert.assertEquals("Client contact", exp.getContact(), act.getContact());
-		//Assert.assertEquals("Client priority", exp.getPriority(), act.getPriority());
 	}
 	
 	@Test

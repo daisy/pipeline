@@ -7,29 +7,20 @@ import org.daisy.common.properties.Properties;
 
 public class Updater {
 
-        private static String UPDATER_BIN="org.daisy.pipeline.updater.bin";
-        private static String DEPLOY_PATH="org.daisy.pipeline.updater.deployPath";
-        private static String UPDATE_SITE="org.daisy.pipeline.updater.updateSite";
-        private static String RELEASE_DESCRIPTOR="org.daisy.pipeline.updater.releaseDescriptor";
-        private static String ERROR="Property %s not set";
-
+        private static String DEFAULT_UPDATE_SITE = "http://daisy.github.io/pipeline-assembly/releases/";
 
         //launches the pipeline and waits it to be up
         public void update(UpdaterObserver obs) throws IOException {
-                String bin=Properties.getProperty(UPDATER_BIN,"");
-                String deployPath=Properties.getProperty(DEPLOY_PATH,"");
-                String updateSite=Properties.getProperty(UPDATE_SITE,"");
-                String releaseDescriptor=Properties.getProperty(RELEASE_DESCRIPTOR,"");
-                if (bin.isEmpty()){
-                        throw new IllegalArgumentException(String.format(ERROR,UPDATER_BIN));
-                }
-                if (deployPath.isEmpty()){
-                        throw new IllegalArgumentException(String.format(ERROR,DEPLOY_PATH));
-                }
-                if (updateSite.isEmpty()){
-                        throw new IllegalArgumentException(String.format(ERROR,UPDATE_SITE));
-                }
-
+                String home = Properties.getProperty("org.daisy.pipeline.home");
+                if (home == null)
+                        throw new IllegalStateException(
+                                "The property 'org.daisy.pipeline.home' is not set. Can not run updater.");
+                // pipeline-assembly is responsible for placing the file at this location
+                String bin = home + "/updater/pipeline-updater";
+                String deployPath = home + "/";
+                // pipeline-assembly is responsible for placing the file at this location
+                String releaseDescriptor = home + "/etc/releaseDescriptor.xml";
+                String updateSite = Properties.getProperty("org.daisy.pipeline.updater.updateSite", DEFAULT_UPDATE_SITE);
                 InputStream os=new Launcher(bin,
                                 updateSite,
                                 deployPath,

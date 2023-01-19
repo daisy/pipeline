@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.persistence.EntityManagerFactory;
 
 import org.daisy.common.properties.Properties;
+import org.daisy.pipeline.job.JobURIUtils;
 import org.daisy.pipeline.persistence.ForwardingEntityManagerFactory;
 
 import org.slf4j.Logger;
@@ -22,22 +23,25 @@ import org.osgi.service.component.annotations.Component;
 public class DerbyEntityManagerFactory extends ForwardingEntityManagerFactory {
 
 	private static final String DERBY_JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-	private static final String DERBY_DB_URL = "jdbc:derby:"+Properties.getProperty("org.daisy.pipeline.data")+"/db;create=true";
+	private static final String DERBY_DB_URL;
 	
 	protected static Logger logger = LoggerFactory
 			.getLogger(DerbyEntityManagerFactory.class.getName());
 	
 	private static final Map<String,Object> props = new HashMap<String, Object>();
 	static {
-		props.put(JAVAX_PERSISTENCE_JDBC_DRIVER,
-				DERBY_JDBC_DRIVER);
-		props.put(JAVAX_PERSISTENCE_JDBC_URL,
-				DERBY_DB_URL);
+		try {
+			JobURIUtils.assertFrameworkDataDirPersisted();
+		} catch (Exception e) {
+			throw new IllegalStateException("'org.daisy.pipeline.data' property is not set, can not create DerbyEntityManagerFactory", e);
+		}
+		DERBY_DB_URL = "jdbc:derby:" + Properties.getProperty("org.daisy.pipeline.data") + "/db;create=true";
+		props.put(JAVAX_PERSISTENCE_JDBC_DRIVER, DERBY_JDBC_DRIVER);
+		props.put(JAVAX_PERSISTENCE_JDBC_URL, DERBY_DB_URL);
 		logger.debug(DERBY_DB_URL);
-		String logdir = Properties.getProperty("org.daisy.pipeline.logdir");
-		if (logdir == null)
-			logdir = Properties.getProperty("org.daisy.pipeline.data") + "/log";
-		System.setProperty("derby.stream.error.file", logdir + "/derby.log");
+		String logfile = Properties.getProperty("org.daisy.pipeline.data") + "/log/derby.log";
+		System.setProperty("derby.stream.error.file", logfile);
+		logger.info("Writing Derby log messages to " + logfile);
 	}
 
 	public DerbyEntityManagerFactory(){

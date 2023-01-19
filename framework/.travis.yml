@@ -8,7 +8,6 @@ install: mvn install -DskipTests=true -Dinvoker.skip=true -Dmaven.javadoc.skip=t
 
 # main task, run the verify goal
 # FIXME: skipping calabash-adapter and persistence-derby tests because for some reason they fail on Travis
-#        webservice tests are disabled in Maven itself because they also sometimes fail on my own machine
 script: mvn -pl '!calabash-adapter,!persistence-derby' verify
 
 # if the build succeeds, deploy the artifact (tests are skipped)

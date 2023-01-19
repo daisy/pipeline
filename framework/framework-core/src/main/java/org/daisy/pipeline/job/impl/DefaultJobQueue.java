@@ -5,10 +5,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.daisy.common.priority.Priority;
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.common.priority.PrioritizableRunnable;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
 import org.daisy.common.priority.UpdatablePriorityBlockingQueue;
+import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobId;
@@ -68,6 +70,49 @@ public class DefaultJobQueue implements JobQueue {
         }
 
         @Override
+        public int getPositionInQueue(JobId id) {
+                int pos = 0;
+                for (Prioritizable<Job> job : asCollection()) {
+                        if (job.prioritySource().getId().equals(id))
+                                return pos;
+                        pos++;
+                }
+                return -1; // not in the queue
+        }
+
+        @Override
+        public Priority getJobPriority(JobId id) {
+                for (Prioritizable<Job> pJob : asCollection()) {
+                        Job job = pJob.prioritySource();
+                        if (job.getId().equals(id))
+                                try {
+                                        return ((AbstractJob)job).getPriority();
+                                } catch (ClassCastException e) {
+                                        // this can not happen because DefaultJobExecutionService makes
+                                        // sure that no jobs are submitted that are not of type AbstractJob
+                                        throw new IllegalStateException("coding error");
+                                }
+                }
+                return null; // not in the queue
+        }
+
+        @Override
+        public Priority getClientPriority(JobId id) {
+                for (Prioritizable<Job> pJob : asCollection()) {
+                        Job job = pJob.prioritySource();
+                        if (job.getId().equals(id))
+                                try {
+                                        return ((AbstractJob)job).getContext().getClient().getPriority();
+                                } catch (ClassCastException e) {
+                                        // this can not happen because DefaultJobExecutionService makes
+                                        // sure that no jobs are submitted that are not of type AbstractJob
+                                        throw new IllegalStateException("coding error");
+                                }
+                }
+                return null; // not in the queue
+        }
+
+        @Override
         public Collection<? extends Prioritizable<Job>> asCollection(){
                 return (Collection<? extends Prioritizable<Job>>)
                         this.getQueue().asOrderedCollection();
@@ -122,6 +167,4 @@ public class DefaultJobQueue implements JobQueue {
         protected UpdatablePriorityBlockingQueue<Job> getQueue() {
                 return executor.getUpdatableQueue();
         }
-
-        
 }

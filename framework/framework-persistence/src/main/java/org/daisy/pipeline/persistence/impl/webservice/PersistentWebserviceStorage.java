@@ -20,7 +20,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "webservice-storage",
-	service = { WebserviceStorage.class }
+	service = {
+		WebserviceStorage.class,
+		PersistentWebserviceStorage.class
+	}
 )
 public class PersistentWebserviceStorage implements WebserviceStorage {
 

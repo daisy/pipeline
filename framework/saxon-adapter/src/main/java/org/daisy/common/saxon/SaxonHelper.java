@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Vector;
 
 import net.sf.saxon.Configuration;
@@ -42,31 +42,22 @@ import net.sf.saxon.value.StringValue;
 public final class SaxonHelper {
 
 	public static Sequence sequenceFromObject(Object object) {
-		return sequenceFromObject(object, null);
-	}
-
-	/**
-	 * @param externalObjectClasses Classes of objects that are wrapped in a XPath value.
-	 */
-	public static Sequence sequenceFromObject(Object object, Set<Class<?>> externalObjectClasses) {
 		if (object == null)
 			return EmptySequence.getInstance();
-		else if (object instanceof Iterator || (object instanceof Iterable && !(object instanceof List)))
+		else if (object instanceof Iterator || object instanceof Iterable)
 			return sequenceFromIterator(
 				object instanceof Iterable
 					? ((Iterable<?>)object).iterator()
-					: (Iterator<?>)object,
-				externalObjectClasses);
+					: (Iterator<?>)object);
+		else if (object.getClass().isArray())
+			return arrayItemFromIterator(Arrays.asList((Object[])object).iterator());
 		else
-			return itemFromObject(object, externalObjectClasses);
+			return itemFromObject(object);
 	}
 
-	private static Item itemFromObject(Object object, Set<Class<?>> externalObjectClasses) {
+	private static Item itemFromObject(Object object) {
 		if (object == null)
 			throw new IllegalArgumentException();
-		else if (externalObjectClasses != null
-		         && externalObjectClasses.stream().anyMatch(c -> c.isInstance(object)))
-			return new ObjectValue<>(object);
 		else if (object instanceof String)
 			return new StringValue((String)object);
 		else if (object instanceof Integer)
@@ -82,35 +73,33 @@ public final class SaxonHelper {
 		else if (object instanceof URI)
 			return new AnyURIValue(((URI)object).toASCIIString());
 		else if (object instanceof Map)
-			return mapItemFromMap((Map<?,?>)object, externalObjectClasses);
-		else if (object instanceof List)
-			return arrayItemFromList((List<?>)object, externalObjectClasses);
+			return mapItemFromMap((Map<?,?>)object);
 		else
-			throw new IllegalArgumentException();
+			return new ObjectValue<>(object);
 	}
 
-	private static Sequence sequenceFromIterator(Iterator<?> iterator, Set<Class<?>> externalObjectClasses) {
+	private static Sequence sequenceFromIterator(Iterator<?> iterator) {
 		List<Item> list = new ArrayList<>();
 		while (iterator.hasNext())
-			list.add(itemFromObject(iterator.next(), externalObjectClasses));
+			list.add(itemFromObject(iterator.next()));
 		return new SequenceExtent(list);
 	}
 
-	private static MapItem mapItemFromMap(Map<?,?> map, Set<Class<?>> externalObjectClasses) {
+	private static MapItem mapItemFromMap(Map<?,?> map) {
 		MapItem mapItem = new HashTrieMap();
 		for (Object key : map.keySet()) {
 			if (!(key instanceof String))
 				throw new IllegalArgumentException();
 			mapItem = mapItem.addEntry(
 				new StringValue((String)key),
-				sequenceFromObject(map.get(key), externalObjectClasses));
+				sequenceFromObject(map.get(key)));
 		}
 		return mapItem;
 	}
 
-	private static ArrayItem arrayItemFromList(List<?> list, Set<Class<?>> externalObjectClasses) {
+	private static ArrayItem arrayItemFromIterator(Iterator<?> iterator) {
 		try {
-			return SimpleArrayItem.makeSimpleArrayItem(sequenceFromIterator(list.iterator(), externalObjectClasses).iterate());
+			return SimpleArrayItem.makeSimpleArrayItem(sequenceFromIterator(iterator).iterate());
 		} catch (XPathException e) {
 			throw new RuntimeException(e); // should not happen
 		}

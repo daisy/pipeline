@@ -6,8 +6,6 @@ import java.io.IOException;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.pipeline.webservice.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,24 +19,32 @@ public class AliveXmlWriter {
 	private static Logger logger = LoggerFactory.getLogger(AliveXmlWriter.class.getName());
 	private static String version = null;
 
+	private final boolean isLocalFS;
+	private final boolean isAuthenticationEnabled;
+
+	public AliveXmlWriter(boolean isLocalFS, boolean isAuthenticationEnabled) {
+		this.isLocalFS = isLocalFS;
+		this.isAuthenticationEnabled = isAuthenticationEnabled;
+	}
+
 	public Document getXmlDocument() {
 		Document doc = XmlUtils.createDom("alive");
 		Element aliveElm = doc.getDocumentElement();
-		aliveElm.setAttribute("localfs", Boolean.valueOf(Properties.LOCALFS.get()) ? "true" : "false");
-		aliveElm.setAttribute("authentication", Properties.AUTHENTICATION.get());
+		aliveElm.setAttribute("localfs", isLocalFS ? "true" : "false");
+		aliveElm.setAttribute("authentication", isAuthenticationEnabled ? "true" : "false");
 		aliveElm.setAttribute("version", getVersion());
 		if (!XmlValidator.validate(doc, XmlValidator.ALIVE_SCHEMA_URL)) {
-			logger.error("INVALID XML:\n" + XmlUtils.DOMToString(doc));
-			logger.error(XmlUtils.DOMToString(doc));
+			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
 		return doc;
 	}
 
 	private static String getVersion() {
 		if (version == null) {
-			String releaseDescriptorPath = Properties.RELEASE_DESCRIPTOR.get();
-			if (releaseDescriptorPath != null) {
-				File releaseDescriptor = new File(releaseDescriptorPath);
+			String home = org.daisy.common.properties.Properties.getProperty("org.daisy.pipeline.home");
+			if (home != null) {
+				// pipeline-assembly is responsible for placing the file at this location
+				File releaseDescriptor = new File(home + "/etc/releaseDescriptor.xml");
 				if (releaseDescriptor.isFile()) {
 					try {
 						Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(releaseDescriptor);

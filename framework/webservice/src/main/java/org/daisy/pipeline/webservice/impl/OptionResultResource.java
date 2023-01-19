@@ -14,6 +14,6 @@ public class OptionResultResource extends NamedResultResource {
 
 	@Override
 	protected Collection<JobResult> gatherResults(Job job, String name) {
-		return job.getContext().getResults().getResults(new QName(name));
+		return job.getResults().getResults(new QName(name));
 	}
 }

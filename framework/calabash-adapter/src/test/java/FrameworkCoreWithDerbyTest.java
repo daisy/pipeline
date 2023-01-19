@@ -20,13 +20,9 @@ import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.clients.WebserviceStorage;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
-import org.daisy.pipeline.job.JobMonitor;
-import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
 import org.daisy.pipeline.script.BoundXProcScript;
@@ -50,13 +46,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	public JobManagerFactory jobManagerFactory;
 	
 	@Inject
-	public WebserviceStorage webserviceStorage;
-	
-	@Inject
 	public ScriptRegistry scriptRegistry;
-	
-	@Inject
-	public JobMonitorFactory jobMonitorFactory;
 	
 	// Test that progress messages work also with persistent storage
 	@Test
@@ -81,8 +71,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 			                                                          catch (IOException e) {
 			                                                              throw new RuntimeException(e); }})
 			                                          .build());
-			JobMonitor monitor = jobMonitorFactory.newJobMonitor(job.getId());
-			final MessageAccessor accessor = monitor.getMessageAccessor();
+			final MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new FrameworkCoreTest.JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
 				Iterator<BigDecimal> mustSee = FrameworkCoreTest.stream(".125", ".375", ".9").map(d -> new BigDecimal(d)).iterator();
@@ -139,8 +128,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
-		Client client = webserviceStorage.getClientStorage().defaultClient();
-		JobManager jobManager = jobManagerFactory.createFor(client);
+		JobManager jobManager = jobManagerFactory.create();
 		XProcScriptService script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
 		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))
@@ -179,7 +167,6 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		Properties p = new Properties();
 		p.setProperty("org.daisy.pipeline.data", PIPELINE_DATA.getAbsolutePath());
 		p.setProperty("org.daisy.pipeline.persistence", "true");
-		p.setProperty("org.daisy.pipeline.logdir", new File(PIPELINE_DATA, "log").getAbsolutePath());
 		return p;
 	}
 

@@ -51,7 +51,16 @@ public class TestMultipleJobs extends Base {
 				}
 			}
 		}
-		Assert.assertEquals("We have 6 jobs", 6, client().jobs().getJob().size());
+		List<Job> jobs = client().jobs().getJob();
+		Assert.assertEquals("We have 6 jobs", 6, jobs.size());
+		int countIdle = 0;
+		for (Job job : jobs) {
+			if (job.getStatus() == JobStatus.IDLE) {
+				countIdle++;
+				Assert.assertTrue("Idle job must have a priority", job.getPriority() != null);
+			}
+		}
+		Assert.assertTrue("There are at least 4 idle jobs", countIdle >= 4);
 		List<org.daisy.pipeline.webservice.jaxb.queue.Job> queue = client().queue().getJob();
 		Assert.assertTrue("There are at least 4 jobs in the queue", queue.size() >= 4);
 		org.daisy.pipeline.webservice.jaxb.queue.Job last = queue.get(queue.size() - 1);

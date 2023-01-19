@@ -170,7 +170,7 @@ public class PersistentClientStorageTest {
         @Test 
         public void addDefault(){
                 Client c= storage.defaultClient();
-                Optional<Client>def=storage.update(PersistentClientStorage.DEFAULT.getId(),"",Role.ADMIN,"",Priority.LOW);
+                Optional<Client>def=storage.update(c.getId(),"",Role.ADMIN,"",Priority.LOW);
                 //make sure is in the db
                 toDel.add(c);
                 Assert.assertFalse(def.isPresent());
@@ -191,7 +191,7 @@ public class PersistentClientStorageTest {
                 toDel.add(def);
                 //the client has been inserted in the db
                 Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
-                Assert.assertEquals("Check default id",PersistentClientStorage.DEFAULT.getId(),def.getId());
+                Assert.assertEquals("Check default id", Client.DEFAULT_ADMIN.getId(), def.getId());
         }
 
         @Test
@@ -202,6 +202,6 @@ public class PersistentClientStorageTest {
                 Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
                 def= storage.defaultClient();
                 Mockito.verify(db,Mockito.times(1)).addObject(Mockito.any());
-                Assert.assertEquals("Check default id",PersistentClientStorage.DEFAULT.getId(),def.getId());
+                Assert.assertEquals("Check default id", Client.DEFAULT_ADMIN.getId(), def.getId());
         }
 }

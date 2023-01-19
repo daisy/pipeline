@@ -59,7 +59,11 @@ public class TestPushNotifications extends Base {
 		AbstractCallback testStatusAndMessages = new AbstractCallback() {
 			JobStatus lastStatus = null;
 			BigDecimal lastProgress = BigDecimal.ZERO;
-			Iterator<BigDecimal> mustSee = stream(".25", ".375", ".5", ".55", ".675", ".8", ".9").map(d -> new BigDecimal(d)).iterator();
+			// Note that we do not see "1" because the last step has no message or progress so we
+			// are not notified when it is opened or closed. If we would be notified when the last
+			// step is closed, we would see "1.0" and not again ".9" because by the time the
+			// notification is sent the job has already finished.
+			Iterator<BigDecimal> mustSee = stream(".25", ".375", ".5", ".55", ".675", ".8", ".9").map(BigDecimal::new).iterator();
 			BigDecimal mustSeeNext = mustSee.next();
 			List<BigDecimal> seen = new ArrayList<BigDecimal>();
 			@Override
@@ -129,7 +133,7 @@ public class TestPushNotifications extends Base {
 			}
 			Job job = client().sendJob(req);
 			deleteAfterTest(job);
-			waitForStatus(JobStatus.SUCCESS, job, 10000);
+			waitForStatus(JobStatus.SUCCESS, job, 20000);
 			// wait until all updates have been pushed
 			Thread.sleep(1000);
 			testStatusAndMessages.finalTest();

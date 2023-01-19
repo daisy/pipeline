@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.LinkedList;
 
+import org.daisy.pipeline.job.impl.JobURIUtils;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;

@@ -4,11 +4,11 @@ import java.net.URI;
 
 import javax.xml.namespace.QName;
 
-import org.daisy.pipeline.job.Index;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobUUIDGenerator;
 import org.daisy.pipeline.persistence.impl.Database;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,10 +24,9 @@ public class PersistentOptionResultTest {
 	JobId id1;
 	@Before	
 	public void setUp(){
-		result= new JobResult.Builder().withPath(path).withIdx(idx).build();
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
-		pi1=new PersistentOptionResult(id1,result, new QName(name));
+		pi1=new PersistentOptionResult(id1, new JobResult(idx, path, null) {}, new QName(name));
 		db.addObject(pi1);
 	}	
 
@@ -37,15 +36,10 @@ public class PersistentOptionResultTest {
 	}	
 
 	@Test
-	public void optionName() throws Exception{
-		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,new Index(idx)));
+	public void testPersistOptionResult() throws Exception{
+		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1, idx));
 		Assert.assertEquals(name,stored.getOptionName().toString());
+		Assert.assertEquals(idx, stored.getIdx());
+		Assert.assertEquals(path, stored.getPath());
 	}
-	
-	@Test
-	public void jobResult() throws Exception{
-		PersistentOptionResult stored=db.getEntityManager().find(PersistentOptionResult.class,new PersistentOptionResult.PK(id1,new Index(idx)));
-		Assert.assertEquals(result,stored.getJobResult());
-	}
-	
 }
