@@ -13,9 +13,9 @@ import (
 	"regexp"
 	"strconv"
 
-	"github.com/capitancambio/blackterm"
+	"github.com/bertfrees/blackterm"
 	"github.com/capitancambio/chalk"
-	"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
 	"github.com/daisy/pipeline-clientlib-go"
 )
 

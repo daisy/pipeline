@@ -14,7 +14,7 @@ import (
 	"runtime"
 	"strconv"
 
-	"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
 )
 
 var keyFile = "dp2key.txt"

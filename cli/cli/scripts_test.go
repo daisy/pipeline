@@ -3,8 +3,8 @@ package cli
 import (
 	"fmt"
 
-	"github.com/capitancambio/go-subcommand"
-	//"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
+	//"github.com/bertfrees/go-subcommand"
 	//"github.com/daisy-consortium/pipeline-clientlib-go"
 	"io/ioutil"
 	"log"

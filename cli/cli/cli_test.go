@@ -1,7 +1,7 @@
 package cli
 
 import (
-	//"github.com/capitancambio/go-subcommand"
+	//"github.com/bertfrees/go-subcommand"
 	"io/ioutil"
 	"os"
 	"strconv"

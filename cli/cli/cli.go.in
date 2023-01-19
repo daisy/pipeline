@@ -10,7 +10,7 @@ import (
 	"text/template"
 	"regexp"
 
-	"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
 )
 
 const (

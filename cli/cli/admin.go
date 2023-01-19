@@ -1,11 +1,11 @@
 package cli
 
 import (
-	//"github.com/capitancambio/go-subcommand"
+	//"github.com/bertfrees/go-subcommand"
 	"fmt"
 	"text/template"
 
-	"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
 	"github.com/daisy/pipeline-clientlib-go"
 )
 

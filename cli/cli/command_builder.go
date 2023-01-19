@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"text/template"
 
-	"github.com/capitancambio/go-subcommand"
+	"github.com/bertfrees/go-subcommand"
 )
 
 //Convinience interface for building commands

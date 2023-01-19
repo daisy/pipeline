@@ -5,42 +5,17 @@ Command-Line Interface for the DAISY Pipeline 2 (Golang)
 How to build
 ------------
 1. Install golang from the [official site](http://golang.org/doc/install). If you'll be creating distributions of the cli please install from the [sources](http://golang.org/doc/install/source)
-2. Create a go source directory:
 
-```
-        $ mkdir ~/src/golibs/
-        $ cd ~/src/golibs/
-        $ export GOPATH=~/src/golibs:$GOPATH
-```
+2. Run `make`. The building process will an executable named "dp2" in the build/bin/ folder.
 
-3. Install dependencies:
+3. Copy the default configuration file to the same directory as the binary:
 
-
-        go get github.com/capitancambio/go-subcommand
-        go get launchpad.net/goyaml
-        go get github.com/daisy-consortium/pipeline-clientlib-go
-        go get bitbucket.org/kardianos/osext
-        go get github.com/daisy-consortium/pipeline-cli-go
-        
-        
-4. The building process will create two executables, dp2 and dp2admin in the bin/ folder:
-
-
-        go install github.com/daisy-consortium/pipeline-cli-go/dp2
-        go install github.com/daisy-consortium/pipeline-cli-go/dp2admin
-        
-5. Copy the default configuration file to the same directory as the binaries:
-
-
-        cp src/github.com/daisy-consortium/pipeline-cli-go/dp2/config.yml bin/
+        cp dp2/config.yml build/bin/
 
 How to build and distribute using maven
 ---------------------------------------
 In order to allow the go client play nice with the rest of the pipeline ecosystem a maven build process is provided, although right now it only works on linux and mac systems ( You should be able to make it work using cygwin though).
 
-Follow the previous instructions till step 2. installing go from the sources. 
-
-        cd src/github.com/daisy-consortium/pipeline-cli-go/
         mvn clean install
 
 You can find in the target/bin directory all the binaries from windows,mac and linux platforms.
