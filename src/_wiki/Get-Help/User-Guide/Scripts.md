@@ -6,6 +6,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [DAISY 2.02 Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator/)
 * [DAISY 2.02 to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-daisy3/)
 * [DAISY 2.02 to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3/)
+* [DAISY 2.02 to MP3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-mp3/)
 * [DAISY 3 to DAISY 2.02](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202/)
 * [DAISY 3 to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3/)
 * [DAISY 3 to MP3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/)

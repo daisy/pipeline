@@ -5,6 +5,8 @@
 - group: org.daisy.pipeline.modules
   artifact: daisy202-to-epub3
 - group: org.daisy.pipeline.modules
+  artifact: daisy202-to-mp3
+- group: org.daisy.pipeline.modules
   artifact: daisy202-validator
 - group: org.daisy.pipeline.modules
   artifact: daisy3-to-daisy202
