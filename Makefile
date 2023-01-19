@@ -274,8 +274,6 @@ clean-webui-deps :
 # 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-linux_386.zip \
 # 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-windows_386.zip
 
-export PIPELINE_CLIENTLIB_PATH = $(CURDIR)/clientlib/go
-
 cli/build/bin/darwin_amd64/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
 cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/cli/,*.go.in) $(call rwildcard,cli/dp2/,*.go) $(call rwildcard,clientlib/go/,*.go)
