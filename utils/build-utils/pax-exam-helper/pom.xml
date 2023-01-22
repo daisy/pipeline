@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>pax-exam-helper</artifactId>
-  <version>2.5.1-SNAPSHOT</version>
+  <version>2.5.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Pax Exam Helper</name>
@@ -28,12 +28,12 @@
     <aether.version>1.13.1</aether.version>
     <maven.version>3.0.4</maven.version>
     <wagon.version>2.2</wagon.version>
-    <saxon-adapter.version>1.4.0</saxon-adapter.version>
+    <saxon-adapter.version>3.1.0</saxon-adapter.version>
     <xspec-runner.version>1.0.4</xspec-runner.version>
-    <xprocspec.version>1.2.0</xprocspec.version>
-    <xprocspec-runner.version>1.2.3</xprocspec-runner.version>
-    <xproc-engine-daisy-pipeline.version>1.13.0</xproc-engine-daisy-pipeline.version>
-    <framework.version>1.13.0</framework.version>
+    <xprocspec.version>1.4.2</xprocspec.version>
+    <xprocspec-runner.version>1.2.6</xprocspec-runner.version>
+    <xproc-engine-daisy-pipeline.version>1.14.4</xproc-engine-daisy-pipeline.version>
+    <framework.version>1.14.10</framework.version>
   </properties>
   
   <dependencyManagement>
@@ -230,11 +230,6 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

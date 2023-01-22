@@ -46,7 +46,6 @@ public class XProcSpecTest {
 				xprocspec(),
 				mavenBundle("org.daisy.pipeline:framework-core:?"),
 				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				mavenBundle("org.daisy.pipeline:framework-volatile:?"),
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?")),
 			junitBundles()
 		);

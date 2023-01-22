@@ -61,14 +61,10 @@
       <groupId>org.slf4j</groupId>
       <artifactId>jcl-over-slf4j</artifactId>
     </dependency>
-    <!-- avoid circular dependency on framework -->
-    <?fixed-dependency?>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>xmlcatalog</artifactId>
     </dependency>
-    <!-- avoid circular dependency on framework -->
-    <?fixed-dependency?>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>

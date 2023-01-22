@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.ServiceConfigurationError;
 
 import com.google.common.collect.AbstractIterator;
 
@@ -62,7 +63,7 @@ public class ServiceLoader<S> implements Iterable<S> {
 						}
 						serviceIterator = serviceLoader.iterator();
 					} catch (Throwable e) {
-						logger.error("Failed to instantiate services", e);
+						logger.error("Failed to load service providers", e);
 						return endOfData();
 					}
 				}
@@ -70,7 +71,13 @@ public class ServiceLoader<S> implements Iterable<S> {
 					try {
 						return serviceIterator.next();
 					} catch (Throwable e) {
-						logger.error("Failed to instantiate service", e);
+						if (e instanceof ServiceConfigurationError && e.getCause() instanceof ActivationException) {
+							logger.info(e.getMessage() + ": " + e.getCause().getMessage());
+							if (e.getCause().getCause() != null)
+								logger.trace("Cause:", e.getCause().getCause());
+						} else {
+							logger.error("Failed to instantiate provider of service '" + serviceType.getCanonicalName() + "'", e);
+						}
 					}
 				}
 				return endOfData();

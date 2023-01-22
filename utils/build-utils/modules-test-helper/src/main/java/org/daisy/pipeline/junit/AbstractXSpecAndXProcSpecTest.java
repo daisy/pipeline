@@ -120,7 +120,6 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 				xprocspec(),
 				 // runtime dependencies of xproc-engine-daisy-pipeline
 				mavenBundle("org.daisy.pipeline:calabash-adapter:?"),
-				mavenBundle("org.daisy.pipeline:framework-volatile:?"),
 				mavenBundle("org.daisy.pipeline:logging-appender:?"), // for org.daisy.pipeline.logging.JobProgressAppender
 				mavenBundle("org.daisy.maven:xproc-engine-daisy-pipeline:?"),
 				// xspec
