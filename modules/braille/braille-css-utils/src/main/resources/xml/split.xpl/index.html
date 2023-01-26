@@ -42,10 +42,9 @@
             means deleting the element and its preceding nodes from the second copy and deleting the
             element's following nodes from the first copy. css:box elements that are split get a
             part attribute with value 'first', 'middle' or 'last'. The attributes css:id,
-            css:string-set, css:string-entry, css:counter-set, css:counter-reset,
-            css:counter-increment, css:counter-set-*, css:counter-reset-* and
-            css:counter-increment-* are omitted on css:box elements with a part attribute equal to
-            'middle' or 'last'.
+            css:string-set, css:counter-set, css:counter-reset, css:counter-increment,
+            css:counter-set-*, css:counter-reset-* and css:counter-increment-* are omitted on
+            css:box elements with a part attribute equal to 'middle' or 'last'.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
     
@@ -68,7 +67,7 @@
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[not(self::css:box)]/@part"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[@part=('head','tail')]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"part"</span> <span class="code-xml-attribute-local-name">replace</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"if (@part='head') then 'first' else 'last'"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@part=('middle','last')]/@css:*[local-name(.)=('id',                                                                           'string-set',                                                                           'string-entry')                                                            or matches(local-name(.),'^counter-(set|reset|increment).*')]"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@part=('middle','last')]/@css:*[local-name(.)=('id',                                                                           'string-set')                                                            or matches(local-name(.),'^counter-(set|reset|increment).*')]"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>

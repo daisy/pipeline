@@ -930,22 +930,21 @@ The resulting EPUB 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">Whether or not to make the TTS log available.
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
 </div>
-<div class="longdesc">Whether or not to make the TTS log available.
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
 
-<p>The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.</p>
+<p>Top-level sections in the ZedAI become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>-1</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -963,21 +962,22 @@ Whether to use a speech synthesizer to produce audio files.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-name">Enable TTS log</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+<div class="shortdesc">Whether or not to make the TTS log available.
 </div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+<div class="longdesc">Whether or not to make the TTS log available.
 
-<p>Top-level sections in the ZedAI become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
+<p>The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1035,16 +1035,16 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
-<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
 <td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
+<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

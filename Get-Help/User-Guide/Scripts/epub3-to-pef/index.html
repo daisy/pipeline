@@ -900,35 +900,9 @@ An HTML file to be prepended to the EPUB spine.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">PEF</div>
-<div class="synopsis-output-desc">
-The intermediary PEF file.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
-</ul>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">Preview</div>
 <div class="synopsis-output-desc">
 An HTML preview of the braille result.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text/html</li>
-</ul>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">OBFL</div>
-<div class="synopsis-output-desc">
-The intermediary OBFL file.
 </div>
 <div class="synopsis-output-media-type">
 <b>Media-type</b>:
@@ -950,325 +924,37 @@ The output braille file.
 </ul>
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">OBFL</div>
+<div class="synopsis-output-desc">
+The intermediary OBFL file.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text/html</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">PEF</div>
+<div class="synopsis-output-desc">
+The intermediary PEF file.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
+</ul>
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheet parameters</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the style sheets.
-</div>
-<div class="longdesc">A list of parameters passed to the style sheets.
-
-<p>Style sheets, whether they’re specified with the “stylesheets” option or associated with the source,
-may have parameters (variables in case of Sass). The “stylesheet-parameters” option can be used to
-set these parameters.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Force braille page break</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Force braille page breaks at print page breaks.
-</div>
-<div class="longdesc">Force braille page breaks at print page breaks.
-
-<p>Makes the variable <code>$force-braille-page-break</code> available in style sheets and includes the following
-rule by default:</p>
-
-<pre><code class="language-sass">@if $force-braille-page-break {
-  .page-front,
-  .page-normal,
-  .page-special,
-  [epub|type='pagebreak'] {
-    page-break-before: always;
-  }
-}
-</code></pre>
-
-<p>See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks" class="external-link" target="_blank"><code>page-break-before</code></a>
-property</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Show braille page numbers</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">When enabled, will number braille pages.
-</div>
-<div class="longdesc">When enabled, will number braille pages.
-
-<p>Makes the variable <code>$show-braille-page-numbers</code> available in style sheets. In order to use the
-variable include a rule like the following in your custom style sheet:</p>
-
-<pre><code class="language-sass">@if $show-braille-page-numbers {
-  @page {
-    @top-right {
-      content: counter(page);
-    }
-  }
-}
-</code></pre>
-
-<p>This will create a page number in the top right corner of every braille page.</p>
-
-<p>See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
-  <li>the
-<a href="http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function" class="external-link" target="_blank"><code>counter()</code></a>
-function</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Levels in footer</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Specify which headings are rendered in the footer.
-</div>
-<div class="longdesc">Specify which headings are rendered in the footer.
-
-<p>Makes the variable <code>$levels-in-footer</code> available in style sheets and includes the following rule by
-default:</p>
-
-<pre><code class="language-sass">@for $level from 1 through 6 {
-  @if $levels-in-footer &gt;= $level {
-    h#{$level} {
-      string-set: footer content();
-    }
-  }
-}
-</code></pre>
-
-<p>In other words, the <code>footer</code> string is updated each time a heading with a level smaller than or
-equal to <code>levels-in-footer</code> is encountered. In order to use the <code>footer</code> string include a rule like
-the following in your custom style sheet:</p>
-
-<pre><code class="language-css">@page {
-  @bottom-center {
-    content: string(footer);
-  }
-}
-</code></pre>
-
-<p>See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-set-property" class="external-link" target="_blank"><code>string-set</code></a> property</li>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-function" class="external-link" target="_blank"><code>string()</code></a> function</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>6</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include preview</div>
-<div class="synopsis-option-desc">
-Whether or not to include a HTML preview of the braille result.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Braille code</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Braille code to be used for braille transcription.
-</div>
-<div class="longdesc">Braille code to be used for braille transcription.
-
-<p>If set, <a href="/pipeline/Get-Help/User-Guide/Braille">braille transcription</a> is
-done with the selected braille code. If left empty, the braille code is determined by the document
-language and the “Transformer features” option.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;liblouis-table-query&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include captions</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">When enabled, will include captions for images, tables, and so on.
-</div>
-<div class="longdesc">When enabled, will include captions for images, tables, and so on.
-
-<p>Makes the variable <code>$include-captions</code> available in style sheets and includes the following rule by
-default:</p>
-
-<pre><code class="language-sass">caption {
-  display: if($include-captions, block, none);
-}
-</code></pre>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Line spacing</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Single or double line spacing.
-</div>
-<div class="longdesc">Single or double line spacing.
-
-<p>Makes the variable <code>$line-spacing</code> available in style sheets and includes the following rule by
-default:</p>
-
-<pre><code class="language-sass">@if $line-spacing == double {
-  :root {
-    line-height: 2;
-  }
-}
-</code></pre>
-
-<p>See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-line-height-property" class="external-link" target="_blank"><code>line-height</code></a>
-property</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>single</code></dt>
-<dd>Single</dd>
-<dt><code>double</code></dt>
-<dd>Double</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>single</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include images</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
-</div>
-<div class="longdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
-
-<p>Makes the variable <code>$include-images</code> available in style sheets and includes the following rule by
-default:</p>
-
-<pre><code class="language-sass">@if $include-images {
-  img::after {
-    content: attr(alt);
-  }
-}
-</code></pre>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Hyphenation</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Hyphenation policy.
-</div>
-<div class="longdesc">Hyphenation policy.
-
-<p>Makes the variable <code>$hyphenation</code> available in style sheets and includes the following rule by
-default:</p>
-
-<pre><code class="language-sass">:root {
-  hyphens: $hyphenation;
-}
-</code></pre>
-
-<p>This means that words are hyphenated according to the specified policy, except where overridden by
-more specific CSS rules. See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#the-hyphens-property" class="external-link" target="_blank"><code>hyphens</code></a> property</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>auto</code></dt>
-<dd>Hyphenate words</dd>
-<dt><code>manual</code></dt>
-<dd>Only hyphenate words where there are soft hyphens (U+00AD)</dd>
-<dt><code>none</code></dt>
-<dd>Never hyphenate words</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>auto</code>
-</div>
-</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Maximum number of sheets</div>
@@ -1302,109 +988,15 @@ rule by default:</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include OBFL</div>
+<div class="synopsis-option-name">Duplex</div>
 <div class="synopsis-option-desc">
-Whether or not the keep the intermediary OBFL file (for debugging).
+When enabled, will print on both sides of the paper.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Prefer breaks at higher level sections.</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Amount with which preference is given to volume breaks before higher level sections.
-</div>
-<div class="longdesc">Amount with which preference is given to volume breaks before higher level sections.
-
-<p>The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference
-is given. A higher value results in volumes that are less equal in size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>0</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The ASCII braille table used to render the HTML preview.
-</div>
-<div class="longdesc">The ASCII braille table used to render the HTML preview.
-
-<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Output file format</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The file format in which to store the braille result.
-</div>
-<div class="longdesc">The file format in which to store the braille result.
-
-<p>If left blank, the braille will be stored in PEF format.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include PEF</div>
-<div class="synopsis-option-desc">
-Whether or not to keep the intermediary PEF file (for debugging).
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1503,6 +1095,32 @@ rule. Example:</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Hyphenation at page boundaries</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether hyphenation of words at page boundaries is allowed or not.
+</div>
+<div class="longdesc">Whether hyphenation of words at page boundaries is allowed or not.
+
+<p>This option only determines whether hyphenation is allowed at page boundaries. The “Hyphenation”
+option and the CSS determine how the hyphenation is done, when allowed.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>false</code></dt>
+<dd>Never hyphenate words at page boundaries</dd>
+<dt><code>except-at-volume-breaks</code></dt>
+<dd>Allow hyphenation at page boundaries except when it's a volume boundary</dd>
+<dt><code>true</code></dt>
+<dd>Allow hyphenation at page boundaries</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Page width</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The number of columns available for printing.
@@ -1527,6 +1145,50 @@ use the ‘width’ feature, and makes the variable <code>$page-width</code> ava
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>40</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a HTML preview of the braille result.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Output file format</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The file format in which to store the braille result.
+</div>
+<div class="longdesc">The file format in which to store the braille result.
+
+<p>If left blank, the braille will be stored in PEF format.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1564,17 +1226,19 @@ value
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include line groups</div>
+<div class="synopsis-option-name">Capital letters</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">When disabled, lines in a linegroup are joined together to form one block.
+<div class="shortdesc">When enabled, will indicate capital letters.
 </div>
-<div class="longdesc">When disabled, lines in a linegroup are joined together to form one block.
+<div class="longdesc">When enabled, will indicate capital letters.
 
-<p>Makes the variable <code>$include-line-groups</code> available in style sheets and includes the following rule
-by default:</p>
+<p>Makes the variable <code>$capital-letters</code> available in style sheets and includes the following rule by
+default:</p>
 
-<pre><code class="language-sass">.linegroup .line {
-  display: if($include-line-groups, block, inline);
+<pre><code class="language-sass">@if $capital-letters != true {
+  :root {
+    text-transform: lowercase;
+  }
 }
 </code></pre>
 </div>
@@ -1588,22 +1252,158 @@ by default:</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Allow breaks within sections.</div>
+<div class="synopsis-option-name">Line spacing</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">Amount with which volume breaks are allowed within sections.
+<div class="shortdesc">Single or double line spacing.
 </div>
-<div class="longdesc">Amount with which volume breaks are allowed within sections.
+<div class="longdesc">Single or double line spacing.
 
-<p>The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
-right before <code>section</code> elements. The higher the value, the more equal the volumes will be in
-size.</p>
+<p>Makes the variable <code>$line-spacing</code> available in style sheets and includes the following rule by
+default:</p>
+
+<pre><code class="language-sass">@if $line-spacing == double {
+  :root {
+    line-height: 2;
+  }
+}
+</code></pre>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h3_the-line-height-property" class="external-link" target="_blank"><code>line-height</code></a>
+property</li>
+</ul>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>single</code></dt>
+<dd>Single</dd>
+<dt><code>double</code></dt>
+<dd>Double</dd>
+</dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>10</code>
+<b>Default value</b>: <code>single</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include PEF</div>
+<div class="synopsis-option-desc">
+Whether or not to keep the intermediary PEF file (for debugging).
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Braille code</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Braille code to be used for braille transcription.
+</div>
+<div class="longdesc">Braille code to be used for braille transcription.
+
+<p>If set, <a href="/pipeline/Get-Help/User-Guide/Braille">braille transcription</a> is
+done with the selected braille code. If left empty, the braille code is determined by the document
+language and the “Transformer features” option.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;liblouis-table-query&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Apply document-specific CSS</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">If this option is enabled, any pre-existing CSS in the EPUB with media "embossed" (or "all") will be used.
+</div>
+<div class="longdesc">If this option is enabled, any pre-existing CSS in the EPUB with media "embossed" (or "all") will be used.
+
+<p>The input EPUB may already contain CSS that applies to embossed media.  Such document-specific CSS
+takes precedence over any CSS attached when running this script.</p>
+
+<p>For instance, if the EPUB already contains the rule <code>p { padding-left: 2; }</code>,
+and using this script the rule <code>p#docauthor { padding-left: 4; }</code> is provided, then the
+<code>padding-left</code> property will get the value <code>2</code> because that’s what was defined in the EPUB,
+even though the provided CSS is more specific.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS/Sass style sheets to apply.
+</div>
+<div class="longdesc">A list of CSS/Sass style sheets to apply.
+
+<p>DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
+future. It is recommended to apply any XSLT style sheets during pre-processing of the document.</p>
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>”. Style sheets can also be attached to the
+source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a>”. They can be linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>).</p>
+
+<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
+CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
+the author style sheets, in the order in which they are specified.</p>
+
+<p>All CSS/Sass style sheets are applied at once, but the order in which they are specified (first user
+style sheets, then author style sheets) has an influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading
+order</a>.</p>
+
+<p>CSS/Sass style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules.</p>
+
+<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
+manual</a>.</p>
+
+<p>A number of <a href="https://sass-lang.com/documentation/at-rules/import#partials" class="external-link" target="_blank">partials</a> (helper style
+sheet modules) are available for use in Sass style sheets:</p>
+
+<ul>
+  <li>
+<a href="/pipeline/modules/braille/html-to-pef/src/main/resources/css/tables.html">http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss</a>:
+for styling tables</li>
+  <li>
+<a href="/pipeline/modules/braille/html-to-pef/src/main/resources/css/definition-lists.html">http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss</a>:
+for styling definition lists</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Zero or more of the following:<dl class="choice">
+<dt><var>&lt;anyFileURI&gt;</var></dt>
+<dd>File path relative to input EPUB 3.</dd>
+<dt><var>&lt;anyURI&gt;</var></dt>
+<dd>Any other absolute URI</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1720,60 +1520,32 @@ value</li>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-name">Style sheet parameters</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS/Sass style sheets to apply.
+<div class="shortdesc">A list of parameters passed to the style sheets.
 </div>
-<div class="longdesc">A list of CSS/Sass style sheets to apply.
+<div class="longdesc">A list of parameters passed to the style sheets.
 
-<p>DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
-future. It is recommended to apply any XSLT style sheets during pre-processing of the document.</p>
-
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>”. Style sheets can also be attached to the
-source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>”. They can be linked (using an
-<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
-element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
-element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
-attributes</a>).</p>
-
-<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
-CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
-the author style sheets, in the order in which they are specified.</p>
-
-<p>All CSS/Sass style sheets are applied at once, but the order in which they are specified (first user
-style sheets, then author style sheets) has an influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading
-order</a>.</p>
-
-<p>CSS/Sass style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
-CSS</a> rules.</p>
-
-<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
-manual</a>.</p>
-
-<p>A number of <a href="https://sass-lang.com/documentation/at-rules/import#partials" class="external-link" target="_blank">partials</a> (helper style
-sheet modules) are available for use in Sass style sheets:</p>
-
-<ul>
-  <li>
-<a href="/pipeline/modules/braille/html-to-pef/src/main/resources/css/tables.html">http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss</a>:
-for styling tables</li>
-  <li>
-<a href="/pipeline/modules/braille/html-to-pef/src/main/resources/css/definition-lists.html">http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss</a>:
-for styling definition lists</li>
-</ul>
+<p>Style sheets, whether they’re specified with the “stylesheets” option or associated with the source,
+may have parameters (variables in case of Sass). The “stylesheet-parameters” option can be used to
+set these parameters.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Zero or more of the following:<dl class="choice">
-<dt><var>&lt;anyFileURI&gt;</var></dt>
-<dd>File path relative to input EPUB 3.</dd>
-<dt><var>&lt;anyURI&gt;</var></dt>
-<dd>Any other absolute URI</dd>
-</dl>
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
@@ -1781,18 +1553,79 @@ for styling definition lists</li>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include production notes</div>
+<div class="synopsis-option-name">Levels in footer</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">When enabled, production notes are included in the content.
+<div class="shortdesc">Specify which headings are rendered in the footer.
 </div>
-<div class="longdesc">When enabled, production notes are included in the content.
+<div class="longdesc">Specify which headings are rendered in the footer.
 
-<p>Makes the variable <code>$include-production-notes</code> available in style sheets and includes the following
-rule by default:</p>
+<p>Makes the variable <code>$levels-in-footer</code> available in style sheets and includes the following rule by
+default:</p>
 
-<pre><code class="language-sass">.prodnote,
-[epub|type~='z3998:production'] {
-  display: if($include-production-notes, block, none);
+<pre><code class="language-sass">@for $level from 1 through 6 {
+  @if $levels-in-footer &gt;= $level {
+    h#{$level} {
+      string-set: footer content();
+    }
+  }
+}
+</code></pre>
+
+<p>In other words, the <code>footer</code> string is updated each time a heading with a level smaller than or
+equal to <code>levels-in-footer</code> is encountered. In order to use the <code>footer</code> string include a rule like
+the following in your custom style sheet:</p>
+
+<pre><code class="language-css">@page {
+  @bottom-center {
+    content: string(footer);
+  }
+}
+</code></pre>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-set-property" class="external-link" target="_blank"><code>string-set</code></a> property</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-string-function" class="external-link" target="_blank"><code>string()</code></a> function</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>6</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include OBFL</div>
+<div class="synopsis-option-desc">
+Whether or not the keep the intermediary OBFL file (for debugging).
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include images</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+</div>
+<div class="longdesc">When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+
+<p>Makes the variable <code>$include-images</code> available in style sheets and includes the following rule by
+default:</p>
+
+<pre><code class="language-sass">@if $include-images {
+  img::after {
+    content: attr(alt);
+  }
 }
 </code></pre>
 </div>
@@ -1801,7 +1634,35 @@ rule by default:</p>
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page height</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The number of rows available for printing.
+</div>
+<div class="longdesc">The number of rows available for printing.
+
+<p>Sets the default page height (this can be overwritten with <code>@page</code> rules), affects media queries
+that use the ‘height’ feature, and makes the variable <code>$page-height</code> available in style sheets.</p>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-size-property" class="external-link" target="_blank"><code>size</code></a> property</li>
+  <li>the <a href="https://www.w3.org/TR/mediaqueries-4/#mf-dimensions" class="external-link" target="_blank">page dimensions media features</a>
+</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>25</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1853,32 +1714,42 @@ sheet:</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Duplex</div>
+<div class="synopsis-option-name">Include production notes</div>
 <div class="synopsis-option-desc">
-When enabled, will print on both sides of the paper.
+<div class="shortdesc">When enabled, production notes are included in the content.
+</div>
+<div class="longdesc">When enabled, production notes are included in the content.
+
+<p>Makes the variable <code>$include-production-notes</code> available in style sheets and includes the following
+rule by default:</p>
+
+<pre><code class="language-sass">.prodnote,
+[epub|type~='z3998:production'] {
+  display: if($include-production-notes, block, none);
+}
+</code></pre>
+</div>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Capital letters</div>
+<div class="synopsis-option-name">Include captions</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">When enabled, will indicate capital letters.
+<div class="shortdesc">When enabled, will include captions for images, tables, and so on.
 </div>
-<div class="longdesc">When enabled, will indicate capital letters.
+<div class="longdesc">When enabled, will include captions for images, tables, and so on.
 
-<p>Makes the variable <code>$capital-letters</code> available in style sheets and includes the following rule by
+<p>Makes the variable <code>$include-captions</code> available in style sheets and includes the following rule by
 default:</p>
 
-<pre><code class="language-sass">@if $capital-letters != true {
-  :root {
-    text-transform: lowercase;
-  }
+<pre><code class="language-sass">caption {
+  display: if($include-captions, block, none);
 }
 </code></pre>
 </div>
@@ -1892,19 +1763,75 @@ default:</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Apply document-specific CSS</div>
+<div class="synopsis-option-name">Allow breaks within sections.</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">If this option is enabled, any pre-existing CSS in the EPUB with media "embossed" (or "all") will be used.
+<div class="shortdesc">Amount with which volume breaks are allowed within sections.
 </div>
-<div class="longdesc">If this option is enabled, any pre-existing CSS in the EPUB with media "embossed" (or "all") will be used.
+<div class="longdesc">Amount with which volume breaks are allowed within sections.
 
-<p>The input EPUB may already contain CSS that applies to embossed media.  Such document-specific CSS
-takes precedence over any CSS attached when running this script.</p>
+<p>The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
+right before <code>section</code> elements. The higher the value, the more equal the volumes will be in
+size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>10</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include line groups</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When disabled, lines in a linegroup are joined together to form one block.
+</div>
+<div class="longdesc">When disabled, lines in a linegroup are joined together to form one block.
 
-<p>For instance, if the EPUB already contains the rule <code>p { padding-left: 2; }</code>,
-and using this script the rule <code>p#docauthor { padding-left: 4; }</code> is provided, then the
-<code>padding-left</code> property will get the value <code>2</code> because that’s what was defined in the EPUB,
-even though the provided CSS is more specific.</p>
+<p>Makes the variable <code>$include-line-groups</code> available in style sheets and includes the following rule
+by default:</p>
+
+<pre><code class="language-sass">.linegroup .line {
+  display: if($include-line-groups, block, inline);
+}
+</code></pre>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Force braille page break</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Force braille page breaks at print page breaks.
+</div>
+<div class="longdesc">Force braille page breaks at print page breaks.
+
+<p>Makes the variable <code>$force-braille-page-break</code> available in style sheets and includes the following
+rule by default:</p>
+
+<pre><code class="language-sass">@if $force-braille-page-break {
+  .page-front,
+  .page-normal,
+  .page-special,
+  [epub|type='pagebreak'] {
+    page-break-before: always;
+  }
+}
+</code></pre>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_controlling-page-breaks" class="external-link" target="_blank"><code>page-break-before</code></a>
+property</li>
+</ul>
 </div>
 </div>
 <div class="synopsis-option-data-type">
@@ -1912,6 +1839,133 @@ even though the provided CSS is more specific.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Prefer breaks at higher level sections.</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Amount with which preference is given to volume breaks before higher level sections.
+</div>
+<div class="longdesc">Amount with which preference is given to volume breaks before higher level sections.
+
+<p>The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference
+is given. A higher value results in volumes that are less equal in size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>0</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Show braille page numbers</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">When enabled, will number braille pages.
+</div>
+<div class="longdesc">When enabled, will number braille pages.
+
+<p>Makes the variable <code>$show-braille-page-numbers</code> available in style sheets. In order to use the
+variable include a rule like the following in your custom style sheet:</p>
+
+<pre><code class="language-sass">@if $show-braille-page-numbers {
+  @page {
+    @top-right {
+      content: counter(page);
+    }
+  }
+}
+</code></pre>
+
+<p>This will create a page number in the top right corner of every braille page.</p>
+
+<p>See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
+  <li>the
+<a href="http://braillespecs.github.io/braille-css/#printing-counters-the-counter-function" class="external-link" target="_blank"><code>counter()</code></a>
+function</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The ASCII braille table used to render the HTML preview.
+</div>
+<div class="longdesc">The ASCII braille table used to render the HTML preview.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Hyphenation</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Hyphenation policy.
+</div>
+<div class="longdesc">Hyphenation policy.
+
+<p>Makes the variable <code>$hyphenation</code> available in style sheets and includes the following rule by
+default:</p>
+
+<pre><code class="language-sass">:root {
+  hyphens: $hyphenation;
+}
+</code></pre>
+
+<p>This means that words are hyphenated according to the specified policy, except where overridden by
+more specific CSS rules. See the CSS specification for more info:</p>
+
+<ul>
+  <li>the <a href="http://braillespecs.github.io/braille-css/#the-hyphens-property" class="external-link" target="_blank"><code>hyphens</code></a> property</li>
+</ul>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>auto</code></dt>
+<dd>Hyphenate words</dd>
+<dt><code>manual</code></dt>
+<dd>Only hyphenate words where there are soft hyphens (U+00AD)</dd>
+<dt><code>none</code></dt>
+<dd>Never hyphenate words</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>auto</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1930,60 +1984,6 @@ even though the provided CSS is more specific.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Page height</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The number of rows available for printing.
-</div>
-<div class="longdesc">The number of rows available for printing.
-
-<p>Sets the default page height (this can be overwritten with <code>@page</code> rules), affects media queries
-that use the ‘height’ feature, and makes the variable <code>$page-height</code> available in style sheets.</p>
-
-<p>See the CSS specification for more info:</p>
-
-<ul>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#h4_the-page-rule" class="external-link" target="_blank"><code>@page</code></a> rule</li>
-  <li>the <a href="http://braillespecs.github.io/braille-css/#the-size-property" class="external-link" target="_blank"><code>size</code></a> property</li>
-  <li>the <a href="https://www.w3.org/TR/mediaqueries-4/#mf-dimensions" class="external-link" target="_blank">page dimensions media features</a>
-</li>
-</ul>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>25</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Hyphenation at page boundaries</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether hyphenation of words at page boundaries is allowed or not.
-</div>
-<div class="longdesc">Whether hyphenation of words at page boundaries is allowed or not.
-
-<p>This option only determines whether hyphenation is allowed at page boundaries. The “Hyphenation”
-option and the CSS determine how the hyphenation is done, when allowed.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>false</code></dt>
-<dd>Never hyphenate words at page boundaries</dd>
-<dt><code>except-at-volume-breaks</code></dt>
-<dd>Allow hyphenation at page boundaries except when it's a volume boundary</dd>
-<dt><code>true</code></dt>
-<dd>Allow hyphenation at page boundaries</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -2041,128 +2041,128 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
-<td>Style sheet parameters (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--force-braille-page-break [<span style="text-transform: uppercase">force-braille-page-break</span>]</td>
-<td>Force braille page break (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--show-braille-page-numbers [<span style="text-transform: uppercase">show-braille-page-numbers</span>]</td>
-<td>Show braille page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--levels-in-footer [<span style="text-transform: uppercase">levels-in-footer</span>]</td>
-<td>Levels in footer (default: <span class="synopsis-option-default"><code>6</code></span>)</td>
-</tr>
-<tr>
-<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
-<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--braille-code [<span style="text-transform: uppercase">braille-code</span>]</td>
-<td>Braille code (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--include-captions [<span style="text-transform: uppercase">include-captions</span>]</td>
-<td>Include captions (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--line-spacing [<span style="text-transform: uppercase">line-spacing</span>]</td>
-<td>Line spacing (default: <span class="synopsis-option-default"><code>single</code></span>)</td>
-</tr>
-<tr>
-<td>--include-images [<span style="text-transform: uppercase">include-images</span>]</td>
-<td>Include images (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--hyphenation [<span style="text-transform: uppercase">hyphenation</span>]</td>
-<td>Hyphenation (default: <span class="synopsis-option-default"><code>auto</code></span>)</td>
-</tr>
-<tr>
 <td>--maximum-number-of-sheets [<span style="text-transform: uppercase">maximum-number-of-sheets</span>]</td>
 <td>Maximum number of sheets (default: <span class="synopsis-option-default"><code>70</code></span>)</td>
-</tr>
-<tr>
-<td>--include-obfl [<span style="text-transform: uppercase">include-obfl</span>]</td>
-<td>Include OBFL (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--prefer-volume-break-before-higher-level-factor [<span style="text-transform: uppercase">prefer-volume-break-before-higher-level-factor</span>]</td>
-<td>Prefer breaks at higher level sections. (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
-</tr>
-<tr>
-<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
-<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
-<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
-<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--notes-placement [<span style="text-transform: uppercase">notes-placement</span>]</td>
-<td>Notes placement (default: <span class="synopsis-option-default"><code>end-of-book</code></span>)</td>
-</tr>
-<tr>
-<td>--page-width [<span style="text-transform: uppercase">page-width</span>]</td>
-<td>Page width (default: <span class="synopsis-option-default"><code>40</code></span>)</td>
-</tr>
-<tr>
-<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
-<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
-</tr>
-<tr>
-<td>--include-line-groups [<span style="text-transform: uppercase">include-line-groups</span>]</td>
-<td>Include line groups (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--allow-volume-break-inside-leaf-section-factor [<span style="text-transform: uppercase">allow-volume-break-inside-leaf-section-factor</span>]</td>
-<td>Allow breaks within sections. (default: <span class="synopsis-option-default"><code>10</code></span>)</td>
-</tr>
-<tr>
-<td>--toc-depth [<span style="text-transform: uppercase">toc-depth</span>]</td>
-<td>Table of contents depth (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
-</tr>
-<tr>
-<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--include-production-notes [<span style="text-transform: uppercase">include-production-notes</span>]</td>
-<td>Include production notes (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--show-print-page-numbers [<span style="text-transform: uppercase">show-print-page-numbers</span>]</td>
-<td>Show print page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--duplex [<span style="text-transform: uppercase">duplex</span>]</td>
 <td>Duplex (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
+<td>--notes-placement [<span style="text-transform: uppercase">notes-placement</span>]</td>
+<td>Notes placement (default: <span class="synopsis-option-default"><code>end-of-book</code></span>)</td>
+</tr>
+<tr>
+<td>--hyphenation-at-page-breaks [<span style="text-transform: uppercase">hyphenation-at-page-breaks</span>]</td>
+<td>Hyphenation at page boundaries (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--page-width [<span style="text-transform: uppercase">page-width</span>]</td>
+<td>Page width (default: <span class="synopsis-option-default"><code>40</code></span>)</td>
+</tr>
+<tr>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
+<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
+<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
+</tr>
+<tr>
 <td>--capital-letters [<span style="text-transform: uppercase">capital-letters</span>]</td>
 <td>Capital letters (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--line-spacing [<span style="text-transform: uppercase">line-spacing</span>]</td>
+<td>Line spacing (default: <span class="synopsis-option-default"><code>single</code></span>)</td>
+</tr>
+<tr>
+<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
+<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--braille-code [<span style="text-transform: uppercase">braille-code</span>]</td>
+<td>Braille code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--apply-document-specific-stylesheets [<span style="text-transform: uppercase">apply-document-specific-stylesheets</span>]</td>
 <td>Apply document-specific CSS (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--toc-exclude-class [<span style="text-transform: uppercase">toc-exclude-class</span>]</td>
-<td>Exclude headings (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--toc-depth [<span style="text-transform: uppercase">toc-depth</span>]</td>
+<td>Table of contents depth (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--levels-in-footer [<span style="text-transform: uppercase">levels-in-footer</span>]</td>
+<td>Levels in footer (default: <span class="synopsis-option-default"><code>6</code></span>)</td>
+</tr>
+<tr>
+<td>--include-obfl [<span style="text-transform: uppercase">include-obfl</span>]</td>
+<td>Include OBFL (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-images [<span style="text-transform: uppercase">include-images</span>]</td>
+<td>Include images (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--page-height [<span style="text-transform: uppercase">page-height</span>]</td>
 <td>Page height (default: <span class="synopsis-option-default"><code>25</code></span>)</td>
 </tr>
 <tr>
-<td>--hyphenation-at-page-breaks [<span style="text-transform: uppercase">hyphenation-at-page-breaks</span>]</td>
-<td>Hyphenation at page boundaries (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--show-print-page-numbers [<span style="text-transform: uppercase">show-print-page-numbers</span>]</td>
+<td>Show print page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--include-production-notes [<span style="text-transform: uppercase">include-production-notes</span>]</td>
+<td>Include production notes (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--include-captions [<span style="text-transform: uppercase">include-captions</span>]</td>
+<td>Include captions (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--allow-volume-break-inside-leaf-section-factor [<span style="text-transform: uppercase">allow-volume-break-inside-leaf-section-factor</span>]</td>
+<td>Allow breaks within sections. (default: <span class="synopsis-option-default"><code>10</code></span>)</td>
+</tr>
+<tr>
+<td>--include-line-groups [<span style="text-transform: uppercase">include-line-groups</span>]</td>
+<td>Include line groups (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--force-braille-page-break [<span style="text-transform: uppercase">force-braille-page-break</span>]</td>
+<td>Force braille page break (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--prefer-volume-break-before-higher-level-factor [<span style="text-transform: uppercase">prefer-volume-break-before-higher-level-factor</span>]</td>
+<td>Prefer breaks at higher level sections. (default: <span class="synopsis-option-default"><code>0</code></span>)</td>
+</tr>
+<tr>
+<td>--show-braille-page-numbers [<span style="text-transform: uppercase">show-braille-page-numbers</span>]</td>
+<td>Show braille page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
+<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--hyphenation [<span style="text-transform: uppercase">hyphenation</span>]</td>
+<td>Hyphenation (default: <span class="synopsis-option-default"><code>auto</code></span>)</td>
+</tr>
+<tr>
+<td>--toc-exclude-class [<span style="text-transform: uppercase">toc-exclude-class</span>]</td>
+<td>Exclude headings (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -863,12 +863,12 @@ dependencies:</p>
   <div class="code"><pre><span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>org.daisy.pipeline<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>clientlib-java<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>4.8.2<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>5.0.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 <span class="tag">&lt;dependency&gt;</span>
   <span class="tag">&lt;groupId&gt;</span>org.daisy.pipeline<span class="tag">&lt;/groupId&gt;</span>
   <span class="tag">&lt;artifactId&gt;</span>clientlib-java-httpclient<span class="tag">&lt;/artifactId&gt;</span>
-  <span class="tag">&lt;version&gt;</span>2.0.3<span class="tag">&lt;/version&gt;</span>
+  <span class="tag">&lt;version&gt;</span>2.1.1<span class="tag">&lt;/version&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span>
 </pre></div>
 </div>
@@ -915,37 +915,10 @@ of via client-server communication.</p>
   <dd>Access job messages.</dd>
 </dl>
 
-<!--
-FIXME: should not be in API but is currently needed to create a JobManager
-[`org.daisy.pipeline.clients.ClientStorage`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/clients/ClientStorage.html)
-: Create, delete and access clients.
--->
-
-<p>The <code>ScriptRegistry</code>, <code>DatatypeRegistry</code> and <code>JobManagerFactory</code>
-objects are OSGi services that can be injected as follows:</p>
-
-<div class="language-java highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre><span class="keyword">import</span> <span class="include">org.daisy.pipeline.script.ScriptRegistry</span>;
-
-<span class="keyword">import</span> <span class="include">org.osgi.service.component.annotations.Reference</span>;
-<span class="keyword">import</span> <span class="include">org.osgi.service.component.annotations.ReferenceCardinality</span>;
-<span class="keyword">import</span> <span class="include">org.osgi.service.component.annotations.ReferencePolicy</span>;
-
-...
-
-<span class="annotation">@Reference</span>(
-    name = <span class="string"><span class="delimiter">"</span><span class="content">ScriptRegistry</span><span class="delimiter">"</span></span>,
-    service = ScriptRegistry.class,
-    cardinality = ReferenceCardinality.MANDATORY,
-    policy = ReferencePolicy.STATIC
-)
-<span class="directive">public</span> <span class="type">void</span> setScriptRegistry(ScriptRegistry registry) {
-    ...
-}
-</pre></div>
-</div>
-</div>
+<p>Providers of the <code>ScriptRegistry</code>, <code>DatatypeRegistry</code> and
+<code>JobManagerFactory</code> services can be loaded using the
+<a href="https://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html" class="external-link" target="_blank"><code>ServiceLoader</code></a>
+mechanism or using OSGi.</p>
 
 <h2 id="complete-javadocs">Complete Javadocs</h2>
 

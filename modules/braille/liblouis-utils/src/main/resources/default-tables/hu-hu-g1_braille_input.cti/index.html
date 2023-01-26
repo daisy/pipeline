@@ -953,7 +953,7 @@ noback pass2 @5-23456 @46-1356
 #Compatibility purposes handle older braille 5-4 dot combination when the user trying typing the 5-4 dot combination, and not known yet the new changed 5-14 dot combination
 nofor always ` 5-4
 noback always ` 5-4
-noback context $a1-30["`" @5-4
+noback context $a1-30["`"] @5-4
 noback pass2 @5-4 @5-14
 nofor context @5-4 "`"        Handle the backtranslation too
 
@@ -1002,17 +1002,26 @@ prepunc ! 235
 postpunc ! 235
 punctuation ! 235
 endnum % 3456-245-356
+endnum -% 36-3456-245-356
+noback pass2 $D.@36-3456-245-356[@36-6]%notaccentedletters @36
 endnum / 5-2
 prepunc / 5-2
 postpunc / 5-2
+always ' 6-3
+midnum : 3
+endnum : 6-25
+always : 25
+always ! 235
+always • 6-35
 
 #numbers related braille input rules, trying temporary fixing with numericnocontchars abcdefghij related issue (the #615 issue), link is following:
 #https://github.com/liblouis/liblouis/issues/615
 #cs related number exceptions
 endnum cs 146
 endnum -cs 36-146
-prepunc cs 146
+#prepunc cs 146
 postpunc cs 146
+always cs 146
 noback pass2 $D@6%notaccentedletters[@14-234] @146
 noback pass2 $D@6%notaccentedletters%accentedletters.[@14-234] @146
 noback pass2 $D@46%notaccentedletters[@14-234] @146
@@ -1094,6 +1103,7 @@ endnum -ly 36-456
 prepunc ly 456
 postpunc ly 456
 always ly 456
+noback pass2 $D.[@36-456-6]%notaccentedletters. @36-456
 
 endnum lly 456-456        General need replacing ly letters with a combined dot combination
 endnum -lly 36-456-456        General need replacing ly letters with a combined dot
@@ -1105,6 +1115,8 @@ endnum ny 1246
 endnum -ny 36-1246
 prepunc ny 1246        General need replacing ny letters with a combined dot combination
 postpunc ny 1246        General need replacing ny letters with a combined dot combination
+noback pass2 $D.[@6-1246] @1246
+noback pass2 $D.[@36-1246-6]%notaccentedletters. @36-1246
 
 endnum nny 1246-1246        General need replacing nny letters with a combined dot combination
 endnum -nny 36-1246-1246        General need replacing nny letters with a combined dot combination
@@ -1117,6 +1129,7 @@ endnum -ty 36-1256        General need replacing ty letter pairs with a combined
 prepunc ty 1256        General need replacing ty letter pairs with a combined dot combination
 postpunc ty 1256        General need replacing ty letter pairs with a combined dot combination
 always ty 1256
+noback pass2 $D.[@36-1256-6]%notaccentedletters. @36-1256
 
 endnum tty 1256-1256                General need replacing ty letter pairs with a combined dot combination
 endnum -tty 36-1256-1256                General need replacing ty letter pairs with a combined dot combination
@@ -1161,6 +1174,7 @@ endnum -zs 36-345        General need replacing zs letters with a combined dot c
 prepunc zs 345
 postpunc zs 345
 always zs 345
+noback pass2 $D.[@36-345-6]%notaccentedletters. @36-345
 
 endnum zzs 345-345        General need replacing zs letters with a combined dot combination
 endnum -zzs 36-345-345        General need replacing zs letters with a combined dot combination
@@ -1248,7 +1262,16 @@ prepunc ä 5-1
 postpunc ä 5-1
 noback context $l$p["–"] @36-36
 noback context $l["–"] @36-36
+nofor correct $D1-30["--annyi"] "--ai"
+nofor correct $D1-30["--ennyi"] "--ei"
+#nofor correct $D1-30["-'annyi"] "-ai"
+nofor correct $D1-30["-ennyi"] "-ei"
 
+nofor correct $D["'"]$l ?
+nofor correct $D["'"]$U ?
+nofor correct ["—'"]$l "--"
+nofor correct ["--'"]$l "-"
+nofor correct ["-'"]$l "-"
 </pre></div>
 </div>
 </div>
