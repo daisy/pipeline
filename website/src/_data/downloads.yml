@@ -1,16 +1,73 @@
 ## Generate with:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.10 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tab:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" elif .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".deb") then ["gui","server"] else ["gui","server","cli"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.12 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["gui","server", "cli"] else ["gui","server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.0.0 '.[] | select(.tag_name == $version)|{gui_github_tag:$version,gui_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.14.12"
+  sort: "1.14.12"
+  state: stable
+  github_tag: "v1.14.12"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.11"
+  gui_github_tag: "1.0.0"
+  gui_github_url: "https://github.com/daisy/pipeline-ui/releases/tag/1.0.0"
+  description: >
+    Includes the standalone desktop application and the server. Versions available for
+    Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
+    application).
+  #description: >
+  #  Includes the standalone desktop application and the web server. Versions available for
+  #  Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
+  #  application). The Linux packages (ZIP and DEB files) include only the web server. The
+  #  ZIP package also includes the command line interface.
+  files:
+  - platform: macosx
+    package: dmg
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.0.0/DAISY.Pipeline.2023.-Setup-1.0.0.dmg"
+    size: 175752251
+  - platform: windows
+    package: installer
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.0.0/DAISY.Pipeline.2023.Setup.1.0.0.exe"
+    size: 130266592
+
+- group: main
+  version: "1.14.11"
+  sort: "1.14.11"
+  state: stable
+  github_tag: "v1.14.11"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.11"
+  description: >
+    Includes the standalone desktop application, the server, and the command line
+    interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+    DEB files). The DEB does not include the command line interface.
+  files:
+  - platform: debian
+    package: deb
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.11/pipeline2-1.14.11_debian.deb"
+    size: 128400128
+  - platform: linux
+    package: zip
+    content: [gui, server, cli]
+    url: 'https://github.com/daisy/pipeline-assembly/releases/download/v1.14.11/pipeline2-1.14.11_linux.zip'
+    size: 105160702
+  - platform: windows
+    package: installer
+    content: [gui, server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.11/pipeline2-1.14.11_windows.exe"
+    size: 129564247
 
 - group: main
   version: "1.14.10"
   sort: "1.14.10"
   state: stable
-  github_tab: "v1.14.10"
+  github_tag: "v1.14.10"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.10"
   description: >
     Includes the standalone desktop application, the server, and the command line
-      interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
-      DEB files). The DEB does not include the command line interface.
+    interface. Versions available for Windows (an installer EXE) and Linux (ZIP and
+    DEB files). The DEB does not include the command line interface.
   files:
   - platform: debian
     package: deb
@@ -32,7 +89,7 @@
   version: "1.14.9"
   sort: "1.14.09"
   state: stable
-  github_tab: "v1.14.9"
+  github_tag: "v1.14.9"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.9"
   description: >
       Includes the standalone desktop application, the server, and the command line
@@ -59,7 +116,7 @@
   version: "1.14.8"
   sort: "1.14.08"
   state: stable
-  github_tab: "v1.14.8"
+  github_tag: "v1.14.8"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.8"
   description: >
       Includes the standalone desktop application, the server, and the command line
@@ -86,7 +143,7 @@
   version: "1.14.7"
   sort: "1.14.07"
   state: stable
-  github_tab: "v1.14.7"
+  github_tag: "v1.14.7"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.7"
   description: >
       Includes the standalone desktop application, the server, and the command line
@@ -113,7 +170,7 @@
   version: "1.14.6"
   sort: "1.14.06"
   state: stable
-  github_tab: "v1.14.6"
+  github_tag: "v1.14.6"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.6"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -147,7 +204,7 @@
   version: "1.14.5"
   sort: "1.14.05"
   state: stable
-  github_tab: "v1.14.5"
+  github_tag: "v1.14.5"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.5"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -203,7 +260,7 @@
   version: "1.14.4"
   sort: "1.14.04"
   state: stable
-  github_tab: "v1.14.4"
+  github_tag: "v1.14.4"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.4"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -237,7 +294,7 @@
   version: "1.14.3"
   sort: "1.14.03"
   state: stable
-  github_tab: "v1.14.3"
+  github_tag: "v1.14.3"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.3"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -271,7 +328,7 @@
   version: "1.14.2"
   sort: "1.14.02"
   state: stable
-  github_tab: "v1.14.2"
+  github_tag: "v1.14.2"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.2"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -305,7 +362,7 @@
   version: "1.14.1"
   sort: "1.14.01"
   state: stable
-  github_tab: "v1.14.1"
+  github_tag: "v1.14.1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.1"
 
 - group: main
@@ -354,7 +411,7 @@
   version: "1.13.0"
   sort: "1.13.0"
   state: stable
-  github_tab: "v1.13.0"
+  github_tag: "v1.13.0"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.13.0"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -387,7 +444,7 @@
   version: "1.12.1"
   sort: "1.12.1"
   state: stable
-  github_tab: "v1.12.1"
+  github_tag: "v1.12.1"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.1"
   description: >
     Includes the standalone desktop application, the server, and the command line
@@ -442,7 +499,7 @@
   version: "1.12.0"
   sort: "1.12.0"
   state: stable
-  github_tab: "v1.12.0"
+  github_tag: "v1.12.0"
   github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.12.0"
   description: >
     Includes the standalone desktop application, the server, and the command line
