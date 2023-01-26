@@ -4,6 +4,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:f="functions"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xpath-default-namespace="http://www.w3.org/1999/xhtml"
                 exclude-result-prefixes="#all">
@@ -588,6 +589,10 @@
 			<xsl:otherwise>
 				<xsl:copy>
 					<xsl:apply-templates mode="#current" select="@* except @aria-label"/>
+					<xsl:variable name="first-content-node" as="node()?"
+					              select="child::node()[not(self::text()[not(normalize-space(.))] or
+					                                        @role='doc-pagebreak' or
+					                                        @epub:type/tokenize(.,'\s+')='pagebreak')][1]"/>
 					<xsl:variable name="rank" as="xs:integer">
 						<xsl:choose>
 							<xsl:when test="$fix-heading-ranks='outline-depth'">
@@ -610,12 +615,14 @@
 								<xsl:call-template name="pf:generate-id"/>
 							</xsl:variable>
 							<xsl:attribute name="aria-labelledby" select="$label-id"/>
+							<xsl:apply-templates mode="#current" select="$first-content-node/preceding-sibling::node()"/>
 							<xsl:element name="h{$rank}">
 								<xsl:sequence select="$label-id"/>
 								<xsl:value-of select="@aria-label"/>
 							</xsl:element>
 						</xsl:when>
 						<xsl:otherwise>
+							<xsl:apply-templates mode="#current" select="$first-content-node/preceding-sibling::node()"/>
 							<xsl:element name="h{$rank}">
 								<xsl:call-template name="get-untitled-section-title">
 									<xsl:with-param name="sectioning-element" select="."/>
@@ -623,7 +630,8 @@
 							</xsl:element>
 						</xsl:otherwise>
 					</xsl:choose>
-					<xsl:apply-templates mode="#current"/>
+					<xsl:apply-templates mode="#current" select="$first-content-node|
+					                                             $first-content-node/following-sibling::node()"/>
 				</xsl:copy>
 			</xsl:otherwise>
 		</xsl:choose>

@@ -70,11 +70,27 @@
 
 	<p:group name="ncc">
 		<p:output port="result"/>
-		<px:fileset-load href="*/ncc.html">
-			<p:input port="in-memory">
-				<p:pipe step="main" port="source.in-memory"/>
-			</p:input>
-		</px:fileset-load>
+		<p:group>
+			<p:output port="result" sequence="true">
+				<p:pipe step="load-ncc" port="result"/>
+				<p:pipe step="load-NCC" port="result"/>
+			</p:output>
+			<px:fileset-load href="*/ncc.html" name="load-ncc">
+				<p:input port="in-memory">
+					<p:pipe step="main" port="source.in-memory"/>
+				</p:input>
+			</px:fileset-load>
+			<p:sink/>
+			<px:fileset-load href="*/NCC.HTML" name="load-NCC">
+				<p:input port="fileset">
+					<p:pipe step="main" port="source.fileset"/>
+				</p:input>
+				<p:input port="in-memory">
+					<p:pipe step="main" port="source.in-memory"/>
+				</p:input>
+			</px:fileset-load>
+			<p:sink/>
+		</p:group>
 		<px:assert test-count-min="1" test-count-max="1" error-code="XXXX"
 		           message="The input fileset must contain exactly one NCC file"/>
 		<p:group name="check-multimedia-type">
@@ -83,7 +99,8 @@
 				<p:with-option name="test" select="$type!=''"/>
 			</px:assert>
 			<px:assert error-code="XXXX" message="The input DTB type ('$1') is not supported.">
-				<p:with-option name="test" select="$type=('audioOnly','audioNcc','audioPartText','audioFullText')"/>
+				<p:with-option name="test" select="some $t in ('audioOnly','audioNcc','audioPartText','audioFullText')
+				                                   satisfies lower-case($t)=lower-case($type)"/>
 				<p:with-option name="param1" select="$type"/>
 			</px:assert>
 		</p:group>

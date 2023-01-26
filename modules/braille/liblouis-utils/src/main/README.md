@@ -6,8 +6,6 @@
 
 ## [catalog.xml](resources/META-INF/catalog.xml)
 
-- [`http://www.daisy.org/pipeline/modules/braille/liblouis-utils/library.xsl`](resources/xml/library.xsl)
-
 ## Liblouis table paths ([`org.daisy.pipeline.braille.liblouis.LiblouisTablePath`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/braille/liblouis/LiblouisTablePath.html))
 
 - [`http://www.liblouis.org/tables/`](resources/default-tables/)

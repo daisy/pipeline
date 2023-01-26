@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-bom</artifactId>
-  <version>1.14.12-SNAPSHOT</version>
+  <version>1.14.13-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules BoM</name>
@@ -26,7 +26,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>audio-common</artifactId>
-        <version>5.0.2</version>
+        <version>5.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -40,7 +40,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-common</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -80,7 +80,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>liblouis-utils</artifactId>
-        <version>5.0.0</version>
+        <version>5.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -117,7 +117,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils</artifactId>
-        <version>2.0.1</version>
+        <version>2.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -127,12 +127,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>fileset-utils</artifactId>
-        <version>5.2.0</version>
+        <version>5.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>html-utils</artifactId>
-        <version>6.0.0</version>
+        <version>6.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -176,7 +176,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-common</artifactId>
-        <version>2.0.4</version>
+        <version>2.0.5</version>
       </dependency>
       <!-- <dependency> -->
       <!--   <groupId>org.daisy.pipeline.modules</groupId> -->
@@ -215,7 +215,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-utils</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -289,7 +289,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy202-to-mp3</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -304,7 +304,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-to-mp3</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -369,7 +369,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-to-epub3</artifactId>
-        <version>4.0.1</version>
+        <version>4.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -394,7 +394,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>html-to-pef</artifactId>
-        <version>6.0.0</version>
+        <version>6.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -433,7 +433,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>epub3-tts</artifactId>
-        <version>2.3.1</version>
+        <version>2.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -448,7 +448,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-adapter-cereproc</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

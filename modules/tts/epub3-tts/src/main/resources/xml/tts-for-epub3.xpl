@@ -92,6 +92,12 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="sentence-class" required="false" select="''">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Class attribute to mark sentences with.</p>
+    </p:documentation>
+  </p:option>
+
   <!-- Might be useful some day: -->
   <!-- <p:option name="segmentation" required="false" px:type="boolean" select="'true'"> -->
   <!--   <p:documentation xmlns="http://www.w3.org/1999/xhtml"> -->
@@ -263,6 +269,8 @@
         </p:group>
         <px:html-break-detect name="lexing" px:progress="1/2" px:message="Performing sentence detection">
           <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
+          <p:with-option name="sentence-attr" select="if ($sentence-class!='') then 'class' else ''"/>
+          <p:with-option name="sentence-attr-val" select="$sentence-class"/>
         </px:html-break-detect>
         <px:isolate-skippable name="isolate-skippable"
                               match="*[@epub:type/tokenize(.,'\s+')=('pagebreak','noteref')]|

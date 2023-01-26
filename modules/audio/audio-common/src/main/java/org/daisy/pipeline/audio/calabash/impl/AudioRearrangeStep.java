@@ -3,6 +3,7 @@ package org.daisy.pipeline.audio.calabash.impl;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.nio.file.Files;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -40,6 +41,8 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.transform.InputValue;
 import org.daisy.common.transform.OutputValue;
@@ -363,6 +366,9 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						List<AudioInputStream> currentDestinationPCM = new ArrayList<>();
 						long currentDestinationElapsed = 0; // in frames
 						int fileCounter = 0;
+						MessageAppender progress = MessageAppender.getActiveBlock(); // px:audio-rearrange step
+						BigDecimal progressInc = BigDecimal.TEN.divide(new BigDecimal(desired.size()), MathContext.DECIMAL128);
+						int clipCounter = 0;
 						for (Map.Entry<AudioClip,AudioClip> entry : desired.entrySet()) {
 							AudioClip destinationClip = entry.getKey(); // destination clips are in order and don't overlap
 							AudioClip sourceClip = entry.getValue();
@@ -431,33 +437,47 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							if (sourceClipBegin < currentSourceElapsed)
 								throw new IllegalStateException(); // can not happen because if clips overlap or are not in
 								                                   // order, the audio file is read again
-							AudioInputStream clipPCM; {
-								long sourceClipLength = sourceClipEnd - sourceClipBegin;
-								long destinationClipLength = destinationClipEnd - destinationClipBegin;
-								long clipLength = Math.min(sourceClipLength, destinationClipLength);
-								Iterator<AudioInputStream> chunks = AudioUtils.split(
-									currentSourcePCM,
-									sourceClipBegin - currentSourceElapsed,
-									sourceClipBegin - currentSourceElapsed + clipLength
-								).iterator();
-								currentSourceElapsed += chunks.next().getFrameLength();
-								clipPCM = chunks.next();
-								currentSourcePCM = chunks.next();
-								currentSourceElapsed += clipPCM.getFrameLength();
+							long currentSourceRemaining = currentSourcePCM.getFrameLength();
+							if (currentSourceRemaining == 0) {
+								// audio missing in the input; will be missing in the output too
+							} else {
+								AudioInputStream clipPCM; {
+									long sourceClipLength = sourceClipEnd - sourceClipBegin;
+									long destinationClipLength = destinationClipEnd - destinationClipBegin;
+									long clipLength = Math.min(sourceClipLength, destinationClipLength);
+									if (clipLength > currentSourceRemaining) {
+										// part of audio missing in the input; will be missing in the output too
+										clipLength = currentSourceRemaining;
+									}
+									Iterator<AudioInputStream> chunks = AudioUtils.split(
+										currentSourcePCM,
+										sourceClipBegin - currentSourceElapsed,
+										sourceClipBegin - currentSourceElapsed + clipLength
+									).iterator();
+									currentSourceElapsed += chunks.next().getFrameLength();
+									clipPCM = chunks.next();
+									currentSourcePCM = chunks.next();
+									currentSourceElapsed += clipPCM.getFrameLength();
+								}
+								if (destinationClipBegin < currentDestinationElapsed)
+									throw new IllegalStateException(); // can not happen because clips are in order and don't overlap
+								AudioInputStream silence = AudioUtils.createSilence(
+									clipPCM.getFormat(),
+									destinationClipBegin - currentDestinationElapsed);
+								if (silence != null) {
+									currentDestinationPCM.add(silence);
+									currentDestinationElapsed += silence.getFrameLength();
+								}
+								currentDestinationPCM.add(clipPCM);
+								currentDestinationElapsed += clipPCM.getFrameLength();
 							}
-							if (destinationClipBegin < currentDestinationElapsed)
-								throw new IllegalStateException(); // can not happen because clips are in order and don't overlap
-							AudioInputStream silence = AudioUtils.createSilence(
-								clipPCM.getFormat(),
-								destinationClipBegin - currentDestinationElapsed);
-							if (silence != null) {
-								currentDestinationPCM.add(silence);
-								currentDestinationElapsed += silence.getFrameLength();
-							}
-							currentDestinationPCM.add(clipPCM);
-							currentDestinationElapsed += clipPCM.getFrameLength();
 							prevSourceClip = sourceClip;
+							if (++clipCounter == 10) {
+								clipCounter = 0;
+								progress.append(new MessageBuilder().withProgress(progressInc)).close();
+							}
 						}
+						progress.append(new MessageBuilder().withProgress(progressInc)).close();
 						File resultFile = new File(currentDestinationFile);
 						File tempFile = new File(tempDir, "tmp" + (++fileCounter) + "." + getFileExtension(resultFile.getName()));
 						try {

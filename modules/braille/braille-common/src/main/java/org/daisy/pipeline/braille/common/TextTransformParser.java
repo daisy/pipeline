@@ -82,15 +82,17 @@ public class TextTransformParser {
 								value = "" + ((TermInteger)d.get(0)).getIntValue();
 							else
 								value = "" + d.get(0).getValue();
-							if (query.containsKey(key))
-								query.removeAll(key);
 						}
+						if (query.containsKey(key))
+							query.removeAll(key);
 						if (translator != null && key.equals("translator") && !translator.equals(value)) {
 							query = null;
 							break; }
 						else if (key.equals("contraction") && value.equals("no"))
 							query.removeAll("grade");
 						else if (key.equals("table") || key.equals("liblouis-table")) {
+							query.removeAll("table");
+							query.removeAll("liblouis-table");
 							query.removeAll("locale");
 							query.removeAll("type");
 							query.removeAll("contraction");

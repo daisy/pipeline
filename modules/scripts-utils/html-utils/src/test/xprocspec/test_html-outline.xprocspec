@@ -759,9 +759,11 @@
 					<html xmlns="http://www.w3.org/1999/xhtml">
 						<body>
 							<section>
+								<div role="doc-pagebreak" title="1"></div>
 								<p/>
 							</section>
 							<section aria-label="My chapter">
+								<div epub:type="pagebreak" title="2"></div>
 								<p/>
 							</section>
 						</body>
@@ -803,10 +805,12 @@
 						<body id="id_1">
 							<h1>Untitled document</h1>
 							<section id="id_2">
+								<div role="doc-pagebreak" title="1"></div>
 								<h1>Untitled section</h1>
 								<p/>
 							</section>
 							<section id="id_3" aria-labelledby="aria_label_1">
+								<div id="id_4" epub:type="pagebreak" title="2"></div>
 								<h1 id="aria_label_1">My chapter</h1>
 								<p/>
 							</section>
@@ -847,9 +851,11 @@
 					<html xmlns="http://www.w3.org/1999/xhtml">
 						<body id="id_1">
 							<section id="id_2">
+								<div role="doc-pagebreak" title="1"></div>
 								<p/>
 							</section>
 							<section id="id_3" aria-labelledby="aria_label_1">
+								<div id="id_4" epub:type="pagebreak" title="2"></div>
 								<h1 id="aria_label_1">My chapter</h1>
 								<p/>
 							</section>

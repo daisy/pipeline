@@ -113,10 +113,13 @@
 									<xsl:with-param name="from-smil-elem" select="$to-smil-elem"/>
 									<xsl:with-param name="dest-file"
 									                select="let $level := 1 + count(ancestor::ncx:navPoint)
-									                        return (for $x in 1 to $level - 1 return $dest-file[$x],
-									                                $dest-file[$level] + 1,
-									                                for $x in $level + 1 to $depth return 1)"/>
-									<xsl:with-param name="label" select="string(ncx:navLabel/ncx:text)"/>
+									                        return if (empty($clips-for-dest-file)
+									                                   and (every $x in $level + 1 to $depth satisfies $dest-file[$x] eq 1))
+									                               then $dest-file
+									                               else (for $x in 1 to $level - 1 return $dest-file[$x],
+									                                    $dest-file[$level] + 1,
+									                                    for $x in $level + 1 to $depth return 1)"/>
+									<xsl:with-param name="label" select="normalize-space(string(ncx:navLabel/ncx:text))"/>
 									<xsl:with-param name="clips-for-dest-file" select="()"/>
 								</xsl:next-iteration>
 							</xsl:when>

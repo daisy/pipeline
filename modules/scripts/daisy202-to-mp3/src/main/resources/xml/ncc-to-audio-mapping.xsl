@@ -24,7 +24,7 @@
 		</xsl:map>
 	</xsl:variable>
 
-	<xsl:key name="id" match="par[@id]|seq[@id]" use="@id"/>
+	<xsl:key name="id" match="par[@id]|seq[@id]|text[@id]" use="@id"/>
 
 	<xsl:template match="/html:html">
 		<d:fileset>
@@ -68,6 +68,10 @@
 						              select="if (exists($to-smil-doc))
 						                      then key('id',substring-after($src,'#'),$smils[$to-smil-doc])
 						                      else ()"/>
+						<xsl:variable name="to-smil-elem" as="element()?"
+						              select="if ($to-smil-elem/self::text)
+						                      then $to-smil-elem/parent::*
+						                      else $to-smil-elem"/>
 						<xsl:if test="not(exists($to-smil-elem))">
 							<xsl:call-template name="pf:error">
 								<xsl:with-param name="msg">NCC invalid: "href" attribute contains a broken
@@ -102,10 +106,13 @@
 									<xsl:with-param name="from-smil-doc" select="$to-smil-doc"/>
 									<xsl:with-param name="from-smil-elem" select="$to-smil-elem"/>
 									<xsl:with-param name="dest-file"
-									                select="for $x in 1 to $level - 1 return $dest-file[$x],
-									                        $dest-file[$level] + 1,
-									                        for $x in $level + 1 to $depth return 1"/>
-									<xsl:with-param name="label" select="string(.)"/>
+									                select="if (empty($clips-for-dest-file)
+									                            and (every $x in $level + 1 to $depth satisfies $dest-file[$x] eq 1))
+									                        then $dest-file
+									                        else (for $x in 1 to $level - 1 return $dest-file[$x],
+									                              $dest-file[$level] + 1,
+									                              for $x in $level + 1 to $depth return 1)"/>
+									<xsl:with-param name="label" select="normalize-space(string(.))"/>
 									<xsl:with-param name="clips-for-dest-file" select="()"/>
 								</xsl:next-iteration>
 							</xsl:when>

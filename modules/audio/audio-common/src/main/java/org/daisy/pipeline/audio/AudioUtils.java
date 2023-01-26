@@ -168,7 +168,8 @@ public final class AudioUtils {
 	/**
 	 * Split a {@link AudioInputStream} into a sequence of {@link AudioInputStream}.
 	 *
-	 * @param stream Must be PCM encoded.
+	 * @param stream Must be PCM encoded. {@link AudioInputStream#getFrameLength()} must return the
+	 *               actual number of available frames in the stream.
 	 * @param splitPoints Are relative to the beginning of the stream.
 	 * @return A sequence of streams. The number of streams is one more than the number of split points.
 	 *         The durations are approximately (apart from rounding errors due to sampling) the time
@@ -213,13 +214,15 @@ public final class AudioUtils {
 					protected AudioInputStream computeNext() {
 						if (i > splitPoints.length)
 							return endOfData();
-						else if (i == splitPoints.length)
-							// we're at the last chunk, so we can simply return remaining stream
-							return stream;
-						long splitPoint = splitPoints[i];
-						long frames = splitPoint - framesConsumed;
-						if (frames > framesAvailable)
-							throw new IllegalStateException("coding error");
+						long frames = i == splitPoints.length
+							? framesAvailable
+							: splitPoints[i] - framesConsumed;
+						if (frames > framesAvailable) {
+							if (i == splitPoints.length - 1 && frames == framesAvailable + 1)
+								frames--;
+							else
+								throw new IllegalStateException("coding error"); // can not happen (see splitPoint validation above)
+						}
 						// In theory a byte array can hold 2 Gb of memory, which should be more than
 						// enough for audio. Note that when a lot of AudioInputStreams are open,
 						// there is still a risk for out-of-memory errors, but normally the streams
@@ -230,6 +233,8 @@ public final class AudioUtils {
 						if (frames > 0) {
 							try {
 								if (stream.read(bytes) < bytes.length)
+									// if this happens it means that stream.getFrameLength() did not
+									// return the actual number of available frames
 									throw new IllegalStateException("coding error");
 							} catch (IOException e) {
 								throw new RuntimeException(e);
