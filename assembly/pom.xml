@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.11-SNAPSHOT</version>
+  <version>1.14.11</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.14.11</tag>
   </scm>
   <properties>
     <cli.version>2.1.7</cli.version>
@@ -80,14 +80,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.10</version>
+        <version>1.14.11</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.11</version>
+        <version>1.14.12</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -462,12 +462,10 @@
                 <artifactItem>
                   <groupId>ch.qos.logback</groupId>
                   <artifactId>logback-classic</artifactId>
-                  <version>1.2.8</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>ch.qos.logback</groupId>
                   <artifactId>logback-core</artifactId>
-                  <version>1.2.8</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.slf4j</groupId>
@@ -670,6 +668,39 @@
                 <artifactItem>
                   <groupId>org.restlet.osgi</groupId>
                   <artifactId>org.restlet.ext.xml</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>servlet-api</artifactId>
+                </artifactItem>
+                <!-- Jetty -->
+                <artifactItem>
+                  <groupId>org.restlet.osgi</groupId>
+                  <artifactId>org.restlet.ext.jetty</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-ajp</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-continuation</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-http</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-io</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-server</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-util</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>

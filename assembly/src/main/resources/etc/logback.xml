@@ -4,32 +4,8 @@
     <Property name="org.daisy.pipeline.logdir">${user.home:-.}</Property>
   </Properties>
 
-  <!-- see http://logback.qos.ch/manual/configuration.html#LevelChangePropagator -->
-  <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator"/>
-
-  <appender name="JOB_FILE" class="org.daisy.pipeline.logging.JobLogFileAppender">
-    <encoder>
-      <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
-    </encoder>
-  </appender>
-
-  <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
-    <filter class="org.daisy.pipeline.logging.ThresholdFilter">
-      <rootLevel>INFO</rootLevel>
-      <loggerLevels>
-        cz.vutbr.web=WARN
-        org.daisy.pipeline.job.Job=OFF
-        org.daisy.pipeline.job.impl.DefaultJobExecutionService=OFF
-        org.daisy.pipeline.persistence.impl.job.PersistentJob=OFF
-        org.daisy.dotify=WARN
-        com.xmlcalabash.runtime=OFF
-        com.xmlcalabash.library.XSLT=ERROR
-      </loggerLevels>
-    </filter>
-  </appender>
-  
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
+    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
     <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
       <fileNamePattern>${org.daisy.pipeline.logdir}/daisy-pipeline.%i.log.zip</fileNamePattern>
@@ -39,22 +15,26 @@
     <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
       <maxFileSize>10MB</maxFileSize>
     </triggeringPolicy>
-
     <encoder>
       <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
     </encoder>
   </appender>
 
   <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-          <filter class="org.daisy.pipeline.logging.OSGIFilter"/>   
-          <encoder>
-                  <Pattern>%-5level %marker [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
-          </encoder>
+    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
+    <encoder>
+      <Pattern>%-5level %marker [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
+    </encoder>
   </appender>
+
+  <include resource="org/daisy/pipeline/logging/jul-to-slf4j.xml"/>
+  <include resource="org/daisy/pipeline/logging/appenders.xml">
+    <!-- JOB and JOB_FILE appenders-->
+  </include>
 
   <root level="DEBUG">
     <appender-ref ref="FILE"/>
-    <appender-ref ref="STDOUT"/>
+    <!-- <appender-ref ref="STDOUT"/> -->
     <appender-ref ref="JOB_FILE"/>
     <appender-ref ref="JOB"/>
   </root>

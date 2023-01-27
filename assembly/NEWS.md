@@ -1,3 +1,24 @@
+Changes in release v1.14.11
+===========================
+
+## Framework
+
+- **FIX** Issue of empty job log files.
+- **FIX** Regression in web server: handling of simultaneous requests was broken in release 1.14.10.
+
+## Modules
+
+- **FIX** Various fixes and improvements to DAISY 3 to MP3 and DAISY 2.02 to MP3 scripts.
+- **FIX** Headings generated from `aria-label` attributes are now inserted after any leading page
+  breaks.
+- Other bugfixes
+
+## Details
+
+- [Closed issues in pipeline-assembly](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-assembly+milestone%3Av1.14.11)
+- [Closed issues in pipeline-framework](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-framework+milestone%3Av1.14.11)
+- [Closed issues in pipeline-modules](https://github.com/issues?q=repo%3Adaisy%2Fpipeline-modules+milestone%3Av1.14.11)
+
 Changes in release v1.14.10
 ===========================
 
@@ -6,6 +27,7 @@ Changes in release v1.14.10
 - **NEW** Script to transform a DAISY 2.02 into a folder structure with MP3 files (experimental)
 - **NEW** Script to unscramble audio files in a DAISY 2.02 publication
 - **NEW** Support for new type of Windows text-to-speech voices ("OneCore" voices).
+- Changes to braille production scripts, see [release notes of braille modules v1.14.11](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11411)
 
 ## Framework
 
