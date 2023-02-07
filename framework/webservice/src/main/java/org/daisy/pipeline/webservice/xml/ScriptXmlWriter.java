@@ -145,7 +145,7 @@ public class ScriptXmlWriter {
 	                optionElm.setAttribute("nicename", meta.getNiceName());
 			optionElm.setAttribute("required", Boolean.toString(option.isRequired()));
 			
-			optionElm.setAttribute("type", meta.getType());
+			optionElm.setAttribute("type", meta.getType() == null ? "xs:string" : meta.getType());
 			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
 				optionElm.setAttribute("mediaType", meta.getMediaType());
 			}

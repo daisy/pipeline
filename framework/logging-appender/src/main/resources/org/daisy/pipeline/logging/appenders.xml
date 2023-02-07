@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+    <appender name="JOB_FILE" class="org.daisy.pipeline.logging.JobLogFileAppender">
+        <encoder>
+            <Pattern>%date [%-5level] %logger{36} - %msg%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="JOB" class="org.daisy.pipeline.logging.JobProgressAppender">
+        <filter class="org.daisy.pipeline.logging.ThresholdFilter">
+            <rootLevel>INFO</rootLevel>
+            <loggerLevels>
+                cz.vutbr.web=WARN
+                org.daisy.pipeline.job.Job=OFF
+                org.daisy.pipeline.job.impl.DefaultJobExecutionService=OFF
+                org.daisy.pipeline.persistence.impl.job.PersistentJob=OFF
+                org.daisy.dotify=WARN
+                com.xmlcalabash.runtime=OFF
+                com.xmlcalabash.library.XSLT=ERROR
+            </loggerLevels>
+        </filter>
+    </appender>
+
+</included>

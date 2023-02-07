@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.14.10</version>
+  <version>1.14.12-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -21,30 +21,30 @@
     <connection>scm:git:git@github.com:daisy/pipeline-framework.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-framework.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-framework.git</developerConnection>
-    <tag>v1.14.10</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <modules>
     <module>bom</module>
     <module>parent</module>
     <module>utils/webservice-jaxb</module>
-    <!--<module>utils/clientlib-java-jaxb</module>-->
+    <module>utils/clientlib-java-jaxb</module>
     <module>utils/xproc-engine-daisy-pipeline</module>
-    <!--<module>utils/xproc-engine-daisy-pipeline-logging</module>-->
+    <module>utils/xproc-engine-daisy-pipeline-logging</module>
     <module>saxon-adapter</module>
     <module>calabash-adapter</module>
     <module>common-utils</module>
     <module>framework-core</module>
     <module>framework-persistence</module>
-    <!--<module>logging-activator</module>-->
+    <module>logging-activator</module>
     <module>logging-appender</module>
     <module>modules-registry</module>
     <module>persistence-derby</module>
-    <!--<module>persistence-mysql</module>-->
+    <module>persistence-mysql</module>
     <module>updater-wrapper</module>
     <module>webservice</module>
-    <!--<module>woodstox-osgi-adapter</module>-->
-    <!--<module>xproc-api</module>-->
+    <module>woodstox-osgi-adapter</module>
+    <module>xproc-api</module>
   </modules>
   
   <build>

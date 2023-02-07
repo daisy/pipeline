@@ -30,6 +30,8 @@ public interface XMLTransformer {
 	 *         threads, the transformations must be executed in the correct order. {@link
 	 *         Runnable#run()} may throw a {@link TransformerException} if an input could not be
 	 *         read, the transformation failed, or an output could not be written.
+	 * @throws IllegalArgumentException if an invalid input or output value was provided or if an
+	 *                                  input or output value is missing.
 	 */
 	public Runnable transform(Map<QName,InputValue<?>> input, Map<QName,OutputValue<?>> output);
 
