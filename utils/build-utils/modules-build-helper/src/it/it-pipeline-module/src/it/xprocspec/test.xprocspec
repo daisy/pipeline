@@ -336,6 +336,7 @@
 					<c:file name="src/main/java/overview-summary.html"/>
 					<c:file name="src/main/java/stylesheet.css"/>
 					<c:file name="src/main/resources/META-INF/catalog.xml/index.html"/>
+                    <c:file name="src/main/resources/css/bar-2.md"/>
 					<c:file name="src/main/resources/css/bar-2.xpl/index.html"/>
 					<c:file name="src/main/resources/css/foo-1.css/index.md"/>
 					<c:file name="src/main/resources/css/foo-1.xpl/index.html"/>
@@ -454,10 +455,10 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
-					<c:file name="d444e26.html"/>
-					<c:file name="d444e5.html"/>
-					<c:file name="d444e54.html"/>
-					<c:file name="d444e87.html"/>
+					<c:file name="d428e26.html"/>
+					<c:file name="d428e5.html"/>
+					<c:file name="d428e54.html"/>
+					<c:file name="d428e87.html"/>
 					<c:file name="index.html"/>
 					<c:file name="libraries.html"/>
 					<c:file name="org/daisy/pipeline/modules/foo-utils/foo.xpl.html"/>

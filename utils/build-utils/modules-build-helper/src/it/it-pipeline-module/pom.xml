@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.2</version>
+    <version>1.14.12-SNAPSHOT</version>
     <relativePath/>
   </parent>
   <groupId>org.daisy.pipeline.build.modules-build-helper</groupId>
@@ -76,11 +76,6 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>framework-volatile</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
       <artifactId>logging-appender</artifactId>
       <scope>test</scope>
     </dependency>
@@ -104,17 +99,6 @@
     </dependency>
   </dependencies>
   <properties>
-    <!-- FIXME: move to modules-parent -->
-    <generated-packages>
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/saxon/impl);org.daisy.common.saxon.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/xpath/saxon/impl);org.daisy.common.xpath.saxon.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/common/xproc/calabash/impl);org.daisy.common.xproc.calabash.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/datatypes/impl);org.daisy.pipeline.datatypes.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/modules/impl);org.daisy.pipeline.modules.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/script/impl);org.daisy.pipeline.script.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/braille/libhyphen/impl);org.daisy.pipeline.braille.libhyphen.impl\;-split-package:=first,)
-      $(if;$(isdir;${project.build.directory}/generated-sources/process-catalog/org/daisy/pipeline/braille/liblouis/impl);org.daisy.pipeline.braille.liblouis.impl\;-split-package:=first,)
-    </generated-packages>
     <expose-services>
       org.daisy.impl.FooImpl,
       impl.JavaFunction,
