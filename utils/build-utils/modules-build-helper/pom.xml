@@ -23,7 +23,7 @@
     <ds-to-spi-runtime.version>1.2.0</ds-to-spi-runtime.version>
     <xprocspec.version>1.4.2</xprocspec.version>
     <framework.version>1.14.10</framework.version>
-    <modules.version>1.14.12-SNAPSHOT</modules.version>
+    <modules.version>1.14.12</modules.version>
     <modules-test-helper.version>2.2.2</modules-test-helper.version>
     <xproc-engine-daisy-pipeline.version>1.14.4</xproc-engine-daisy-pipeline.version>
   </properties>
