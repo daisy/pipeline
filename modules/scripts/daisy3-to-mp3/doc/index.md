@@ -2,9 +2,9 @@
 <link rev="dp2:doc" href="../src/main/resources/xml/daisy3-to-mp3.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-# DAISY 3 to MP3 (beta)
+# DAISY 3 to MegaVoice multi-level
 
-Transforms a DAISY 3 publication into a folder structure with MP3 files.
+Transforms a DAISY 3 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices (all versions except the Envoy Connect).
 
 ## Synopsis
 

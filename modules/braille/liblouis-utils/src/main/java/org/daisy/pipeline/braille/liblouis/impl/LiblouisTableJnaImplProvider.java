@@ -516,7 +516,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 					else if (s2 == null)
 						return 1;
 					else
-						return s1.compareTo(s2); }});
+						return s1.toLowerCase().compareTo(s2.toLowerCase()); }});
 		for (Table table : tables) {
 			// We can only do this because we know the identifier can be used to construct a new
 			// Translator, but this is not an official feature. A more correct solution would be to

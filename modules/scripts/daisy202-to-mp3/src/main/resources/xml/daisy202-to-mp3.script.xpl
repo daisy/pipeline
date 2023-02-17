@@ -6,8 +6,8 @@
                 name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<h1 px:role="name">DAISY 2.02 to MP3 (beta)</h1>
-		<p px:role="desc">Transforms a DAISY 2.02 publication into a folder structure with MP3 files (beta).</p>
+		<h1 px:role="name">DAISY 2.02 to MegaVoice multi-level</h1>
+		<p px:role="desc">Transforms a DAISY 2.02 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices (all versions except the Envoy Connect).</p>
 		<p><a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-mp3/"
 		      >Online documentation</a></p>
 	</p:documentation>

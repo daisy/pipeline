@@ -17,7 +17,7 @@
         <d:fileset>
             <xsl:attribute name="xml:base" select="replace(base-uri(/*),'^(.+/)[^/]*$','$1')"/>
             <xsl:for-each select="distinct-values(*/h:a/tokenize(@href,'#')[1])">
-                <xsl:if test="matches(.,'smil$')">
+                <xsl:if test="matches(.,'\.(smil|SMIL)$')">
                     <d:file href="{.}" media-type="application/smil+xml"/>
                 </xsl:if>
             </xsl:for-each>

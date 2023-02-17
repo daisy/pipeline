@@ -5,6 +5,7 @@ import java.net.URI;
 import java.util.Hashtable;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.properties.Properties;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.braille.common.NativePath;
 
@@ -22,7 +23,8 @@ import org.osgi.service.component.annotations.Component;
 )
 public class LiblouisExternalNativePath implements NativePath {
 	
-	final static boolean LIBLOUIS_EXTERNAL = Boolean.getBoolean("org.daisy.pipeline.braille.liblouis.external");
+	final static boolean LIBLOUIS_EXTERNAL
+		= Properties.getProperty("org.daisy.pipeline.braille.liblouis.external", "false").equalsIgnoreCase("true");
 	
 	/**
 	 * @throws RuntimeException if using the Liblouis library present on the system is not allowed
