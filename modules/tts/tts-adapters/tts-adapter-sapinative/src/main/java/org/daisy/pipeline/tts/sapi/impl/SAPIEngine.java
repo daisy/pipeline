@@ -111,12 +111,17 @@ public class SAPIEngine extends TTSEngine {
 			int size = SAPI.getStreamSize(tr.SAPIConnection);
 			byte[] data = new byte[size];
 			SAPI.readStream(tr.SAPIConnection, data, 0);
-			long[] bookmarksPositions = SAPI.getBookmarkPositions(tr.SAPIConnection);
+
+			String[] names = SAPI.getBookmarkNames(tr.SAPIConnection);
+			long[] positions = SAPI.getBookmarkPositions(tr.SAPIConnection);
 			float sampleRate = sapiAudioFormat.getSampleRate();
 			int bytesPerSample = sapiAudioFormat.getSampleSizeInBits() / 8;
-			for (long position : bookmarksPositions) {
-				int offset = (int) ((position * sampleRate * bytesPerSample) / 1000);
-				marks.add(offset);
+			for (int i = 0; i < names.length; ++i) {
+				int offset = (int) ((positions[i] * sampleRate * bytesPerSample) / 1000);
+				// it happens that SAPI / OneCore sometimes make empty bookmarks (for unknown reason)
+				if (names[i].length() > 0){
+					marks.add(offset);
+				}
 			}
 			return createAudioStream(sapiAudioFormat, data);
 		} else { // use onecore engine
@@ -135,6 +140,7 @@ public class SAPIEngine extends TTSEngine {
 			int size = Onecore.getStreamSize(tr.onecoreConnection);
 			byte[] data = new byte[size];
 			Onecore.readStream(tr.onecoreConnection, data, 0);
+			String[] names = Onecore.getBookmarkNames(tr.onecoreConnection);
 			long[] pos = Onecore.getBookmarkPositions(tr.onecoreConnection);
 			AudioInputStream result;
 			try {
@@ -145,9 +151,12 @@ public class SAPIEngine extends TTSEngine {
 			AudioFormat resultFormat = result.getFormat();
 			float sampleRate = resultFormat.getSampleRate();
 			int bytesPerSample = resultFormat.getSampleSizeInBits() / 8;
-			for (long po : pos) {
-				int offset = (int) ((po * sampleRate * bytesPerSample) / 1000);
-				marks.add(offset);
+			for (int i = 0; i < names.length; ++i) {
+				int offset = (int) ((pos[i] * sampleRate * bytesPerSample) / 1000);
+				// it happens that SAPI / OneCore sometimes make empty bookmarks (for unknown reason)
+				if (names[i].length() > 0){
+					marks.add(offset);
+				}
 			}
 			return result;
 		}
@@ -245,8 +254,14 @@ public class SAPIEngine extends TTSEngine {
 				// Note that since onecore voice are added after sapi,
 				// they are overwriting matching sapi voices to avoid duplicates
 				try {
+					// remove the "desktop" extension of SAPI legacy microsoft voices
+					// So that onecore voices are used instead if available
+					String key = names.get(i).toLowerCase();
+					if (key.endsWith(" desktop")) {
+						key = key.substring(0,key.length() - " desktop".length());
+					}
 					mVoiceFormatConverter.put(
-						names.get(i).toLowerCase(),
+						key,
 						new Voice(
 							vendors.get(i),
 							names.get(i),
