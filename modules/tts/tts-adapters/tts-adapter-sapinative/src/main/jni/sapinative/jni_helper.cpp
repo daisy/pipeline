@@ -21,3 +21,11 @@ jobjectArray emptyJavaArray(JNIEnv* env, const char* javaClass, int size) {
 	jobjectArray jArray = env->NewObjectArray(size, objClass, 0);
 	return jArray;
 }
+
+void raiseIOException(JNIEnv* env, const jchar* message, size_t len) {
+	jclass exceptionClass = env->FindClass("java/lang/Exception");
+	jmethodID construtor = env->GetMethodID(exceptionClass, "<init>", "(Ljava/lang/String;)V");
+	jstring messageJava = env->NewString(message, len);
+	jobject except = env->NewObject(exceptionClass, construtor, messageJava);
+	env->Throw((jthrowable)except);
+}

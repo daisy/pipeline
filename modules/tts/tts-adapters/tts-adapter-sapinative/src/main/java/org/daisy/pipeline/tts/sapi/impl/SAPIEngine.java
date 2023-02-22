@@ -79,8 +79,8 @@ public class SAPIEngine extends TTSEngine {
 		}
 		try {
 			List<Integer> marks = new ArrayList<>();
-			AudioInputStream audio = speak(transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams),
-			                               voice, resource, marks);
+			String ssmlForEngine = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
+			AudioInputStream audio = speak(ssmlForEngine, voice, resource, marks);
 			return new SynthesisResult(audio, marks);
 		} catch (IOException|SaxonApiException e) {
 			throw new SynthesisException(e);
@@ -93,12 +93,21 @@ public class SAPIEngine extends TTSEngine {
 		voice = mVoiceFormatConverter.get(voice.name.toLowerCase());
 		ThreadResource tr = (ThreadResource)resource;
 		if (voice.engine.equals("sapi") ){
-			int res = SAPI.speak(tr.SAPIConnection, voice.engine, voice.name, ssml);
-			if (res != SAPIResult.SAPINATIVE_OK.value()) {
-				throw new SynthesisException("SAPI-legacy speak error " + res + " raised with voice "
-				                             + voice + ": " +  SAPIResult.valueOfCode(res)+"\nFor text :"
-				                             + ssml);
+			try {
+				int res = SAPI.speak(tr.SAPIConnection, voice.engine, voice.name, ssml);
+				if (res != SAPIResult.SAPINATIVE_OK.value()) {
+					throw new SynthesisException("SAPI-legacy speak error " + res + " raised with voice "
+							+ voice + ": " +  SAPIResult.valueOfCode(res)+"\nFor text :"
+							+ ssml);
+				}
+			} catch (RuntimeException e){
+				Logger.error("SAPI-legacy raised a RUNTIME exception while speaking " + ssml + " with " + voice + " : " + e.getMessage());
+				throw new SynthesisException("SAPI-legacy raised a RUNTIME exception while speaking " + ssml + " with " + voice, e);
+			} catch (Exception e){
+				Logger.error("SAPI-legacy raised an exception while speaking " + ssml + " with " + voice + " : " + e.getMessage());
+				throw new SynthesisException("SAPI-legacy raised an exception while speaking " + ssml + " with " + voice, e);
 			}
+
 			int size = SAPI.getStreamSize(tr.SAPIConnection);
 			byte[] data = new byte[size];
 			SAPI.readStream(tr.SAPIConnection, data, 0);
@@ -111,12 +120,18 @@ public class SAPIEngine extends TTSEngine {
 			}
 			return createAudioStream(sapiAudioFormat, data);
 		} else { // use onecore engine
-			int res = Onecore.speak(tr.onecoreConnection, voice.engine, voice.name, ssml);
-			if (res != OnecoreResult.SAPINATIVE_OK.value()) {
-				throw new SynthesisException("SAPI-Onecore speak error " + res + " raised with voice "
-				                             + voice + ": " +  OnecoreResult.valueOfCode(res)+"\nFor text :"
-				                             + ssml);
+			try {
+				int res = Onecore.speak(tr.onecoreConnection, voice.engine, voice.name, ssml);
+				if (res != OnecoreResult.SAPINATIVE_OK.value()) {
+					throw new SynthesisException("SAPI-Onecore speak error " + res + " raised with voice "
+							+ voice + ": " +  OnecoreResult.valueOfCode(res)+"\nFor text :"
+							+ ssml);
+				}
+			} catch (IOException e) {
+				Logger.error("SAPI-onecore raised an exception while speaking " + ssml + " with " + voice + " : " + e.getMessage());
+				throw new SynthesisException("SAPI-Onecore raised an exception while speaking " + ssml + " with " + voice, e);
 			}
+
 			int size = Onecore.getStreamSize(tr.onecoreConnection);
 			byte[] data = new byte[size];
 			Onecore.readStream(tr.onecoreConnection, data, 0);
@@ -149,11 +164,17 @@ public class SAPIEngine extends TTSEngine {
 			tr.onecoreConnection = connection;
 		}
 		if (this.sapiAudioFormat != null){
-			long connection = SAPI.openConnection();
-			if (connection == 0) {
-				throw new SynthesisException("could not open SAPI-Onecore context.");
+			try {
+				long connection = SAPI.openConnection();
+				if (connection == 0) {
+					throw new IOException("could not connect to SAPI-Legacy context.");
+				}
+				tr.SAPIConnection = connection;
+			} catch (IOException e) {
+				throw new SynthesisException("could not open SAPI-Legacy context.", e);
 			}
-			tr.SAPIConnection = connection;
+
+
 		}
 		return tr;
 	}

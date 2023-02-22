@@ -1,9 +1,11 @@
 package org.daisy.pipeline.tts.sapi.impl;
 
+import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.onecore.SAPI;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -33,7 +35,7 @@ public class SAPITest {
 		        + "</s></speak>";
 	}
 
-	static long speakCycle(String text) {
+	static long speakCycle(String text) throws IOException {
 		String[] names = SAPI.getVoiceNames();
 		String[] vendors = SAPI.getVoiceVendors();
 		String[] locales = SAPI.getVoiceLocales();
@@ -91,14 +93,13 @@ public class SAPITest {
 	}
 
 	@Test
-	public void manageConnection() {
+	public void manageConnection() throws IOException {
 		long connection = SAPI.openConnection();
 		Assert.assertNotSame(0, connection);
 		SAPI.closeConnection(connection);
 	}
-
 	@Test
-	public void speakEasy() {
+	public void speakEasy() throws IOException{
 		long connection = speakCycle(SSML("this is a test"));
 		SAPI.closeConnection(connection);
 	}
@@ -115,7 +116,7 @@ public class SAPITest {
 	}
 
 	@Test
-	public void speakTwice() {
+	public void speakTwice() throws IOException {
 		String[] names = SAPI.getVoiceNames();
 		String[] vendors = SAPI.getVoiceVendors();
 		Assert.assertTrue(names.length > 0);
@@ -139,7 +140,7 @@ public class SAPITest {
 	}
 
 	@Test
-	public void bookmarkReply() {
+	public void bookmarkReply() throws IOException {
 		long connection = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
 		String[] names = SAPI.getBookmarkNames(connection);
 		long[] pos = SAPI.getBookmarkPositions(connection);
@@ -149,7 +150,7 @@ public class SAPITest {
 	}
 
 	@Test
-	public void oneBookmark() {
+	public void oneBookmark() throws IOException {
 		String bookmark = "bmark";
 		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
 		String[] names = SAPI.getBookmarkNames(connection);
@@ -161,7 +162,7 @@ public class SAPITest {
 	}
 
 	 @Test
-	public void endingBookmark() {
+	public void endingBookmark() throws IOException {
 		String bookmark = "endingmark";
 		long connection = speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark + "\"/> "));
 		String[] names = SAPI.getBookmarkNames(connection);
@@ -173,7 +174,7 @@ public class SAPITest {
 	}
 
 	@Test
-	public void twoBookmarks() {
+	public void twoBookmarks() throws IOException {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
 		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
@@ -190,7 +191,7 @@ public class SAPITest {
 		Assert.assertTrue(pos[0] > diff);
 	}
 
-	static private int[] findSize(final String[] sentences, int startShift) throws InterruptedException {
+	static private int[] findSize(final String[] sentences, int startShift) throws InterruptedException, IOException {
 		final String[] names = SAPI.getVoiceNames();
 		final String[] vendors = SAPI.getVoiceVendors();
 		final int[] foundSize = new int[sentences.length];
@@ -199,10 +200,15 @@ public class SAPITest {
 			final int j = i;
 			threads[i] = new Thread() {
 				public void run() {
-					long connection = SAPI.openConnection();
-					SAPI.speak(connection, vendors[0], names[0], sentences[j]);
-					foundSize[j] = SAPI.getStreamSize(connection);
-					SAPI.closeConnection(connection);
+					try{
+						long connection = SAPI.openConnection();
+						SAPI.speak(connection, vendors[0], names[0], sentences[j]);
+						foundSize[j] = SAPI.getStreamSize(connection);
+						SAPI.closeConnection(connection);
+					} catch (IOException e){
+
+					}
+
 				}
 			};
 		}
@@ -216,7 +222,7 @@ public class SAPITest {
 	}
 
 	@Test
-	public void multithreadedSpeak() throws InterruptedException {
+	public void multithreadedSpeak() throws InterruptedException, IOException {
 		final String[] sentences = new String[]{
 			SSML("short"), SSML("regular size"), SSML("a bit longer size"),
 			SSML("very much longer sentence")

@@ -136,24 +136,31 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_speak(JNIEnv*
         return TOO_LONG_TEXT;
 
 #if _DEBUG
-        std::wcout << it->second.name << " speaking " << conn->sentence << std::endl;
+    std::wcout << it->second.name << " speaking " << conn->sentence << std::endl;
 #endif
-        // VoiceInformation seems to create an exception, so we use the voice display name for now
-        winrt::hstring ssmltext = winrt::hstring(conn->sentence);
-        winrt::hstring foundVoiceName = it->second.rawVoice;
+    // VoiceInformation seems to create an exception, so we use the voice display name for now
+    winrt::hstring ssmltext = winrt::hstring(conn->sentence);
+    winrt::hstring foundVoiceName = it->second.rawVoice;
         
-        try {   
-            conn->streamData = conn->onecore.speak(ssmltext, foundVoiceName);
-            conn->marksNames = conn->onecore.marksNames();
-            conn->marksPositions = conn->onecore.marksPositions();
-        }
-        catch (winrt::hresult_error const& ex)
-        {
-            winrt::hresult hr = ex.code();
-            winrt::hstring message = ex.message(); 
-            std::wcout << "Exception raised while speaking " << conn->sentence << std::endl << "With voice " << it->second.name << " : " << std::endl;
-            std::cout << message.c_str() << std::endl;
-        }
+    try {   
+        conn->streamData = conn->onecore.speak(ssmltext, foundVoiceName);
+        conn->marksNames = conn->onecore.marksNames();
+        conn->marksPositions = conn->onecore.marksPositions();
+    }
+    catch (winrt::hresult_error const& ex)
+    {
+            
+        winrt::hresult hr = ex.code();
+        std::wstring message = std::wstring(ex.message().c_str());
+        std::wstring sentence = std::wstring(conn->sentence);
+        std::wostringstream excep;
+        excep << L"Error code (0x" << std::hex << hr.value << L") raised when trying to speak with OneCore SAPI" << std::endl;
+        excep << message << std::endl;
+        // Use exception instead of return result to get error code in java
+        raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());
+        return COULD_NOT_SPEAK;
+        
+    }
         
     return SAPI_OK;
 }

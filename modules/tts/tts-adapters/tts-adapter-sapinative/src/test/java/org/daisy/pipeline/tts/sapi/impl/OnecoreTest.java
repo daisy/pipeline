@@ -1,5 +1,6 @@
 package org.daisy.pipeline.tts.sapi.impl;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -87,6 +88,8 @@ public class OnecoreTest {
 		return "<speak xmlns='http://www.w3.org/2001/10/synthesis' version='1.0'><s>" + x + "</s></speak>";
 	}
 
+
+
 	/**
 	 * Send a text to the TTS API and assert that
 	 * - Voices are correctly retrieved
@@ -95,7 +98,7 @@ public class OnecoreTest {
 	 * @param text the text to speak
 	 * @return the pointer of the connection opened with the TTS API
 	 */
-	static long speakCycle(String text) {
+	static long speakCycle(String text) throws IOException {
 		String[] names = Onecore.getVoiceNames();
 		String[] vendors = Onecore.getVoiceVendors();
 		String[] locales = Onecore.getVoiceLocales();
@@ -123,7 +126,7 @@ public class OnecoreTest {
 	}
 
 	@Test
-	public void speakEasy() {
+	public void speakEasy() throws IOException {
 		long connection = speakCycle(SSML("this is a test"));
 		Onecore.closeConnection(connection);
 	}
@@ -142,7 +145,7 @@ public class OnecoreTest {
 	 * Test continuous speaking on a connection with 2 sentences
 	 */
 	@Test
-	public void speakTwice() {
+	public void speakTwice() throws IOException {
 		String[] names = Onecore.getVoiceNames();
 		String[] vendors = Onecore.getVoiceVendors();
 		Assert.assertTrue(names.length > 0);
@@ -170,7 +173,7 @@ public class OnecoreTest {
 	 * Test to retrieve the name and position of a mark
 	 */
 	@Test
-	public void oneBookmark() {
+	public void oneBookmark() throws IOException {
 		String bookmark = "bmark";
 		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
 		String[] names = Onecore.getBookmarkNames(connection);
@@ -185,7 +188,7 @@ public class OnecoreTest {
 	 * Test to retrieve ending marks names and position.
 	 */
 	@Test
-	public void endingBookmark() {
+	public void endingBookmark() throws IOException {
 		String bookmark = "endingmark";
 		long connection = speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark
 		        + "\"/> "));
@@ -201,7 +204,7 @@ public class OnecoreTest {
 	 * Test to retrieve the name and position of 2 marks in the text
 	 */
 	@Test
-	public void twoBookmarks() {
+	public void twoBookmarks() throws IOException {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
 		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
@@ -235,8 +238,12 @@ public class OnecoreTest {
 			threads[i] = new Thread() {
 				public void run() {
 					long connection = Onecore.openConnection();
-					Onecore.speak(connection, vendors[0], names[0], sentences[j]);
-					foundSize[j] = Onecore.getStreamSize(connection);
+					try{
+						Onecore.speak(connection, vendors[0], names[0], sentences[j]);
+						foundSize[j] = Onecore.getStreamSize(connection);
+					} catch (IOException e){
+
+					}
 					Onecore.closeConnection(connection);
 				}
 			};
@@ -255,7 +262,7 @@ public class OnecoreTest {
 	 * @throws InterruptedException
 	 */
 	@Test
-	public void multithreadedSpeak() throws InterruptedException {
+	public void multithreadedSpeak() throws InterruptedException, IOException {
 		final String[] sentences = new String[]{
 			SSML("short"), SSML("regular size"), SSML("a bit longer size"),
 			SSML("very much longer sentence")
