@@ -53,6 +53,7 @@
   * [[Developer Guide|Developer-Guide]]
     * [[Source Code|Sources]]
     * [[Build System|Building]]
+    * [[Writing Modules|Modules]]
     * [[XProc|XProc]]
       * [[XProc Extensions|XProcExtensions]]
     * [[Testing|Testing]]
