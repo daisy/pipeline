@@ -217,4 +217,4 @@ The server and the desktop application require a Java runtime
 environment. Windows and Mac users do not have to worry about Java
 because it is included in the DAISY Pipeline installation. Linux users
 however are on their own. The minimum required version of Java
-is 11. We recommend installing Java from https://adoptopenjdk.net.
+is 11. We recommend installing Java from https://adoptium.net/.
