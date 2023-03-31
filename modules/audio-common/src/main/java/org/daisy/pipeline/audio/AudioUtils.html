@@ -177,195 +177,200 @@
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<em class="jxr_javadoccomment">/**</em>
 <a class="jxr_linenumber" name="L169" href="#L169">169</a> <em class="jxr_javadoccomment">	 * Split a {@link AudioInputStream} into a sequence of {@link AudioInputStream}.</em>
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> <em class="jxr_javadoccomment">	 *</em>
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * @param stream Must be PCM encoded.</em>
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 * @param splitPoints Are relative to the beginning of the stream.</em>
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * @return A sequence of streams. The number of streams is one more than the number of split points.</em>
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 *         The durations are approximately (apart from rounding errors due to sampling) the time</em>
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 *         between the split points.</em>
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if a negative split point is provided, a split point exceeds</em>
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 *                                  the total length of the input stream, or a split point is not</em>
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 *                                  greater than or equal to the preceding split point ,and also</em>
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 *                                  if the audio format is not PCM encoded with specified frame</em>
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *                                  rate and frame size.</em>
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;AudioInputStream&gt; split(AudioInputStream stream, Duration... splitPoints) {
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 		<strong class="jxr_keyword">long</strong>[] splitPointsInFrames = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[splitPoints.length];
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		PCMAudioFormat format = PCMAudioFormat.of(stream.getFormat());
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; splitPoints.length; i++)
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			splitPointsInFrames[i] = getLengthInFrames(format, splitPoints[i]);
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 		<strong class="jxr_keyword">return</strong> split(stream, splitPointsInFrames);
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 	}
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;AudioInputStream&gt; split(AudioInputStream stream, <strong class="jxr_keyword">long</strong>... splitPoints) {
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 		<strong class="jxr_keyword">if</strong> (splitPoints.length == 0)
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 			<strong class="jxr_keyword">return</strong> Collections.singleton(stream);
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 		PCMAudioFormat format = PCMAudioFormat.of(stream.getFormat());
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		<strong class="jxr_keyword">long</strong> totalFrames = stream.getFrameLength();
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		{ <em class="jxr_comment">// validate splitPoints</em>
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 			<strong class="jxr_keyword">long</strong> begin = 0;
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">long</strong> end : splitPoints) {
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 				<strong class="jxr_keyword">if</strong> (end &lt; begin)
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 				begin = end; }
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 			<strong class="jxr_keyword">if</strong> (totalFrames &lt; begin)
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				<em class="jxr_comment">// could be a rounding error due to sampling: provide margin of one frame</em>
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<strong class="jxr_keyword">if</strong> (totalFrames + 1 &lt; begin)
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 		}
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		<strong class="jxr_keyword">int</strong> frameSize = format.getFrameSize();
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;AudioInputStream&gt;() {
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;AudioInputStream&gt; iterator() {
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;AudioInputStream&gt;() {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					<strong class="jxr_keyword">long</strong> framesAvailable = totalFrames;
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">long</strong> framesConsumed = 0;
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					<strong class="jxr_keyword">protected</strong> AudioInputStream computeNext() {
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 						<strong class="jxr_keyword">if</strong> (i &gt; splitPoints.length)
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 							<strong class="jxr_keyword">return</strong> endOfData();
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (i == splitPoints.length)
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 							<em class="jxr_comment">// we're at the last chunk, so we can simply return remaining stream</em>
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 							<strong class="jxr_keyword">return</strong> stream;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 						<strong class="jxr_keyword">long</strong> splitPoint = splitPoints[i];
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 						<strong class="jxr_keyword">long</strong> frames = splitPoint - framesConsumed;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 						<strong class="jxr_keyword">if</strong> (frames &gt; framesAvailable)
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"coding error"</span>);
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 						<em class="jxr_comment">// In theory a byte array can hold 2 Gb of memory, which should be more than</em>
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 						<em class="jxr_comment">// enough for audio. Note that when a lot of AudioInputStreams are open,</em>
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 						<em class="jxr_comment">// there is still a risk for out-of-memory errors, but normally the streams</em>
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 						<em class="jxr_comment">// are consumed in order so that should be okay as well. An alternative</em>
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 						<em class="jxr_comment">// solution would be to not use byte arrays and enforce that streams are</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 						<em class="jxr_comment">// fully consumed before the next is computed.</em>
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 						byte[] bytes = <strong class="jxr_keyword">new</strong> byte[Math.toIntExact(frames * frameSize)];
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 						<strong class="jxr_keyword">if</strong> (frames &gt; 0) {
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 							<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 								<strong class="jxr_keyword">if</strong> (stream.read(bytes) &lt; bytes.length)
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"coding error"</span>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 							} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
-<a class="jxr_linenumber" name="L236" href="#L236">236</a> 							}
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 							framesConsumed += frames;
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 							framesAvailable -= frames;
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 						}
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 						i++;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 						<strong class="jxr_keyword">return</strong> createAudioStream(format, bytes);
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					}
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				};
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 			}
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 		};
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 	}
-<a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> <em class="jxr_javadoccomment">	 * @param duration must not be negative</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> <em class="jxr_javadoccomment">	 * @return &lt;code&gt;null&lt;/code&gt; if &lt;code&gt;duration&lt;/code&gt; is too short</em>
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream createSilence(<a href="/pipeline/modules/audio-common/src/main/java/org/daisy/pipeline/audio/PCMAudioFormat.html">PCMAudioFormat</a> format, Duration duration) {
-<a class="jxr_linenumber" name="L253" href="#L253">253</a> 		<strong class="jxr_keyword">if</strong> (duration.compareTo(Duration.ZERO) &lt; 0)
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 		<strong class="jxr_keyword">long</strong> frames = getLengthInFrames(format, duration);
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 		<strong class="jxr_keyword">if</strong> (frames == 0)
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">return</strong> createSilence(format, frames);
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 	}
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> <em class="jxr_javadoccomment">	 * @param format must be PCM encoded</em>
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> <em class="jxr_javadoccomment">	 * @param frames must not be negative</em>
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> <em class="jxr_javadoccomment">	 * @return &lt;code&gt;null&lt;/code&gt; if &lt;code&gt;frames&lt;/code&gt; is &lt;code&gt;0&lt;/code&gt;</em>
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream createSilence(AudioFormat format, <strong class="jxr_keyword">long</strong> frames) {
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 		format = PCMAudioFormat.of(format);
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 		<strong class="jxr_keyword">if</strong> (frames &lt; 0)
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 		<strong class="jxr_keyword">if</strong> (frames == 0)
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		byte[] data = <strong class="jxr_keyword">new</strong> byte[Math.multiplyExact(Math.toIntExact(frames), format.getFrameSize())]; <em class="jxr_comment">// initialized to all zeros</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		Encoding encoding = format.getEncoding();
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 		<strong class="jxr_keyword">if</strong> (encoding == Encoding.PCM_SIGNED)
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 			<strong class="jxr_keyword">return</strong> createAudioStream(format, data);
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (encoding == Encoding.PCM_UNSIGNED)
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 			<strong class="jxr_keyword">return</strong> convertAudioStream(
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 				format,
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 				createAudioStream(<strong class="jxr_keyword">new</strong> AudioFormat(Encoding.PCM_SIGNED,
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				                                  format.getSampleRate(),
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				                                  format.getSampleSizeInBits(),
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 				                                  format.getChannels(),
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				                                  format.getFrameSize(),
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				                                  format.getFrameRate(),
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				                                  format.isBigEndian()),
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				                  data));
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 		<strong class="jxr_keyword">else</strong> <em class="jxr_comment">// encoding == Encoding.PCM_FLOAT</em>
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented"</span>); <em class="jxr_comment">// FIXME</em>
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 	}
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 	<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> <em class="jxr_javadoccomment">	 * Convert audio from one format to another.</em>
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> <em class="jxr_javadoccomment">	 */</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream convertAudioStream(AudioFormat newFormat, AudioInputStream stream) {
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 		AudioFormat format = stream.getFormat();
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 		<strong class="jxr_keyword">if</strong> (format.getSampleSizeInBits() &gt; 8
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 		    &amp;&amp; newFormat.getSampleSizeInBits() &gt; 8
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 		    &amp;&amp; !format.isBigEndian()
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 		    &amp;&amp; !newFormat.isBigEndian()
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		    &amp;&amp; ((format.getEncoding() == Encoding.PCM_UNSIGNED
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		         &amp;&amp; newFormat.getEncoding() == Encoding.PCM_SIGNED)
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		        || (format.getEncoding() == Encoding.PCM_SIGNED
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		            &amp;&amp; newFormat.getEncoding() == Encoding.PCM_UNSIGNED))) {
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 			<em class="jxr_comment">// com.sun.media.sound.PCMtoPCMCodec does not correctly convert unsigned little-endian</em>
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			<em class="jxr_comment">// to signed little-endian or visa-versa. Work around this by first converting the</em>
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			<em class="jxr_comment">// samples to big-endian.</em>
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">return</strong> convertAudioStream(
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				newFormat,
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				convertAudioStream(
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 					<strong class="jxr_keyword">new</strong> AudioFormat(format.getSampleRate(),
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 					                format.getSampleSizeInBits(),
-<a class="jxr_linenumber" name="L314" href="#L314">314</a> 					                format.getChannels(),
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 					                format.getEncoding() == Encoding.PCM_SIGNED,
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 					                <strong class="jxr_keyword">true</strong>), <em class="jxr_comment">// big endian</em>
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					stream));
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (format.getEncoding() == Encoding.PCM_FLOAT
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 		           &amp;&amp; newFormat.getEncoding() == Encoding.PCM_FLOAT
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 		           &amp;&amp; format.getSampleSizeInBits() == 64
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 		           &amp;&amp; newFormat.getSampleSizeInBits() == 64
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 		           &amp;&amp; format.isBigEndian() != newFormat.isBigEndian()) {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			<em class="jxr_comment">// AudioSystem.getAudioInputStream() introduces a rounding error, so we do the byte</em>
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<em class="jxr_comment">// order conversion ourselves.</em>
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			AudioFormat otherEndian = <strong class="jxr_keyword">new</strong> AudioFormat(format.getEncoding(),
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			                                          format.getSampleRate(),
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			                                          format.getSampleSizeInBits(),
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			                                          format.getChannels(),
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			                                          format.getFrameSize(),
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			                                          format.getFrameRate(),
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			                                          !format.isBigEndian());
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			ByteBuffer bytes; {
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> 				<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L335" href="#L335">335</a> 					bytes = ByteBuffer.wrap(ByteStreams.toByteArray(stream));
-<a class="jxr_linenumber" name="L336" href="#L336">336</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L337" href="#L337">337</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e); <em class="jxr_comment">// should not happen</em>
-<a class="jxr_linenumber" name="L338" href="#L338">338</a> 				}
-<a class="jxr_linenumber" name="L339" href="#L339">339</a> 			}
-<a class="jxr_linenumber" name="L340" href="#L340">340</a> 			ByteBuffer reorderedBytes  = ByteBuffer.wrap(<strong class="jxr_keyword">new</strong> byte[bytes.array().length]);
-<a class="jxr_linenumber" name="L341" href="#L341">341</a> 			reorderedBytes = reorderedBytes.order(ByteOrder.LITTLE_ENDIAN);
-<a class="jxr_linenumber" name="L342" href="#L342">342</a> 			<strong class="jxr_keyword">while</strong> (bytes.hasRemaining())
-<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				reorderedBytes.putLong(bytes.getLong());
-<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			stream = createAudioStream(otherEndian, reorderedBytes.array());
-<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			<strong class="jxr_keyword">if</strong> (otherEndian.matches(newFormat))
-<a class="jxr_linenumber" name="L346" href="#L346">346</a> 				<strong class="jxr_keyword">return</strong> stream;
-<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				<strong class="jxr_keyword">return</strong> convertAudioStream(newFormat, stream);
-<a class="jxr_linenumber" name="L349" href="#L349">349</a> 		}
-<a class="jxr_linenumber" name="L350" href="#L350">350</a> 		<strong class="jxr_keyword">return</strong> AudioSystem.getAudioInputStream(newFormat, stream);
-<a class="jxr_linenumber" name="L351" href="#L351">351</a> 	}
-<a class="jxr_linenumber" name="L352" href="#L352">352</a> 
-<a class="jxr_linenumber" name="L353" href="#L353">353</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPCM(AudioFormat format) {
-<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		Encoding encoding = format.getEncoding();
-<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> encoding == Encoding.PCM_SIGNED
-<a class="jxr_linenumber" name="L356" href="#L356">356</a> 			|| encoding == Encoding.PCM_UNSIGNED
-<a class="jxr_linenumber" name="L357" href="#L357">357</a> 			|| encoding == Encoding.PCM_FLOAT;
-<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	}
-<a class="jxr_linenumber" name="L359" href="#L359">359</a> }
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> <em class="jxr_javadoccomment">	 * @param stream Must be PCM encoded. {@link AudioInputStream#getFrameLength()} must return the</em>
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> <em class="jxr_javadoccomment">	 *               actual number of available frames in the stream.</em>
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> <em class="jxr_javadoccomment">	 * @param splitPoints Are relative to the beginning of the stream.</em>
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> <em class="jxr_javadoccomment">	 * @return A sequence of streams. The number of streams is one more than the number of split points.</em>
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> <em class="jxr_javadoccomment">	 *         The durations are approximately (apart from rounding errors due to sampling) the time</em>
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> <em class="jxr_javadoccomment">	 *         between the split points.</em>
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> <em class="jxr_javadoccomment">	 * @throws IllegalArgumentException if a negative split point is provided, a split point exceeds</em>
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> <em class="jxr_javadoccomment">	 *                                  the total length of the input stream, or a split point is not</em>
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> <em class="jxr_javadoccomment">	 *                                  greater than or equal to the preceding split point ,and also</em>
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> <em class="jxr_javadoccomment">	 *                                  if the audio format is not PCM encoded with specified frame</em>
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> <em class="jxr_javadoccomment">	 *                                  rate and frame size.</em>
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;AudioInputStream&gt; split(AudioInputStream stream, Duration... splitPoints) {
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 		<strong class="jxr_keyword">long</strong>[] splitPointsInFrames = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">long</strong>[splitPoints.length];
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 		PCMAudioFormat format = PCMAudioFormat.of(stream.getFormat());
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 		<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; splitPoints.length; i++)
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			splitPointsInFrames[i] = getLengthInFrames(format, splitPoints[i]);
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 		<strong class="jxr_keyword">return</strong> split(stream, splitPointsInFrames);
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 	}
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;AudioInputStream&gt; split(AudioInputStream stream, <strong class="jxr_keyword">long</strong>... splitPoints) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 		<strong class="jxr_keyword">if</strong> (splitPoints.length == 0)
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 			<strong class="jxr_keyword">return</strong> Collections.singleton(stream);
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 		PCMAudioFormat format = PCMAudioFormat.of(stream.getFormat());
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 		<strong class="jxr_keyword">long</strong> totalFrames = stream.getFrameLength();
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 		{ <em class="jxr_comment">// validate splitPoints</em>
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 			<strong class="jxr_keyword">long</strong> begin = 0;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">long</strong> end : splitPoints) {
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 				<strong class="jxr_keyword">if</strong> (end &lt; begin)
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				begin = end; }
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 			<strong class="jxr_keyword">if</strong> (totalFrames &lt; begin)
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<em class="jxr_comment">// could be a rounding error due to sampling: provide margin of one frame</em>
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">if</strong> (totalFrames + 1 &lt; begin)
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 		}
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 		<strong class="jxr_keyword">int</strong> frameSize = format.getFrameSize();
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;AudioInputStream&gt;() {
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 			<strong class="jxr_keyword">public</strong> Iterator&lt;AudioInputStream&gt; iterator() {
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;AudioInputStream&gt;() {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">long</strong> framesAvailable = totalFrames;
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					<strong class="jxr_keyword">long</strong> framesConsumed = 0;
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					<strong class="jxr_keyword">protected</strong> AudioInputStream computeNext() {
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 						<strong class="jxr_keyword">if</strong> (i &gt; splitPoints.length)
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 							<strong class="jxr_keyword">return</strong> endOfData();
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 						<strong class="jxr_keyword">long</strong> frames = i == splitPoints.length
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 							? framesAvailable
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 							: splitPoints[i] - framesConsumed;
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 						<strong class="jxr_keyword">if</strong> (frames &gt; framesAvailable) {
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 							<strong class="jxr_keyword">if</strong> (i == splitPoints.length - 1 &amp;&amp; frames == framesAvailable + 1)
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 								frames--;
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 							<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"coding error"</span>); <em class="jxr_comment">// can not happen (see splitPoint validation above)</em>
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 						}
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 						<em class="jxr_comment">// In theory a byte array can hold 2 Gb of memory, which should be more than</em>
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 						<em class="jxr_comment">// enough for audio. Note that when a lot of AudioInputStreams are open,</em>
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 						<em class="jxr_comment">// there is still a risk for out-of-memory errors, but normally the streams</em>
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 						<em class="jxr_comment">// are consumed in order so that should be okay as well. An alternative</em>
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 						<em class="jxr_comment">// solution would be to not use byte arrays and enforce that streams are</em>
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 						<em class="jxr_comment">// fully consumed before the next is computed.</em>
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 						byte[] bytes = <strong class="jxr_keyword">new</strong> byte[Math.toIntExact(frames * frameSize)];
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 						<strong class="jxr_keyword">if</strong> (frames &gt; 0) {
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 							<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 								<strong class="jxr_keyword">if</strong> (stream.read(bytes) &lt; bytes.length)
+<a class="jxr_linenumber" name="L236" href="#L236">236</a> 									<em class="jxr_comment">// if this happens it means that stream.getFrameLength() did not</em>
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 									<em class="jxr_comment">// return the actual number of available frames</em>
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 									<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"coding error"</span>);
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 							} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 								<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e);
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 							}
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 							framesConsumed += frames;
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 							framesAvailable -= frames;
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 						}
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 						i++;
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 						<strong class="jxr_keyword">return</strong> createAudioStream(format, bytes);
+<a class="jxr_linenumber" name="L247" href="#L247">247</a> 					}
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				};
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 			}
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 		};
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 	}
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 
+<a class="jxr_linenumber" name="L253" href="#L253">253</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> <em class="jxr_javadoccomment">	 * @param duration must not be negative</em>
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> <em class="jxr_javadoccomment">	 * @return &lt;code&gt;null&lt;/code&gt; if &lt;code&gt;duration&lt;/code&gt; is too short</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream createSilence(<a href="/pipeline/modules/audio-common/src/main/java/org/daisy/pipeline/audio/PCMAudioFormat.html">PCMAudioFormat</a> format, Duration duration) {
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 		<strong class="jxr_keyword">if</strong> (duration.compareTo(Duration.ZERO) &lt; 0)
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 		<strong class="jxr_keyword">long</strong> frames = getLengthInFrames(format, duration);
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 		<strong class="jxr_keyword">if</strong> (frames == 0)
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 			<strong class="jxr_keyword">return</strong> createSilence(format, frames);
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 	}
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> <em class="jxr_javadoccomment">	 * @param format must be PCM encoded</em>
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> <em class="jxr_javadoccomment">	 * @param frames must not be negative</em>
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> <em class="jxr_javadoccomment">	 * @return &lt;code&gt;null&lt;/code&gt; if &lt;code&gt;frames&lt;/code&gt; is &lt;code&gt;0&lt;/code&gt;</em>
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream createSilence(AudioFormat format, <strong class="jxr_keyword">long</strong> frames) {
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 		format = PCMAudioFormat.of(format);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 		<strong class="jxr_keyword">if</strong> (frames &lt; 0)
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException();
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 		<strong class="jxr_keyword">if</strong> (frames == 0)
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 		byte[] data = <strong class="jxr_keyword">new</strong> byte[Math.multiplyExact(Math.toIntExact(frames), format.getFrameSize())]; <em class="jxr_comment">// initialized to all zeros</em>
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 		Encoding encoding = format.getEncoding();
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 		<strong class="jxr_keyword">if</strong> (encoding == Encoding.PCM_SIGNED)
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 			<strong class="jxr_keyword">return</strong> createAudioStream(format, data);
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (encoding == Encoding.PCM_UNSIGNED)
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 			<strong class="jxr_keyword">return</strong> convertAudioStream(
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 				format,
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 				createAudioStream(<strong class="jxr_keyword">new</strong> AudioFormat(Encoding.PCM_SIGNED,
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 				                                  format.getSampleRate(),
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				                                  format.getSampleSizeInBits(),
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				                                  format.getChannels(),
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 				                                  format.getFrameSize(),
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 				                                  format.getFrameRate(),
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 				                                  format.isBigEndian()),
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 				                  data));
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 		<strong class="jxr_keyword">else</strong> <em class="jxr_comment">// encoding == Encoding.PCM_FLOAT</em>
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> UnsupportedOperationException(<span class="jxr_string">"Not implemented"</span>); <em class="jxr_comment">// FIXME</em>
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 	}
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 	<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> <em class="jxr_javadoccomment">	 * Convert audio from one format to another.</em>
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> <em class="jxr_javadoccomment">	 */</em>
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> AudioInputStream convertAudioStream(AudioFormat newFormat, AudioInputStream stream) {
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 		AudioFormat format = stream.getFormat();
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 		<strong class="jxr_keyword">if</strong> (format.getSampleSizeInBits() &gt; 8
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 		    &amp;&amp; newFormat.getSampleSizeInBits() &gt; 8
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 		    &amp;&amp; !format.isBigEndian()
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 		    &amp;&amp; !newFormat.isBigEndian()
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 		    &amp;&amp; ((format.getEncoding() == Encoding.PCM_UNSIGNED
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 		         &amp;&amp; newFormat.getEncoding() == Encoding.PCM_SIGNED)
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 		        || (format.getEncoding() == Encoding.PCM_SIGNED
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 		            &amp;&amp; newFormat.getEncoding() == Encoding.PCM_UNSIGNED))) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 			<em class="jxr_comment">// com.sun.media.sound.PCMtoPCMCodec does not correctly convert unsigned little-endian</em>
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 			<em class="jxr_comment">// to signed little-endian or visa-versa. Work around this by first converting the</em>
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 			<em class="jxr_comment">// samples to big-endian.</em>
+<a class="jxr_linenumber" name="L314" href="#L314">314</a> 			<strong class="jxr_keyword">return</strong> convertAudioStream(
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				newFormat,
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 				convertAudioStream(
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 					<strong class="jxr_keyword">new</strong> AudioFormat(format.getSampleRate(),
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 					                format.getSampleSizeInBits(),
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					                format.getChannels(),
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 					                format.getEncoding() == Encoding.PCM_SIGNED,
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 					                <strong class="jxr_keyword">true</strong>), <em class="jxr_comment">// big endian</em>
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 					stream));
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (format.getEncoding() == Encoding.PCM_FLOAT
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 		           &amp;&amp; newFormat.getEncoding() == Encoding.PCM_FLOAT
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 		           &amp;&amp; format.getSampleSizeInBits() == 64
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 		           &amp;&amp; newFormat.getSampleSizeInBits() == 64
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 		           &amp;&amp; format.isBigEndian() != newFormat.isBigEndian()) {
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<em class="jxr_comment">// AudioSystem.getAudioInputStream() introduces a rounding error, so we do the byte</em>
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			<em class="jxr_comment">// order conversion ourselves.</em>
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 			AudioFormat otherEndian = <strong class="jxr_keyword">new</strong> AudioFormat(format.getEncoding(),
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 			                                          format.getSampleRate(),
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			                                          format.getSampleSizeInBits(),
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			                                          format.getChannels(),
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			                                          format.getFrameSize(),
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			                                          format.getFrameRate(),
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 			                                          !format.isBigEndian());
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 			ByteBuffer bytes; {
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> 					bytes = ByteBuffer.wrap(ByteStreams.toByteArray(stream));
+<a class="jxr_linenumber" name="L341" href="#L341">341</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L342" href="#L342">342</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e); <em class="jxr_comment">// should not happen</em>
+<a class="jxr_linenumber" name="L343" href="#L343">343</a> 				}
+<a class="jxr_linenumber" name="L344" href="#L344">344</a> 			}
+<a class="jxr_linenumber" name="L345" href="#L345">345</a> 			ByteBuffer reorderedBytes  = ByteBuffer.wrap(<strong class="jxr_keyword">new</strong> byte[bytes.array().length]);
+<a class="jxr_linenumber" name="L346" href="#L346">346</a> 			reorderedBytes = reorderedBytes.order(ByteOrder.LITTLE_ENDIAN);
+<a class="jxr_linenumber" name="L347" href="#L347">347</a> 			<strong class="jxr_keyword">while</strong> (bytes.hasRemaining())
+<a class="jxr_linenumber" name="L348" href="#L348">348</a> 				reorderedBytes.putLong(bytes.getLong());
+<a class="jxr_linenumber" name="L349" href="#L349">349</a> 			stream = createAudioStream(otherEndian, reorderedBytes.array());
+<a class="jxr_linenumber" name="L350" href="#L350">350</a> 			<strong class="jxr_keyword">if</strong> (otherEndian.matches(newFormat))
+<a class="jxr_linenumber" name="L351" href="#L351">351</a> 				<strong class="jxr_keyword">return</strong> stream;
+<a class="jxr_linenumber" name="L352" href="#L352">352</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L353" href="#L353">353</a> 				<strong class="jxr_keyword">return</strong> convertAudioStream(newFormat, stream);
+<a class="jxr_linenumber" name="L354" href="#L354">354</a> 		}
+<a class="jxr_linenumber" name="L355" href="#L355">355</a> 		<strong class="jxr_keyword">return</strong> AudioSystem.getAudioInputStream(newFormat, stream);
+<a class="jxr_linenumber" name="L356" href="#L356">356</a> 	}
+<a class="jxr_linenumber" name="L357" href="#L357">357</a> 
+<a class="jxr_linenumber" name="L358" href="#L358">358</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isPCM(AudioFormat format) {
+<a class="jxr_linenumber" name="L359" href="#L359">359</a> 		Encoding encoding = format.getEncoding();
+<a class="jxr_linenumber" name="L360" href="#L360">360</a> 		<strong class="jxr_keyword">return</strong> encoding == Encoding.PCM_SIGNED
+<a class="jxr_linenumber" name="L361" href="#L361">361</a> 			|| encoding == Encoding.PCM_UNSIGNED
+<a class="jxr_linenumber" name="L362" href="#L362">362</a> 			|| encoding == Encoding.PCM_FLOAT;
+<a class="jxr_linenumber" name="L363" href="#L363">363</a> 	}
+<a class="jxr_linenumber" name="L364" href="#L364">364</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

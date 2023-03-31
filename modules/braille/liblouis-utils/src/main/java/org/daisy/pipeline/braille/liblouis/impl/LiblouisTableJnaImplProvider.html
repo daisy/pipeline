@@ -525,7 +525,7 @@
 <a class="jxr_linenumber" name="L516" href="#L516">516</a> 					<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (s2 == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L517" href="#L517">517</a> 						<strong class="jxr_keyword">return</strong> 1;
 <a class="jxr_linenumber" name="L518" href="#L518">518</a> 					<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 						<strong class="jxr_keyword">return</strong> s1.compareTo(s2); }});
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 						<strong class="jxr_keyword">return</strong> s1.toLowerCase().compareTo(s2.toLowerCase()); }});
 <a class="jxr_linenumber" name="L520" href="#L520">520</a> 		<strong class="jxr_keyword">for</strong> (Table table : tables) {
 <a class="jxr_linenumber" name="L521" href="#L521">521</a> 			<em class="jxr_comment">// We can only do this because we know the identifier can be used to construct a new</em>
 <a class="jxr_linenumber" name="L522" href="#L522">522</a> 			<em class="jxr_comment">// Translator, but this is not an official feature. A more correct solution would be to</em>

@@ -91,40 +91,42 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  								value = <span class="jxr_string">""</span> + ((TermInteger)d.get(0)).getIntValue();
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  							<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  								value = <span class="jxr_string">""</span> + d.get(0).getValue();
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  							<strong class="jxr_keyword">if</strong> (query.containsKey(key))
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  								query.removeAll(key);
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  						}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  						}
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  						<strong class="jxr_keyword">if</strong> (query.containsKey(key))
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  							query.removeAll(key);
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  						<strong class="jxr_keyword">if</strong> (translator != <strong class="jxr_keyword">null</strong> &amp;&amp; key.equals(<span class="jxr_string">"translator"</span>) &amp;&amp; !translator.equals(value)) {
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  							query = <strong class="jxr_keyword">null</strong>;
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  							<strong class="jxr_keyword">break</strong>; }
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (key.equals(<span class="jxr_string">"contraction"</span>) &amp;&amp; value.equals(<span class="jxr_string">"no"</span>))
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  							query.removeAll(<span class="jxr_string">"grade"</span>);
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (key.equals(<span class="jxr_string">"table"</span>) || key.equals(<span class="jxr_string">"liblouis-table"</span>)) {
-<a class="jxr_linenumber" name="L94" href="#L94">94</a>  							query.removeAll(<span class="jxr_string">"locale"</span>);
-<a class="jxr_linenumber" name="L95" href="#L95">95</a>  							query.removeAll(<span class="jxr_string">"type"</span>);
-<a class="jxr_linenumber" name="L96" href="#L96">96</a>  							query.removeAll(<span class="jxr_string">"contraction"</span>);
-<a class="jxr_linenumber" name="L97" href="#L97">97</a>  							query.removeAll(<span class="jxr_string">"grade"</span>);
-<a class="jxr_linenumber" name="L98" href="#L98">98</a>  							query.removeAll(<span class="jxr_string">"dots"</span>);
-<a class="jxr_linenumber" name="L99" href="#L99">99</a>  							query.removeAll(<span class="jxr_string">"direction"</span>);
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 						}
-<a class="jxr_linenumber" name="L101" href="#L101">101</a> 						query.add(key, value);
-<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 						query = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L104" href="#L104">104</a> 						<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L105" href="#L105">105</a> 					}
-<a class="jxr_linenumber" name="L106" href="#L106">106</a> 				<strong class="jxr_keyword">if</strong> (query != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L107" href="#L107">107</a> 					<strong class="jxr_keyword">if</strong> (queries == <strong class="jxr_keyword">null</strong>) queries = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
-<a class="jxr_linenumber" name="L108" href="#L108">108</a> 					String name = rule.getName();
-<a class="jxr_linenumber" name="L109" href="#L109">109</a> 					queries.put(name == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"auto"</span> : name, query);
-<a class="jxr_linenumber" name="L110" href="#L110">110</a> 				}
-<a class="jxr_linenumber" name="L111" href="#L111">111</a> 			}
-<a class="jxr_linenumber" name="L112" href="#L112">112</a> 			<strong class="jxr_keyword">return</strong> queries;
-<a class="jxr_linenumber" name="L113" href="#L113">113</a> 		} <strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L115" href="#L115">115</a> 	}
-<a class="jxr_linenumber" name="L116" href="#L116">116</a> }
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  							query.removeAll(<span class="jxr_string">"table"</span>);
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  							query.removeAll(<span class="jxr_string">"liblouis-table"</span>);
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  							query.removeAll(<span class="jxr_string">"locale"</span>);
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  							query.removeAll(<span class="jxr_string">"type"</span>);
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  							query.removeAll(<span class="jxr_string">"contraction"</span>);
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  							query.removeAll(<span class="jxr_string">"grade"</span>);
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 							query.removeAll(<span class="jxr_string">"dots"</span>);
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 							query.removeAll(<span class="jxr_string">"direction"</span>);
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 						}
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 						query.add(key, value);
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 						query = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 						<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 					}
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 				<strong class="jxr_keyword">if</strong> (query != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 					<strong class="jxr_keyword">if</strong> (queries == <strong class="jxr_keyword">null</strong>) queries = <strong class="jxr_keyword">new</strong> HashMap&lt;&gt;();
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 					String name = rule.getName();
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 					queries.put(name == <strong class="jxr_keyword">null</strong> ? <span class="jxr_string">"auto"</span> : name, query);
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 				}
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 			}
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 			<strong class="jxr_keyword">return</strong> queries;
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		} <strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 	}
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2022 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

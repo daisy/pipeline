@@ -612,7 +612,19 @@
         <li class="spine-item">
       
       
-        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="50">
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="50">
+      
+      Forum
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="51">
       
       Contact
       </a>
@@ -639,7 +651,7 @@
         <li class="spine-item">
       
       
-        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="51">
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="52">
       
       Source Code
       </a>
@@ -651,7 +663,7 @@
         <li class="spine-item">
       
       
-        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="52">
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="53">
       
       Developers Mailing List
       </a>
@@ -662,7 +674,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide" tabindex="53">
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="54">
       Developer Guide
       </a>
       
@@ -673,7 +685,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="54">
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="55">
       
       Source Code
       </a>
@@ -685,7 +697,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="55">
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="56">
       
       Build System
       </a>
@@ -696,7 +708,7 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="56">
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="57">
       XProc
       </a>
       
@@ -707,7 +719,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="57">
+        <a href="/pipeline/XProcExtensions" tabindex="58">
       
       XProc Extensions
       </a>
@@ -724,7 +736,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="58">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="59">
       
       Testing
       </a>
@@ -736,7 +748,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="59">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="60">
       
       Debugging
       </a>
@@ -748,7 +760,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="60">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="61">
       
       Release Management
       </a>
@@ -765,7 +777,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="61">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="62">
       
       Easy Hacks
       </a>
@@ -858,21 +870,6 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file(s)</div>
-<div class="synopsis-input-desc">
-One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Configuration file for the text-to-speech.
@@ -890,6 +887,21 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 </div>
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook file(s)</div>
+<div class="synopsis-input-desc">
+One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: yes</div>
 </li>
 </ul>
 
@@ -930,6 +942,38 @@ property.</p>
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Enable text-to-speech</div>
 <div class="synopsis-option-desc">
 Whether to use a speech synthesizer to produce audio files.
@@ -952,38 +996,6 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1043,15 +1055,23 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+</td>
+<td>Configuration file for the text-to-speech.
+</td>
+</tr>
+<tr>
 <td>--source <span style="text-transform: uppercase">source</span>
 </td>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
-</td>
-<td>Configuration file for the text-to-speech.
-</td>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
@@ -1060,14 +1080,6 @@ Options:</pre>
 <tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
