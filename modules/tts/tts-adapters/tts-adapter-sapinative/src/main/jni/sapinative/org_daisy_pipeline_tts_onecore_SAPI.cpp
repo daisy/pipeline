@@ -85,9 +85,6 @@ ConnectionsRegistry* openedConnection = NULL;
 
 
 JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEnv* env, jclass, jint sampleRate, jshort bitsPerSample) {
-#if _DEBUG
-    std::wcout << "Initializing SAPI" << std::endl;
-#endif
     if (bitsPerSample != 8 && bitsPerSample != 16)
         return UNSUPPORTED_AUDIO_FORMAT;
 
@@ -110,7 +107,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
     gWaveFormat->nAvgBytesPerSec = gWaveFormat->nBlockAlign * gWaveFormat->nSamplesPerSec;
     gWaveFormat->cbSize = 0;
     
-    openedConnection = new ConnectionsRegistry();
+    openedConnection = new ConnectionsRegistry(1024);
 
     HRESULT hr;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -183,9 +180,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
                     // but the use of "sapi" as vendor could lead to errors in voice 
                     // identification if some vendors decided to provided voices with the same
                     // name
-#if _DEBUG
-                    std::wcout << L"Registering voice " << L"sapi" << " : " << name << std::endl;
-#endif
                     gAllVoices->insert(std::make_pair(
                         std::pair<std::wstring, std::wstring>(L"sapi", name),
                         Voice<ISpObjectToken*>(cpToken,
@@ -203,9 +197,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
             else cpToken->Release();
         }
     }
-#if _DEBUG
-    std::wcout << "Done" << std::endl;
-#endif
     cpEnum->Release();
     category->Release();
 
@@ -214,13 +205,15 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
 
 
 JNIEXPORT jlong JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_openConnection(JNIEnv* env, jclass) {
-
     Connection* conn = new Connection();
     HRESULT hr;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     //hr = CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
     if (hr != S_OK && hr != S_FALSE) {
-        std::wcout << "SAPI - COM server not initialized for the connection attempt" << std::endl;
+        std::wostringstream excep;
+        excep << L"SAPI - COM server not initialized for the connection attempt" << std::endl;
+        // Use exception instead of return result to get error code in java
+        raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());
         return 0;
     }
     hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void**)(&conn->spVoice));
@@ -247,18 +240,13 @@ JNIEXPORT jlong JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_openConnection(
     }
     conn->spVoice->AddRef();
     jlong connectionPtr = reinterpret_cast<jlong>(conn);
-#if _DEBUG
-    std::wcout << "New connection opened with the pipeline : " << connectionPtr << std::endl;
-#endif
     // Add connection ptr on registry
     openedConnection->push_back(connectionPtr);
     return connectionPtr;
 }
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_closeConnection(JNIEnv*, jclass, jlong connection) {
-#if _DEBUG
-    std::wcout << "Closing SAPI connection " << connection << std::endl;
-#endif
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_closeConnection(JNIEnv*, jclass, jlong connection)
+{
     {
         Connection* conn = reinterpret_cast<Connection*>(connection);
         if (conn != NULL) {
@@ -277,8 +265,8 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_closeConnection(
     return SAPI_OK;
 }
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* env, jclass, jlong connection, jstring voiceVendor, jstring voiceName, jstring text) {
-
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* env, jclass, jlong connection, jstring voiceVendor, jstring voiceName, jstring text)
+{
     wchar_t c_vendor[MAX_VOICE_NAME_SIZE / sizeof(wchar_t)];
     if (!(convertToUTF16(env, voiceVendor, c_vendor, MAX_VOICE_NAME_SIZE)))
         return TOO_LONG_VOICE_VENDOR;
@@ -289,9 +277,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
 
     SapiVoice::Map::iterator it;
     if (gAllVoices != NULL) {
-#if _DEBUG
-        std::wcout << L"Looking for voice " << c_vendor << " : " << c_name << std::endl;
-#endif
         it = gAllVoices->find(std::make_pair(c_vendor, c_name));
         if (it == gAllVoices->end()) return VOICE_NOT_FOUND;
     } else {
@@ -410,13 +395,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
         sentence = std::regex_replace(sentence, speakTagSearch, newTagStream.str());
 
     }
-#if _DEBUG
-    else {
-        std::wcout << L"Text contains an 'xml:lang' attribute" << std::endl;
-    }
-
-    std::wcout << L"SAPI " << c_name <<  L" Speaking " << sentence << std::endl;
-#endif
+    
     conn->qStream.startWritingPhase();
     try {
         hr = conn->spVoice->Speak(sentence.c_str(), CLIENT_SPEAK_FLAGS, 0);
@@ -451,9 +430,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
         bool end = false;
         HRESULT eventFound = S_FALSE;
         do {
-#if _DEBUG
-            std::wcout << "Waiting for an event with " << (end ? "5000 ms" : "no") << " time out" << std::endl;
-#endif
             // wait for a possible last event after end
             conn->spVoice->WaitForNotifyEvent(INFINITE);
             SPEVENT event;
@@ -462,9 +438,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
                 memset(&event, 0, sizeof(SPEVENT));
                 eventFound = conn->spVoice->GetEvents(1, &event, NULL);
                 if (eventFound == S_OK) {
-#if _DEBUG
-                    std::wcout << "event found : " << event.eEventId << std::endl;
-#endif
                     switch (event.eEventId) {
                     case SPEI_VISEME:
                         duration += HIWORD(event.wParam);
@@ -482,9 +455,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
                         conn->bookmarkNames[conn->currentBookmarkIndex] = (const wchar_t*)(event.lParam);
                         conn->bookmarkPositions[conn->currentBookmarkIndex] = duration;
                         ++(conn->currentBookmarkIndex);
-#if _DEBUG
-                        std::wcout << "found mark " << (const wchar_t*)(event.lParam) << std::endl;
-#endif
                         break;
                     }
                 }
@@ -504,12 +474,14 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* en
 
 
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getStreamSize(JNIEnv*, jclass, jlong connection) {
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getStreamSize(JNIEnv*, jclass, jlong connection)
+{
     Connection* conn = reinterpret_cast<Connection*>(connection);
     return conn->qStream.in_avail();
 }
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_readStream(JNIEnv* env, jclass, jlong connection, jbyteArray dest, jint offset) {
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_readStream(JNIEnv* env, jclass, jlong connection, jbyteArray dest, jint offset)
+{
     Connection* conn = reinterpret_cast<Connection*>(connection);
     
     //the array 'dest' is assumed to be big enough thanks to
@@ -531,10 +503,8 @@ struct VoiceVendorToJString {
         return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
     }
 };
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceVendors(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice vendors" << std::endl;
-#endif
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceVendors(JNIEnv* env, jclass)
+{
     if (gAllVoices != NULL) {
         return newJavaArray<SapiVoice::Map::iterator, VoiceVendorToJString>(
             env,
@@ -555,10 +525,8 @@ struct VoiceNameToJString {
     }
 };
 
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceNames(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice names" << std::endl;
-#endif
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceNames(JNIEnv* env, jclass)
+{
     if (gAllVoices != NULL) {
         return newJavaArray<SapiVoice::Map::iterator, VoiceNameToJString>(
             env,
@@ -577,10 +545,8 @@ struct VoiceLocaleToJString {
         return env->NewString((const jchar*)str, static_cast<jsize>(std::wcslen(str)));
     }
 };
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceLocales(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice locales" << std::endl;
-#endif
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceLocales(JNIEnv* env, jclass)
+{
     if (gAllVoices != NULL) {
         return newJavaArray<SapiVoice::Map::iterator, VoiceLocaleToJString>(
             env,
@@ -601,9 +567,6 @@ struct VoiceGenderToJString {
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceGenders(JNIEnv* env, jclass)
 {
-#if _DEBUG
-    std::wcout << "Getting voice genders" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<SapiVoice::Map::iterator, VoiceGenderToJString>(
             env,
@@ -623,9 +586,6 @@ struct VoiceAgeToJString {
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceAges(JNIEnv* env, jclass)
 {
-#if _DEBUG
-    std::wcout << "Getting voice ages" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<SapiVoice::Map::iterator, VoiceAgeToJString>(
             env,
@@ -656,7 +616,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookm
 }
 
 
-JNIEXPORT jlongArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookmarkPositions(JNIEnv* env, jclass, jlong connection) {
+JNIEXPORT jlongArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookmarkPositions(JNIEnv* env, jclass, jlong connection)
+{
     Connection* conn = reinterpret_cast<Connection*>(connection);
 
     jlongArray result = env->NewLongArray(conn->currentBookmarkIndex);
@@ -666,19 +627,13 @@ JNIEXPORT jlongArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookmar
     return result;
 }
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_dispose(JNIEnv*, jclass) {
-#if _DEBUG
-    std::wcout << "Disposing of sapi" << std::endl;
-#endif
-    
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_dispose(JNIEnv*, jclass)
+{
     {   
         // Close remaining connections
         if (openedConnection != NULL) {
             
             for (ConnectionsRegistry::iterator it = openedConnection->begin(); it != openedConnection->end(); ++it) {
-#if _DEBUG
-                std::wcout << "- Cleaning sapi connection " << *it << std::endl;
-#endif
                 Connection* conn = reinterpret_cast<Connection*>(*it);
                 delete conn;
             }
@@ -701,9 +656,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_dispose(JNIEnv*,
     }
     
     CoUninitialize();
-#if _DEBUG
-    std::wcout << "sapi disposed" << std::endl;
-#endif
     return SAPI_OK;
 }
 

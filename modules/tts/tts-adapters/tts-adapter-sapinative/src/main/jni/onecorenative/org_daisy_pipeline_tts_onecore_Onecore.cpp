@@ -36,9 +36,6 @@ ConnectionsRegistry* openedConnection = NULL;
 ///////////////////////////////////////
 
 JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_initialize(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Initializing Onecore" << std::endl;
-#endif
     gAllVoices = new OneCoreVoice::Map();
     winrtConnection temp = winrtConnection();
     for each (auto rawVoice in temp.voices())
@@ -59,7 +56,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_initialize(JN
             voice
         ));
     }
-    openedConnection = new ConnectionsRegistry();
+    openedConnection = new ConnectionsRegistry(1024);
     return SAPI_OK;
 }
 
@@ -72,9 +69,6 @@ JNIEXPORT jlong JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_openConnecti
 }
 
 JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_closeConnection(JNIEnv*, jclass, jlong connection) {
-#if _DEBUG
-    std::wcout << "Closing onecore connection " << connection << std::endl;
-#endif
     Connection* conn = reinterpret_cast<Connection*>(connection);
     if (conn != NULL) {
         delete conn;
@@ -91,16 +85,10 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_closeConnecti
 
 
 JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_dispose(JNIEnv*, jclass) {
-#if _DEBUG
-    std::wcout << "Disposing of Onecore" << std::endl;
-#endif
     // Close remaining connections
     if (openedConnection != NULL) {
 
         for (ConnectionsRegistry::iterator it = openedConnection->begin(); it != openedConnection->end(); ++it) {
-#if _DEBUG
-            std::wcout << "- Cleaning onecore connection " << *it << std::endl;
-#endif
             Connection* conn = reinterpret_cast<Connection*>(*it);
             delete conn;
         }
@@ -135,9 +123,6 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_speak(JNIEnv*
     if (!(convertToUTF16(env, text, conn->sentence, MAX_SENTENCE_SIZE)))
         return TOO_LONG_TEXT;
 
-#if _DEBUG
-    std::wcout << it->second.name << " speaking " << conn->sentence << std::endl;
-#endif
     // VoiceInformation seems to create an exception, so we use the voice display name for now
     winrt::hstring ssmltext = winrt::hstring(conn->sentence);
     winrt::hstring foundVoiceName = it->second.rawVoice;
@@ -198,9 +183,6 @@ struct VoiceVendorToJString {
     }
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoiceVendors(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice vendors" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<OneCoreVoice::Map::iterator, VoiceVendorToJString>(
             env,
@@ -220,9 +202,6 @@ struct VoiceNameToJString {
     }
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoiceNames(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice names" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<OneCoreVoice::Map::iterator, VoiceNameToJString>(
             env,
@@ -242,9 +221,6 @@ struct VoiceLocaleToJString {
     }
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoiceLocales(JNIEnv* env, jclass) {
-#if _DEBUG
-    std::wcout << "Getting voice locales" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<OneCoreVoice::Map::iterator, VoiceLocaleToJString>(
             env,
@@ -265,9 +241,6 @@ struct VoiceGenderToJString {
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoiceGenders(JNIEnv* env, jclass)
 {
-#if _DEBUG
-    std::wcout << "Getting voice genders" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<OneCoreVoice::Map::iterator, VoiceGenderToJString>(
             env,
@@ -287,9 +260,6 @@ struct VoiceAgeToJString {
 };
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoiceAges(JNIEnv* env, jclass)
 {
-#if _DEBUG
-    std::wcout << "Getting voice ages" << std::endl;
-#endif
     if (gAllVoices != NULL) {
         return newJavaArray<OneCoreVoice::Map::iterator, VoiceAgeToJString>(
             env,
