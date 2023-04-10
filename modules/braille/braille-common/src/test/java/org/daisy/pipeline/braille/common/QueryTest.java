@@ -9,10 +9,11 @@ public class QueryTest {
 	public void testSerializeQuery() {
 		Query.MutableQuery q = Query.util.mutableQuery();
 		q.add("locale", "en-US");
-		q.add("grade", "2");
+		q.add("locale", "ar");
 		q.add("foo");
 		q.add("bar", "ds<:;'\"dsqf");
-		assertEquals("(locale:en-US)(grade:2)(foo)(bar:\"ds<:;'\\22dsqf\")",
+		q.add("grade", "2");
+		assertEquals("(bar:\"ds<:;'\\22dsqf\")(foo)(grade:2)(locale:en-US)(locale:ar)",
 		             q.toString());
 	}
 	

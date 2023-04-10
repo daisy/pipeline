@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>epub3-to-daisy3</artifactId>
-  <version>1.0.6-SNAPSHOT</version>
+  <version>1.0.7-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: EPUB 3 to DAISY 3</name>
@@ -42,6 +42,11 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>epub-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>

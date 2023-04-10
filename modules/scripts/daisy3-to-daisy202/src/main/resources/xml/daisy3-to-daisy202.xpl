@@ -35,6 +35,13 @@
         </p:documentation>
     </p:option>
 
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <!-- directory used for temporary files -->
+    </p:option>
+
+    <p:option xmlns:_="daisy202" name="_:ensure-core-media" select="'false'">
+        <!-- defined in ../../../../../scripts/common-options.xpl -->
+    </p:option>
 
     <!--=========================================================================-->
     <!-- IMPORTS                                                                 -->
@@ -102,6 +109,8 @@
             <p:pipe step="load" port="result.in-memory"/>
         </p:input>
         <p:with-option name="output-dir" select="$output-dir-checked"/>
+        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-option name="ensure-core-media" xmlns:_="daisy202" select="$_:ensure-core-media='true'"/>
     </px:daisy3-to-daisy202>
 
     <!--=========================================================================-->

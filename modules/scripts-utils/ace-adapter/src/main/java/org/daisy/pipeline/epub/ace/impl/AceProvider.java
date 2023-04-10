@@ -101,9 +101,10 @@ public class AceProvider implements XProcStepProvider {
 
 				// Output where the Ace reports (report.html and report.json) and unzipped epub will be stored
 				File tempDir;
-				if (getOption(_tempDir).getString().equals(""))
+				if (getOption(_tempDir).getString().equals("")) {
 					tempDir = Files.createTempDirectory("ace-").toFile();
-				else
+					tempDir.deleteOnExit();
+				} else
 					tempDir = new File(new URI(getOption(_tempDir).getString()));
 
 				String language = getOption(_lang).getString();
@@ -122,6 +123,11 @@ public class AceProvider implements XProcStepProvider {
 
 				File htmlReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.html");
 				File jsonReportFile = new File(tempDir.getAbsolutePath() + File.separator + "report.json");
+
+				if (getOption(_tempDir).getString().equals("")) {
+					htmlReportFile.deleteOnExit();
+					jsonReportFile.deleteOnExit();
+				}
 
 				// write the result uris in c:result documents
 				writeCResult(htmlReport, htmlReportFile.toURI());

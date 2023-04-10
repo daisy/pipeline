@@ -9,28 +9,25 @@
     xmlns:m="http://www.w3.org/1998/Math/MathML" exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DTBook Validator: Store</h1>
-        <p px:role="desc">Internal step.</p>
+        <h1>DTBook Validator: Store</h1>
+        <p>Internal step.</p>
     </p:documentation>
     
     <p:input port="xml-report">
         <p:documentation>
-            <h2 px:role="name">xml-report</h2>
-            <p px:role="desc">Validation report XML.</p>
+            <p>Validation report XML.</p>
         </p:documentation>
     </p:input>
     
     <p:input port="html-report">
         <p:documentation>
-            <h2 px:role="name">html-report</h2>
-            <p px:role="desc">Validation report HTML.</p>
+            <p>Validation report HTML.</p>
         </p:documentation>
     </p:input>
     
     <p:option name="output-dir" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">output-dir</h2>
-            <p px:role="desc">Directory where the validation reports are stored. If left blank,
+            <p>Directory where the validation reports are stored. If left blank,
                 nothing is saved to disk.</p>
         </p:documentation>
     </p:option>

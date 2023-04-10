@@ -5,7 +5,7 @@
                 type="px:html-load" name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<p px:role="desc">Creates a fileset document for a set of HTML documents.</p>
+		<p>Creates a fileset document for a set of HTML documents.</p>
 	</p:documentation>
 
 	<p:input port="source.fileset" primary="true">

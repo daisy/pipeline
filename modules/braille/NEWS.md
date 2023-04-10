@@ -1,3 +1,30 @@
+v1.14.14
+========
+
+Changes
+-------
+- Update to Liblouis [3.25.0](https://github.com/liblouis/liblouis/releases/tag/v3.25.0)
+- New `allow-text-overflow-trimming` option to truncate text that overflows its containing box
+  (notably text within page margins that is too long to fit the space). Note that this was already a
+  feature but only available through the stylesheet-parameters option and not documented.
+- Fix unneeded repeating of headings in a new volume when headings have a top margin
+- The default value of `levels-in-footer` is now `0`
+- The `hyphens` property does not influence wrapping of compound words with a hyphen anymore
+- A Libhyphen table linked using a relative path from within a `@text-transform` rule is now
+  recompiled on every run (no caching)
+
+Components
+----------
+- **liblouis** ([**3.25.0**](https://github.com/liblouis/liblouis/releases/tag/v3.25.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.6](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
+- **braille-css** ([**1.22.0**](https://github.com/daisy/braille-css/releases/tag/1.22.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.14.11
 ========
 
@@ -5,12 +32,36 @@ Changes
 -------
 - Update to Liblouis [3.24.0](https://github.com/liblouis/liblouis/releases/tag/v3.24.0)
 
+Components
+----------
+- **liblouis** ([**3.24.0**](https://github.com/liblouis/liblouis/releases/tag/v3.24.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.6](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
+- braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.14.10
 ========
 
 Changes
 -------
 - Various bugfixes
+
+Components
+----------
+- liblouis ([3.21.0](https://github.com/liblouis/liblouis/releases/tag/v3.21.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- **dotify** ([**1.0.6**](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
+- braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
 v1.14.8
 =======
@@ -32,8 +83,8 @@ Components
 ----------
 - liblouis ([3.21.0](https://github.com/liblouis/liblouis/releases/tag/v3.21.0)),
   liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
-  **liblouis-java** ([**5.0.2**](https://github.com/liblouis/liblouis-java/releases/tag/5.0.1))
-- **dotify** ([**1.0.5**](https://github.com/mtmse/dotify.library/releases/tag/1.0.3)
+  **liblouis-java** ([**5.0.2**](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- **dotify** ([**1.0.5**](https://github.com/mtmse/dotify.library/releases/tag/1.0.5)
 - braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
 - jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen

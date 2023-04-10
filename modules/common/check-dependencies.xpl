@@ -7,13 +7,13 @@
                 xmlns:catalog="urn:oasis:names:tc:entity:xmlns:xml:catalog">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:type="name">XProc+XSLT Dependency Checker</h1>
+        <h1>XProc+XSLT Dependency Checker</h1>
     </p:documentation>
 
     <p:option name="report-base" select="'..'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">The parent directory to all your pipeline module repositories.</h1>
-            <p px:role="desc">For instance <code>file:/home/user/daisy-pipeline.modules/</code>. The scripts/scripts-utils/common-utils repositories are expected to be subdirectories of this
+            <h1>The parent directory to all your pipeline module repositories.</h1>
+            <p>For instance <code>file:/home/user/daisy-pipeline.modules/</code>. The scripts/scripts-utils/common-utils repositories are expected to be subdirectories of this
                 directory.</p>
         </p:documentation>
     </p:option>

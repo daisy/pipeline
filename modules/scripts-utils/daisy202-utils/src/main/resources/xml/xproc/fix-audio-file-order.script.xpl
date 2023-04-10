@@ -10,12 +10,18 @@
 		<h1 px:role="name">DAISY 2.02 Unscrambler</h1>
 		<p px:role="desc">Renames audio files in a DAISY 2.02 publication in such a way that when
 		sorted alphabetically, they are also sorted according to the reading order.</p>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Bert Frees</dd>
-			<dt>E-mail:</dt>
-			<dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
-		</dl>
+		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-unscrambler/">
+			Online documentation
+		</a>
+        <address>
+			Authors:
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Bert Frees</dd>
+				<dt>E-mail:</dt>
+				<dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+			</dl>
+		</address>
 	</p:documentation>
 
 	<p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">

@@ -5,6 +5,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:daisy202-to-epub3"
                 name="main">
 
@@ -30,12 +31,12 @@
         <p:pipe port="result" step="result.in-memory"/>
     </p:output>
 
-    <p:option name="output-dir" required="true" px:dir="output" px:type="anyDirURI">
+    <p:option name="output-dir" required="true" cx:type="xs:anyURI" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">The directory that the EPUB3 fileset is intended to be stored in.</p:documentation>
     </p:option>
 
-    <p:option name="mediaoverlay" required="false" select="'true'" px:type="boolean"/>
-    <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean"/>
+    <p:option name="mediaoverlay" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string"/>
+    <p:option name="compatibility-mode" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string"/>
 
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
@@ -291,7 +292,7 @@
     <p:sink/>
 
     <pxi:daisy202-to-epub3-mediaoverlay name="mediaoverlay">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml"><p px:role="desc">Convert and copy the content files and SMIL-files.</p></p:documentation>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml"><p>Convert and copy the content files and SMIL-files.</p></p:documentation>
         <p:with-option name="include-mediaoverlay" select="$mediaoverlay"/>
         <p:with-option name="daisy-dir" select="$daisy-dir"/>
         <p:with-option name="publication-dir" select="$publication-dir"/>

@@ -9,7 +9,7 @@
                 name="resources">
 
     <p:documentation>
-        <h1 px:role="desc">Copy the auxiliary resources from the DAISY 2.02 fileset to the EPUB 3 fileset, and return a manifest of all the resulting files.</h1>
+        <h1>Copy the auxiliary resources from the DAISY 2.02 fileset to the EPUB 3 fileset, and return a manifest of all the resulting files.</h1>
     </p:documentation>
 
     <p:input port="daisy-smil" sequence="true">

@@ -7,46 +7,40 @@
                 type="px:combine-validation-reports" name="combine-validation-reports">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Combine validation reports</h1>
-        <p px:role="desc">Wrap one or more validation reports and optional document data. This
+        <h1>Combine validation reports</h1>
+        <p>Wrap one or more validation reports and optional document data. This
             prepares it for the validation-report-to-html step.</p>
     </p:documentation>
 
     <p:input port="source" primary="true" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">source</h1>
-            <p px:role="desc">A validation report</p>
+            <p>Validation reports</p>
         </p:documentation>
     </p:input>
     <p:option name="document-name" required="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">document-name</h1>
-            <p px:role="desc">The name of the document that was validated. Used for display
+            <p>The name of the document that was validated. Used for display
                 purposes.</p>
         </p:documentation>
     </p:option>
     <p:option name="document-type" required="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">document-type</h1>
-            <p px:role="desc">The type of the document. Used for display purposes.</p>
+            <p>The type of the document. Used for display purposes.</p>
         </p:documentation>
     </p:option>
     <p:option name="document-path" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">document-path</h1>
-            <p px:role="desc">The full path to the document, if available.</p>
+            <p>The full path to the document, if available.</p>
         </p:documentation>
     </p:option>
     <p:option name="report-path" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">report-path</h1>
-            <p px:role="desc">The path to the validation report XML, if available.</p>
+            <p>The path to the validation report XML, if available.</p>
         </p:documentation>
     </p:option>
     <p:option name="internal-info" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">internal-info</h1>
-            <p px:role="desc">A string to stash in the document-info/@internal attribute.</p>
+            <p>A string to stash in the document-info/@internal attribute.</p>
         </p:documentation>
     </p:option>
 

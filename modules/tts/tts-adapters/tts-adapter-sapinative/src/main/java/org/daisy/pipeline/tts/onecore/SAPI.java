@@ -1,12 +1,14 @@
 package org.daisy.pipeline.tts.onecore;
 
+import java.io.IOException;
+
 public class SAPI {
 
-	public static native long openConnection();
+	public static native long openConnection() throws IOException;
 
 	public static native int closeConnection(long connection);
 
-	public static native int speak(long connection, String voiceVendor, String voiceName, String text);
+	public static native int speak(long connection, String voiceVendor, String voiceName, String text) throws IOException;
 	/* in bytes*/
 	public static native int getStreamSize(long connection);
 

@@ -6,9 +6,7 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech" />
 </catalog>

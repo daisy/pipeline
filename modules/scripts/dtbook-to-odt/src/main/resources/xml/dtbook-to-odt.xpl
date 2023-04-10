@@ -15,17 +15,20 @@
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/">
             Online documentation
         </a>
-        <dl px:role="author">
-            <dt>Name:</dt>
-            <dd px:role="name">Bert Frees</dd>
-            <dt>Organization:</dt>
-            <dd px:role="organization" href="http://www.sbs-online.ch/">SBS</dd>
-            <dt>E-mail:</dt>
-            <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bert.frees@sbs.ch</a></dd>
-        </dl>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Bert Frees</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bert.frees@sbs.ch</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization" href="http://www.sbs-online.ch/">SBS</dd>
+            </dl>
+        </address>
     </p:documentation>
     
-    <p:input port="source" primary="true" px:name="source" px:media-type="application/x-dtbook+xml">
+    <p:input port="source" primary="true" px:media-type="application/x-dtbook+xml">
         <p:documentation>
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">The DTBook to transform.</p>
@@ -37,6 +40,10 @@
             <h2 px:role="name">ODT</h2>
             <p px:role="desc">The resulting ODT file.</p>
         </p:documentation>
+    </p:option>
+    
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <!-- directory used for temporary files -->
     </p:option>
     
     <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template">
@@ -101,25 +108,22 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
         </p:documentation>
     </p:option>
     
-    <p:import href="dtbook-to-odt.convert.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
+    <p:import href="dtbook-to-odt.convert.xpl">
+        <p:documentation>
+            px:dtbook-to-odt
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+        <p:documentation>
+            px:dtbook-load
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/odf-utils/library.xpl">
         <p:documentation>
             px:odf-store
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    
-    <!-- =============== -->
-    <!-- CREATE TEMP DIR -->
-    <!-- =============== -->
-    
-    <px:tempdir>
-        <p:with-option name="href" select="$output-dir"/>
-    </px:tempdir>
-    <p:group>
-        <p:variable name="temp-dir" select="string(/c:result)"/>
-        
+
         <!-- =========== -->
         <!-- LOAD DTBOOK -->
         <!-- =========== -->
@@ -139,10 +143,10 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
                 <p:document href="content.xsl"/>
             </p:input>
             <p:input port="fileset.in">
-                <p:pipe step="dtbook" port="fileset.out"/>
+                <p:pipe step="dtbook" port="result.fileset"/>
             </p:input>
             <p:input port="in-memory.in">
-                <p:pipe step="dtbook" port="in-memory.out"/>
+                <p:pipe step="dtbook" port="result.in-memory"/>
             </p:input>
             <p:input port="meta">
                 <p:inline>
@@ -180,6 +184,5 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
                 <p:pipe step="main" port="source"/>
             </p:with-option>
         </px:odf-store>
-    </p:group>
-    
+
 </p:declare-step>

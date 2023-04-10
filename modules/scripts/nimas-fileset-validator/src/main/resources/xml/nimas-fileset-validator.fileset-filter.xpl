@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="nimas-fileset-validator.fileset-filter"
-    type="pxi:nimas-fileset-validator.fileset-filter" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
-    xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:pkg="http://openebook.org/namespaces/oeb-package/1.0/" exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:pkg="http://openebook.org/namespaces/oeb-package/1.0/"
+                type="pxi:nimas-fileset-validator.fileset-filter"
+                exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Helper step for Nimas Fileset Validator</h1>
-        <p px:role="desc">Create a fileset of manifest items with the specified media-type.</p>
+        <h1>Helper step for Nimas Fileset Validator</h1>
+        <p>Create a fileset of manifest items with the specified media-type.</p>
     </p:documentation>
 
     <!-- ***************************************************** -->
@@ -20,22 +18,19 @@
 
     <p:input port="source" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">source</h1>
-            <p px:role="desc">A package document</p>
+            <p>A package document</p>
         </p:documentation>
     </p:input>
 
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">FileSet representing the filtered file list.</p>
+            <p>FileSet representing the filtered file list.</p>
         </p:documentation>
     </p:output>
     
     <p:option name="media-type" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">media-type</h1>
-            <p px:role="desc">Media type of the files to list.</p>
+            <p>Media type of the files to list.</p>
         </p:documentation>
     </p:option>
     

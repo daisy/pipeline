@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="../../main/resources/xml/dtbook-to-html.xpl">
 
 	<x:scenario label="minimal">
@@ -9,9 +9,18 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
+			<x:option name="validation" select="'abort'"/>
 			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
 		</x:call>
+		<x:context label="the status">
+			<x:document type="port" port="status"/>
+		</x:context>
+		<x:expect label="the output HTML" type="compare">
+			<x:document type="inline">
+				<d:validation-status result="ok"/>
+			</x:document>
+		</x:expect>
 		<x:context label="the output HTML">
 			<x:document type="file" base-uri="temp-dir" href="minimal/output-dir/minimal.xhtml"/>
 		</x:context>
@@ -23,17 +32,17 @@
 						<meta charset="UTF-8"/>
 						<title>Minimal DTBook</title>
 					</head>
-					<body>
-						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
-							<section id="a">
-								<h1 epub:type="title">Minimal DTBook</h1>
+					<body id="id_3">
+						<section id="id_4" xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
+							<section id="id_1">
+								<h3 id="id_5" epub:type="title">Minimal DTBook</h3>
 								<p>Bert</p>
 							</section>
 						</section>
-						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
-							<section id="b">
+						<section id="id_6" xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
+							<section id="id_2">
 								<span epub:type="pagebreak" title="1" id="page_1"/>
-								<h1>Chapter</h1>
+								<h3 id="id_7">Chapter</h3>
 								<p>Paragraph</p>
 								<span epub:type="pagebreak" title="2" id="page_2"/>
 								<p>Another paragraph</p>

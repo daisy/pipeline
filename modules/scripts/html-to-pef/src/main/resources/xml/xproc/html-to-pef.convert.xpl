@@ -88,7 +88,9 @@
             px:html-to-opf-metadata
         </p:documentation>
     </p:import>
-    
+
+    <p:variable name="ERR_DOTIFY_002" cx:as="xs:QName" select="QName('http://www.daisy.org/ns/pipeline/errors','pe:DOTIFY002')"/>
+
     <!-- Ensure that there's exactly one c:param-set -->
     <px:merge-parameters name="parameters" px:progress=".01">
         <p:input port="source">
@@ -223,8 +225,8 @@
                         <p:xpath-context>
                             <p:pipe step="catch" port="error"/>
                         </p:xpath-context>
-                        <p:when test="//c:error[@code='DOTIFY_FAILURE']">
-                            <p:variable name="message" select="//c:error[@code='DOTIFY_FAILURE'][1]/string(.)">
+                        <p:when test="//c:error[resolve-QName(@code,.)=$ERR_DOTIFY_002]">
+                            <p:variable name="message" select="//c:error[resolve-QName(@code,.)=$ERR_DOTIFY_002][1]/string(.)">
                                 <p:pipe step="catch" port="error"/>
                             </p:variable>
                             <p:identity px:message-severity="ERROR" px:message="{$message}"/>
@@ -288,8 +290,8 @@
                         <p:xpath-context>
                             <p:pipe step="catch" port="error"/>
                         </p:xpath-context>
-                        <p:when test="//c:error[@code='DOTIFY_FAILURE']">
-                            <p:variable name="message" select="//c:error[@code='DOTIFY_FAILURE'][1]/string(.)">
+                        <p:when test="//c:error[resolve-QName(@code,.)=$ERR_DOTIFY_002]">
+                            <p:variable name="message" select="//c:error[resolve-QName(@code,.)=$ERR_DOTIFY_002][1]/string(.)">
                                 <p:pipe step="catch" port="error"/>
                             </p:variable>
                             <p:identity px:message-severity="ERROR" px:message="{$message}"/>

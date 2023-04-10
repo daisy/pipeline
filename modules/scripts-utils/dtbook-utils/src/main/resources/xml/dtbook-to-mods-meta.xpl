@@ -6,11 +6,17 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Generate a MODS metadata record from a DTBook 2005-3 document.</p>
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
 
     <p:input port="source"/>

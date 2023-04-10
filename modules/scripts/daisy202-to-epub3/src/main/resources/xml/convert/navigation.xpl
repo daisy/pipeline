@@ -12,7 +12,7 @@
                 type="pxi:daisy202-to-epub3-navigation" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="desc">Make a EPUB3 Navigation Document based on the Content Documents.</h1>
+        <h1>Make a EPUB3 Navigation Document based on the Content Documents.</h1>
     </p:documentation>
 
     <p:input port="ncc-navigation" primary="true">
@@ -32,7 +32,7 @@
     </p:output>
     <p:output port="content-navfix" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">The same sequence of EPUB3 Content Documents as arrived on the "content" port, but with the old Navigation Document replaced by the new one (if it's in the spine).</p>
+            <p>The same sequence of EPUB3 Content Documents as arrived on the "content" port, but with the old Navigation Document replaced by the new one (if it's in the spine).</p>
             <pre><code class="example">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/epub3/epub/Publication/Content/a.xhtml" original-href="file:/home/user/daisy202/a.html">...</html>
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/epub3/epub/Publication/Content/ncc.xhtml" original-href="file:/home/user/daisy202/ncc.html">...</html>
@@ -49,19 +49,19 @@
 
     <p:option name="publication-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to the EPUB3 Publication directory.</p>
+            <p>URI to the EPUB3 Publication directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="content-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to the EPUB3 Content directory.</p>
+            <p>URI to the EPUB3 Content directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/Content/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="compatibility-mode" required="true" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">Whether or not to include NCX-file. Can be either 'true' (default) or 'false'.</p>
+            <p>Whether or not to include NCX-file. Can be either 'true' (default) or 'false'.</p>
         </p:documentation>
     </p:option>
 

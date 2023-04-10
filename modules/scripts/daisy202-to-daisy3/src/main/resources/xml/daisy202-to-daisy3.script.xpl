@@ -11,22 +11,25 @@
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-daisy3/">
 			Online documentation
 		</a>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Markus Gylling</dd>
-		</dl>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Brandon Nelson</dd>
-		</dl>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Per Sennels</dd>
-		</dl>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Bert Frees</dd>
-		</dl>
+		<address>
+			Authors:
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Markus Gylling</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Brandon Nelson</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Per Sennels</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Bert Frees</dd>
+			</dl>
+		</address>
 	</p:documentation>
 
 	<p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">

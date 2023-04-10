@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+
+    <!--
+        Dotify specific options; included because we assume the Dotify formatter is used (no other formatter is available)
+    -->
+
+    <p:option name="hyphenation-at-page-breaks" required="false" select="'false'">
+        <p:pipeinfo>
+            <px:type>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <value>false</value>
+                    <a:documentation xml:lang="en">Never hyphenate words at page boundaries</a:documentation>
+                    <value>except-at-volume-breaks</value>
+                    <a:documentation xml:lang="en">Allow hyphenation at page boundaries except when it's a volume boundary</a:documentation>
+                    <value>true</value>
+                    <a:documentation xml:lang="en">Allow hyphenation at page boundaries</a:documentation>
+                </choice>
+            </px:type>
+        </p:pipeinfo>
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Hyphenation at page boundaries</h2>
+            <p px:role="desc" xml:space="preserve">Whether hyphenation of words at page boundaries is allowed or not.
+
+This option only determines whether hyphenation is allowed at page boundaries. The "Hyphenation"
+option and the CSS determine how the hyphenation is done, when allowed.
+</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="allow-text-overflow-trimming" px:type="boolean" required="false" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Translation/formatting of text: Trimming of overflowing text</h2>
+            <p px:role="desc" xml:space="preserve">Allow trimming of overflowing text.
+
+By default, text that overflows its containing box will result in an error. By selecting this
+option, overflowing text will be truncated and generate a warning instead whenever
+possible. Notably, this will happen with text within page margins (top, right, bottom and left) that
+is too long to fit the space.
+</p>
+        </p:documentation>
+    </p:option>
+
+</p:declare-step>

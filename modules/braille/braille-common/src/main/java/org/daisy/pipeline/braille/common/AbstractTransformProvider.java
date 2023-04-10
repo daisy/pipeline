@@ -1,5 +1,7 @@
 package org.daisy.pipeline.braille.common;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,9 +45,20 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 		if (transformCache.containsKey(query))
 			i = transformCache.get(query);
 		else {
-			// memoize() doesn't make sense
-			i = util.Iterables.memoize(_get(query));
-			transformCache.put(query, i); }
+			i = _get(query);
+			i = util.Iterables.memoize(i);
+			// don't cache queries that contain "volatile-file" URI
+			// note that converting them to "file" URIs is the responsibility of the get() method
+			// also note that the get() method may do some caching of its own (e.g. Liblouis caches compiled tables)
+			boolean containsVolatileFileURIs = false; {
+				for (Query.Feature f : query)
+					try {
+						if (f.hasValue() && "volatile-file".equals(new URI(f.getValue().get()).getScheme())) {
+							containsVolatileFileURIs = true;
+							break; }}
+					catch (URISyntaxException e) {}}
+			if (!containsVolatileFileURIs) {
+				transformCache.put(query, i); }}
 		return rememberId(i.apply(context));
 	}
 	

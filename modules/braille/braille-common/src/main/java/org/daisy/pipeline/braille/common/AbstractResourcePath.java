@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.daisy.common.file.URLs;
@@ -111,8 +112,25 @@ public abstract class AbstractResourcePath implements ResourcePath {
 				for (URI r : listResources())
 					maybeUnpack(r);
 				file = unpackDir; }
-			else
+			else {
 				file = asFile(URLs.resolve(URLs.asURI(unpackDir), resource));
+				// assuming that file is a temporary file
+				// this assumption can be made because BundledResourcePath.makeUnpackDir() returns a temporary
+				// directory, and BundledResourcePath is the only class that extends AbstractResourcePath
+				LinkedList<File> deleteFilesOnExit = new LinkedList<>(); {
+					File f = file;
+					while (true) {
+						if (f.equals(unpackDir))
+							break;
+						if (!f.toString().startsWith(unpackDir.toString() + File.separator))
+							throw new IllegalStateException(); // file must be contained inside unpackDir
+						deleteFilesOnExit.push(f);
+						f = f.getParentFile();
+					}
+				}
+				for (File f : deleteFilesOnExit)
+					f.deleteOnExit();
+			}
 			Files.unpack(URLs.asURL(URLs.resolve(URLs.asURI(getBasePath()), resource)), file);
 			if (isExecutable(resource) && !OS.isWindows())
 				Files.chmod775(file);

@@ -18,16 +18,17 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermString;
 
-import org.daisy.dotify.api.table.BrailleConverter;
-import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
-import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.braille.css.BrailleCSSProperty.HyphenateCharacter;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 import org.daisy.braille.css.SimpleInlineStyle;
+import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.dotify.api.translator.UnsupportedMetricException;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import static org.daisy.pipeline.braille.common.util.Tuple2;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.slf4j.Logger;
 
@@ -162,16 +163,16 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 			 * white space and perform line breaking outside or at the boundaries of words
 			 * (according to the CSS rules), but it doesn't need to because the result will be
 			 * passed though a white space processing and line breaking stage anyway. Preserved
-			 * spaces MUST be converted to NBSP characters. Line breaking may be "explicit" by
-			 * indicating that the end of a line has been reached, by returning an empty string the
-			 * next time the next() method is called (and `limit` &gt; 0). The returned string is
-			 * normally smaller or equal to `limit` in this case. The "allowHyphens" argument must
-			 * be respected, and a hyphen character at the end the line MUST be inserted when
-			 * hyphenating. If it's a soft hyphen (SHY) it will be substituted with a real hyphen
-			 * automatically. If line breaking is "implicit", it is left up to the line breaking
-			 * stage. Preserved line breaks MUST be converted to LS characters in this case, and
-			 * other break characters (SHY, ZWSP) MUST be included for all break opportunities,
-			 * including those within words, regardless of the "allowHyphens" argument.
+			 * spaces MUST be converted to NBSP characters. Line breaking may be "explicit" by not
+			 * providing more characters than those that may be put on the current line. The
+			 * "allowHyphens" argument must be respected, and a hyphen character at the end the line
+			 * MUST be inserted when hyphenating. If it's a soft hyphen (SHY) it will be substituted
+			 * with a real hyphen automatically. If line breaking is "implicit", it is left up to
+			 * the line breaking stage. Preserved line breaks MUST be converted to LS characters in
+			 * this case, and other break characters (SHY, ZWSP) MUST be included for all break
+			 * opportunities, including those within words, regardless of the "allowHyphens"
+			 * argument. There is a break opportunity after each string returned by the {@link
+			 * BrailleStream}.
 			 */
 			protected abstract BrailleStream translateAndHyphenate(Iterable<CSSStyledText> text, int from, int to);
 			
@@ -271,7 +272,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 					this(string, 0, -1);
 				}
 				public FullyHyphenatedAndTranslatedString(String string, int from, int to) {
-					this(string, from, to, '\u2824');
+					this(string, from, to, SHY); // LineIterator converts SHY at the end of a line to a hyphen character
 				}
 				public FullyHyphenatedAndTranslatedString(String string, int from, int to, char hyphenChar) {
 					// if there are no preceding segments, assume that we are at the beginning of a line,
@@ -302,8 +303,15 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 								lastWordPart = next.substring(lastWordStart, to);
 								lastWordOtherPart = next.substring(to, lastWordEnd);
 								next = next.substring(0, lastWordStart);
+								// ZWSP is not considered a WORD_BOUNDARY, but a word should not start with a ZWSP
+								lastWordPart = lastWordPart.replaceAll("^\u200b*", "");
+								if (lastWordPart.isEmpty())
+									lastWordPart = lastWordOtherPart = null;
 							}
 						}
+					} else {
+						// remove SHY at end of stream because it would be converted to hyphen character
+						next = next.replaceAll("\u00ad$", "");
 					}
 					if (next.replaceAll("[\u00ad\u200b]","").isEmpty())
 						next = null;
@@ -355,7 +363,6 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 										String n = lastWord.substring(0, i);
 										// FIXME: don't hard-code the number 1
 										if ((hyphens[i - 1] & 1) == 1)
-											// don't use SHY because it would be dropped by LineIterator if no more characters follow
 											n += hyphenChar;
 										lastWordPart = nextLastWordPart.substring(i);
 										if (lastWordPart.isEmpty()) lastWordPart = null;
@@ -478,20 +485,23 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 				 */
 				private void fillRow(int limit, boolean force, boolean allowHyphens) {
 					int bufSize = charBuffer.length();
-				  loop: while (true) {
-						if (inputBuffer == null || !inputBuffer.hasNext()) {
+					while (true) {
+						if (inputBuffer != null && !inputBuffer.hasNext()) {
+							// there is a break opportunity after each string returned by the stream
+							// we keep soft hyphens at the end of the string (also if we are at the very end of the stream)
+							if (bufSize > 0 && wrapInfo.get(bufSize - 1) != SOFT_WRAP_WITH_HYPHEN)
+								wrapInfo.set(bufSize - 1, (byte)(wrapInfo.get(bufSize - 1) | SOFT_WRAP_WITHOUT_HYPHEN));
 							inputBuffer = null;
-							if (!inputStream.hasNext()) {} // end of stream
-							else if (bufSize < limit) {
+						}
+						if (inputBuffer == null) {
+							if (!inputStream.hasNext()) // end of stream
+								return;
+							if (bufSize < limit) {
 								String next = inputStream.next(limit - bufSize, force && (bufSize == 0), allowHyphens);
-								if (next.isEmpty()) {} // row full according to input feed
-								else
-									inputBuffer = peekingIterator(charactersOf(next).iterator()); }
+								if (next.isEmpty()) // row full according to input feed
+									return;
+								inputBuffer = peekingIterator(charactersOf(next).iterator()); }
 							if (inputBuffer == null) {
-								if (!inputStream.hasNext()) { // end of stream
-									if (bufSize > 0)
-										wrapInfo.set(bufSize - 1, (byte)(wrapInfo.get(bufSize - 1) | SOFT_WRAP_WITHOUT_HYPHEN));
-									return; }
 								switch (inputStream.peek()) {
 								case SHY:    case TAB:
 								case ZWSP:   case BLANK:
@@ -551,12 +561,13 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 							lastCharIsSpace = true;
 							break;
 						default:
-							if (bufSize >= limit) break loop;
+							if (bufSize >= limit) return;
 							charBuffer.append(next);
 							bufSize ++;
 							wrapInfo.add(NO_SOFT_WRAP);
 							lastCharIsSpace = false; }
-						inputBuffer.next(); }
+						inputBuffer.next();
+					}
 				}
 				
 				/**

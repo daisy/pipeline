@@ -44,13 +44,14 @@
 			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the html file">
-			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_zedai-to-html.script.xhtml" select="//html:h1[1]"/>
+			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_zedai-to-html.script.xhtml"
+			            select="//(html:h1|html:h2|html:h3|html:h4|html:h5|html:h6)[1]"/>
 		</x:context>
 		<x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
 			<x:document type="inline">
-				<h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+				<h3 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
 										<em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
-									</h1>
+									</h3>
 			</x:document>
 		</x:expect>
 	</x:scenario>

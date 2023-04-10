@@ -12,12 +12,14 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 2.02 Validator</h1>
         <p px:role="desc">Validates a DAISY 2.02 fileset.</p>
-        <address px:role="author maintainer">
-            <p>Maintained by <span px:role="name">Jostein Austvik Jacobsen</span>
-                (organization: <span px:role="organization">NLB</span>,
-                e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator/">
+            Online Documentation
+        </a>
+        <address px:role="author">
+            Written by <span px:role="name">Jostein Austvik Jacobsen</span> (organization: <span
+            px:role="organization">NLB</span>, e-mail: <a px:role="contact"
+            href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).
         </address>
-        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator/">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="ncc" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
@@ -42,12 +44,7 @@
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" sequence="true">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Validation status</h1>
-            <p px:role="desc" xml:space="preserve">The validation status
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-        </p:documentation>
+        <!-- whether the validation was successful -->
         <p:pipe step="validate" port="validation-status"/>
     </p:output>
 

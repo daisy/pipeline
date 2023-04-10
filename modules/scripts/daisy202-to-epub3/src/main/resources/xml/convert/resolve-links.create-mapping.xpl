@@ -7,12 +7,12 @@
                 type="pxi:daisy202-to-epub3-resolve-links-create-mapping">
 
     <p:documentation>
-        <h1 px:role="desc">Creates a reusable mapping for pxi:daisy202-to-epub3-resolve-links</h1>
+        <h1>Creates a reusable mapping for pxi:daisy202-to-epub3-resolve-links</h1>
     </p:documentation>
 
     <p:input port="daisy-smil" sequence="true" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">The DAISY 2.02 SMIL documents.</p>
+            <p>The DAISY 2.02 SMIL documents.</p>
             <pre><code class="example">
                 <smil xml:base="file:/home/user/daisy202/a.smil">
                     <head>...</head>
@@ -30,7 +30,7 @@
 
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A map of all the links in the SMIL files.</p>
+            <p>A map of all the links in the SMIL files.</p>
             <pre><code class="example">
                 <di:mapping xmlns:di="http://www.daisy.org/ns/pipeline/tmp">
                     <di:smil xml:base="file:/home/user/a.smil">

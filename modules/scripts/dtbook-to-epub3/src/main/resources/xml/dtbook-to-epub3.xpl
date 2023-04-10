@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                name="dtbook-to-epub3" type="px:dtbook-to-epub3.script"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                name="main" type="px:dtbook-to-epub3.script"
                 px:input-filesets="dtbook"
                 px:output-filesets="epub3"
                 exclude-inline-prefixes="#all">
@@ -23,19 +26,9 @@
         </p:documentation>
     </p:input>
 
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h2 px:role="name">Status</h2>
-        <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
-
-When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 publication even if the text-to-speech process has errors.</p>
-      </p:documentation>
-      <p:pipe step="convert-and-store" port="validation-status"/>
-    </p:output>
-
     <p:output port="tts-log" sequence="true">
-      <!-- defined in common-options.xpl -->
-      <p:pipe step="convert-and-store" port="tts-log"/>
+      <!-- defined in ../../../../../common-options.xpl -->
+      <p:pipe step="result" port="tts-log"/>
     </p:output>
 
     <p:option name="language" required="false" px:type="string" select="''">
@@ -53,32 +46,43 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
     </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Directory used for temporary files.</p>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
 
-    <p:option name="assert-valid" required="false" px:type="boolean" select="'true'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Assert validity</h2>
-            <p px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
-        </p:documentation>
+    <p:option name="validation" select="'abort'">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+
+    <p:output port="validation-report" sequence="true">
+        <!-- defined in ../../../../../common-options.xpl -->
+        <p:pipe step="load" port="validation-report"/>
+    </p:output>
+
+    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
+      <!-- whether the conversion was aborted due to validation errors or text-to-speech errors -->
+      <!-- when the conversion fails because of text-to-speech errors it may still output a
+           (incomplete) EPUB 3 publication-->
+    </p:output>
+
+    <p:option name="nimas" select="'false'">
+      <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:input port="tts-config">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../common-options.xpl -->
       <p:inline><d:config/></p:inline>
     </p:input>
 
     <p:option xmlns:_="dtbook" name="_:chunk-size" select="'-1'">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="audio" select="'false'">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
-    <p:option name="audio-file-type" select="'audio/mpeg'" px:hidden="true"/>
+    <p:option name="audio-file-type" select="'audio/mpeg'" px:hidden="true">
+        <!-- the desired file type of the generated audio files -->
+    </p:option>
 
     <p:import href="convert.xpl">
         <p:documentation>
@@ -86,68 +90,122 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
         </p:documentation>
     </p:import>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+      <p:documentation>
+        px:dtbook-load
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
       <p:documentation>
         px:epub3-store
       </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+      <p:documentation>
+        pf:normalize-uri
+      </p:documentation>
+    </cx:import>
 
-    <px:normalize-uri name="output-dir-uri">
-        <p:with-option name="href" select="concat($output-dir,'/')"/>
-    </px:normalize-uri>
+    <px:dtbook-load name="load" px:progress=".1" px:message="Loading DTBook">
+      <p:input port="source">
+	<p:pipe step="main" port="source"/>
+      </p:input>
+      <p:with-option name="validation" select="not($validation='off')"/>
+      <p:with-option name="nimas" select="$nimas='true'"/>
+      <!-- assume MathML 3.0 -->
+    </px:dtbook-load>
 
-    <p:split-sequence name="first-dtbook" test="position()=1" initial-only="true"/>
-    <p:sink/>
+    <p:identity>
+      <p:input port="source">
+	<p:pipe step="load" port="validation-status"/>
+      </p:input>
+    </p:identity>
+    <p:choose>
+      <p:when test="/d:validation-status[@result='error']">
+	<p:choose>
+	  <p:when test="$validation='abort'">
+	    <p:identity px:message="The input contains an invalid DTBook file. See validation report for more info."
+			px:message-severity="ERROR"/>
+	  </p:when>
+	  <p:otherwise>
+	    <p:identity px:message="The input contains an invalid DTBook file. See validation report for more info."
+			px:message-severity="WARN"/>
+	  </p:otherwise>
+	</p:choose>
+      </p:when>
+      <p:otherwise>
+	<p:identity/>
+      </p:otherwise>
+    </p:choose>
+    <p:choose name="result" px:progress=".9">
+      <p:when test="/d:validation-status[@result='error'] and $validation='abort'">
+	<p:output port="status" primary="true"/>
+        <p:output port="tts-log" sequence="true">
+	  <p:empty/>
+	</p:output>
+	<p:identity/>
+      </p:when>
+      <p:otherwise>
+	<p:output port="status" primary="true"/>
+	<p:output port="tts-log" sequence="true">
+	  <p:pipe step="convert-and-store" port="tts-log"/>
+	</p:output>
+	<p:variable name="dtbook-is-valid" cx:as="xs:boolean"
+		    select="not($validation='off') and exists(/d:validation-status[@result='ok'])"/>
 
-    <p:group name="convert-and-store">
-        <p:output port="validation-status">
-          <p:pipe step="convert" port="validation-status"/>
-        </p:output>
-        <p:output port="tts-log">
-          <p:pipe step="convert" port="tts-log"/>
-        </p:output>
-
-        <p:variable name="output-name" select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
-            <p:pipe port="matched" step="first-dtbook"/>
-        </p:variable>
-        <p:variable name="output-dir-uri" select="/c:result/string()">
-            <p:pipe step="output-dir-uri" port="normalized"/>
-        </p:variable>
-        <p:variable name="epub-file-uri" select="concat($output-dir-uri,$output-name,'.epub')"/>
-
-	<px:dtbook-load name="load">
-            <p:input port="source">
-                <p:pipe port="source" step="dtbook-to-epub3"/>
-            </p:input>
-        </px:dtbook-load>
-
-	<px:dtbook-to-epub3 name="convert">
-	  <p:input port="source.in-memory">
-	    <p:pipe step="load" port="in-memory.out"/>
+	<!-- get the EPUB filename from the first DTBook -->
+	<p:sink/>
+	<p:split-sequence test="position()=1" initial-only="true">
+	  <p:input port="source">
+	    <p:pipe step="main" port="source"/>
 	  </p:input>
-	  <p:input port="tts-config">
-	    <p:pipe step="dtbook-to-epub3" port="tts-config"/>
-	  </p:input>
-	  <p:with-option name="audio" select="$audio"/>
-	  <p:with-option name="audio-file-type" select="$audio-file-type"/>
-	  <p:with-option name="language" select="$language"/>
-	  <p:with-option name="assert-valid" select="$assert-valid"/>
-	  <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
-	  <p:with-option name="output-name" select="$output-name"/>
-	  <p:with-option name="output-dir" select="$output-dir-uri"/>
-	  <p:with-option name="temp-dir" select="$temp-dir"/>
-	</px:dtbook-to-epub3>
+	</p:split-sequence>
+	<p:group name="convert-and-store" px:progress="1">
+          <p:output port="status" primary="true"/>
+	  <p:output port="tts-log" sequence="true">
+	    <p:pipe step="convert" port="tts-log"/>
+	  </p:output>
+	  <p:variable name="output-name" select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')"/>
+	  <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+	  <p:variable name="epub-file-uri" select="concat($output-dir-uri,$output-name,'.epub')"/>
+	  <p:sink/>
 
-        <px:epub3-store name="store">
-            <p:input port="in-memory.in">
-                <p:pipe step="convert" port="result.in-memory"/>
-            </p:input>
-            <p:with-option name="href" select="$epub-file-uri"/>
-        </px:epub3-store>
+	  <px:dtbook-to-epub3 name="convert" px:progress="8/9">
+	    <p:input port="source.fileset">
+	      <p:pipe step="load" port="result.fileset"/>
+	    </p:input>
+	    <p:input port="source.in-memory">
+	      <p:pipe step="load" port="result.in-memory"/>
+	    </p:input>
+	    <p:input port="tts-config">
+	      <p:pipe step="main" port="tts-config"/>
+	    </p:input>
+	    <p:with-option name="audio" select="$audio"/>
+	    <p:with-option name="audio-file-type" select="$audio-file-type"/>
+	    <p:with-option name="language" select="$language"/>
+	    <p:with-option name="validation" select="$validation"/>
+	    <p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
+	    <p:with-option name="nimas" select="$nimas='true'"/>
+	    <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
+	    <p:with-option name="output-name" select="$output-name"/>
+	    <p:with-option name="output-dir" select="$output-dir-uri"/>
+	    <p:with-option name="temp-dir" select="$temp-dir"/>
+	  </px:dtbook-to-epub3>
 
-    </p:group>
+	  <px:epub3-store name="store" px:progress="1/9" px:message="Storing EPUB 3">
+	    <p:input port="in-memory.in">
+	      <p:pipe step="convert" port="result.in-memory"/>
+	    </p:input>
+	    <p:with-option name="href" select="$epub-file-uri"/>
+	  </px:epub3-store>
+
+	  <p:identity cx:depends-on="store">
+	    <p:input port="source">
+	      <p:pipe step="convert" port="validation-status"/>
+	    </p:input>
+	  </p:identity>
+	</p:group>
+      </p:otherwise>
+    </p:choose>
 
 </p:declare-step>

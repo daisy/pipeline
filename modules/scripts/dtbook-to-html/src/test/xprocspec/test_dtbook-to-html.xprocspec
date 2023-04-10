@@ -15,7 +15,7 @@
 			</x:input>
 			<x:input port="source.in-memory"/>
 			<x:option name="language" select="'language'"/>
-			<x:option name="assert-valid" select="'true'"/>
+			<x:option name="validation" select="'abort'"/>
 			<x:option name="filename" select="'minimal'"/>
 			<x:option name="output-dir" select="resolve-uri('result/')"/>
 			<x:option name="temp-dir" select="resolve-uri('minimal/',$temp-dir)"/>
@@ -34,25 +34,24 @@
 		<x:context label="the result HTML">
 			<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/minimal.xhtml')]"/>
 		</x:context>
-		<x:expect label="the output HTML"
-		          type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+		<x:expect label="the output HTML" type="compare">
 			<x:document type="inline">
 				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 					<head>
 						<meta charset="UTF-8"/>
 						<title>Minimal DTBook</title>
 					</head>
-					<body>
-						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
-							<section id="a">
-								<h1 epub:type="title">Minimal DTBook</h1>
+					<body id="id_3">
+						<section id="id_4" xmlns:epub="http://www.idpf.org/2007/ops" epub:type="frontmatter">
+							<section id="id_1">
+								<h3 id="id_5" epub:type="title">Minimal DTBook</h3>
 								<p>Bert</p>
 							</section>
 						</section>
-						<section xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
-							<section id="b">
+						<section id="id_6" xmlns:epub="http://www.idpf.org/2007/ops" epub:type="bodymatter">
+							<section id="id_2">
 								<span epub:type="pagebreak" title="1" id="page_1"/>
-								<h1>Chapter</h1>
+								<h3 id="id_7">Chapter</h3>
 								<p>Paragraph</p>
 								<span epub:type="pagebreak" title="2" id="page_2"/>
 								<p>Another paragraph</p>

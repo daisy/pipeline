@@ -6,14 +6,14 @@
                 type="pxi:daisy202-to-epub3-resolve-links" name="resolve-links">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p px:role="desc">De-references links in content documents.</p>
+        <p>De-references links in content documents.</p>
         <p>In DAISY 2.02, links point to other locations in the book via the SMIL files. For instance, a link in ncc.html might point to content.smil#fragment, and the SMIL clip at
             content.smil#fragment might point to content.html#id. This step would change the original link from content.smil#fragment to content.html#id.</p>
     </p:documentation>
 
     <p:input port="source" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A DAISY 2.02 content document.</p>
+            <p>A DAISY 2.02 content document.</p>
             <pre><code class="example">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/daisy202/ncc.html">
                     <head>...</head>
@@ -24,7 +24,7 @@
     </p:input>
     <p:input port="resolve-links-mapping">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A map of all the links in the SMIL files.</p>
+            <p>A map of all the links in the SMIL files.</p>
             <pre><code class="example">
                 <di:mapping xmlns:di="http://www.daisy.org/ns/pipeline/tmp">
                     <di:smil xml:base="file:/home/user/a.smil">
@@ -41,7 +41,7 @@
     </p:input>
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">The resulting DAISY 2.02 content document.</p>
+            <p>The resulting DAISY 2.02 content document.</p>
             <pre><code class="example">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/daisy202/ncc.html">
                     <head>...</head>

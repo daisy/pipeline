@@ -37,10 +37,12 @@
 			<p>The desired file type of the transcoded audio files, specified as a MIME type.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="new-audio-dir" required="true">
+	<p:option name="new-audio-dir" required="false" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>URI of the folder within the output fileset that should contain the transcoded audio
 			files.</p>
+			<p>If not specified or empty, will use the deepest common directory that contains all
+			the matched files.</p>
 			<p>The actual files will be stored in a temporary location.</p>
 		</p:documentation>
 	</p:option>
@@ -57,7 +59,7 @@
 			"media-types" and "not-media-types" filters replaced by transcoded versions of those
 			files.</p>
 		</p:documentation>
-		<p:pipe step="move-to-new-audio-dir" port="result"/>
+		<p:pipe step="maybe-skip" port="result"/>
 	</p:output>
 	<p:output port="mapping">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -69,7 +71,7 @@
 			audio file starts at an offset within the transcoded audio file. The attributes values
 			are positive and are expressed in seconds (with millisecond precision).</p>
 		</p:documentation>
-		<p:pipe step="mapping" port="result"/>
+		<p:pipe step="maybe-skip" port="mapping"/>
 	</p:output>
 
 	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -89,129 +91,163 @@
 	<cx:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" type="application/xslt+xml">
 		<p:documentation>
 			pf:normalize-uri
+			pf:longest-common-uri
 		</p:documentation>
 	</cx:import>
 
-	<p:group name="transcode-files">
-		<p:output port="result" primary="true"/>
-		<p:output port="mapping">
-			<p:pipe step="xslt" port="secondary"/>
-		</p:output>
+	<px:fileset-filter name="input-audio">
+		<p:with-option name="media-types" select="$media-types"/>
+		<p:with-option name="not-media-types" select="$not-media-types"/>
+	</px:fileset-filter>
 
-		<px:fileset-filter>
-			<p:with-option name="media-types" select="$media-types"/>
-			<p:with-option name="not-media-types" select="$not-media-types"/>
-		</px:fileset-filter>
-
-		<p:xslt name="xslt">
-			<p:input port="stylesheet">
-				<p:document href="audio-transcode.xsl"/>
-			</p:input>
-			<p:with-param name="new-audio-file-type" select="$new-audio-file-type"/>
-			<!--
-			    initially place new audio files in temporary directory
-			-->
-			<p:with-param name="new-audio-dir" select="xs:anyURI(string(/*))">
-				<p:pipe step="temp-dir" port="result"/>
-			</p:with-param>
-			<p:with-param name="temp-dir" select="xs:anyURI(string(/*))">
-				<p:pipe step="temp-dir" port="result"/>
-			</p:with-param>
-		</p:xslt>
-		<p:sink/>
-
+	<p:choose name="maybe-skip">
 		<!--
-		    update href, original-href and media-type in input fileset
+		    bypass everything if there are no audio files to transcode
 		-->
-		<px:fileset-apply name="apply-to-fileset">
-			<!-- update href -->
-			<p:input port="source.fileset">
-				<p:pipe step="main" port="source"/>
-			</p:input>
-			<p:input port="mapping">
-				<p:pipe step="xslt" port="secondary"/>
-			</p:input>
-		</px:fileset-apply>
-		<p:sink/>
-		<px:fileset-join>
-			<!-- update original-href and media-type -->
-			<!-- also normalizes hrefs -->
-			<p:input port="source">
-				<p:pipe step="apply-to-fileset" port="result.fileset"/>
-				<p:pipe step="xslt" port="result"/>
-			</p:input>
-		</px:fileset-join>
-	</p:group>
-
-	<!--
-	    move audio files from temporary directory to $new-audio-dir
-	-->
-	<p:group name="move-to-new-audio-dir">
-		<p:output port="result" primary="true"/>
-		<p:output port="mapping">
-			<p:pipe step="move" port="mapping"/>
-		</p:output>
-		<p:delete>
-			<p:with-option name="match"
-			               select="concat(
-			                         'd:file[not(resolve-uri(&quot;./&quot;,resolve-uri(@href,base-uri(.)))=(&quot;',
-			                         pf:normalize-uri(string(/*)),
-			                         '&quot;,&quot;',
-			                         pf:normalize-uri($new-audio-dir),
-			                         '&quot;))]'
-			                         )">
-				<p:pipe step="temp-dir" port="result"/>
-			</p:with-option>
-		</p:delete>
-		<px:fileset-copy flatten="true" dry-run="true" name="move">
-			<p:with-option name="target" select="$new-audio-dir"/>
-		</px:fileset-copy>
-		<p:sink/>
-		<px:fileset-apply>
-			<p:input port="source.fileset">
-				<p:pipe step="transcode-files" port="result"/>
-			</p:input>
-			<p:input port="mapping">
-				<p:pipe step="move" port="mapping"/>
-			</p:input>
-		</px:fileset-apply>
-	</p:group>
-	<p:sink/>
-
-	<!--
-	    composed mapping
-	-->
-	<px:fileset-compose name="mapping">
-		<p:input port="source">
-			<p:pipe step="transcode-files" port="mapping"/>
-			<p:pipe step="move-to-new-audio-dir" port="mapping"/>
-		</p:input>
-	</px:fileset-compose>
-	<p:sink/>
-
-	<!--
-	    temporary directory to store new audio files
-	-->
-	<p:choose>
-		<p:when test="not($temp-dir='')">
-			<p:in-scope-names name="vars"/>
-			<p:template>
-				<p:input port="template">
-					<p:inline><c:result>{$temp-dir}/</c:result></p:inline>
-				</p:input>
-				<p:input port="parameters">
-					<p:pipe step="vars" port="result"/>
-				</p:input>
+		<p:when test="not(//d:file)">
+			<p:output port="result" primary="true"/>
+			<p:output port="mapping">
+				<p:inline><d:fileset/></p:inline>
+			</p:output>
+			<p:sink/>
+			<p:identity>
 				<p:input port="source">
-					<p:empty/>
+					<p:pipe step="main" port="source"/>
 				</p:input>
-			</p:template>
+			</p:identity>
 		</p:when>
 		<p:otherwise>
-			<px:tempdir delete-on-exit="true"/>
+			<p:output port="result" primary="true">
+				<p:pipe step="move-to-new-audio-dir" port="result"/>
+			</p:output>
+			<p:output port="mapping">
+				<p:pipe step="mapping" port="result"/>
+			</p:output>
+
+			<p:group name="transcode-files">
+				<p:output port="result" primary="true"/>
+				<p:output port="mapping">
+					<p:pipe step="xslt" port="secondary"/>
+				</p:output>
+
+				<p:xslt name="xslt">
+					<p:input port="stylesheet">
+						<p:document href="audio-transcode.xsl"/>
+					</p:input>
+					<p:with-param name="new-audio-file-type" select="$new-audio-file-type"/>
+					<!--
+					    initially place new audio files in temporary directory
+					-->
+					<p:with-param name="new-audio-dir" select="xs:anyURI(string(/*))">
+						<p:pipe step="temp-dir" port="result"/>
+					</p:with-param>
+					<p:with-param name="temp-dir" select="xs:anyURI(string(/*))">
+						<p:pipe step="temp-dir" port="result"/>
+					</p:with-param>
+				</p:xslt>
+				<p:sink/>
+
+				<!--
+				    update href, original-href and media-type in input fileset
+				-->
+				<px:fileset-apply name="apply-to-fileset">
+					<!-- update href -->
+					<p:input port="source.fileset">
+						<p:pipe step="main" port="source"/>
+					</p:input>
+					<p:input port="mapping">
+						<p:pipe step="xslt" port="secondary"/>
+					</p:input>
+				</px:fileset-apply>
+				<p:sink/>
+				<px:fileset-join>
+					<!-- update original-href and media-type -->
+					<!-- also normalizes hrefs -->
+					<p:input port="source">
+						<p:pipe step="apply-to-fileset" port="result.fileset"/>
+						<p:pipe step="xslt" port="result"/>
+					</p:input>
+				</px:fileset-join>
+			</p:group>
+
+			<!--
+			    move audio files from temporary directory to $new-audio-dir
+			-->
+			<p:group name="move-to-new-audio-dir">
+				<p:output port="result" primary="true"/>
+				<p:output port="mapping">
+					<p:pipe step="move" port="mapping"/>
+				</p:output>
+				<p:variable name="target" select="pf:normalize-uri(
+				                                    if ($new-audio-dir!='')
+				                                    then $new-audio-dir
+				                                    else pf:longest-common-uri(//d:file/resolve-uri(@href,base-uri(.))))">
+					<p:pipe step="input-audio" port="result"/>
+				</p:variable>
+				<p:delete>
+					<p:with-option name="match"
+					               select="concat(
+					                         'd:file[not(resolve-uri(&quot;./&quot;,resolve-uri(@href,base-uri(.)))=(&quot;',
+					                         pf:normalize-uri(string(/*)),
+					                         '&quot;,&quot;',
+					                         $target,
+					                         '&quot;))]'
+					                         )">
+						<p:pipe step="temp-dir" port="result"/>
+					</p:with-option>
+				</p:delete>
+				<px:fileset-copy flatten="true" dry-run="true" name="move">
+					<p:with-option name="target" select="$target"/>
+				</px:fileset-copy>
+				<p:sink/>
+				<px:fileset-apply>
+					<p:input port="source.fileset">
+						<p:pipe step="transcode-files" port="result"/>
+					</p:input>
+					<p:input port="mapping">
+						<p:pipe step="move" port="mapping"/>
+					</p:input>
+				</px:fileset-apply>
+			</p:group>
+			<p:sink/>
+
+			<!--
+			    composed mapping
+			-->
+			<px:fileset-compose name="mapping">
+				<p:input port="source">
+					<p:pipe step="transcode-files" port="mapping"/>
+					<p:pipe step="move-to-new-audio-dir" port="mapping"/>
+				</p:input>
+			</px:fileset-compose>
+			<p:sink/>
+
+			<!--
+			    temporary directory to store new audio files
+			-->
+			<p:choose>
+				<p:when test="not($temp-dir='')">
+					<p:in-scope-names name="vars"/>
+					<p:template>
+						<p:input port="template">
+							<p:inline><c:result>{$temp-dir}/</c:result></p:inline>
+						</p:input>
+						<p:input port="parameters">
+							<p:pipe step="vars" port="result"/>
+						</p:input>
+						<p:input port="source">
+							<p:empty/>
+						</p:input>
+					</p:template>
+				</p:when>
+				<p:otherwise>
+					<px:tempdir delete-on-exit="true"/>
+				</p:otherwise>
+			</p:choose>
+			<p:identity name="temp-dir"/>
+			<p:sink/>
+
 		</p:otherwise>
 	</p:choose>
-	<p:identity name="temp-dir"/>
-	<p:sink/>
 
 </p:declare-step>

@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 exclude-inline-prefixes="#all"
                 type="px:dtbook-merge" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Merge DTBook</h1>
-        <p px:role="desc">Merge 2 or more DTBook documents.</p>
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a href="mailto:marisa.demeglio@gmail.com" px:role="contact">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <h1>Merge DTBook</h1>
+        <p>Merge 2 or more DTBook documents.</p>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
     <!-- 
         TODO: 
@@ -22,17 +26,15 @@
          * deal with xml:lang (either copy once and put in dtbook/@xml:lang or, if different languages are used, copy the @xml:lang attr into the respective sections.
     -->
 
-    <p:input port="source" primary="true" sequence="true" px:name="in"
+    <p:input port="source" primary="true" sequence="true"
         px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">in</h2>
-            <p px:role="desc">Sequence of DTBook files</p>
+            <p>Sequence of DTBook files</p>
         </p:documentation>
     </p:input>
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">out</h2>
-            <p px:role="desc">The result</p>
+            <p>The result</p>
         </p:documentation>
     </p:output>
     <p:option name="output-base-uri" required="true">

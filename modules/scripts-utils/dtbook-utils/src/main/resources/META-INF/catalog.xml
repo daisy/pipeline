@@ -29,4 +29,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
    <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
 </catalog>

@@ -82,4 +82,30 @@
 		</x:expect>
 	</x:scenario>
 	
+	<x:scenario label="unsafe base directory">
+		<x:call step="px:epub3-safe-uris">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset xml:base="file:/tmp%20dir/">
+						<d:file href="a.xml"/>
+						<d:file href="b.xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="should be as expected" type="custom"
+		          href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="file:/tmp%20dir/a.xml"/>
+					<d:file href="file:/tmp%20dir/b.xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

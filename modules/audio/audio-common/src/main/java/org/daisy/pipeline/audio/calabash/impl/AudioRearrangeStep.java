@@ -190,6 +190,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 				} else {
 					try {
 						tempDir = Files.createTempDirectory("pipeline-").toFile();
+						tempDir.deleteOnExit();
 					} catch (IOException e) {
 						throw new TransformerException(e);
 					}
@@ -377,6 +378,8 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							else if (!currentDestinationFile.equals(destinationClip.src)) {
 								File resultFile = new File(currentDestinationFile);
 								File tempFile = new File(tempDir, "tmp" + (++fileCounter) + "." + getFileExtension(resultFile.getName()));
+								if (tempDirOption == null || tempDirOption.isEmpty())
+									tempFile.deleteOnExit();
 								try {
 									tempFile.getParentFile().mkdirs();
 									encoder.get().encode(AudioUtils.concat(currentDestinationPCM), resultFileType, tempFile);
@@ -480,6 +483,8 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						progress.append(new MessageBuilder().withProgress(progressInc)).close();
 						File resultFile = new File(currentDestinationFile);
 						File tempFile = new File(tempDir, "tmp" + (++fileCounter) + "." + getFileExtension(resultFile.getName()));
+						if (tempDirOption == null || tempDirOption.isEmpty())
+							tempFile.deleteOnExit();
 						try {
 							tempFile.getParentFile().mkdirs();
 							encoder.get().encode(AudioUtils.concat(currentDestinationPCM), resultFileType, tempFile);

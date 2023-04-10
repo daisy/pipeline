@@ -57,6 +57,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xpl">
         <p:documentation>
             px:html-chunker
+            px:html-outline
         </p:documentation>
     </p:import>
 
@@ -116,6 +117,8 @@
                     <p:empty/>
                 </p:input>
             </p:xslt>
+            <!-- zedai-to-html.xsl only uses h1 -->
+            <px:html-outline fix-heading-ranks="outline-depth"/>
             <px:set-base-uri name="result">
                 <p:with-option name="base-uri" select="$result-basename"/>
             </px:set-base-uri>

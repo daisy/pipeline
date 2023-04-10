@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE package PUBLIC "+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN" "http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd">
+<package xmlns="http://openebook.org/namespaces/oeb-package/1.0/" unique-identifier="NIMAS9781122334455" xml:lang="en">
+	<metadata>
+		<dc-metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:oebpackage="http://openebook.org/namespaces/oeb-package/1.0/">
+			<dc:Date event="DCTERMS.created">2020-10-01</dc:Date>
+			<dc:Title>The Great Depression</dc:Title>
+			<dc:Creator role="author">John Smith</dc:Creator>
+			<dc:Creator role="author">Jane Doe</dc:Creator>
+			<dc:Identifier id="NIMAS9781122334455" scheme="NIMAS">9781122334455NIMAS</dc:Identifier>
+			<dc:Language>en</dc:Language>
+			<dc:Publisher>CAST, Inc.</dc:Publisher>
+			<dc:Format>NIMAS 1.1</dc:Format>
+			<dc:Rights>The only legal and authorized use of these files is for the production of alternate media materials for blind, visually impaired, or print disabled students as specified in the NIMAC limitation of use agreement. The copyright for these files is the sole property of the original owner.</dc:Rights>
+			<dc:Source>9781122334455</dc:Source>
+			<dc:Subject>Social Studies</dc:Subject>
+		</dc-metadata>
+		<x-metadata>
+			<meta name="nimas-SourceEdition" content="2nd ed."/>
+			<meta name="nimas-SourceDate" content="2020"/>
+			<meta name="DCTERMS.audience.educationLevel" content="Grade 5"/>
+			<meta name="DCTERMS.date.dateCopyrighted" content="2020"/>
+			<meta name="DCTERMS.date.issued" content="2020"/>
+			<meta name="DCTERMS.description.note" content="Textbook"/>
+			<meta name="DCTERMS.description.note" content="NIMAS Social Studies Textbook Exemplar"/>
+			<meta name="DCTERMS.description.version" content="National ed."/>
+            <meta name="DCTERMS.description.version" content="2nd ed."/>
+			<meta name="DCTERMS.publisher.place" content="Wakefield, MA"/>
+		</x-metadata>
+	</metadata>
+	<manifest>
+		<item id="titlepage" href="9781122334455NIMAS.pdf" media-type="application/pdf"/>
+		<item id="xmlexemplar" href="9781122334455NIMAS.xml" media-type="application/x-dtbook+xml"/>
+		<item id="exemplar1imgcover" href="images/U00/cover.jpg" media-type="image/jpeg"/>
+		<item id="exemplar1imgicon" href="images/U01C01/icon.jpg" media-type="image/jpeg"/>
+		<item id="exemplar1imgp002-001" href="images/U01C01/p002-001.jpg" media-type="image/jpeg"/>
+		<item id="exemplar1imgp006-001" href="images/U01C01/p006-001.jpg" media-type="image/jpeg"/>
+		<item id="exemplar1imgp008-001" href="images/U01C01/p008-001.jpg" media-type="image/jpeg"/>
+		<item id="exemplar1imgp010-001" href="images/U01C01/p010-001.jpg" media-type="image/jpeg"/>
+	</manifest>
+	<spine>
+		<itemref idref="xmlexemplar"/>
+	</spine>
+</package>

@@ -51,11 +51,11 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="assert-valid">
+    <x:scenario label="validation">
         <x:call step="px:dtbook-to-epub3.script">
             <x:input port="source">
                 <x:document type="inline">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
                         <head>
                             <meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
                             <meta name="dc:Title" content="Minimal DTBook"/>
@@ -77,23 +77,31 @@
                 </x:document>
             </x:input>
         </x:call>
-        <x:scenario label="true (default)">
+        <x:scenario label="abort (default)">
             <x:call>
-                <x:option name="assert-valid" select="'true'"/>
-                <x:option name="output-dir" select="resolve-uri('assert-valid-true/output-dir/',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('assert-valid-true/temp-dir/',$temp-dir)"/>
+                <x:option name="validation" select="'abort'"/>
+                <x:option name="output-dir" select="resolve-uri('validation-abort/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation-abort/temp-dir/',$temp-dir)"/>
             </x:call>
-            <x:context label="the error">
-                <x:document type="errors"/>
+            <x:context label="the status">
+                <x:document type="port" port="validation-status"/>
             </x:context>
-            <x:expect label="there should be errors" type="count" min="1"/>
-            <x:expect label="the script should fail with a 'XC0053' error" type="xpath" test="//c:error[@code='ERR:XC0053']"/>
+            <x:expect label="the conversion should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="error"/>
+                </x:document>
+            </x:expect>
+            <x:context label="the report">
+                <x:document type="port" port="validation-report"/>
+            </x:context>
+            <x:expect label="there should be an error about the 'level2' element" type="xpath"
+                      test="exists(//html:li[@class='message-error'][contains(string(.),'element &quot;level2&quot; not allowed here')])"/>
         </x:scenario>
-        <x:scenario label="false">
+        <x:scenario label="report">
             <x:call>
-                <x:option name="assert-valid" select="'false'"/>
-                <x:option name="output-dir" select="resolve-uri('assert-valid-false/output-dir/',$temp-dir)"/>
-                <x:option name="temp-dir" select="resolve-uri('assert-valid-false/temp-dir/',$temp-dir)"/>
+                <x:option name="validation" select="'report'"/>
+                <x:option name="output-dir" select="resolve-uri('validation-report/output-dir/',$temp-dir)"/>
+                <x:option name="temp-dir" select="resolve-uri('validation-report/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the status">
                 <x:document type="port" port="validation-status"/>
@@ -104,7 +112,7 @@
                 </x:document>
             </x:expect>
             <x:context label="the output directory">
-                <x:document type="directory" base-uri="temp-dir" href="assert-valid-false/output-dir/" recursive="true"/>
+                <x:document type="directory" base-uri="temp-dir" href="validation-report/output-dir/" recursive="true"/>
             </x:context>
             <x:expect label="the script should succeed" type="compare" >
                 <x:document type="inline">
@@ -120,7 +128,7 @@
         <x:call step="px:dtbook-to-epub3.script">
             <x:input port="source">
                 <x:document type="inline">
-                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
                         <head>
                             <meta name="dc:Title" content="Selections from &quot;Great Pictures, As Seen and Described by Famous Writers&quot;"/>
                             <meta name="dc:Creator" content="Esther Singleton"/>
@@ -138,7 +146,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
-            <x:option name="assert-valid" select="'false'"/>
+            <x:option name="validation" select="'report'"/>
             <x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
         </x:call>
@@ -151,13 +159,13 @@
             </x:document>
         </x:expect>
         <x:context label="the content file">
-            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml" select="//html:h1[1]"/>
+            <x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/test_dtbook-to-epub3.script.epub!/EPUB/test_dtbook-to-epub3.script-2.xhtml" select="//(html:h1|html:h2|html:h3|html:h4|html:h5|html:h6)[1]"/>
         </x:context>
         <x:expect label="the white space in between the 'em' elements should be preserved" type="compare" normalize-space="false">
             <x:document type="inline">
-                <h1 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
+                <h3 xmlns="http://www.w3.org/1999/xhtml" id="chapter_1">
                                         <em>CHAPTER 1</em> <em>THE LAST JUDGEMENT (MICHAEL ANGELO)</em>
-                                    </h1>
+                                    </h3>
             </x:document>
         </x:expect>
     </x:scenario>
@@ -167,7 +175,7 @@
             <x:input port="source">
                 <x:document type="file" href="../resources/dtbook110.xml"/>
             </x:input>
-            <x:option name="assert-valid" select="'true'"/>
+            <x:option name="validation" select="'abort'"/>
             <x:option name="output-dir" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
         </x:call>
@@ -182,17 +190,16 @@
         <x:context label="the result HTML file">
             <x:document type="file" base-uri="temp-dir" href="dtbook110/output-dir/dtbook110.epub!/EPUB/dtbook110-1.xhtml"/>
         </x:context>
-        <x:expect label="the result HTML file"
-                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+        <x:expect label="the result HTML file" type="compare">
             <x:document type="inline">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
                     <head>
                         <meta charset="UTF-8"/>
                         <title>Title</title>
                     </head>
-                    <body id="a" epub:type="frontmatter">
-                        <section id="b">
-                            <h1 id="c" epub:type="title">Title</h1>
+                    <body id="id_3" epub:type="frontmatter">
+                        <section id="id_4">
+                            <h3 id="id_5" epub:type="title">Title</h3>
                         </section>
                     </body>
                 </html>

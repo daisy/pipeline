@@ -92,14 +92,22 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 	private static final QName _css_counter_style_definitions = new QName("css-counter-style-definitions");
 	private static final QName _has_volume_transition = new QName("has-volume-transition");
 	
-	/** Code for Dotify errors caused by invalid or unsupported OBFL. */
-	private static final QName DOTIFY_INVALID = new QName("DOTIFY_INVALID");
+	private static final String ERR_NS = "http://www.daisy.org/ns/pipeline/errors";
+	
+	/**
+	 * Code for Dotify errors caused by invalid or unsupported OBFL.
+	 */
+	private static final QName ERR_DOTIFY_001 = new QName("pe", ERR_NS, "DOTIFY001");
 
-	/** Code for Dotify errors caused by OBFL input that can not be formatted. */
-	private static final QName DOTIFY_FAILURE = new QName("DOTIFY_FAILURE");
+	/**
+	 * Code for Dotify errors caused by OBFL input that can not be formatted.
+	 */
+	private static final QName ERR_DOTIFY_002 = new QName("pe", ERR_NS, "DOTIFY002");
 
-	/** Code for unexpected Dotify errors. */
-	private static final QName DOTIFY_UNEXPECTED = new QName("DOTIFY_UNEXPECTED");
+	/**
+	 * Code for unexpected Dotify errors.
+	 */
+	private static final QName ERR_DOTIFY_003 = new QName("pe", ERR_NS, "DOTIFY003");
 
 	private ReadablePipe source = null;
 	private WritablePipe result = null;
@@ -324,7 +332,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 			if (msg != null)
 				if ((msg.contains("Cannot fit") && msg.contains("into a margin-region of size"))
 				    || msg.contains("Failed to solve table"))
-					throw new XProcException(DOTIFY_FAILURE, step, e);
+					throw new XProcException(ERR_DOTIFY_002, step, e);
 			throw XProcStep.raiseError(e, step); }
 		finally {
 			evictTempTranslator.apply(); }

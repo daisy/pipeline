@@ -24,13 +24,11 @@
         <p:pipe port="result" step="result"/>
     </p:output>
     
-    <p:option name="test" select="''" cx:as="xs:string"/>                           <!-- boolean -->
-    <p:option name="test-count-min" select="''"/>                                   <!-- positive integer -->
-    <p:option name="test-count-max" select="''"/>                                   <!-- positive integer -->
-    <p:option name="error-code" select="''"/>                                       <!-- QName - if not given, only a warning will be displayed. -->
-    <p:option name="error-code-prefix" select="''"/>                                <!-- NCName -->
-    <p:option name="error-code-namespace" select="''"/>                             <!-- anyURI -->
-    <p:option name="message" required="true" cx:as="xs:string"/>                    <!-- description of what you are asserting. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
+    <p:option name="test" select="''" cx:as="xs:string"/>             <!-- boolean -->
+    <p:option name="test-count-min" select="''"/>                     <!-- positive integer -->
+    <p:option name="test-count-max" select="''"/>                     <!-- positive integer -->
+    <p:option name="error-code" required="false" cx:as="xs:QName"/>   <!-- if not given, only a warning will be displayed. -->
+    <p:option name="message" required="true" cx:as="xs:string"/>      <!-- description of what you are asserting. $1, $2 etc will be replaced with the contents of param1, param2 etc. -->
     <p:option name="param1" select="''" cx:as="xs:string"/>
     <p:option name="param2" select="''" cx:as="xs:string"/>
     <p:option name="param3" select="''" cx:as="xs:string"/>
@@ -135,13 +133,11 @@
             </p:identity>
         </p:when>
         
-        <p:when test="not($error-code='')">
+        <p:when test="p:value-available('error-code')">
             <!-- assertion failed; throw error -->
             <px:error>
                 <p:with-option name="message" select="/*/@message"/>
                 <p:with-option name="code" select="$error-code"/>
-                <p:with-option name="code-namespace" select="$error-code-namespace"/>
-                <p:with-option name="code-prefix" select="$error-code-prefix"/>
             </px:error>
         </p:when>
         

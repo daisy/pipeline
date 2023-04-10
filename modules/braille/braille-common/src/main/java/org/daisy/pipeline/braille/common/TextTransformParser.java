@@ -73,10 +73,16 @@ public class TextTransformParser {
 						}
 						String value;
 						if (d.get(0) instanceof TermURI) {
-							URL cssBase = ((TermURI)d.get(0)).getBase(); // this is always null because the source is a string
-							value = URLs.resolve(cssBase != null ? URLs.asURI(cssBase) : baseURI,
-							                     URLs.asURI(((TermURI)d.get(0)).getValue()))
-							            .toASCIIString();
+							URI uri = URLs.asURI(((TermURI)d.get(0)).getValue());
+							if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
+								// relative URI
+								URI cssBase; {
+									URL b = ((TermURI)d.get(0)).getBase(); // this is always null because the style is provided as a string
+									cssBase = b != null ? URLs.asURI(b) : baseURI;
+								}
+								uri = URLs.resolve(cssBase, uri);
+							}
+							value = uri.toASCIIString();
 						} else {
 							if (d.get(0) instanceof TermInteger)
 								value = "" + ((TermInteger)d.get(0)).getIntValue();

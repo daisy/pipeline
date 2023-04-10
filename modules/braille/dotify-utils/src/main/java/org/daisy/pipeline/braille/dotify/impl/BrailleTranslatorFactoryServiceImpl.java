@@ -31,11 +31,11 @@ import org.daisy.dotify.api.translator.TranslatorSpecification;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

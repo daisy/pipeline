@@ -27,13 +27,11 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
     </p:option>
 
     <p:option name="validation" select="'off'">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
@@ -43,14 +41,14 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
     </p:option>
 
     <p:output port="validation-report" sequence="true">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../../common-options.xpl -->
         <p:pipe step="load" port="validation-report"/>
     </p:output>
 
     <p:output port="validation-status">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h1 px:role="name">Input validation status</h1>
-            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the input validation was successful.
+            <p px:role="desc" xml:space="preserve">An XML document describing whether the conversion was successful.
 
 [More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
         </p:documentation>
@@ -88,7 +86,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
     <px:epub-load name="load" version="3" store-to-disk="true" px:progress="0.1" px:message="Loading EPUB 3">
         <p:with-option name="href" select="$epub-href"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
-        <p:with-option name="validation" select="$validation"/>
+        <p:with-option name="validation" select="not($validation='off')"/>
     </px:epub-load>
     
     <p:identity>
@@ -96,8 +94,25 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
             <p:pipe step="load" port="validation-status"/>
         </p:input>
     </p:identity>
-    <p:choose name="status" px:progress="0.9">
+    <p:choose>
         <p:when test="/d:validation-status[@result='error']">
+            <p:choose>
+                <p:when test="$validation='abort'">
+                    <p:identity px:message="The EPUB input is invalid. See validation report for more info."
+                                px:message-severity="ERROR"/>
+                </p:when>
+                <p:otherwise>
+                    <p:identity px:message="The EPUB input is invalid. See validation report for more info."
+                                px:message-severity="WARN"/>
+                </p:otherwise>
+            </p:choose>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
+    <p:choose name="status" px:progress="0.9">
+        <p:when test="/d:validation-status[@result='error'] and $validation='abort'">
             <p:output port="result"/>
             <p:identity/>
         </p:when>
@@ -130,7 +145,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 
                     <p:identity cx:depends-on="store">
                         <p:input port="source">
-                            <p:pipe step="load" port="validation-status"/>
+                            <p:inline><d:validation-status result="ok"/></p:inline>
                         </p:input>
                     </p:identity>
                 </p:group>

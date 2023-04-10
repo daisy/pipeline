@@ -6,33 +6,29 @@
     xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" exclude-inline-prefixes="#all">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Create a d:error element</h1>
-        <p px:role="desc">Create a d:error element, used in validation reports. See
-            http://code.google.com/p/daisy-pipeline/wiki/ValidationReportXML</p>
+        <h1>Create a d:error element</h1>
+        <p>Create a d:error element, used in validation reports. See
+        http://code.google.com/p/daisy-pipeline/wiki/ValidationReportXML</p>
     </p:documentation>
 
     <p:option name="error-type" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">error-type</h1>
-            <p px:role="desc">Type of error.</p>
+            <p>Type of error.</p>
         </p:documentation>
     </p:option>
     <p:option name="location-href" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">location-href</h1>
-            <p px:role="desc">The file containing a reference to this error.</p>
+            <p>The file containing a reference to this error.</p>
         </p:documentation>
     </p:option>
     <p:option name="file-href" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">file-href</h1>
-            <p px:role="desc">The file where the error itself is.</p>
+            <p>The file where the error itself is.</p>
         </p:documentation>
     </p:option>
     <p:option name="desc" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">desc</h1>
-            <p px:role="desc">A description of the error.</p>
+            <p>A description of the error.</p>
         </p:documentation>
     </p:option>
     <p:output port="result"/>

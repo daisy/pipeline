@@ -10,7 +10,7 @@
     </p:input>
     <p:input port="resolve-links-mapping">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A map of all the links in the SMIL files.</p>
+            <p>A map of all the links in the SMIL files.</p>
             <pre><code class="example">
                 <di:mapping xmlns:di="http://www.daisy.org/ns/pipeline/tmp">
                     <di:smil xml:base="file:/home/user/a.smil">

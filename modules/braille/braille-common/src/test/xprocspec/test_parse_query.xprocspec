@@ -14,8 +14,8 @@
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
 				<c:param-set>
-					<c:param name="foo" namespace="" value="1&#xa;2&#xa;3"/>
 					<c:param name="bar" namespace="" value="true"/>
+					<c:param name="foo" namespace="" value="1&#xa;2&#xa;3"/>
 				</c:param-set>
 			</x:document>
 		</x:expect>

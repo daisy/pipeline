@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.css.impl;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -77,12 +78,11 @@ public final class BrailleCssSerializer {
 			Object val = pair.getValue();
 			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val) : val.toString()); }
 		else if (term instanceof TermURI) {
-			TermURI uri = (TermURI)term;
-			return "url(\""
-				+ (uri.getBase() == null
-					? URLs.asURI(uri.getValue())
-					: URLs.resolve(URLs.asURI(uri.getBase()), URLs.asURI(uri.getValue())))
-				+ "\")"; }
+			TermURI termURI = (TermURI)term;
+			URI uri = URLs.asURI(termURI.getValue());
+			if (termURI.getBase() != null)
+				uri = URLs.resolve(URLs.asURI(termURI.getBase()), uri);
+			return "url(\"" + uri + "\")"; }
 		else if (term instanceof TermString) {
 			TermString string = (TermString)term;
 			return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }

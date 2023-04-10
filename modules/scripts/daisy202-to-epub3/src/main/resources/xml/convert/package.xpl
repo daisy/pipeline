@@ -10,7 +10,7 @@
 
     <p:input port="spine" primary="false" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A ordered fileset of Content Documents sorted in reading order.</p>
+            <p>A ordered fileset of Content Documents sorted in reading order.</p>
             <p>See also: <a class="see" href="http://idpf.org/epub/30/spec/epub30-overview.html#sec-nav-order">http://idpf.org/epub/30/spec/epub30-overview.html#sec-nav-order</a></p>
         </p:documentation>
     </p:input>
@@ -42,7 +42,7 @@
 
     <p:option name="pub-id" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">The publication identifier.</p>
+            <p>The publication identifier.</p>
             <p>See also: <a class="see" href="http://idpf.org/epub/30/spec/epub30-publications.html#sec-opf-dcidentifier"
                 >http://idpf.org/epub/30/spec/epub30-publications.html#sec-opf-dcidentifier</a></p>
         </p:documentation>

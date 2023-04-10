@@ -15,7 +15,7 @@
     <p:input port="fileset.in" primary="true"/>
     <p:input port="in-memory.in" sequence="true"/>
 
-    <p:option name="timeToleranceMs" select="'500'" cx:as="xs:string" px:type="xs:integer"/>
+    <p:option name="timeToleranceMs" select="'500'" cx:as="xs:string" cx:type="xs:integer"/>
     <p:option name="ncc" required="true"/>
 
     <p:output port="fileset.out" primary="true">

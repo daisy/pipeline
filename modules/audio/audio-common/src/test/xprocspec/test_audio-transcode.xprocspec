@@ -59,7 +59,6 @@
 			</x:input>
 			<x:option name="media-types" select="'audio/*'"/>
 			<x:option name="new-audio-file-type" select="'audio/x-wav'"/>
-			<x:option name="new-audio-dir" select="resolve-uri('./')"/>
 			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_audio-transcode/')"/>
 		</x:call>
 		<x:context label="the result port">

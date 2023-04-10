@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:err="http://www.w3.org/ns/xproc-error"
                 type="px:smil-upgrade">
 
     <p:input port="source">
@@ -63,7 +64,7 @@
             </p:xslt>
         </p:when>
         <p:otherwise>
-            <px:error code="PMU0001" code-prefix="err" code-namespace="http://www.w3.org/ns/xproc-error"
+            <px:error code="err:PMU0001"
                       message="It is a dynamic error if the document arriving on the input port
                             is not a valid DAISY 2.02, DAISY 3 (DTBook) or EPUB3 Media Overlay
                             document."/>

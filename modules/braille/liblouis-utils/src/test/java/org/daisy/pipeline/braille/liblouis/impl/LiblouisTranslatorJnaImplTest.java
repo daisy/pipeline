@@ -16,10 +16,10 @@ import org.daisy.braille.css.SimpleInlineStyle;
 import static org.daisy.common.file.URLs.asURL;
 
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.NativePath;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
 import org.daisy.pipeline.junit.OSGiLessRunner;
 

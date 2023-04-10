@@ -28,7 +28,7 @@
 			</x:input>
 		</x:call>
 		<x:context label="the fileset">
-			<x:document type="port" port="fileset.out"/>
+			<x:document type="port" port="result.fileset"/>
 		</x:context>
 		<x:expect label="the fileset"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
@@ -51,7 +51,7 @@
 			</x:input>
 		</x:call>
 		<x:context label="the fileset">
-			<x:document type="port" port="fileset.out"/>
+			<x:document type="port" port="result.fileset"/>
 		</x:context>
 		<x:expect label="the fileset"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
@@ -92,7 +92,7 @@
 			</x:input>
 		</x:call>
 		<x:context label="the fileset">
-			<x:document type="port" port="fileset.out"/>
+			<x:document type="port" port="result.fileset"/>
 		</x:context>
 		<x:expect label="this results in a xml:base with only one slash after file:" type="compare"> <!-- not using x:fileset-compare -->
 			<x:document type="inline">

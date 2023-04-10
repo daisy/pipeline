@@ -139,6 +139,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	private DisplayTable unicodeDisplayTableWithNoBreakSpace;
 	private File spacesFile;
 	private File spacesDisFile;
+	private File tempDir;
 	
 	private void registerTableResolver() {
 		Louis.setTableResolver(new TableResolver() {
@@ -167,7 +168,8 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 								for (File f : resolved)
 									b.append("include ").append(URLs.asURI(f.getCanonicalFile()).toASCIIString()).append('\n');
 								InputStream in = new ByteArrayInputStream(b.toString().getBytes(StandardCharsets.UTF_8));
-								File f = createTempFile("aggregator-", ".tbl");
+								File f = File.createTempFile("aggregator-", ".tbl", tempDir);
+								f.deleteOnExit();
 								f.delete();
 								Files.copy(in, f.toPath());
 								f = f.getCanonicalFile();
@@ -200,6 +202,12 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	protected void activate() {
 		logger.debug("Loading liblouis service");
 		try {
+			tempDir = normalize(createTempDirectory("pipeline-").toFile());
+			tempDir.deleteOnExit();
+		} catch (Exception e) {
+			throw new RuntimeException("Could not create temporary directory", e);
+		}
+		try {
 			tableRegistry.onPathChange(
 				new Function<LiblouisTableRegistry,Void>() {
 					public Void apply(LiblouisTableRegistry r) {
@@ -210,19 +218,22 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			registerTableResolver();
 			// invoke after table resolver registered because otherwise default tables will be unpacked for no reason
 			logger.debug("liblouis version: {}", Louis.getVersion());
-			File unicodeDisFile = new File(makeUnpackDir(), "unicode.dis");
+			File unicodeDisFile = new File(tempDir, "unicode.dis");
 			unpack(
 				URLs.getResourceFromJAR("/tables/unicode.dis", LiblouisTableJnaImplProvider.class),
 				unicodeDisFile);
+			unicodeDisFile.deleteOnExit();
 			unicodeDisplayTable = DisplayTable.fromTable("" + URLs.asURI(unicodeDisFile), Fallback.MASK);
-			spacesFile = new File(makeUnpackDir(), "spaces.cti");
+			spacesFile = new File(tempDir, "spaces.cti");
 			unpack(
 				URLs.getResourceFromJAR("/tables/spaces.cti", LiblouisTableJnaImplProvider.class),
 				spacesFile);
-			spacesDisFile = new File(makeUnpackDir(), "spaces.dis");
+			spacesFile.deleteOnExit();
+			spacesDisFile = new File(tempDir, "spaces.dis");
 			unpack(
 				URLs.getResourceFromJAR("/tables/spaces.dis", LiblouisTableJnaImplProvider.class),
 				spacesDisFile);
+			spacesDisFile.deleteOnExit();
 			unicodeDisplayTableWithNoBreakSpace = DisplayTable.fromTable(
 				"" + URLs.asURI(unicodeDisFile) + "," + URLs.asURI(spacesDisFile), Fallback.MASK);
 			Louis.setLogger(new org.liblouis.Logger() {
@@ -239,21 +250,6 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		catch (Throwable e) {
 			logger.error("liblouis service could not be loaded", e);
 			throw e; }
-	}
-	
-	private static File makeUnpackDir() {
-		File tmpDirectory; {
-			try {
-				tmpDirectory = createTempDirectory("pipeline-").toFile(); }
-			catch (Exception e) {
-				throw new RuntimeException("Could not create temporary directory", e); }
-			tmpDirectory.deleteOnExit();
-		}
-		return normalize(tmpDirectory);
-	}
-	
-	private static File createTempFile(String prefix, String suffix) throws IOException {
-		return File.createTempFile(prefix, suffix, makeUnpackDir());
 	}
 	
 	@Deactivate
@@ -420,7 +416,8 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 										throw new NoSuchElementException(); }
 								if (dotsForUndefinedChar != null) {
 									try {
-										File undefinedFile = createTempFile("undefined-", ".uti");
+										File undefinedFile = File.createTempFile("undefined-", ".uti", tempDir);
+										undefinedFile.deleteOnExit();
 										undefinedFile.createNewFile();
 										FileOutputStream writer = new FileOutputStream(undefinedFile);
 										String dotPattern; {

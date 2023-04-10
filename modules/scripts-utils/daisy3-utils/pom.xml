@@ -6,17 +6,22 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>daisy3-utils</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>4.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DAISY 3 Utils</name>
   
   <dependencies>
+    <!-- for XProcScriptService -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
     <!--
         runtime dependencies
     -->
@@ -54,7 +59,8 @@
   
   <properties>
     <expose-services>
-      org.daisy.pipeline.modules.impl.Module_daisy3_utils
+      org.daisy.pipeline.modules.impl.Module_daisy3_utils,
+      org.daisy.pipeline.script.impl.XProcScript_daisy3_upgrader
     </expose-services>
   </properties>
   

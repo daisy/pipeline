@@ -25,9 +25,8 @@
     <p:pipe step="load" port="result"/>
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>The filtered and loaded fileset.</p>
-      <p>All files are loaded into memory, unless if the "load-if-not-in-memory" option is set, then
-      the "result" port will only contain documents that were already present in the "in-memory"
-      input.</p>
+      <p>Files are loaded into memory, unless a file can not be loaded and the
+      "fail-on-not-found" option is not set.</p>
       <p>The fileset ("xml:base" and "href" attributes and base URIs of documents) is normalized.</p>
       <p>"original-href" attributes are removed from the manifest.</p>
     </p:documentation>
@@ -49,7 +48,6 @@
   <p:option name="media-types" select="''"/>
   <p:option name="not-media-types" select="''"/>
   <p:option name="fail-on-not-found" select="'false'"/>
-  <p:option name="load-if-not-in-memory" select="'true'"/>
   <p:option name="detect-serialization-properties" cx:as="xs:boolean" select="false()">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Whether to detect serialization properties of XML documents when loaded from disk. The
@@ -229,20 +227,6 @@
             <p:split-sequence test="position()=1"/>
           </p:when>
 
-          <!-- not in memory, but don't load it from disk -->
-          <p:when test="not($load-if-not-in-memory = 'true')">
-            <p:output port="result" primary="true" sequence="true"/>
-            <p:output port="newly-loaded-files-with-doctype" sequence="true">
-              <p:empty/>
-            </p:output>
-            <p:sink/>
-            <p:identity>
-              <p:input port="source">
-                <p:empty/>
-              </p:input>
-            </p:identity>
-          </p:when>
-
           <!-- load file into memory (from disk, HTTP, etc) -->
           <p:otherwise>
             <p:output port="result" primary="true" sequence="true">
@@ -290,21 +274,9 @@
 
                   <!-- Force XML -->
                   <p:when test="$method='xml'">
-                    <p:try>
-                      <p:group>
-                        <p:load>
+                      <p:load>
                           <p:with-option name="href" select="$href-maybe-in-zip"/>
-                        </p:load>
-                      </p:group>
-                      <p:catch>
-                        <px:message severity="WARN">
-                          <p:input port="source">
-                            <p:empty/>
-                          </p:input>
-                          <p:with-option name="message" select="concat('unable to load ',$href,' as XML')"/>
-                        </px:message>
-                      </p:catch>
-                    </p:try>
+                      </p:load>
                   </p:when>
 
                   <!-- Force text -->

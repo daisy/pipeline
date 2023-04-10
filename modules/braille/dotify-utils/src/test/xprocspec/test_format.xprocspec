@@ -17,6 +17,7 @@
       <p:output port="obfl" sequence="false">
         <p:pipe step="obfl-final" port="result"/>
       </p:output>
+      <p:option name="document-locale" select="'und'"/>
       <p:option name="text-transform" select="'(input:braille)'"/>
       <p:option name="braille-charset" select="''"/>
       <p:option name="skip-margin-top-of-page" select="'false'"/>
@@ -25,7 +26,8 @@
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
-                       duplex="true" document-locale="und">
+                       duplex="true">
+        <p:with-option name="document-locale" select="$document-locale"/>
         <p:with-option name="text-transform" select="$text-transform"/>
         <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
@@ -2749,7 +2751,7 @@
   
   <x:scenario label="test_25">
     <x:documentation>
-      Tests (pre-)hyphenation.
+      Tests pre-hyphenated text.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -3978,8 +3980,8 @@
   
   <x:scenario label="test_41">
     <x:documentation>
-      Tests hyphens:none, text-transform. hyphens:none is currently handled in XSLT (not in
-      Dotify). text-transform is handled in Dotify.
+      Tests hyphens:none and text-transform. hyphens:none is currently handled with a style
+      element. text-transform is handled with a style element and/or translate attributes.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -5964,20 +5966,31 @@
         <x:document type="inline">
           <doc style="text-transform: none;
                       @page {
-                        size: 15 5;
+                        size: 15 10;
                         margin-left: 2;
                         @left {
                           content: -obfl-marker-indicator(pagenum, '⠿');
                           text-transform: none; }}">
             <body style="display: block">
-              <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <pagenum style="display: none; -obfl-marker: pagenum">2</pagenum>
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <pagenum style="display: none; -obfl-marker: pagenum">3</pagenum>
+              <section style="display: block">
+                <pagenum style="display: none; -obfl-marker: pagenum">1</pagenum>
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <pagenum style="display: none; -obfl-marker: pagenum">2</pagenum>
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <pagenum style="display: none; -obfl-marker: pagenum">3</pagenum>
+              </section>
+              <section style="display: block">
+                <pagenum style="display: none; -obfl-marker: pagenum">3</pagenum>
+                <h style="display: block;
+                          margin-top: 1">
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </h>
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+              </section>
             </body>
           </doc>
         </x:document>
@@ -5992,7 +6005,7 @@
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
           </meta>
-          <layout-master name="body" page-width="15" page-height="5" duplex="true">
+          <layout-master name="body" page-width="15" page-height="10" duplex="true">
             <default-template>
               <header/>
               <footer/>
@@ -6005,14 +6018,26 @@
           </layout-master>
           <sequence master="body">
             <block>
-              <marker class="indicator/pagenum" value="x"/>
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <marker class="indicator/pagenum" value="x"/>
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <marker class="indicator/pagenum" value="x"/>
+              <block>
+                <marker class="indicator/pagenum" value="x"/>
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <marker class="indicator/pagenum" value="x"/>
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                <marker class="indicator/pagenum" value="x"/>
+              </block>
+              <block>
+                <block margin-top="1">
+                  <marker class="indicator/pagenum" value="x"/>
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
+                <block>
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                  ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+                </block>
+              </block>
             </block>
           </sequence>
         </obfl>
@@ -6030,7 +6055,7 @@
             </meta>
           </head>
           <body>
-            <volume cols="15" rows="5" rowgap="0" duplex="true">
+            <volume cols="15" rows="10" rowgap="0" duplex="true">
               <section>
                 <page>
                   <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
@@ -6038,6 +6063,10 @@
                   <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                   <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row/>
+                  <row>⠿⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
+                  <row>⠀⠀⠤⠤⠤⠀⠤⠤⠤⠀⠤⠤⠤</row>
                 </page>
               </section>
             </volume>
@@ -11405,7 +11434,7 @@
     <x:documentation>
       Tests rendering of the range of print pages covered on the current page when a print page
       break coincides with a braille page break and the first element on the new page has a top
-      padding.
+      margin, border or padding.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -11424,7 +11453,18 @@
                                         print-page-dash content() '⠒'">1</pagenum>
             <!-- begin page -->
             <p style="display: block">⠁⠁⠁</p>
-            <p style="display: block">⠁⠁⠁</p>
+            <!-- begin page -->
+            <pagenum style="display: none;
+                            string-set: print-page content(),
+                                        dash-print-page '⠒' content(),
+                                        print-page-dash content() '⠒'">2</pagenum>
+            <p style="display: block; page-break-before: always; padding-top: 1">⠁⠁⠁</p>
+            <!-- begin page -->
+            <pagenum style="display: none;
+                            string-set: print-page content(),
+                                        dash-print-page '⠒' content(),
+                                        print-page-dash content() '⠒'">3</pagenum>
+            <p style="display: block; page-break-before: always; border-top-pattern: ⠿">⠁⠁⠁</p>
             <p style="display: block">⠁⠁⠁</p>
             <p style="display: block">⠁⠁⠁</p>
             <p style="display: block">⠁⠁⠁</p>
@@ -11432,11 +11472,8 @@
             <pagenum style="display: none;
                             string-set: print-page content(),
                                         dash-print-page '⠒' content(),
-                                        print-page-dash content() '⠒'">2</pagenum>
-            <p style="display: block; page-break-before: always; padding-top: 1">⠁⠁⠁</p>
-            <p style="display: block">⠁⠁⠁</p>
-            <p style="display: block">⠁⠁⠁</p>
-            <p style="display: block">⠁⠁⠁</p>
+                                        print-page-dash content() '⠒'">4</pagenum>
+            <p style="display: block; margin-top: 1">⠁⠁⠁</p>
           </doc>
         </x:document>
       </x:input>
@@ -11480,10 +11517,6 @@
               </block>
               ⠁⠁⠁
             </block>
-            <block>⠁⠁⠁</block>
-            <block>⠁⠁⠁</block>
-            <block>⠁⠁⠁</block>
-            <block>⠁⠁⠁</block>
             <!-- begin page -->
             <block break-before="page">
               <block>
@@ -11494,9 +11527,29 @@
                 ⠁⠁⠁
               </block>
             </block>
+            <!-- begin page -->
+            <block break-before="page">
+              <block>
+                <marker class="print-page" value="3"/>
+                <marker class="print-page-dash/prev" value="2⠒"/>
+              </block>
+              <block border-top-style="solid" border-top-width="3">
+                ⠁⠁⠁
+              </block>
+            </block>
             <block>⠁⠁⠁</block>
             <block>⠁⠁⠁</block>
             <block>⠁⠁⠁</block>
+            <!-- begin page -->
+            <block>
+              <block>
+                <marker class="print-page" value="4"/>
+                <marker class="print-page-dash/prev" value="3⠒"/>
+              </block>
+              <block margin-top="1">
+                ⠁⠁⠁
+              </block>
+            </block>
           </sequence>
         </obfl>
       </x:document>
@@ -11518,17 +11571,23 @@
                 <page>
                   <row>⠼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                   <row>⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                  <row/>
+                  <row>⠁⠁⠁</row>
+                </page>
+                <page>
+                  <row>⠼⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿</row>
                   <row>⠁⠁⠁</row>
                   <row>⠁⠁⠁</row>
                   <row>⠁⠁⠁</row>
                   <row>⠁⠁⠁</row>
                 </page>
                 <page>
-                  <row>⠼⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
+                  <row>⠼⠙⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                   <row/>
-                  <row>⠁⠁⠁</row>
-                  <row>⠁⠁⠁</row>
-                  <row>⠁⠁⠁</row>
                   <row>⠁⠁⠁</row>
                 </page>
               </section>
@@ -14465,7 +14524,7 @@
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               <h1 id="ch_2" style="display:block; text-transform:auto"> 2 </h1>
               <br style="display: block; volume-break-before: always"/>
-              <h2 id="ch_2_1" style="display:block; text-transform:auto"> 2.1 </h2>
+              <h2 id="ch_2_1" style="display:block; margin-top: 1; text-transform:auto"> 2.1 </h2>
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
               <h2 id="ch_2_2" style="display:block; text-transform:auto"> 2.2 </h2>
@@ -14617,11 +14676,13 @@
           <sequence master="main" break-before="volume">
             <block translate="pre-translated-text-css">
               <block/>
-              <block translate="">
+              <block>
                 <block>
                   <span id="ch_2_1"/>
                 </block>
-                2.1
+                <block translate="" margin-top="1">
+                  2.1
+                </block>
               </block>
               <block>
                 ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤ ⠤⠤⠤⠤⠤
@@ -14667,7 +14728,7 @@
                 </page>
                 <page>
                   <row>⠀⠼⠃⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠛</row>
-                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠓</row>
+                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠊</row>
                   <row/>
                   <row/>
                   <row/>
@@ -14748,7 +14809,7 @@
               <section>
                 <page>
                   <row>⠀⠼⠃⠲⠁⠀⠐⠐⠐⠐⠐⠐⠀⠼⠛</row>
-                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠓</row>
+                  <row>⠀⠼⠃⠲⠃⠀⠐⠐⠐⠐⠐⠐⠀⠼⠊</row>
                   <row/>
                   <row/>
                   <row/>
@@ -14758,8 +14819,8 @@
               </section>
               <section>
                 <page>
+                  <row/>
                   <row>⠼⠃⠲⠁</row>
-                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
@@ -14772,11 +14833,11 @@
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
-                  <row>⠼⠃⠲⠃</row>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠓</row>
                 </page>
                 <page>
-                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
+                  <row>⠼⠃⠲⠃</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
@@ -14789,7 +14850,7 @@
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
-                  <row/>
+                  <row>⠤⠤⠤⠤⠤⠀⠤⠤⠤⠤⠤</row>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠚</row>
                 </page>
@@ -15058,7 +15119,7 @@
   
   <x:scenario label="test_124">
     <x:documentation>
-      Tests string() inside @-obfl-volume-transition rule.
+      Tests string(..., start-except-first) inside @-obfl-volume-transition rule.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -15085,6 +15146,7 @@
             </h1>
             <p style="display: block">⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿</p>
             <h1 style="display: block;
+                       margin-top: 1;
                        string-set: foo '⠤⠤⠤ ⠿';
                        page-break-before: right">
               ⠤⠤⠤
@@ -15150,9 +15212,11 @@
                 <marker class="foo/if-not-set-next/prev" value="⠤⠤ ⠿"/>
                 <marker class="foo/if-not-set-next" value="​"/>
               </block>
-              <marker class="foo/if-not-set-next/prev" value="​"/>
-              <marker class="foo/if-not-set-next" value="⠤⠤⠤ ⠿"/>
-              ⠤⠤⠤
+              <block margin-top="1">
+                <marker class="foo/if-not-set-next/prev" value="​"/>
+                <marker class="foo/if-not-set-next" value="⠤⠤⠤ ⠿"/>
+                ⠤⠤⠤
+              </block>
             </block>
             <block>⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿</block>
             <block>⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿</block>
@@ -15257,10 +15321,10 @@
             <volume cols="8" rows="4" rowgap="0" duplex="true">
               <section>
                 <page>
+                  <row></row>
                   <row>⠤⠤⠤</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿</row>
                 </page>
                 <page>
                   <row>⠿⠿⠿⠿⠿</row>
@@ -15275,6 +15339,7 @@
                   <row>⠿⠿⠿⠿⠿</row>
                 </page>
                 <page>
+                  <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
                   <row>⠿⠿⠿⠿⠿</row>
@@ -16779,6 +16844,142 @@
     </x:expect>
   </x:scenario>
   
+   <x:scenario label="test_141">
+    <x:documentation>
+      Tests hyphenation during formatting.
+    </x:documentation>
+    <x:call step="dotify:format">
+      <x:input port="source">
+        <x:document type="inline">
+          <doc style="@page { size: 12 25; }">
+            <p style="display: block; hyphens: none">
+              xxxxxx foo-bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: manual">
+              xxxxxx foo-bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: auto">
+              xxxxxx foo-bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: none">
+              xxxxxx foo­bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: manual">
+              xxxxxx foo­bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: auto">
+              xxxxxx foo­bar xxxxxx
+            </p>
+            <p style="display: block; hyphens: none">
+              xxxxxx foobar xxxxxx
+            </p>
+            <p style="display: block; hyphens: manual">
+              xxxxxx foobar xxxxxx
+            </p>
+            <p style="display: block; hyphens: auto">
+              xxxxxx foobar xxxxxx
+            </p>
+          </doc>
+        </x:document>
+      </x:input>
+      <x:option name="document-locale" select="'en'"/>
+      <x:option name="text-transform" select="'(system:ueb)(grade:1)'"/>
+    </x:call>
+    <x:context label="obfl">
+      <x:document type="port" port="obfl"/>
+    </x:context>
+    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
+      <x:document type="inline">
+        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en" hyphenate="false">
+          <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
+            <dp2:style-type>text/css</dp2:style-type>
+          </meta>
+          <layout-master name="a" page-width="12" page-height="25" duplex="true">
+            <default-template>
+              <header/>
+              <footer/>
+            </default-template>
+          </layout-master>
+          <sequence master="a">
+            <block>
+              <style name="hyphens: none">xxxxxx foo-bar xxxxxx</style>
+            </block>
+            <block>
+              xxxxxx foo-bar xxxxxx
+            </block>
+            <block hyphenate="true">
+              xxxxxx foo-bar xxxxxx
+            </block>
+            <block>
+              <style name="hyphens: none">xxxxxx foo­bar xxxxxx</style>
+            </block>
+            <block>
+              xxxxxx foo­bar xxxxxx
+            </block>
+            <block hyphenate="true">
+              xxxxxx foo­bar xxxxxx
+            </block>
+            <block>
+              <style name="hyphens: none">xxxxxx foobar xxxxxx</style>
+            </block>
+            <block>
+              xxxxxx foobar xxxxxx
+            </block>
+            <block hyphenate="true">
+              xxxxxx foobar xxxxxx
+            </block>
+          </sequence>
+        </obfl>
+      </x:document>
+    </x:expect>
+    <x:context label="pef">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="12" rows="25" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <!-- foo-bar -->
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <!-- foo­bar -->
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠋⠕⠕⠃⠁⠗</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <!-- foobar -->
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠋⠕⠕⠃⠁⠗</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠋⠕⠕⠃⠁⠗</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
   <x:scenario label="test_142">
     <x:documentation>
       Tests that content in top margin is trimmed when needed. (Note that if

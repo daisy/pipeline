@@ -35,17 +35,12 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     </p:option>
     
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Status</h2>
-            <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
-
-When `include-obfl` is set to true, the conversion may fail but still output a document on the
-"obfl" port.</p>
-        </p:documentation>
+        <!-- when `include-obfl` is set to true, the conversion may fail but still output a document
+             on the "obfl" port -->
         <p:pipe step="convert" port="status"/>
     </p:output>
 
-    <p:option name="stylesheet" px:sequence="true">
+    <p:option name="stylesheet">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
           <p px:role="desc" xml:space="preserve" px:inherit="prepend">
 
@@ -58,18 +53,6 @@ sheet modules) are available for use in Sass style sheets:
   for styling definition lists
 </p>
         </p:documentation>
-        <p:pipeinfo>
-            <px:type>
-                <choice>
-                    <data type="anyFileURI" datatypeLibrary="http://www.daisy.org/ns/pipeline/xproc">
-                        <documentation xml:lang="en">File path relative to input EPUB 3.</documentation>
-                    </data>
-                    <data type="anyURI">
-                        <documentation xml:lang="en">Any other absolute URI</documentation>
-                    </data>
-                </choice>
-            </px:type>
-        </p:pipeinfo>
     </p:option>
     
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
@@ -88,6 +71,7 @@ even though the provided CSS is more specific.
         </p:documentation>
     </p:option>
     
+    <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="stylesheet-parameters"/>
     <p:option name="braille-code"/>
     <p:option name="transform"/>
@@ -121,7 +105,10 @@ even though the provided CSS is more specific.
     <p:option name="pef-output-dir"/>
     <p:option name="preview-output-dir"/>
     <p:option name="obfl-output-dir"/>
-    <p:option name="temp-dir"/>
+    
+    <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
+        <!-- directory used for temporary files -->
+    </p:option>
     
     <!-- ======= -->
     <!-- Imports -->
@@ -140,11 +127,6 @@ even though the provided CSS is more specific.
         <p:documentation>
             px:delete-parameters
             px:parse-query
-        </p:documentation>
-    </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-        <p:documentation>
-            px:tempdir
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -187,22 +169,13 @@ even though the provided CSS is more specific.
     </px:parse-query>
     <p:sink/>
     
-    <!-- =============== -->
-    <!-- CREATE TEMP DIR -->
-    <!-- =============== -->
-    <px:tempdir name="temp-dir" px:message="Creating temporary directory" px:progress=".01">
-        <p:with-option name="href" select="if ($temp-dir!='') then $temp-dir else $output-dir"/>
-    </px:tempdir>
-    
     <!-- ============================= -->
     <!-- LOAD EPUB 3 and PREAMBLE HTML -->
     <!-- ============================= -->
-    <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".03">
+    <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".04">
         <p:with-option name="epub" select="$epub"/>
         <p:with-option name="preamble" select="$preamble"/>
-        <p:with-option name="temp-dir" select="concat(string(/c:result),'load/')">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
+        <p:with-option name="temp-dir" select="concat($temp-dir,'load/')"/>
     </px:epub3-to-pef.load>
     <px:fileset-load name="opf" media-types="application/oebps-package+xml">
         <p:input port="in-memory">
@@ -224,9 +197,7 @@ even though the provided CSS is more specific.
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
-        <p:with-option name="temp-dir" select="concat(string(/c:result),'convert/')">
-            <p:pipe step="temp-dir" port="result"/>
-        </p:with-option>
+        <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
         <p:with-option name="stylesheet" select="$stylesheet"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="transform"

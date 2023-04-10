@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
                 exclude-inline-prefixes="#all"
@@ -17,8 +18,8 @@
 
   <p:input port="config">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Text-To-Speech configuration file</h2>
-      <p px:role="desc">Configuration file that contains Text-To-Speech
+      <h2>Text-To-Speech configuration file</h2>
+      <p>Configuration file that contains Text-To-Speech
       properties, links to aural CSS stylesheets and links to PLS
       lexicons.</p>
     </p:documentation>
@@ -67,10 +68,10 @@
     <p:pipe step="synthesize" port="log"/>
   </p:output>
 
-  <p:option name="audio" required="false" px:type="boolean" select="'true'">
+  <p:option name="audio" required="false" cx:type="xs:boolean" cx:as="xs:string" select="'true'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Enable Text-To-Speech</h2>
-      <p px:role="desc">Whether to use a speech synthesizer to produce
+      <h2>Enable Text-To-Speech</h2>
+      <p>Whether to use a speech synthesizer to produce
       audio files.</p>
     </p:documentation>
   </p:option>
@@ -99,17 +100,17 @@
   </p:option>
 
   <!-- Might be useful some day: -->
-  <!-- <p:option name="segmentation" required="false" px:type="boolean" select="'true'"> -->
+  <!-- <p:option name="segmentation" required="false" cx:type="xs:boolean" cx:as="xs:string" select="'true'"> -->
   <!--   <p:documentation xmlns="http://www.w3.org/1999/xhtml"> -->
-  <!--     <h2 px:role="name">Enable segmentation</h2> -->
-  <!--     <p px:role="desc">Whether to segment the text or not, i.e. word and sentence boundary detection.</p> -->
+  <!--     <h2>Enable segmentation</h2> -->
+  <!--     <p>Whether to segment the text or not, i.e. word and sentence boundary detection.</p> -->
   <!--   </p:documentation> -->
   <!-- </p:option> -->
 
-  <p:option name="ssml-of-lexicons-uris" required="false" px:type="anyURI" select="''">
+  <p:option name="ssml-of-lexicons-uris" required="false" cx:type="xs:anyURI" cx:as="xs:string" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Lexicons SSML pointers</h2>
-      <p px:role="desc">URI of an SSML file which contains a list of
+      <h2>Lexicons SSML pointers</h2>
+      <p>URI of an SSML file which contains a list of
       lexicon elements with their URI. The lexicons will be provided
       to the Text-To-Speech processors.</p>
     </p:documentation>
@@ -117,8 +118,8 @@
 
   <p:option name="anti-conflict-prefix" required="false"  select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Prefix for IDs</h2>
-      <p px:role="desc">The IDs will be prefixed so as to prevent conflicts.</p>
+      <h2>Prefix for IDs</h2>
+      <p>The IDs will be prefixed so as to prevent conflicts.</p>
     </p:documentation>
   </p:option>
 

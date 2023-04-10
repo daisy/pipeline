@@ -8,25 +8,22 @@
                 exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Validation status XML</h1>
-        <p px:role="desc">Given one or more validation reports, produce XML that can be used on the reserved validation-status port. 
+        <h1>Validation status XML</h1>
+        <p>Given one or more validation reports, produce XML that can be used on the reserved validation-status port. 
             If any of the reports contain errors, the validation status will be 'error'. Otherwise, it will be 'ok'.</p>
     </p:documentation>
     
     <p:input port="source" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">source</h1>
-            <p px:role="desc">One or more validation reports (http://code.google.com/p/daisy-pipeline/wiki/ValidationReportXML).</p>
+            <p>One or more validation reports (http://code.google.com/p/daisy-pipeline/wiki/ValidationReportXML).</p>
         </p:documentation>
     </p:input>
     
     <p:output port="result" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML).</p>
+            <p>Validation status (http://daisy.github.io/pipeline/StatusXML).</p>
         </p:documentation>
     </p:output>
-    
     
     <p:for-each name="has-errors">
         <p:output port="result" sequence="true"/>

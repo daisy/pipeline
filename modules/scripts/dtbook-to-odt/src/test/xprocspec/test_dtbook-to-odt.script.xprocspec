@@ -25,15 +25,16 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="output-dir" select="concat($temp-dir,'minimal/')"/>
+      <x:option name="output-dir" select="concat($temp-dir,'minimal/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'minimal/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory">
-      <x:document type="directory" base-uri="temp-dir" href="minimal/" recursive="true"/>
+      <x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/" recursive="true"/>
     </x:context>
     <x:expect label="the output directory should contain the ODT file" type="xpath"
               test="/c:directory/c:file[@name='test_dtbook-to-odt.script.odt']"/>
     <x:context label="the content file">
-      <x:document type="file" base-uri="temp-dir" href="minimal/test_dtbook-to-odt.script.odt!/content.xml"
+      <x:document type="file" base-uri="temp-dir" href="minimal/output-dir/test_dtbook-to-odt.script.odt!/content.xml"
                   select="/office:document-content/office:body/office:text"/>
     </x:context>
     <x:expect label="the content file" type="compare">

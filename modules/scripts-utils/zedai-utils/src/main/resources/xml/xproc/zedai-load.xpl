@@ -5,7 +5,7 @@
                 type="px:zedai-load" exclude-inline-prefixes="#all">
 
     <p:documentation>Loads a ZedAI (ANSI/NISO Z39.98-2012 Authoring and Interchange) fileset from disk.</p:documentation>
-    <p:input port="source" primary="true" px:name="source"/>
+    <p:input port="source" primary="true"/>
     <p:output port="fileset.out" primary="true">
         <p:pipe port="result" step="fileset"/>
     </p:output>

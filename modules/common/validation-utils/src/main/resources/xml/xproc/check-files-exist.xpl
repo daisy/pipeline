@@ -6,174 +6,84 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-inline-prefixes="#all"
-                type="px:check-files-exist">
+                type="px:check-files-exist" name="main">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Check that files exist on disk</h1>
-        <p px:role="desc">Given a list of files, ensure that each exists on disk.</p>
+        <h1>Check that files exist</h1>
+        <p>Given a list of files, ensure that each exists.</p>
     </p:documentation>
     
-    <!-- ***************************************************** -->
-    <!-- INPUT, OUTPUT and OPTIONS -->
-    <!-- ***************************************************** -->
-    
-    <p:input port="source" primary="true">
+    <p:input port="source.fileset" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">source</h1>
-            <p px:role="desc">A list of files, formatted as a FileSet (http://code.google.com/p/daisy-pipeline/wiki/FileSetUtils).</p>
+            <p>Input fileset.</p>
         </p:documentation>
     </p:input>
+    <p:input port="source.in-memory" sequence="true">
+        <p:empty/>
+    </p:input>
     
-    <p:output port="result" primary="true">
+    <p:output port="result.fileset" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">List of existing files, formatted as a DAISY Pipeline FileSet.</p>
+            <p>Output fileset of files that exist in memory or on disk.</p>
         </p:documentation>
-        <p:pipe port="result" step="wrap-fileset"/>
+        <p:pipe step="purge" port="result.fileset"/>
+    </p:output>
+    <p:output port="result.in-memory" sequence="true">
+        <p:pipe step="main" port="source.in-memory"/>
     </p:output>
     
     <p:output port="report">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">List of missing files, formatted as &lt;d:error&gt; elements, or an empty d:errors element if nothing is missing.</p>
+            <p>List of missing files, formatted as &lt;d:error&gt; elements, or an empty d:errors element if nothing is missing.</p>
         </p:documentation>
-        <p:pipe port="result" step="wrap-errors"/>
+        <p:pipe step="report" port="result"/>
     </p:output>
     
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">validation-status</h1>
-            <p px:role="desc">Validation status (http://code.google.com/p/daisy-pipeline/wiki/ValidationStatusXML) of the file check.</p>
+            <p>Validation status (http://daisy.github.io/pipeline/StatusXML) of the file check.</p>
         </p:documentation>
-        <p:pipe step="format-validation-status" port="result"/>
+        <p:pipe step="validation-status" port="result"/>
     </p:output>
     
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
-        <p:documentation>Utilities for representing a fileset.</p:documentation>
+        <p:documentation>
+            px:fileset-purge
+        </p:documentation>
+    </p:import>
+    <p:import href="create-validation-report-error-for-file.xpl">
+        <p:documentation>
+            pxi:create-validation-report-error-for-file
+        </p:documentation>
+    </p:import>
+    <p:import href="validation-status.xpl">
+        <p:documentation>
+            px:validation-status
+        </p:documentation>
     </p:import>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
-        <p:documentation>For manipulating files.</p:documentation>
-    </p:import>
-    
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    
-    <p:import href="create-validation-report-error-for-file.xpl"/>
-    <p:import href="validation-status.xpl"/>
-    
-    <p:variable name="base" cx:as="xs:string" select="/*/@xml:base"/>
-    
-    <p:for-each name="check-each-file">
-        <p:iteration-source select="//d:file"/>
-        <p:output port="result" sequence="true">
-            <p:pipe port="result" step="file-exists"/>
-        </p:output>
-        <p:output port="report" sequence="true">
-            <p:pipe port="report" step="file-exists"/>
-        </p:output>
-        
-        <p:variable name="filepath" select="resolve-uri(*/@href, $base)"/>    
-        <p:try>
-            <p:group>
-                <px:info>
-                    <p:with-option name="href" select="$filepath"/>
-                </px:info>
-            </p:group>
-            <p:catch>
-                <p:identity>
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-            </p:catch>
-        </p:try>
-        
-        <p:wrap-sequence wrapper="info"/>
-        
-        <!-- the <info> element, generated above, will be empty if the file was not found -->
-        <p:choose name="file-exists">
-            <p:when test="empty(/info/*)">
-                <p:output port="report" sequence="true">
-                    <p:pipe port="result" step="create-error"/>
-                </p:output>
-                
-                <p:output port="result" sequence="true">
-                    <p:pipe port="result" step="empty-fileset"/>
-                </p:output>
-                
-                <px:message severity="WARN">
-                    <p:with-option name="message" select="concat('File not found: ', $filepath)"/>
-                </px:message>
-                
-                <p:identity name="empty-fileset">
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-                
-                <pxi:create-validation-report-error-for-file name="create-error">
-                    <p:input port="source">
-                        <p:pipe port="current" step="check-each-file"/>
-                    </p:input>
-                    <p:with-option name="error-type" select="'file-not-found'"/>
-                    <p:with-option name="desc" select="'File not found'"/>
-                    <p:with-option name="base" select="$base"/>
-                </pxi:create-validation-report-error-for-file>
-            </p:when>
-            <p:otherwise>
-                <p:output port="result" sequence="true">
-                    <p:pipe port="result.fileset" step="create-fileset-entry"/>
-                </p:output>
-                <p:output port="report" sequence="true">
-                    <p:pipe port="result" step="empty-error"/>
-                </p:output>
-                
-                <p:identity name="empty-error">
-                    <p:input port="source">
-                        <p:empty/>
-                    </p:input>
-                </p:identity>
-                <p:sink/>
-                
-                <px:fileset-add-entry name="create-fileset-entry">
-                    <p:with-option name="href" select="$filepath"/>
-                    <p:input port="source.fileset">
-                        <p:inline>
-                            <d:fileset/>
-                        </p:inline>
-                    </p:input>
-                </px:fileset-add-entry>
-            </p:otherwise>
-        </p:choose>
-    </p:for-each>  
-    
-    <p:wrap-sequence wrapper="errors" wrapper-prefix="d" wrapper-namespace="http://www.daisy.org/ns/pipeline/data" name="wrap-errors">
-        <p:input port="source">
-            <p:pipe port="report" step="check-each-file"/>
+    <px:fileset-purge warn-on-missing="true" name="purge">
+        <p:input port="source.in-memory">
+            <p:pipe step="main" port="source.in-memory"/>
         </p:input>
-    </p:wrap-sequence>
-    
-    <px:validation-status name="format-validation-status">
-        <p:input port="source">
-            <p:pipe port="result" step="wrap-errors"/>
-        </p:input>
-    </px:validation-status>
+    </px:fileset-purge>
     <p:sink/>
     
-    <p:group name="wrap-fileset">
-        <p:output port="result"/>
-        
-        <!-- input fileset -->
-        <px:fileset-create name="fileset.in-memory-base"/>
-        
-        <!-- output fileset -->
-        <px:fileset-join>
-            <p:input port="source">
-                <p:pipe step="fileset.in-memory-base" port="result"/>
-                <p:pipe step="check-each-file" port="result"/>
-            </p:input>
-        </px:fileset-join>
-    </p:group>
+    <p:for-each>
+        <p:iteration-source select="//d:file">
+            <p:pipe step="purge" port="purged"/>
+        </p:iteration-source>
+        <pxi:create-validation-report-error-for-file>
+            <p:with-option name="error-type" select="'file-not-found'"/>
+            <p:with-option name="desc" select="'File not found'"/>
+            <p:with-option name="base" select="base-uri(/*)">
+                <p:pipe step="purge" port="purged"/>
+            </p:with-option>
+        </pxi:create-validation-report-error-for-file>
+    </p:for-each>
+    <p:wrap-sequence wrapper="errors" wrapper-prefix="d" wrapper-namespace="http://www.daisy.org/ns/pipeline/data"
+                     name="report"/>
+    <px:validation-status name="validation-status"/>
     <p:sink/>
     
 </p:declare-step>

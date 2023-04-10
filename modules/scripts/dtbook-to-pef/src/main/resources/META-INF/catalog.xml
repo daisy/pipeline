@@ -10,7 +10,8 @@
                    ../css/generate-toc.params
                    ../css/page-breaking.params
                    ../css/volume-breaking.params
-                   ../css/notes.params"/>
+                   ../css/notes.params
+                   ../css/dotify.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>

@@ -30,13 +30,17 @@
     </xsl:variable>
 
     <!-- update dtb:audioFormat metadata -->
-    <xsl:template match="/package/metadata/x-metadata/meta[@name='dtb:audioFormat']">
-        <xsl:if test="$audio-formats($new-audio-file-type)">
-            <xsl:copy>
-                <xsl:apply-templates select="@* except @content"/>
-                <xsl:attribute name="content" select="$audio-formats($new-audio-file-type)"/>
-            </xsl:copy>
-        </xsl:if>
+    <xsl:template match="/package/metadata/x-metadata/meta[@name='dtb:audioFormat' and not(@content=('mp4-aac','mp3','wav'))]"/>
+    <xsl:template match="/package/metadata/x-metadata">
+        <xsl:copy>
+            <xsl:apply-templates mode="#current" select="@*|node()"/>
+            <xsl:if test="$audio-formats($new-audio-file-type)">
+                <xsl:variable name="format" as="xs:string" select="$audio-formats($new-audio-file-type)"/>
+                <xsl:if test="not(/package/metadata/x-metadata/meta[@name='dtb:audioFormat' and @content=$format])">
+                    <meta name="dtb:audioFormat" content="{$format}"/>
+                </xsl:if>
+            </xsl:if>
+        </xsl:copy>
     </xsl:template>
 
     <!-- update media-type of manifest items -->

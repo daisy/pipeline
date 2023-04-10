@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-epub3"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:daisy3-to-epub3" version="1.0" name="main">
 
@@ -14,10 +15,14 @@
     </p:output>
 
     <p:option name="mediaoverlays" required="true"/>
-    <p:option name="assert-valid" required="true"/>
+    <p:option name="validation" cx:type="off|report|abort" select="'off'">
+        <p:documentation>
+            <p>Whether to stop processing and raise an error on validation issues (abort), only
+            report them (report), or to ignore any validation issues (off).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="chunk-size" required="false" select="'-1'"/>
     <p:option name="temp-dir" required="true"/>
-
 
     <!--=========================================================================-->
     <!-- IMPORTS                                                                 -->
@@ -197,7 +202,7 @@
         </p:input>
         <p:with-option name="output-dir" select="$content-dir"/>
         <p:with-option name="temp-dir" select="concat($temp-dir-checked,'dtbook-to-html/')"/>
-        <p:with-option name="assert-valid" select="$assert-valid"/>
+        <p:with-option name="validation" select="$validation"/>
         <p:with-option name="chunk-size" select="$chunk-size"/>
         <p:with-option name="filename"
                        select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">

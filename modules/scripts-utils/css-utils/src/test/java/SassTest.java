@@ -77,7 +77,7 @@ public class SassTest {
 		CommonTreeNodeStream nodes = new CommonTreeNodeStream(ast);
 		nodes.setTokenStream(tokens);
 		CSSTreeParser treeParser = new CSSTreeParser(nodes);
-		treeParser.init(new SimplePreparator(null, true), null, null);
+		treeParser.init(new SimplePreparator(null, true), null);
 		List<RuleBlock<?>> rules = treeParser.stylesheet();
 		Assert.assertEquals(1, rules.size());
 		RuleBlock<?> rule = rules.get(0);

@@ -23,7 +23,22 @@
 	<p:input port="tts-config"/>
 
 	<p:option name="language" required="true"/>
-	<p:option name="assert-valid" required="true" cx:as="xs:string"/>
+	<p:option name="validation" cx:type="off|report|abort" select="'off'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether to stop processing and raise an error on validation issues (abort), only
+			report them (report), or to ignore any validation issues (off).</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="dtbook-is-valid" cx:as="xs:boolean" select="true()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether the input is a valid DTBook.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="nimas" cx:as="xs:boolean" select="false()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether the input is NIMAS.</p>
+		</p:documentation>
+	</p:option>
 	<p:option name="audio" required="true" cx:as="xs:string"/>
 	<p:option name="audio-file-type" select="'audio/mpeg'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -58,7 +73,7 @@
 	</p:import>
 
 	<!-- CSS inlining -->
-	<p:choose>
+	<p:choose px:progress=".1">
 		<p:when test="$audio = 'true'">
 			<px:css-speech-cascade content-type="application/x-dtbook+xml" name="cascade">
 				<p:input port="source.in-memory">
@@ -86,7 +101,7 @@
 	<p:identity name="dtbook-with-css"/>
 	<p:sink/>
 	
-	<px:dtbook-to-zedai name="dtbook-to-zedai">
+	<px:dtbook-to-zedai name="dtbook-to-zedai" px:message="Converting DTBook to ZedAI" px:progress="4/10">
 		<p:input port="source.fileset">
 			<p:pipe step="main" port="source.fileset"/>
 		</p:input>
@@ -96,7 +111,15 @@
 		<p:with-option name="output-dir" select="concat($output-dir,'zedai/')"/>
 		<p:with-option name="zedai-filename" select="concat($output-name,'.xml')"/>
 		<p:with-option name="lang" select="$language"/>
-		<p:with-option name="validation" select="if ($assert-valid='true') then 'abort' else 'report'"/>
+		<p:with-option name="validation" select="$validation"/>
+		<p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
+		<!-- reporting validation issues in intermediary documents is not helpful for user -->
+		<!-- FIXME: for now we even completely disabled output validation because px:dtbook-to-zedai
+		     is not perfect, but the issues in the ZedAI do not necessarily result in bad HTML -->
+		<p:with-option name="output-validation" select="'off'"/> <!--if ($validation='abort') then 'abort'
+		                                                             else if ($validation='report' and $dtbook-is-valid) then 'abort'
+		                                                             else 'off'-->
+		<p:with-option name="nimas" select="$nimas"/>
 	</px:dtbook-to-zedai>
 
 	<!--TODO better handle core media type filtering-->
@@ -106,7 +129,7 @@
 	                                         'image/svg+xml','application/pls+xml',
 	                                         'audio/mpeg','audio/mp4','text/javascript'))]"/>
 
-	<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false">
+	<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false" px:message="Converting ZedAI to EPUB 3" px:progress="5/10">
 		<p:input port="in-memory.in">
 			<p:pipe step="dtbook-to-zedai" port="result.in-memory"/>
 		</p:input>

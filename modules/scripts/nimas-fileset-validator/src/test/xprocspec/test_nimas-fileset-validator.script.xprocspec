@@ -6,7 +6,7 @@
 
     <x:scenario label="MathML_Modular_Extension_Example_2">
         <x:call step="px:nimas-fileset-validator.script">
-            <x:option name="input-opf" select="resolve-uri('../resources/MathML_Modular_Extension_Example_2/MathML_Sample2.opf')"/>
+            <x:option name="source" select="resolve-uri('../resources/MathML_Modular_Extension_Example_2/MathML_Sample2.opf')"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>
@@ -20,7 +20,7 @@
 
     <x:scenario label="greatpainters-text-files-only">
         <x:call step="px:nimas-fileset-validator.script">
-            <x:option name="input-opf" select="resolve-uri('../resources/greatpainters-text-files-only/speechgen.opf')"/>
+            <x:option name="source" select="resolve-uri('../resources/greatpainters-text-files-only/speechgen.opf')"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>

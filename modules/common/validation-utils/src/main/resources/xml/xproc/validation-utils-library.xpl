@@ -2,12 +2,18 @@
            xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
 
     <p:documentation>
-        <h1 px:role="name">Validation Utilities Library</h1>
-        <div px:role="author maintainer">
-            <p px:role="name">Romain Deltour</p>
-            <a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltour@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <h1>Validation Utilities Library</h1>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Romain Deltour</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltour@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
     
     <p:import href="combine-validation-reports.xpl">
@@ -38,12 +44,10 @@
         <p:documentation>Performs RELAX NG validation, returning two results: the source document (validated, if validation succeeds) and a report of the validation errors (if any).</p:documentation>
     </p:import>
     
-    <p:import href="validate-with-relax-ng-and-report.xpl">
-        <p:documentation>Performs RELAX NG validation, and if there are validation errors, sends them to the error listener as warnings. If 'assert-valid' is true, also raises an error.</p:documentation>
-    </p:import>
-    
     <p:import href="relax-ng-to-schematron.xpl">
         <p:documentation>Extracts embedded Schematron rules from a RELAX NG schema (not in compact syntax).</p:documentation>
     </p:import>
+    
+    <p:import href="report-errors.xpl"/>
     
 </p:library>

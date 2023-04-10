@@ -110,7 +110,7 @@ See the CSS specification for more info:
         </p:documentation>
     </p:option>
 
-    <p:option name="levels-in-footer" required="false" px:type="integer" select="'6'">
+    <p:option name="levels-in-footer" required="false" px:type="integer" select="'0'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Headers/footers: Levels in footer</h2>
             <p px:role="desc" xml:space="preserve">Specify which headings are rendered in the footer.

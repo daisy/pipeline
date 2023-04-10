@@ -27,8 +27,6 @@
         <p:input port="source" primary="true" sequence="true"/>
         <p:output port="result" sequence="true"/>
         <p:option name="code" required="true"/>
-        <p:option name="code-prefix" select="''"/>
-        <p:option name="code-namespace" select="''"/>
         <p:option name="message" required="true"/>
         <p:option name="param1" select="''"/>
         <p:option name="param2" select="''"/>
@@ -52,8 +50,6 @@
         <p:option name="test-count-min" select="''"/>
         <p:option name="test-count-max" select="''"/>
         <p:option name="error-code" select="''"/>
-        <p:option name="error-code-prefix" select="''"/>
-        <p:option name="error-code-namespace" select="''"/>
         <p:option name="message" required="true"/>
         <p:option name="param1" select="''"/>
         <p:option name="param2" select="''"/>

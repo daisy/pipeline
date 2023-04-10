@@ -24,7 +24,7 @@
         </x:context>
         <x:expect label="Should result in error" type="count" min="1"/>
         <x:expect label="Should result in a XC0011 error: https://www.w3.org/TR/xproc/#err.D0011"
-                  type="xpath" test="//c:error/@code" equals="'err:XC0011'"/>
+                  type="xpath" test="exists(//c:error/[resolve-QName(@code,.)=QName('http://www.w3.org/ns/xproc-error','err:XC0011')])"/>
     </x:scenario>
     
     <x:scenario label="Load XML document with DTD present in catalog.xml">

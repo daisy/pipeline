@@ -33,17 +33,9 @@
 			directory.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="validation" select="'off'">
+	<p:option name="validation" cx:as="xs:boolean" select="false()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>Whether to perform validation of the input:</p>
-			<dl>
-				<dt>off</dt>
-				<dd>No validation</dd>
-				<dt>report</dt>
-				<dd>Report validation issues</dd>
-				<dt>abort</dt>
-				<dd>Abort on validation issues</dd>
-			</dl>
+			<p>Whether to perform validation of the input.</p>
 		</p:documentation>
 	</p:option>
 	<p:option name="temp-dir" required="false">
@@ -67,8 +59,8 @@
 	<p:output port="validation-report" sequence="true" px:media-type="application/vnd.pipeline.report+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The validation report</p>
-			<p>The port is empty if the <code>validation</code> option is 'off' or if the input is a
-			valid EPUB.</p>
+			<p>The port is empty if the <code>validation</code> option is set to 'false' or if the
+			input is a valid EPUB.</p>
 		</p:documentation>
 		<p:pipe step="validate" port="report"/>
 	</p:output>
@@ -76,8 +68,7 @@
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The <a href="http://daisy.github.io/pipeline/StatusXML">validation
 			status</a> document</p>
-			<p>'ok' if the <code>validation</code> option not 'abort' or if the input is a valid
-			EPUB, 'error' otherwise.</p>
+			<p>'ok' if the input is a valid EPUB, 'error' otherwise.</p>
 		</p:documentation>
 		<p:pipe step="validate" port="status"/>
 	</p:output>
@@ -312,7 +303,7 @@
 	<p:sink/>
 
 	<p:choose name="validate">
-		<p:when test="$validation='off'">
+		<p:when test="not($validation)">
 			<p:output port="report" sequence="true">
 				<p:empty/>
 			</p:output>
@@ -359,30 +350,12 @@
 					</p:output>
 					<p:identity/>
 				</p:when>
-				<p:when test="$validation='report'">
-					<p:output port="status" primary="true">
-						<!--
-							Return OK here even though validation failed.
-						-->
-						<p:inline>
-							<d:validation-status result="ok"/>
-						</p:inline>
-					</p:output>
+				<p:otherwise>
+					<p:output port="status" primary="true"/>
 					<p:output port="report">
 						<p:pipe step="epub3-validator" port="html-report"/>
 					</p:output>
-					<p:sink>
-						<p:input port="source">
-							<p:empty/>
-						</p:input>
-					</p:sink>
-				</p:when>
-				<p:otherwise>
-					<p:output port="status" primary="true"/>
-					<p:output port="report" sequence="true">
-						<p:pipe step="epub3-validator" port="html-report"/>
-					</p:output>
-					<px:message message="The EPUB input is invalid. Aborting."/>
+					<p:identity/>
 				</p:otherwise>
 			</p:choose>
 		</p:otherwise>

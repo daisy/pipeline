@@ -12,7 +12,7 @@
 		<x:context label="the output EPUB">
 			<x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/minimal.epub" ordered="true"/>
 		</x:context>
-		<x:expect label="the output EPUB" type="compare" >
+		<x:expect label="the output EPUB" type="compare">
 			<x:document type="inline">
 				<c:zipfile name="minimal.epub">
 					<c:file name="EPUB/minimal.xhtml"/>
@@ -24,5 +24,30 @@
 			</x:document>
 		</x:expect>
 	</x:scenario>
-	
+
+	<x:scenario label="path with special characters">
+		<x:documentation>
+			Special characters such as spaces in output-dir should not result in an error.
+			(See https://github.com/daisy/pipeline-modules/issues/56)
+		</x:documentation>
+		<x:call step="px:html-to-epub3.script">
+			<x:option name="html" select="resolve-uri('../resources/minimal.xhtml')"/>
+			<x:option name="output-dir" select="resolve-uri('path%20with%20special%20characters/output-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output EPUB">
+			<x:document type="zip" base-uri="temp-dir" href="path%20with%20special%20characters/output-dir/minimal.epub" ordered="true"/>
+		</x:context>
+		<x:expect label="the output EPUB" type="compare">
+			<x:document type="inline">
+				<c:zipfile name="minimal.epub">
+					<c:file name="EPUB/minimal.xhtml"/>
+					<c:file name="EPUB/package.opf"/>
+					<c:file name="EPUB/toc.xhtml"/>
+					<c:file name="META-INF/container.xml"/>
+					<c:file name="mimetype"/>
+				</c:zipfile>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

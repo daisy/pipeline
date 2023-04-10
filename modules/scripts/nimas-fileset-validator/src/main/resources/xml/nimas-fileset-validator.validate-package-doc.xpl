@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="nimas-fileset-validator.validate-package-doc" type="pxi:nimas-fileset-validator.validate-package-doc"
-    xmlns:p="http://www.w3.org/ns/xproc" 
-    xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" 
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:l="http://xproc.org/library" 
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:l="http://xproc.org/library"
+                type="pxi:nimas-fileset-validator.validate-package-doc"
+                name="nimas-fileset-validator.validate-package-doc"
+                exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">NIMAS Fileset Validator Helper: Validate package documents</h1>
-        <p px:role="desc">Validates package documents (*.opf).</p>
+        <h1>NIMAS Fileset Validator Helper: Validate package documents</h1>
+        <p>Validates package documents (*.opf).</p>
     </p:documentation>
     
     <!-- ***************************************************** -->
@@ -20,43 +18,49 @@
     <!-- ***************************************************** -->
     <p:input port="source" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">source</h1>
-            <p px:role="desc">A package document (.opf).</p>
+            <p>A package document (.opf).</p>
         </p:documentation>
     </p:input>
     
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">A copy of the input document; may include PSVI annotations.</p>
+            <p>A copy of the input document; may include PSVI annotations.</p>
         </p:documentation>
         <p:pipe port="copy-of-document" step="validate-against-relaxng"/>
     </p:output>
     
     <p:output port="report">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">relaxng-report</h1>
-            <p px:role="desc">Raw output from the RelaxNG validation.</p>
+            <p>Raw output from the RelaxNG validation.</p>
         </p:documentation>
         <p:pipe port="result" step="wrap-reports"/>
     </p:output>
     
     <p:option name="math" required="false" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">math</h1>
-            <p px:role="desc">Indicates the presence of MathML in the book. 
+            <p>Indicates the presence of MathML in the book. 
                 When set to true, the validator checks that the correct metadata is present in the package document.</p>
         </p:documentation>
     </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    
-    <p:import
-        href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
-        <p:documentation>Collection of utilities for validation and reporting. </p:documentation>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
     </p:import>
     
-    <p:import href="nimas-fileset-validator.fileset-filter.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+        <p:documentation>
+            px:check-files-exist
+            px:combine-validation-reports
+        </p:documentation>
+    </p:import>
+    
+    <p:import href="nimas-fileset-validator.fileset-filter.xpl">
+        <p:documentation>
+            pxi:nimas-fileset-validator.fileset-filter
+        </p:documentation>
+    </p:import>
     
     <p:variable name="base-uri" select="base-uri()">
         <p:pipe port="source" step="nimas-fileset-validator.validate-package-doc"/>
@@ -172,12 +176,7 @@
             </p:input>
         </pxi:nimas-fileset-validator.fileset-filter>
         <px:check-files-exist name="check-pdfs-exist"/>
-        <!-- we're only using the report port-->
-        <p:sink>
-            <p:input port="source">
-                <p:pipe port="result" step="check-pdfs-exist"/>
-            </p:input>
-        </p:sink>
+        <p:sink/>
     </p:group>
     <p:sink/>
     

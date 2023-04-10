@@ -167,9 +167,97 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="@page inside @media rule" xfail="true">
+  <x:scenario label="media attribute on style element and @media rule">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css" media="embossed">
+                @media (max-width:30) {
+                  p {
+                    display: inline;
+                  }
+                }
+                @media (min-width:31) {
+                  p {
+                    display: block;
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <p>
+                foobar
+              </p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'embossed AND (width:29)'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="display: inline;">
+            foobar
+          </p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="nested @media rules">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style type="text/css">
+                @media embossed {
+                  @media (max-width:30) {
+                    p {
+                      display: inline;
+                    }
+                  }
+                  @media (min-width:31) {
+                    p {
+                      display: block;
+                    }
+                  }
+                }
+              </style>
+            </head>
+            <body>
+              <p>
+                foobar
+              </p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'embossed AND (width:29)'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="display: inline;">
+            foobar
+          </p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="@page inside @media rule">
     <x:documentation>
-      Broken: @page inside @media does not work.
+      @page inside @media
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">

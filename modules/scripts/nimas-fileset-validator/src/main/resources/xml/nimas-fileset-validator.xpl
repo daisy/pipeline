@@ -3,7 +3,6 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 type="px:nimas-fileset-validator.script"
                 px:input-filesets="nimas dtbook daisy3"
                 exclude-inline-prefixes="#all">
@@ -14,19 +13,22 @@
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/">
             Online documentation
         </a>
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com"
-                >marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
 
     <!-- ***************************************************** -->
     <!-- INPUTS / OUTPUTS / OPTIONS -->
     <!-- ***************************************************** -->
-
-    <!-- NOTE: the "input" here is given by an option string "input-opf" -->
 
     <p:output port="html-report" primary="true" px:media-type="application/vnd.pipeline.report+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -53,21 +55,16 @@
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Validation Status</h1>
-            <p px:role="desc" xml:space="preserve">The validation status
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-        </p:documentation>
+        <!-- whether the validation was successful -->
         <p:pipe step="validate-nimas-fileset" port="validation-status"/>
     </p:output>
 
     <!-- we are using a string option instead of an XML input source because
         the wellformedness of the document cannot be taken for granted -->
-    <p:option name="input-opf" required="true" px:type="anyFileURI" px:media-type="application/oebps-package+xml">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Package Document</h2>
-            <p px:role="desc">The input package document (*.opf).</p>
+            <h2 px:role="name">Input NIMAS fileset</h2>
+            <p px:role="desc">The package document (*.opf) of the input NIMAS fileset.</p>
         </p:documentation>
     </p:option>
 
@@ -78,11 +75,8 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="mathml-version" required="false" px:type="string" select="'3.0'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">MathML version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file(s).</p>
-        </p:documentation>
+    <p:option name="mathml-version" select="'3.0'">
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="check-images" required="false" px:type="boolean" select="'false'">
@@ -93,11 +87,6 @@
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            px:message
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-add-entry
@@ -114,29 +103,19 @@
         </p:documentation>
     </p:import>
 
-    <px:message>
-        <p:with-option name="message" select="concat('Nimas fileset validator: ', $input-opf)"/>
-        <p:input port="source">
-            <p:empty/>
-        </p:input>
-    </px:message>
-    <p:sink/>
-
     <px:fileset-add-entry media-type="application/oebps-package+xml">
-        <p:with-option name="href" select="$input-opf"/>
+        <p:with-option name="href" select="$source"/>
         <p:input port="source.fileset">
-            <p:inline>
-                <d:fileset/>
-            </p:inline>
+            <p:inline><d:fileset/></p:inline>
         </p:input>
     </px:fileset-add-entry>
-    
+
     <px:nimas-fileset-validator name="validate-nimas-fileset">
         <p:with-option name="mathml-version" select="$mathml-version"/>
-        <p:with-option name="check-images" select="$check-images"/>
-        <p:with-option name="base-uri" select="$input-opf"/>
+        <p:with-option name="check-images" select="$check-images='true'"/>
+        <p:with-option name="base-uri" select="$source"/>
     </px:nimas-fileset-validator>
-    
+
     <pxi:nimas-fileset-validator.store>
         <p:input port="html-report">
             <p:pipe step="validate-nimas-fileset" port="html-report"/>

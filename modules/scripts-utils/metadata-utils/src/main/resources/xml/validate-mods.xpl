@@ -6,11 +6,14 @@
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Validate a MODS document.</p>
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <dl px:role="author">
+            <dt>Name:</dt>
+            <dd px:role="name">Marisa DeMeglio</dd>
+            <dt>E-mail:</dt>
+            <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+            <dt>Organization:</dt>
+            <dd px:role="organization">DAISY Consortium</dd>
+        </dl>
     </p:documentation>
 
     <p:input port="source"/>

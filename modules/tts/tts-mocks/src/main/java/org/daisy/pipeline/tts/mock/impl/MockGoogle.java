@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.mock.impl;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,11 +17,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.xml.transform.stream.StreamSource;
-
-import com.google.common.io.ByteStreams;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -167,9 +168,11 @@ public class MockGoogle {
 							if (!audioFormat.equals(audio.getFormat()))
 								audio = AudioUtils.convertAudioStream(audioFormat, audio);
 						}
+						ByteArrayOutputStream wav = new ByteArrayOutputStream();
+						AudioSystem.write(audio, AudioFileFormat.Type.WAVE, wav);
 						String response = new JSONObject().put(
 							"audioContent",
-							Base64.getEncoder().encodeToString(ByteStreams.toByteArray(audio))).toString();
+							Base64.getEncoder().encodeToString(wav.toByteArray())).toString();
 						exchange.sendResponseHeaders(200, response.length());
 						OutputStream os = exchange.getResponseBody();
 						os.write(response.getBytes());

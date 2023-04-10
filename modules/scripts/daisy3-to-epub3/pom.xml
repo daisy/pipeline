@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>daisy3-to-epub3</artifactId>
-  <version>2.0.9-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DAISY 3 to EPUB 3</name>
@@ -70,7 +70,8 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_daisy3_to_epub3,
-      org.daisy.pipeline.script.impl.XProcScript_daisy3_to_epub3
+      org.daisy.pipeline.script.impl.XProcScript_daisy3_to_epub3,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_daisy3_to_epub3_script_validation
     </expose-services>
   </properties>
 

@@ -1,6 +1,8 @@
 package org.daisy.pipeline.braille.common;
 
+import java.util.AbstractCollection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -16,7 +18,6 @@ import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
 
-import com.google.common.collect.ForwardingList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 
@@ -173,35 +174,61 @@ public interface Query extends Iterable<Query.Feature> {
 			return query.asImmutable();
 		}
 
-		private static abstract class AbstractQueryImpl extends ForwardingList<Feature> implements Query {
+		private static abstract class AbstractQueryImpl extends AbstractCollection<Feature> implements Query {
+
+			protected final List<Feature> list;
+			
+			protected AbstractQueryImpl() {
+				this(new ArrayList<Feature>());
+			}
+			
+			protected AbstractQueryImpl(List<Feature> list) {
+				this.list = list;
+			}
+
+			public int size() {
+				return list.size();
+			}
+			
+			public Iterator<Feature> iterator() {
+				return list.iterator();
+			}
 			
 			public boolean containsKey(String key) {
 				return get(key).iterator().hasNext();
 			}
 			
 			public Iterable<Feature> get(final String key) {
-				final ListIterator<Feature> features = listIterator();
-				return new Iterable<Feature>() {
-					public Iterator<Feature> iterator() {
-						return new Iterator<Feature>() {
-							public boolean hasNext() {
-								for (int i = features.nextIndex(); i < size(); i++)
-									if (get(i).getKey().equals(key))
-										return true;
-								return false;
-							}
-							public Feature next() {
-								while (true) {
-									Feature next = features.next();
-									if (next.getKey().equals(key))
-										return next; }
-							}
-							public void remove() {
-								features.remove();
+				final ListIterator<Feature> features = list.listIterator();
+				while (features.hasNext()) {
+					Feature next = features.next();
+					if (next.getKey().equals(key)) {
+						features.previous();
+						return new Iterable<Feature>() {
+							public Iterator<Feature> iterator() {
+								return new Iterator<Feature>() {
+									private boolean canRemove = false;
+									public boolean hasNext() {
+										return features.hasNext() && list.get(features.nextIndex()).getKey().equals(key);
+									}
+									public Feature next() {
+										Feature next = features.next();
+										if (next.getKey().equals(key)) {
+											canRemove = true;
+											return next; }
+										else
+											throw new NoSuchElementException();
+									}
+									public void remove() {
+										features.remove();
+										canRemove = false;
+									}
+								};
 							}
 						};
 					}
-				};
+				}
+				return Collections.emptyList();
 			}
 			
 			public Feature getOnly(String key) throws IllegalStateException {
@@ -220,6 +247,11 @@ public interface Query extends Iterable<Query.Feature> {
 					b.append(f);
 				return b.toString();
 			}
+
+			@Override
+			public int hashCode() {
+				return list.hashCode();
+			}
 			
 			@Override
 			public boolean equals(Object obj) {
@@ -235,10 +267,21 @@ public interface Query extends Iterable<Query.Feature> {
 		
 		private static class MutableQueryImpl extends AbstractQueryImpl implements MutableQuery {
 			
-			private final List<Feature> list = new ArrayList<Feature>();
-			
-			protected List<Feature> delegate() {
-				return list;
+			public boolean add(Feature feature) {
+				int index = 0;
+				String key = feature.getKey();
+				for (Feature f : list) {
+					int cmp = f.getKey().compareTo(key);
+					if (cmp > 0) {
+						break;
+					} else if (cmp > 0) {
+						index++;
+						break;
+					}
+					index++;
+				}
+				list.add(index, feature);
+				return true;
 			}
 			
 			public MutableQuery add(String key) {
@@ -298,14 +341,8 @@ public interface Query extends Iterable<Query.Feature> {
 		
 		private static class ImmutableQueryImpl extends AbstractQueryImpl {
 			
-			private final ImmutableList<Feature> list;
-			
-			private ImmutableQueryImpl(List<Feature> list) {
-				this.list = ImmutableList.copyOf(list);
-			}
-				
-			protected List<Feature> delegate() {
-				return list;
+			private ImmutableQueryImpl(MutableQueryImpl query) {
+				super(ImmutableList.copyOf(query.list));
 			}
 		}
 		

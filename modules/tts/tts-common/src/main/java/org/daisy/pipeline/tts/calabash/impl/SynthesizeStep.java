@@ -44,7 +44,10 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
 
-	private static QName ENCODING_ERROR = new QName("TTS01");
+	/**
+	 * Encoding error
+	 */
+	private static QName ERR_TTS_001 = new QName("pe", "http://www.daisy.org/ns/pipeline/errors", "TTS001");
 
 	private ReadablePipe source = null;
 	private ReadablePipe config = null;
@@ -191,7 +194,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			logger.error("Synthesis failed", e);
 			return;
 		} catch (EncodingException e) {
-			throw new XProcException(ENCODING_ERROR,
+			throw new XProcException(ERR_TTS_001,
 			                         step,
 			                         "Encoding error",
 			                         XProcException.fromException(e)

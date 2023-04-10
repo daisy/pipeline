@@ -7,13 +7,19 @@
                 type="px:mediatype-detect" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Media type detect</h1>
-        <p px:role="desc">Determine the media type of a file.</p>
-        <div px:role="author maintainer">
-            <p px:role="name">Jostein Austvik Jacobsen</p>
-            <a href="mailto:josteinaj@gmail.com" px:role="contact">josteinaj@gmail.com</a>
-            <p px:role="organization">NLB</p>
-        </div>
+        <h1>Media type detect</h1>
+        <p>Determine the media type of a file.</p>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Jostein Austvik Jacobsen</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a></dd>
+                <dt>Organisation:</dt>
+                <dd px:role="organization">NLB</dd>
+            </dl>
+        </address>
     </p:documentation>
 
     <p:input port="source" primary="true">
@@ -128,7 +134,7 @@
                                     </p:input>
                                 </px:fileset-filter>
                                 <p:add-attribute match="/*" attribute-name="method" attribute-value="xml"/>
-                                <px:fileset-load name="file-from-disk" load-if-not-in-memory="true">
+                                <px:fileset-load name="file-from-disk">
                                     <p:input port="in-memory">
                                         <p:pipe port="in-memory" step="main"/>
                                     </p:input>

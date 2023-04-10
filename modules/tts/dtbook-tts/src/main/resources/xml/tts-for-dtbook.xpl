@@ -62,10 +62,10 @@
     <p:pipe step="synthesize" port="log"/>
   </p:output>
 
-  <p:option name="audio" required="false" px:type="boolean" select="'true'" cx:as="xs:string">
+  <p:option name="audio" required="false" cx:type="xs:boolean" select="'true'" cx:as="xs:string">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Enable Text-To-Speech</h2>
-      <p px:role="desc">Whether to use a speech synthesizer to produce audio files.</p>
+      <h2>Enable Text-To-Speech</h2>
+      <p>Whether to use a speech synthesizer to produce audio files.</p>
     </p:documentation>
   </p:option>
 

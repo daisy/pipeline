@@ -6,15 +6,21 @@
                 type="px:dtbook-upgrade">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Upgrade DTBook</h1>
-        <p px:role="desc">Upgrade a DTBook document from version 1.1.0, 2005-1, or 2005-2 to version
+        <h1>Upgrade DTBook</h1>
+        <p>Upgrade a DTBook document from version 1.1.0, 2005-1, or 2005-2 to version
         2005-1, 2005-2 or 2005-3.</p>
-        <!-- This module was imported from Pipeline 1 -->
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <address>
+            Authors:
+            <!-- This module was imported from Pipeline 1 -->
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
 
     <p:input port="source" px:media-type="application/x-dtbook+xml">

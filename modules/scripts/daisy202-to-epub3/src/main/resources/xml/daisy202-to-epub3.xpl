@@ -12,15 +12,20 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DAISY 2.02 to EPUB 3</h1>
         <p px:role="desc">Transforms a DAISY 2.02 publication into an EPUB 3 publication.</p>
-        <dl px:role="author maintainer">
-            <dt>Name:</dt>
-            <dd px:role="name">Jostein Austvik Jacobsen</dd>
-            <dt>E-mail:</dt>
-            <dd><a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a></dd>
-            <dt>Organization:</dt>
-            <dd px:role="organization">NLB</dd>
-        </dl>
-        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3/">Online Documentation</a></p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3/">
+            Online Documentation
+        </a>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Jostein Austvik Jacobsen</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">NLB</dd>
+            </dl>
+        </address>
     </p:documentation>
 
     <p:option name="href" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
@@ -34,9 +39,7 @@
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
     <p:option name="mediaoverlay" required="false" select="'true'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

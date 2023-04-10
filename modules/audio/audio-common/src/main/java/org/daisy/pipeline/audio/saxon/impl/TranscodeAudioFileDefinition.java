@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import org.daisy.common.transform.TransformerException;
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
 import org.daisy.pipeline.audio.AudioClip;
@@ -68,7 +69,9 @@ public class TranscodeAudioFileDefinition extends ReflexiveExtensionFunctionProv
 					String mediaType = oldMediaType.get();
 					AudioFileFormat.Type fileType = AudioFileTypes.fromMediaType(mediaType);
 					if (fileType == null)
-						throw new IllegalArgumentException("new-file-type parameter is not a recognized mime type: " + mediaType);
+						throw new TransformerException(
+							AudioErrors.ERR_AUDIO_001,
+							new IllegalArgumentException("media-type is not a recognized mime type: " + mediaType));
 					oldFileType = Optional.of(fileType);
 				} else
 					oldFileType = Optional.empty();

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step type="px:i18n-translate" xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" version="1.0"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data" name="main" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                type="px:i18n-translate" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>This step invokes the <code>pf:i18n-translate</code> function (implemented in i18n-translate.xsl) with its options as arguments and returns the result as a <code>c:result</code>
@@ -31,26 +35,25 @@
         </p:documentation>
     </p:output>
 
-    <p:wrap-sequence wrapper="d:maps"/>
+    <cx:import href="../xslt/i18n.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:i18n-translate
+        </p:documentation>
+    </cx:import>
 
-    <p:xslt>
-        <p:with-param name="string" select="$string"/>
-        <p:with-param name="language" select="$language"/>
-        <p:input port="stylesheet">
+    <p:sink/>
+    <p:template>
+        <p:input port="source">
+            <p:empty/>
+        </p:input>
+        <p:input port="template">
             <p:inline>
-                <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0" exclude-result-prefixes="#all"
-                    xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
-                    <xsl:import href="../xslt/i18n.xsl"/>
-                    <xsl:param name="string" as="xs:string"/>
-                    <xsl:param name="language" as="xs:string"/>
-                    <xsl:template match="/*">
-                        <c:result>
-                            <xsl:value-of select="pf:i18n-translate($string, $language, /*/*)"/>
-                        </c:result>
-                    </xsl:template>
-                </xsl:stylesheet>
+                <c:result>{$translation}</c:result>
             </p:inline>
         </p:input>
-    </p:xslt>
+        <p:with-param name="translation" select="pf:i18n-translate($string, $language, collection()/*)">
+            <p:pipe step="main" port="maps"/>
+        </p:with-param>
+    </p:template>
 
 </p:declare-step>

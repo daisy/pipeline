@@ -9,7 +9,7 @@
                 type="pxi:daisy202-to-epub3-mediaoverlay" name="mediaoverlay">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <p px:role="desc">For processing the SMILs.</p>
+        <p>For processing the SMILs.</p>
     </p:documentation>
 
     <p:input port="daisy-smil" sequence="true" primary="true">
@@ -31,19 +31,19 @@
     </p:option>
     <p:option name="publication-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to the EPUB3 Publication directory.</p>
+            <p>URI to the EPUB3 Publication directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="content-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="name">URI to the EPUB3 Content directory.</p>
+            <p>URI to the EPUB3 Content directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/Content/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="include-mediaoverlay" required="true" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">Whether or not to include media overlays. Can be either 'true' or 'false'.</p>
+            <p>Whether or not to include media overlays. Can be either 'true' or 'false'.</p>
         </p:documentation>
     </p:option>
 

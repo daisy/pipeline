@@ -36,29 +36,6 @@ more specific CSS rules. See the CSS specification for more info:
         </p:documentation>
     </p:option>
 
-    <p:option name="hyphenation-at-page-breaks" required="false" select="'false'">
-        <p:pipeinfo>
-            <px:type>
-                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-                    <value>false</value>
-                    <a:documentation xml:lang="en">Never hyphenate words at page boundaries</a:documentation>
-                    <value>except-at-volume-breaks</value>
-                    <a:documentation xml:lang="en">Allow hyphenation at page boundaries except when it's a volume boundary</a:documentation>
-                    <value>true</value>
-                    <a:documentation xml:lang="en">Allow hyphenation at page boundaries</a:documentation>
-                </choice>
-            </px:type>
-        </p:pipeinfo>
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Translation/formatting of text: Hyphenation at page boundaries</h2>
-            <p px:role="desc" xml:space="preserve">Whether hyphenation of words at page boundaries is allowed or not.
-
-This option only determines whether hyphenation is allowed at page boundaries. The "Hyphenation"
-option and the CSS determine how the hyphenation is done, when allowed.
-</p>
-        </p:documentation>
-    </p:option>
-
     <p:option name="line-spacing" required="false" select="'single'">
         <p:pipeinfo>
             <px:type>

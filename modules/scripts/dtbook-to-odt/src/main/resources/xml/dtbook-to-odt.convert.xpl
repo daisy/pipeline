@@ -43,10 +43,16 @@
         </p:documentation>
     </p:option>
     
-    <!-- Empty temporary directory dedicated to this conversion -->
-    <p:option name="temp-dir" required="true"/>
+    <p:option name="temp-dir" required="true">
+        <!-- empty temporary directory dedicated to this conversion -->
+    </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:mkdir
+            px:copy-resource
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-load
@@ -73,26 +79,31 @@
             <p:pipe step="main" port="in-memory.in"/>
         </p:input>
     </px:fileset-load>
+    <p:sink/>
     
     <!-- ============= -->
     <!-- LOAD TEMPLATE -->
     <!-- ============= -->
     
-    <p:identity>
-        <p:input port="source">
-            <p:pipe step="main" port="fileset.in"/>
-        </p:input>
-    </p:identity>
+    <px:mkdir name="mkdir">
+        <!-- because copy-resource does not create parent directory -->
+        <p:with-option name="href" select="$temp-dir"/>
+    </px:mkdir>
     <p:group name="template">
         <p:output port="fileset.out" primary="true"/>
         <p:output port="in-memory.out" sequence="true">
             <p:pipe step="load-template" port="in-memory.out"/>
         </p:output>
-        <p:variable name="save-dir"
-                    select="resolve-uri(concat(replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt/'), $temp-dir)">
+        <p:variable name="dtbook-name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
             <p:pipe step="dtbook" port="result"/>
         </p:variable>
-        <p:variable name="template-copy" select="resolve-uri(replace($template, '^.*/([^/]+)$','$1'), $temp-dir)"/>
+        <p:variable name="save-dir"
+                    select="resolve-uri(concat($dtbook-name,'.odt/'),string(/c:result))">
+            <p:pipe step="mkdir" port="result"/>
+        </p:variable>
+        <p:variable name="template-copy" select="resolve-uri(replace($template,'^.*/([^/]+)$','$1'),string(/c:result))">
+            <p:pipe step="mkdir" port="result"/>
+        </p:variable>
         <px:copy-resource>
             <p:with-option name="href" select="$template"/>
             <p:with-option name="target" select="$template-copy"/>

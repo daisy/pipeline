@@ -1,19 +1,18 @@
 package org.daisy.pipeline.braille.common;
 
 import java.util.ArrayList;
+import static java.util.Collections.singleton;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.daisy.braille.css.SimpleInlineStyle;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import org.daisy.pipeline.braille.css.CSSStyledText;
+
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-
-import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
-import org.daisy.pipeline.braille.common.AbstractHyphenator;
-import org.daisy.pipeline.braille.common.CSSStyledText;
-import org.daisy.pipeline.braille.common.BrailleTranslator;
-import org.daisy.pipeline.braille.common.Hyphenator;
 
 public class DefaultLineBreakerTest {
 	
@@ -22,8 +21,9 @@ public class DefaultLineBreakerTest {
 		TestHyphenator hyphenator = new TestHyphenator();
 		TestTranslator translator = new TestTranslator(hyphenator);
 		assertEquals(
-			"BUSS\n" +
-			"TOPP",
+			"BUS\n" +
+			"STOP\n" +
+			"P",
 			fillLines(translator.lineBreakingFromStyledText().transform(text("busstopp")), 4));
 		assertEquals(
 			"BUSS-\n" +
@@ -186,18 +186,18 @@ public class DefaultLineBreakerTest {
 			return fullHyphenator;
 		}
 		
-		private static final FullHyphenator fullHyphenator = new FullHyphenator() {
-			public String transform(String text) {
+		private static final FullHyphenator fullHyphenator = new AbstractHyphenator.util.DefaultFullHyphenator() {
+
+			private final static char SHY = '\u00AD';
+			private final static char ZWSP = '\u200B';
+
+			protected boolean isCodePointAware() { return false; }
+		
+			protected byte[] getHyphenationOpportunities(String text) throws RuntimeException {
 				if (text.contains("busstopp"))
 					throw new RuntimeException("text contains non-standard break points");
 				else
-					return text;
-			}
-			public String[] transform(String[] text) {
-				String[] r = new String[text.length];
-				for (int i = 0; i < r.length; i++)
-					r[i] = transform(text[i]);
-				return r;
+					return extractHyphens(text, false, SHY, ZWSP)._2;
 			}
 		};
 		
@@ -229,6 +229,7 @@ public class DefaultLineBreakerTest {
 		}
 		
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
+		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
 			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
@@ -256,7 +257,8 @@ public class DefaultLineBreakerTest {
 							pos = end; }
 						else {
 							try {
-								next = hyphenator.asFullHyphenator().transform(text.substring(pos));
+								next = hyphenator.asFullHyphenator().transform(
+									singleton(new CSSStyledText(text.substring(pos), HYPHENS_AUTO))).iterator().next().getText();
 								pos = end; }
 							catch (Exception e) {
 								Matcher m = WORD_SPLITTER.matcher(text.substring(pos));

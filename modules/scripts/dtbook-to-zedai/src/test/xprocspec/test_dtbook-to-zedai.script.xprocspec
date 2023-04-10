@@ -58,7 +58,7 @@
 		<x:call step="px:dtbook-to-zedai.script">
 			<x:input port="source">
 				<x:document type="inline">
-					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
 						<head>
 							<meta name="dc:Title" content="Selections from &quot;Great Pictures, As Seen and Described by Famous Writers&quot;"/>
 							<meta name="dc:Creator" content="Esther Singleton"/>

@@ -31,7 +31,7 @@ public class ErrorReporter implements XMLTransformer {
 
 	@Override
 	public Runnable transform(Map<QName,InputValue<?>> input, Map<QName,OutputValue<?>> output) {
-		input = XMLTransformer.validateInput(input, ImmutableMap.of(_SOURCE, InputType.MANDATORY_NODE_SINGLE));
+		input = XMLTransformer.validateInput(input, ImmutableMap.of(_SOURCE, InputType.MANDATORY_NODE_SEQUENCE));
 		output = XMLTransformer.validateOutput(output, null);
 		XMLInputValue<?> source = (XMLInputValue<?>)input.get(_SOURCE);
 		return () -> report(source.asXMLStreamReader());

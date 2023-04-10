@@ -20,9 +20,9 @@ import net.sf.saxon.value.StringValue;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.FromStyledTextToBraille;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
-import org.daisy.pipeline.braille.common.CSSStyledText;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;

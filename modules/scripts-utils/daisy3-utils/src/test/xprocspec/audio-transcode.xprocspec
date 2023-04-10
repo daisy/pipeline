@@ -10,7 +10,6 @@
 	<x:scenario label="test">
 		<x:call step="px:daisy3-audio-transcode">
 			<x:option name="new-audio-file-type" select="'audio/aiff'"/>
-			<x:option name="new-audio-dir" select="resolve-uri('./')"/>
 			<x:option name="temp-dir" select="resolve-uri('../../../target/xprocspec/test_audio-transcode/')"/>
 			<x:input port="source.fileset">
 				<x:document type="inline">
@@ -20,7 +19,7 @@
 						<d:file href="content.xml" media-type="application/x-dtbook+xml"/>
 						<d:file href="navigation.ncx" media-type="application/x-dtbncx+xml"/>
 						<d:file href="resources.res" media-type="application/x-dtbresource+xml"/>
-						<d:file href="audio.wav" media-type="audio/x-wav" original-href="../resources/1.1.0/audio.wav"/>
+						<d:file href="audio.wav" media-type="audio/wav" original-href="../resources/1.1.0/audio.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
@@ -50,7 +49,7 @@
 							<item href="mo.smil" id="mo" media-type="application/smil"/>
 							<item href="navigation.ncx" id="ncx" media-type="application/x-dtbncx+xml"/>
 							<item href="resources.res" id="resource" media-type="application/x-dtbresource+xml"/>
-							<item href="audio.wav" id="audio" media-type="audio/x-wav"/>
+							<item href="audio.wav" id="audio" media-type="audio/wav"/>
 						</manifest>
 						<spine>
 							<itemref idref="mo"/>
@@ -168,6 +167,7 @@
 							<meta name="dtb:multimediaType" content="audioFullText"/>
 							<meta name="dtb:totalTime" content="0:00:04"/>
 							<meta name="dtb:multimediaContent" content="audio,text"/>
+							<meta name="dtb:audioFormat" content="wav"/>
 						</x-metadata>
 					</metadata>
 					<manifest>

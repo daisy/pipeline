@@ -7,8 +7,8 @@
                 name="validation-report-to-html" type="px:validation-report-to-html">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Validation Report to HTML</h1>
-        <p px:role="desc">Combines a series of validation reports into one single HTML report.</p>
+        <h1>Validation Report to HTML</h1>
+        <p>Combines a series of validation reports into one single HTML report.</p>
     </p:documentation>
 
     <!-- 

@@ -7,6 +7,7 @@ import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,10 +27,7 @@ public class MockHyphenator extends AbstractHyphenator {
 	};
 	
 	private static final FullHyphenator fullHyphenator = new FullHyphenator() {
-		public String transform(String text) throws NonStandardHyphenationException {
-			throw new NonStandardHyphenationException();
-		}
-		public String[] transform(String[] text) throws NonStandardHyphenationException {
+		public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> text) throws NonStandardHyphenationException {
 			throw new NonStandardHyphenationException();
 		}
 	};

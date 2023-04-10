@@ -18,17 +18,17 @@
 	
 	<p:input port="source" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">HTML document</h2>
-			<p px:role="desc">The HTML document from which the outline must be extracted.</p>
+			<h2>HTML document</h2>
+			<p>The HTML document from which the outline must be extracted.</p>
 		</p:documentation>
 	</p:input>
 	<p:input port="input-toc" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Table of contents</h2>
-			<p px:role="desc">A table of contents referencing some sections or headings in the
-			source document. Only required if the "fix-heading-ranks" option is set to "toc-depth"
-			(and not more than one document is allowed). The table of contents should be formatted
-			as the <code>ol</code> element from a <a
+			<h2>Table of contents</h2>
+			<p>A table of contents referencing some sections or headings in the source
+			document. Only required if the "fix-heading-ranks" option is set to "toc-depth" (and not
+			more than one document is allowed). The table of contents should be formatted as the
+			<code>ol</code> element from a <a
 			href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-nav-def-model">EPUB
 			<code>&lt;nav epub:type="toc"&gt;</code> element</a>.</p>
 		</p:documentation>
@@ -37,11 +37,11 @@
 
 	<p:output port="result" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">The modified HTML document.</h2>
-			<p px:role="desc">Depending on the values of the "fix-heading-ranks", "fix-sectioning"
-			and "fix-untitled-sections" options, heading elements may be inserted or renamed and
-			section elements may be inserted, but the outline is guaranteed to be unchanged.</p>
-			<p px:role="desc">All <code>body</code>, <code>article</code>, <code>aside</code>,
+			<h2>The modified HTML document.</h2>
+			<p>Depending on the values of the "fix-heading-ranks", "fix-sectioning" and
+			"fix-untitled-sections" options, heading elements may be inserted or renamed and section
+			elements may be inserted, but the outline is guaranteed to be unchanged.</p>
+			<p>All <code>body</code>, <code>article</code>, <code>aside</code>,
 			<code>nav</code>, <code>section</code>, <code>h1</code>, <code>h2</code>,
 			<code>h3</code>, <code>h4</code>, <code>h5</code>, <code>h6</code> and
 			<code>hgroup</code> elements get an <code>id</code> attribute.</p>
@@ -50,8 +50,8 @@
 	</p:output>
 	<p:output port="toc">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">The outline in HTML format</h2>
-			<p px:role="desc">The outline of the HTML document as a <code>ol</code> element. Can be
+			<h2>The outline in HTML format</h2>
+			<p>The outline of the HTML document as a <code>ol</code> element. Can be
 			used directly to include in a <a
 			href="https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-nav-def-model">EPUB
 			<code>&lt;nav epub:type="toc"&gt;</code> element</a>.</p>
@@ -60,9 +60,9 @@
 	</p:output>
 	<p:output port="outline">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">The raw outline</h2>
-			<p px:role="desc">The unformatted outline of the HTML document as a
-			<code>d:outline</code> document.</p>
+			<h2>The raw outline</h2>
+			<p>The unformatted outline of the HTML document as a <code>d:outline</code>
+			document.</p>
 		</p:documentation>
 		<p:pipe step="raw-outline" port="result"/>
 	</p:output>

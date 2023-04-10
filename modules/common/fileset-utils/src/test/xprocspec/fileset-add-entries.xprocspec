@@ -317,10 +317,10 @@
             <x:param port="file-attributes" name="media-type" select="'foo'"/>
         </x:call>
         <x:context label="the errors">
-            <x:document type="errors" select="//c:error"/>
+            <x:document type="errors"/>
         </x:context>
         <x:expect label="there should be an error" type="xpath"
-                  test="contains(string(//c:error),'href, original-href and media-type are not allowed file attributes')"/>
+                  test="contains(string(/*/c:error),'href, original-href and media-type are not allowed file attributes')"/>
     </x:scenario>
 
     <x:scenario label="add-existing-entry">

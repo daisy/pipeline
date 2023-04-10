@@ -159,7 +159,9 @@ public class CereProcEngine extends TTSEngine {
 		} catch (IOException e) {
 			throw new SynthesisException(e);
 		}
+		txtFile.deleteOnExit();
 		File audioFile = new File(tmpDirectory, txtFile.getName().replaceAll(".txt$", ".raw"));
+		audioFile.deleteOnExit();
 		try {
 			String[] cmd = new String[this.cmd.length + 3];
 			System.arraycopy(this.cmd, 0, cmd, 0, this.cmd.length);

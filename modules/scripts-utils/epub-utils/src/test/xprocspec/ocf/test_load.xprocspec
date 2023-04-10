@@ -197,7 +197,7 @@
 			<x:option name="version" select="'3'"/>
 			<x:option name="href" select="resolve-uri('../../resources/moby-dick-mo-20120214.OK.epub')"/>
 			<x:option name="temp-dir" select="resolve-uri('validation',$temp-dir)"/>
-			<x:option name="validation" select="'abort'"/>
+			<x:option name="validation" select="true()"/>
 		</x:call>
 		<x:context label="the validation status">
 			<x:document type="port" port="validation-status"/>

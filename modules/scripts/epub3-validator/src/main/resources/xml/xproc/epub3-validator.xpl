@@ -8,12 +8,14 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Validator</h1>
         <p px:role="desc">Validates a EPUB.</p>
-        <address px:role="author maintainer">
-            <p>Script wrapper for epubcheck maintained by <span px:role="name">Jostein Austvik Jacobsen</span>
-                (organization: <span px:role="organization">NLB</span>,
-                e-mail: <a px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).</p>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-validator/">
+            Online Documentation
+        </a>
+        <address px:role="author">
+            Script wrapper for epubcheck written by <span px:role="name">Jostein Austvik
+            Jacobsen</span> (organization: <span px:role="organization">NLB</span>, e-mail: <a
+            px:role="contact" href="mailto:josteinaj@gmail.com">josteinaj@gmail.com</a>).
         </address>
-        <p><a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-validator/">Online Documentation</a></p>
     </p:documentation>
 
     <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
@@ -31,19 +33,12 @@
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Validation status</h1>
-            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-        </p:documentation>
+        <!-- whether the validation was successful -->
         <p:pipe step="validate" port="validation-status"/>
     </p:output>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
 
     <p:option name="accessibility-check" required="false" px:type="boolean" select="'false'">

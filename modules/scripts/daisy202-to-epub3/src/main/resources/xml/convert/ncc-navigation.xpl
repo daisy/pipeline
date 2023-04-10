@@ -6,12 +6,12 @@
                 type="pxi:daisy202-to-epub3-ncc-navigation" name="ncc-navigation">
 
     <p:documentation>
-        <p px:role="desc">Transform the DAISY 2.02 NCC into a EPUB 3 Navigation Document.</p>
+        <p>Transform the DAISY 2.02 NCC into a EPUB 3 Navigation Document.</p>
     </p:documentation>
 
     <p:input port="ncc" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">The DAISY 2.02 NCC</p>
+            <p>The DAISY 2.02 NCC</p>
             <pre><code class="example">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/daisy202/ncc.html">...</html>
             </code></pre>
@@ -19,7 +19,7 @@
     </p:input>
     <p:input port="resolve-links-mapping">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">A map of all the links in the SMIL files.</p>
+            <p>A map of all the links in the SMIL files.</p>
             <pre><code class="example">
                 <di:mapping xmlns:di="http://www.daisy.org/ns/pipeline/tmp">
                     <di:smil xml:base="file:/home/user/a.smil">
@@ -37,7 +37,7 @@
 
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">An EPUB3 Navigation Document with contents based purely on the DAISY 2.02 NCC.</p>
+            <p>An EPUB3 Navigation Document with contents based purely on the DAISY 2.02 NCC.</p>
             <pre><code class="example">
                 <html xmlns="http://www.w3.org/1999/xhtml" xml:base="file:/home/user/epub3/epub/Publication/ncc.xhtml" original-href="file:/home/user/daisy202/ncc.html">...</html>
             </code></pre>
@@ -47,13 +47,13 @@
 
     <p:option name="publication-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to the EPUB3 Publication directory.</p>
+            <p>URI to the EPUB3 Publication directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/</code></pre>
         </p:documentation>
     </p:option>
     <p:option name="content-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to the EPUB3 Content directory.</p>
+            <p>URI to the EPUB3 Content directory.</p>
             <pre><code class="example">file:/home/user/epub3/epub/Publication/Content/</code></pre>
         </p:documentation>
     </p:option>

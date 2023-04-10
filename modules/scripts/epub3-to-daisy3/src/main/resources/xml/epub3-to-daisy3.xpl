@@ -488,7 +488,7 @@
         </px:html-load>
         <px:fileset-diff name="unreferenced-resources">
             <p:input port="secondary">
-                <p:pipe step="dtbook-fileset" port="fileset.out"/>
+                <p:pipe step="dtbook-fileset" port="result.fileset"/>
             </p:input>
         </px:fileset-diff>
         <p:sink/>

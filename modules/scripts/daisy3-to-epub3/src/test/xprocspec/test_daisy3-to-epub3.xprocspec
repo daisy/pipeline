@@ -21,7 +21,7 @@
 			</x:input>
 			<x:input port="source.in-memory"/>
 			<x:option name="mediaoverlays" select="true()"/>
-			<x:option name="assert-valid" select="'false'"/>
+			<x:option name="validation" select="'report'"/>
 			<x:option name="temp-dir" select="resolve-uri('result/')"/>
 		</x:call>
 		<x:context label="the result.fileset port">
@@ -81,7 +81,7 @@
 		<x:expect label="the book-1.smil file" type="compare">
 			<x:document type="inline">
 				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
-					<body epub:type="frontmatter">
+					<body epub:textref="../book-1.xhtml#id_4" epub:type="frontmatter">
 						<seq epub:textref="../book-1.xhtml#id_1">
 							<seq epub:textref="../book-1.xhtml#forsmil-d1386e16" epub:type="title">
 								<par>
@@ -106,7 +106,7 @@
 		<x:expect label="the book-2.smil file" type="compare">
 			<x:document type="inline">
 				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
-					<body epub:type="bodymatter">
+					<body epub:textref="../book-2.xhtml#id_5" epub:type="bodymatter">
 						<seq epub:textref="../book-2.xhtml#id_2">
 							<par epub:type="pagebreak">
 								<text src="../book-2.xhtml#page_1"/>

@@ -108,11 +108,18 @@
     </p:for-each>
     <px:fileset-join name="audio-fileset"/>
     <p:sink/>
-    <p:add-attribute match="/d:file" attribute-name="media-type" attribute-value="application/smil+xml" name="smil-fileset">
+    <p:add-attribute match="d:file" attribute-name="media-version" attribute-value="1.0">
         <p:input port="source">
             <p:pipe step="input-smils" port="result.fileset"/>
         </p:input>
     </p:add-attribute>
+    <p:add-attribute match="d:file"
+                     attribute-name="doctype-public"
+                     attribute-value="-//W3C//DTD SMIL 1.0//EN'"/>
+    <p:add-attribute match="d:file"
+                     attribute-name="doctype-system"
+                     attribute-value="http://www.w3.org/TR/REC-smil/SMIL10.dtd"/>
+    <p:identity name="smil-fileset"/>
     <p:sink/>
     <px:fileset-join>
         <p:input port="source">

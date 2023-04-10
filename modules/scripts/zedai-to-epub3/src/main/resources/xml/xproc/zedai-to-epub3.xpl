@@ -16,7 +16,7 @@
         </a>
     </p:documentation>
 
-    <p:input port="source" primary="true" px:name="source" px:media-type="application/z3998-auth+xml">
+    <p:input port="source" primary="true" px:media-type="application/z3998-auth+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ZedAI document</h2>
             <p px:role="desc">Input ZedAI.</p>
@@ -24,20 +24,16 @@
     </p:input>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h2 px:role="name">Status</h2>
-        <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
-
-When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 publication even if the text-to-speech process has errors.</p>
-      </p:documentation>
+      <!-- when text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3
+           publication even if the text-to-speech process has errors -->
       <p:pipe step="load-convert-store" port="validation-status"/>
     </p:output>
 
     <p:option name="include-tts-log" select="'false'">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
     <p:output port="tts-log" sequence="true">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../../common-options.xpl -->
       <p:pipe step="load-convert-store" port="tts-log"/>
     </p:output>
 
@@ -49,23 +45,20 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
     </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Directory used for temporary files.</p>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
 
     <p:input port="tts-config">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../../common-options.xpl -->
       <p:inline><d:config/></p:inline>
     </p:input>
 
     <p:option name="audio"  select="'false'">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
 
     <p:option xmlns:_="zedai" name="_:chunk-size" select="'-1'">
-      <!-- defined in common-options.xpl -->
+      <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
 
     <p:import href="zedai-to-epub3.convert.xpl"/>
@@ -117,7 +110,8 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
               <p:pipe step="main" port="tts-config"/>
             </p:input>
             <p:with-option name="output-dir" select="$temp-dir"/>
-	    <p:with-option name="audio" select="$audio"/>
+            <p:with-option name="audio" select="$audio"/>
+            <p:with-option name="chunk-size" xmlns:_="zedai" select="$_:chunk-size"/>
             <p:with-option name="include-tts-log" select="$include-tts-log"/>
         </px:zedai-to-epub3>
 

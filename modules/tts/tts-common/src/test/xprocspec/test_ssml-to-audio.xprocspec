@@ -117,7 +117,8 @@
 			<x:document type="errors"/>
 		</x:context>
 		<x:expect label="there should be errors" type="count" min="1"/>
-		<x:expect label="an encoding error is thrown" type="xpath" test="/c:errors/c:error/@code='TTS01'"/>
+		<x:expect label="an encoding error is thrown" type="xpath"
+		          test="exists(/c:errors/c:error[resolve-QName(@code,.)=QName('http://www.daisy.org/ns/pipeline/errors','pe:TTS001')])"/>
 	</x:scenario>
 	
 </x:description>

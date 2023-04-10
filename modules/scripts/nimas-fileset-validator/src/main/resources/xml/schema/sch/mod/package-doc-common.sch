@@ -12,6 +12,8 @@
     	<!--<assert test="count(dc:Creator) >=1">dc:Creator metadata is required by NIMAS.</assert>-->
     	<assert test="dc:Format[text() = 'NIMAS 1.1']">dc:Format metadata must equal NIMAS 1.1</assert>
     	<assert test="count(dc:Subject) >=1">dc:Subject is required by NIMAS.</assert>	
+    	<!-- this NIMAS metadata requirement came from a NIMAC PDF sent by APH -->
+    	<assert test="count(dc:Date[@event='DCTERMS.created']) >= 1">DCTERMS.created metadata is required by NIMAS.</assert>
     </rule>
     
     <rule context="//pkg:package/pkg:metadata/pkg:x-metadata">
@@ -47,7 +49,6 @@
     	<assert test="count(pkg:meta[@name='DCTERMS.date.dateCopyrighted']) >= 1">DCTERMS.date.dateCopyrighted metadata is required by NIMAS.</assert>
     	<assert test="count(pkg:meta[@name='DCTERMS.description.version']) >= 1">DCTERMS.description.version metadata is required by NIMAS.</assert>
     	<assert test="count(pkg:meta[@name='DCTERMS.audience.educationLevel']) >= 1">DCTERMS.audience.educationLevel metadata is required by NIMAS.</assert>
-    	<assert test="count(pkg:meta[@name='DCTERMS.created']) >= 1">DCTERMS.created metadata is required by NIMAS.</assert>
     	<assert test="count(pkg:meta[@name='DCTERMS.publisher.place']) >= 1">DCTERMS.publisher.place metadata is required by NIMAS.</assert>
     	<assert test="count(pkg:meta[@name='DCTERMS.date.issued']) >= 1">DCTERMS.date.issued metadata is required by NIMAS.</assert>
     	<!--

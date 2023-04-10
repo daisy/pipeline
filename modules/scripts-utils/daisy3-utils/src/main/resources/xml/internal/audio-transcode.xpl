@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:daisy3-audio-transcode"
                 name="main">
 
@@ -15,15 +16,18 @@
 		</p:documentation>
 	</p:input>
 
-	<p:option name="new-audio-file-type" required="true">
+	<p:option name="new-audio-file-type" required="true"> <!-- cx:type="audio/mpeg|audio/mpeg4-generic|audio/x-wav"
+	                                                           xmlns:cx="http://xmlcalabash.com/ns/extensions" -->
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The desired file type of the transcoded audio files, specified as a MIME type.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="new-audio-dir" required="true">
+	<p:option name="new-audio-dir" required="false" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>URI of the folder within the output fileset that should contain the transcoded audio
 			files.</p>
+			<p>If not specified or empty, will use the deepest common directory that contains all
+			the matched files.</p>
 			<p>The actual files will be stored in a temporary location.</p>
 		</p:documentation>
 	</p:option>
@@ -37,11 +41,11 @@
 	<p:output port="result.fileset" primary="true"/>
 	<p:output port="result.in-memory" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>Copy of the input fileset with all the audio files that are matched by the
-			"media-types" and "not-media-types" filters replaced by transcoded versions of those
-			files.</p>
+			<p>Copy of the input fileset with all the not officially unsupported audio files
+			replaced by transcoded versions of those files. OPF, NCX and SMIL files are updated
+			accordingly.</p>
 		</p:documentation>
-		<p:pipe step="update-opf" port="in-memory"/>
+		<p:pipe step="maybe-skip" port="in-memory"/>
 	</p:output>
 
 	<p:import href="http://www.daisy.org/pipeline/modules/audio-common/library.xpl">
@@ -62,64 +66,104 @@
 		</p:documentation>
 	</p:import>
 
-	<px:audio-transcode name="transcode">
+	<!--
+	    FIXME: More is needed to ensure that audio files are supported. We don't process files with
+	    media types "audio/mpeg4-generic", "audio/mpeg" and "audio/x-wav", but we don't check that
+	    they are actually MPEG-4 AAC, MP3 (MPEG-1/2 layer III) or WAVE (linear PCM RIFF WAVE). We
+	    also don't check that they have a constant bit rate, and that their number of channels, bit
+	    depths and sample frequencies are within the accepted ranges. Note that it is also possible
+	    that audio files are already valid but have the wrong file extension or media-type attribute
+	    (e.g. audio/wav, audio/aac or audio/mp3). In this case the files will still be transcoded,
+	    even though it might be a no-op.
+	-->
+
+	<!--
+	    FIXME: The G.726 format is currently not recognized.
+	-->
+
+	<px:audio-transcode name="transcode" not-media-types="audio/mpeg4-generic
+	                                                      audio/mpeg
+	                                                      audio/x-wav">
 		<p:with-option name="new-audio-file-type" select="$new-audio-file-type"/>
 		<p:with-option name="new-audio-dir" select="$new-audio-dir"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 	</px:audio-transcode>
 
-	<px:daisy3-update-links name="update-links">
-		<p:input port="source.in-memory">
-			<p:pipe step="main" port="source.in-memory"/>
-		</p:input>
-		<p:input port="mapping">
+	<p:choose name="maybe-skip">
+		<!--
+		    bypass everything else if no audio files were transcoded
+		-->
+		<p:xpath-context>
 			<p:pipe step="transcode" port="mapping"/>
-		</p:input>
-	</px:daisy3-update-links>
+		</p:xpath-context>
+		<p:when test="not(//d:file)">
+			<p:output port="fileset" primary="true"/>
+			<p:output port="in-memory" sequence="true">
+				<p:pipe step="main" port="source.in-memory"/>
+			</p:output>
+			<p:identity/>
+		</p:when>
+		<p:otherwise>
+			<p:output port="fileset" primary="true"/>
+			<p:output port="in-memory" sequence="true">
+				<p:pipe step="update-opf" port="in-memory"/>
+			</p:output>
 
-	<p:group name="update-opf">
-		<p:documentation>Update metadata and media-type in OPF document</p:documentation>
-		<p:output port="fileset" primary="true"/>
-		<p:output port="in-memory" sequence="true">
-			<p:pipe step="update" port="result.in-memory"/>
-		</p:output>
-		<px:fileset-filter media-types="application/oebps-package+xml" name="opf">
-			<p:input port="source.in-memory">
-				<p:pipe step="update-links" port="result.in-memory"/>
-			</p:input>
-		</px:fileset-filter>
-		<px:fileset-load>
-			<p:input port="in-memory">
-				<p:pipe step="update-links" port="result.in-memory"/>
-			</p:input>
-		</px:fileset-load>
-		<p:for-each name="opf-updated">
-			<p:output port="result"/>
-			<p:xslt>
-				<p:input port="stylesheet">
-					<p:document href="audio-transcode-update-opf.xsl"/>
+			<px:daisy3-update-links name="update-links">
+				<p:input port="source.in-memory">
+					<p:pipe step="main" port="source.in-memory"/>
 				</p:input>
-				<p:with-param port="parameters" name="new-audio-file-type" select="$new-audio-file-type"/>
-				<p:with-param port="parameters" name="mapping" select="/*">
+				<p:input port="mapping">
 					<p:pipe step="transcode" port="mapping"/>
-				</p:with-param>
-			</p:xslt>
-		</p:for-each>
-		<p:sink/>
-		<px:fileset-update name="update">
-			<p:input port="source.fileset">
-				<p:pipe step="update-links" port="result.fileset"/>
-			</p:input>
-			<p:input port="source.in-memory">
-				<p:pipe step="update-links" port="result.in-memory"/>
-			</p:input>
-			<p:input port="update.fileset">
-				<p:pipe step="opf" port="result"/>
-			</p:input>
-			<p:input port="update.in-memory">
-				<p:pipe step="opf-updated" port="result"/>
-			</p:input>
-		</px:fileset-update>
-	</p:group>
+				</p:input>
+			</px:daisy3-update-links>
+
+			<p:group name="update-opf">
+				<p:documentation>Update metadata and media-type in OPF document</p:documentation>
+				<p:output port="fileset" primary="true"/>
+				<p:output port="in-memory" sequence="true">
+					<p:pipe step="update" port="result.in-memory"/>
+				</p:output>
+				<px:fileset-filter media-types="application/oebps-package+xml" name="opf">
+					<p:input port="source.in-memory">
+						<p:pipe step="update-links" port="result.in-memory"/>
+					</p:input>
+				</px:fileset-filter>
+				<px:fileset-load>
+					<p:input port="in-memory">
+						<p:pipe step="update-links" port="result.in-memory"/>
+					</p:input>
+				</px:fileset-load>
+				<p:for-each name="opf-updated">
+					<p:output port="result"/>
+					<p:xslt>
+						<p:input port="stylesheet">
+							<p:document href="audio-transcode-update-opf.xsl"/>
+						</p:input>
+						<p:with-param port="parameters" name="new-audio-file-type" select="$new-audio-file-type"/>
+						<p:with-param port="parameters" name="mapping" select="/*">
+							<p:pipe step="transcode" port="mapping"/>
+						</p:with-param>
+					</p:xslt>
+				</p:for-each>
+				<p:sink/>
+				<px:fileset-update name="update">
+					<p:input port="source.fileset">
+						<p:pipe step="update-links" port="result.fileset"/>
+					</p:input>
+					<p:input port="source.in-memory">
+						<p:pipe step="update-links" port="result.in-memory"/>
+					</p:input>
+					<p:input port="update.fileset">
+						<p:pipe step="opf" port="result"/>
+					</p:input>
+					<p:input port="update.in-memory">
+						<p:pipe step="opf-updated" port="result"/>
+					</p:input>
+				</px:fileset-update>
+			</p:group>
+
+		</p:otherwise>
+	</p:choose>
 
 </p:declare-step>

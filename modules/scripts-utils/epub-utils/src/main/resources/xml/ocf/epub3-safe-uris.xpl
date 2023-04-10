@@ -23,8 +23,11 @@
     <p:output port="result.in-memory" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The output fileset</p>
-            <p>The xml:base, href and original-href attributes in the fileset manifest or changed to
-            EPUB-safe URIs. The base URIs of the in-memory documents are updated
+            <p><code>href</code> attributes in the fileset manifest are changed to EPUB-safe
+            URIs. <code>xml:base</code> and <code>original-href</code> attributes are left
+            unchanged. It is assumed that the base URI of the <code>d:fileset</code> document
+            corresponds with the root of the EPUB container and that the <code>href</code>
+            attributes are relative to it. The base URIs of the in-memory documents are updated
             accordingly. Cross-references in HTML and SMIL documents are updated too.</p>
         </p:documentation>
         <p:pipe step="rename" port="result.in-memory"/>
@@ -64,7 +67,7 @@
                                             concat('$1_',1+count(preceding-sibling::d:file[@href=$href]),'$2'))">
         <p:documentation>Because the renaming may have resulted in duplicate file names</p:documentation>
     </p:label-elements>
-    <p:label-elements match="d:file" attribute="original-href" label="@href-before-move" replace="true"/>
+    <p:label-elements match="d:file" attribute="original-href" label="@absolute-href-before-move" replace="true"/>
     <p:delete match="/*/*[not(self::d:file)]|
                      d:file/@*[not(name()=('href','original-href'))]"
               name="mapping"/>

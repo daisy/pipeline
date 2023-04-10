@@ -33,8 +33,9 @@ public class Error implements XProcStepProvider {
 	}
 
 	/**
-	 * Own version of <code>p:error</code> that reads a <code>c:errors</code> document, creates
-	 * {@link XProcException}s from it, reports them, and throws the last one.
+	 * Own version of <code>p:error</code> that reads one or more <code>c:errors</code> documents
+	 * with one or more <code>c:error</code> elements in each, creates {@link XProcException}s,
+	 * reports them, and throws the last one.
 	 */
 	public static class ErrorStep extends DefaultStep implements XProcStep {
 
@@ -73,7 +74,7 @@ public class Error implements XProcStepProvider {
 				if (lastError != null)
 					throw lastError;
 				else
-					throw new RuntimeException("Expected valid c:errors document with at least one c:error");
+					throw new RuntimeException("Expected c:errors document with at least one c:error");
 			} catch (Throwable e) {
 				throw XProcStep.raiseError(e, step);
 			}

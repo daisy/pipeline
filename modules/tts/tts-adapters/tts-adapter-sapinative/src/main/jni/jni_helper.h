@@ -47,4 +47,6 @@ jobjectArray newJavaArray(JNIEnv* env, Iterator items, size_t size, const char* 
 	return jArray;
 }
 
+void raiseIOException(JNIEnv* env, const jchar* message, size_t len);
+
 #endif

@@ -82,9 +82,12 @@
 			<x:document type="errors"/>
 		</x:context>
 		<x:expect label="there should be errors" type="count" min="1"/>
-		<x:expect label="the error" type="xpath"
-		          test="/c:errors/c:error/concat('[',@code,'] ',normalize-space(string(.)))"
-		          equals="'[err:EOU002] No OPF was found in the source file set.'"/>
+		<x:expect label="there should be a err:EOU002 error" type="xpath"
+		          test="exists(/c:errors/c:error[resolve-QName(@code,.)=QName('http://www.w3.org/ns/xproc-error','err:EOU002')])"/>
+		<x:expect label="the error message" type="xpath"
+		          test="/c:errors/c:error[resolve-QName(@code,.)=QName('http://www.w3.org/ns/xproc-error','err:EOU002')]
+		                /normalize-space(string(.))"
+		          equals="'No OPF was found in the source file set.'"/>
 	</x:scenario>
 	
 	<x:scenario label="test-create-odf-manifest">

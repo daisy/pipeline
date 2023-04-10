@@ -24,7 +24,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 	</p:option>
 
 	<p:option name="validation" select="'off'">
-		<!-- defined in common-options.xpl -->
+		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
 	<p:option name="tts" required="false" px:type="boolean" select="'default'">
@@ -49,14 +49,12 @@ This will remove any existing media overlays in the EPUB.</p>
 	</p:option>
 
 	<p:input port="tts-config" primary="false">
-		<!-- defined in common-options.xpl -->
+		<!-- defined in ../../../../../common-options.xpl -->
 		<p:inline><d:config/></p:inline>
 	</p:input>
 
 	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Temporary directory</h2>
-		</p:documentation>
+		<!-- directory used for temporary files -->
 	</p:option>
 
 	<p:option name="epub3-output-dir" required="true" px:output="result" px:type="anyDirURI">
@@ -79,17 +77,12 @@ This will remove any existing media overlays in the EPUB.</p>
 	</p:option>
 
 	<p:output port="validation-report" sequence="true">
-		<!-- defined in common-options.xpl -->
+		<!-- defined in ../../../../../common-options.xpl -->
 		<p:pipe step="load" port="validation-report"/>
 	</p:output>
 
 	<p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h1 px:role="name">Conversion status</h1>
-			<p px:role="desc" xml:space="preserve">An XML document describing whether the conversion was successful.
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-		</p:documentation>
+		<!-- whether or not the conversion was successful -->
 		<p:pipe step="status" port="result"/>
 	</p:output>
 
@@ -112,7 +105,7 @@ This will remove any existing media overlays in the EPUB.</p>
 
 	<px:epub-load name="load" px:message="Loading EPUB" px:progress="1/20">
 		<p:with-option name="href" select="$source"/>
-		<p:with-option name="validation" select="$validation"/>
+		<p:with-option name="validation" select="not($validation='off')"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 	</px:epub-load>
 	<p:sink/>
@@ -122,8 +115,25 @@ This will remove any existing media overlays in the EPUB.</p>
 			<p:pipe step="load" port="validation-status"/>
 		</p:input>
 	</p:identity>
-	<p:choose name="status" px:progress="19/20">
+	<p:choose>
 		<p:when test="/d:validation-status[@result='error']">
+			<p:choose>
+				<p:when test="$validation='abort'">
+					<p:identity px:message="The EPUB input is invalid. See validation report for more info."
+								px:message-severity="ERROR"/>
+				</p:when>
+				<p:otherwise>
+					<p:identity px:message="The EPUB input is invalid. See validation report for more info."
+								px:message-severity="WARN"/>
+				</p:otherwise>
+			</p:choose>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
+	<p:choose name="status" px:progress="19/20">
+		<p:when test="/d:validation-status[@result='error'] and $validation='abort'">
 			<p:output port="result"/>
 			<p:identity/>
 		</p:when>
@@ -221,7 +231,7 @@ This will remove any existing media overlays in the EPUB.</p>
 
 			<p:identity cx:depends-on="delete-temp-files">
 				<p:input port="source">
-					<p:pipe step="convert" port="status"/>
+					<p:inline><d:validation-status result="ok"/></p:inline>
 				</p:input>
 			</p:identity>
 		</p:otherwise>

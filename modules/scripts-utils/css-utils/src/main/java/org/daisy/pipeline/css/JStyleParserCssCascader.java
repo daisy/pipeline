@@ -90,6 +90,9 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 
 	private static final Logger logger = LoggerFactory.getLogger(JStyleParserCssCascader.class);
 
+	/**
+	 * @param ruleFactory to create StyleSheet objects
+	 */
 	public JStyleParserCssCascader(URIResolver uriResolver,
 	                               CssPreProcessor preProcessor,
 	                               XsltProcessor xsltProcessor,
@@ -252,171 +255,169 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				}
 			};
 			StyleMap styleMap;
-			synchronized(JStyleParserCssCascader.class) {
-				// CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
-				CSSFactory.registerCSSParserFactory(parserFactory);
-				// RuleFactory injected in
-				// - SimplePreparator.<init> in CSSParserFactory.append in CSSFactory.getUsedStyles
-				// - CSSTreeParser.<init> in CSSParserFactory.append in CSSFactory.getUsedStyles
-				CSSFactory.registerRuleFactory(ruleFactory);
-				// DeclarationTransformer injected in SingleMapNodeData.<init> in CSSFactory.createNodeData in Analyzer.evaluateDOM
-				CSSFactory.registerDeclarationTransformer(declarationTransformer);
-				// SupportedCSS injected in
-				// - SingleMapNodeData.<init> in CSSFactory.createNodeData in Analyzer.evaluateDOM
-				// - Repeater.assignDefaults in DeclarationTransformer.parseDeclaration in SingleMapNodeData.push in Analyzer.evaluateDOM
-				// - Variator.assignDefaults in DeclarationTransformer.parseDeclaration in SingleMapNodeData.push in Analyzer.evaluateDOM
-				CSSFactory.registerSupportedCSS(supportedCSS);
-				StyleSheet defaultStyleSheet; {
-					StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-					if (defaultStyleSheets != null) {
-						StringTokenizer t = new StringTokenizer(defaultStyleSheets);
-						while (t.hasMoreTokens()) {
-							URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
-							if (!cssReader.supportsMediaType(null, u))
-								logger.warn("Style sheet type not supported: " + u);
-							else
-								s = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, s);
-						}
+			StyleSheet defaultStyleSheet; {
+				StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+				if (defaultStyleSheets != null) {
+					StringTokenizer t = new StringTokenizer(defaultStyleSheets);
+					while (t.hasMoreTokens()) {
+						URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
+						if (!cssReader.supportsMediaType(null, u))
+							logger.warn("Style sheet type not supported: " + u);
+						else
+							s = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, s);
 					}
-					defaultStyleSheet = s;
 				}
-				styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-				styleSheet.addAll(defaultStyleSheet);
+				defaultStyleSheet = s;
+			}
+			styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+			styleSheet.addAll(defaultStyleSheet);
+			synchronized(JStyleParserCssCascader.class) {
+				// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
+				CSSFactory.registerCSSParserFactory(parserFactory);
 				styleSheet = CSSFactory.getUsedStyles(document, null, nodeLocator, medium, cssReader, styleSheet);
+			}
 
-				// FIXME: use a dedicated parser to parse @xslt rules (and ignore all the rest)
-				XMLInputValue<?> transformed = null;
-				for (RuleXslt r : Iterables.filter(styleSheet, RuleXslt.class)) {
-					Map<QName,InputValue<?>> params = new HashMap<>();
-					for (Declaration d : r) {
-						List<Object> val = new ArrayList<>();
-						boolean invalid = false;
-						for (Term<?> t : d) {
-							if (t instanceof TermIdent || t instanceof TermString) {
-								String v = ((Term<String>)t).getValue();
-								if (t instanceof TermIdent && ("true".equals(v) || "false".equals(v)))
-									val.add(Boolean.valueOf(v));
-								else
-									val.add(v);
-							} else if (t instanceof TermInteger)
-								val.add(((TermInteger)t).getIntValue());
-							else {
-								logger.warn("@xslt parameter value must be a sequence of string, ident or integer, but got " + d);
-								invalid = true;
-								break;
-							}
+			// FIXME: use a dedicated parser to parse @xslt rules (and ignore all the rest)
+			XMLInputValue<?> transformed = null;
+			for (RuleXslt r : Iterables.filter(styleSheet, RuleXslt.class)) {
+				Map<QName,InputValue<?>> params = new HashMap<>();
+				for (Declaration d : r) {
+					List<Object> val = new ArrayList<>();
+					boolean invalid = false;
+					for (Term<?> t : d) {
+						if (t instanceof TermIdent || t instanceof TermString) {
+							String v = ((Term<String>)t).getValue();
+							if (t instanceof TermIdent && ("true".equals(v) || "false".equals(v)))
+								val.add(Boolean.valueOf(v));
+							else
+								val.add(v);
+						} else if (t instanceof TermInteger)
+							val.add(((TermInteger)t).getIntValue());
+						else {
+							logger.warn("@xslt parameter value must be a sequence of string, ident or integer, but got " + d);
+							invalid = true;
+							break;
 						}
-						if (!invalid)
-							params.put(new QName(d.getProperty()), new InputValue<>(val));
 					}
-					Document doc; {
-						if (transformed != null) {
-							Mult<? extends XMLInputValue<?>> m = transformed.mult(2);
-							doc = (Document)m.get().ensureSingleItem().asNodeIterator().next();
-							transformed = m.get();
-						} else
-							doc = document;
-					}
-					params.put(
-						new QName("style"),
-						new InputValue<>(
-							new StyleAccessor() {
-								StyleMap style = null;
-								public Optional<String> get(Element element, String property) {
-									if (style == null) {
-										StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-										s.addAll(defaultStyleSheet);
+					if (!invalid)
+						params.put(new QName(d.getProperty()), new InputValue<>(val));
+				}
+				Document doc; {
+					if (transformed != null) {
+						Mult<? extends XMLInputValue<?>> m = transformed.mult(2);
+						doc = (Document)m.get().ensureSingleItem().asNodeIterator().next();
+						transformed = m.get();
+					} else
+						doc = document;
+				}
+				params.put(
+					new QName("style"),
+					new InputValue<>(
+						new StyleAccessor() {
+							StyleMap style = null;
+							public Optional<String> get(Element element, String property) {
+								if (style == null) {
+									StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+									s.addAll(defaultStyleSheet);
+									synchronized(JStyleParserCssCascader.class) {
+										// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
+										CSSFactory.registerCSSParserFactory(parserFactory);
 										// not using element.getOwnerDocument() because base URI is null/empty in some cases
 										s = CSSFactory.getUsedStyles(doc, null, nodeLocator, medium, cssReader, s);
-										style = new Analyzer(s).evaluateDOM(doc, medium, true); }
-									NodeData data = style.get(element);
-									if (data != null) {
-										Term<?> value = data.getValue(property, true);
-										if (value != null)
-											return Optional.of(serializeValue(value));
-										else {
-											CSSProperty p = data.getProperty(property);
-											if (p != null)
-												return Optional.of(p.toString()); }}
-									return Optional.empty();
-								}
-
-								Map<String,List<CombinedSelector>> selectorCache = null; // cache of compiled selectors
-								public boolean matches(Element element, String selector) {
-									List<CombinedSelector> compiledSelector;
-									if (selectorCache == null)
-										selectorCache = new HashMap<>();
-									if (selectorCache.containsKey(selector))
-										compiledSelector = selectorCache.get(selector);
-									else {
-										compiledSelector = parserFactory.parseSelector(selector, r.namespaces);
-										if (compiledSelector != null)
-											selectorCache.put(selector, compiledSelector); }
-									if (compiledSelector == null)
-										return false;
-									for (CombinedSelector sel : compiledSelector) {
-										boolean match = false;
-										Combinator combinator = null;
-										for (int i = sel.size() - 1; i >= 0; i--) {
-											Selector s = sel.get(i);
-											if (combinator == null)
-												match = s.matches(element);
-											else if (combinator == Combinator.ADJACENT) {
-												Node adjacent = element.getPreviousSibling();
-												while (adjacent != null && !(adjacent instanceof Element))
-													adjacent = adjacent.getPreviousSibling();
-												match = adjacent != null && s.matches((Element)adjacent); }
-											else if (combinator == Combinator.PRECEDING) {
-												match = false;
-												Node preceding = element.getPreviousSibling();
-												while (!match) {
-													while (preceding != null && !(preceding instanceof Element))
-														preceding = preceding.getPreviousSibling();
-													if (preceding != null)
-														break;
-													match = s.matches((Element)preceding);
-													preceding = preceding.getPreviousSibling(); }}
-											else if (combinator == Combinator.DESCENDANT) {
-												match = false;
-												Node ancestor = element.getParentNode();
-												while (!match && ancestor != null) {
-													match = s.matches((Element)ancestor);
-													ancestor = ancestor.getParentNode(); }}
-											else if (combinator == Combinator.CHILD) {
-												Element parent = (Element)element.getParentNode();
-												match = parent != null && s.matches(parent); }
-											combinator = s.getCombinator();
-											if (!match)
-												return false;
-										}
-										if (match == true)
-											return true;
 									}
-									return false;
-								}
+									style = new Analyzer(s, declarationTransformer, supportedCSS)
+									            .evaluateDOM(doc, medium, true); }
+								NodeData data = style.get(element);
+								if (data != null) {
+									Term<?> value = data.getValue(property, true);
+									if (value != null)
+										return Optional.of(serializeValue(value));
+									else {
+										CSSProperty p = data.getProperty(property);
+										if (p != null)
+											return Optional.of(p.toString()); }}
+								return Optional.empty();
 							}
-						)
-					);
-					transformed = xsltProcessor.transform(
-						URLs.resolve(URLs.asURI(r.base), URLs.asURI(r.uri)),
-						transformed != null ? transformed : source.get(),
-						params);
-				}
-				if (transformed != null) {
-					node = transformed.ensureSingleItem().asNodeIterator().next();
-					if (!(node instanceof Document))
-						throw new TransformerException(
-							new RuntimeException("XsltProcessor must return a (single) document"));
-					document = (Document)node;
-					// We assume that base URI did not change.
-					// We need to recompute the stylesheet because of any possible inline styles, which
-					// are attached to an element in the original document.
-					styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-					styleSheet.addAll(defaultStyleSheet);
+
+							Map<String,List<CombinedSelector>> selectorCache = null; // cache of compiled selectors
+							public boolean matches(Element element, String selector) {
+								List<CombinedSelector> compiledSelector;
+								if (selectorCache == null)
+									selectorCache = new HashMap<>();
+								if (selectorCache.containsKey(selector))
+									compiledSelector = selectorCache.get(selector);
+								else {
+									compiledSelector = parserFactory.parseSelector(selector, r.namespaces);
+									if (compiledSelector != null)
+										selectorCache.put(selector, compiledSelector); }
+								if (compiledSelector == null)
+									return false;
+								for (CombinedSelector sel : compiledSelector) {
+									boolean match = false;
+									Combinator combinator = null;
+									for (int i = sel.size() - 1; i >= 0; i--) {
+										Selector s = sel.get(i);
+										if (combinator == null)
+											match = s.matches(element);
+										else if (combinator == Combinator.ADJACENT) {
+											Node adjacent = element.getPreviousSibling();
+											while (adjacent != null && !(adjacent instanceof Element))
+												adjacent = adjacent.getPreviousSibling();
+											match = adjacent != null && s.matches((Element)adjacent); }
+										else if (combinator == Combinator.PRECEDING) {
+											match = false;
+											Node preceding = element.getPreviousSibling();
+											while (!match) {
+												while (preceding != null && !(preceding instanceof Element))
+													preceding = preceding.getPreviousSibling();
+												if (preceding != null)
+													break;
+												match = s.matches((Element)preceding);
+												preceding = preceding.getPreviousSibling(); }}
+										else if (combinator == Combinator.DESCENDANT) {
+											match = false;
+											Node ancestor = element.getParentNode();
+											while (!match && ancestor != null) {
+												match = s.matches((Element)ancestor);
+												ancestor = ancestor.getParentNode(); }}
+										else if (combinator == Combinator.CHILD) {
+											Element parent = (Element)element.getParentNode();
+											match = parent != null && s.matches(parent); }
+										combinator = s.getCombinator();
+										if (!match)
+											return false;
+									}
+									if (match == true)
+										return true;
+								}
+								return false;
+							}
+						}
+					)
+				);
+				transformed = xsltProcessor.transform(
+					URLs.resolve(URLs.asURI(r.base), URLs.asURI(r.uri)),
+					transformed != null ? transformed : source.get(),
+					params);
+			}
+			if (transformed != null) {
+				node = transformed.ensureSingleItem().asNodeIterator().next();
+				if (!(node instanceof Document))
+					throw new TransformerException(
+						new RuntimeException("XsltProcessor must return a (single) document"));
+				document = (Document)node;
+				// We assume that base URI did not change.
+				// We need to recompute the stylesheet because of any possible inline styles, which
+				// are attached to an element in the original document.
+				styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
+				styleSheet.addAll(defaultStyleSheet);
+				synchronized(JStyleParserCssCascader.class) {
+					// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
+					CSSFactory.registerCSSParserFactory(parserFactory);
 					styleSheet = CSSFactory.getUsedStyles(document, null, nodeLocator, medium, cssReader, styleSheet);
 				}
-				styleMap = new Analyzer(styleSheet).evaluateDOM(document, medium, false);
 			}
+			styleMap = new Analyzer(styleSheet, declarationTransformer, supportedCSS).evaluateDOM(document, medium, false);
 			writer.setBaseURI(baseURI);
 			writer.writeStartDocument();
 			traverse(document.getDocumentElement(), styleMap, writer);

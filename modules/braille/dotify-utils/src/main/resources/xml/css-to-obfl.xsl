@@ -1074,14 +1074,13 @@
     </xsl:template>
     
     <!--
-        wrap main block in additional block when page-break-before is combined with padding-top and string-set:
-        the marker needs to come before the padding in order to make page-start and page-start-except-last behave correctly
-        
-        FIXME: this probably breaks page-start-except-first
+        wrap main block in additional block when string-set is combined with margin-top,
+        border-top-pattern or padding-top: the marker needs to come before the margin, border and
+        padding in order to make page-start and page-start-except-last behave correctly
     -->
     <xsl:template priority="0.73"
                   mode="block toc-block"
-                  match="css:box[@type='block'][@css:page-break-before]">
+                  match="css:box[@type='block']">
         <xsl:variable name="first-inline" as="element()?" select="(descendant::css:box[@type='inline'])[1]"/>
         <xsl:variable name="string-set-on-first-inline" as="attribute()*"
                       select="$first-inline/@css:string-set|
@@ -1098,7 +1097,8 @@
         </xsl:variable>
         <xsl:choose>
             <xsl:when test="($string-set-on-first-inline or $id-on-first-inline)
-                            and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:padding-top
+                            and (descendant-or-self::css:box[@type='block'] intersect $first-inline/ancestor::*)
+                                /(@css:margin-top|@css:margin-top-skip-if-top-of-page|@css:border-top-pattern|@css:padding-top)
                             and not((descendant::css:box[@type='block'] intersect $first-inline/ancestor::*)/@css:page-break-before)">
                 <xsl:element name="{$block-tag}">
                     <xsl:apply-templates mode="block-attr" select="@css:page-break-before"/>
@@ -1116,6 +1116,9 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    <!--
+        attributes that apply on outer block if present, or main block otherwise
+    -->
     <xsl:template priority="0.73"
                   mode="block-attr"
                   match="css:box[@type='block']/@css:page-break-before">
@@ -1575,6 +1578,7 @@
                       select="(@css:hyphenate-character/string(),$pending-hyphenate-character)[1]"/>
         <xsl:apply-templates mode="#current" select="@css:id"/>
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
+        <xsl:apply-templates mode="content-marker" select="@css:string-set"/>
         <xsl:apply-templates mode="assert-nil-attr"
                              select="@* except (@type|
                                                 @css:id|
@@ -1662,6 +1666,7 @@
         <xsl:apply-templates mode="assert-nil-attr" select="@* except (@css:id|@css:string-set|@css:_obfl-marker)"/>
         <xsl:apply-templates mode="#current" select="@css:id"/>
         <xsl:apply-templates mode="marker" select="@css:string-set|@css:_obfl-marker"/>
+        <xsl:apply-templates mode="content-marker" select="@css:string-set"/>
         <xsl:apply-templates mode="#current"/>
         <xsl:apply-templates mode="anchor" select="@css:id"/>
     </xsl:template>
@@ -2509,26 +2514,24 @@
                                 not(preceding-sibling::text()[not(matches(string(),'^[\s&#x2800;]*$'))])]
                          //@css:string-set">
         <block>
-            <xsl:next-match>
-                <xsl:with-param name="markers-wrapped" tunnel="yes" select="true()"/>
-            </xsl:next-match>
+            <xsl:for-each select="css:parse-string-set(.)">
+                <xsl:variable name="value" as="xs:string*">
+                    <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
+                </xsl:variable>
+                <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
+                <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
+                <marker class="{@name}/prev"/> <!-- value will be filled later -->
+                <marker class="{@name}" value="{$value}"/>
+                <marker class="{@name}/if-not-set-next/prev"/> <!-- value will be filled later -->
+                <marker class="{@name}/if-not-set-next" value=""/>
+            </xsl:for-each>
         </block>
-        <xsl:for-each select="css:parse-string-set(.)">
-            <xsl:variable name="value" as="xs:string*">
-                <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
-            </xsl:variable>
-            <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
-            <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
-            <marker class="{@name}/if-not-set-next/prev"/> <!-- value will be filled later -->
-            <marker class="{@name}/if-not-set-next" value="{$value}"/>
-        </xsl:for-each>
     </xsl:template>
     
     <xsl:template mode="marker"
                   match="css:box[@type='inline']/@css:string-set|
                          css:box[@type='inline']/css:_/@css:string-set|
                          css:_/css:_/@css:string-set">
-        <xsl:param name="markers-wrapped" as="xs:boolean" tunnel="yes" select="false()"/>
         <xsl:for-each select="css:parse-string-set(.)">
             <xsl:variable name="value" as="xs:string*">
                 <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
@@ -2537,8 +2540,21 @@
             <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
             <marker class="{@name}/prev"/> <!-- value will be filled later -->
             <marker class="{@name}" value="{$value}"/>
+        </xsl:for-each>
+    </xsl:template>
+    
+    <xsl:template mode="content-marker"
+                  match="css:box[@type='inline']/@css:string-set|
+                         css:box[@type='inline']/css:_/@css:string-set|
+                         css:_/css:_/@css:string-set">
+        <xsl:for-each select="css:parse-string-set(.)">
+            <xsl:variable name="value" as="xs:string*">
+                <xsl:apply-templates mode="css:eval-string-set" select="css:parse-content-list(@value, ())"/>
+            </xsl:variable>
+            <xsl:variable name="value" as="xs:string" select="string-join($value,'')"/>
+            <xsl:variable name="value" as="xs:string" select="replace($value,'^\s+|\s+$','')"/> <!-- trim -->
             <marker class="{@name}/if-not-set-next/prev"/> <!-- value will be filled later -->
-            <marker class="{@name}/if-not-set-next" value="{if ($markers-wrapped) then '' else $value}"/>
+            <marker class="{@name}/if-not-set-next" value="{$value}"/>
         </xsl:for-each>
     </xsl:template>
     
@@ -2811,6 +2827,7 @@
     <xsl:template match="pxi:print-mode" mode="td-attr">td-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="assert-nil-attr">assert-nil-attr</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker">marker</xsl:template>
+    <xsl:template match="pxi:print-mode" mode="content-marker">content-marker</xsl:template>
     <xsl:template match="pxi:print-mode" mode="xml-data">xml-data</xsl:template>
     <xsl:template match="pxi:print-mode" mode="sequence-interrupted-resumed">sequence-interrupted-resumed</xsl:template>
     <xsl:template match="pxi:print-mode" mode="marker-reference">marker-reference</xsl:template>

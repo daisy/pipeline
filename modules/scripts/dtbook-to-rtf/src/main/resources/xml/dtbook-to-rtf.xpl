@@ -9,35 +9,38 @@
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">DTBook to RTF</h1>
 		<p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an RTF (Rich Text Format).</p>
-		<a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf/" px:role="homepage">Online documentation</a>
-		<dl px:role="author">
-      <dt>Name:</dt>
-      <dd px:role="name">Markus Gylling</dd>
-    </dl>
-		<dl px:role="author">
-      <dt>Name:</dt>
-      <dd px:role="name">Ole Holst Andersen</dd>
-      <dt>Organization:</dt>
-			<dd href="https://nota.dk" px:role="organization">Nota</dd>
-    </dl>
-    <dl px:role="author">
-      <dt>Name:</dt>
-      <dd px:role="name">Romain Deltour</dd>
-      <dt>Organization:</dt>
-      <dd px:role="organization">DAISY</dd>
-      <dt>E-mail:</dt>
-      <dd><a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltout@gmail.com</a></dd>
-    </dl>
-		<dl px:role="author">
-			<dt>Name:</dt>
-			<dd px:role="name">Yilin Langlois</dd>
-			<dt>Organization:</dt>
-			<dd href="http://www.braillenet.org/" px:role="organization">BrailleNet</dd>
-			<dt>E-mail:</dt>
-			<dd>
-				<a href="mailto:yilin.langlois@braillenet.org" px:role="contact">yilin.langlois@braillenet.org</a>
-			</dd>
-		</dl>
+		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf/">
+			Online documentation
+		</a>
+		<address>
+			Authors:
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Markus Gylling</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Ole Holst Andersen</dd>
+				<dt>Organization:</dt>
+				<dd href="https://nota.dk" px:role="organization">Nota</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Romain Deltour</dd>
+				<dt>E-mail:</dt>
+				<dd><a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltour@gmail.com</a></dd>
+				<dt>Organization:</dt>
+				<dd px:role="organization">DAISY Consortium</dd>
+			</dl>
+			<dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Yilin Langlois</dd>
+				<dt>E-mail:</dt>
+				<dd><a href="mailto:yilin.langlois@braillenet.org" px:role="contact">yilin.langlois@braillenet.org</a></dd>
+				<dt>Organization:</dt>
+				<dd href="http://www.braillenet.org/" px:role="organization">BrailleNet</dd>
+			</dl>
+		</address>
 	</p:documentation>
 
 	<p:input port="source" primary="true" px:media-type="application/x-dtbook+xml">
@@ -62,12 +65,8 @@
 	</p:option>
 	
 	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Temporary directory</h2>
-      <p px:role="desc">Directory used for temporary files.</p>
-    </p:documentation>
-  </p:option>
-
+		<!-- directory used for temporary files -->
+	</p:option>
 
 	<p:option name="output-dir" px:output="result" px:type="anyDirURI" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -96,7 +95,7 @@
 		
 		<px:dtbook-to-rtf>
 			<p:input port="source.in-memory">
-				<p:pipe step="load" port="in-memory.out"/>
+				<p:pipe step="load" port="result.in-memory"/>
 			</p:input>
 			<p:with-option name="include-table-of-content" select="$include-table-of-content"/>
 			<p:with-option name="include-page-number" select="$include-page-number"/>

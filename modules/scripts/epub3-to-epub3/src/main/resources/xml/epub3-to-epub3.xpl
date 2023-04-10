@@ -10,12 +10,18 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Enhancer</h1>
         <p px:role="desc">Transforms an EPUB 3 publication into an EPUB 3 publication with audio and/or a braille rendition.</p>
-        <dl px:role="author">
-            <dt>Name:</dt>
-            <dd px:role="name">Bert Frees</dd>
-            <dt>E-mail:</dt>
-            <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
-        </dl>
+        <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3/">
+            Online documentation
+        </a>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Bert Frees</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+            </dl>
+        </address>
     </p:documentation>
     
     <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/epub+zip text/plain">
@@ -212,7 +218,7 @@ marked up.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="stylesheet" required="false" px:type="string" select="''">
+    <p:option name="stylesheet" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
             <p px:role="desc" xml:space="preserve">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
@@ -253,7 +259,7 @@ specific.
     </p:option>
     
     <p:input port="tts-config" primary="false">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../common-options.xpl -->
         <p:inline><d:config/></p:inline>
     </p:input>
     
@@ -274,17 +280,14 @@ elements that represent the sentences.</p>
     </p:option>
     
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-            <p px:role="desc">Directory used for temporary files.</p>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
     
     <p:option name="include-tts-log" select="'false'">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
     <p:output port="tts-log" sequence="true">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../common-options.xpl -->
         <p:pipe step="convert" port="tts-log"/>
     </p:output>
     

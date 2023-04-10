@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.inject.Inject;
@@ -9,6 +11,7 @@ import static org.daisy.pipeline.braille.common.Hyphenator.FullHyphenator;
 import static org.daisy.pipeline.braille.common.Hyphenator.LineBreaker;
 import static org.daisy.pipeline.braille.common.Hyphenator.LineIterator;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.daisy.pipeline.braille.libhyphen.LibhyphenHyphenator;
 
@@ -46,9 +49,10 @@ public class LibhyphenCoreTest extends AbstractTest {
 		                                   .get(query("(table:'standard.dic')"))
 		                                   .iterator().next()
 		                                   .asFullHyphenator();
-		assertEquals("foo\u00ADbar", hyphenator.transform("foobar"));
-		assertEquals("foo-\u200Bbar", hyphenator.transform("foo-bar"));
-		assertEquals("foo\u00ADbar foob\u00ADar", hyphenator.transform("foobar foob\u00ADar"));
+		assertEquals(text("foo\u00ADbar"), hyphenator.transform(styledText("foobar", "hyphens: auto")));
+		assertEquals(text("foo-\u200Bbar"), hyphenator.transform(styledText("foo-bar", "hyphens: auto")));
+		assertEquals(text("foo-\u200Bbar"), hyphenator.transform(styledText("foo-bar", "hyphens: none")));
+		assertEquals(text("foo\u00ADbar foob\u00ADar"), hyphenator.transform(styledText("foobar foob\u00ADar", "hyphens: auto")));
 	}
 	
 	@Test(expected=RuntimeException.class)
@@ -57,7 +61,7 @@ public class LibhyphenCoreTest extends AbstractTest {
 		                                   .get(query("(table:'non-standard.dic')"))
 		                                   .iterator().next()
 		                                   .asFullHyphenator();
-		hyphenator.transform("foobar");
+		hyphenator.transform(styledText("foobar", "hyphens: auto"));
 	}
 	
 	@Test
@@ -83,6 +87,28 @@ public class LibhyphenCoreTest extends AbstractTest {
 		assertEquals("foo-\n" +
 		             "bar",
 		             fillLines(hyphenator.transform("foo-bar"), 6, '-'));
+	}
+	
+	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
+		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
+		String text = null;
+		boolean textSet = false;
+		for (String s : textAndStyle) {
+			if (textSet)
+				styledText.add(new CSSStyledText(text, s));
+			else
+				text = s;
+			textSet = !textSet; }
+		if (textSet)
+			throw new RuntimeException();
+		return styledText;
+	}
+	
+	private Iterable<CSSStyledText> text(String... text) {
+		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
+		for (String t : text)
+			styledText.add(new CSSStyledText(t, ""));
+		return styledText;
 	}
 	
 	private static String fillLines(LineIterator lines, int width, char hyphen) {

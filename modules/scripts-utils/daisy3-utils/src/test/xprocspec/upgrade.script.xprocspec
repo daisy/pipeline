@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/daisy3-upgrader.script.xpl">
+
+	<x:scenario label="test">
+		<x:call step="px:daisy3-upgrader.script">
+			<x:input port="source">
+				<x:document type="file" href="../resources/1.1.0/book.opf"/>
+			</x:input>
+			<x:option name="output-dir" select="resolve-uri('test/output-dir/',$temp-dir)"/>
+			<x:option name="temp-dir" select="resolve-uri('test/temp-dir/',$temp-dir)"/>
+		</x:call>
+		<x:context label="the output directory">
+			<x:document type="directory" base-uri="temp-dir" href="test/output-dir/" recursive="true"/>
+		</x:context>
+		<x:expect label="the output directory should contain the upgraded DAISY 3" type="compare">
+			<x:document type="inline">
+				<c:directory name="output-dir">
+					<c:file name="audio.wav"/>
+					<c:file name="book.opf"/>
+					<c:file name="content.xml"/>
+					<c:file name="dtbook110.dtd"/>
+					<c:file name="dtbsmil110.dtd"/>
+					<c:file name="mo.smil"/>
+					<c:file name="navigation.ncx"/>
+					<c:file name="ncx110.dtd"/>
+					<c:file name="oeb1.ent"/>
+					<c:file name="oebpkg101.dtd"/>
+				</c:directory>
+			</x:document>
+		</x:expect>
+		<x:context label="the NCX document">
+			<x:document type="file" base-uri="temp-dir" href="test/output-dir/navigation.ncx"/>
+		</x:context>
+		<x:expect label="the NCX document" type="compare">
+			<x:document type="inline">
+				<ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+					<head>
+						<meta content="DAISY Pipeline 2" name="dtb:generator"/>
+						<meta name="dtb:uid" content="uid"/>
+						<meta name="dtb:depth" content="02"/>
+						<meta name="dtb:totalPageCount" content="0"/>
+						<meta name="dtb:maxPageNumber" content="0"/>
+						<smilCustomTest bookStruct="PAGE_NUMBER" defaultState="false" id="pagenum" override="visible"/>
+						<smilCustomTest bookStruct="NOTE" defaultState="false" id="note" override="visible"/>
+						<smilCustomTest bookStruct="NOTE_REFERENCE" defaultState="false" id="noteref" override="visible"/>
+						<smilCustomTest bookStruct="ANNOTATION" defaultState="false" id="annotation" override="visible"/>
+						<smilCustomTest bookStruct="LINE_NUMBER" defaultState="false" id="linenum" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_SIDEBAR" defaultState="false" id="sidebar" override="visible"/>
+						<smilCustomTest bookStruct="OPTIONAL_PRODUCER_NOTE" defaultState="false" id="prodnote" override="visible"/>
+					</head>
+					<docTitle/>
+					<navMap>
+						<navPoint playOrder="1" id="ncx-1">
+							<navLabel>
+								<text>Part 1</text>
+								<audio clipBegin="0:00:00.000" clipEnd="0:00:01.500" src="audio.wav"/>
+							</navLabel>
+							<content src="mo.smil#s1"/>
+							<navPoint playOrder="2" id="ncx-2">
+								<navLabel>
+									<text>Chapter 1.1</text>
+									<audio clipBegin="0:00:01.500" clipEnd="0:00:04.000" src="audio.wav"/>
+								</navLabel>
+								<content src="mo.smil#s2"/>
+							</navPoint>
+						</navPoint>
+					</navMap>
+				</ncx>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

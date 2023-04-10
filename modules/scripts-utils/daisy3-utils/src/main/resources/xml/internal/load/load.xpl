@@ -10,7 +10,7 @@
                 name="main" type="px:daisy3-load">
 
     <p:documentation>
-        <p px:role="desc">Creates a fileset document based on a DAISY 3 package file.</p>
+        <p>Creates a fileset document based on a DAISY 3 package file.</p>
     </p:documentation>
 
     <p:input port="source.fileset" primary="true">

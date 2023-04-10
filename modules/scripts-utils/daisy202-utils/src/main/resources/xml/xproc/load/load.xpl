@@ -6,14 +6,14 @@
                 type="px:daisy202-load">
 
     <p:documentation>
-        <p px:role="desc">Load a DAISY 2.02 fileset based on its NCC.</p>
+        <p>Load a DAISY 2.02 fileset based on its NCC.</p>
     </p:documentation>
 
     <p:serialization port="fileset.out" indent="true"/>
 
     <p:option name="ncc" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p px:role="desc">URI to input NCC.</p>
+            <p>URI to input NCC.</p>
         </p:documentation>
     </p:option>
 

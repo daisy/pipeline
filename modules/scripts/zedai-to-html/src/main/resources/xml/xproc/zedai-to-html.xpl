@@ -15,7 +15,7 @@
         </a>
     </p:documentation>
 
-    <p:input port="source" primary="true" px:name="source" px:media-type="application/z3998-auth+xml">
+    <p:input port="source" primary="true" px:media-type="application/z3998-auth+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ZedAI document</h2>
             <p px:role="desc">Input ZedAI.</p>

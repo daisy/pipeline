@@ -14,9 +14,8 @@ import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
-import org.daisy.pipeline.braille.common.CSSStyledText;
-
 import org.daisy.pipeline.braille.css.CounterStyle;
+import org.daisy.pipeline.braille.css.CSSStyledText;
 
 /**
  * {@link BrailleTranslator} that handles the <code>text-transform</code> value

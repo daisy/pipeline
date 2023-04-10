@@ -1,6 +1,8 @@
 package org.daisy.pipeline.tts.google.impl;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
 
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -129,7 +132,10 @@ public class GoogleRestTTSEngine extends TTSEngine {
 					throw new FatalError("JSON could not be parsed:\n" + json, e);
 				}
 			});
-			return new SynthesisResult(createAudioStream(mAudioFormat, result.get(0)));
+			AudioInputStream audio = createAudioStream(new BufferedInputStream(new ByteArrayInputStream(result.get(0))));
+			if (!audio.getFormat().matches(mAudioFormat))
+				throw new IllegalStateException("Got unexpected WAV header");
+			return new SynthesisResult(audio);
 		} catch (InterruptedException e) {
 			throw e;
 		} catch (Exception e) {

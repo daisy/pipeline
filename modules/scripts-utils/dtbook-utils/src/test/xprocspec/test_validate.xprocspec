@@ -2,6 +2,8 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:svrl="http://purl.oclc.org/dsdl/svrl"
                script="../../main/resources/xml/validate-dtbook/validate-dtbook.xpl">
 
     <x:scenario label="dtbook_valid_2005-3">
@@ -57,27 +59,123 @@
             <x:option name="check-images" select="false()"/>
             <x:option name="nimas" select="false()"/>
         </x:call>
-        <x:context label="the validation-status port">
-            <x:document type="port" port="validation-status"/>
-        </x:context>
-        <x:expect label="the validation should fail" type="compare">
-            <x:document type="inline">
-                <d:validation-status result="error"/>
-            </x:document>
-        </x:expect>
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect label="the result port" type="compare">
-            <x:document type="inline">
-                <tmp:error xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"/>
-            </x:document>
-        </x:expect>
-        <x:context label="the xml-report port">
-            <x:document type="port" port="xml-report"/>
-        </x:context>
-        <x:expect label="the report should indicate that the file in not well-formed XML" type="xpath"
-                  test="/d:document-validation-report/d:reports/d:report/d:errors/d:error[@type='file-not-wellformed']"/>
+        <x:scenario label="report-method 'port'">
+            <x:call>
+                <x:option name="report-method" select="'port'"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the validation should fail" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="error"/>
+                </x:document>
+            </x:expect>
+            <x:context label="the result port">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect label="the result port" type="compare">
+                <x:document type="inline">
+                    <tmp:error xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"/>
+                </x:document>
+            </x:expect>
+            <x:context label="the xml-report port">
+                <x:document type="port" port="xml-report"/>
+            </x:context>
+            <x:expect label="the report should indicate that the file is not well-formed XML" type="xpath"
+                      test="/d:document-validation-report/d:reports/d:report/d:errors/d:error[@type='file-not-wellformed']"/>
+        </x:scenario>
+        <x:scenario label="report-method 'error'">
+            <x:call>
+                <x:option name="report-method" select="'error'"/>
+            </x:call>
+            <x:context label="the errors">
+                <x:document type="errors"/>
+            </x:context>
+            <x:expect label="there should be one c:errors document" type="count" min="1" max="1"/>
+            <x:expect label="there should be one error in it" type="xpath" test="count(/c:errors/c:error)=1"/>
+            <x:expect label="the error message should start with 'File is not well-formed XML'" type="xpath"
+                      test="starts-with(/c:errors/c:error/string(.),'File is not well-formed XML:')"/>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="nimas">
+        <x:call step="px:dtbook-validate">
+            <x:input port="source.fileset">
+                <x:document type="inline">
+                    <d:fileset>
+                        <d:file href="../../../../../scripts/nimas-fileset-validator/src/test/resources/9781122334455NIMAS/9781122334455NIMAS.xml"
+                                media-type="application/x-dtbook+xml"/>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+            <x:input port="source.in-memory"/>
+            <x:option name="mathml-version" select="'3.0'"/>
+            <x:option name="check-images" select="false()"/>
+            <x:option name="nimas" select="false()"/>
+        </x:call>
+        <x:scenario label="dtbook validation">
+            <x:scenario label="report-method 'port'">
+                <x:call>
+                    <x:option name="report-method" select="'port'"/>
+                </x:call>
+                <x:context label="the validation-status port">
+                    <x:document type="port" port="validation-status"/>
+                </x:context>
+                <x:expect label="the validation should fail" type="compare">
+                    <x:document type="inline">
+                        <d:validation-status result="error"/>
+                    </x:document>
+                </x:expect>
+                <x:context label="the xml-report port">
+                    <x:document type="port" port="xml-report"/>
+                </x:context>
+                <x:expect label="the report should indicate that the file is not valid DTBook" type="xpath"
+                          test="exists(/d:document-validation-report/d:reports/d:report[@type='schematron']
+                                       /svrl:schematron-output/svrl:failed-assert)"/>
+            </x:scenario>
+            <x:scenario label="report-method 'error'">
+                <x:call>
+                    <x:option name="report-method" select="'error'"/>
+                </x:call>
+                <x:context label="the errors">
+                    <x:document type="errors"/>
+                </x:context>
+                <x:expect label="there should be one c:errors document" type="count" min="1" max="1"/>
+                <x:expect label="there should be two errors in it" type="xpath" test="count(/c:errors/c:error)=2"/>
+                <x:expect label="the error messages should be" type="xpath" test="/c:errors/c:error/string(.)"
+                          equals="('There must be exactly one dtb:uid metadata item.',
+                                   'There must be at least one dc:Title metadata item.')"/>
+            </x:scenario>
+        </x:scenario>
+        <x:scenario label="nimas validation">
+            <x:call>
+                <x:option name="report-method" select="'error'"/>
+                <x:option name="nimas" select="true()"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the validation should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="ok"/>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="skip-schematron">
+            <x:call>
+                <x:option name="report-method" select="'error'"/>
+                <x:option name="skip-schematron" select="true()"/>
+            </x:call>
+            <x:context label="the validation-status port">
+                <x:document type="port" port="validation-status"/>
+            </x:context>
+            <x:expect label="the validation should succeed" type="compare">
+                <x:document type="inline">
+                    <d:validation-status result="ok"/>
+                </x:document>
+            </x:expect>
+        </x:scenario>
     </x:scenario>
 
 </x:description>

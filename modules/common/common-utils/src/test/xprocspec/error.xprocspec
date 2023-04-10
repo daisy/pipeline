@@ -15,14 +15,12 @@
     </x:context>
     <x:expect label="the error" type="compare">
       <x:document type="inline">
-        <c:error code="ERR" name="!1.19.5.4.4.1" type="p:error" href="src/main/resources/xml/xproc/error.xpl" line="169" column="30">
+        <c:error code="ERR" name="!1.18.4.3" type="p:error" href="src/main/resources/xml/xproc/error.xpl" line="138" column="22">
           <message>foobar</message>
           <px:location>
-            <px:file href="src/main/resources/xml/xproc/error.xpl" line="169" column="30"/>
-            <px:file href="src/main/resources/xml/xproc/error.xpl" line="168" column="30"/>
-            <px:file href="src/main/resources/xml/xproc/error.xpl" line="139" column="23"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="138" column="22"/>
             <px:file href="src/main/resources/xml/xproc/error.xpl" line="117" column="22"/>
-            <px:file href="src/main/resources/xml/xproc/error.xpl" line="70" column="15"/>
+            <px:file href="src/main/resources/xml/xproc/error.xpl" line="77" column="15"/>
             <!-- these lines can change if the XProcSpec implementation changes! -->
             <px:file href="src/test/xprocspec/error.xprocspec" line="10" column="98"/>
             <px:file href="src/test/xprocspec/error.xprocspec" line="9" column="18"/>

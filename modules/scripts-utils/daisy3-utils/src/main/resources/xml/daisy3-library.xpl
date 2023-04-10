@@ -2,16 +2,22 @@
     xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">DAISY 3 Utilities</h1>
-        <p px:role="desc">A collection of utilities for DAISY 3 filesets.</p>
-        <div px:role="author">
-            <p px:role="name">Romain Deltour</p>
-            <a href="mailto:rdeltour@gmail.com" px:role="contact">rdeltour@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
-        <div px:role="author maintainer">
-            <p px:role="name">Bert Frees</p>
-        </div>
+        <h1>DAISY 3 Utilities</h1>
+        <p>A collection of utilities for DAISY 3 filesets.</p>
+        <dl px:role="author">
+            <dt>Name:</dt>
+            <dd px:role="name">Romain Deltour</dd>
+            <dt>E-mail:</dt>
+            <dd><a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltour@gmail.com</a></dd>
+            <dt>Organization:</dt>
+            <dd px:role="organization">DAISY Consortium</dd>
+        </dl>
+        <dl px:role="author">
+            <dt>Name:</dt>
+            <dd px:role="name">Bert Frees</dd>
+            <dt>E-mail:</dt>
+            <dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+        </dl>
     </p:documentation>
 
     <p:import href="internal/load/load.xpl"/>
@@ -25,5 +31,6 @@
     <p:import href="internal/resources/create-res-file.xpl"/>
     <p:import href="internal/audio-transcode.xpl"/>
     <p:import href="internal/update-links.xpl"/>
+    <p:import href="internal/upgrade.xpl"/>
 
 </p:library>

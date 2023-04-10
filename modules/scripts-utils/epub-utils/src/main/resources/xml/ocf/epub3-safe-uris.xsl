@@ -9,22 +9,16 @@
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
     <xsl:template match="/*">
-        <xsl:copy>
-            <xsl:variable name="base" select="f:safe-uri(@xml:base)"/>
-            <xsl:attribute name="xml:base" select="$base"/>
-            <xsl:apply-templates select="(@* except @xml:base)|node()">
-                <xsl:with-param name="base" tunnel="yes" select="$base"/>
-            </xsl:apply-templates>
-        </xsl:copy>
+        <xsl:next-match>
+            <xsl:with-param name="base" tunnel="yes" select="base-uri(.)"/>
+        </xsl:next-match>
     </xsl:template>
-
-    <xsl:template match="@xml:base"/>
 
     <xsl:template match="d:file/@href">
         <xsl:param name="base" tunnel="yes" required="yes"/>
         <xsl:variable name="absolute-href" select="resolve-uri(.,base-uri(.))"/>
-        <xsl:attribute name="href" select="pf:relativize-uri(f:safe-uri($absolute-href),$base)"/>
-        <xsl:attribute name="href-before-move" select="$absolute-href"/>
+        <xsl:attribute name="href" select="f:safe-uri(pf:relativize-uri($absolute-href,$base))"/>
+        <xsl:attribute name="absolute-href-before-move" select="$absolute-href"/>
     </xsl:template>
 
     <xsl:template match="d:file/@original-href">

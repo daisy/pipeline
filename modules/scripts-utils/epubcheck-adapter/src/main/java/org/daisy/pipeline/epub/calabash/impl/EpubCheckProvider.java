@@ -162,8 +162,10 @@ public class EpubCheckProvider implements XProcStepProvider {
 								}
 								if (tempDir.exists())
 									throw new IllegalArgumentException("temp-dir option must be a non-existing directory: "+tempDirOpt);
-							} else
+							} else {
 								tempDir = Files.createTempDirectory("epubcheck-").toFile();
+								tempDir.deleteOnExit();
+							}
 						}
 						File zippedEpubFile = new File(tempDir, epubName);
 						logger.debug("Creating zipped EPUB from " + path + " at " + zippedEpubFile);

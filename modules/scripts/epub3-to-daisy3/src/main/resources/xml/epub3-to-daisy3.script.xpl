@@ -25,13 +25,11 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     </p:option>
 
     <p:option name="validation" select="'off'">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Temporary directory</h2>
-        </p:documentation>
+        <!-- directory used for temporary files -->
     </p:option>
 
     <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
@@ -41,17 +39,12 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     </p:option>
 
     <p:output port="validation-report" sequence="true">
-        <!-- defined in common-options.xpl -->
+        <!-- defined in ../../../../../common-options.xpl -->
         <p:pipe step="load" port="validation-report"/>
     </p:output>
 
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Conversion status</h1>
-            <p px:role="desc" xml:space="preserve">An XML document describing whether the conversion was successful.
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-        </p:documentation>
+        <!-- whether the validation of the input was successful -->
         <p:pipe step="status" port="result"/>
     </p:output>
 
@@ -73,7 +66,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
 
     <px:epub-load version="3" name="load" px:message="Loading EPUB 3" px:progress="1/10">
         <p:with-option name="href" select="$epub"/>
-        <p:with-option name="validation" select="$validation"/>
+        <p:with-option name="validation" select="not($validation='off')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub-load>
     <p:sink/>
@@ -83,8 +76,25 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
             <p:pipe step="load" port="validation-status"/>
         </p:input>
     </p:identity>
-    <p:choose name="status" px:progress="9/10">
+    <p:choose>
         <p:when test="/d:validation-status[@result='error']">
+            <p:choose>
+                <p:when test="$validation='abort'">
+                    <p:identity px:message="The EPUB input is invalid. See validation report for more info."
+                                px:message-severity="ERROR"/>
+                </p:when>
+                <p:otherwise>
+                    <p:identity px:message="The EPUB input is invalid. See validation report for more info."
+                                px:message-severity="WARN"/>
+                </p:otherwise>
+            </p:choose>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
+    <p:choose name="status" px:progress="9/10">
+        <p:when test="/d:validation-status[@result='error'] and $validation='abort'">
             <p:output port="result"/>
             <p:identity/>
         </p:when>
@@ -109,7 +119,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
 
             <p:identity cx:depends-on="store">
                 <p:input port="source">
-                    <p:pipe step="load" port="validation-status"/>
+                    <p:inline><d:validation-status result="ok"/></p:inline>
                 </p:input>
             </p:identity>
         </p:otherwise>

@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.1.1-SNAPSHOT</version>
+  <version>3.1.2-SNAPSHOT</version>
   <artifactId>dtbook-tts</artifactId>
   <packaging>bundle</packaging>
 

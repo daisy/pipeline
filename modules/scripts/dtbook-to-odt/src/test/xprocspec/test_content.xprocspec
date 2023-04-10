@@ -115,7 +115,8 @@
           <px:dtbook-to-odt.script>
             <p:with-option name="page-numbers" select="$page-numbers"/>
             <p:with-option name="page-numbers-float" select="$page-numbers-float"/>
-            <p:with-option name="output-dir" select="$temp-dir"/>
+            <p:with-option name="output-dir" select="concat($temp-dir,'output-dir/')"/>
+            <p:with-option name="temp-dir" select="concat($temp-dir,'temp-dir/')"/>
           </px:dtbook-to-odt.script>
         </p:when>
         <p:otherwise>

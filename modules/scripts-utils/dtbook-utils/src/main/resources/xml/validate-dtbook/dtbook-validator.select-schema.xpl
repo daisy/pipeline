@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:dtbook-validator.select-schema"
                 exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">Helper step for DTBook Validator</h1>
-        <p px:role="desc">Select the correct RNG schema for the given DTBook and MathML versions.</p>
+        <h1>Helper step for DTBook Validator</h1>
+        <p>Select the correct RNG schema for the given DTBook and MathML versions.</p>
     </p:documentation>
     
     <!-- ***************************************************** -->
@@ -21,22 +23,19 @@
     
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">The RNG schema that the document should be validated against.</p>
+            <p>The RNG schema that the document should be validated against.</p>
         </p:documentation>
     </p:output>
     
-    <p:option name="dtbook-version" required="true" px:type="string">
+    <p:option name="dtbook-version" required="true" cx:as="xs:string" cx:type="2005-3|2005-2|2005-1|1.1.0">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">mathml-version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file.</p>
+            <p>DTBook version.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="mathml-version" required="false" px:type="string">
+    <p:option name="mathml-version" required="false" cx:as="xs:string" cx:type="3.0|2.0">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">mathml-version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file.</p>
+            <p>Version of MathML in the DTBook file.</p>
         </p:documentation>
     </p:option>
     
@@ -86,9 +85,8 @@
                 </p:input>
             </p:identity>
         </p:when>
-        <!-- default to dtbook 2005-3 -->
-        <!-- We could also consider generating an error that the version was not detectable. -->
         <p:otherwise>
+            <!-- default to dtbook 2005-3 with mathml 3.0 (can not happen) -->
             <p:identity>
                 <p:input port="source">
                     <p:document href="./schema/rng/dtbook-2005-3.mathml-3.integration.rng"/>

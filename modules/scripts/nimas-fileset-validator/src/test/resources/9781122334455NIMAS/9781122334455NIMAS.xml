@@ -1,0 +1,935 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dtbook PUBLIC "-//NISO//DTD dtbook 2005-3//EN" "http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd">
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="En-US">
+
+    <!--This file was originally prepared by Valerie Hendricks and was updated by Luis Perez and Lynn McCormack (AEM Center) and Nicole Gaines (NIMAC) in October, 2020-->
+    <head/>
+    <book>
+
+        <frontmatter>
+            <doctitle>The Great Depression</doctitle>
+            <docauthor>John Smith</docauthor>
+			<docauthor>Jane Doe</docauthor>
+            <level1>
+                <pagenum id="pi" page="front">i</pagenum>
+                <h1>The Great Depression</h1>
+				<p>by John Smith and Jane Doe</p>
+                <img src="./images/U00/cover.jpg"
+                     alt="Black and white photo of a mother and her children in a makeshift home during the depression"/>
+
+                <level2 class="copyright">
+                    <p>&#x00A9; 2020 CAST, Inc.</p>
+                    <p>NIMAS Social Studies Textbook Exemplar, 2nd Edition</p>
+                    <p>ISBN: 9781122334455</p>
+                    <!--This ISBN does not refer to an actual title  -->
+                </level2>
+
+                <level2 class="contents">
+                    <pagenum id="pii" page="front">ii</pagenum>
+                    <h2 class="contents">Table of Contents</h2>
+                    <list type="pl" depth="1">
+                        <hd>The Great Depression</hd>
+                        <li>
+                            <!-- A common example of the use of <lic> is in a table of contents to separately
+                            mark each entry and its corresponding page number. This table of contents includes
+                            all levels through level 4. -->
+                            <!-- level 2-->
+                            <lic class="entry">
+                                <a href="#page_1">Overview</a>
+                            </lic>
+                            <lic class="pagenum">
+                                <a href="#page_1">1</a>
+                            </lic>
+                        </li>
+                        <!-- level 2-->
+                        <li>
+                            <lic class="entry">
+                                <a href="#page_3">Troubled Times</a>
+                            </lic>
+                            <lic class="pagenum">
+                                <a href="#page_3">3</a>
+                            </lic>
+                            <list type="pl" depth="2">
+                                <li>
+                                    <!-- level 3 -->
+                                    <lic class="entry">
+                                        <a href="#page_5">Farm Life and the Dust Bowl</a>
+                                    </lic>
+                                    <lic class="pagenum">
+                                        <a href="#page_5">5</a>
+                                    </lic>
+                                    <list type="pl" depth="3">
+                                        <!-- level 4 -->
+                                        <li>
+                                            <lic class="entry">
+                                                <a href="#page_5">The Dust Bowl Migration</a>
+                                            </lic>
+                                            <lic class="pagenum">
+                                                <a href="#page_5">5</a>
+                                            </lic>
+                                        </li>
+                                        <li>
+                                            <lic class="entry">
+                                                <a href="#page_7">Farm Tenants</a>
+                                            </lic>
+                                            <lic class="pagenum">
+                                                <a href="#page_7">7</a>
+                                            </lic>
+                                        </li>
+                                        <li>
+                                            <lic class="entry">
+                                                <a href="#page_9">Electric Farms</a>
+                                            </lic>
+                                            <lic class="pagenum">
+                                                <a href="#page_9">9</a>
+                                            </lic>
+                                        </li>
+                                        <li>
+                                            <lic class="entry">
+                                                <a href="#page_9">Dorothea Lange, Photographer of the Great Depression</a>
+                                            </lic>
+                                            <lic class="pagenum">
+                                                <a href="#page_9">9</a>
+                                            </lic>
+                                        </li>
+                                        <li>
+                                            <lic class="entry">
+                                                <a href="#page_10">Keeping Spirits Up</a>
+                                            </lic>
+                                            <lic class="pagenum">
+                                                <a href="#page_10">10</a>
+                                            </lic>
+                                        </li>
+                                    </list>
+                                </li>
+                            </list>
+                        </li>
+                        <li>
+                            <lic class="entry">
+                                <a href="#page_12">Review</a>
+                            </lic>
+                            <lic class="pagenum">
+                                <a href="#page_12">12</a>
+                            </lic>
+                            <list type="pl" depth="2">
+                                <li>
+                                    <lic class="entry">
+                                        <a href="#page_12">Review Questions</a>
+                                    </lic>
+                                    <lic class="pagenum">
+                                        <a href="#page_12">12</a>
+                                    </lic>
+                                </li>
+                                <li>
+                                    <lic class="entry">
+                                        <a href="#page_12">Key Words</a>
+                                    </lic>
+                                    <lic class="pagenum">
+                                        <a href="#page_12">12</a>
+                                    </lic>
+
+                                </li>
+                            </list>
+                        </li>
+                    </list>
+                </level2>
+            </level1>
+        </frontmatter>
+
+        <bodymatter>
+            <level1 id="L001">
+                <h1 id="L001.H01">The Great Depression</h1>
+                <pagenum id="page_1" page="normal">1</pagenum>
+                <level2 id="L001.001" class="mainsection">
+                    <h2 id="L001.001.H01" class="mainsection">Overview</h2>
+                    <p>
+                        During the 1920s, the United States saw a time of great prosperity. However, that would all
+                        change with the stock market crash of 1929. The country and the world would be plunged into an
+                        economic and social depression.
+                    </p>
+                    <p>
+                        Companies were going bankrupt, banks were shutting down, and unemployment was skyrocketing.
+                    </p>
+                    <p>
+                        One president would ignore the problem, another would radically alter the powers of government
+                        to help the nation. People were starving both in the cities and on the farms of America.
+                    </p>
+                    <p>
+                        Throughout the 1930s and into the 1940s, the people of the United States faced some of their
+                        toughest years. Only the Second World War would put an end to The Great Depression.
+                    </p>
+                    <pagenum id="page_2" page="normal">2</pagenum>
+                    <imggroup>
+                        <img id="L001.001.P002-001" src="./images/U01C01/p002-001.jpg"
+                             alt="Black and white photo of a makeshift home during the Depression"/>
+                        <prodnote imgref="L001.001.P002-001" render="optional">
+                            This black and white photo shows a makeshift home during the Depression. A young mother and her two children stand barefoot in front of a makeshift home made from scraps of wood, fabric and metal. In the foreground a few blankets are placed on top of a bed frame missing its mattress. A clothesline in the background has some of the family's clothing strung across it.
+                        </prodnote>
+                        <caption imgref="L001.001.P002-001">
+                            The Great Depression caused immediate hardship on everyday life. Hundreds of thousands
+                            of people lost their homes, their jobs, and their dignity. Families, like the one shown
+                            above, were forced to live in make-shift camps that were overcrowded and unsanitary.
+                        </caption>
+                    </imggroup>
+                    <list type="pl">
+                        <hd>KEY POINTS</hd>
+                        <li>
+                            The causes of the Great Depression, culminating in the stock market crash of 1929.
+                        </li>
+                        <li>
+                            Herbert Hoover's presidency and ineffective actions toward the economic crisis.
+                        </li>
+                        <li>
+                            The New Deal and the challenges of FDR's presidency.
+                        </li>
+                        <li>
+                            Life during the Great Depression in cities, on farms, and in the entertainment industry.
+                        </li>
+                    </list>
+                </level2>
+                <pagenum id="page_3" page="normal">3</pagenum>
+                <level2 id="L001.002" class="mainsection">
+                    <h2 id="L001.002.H01" class="mainsection">
+                        Troubled Times
+                    </h2>
+                    <p>
+                        Cities were hard hit by the Great Depression. By March of 1930, more than 3.2 million people
+                        were unemployed. Since most people lost their homes, homelessness ran rampant. People were
+                        living literally "in the streets." Whole families were living in boxes, under bridges and
+                        overpasses, and in alleys. The street corners of New York City were packed with people selling
+                        anything and everything to try and make money.
+                        <q>"Desperate times began to put into question the old American notion that if a man worked hard
+                            enough, he could always take care of himself and his family. The effect of the Depression on
+                            poor children was particularly severe.... Most elderly Americans did not have personal
+                            savings or retirement pensions to support them in normal times, let alone during a national
+                            economic crisis.... Even skilled workers, business owners, successful farmers, and
+                            professionals of all kinds found themselves in severe economic difficulty as one out of four
+                            in the labor force lost their jobs." (CRF, www.crf-usa.org.)
+                        </q>
+                    </p>
+                    <table id="L001.002.001.003.T01" width="50%" border="1">
+                        <thead>
+                            <tr>
+                                <th align="center">Year</th>
+                                <th align="center">U.S. Population</th>
+                                <th align="center">Unemployment Percentage</th>
+                            </tr>
+                        </thead>
+                        <tr>
+                            <td>1929</td>
+                            <td>88,010,000</td>
+                            <td>3.14</td>
+                        </tr>
+                        <tr>
+                            <td>1930</td>
+                            <td>89,550,000</td>
+                            <td>8.67</td>
+                        </tr>
+                        <tr>
+                            <td>1931</td>
+                            <td>90,710,000</td>
+                            <td>15.82</td>
+                        </tr>
+                        <tr>
+                            <td>1932</td>
+                            <td>91,810,000</td>
+                            <td>23.53</td>
+                        </tr>
+                        <tr>
+                            <td>1933</td>
+                            <td>92,950,000</td>
+                            <td>24.75</td>
+                        </tr>
+                        <tr>
+                            <td>1934</td>
+                            <td>94,190,000</td>
+                            <td>21.60</td>
+                        </tr>
+                        <tr>
+                            <td>1935</td>
+                            <td>95,460,000</td>
+                            <td>19.97</td>
+                        </tr>
+                        <tr>
+                            <td>1936</td>
+                            <td>96,700,000</td>
+                            <td>16.80</td>
+                        </tr>
+                        <tr>
+                            <td>1937</td>
+                            <td>97,870,000</td>
+                            <td>14.18</td>
+                        </tr>
+                        <tr>
+                            <td>1938</td>
+                            <td>99,120,000</td>
+                            <td>18.91</td>
+                        </tr>
+                        <tr>
+                            <td>1939</td>
+                            <td>100,360,000</td>
+                            <td>17.05</td>
+                        </tr>
+                        <tr>
+                            <td>1940</td>
+                            <td>101,560,000</td>
+                            <td>14.45</td>
+                        </tr>
+                        <tr>
+                            <td>1941</td>
+                            <td>102,700,000</td>
+                            <td>9.66</td>
+                        </tr>
+                    </table>
+                    <cite>Source: <em>U.S. Bureau of the Census, Historical Statistics of the United States, Colonial
+                        Times to 1957
+                    </em> (Washington, D.C., 1960), p. 70.
+                    </cite>
+                    <p>
+                        People were living in the streets and they were starving. They were becoming angry and
+                        desperate. Food riots broke out across the nation. In Minneapolis, people smashed the windows of
+                        a store and stole fruit, canned goods, bacon, and ham. When one of the shop owners tried to stop
+                        them at gunpoint, one of the looters broke his arm. It took 100 police officers to bring the
+                        riot under control. Seven people were arrested.
+                    </p>
+                    <p>
+                        Some cities tried to control the problem by distributing
+                        food to people who waited in
+                        <span class="keyword">bread lines</span>
+                        to get a meal. In New York City, there were 82 different
+                        bread lines located in different stations around the city.
+                        In 1931, each of these lines averaged 85,000 meals a day.
+                        A typical meal consisted of bread, soup, and stew. People
+                        would stand in these lines for days waiting for one meal.
+                        Many people fainted while standing in line from exhaustion,
+                        fatigue, and hunger.
+                    </p>
+                    <p>
+                        New York also tried to provide citywide relief to its homeless,
+                        jobless masses. But by April of 1932, more than 750,000 New
+                        Yorkers were dependent on city relief with a waiting list of
+                        160,000 people. The people on relief began to outnumber the
+                        people working. The city could not support this relief much longer.
+                    </p>
+                    <p>Franklin Delano Roosevelt was elected in 1933 on his "new deal" platform of recovery and reform.
+                        His inauguration speech contained the now-famous quote: "Let me assert my firm belief that the
+                        only thing we have to fear is fear itself; needless, unreasoning, unjustified terror which
+                        paralyzes needed efforts to convert retreat into advance."
+                    </p>
+                    <blockquote>
+                        <p>
+                            FDR's Inaugural Address, 1933:
+                            <br/>
+                            President Hoover, Mr. Chief Justice, my friends: This is a day of national consecration, and
+                            I am certain that my fellow Americans expect that on my induction into the Presidency I will
+                            address them with a candor and a decision which the present situation of our nation impels.
+                            This is pre-eminently the time to speak the truth, the whole truth, frankly and boldly. Nor
+                            need we shrink from honestly facing conditions in our country today. This great nation will
+                            endure as it has endured, will revive and will prosper. So first of all let me assert my
+                            firm belief that the only thing we have to fear is fear itself—nameless, unreasoning,
+                            unjustified terror which paralyzes needed efforts to convert retreat into advance. In every
+                            dark hour of our national life a leadership of frankness and vigor has met with that
+                            understanding and support of the people themselves which is essential to victory. I am
+                            convinced that you will again give that support to leadership in these critical days.
+                        </p>
+                        <p>In such a spirit on my part and on yours we face our common difficulties. They concern, thank
+                            God, only material things. Values have shrunken to fantastic levels: taxes have risen, our
+                            ability to pay has fallen, government of all kinds is faced by serious curtailment of
+                            income, the means of exchange are frozen in the currents of trade, the withered leaves of
+                            industrial enterprise lie on every side, farmers find no markets for their produce, the
+                            savings of many years in thousands of families are gone.
+                        </p>
+                        <p>More important, a host of unemployed citizens face the grim problem of existence, and an
+                            equally great number toil with little return. Only a foolish optimist can deny the dark
+                            realities of the moment.
+                        </p>
+                        <p>Yet our distress comes from no failure of substance. We are stricken by no plague of locusts.
+                            Compared with the perils which our forefathers conquered because they believed and were not
+                            afraid, we have still much to be thankful for. Nature still offers her bounty and human
+                            efforts have multiplied it. Plenty is at our doorstep, but a generous use of it languishes
+                            in the very sight of the supply. Primarily, this is because the rulers of the exchange of
+                            mankind's goods have failed through their own stubbornness and their own incompetence, have
+                            admitted their failures and abdicated. Practices of the unscrupulous money changers stand
+                            indicted in the court of public opinion, rejected by the hearts and minds of men.
+                        </p>
+                        <p>True, they have tried, but their efforts have been cast in the pattern of an outworn
+                            tradition. Faced by failure of credit, they have proposed only the lending of more money.
+                            Stripped of the lure of profit by which to induce our people to follow their false
+                            leadership, they have resorted to exhortations, pleading tearfully for restored conditions.
+                            They know only the rules of a generation of self-seekers. They have no vision, and when
+                            there is no vision the people perish.
+                        </p>
+                        <p>The money changers have fled their high seats in the temple of our civilization. We may now
+                            restore that temple to the ancient truths. The measure of the restoration lies in the extent
+                            to which we apply social values more noble than mere monetary profit.
+                        </p>
+                        <p>Happiness lies not in the mere possession of money, it lies in the joy of achievement, in the
+                            thrill of creative effort. The joy and moral stimulation of work no longer must be forgotten
+                            in the mad chase of evanescent profits. These dark days will be worth all they cost us if
+                            they teach us that our true destiny is not to be ministered unto but to minister to
+                            ourselves and to our fellow-men.
+                        </p>
+                        <p>Recognition of the falsity of material wealth as the standard of success goes hand in hand
+                            with the abandonment of the false belief that public office and high political position are
+                            to be values only by the standards of pride of place and personal profit, and there must be
+                            an end to a conduct in banking and in business which too often has given to a sacred trust
+                            the likeness of callous and selfish wrongdoing. Small wonder that confidence languishes, for
+                            it thrives only on honesty, on honor, on the sacredness of obligations, on faithful
+                            protection, on unselfish performance. Without them it cannot live.
+                        </p>
+                        <p>Restoration calls, however, not for changes in ethics alone. This nation asks for action, and
+                            action now.
+                        </p>
+                        <p>Our greatest primary task is to put people to work. This is no unsolvable problem if we face
+                            it wisely and courageously. It can be accompanied in part by direct recruiting by the
+                            government itself, treating the task as we would treat the emergency of a war, but at the
+                            same time, through this employment, accomplishing greatly needed projects to stimulate and
+                            reorganize the use of our national resources.
+                        </p>
+                        <p>Hand in hand with this, we must frankly recognize the over-balance of population in our
+                            industrial centers and, by engaging on a national scale in a redistribution, endeavor to
+                            provide a better use of the land for those best fitted for the land. The task can be helped
+                            by definite efforts to raise the values of agricultural products and with this the power to
+                            purchase the output of our cities. It can be helped by preventing realistically the tragedy
+                            of the growing loss, through foreclosure, of our small homes and our farms. It can be helped
+                            by insistence that the Federal, State, and local governments act forthwith on the demand
+                            that their cost be drastically reduced. It can be helped by the unifying of relief
+                            activities which today are often scattered, uneconomical, and unequal. It can be helped by
+                            national planning for and supervision of all forms of transportation and of communications
+                            and other utilities which have a definitely public character. There are many ways in which
+                            it can be helped, but it can never be helped merely by talking about it. We must act, and
+                            act quickly.
+                        </p>
+                        <p>Finally, in our progress toward a resumption of work we require two safeguards against a
+                            return of the evils of the old order: there must be a strict supervision of all banking and
+                            credits and investments; there must be an end to speculation with other people's money, and
+                            there must be provision for an adequate but sound currency.
+                        </p>
+                        <p>These are the lines of attack. I shall presently urge upon a new Congress in special session
+                            detailed measures for their fulfillment, and I shall seek the immediate assistance of the
+                            several States.
+                        </p>
+                        <p>Through this program of action we address ourselves to putting our own national house in
+                            order and making income balance outgo. Our international trade relations, though vastly
+                            important, are, to point in time and necessity, secondary to the establishment of a sound
+                            national economy. I favor as a practical policy the putting of first things first. I shall
+                            spare no effort to restore world trade by international economic readjustment, but the
+                            emergency at home cannot wait on that accomplishment.
+                        </p>
+                        <p>The basic thought that guides these specific means of national recovery is not narrowly
+                            nationalistic. It is the insistence, as a first consideration, upon the interdependence of
+                            the various elements in and parts of the United States ... a recognition of the old and
+                            permanently important manifestation of the American spirit of the pioneer. It is the way to
+                            recovery. It is the immediate way. It is the strongest assurance that the recovery will
+                            endure.
+                        </p>
+                        <p>In the field of world policy I would dedicate this nation to the policy of the good neighbor;
+                            the neighbor who resolutely respects himself and, because he does so, respects the rights of
+                            others; the neighbor who respects his obligations and respects the sanctity of his
+                            agreements in and with a world of neighbors.
+                        </p>
+                        <p>If I read the temper of our people correctly, we now realize, as we have never realized
+                            before, our interdependence on each other: that we cannot merely take, but we must give as
+                            well, that if we are to go forward we must move as a trained and loyal army willing to
+                            sacrifice for the good of a common discipline, because without such discipline, no progress
+                            is made, no leadership becomes effective. We are, I know, ready and willing to submit our
+                            lives and property to such discipline because it makes possible a leadership which aims at a
+                            larger good. This I propose to offer, pledging that the larger purposes will bind upon us
+                            all as a sacred obligation with a unity of duty hitherto evoked only in time of armed
+                            strife.
+                        </p>
+                        <p>With this pledge taken, I assume unhesitatingly the leadership of this great army of our
+                            people, dedicated to a disciplined attack upon our common problems.
+                        </p>
+                        <p>Action in this image and to this end is feasible under the form of government which we have
+                            inherited from our ancestors. Our Constitution is so simple and practical that it is
+                            possible always to meet extraordinary needs by changes in emphasis and arrangement without
+                            loss of essential form. That is why our constitutional system has proved itself the most
+                            superbly enduring political mechanism the modern world has produced. It has met every stress
+                            of vast expansion of territory, of foreign wars, of bitter internal strife, of world
+                            relations.
+                        </p>
+                        <p>It is to be hoped that the normal balance of executive and legislative authority may be
+                            wholly adequate to meet the unprecedented task before us. But it may be that an
+                            unprecedented demand and need for undelayed action may call for temporary departure from
+                            that normal balance of public procedure.
+                        </p>
+                        <p>I am prepared under my constitutional duty to recommend the measures that a stricken nation
+                            in the midst of a stricken world may require. But in the event that the Congress shall fail
+                            to take one of these courses, and in the event that the national emergency is still
+                            critical, I shall not evade the clear course of duty that will then confront me. I shall ask
+                            the Congress for the one remaining instrument to meet the crisis—broad executive power to
+                            wage a war against the emergency as great as the power that would be given to me if we were
+                            in fact invaded by a foreign foe.
+                        </p>
+                        <p>For the trust reposed in me I will return the courage and the devotion that befit the time. I
+                            can do no less.
+                        </p>
+                        <p>We face the arduous days that lie before us in the warm courage of national unity, with the
+                            clear consciousness of seeking old and precious moral values, with the clean satisfaction
+                            that comes from the stern performance of duty by old and young alike. We aim at the
+                            assurance of a rounded and permanent national life.
+                        </p>
+                        <p>We do not distrust the future of essential democracy. The people of the United States have
+                            not failed. In their need they have registered a mandate that they want direct, vigorous
+                            action. They have asked for discipline and direction under leadership. They have made me the
+                            present instrument of their wishes. In the spirit of the gift I take it.
+                        </p>
+                        <p>In this dedication of a nation we humbly ask the blessing of God. May He protect each and
+                            every one of us. May He guide me in the days to come.
+                        </p>
+                        <p>
+                            <cite><author>FDR</author></cite>
+                        </p>
+                    </blockquote>
+                    <pagenum id="page_4" page="normal">4</pagenum>
+                    <p>
+                        Despite the election of FDR and all his New Deal programs,
+                        unemployment in cities remained high and began to take its
+                        toll on society. Unemployed men felt a loss of status because
+                        they could not provide for their families. They became easily
+                        agitated and irritable which resulted in many fights and
+                        quarrels in public places. Women who had jobs suddenly
+                        came under immense social pressure to give their jobs to
+                        unemployed men. Women were told that men "deserved" the job
+                        more than they did. Almost all married women lost their jobs,
+                        even if they were the only person in the family working.
+                        Women were relegated to servant positions that society saw
+                        as more suited to women than men. These jobs usually paid
+                        much less than the jobs they had to give up.
+                    </p>
+                    <p>
+                        Children were also put to work. Boys and girls by the
+                        hundreds dropped out of school and either began working
+                        low-paying jobs or staying home to look after younger
+                        siblings while both their parents worked. Teenagers
+                        dropped out of school and frequently left their families.
+                        Most could not find jobs and their families could not
+                        support them. Many city youth ran away from the city and
+                        "rode the rails," or roamed the country by railroad. These
+                        youth would sneak onto trains, beg for food, and live
+                        in <span class="keyword">squatter</span> camps along the railroad routes.
+                    </p>
+                    <sidebar id="L001.002.SB01" render="required">
+                        <imggroup>
+                            <img id="L001.002.icon01" src="./images/U01C01/icon.jpg" alt="Summary icon"/>
+                        </imggroup>
+                        <p>
+                            Cities were full of unemployed, homeless, starving people
+                            who could not find work despite FDR's New Deal programs.
+                            This chaos led to food riots and strain on city budgets.
+                            Society pressured women out of jobs, children into jobs,
+                            and teenagers to ride the rails.
+                        </p>
+                    </sidebar>
+                    <pagenum id="page_5" page="normal">5</pagenum>
+                    <level3 id="L001.002.001" class="section">
+                        <h3 id="L001.002.001.H01" class="section">
+                            Farm Life and the Dust Bowl
+                        </h3>
+                        <p>
+                            The Depression attacked farms as quickly and as
+                            destructively as it did the cities. The problems
+                            facing farmers were numerous and complex and could
+                            not be fixed with a single solution.
+                        </p>
+                        <level4 id="L001.002.001.001" class="subsection">
+                            <h4 id="L001.002.001.001.H01" class="subsection">
+                                The Dust Bowl Migration
+                            </h4>
+                            <p>
+                                During the 1920s, farms were prospering and there was
+                                such an abundance of rainfall that farmers all across
+                                the western United States had become careless in their
+                                farming techniques and soil preparation. Farmers
+                                over-grazed livestock and over-plowed fields to make
+                                more money. This damaged the land and destroyed the
+                                regenerative properties of the soil. During the 1930s,
+                                there was a large drought in the West, causing crops
+                                to shrivel, cattle to die, and the topsoil to blow
+                                away. This turned the West into one large
+                                <span class="keyword">dust bowl</span>.
+                            </p>
+                            <p>
+                                The states in the dust bowl region were Kansas, Oklahoma,
+                                Texas, Colorado, and New Mexico. This region was called
+                                the dust bowl because of the large numbers of <span class="keyword">dust
+                                storms</span> that occurred there. However, other states
+                                like Arkansas and the Dakotas were also plagued by dust
+                                storms.
+                            </p>
+                            <p>
+                                What is a dust storm? Dust storms are storms that last
+                                for several days, driven by high winds. The winds blow
+                                dust, creating huge dark, yellowish clouds that, at times,
+                                can block out the light of the sun. Sometimes, these dust
+                                clouds can get up to 8,000 feet high and be accompanied
+                                by thunder and lightning. Two massive and highly
+                                destructive dust storms occurred in the 1930s. The first
+                                was in May of 1934.
+                            </p>
+                            <pagenum id="page_6" page="normal">6</pagenum>
+                            <p>
+                                A dust storm lasting three days blew across the West
+                                and Southwest, pulling up over 350 million tons of soil
+                                and dropping it as far east as New York City, New York
+                                and Boston, Massachusetts. It was reported that these
+                                cities had to turn on streetlamps in the daytime just
+                                to be able to see through the blowing dust. The second
+                                storm occurred in March of 1935 in the Dakotas and
+                                Nebraska. It destroyed the entire wheat crop for both
+                                states and swept away as much dirt as workers dug up
+                                when they constructed the Panama Canal.
+                            </p>
+                            <imggroup>
+                                <img id="L001.002.001.001.P006-001" src="./images/U01C01/p006-001.jpg"
+                                     alt="Black and white photo of a two-wheeled wagon from the 1930s"/>
+                                <prodnote imgref="L001.002.001.001.P006-001" render="optional">
+                                    This black and white photo shows a two-wheeled wagon
+                                    piled high with cloth sacks filled with goods. Another
+                                    sack lies on the grass next to the wagon. The wagon
+                                    has the thin tires and criss-cross pattern of spokes
+                                    on the wheels that are characteristic of the 1930s.
+                                </prodnote>
+                                <caption imgref="L001.002.001.001.P006-001">
+                                    People living in the dust bowl states packed up
+                                    everything they owned and migrated west. They
+                                    pulled wagons filled with their personal goods behind their cars
+                                    or trucks.
+                                </caption>
+                            </imggroup>
+                            <p>
+                                Not only were these dust storms economically damaging,
+                                they were a danger to the people living in these states.
+                                People caught outside in dust storms could suffocate and
+                                die from dust inhalation. Because of the havoc these
+                                storms wreaked on the land and the people living on it,
+                                people were forced to <span class="keyword">migrate</span> to find
+                                work or a new place to farm. Many packed up everything
+                                they owned into trucks, cars, and wagons and began to
+                                travel further west to California and other Pacific States.
+                                Over 2.5 million people fled to California during the
+                                Great Depression. The migrants began to gather nicknames
+                                based on where they were migrating from such as "Oakies"
+                                if they were from Oklahoma and "Arkies" if they were
+                                from Arkansas. These people pushed west into Texas, Kansas,
+                                Nebraska, and the Dakotas, and finding no relief in these
+                                dust bowl-burdened states, pushed on to California.
+                            </p>
+                            <pagenum id="page_7" page="normal">7</pagenum>
+                            <p>
+                                Unfortunately, California could not support the huge
+                                influx of people that began to pour into the state.
+                                California was not a huge farming state, and the small
+                                farm towns it did have quickly became overcrowded and
+                                overrun with migrants looking for work and land to farm.
+                                By 1939, the problem had gotten so bad that the California
+                                state government passed a law forbidding entry of any
+                                new people into the state. The Supreme Court overturned
+                                this law as unconstitutional, and people continued
+                                to flood the state.
+                            </p>
+                            <p>
+                                The federal government in the 1930s tried to alleviate
+                                the crisis by taking measures to salvage the land that
+                                had been destroyed by the dust storms and poor farming
+                                techniques. In 1933, the government created the Soil
+                                Erosion Service. This was a commission that taught
+                                terracing and contour farming techniques to farmers to
+                                help them preserve the soil. In 1936, the government
+                                passed the Soil Conservation Act, which tried to reduce
+                                farm surpluses and promote soil conservation. The
+                                government also planted over 200 million trees in
+                                the most ravaged parts of the dust bowl from the Dakotas
+                                to Texas. These trees took to the soil and began to grow,
+                                providing "shelter belts" along the West and conserving
+                                water to help hold down the topsoil. The dust bowl was
+                                slowly beginning to replenish itself.
+                            </p>
+                        </level4>
+                        <level4 id="L001.002.001.002" class="subsection">
+                            <h4 id="L001.002.001.002.H01" class="subsection">Farm Tenants</h4>
+                            <p>
+                                Aside from the growing dust storms and bad soil, there
+                                was another class of farmers affected by the Great
+                                Depression. These farmers were tenant farmers or
+                                <span class="keyword">sharecroppers</span>. After the Civil War,
+                                sharecroppers replaced slaves on many farms. Some
+                                sharecroppers were former slaves, while others were
+                                poor white farmers. Sharecroppers, or tenant farmers,
+                                did not own their land. They were not paid any wages.
+                                Someone else owned the land they farmed and the
+                                sharecroppers rented it. They paid these landowners
+                                with a "share" of the crops and other goods produced
+                                on that farm. Most of these farmers could only obtain
+                                the seed, food, and clothes they needed each year by
+                                pledging their harvest in advance.
+                            </p>
+                            <pagenum id="page_8" page="normal">8</pagenum>
+                            <p>
+                                When the Great Depression hit these farms, not to mention
+                                the dust storms, most sharecroppers had already pledged
+                                their crops and other goods in advance. The dying crops
+                                and bad soil could not produce enough for the farmers
+                                to live off of, so they were unable to pay their share
+                                to the landowners. As a result, they were forced to
+                                leave the land, burdened with huge debts they had no
+                                hope of paying.
+                            </p>
+                            <p>
+                                The federal government, again, tried to help, by passing
+                                the Federal Emergency Relief Act to help tenant farmers.
+                                This act gave money, seeds, and equipment to these farmers
+                                and tried to relocate them to better land. It helped
+                                some, but not all sharecroppers, escape total poverty.
+                            </p>
+                            <imggroup>
+                                <img id="L001.002.001.002.P008-001" src="./images/U01C01/p008-001.jpg"
+                                     alt="Map of dust storm damage in the United States, 1930 to 1940"/>
+                                <prodnote imgref="L001.002.001.002.P008-001" render="optional">
+                                    This is a map showing dust storm damage between 1930
+                                    and 1940. It shows the 48 contiguous United States.
+                                    In the center of the map, states impacted by the dust storm
+                                    are labeled. They are, from north to south, North Dakota, South Dakota,
+                                    Montana, Wyoming, Nebraska, Colorado, Kansas, Oklahoma,
+                                    New Mexico, and Texas. The storm was most intense along the borders
+                                    of New Mexico, Texas, Okalahoma, Kansas, and Colorado.
+                                </prodnote>
+                                <caption imgref="L001.002.001.002.P008-001">
+                                    This map shows the states that were considered dust
+                                    bowl states and the areas affected by dust storms.
+                                    Notice that many states not considered dust bowl
+                                    states were still damaged by dust storms. The whole
+                                    middle of the United States was literally blowing away.
+                                </caption>
+                            </imggroup>
+                        </level4>
+                        <pagenum id="page_9" page="normal">9</pagenum>
+                        <level4 id="L001.002.001.003" class="subsection">
+                            <h4 id="L001.002.001.003.H01" class="subsection">Electric Farms</h4>
+                            <p>
+                                Another major problem that farmers faced during the Great
+                                Depression was lack of electricity. Before the depression hit,
+                                only one in ten farms had electricity. After the depression
+                                and the major dust storms, it became apparent that more
+                                farms needed electricity and quickly! So the federal
+                                government formed the Rural Electrification Administration
+                                to bring electricity to farms in the West. The REA had
+                                the power to loan money to farmers and small towns to help
+                                them build generators and install power lines. This action
+                                was one of the most revolutionary and successful actions
+                                during the Great Depression. By 1941, four out of five
+                                American farms now had electricity.
+                            </p>
+                            <sidebar id="L001.002.001.003.SB01" render="required">
+                                <imggroup>
+                                    <img id="L001.002.001.003.icon01" src="./images/U01C01/icon.jpg"
+                                         alt="Summary icon"/>
+                                </imggroup>
+                                <p>
+                                    Powerful dust storms in the 1930s created a dust bowl
+                                    in the middle of the United States. Farmers and their
+                                    families were forced to migrate in droves to California
+                                    and other points west. Sharecroppers faced debt from
+                                    lack of crops, and farms in the West needed electricity.
+                                    The federal government set up programs to help, and
+                                    were, for the most part, successful.
+                                </p>
+                            </sidebar>
+                        </level4>
+
+                        <level4 id="L001.002.001.004" class="subsection">
+                            <h4 id="L001.002.001.004.H02" class="subsection">Dorothea Lange, Photographer of the Great
+                                Depression
+                            </h4>
+                            <p>Dorothea Lange decided to travel the world at age 20, taking pictures and selling her
+                                photographs. By the time she settled down in San Francisco, California in 1916, she had
+                                gathered a reputation as an innovative, talented documentary photographer.
+                            </p>
+                            <p>During the Great Depression, she wanted to expand her talents and began by photographing
+                                the homeless men in the cities around the country. One of those photographs, White Angel
+                                Breadline, gained the attention of not only her colleagues, but also the federal
+                                government. The government hired her to work with the Resettlement Association of the
+                                1930s to bring the conditions of the poor to the attention of the public. She traveled
+                                with and photographed hundreds of migrant workers. Her photographs directly contributed
+                                to the establishment of better housing camps for migrant workers in California.
+                            </p>
+                            <pagenum id="page_10" page="normal">10</pagenum>
+                            <imggroup>
+                                <img id="L001.002.001.004.P010-001" src="./images/U01C01/p010-001.jpg"
+                                     alt="Black and white photo of a migrant mother and her children"/>
+                                <!-- This image does not have a long description because the caption or context
+                                    of the image provides the description for the image. -->
+                                <caption imgref="L001.002.001.004.P010-001">
+                                    Dorothea Lange's most famous photograph is entitled
+                                    <em>Migrant Mother</em>, taken in Nipomo, California
+                                    in 1936. The blank, flat prairie behind them seem to add a
+                                    sense of bleakness and isolation.  Lange was famous for
+                                    capturing the hardship, anguish, and the humanity of the Great Depression.
+                                </caption>
+                            </imggroup>
+                        </level4>
+                        <level4 id="L001.002.001.006" class="subsection">
+                            <h4 id="L001.002.001.006.H01" class="subsection">
+                                Keeping Spirits Up
+                            </h4>
+                            <p>
+                                During the Great Depression, not only was the economy
+                                depressed, but also were the people. The morale of
+                                American society was down and out. The country and
+                                its people needed hope, and the entertainment
+                                industry tried hard to keep America's spirits up.
+                            </p>
+                            <pagenum id="page_11" page="normal">11</pagenum>
+                            <p>
+                                Books, movies, and music were dedicated to bringing up
+                                American morale. Most of the books were reality-based books
+                                about the state of affairs such as <em>Let Us Now Praise
+                                Famous Men
+                            </em>by James Agee and Walker Evans, that told
+                                the story of tenant farmers, and <em>The Grapes of
+                                Wrath
+                            </em>by John Steinbeck, that fictionalized the
+                                story of a dust bowl family's migration west. Both of
+                                these novels were extremely popular because they told
+                                the truth and gave a voice to the people of the nation
+                                who felt like no one was listening.
+                            </p>
+                            <p>
+                                Movies took a different tack. Some studios projected the
+                                image of the ideal life or a hopeful future, such as many
+                                of the Shirley Temple movies of the 1930s. Other films
+                                were pure escapism, like The Wizard of Oz. People flocked
+                                to the movies either to be encouraged by the future or to
+                                forget the present.
+                            </p>
+                            <p>
+                                Also during this time, comics were introduced with
+                                superhero characters such as Superman. These comics
+                                had characters with extraordinary powers that helped
+                                the poor, downtrodden, and innocent.
+                            </p>
+                            <p>
+                                The music industry also worked hard to raise people's
+                                spirits. Many parlor songs of the time were uplifting,
+                                with messages of hope for the future with titles such
+                                as "When the Shepherd Leads the Sheep Back Home" (1931)
+                                and "The Clouds Will Soon Roll By" (1932). Some songs
+                                took on a more humorous and whimsical tone to help
+                                refocus people's attention away from the bad times,
+                                such as "Here It is Monday and I've Still Got A Dollar"
+                                (1932).
+                            </p>
+                            <p>One of the most popular songs of the era was "Pennies from Heaven":</p>
+                            <linegroup>
+                                <line>A long time ago</line>
+                                <line>A million years B.C.</line>
+                                <line>The best things in life</line>
+                                <line>Were absolutely free</line>
+                                <line>But no one appreciated</line>
+                                <line>A sky that was always blue</line>
+                                <line>And no one congratulated</line>
+                                <line>A moon that was always new</line>
+                                <line>So it was planned that they would vanish now and then</line>
+                                <line>And you must pay before you get them back again</line>
+                                <line>That's what storms were made for</line>
+                                <line>And you shouldn't be afraid, for</line>
+                                <line>Every time it rains it rains</line>
+                                <line>Pennies from heaven</line>
+                                <line>Don't you know each cloud contains</line>
+                                <line>Pennies from heaven</line>
+                                <line>You'll find your fortune falling</line>
+                                <line>All over town</line>
+                                <line>Be sure that your umbrella is upside down</line>
+                                <line>Trade them for a package of sunshine and flowers</line>
+                                <line>If you want the things you love</line>
+                                <line>You must have showers</line>
+                                <line>So when you hear it thunder</line>
+                                <line>Don't run under a tree</line>
+                                <line>There'll be pennies from heaven for you and me</line>
+                            </linegroup>
+                            <cite>Written by <author>Johnny Burke</author> and <author>Arthur Johnston</author> (www.lyrics007.com).</cite>
+                            <p>
+                                Other types of entertainment slipped in to help society
+                                refocus. In 1930, the first pinball machine hit the scene,
+                                and in 1935, Parker Brothers distributed the first version
+                                of the board game Monopoly. People took to these
+                                distractions, and they helped to pass what was one of
+                                the hardest times in American history.
+                            </p>
+                            <sidebar id="L001.002.001.006.SB01" render="required">
+                                <imggroup>
+                                    <img id="L001.002.001.006.icon01" src="./images/U01C01/icon.jpg"
+                                         alt="Summary icon"/>
+                                </imggroup>
+                                <p>
+                                    The morale of the American people fell rapidly during
+                                    the Great Depression. Books, movies, and music worked
+                                    overtime to keep people hopeful and happy. These types
+                                    of entertainment gave people hope and joy in a very
+                                    tough time.
+                                </p>
+                            </sidebar>
+                        </level4>
+                    </level3>
+                    <pagenum id="page_12" page="normal">12</pagenum>
+                </level2>
+
+                <level2 id="L001.003" class="mainsection">
+                    <h2 id="L001.003.H01" class="section">Review</h2>
+                    <level3>
+                        <h3 id="L001.003.H02" class="section">Review Questions</h3>
+                        <list type="ul">
+                            <li>How did the high unemployment rate effect society?</li>
+                            <li>What were three of the main problems facing farmers?</li>
+                            <li>What ways did the government try to help farmers? Were
+                                they successful? Why or why not?</li>
+                            <li>Why do you think the Supreme Court declared the 1939
+                                California law forbidding state entry unconstitutional?</li>
+                            <li>Why do you think comic books with superheroes were so
+                                popular during the Great Depression?</li>
+                            <li>Write an essay that analyzes and assesses the overall
+                                effects of the Great Depression on cities, farms, and
+                                society. Discuss the major problems and how people coped,
+                                how the government acted, and how the entertainment industry
+                                tried to help.</li>
+                        </list>
+                    </level3>
+                    <level3>
+                        <h3 id="L001.003.H03" class="section">Key Words</h3>
+                        <dl>
+                            <dt>bread lines</dt>
+                            <dd>lines at food distribution centers where people often faced long waits to get a meal during the Great Depression</dd>
+                            <dt>dust bowl</dt>
+                            <dd>section of the Great Plains of the United States where a severe drought took place in the early 1930s</dd>
+                            <dt>dust storms</dt>
+                            <dd>strong storms that blew large amounts of dust from the bare, dry soil in the Dust Bowl across a number of U.S. states</dd>
+                            <dt>migrate</dt>
+                            <dd>to move from one region to another</dd>
+                            <dt>share cropper</dt>
+                            <dd>a farmer who provides a portion of each crop to the owner of the land as rent</dd>
+                            <dt>squatter</dt>
+                            <dd>a person who lives on land he or she does not own or rent</dd>
+                        </dl>
+                    </level3>
+                    <p>To learn more about the USA during the Depression era, read <em>The Great Depression:
+                        America 1929–1941</em> by Robert S. M<sup>c</sup>Elvaine, or
+                        <em>The Hungry Years: A Narrative History of the Great Depression in America</em> by T. H. Watkins.
+                    </p>
+                </level2>
+            </level1>
+        </bodymatter>
+        <rearmatter>
+            <level1>
+                <p>Copyright, 2020 CAST, Inc.
+                    <br/>
+                    This exemplar is provided so that publishers, conversion houses, developers, and others may enhance
+                    their understanding of NIMAS XML source files. The content was authored and is copyrighted by CAST,
+                    Inc., and it may not be reproduced, redistributed, sold, or transmitted without the express consent
+                    of CAST. CAST makes no representation that the enclosed NIMAS-conformant files are without error,
+                    nor that they include all of the elements listed in the NIMAS DTD. Please email feedback and comments to aem@cast.org.
+                </p>
+            </level1>
+        </rearmatter>
+    </book>
+</dtbook>

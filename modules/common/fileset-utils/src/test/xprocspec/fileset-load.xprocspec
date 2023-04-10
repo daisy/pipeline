@@ -680,32 +680,6 @@
         <x:expect type="xpath" label="the error PEZE00 should be thrown" test="/*/*/@code" equals="'PEZE00'"/>
     </x:scenario>
 
-    <x:scenario label="test-load-if-not-in-memory-false">
-        <x:call step="px:fileset-load">
-            <x:option name="load-if-not-in-memory" select="'false'"/>
-            <x:option name="href" select="resolve-uri('samples/fileset2/xml/container.xml',/*/@xml:base)"/>
-            <x:input port="fileset">
-                <x:document type="file" href="samples/fileset2.xml"/>
-            </x:input>
-            <x:input port="in-memory"/>
-        </x:call>
-        <x:context label="the result.fileset port">
-            <x:document type="port" port="result.fileset"/>
-        </x:context>
-        <x:expect label="should be as expected" type="custom"
-                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
-            <x:document type="inline">
-                <d:fileset>
-                    <d:file href="samples/fileset2/xml/container.xml" media-type="application/xml"/>
-                </d:fileset>
-            </x:document>
-        </x:expect>
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect type="count" label="no document should be loaded" max="0"/>
-    </x:scenario>
-
     <x:scenario label="test-load-from-memory">
         <x:call step="px:fileset-load">
             <x:input port="fileset">

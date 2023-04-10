@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>common-utils</artifactId>
-  <version>2.0.3-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Common Utilities</name>
@@ -57,6 +57,7 @@
       org.daisy.pipeline.common.saxon.impl.ErrorDefinition,
       org.daisy.pipeline.common.saxon.impl.MessageDefinition,
       org.daisy.pipeline.common.saxon.impl.ProgressDefinition,
+      org.daisy.pipeline.common.saxon.impl.NormalizeLangDefinition,
       org.daisy.pipeline.common.calabash.impl.Error,
       org.daisy.pipeline.common.calabash.impl.LogError,
       org.daisy.pipeline.common.calabash.impl.ChunkerStep$Provider
@@ -77,6 +78,16 @@
             </Import-Package>
           </instructions>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

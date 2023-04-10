@@ -26,20 +26,16 @@
   </p:input>
 
   <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2 px:role="name">Status</h2>
-      <p px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
-
-When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3 even if the text-to-speech process has errors.</p>
-    </p:documentation>
+    <!-- when text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3 even if
+         the text-to-speech process has errors -->
     <p:pipe step="convert" port="validation-status"/>
   </p:output>
 
   <p:option name="include-tts-log" select="'false'">
-    <!-- defined in common-options.xpl -->
+    <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
   <p:output port="tts-log" sequence="true">
-    <!-- defined in common-options.xpl -->
+    <!-- defined in ../../../../../common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
   </p:output>
 
@@ -60,15 +56,17 @@ When text-to-speech is enabled, the conversion may output a (incomplete) DAISY 3
   </p:option>
 
   <p:input port="tts-config">
-    <!-- defined in common-options.xpl -->
+    <!-- defined in ../../../../../common-options.xpl -->
     <p:inline><d:config/></p:inline>
   </p:input>
 
   <p:option name="audio" select="'false'">
-    <!-- defined in common-options.xpl -->
+    <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
 
-  <p:option name="audio-file-type" select="'audio/mpeg'" px:hidden="true"/>
+  <p:option name="audio-file-type" select="'audio/mpeg'" px:hidden="true">
+    <!-- the desired file type of the generated audio files -->
+  </p:option>
 
   <p:option name="with-text" required="false" px:type="boolean" select="'true'">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -108,10 +106,10 @@ reading systems can't handle the word tags.</p>
 
   <px:dtbook-to-daisy3 name="convert" px:progress="1">
     <p:input port="fileset.in">
-      <p:pipe step="load" port="fileset.out"/>
+      <p:pipe step="load" port="result.fileset"/>
     </p:input>
     <p:input port="in-memory.in">
-      <p:pipe step="load" port="in-memory.out"/>
+      <p:pipe step="load" port="result.in-memory"/>
     </p:input>
     <p:input port="tts-config">
       <p:pipe step="main" port="tts-config"/>

@@ -13,27 +13,18 @@
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/">
             Online documentation
         </a>
-        <div px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        </address>
     </p:documentation>
-
-    <!-- ***************************************************** -->
-    <!-- INPUTS / OUTPUTS / OPTIONS -->
-    <!-- ***************************************************** -->
-
-    <!-- NOTE: the "input" here is given by an option string "input-dtbook" -->
-
-
-    <!--<p:output port="result" primary="true">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">result</h1>
-            <p px:role="desc">A copy of the input document; may include PSVI annotations.</p>
-        </p:documentation>
-        <p:pipe step="validate-dtbook" port="result"/>
-     </p:output>-->
 
     <p:output port="report" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -53,12 +44,7 @@
     </p:output>
 
     <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Validation status</h1>
-            <p px:role="desc" xml:space="preserve">An XML document describing, briefly, whether the validation was successful.
-
-[More details on the file format](http://daisy.github.io/pipeline/StatusXML).</p>
-        </p:documentation>
+        <!-- whether the validation was successful -->
         <p:pipe step="validate-dtbook" port="validation-status"/>
     </p:output>
 
@@ -80,21 +66,8 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="mathml-version" required="false" select="'3.0'">
-        <p:pipeinfo>
-            <px:type>
-                <choice>
-                    <value>3.0</value>
-                    <value>2.0</value>
-                    <value>1.01</value>
-                    <value>1.0</value>
-                </choice>
-            </px:type>
-        </p:pipeinfo>
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">MathML version</h2>
-            <p px:role="desc">Version of MathML in the DTBook file.</p>
-        </p:documentation>
+    <p:option name="mathml-version" select="'3.0'">
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="check-images" required="false" px:type="boolean" select="'false'">
@@ -104,18 +77,14 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="nimas" required="false" px:type="boolean" select="'false'">
+    <p:option name="nimas" select="'false'">
+        <!-- defined in ../../../../../common-options.xpl -->
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validate against NIMAS 1.1</h2>
             <p px:role="desc">Validate using NIMAS 1.1 rules for DTBook.</p>
         </p:documentation>
     </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
-        <p:documentation>
-            px:message
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-add-entry
@@ -132,15 +101,7 @@
         </p:documentation>
     </p:import>
     
-    <px:message>
-        <p:with-option name="message" select="concat('DTBook validator: ', $input-dtbook)"/>
-        <p:input port="source">
-            <p:empty/>
-        </p:input>
-    </px:message>
-    <p:sink/>
-    
-    <px:fileset-add-entry media-type="application/x-dtbook+xml">
+    <px:fileset-add-entry media-type="application/x-dtbook+xml" px:message="DTBook validator: {$input-dtbook}">
         <p:with-option name="href" select="$input-dtbook"/>
         <p:input port="source.fileset">
             <p:inline>
@@ -151,8 +112,8 @@
     
     <px:dtbook-validate name="validate-dtbook">
         <p:with-option name="mathml-version" select="$mathml-version"/>
-        <p:with-option name="check-images" select="$check-images"/>
-        <p:with-option name="nimas" select="$nimas"/>
+        <p:with-option name="check-images" select="$check-images='true'"/>
+        <p:with-option name="nimas" select="$nimas='true'"/>
     </px:dtbook-validate>
     
     <pxi:dtbook-validator.store>

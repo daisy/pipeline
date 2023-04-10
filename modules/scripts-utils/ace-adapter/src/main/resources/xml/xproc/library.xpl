@@ -2,46 +2,48 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
            xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
            xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-           xmlns:c="http://www.w3.org/ns/xproc-step">
+           xmlns:c="http://www.w3.org/ns/xproc-step"
+           xmlns:cx="http://xmlcalabash.com/ns/extensions"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema">
 
     <p:declare-step type="px:ace" name="main">
 
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">Ace check</h1>
-            <p px:role="desc">Generate an accessibility report using the Accessibility Checker for EPUB (Ace) tool.
+            <h1>Ace check</h1>
+            <p>Generate an accessibility report using the Accessibility Checker for EPUB (Ace) tool.
 
 Please make sure that Ace is installed or <a
 href="https://daisy.github.io/ace/getting-started/installation/">install Ace</a> before using this
 step. If this is not the case, the reports will contain a message that Ace was not found.</p>
         </p:documentation>
 
-        <p:option name="epub" required="true" px:type="anyFileURI">
+        <p:option name="epub" required="true" cx:type="xs:anyURI" cx:as="xs:string">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">EPUB URI</h1>
-                <p px:role="desc">URI of the EPUB to check</p>
+                <h1>EPUB URI</h1>
+                <p>URI of the EPUB to check</p>
             </p:documentation>
         </p:option>
 
         <p:option name="temp-dir" required="false" select="''">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">Temporary directory URI</h1>
-                <p px:role="desc">Directory where the Ace reports will be stored. If empty or not
+                <h1>Temporary directory URI</h1>
+                <p>Directory where the Ace reports will be stored. If empty or not
                 defined, the system temporary folder is used.</p>
             </p:documentation>
         </p:option>
 
         <p:option name="lang" required="false" select="'en'">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">Report language</h1>
-                <p px:role="desc">Code of the language to use to localize the reports. Default is
+                <h1>Report language</h1>
+                <p>Code of the language to use to localize the reports. Default is
                 'en' (English).</p>
             </p:documentation>
         </p:option>
 
         <p:output port="html-report">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">HTML report</h1>
-                <p px:role="desc">The HTML report created by Ace, or if Ace could not be found, a
+                <h1>HTML report</h1>
+                <p>The HTML report created by Ace, or if Ace could not be found, a
                 short HTML document stating this.</p>
             </p:documentation>
             <p:pipe step="ace-or-not-found" port="html-report"/>
@@ -49,8 +51,8 @@ step. If this is not the case, the reports will contain a message that Ace was n
 
         <p:output port="json-report" primary="true">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">JSON report</h1>
-                <p px:role="desc">The JSON report created by Ace, or if Ace could not be found, a
+                <h1>JSON report</h1>
+                <p>The JSON report created by Ace, or if Ace could not be found, a
                 short JSON document stating this.</p>
             </p:documentation>
             <p:pipe step="ace-or-not-found" port="json-report"/>
@@ -59,23 +61,23 @@ step. If this is not the case, the reports will contain a message that Ace was n
         <!-- Java internal step signature -->
         <p:declare-step type="pxi:ace">
             <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                <h1 px:role="name">Ace internal adapter</h1>
-                <p px:role="desc">Java-implemented step to call Ace on an EPUB and retrieve the report URIs.</p>
+                <h1>Ace internal adapter</h1>
+                <p>Java-implemented step to call Ace on an EPUB and retrieve the report URIs.</p>
             </p:documentation>
             <p:option name="epub" required="true"/>
             <p:option name="temp-dir" required="false"/>
             <p:option name="lang" required="false"/>
             <p:output port="html-report-uri">
                 <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                    <h1 px:role="name">HTML report URI</h1>
-                    <p px:role="desc">A <code>c:result</code> document containing the URI of the
+                    <h1>HTML report URI</h1>
+                    <p>A <code>c:result</code> document containing the URI of the
                     HTML report's location on disk.</p>
                 </p:documentation>
             </p:output>
             <p:output port="json-report-uri" primary="true">
                 <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-                    <h1 px:role="name">JSON report URI</h1>
-                    <p px:role="desc">A <code>c:result</code> document containing the URI of the
+                    <h1>JSON report URI</h1>
+                    <p>A <code>c:result</code> document containing the URI of the
                     JSON report's location on disk.</p>
                 </p:documentation>
             </p:output>

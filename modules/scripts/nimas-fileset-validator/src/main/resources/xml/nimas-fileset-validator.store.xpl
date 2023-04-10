@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step version="1.0" name="nimas-fileset-validator.store" type="pxi:nimas-fileset-validator.store"
-    xmlns:p="http://www.w3.org/ns/xproc" xmlns:c="http://www.w3.org/ns/xproc-step"
-    xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-    xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-    xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp" xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:l="http://xproc.org/library" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xhtml="http://www.w3.org/1999/xhtml"
-    xmlns:pkg="http://openebook.org/namespaces/oeb-package/1.0/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:m="http://www.w3.org/1998/Math/MathML"
-    exclude-inline-prefixes="#all">
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                type="pxi:nimas-fileset-validator.store"
+                name="nimas-fileset-validator.store"
+                exclude-inline-prefixes="#all">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-        <h1 px:role="name">NIMAS Fileset Validator: Store</h1>
-        <p px:role="desc">Internal step for NIMAS fileset validator.</p>
+        <h1>NIMAS Fileset Validator: Store</h1>
+        <p>Internal step for NIMAS fileset validator.</p>
     </p:documentation>
     
     <!-- ***************************************************** -->
@@ -20,27 +17,28 @@
     <!-- ***************************************************** -->
     <p:input port="html-report" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">html-report</h1>
-            <p px:role="desc">An HTML report.</p>
+            <p>An HTML report.</p>
         </p:documentation>
     </p:input>
     
     <p:input port="xml-reports" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h1 px:role="name">xml-reports</h1>
-            <p px:role="desc">One or more xml reports.</p>
+            <p>One or more xml reports.</p>
         </p:documentation>
     </p:input>
     
     <p:option name="output-dir" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">output-dir</h2>
-            <p px:role="desc">Directory where the validation reports are stored. If left blank,
+            <p>Directory where the validation reports are stored. If left blank,
                 nothing is saved to disk.</p>
         </p:documentation>
     </p:option>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+        <p:documentation>
+            px:message
+        </p:documentation>
+    </p:import>
     
     <!-- ***************************************************** -->
     <!-- STORE REPORTS -->

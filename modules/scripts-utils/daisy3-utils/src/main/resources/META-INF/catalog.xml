@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+
+    <uri uri="../xml/daisy3-upgrader.script.xpl" px:content-type="script" px:id="daisy3-upgrader"
+         px:extends="../../../../../../scripts/common-options.xpl"/>
 
     <public publicId='-//NISO//DTD ncx v1.1.0//EN' uri='../xml/dtd/ncx110.dtd'/>
     <system systemId='http://www.loc.gov/nls/z3986/v100/ncx110.dtd' uri='../xml/dtd/ncx110.dtd'/>

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.14-SNAPSHOT</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-utils</artifactId>
-  <version>5.0.3-SNAPSHOT</version>
+  <version>5.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils</name>
@@ -134,7 +134,7 @@
   </dependencies>
 
   <properties>
-    <liblouis.version>3.24.0-p1</liblouis.version>
+    <liblouis.version>3.25.0-p1</liblouis.version>
     <liblouisutdml.liblouis.version>2.6.3</liblouisutdml.liblouis.version>
     <expose-services>
       org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_default_liblouis_tables,

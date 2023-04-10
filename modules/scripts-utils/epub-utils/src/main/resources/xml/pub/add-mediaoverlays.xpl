@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:opf="http://www.idpf.org/2007/opf"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:epub3-add-mediaoverlays" name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -34,7 +35,7 @@
         <p:pipe step="update-metadata" port="result.in-memory"/>
     </p:output>
 
-    <p:option name="compatibility-mode" required="false" select="'true'" px:type="boolean">
+    <p:option name="compatibility-mode" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Whether to be backward compatible with <a
             href="http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm">Open Package Format
