@@ -285,10 +285,10 @@ cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_38
 cli/.install : | .maven-init .group-eval
 	+$(call eval-for-host-platform,.make/mvn-install.sh,$$(dirname $@))
 
-updater/cli/.install : $(call rwildcard,updater/cli/,*)
+updater/.install : $(call rwildcard,updater/,*)
 
-.SECONDARY : updater/cli/.install-darwin_amd64.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip
-updater/cli/.install-darwin_amd64.zip updater/cli/.install-linux_386.zip updater/cli/.install-windows_386.zip : updater/cli/.install
+.SECONDARY : updater/.install-darwin_amd64.zip updater/.install-linux_386.zip updater/.install-windows_386.zip
+updater/.install-darwin_amd64.zip updater/.install-linux_386.zip updater/.install-windows_386.zip : updater/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install

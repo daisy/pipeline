@@ -29,8 +29,7 @@
     <module>framework</module>
     <module>modules</module>
     <module>cli</module>
-    <module>updater/cli</module>
-    <module>updater/gui</module>
+    <module>updater</module>
     <module>assembly</module>
     <module>website/target/maven</module>
     <module>clientlib/java</module>
