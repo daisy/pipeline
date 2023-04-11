@@ -63,18 +63,6 @@
                                                 <xsl:when test="pom:id = 'copy-persistence-no-osgi'">
                                                         <xsl:value-of select="'system/no-osgi/persistence'"/>
                                                 </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-gui'">
-                                                        <xsl:value-of select="'system/gui'"/>
-                                                </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-javafx-linux'">
-                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
-                                                </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-javafx-mac'">
-                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
-                                                </xsl:when>
-                                                <xsl:when test="pom:id = 'copy-javafx-win'">
-                                                        <xsl:value-of select="'system/gui/bootstrap'"/>
-                                                </xsl:when>
                                                 <xsl:otherwise>
                                                         <xsl:message terminate="yes" select="concat('the build plugin maven-dependency-plugin has an an execution without an associated deployPath in ',replace(base-uri(),'^.*/',''),': ',pom:id/text())"/>
                                                 </xsl:otherwise>

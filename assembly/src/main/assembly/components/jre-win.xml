@@ -2,11 +2,11 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/maven-jlink/classifiers/jre-win64</directory>
+      <directory>target/maven-jlink/classifiers/win64</directory>
       <outputDirectory>jre</outputDirectory>
     </fileSet>
     <fileSet>
-      <directory>target/maven-jlink/classifiers/jre-win32</directory>
+      <directory>target/maven-jlink/classifiers/win32</directory>
       <outputDirectory>jre32</outputDirectory>
     </fileSet>
   </fileSets>

@@ -1,24 +1,4 @@
-ifneq ($(firstword $(sort $(MAKE_VERSION) 3.82)), 3.82)
-$(error "GNU Make 3.82 is required to run this script")
-endif
-
-ifeq ($(OS),Windows_NT)
-SHELL := make\\eval-java.exe
-else
-SHELL := make/eval-java
-endif
-.SHELLFLAGS :=
-
-JAVA_VERSION := $(shell println(getJavaVersion());)
-
-ifeq ($(JAVA_VERSION),)
-# probably because java not found or exited with a UnsupportedClassVersionError
-$(error "Java 8 is required to run this script")
-else ifeq ($(shell println($(JAVA_VERSION) >= 8);), false)
-$(error "Java 8 is required to run this script")
-endif
-
-OS := $(shell println(getOS());)
+include make/enable-java-shell.mk
 
 ifeq ($(OS), WINDOWS)
 MVN ?= mvn.cmd
@@ -30,29 +10,12 @@ DOCKER := docker
 --classifier ?=
 CLASSIFIER := $(shell println("$(--classifier)".replaceAll("^.+$$", "-$$0"));)
 
-.PHONY : default
-ifeq ($(OS), WINDOWS)
-default : exe
-else ifeq ($(OS), MACOSX)
-default : dmg
-else ifeq ($(OS), REDHAT)
-default : rpm
-else
-default : zip-linux
-endif
-
 .PHONY : help
 help :
 	@err.println(                                                                 \
-		"make [default]:"                                                + "\n" + \
-		"    Builds the default package for the current platform");               \
-	if (getOS() == OS.MACOSX)                                                     \
-		err.println(                                                              \
-			"make dmg:"                                                  + "\n" + \
-			"    Builds a DMG image (Mac OS disk image)");                        \
+		"make help:"                                                     + "\n" + \
+		"    Print list of commands");                                            \
 	err.println(                                                                  \
-		"make exe:"                                                      + "\n" + \
-		"    Builds a EXE (Windows installer)"                           + "\n" + \
 		"make deb:"                                                      + "\n" + \
 		"    Builds a DEB (Debian package)");                                     \
 	if (getOS() == OS.REDHAT)                                                     \
@@ -87,10 +50,8 @@ INSTALL_DIR                  := $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assem
 
 include deps.mk
 
-.PHONY : dmg exe deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
+.PHONY : deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
 
-dmg         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).dmg
-exe         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe
 deb         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb
 rpm         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm
 zip-linux   : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip
@@ -105,7 +66,6 @@ release-descriptor : target/release-descriptor/releaseDescriptor.xml
 target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descriptor
 
 # some artifacts are installed through command line
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).dmg         \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip   \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip     \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     \
@@ -119,13 +79,6 @@ ifndef DUMP_PROFILES
 	exit(new File("$@").exists());
 endif
 
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe                  : mvn -Pcopy-artifacts \
-                                                                                    -Pgenerate-release-descriptor \
-                                                                                    -Punpack-cli-win \
-                                                                                    -Punpack-updater-win \
-                                                                                    -Punpack-updater-gui-win \
-                                                                                    -Passemble-win-dir \
-                                                                                    -Ppackage-exe
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb                  : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-updater-linux \
@@ -148,15 +101,14 @@ else
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pbuild-jre-mac
 # -Passemble-mac-zip run separately because -Pbuild-jre-mac also run separately
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "package", "-Passemble-mac-zip");
+	exec("$(MVN)", "assembly:single", "-Passemble-mac-zip");
 	exit(new File("$@").exists());
 endif
 endif # --without-jre
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-win \
-                                                                                    -Punpack-updater-win \
-                                                                                    -Punpack-updater-gui-win
+                                                                                    -Punpack-updater-win
 ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Passemble-win-zip
 ifndef DUMP_PROFILES
@@ -169,7 +121,7 @@ target/assembly-$(assembly/VERSION)-win.zip                                   : 
 endif # --with-jre32
 # -Passemble-win-zip run separately because -Pbuild-jre-win64 also run separately
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "package", "-Passemble-win-zip");
+	exec("$(MVN)", "assembly:single", "-Passemble-win-zip");
 	exit(new File("$@").exists());
 endif
 endif # --without-jre
@@ -183,44 +135,6 @@ $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb              : 
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-linux \
                                                                                     -Ppackage-deb-cli
-ifeq ($(OS), MACOSX)
-app_version := $(shell println("$(assembly/VERSION)".replaceAll("-.*$$", ""));)
-target/assembly-$(assembly/VERSION).dmg                                        : mvn -Pcopy-artifacts \
-                                                                                     -Pgenerate-release-descriptor \
-                                                                                     -Punpack-updater-mac \
-                                                                                     -Passemble-mac-app-dir \
-                                                                                     -Pbuild-jre-mac
-ifndef DUMP_PROFILES
-	rm("target/jpackage");                                                                               \
-	String[] guiJar = new File("target/assembly-$(assembly/VERSION)-mac-app/daisy-pipeline/system/gui")  \
-	                  .list((dir, name) -> name.matches("org\\.daisy\\.pipeline\\.gui-.*\\.jar"));       \
-	exitOnError(guiJar != null && guiJar.length == 1);                                                   \
-	exec("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7/Contents/Home/bin/jpackage", \
-	     "--dest", "target/jpackage",                                                                    \
-	     "--type", "dmg",                                                                                \
-	     "--app-version", "$(app_version)",                                                              \
-	     "--description", "A tool for automated production of accessible digital publication",           \
-	     "--name", "DAISY Pipeline 2",                                                                   \
-	     "--vendor", "DAISY Consortium",                                                                 \
-	     "--icon", "src/main/mac/pipeline.icns",                                                         \
-	     "--mac-package-identifier", "org.daisy.pipeline2",                                              \
-	     "--runtime-image", "target/maven-jlink/classifiers/jre-mac",                                    \
-	     "--input", "target/assembly-$(assembly/VERSION)-mac-app/daisy-pipeline",                        \
-	     "--main-jar", "system/gui/" + guiJar[0],                                                        \
-	     "--main-class", "org.daisy.pipeline.gui.GUIService",                                            \
-	     "--java-options", "--add-opens=java.base/java.lang=ALL-UNNAMED "                              + \
-	                       "-Dorg.daisy.pipeline.home=$$APPDIR "                                       + \
-	                       "-Dorg.daisy.pipeline.data=$$APPDIR/data "                                  + \
-	                       "-Dorg.daisy.pipeline.logdir=$$APPDIR/log "                                 + \
-	                       "-Dorg.daisy.pipeline.properties=$$APPDIR/etc/pipeline.properties "         + \
-	                       "-Dlogback.configurationFile=$$APPDIR/etc/logback.xml");
-	exec("mv", "target/jpackage/DAISY Pipeline 2-$(app_version).dmg", "$@");
-endif
-else
-target/assembly-$(assembly/VERSION).dmg :
-	@err.println("Can not build DMG because not running MacOS"); \
-	exit(1);
-endif # eq ($(OS), MACOSX)
 ifeq ($(OS), REDHAT)
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm                   : mvn -Pcopy-artifacts \
                                                                                      -Pgenerate-release-descriptor \
@@ -245,12 +159,11 @@ endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
 # Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-osgi, --without-persistence,
-# --without-webservice, --without-gui, --without-cli, --without-updater and --with-simple-api were also specified.
+# --without-webservice, --without-cli, --without-updater and --with-simple-api were also specified.
 dir-word-addin                                                                 : assembly/SOURCES
 dir-word-addin                                                                 : mvn -Pwithout-osgi \
                                                                                      -Pwithout-persistence \
                                                                                      -Pwithout-webservice \
-                                                                                     -Pwithout-gui \
                                                                                      -Pwithout-cli \
                                                                                      -Pwithout-updater \
                                                                                      -Pwith-simple-api \
@@ -258,21 +171,22 @@ dir-word-addin                                                                 :
                                                                                      -Pbuild-jre-win32 \
                                                                                      -Pbuild-jre-win64
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install", "-Passemble-win-dir");
+	exec("$(MVN)", "assembly:single", "-Passemble-win-dir");
 endif
 
 ifneq ($(OS), WINDOWS)
 
 .PHONY : docker
-# Note that when `docker' is enabled together with other targets, it is as if --without-gui and --without-osgi were also specified.
-docker : mvn -Pwithout-gui -Pwithout-osgi \
-         target/maven-jlink/classifiers/jre-linux \
+# Note that when `docker' is enabled together with other targets, it is as if --without-osgi was also specified.
+docker : mvn -Pwithout-osgi \
+         target/maven-jlink/classifiers/linux \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 ifndef DUMP_PROFILES
 	mkdirs("target/docker");                                                                        \
 	exec("cp", "src/main/docker/Dockerfile", "target/docker/Dockerfile");
+	exec("cp", "src/main/docker/logback.xml", "target/docker/logback.xml");
 	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
-	exec("cp", "-r", "$(word 4,$^)", "target/docker/jre");
+	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre");
 	exec(new File("target/docker"),                                                                 \
 	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline:latest-snapshot", ".");
 endif
@@ -282,9 +196,9 @@ dev-launcher : target/dev-launcher/pipeline2
 target/dev-launcher/pipeline2 : pom.xml
 ifdef BUILD_JRE_FOR_DEV_LAUNCHER
 ifeq ($(OS), MACOSX)
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre-mac target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/mac target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 else
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/jre-linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
 ifndef DUMP_PROFILES
 	mkdirs("$(dir $@)");                                \
@@ -311,8 +225,8 @@ ifndef DUMP_PROFILES
 endif
 endif
 
-target/maven-jlink/classifiers/jre-mac                                 : mvn -Pbuild-jre-mac
-target/maven-jlink/classifiers/jre-linux                               : mvn -Pbuild-jre-linux
+target/maven-jlink/classifiers/mac                                     : mvn -Pbuild-jre-mac
+target/maven-jlink/classifiers/linux                                   : mvn -Pbuild-jre-linux
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
@@ -327,7 +241,6 @@ target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pc
 
 endif # neq ($(OS), WINDOWS)
 
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).exe           \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb           \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb       \
 target/assembly-$(assembly/VERSION)-linux.zip             \
@@ -350,9 +263,7 @@ endif # neq ($(OS), WINDOWS)
 .PHONY : clean
 clean :
 	exec("$(MVN)", "clean");
-	for (File f : new File("make/java/").listFiles())  \
-		if (f.getName().matches(".*\\.(java|class)"))  \
-			f.delete();
+	rm("make/recipes");
 
 #                         process-sources      generate-resources      process-resources      prepare-package       package
 #                         ---------------      ---------------         -----------------      ---------------       -------
@@ -366,10 +277,6 @@ clean :
 #                         copy-persistence-osgi
 #                         copy-persistence-no-osgi
 #                         copy-webservice
-#                         copy-gui
-#                         copy-javafx-linux
-#                         copy-javafx-mac
-#                         copy-javafx-win
 #                         copy-modules
 #                         copy-modules-osgi
 #                         copy-modules-linux
@@ -387,16 +294,13 @@ clean :
 # unpack-updater-mac                           unpack-updater-mac
 # unpack-updater-linux                         unpack-updater-linux
 # unpack-updater-win                           unpack-updater-win
-# unpack-updater-gui-win                       unpack-updater-gui-win
 # assemble-mac-dir                                                                            assemble-mac-dir
-# assemble-mac-app-dir                                                                                              assemble-mac-app-dir
 # assemble-linux-dir                                                                          assemble-linux-dir
 # assemble-win-dir                                                                            assemble-win-dir
 # assemble-mac-zip                                                                                                  assemble-mac-zip
 # assemble-linux-zip                                                                                                assemble-linux-zip
 # assemble-win-zip                                                                                                  assemble-win-zip
 # assemble-minimal-zip                                                                                              assemble-minimal-zip
-# package-exe                                                                                 copy-nsis-resources   package-exe
 # package-deb                                                          filter-deb-resources                         package-deb
 # package-deb-cli                                                                                                   package-deb-cli
 # package-rpm                                                                                                       package-rpm
@@ -408,14 +312,12 @@ PROFILES :=                     \
 	assemble-linux-dir          \
 	assemble-linux-zip          \
 	assemble-mac-dir            \
-	assemble-mac-app-dir        \
 	assemble-mac-zip            \
 	assemble-win-dir            \
 	assemble-win-zip            \
 	assemble-minimal-zip        \
 	package-deb                 \
 	package-deb-cli             \
-	package-exe                 \
 	package-rpm                 \
 	package-rpm-cli             \
 	unpack-cli-linux            \
@@ -423,8 +325,7 @@ PROFILES :=                     \
 	unpack-cli-win              \
 	unpack-updater-linux        \
 	unpack-updater-mac          \
-	unpack-updater-win          \
-	unpack-updater-gui-win
+	unpack-updater-win
 
 .PHONY : --with-persistence --without-persistence
 --without-persistence : -Pwithout-persistence
@@ -440,14 +341,6 @@ ifneq (--with-osgi,$(filter --with-osgi,$(MAKECMDGOALS)))
 PROFILES += without-osgi
 else
 .PHONY : -Pwithout-osgi
-endif
-
-.PHONY : --with-gui --without-gui
---without-gui : -Pwithout-gui
-ifneq (--with-gui,$(filter --with-gui,$(MAKECMDGOALS)))
-PROFILES += without-gui
-else
-.PHONY : -Pwithout-gui
 endif
 
 .PHONY : --with-webservice --without-webservice
@@ -491,17 +384,17 @@ endif
 .PHONY : mvn
 mvn :
 ifndef DUMP_PROFILES
-	@List<String> cmd = new ArrayList<>();                                                                                 \
-	cmd.add("$(MVN)");                                                                                                     \
-	cmd.add("clean");                                                                                                      \
-	cmd.add("install");                                                                                                    \
-	cmd.add("-Dclassifier=$(--classifier)");                                                                               \
-	cmd.add("-Dclassifier.dash=$(shell println("$(--classifier)".replaceAll("^.+$$", "$$0-"));)");                         \
-	exitOnError(                                                                                                           \
-		captureOutput(                                                                                                     \
-			Arrays.asList("$(MAKE) -s --no-print-directory ECHO=true DUMP_PROFILES=true -- $(MAKECMDGOALS)".split("\\s")), \
-			line -> { if (line.startsWith("-P")) cmd.add(line); }));                                                       \
-	println(String.join(" ", cmd));                                                                                        \
+	@List<String> cmd = new ArrayList<>();                                                                                   \
+	cmd.add("$(MVN)");                                                                                                       \
+	cmd.add("clean");                                                                                                        \
+	cmd.add("install");                                                                                                      \
+	cmd.add("-Dclassifier=$(--classifier)");                                                                                 \
+	cmd.add("-Dclassifier.dash=$(shell println("$(--classifier)".replaceAll("^.+$$", "$$0-"));)");                           \
+	exitOnError(                                                                                                             \
+		captureOutput(                                                                                                       \
+			line -> { if (line.startsWith("-P")) cmd.add(line); },                                                           \
+			Arrays.asList("$(MAKE) -s --no-print-directory ECHO=true DUMP_PROFILES=true -- $(MAKECMDGOALS)".split("\\s")))); \
+	println(String.join(" ", cmd));                                                                                          \
 	exec(runInShell(cmd));
 endif
 
@@ -515,7 +408,7 @@ endif
 
 ifdef DUMP_PROFILES
 ifeq ($(shell println($(JAVA_VERSION) >= 10);), false)
--Pwith-simple-api : require-java-10
+--with-simple-api : require-java-10
 .PHONY : require-java-10
 require-java-10 :
 	@err.println("Java 10 is required to compile SimpleAPI.java"); \
@@ -523,85 +416,74 @@ require-java-10 :
 endif
 endif
 
-# profiles that are run separately because need to be run with specific JDKs, and because they should not be installed
+# profiles that are run separately because need to be run with specific JDKs, because they should not be
+# installed, and because they require a pom without dependencies
 
 .PHONY : -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64
 -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : mvn # to make sure they are run after other profiles
 
 ifeq ($(OS), MACOSX)
--Pbuild-jre-mac                                       : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 -Pbuild-jre-mac : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	rm("target/classes");                                \
 	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
-	     "$(MVN)", "package", "$@");
-endif
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8/jdk-11.0.13+8
-ifndef DUMP_PROFILES
-	rm("target/classes");                                \
-	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
-	     "$(MVN)", "package", "$@");
+	     "$(MVN)", "-f", "build-jre.xml", "jlink:jlink", "$@");
 endif
 else ifeq ($(OS), WINDOWS)
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	rm("target/classes");                                \
 	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "package", "$@");
+	     "$(MVN)", "-f", "build-jre.xml", "jlink:jlink", "$@");
 endif
 else
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	rm("target/classes");                                \
 	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "package", "$@");
+	     "$(MVN)", "-f", "build-jre.xml", "jlink:jlink", "$@");
 endif
 endif
 
 # for dependencies to jmods
--Pbuild-jre-mac   : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7
--Pbuild-jre-linux : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8
--Pbuild-jre-win64 : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8
--Pbuild-jre-win32 : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8
+-Pbuild-jre-mac   : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-win64 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-win32 : src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 
 # JDKs
 
-src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8 \
-src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : %.zip
+src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7 \
+src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7 : %/jdk-17.0.7+7 : %.zip
+	mkdirs("$(dir $@)"); \
 	unzip(new File("$<"), new File("$(dir $@)"));
 
 ifneq ($(OS), WINDOWS)
-src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : | %.tar.gz
-	mkdirs("$(dir $@)");                                                                                       \
-	exec("tar", "-zxvf", "src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz", "-C", "$(dir $@)/");
-src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8/jdk-11.0.13+8 : %/jdk-11.0.13+8 : | %.tar.gz
-	mkdirs("$(dir $@)");                                                                                       \
-	exec("tar", "-zxvf", "src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz", "-C", "$(dir $@)/");
-src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7   : %/jdk-17.0.3+7 : | %.tar.gz
-	mkdirs("$(dir $@)");                                                                                       \
-	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz", "-C", "$(dir $@)/");
+src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7 : %/jdk-17.0.7+7 : | %.tar.gz
+	mkdirs("$(dir $@)"); \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz", "-C", "$(dir $@)/");
+src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7   : %/jdk-17.0.7+7 : | %.tar.gz
+	mkdirs("$(dir $@)"); \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz", "-C", "$(dir $@)/");
 endif
 
-.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz
-.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz
-.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip
-.INTERMEDIATE : src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip
+.INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz
+.INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
+.INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7.zip
+.INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip
 
-src/main/jre/OpenJDK11U-jdk_x64_mac_hotspot_11.0.13_8.tar.gz \
-src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8.tar.gz \
-src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8.zip \
-src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8.zip :
-	mkdirs("$(dir $@)");                                                                                           \
-	copy(new URL("https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.13%2B8/$(notdir $@)"), \
-	     new File("$@"));
-src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7.tar.gz :
+src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz \
+src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz \
+src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7.zip \
+src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip :
 	mkdirs("$(dir $@)");                                                                                          \
-	copy(new URL("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.3%2B7/$(notdir $@)"), \
+	copy(new URL("https://github.com/adoptium/temurin17-binaries/releases/download/jdk-17.0.7%2B7/$(notdir $@)"), \
 	     new File("$@"));
 
 .PHONY : clean-jdk
 clean : clean-jdk
 clean-jdk :
-	rm("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7");          \
-	rm("src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8");      \
-	rm("src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8");    \
-	rm("src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8");
+	rm("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7");        \
+	rm("src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7");      \
+	rm("src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7");    \
+	rm("src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7");

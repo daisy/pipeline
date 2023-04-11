@@ -9,19 +9,18 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.12</version>
+  <version>1.14.14-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
   <scm>
-    <connection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</connection>
-    <url>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</url>
-    <developerConnection>scm:git:git@github.com:daisy-consortium/pipeline-assembly.git</developerConnection>
-    <tag>v1.14.12</tag>
+    <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
+    <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
+    <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <cli.version>2.1.7</cli.version>
-    <javafx.version>11.0.1</javafx.version>
     <classifier />
     <classifier.dash /> <!-- classifier followed by "-" -->
     <!--
@@ -54,17 +53,7 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
-        <artifactId>gui</artifactId>
-        <version>1.3.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
         <artifactId>updater</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>updater-gui</artifactId>
         <version>1.0.2</version>
       </dependency>
       <dependency>
@@ -80,45 +69,1445 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.11</version>
+        <version>1.14.12</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.13</version>
+        <version>1.14.14</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!-- missing from framework-bom -->
       <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-base</artifactId>
-        <version>${javafx.version}</version>
+        <groupId>com.nwalsh</groupId>
+        <artifactId>nwalsh-annotations</artifactId>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-graphics</artifactId>
-        <version>${javafx.version}</version>
+        <groupId>org.xmlresolver</groupId>
+        <artifactId>xmlresolver</artifactId>
+        <version>0.13.1</version>
       </dependency>
       <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-controls</artifactId>
-        <version>${javafx.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-web</artifactId>
-        <version>${javafx.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.openjfx</groupId>
-        <artifactId>javafx-fxml</artifactId>
-        <version>${javafx.version}</version>
+        <groupId>org.atteo.classindex</groupId>
+        <artifactId>classindex</artifactId>
+        <version>3.3</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
+  <dependencies>
+    <!--
+        dependencies needed to run Pipeline as library (no webservice, no persistence, no updater, no OSGi)
+
+        this section must be kept in sync with the corresponding maven-dependency-plugin sections below
+    -->
+    <!--
+        copy-framework
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-appender</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>logging-activator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>xproc-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.crypto</groupId>
+      <artifactId>jsr105-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>javax.xml.parsers</groupId>
+      <artifactId>jaxp-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient-osgi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore-osgi</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jing</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>nu.validator.htmlparser</groupId>
+      <artifactId>htmlparser</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>woodstox-core-lgpl</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>stax2-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jul-to-slf4j</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!--
+        copy-framework-no-osgi
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <!-- dependency of ds-to-spi-runtime -->
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <!-- needed to avoid warnings about annotations -->
+      <!-- needed to compile SimpleAPI -->
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.nwalsh</groupId>
+      <artifactId>nwalsh-annotations</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.xmlresolver</groupId>
+      <artifactId>xmlresolver</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.atteo.classindex</groupId>
+      <artifactId>classindex</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!--
+        copy-modules
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>asciimath-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>audio-encoder-lame</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-speech</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-to-mp3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-validator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy202-to-daisy3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-to-daisy202</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-to-mp3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>daisy3-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-break-detection</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-daisy3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-html</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-odt</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-rtf</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-zedai</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-tts</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-tts</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-validator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub-to-daisy</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub2-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-validator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>ace-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epubcheck-adapter</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-daisy202</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-daisy3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub3-to-html</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-break-detection</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-to-dtbook</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>html-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>image-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mathml-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mathml-to-ssml</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>smil-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>mediatype-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>metadata-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nimas-fileset-validator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>nlp-ruled-lexer</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>odf-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>text-to-ssml</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-acapela</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-cereproc</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-espeak</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-google</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-qfrency</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>validation-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zedai-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zedai-to-html</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zedai-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>zip-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-css-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>dotify-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>dtbook-to-pef</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>epub3-to-pef</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>html-to-pef</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>pef-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>texhyph-utils</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>zedai-to-pef</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jnaerator</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.antlr-runtime</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>jstyleparser</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-text</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.texhyphj</groupId>
+      <artifactId>texhyphj</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.bindings</groupId>
+      <artifactId>jhyphen</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.braille</groupId>
+      <artifactId>braille-css</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.dotify</groupId>
+      <artifactId>dotify.library</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>io.bit3.jsass</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.liblouis</groupId>
+      <artifactId>liblouis-java</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.sharegov</groupId>
+      <artifactId>mjson</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.unbescape</groupId>
+      <artifactId>unbescape</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.w3c</groupId>
+      <artifactId>epubcheck</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-compress</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-core-asl</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-mapper-asl</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.googlecode.soundlibs</groupId>
+      <artifactId>jlayer</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!--
+        copy-modules-linux
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <classifier>linux</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <classifier>linux</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!--
+        copy-modules-mac
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <classifier>mac</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <classifier>mac</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-osx</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!--
+        copy-modules-win
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <classifier>windows</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <classifier>windows</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-sapinative</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources/etc</directory>
+        <includes>
+          <!--
+              A default logback configuration is included because otherwise if the user would not
+              configure Logback correctly himself, the job log files and some job progress messages
+              would be missing. Note however that if a custom Logback configuration is provided
+              (using -Dlogback.configurationFile) the user is responsible for the job log files and
+              job progress messages.
+          -->
+          <include>logback.xml</include>
+        </includes>
+      </resource>
+    </resources>
     <extensions>
       <!--
            Version 2.2 has issues with Maven 3.0.3:
@@ -141,29 +1530,6 @@
         <version>2.1</version>
       </extension>
     </extensions>
-    <plugins>
-      <plugin>
-        <groupId>org.daisy.maven</groupId>
-        <artifactId>xspec-maven-plugin</artifactId>
-        <version>1.0.0</version>
-        <executions>
-          <execution>
-            <id>xspecTest</id>
-            <phase>test</phase>
-            <goals>
-              <goal>test</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.daisy.maven</groupId>
-            <artifactId>xspec-runner</artifactId>
-            <version>1.0.2</version>
-          </dependency>
-        </dependencies>
-      </plugin>
-    </plugins>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -192,6 +1558,10 @@
           <version>2.1.1</version>
         </plugin>
         <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.3.2</version>
+        </plugin>
+        <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
           <version>1.5.0</version>
@@ -210,11 +1580,6 @@
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>rpm-maven-plugin</artifactId>
           <version>2.0.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jlink-plugin</artifactId>
-          <version>3.1.0</version>
         </plugin>
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
@@ -261,6 +1626,70 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <version>1.0.0</version>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>test</phase>
+            <goals>
+              <goal>test</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.daisy.maven</groupId>
+            <artifactId>xspec-runner</artifactId>
+            <version>1.0.2</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>package-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- needed because with <packaging>pom</packaging> the jar is not automatically attached -->
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>install-jar</id>
+            <phase>install</phase>
+            <goals>
+              <goal>install-file</goal>
+            </goals>
+            <configuration>
+              <file>${project.build.directory}/assembly-${project.version}.jar</file>
+              <packaging>jar</packaging>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
   <profiles>
     <profile>
@@ -272,6 +1701,7 @@
         <executions>
           <execution>
             <id>copy-felix-launcher</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -288,6 +1718,7 @@
           </execution>
           <execution>
             <id>copy-felix-bundles</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -338,6 +1769,7 @@
           </execution>
           <execution>
             <id>copy-felix-gogo</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -364,6 +1796,7 @@
           </execution>
           <execution>
             <id>copy-framework</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -440,8 +1873,6 @@
                 <artifactItem>
                   <groupId>com.google.guava</groupId>
                   <artifactId>guava</artifactId>
-                  <!-- FIXME: remove when framework-bom updated -->
-                  <version>24.1.1-android</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>commons-fileupload</groupId>
@@ -484,6 +1915,7 @@
           </execution>
           <execution>
             <id>copy-framework-osgi</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -503,6 +1935,7 @@
           </execution>
           <execution>
             <id>copy-framework-no-osgi</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -514,31 +1947,29 @@
                   <artifactId>ds-to-spi-runtime</artifactId>
                 </artifactItem>
                 <!-- dependency of ds-to-spi-runtime -->
-                <dependency>
+                <artifactItem>
                   <groupId>org.osgi</groupId>
                   <artifactId>org.osgi.core</artifactId>
-                </dependency>
+                </artifactItem>
                 <!-- dependencies of XMLCalabash (the first two are embedded with Bundle-ClassPath) -->
                 <artifactItem>
                   <groupId>com.nwalsh</groupId>
                   <artifactId>nwalsh-annotations</artifactId>
-                  <version>1.0.0</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.xmlresolver</groupId>
                   <artifactId>xmlresolver</artifactId>
-                  <version>0.13.1</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.atteo.classindex</groupId>
                   <artifactId>classindex</artifactId>
-                  <version>3.3</version>
                 </artifactItem>
               </artifactItems>
             </configuration>
           </execution>
           <execution>
             <id>copy-persistence</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -617,6 +2048,7 @@
           </execution>
           <execution>
             <id>copy-persistence-osgi</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -632,6 +2064,7 @@
           </execution>
           <execution>
             <id>copy-persistence-no-osgi</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -647,6 +2080,7 @@
           </execution>
           <execution>
             <id>copy-webservice</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -706,180 +2140,8 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy-gui</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/gui</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>gui</artifactId>
-                </artifactItem>
-                <!--
-                    framework dependencies
-                -->
-                <artifactItem>
-                  <groupId>org.daisy.pipeline</groupId>
-                  <artifactId>updater-wrapper</artifactId>
-                </artifactItem>
-                <!--
-                    3rd-party dependencies
-                -->
-                <dependency>
-                  <groupId>de.jangassen</groupId>
-                  <artifactId>nsmenufx</artifactId>
-                  <version>2.1.8</version>
-                </dependency>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>pegdown</artifactId>
-                  <version>1.0.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>parboiled</artifactId>
-                  <version>1.0.0</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.asm</groupId>
-                  <artifactId>asm</artifactId>
-                  <version>5.0.3</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.asm</groupId>
-                  <artifactId>asm-analysis</artifactId>
-                  <version>5.0.3</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.asm</groupId>
-                  <artifactId>asm-tree</artifactId>
-                  <version>5.0.3</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.ow2.asm</groupId>
-                  <artifactId>asm-util</artifactId>
-                  <version>5.0.3</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.parboiled</groupId>
-                  <artifactId>parboiled-core</artifactId>
-                  <version>1.1.7</version>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-javafx-linux</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/linux</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-base</artifactId>
-                  <classifier>linux</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-graphics</artifactId>
-                  <classifier>linux</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-controls</artifactId>
-                  <classifier>linux</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-web</artifactId>
-                  <classifier>linux</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-fxml</artifactId>
-                  <classifier>linux</classifier>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-javafx-mac</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/mac</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-base</artifactId>
-                  <classifier>mac</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-graphics</artifactId>
-                  <classifier>mac</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-controls</artifactId>
-                  <classifier>mac</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-web</artifactId>
-                  <classifier>mac</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-fxml</artifactId>
-                  <classifier>mac</classifier>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-javafx-win</id>
-            <goals>
-              <goal>copy</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.directory}/jars/gui/bootstrap/win</outputDirectory>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-base</artifactId>
-                  <classifier>win</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-graphics</artifactId>
-                  <classifier>win</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-controls</artifactId>
-                  <classifier>win</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-web</artifactId>
-                  <classifier>win</classifier>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.openjfx</groupId>
-                  <artifactId>javafx-fxml</artifactId>
-                  <classifier>win</classifier>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-          <execution>
             <id>copy-modules</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1264,8 +2526,6 @@
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-compress</artifactId>
-                  <!-- FIXME: remove when modules-bom updated -->
-                  <version>1.20</version>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.codehaus.jackson</groupId>
@@ -1294,6 +2554,7 @@
           </execution>
           <execution>
             <id>copy-modules-osgi</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1313,6 +2574,7 @@
           </execution>
           <execution>
             <id>copy-modules-linux</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1334,6 +2596,7 @@
           </execution>
           <execution>
             <id>copy-modules-mac</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1359,6 +2622,7 @@
           </execution>
           <execution>
             <id>copy-modules-win</id>
+            <phase>process-sources</phase>
             <goals>
               <goal>copy</goal>
             </goals>
@@ -1440,30 +2704,7 @@
     </profile>
     <profile>
       <id>with-simple-api</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>framework-core</artifactId>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.daisy.pipeline</groupId>
-          <artifactId>ds-to-spi-runtime</artifactId>
-          <scope>provided</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.compendium</artifactId>
-          <scope>provided</scope>
-        </dependency>
-      </dependencies>
       <build>
-        <resources>
-          <!-- needed to not include src/main/resources -->
-          <resource>
-            <directory>xxx</directory>
-          </resource>
-        </resources>
         <plugins>
           <plugin>
             <groupId>org.daisy.pipeline.build</groupId>
@@ -1476,9 +2717,7 @@
                   <goal>generate-spi-classes</goal>
                 </goals>
                 <configuration>
-                  <includes>
-                    SimpleAPI
-                  </includes>
+                  <includes>SimpleAPI</includes>
                 </configuration>
               </execution>
             </executions>
@@ -1487,6 +2726,7 @@
             <artifactId>maven-compiler-plugin</artifactId>
             <executions>
               <execution>
+                <id>compile-simple-api</id>
                 <phase>compile</phase>
                 <goals>
                   <goal>compile</goal>
@@ -1502,10 +2742,23 @@
             <artifactId>maven-resources-plugin</artifactId>
             <executions>
               <execution>
-                <phase>process-resources</phase>
+                <id>copy-simple-api</id>
+                <phase>prepare-package</phase>
                 <goals>
-                  <goal>resources</goal>
+                  <goal>copy-resources</goal>
                 </goals>
+                <configuration>
+                  <outputDirectory>${project.build.directory}/simple-api</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${project.build.outputDirectory}</directory>
+                      <includes>
+                        <include>*.class</include>
+                        <include>META-INF/services/*</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
               </execution>
             </executions>
           </plugin>
@@ -1693,36 +2946,6 @@
       </build>
     </profile>
     <profile>
-      <id>unpack-updater-gui-win</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-gui-win</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater-gui</artifactId>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>assemble-mac-dir</id>
       <build>
         <plugins>
@@ -1796,8 +3019,9 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>assemble-win-dir</id>
-                <phase>prepare-package</phase>
+                <id>default-cli</id> <!-- run directly from Makefile -->
+                <!-- <id>assemble-win-dir</id> -->
+                <!-- <phase>prepare-package</phase> -->
                 <goals>
                   <goal>single</goal>
                 </goals>
@@ -1829,8 +3053,9 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>assemble-mac-zip</id>
-                <phase>package</phase>
+                <id>default-cli</id> <!-- run directly from Makefile -->
+                <!-- <id>assemble-mac-zip</id> -->
+                <!-- <phase>package</phase> -->
                 <goals>
                   <goal>single</goal>
                 </goals>
@@ -1895,8 +3120,9 @@
             <artifactId>maven-assembly-plugin</artifactId>
             <executions>
               <execution>
-                <id>assemble-win-zip</id>
-                <phase>prepare-package</phase>
+                <id>default-cli</id> <!-- run directly from Makefile -->
+                <!-- <id>assemble-win-zip</id> -->
+                <!-- <phase>prepare-package</phase> -->
                 <goals>
                   <goal>single</goal>
                 </goals>
@@ -1944,39 +3170,6 @@
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
                     <filter>src/main/assembly/dist-linux.properties</filter>
-                  </filters>
-                  <appendAssemblyId>true</appendAssemblyId>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>assemble-mac-app-dir</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>assemble-mac-app-dir</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach>
-                  <formats>
-                    <format>dir</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-mac-app.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-mac.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -2193,12 +3386,6 @@
                       <type>directory</type>
                       <src>${project.build.directory}/jars</src>
                       <excludes>
-                        gui/bootstrap/linux,
-                        gui/bootstrap/linux/*,
-                        gui/bootstrap/win,
-                        gui/bootstrap/win/*,
-                        gui/bootstrap/mac,
-                        gui/bootstrap/mac/*
                         common/linux,
                         common/linux/*,
                         common/win,
@@ -2208,14 +3395,6 @@
                       </excludes>
                       <mapper>
                         <prefix>${deb.pipeline.home}/system</prefix>
-                        <type>perm</type>
-                      </mapper>
-                    </data>
-                    <data>
-                      <type>directory</type>
-                      <src>${project.build.directory}/jars/gui/bootstrap/linux</src>
-                      <mapper>
-                        <prefix>${deb.pipeline.home}/system/gui/bootstrap</prefix>
                         <type>perm</type>
                       </mapper>
                     </data>
@@ -2421,12 +3600,6 @@
                         <source>
                           <location>${project.build.directory}/jars</location>
                           <excludes>
-                            <exclude>gui/bootstrap/linux</exclude>
-                            <exclude>gui/bootstrap/linux/*</exclude>
-                            <exclude>gui/bootstrap/win</exclude>
-                            <exclude>gui/bootstrap/win/*</exclude>
-                            <exclude>gui/bootstrap/mac</exclude>
-                            <exclude>gui/bootstrap/mac/*</exclude>
                             <exclude>common/linux</exclude>
                             <exclude>common/linux/*</exclude>
                             <exclude>common/win</exclude>
@@ -2434,17 +3607,6 @@
                             <exclude>common/mac</exclude>
                             <exclude>common/mac/*</exclude>
                           </excludes>
-                        </source>
-                      </sources>
-                    </mapping>
-                    <mapping>
-                      <directory>${rpm.pipeline.home}/system/gui/bootstrap</directory>
-                      <filemode>0644</filemode>
-                      <username>${rpm.user}</username>
-                      <groupname>${rpm.group}</groupname>
-                      <sources>
-                        <source>
-                          <location>${project.build.directory}/jars/gui/bootstrap/linux</location>
                         </source>
                       </sources>
                     </mapping>
@@ -2540,179 +3702,6 @@
       </build>
     </profile>
     <profile>
-      <!--
-          this profile needs to be run with JDK 11
-      -->
-      <id>build-jre-linux</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jlink-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jlink-linux</id>
-                <!-- if done in package phase, will try to include target/classes and fail because
-                     of "target/classes does not contain a module-info.java file" error (same for
-                     other "build-jre" profiles) -->
-                <phase>initialize</phase>
-                <!-- <phase>package</phase> -->
-                <goals>
-                  <goal>jlink</goal>
-                </goals>
-                <configuration>
-                  <classifier>jre-linux</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.security.jgss</addModule>
-                    <addModule>java.scripting</addModule> <!-- for gui -->
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
-                  <modulePaths>
-                    <modulePath>src/main/jre/OpenJDK11U-jdk_x64_linux_hotspot_11.0.13_8/jdk-11.0.13+8/jmods</modulePath>
-                  </modulePaths>
-                  <noHeaderFiles>true</noHeaderFiles>
-                  <noManPages>true</noManPages>
-                  <compress>1</compress>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <!--
-          this profile needs to be run with JDK 17
-      -->
-      <id>build-jre-mac</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jlink-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jlink-mac</id>
-                <phase>initialize</phase>
-                <!-- <phase>package</phase> -->
-                <goals>
-                  <goal>jlink</goal>
-                </goals>
-                <configuration>
-                  <classifier>jre-mac</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.security.jgss</addModule>
-                    <addModule>java.scripting</addModule> <!-- for gui -->
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
-                  <modulePaths>
-                    <modulePath>src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.3_7/jdk-17.0.3+7/Contents/Home/jmods</modulePath>
-                  </modulePaths>
-                  <noHeaderFiles>true</noHeaderFiles>
-                  <noManPages>true</noManPages>
-                  <compress>1</compress>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <!--
-          this profile needs to be run with JDK 11
-      -->
-      <id>build-jre-win32</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jlink-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jlink-win32</id>
-                <phase>initialize</phase>
-                <!-- <phase>package</phase> -->
-                <goals>
-                  <goal>jlink</goal>
-                </goals>
-                <configuration>
-                  <classifier>jre-win32</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
-                  <modulePaths>
-                    <modulePath>src/main/jre/OpenJDK11U-jdk_x86-32_windows_hotspot_11.0.13_8/jdk-11.0.13+8/jmods</modulePath>
-                  </modulePaths>
-                  <noHeaderFiles>true</noHeaderFiles>
-                  <noManPages>true</noManPages>
-                  <compress>1</compress>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <!--
-          this profile needs to be run with JDK 11
-      -->
-      <id>build-jre-win64</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-jlink-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jlink-win64</id>
-                <phase>initialize</phase>
-                <!-- <phase>package</phase> -->
-                <goals>
-                  <goal>jlink</goal>
-                </goals>
-                <configuration>
-                  <classifier>jre-win64</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
-                  <modulePaths>
-                    <modulePath>src/main/jre/OpenJDK11U-jdk_x64_windows_hotspot_11.0.13_8/jdk-11.0.13+8/jmods</modulePath>
-                  </modulePaths>
-                  <noHeaderFiles>true</noHeaderFiles>
-                  <noManPages>true</noManPages>
-                  <compress>1</compress>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>without-persistence</id>
       <build>
         <plugins>
@@ -2773,37 +3762,7 @@
       </build>
     </profile>
     <profile>
-      <id>without-gui</id>
-      <!-- FIXME: also exclude pipeline2-gui.vbs (and start menu shortcut) -->
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>copy-gui</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>copy-javafx-linux</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>copy-javafx-mac</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>copy-javafx-win</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>without-webservice</id>
-      <!-- FIXME: also exclude pipeline2-webservice.vbs (and start menu shortcut) -->
       <build>
         <plugins>
           <plugin>
@@ -2844,7 +3803,6 @@
     </profile>
     <profile>
       <id>without-updater</id>
-      <!-- FIXME: also omit the "Check updates" item in the "Help" menu of the GUI -->
       <build>
         <plugins>
           <plugin>
@@ -2860,11 +3818,6 @@
               </execution>
               <execution>
                 <id>unpack-updater-win</id>
-                <phase>none</phase>
-              </execution>
-              <!-- FIXME: also exclude the start menu shortcut on Windows -->
-              <execution>
-                <id>unpack-updater-gui-win</id>
                 <phase>none</phase>
               </execution>
             </executions>

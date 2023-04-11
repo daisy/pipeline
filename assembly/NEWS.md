@@ -1,3 +1,35 @@
+Changes in release v1.14.13
+===========================
+
+## Framework
+
+- Simplified and improved script & job API
+- **NEW** Web API: added "desc" attribute to &lt;result&gt; elements in job XML
+- **FIX** Make "log" link available in job XML also when a job errors
+- Other bugfixes
+
+## Modules
+
+- **NEW** NIMAS support: the scripts that produce HTML, EPUB 3 and ZedAI from DTBook now also
+  support NIMAS as input
+- **NEW** DAISY 3 Upgrader script to upgrade a DAISY 3 publication from version 1.1.0 (Z39.86-2002)
+  to version 2005 (Z39.86-2005)
+- **NEW** Support for Z39.86-2002 in DAISY 3 to DAISY 2.02
+- **NEW** Options in DAISY 3 Upgrader and DAISY 3 to DAISY 2.02 to ensure that the output uses
+  allowed audio file formats only (MP2, MP3 and WAVE in the case of DAISY 2.02; MP3, MPEG-4 AAC and
+  WAVE in the case of DAISY 3). Audio files in other formats are transcoded to MP3.
+- **FIX** Preserve heading hierarchy in DTBook to HTML and DTBook to EPUB 3
+- **FIX** Wrong EPUB page list heading (in Arabic instead of the requested language) when the
+  `xml:lang` defined in the DTBook is a three-letter code such as "eng"
+- **FIX** Issue in Google TTS adapter: clicking sound at beginning of phrases
+- **FIX** Issues in SAPI adapter
+- Various other bugfixes
+- Changes to braille production scripts, see [release notes of braille modules v1.14.14](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11414)
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/1).
+
 Changes in release v1.14.12
 ===========================
 

@@ -2,7 +2,7 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/maven-jlink/classifiers/jre-mac</directory>
+      <directory>target/maven-jlink/classifiers/mac</directory>
       <outputDirectory>jre</outputDirectory>
     </fileSet>
   </fileSets>

@@ -13,17 +13,7 @@
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline</groupId>
-                <artifactId>gui</artifactId>
-                <version>1.2.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.daisy.pipeline</groupId>
                 <artifactId>updater</artifactId>
-                <version>1.0.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.daisy.pipeline</groupId>
-                <artifactId>updater-gui</artifactId>
                 <version>1.0.1</version>
             </dependency>
             <dependency>
@@ -95,11 +85,6 @@
                 <groupId>org.daisy.pipeline</groupId>
                 <artifactId>push-notifier</artifactId>
                 <version>2.0.2</version>
-            </dependency>
-            <dependency>
-                <groupId>org.daisy.pipeline</groupId>
-                <artifactId>updater-wrapper</artifactId>
-                <version>1.0.2</version>
             </dependency>
             <dependency>
                 <groupId>org.daisy.pipeline</groupId>
@@ -1466,53 +1451,6 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>copy-gui</id>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>gui</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.pipeline</groupId>
-                                    <artifactId>updater-wrapper</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>de.codecentric.centerdevice</groupId>
-                                    <artifactId>centerdevice-nsmenufx</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>pegdown</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.daisy.libs</groupId>
-                                    <artifactId>parboiled</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.ow2.asm</groupId>
-                                    <artifactId>asm</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.ow2.asm</groupId>
-                                    <artifactId>asm-analysis</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.ow2.asm</groupId>
-                                    <artifactId>asm-tree</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.ow2.asm</groupId>
-                                    <artifactId>asm-util</artifactId>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.parboiled</groupId>
-                                    <artifactId>parboiled-core</artifactId>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                    <execution>
                         <id>copy-modules</id>
                         <configuration>
                             <artifactItems>
@@ -2229,35 +2167,6 @@
                                         <artifactItem>
                                             <groupId>org.daisy.pipeline</groupId>
                                             <artifactId>updater</artifactId>
-                                            <type>zip</type>
-                                            <classifier>windows_386</classifier>
-                                        </artifactItem>
-                                    </artifactItems>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>unpack-updater-gui-win</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-dependency-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>unpack-updater-gui-win</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>unpack</goal>
-                                </goals>
-                                <configuration>
-                                    <artifactItems>
-                                        <artifactItem>
-                                            <groupId>org.daisy.pipeline</groupId>
-                                            <artifactId>updater-gui</artifactId>
                                             <type>zip</type>
                                             <classifier>windows_386</classifier>
                                         </artifactItem>

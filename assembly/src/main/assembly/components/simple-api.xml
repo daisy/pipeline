@@ -2,7 +2,7 @@
 <component>
   <fileSets>
     <fileSet>
-      <directory>target/classes</directory>
+      <directory>target/simple-api</directory>
       <outputDirectory>system/simple-api</outputDirectory>
     </fileSet>
   </fileSets>

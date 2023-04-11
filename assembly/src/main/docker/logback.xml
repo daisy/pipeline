@@ -1,0 +1,25 @@
+<configuration debug="false">
+
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
+    <encoder>
+      <Pattern>%-5level %marker [%40.40logger{40}] %msg   @%class{36}:%L#%M%n</Pattern>
+    </encoder>
+  </appender>
+
+  <include resource="org/daisy/pipeline/logging/jul-to-slf4j.xml"/>
+  <include resource="org/daisy/pipeline/logging/appenders.xml">
+    <!-- JOB and JOB_FILE appenders-->
+  </include>
+
+  <root level="DEBUG">
+    <appender-ref ref="STDOUT"/>
+    <appender-ref ref="JOB_FILE"/>
+    <appender-ref ref="JOB"/>
+  </root>
+  <logger name="com.xmlcalabash" level="INFO"/>
+  <logger name="org.eclipse.jetty.util.log" level="INFO" />
+  <logger name="cz.vutbr.web" level="WARN"/>
+  <logger name="org.daisy.braille.css" level="WARN"/>
+
+</configuration>

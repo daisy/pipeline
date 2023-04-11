@@ -278,7 +278,6 @@ join() {
 }
 
 setupDefaults() {
-    # add startOnFirstThread for the GUI
     DEFAULT_JAVA_OPTS=""
 
     #Set the JVM_VENDOR specific JVM flags
@@ -383,11 +382,6 @@ run() {
             ENABLE_SHELL=true
             shift
             ;;
-        'gui')
-            MODE=gui
-            ENABLE_PERSISTENCE=false
-            shift
-            ;;
         '--')
             if ! [ "$MODE" = "cli" ]; then
                 die "Additional arguments can only be provided in CLI mode (\"--\" must follow \"cli\")"
@@ -408,16 +402,8 @@ run() {
 
     if [ "$MODE" = "webservice" ]; then
         if ! [ -e "$PIPELINE2_HOME/system/webservice" ]; then
-            if [ -e "$PIPELINE2_HOME/system/gui" ]; then
-                MODE=gui
-            else
-                MODE=cli
-            fi
+            MODE=cli
             ENABLE_PERSISTENCE=false
-        fi
-    elif [ "$MODE" = "gui" ]; then
-        if ! [ -e "$PIPELINE2_HOME/system/gui" ] ; then
-            die "GUI mode not supported"
         fi
     fi
     if [ "$ENABLE_OSGI" = "true" ]; then
@@ -461,11 +447,7 @@ run() {
         fi
     fi
     if [ "$ENABLE_OSGI" = "true" ]; then
-        if [ "$MODE" = "gui" ]; then
-            listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap system/gui/bootstrap
-        else
-            listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap
-        fi
+        listJars OSGI_BOOTSTRAP_JARS system/osgi/bootstrap
         CLASSPATH="$(join : ${OSGI_BOOTSTRAP_JARS[@]})"
         MAIN=org.apache.felix.main.Main
         eval listJars AUTO_START_BUNDLES $PATHS
@@ -476,9 +458,6 @@ run() {
         OSGI_OPTS="-Dfelix.config.properties=\"file:$PIPELINE2_HOME/etc/felix.properties\" \
                    -Dfelix.auto.start.1=\"$(join ' ' ${AUTO_START_BUNDLES[@]/#/file:})\""
     else
-        if [ "$MODE" = "gui" ]; then
-            PATHS="system/gui/bootstrap $PATHS"
-        fi
         eval listJars JARS system/common $PATHS modules
         CLASSPATH="$(join : ${JARS[@]})"
         if [ "$MODE" = "cli" ]; then
@@ -486,8 +465,6 @@ run() {
         fi
         if [ "$MODE" = "webservice" ]; then
             MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
-        elif [ "$MODE" = "gui" ]; then
-            MAIN=org.daisy.pipeline.gui.GUIService
         else
             MAIN=SimpleAPI
         fi

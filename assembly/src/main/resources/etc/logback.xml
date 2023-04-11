@@ -1,9 +1,5 @@
 <configuration debug="false">
 
-  <Properties>
-    <Property name="org.daisy.pipeline.logdir">${user.home:-.}</Property>
-  </Properties>
-
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <filter class="org.daisy.pipeline.logging.OSGIFilter"/>
     <file>${org.daisy.pipeline.logdir}/daisy-pipeline.log</file>

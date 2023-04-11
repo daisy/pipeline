@@ -98,7 +98,6 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     call:warn Enabling Java debug options: %JAVA_DEBUG_OPTS%
 :PIPELINE2_DEBUG_END
 
-    set MODE=webservice
     set ENABLE_OSGI=false
     set ENABLE_PERSISTENCE=true
     set ENABLE_SHELL=false
@@ -109,7 +108,6 @@ rem # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
     if "%1" == "remote" goto :EXECUTE_REMOTE
     if "%1" == "local" goto :EXECUTE_LOCAL
     if "%1" == "clean" goto :EXECUTE_CLEAN
-    if "%1" == "gui" goto :EXECUTE_GUI
     if "%1" == "debug" goto :EXECUTE_DEBUG
     if "%1" == "shell" goto :EXECUTE_SHELL
     call:warn Unexpected argument: "%1"
@@ -140,12 +138,6 @@ goto :RUN_LOOP
     shift
 goto :RUN_LOOP
 
-:EXECUTE_GUI
-    set MODE=gui
-    set ENABLE_PERSISTENCE=false
-    shift
-goto :RUN_LOOP
-
 :EXECUTE_DEBUG
     if "%JAVA_DEBUG_OPTS%" == "" set JAVA_DEBUG_OPTS=%DEFAULT_JAVA_DEBUG_OPTS%
     set "JAVA_OPTS=%JAVA_DEBUG_OPTS% %JAVA_OPTS%"
@@ -158,25 +150,10 @@ goto :RUN_LOOP
 goto :RUN_LOOP
 
 :EXECUTE
-    if %MODE% == webservice (
-        if not exist "%PIPELINE2_HOME%\system\webservice" (
-            if not exist "%PIPELINE2_HOME%\system\gui" (
-                rem fatal
-                set exitCode=3
-                goto END
-            )
-            set MODE=gui
-            set ENABLE_PERSISTENCE=false
-        )
-    ) else (
-        if %MODE% == gui (
-            if not exist "%PIPELINE2_HOME%\system\gui" (
-                call:warn GUI mode not supported
-                rem user-fixable
-                set exitCode=2
-                goto END
-            )
-        )
+    if not exist "%PIPELINE2_HOME%\system\webservice" (
+        rem fatal
+        set exitCode=3
+        goto END
     )
     if %ENABLE_OSGI% == true (
         if not exist "%PIPELINE2_HOME%\system\osgi\bootstrap" (
@@ -189,7 +166,7 @@ goto :RUN_LOOP
     ) else (
         set PATHS=!PATHS! system\no-osgi
     )
-    set PATHS=!PATHS! system\%MODE%
+    set PATHS=!PATHS! system\webservice
     if %ENABLE_SHELL% == true (
         if %ENABLE_OSGI% == true (
             set PATHS=!PATHS! system\osgi\gogo
@@ -217,13 +194,6 @@ goto :RUN_LOOP
                 set CLASSPATH=!CLASSPATH!;%%D\%%F
             )
         )
-        if %MODE% == gui (
-            for %%D in (system\gui\bootstrap) do (
-                for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
-                    set CLASSPATH=!CLASSPATH!;%%D\%%F
-                )
-            )
-        )
         set MAIN=org.apache.felix.main.Main
         for %%D in (%PATHS%) do (
             for /f %%F in ('dir /b "%PIPELINE2_HOME%\%%D\*.jar"') do (
@@ -237,9 +207,6 @@ goto :RUN_LOOP
         set OSGI_OPTS=-Dfelix.config.properties="file:%PIPELINE2_HOME:\=/%/etc/felix.properties" ^
                       -Dfelix.auto.start.1="!AUTO_START_BUNDLES!"
     ) else (
-        if %MODE% == gui (
-            set PATHS=!PATHS! system\gui\bootstrap
-        )
         for %%D in (system\common !PATHS! modules) do (
             if exist "%PIPELINE2_HOME%\%%D" (
                 rem Using wildcard to avoid "The input line is too long" error
@@ -249,11 +216,7 @@ goto :RUN_LOOP
                 rem )
             )
         )
-        if %MODE% == webservice (
-            set MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
-        ) else (
-            set MAIN=org.daisy.pipeline.gui.GUIService
-        )
+        set MAIN=org.daisy.pipeline.webservice.impl.PipelineWebService
     )
 
     rem Execute the Java Virtual Machine
@@ -310,7 +273,6 @@ goto :RUN_LOOP
     )
     call:warn Starting java: %COMMAND%
 
-    rem FIXME: the endlocal seems to break things when called from pipeline2-gui.vbs
     if %ENABLE_SHELL% == true (
         rem endlocal & (
         rem     set "PIPELINE2_HOME=%PIPELINE2_HOME%"
