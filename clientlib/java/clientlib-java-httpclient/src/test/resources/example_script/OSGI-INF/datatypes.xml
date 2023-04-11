@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:components xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
     <scr:component immediate="true" name="foo:choice">
-        <scr:implementation class="org.daisy.pipeline.datatypes.UrlBasedDatatypeService"/>
+        <scr:implementation class="Datatype_foo_choice"/>
         <scr:service>
             <scr:provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
         </scr:service>
@@ -9,7 +9,7 @@
         <scr:property name="data-type.url" type="String" value="/xml/choice.xml"/>
     </scr:component>
     <scr:component immediate="true" name="foo:regex">
-        <scr:implementation class="org.daisy.pipeline.datatypes.UrlBasedDatatypeService"/>
+        <scr:implementation class="Datatype_foo_regex"/>
         <scr:service>
             <scr:provide interface="org.daisy.pipeline.datatypes.DatatypeService"/>
         </scr:service>

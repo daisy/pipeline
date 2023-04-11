@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="foo:script">
-	<scr:implementation class="org.daisy.pipeline.script.XProcScriptService"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="foo:script" activate="activate">
+	<scr:implementation class="XProcScript_foo_script"/>
 	<scr:service>
 		<scr:provide interface="org.daisy.pipeline.script.XProcScriptService"/>
 	</scr:service>
 	<scr:property name="script.id" type="String" value="foo:script"/>
-	<scr:property name="script.name" type="String" value="Example script"/>
 	<scr:property name="script.description" type="String" value="Example script"/>
 	<scr:property name="script.url" type="String" value="/xml/script.xpl"/>
 	<scr:property name="script.version" type="String" value="0.0.0-SNAPSHOT"/>

@@ -39,7 +39,7 @@ public class WSTest extends PaxExamConfig {
 		assertFalse(alive.error);
 		assertFalse(alive.authentication);
 		assertTrue(alive.localfs);
-		assertEquals("1.10", alive.version);
+		assertEquals("1.14.4", alive.version);
 	}
 	
 	@Test

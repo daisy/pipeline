@@ -41,10 +41,9 @@ public abstract class PaxExamConfig {
 	// Normally this is not needed but it can help with debugging.
 	@Inject org.daisy.pipeline.script.ScriptRegistry dep1;
 	@Inject org.daisy.pipeline.job.JobManagerFactory dep2;
-	@Inject org.daisy.pipeline.webserviceutils.storage.WebserviceStorage dep3;
-	@Inject org.daisy.pipeline.webserviceutils.callback.CallbackHandler dep4;
+	@Inject org.daisy.pipeline.clients.WebserviceStorage dep3;
+	@Inject org.daisy.pipeline.webservice.CallbackHandler dep4;
 	@Inject org.daisy.pipeline.datatypes.DatatypeRegistry dep5;
-	@Inject org.daisy.common.properties.PropertyPublisherFactory dep6;
 	// @Inject org.restlet.Application webserver;
 
 	static final File BASEDIR = new File(PathUtils.getBaseDir());
@@ -66,8 +65,8 @@ public abstract class PaxExamConfig {
 		return options(
 			systemProperty("org.daisy.pipeline.ws.localfs").value(String.valueOf(isLocalFs())),
 			systemProperty("org.daisy.pipeline.ws.authentication").value("false"),
-			systemProperty("org.daisy.pipeline.iobase").value(new File(PIPELINE_DATA, "jobs").getAbsolutePath()),
-			systemProperty("org.daisy.pipeline.version").value("1.10"),
+			systemProperty("org.daisy.pipeline.data").value(PIPELINE_DATA.getAbsolutePath()),
+			systemProperty("org.daisy.pipeline.version").value("1.14.4"),
 			domTraversalPackage(),
 			logbackConfigFile(),
 			felixDeclarativeServices(),
@@ -83,11 +82,7 @@ public abstract class PaxExamConfig {
 				mavenBundle("org.daisy.pipeline:modules-registry:?"), // javax.xml.transform.URIResolver
 				mavenBundle("org.daisy.pipeline:framework-volatile:?"), // org.daisy.pipeline.job.JobStorage
 				mavenBundle("org.daisy.pipeline:woodstox-osgi-adapter:?"), // javax.xml.stream.XMLInputFactory
-				mavenBundle("org.daisy.pipeline:framework-core:?"), // org.daisy.pipeline.datatypes.DatatypeRegistry
-				// FIXME: this should be a runtime dependency of webservice
-				mavenBundle("org.daisy.pipeline:push-notifier:?"), // org.daisy.pipeline.webserviceutils.callback.CallbackHandler
-				// FIXME: these belong in the framework as runtime dependencies
-				mavenBundle("org.daisy.libs:jing:?")
+				mavenBundle("org.daisy.pipeline:framework-core:?") // org.daisy.pipeline.datatypes.DatatypeRegistry
 				),
 			// example script (incl. datatypes)
 			bundle("reference:" + new File(BASEDIR, "target/test-classes/example_script/").toURL().toString()),
