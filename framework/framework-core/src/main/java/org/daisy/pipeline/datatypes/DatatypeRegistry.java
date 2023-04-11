@@ -1,32 +1,63 @@
-/*
- *
- */
 package org.daisy.pipeline.datatypes;
 
+import java.util.Map;
+
 import com.google.common.base.Optional;
+import com.google.common.collect.Maps;
 
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
-// TODO: Auto-generated Javadoc
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Component(
+	name = "datatype-registry",
+	service = { DatatypeRegistry.class }
+)
 /**
- * Keeps track of the registered datatypes 
+ * Keeps track of the registered datatypes.
  */
-public interface DatatypeRegistry {
+public class DatatypeRegistry {
+
+	private static final Logger logger = LoggerFactory.getLogger(DatatypeRegistry.class);
+	private final Map<String,DatatypeService> registry = Maps.newHashMap();
 
 	/**
-	 * Gets the datatype using its id.
-	 *
-	 * @param uri the uri
-	 * @return the script
+	 * Get the datatype from its id.
 	 */
-	public Optional<DatatypeService> getDatatype(String id);
+	public Optional<DatatypeService> getDatatype(String id) {
+		return Optional.fromNullable(this.registry.get(id));
+	}
 
 	/**
-	 * Gets all the datatypes
-	 *
-	 * @return the scripts
+	 * Get all the datatypes.
 	 */
-	public Iterable<DatatypeService> getDatatypes();
+	public Iterable<DatatypeService> getDatatypes() {
+		return registry.values();
+	}
 
-        public void register(DatatypeService service);
-        public void unregister(DatatypeService service);
+	@Activate
+	protected void activate(){
+		logger.debug("Activating datatype registry");
+	}
+
+	@Reference(
+		name = "datatype-services",
+		unbind = "unregister",
+		service = DatatypeService.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.DYNAMIC
+	)
+	public void register(DatatypeService service) {
+		logger.debug("Registering " + service.toString());
+		registry.put(service.getId(), service);
+	}
+
+	public void unregister(DatatypeService service) {
+		registry.remove(service.getId());
+	}
 }

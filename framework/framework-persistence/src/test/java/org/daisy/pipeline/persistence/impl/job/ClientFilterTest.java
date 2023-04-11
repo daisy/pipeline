@@ -2,7 +2,12 @@
 
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.persistence.TypedQuery;
+
+import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client.Role;
@@ -15,7 +20,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.io.Files;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ClientFilterTest{
@@ -23,22 +31,38 @@ public class ClientFilterTest{
         AbstractJob job2;
         Database db;
         PersistentClient client;
+        File tempDir;
+        File tempDir2;
 
         @Before
         public void setUp(){
 		db=DatabaseProvider.getDatabase();
-
-		job = new PersistentJob(db, Mocks.buildJob(), null);
-		job2 = new PersistentJob(db, Mocks.buildJob(), null);
+		tempDir = Files.createTempDir();
+		tempDir2 = Files.createTempDir();
+		job = new PersistentJob(db, Mocks.buildJob(tempDir), null);
+		job2 = new PersistentJob(db, Mocks.buildJob(tempDir2), null);
                 client=new PersistentClient("cli","sadfsa",Role.ADMIN,"asdf",Priority.LOW);
         }
 	@After
 	public void tearDown(){
-		db.deleteObject(job);
-		db.deleteObject(job.getContext().getClient());
-		db.deleteObject(job2);
-		db.deleteObject(job2.getContext().getClient());
-        }
+		try {
+			db.deleteObject(job);
+			db.deleteObject(job.getContext().getClient());
+			db.deleteObject(job2);
+			db.deleteObject(job2.getContext().getClient());
+		} finally {
+			if (tempDir != null)
+				try {
+					FileUtils.deleteDirectory(tempDir);
+				} catch (IOException e) {
+				}
+			if (tempDir2 != null)
+				try {
+					FileUtils.deleteDirectory(tempDir2);
+				} catch (IOException e) {
+				}
+		}
+	}
 
 
         @Test

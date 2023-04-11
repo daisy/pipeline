@@ -1,11 +1,8 @@
 package org.daisy.pipeline.webservice.xml;
 
-import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPortInfo;
-import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcOptionMetadata.Output;
-import org.daisy.pipeline.script.XProcPortMetadata;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.ScriptOption;
+import org.daisy.pipeline.script.ScriptPort;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -17,14 +14,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.google.common.base.Joiner;
-import com.google.common.base.Strings;
 import com.google.common.collect.Iterables;
 
 public class ScriptXmlWriter {
 	
 	private final String baseUrl;
-	XProcScript script = null;
-	boolean details = false;
+	private Script script = null;
+	private boolean details = false;
 	private static Logger logger = LoggerFactory.getLogger(ScriptXmlWriter.class.getName());
 
 
@@ -34,7 +30,7 @@ public class ScriptXmlWriter {
 	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
 	 *                absolute paths relative to the domain name.
 	 */
-	public ScriptXmlWriter(XProcScript script, String baseUrl) {
+	public ScriptXmlWriter(Script script, String baseUrl) {
 		this.script = script;
 		this.baseUrl = baseUrl;
 	}
@@ -60,7 +56,7 @@ public class ScriptXmlWriter {
 		parent.appendChild(scriptElm);
 	}
 	
-	private Document scriptToXmlDocument(XProcScript script) {
+	private Document scriptToXmlDocument(Script script) {
 		Document doc = XmlUtils.createDom("script");
 		Element scriptElm = doc.getDocumentElement();
 		addElementData(script, scriptElm);
@@ -74,11 +70,11 @@ public class ScriptXmlWriter {
 	}
 
 	// element is <script> but it's empty
-	private void addElementData(XProcScript script, Element element) {
+	private void addElementData(Script script, Element element) {
 		Document doc = element.getOwnerDocument();
-		String scriptHref = baseUrl + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getDescriptor().getId());
+		String scriptHref = baseUrl + Routes.SCRIPT_ROUTE.replaceFirst("\\{id\\}", script.getId());
 
-		element.setAttribute("id", script.getDescriptor().getId());
+		element.setAttribute("id", script.getId());
 		element.setAttribute("href", scriptHref);
 		Joiner joiner = Joiner.on(" ");
 		if(!Iterables.isEmpty(script.getInputFilesets())){
@@ -110,94 +106,46 @@ public class ScriptXmlWriter {
 				element.appendChild(homepageElm);
 			}
 			
-			addInputPorts(script.getXProcPipelineInfo().getInputPorts(), element);
-			addOptions(script.getXProcPipelineInfo().getOptions(), element);
-			addOutputPorts(script.getXProcPipelineInfo().getOutputPorts(), element);
+			addInputPorts(script.getInputPorts(), element);
+			addOptions(script.getOptions(), element);
 		}
 	}
 	
-	private void addInputPorts(Iterable<XProcPortInfo> inputs, Element parent) {
+	private static void addInputPorts(Iterable<ScriptPort> ports, Element parent) {
 		Document doc = parent.getOwnerDocument();
-		for (XProcPortInfo input : script.getXProcPipelineInfo().getInputPorts()) {
-			XProcPortMetadata meta = script.getPortMetadata(input.getName());
-
+		for (ScriptPort port : ports) {
 			Element inputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "input");
-			inputElm.setAttribute("name", input.getName());
-	                inputElm.setAttribute("nicename", meta.getNiceName());
-			inputElm.setAttribute("required", Boolean.toString(meta.isRequired()));
-			inputElm.setAttribute("sequence", Boolean.toString(input.isSequence()));
-			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
-				inputElm.setAttribute("mediaType", meta.getMediaType());
+			inputElm.setAttribute("name", port.getName());
+	                inputElm.setAttribute("nicename", port.getNiceName());
+			inputElm.setAttribute("required", Boolean.toString(port.isRequired()));
+			inputElm.setAttribute("sequence", Boolean.toString(port.isSequence()));
+			if (port.getMediaType() != null && !port.getMediaType().isEmpty()) {
+				inputElm.setAttribute("mediaType", port.getMediaType());
 			}
-			inputElm.setAttribute("desc", meta.getDescription());
+			inputElm.setAttribute("desc", port.getDescription());
 
 			parent.appendChild(inputElm);
 		}
 	}
 
-	private void addOptions(Iterable<XProcOptionInfo> options, Element parent) {
+	private static void addOptions(Iterable<ScriptOption> options, Element parent) {
 		Document doc = parent.getOwnerDocument();
-		for (XProcOptionInfo option : options) {
-			XProcOptionMetadata meta = script.getOptionMetadata(option.getName());
-			
+		for (ScriptOption option : options) {
 			Element optionElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "option");
 			optionElm.setAttribute("name", option.getName().toString());
-	                optionElm.setAttribute("nicename", meta.getNiceName());
+			optionElm.setAttribute("nicename", option.getNiceName());
 			optionElm.setAttribute("required", Boolean.toString(option.isRequired()));
 			
-			optionElm.setAttribute("type", meta.getType() == null ? "xs:string" : meta.getType());
-			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
-				optionElm.setAttribute("mediaType", meta.getMediaType());
+			optionElm.setAttribute("type", option.getType().getId());
+			if (option.getMediaType() != null && !option.getMediaType().isEmpty()) {
+				optionElm.setAttribute("mediaType", option.getMediaType());
 			}
-			optionElm.setAttribute("desc", meta.getDescription());
-			optionElm.setAttribute("ordered", Boolean.toString(meta.isOrdered()));
-			optionElm.setAttribute("sequence", Boolean.toString(meta.isSequence()));
-                        setDefault(option,optionElm);
-			
-			if (meta.getOutput() != Output.NA) {
-				optionElm.setAttribute("outputType", meta.getOutput().toString().toLowerCase());
-			}
+			optionElm.setAttribute("desc", option.getDescription());
+			optionElm.setAttribute("ordered", Boolean.toString(option.isOrdered()));
+			optionElm.setAttribute("sequence", Boolean.toString(option.isSequence()));
+			if (!option.isRequired())
+				optionElm.setAttribute("default", option.getDefault());
 			parent.appendChild(optionElm);
-		}
-	}
-
-        private void setDefault(XProcOptionInfo info,Element element ){
-                
-                String select=info.getSelect();
-                if (Strings.isNullOrEmpty(select)){
-                        return;
-                }
-                char quote=select.charAt(0);
-                //check that those are quotes
-                if (quote!='"' && quote!='\''){
-                        return;//no quote
-                }
-                //starts and ends by quote
-                if (select.charAt(select.length()-1)!=quote){
-                        return;
-                }
-
-                String def=select.substring(1,select.length()-1);
-                //set whatever is in the select
-                element.setAttribute("default",def);
-        }
-	
-	private void addOutputPorts(Iterable<XProcPortInfo> outputs, Element parent) {
-		logger.debug("Adding output ports");
-		Document doc = parent.getOwnerDocument();
-		for (XProcPortInfo output : outputs) {
-			logger.debug("Adding output port"+output.getName());
-			XProcPortMetadata meta = script.getPortMetadata(output.getName());
-			Element outputElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "output");
-			outputElm.setAttribute("name", output.getName());
-	                outputElm.setAttribute("nicename", meta.getNiceName());
-			outputElm.setAttribute("sequence", Boolean.toString(output.isSequence()));
-			if (meta.getMediaType() != null && !meta.getMediaType().isEmpty()) {
-				outputElm.setAttribute("mediaType", meta.getMediaType());
-			}
-			outputElm.setAttribute("desc", meta.getDescription());
-			
-			parent.appendChild(outputElm);
 		}
 	}
 }

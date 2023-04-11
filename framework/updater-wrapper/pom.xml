@@ -4,13 +4,18 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.12-SNAPSHOT</version>
+    <version>1.14.13-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>updater-wrapper</artifactId>
   <version>1.0.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Updater</name>
+  <!--
+      Note that this module is currently not included by pipeline-assembly because we don't include
+      the GUI and updater GUI (Windows) anymore. For now the code is kept as it might still become
+      useful in another context.
+  -->
   <dependencies>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
@@ -26,17 +31,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <configuration>
-          <instructions>
-            <!--<Service-Component>OSGI-INF/updater.xml</Service-Component>-->
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

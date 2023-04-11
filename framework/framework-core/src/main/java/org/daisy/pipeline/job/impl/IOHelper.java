@@ -101,24 +101,18 @@ public class IOHelper {
 
 	/**
 	 * creates a flat list out of a tree directory.
-	 *
-	 * @param base the base
-	 * @return the list
 	 */
-	public static List<URI> treeFileList(URI uriBase) {
-		File base=new File(uriBase);	
-		
-		LinkedList<URI> result= new LinkedList<URI>();
-		File[] fList=base.listFiles();
-		if (fList!=null) 
-			for(File f:base.listFiles()){
-				if(f.isDirectory()){
-					result.addAll(treeFileList(f.toURI()));
-				}else{
-					result.add(f.toURI());
+	public static List<File> treeFileList(File base) {
+		LinkedList<File> result = new LinkedList<>();
+		File[] fList = base.listFiles();
+		if (fList != null)
+			for (File f : base.listFiles()) {
+				if (f.isDirectory()) {
+					result.addAll(treeFileList(f));
+				} else {
+					result.add(f);
 				}
 			}
-
 		return result;
 	}
 }

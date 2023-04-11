@@ -53,19 +53,19 @@
             <p:empty/>
     </p:output>
 
-    <p:option name="option1" select="." required="true" px:dir="output" px:type="dtbook:mydatatype" px:primary="true">
+    <p:option name="option1" required="false" select="." px:dir="output" px:type="dtbook:mydatatype" px:primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 1</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="option2" select="." required="true" px:dir="output2" px:type="anyDirURI" px:primary="false">
+    <p:option name="option2" required="true" px:dir="output2" px:type="anyDirURI" px:primary="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 2</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="option3" select="." required="true" px:dir="output3" px:type="anyDirURI">
+    <p:option name="option3" required="true" px:dir="output3" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p px:role="name">Option 3</p>
         </p:documentation>

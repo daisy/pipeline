@@ -3,7 +3,7 @@ package org.daisy.pipeline.job;
 import java.net.URI;
 
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.Script;
 
 /**
  * The Class Job defines the execution unit.
@@ -25,7 +25,7 @@ public interface Job extends Runnable, AutoCloseable {
 
     public String getNiceName();
 
-    public XProcScript getScript();
+    public Script getScript();
 
     /**
      * @return the job status

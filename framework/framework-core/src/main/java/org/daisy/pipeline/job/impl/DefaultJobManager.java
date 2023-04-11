@@ -12,7 +12,7 @@ import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -99,7 +99,7 @@ public class DefaultJobManager implements JobManager {
         }
 
         @Override
-        public JobManager.JobBuilder newJob(BoundXProcScript boundScript) {
+        public JobManager.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(monitorFactory,
                                              xprocEngine,
                                              client,

@@ -3,7 +3,11 @@ package org.daisy.pipeline.persistence.impl.job;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.clients.Client;
@@ -21,6 +25,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
@@ -28,11 +33,13 @@ import org.mockito.runners.MockitoJUnitRunner;
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.io.Files;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PersistentJobStorageTest {
         List<AbstractJob> jobsToDel= Lists.newLinkedList();
         List<Client> clientsToDel= Lists.newLinkedList(); 
+        List<File> tempDirsToDel = Lists.newLinkedList();
         Database db;
         PersistentJobStorage storage;
         PersistentClient cl = new PersistentClient("paco","asdf",Role.CLIENTAPP,"afasd",Priority.LOW);
@@ -56,27 +63,36 @@ public class PersistentJobStorageTest {
 
         @After
         public void tearDown() {
-                //for (Job j: jobsToDel){
-                        //this.db.deleteObject(j.getContext());
-                //}
-                for (AbstractJob j: jobsToDel){
-                        this.db.deleteObject(j);
-                }
-                for (Client c : clientsToDel) {
-                        this. db.deleteObject(c);
+                try {
+                        for (AbstractJob j: jobsToDel){
+                                this.db.deleteObject(j);
+                        }
+                        for (Client c : clientsToDel) {
+                                this. db.deleteObject(c);
+                        }
+                } finally {
+                        for (File tempDir : tempDirsToDel)
+                                try {
+                                    FileUtils.deleteDirectory(tempDir);
+                                } catch (IOException e) {
+                                }
                 }
                 System.setProperty("org.daisy.pipeline.data", oldBase);
         }
         @Test
         public void addJob() throws Exception{
-                Optional<AbstractJob> job = this.storage.add(Mocks.buildJob((Client)cl));
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                Optional<AbstractJob> job = this.storage.add(Mocks.buildJob((Client)cl, tempDir));
                 this.jobsToDel.add(job.get());
                 Assert.assertTrue("Job was created",job.isPresent());
         }
 
         @Test
         public void getJob() throws Exception{
-                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(job);
                 Optional<AbstractJob> fromDatabase = this.storage.get(job.getId());
                 Assert.assertTrue("A job was found",fromDatabase.isPresent());
@@ -92,7 +108,9 @@ public class PersistentJobStorageTest {
 
         @Test
         public void remove() throws Exception{
-                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(job);
                 Optional<AbstractJob> deleted = this.storage.remove(job.getId());
                 Assert.assertTrue("The job's been removed",deleted.isPresent());
@@ -109,9 +127,13 @@ public class PersistentJobStorageTest {
 
         @Test
         public void iterate() throws Exception{
-                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob job = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(job);
-                job = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                job = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(job);
                 Assert.assertEquals("Two jobs is what we have in store",2,Iterables.size(this.storage));
                 
@@ -119,9 +141,13 @@ public class PersistentJobStorageTest {
 
         @Test
         public void byClientGetJob() throws Exception{
-                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(jobMine);
-                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob(tempDir)).get();
                 this.jobsToDel.add(jobOther);
                 this.clientsToDel.add(jobOther.getClient());
                 Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).get(jobMine.getId());
@@ -133,9 +159,13 @@ public class PersistentJobStorageTest {
 
         @Test
         public void byClientRemoveJob() throws Exception{
-                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(jobMine);
-                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob(tempDir)).get();
                 this.jobsToDel.add(jobOther);
                 this.clientsToDel.add(jobOther.getClient());
                 Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).remove(jobMine.getId());
@@ -150,14 +180,22 @@ public class PersistentJobStorageTest {
 
         @Test
         public void byClientIterate() throws Exception{
-                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobMine = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(jobMine);
-                jobMine = this.storage.add(Mocks.buildJob((Client)cl)).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                jobMine = this.storage.add(Mocks.buildJob((Client)cl, tempDir)).get();
                 this.jobsToDel.add(jobMine);
-                AbstractJob jobOther = this.storage.add(Mocks.buildJob()).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobOther = this.storage.add(Mocks.buildJob(tempDir)).get();
                 this.jobsToDel.add(jobOther);
                 this.clientsToDel.add(jobOther.getClient());
-                jobOther = this.storage.add(Mocks.buildJob()).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                jobOther = this.storage.add(Mocks.buildJob(tempDir)).get();
                 this.jobsToDel.add(jobOther);
                 this.clientsToDel.add(jobOther.getClient());
                 Assert.assertEquals("I have two jobs",2,Iterables.size(this.storage.filterBy(cl)));
@@ -176,9 +214,13 @@ public class PersistentJobStorageTest {
         public void byClientAndBatchIdGetJob() throws Exception{
                 JobBatchId id1=JobIdFactory.newBatchId();
                 JobBatchId id2=JobIdFactory.newBatchId();
-                AbstractJob jobMineId1 = this.storage.add(Mocks.buildJob((Client)cl, id1)).get();
+                File tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobMineId1 = this.storage.add(Mocks.buildJob((Client)cl, id1, tempDir)).get();
                 this.jobsToDel.add(jobMineId1);
-                AbstractJob jobOtherId2 = this.storage.add(Mocks.buildJob((Client)cl, id2)).get();
+                tempDir = Files.createTempDir();
+                tempDirsToDel.add(tempDir);
+                AbstractJob jobOtherId2 = this.storage.add(Mocks.buildJob((Client)cl, id2, tempDir)).get();
                 this.jobsToDel.add(jobOtherId2);
                 this.clientsToDel.add(jobOtherId2.getClient());
                 Optional<AbstractJob> fromDatabase = this.storage.filterBy(this.cl).filterBy(id1).get(jobMineId1.getId());

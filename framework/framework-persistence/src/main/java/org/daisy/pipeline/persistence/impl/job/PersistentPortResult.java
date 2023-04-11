@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 
@@ -13,6 +14,9 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 
+/**
+ * Because of backward compatibility the path is stored as a URI.
+ */
 @Entity
 @Table(name="job_port_results")
 public class PersistentPortResult   {
@@ -36,7 +40,7 @@ public class PersistentPortResult   {
 			throw new IllegalArgumentException("The result can not be persisted", e);
 		}
 		this.id = new PK(jobId, idx);
-		this.path=result.getPath().toString();
+		this.path=result.getPath().toURI().toString();
 		this.mediaType=result.getMediaType();
 		this.portName=port;
 	}
@@ -73,9 +77,9 @@ public class PersistentPortResult   {
 	 *
 	 * @return The path.
 	 */
-	public URI getPath()
+	public File getPath()
 	{
-		return URI.create(this.path);
+		return new File(URI.create(this.path));
 	}
 
 	/**
@@ -101,9 +105,9 @@ public class PersistentPortResult   {
 	 *
 	 * @param path The path.
 	 */
-	public void setPath(URI path)
+	public void setPath(File path)
 	{
-		this.path = path.toString();
+		this.path = path.toURI().toString();
 	}
 
 	public String getIdx(){

@@ -1,123 +1,88 @@
 package org.daisy.common.xproc;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class XProcPortInfo.
+ * Info about an XProc port
  */
 public final class XProcPortInfo {
 
-	/**
-	 * The Enum Kind.
-	 */
 	public static enum Kind {
-
-		/** The INPUT. */
 		INPUT,
- /** The OUTPUT. */
- OUTPUT,
- /** The PARAMETER. */
- PARAMETER
+		OUTPUT,
+		PARAMETER
 	};
 
 	/**
-	 * New input port.
-	 *
-	 * @param name the name
-	 * @param isSequence the is sequence
-	 * @param isPrimary the is primary
-	 * @return the x proc port info
+	 * Instantiates a new {@link XProcPortInfo} for an input port.
 	 */
-	public static XProcPortInfo newInputPort(String name, boolean isSequence,
-			boolean isPrimary) {
-		return new XProcPortInfo(Kind.INPUT, name, isSequence, isPrimary);
+	public static XProcPortInfo newInputPort(String name, boolean isSequence, boolean isRequired, boolean isPrimary) {
+		return new XProcPortInfo(Kind.INPUT, name, isSequence, isRequired, isPrimary);
 	}
 
 	/**
-	 * New output port.
-	 *
-	 * @param name the name
-	 * @param isSequence the is sequence
-	 * @param isPrimary the is primary
-	 * @return the x proc port info
+	 * Instantiates a new {@link XProcPortInfo} for an output port.
 	 */
-	public static XProcPortInfo newOutputPort(String name, boolean isSequence,
-			boolean isPrimary) {
-		return new XProcPortInfo(Kind.OUTPUT, name, isSequence, isPrimary);
+	public static XProcPortInfo newOutputPort(String name, boolean isSequence, boolean isPrimary) {
+		return new XProcPortInfo(Kind.OUTPUT, name, isSequence, false, isPrimary);
 	}
 
 	/**
-	 * New parameter port.
-	 *
-	 * @param name the name
-	 * @param isPrimary the is primary
-	 * @return the x proc port info
+	 * Instantiates a new {@link XProcPortInfo} for a parameter input port.
 	 */
 	public static XProcPortInfo newParameterPort(String name, boolean isPrimary) {
-		return new XProcPortInfo(Kind.PARAMETER, name, true, isPrimary);
+		return new XProcPortInfo(Kind.PARAMETER, name, true, true, isPrimary);
 	}
 
-	/** The kind. */
 	private final Kind kind;
-
-	/** The name. */
 	private final String name;
-
-	/** The is primary. */
 	private final boolean isPrimary;
-
-	/** The is sequence. */
 	private final boolean isSequence;
+	private final boolean isRequired;
 
-	/**
-	 * Instantiates a new x proc port info.
-	 *
-	 * @param kind the kind
-	 * @param name the name
-	 * @param isSequence the is sequence
-	 * @param isPrimary the is primary
-	 */
-	private XProcPortInfo(Kind kind, String name, boolean isSequence,
-			boolean isPrimary) {
+	private XProcPortInfo(Kind kind, String name, boolean isSequence, boolean isRequired, boolean isPrimary) {
 		this.kind = kind;
 		this.name = name;
 		this.isSequence = isSequence;
+		this.isRequired = isRequired;
 		this.isPrimary = isPrimary;
 	}
 
 	/**
-	 * Gets the kind.
-	 *
-	 * @return the kind
+	 * The kind of port.
 	 */
 	public Kind getKind() {
 		return kind;
 	}
 
 	/**
-	 * Gets the name.
-	 *
-	 * @return the name
+	 * The port name.
 	 */
 	public String getName() {
 		return name;
 	}
 
 	/**
-	 * Checks if is primary.
-	 *
-	 * @return true, if is primary
+	 * Whether it is a primary port.
 	 */
 	public boolean isPrimary() {
 		return isPrimary;
 	}
 
 	/**
-	 * Checks if is sequence.
+	 * Whether the port can accept/produce a sequence of documents.
 	 *
-	 * @return true, if is sequence
+	 * A sequence of documents is always allowed on a parameter input port.
 	 */
 	public boolean isSequence() {
 		return isSequence;
 	}
 
+	/**
+	 * Whether a connection is required on the port.
+	 *
+	 * A connection is required if the port does not have a default connection. Output ports never
+	 * require a connection. Paramter input ports always required a connection.
+	 */
+	public boolean isRequired() {
+		return isRequired;
+	}
 }

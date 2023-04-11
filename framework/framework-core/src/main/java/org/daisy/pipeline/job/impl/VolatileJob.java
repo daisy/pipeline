@@ -1,10 +1,8 @@
 package org.daisy.pipeline.job.impl;
 
-import java.net.URI;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.xml.namespace.QName;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
@@ -13,6 +11,7 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.script.Script;
 
 /**
  * Job that automatically deletes all associated files when the object is dismissed.
@@ -65,22 +64,17 @@ public class VolatileJob extends AbstractJob {
 	}
 
 	@Override
-	protected JobResultSet.Builder newResultSetBuilder() {
-		return new JobResultSet.Builder() {
+	protected JobResultSet.Builder newResultSetBuilder(Script script) {
+		return new JobResultSet.Builder(script) {
 			@Override
-			public JobResultSet.Builder addResult(String port, String idx, URI path, String mediaType) {
-				outputPorts.put(port, newResult(idx, path, mediaType));
-				return this;
-			}
-			@Override
-			public JobResultSet.Builder addResult(QName option, String idx, URI path, String mediaType) {
-				options.put(option, newResult(idx, path, mediaType));
+			public JobResultSet.Builder addResult(String port, String idx, File path, String mediaType) {
+				addResult(port, newResult(idx, path, mediaType));
 				return this;
 			}
 		};
 	}
 
-	private JobResult newResult(String idx, URI path, String mediaType) {
+	private JobResult newResult(String idx, File path, String mediaType) {
 		resultCount.incrementAndGet();
 		return new JobResult(idx, path, mediaType) {
 				@Override

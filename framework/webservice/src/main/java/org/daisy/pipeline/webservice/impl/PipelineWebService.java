@@ -94,9 +94,9 @@ public class PipelineWebService extends Application {
                 router.attach(Routes.JOB_CONF_ROUTE, JobConfigurationResource.class);
                 router.attach(Routes.LOG_ROUTE, LogResource.class);
                 router.attach(Routes.RESULT_ROUTE, ResultResource.class);
-                router.attach(Routes.RESULT_OPTION_ROUTE     , OptionResultResource.class);
+                router.attach(Routes.RESULT_OPTION_ROUTE     , OptionResultResource.class);                       // kept for backward compatibility (but will result in error)
                 //:comment This allows to have url-like elements in the idx part of the query   
-                TemplateRoute route= router.attach(Routes.RESULT_OPTION_ROUTE_IDX , OptionResultResource.class);
+                TemplateRoute route= router.attach(Routes.RESULT_OPTION_ROUTE_IDX , OptionResultResource.class);  // kept for backward compatibility (but will result in error)
                 Map<String, Variable> routeVariables = route.getTemplate().getVariables();
                 routeVariables.put("idx", new Variable(Variable.TYPE_URI_ALL));
 

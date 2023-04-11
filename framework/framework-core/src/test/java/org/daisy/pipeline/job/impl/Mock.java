@@ -3,11 +3,8 @@ package org.daisy.pipeline.job.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -17,11 +14,9 @@ import javax.xml.transform.Source;
 
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
-import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -66,7 +61,7 @@ public class Mock   {
                 }
         }
 
-        public static class MockSource implements Source,Supplier<Source>{
+        public static class MockSource implements Source {
                 String sId;
 
                 /**
@@ -87,11 +82,6 @@ public class Mock   {
                 public void setSystemId(String systemId) {
                         sId=systemId;
                         
-                }
-
-                @Override
-                public Source get() {
-                        return this;
                 }
         }
 
@@ -123,7 +113,7 @@ public class Mock   {
                         return this;
                 }
         }
-        public static Supplier<Source> getSourceProvider(String systemId){
+        public static Source getSource(String systemId){
                 return new MockSource(systemId);
 
         }
@@ -287,98 +277,81 @@ public class Mock   {
                 }
 
 
-                public XProcScript generate(){
-                        Set<XProcPortInfo> inputSet= new LinkedHashSet<XProcPortInfo>(); 
-                        Set<XProcPortInfo> outputSet= new LinkedHashSet<XProcPortInfo>(); 
-                        Set<XProcOptionInfo> optionsSet= new LinkedHashSet<XProcOptionInfo>(); 
-                        HashMap<QName,XProcOptionMetadata> optionMetadatas= new LinkedHashMap<QName,XProcOptionMetadata>(); 
-                        HashMap<String,XProcPortMetadata> portMetadatas= new LinkedHashMap<String,XProcPortMetadata>(); 
-                        //inputs
-                        for (int i=0;i<this.inputs;i++){
-                                inputSet.add(XProcPortInfo.newInputPort(getInputName(i),false, true));
+                public XProcScript generate() {
+                        XProcScript.Builder builder = new XProcScript.Builder("", "", null, null);
+
+                        // inputs
+                        for (int i = 0; i < inputs; i++) {
+                                XProcPortInfo info = XProcPortInfo.newInputPort(getInputName(i), false, true, true);
+                                builder.withInputPort(info, new XProcPortMetadata("", "", ""));
                         }
-                        //outputs
+
+                        // outputs
+                        Set<XProcPortInfo> outputPortSet = new LinkedHashSet<XProcPortInfo>();
                         if (fixedOutputPorts != null) {
-                                outputSet.addAll(fixedOutputPorts);
+                                outputPortSet.addAll(fixedOutputPorts);
                         }
-                        for (int i=0;i<this.outputPorts;i++){
-                                outputSet.add(XProcPortInfo.newOutputPort(getOutputName(i),false, true));
+                        for (int i = 0; i < outputPorts; i++) {
+                                outputPortSet.add(XProcPortInfo.newOutputPort(getOutputName(i),false, true));
                         }
-                        //options inputs
-                        for (int i=0;i<this.optionInputs;i++){
-                                QName name=getOptionInputName(i);
-                                optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-                                .withType(XProcDecorator.TranslatableOption.ANY_FILE_URI.toString()).build());
-                        }
-                        //options output file
-                        for (int i=0;i<this.optionOutputsFile;i++){
-                                QName name= getOptionOutputFileName(i);
-                                optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-                                .withType(XProcDecorator.TranslatableOption.ANY_FILE_URI.toString()).withOutput("result").build());
+                        for (XProcPortInfo port : outputPortSet) {
+                                builder.withOutputPort(port,
+                                                       new XProcPortMetadata("", "", fixedOutputPortMediaTypes != null
+                                                                                         ? fixedOutputPortMediaTypes.get(port.getName())
+                                                                                         : null));
                         }
 
-                        //options output file
-                        for (int i=0;i<this.optionOutputsDir;i++){
-                                QName name= getOptionOutputDirName(i);
-                                optionsSet.add( XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas.put(name,new XProcOptionMetadata.Builder()
-                                .withType(XProcDecorator.TranslatableOption.ANY_DIR_URI.toString()).withOutput("result").build());
+                        // options inputs
+                        for (int i = 0; i < optionInputs; i++) {
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getOptionInputName(i), false, ""),
+                                        new XProcOptionMetadata(
+                                                null, null, XProcOptionMetadata.ANY_FILE_URI, null));
                         }
 
-                        //options output file
+                        // options output file
+                        for (int i = 0; i < optionOutputsFile; i++) {
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getOptionOutputFileName(i), false, ""),
+                                        new XProcOptionMetadata(
+                                                null, null, XProcOptionMetadata.ANY_FILE_URI, null,
+                                                XProcOptionMetadata.Output.RESULT, true));
+                        }
+
+                        // options output file
+                        for (int i=0; i < optionOutputsDir; i++) {
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getOptionOutputDirName(i), false, ""),
+                                        new XProcOptionMetadata(
+                                                null, null, XProcOptionMetadata.ANY_DIR_URI, null,
+                                                XProcOptionMetadata.Output.RESULT, true));
+                        }
+
+                        // options output file
                         for (int i=0;i<this.optionTemp;i++){
-                                QName name = getOptionTempName(i);
-                                optionsSet.add(XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas
-                                                .put(name,
-                                                                new XProcOptionMetadata.Builder()
-                                                                                .withType(
-                                                                                                XProcDecorator.TranslatableOption.ANY_DIR_URI
-                                                                                                                .toString())
-                                                                                .withOutput("temp").build());
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getOptionTempName(i), false, ""),
+                                        new XProcOptionMetadata(
+                                                null, null, XProcOptionMetadata.ANY_DIR_URI, null,
+                                                XProcOptionMetadata.Output.TEMP, true));
                         }
 
-                        //options output file
+                        // options output file
                         for (int i = 0; i < this.optionOutputsNA; i++) {
-                                QName name = getOptionOutputNAName(i);
-                                optionsSet.add(XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas
-                                                .put(name,
-                                                                new XProcOptionMetadata.Builder()
-                                                                                .withType(
-                                                                                                XProcDecorator.TranslatableOption.ANY_DIR_URI
-                                                                                                                .toString())
-                                                                                .withOutput("NA").build());
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getOptionOutputNAName(i), false, ""),
+                                        new XProcOptionMetadata(
+                                                null, null, XProcOptionMetadata.ANY_DIR_URI, null,
+                                                XProcOptionMetadata.Output.NA, false));
                         }
-                        //regular options
+                        // regular options
                         for (int i = 0; i < this.optionOther; i++) {
-                                QName name = getRegularOptionName(i);
-                                optionsSet.add(XProcOptionInfo.newOption(name, false, ""));
-                                optionMetadatas.put(name,
-                                                new XProcOptionMetadata.Builder().build());
+                                builder.withOption(
+                                        XProcOptionInfo.newOption(getRegularOptionName(i), false, ""),
+                                        new XProcOptionMetadata(null, null, null, null));
                         }
-                        XProcPipelineInfo.Builder pipelineBuilder = new XProcPipelineInfo.Builder();
-                        for (XProcOptionInfo oInf : optionsSet) {
-                                pipelineBuilder.withOption(oInf);
-                        }
-                        for (XProcPortInfo port : inputSet) {
-                                pipelineBuilder.withPort(port);
-                        }
-                        for (XProcPortInfo port : outputSet) {
-                                pipelineBuilder.withPort(port);
-                                XProcPortMetadata.Builder meta = new XProcPortMetadata.Builder();
-                                if (fixedOutputPortMediaTypes != null) {
-                                        meta.withMediaType(fixedOutputPortMediaTypes.get(port.getName()));
-                                }
-                                portMetadatas.put(port.getName(), meta.build());
-                        }
-                        List<String> inputMedias = Collections.emptyList();
-                        return new XProcScript(pipelineBuilder.build(), null, null, null,
-                                        portMetadatas, optionMetadatas, null, inputMedias,
-                                        inputMedias);
 
+                        return builder.build();
                 }
 
                 public static QName getOptionTempName(int num) {

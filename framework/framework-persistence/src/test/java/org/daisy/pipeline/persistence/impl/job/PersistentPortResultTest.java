@@ -1,6 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
-import java.net.URI;
+import java.io.File;
 
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
@@ -16,7 +16,7 @@ public class PersistentPortResultTest {
 	Database db;
 	PersistentPortResult pi1;
 	String name="result";
-	URI path=URI.create("file:/tmp/file.xml");
+	File path = Mocks.result1;
 	String idx="file.xml";
 	JobId id1;
 	@Before	

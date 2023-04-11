@@ -1,12 +1,8 @@
-import java.io.ByteArrayOutputStream;
 import java.util.Iterator;
 import javax.inject.Inject;
-import javax.xml.transform.stream.StreamResult;
 
 import com.google.common.base.Optional;
 
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.clients.WebserviceStorage;
@@ -14,7 +10,7 @@ import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.job.JobStorage;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.junit.Assert;
@@ -51,12 +47,7 @@ public class NewDatabaseTest extends TestBase {
 		Optional<Client> client = clientStorage.addClient("my-client", "my-secret", Client.Role.CLIENTAPP, "me@daisy.org");
 		Assert.assertTrue(client.isPresent());
 		Assert.assertEquals("my-script", script.getId());
-		BoundXProcScript boundScript = BoundXProcScript.from(
-			script.load(),
-			new XProcInput.Builder().build(),
-			new XProcOutput.Builder()
-			    .withOutput("result", () -> new StreamResult(new ByteArrayOutputStream()))
-			    .build());
+		BoundScript boundScript = new BoundScript.Builder(script.load()).build();
 		JobManager jobManager; {
 			JobManagerFactory factory = new JobManagerFactory() {{
 				setJobStorage(jobStorage);
@@ -64,7 +55,6 @@ public class NewDatabaseTest extends TestBase {
 			jobManager = factory.createFor(client.get());
 		}
 		Optional<Job> job = jobManager.newJob(boundScript)
-		                              .isMapping(false)
 		                              .withNiceName("my-job")
 		                              .build();
 		Assert.assertTrue(job.isPresent());

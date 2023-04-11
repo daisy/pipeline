@@ -5,18 +5,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.daisy.common.xproc.XProcOptionInfo;
-import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptOption;
+import org.daisy.pipeline.script.ScriptPort;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
 import org.daisy.pipeline.webservice.xml.XmlValidator;
 
@@ -84,40 +83,25 @@ public class Validator {
 				scriptId = scriptId.substring(idx+1);
 
 		ScriptRegistry scriptRegistry = application.getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry.getScript(scriptId);
+		ScriptService<?> scriptService = scriptRegistry.getScript(scriptId);
 
-		if (unfilteredScript == null) {
+		if (scriptService == null) {
                         String message="Script not found";
 		        logger.error(message);
 			return new ValidationStatus(false,message);
 		}
 
-		XProcScript script = XProcScriptFilter.withoutOutputs(unfilteredScript.load());
+		Script script = scriptService.load();
 
 		// inputs
-		ValidationStatus hasAllRequiredInputs = validateJobRequestInputPortData(script.getXProcPipelineInfo().getInputPorts(),
-				doc.getElementsByTagNameNS(NS_DAISY,"input"), script);
+		ValidationStatus hasAllRequiredInputs = validateJobRequestInputPortData(
+			doc.getElementsByTagNameNS(NS_DAISY, "input"), script);
                 if (!hasAllRequiredInputs.isValid()){
                         return hasAllRequiredInputs;
                 }
 		// options
 		ValidationStatus hasAllRequiredOptions = validateJobRequestOptionData(
-			XProcScriptFilter.renameOptions(script),
-			doc.getElementsByTagNameNS(NS_DAISY,"option"));
-		
-		// at the moment (dec 2012), we never require outputs to be specified
-		
-		// outputs (if run in local mode)
-		/*boolean hasAllRequiredOutputs = validateJobRequestOutputPortData(script
-				.getXProcPipelineInfo().getOutputPorts(),
-				doc.getElementsByTagNameNS(NS_DAISY,"output"), script);
-		*/
-		/*if (application.getConfiguration().isLocal()) {
-			return hasAllRequiredInputs & hasAllRequiredOutputs & hasAllRequiredOptions;
-		}
-		else {
-			return hasAllRequiredInputs & hasAllRequiredOptions;
-		}*/
+			doc.getElementsByTagNameNS(NS_DAISY,"option"), script);
 		
 		return hasAllRequiredOptions;
 	}
@@ -130,24 +114,22 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static ValidationStatus validateJobRequestOptionData(XProcScript script, NodeList nodes) {
-		Iterator<XProcOptionInfo> options = script.getXProcPipelineInfo().getOptions().iterator();
+	private static ValidationStatus validateJobRequestOptionData(NodeList nodes, Script script) {
 		boolean hasAllRequiredArgs = true;
 		List<String> missingArgs = new ArrayList<String>();
 		
-		while (options.hasNext()) {
-			XProcOptionInfo arg = options.next();
+		for (ScriptOption option : script.getOptions()) {
 			// skip optional arguments
-			if (arg.isRequired() == false) {
+			if (option.isRequired() == false) {
 				continue;
 			}
 
 			boolean validArg = false;
 			for (int i=0; i<nodes.getLength(); i++) {
 				Element elm = (Element)nodes.item(i);
-				if (elm.getAttribute("name").equals(arg.getName().toString())) {
-					if(!script.getOptionMetadata(arg.getName()).isSequence()){
-						validArg = validateOptionType(elm.getTextContent(), script.getOptionMetadata(arg.getName()).getMediaType());
+				if (elm.getAttribute("name").equals(option.getName().toString())) {
+					if(!option.isSequence()){
+						validArg = validateOptionType(elm.getTextContent(), option.getMediaType());
 					}else{//otherwise is been validated by the schema
 						validArg=true;
 					}
@@ -157,7 +139,7 @@ public class Validator {
 			hasAllRequiredArgs &= validArg;
 			
 			if (!validArg) {
-				missingArgs.add(arg.getName().toString());
+				missingArgs.add(option.getName().toString());
 			}
 		}
 
@@ -183,17 +165,15 @@ public class Validator {
 	 * @param script the script
 	 * @return true, if successful
 	 */
-	private static ValidationStatus validateJobRequestInputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
+	private static ValidationStatus validateJobRequestInputPortData(NodeList nodes, Script script) {
 
-		Iterator<XProcPortInfo>it = ports.iterator();
 		boolean hasAllRequiredArgs = true;
 		List<String> missingArgs = new ArrayList<String>();
 		
-		while (it.hasNext()) {
-			XProcPortInfo arg = it.next();
+		for (ScriptPort port : script.getInputPorts()) {
                         //if it's not required is valid unless otherwise proven (i.e. empty item)
                         //if it is required is not valid unless proven (it exists and the values/items are well formed
-			boolean validArg = !script.getPortMetadata(arg.getName()).isRequired();
+			boolean validArg = !port.isRequired();
 			// input elements should be of one of two forms:
 			// <input name="in1">
 			//   <item value="./path/to/file/book.xml/>
@@ -213,7 +193,7 @@ public class Validator {
 				Element elm = (Element)nodes.item(i);
 
 				// find the <input> XML element that matches this input arg name
-				if (elm.getAttribute("name").equals(arg.getName())) {
+				if (elm.getAttribute("name").equals(port.getName())) {
 					// <input> elements will have either <item> element children or <docwrapper> element children
 					NodeList itemNodes = elm.getElementsByTagNameNS(NS_DAISY,"item");
 					NodeList docwrapperNodes = elm.getElementsByTagNameNS(NS_DAISY,"docwrapper");
@@ -226,7 +206,7 @@ public class Validator {
 							validArg = validateItemElements(itemNodes);
 						}
 						else {
-							validArg = validateDocwrapperElements(docwrapperNodes, script.getPortMetadata(arg.getName()).getMediaType());
+							validArg = validateDocwrapperElements(docwrapperNodes, port.getMediaType());
 						}
 					}
 					break;
@@ -235,7 +215,7 @@ public class Validator {
 			hasAllRequiredArgs &= validArg;
 			
 			if (!validArg) {
-				missingArgs.add(arg.getName());
+				missingArgs.add(port.getName());
 			}
 		}
 
@@ -249,59 +229,6 @@ public class Validator {
 			return new ValidationStatus(false,message);
 		}
 		return new ValidationStatus(true);
-	}
-
-	/**
-	 * Validate output port data.
-	 *
-	 * @param ports the ports
-	 * @param nodes the nodes
-	 * @param script the script
-	 * @return true, if successful
-	 */
-	// TODO: this function can probably be removed
-	private static boolean validateJobRequestOutputPortData(Iterable<XProcPortInfo> ports, NodeList nodes, XProcScript script) {
-		Iterator<XProcPortInfo>it = ports.iterator();
-		boolean hasAllRequiredArgs = true;
-		List<String> missingArgs = new ArrayList<String>();
-		
-		while (it.hasNext()) {
-			XProcPortInfo arg = it.next();
-			boolean validArg = false;
-			for (int i=0; i<nodes.getLength(); i++) {
-				Element elm = (Element)nodes.item(i);
-				if (elm.getAttribute("name").equals(arg.getName())) {
-					// this didn't match what the schema specified for <output> elements
-					/*NodeList itemNodes = elm.getElementsByTagNameNS(NS_DAISY,"item");
-
-					if (itemNodes.getLength() == 0) {
-						validArg = false;
-					}
-					else {
-						if (itemNodes.getLength() > 0) {
-							validArg = validateItemElements(itemNodes);
-						}
-					}*/
-					validArg = true;
-					break;
-				}
-			}
-			hasAllRequiredArgs &= validArg;
-			
-			if (!validArg) {
-				missingArgs.add(arg.getName());
-			}
-		}
-
-		if (hasAllRequiredArgs == false) {
-			String missingArgsStr = "";
-			for (String s : missingArgs){
-			    missingArgsStr += s + ",";
-			}
-			
-			logger.error("Required jobRequest output port arg(s) missing: " + missingArgsStr);
-		}
-		return hasAllRequiredArgs;
 	}
 
 	// make sure these nodes contain well-formed XML

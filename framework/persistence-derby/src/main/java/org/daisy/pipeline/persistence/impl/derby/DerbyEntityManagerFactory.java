@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.derby;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class DerbyEntityManagerFactory extends ForwardingEntityManagerFactory {
 		props.put(JAVAX_PERSISTENCE_JDBC_URL, DERBY_DB_URL);
 		logger.debug(DERBY_DB_URL);
 		String logfile = Properties.getProperty("org.daisy.pipeline.data") + "/log/derby.log";
+		new File(logfile).getParentFile().mkdirs();
 		System.setProperty("derby.stream.error.file", logfile);
 		logger.info("Writing Derby log messages to " + logfile);
 	}

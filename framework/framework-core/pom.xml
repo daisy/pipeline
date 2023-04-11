@@ -4,11 +4,11 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.12-SNAPSHOT</version>
+    <version>1.14.13-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   <artifactId>framework-core</artifactId>
-  <version>6.0.1-SNAPSHOT</version>
+  <version>7.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>DAISY Pipeline 2 :: Framework Core</name>
   <dependencies>
@@ -120,12 +120,12 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+              org.daisy.pipeline.datatypes.DatatypeRegistry,
               org.daisy.pipeline.event.EventBusProvider,
               org.daisy.pipeline.job.JobManagerFactory,
               org.daisy.pipeline.job.RuntimeConfigurator,
-              org.daisy.pipeline.script.impl.DefaultScriptRegistry,
-              org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+              org.daisy.pipeline.script.ScriptRegistry,
+              org.daisy.pipeline.script.impl.StaxXProcScriptParser
             </_dsannotations>
             <!--
                 compatible with versions >= 20120724
@@ -159,12 +159,12 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.datatypes.impl.DefaultDatatypeRegistry,
+                org.daisy.pipeline.datatypes.DatatypeRegistry,
                 org.daisy.pipeline.event.EventBusProvider,
                 org.daisy.pipeline.job.JobManagerFactory,
                 org.daisy.pipeline.job.RuntimeConfigurator,
-                org.daisy.pipeline.script.impl.DefaultScriptRegistry,
-                org.daisy.pipeline.script.impl.parser.StaxXProcScriptParser
+                org.daisy.pipeline.script.ScriptRegistry,
+                org.daisy.pipeline.script.impl.StaxXProcScriptParser
               </includes>
             </configuration>
           </execution>

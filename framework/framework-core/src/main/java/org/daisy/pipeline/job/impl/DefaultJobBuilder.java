@@ -22,18 +22,20 @@ import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DefaultJobBuilder implements JobManager.JobBuilder {
 
 	private final JobMonitorFactory monitorFactory;
 	private final XProcEngine xprocEngine;
 	private final Client client;
-	private final BoundXProcScript boundScript;
+	private final BoundScript boundScript;
 	private final boolean managed;
-	private boolean isMapping;
+	private boolean closeOnExit = false;
 	private JobBatchId batchId;
-	private JobResources resources;
 	private String niceName = "";
 	private Priority priority = Priority.MEDIUM;
 
@@ -53,7 +55,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	public DefaultJobBuilder(JobMonitorFactory monitorFactory,
 	                         XProcEngine xprocEngine,
 	                         Client client,
-	                         BoundXProcScript boundScript,
+	                         BoundScript boundScript,
 	                         boolean managed) {
 		this.monitorFactory = monitorFactory;
 		this.xprocEngine = xprocEngine;
@@ -63,14 +65,10 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	}
 
 	@Override
-	public DefaultJobBuilder isMapping(boolean isMapping) {
-		this.isMapping = isMapping;
-		return this;
-	}
-
-	@Override
-	public DefaultJobBuilder withResources(JobResources resources) {
-		this.resources = resources;
+	public DefaultJobBuilder closeOnExit() throws UnsupportedOperationException {
+		if (managed)
+			throw new UnsupportedOperationException();
+		this.closeOnExit = closeOnExit;
 		return this;
 	}
 
@@ -111,14 +109,15 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				logFile = JobURIUtils.getLogFile(id.toString()).toURI();
 				results = JobResultSet.EMPTY;
 				script = boundScript.getScript();
-				resultMapper = isMapping
+				input = boundScript.getInput();
+				JobResources resources = input.getResources();
+				uriMapper = resources != null
 					? JobURIUtils.newURIMapper(id.toString())
 					: JobURIUtils.newOutputURIMapper(id.toString());
-				XProcDecorator decorator = isMapping
-					? XProcDecorator.from(script, resultMapper, resources)
-					: XProcDecorator.from(script, resultMapper);
-				input = decorator.decorate(boundScript.getInput());
-				output = decorator.decorate(boundScript.getOutput());
+				if (resources != null) {
+					logger.debug("Storing the resource collection"); // because not persisted
+					IOHelper.dump(resources, uriMapper);
+				}
 				messageBus = new MessageBus(id.toString(), messagesThreshold);
 				statusListeners = new LinkedList<>();
 				StatusNotifier statusNotifier = new StatusNotifier() {
@@ -131,10 +130,13 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
 			return Optional.of(
-				managed ? new AbstractJob(ctxt, priority, xprocEngine, true) {}
-				        : new VolatileJob(ctxt, priority, xprocEngine, false));
+				(managed || !closeOnExit) ? new AbstractJob(ctxt, priority, xprocEngine, managed) {}
+				                          : new VolatileJob(ctxt, priority, xprocEngine, false));
 		} catch (IOException e) {
 			throw new RuntimeException("Error while creating job context", e);
 		}
 	}
+
+	private static final Logger logger = LoggerFactory.getLogger(DefaultJobBuilder.class);
+
 }

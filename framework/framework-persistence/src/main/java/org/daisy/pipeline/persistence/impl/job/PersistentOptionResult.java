@@ -1,5 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
 import java.io.Serializable;
 import java.net.URI;
 
@@ -14,6 +15,9 @@ import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
 
+/**
+ * Not used (only kept for backward compatibility).
+ */
 @Entity
 @Table(name="job_option_results")
 public class PersistentOptionResult{
@@ -32,7 +36,7 @@ public class PersistentOptionResult{
 
 	public PersistentOptionResult(JobId jobId, JobResult result,QName option) {
 		this.id=new PK(jobId,result.getIdx());
-		this.path=result.getPath().toString();
+		this.path=result.getPath().toURI().toString();
 		this.optionName=option.toString();
 		this.mediaType=result.getMediaType();
 	}
@@ -69,9 +73,9 @@ public class PersistentOptionResult{
 	 *
 	 * @return The path.
 	 */
-	public URI getPath()
+	public File getPath()
 	{
-		return URI.create(this.path);
+		return new File(URI.create(this.path));
 	}
 
 	/**

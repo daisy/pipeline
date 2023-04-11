@@ -1,19 +1,19 @@
 package org.daisy.pipeline.job;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import javax.xml.namespace.QName;
-
 import org.daisy.pipeline.job.impl.IOHelper;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptPort;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Lists;
@@ -22,41 +22,60 @@ import com.google.common.collect.Multimaps;
 
 public final class JobResultSet {
 
-        public final static JobResultSet EMPTY = new Builder().build();
+        public final static JobResultSet EMPTY = new Builder(null).build();
 
-        public static class Builder{
+        public static class Builder {
 
-                protected final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
-                protected final Multimap<QName,JobResult> options = LinkedListMultimap.create();
+                private final Script script;
 
-                public Builder addResult(String port, String idx, URI path, String mediaType) {
-                        outputPorts.put(port, new JobResult(idx, path, mediaType));
-                        return this;
+                public Builder() {
+                        this(null);
                 }
 
-                public Builder addResult(QName option, String idx, URI path, String mediaType) {
-                        options.put(option, new JobResult(idx, path, mediaType));
+                public Builder(Script script) {
+                        this.script = script;
+                }
+
+                private final Multimap<String,JobResult> outputPorts = LinkedListMultimap.create();
+
+                protected void addResult(String port, JobResult result) throws IllegalArgumentException {
+                        if (script != null) {
+                                ScriptPort p = script.getOutputPort(port);
+                                if (p == null)
+                                        throw new IllegalArgumentException(
+                                                String.format("Output '%s' is not recognized by script '%s'", port, script.getId()));
+                                if (!p.isSequence() && outputPorts.containsKey(port))
+                                        throw new IllegalArgumentException(
+                                                String.format("Output '%s' of script '%s' can not produce a sequence of documents",
+                                                              port, script.getId()));
+                        }
+                        outputPorts.put(port, result);
+                }
+
+                /**
+                 * @throws IllegalArgumentException if the script does not have the specified output
+                 *         port, or the port can not produce a sequence of documents and multiple
+                 *         documents are supplied.
+                 */
+                public Builder addResult(String port, String idx, File path, String mediaType) throws IllegalArgumentException {
+                        addResult(port, new JobResult(idx, path, mediaType));
                         return this;
                 }
 
                 public JobResultSet build() {
-                        return new JobResultSet(outputPorts, options);
+                        return new JobResultSet(outputPorts);
                 }
         }
 
         private final Multimap<String,JobResult> outputPorts;
-        private final Multimap<QName,JobResult> options;
 
         /**
          * Constructs a new instance.
          *
          * @param outputPorts The outputPorts for this instance.
-         * @param options The options for this instance.
          */
-        public JobResultSet(Multimap<String, JobResult> outputPorts,
-                        Multimap<QName, JobResult> options) {
+        public JobResultSet(Multimap<String, JobResult> outputPorts) {
                 this.outputPorts = Multimaps.unmodifiableMultimap(outputPorts);
-                this.options = Multimaps.unmodifiableMultimap(options);
         }
 
         public static InputStream asZip(Collection<JobResult> results) throws IOException {
@@ -86,7 +105,7 @@ public final class JobResultSet {
                                                 JobResult result = resultsIt.next();
                                                 ZipEntry entry = new ZipEntry(URI.create(result.getIdx()).getPath());
                                                 zipos.putNextEntry(entry);
-                                                InputStream is = result.getPath().toURL().openStream();
+                                                InputStream is = result.asStream();
                                                 IOHelper.dump(is, zipos);
                                                 is.close();
                                                 if (!resultsIt.hasNext())
@@ -110,22 +129,23 @@ public final class JobResultSet {
                 };
         }
 
+        public InputStream asZip() throws IOException {
+                return asZip(getResults());
+        }
+
+        public InputStream asZip(String port) throws IOException {
+                return asZip(getResults(port));
+        }
+
         public Collection<String> getPorts(){
                 return outputPorts.keySet();
-        }
-        public Collection<QName> getOptions(){
-                return options.keySet();
         }
 
         public Collection<JobResult> getResults(String port){
                 return outputPorts.get(port);
         }
-        public Collection<JobResult> getResults(QName option){
-                return options.get(option);
-        }
+
         public Collection<JobResult> getResults(){
-                List<JobResult> results= Lists.newLinkedList(outputPorts.values());
-                results.addAll(options.values());
-                return Collections.unmodifiableList(results);
+                return Collections.unmodifiableList(Lists.newLinkedList(outputPorts.values()));
         }
 }

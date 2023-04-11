@@ -30,7 +30,6 @@ script =
             & attribute ordered { xsd:boolean } # does the order matter
             & attribute type { text } # XSD type or custom data type
             & mediatype.attr? # use if option references a file
-            & attribute outputType { output.type }?
             & attribute default { text }?
         }*
         

@@ -107,7 +107,11 @@ public class PersistentClientStorage implements ClientStorage {
                 // add client to database if needed
                 if (defaultClient == null) {
                         defaultClient = new PersistentClient(Client.DEFAULT_ADMIN);
-                        if (!get(defaultClient.getId()).isPresent()) {
+                        try {
+                                database.getFirst(String.format("select c from PersistentClient as c where c.id='%s'",
+                                                                defaultClient.getId()),
+                                                  PersistentClient.class);
+                        } catch (NoResultException e) {
                                 database.addObject(defaultClient);
                         }
                 }

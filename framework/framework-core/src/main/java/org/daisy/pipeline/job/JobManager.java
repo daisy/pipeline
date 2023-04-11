@@ -1,7 +1,7 @@
 package org.daisy.pipeline.job;
 
 import org.daisy.common.priority.Priority;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 
 import com.google.common.base.Optional;
 
@@ -15,7 +15,7 @@ public interface JobManager extends JobFactory {
 	 * job, it will be added to the storage and the execution queue.
 	 */
 	@Override
-	public JobBuilder newJob(BoundXProcScript boundScript);
+	public JobBuilder newJob(BoundScript boundScript);
 
 	/**
 	 * Gets the jobs.
@@ -50,12 +50,14 @@ public interface JobManager extends JobFactory {
 
 	public interface JobBuilder extends JobFactory.JobBuilder {
 		@Override
-		public JobBuilder isMapping(boolean mapping);
-		@Override
-		public JobBuilder withResources(JobResources resources);
-		@Override
 		public JobBuilder withNiceName(String niceName);
 		public JobBuilder withPriority(Priority priority);
 		public JobBuilder withBatchId(JobBatchId id);
+		/**
+		 * @throws UnsupportedOperationException Jobs managed by a {@link JobManager} are never
+		 *                                       automatically closed.
+		 */
+		@Override
+		public JobBuilder closeOnExit() throws UnsupportedOperationException;
 	}
 }

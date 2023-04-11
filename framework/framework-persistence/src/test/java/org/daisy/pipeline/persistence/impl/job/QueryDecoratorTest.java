@@ -1,11 +1,16 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+
+import org.apache.commons.io.FileUtils;
 
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.persistence.impl.Database;
@@ -16,9 +21,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+
+import com.google.common.io.Files;
 
 @RunWith(MockitoJUnitRunner.class)
 public class QueryDecoratorTest {
@@ -42,6 +50,7 @@ public class QueryDecoratorTest {
         @Mock CriteriaQuery<PersistentJob> cq;
         @Mock Predicate pred;
         AbstractJob job;
+        File tempDir;
         Database db;
 
         @Before
@@ -49,14 +58,23 @@ public class QueryDecoratorTest {
 		db=DatabaseProvider.getDatabase();
                 dec1=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
                 dec2=Mockito.spy(new QueryDecoratorImpl(db.getEntityManager()));
-                job = new PersistentJob(db, Mocks.buildJob(), null);
+                tempDir = Files.createTempDir();
+                job = new PersistentJob(db, Mocks.buildJob(tempDir), null);
         }
 
 	@After
 	public void tearDown(){
-		db.deleteObject(job);
-		db.deleteObject(job.getContext().getClient());
-        }
+		try {
+			db.deleteObject(job);
+			db.deleteObject(job.getContext().getClient());
+		} finally {
+			if (tempDir != null)
+				try {
+					FileUtils.deleteDirectory(tempDir);
+				} catch (IOException e) {
+				}
+		}
+	}
 
         @Test
         public void decorate(){

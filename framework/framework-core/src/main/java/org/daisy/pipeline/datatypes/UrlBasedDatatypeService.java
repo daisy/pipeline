@@ -10,6 +10,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -64,6 +65,7 @@ public class UrlBasedDatatypeService implements DatatypeService{
         private Document typeDecl;
         private boolean typeDeclValid;
         private List<String> enumerationValues = null;
+        private Pattern pattern = null;
 
         public void activate(Map<?, ?> properties, Class<?> context) {
                 if (properties.get(DATATYPE_ID) == null
@@ -106,15 +108,19 @@ public class UrlBasedDatatypeService implements DatatypeService{
 
         @Override
         public ValidationResult validate(String content) {
-                if (!typeDeclRead) {
-                        readTypeDecl();
-                }
+                readTypeDecl();
                 if (enumerationValues != null) {
                         if (enumerationValues.contains(content)) {
                                 return ValidationResult.valid();
                         } else {
                                 return ValidationResult.notValid("'" + content + "' is not in the list of allowed values.");
                         }
+                } else if (pattern != null) {
+                        if (pattern.matcher(content).matches())
+                                return ValidationResult.valid();
+                        else
+                                return ValidationResult.notValid(
+                                        "'" + content + "' does not match the regular expression pattern /" + pattern + "/");
                 } else if (typeDecl == null) {
                         return ValidationResult.notValid("Could not parse type declaration");
                 } else if (!typeDeclValid) {
@@ -136,30 +142,55 @@ public class UrlBasedDatatypeService implements DatatypeService{
          * </pre>
          */
         public boolean isEnumeration() {
-                if (!typeDeclRead) {
-                        readTypeDecl();
-                }
+                readTypeDecl();
                 return enumerationValues != null;
+        }
+
+        /**
+         * Whether the datatype is a regular expression pattern
+         *
+         * <pre>
+              &lt;data type="string"&gt;
+                 &lt;param name="pattern"&gt;^a|b|c$&lt;/param&gt;
+              &lt;/data&gt;
+         * </pre>
+         */
+        public boolean isPattern() {
+                readTypeDecl();
+                return pattern != null;
         }
 
         /**
          * Get all the values of the enumeration.
          *
-         * @throws a RuntimeException if the datatype is not an enumeration.
+         * @throws UnsupportedOperationException if the datatype is not an enumeration.
          */
-        public List<String> getEnumerationValues() throws RuntimeException {
-                if (!typeDeclRead) {
-                        readTypeDecl();
-                }
+        public List<String> getEnumerationValues() throws UnsupportedOperationException {
+                readTypeDecl();
                 if (enumerationValues == null) {
                         throw new RuntimeException("Datatype is not an enumeration");
                 }
                 return enumerationValues;
         }
 
+        /**
+         * Get the regular expression pattern
+         *
+         * @throws UnsupportedOperationException if the datatype is not an pattern.
+         */
+        public Pattern getPattern() throws UnsupportedOperationException {
+                readTypeDecl();
+                if (pattern == null) {
+                        throw new RuntimeException("Datatype is not a pattern");
+                }
+                return pattern;
+		}
+
         // Can not be called from within activate because type declaration URL is possibly not registered yet
         // so resolver will not find it
         private void readTypeDecl() {
+                if (typeDeclRead)
+                        return;
                 try {
                         typeDecl = asDocument();
                         typeDeclValid = validateTypeDecl(typeDecl);
@@ -171,7 +202,20 @@ public class UrlBasedDatatypeService implements DatatypeService{
                                                 b.add(((Element)n).getTextContent());
                                         }
                                         enumerationValues = b.build();
-                                } else { // <data type="string"><param name="pattern">...</param></data>
+                                        // ignoring other child elements than <value>
+                                } else if (elem.getTagName().equals("data")) { // <data type="string"><param name="pattern">...</param></data>
+                                        // assuming the type attribute is "string" and ignoring other attributes
+                                        for (Node n : iterateNodeList(elem.getElementsByTagName("param"))) {
+                                                // assuming the name attribute is "pattern" and ignoring other attributes
+                                                pattern = Pattern.compile(((Element)n).getTextContent());
+                                                // assuming there is only one <param>
+                                                break;
+                                        }
+                                        if (pattern == null)
+                                                throw new RuntimeException("Expected 'param' child element");
+                                        // ignoring other child elements than <param>
+                                } else {
+                                        throw new RuntimeException("Unexpected element: " + elem.getTagName());
                                 }
                         }
                 } catch (Exception e) {

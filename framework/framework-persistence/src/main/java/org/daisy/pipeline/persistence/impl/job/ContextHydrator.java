@@ -1,24 +1,24 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 
-import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptInput;
+import org.daisy.pipeline.script.ScriptOption;
+import org.daisy.pipeline.script.ScriptPort;
 
-import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
 class ContextHydrator {
 	//
-	static void hydrateInputPorts(XProcInput.Builder builder,List<PersistentInputPort> inputPorts ){
+	static void hydrateInputPorts(ScriptInput.Builder builder, List<PersistentInputPort> inputPorts) throws FileNotFoundException {
 		for ( PersistentInputPort input:inputPorts){
 			for (PersistentSource src:input.getSources()){
 				builder.withInput(input.getName(),src);
@@ -26,15 +26,9 @@ class ContextHydrator {
 		}
 	}
 
-	static  void hydrateOptions(XProcInput.Builder builder,List<PersistentOption> options){
+	static  void hydrateOptions(ScriptInput.Builder builder, List<PersistentOption> options) {
 		for (PersistentOption option:options){
-			builder.withOption(option.getName(),option.getValue());
-		}
-	}
-
-	static void hydrateParams(XProcInput.Builder builder,List<PersistentParameter> params){
-		for(PersistentParameter param:params){
-			builder.withParameter(param.getPort(),param.getName(),param.getValue());
+			builder.withOption(option.getName(), option.getValue());
 		}
 	}
 
@@ -43,46 +37,25 @@ class ContextHydrator {
 			builder.addResult(pRes.getPortName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
 		}
 	}
-
-	static void hydrateResultOptions(JobResultSet.Builder builder,List<PersistentOptionResult> optionResults){
-		for(PersistentOptionResult pRes: optionResults){
-			builder.addResult(pRes.getOptionName(), pRes.getIdx(), pRes.getPath(), pRes.getMediaType());
-		}
-	}
 	
-	static List<PersistentInputPort> dehydrateInputPorts(JobId id, XProcScript script, XProcInput input) {
+	static List<PersistentInputPort> dehydrateInputPorts(JobId id, Script script, ScriptInput input) {
 		List<PersistentInputPort> inputPorts = Lists.newLinkedList();
-		for (XProcPortInfo portName : script.getXProcPipelineInfo().getInputPorts()) {
-			PersistentInputPort anon = new PersistentInputPort(id, portName.getName());
-			for (Supplier<Source> src: input.getInputs(portName.getName())) {
-				anon.addSource(new PersistentSource(src.get().getSystemId()));
+		for (ScriptPort port : script.getInputPorts()) {
+			PersistentInputPort anon = new PersistentInputPort(id, port.getName());
+			for (Source src : input.getInput(port.getName())) {
+				anon.addSource(new PersistentSource(src.getSystemId()));
 			}
 			inputPorts.add(anon);
 		}
 		return inputPorts;
 	}
 
-	static List<PersistentOption> dehydrateOptions(JobId id, XProcInput input) {
+	static List<PersistentOption> dehydrateOptions(JobId id, Script script, ScriptInput input) {
 		List<PersistentOption> options = Lists.newLinkedList();
-		for (QName option : input.getOptions().keySet()) {
-			Object val = input.getOptions().get(option);
-			try {
-				options.add(new PersistentOption(id, option, (String)val));
-			} catch (ClassCastException e) {
-				throw new RuntimeException("Expected string value for option " + option + " but got: " + val.getClass());
-			};
+		for (ScriptOption option : script.getOptions()) {
+			options.add(new PersistentOption(id, option.getName(), input.getOption(option.getName())));
 		}
 		return options;
-	}
-
-	static List<PersistentParameter> dehydrateParameters(JobId id, XProcScript script, XProcInput input) {
-		List<PersistentParameter> parameters = Lists.newLinkedList();
-		for (String portName : script.getXProcPipelineInfo().getParameterPorts()) {
-			for (QName paramName : input.getParameters(portName).keySet()){
-				parameters.add(new PersistentParameter(id, portName, paramName, input.getParameters(portName).get(paramName)));
-			}
-		}
-		return parameters;
 	}
 
 	static List<PersistentPortResult> dehydratePortResults(AbstractJobContext ctxt){
@@ -94,16 +67,5 @@ class ContextHydrator {
 			}
 		}
 		return portResults;
-	}
-
-	static List<PersistentOptionResult> dehydrateOptionResults(AbstractJobContext ctxt){
-		List<PersistentOptionResult> optionResults= Lists.newLinkedList();
-		JobResultSet rSet= ctxt.getResults();
-		for(QName option:rSet.getOptions()){
-			for(JobResult res:rSet.getResults(option)){
-				optionResults.add(new PersistentOptionResult(ctxt.getId(),res,option));
-			}
-		}
-		return optionResults;
 	}
 }

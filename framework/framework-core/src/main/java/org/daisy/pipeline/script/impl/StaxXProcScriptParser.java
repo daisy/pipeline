@@ -1,4 +1,4 @@
-package org.daisy.pipeline.script.impl.parser;
+package org.daisy.pipeline.script.impl;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,14 +17,17 @@ import javax.xml.stream.events.XMLEvent;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
+import org.daisy.common.xproc.XProcPipelineInfo;
+import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.daisy.pipeline.script.XProcPortMetadata;
 import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptParser;
 import org.daisy.pipeline.script.XProcScriptService;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Attributes;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Elements;
-import org.daisy.pipeline.script.impl.parser.XProcScriptConstants.Values;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Attributes;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Elements;
+import org.daisy.pipeline.script.impl.XProcScriptConstants.Values;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,29 +37,19 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-// TODO: Auto-generated Javadoc
 /**
- * StaxXProcScriptParser parses the xpl file extracting the metadata and buiding
- * the XProcScript object
+ * Parses the XProc file extracting the metadata and buiding the {@link Script} object
  */
 @Component(
-	name = "converter-parser",
-	service = { XProcScriptParser.class }
+	name = "script-parser",
+	service = { StaxXProcScriptParser.class }
 )
-public class StaxXProcScriptParser implements XProcScriptParser {
+public class StaxXProcScriptParser {
 
-	/** The Constant logger. */
-	private static final Logger logger = LoggerFactory
-			.getLogger(StaxXProcScriptParser.class);
-	/** The xmlinputfactory. */
-	private XMLInputFactory mFactory;
+	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
+	private XMLInputFactory xmlInputFactory;
+	private DatatypeRegistry datatypeRegistry;
 
-	/**
-	 * Sets the factory.
-	 * 
-	 * @param factory
-	 *            the new factory
-	 */
 	@Reference(
 		name = "xml-input-factory",
 		unbind = "-",
@@ -64,24 +57,29 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
 	)
-	public void setFactory(XMLInputFactory factory) {
-		mFactory = factory;
+	protected void setFactory(XMLInputFactory factory) {
+		xmlInputFactory = factory;
 	}
 
-	/**
-	 * Activate (OSGI)
-	 */
+	@Reference(
+		name = "datatype-registry",
+		unbind = "-",
+		service = DatatypeRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void setDatatypeRegistry(DatatypeRegistry registry) {
+		datatypeRegistry = registry;
+	}
+
 	@Activate
-	public void activate() {
+	protected void activate() {
 		logger.trace("Activating XProc script parser");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.daisy.pipeline.script.XProcScriptParser#parse(java.net.URI)
+	/**
+	 * Parses the XProc file.
 	 */
-	@Override
 	public XProcScript parse(final XProcScriptService descriptor) {
 		return new StatefulParser().parse(descriptor);
 	}
@@ -91,52 +89,43 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 */
 	private class StatefulParser {
 
-		/** The m ancestors. */
 		private final LinkedList<XMLEvent> mAncestors = new LinkedList<XMLEvent>();
-
-		/** The m port builders. */
-		private final LinkedList<XProcPortMetadataBuilderHolder> mPortBuilders = new LinkedList<XProcPortMetadataBuilderHolder>();
-
-		/** The m option builders. */
-		private final LinkedList<XProcOptionMetadataBuilderHolder> mOptionBuilders = new LinkedList<XProcOptionMetadataBuilderHolder>();
-
-		/** The script builder. */
+		private final LinkedList<XProcPortMetadataBuilder> inputPortBuilders = new LinkedList<XProcPortMetadataBuilder>();
+		private final LinkedList<XProcPortMetadataBuilder> outputPortBuilders = new LinkedList<XProcPortMetadataBuilder>();
+		private final LinkedList<XProcOptionMetadataBuilder> optionBuilders = new LinkedList<XProcOptionMetadataBuilder>();
 		private XProcScript.Builder scriptBuilder;
 
 		/**
-		 * Parses the xpl file extracting the metadata attached to options,ports
-		 * and the step
-		 * 
-		 * @param uri
-		 *            the uri
-		 * @return the x proc script
+		 * Parses the XProc file extracting the metadata attached to options, ports and the step.
 		 */
 		public XProcScript parse(final XProcScriptService descriptor) {
-			if (mFactory == null) {
+			if (xmlInputFactory == null) {
 				throw new IllegalStateException();
 			}
 			InputStream is = null;
 			XMLEventReader reader = null;
-			scriptBuilder = new XProcScript.Builder();
 			logger.debug("Parsing with descriptor:" + descriptor);
-			scriptBuilder = scriptBuilder.withDescriptor(descriptor);
 			StaxXProcPipelineInfoParser infoParser = new StaxXProcPipelineInfoParser();
-			infoParser.setFactory(mFactory);
+			infoParser.setFactory(xmlInputFactory);
 			try {
-				// init the XMLStreamReader
-				scriptBuilder.withPipelineInfo(infoParser.parse(descriptor.getURL()));
+				XProcPipelineInfo info = infoParser.parse(descriptor.getURL());
+				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), datatypeRegistry);
 				URL descUrl = descriptor.getURL();
 				is = descUrl.openConnection().getInputStream();
-				reader = mFactory.createXMLEventReader(is);
+				reader = xmlInputFactory.createXMLEventReader(is);
 
 				parseStep(reader);
-				for (XProcOptionMetadataBuilderHolder bHolder : mOptionBuilders) {
-					XProcOptionMetadata opt = bHolder.mBuilder.build();
-					scriptBuilder.withOptionMetadata(bHolder.mName, opt);
+				for (XProcOptionMetadataBuilder b : optionBuilders) {
+					scriptBuilder.withOption(info.getOption(b.name), b.build());
 				}
-				for (XProcPortMetadataBuilderHolder bHolder : mPortBuilders) {
-					XProcPortMetadata opt = bHolder.mBuilder.build();
-					scriptBuilder.withPortMetadata(bHolder.mName, opt);
+				for (XProcPortMetadataBuilder b : inputPortBuilders) {
+					if (info.getInputPort(b.name) == null)
+						; // parameter port
+					else
+						scriptBuilder.withInputPort(info.getInputPort(b.name), b.build());
+				}
+				for (XProcPortMetadataBuilder b : outputPortBuilders) {
+					scriptBuilder.withOutputPort(info.getOutputPort(b.name), b.build());
 				}
 
 			} catch (XMLStreamException e) {
@@ -168,15 +157,6 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 */
 		private boolean isFirstChild() {
 			return mAncestors.size() == 2;
-		}
-
-		/**
-		 * Checks the depth of the current element
-		 * 
-		 * @return true, if the element's depth is the given depth
-		 */
-		private boolean isDepth(int detph) {
-			return mAncestors.size() == detph + 1;
 		}
 
 		/**
@@ -232,79 +212,59 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					DocumentationHolder dHolder = new DocumentationHolder();
 					parseDocumentation(reader, dHolder);
 					if (isFirstChild()) {
-						scriptBuilder.withDescription(dHolder.mDetail);
-						scriptBuilder.withShortName(dHolder.mShort);
-						scriptBuilder.withHomepage(dHolder.mHomepage);
-					} else if (this.getParentName().equals(Elements.P_INPUT)
-							|| this.getParentName().equals(Elements.P_OUTPUT)) {
-						mPortBuilders.peekLast().mBuilder
-								.withDescription(dHolder.mDetail);
-						mPortBuilders.peekLast().mBuilder
-								.withNiceName(dHolder.mShort);
+						scriptBuilder.withDescription(dHolder.description);
+						scriptBuilder.withShortName(dHolder.shortName);
+						scriptBuilder.withHomepage(dHolder.homepage);
+					} else if (this.getParentName().equals(Elements.P_INPUT)) {
+						inputPortBuilders.peekLast().description = dHolder.description;
+						inputPortBuilders.peekLast().niceName = dHolder.shortName;
+					} else if (this.getParentName().equals(Elements.P_OUTPUT)) {
+						outputPortBuilders.peekLast().description = dHolder.description;
+						outputPortBuilders.peekLast().niceName = dHolder.shortName;
 					} else if (this.getParentName().equals(Elements.P_OPTION)) {
-						mOptionBuilders.peekLast().mBuilder
-								.withDescription(dHolder.mDetail);
-						mOptionBuilders.peekLast().mBuilder
-								.withNiceName(dHolder.mShort);
+						optionBuilders.peekLast().description = dHolder.description;
+						optionBuilders.peekLast().niceName = dHolder.shortName;
 					}
 				} else if (isFirstChild()
 						&& event.isStartElement()
-						&& (event.asStartElement().getName()
-								.equals(Elements.P_INPUT) || event
-								.asStartElement().getName()
-								.equals(Elements.P_OUTPUT))) {
-
-					// parse output
-					Attribute name = event.asStartElement().getAttributeByName(
-							new QName("port"));
-
-					XProcPortMetadata.Builder portBuilder = new XProcPortMetadata.Builder();
-					XProcPortMetadataBuilderHolder bHolder = new XProcPortMetadataBuilderHolder();
-					bHolder.mName = name.getValue();
-					bHolder.mBuilder = portBuilder;
-					mPortBuilders.add(bHolder);
-					// by default all ports are required
-					portBuilder.withRequired(true);
-					parsePort(event.asStartElement(), portBuilder);
-
-				} else if (isFirstChild() && event.isStartElement()
-						&& event.asStartElement().getName()
-								.equals(Elements.P_OPTION)) {
-					XProcOptionMetadata.Builder optBuilder = new XProcOptionMetadata.Builder();
-					Attribute nameAttr = event.asStartElement().getAttributeByName(
+						&& event.asStartElement().getName().equals(Elements.P_INPUT)) {
+					Attribute name = event.asStartElement().getAttributeByName(new QName("port"));
+					XProcPortMetadataBuilder b = new XProcPortMetadataBuilder(name.getValue());
+					inputPortBuilders.add(b);
+					parsePort(event.asStartElement(), b);
+				} else if (isFirstChild()
+						&& event.isStartElement()
+						&& event.asStartElement().getName().equals(Elements.P_OUTPUT)) {
+					Attribute name = event.asStartElement().getAttributeByName(new QName("port"));
+					XProcPortMetadataBuilder b = new XProcPortMetadataBuilder(name.getValue());
+					outputPortBuilders.add(b);
+					parsePort(event.asStartElement(), b);
+				} else if (isFirstChild()
+						&& event.isStartElement()
+						&& event.asStartElement().getName().equals(Elements.P_OPTION)) {
+					Attribute hiddenAttr = event.asStartElement().getAttributeByName(Attributes.PX_HIDDEN);
+					if (hiddenAttr == null || !Values.TRUE.equals(hiddenAttr.getValue())) {
+						Attribute nameAttr = event.asStartElement().getAttributeByName(
 							XProcScriptConstants.Attributes.NAME);
-					if (nameAttr != null) {
-						String name = nameAttr.getValue();
-						XProcOptionMetadataBuilderHolder bHolder = new XProcOptionMetadataBuilderHolder();
-						if (name.contains(":")) {
-							String prefix = name.substring(0, name.indexOf(":"));
-							String namespace = event.asStartElement().getNamespaceURI(prefix);
-							String localPart = name.substring(prefix.length() + 1, name.length());
-							bHolder.mName = new QName(namespace, localPart, prefix);
-						} else {
-							bHolder.mName = new QName(name);
+						if (nameAttr != null) {
+							String name = nameAttr.getValue();
+							QName qname; {
+								if (name.contains(":")) {
+									String prefix = name.substring(0, name.indexOf(":"));
+									String namespace = event.asStartElement().getNamespaceURI(prefix);
+									String localPart = name.substring(prefix.length() + 1, name.length());
+									qname = new QName(namespace, localPart, prefix);
+								} else {
+									qname = new QName(name);
+								}
+							}
+							XProcOptionMetadataBuilder b = new XProcOptionMetadataBuilder(qname);
+							parseOption(event.asStartElement(), b);
+							optionBuilders.add(b);
 						}
-						bHolder.mBuilder = optBuilder;
-						parseOption(event.asStartElement(), optBuilder);
-						mOptionBuilders.add(bHolder);
-
 					}
-				} else if (this.isPortConnection(event)) {
-					mPortBuilders.peekLast().mBuilder.withRequired(false);
 				}
-
 			}
-		}
-
-		protected boolean isPortConnection(XMLEvent event) {
-
-			boolean ret = event.isStartElement()
-					&& this.isDepth(2)
-					&& this.getParentName().equals(Elements.P_INPUT)
-					&& Elements.CONNECTIONS.contains(event.asStartElement()
-							.getName());
-			return ret;
-
 		}
 
 		protected void parseFilesets(final StartElement declareStep)
@@ -341,7 +301,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 *             the xML stream exception
 		 */
 		protected void parseOption(final StartElement optionElement,
-				final XProcOptionMetadata.Builder optionBuilder)
+				final XProcOptionMetadataBuilder optionBuilder)
 				throws XMLStreamException {
 
 			Attribute type = optionElement
@@ -360,36 +320,36 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_ORDERED);
 			Attribute separator = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_SEPARATOR);
-
 			Attribute primary = optionElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_PRIMARY);
 
 			if (mediaType != null) {
-				optionBuilder.withMediaType(mediaType.getValue());
+				optionBuilder.mediaType = mediaType.getValue();
 			}
 			if (type != null) {
-				optionBuilder.withType(type.getValue());
+				optionBuilder.type = type.getValue();
 			}
 			/*
 			 * if (dir != null) { optionBuilder.withDirection(dir.getValue()); }
 			 */
 			if (output != null) {
-				optionBuilder.withOutput(output.getValue());
+				try {
+					optionBuilder.output = XProcOptionMetadata.Output.valueOf(output.getValue().toUpperCase());
+				} catch (IllegalArgumentException e) {
+				}
 			}
 			if (sequence != null) {
-				optionBuilder.withSequence(sequence.getValue());
+				optionBuilder.sequence = sequence.getValue().equalsIgnoreCase("true");
 			}
 			if (ordered != null) {
-				optionBuilder.withOrdered(ordered.getValue());
+				optionBuilder.ordered = ordered.getValue().equalsIgnoreCase("true");
 			}
-			if (separator != null) {
-				optionBuilder.withSeparator(separator.getValue());
+			if (separator != null && !separator.getValue().isEmpty()) {
+				optionBuilder.separator = separator.getValue();
 			}
-                        if (primary !=null && primary.getValue().equals("false")){
-                                optionBuilder.withPrimary(false);
-                        }else{
-                                optionBuilder.withPrimary(true);
-                        }
+			if (primary != null) {
+				optionBuilder.primary = !primary.getValue().equalsIgnoreCase("false");
+			}
 		}
 
 		/**
@@ -465,7 +425,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
                                         if (!"preserve".equals(xmlSpace)) {
                                             data = data.replaceAll("\\s+"," ");
                                         }
-                                        dHolder.mShort = data;
+                                        dHolder.shortName = data;
 									}
 
 									else if (role.equals(Values.DESC)) {
@@ -474,7 +434,7 @@ public class StaxXProcScriptParser implements XProcScriptParser {
                                         if (!"preserve".equals(xmlSpace)) {
                                             data = data.replaceAll("\\s+"," ");
                                         }
-										dHolder.mDetail = data;
+										dHolder.description = data;
 									} else if (role.equals(Values.HOMEPAGE)) {
 										reader.next();
                                         String data = reader.peek().asCharacters().getData();
@@ -483,14 +443,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
                                         }
 										// if @href is present, use that
 										if (elm.getAttributeByName(Attributes.HREF) != null) {
-											dHolder.mHomepage = elm
+											dHolder.homepage = elm
 													.getAttributeByName(
 															Attributes.HREF)
 													.getValue().replaceAll("\\s+"," ");
 										}
 										// otherwise just use the text contents
 										else {
-											dHolder.mHomepage = data;
+											dHolder.homepage = data;
 										}
 									}
 
@@ -516,24 +476,14 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 		 * @throws XMLStreamException
 		 *             the xML stream exception
 		 */
-		private void parsePort(final StartElement portElement,
-				final XProcPortMetadata.Builder portBuilder)
+		private void parsePort(final StartElement portElement, final XProcPortMetadataBuilder portBuilder)
 				throws XMLStreamException {
 
 			Attribute mediaType = portElement
 					.getAttributeByName(XProcScriptConstants.Attributes.PX_MEDIA_TYPE);
 			if (mediaType != null) {
-				portBuilder.withMediaType(mediaType.getValue());
+				portBuilder.mediaType = mediaType.getValue();
 			}
-			Attribute primary= portElement
-					.getAttributeByName(XProcScriptConstants.Attributes.PRIMARY);
-
-                        if (primary !=null && primary.getValue().equals("false")){
-                                portBuilder.withPrimary(false);
-                        }else{
-
-                                portBuilder.withPrimary(true);
-                        }
 		}
 	}
 
@@ -542,38 +492,57 @@ public class StaxXProcScriptParser implements XProcScriptParser {
 	 */
 	private static class DocumentationHolder {
 
-		/** The m short. */
-		String mShort;
+		String shortName = null;
+		String description = null;
+		String homepage = null;
 
-		/** The m detail. */
-		String mDetail;
-
-		/** The m homepage. */
-		String mHomepage;
 	}
 
 	/**
-	 * The Class XProcOptionMetadataBuilderHolder holds metadata for options
+	 * {@link XProcOptionMetadata} builder.
 	 */
-	private static class XProcOptionMetadataBuilderHolder {
+	private static class XProcOptionMetadataBuilder {
 
-		/** The m name. */
-		QName mName;
+		final QName name;
 
-		/** The m builder. */
-		XProcOptionMetadata.Builder mBuilder;
+		XProcOptionMetadataBuilder(QName name) {
+			this.name = name;
+		}
+
+		String niceName = null;
+		String description = null;
+		String type = null;
+		String mediaType = null;
+		XProcOptionMetadata.Output output = XProcOptionMetadata.Output.NA;
+		boolean primary = true;
+		boolean sequence = false;
+		boolean ordered = true;
+		String separator = XProcOptionMetadata.DEFAULT_SEPARATOR;
+
+		XProcOptionMetadata build() {
+			return new XProcOptionMetadata(niceName, description, type, mediaType,
+			                               output, primary,
+			                               sequence, ordered, separator);
+		}
 	}
 
 	/**
-	 * The Class XProcPortMetadataBuilderHolder holds metadata for ports
+	 * {@link XProcPortMetadata} builder.
 	 */
-	private static class XProcPortMetadataBuilderHolder {
+	private static class XProcPortMetadataBuilder {
 
-		/** The m name. */
-		String mName;
+		final String name;
 
-		/** The m builder. */
-		XProcPortMetadata.Builder mBuilder;
+		XProcPortMetadataBuilder(String name) {
+			this.name = name;
+		}
+
+		String niceName;
+		String description;
+		String mediaType;
+
+		XProcPortMetadata build() {
+			return new XProcPortMetadata(niceName, description, mediaType);
+		}
 	}
-
 }

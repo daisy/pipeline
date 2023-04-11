@@ -36,16 +36,16 @@ public class JobResultSetTest   {
 		URI tmp=new File(System.getProperty("java.io.tmpdir")).toURI();
 		uri1= URI.create("file1.xml");
 		uri2= URI.create("file2.xml");
-		URI res1=tmp.resolve(uri1);
-		URI res2=tmp.resolve(uri2);
-		(new File(res1)).createNewFile();
-		(new File(res2)).createNewFile();
+		File res1 = new File(tmp.resolve(uri1));
+		File res2 = new File(tmp.resolve(uri2));
+		res1.createNewFile();
+		res2.createNewFile();
 		//write the files	
-		PrintWriter pw1= new PrintWriter(new FileOutputStream(new File(res1)));
+		PrintWriter pw1 = new PrintWriter(new FileOutputStream(res1));
 		pw1.append(content1);
 		pw1.close();
 
-		PrintWriter pw2= new PrintWriter(new FileOutputStream(new File(res2)));
+		PrintWriter pw2 = new PrintWriter(new FileOutputStream(res2));
 		pw2.append(content2);
 		pw2.close();
 

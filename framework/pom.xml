@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-aggregator</artifactId>
-  <version>1.14.12-SNAPSHOT</version>
+  <version>1.14.13-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Aggregator</name>
@@ -41,7 +41,7 @@
     <module>modules-registry</module>
     <module>persistence-derby</module>
     <module>persistence-mysql</module>
-    <module>updater-wrapper</module>
+    <module>updater-wrapper</module> <!-- currently not included by pipeline-assembly -->
     <module>webservice</module>
     <module>woodstox-osgi-adapter</module>
     <module>xproc-api</module>

@@ -1,8 +1,8 @@
 package org.daisy.pipeline.webservice.impl;
 
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.webservice.xml.ScriptXmlWriter;
 
 import org.restlet.data.MediaType;
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ScriptResource extends AuthenticatedResource {
 	/** The script. */
-	private XProcScript script = null;
+	private Script script = null;
 	/** The logger. */
 	private static Logger logger = LoggerFactory.getLogger(ScriptResource.class.getName());
 
@@ -39,13 +39,10 @@ public class ScriptResource extends AuthenticatedResource {
 
 		logger.debug("Script with id :"+scriptId);
 		ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
-		XProcScriptService unfilteredScript = scriptRegistry
-				.getScript(scriptId);
+		ScriptService<?> scriptService = scriptRegistry.getScript(scriptId);
 
-		if (unfilteredScript != null) {
-			script = unfilteredScript.load();
-			script = XProcScriptFilter.withoutOutputs(script);
-			script = XProcScriptFilter.renameOptions(script);
+		if (scriptService != null) {
+			script = scriptService.load();
 		}
 	}
 

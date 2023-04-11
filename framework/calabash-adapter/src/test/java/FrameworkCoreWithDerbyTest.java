@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import javax.inject.Inject;
-import javax.xml.transform.Result;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.Level;
@@ -18,16 +17,14 @@ import org.apache.commons.io.FileUtils;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobManagerFactory;
 import org.daisy.pipeline.junit.AbstractTest;
 import org.daisy.pipeline.junit.OSGiLessConfiguration;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -55,22 +52,7 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		FrameworkCoreTest.CollectLogMessages collectLog = new FrameworkCoreTest.CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
 		try {
-			Job job = newJob("progress-messages",
-			                 new XProcInput.Builder().build(),
-			                 // can not use StreamResult because framework would not be able to persist and raise error
-			                 new XProcOutput.Builder().withOutput("result",
-			                                                      () -> {
-			                                                          try {
-			                                                              File res = File.createTempFile("res", null, PIPELINE_BASE);
-			                                                              logger.debug("Storing result to " + res);
-			                                                              return new Result() {
-			                                                                  public String getSystemId() {
-			                                                                      return res.toURI().toString(); }
-			                                                                  public void setSystemId(String id) {
-			                                                                      throw new UnsupportedOperationException(); }}; }
-			                                                          catch (IOException e) {
-			                                                              throw new RuntimeException(e); }})
-			                                          .build());
+			Job job = newJob("progress-messages");
 			final MessageAccessor accessor = job.getMonitor().getMessageAccessor();
 			Runnable poller = new FrameworkCoreTest.JobPoller(job, Job.Status.SUCCESS, 200, 3000) {
 				BigDecimal lastProgress = BigDecimal.ZERO;
@@ -127,12 +109,11 @@ public class FrameworkCoreWithDerbyTest extends AbstractTest {
 		}
 	}
 	
-	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
+	Job newJob(String scriptId) {
 		JobManager jobManager = jobManagerFactory.create();
-		XProcScriptService script = scriptRegistry.getScript(scriptId);
+		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		return jobManager.newJob(BoundXProcScript.from(script.load(), input, output))
-		                 .isMapping(true)
+		return jobManager.newJob(new BoundScript.Builder(script.load()).build())
 		                 .withNiceName("nice")
 		                 .build()
 		                 .get();

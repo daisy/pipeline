@@ -1,6 +1,10 @@
 package org.daisy.common.xproc;
 
-public class XProcErrorException extends Exception {
+import javax.xml.namespace.QName;
+
+import org.daisy.common.transform.TransformerException;
+
+public class XProcErrorException extends TransformerException {
 	
 	private final XProcError error;
 	
@@ -11,6 +15,11 @@ public class XProcErrorException extends Exception {
 	
 	public XProcError getXProcError() {
 		return error;
+	}
+	
+	@Override
+	public QName getCode() {
+		return error.getCode();
 	}
 	
 	@Override

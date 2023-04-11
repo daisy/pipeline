@@ -182,21 +182,22 @@ public interface XProcStep extends com.xmlcalabash.core.XProcStep, XMLTransforme
 							? XProcException.fromException(e.getCause())
 							                .rebase(step.getLocation(), stackTrace)
 							: null;
-				return e.getMessage() != null
-					? cause != null
-						? new XProcException(step, e.getMessage(), cause)
-						: new XProcException(step, e.getMessage())
-					: cause;
+				QName code = ((TransformerException)e).getCode();
+				return new XProcException(
+					code != null
+						? new net.sf.saxon.s9api.QName(code.getPrefix(), code.getNamespaceURI(), code.getLocalPart())
+						: null,
+					step, e, cause);
 			} else {
 				/* If the exception is a TransformerException we assume it comes from the {@link
 				 * XMLTransformer.transform()} method used to implement the step. An
 				 * IllegalArgumentException should not happen (indicates a bug in the XProc
 				 * step). Because no other exceptions are mentioned in the contract of this method
 				 * we treat them as unexpected exceptions as well. */
-				return XProcException(step,
-				                      "Unexpected error in " + step.getType(),
-				                      XProcException.fromException(e)
-				                                    .rebase(step.getLocation(), stackTrace));
+				return new XProcException(step,
+				                          "Unexpected error in " + step.getType(),
+				                          XProcException.fromException(e)
+				                                        .rebase(step.getLocation(), stackTrace));
 			}
 		}
 	}

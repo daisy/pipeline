@@ -7,7 +7,7 @@ import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
 import org.daisy.pipeline.job.impl.DefaultJobManager;
 import org.daisy.pipeline.job.impl.JobExecutionService;
 import org.daisy.pipeline.job.impl.VolatileJobStorage;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 public class JobManagerFactory implements JobFactory {
 
         @Override
-        public JobFactory.JobBuilder newJob(BoundXProcScript boundScript) {
+        public JobFactory.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(JobMonitorFactory.LIVE_MONITOR_FACTORY,
                                              xprocEngine,
                                              null,

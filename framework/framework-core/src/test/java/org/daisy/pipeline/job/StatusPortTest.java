@@ -1,19 +1,22 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.job;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.OutputStreamWriter;
+
 import javax.xml.transform.stream.StreamResult;
 
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.job.impl.JobUtils;
+import org.daisy.pipeline.job.impl.Mock;
+import org.daisy.pipeline.job.impl.XProcDecorator;
 import org.daisy.pipeline.script.XProcScript;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class JobUtilsTest {
+public class StatusPortTest {
+
         private static final String XML_ERR = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='error'/>";
         private static final String XML_OK = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' result='ok'/>";
         private static final String XML_INVALID = "<d:status xmlns:d='http://www.daisy.org/ns/pipeline/data' invalid='ok'/>";
@@ -39,41 +42,41 @@ public class JobUtilsTest {
 
         @Test
         public void withoutStatusPort() {
-                boolean ok=JobUtils.checkStatusPort(script, outputs);
+                boolean ok = AbstractJob.checkStatusPort(script, outputs);
                 Assert.assertTrue("should return true when no status port is present",ok);
         }
         
         @Test
         public void statusPortOk() throws IOException, UnsupportedEncodingException {
                 writeStatus(XML_OK);
-                boolean ok=JobUtils.checkStatusPort(script, outputs);
+                boolean ok = AbstractJob.checkStatusPort(script, outputs);
                 Assert.assertTrue("should return true when status document says 'ok'",ok);
         }
 
         @Test
         public void statusPortError() throws IOException, UnsupportedEncodingException {
                 writeStatus(XML_ERR);
-                boolean ok=JobUtils.checkStatusPort(script, outputs);
+                boolean ok = AbstractJob.checkStatusPort(script, outputs);
                 Assert.assertFalse("should return false when status document says 'error'",ok);
         }
 
         @Test(expected =RuntimeException.class)
         public void invalidStatusXml() throws IOException, UnsupportedEncodingException {
                 writeStatus(XML_INVALID);
-                JobUtils.checkStatusPort(script, outputs);
+                AbstractJob.checkStatusPort(script, outputs);
         }
         @Test
         public void multipleStatusOk() throws IOException, UnsupportedEncodingException {
                 writeStatus(XML_OK);
                 writeStatus(XML_OK);
-                boolean ok=JobUtils.checkStatusPort(script, outputs);
+                boolean ok = AbstractJob.checkStatusPort(script, outputs);
                 Assert.assertTrue("should return true if all status documents say 'ok'",ok);
         }
         @Test
         public void multipleStatusErr() throws IOException, UnsupportedEncodingException {
                 writeStatus(XML_OK);
                 writeStatus(XML_ERR);
-                boolean ok=JobUtils.checkStatusPort(script, outputs);
+                boolean ok = AbstractJob.checkStatusPort(script, outputs);
                 Assert.assertFalse("should return false if at least one status documents say 'error'",ok);
         }
 }

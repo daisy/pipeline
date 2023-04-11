@@ -1,6 +1,6 @@
 package org.daisy.pipeline.persistence.impl.job;
 
-import java.net.URI;
+import java.io.File;
 
 import javax.xml.namespace.QName;
 
@@ -18,7 +18,7 @@ public class PersistentOptionResultTest {
 	Database db;
 	PersistentOptionResult pi1;
 	String name="result";
-	URI path=URI.create("file:/tmp/file.xml");
+	File path = Mocks.result1;
 	String idx="file.xml";
 	JobResult result;
 	JobId id1;

@@ -6,10 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.xml.transform.Source;
 
-import com.google.common.base.Supplier;
-
 @Embeddable
-public class PersistentSource implements Source,Serializable,Supplier<Source>{
+public class PersistentSource implements Source, Serializable {
 	static final long serialVersionUID=98749124L;
 
         @Column(length=32672)
@@ -39,10 +37,4 @@ public class PersistentSource implements Source,Serializable,Supplier<Source>{
 	public void setSystemId(String systemId) {
 		this.systemId=systemId;
 	}
-
-	@Override
-	public Source get() {
-		return this;
-	}
-
 }

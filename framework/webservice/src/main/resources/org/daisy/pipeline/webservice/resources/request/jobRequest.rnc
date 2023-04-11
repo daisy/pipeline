@@ -21,10 +21,6 @@ start =
             & (text | item+)
         }* 
         
-        & element output {
-            attribute name { text } 
-            & (text | item+)
-        }*
         & element callback {
             attribute href { text }
             & attribute type { callback.type }

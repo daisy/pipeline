@@ -16,6 +16,7 @@ public class Updater {
                         throw new IllegalStateException(
                                 "The property 'org.daisy.pipeline.home' is not set. Can not run updater.");
                 // pipeline-assembly is responsible for placing the file at this location
+                // FIXME: embed the binaries within this JAR
                 String bin = home + "/updater/pipeline-updater";
                 String deployPath = home + "/";
                 // pipeline-assembly is responsible for placing the file at this location

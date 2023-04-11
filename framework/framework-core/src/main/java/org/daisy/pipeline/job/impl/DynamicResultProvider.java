@@ -43,6 +43,9 @@ public final class DynamicResultProvider implements Supplier<Result>{
 	public Result get() {
 		Result res = null;
 		int count = providedResults.size();
+		/* Note that in practice backingProvider will always be null because the {@link
+		 * BoundXProcScript} API doesn't allow specifying outputs anymore.
+		 */
 		if (backingProvider != null) {
 			res = backingProvider.get();
 			if (!(res instanceof StreamResult)) {
@@ -65,7 +68,7 @@ public final class DynamicResultProvider implements Supplier<Result>{
 		}
 		if (res == null) {
 			if (prefix == null) {
-				String parts[] = URITranslatorHelper.getDynamicResultProviderParts(portName, constantSystemId, portMimetype);
+				String parts[] = getDynamicResultProviderParts(portName, constantSystemId, portMimetype);
 				prefix = mapper.mapOutput(URI.create(parts[0])).toString();
 				suffix = parts[1];
 			}
@@ -110,9 +113,50 @@ public final class DynamicResultProvider implements Supplier<Result>{
 		public void setSystemId(String arg0) {
 			throw new UnsupportedOperationException(String.format("%s does not support modifying the systemId",DynamicResult.class));
 		}
-
-		
-
 	}
-	
+
+	/**
+	 * Return the prefix (unmapped) at index 0 and suffix at index 1 for the a dynamic result
+	 * provider based on the provider and the port info.
+	 */
+	static final String[] getDynamicResultProviderParts(String name, String systemId, String mimetype){
+		String parts[] = null;
+		// on the result/result.xml way
+		if (systemId == null || systemId.isEmpty()) {
+			parts = new String[]{String.format("%s/%s", name, name), getFileExtension(mimetype)};
+			// directory -> dir/name, .xml
+			// the first part is the last char of the sysId
+		} else if (systemId.charAt(systemId.length() - 1) == '/') {
+			parts= new String[]{String.format("%s%s", systemId, name), getFileExtension(mimetype)};
+			// file name/name, (".???"|"")
+		} else {
+			String ext = "";
+			String path = systemId;
+			int idx;
+			// get the extension if there is one
+			if ((idx = path.lastIndexOf('.')) > -1)
+				ext = path.substring(idx);
+			// the path had a dot in the middle, it's not an extension
+			if (ext.indexOf('/') > 0)
+				ext = "";
+			// there's extension so we divide
+			// lastIndexOf(.) will never be -1
+			if (!ext.isEmpty())
+				path = path.substring(0, path.lastIndexOf('.'));
+			parts = new String[]{path, ext};
+		}
+		return parts;
+	}
+
+	private static final String MEDIA_TYPE_REPORT_XML = "application/vnd.pipeline.report+xml";
+
+	/**
+	 * Map mimetype to file extension
+	 */
+	private static String getFileExtension(String mimetype) {
+		if (MEDIA_TYPE_REPORT_XML.equals(mimetype))
+			return ".html";
+		else
+			return ".xml";
+	}
 }

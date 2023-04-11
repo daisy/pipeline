@@ -1,6 +1,6 @@
 package org.daisy.pipeline.webservice.xml;
 
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 public class ScriptsXmlWriter {
 	
 	private final String baseUrl;
-	Iterable<XProcScript> scripts = null;
+	Iterable<Script> scripts = null;
 	private static Logger logger = LoggerFactory.getLogger(ScriptsXmlWriter.class.getName());
 
 	/**
@@ -23,7 +23,7 @@ public class ScriptsXmlWriter {
 	 *                to get fully qualified URLs. Set this to {@link Routes#getPath()} to get
 	 *                absolute paths relative to the domain name.
 	 */
-	public ScriptsXmlWriter(Iterable<XProcScript> scripts, String baseUrl) {
+	public ScriptsXmlWriter(Iterable<Script> scripts, String baseUrl) {
 		this.scripts = scripts;
 		this.baseUrl = baseUrl;
 	}
@@ -36,12 +36,12 @@ public class ScriptsXmlWriter {
 		return scriptsToXml(scripts);
 	}
 	
-	private Document scriptsToXml(Iterable<XProcScript> scripts) {
+	private Document scriptsToXml(Iterable<Script> scripts) {
 		Document doc = XmlUtils.createDom("scripts");
 		Element scriptsElm = doc.getDocumentElement();
 		scriptsElm.setAttribute("href", baseUrl + Routes.SCRIPTS_ROUTE);
 		
-		for (XProcScript script : scripts) {
+		for (Script script : scripts) {
 			ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
 			writer.addAsElementChild(scriptsElm);
 		}

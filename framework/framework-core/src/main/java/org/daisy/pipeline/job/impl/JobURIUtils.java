@@ -68,6 +68,9 @@ public class JobURIUtils {
                         if (val != null)
                                 logger.warn("The '" + prop + "' property is deprecated. Ignoring.");
                         jobsBaseDir = new File(frameworkDataDir(), "jobs");
+                        if (Properties.getProperty("org.daisy.pipeline.data") == null)
+                                // delete on exit when empty
+                                jobsBaseDir.deleteOnExit();
                 }
                 File f = new File(jobsBaseDir, jobId);
                 if (create)
@@ -172,11 +175,8 @@ public class JobURIUtils {
                                 frameworkDataDir = new File(val);
                         else {
                                 frameworkDataDir = Files.createTempDirectory("pipeline-jobs-").toFile();
-                                // delete on exit
-                                Runtime.getRuntime().addShutdownHook(
-                                        new Thread() {
-                                                public void run() {
-                                                        deleteDir(frameworkDataDir); }});
+                                // delete on exit if empty
+                                frameworkDataDir.deleteOnExit();
                         }
                 }
                 return frameworkDataDir;

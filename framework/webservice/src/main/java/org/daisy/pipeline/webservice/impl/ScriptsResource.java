@@ -1,12 +1,11 @@
 package org.daisy.pipeline.webservice.impl;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 import org.daisy.pipeline.webservice.xml.ScriptsXmlWriter;
 
 import org.restlet.data.MediaType;
@@ -21,7 +20,7 @@ import org.restlet.resource.Get;
  */
 public class ScriptsResource extends AuthenticatedResource {
 	/** The scripts. */
-	List<XProcScript> scripts = null;
+	List<Script> scripts = null;
 
 	/* (non-Javadoc)
 	 * @see org.restlet.resource.Resource#doInit()
@@ -33,11 +32,9 @@ public class ScriptsResource extends AuthenticatedResource {
 			return;
 		}
 		ScriptRegistry scriptRegistry = webservice().getScriptRegistry();
-		Iterable<XProcScriptService> unfilteredScripts = scriptRegistry.getScripts();
-		Iterator<XProcScriptService> it = unfilteredScripts.iterator();
-		scripts = new ArrayList<XProcScript>();
-		while (it.hasNext()) {
-			scripts.add(it.next().load());
+		scripts = new ArrayList<Script>();
+		for (ScriptService<?> script : scriptRegistry.getScripts()) {
+			scripts.add(script.load());
 		}
 	}
 

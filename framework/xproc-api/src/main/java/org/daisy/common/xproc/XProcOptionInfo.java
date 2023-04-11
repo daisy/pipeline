@@ -37,7 +37,9 @@ public class XProcOptionInfo {
 	/** The select statement */
 	private final String select;
 
-	public XProcOptionInfo(QName name, String type, boolean isRequired, String select) {
+	protected XProcOptionInfo(QName name, String type, boolean isRequired, String select) {
+		if (isRequired && select != null)
+			throw new IllegalArgumentException("A required option can not have a select statement");
 		this.name = name;
 		this.type = type;
 		this.isRequired = isRequired;

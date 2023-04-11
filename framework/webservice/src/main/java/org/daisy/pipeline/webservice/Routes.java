@@ -16,8 +16,8 @@ public class Routes {
 	public static final String JOB_CONF_ROUTE = "/jobs/{id}/configuration";
 	public static final String ALIVE_ROUTE = "/alive";
 	public static final String RESULT_ROUTE = "/jobs/{id}/result";
-	public static final String RESULT_OPTION_ROUTE = "/jobs/{id}/result/option/{name}";
-	public static final String RESULT_OPTION_ROUTE_IDX = "/jobs/{id}/result/option/{name}/idx/{idx}";
+	public static final String RESULT_OPTION_ROUTE = "/jobs/{id}/result/option/{name}";               // kept for backward compatibility (but will result in error)
+	public static final String RESULT_OPTION_ROUTE_IDX = "/jobs/{id}/result/option/{name}/idx/{idx}"; // kept for backward compatibility (but will result in error)
 	public static final String RESULT_PORT_ROUTE= "/jobs/{id}/result/port/{name}";
 	public static final String RESULT_PORT_ROUTE_IDX = "/jobs/{id}/result/port/{name}/idx/{idx}";
 	public static final String HALT_ROUTE = "/admin/halt/{key}";

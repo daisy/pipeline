@@ -19,8 +19,7 @@ public class PersistentMapper {
 	}	
 
 	public PersistentMapper(URIMapper mapper){
-		this.inputBase=mapper.getInputBase().toString();	
-		this.outputBase=mapper.getOutputBase().toString();	
+		setMapper(mapper);
 	}
 
 	public URIMapper getMapper(){
@@ -31,6 +30,4 @@ public class PersistentMapper {
 		this.inputBase=mapper.getInputBase().toString();	
 		this.outputBase=mapper.getOutputBase().toString();	
 	}
-
-
 }

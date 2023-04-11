@@ -1,5 +1,7 @@
 package org.daisy.pipeline.persistence.impl.job;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +22,6 @@ import javax.persistence.PostLoad;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.daisy.common.xproc.XProcInput;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
@@ -29,9 +30,9 @@ import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
+import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScript;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +71,9 @@ public final class PersistentJobContext extends AbstractJobContext {
         @MapsId("job_id")
         private List<PersistentOption> options= new ArrayList<PersistentOption>();
 
+        /**
+         * Not used (only kept for backward compatibility).
+         */
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
@@ -80,6 +84,9 @@ public final class PersistentJobContext extends AbstractJobContext {
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
         private List<PersistentPortResult> portResults= new ArrayList<PersistentPortResult>();
 
+        /**
+         * Not used (only kept for backward compatibility).
+         */
         @OneToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
         @MapsId("job_id")
         //@JoinColumn(name="job_id",referencedColumnName="job_id")
@@ -89,10 +96,9 @@ public final class PersistentJobContext extends AbstractJobContext {
                 super(ctxt);
                 // Map complex objects to their Persistent representation
                 logger.debug("coping the objects to the model ");
-                this.pMapper = new PersistentMapper(this.resultMapper);
+                this.pMapper = new PersistentMapper(this.uriMapper);
                 this.inputPorts = ContextHydrator.dehydrateInputPorts(this.getId(), this.getScript(), this.input);
-                this.options = ContextHydrator.dehydrateOptions(this.getId(), this.input);
-                this.parameters = ContextHydrator.dehydrateParameters(this.getId(), this.getScript(), this.input);
+                this.options = ContextHydrator.dehydrateOptions(this.getId(), this.getScript(), this.input);
                 if (this.getClient() instanceof PersistentClient)
                         this.pClient = (PersistentClient)this.getClient();
                 else if (clientStorage == null)
@@ -124,26 +130,37 @@ public final class PersistentJobContext extends AbstractJobContext {
         private void postLoad(){
                 logger.debug("Post loading jobcontext");
                 //we have all the model but we have to hidrate the actual objects
-                XProcInput.Builder builder=new XProcInput.Builder();
-                ContextHydrator.hydrateInputPorts(builder,inputPorts);
+                this.uriMapper = this.pMapper.getMapper();
+                File contextDir = null; {
+                        URI u = uriMapper.getInputBase();
+                        if (u != null && !"".equals(u.toString())) {
+                                try {
+                                        contextDir = new File(u);
+                                } catch (IllegalArgumentException e) {
+                                        throw new IllegalStateException("Not a directory: " + u, e);
+                                }
+                        }
+                }
+                ScriptInput.Builder builder = contextDir != null ? new ScriptInput.Builder(contextDir)
+                                                                 : new ScriptInput.Builder();
+                try {
+                        ContextHydrator.hydrateInputPorts(builder,inputPorts);
+                } catch (FileNotFoundException e) {
+                        throw new IllegalStateException("Input files missing", e);
+                }
                 ContextHydrator.hydrateOptions(builder,options);
-                ContextHydrator.hydrateParams(builder,parameters);
                 this.input = builder.build();
 
-                this.resultMapper = this.pMapper.getMapper();
                 this.client = this.pClient;
 
                 JobResultSet.Builder rBuilder=new JobResultSet.Builder();
                 ContextHydrator.hydrateResultPorts(rBuilder,portResults);
-                ContextHydrator.hydrateResultOptions(rBuilder,optionResults);
                 this.results = rBuilder.build();
         }
 
         void updateResults() {
                 if(this.portResults.size()==0)
                         this.portResults=ContextHydrator.dehydratePortResults(this);
-                if(this.optionResults.size()==0)
-                        this.optionResults=ContextHydrator.dehydrateOptionResults(this);
         }
 
         @Column(name="job_id")
@@ -191,7 +208,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                 if (scriptId != null) {
                         return scriptId;
                 } else if (this.getScript() != null) {
-                        return this.getScript().getDescriptor().getId();
+                        return this.getScript().getId();
                 } else {
                         throw new IllegalStateException("Script is null");
                 }
@@ -216,7 +233,7 @@ public final class PersistentJobContext extends AbstractJobContext {
 
         void finalize(ScriptRegistry registry, JobMonitorFactory monitorFactory) {
                 if (registry != null) {
-                        XProcScriptService service = registry.getScript(scriptId);
+                        ScriptService<?> service = registry.getScript(scriptId);
                         if (service == null)
                                 throw new IllegalStateException(
                                         String.format("Illegal state for recovering XProcScript %s: registry %s",
@@ -230,11 +247,11 @@ public final class PersistentJobContext extends AbstractJobContext {
 
         // for unit tests
 
-        XProcInput getInputs() {
+        ScriptInput getInput() {
                 return input;
         }
 
         URIMapper getResultMapper() {
-                return resultMapper;
+                return uriMapper;
         }
 }

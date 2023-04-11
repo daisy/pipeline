@@ -13,10 +13,20 @@ import javax.xml.namespace.QName;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
+
+/**
+ * Because of backward compatibility the name is stored as a QName in Clark notation, and the value
+ * is stored as a flat string.
+ */
 @Entity
 @Table(name="options")
 public class PersistentOption  implements Serializable {
+
 	public static final long serialVersionUID=1L;
+	private static final String VALUE_SEPARATOR = "\u001E"; // Unicode information separator two
+
 	@EmbeddedId
 	PK id;
         @Lob
@@ -31,18 +41,18 @@ public class PersistentOption  implements Serializable {
 	/**
 	 * Constructs a new instance.
 	 */
-	public PersistentOption(JobId jobId, QName name,String value) {
-		this.id=new PK(jobId,name);
-		this.value=value;
-
+	public PersistentOption(JobId jobId, String name, Iterable<String> value) {
+		this.id = new PK(jobId, new QName(name));
+		this.value = Joiner.on(VALUE_SEPARATOR).skipNulls().join(value);
 	}
+
 	/**
 	 * Gets the name for this instance.
 	 *
 	 * @return The name.
 	 */
-	public QName getName() {
-		return this.id.getNameAsQName();
+	public String getName() {
+		return this.id.getNameAsQName().getLocalPart();
 	}
 
 	/**
@@ -78,6 +88,10 @@ public class PersistentOption  implements Serializable {
 	 */
 	public String getValue() {
 		return this.value;
+	}
+
+	public Iterable<String> getValueAsSequence() {
+		return Splitter.on(VALUE_SEPARATOR).split(this.value);
 	}
 
 	/**

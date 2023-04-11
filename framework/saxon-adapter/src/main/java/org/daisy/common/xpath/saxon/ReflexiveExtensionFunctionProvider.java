@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.xpath.XPath;
@@ -30,6 +31,7 @@ import com.google.common.collect.ImmutableList;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.saxon.SaxonOutputValue;
+import org.daisy.common.transform.TransformerException;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -355,7 +357,21 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										else // instance is null in case of static method
 											result = ((Method)method).invoke(instance, javaArgs);
 									} catch (InstantiationException|InvocationTargetException e) {
-										throw new XPathException(e.getCause());
+										Throwable cause = e.getCause();
+										if (cause instanceof XPathException)
+											throw (XPathException)cause;
+										else if (cause instanceof TransformerException) {
+											// TransformerException is just a wrapper of the actual exception, so unwrap
+											// it. Note that if the TransformerException is an instance of
+											// XProcErrorException, unwrapping it will yield an XProcException.
+											XPathException xpe = new XPathException(cause.getMessage(), cause.getCause());
+											QName code = ((TransformerException)cause).getCode();
+											xpe.setErrorCodeQName(new StructuredQName(code.getPrefix(),
+											                                          code.getNamespaceURI(),
+											                                          code.getLocalPart()));
+											throw xpe;
+										} else
+											throw new XPathException(cause);
 									} catch (IllegalAccessException e) {
 										throw new RuntimeException(); // should not happen
 									}

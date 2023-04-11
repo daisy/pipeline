@@ -5,25 +5,28 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.daisy.common.messaging.MessageBus;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.clients.Client;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.Script;
+import org.daisy.pipeline.script.ScriptInput;
 
 public abstract class AbstractJobContext {
 
-        protected XProcInput input;
-        protected XProcOutput output;
-        protected XProcScript script;
+        // accessed in DefaultJobBuilder and PersistentJobContext
         protected JobId id;
         protected JobBatchId batchId;
-        protected MessageBus messageBus;
-        protected JobMonitor monitor;
         protected URI logFile;
-        protected URIMapper resultMapper;
-        protected JobResultSet results;
         protected String niceName;
         protected Client client;
+        protected Script script;
+        protected JobMonitor monitor;
+
+        // accessed in DefaultJobBuilder, PersistentJobContext and AbstractJob
+        protected ScriptInput input;
+        protected URIMapper uriMapper;
+        protected JobResultSet results;
+
+        // accessed in DefaultJobBuilder and AbstractJob
+        protected MessageBus messageBus;
         protected List<Consumer<Job.Status>> statusListeners;
 
         // used by DefaultJobBuilder and PersistentJobContext
@@ -41,8 +44,7 @@ public abstract class AbstractJobContext {
                 this.results = from.results;
                 this.script = from.script;
                 this.input = from.input;
-                this.output = from.output;
-                this.resultMapper = from.resultMapper;
+                this.uriMapper = from.uriMapper;
                 this.monitor = from.monitor;
                 this.messageBus = from.messageBus;
                 this.statusListeners = from.statusListeners;
@@ -56,7 +58,7 @@ public abstract class AbstractJobContext {
                 return monitor;
         }
 
-        public XProcScript getScript() {
+        public Script getScript() {
                 return script;
         }
 

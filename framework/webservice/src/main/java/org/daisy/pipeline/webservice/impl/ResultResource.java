@@ -79,8 +79,7 @@ public class ResultResource extends AuthenticatedResource {
                         return this.getErrorRepresentation("Job status different to SUCCESS");
                 }
 
-                Collection<JobResult> results = job.get().getResults()
-                                .getResults();
+                Collection<JobResult> results = job.get().getResults().getResults();
                 if (results.size() == 0) {
                         setStatus(Status.SERVER_ERROR_INTERNAL);
                         return this.getErrorRepresentation("No results available");
@@ -118,7 +117,7 @@ public class ResultResource extends AuthenticatedResource {
         }
 
         // null means greater than the limit
-        private static Integer getSize(InputStream stream, int limit) throws IOException {
+        static Integer getSize(InputStream stream, int limit) throws IOException {
                 Integer size = 0;
                 if (!stream.markSupported())
                         throw new RuntimeException();

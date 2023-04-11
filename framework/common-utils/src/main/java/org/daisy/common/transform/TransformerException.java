@@ -1,18 +1,27 @@
 package org.daisy.common.transform;
 
+import javax.xml.namespace.QName;
+
 /**
- * Unchecked version of javax.xml.transform.TransformerException
+ * Unchecked version of {@link javax.xml.transform.TransformerException} with an extra "code"
+ * argument.
  */
 @SuppressWarnings("serial")
 public class TransformerException extends RuntimeException {
 	
+	private final QName code;
+	
 	public TransformerException(Throwable cause) {
-		super(cause);
+		this(null, cause);
 	}
 	
-	@Override
-	public String getMessage() {
-		return null;
+	public TransformerException(QName code, Throwable cause) {
+		super(cause.getMessage(), cause);
+		this.code = code;
+	}
+	
+	public QName getCode() {
+		return code;
 	}
 	
 	public static TransformerException wrap(Throwable e) {

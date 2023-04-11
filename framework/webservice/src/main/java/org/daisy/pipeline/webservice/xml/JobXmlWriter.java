@@ -1,10 +1,9 @@
 package org.daisy.pipeline.webservice.xml;
 
 import java.math.BigDecimal;
+import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
-
-import javax.xml.namespace.QName;
 
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
@@ -14,8 +13,8 @@ import org.daisy.common.priority.Priority;
 import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.script.XProcOptionMetadata;
-import org.daisy.pipeline.script.XProcScript;
+import org.daisy.pipeline.script.ScriptPort;
+import org.daisy.pipeline.script.Script;
 import org.daisy.pipeline.webservice.Routes;
 
 import org.restlet.Request;
@@ -170,12 +169,9 @@ public class JobXmlWriter {
                 }
 
                 if (scriptDetails) {
-                        XProcScript script = job.getScript();
-                        //return if no script was loadeded
-                        if(script.getDescriptor()!=null){
-                                ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
-                                writer.addAsElementChild(element);
-                        }
+                        Script script = job.getScript();
+                        ScriptXmlWriter writer = new ScriptXmlWriter(script, baseUrl);
+                        writer.addAsElementChild(element);
                 }
                 
                 if (progress != null && status == Job.Status.RUNNING || messages != null && messages.size() > 0) {
@@ -195,13 +191,18 @@ public class JobXmlWriter {
                         }
                 }
                 
-                if (job.getStatus() == Job.Status.SUCCESS || job.getStatus() == Job.Status.FAIL) {
-                        Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
-                        String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
-                        logElm.setAttribute("href", logHref);
-                        element.appendChild(logElm);
-                        if(this.fullResult)
-                                addResults(element);
+                status = job.getStatus();
+                if (status == Job.Status.SUCCESS || status == Job.Status.FAIL || status == Job.Status.ERROR) {
+                        URI logfileUri = job.getLogFile();
+                        if (logfileUri != null) {
+                                Element logElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "log");
+                                String logHref = baseUrl + Routes.LOG_ROUTE.replaceFirst("\\{id\\}", job.getId().toString());
+                                logElm.setAttribute("href", logHref);
+                                element.appendChild(logElm);
+                        }
+                }
+                if (this.fullResult && (status == Job.Status.SUCCESS || status == Job.Status.FAIL)) {
+                        addResults(element);
                 }
         }
 
@@ -242,60 +243,38 @@ public class JobXmlWriter {
                 resultsElm.setAttribute("mime-type", "application/zip");
                 jobElem.appendChild(resultsElm);
                 //ports
-                for (String port : this.job.getResults().getPorts()) {
-                        if (this.onlyPrimaries && !job.getScript().getPortMetadata(port).isPrimary()){
+                for (String portName : this.job.getResults().getPorts()) {
+                        ScriptPort port = job.getScript().getOutputPort(portName);
+                        if (this.onlyPrimaries && !port.isPrimary()) {
                                 continue;
                         }
                         Element portResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                        portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref,port));
+                        portResultElm.setAttribute("href", String.format("%s/port/%s",resultHref, portName));
                         portResultElm.setAttribute("mime-type", "application/zip");
+                        /**
+                         * Note that this attribute does not really have a meaning anymore now that
+                         * all results come from ports, but it is kept for backward compatibility.
+                         */
                         portResultElm.setAttribute("from", "port");
-                        portResultElm.setAttribute("name", port);
-                        portResultElm.setAttribute("nicename", job.getScript().getPortMetadata(port).getNiceName());
+                        portResultElm.setAttribute("name", portName);
+                        portResultElm.setAttribute("nicename", port.getNiceName());
+                        String desc = port.getDescription();
+                        if (desc != null && !"".equals(desc)) {
+                                portResultElm.setAttribute("desc", desc);
+                        }
                         resultsElm.appendChild(portResultElm);
-                        for (JobResult result : this.job.getResults().getResults(port)) {
+                        for (JobResult result : this.job.getResults().getResults(portName)) {
                                 Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref,port,result.getIdx()));
+                                resultElm.setAttribute("href", String.format("%s/port/%s/idx/%s",resultHref, portName, result.getIdx()));
                                 if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
                                         resultElm.setAttribute("mime-type", result.getMediaType());
                                 }
                                 if ( this.localPaths){
-                                        resultElm.setAttribute("file",result.getPath().toString());
+                                        resultElm.setAttribute("file", result.getPath().toURI().toString());
                                 }
                                 resultElm.setAttribute("size",
                                                 String.format("%s", result.getSize()));
                                 portResultElm.appendChild(resultElm); 
-                        }
-                }
-
-
-                for (QName option : this.job.getResults().getOptions()) {
-                        XProcOptionMetadata meta = job.getScript().getOptionMetadata(option);
-                        if ( this.onlyPrimaries&&  (meta==null || !meta.isPrimary())){
-                                continue;
-                        }
-                        Element optionResultElm = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                        optionResultElm.setAttribute("href", String.format("%s/option/%s",resultHref,option));
-                        optionResultElm.setAttribute("mime-type", "application/zip");
-                        optionResultElm.setAttribute("from", "option");
-                        optionResultElm.setAttribute("name", option.toString());
-                        //in case the script was deleted
-                        if (meta!=null){
-                                optionResultElm.setAttribute("nicename", job.getScript().getOptionMetadata(option).getNiceName());
-                        }
-                        resultsElm.appendChild(optionResultElm);
-                        for(JobResult result : this.job.getResults().getResults(option)) {
-                                Element resultElm= doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "result");
-                                resultElm.setAttribute("href", String.format("%s/option/%s/idx/%s",resultHref,option,result.getIdx()));
-                                if(result.getMediaType()!= null && !result.getMediaType().isEmpty()){
-                                        resultElm.setAttribute("mime-type", result.getMediaType());
-                                }
-                                if ( this.localPaths){
-                                        resultElm.setAttribute("file",result.getPath().toString());
-                                }
-                                resultElm.setAttribute("size",
-                                                String.format("%s", result.getSize()));
-                                optionResultElm.appendChild(resultElm);
                         }
                 }
         }

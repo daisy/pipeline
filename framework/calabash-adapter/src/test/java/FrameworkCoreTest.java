@@ -1,13 +1,9 @@
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,8 +20,6 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.stream.Stream;
 import javax.inject.Inject;
-import javax.xml.transform.Result;
-import javax.xml.transform.stream.StreamResult;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -34,7 +28,6 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.ThrowableProxy;
 import ch.qos.logback.core.AppenderBase;
 
-import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
@@ -44,14 +37,12 @@ import com.google.common.io.CharStreams;
 import org.daisy.common.messaging.Message;
 import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.ProgressMessage;
-import org.daisy.common.xproc.XProcInput;
-import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobFactory;
 import org.daisy.pipeline.junit.AbstractTest;
-import org.daisy.pipeline.script.BoundXProcScript;
+import org.daisy.pipeline.script.BoundScript;
 import org.daisy.pipeline.script.ScriptRegistry;
-import org.daisy.pipeline.script.XProcScriptService;
+import org.daisy.pipeline.script.ScriptService;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -80,14 +71,17 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-		OutputPortReader resultPort = new OutputPortReader();
-		try (Job job = newJob("catch-xproc-error",
-		                      new XProcInput.Builder().build(),
-		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
+		try (Job job = newJob("catch-xproc-error")) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
-			Iterator<Reader> results = resultPort.read();
+			Iterator<String> results = Iterators.transform(
+				job.getResults().getResults("result").iterator(),
+				r -> {
+					try {
+						return CharStreams.toString(new InputStreamReader(r.asStream(), "UTF-8")); }
+					catch (IOException e) {
+						throw new RuntimeException(e); }});
 			Assert.assertTrue(results.hasNext());
-			String errorXml = CharStreams.toString(results.next());
+			String errorXml = results.next();
 			System.out.println(errorXml);
 			Assert.assertTrue(
 				Predicates.containsPattern(
@@ -197,14 +191,17 @@ public class FrameworkCoreTest extends AbstractTest {
 		Logger logger = (Logger)LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
-			OutputPortReader resultPort = new OutputPortReader();
-		try (Job job = newJob("catch-xslt-terminate-error",
-		                      new XProcInput.Builder().build(),
-		                      new XProcOutput.Builder().withOutput("result", resultPort).build())) {
+		try (Job job = newJob("catch-xslt-terminate-error")) {
 			waitForStatus(Job.Status.FAIL, job, 1000);
-			Iterator<Reader> results = resultPort.read();
+			Iterator<String> results = Iterators.transform(
+				job.getResults().getResults("result").iterator(),
+				r -> {
+					try {
+						return CharStreams.toString(new InputStreamReader(r.asStream(), "UTF-8")); }
+					catch (IOException e) {
+						throw new RuntimeException(e); }});
 			Assert.assertTrue(results.hasNext());
-			String errorXml = CharStreams.toString(results.next());
+			String errorXml = results.next();
 			System.out.println(errorXml);
 			Assert.assertTrue(
 				Predicates.containsPattern(
@@ -295,6 +292,8 @@ public class FrameworkCoreTest extends AbstractTest {
 			assertLogMessage(next(log), "org.daisy.pipeline.job.Job", Level.ERROR,
 			                 "job finished with error state\n" +
 			                 "foobar\n" +
+			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
+			                 "Caused by: foobar\n" +
 			                 "	at JavaStep.run(JavaStep.java:57)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
@@ -499,14 +498,9 @@ public class FrameworkCoreTest extends AbstractTest {
 	}
 	
 	Job newJob(String scriptId) {
-		return newJob(scriptId, new XProcInput.Builder().build(), new XProcOutput.Builder().build());
-	}
-	
-	Job newJob(String scriptId, XProcInput input, XProcOutput output) {
-		XProcScriptService script = scriptRegistry.getScript(scriptId);
+		ScriptService<?> script = scriptRegistry.getScript(scriptId);
 		Assert.assertNotNull("The " + scriptId + " script should exist", script);
-		Job job = jobFactory.newJob(BoundXProcScript.from(script.load(), input, output))
-		                    .isMapping(true)
+		Job job = jobFactory.newJob(new BoundScript.Builder(script.load()).build())
 		                    .withNiceName("nice")
 		                    .build()
 		                    .get();
@@ -754,25 +748,6 @@ public class FrameworkCoreTest extends AbstractTest {
 		}
 		Iterator<ILoggingEvent> get() {
 			return log.iterator();
-		}
-	}
-	
-	static class OutputPortReader implements com.google.common.base.Supplier<Result> {
-		final List<ByteArrayOutputStream> docs = new ArrayList<ByteArrayOutputStream>();
-		public Result get() {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			docs.add(os);
-			return new StreamResult(os);
-		}
-		public Iterator<Reader> read() {
-			return Iterators.<ByteArrayOutputStream,Reader>transform(
-				docs.iterator(),
-				new Function<ByteArrayOutputStream,Reader>() {
-					public Reader apply(ByteArrayOutputStream os) {
-						try {
-							return new InputStreamReader(new ByteArrayInputStream(os.toByteArray()), "UTF-8"); }
-						catch (UnsupportedEncodingException e) {
-							throw new RuntimeException(e); }}});
 		}
 	}
 }

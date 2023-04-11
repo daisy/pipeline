@@ -1,8 +1,9 @@
 package org.daisy.pipeline.job;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
-import java.net.URI;
 
 /**
  * The Class JobResult.
@@ -31,8 +32,8 @@ public class JobResult {
         //short index for the result 
         private String idx;
 
-        // path to the actual file
-        private URI path;
+        // path to the file
+        private File path;
 
         //media type
         private String mediaType;
@@ -44,9 +45,13 @@ public class JobResult {
          * @param path The path for this instance.
          * @param mediaType The mediaType for this instance.
          */
-        protected JobResult(String idx, URI path, String mediaType) {
-                this.idx = idx;
+        protected JobResult(String idx, File path, String mediaType) {
+                if (path == null)
+                        throw new NullPointerException();
+                if (!path.exists())
+                        throw new IllegalArgumentException("the document was not stored to disk: " + path);
                 this.path = path;
+                this.idx = idx;
                 this.mediaType = mediaType;
         }
 
@@ -73,8 +78,6 @@ public class JobResult {
          * @return The idx.
          */
         public String getIdx() {
-                if (path == null || path.toString().isEmpty())
-                        throw new RuntimeException("the document was not stored to disk");
                 return idx;
         }
 
@@ -83,9 +86,7 @@ public class JobResult {
          *
          * @return The path.
          */
-        public URI getPath() {
-                if (path == null || path.toString().isEmpty())
-                        throw new RuntimeException("the document was not stored to disk");
+        public File getPath() {
                 return path;
         }
 
@@ -99,16 +100,22 @@ public class JobResult {
         }
 
         /**
+         * Get the contents of the resource as an {@link InputStream}.
+         */
+        public InputStream asStream() throws IOException {
+                return new FileInputStream(path);
+        }
+
+        /**
          * Returns the size of the file pointed by path in bytes
          * @return the size
          */
         public long getSize() {
                 try{
-                        File f= new File(path);
-                        if( ! f.exists()){
-                                throw new IOException(String.format("File not found :",f.getAbsolutePath()));
+                        if (!path.exists()) {
+                                throw new IOException(String.format("File not found: ", path.getAbsolutePath()));
                         }
-                        return f.length();
+                        return path.length();
                 }catch (Exception e){
                         throw new RuntimeException("Error calculating result size",e);
                 }

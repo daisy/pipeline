@@ -11,20 +11,22 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
+
 public class PersistentOptionTest   {
 	
 	Database db;
 	PersistentOption po1;
-	QName qn1;
-	String value;
+	String name1;
+	Iterable<String> value;
 	JobId id1;
 	@Before	
 	public void setUp(){
 		db=DatabaseProvider.getDatabase();
 		id1= new JobUUIDGenerator().generateId();
-		qn1=new QName("http://daisy.org","test");
-		value= "some value";
-		po1= new PersistentOption(id1,qn1,value);	
+		name1 = "test";
+		value = Lists.newArrayList("some value");
+		po1 = new PersistentOption(id1, name1, value);
 		db.addObject(po1);
 	}	
 
@@ -34,9 +36,10 @@ public class PersistentOptionTest   {
 	}	
 	@Test
 	public void retrieveOption(){
-		PersistentOption stored=db.getEntityManager().find(PersistentOption.class,new PersistentOption.PK(id1,qn1));
+		PersistentOption stored = db.getEntityManager().find(PersistentOption.class,
+		                                                     new PersistentOption.PK(id1, new QName(name1)));
 		Assert.assertNotNull(stored);
 		Assert.assertEquals(stored.getJobId(),id1);
-		Assert.assertEquals(stored.getName(),qn1);
+		Assert.assertEquals(stored.getName(), name1);
 	}
 }

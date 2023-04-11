@@ -13,6 +13,9 @@ import javax.xml.namespace.QName;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 
+/**
+ * Not used (onlt kept for backward compatibility).
+ */
 @Entity
 @Table(name="parameters")
 class PersistentParameter  implements Serializable {
