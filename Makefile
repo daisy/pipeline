@@ -1,9 +1,6 @@
 .PHONY : default
 default : help
 
-.PHONY : all
-all : check dist
-
 MVN_WORKSPACE           := .maven-workspace
 MVN_CACHE               := .maven-cache
 
@@ -50,15 +47,6 @@ settings.xml : settings.xml.in
 	             >$@
 
 # -----------------------------------
-
-.PHONY : dist
-dist: dist-dmg dist-exe dist-zip-linux dist-zip-minimal dist-zip-win dist-zip-mac dist-deb dist-rpm dist-webui-deb dist-webui-rpm
-
-.PHONY : dist-dmg
-dist-dmg : pipeline2-$(assembly/VERSION)_mac.dmg
-
-.PHONY : dist-exe
-dist-exe : pipeline2-$(assembly/VERSION)_windows.exe
 
 .PHONY : dist-zip-linux
 dist-zip-linux : pipeline2-$(assembly/VERSION)_linux.zip
@@ -126,10 +114,6 @@ run : $(dev_launcher)
 run-with-osgi : $(dev_launcher)
 	$< local osgi shell
 
-.PHONY : run-gui
-run-gui : $(dev_launcher)
-	$< gui
-
 .PHONY : run-cli
 run-cli :
 	echo "dp2 () { test -e $(dp2) || make $(dp2) && curl http://localhost:8181/ws/alive >/dev/null 2>/dev/null || make $(dev_launcher) && $(dp2) --debug false --starting true --exec_line $(CURDIR)/$(dev_launcher) --ws_timeup 30 \"\$$@\"; }"
@@ -149,7 +133,7 @@ run-docker : dist-docker-image
            -e PIPELINE2_WS_AUTHENTICATION=false \
 	       -p 8181:8181 daisyorg/pipeline:latest-snapshot
 
-SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) modules/scripts-utils/daisy202-utils
+SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) modules/scripts-utils/daisy202-utils modules/scripts-utils/daisy3-utils
 
 .PHONY : $(addprefix run-,$(SCRIPTS))
 $(addprefix run-,$(SCRIPTS)) : run-% : %/.compile-dependencies %/.test-dependencies
@@ -168,16 +152,6 @@ release : assembly/.release
 
 .PHONY : $(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS))
 $(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS)) : check-% : %/.last-tested
-
-pipeline2-$(assembly/VERSION)_mac.dmg \
-	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).dmg \
-	| .group-eval
-	+$(EVAL) cp $< $@
-
-pipeline2-$(assembly/VERSION)_windows.exe \
-	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).exe \
-	| .group-eval
-	+$(EVAL) cp $< $@
 
 pipeline2-$(assembly/VERSION)_linux.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
@@ -240,14 +214,6 @@ assembly/.install-mac.zip : | .maven-init .group-eval
 .SECONDARY : assembly/.install-win.zip
 assembly/.install-win.zip : | .maven-init .group-eval
 	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
-
-.SECONDARY : assembly/.install.dmg
-assembly/.install.dmg : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,dmg)
-
-.SECONDARY : assembly/.install.exe
-assembly/.install.exe : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,exe)
 
 .SECONDARY : assembly/.install-cli.deb
 assembly/.install-cli.deb : | .maven-init .group-eval
@@ -421,16 +387,10 @@ dump-gradle-cmd :
 
 .PHONY : help
 help :
-	echo "make all:"                                                                                                >&2
-	echo "	Incrementally compile and test code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"  >&2
+	echo "make help:"                                                                                               >&2
+	echo "	Print list of commands"                                                                                 >&2
 	echo "make check:"                                                                                              >&2
 	echo "	Incrementally compile and test code"                                                                    >&2
-	echo "make dist:"                                                                                               >&2
-	echo "	Incrementally compile code and package into a DMG, a EXE, a ZIP (for Linux), a DEB and a RPM"           >&2
-	echo "make dist-dmg:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a DMG"                                                      >&2
-	echo "make dist-exe:"                                                                                           >&2
-	echo "	Incrementally compile code and package into a EXE"                                                      >&2
 	echo "make dist-deb:"                                                                                           >&2
 	echo "	Incrementally compile code and package into a DEB"                                                      >&2
 	echo "make dist-rpm:"                                                                                           >&2
@@ -451,8 +411,6 @@ help :
 	echo "	Compile Web UI and package into a RPM"                                                                  >&2
 	echo "make run:"                                                                                                >&2
 	echo "	Incrementally compile code and run a server locally"                                                    >&2
-	echo "make run-gui:"                                                                                            >&2
-	echo "	Incrementally compile code and run the GUI locally"                                                     >&2
 	echo "make run-webui:"                                                                                          >&2
 	echo "	Compile and run web UI locally"                                                                         >&2
 	echo "make run-cli:"                                                                                            >&2
