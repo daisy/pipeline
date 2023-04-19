@@ -10,8 +10,10 @@ import cz.vutbr.web.css.CSSException;
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
+import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
+import cz.vutbr.web.css.RuleMedia;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.antlr.CSSInputStream;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
@@ -52,15 +54,14 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	}
 	
 	private StyleSheet parseAndImport(CSSSource source, CSSSourceReader cssReader,
-	                                  StyleSheet sheet, Preparator preparator, List<MediaQuery> media)
+	                                  StyleSheet sheet, Preparator preparator, MediaQueryList media)
 			throws CSSException, IOException {
-		BrailleCSSTreeParser parser = createTreeParser(source, cssReader, preparator, media);
+		BrailleCSSTreeParser parser = createTreeParser(source, cssReader, preparator);
 		parse(parser, source.type);
 		for (int i = 0; i < parser.getImportPaths().size(); i++) {
 			String path = parser.getImportPaths().get(i);
-			List<MediaQuery> imedia = parser.getImportMedia().get(i);
-			if (((imedia == null || imedia.isEmpty()) && CSSFactory.getAutoImportMedia().matchesEmpty()) //no media query specified
-			    || CSSFactory.getAutoImportMedia().matchesOneOf(imedia)) { //or some media query matches to the autoload media spec
+			MediaQueryList imedia = parser.getImportMedia().get(i);
+			if (CSSFactory.getAutoImportMedia().matches(imedia)) { // if autoload media spec matches media query list
 				URL url = DataURLHandler.createURL(source.base, path);
 				try {
 					if (cssReader.supportsMediaType(null, url))
@@ -70,18 +71,26 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 					log.warn("Couldn't read imported style sheet: {}", e.getMessage()); }}
 			else
 				log.trace("Skipping import {} (media not matching)", path); }
-		return addRulesToStyleSheet(parser.getRules(), sheet);
+		RuleList rules = parser.getRules();
+		if (media != null) {
+			RuleMedia rm = CSSFactory.getRuleFactory().createMedia();
+			rm.setMediaQueries(media);
+			log.debug("Wrapping rules {} into RuleMedia: {}", rules, rm);
+			rm.unlock();
+			rm.replaceAll(rules);
+		}
+		return addRulesToStyleSheet(rules, sheet);
 	}
 	
 	@Override
-	public List<MediaQuery> parseMediaQuery(String query) {
+	public MediaQueryList parseMediaQuery(String query) {
 		try {
 			CSSInputStream input = CSSInputStream.newInstance(query, new URL("file://media/query/url"));
 			CommonTokenStream tokens = feedLexer(input);
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
 			CommonTree ast = (CommonTree) parser.media().getTree();
-			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null, null);
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null);
 			return tparser.media(); }
 		catch (IOException e) {
 			log.error("I/O error during media query parsing: {}", e.getMessage());
@@ -102,7 +111,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
 			CommonTree ast = (CommonTree)parser.combined_selector_list().getTree();
-			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null, namespaces);
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, namespaces);
 			return tparser.combined_selector_list(); }
 		catch (IOException e) {
 			log.error("I/O error during selector parsing: {}", e.getMessage());
@@ -131,7 +140,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			CommonTree ast = feedParser(tokens, SourceType.INLINE, context);
 			// OK to pass null for context element because it is only used in Analyzer.evaluateDOM()
 			Preparator preparator = new Preparator(null, true, context);
-			BrailleCSSTreeParser tparser = feedAST(tokens, ast, preparator, null, null);
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, preparator, null);
 			return tparser.inlinestyle(); }
 		catch (IOException e) {
 			log.error("I/O error during inline style parsing: {}", e.getMessage());
@@ -167,7 +176,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
 			CommonTree ast = (CommonTree)parser.simple_inlinestyle().getTree();
-			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null, null);
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null);
 			return tparser.simple_inlinestyle(); }
 		catch (IOException e) {
 			log.error("I/O error during inline style parsing: {}", e.getMessage());
@@ -187,7 +196,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			BrailleCSSParser parser = new BrailleCSSParser(tokens);
 			parser.init();
 			CommonTree ast = (CommonTree)parser.declaration().getTree();
-			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null, null);
+			BrailleCSSTreeParser tparser = feedAST(tokens, ast, null, null);
 			return tparser.declaration(); }
 		catch (IOException e) {
 			log.error("I/O error during declaration parsing: {}", e.getMessage());
@@ -201,12 +210,12 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	}
 	
 	private static BrailleCSSTreeParser createTreeParser(CSSSource source, CSSSourceReader cssReader,
-	                                                     Preparator preparator, List<MediaQuery> media)
+	                                                     Preparator preparator)
 			throws IOException, CSSException {
 		CSSInputStream input = getInput(source, cssReader);
 		CommonTokenStream tokens = feedLexer(input);
 		CommonTree ast = feedParser(tokens, source.type, Context.ELEMENT);
-		return feedAST(tokens, ast, preparator, media, null);
+		return feedAST(tokens, ast, preparator, null);
 	}
 	
 	private static CommonTokenStream feedLexer(CSSInputStream source) throws CSSException {
@@ -229,14 +238,13 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	}
 	
 	private static BrailleCSSTreeParser feedAST(CommonTokenStream source, CommonTree ast,
-	                                            Preparator preparator, List<MediaQuery> media,
-	                                            Map<String,String> namespaces) {
+	                                            Preparator preparator, Map<String,String> namespaces) {
 		if (log.isTraceEnabled())
 			log.trace("Feeding tree parser with AST:\n{}", TreeUtil.toStringTree(ast));
 		CommonTreeNodeStream nodes = new CommonTreeNodeStream(ast);
 		nodes.setTokenStream(source);
 		BrailleCSSTreeParser parser = new BrailleCSSTreeParser(nodes);
-		parser.init(preparator, media, ruleFactory, namespaces);
+		parser.init(preparator, ruleFactory, namespaces);
 		return parser;
 	}
 	

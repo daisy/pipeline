@@ -687,8 +687,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 				d, properties, values);
 	}
 	
-	@SuppressWarnings("unused")
-	private boolean processTextTransform(Declaration d,
+	protected boolean processTextTransform(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		
 		if (d.size() == 1 && genericOneIdent(TextTransform.class, d, properties))

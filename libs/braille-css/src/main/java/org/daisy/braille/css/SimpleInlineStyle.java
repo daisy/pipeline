@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
@@ -95,7 +96,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		StringBuilder sb = new StringBuilder();
 		List<String> keys = new ArrayList<String>(map.keySet());
 		Collections.sort(keys);
-		for (String key: keys) {
+		for (String key : keys) {
 			if (sb.length() > 0)
 				sb.append("; ");
 			sb.append(key).append(": ");
@@ -109,8 +110,23 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof SimpleInlineStyle)
-			return map.equals(((SimpleInlineStyle)other).map);
+		if (other instanceof SimpleInlineStyle) {
+			SimpleInlineStyle that = (SimpleInlineStyle)other;
+			Set<String> keys = map.keySet();
+			if (!keys.equals(that.map.keySet()))
+				return false;
+			for (String key : keys) {
+				Term<?> value = getValue(key);
+				if ((value == null && that.getValue(key) != null)
+				    || (value != null && !value.equals(that.getValue(key))))
+					return false;
+				CSSProperty prop = getProperty(key);
+				if ((prop == null && that.getProperty(key) != null)
+				    || (prop != null && !prop.equals(that.getProperty(key))))
+					return false;
+			}
+			return true;
+		}
 		return false;
 	}
 }

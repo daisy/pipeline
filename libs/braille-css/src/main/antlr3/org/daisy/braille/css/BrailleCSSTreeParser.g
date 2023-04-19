@@ -14,6 +14,7 @@ import java.util.Map;
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.MediaQuery;
+import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleFactory;
@@ -30,8 +31,8 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
 @members {
     private Preparator preparator;
     
-    public void init(Preparator preparator, List<MediaQuery> wrapMedia, RuleFactory ruleFactory, Map<String,String> namespaces) {
-        gCSSTreeParser.init(preparator, wrapMedia, namespaces);
+    public void init(Preparator preparator, RuleFactory ruleFactory, Map<String,String> namespaces) {
+        gCSSTreeParser.init(preparator, namespaces);
         gCSSTreeParser.rf = ruleFactory;
         this.preparator = preparator;
     }
@@ -40,7 +41,7 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
         return gCSSTreeParser.getRules();
     }
     
-    public List<List<MediaQuery>> getImportMedia() {
+    public List<MediaQueryList> getImportMedia() {
         return gCSSTreeParser.getImportMedia();
     }
     
