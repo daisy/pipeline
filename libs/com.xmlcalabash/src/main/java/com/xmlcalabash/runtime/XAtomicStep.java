@@ -360,7 +360,11 @@ public class XAtomicStep extends XStep {
             // Test to see if the option has a reasonable string value according to the declaration
             Option optionDecl = decl.getOption(name);
             if (optionDecl.getTypeAsQName() != null) {
-                TypeUtils.checkType(runtime, value.getString(), optionDecl.getTypeAsQName(), option.getNode());
+                TypeUtils.checkType(runtime,
+                                    value.hasGeneralValue() ? value.getValue() : null,
+                                    value.getString(),
+                                    optionDecl.getTypeAsQName(),
+                                    option.getNode());
             } else if (optionDecl.getType() != null) {
                 String type = optionDecl.getType();
                 if (type.contains("|")) {
@@ -859,7 +863,11 @@ public class XAtomicStep extends XStep {
 
         // Test to see if the option has a reasonable string value
         if (var.getTypeAsQName() != null) {
-            TypeUtils.checkType(runtime, stringValue, var.getTypeAsQName(), var.getNode());
+            try {
+                TypeUtils.checkType(runtime, value, stringValue, var.getTypeAsQName(), var.getNode());
+            } catch (XProcException e) {
+                throw new XProcException(e.getErrorCode(), this, e);
+            }
         } else if (var.getType() != null) {
             String type = var.getType();
             if (type.contains("|")) {

@@ -34,6 +34,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.value.StringValue;
+import net.sf.saxon.value.QNameValue;
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 
@@ -141,6 +142,8 @@ public class RuntimeValue {
     public QName getQName() {
         // FIXME: Check the type
         // TypeUtils.checkType(runtime, value, )
+        if (value != null && value.size() == 1 && value.itemAt(0).getUnderlyingValue() instanceof QNameValue)
+            return new QName(((QNameValue)value.itemAt(0).getUnderlyingValue()).getStructuredQName());
         if (stringValue.contains(":")) {
             return new QName(stringValue, node);
         } else {

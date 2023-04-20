@@ -96,11 +96,11 @@ public class LabelElements extends DefaultStep implements ProcessMatchingNodes {
         String ans = getOption(_attribute_namespace, (String) null);
 
         if (apfx != null && ans == null) {
-            throw XProcException.dynamicError(34, "You can't specify a prefix without a namespace");
+            throw XProcException.dynamicError(34, step, "You can't specify a prefix without a namespace");
         }
 
         if (ans != null && attrNameStr.contains(":")) {
-            throw XProcException.dynamicError(34, "You can't specify a namespace if the attribute name contains a colon");
+            throw XProcException.dynamicError(34, step, "You can't specify a namespace if the attribute name contains a colon");
         }
 
         if (attrNameStr.contains(":")) {

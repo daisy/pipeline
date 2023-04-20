@@ -72,6 +72,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Hashtable;
@@ -382,7 +383,11 @@ public class XSLT extends DefaultStep {
                         throw new XProcException(e2);
                     }
 
-                    tree.addText(baos.toString());
+                    try {
+                        tree.addText(baos.toString("UTF-8"));
+                    } catch (UnsupportedEncodingException ee) {
+                        throw new RuntimeException(ee); // can not happen
+                    }
                     tree.addEndElement();
                     tree.endDocument();
                     resultPipe.write(tree.getResult());
@@ -397,9 +402,13 @@ public class XSLT extends DefaultStep {
             tree.startDocument(outputBaseURI != null ? outputBaseURI : document != null ? document.getBaseURI() : null);
             tree.addStartElement(XProcConstants.c_result);
             tree.addAttribute(_content_type, "text/plain");
-            tree.addAttribute(cx_decode,"true");
+            tree.addAttribute(cx_decode, "true");
             tree.startContent();
-            tree.addText(outputStream.toString());
+            try {
+                tree.addText(outputStream.toString("UTF-8")); // because makeSerializer() sets encoding output property to UTF-8
+            } catch (UnsupportedEncodingException e) {
+                throw new RuntimeException(e); // can not happen
+            }
             tree.addEndElement();
             tree.endDocument();
             resultPipe.write(tree.getResult());

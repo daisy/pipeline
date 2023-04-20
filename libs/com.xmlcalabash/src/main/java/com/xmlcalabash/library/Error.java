@@ -82,16 +82,16 @@ public class Error extends DefaultStep {
         }
 
         if (cpfx != null && cns == null) {
-            throw XProcException.dynamicError(34, "You can't specify a prefix without a namespace");
+            throw XProcException.dynamicError(34, step, "You can't specify a prefix without a namespace");
         }
 
         if (cns != null && codeNameStr.contains(":")) {
-            throw XProcException.dynamicError(34, "You can't specify a namespace if the code name contains a colon");
+            throw XProcException.dynamicError(34, step, "You can't specify a namespace if the code name contains a colon");
         }
 
         QName errorCode = null;
         if (codeNameStr.contains(":")) {
-            errorCode = new QName(codeNameStr, codeNameValue.getNode());
+            errorCode = codeNameValue.getQName();
         } else {
             errorCode = new QName(cpfx == null ? "" : cpfx, cns, codeNameStr);
         }

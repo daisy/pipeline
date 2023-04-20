@@ -101,7 +101,7 @@ public class NVDL extends DefaultStep {
 
             if (!driver.validate(doc)) {
                 if (assertValid) {
-                    throw XProcException.stepError(53);
+                    throw XProcException.stepError(53, step);
                 }
             }
         } catch (SAXException e) {

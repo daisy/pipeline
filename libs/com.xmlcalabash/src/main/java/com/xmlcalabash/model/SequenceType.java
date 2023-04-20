@@ -5,6 +5,7 @@ import com.xmlcalabash.core.XProcException;
 
 import net.sf.saxon.om.AtomicSequence;
 import net.sf.saxon.om.InscopeNamespaceResolver;
+import net.sf.saxon.expr.instruct.DummyNamespaceResolver;
 import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.ItemType;
 import net.sf.saxon.s9api.ItemTypeFactory;
@@ -19,6 +20,7 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.type.AtomicType;
+import net.sf.saxon.type.BuiltInAtomicType;
 import net.sf.saxon.type.ConversionResult;
 import net.sf.saxon.type.Converter;
 import net.sf.saxon.type.ValidationFailure;
@@ -143,8 +145,12 @@ public class SequenceType {
 				if (converter == null)
 					throw new XProcException(sourceType + " value can not be cast to " + this + ": " + value);
 				if (targetType.isNamespaceSensitive()) {
-					converter = converter.setNamespaceResolver(
-						new InscopeNamespaceResolver((NodeInfo)namespaceResolver.getUnderlyingValue()));
+					if (targetType.equals(BuiltInAtomicType.QNAME) && !sourceValue.toString().contains(":"))
+						// we don't want to use the default namespace URI if it is not empty?
+						converter = converter.setNamespaceResolver(DummyNamespaceResolver.getInstance());
+					else
+						converter = converter.setNamespaceResolver(
+							new InscopeNamespaceResolver((NodeInfo)namespaceResolver.getUnderlyingValue()));
 				}
 				ConversionResult result = converter.convert(sourceValue);
 				if (result instanceof ValidationFailure) {

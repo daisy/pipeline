@@ -113,7 +113,7 @@ public class ValidateWithRNG extends DefaultStep {
         } catch (SAXException sx) {
             // Assume the only error is validity failed?
             if (getOption(_assert_valid,false)) {
-                throw XProcException.stepError(53, sx);
+                throw XProcException.stepError(53, step, sx);
             }
             result.write(doc);
         } catch (IOException ioe) {

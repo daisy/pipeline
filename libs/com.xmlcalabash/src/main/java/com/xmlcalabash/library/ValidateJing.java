@@ -156,7 +156,7 @@ public class ValidateJing extends DefaultStep {
                 InputSource din = S9apiUtils.xdmToInputSource(runtime, doc);
                 if (!driver.validate(din)) {
                     if (assertValid) {
-                        throw XProcException.stepError(53, eh.getErr());
+                        throw XProcException.stepError(53, step, eh.getErr());
                     }
                 }
             } else {
@@ -164,7 +164,7 @@ public class ValidateJing extends DefaultStep {
             }
         } catch (SAXParseException e) {
             if (assertValid) {
-                throw XProcException.stepError(53, e);
+                throw XProcException.stepError(53, step, e);
             }
         } catch (SAXException e) {
             throw new XProcException(new RuntimeException("SAX Exception", e));

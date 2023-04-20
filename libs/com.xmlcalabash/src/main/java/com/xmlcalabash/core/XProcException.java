@@ -235,6 +235,14 @@ public class XProcException extends RuntimeException {
         return new DynamicXProcError(XProcConstants.stepError(code), location, message, null);
     }
 
+    public static XProcException stepError(int code, XStep location) {
+        return new DynamicXProcError(XProcConstants.stepError(code), location, null, null);
+    }
+
+    public static XProcException stepError(int code, XStep location, Throwable message) {
+        return new DynamicXProcError(XProcConstants.stepError(code), location, message, null);
+    }
+
     public XProcException(QName code, XdmNode location, String message) {
         this(code, location, message, null);
     }
@@ -267,7 +275,11 @@ public class XProcException extends RuntimeException {
         this(code, (Object)location, (Object)message, cause);
     }
 
-	public XProcException(QName code, XStep location, String message, XProcException cause) {
+    public XProcException(QName code, XStep location, String message, XProcException cause) {
+        this(code, (Object)location, (Object)message, cause);
+    }
+
+    public XProcException(QName code, XStep location, Throwable message, XProcException cause) {
         this(code, (Object)location, (Object)message, cause);
     }
 
@@ -276,7 +288,7 @@ public class XProcException extends RuntimeException {
     }
 
     public XProcException(QName code, Throwable message) {
-        this(code, null, message, null);
+        this(code, (Object)null, message, null);
     }
 
     public XProcException(String message) {
@@ -284,11 +296,11 @@ public class XProcException extends RuntimeException {
     }
 
     public XProcException(Throwable message) {
-        this(null, null, message, null);
+        this(null, (Object)null, message, null);
     }
 
     public XProcException(Throwable message, XProcException cause) {
-        this(null, null, message, cause);
+        this(null, (Object)null, message, cause);
     }
 
     public XProcException(SourceLocator[] location, Throwable message) {

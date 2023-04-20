@@ -94,7 +94,7 @@ public class WWWFormURLDecode extends DefaultStep {
                     }
 
                     try {
-                        TypeUtils.checkType(runtime, name, XProcConstants.xs_NCName, null);
+                        TypeUtils.checkType(runtime, null, name, XProcConstants.xs_NCName, null);
                     } catch (XProcException e) {
                         throw XProcException.stepError(61);
                     }

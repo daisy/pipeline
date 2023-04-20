@@ -27,6 +27,7 @@ import com.xmlcalabash.core.XProcRuntime;
 import java.util.Hashtable;
 
 import net.sf.saxon.s9api.*;
+import net.sf.saxon.value.QNameValue;
 
 /**
  * Created by IntelliJ IDEA.
@@ -66,11 +67,11 @@ public class TypeUtils {
         throw XProcException.dynamicError(45, "Invalid value: \"" + value + "\" must be one of \"" + literals + "\".");
     }
 
-    public static void checkType(XProcRuntime runtime, String value, QName type, XdmNode node) {
-        checkType(runtime, value, type, node, err_XD0045);
+    public static void checkType(XProcRuntime runtime, XdmValue value, String stringValue, QName type, XdmNode node) {
+        checkType(runtime, value, stringValue, type, node, err_XD0045);
     }
 
-    public static void checkType(XProcRuntime runtime, String value, QName type, XdmNode node, QName error) {
+    public static void checkType(XProcRuntime runtime, XdmValue value, String stringValue, QName type, XdmNode node, QName error) {
         if (XProcConstants.xs_string.equals(type) || XProcConstants.xs_untypedAtomic.equals(type)) {
             return;
         }
@@ -82,11 +83,16 @@ public class TypeUtils {
         }
 
         if (XProcConstants.xs_QName.equals(type)) {
-            try {
-                QName name = new QName(value, node);
-            } catch (Exception e) {
-                throw new XProcException(error, e);
-            }
+            if (value != null
+                && value.size() == 1
+                && value.itemAt(0).getUnderlyingValue() instanceof QNameValue)
+                ;
+            else
+                try {
+                    QName name = new QName(stringValue, node);
+                } catch (Exception e) {
+                    throw new XProcException(error, e);
+                }
             return;
         }
 
@@ -102,7 +108,7 @@ public class TypeUtils {
 
         // FIXME: There's probably a less expensive expensive way to do this
         try {
-            XdmAtomicValue avalue = new XdmAtomicValue(value, itype);
+            XdmAtomicValue avalue = new XdmAtomicValue(stringValue, itype);
         } catch (SaxonApiException sae) {
             throw new XProcException(error, sae);
         }

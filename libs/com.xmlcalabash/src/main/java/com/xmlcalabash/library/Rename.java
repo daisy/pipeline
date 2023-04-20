@@ -81,11 +81,11 @@ public class Rename extends DefaultStep implements ProcessMatchingNodes {
         String nns = getOption(_new_namespace, (String) null);
 
         if (npfx != null && nns == null) {
-            throw XProcException.dynamicError(34, "You can't specify a prefix without a namespace");
+            throw XProcException.dynamicError(34, step, "You can't specify a prefix without a namespace");
         }
 
         if (nns != null && nameStr.contains(":")) {
-            throw XProcException.dynamicError(34, "You can't specify a namespace if the new-name contains a colon");
+            throw XProcException.dynamicError(34, step, "You can't specify a namespace if the new-name contains a colon");
         }
 
         if (nameStr.contains(":")) {

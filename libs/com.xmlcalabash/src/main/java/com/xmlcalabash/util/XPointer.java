@@ -113,7 +113,7 @@ public class XPointer {
             xpointer = "element(" + xpointer + ")";
         } else {
             try {
-                TypeUtils.checkType(runtime, xpointer, XProcConstants.xs_NCName, null);
+                TypeUtils.checkType(runtime, null, xpointer, XProcConstants.xs_NCName, null);
                 xpointer = "element(" + xpointer + ")";
             } catch (XProcException xe) {
                 // nop

@@ -1489,7 +1489,7 @@ public class Parser {
                 || XProcConstants.p_library.equals(node.getNodeName())) {
             String version = node.getAttributeValue(_version);
             if (version != null) {
-                TypeUtils.checkType(runtime, version, XProcConstants.xs_decimal, node, err_XS0063);
+                TypeUtils.checkType(runtime, null, version, XProcConstants.xs_decimal, node, err_XS0063);
                 return Double.parseDouble(version);
             }
         }
@@ -1889,7 +1889,7 @@ public class Parser {
     private String checkNCName(String name) {
         if (name != null) {
             try {
-                TypeUtils.checkType(runtime, name, XProcConstants.xs_NCName,null);
+                TypeUtils.checkType(runtime, null, name, XProcConstants.xs_NCName, null);
             } catch (XProcException xe) {
                 throw new XProcException(
                     new RuntimeException("Invalid name: \"" + name + "\". Step and port names must be NCNames.",
