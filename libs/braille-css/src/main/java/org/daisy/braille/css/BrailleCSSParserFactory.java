@@ -14,12 +14,14 @@ import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMedia;
+import cz.vutbr.web.css.SourceLocator;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.antlr.CSSInputStream;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.CSSSource.SourceType;
 import cz.vutbr.web.csskit.antlr.CSSSourceReader;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 import cz.vutbr.web.csskit.antlr.TreeUtil;
 
 import org.antlr.runtime.CommonTokenStream;
@@ -135,8 +137,14 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 	}
 	
 	public RuleList parseInlineStyle(String style, Context context) {
+		return parseInlineStyle(style, context, null);
+	}
+	
+	private static final CSSSourceReader defaultSourceReader = new DefaultCSSSourceReader();
+	
+	public RuleList parseInlineStyle(String style, Context context, SourceLocator location) {
 		try {
-			CSSInputStream input = CSSInputStream.newInstance(style, null);
+			CSSInputStream input = CSSInputStream.newInstance(defaultSourceReader.read(new CSSSource(style, "text/css", location)));
 			CommonTokenStream tokens = feedLexer(input);
 			CommonTree ast = feedParser(tokens, SourceType.INLINE, context);
 			// OK to pass null for context element because it is only used in Analyzer.evaluateDOM()
