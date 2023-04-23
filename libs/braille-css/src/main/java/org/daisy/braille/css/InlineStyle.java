@@ -18,6 +18,7 @@ import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.SelectorPart;
+import cz.vutbr.web.css.SourceLocator;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.AbstractRuleBlock;
 
@@ -46,9 +47,13 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	}
 	
 	public InlineStyle(String style, BrailleCSSParserFactory.Context context) {
+		this(style, context, null);
+	}
+	
+	public InlineStyle(String style, BrailleCSSParserFactory.Context context, SourceLocator location) {
 		nestedStyles = new ArrayList<RuleBlock<?>>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
-		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style, context)) {
+		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style, context, location)) {
 			if (block == null) {}
 			else if (block instanceof RuleSet) {
 				RuleSet set = (RuleSet)block;
