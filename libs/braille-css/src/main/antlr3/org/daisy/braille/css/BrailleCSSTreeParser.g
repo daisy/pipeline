@@ -47,6 +47,11 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
     public List<String> getImportPaths() {
         return gCSSTreeParser.getImportPaths();
     }
+
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
+        gCSSTreeParser.displayRecognitionError(tokenNames, e);
+    }
 }
 
 // @Override
