@@ -14,6 +14,11 @@ import CSSParser;
     public void init() {
         gCSSParser.init();
     }
+
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
+        gCSSParser.displayRecognitionError(tokenNames, e);
+    }
 }
 
 // @Override
