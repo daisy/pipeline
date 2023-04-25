@@ -263,22 +263,27 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							return URLs.asURL(URI.create(info.getBaseURI()));
 						}
 						public int getLineNumber() {
-							return info.getLineNumber();
+							int line = info.getLineNumber();
+							if (line > 0)
+								return line - 1; // line numbers are 1-based in Saxon
+							else
+								return -1;
 						}
 						public int getColumnNumber() {
-							return info.getColumnNumber();
+							return info.getColumnNumber(); // -1
 						}
 					};
 				} else {
+					// should not happen
 					return new SourceLocator() {
 						public URL getURL() {
 							return URLs.asURL(URI.create(n.getBaseURI()));
 						}
 						public int getLineNumber() {
-							return 0;
+							return -1;
 						}
 						public int getColumnNumber() {
-							return 0;
+							return -1;
 						}
 					};
 				}
