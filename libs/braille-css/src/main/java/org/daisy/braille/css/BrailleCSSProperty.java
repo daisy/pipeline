@@ -750,7 +750,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	}
 	
 	public enum VolumeBreakInside implements BrailleCSSProperty {
-		AUTO("auto"), AVOID("avoid"), obfl_keep(""), INHERIT("inherit"),
+		AUTO("auto"), AVOID("avoid"), custom(""), INHERIT("inherit"),
 		INITIAL("initial");
 
 		private String text;
