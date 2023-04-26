@@ -519,14 +519,14 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	@SuppressWarnings("unused")
 	private boolean processMaxLength(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(MaxLength.class, MaxLength.integer, false,
+		return genericOneIdentOrInteger(MaxLength.class, MaxLength.integer, true,
 				d, properties, values);
 	}
 	
 	@SuppressWarnings("unused")
 	private boolean processMinLength(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		return genericOneIdentOrInteger(MinLength.class, MinLength.integer, false,
+		return genericOneIdentOrInteger(MinLength.class, MinLength.integer, true,
 				d, properties, values);
 	}
 	
