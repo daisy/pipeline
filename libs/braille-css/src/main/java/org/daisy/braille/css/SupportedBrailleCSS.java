@@ -183,8 +183,8 @@ public class SupportedBrailleCSS implements SupportedCSS {
 		setProperty("line-height", LineHeight.number, DEFAULT_UA_LINE_HEIGHT);
 		
 		// layout box
-		setProperty("left", AbsoluteMargin.integer, DEFAULT_UA_MARGIN);
-		setProperty("right", AbsoluteMargin.integer, DEFAULT_UA_MARGIN);
+		setProperty("left", AbsoluteMargin.AUTO);
+		setProperty("right", AbsoluteMargin.AUTO);
 		
 		setProperty("margin-top", Margin.integer, DEFAULT_UA_MARGIN);
 		setProperty("margin-right", Margin.integer, DEFAULT_UA_MARGIN);
