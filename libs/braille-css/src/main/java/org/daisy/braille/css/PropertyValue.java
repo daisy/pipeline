@@ -226,7 +226,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	public static PropertyValue parse(final Declaration declaration) {
 		final Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
 		final Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
-		if (!SimpleInlineStyle.transformerInstance.parseDeclaration(declaration, properties, terms))
+		if (!SimpleInlineStyle.cssInstance.parseDeclaration(declaration, properties, terms))
 			return null;
 		final String propertyName = declaration.getProperty();
 		return new PropertyValue(

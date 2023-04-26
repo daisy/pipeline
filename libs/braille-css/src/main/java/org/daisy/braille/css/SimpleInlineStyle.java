@@ -11,13 +11,11 @@ import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.SingleMapNodeData;
 
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
-	final static SupportedCSS cssInstance = new SupportedBrailleCSS(true, false);
-	final static DeclarationTransformer transformerInstance = new BrailleCSSDeclarationTransformer(cssInstance);
+	final static SupportedBrailleCSS cssInstance = new SupportedBrailleCSS(true, false);
 	final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
@@ -45,18 +43,15 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	}
 	
 	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle) {
-		this(declarations, parentStyle, transformerInstance, cssInstance);
+		this(declarations, parentStyle, cssInstance);
 	}
 	
 	/**
-	 * @param transformer {@link DeclarationTransformer} to be used for declarations that are not
-	 *                    {@link PropertyValue} instances.
-	 * @param css         {@link SupportedCSS} to be used for declarations that are not {@link
-	 *                    PropertyValue} instances.
+	 * @param css {@link SupportedBrailleCSS} to be used for declarations that are not {@link
+	 *            PropertyValue} instances.
 	 */
-	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle,
-	                         DeclarationTransformer transformer, SupportedCSS css) {
-		super(transformer, css);
+	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle, SupportedBrailleCSS css) {
+		super(css, css);
 		if (declarations != null)
 			for (Declaration d : declarations) {
 				if (d instanceof PropertyValue) {

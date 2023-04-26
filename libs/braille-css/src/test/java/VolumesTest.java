@@ -10,7 +10,6 @@ import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
@@ -24,8 +23,9 @@ import org.junit.Test;
 public class VolumesTest {
 	
 	public VolumesTest() {
-		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
-		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
+		SupportedBrailleCSS css = new SupportedBrailleCSS();
+		CSSFactory.registerSupportedCSS(css);
+		CSSFactory.registerDeclarationTransformer(css);
 	}
 	
 	@Test
