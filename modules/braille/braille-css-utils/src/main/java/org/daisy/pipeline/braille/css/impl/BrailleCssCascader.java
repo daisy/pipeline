@@ -43,7 +43,6 @@ import cz.vutbr.web.csskit.RuleFactoryImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import org.daisy.braille.css.AnyAtRule;
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
@@ -104,7 +103,7 @@ public class BrailleCssCascader implements CssCascader {
 		switch (medium.getType()) {
 		case EMBOSSED:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
-			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
+			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleCSS);
 		case PRINT:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
@@ -120,9 +119,7 @@ public class BrailleCssCascader implements CssCascader {
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 
 	// medium embossed
-	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
-	private static final DeclarationTransformer brailleDeclarationTransformer
-		= new BrailleCSSDeclarationTransformer(brailleCSS);
+	private static final SupportedBrailleCSS brailleCSS = new SupportedBrailleCSS(false, true);
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
@@ -317,7 +314,7 @@ public class BrailleCssCascader implements CssCascader {
 
 	private static void insertMarginStyle(StringBuilder builder, RuleMargin ruleMargin) {
 		builder.append("@").append(ruleMargin.getMarginArea()).append(" { ");
-		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleDeclarationTransformer, brailleCSS));
+		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleCSS));
 		builder.append("} ");
 	}
 

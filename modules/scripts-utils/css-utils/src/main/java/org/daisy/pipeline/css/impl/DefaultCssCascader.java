@@ -19,7 +19,6 @@ import cz.vutbr.web.css.CSSProperty.CounterSet;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.Selector.PseudoElement;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
@@ -28,10 +27,8 @@ import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.RuleFactoryImpl;
-import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.StyleMap;
 
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.Display;
@@ -100,9 +97,7 @@ public class DefaultCssCascader implements CssCascader {
 	// using braille-css because @counter-style is not supported by jStyleParser
 	private static final CSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	private static final RuleFactory ruleFactory = RuleFactoryImpl.getInstance();
-	private static final SupportedCSS supportedCSS = new SupportedBrailleCSS(false, true); // FIXME: support "list-style" shorthand
-	private static final DeclarationTransformer declarationTransformer
-		= new BrailleCSSDeclarationTransformer(supportedCSS);
+	private static final SupportedBrailleCSS supportedCSS = new SupportedBrailleCSS(false, true); // FIXME: support "list-style" shorthand
 
 	/*
 	 * We can make use of JStyleParserCssCascader for the evaluation of marker contents because to
@@ -120,7 +115,7 @@ public class DefaultCssCascader implements CssCascader {
 		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
 		                    String userStyleSheet, Medium medium, QName attributeName, boolean multipleAttrs) {
 			super(resolver, preProcessor, xsltProcessor, userStyleSheet, medium, attributeName,
-			      parserFactory, ruleFactory, supportedCSS, declarationTransformer);
+			      parserFactory, ruleFactory, supportedCSS, supportedCSS);
 			listCounterStyle.push(CounterStyle.DISC);
 			counterValues.push(null);
 			if (attributeName == null) {

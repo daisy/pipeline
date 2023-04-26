@@ -251,7 +251,7 @@ public class CssShiftStringSetStep extends DefaultStep implements XProcStep {
 	private static void parseStringSet(String value, List<TermPair<String,TermList>> appendTo) {
 		PropertyValue decl = PropertyValue.parse("string-set", value);
 		if (decl != null) {
-			StringSet stringSet = (StringSet)decl.getProperty();
+			StringSet stringSet = (StringSet)decl.getCSSProperty();
 			switch (stringSet) {
 			case INHERIT:
 				throw new RuntimeException("'string-set: inherit' not supported");
