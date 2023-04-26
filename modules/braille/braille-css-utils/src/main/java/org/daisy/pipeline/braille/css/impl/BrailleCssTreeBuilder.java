@@ -17,7 +17,6 @@ import cz.vutbr.web.css.Selector.Combinator;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.SelectorPart;
 
-import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
@@ -30,6 +29,7 @@ import org.daisy.braille.css.RuleHyphenationResource;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
+import org.daisy.braille.css.VendorAtRule;
 
 public final class BrailleCssTreeBuilder {
 
@@ -142,13 +142,13 @@ public final class BrailleCssTreeBuilder {
 			                       new Style().add((List<Declaration>)rule));
 		}
 
-		private static Style of(AnyAtRule rule) {
+		private static Style of(VendorAtRule<? extends Rule<?>> rule) {
 			Style style = new Style();
 			for (Rule<?> r : rule)
 				if (r instanceof Declaration)
 					style.add((Declaration)r);
-				else if (r instanceof AnyAtRule)
-					style.add("@" + ((AnyAtRule)r).getName(), Style.of((AnyAtRule)r));
+				else if (r instanceof VendorAtRule)
+					style.add("@" + ((VendorAtRule)r).getName(), Style.of((VendorAtRule<? extends Rule<?>>)r));
 				else
 					throw new RuntimeException("coding error");
 			return style;
@@ -201,9 +201,9 @@ public final class BrailleCssTreeBuilder {
 					style.add(Style.of(((RuleRelativeVolume)rule).asRuleVolume()));
 				else if (rule instanceof RuleRelativeHyphenationResource)
 					style.add(Style.of(((RuleRelativeHyphenationResource)rule).asRuleHyphenationResource()));
-				else if (rule instanceof AnyAtRule)
-					style.add("@" + ((AnyAtRule)rule).getName(),
-					          Style.of((AnyAtRule)rule));
+				else if (rule instanceof VendorAtRule)
+					style.add("@" + ((VendorAtRule)rule).getName(),
+					          Style.of((VendorAtRule<? extends Rule<?>>)rule));
 				else
 					throw new RuntimeException("coding error");
 			}

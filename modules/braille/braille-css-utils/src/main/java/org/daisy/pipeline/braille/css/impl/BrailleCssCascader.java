@@ -42,8 +42,6 @@ import cz.vutbr.web.csskit.antlr.CSSParserFactory;
 import cz.vutbr.web.csskit.RuleFactoryImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
-import org.daisy.braille.css.AnyAtRule;
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
@@ -55,6 +53,7 @@ import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.braille.css.VendorAtRule;
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.braille.css.SupportedPrintCSS;
@@ -106,7 +105,7 @@ public class BrailleCssCascader implements CssCascader {
 		case EMBOSSED:
 		case BRAILLE:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
-			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
+			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleCSS);
 		case PRINT:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
@@ -122,9 +121,7 @@ public class BrailleCssCascader implements CssCascader {
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 
 	// medium braille/embossed
-	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
-	private static final DeclarationTransformer brailleDeclarationTransformer
-		= new BrailleCSSDeclarationTransformer(brailleCSS);
+	private static final SupportedBrailleCSS brailleCSS = new SupportedBrailleCSS(false, true);
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
@@ -148,7 +145,7 @@ public class BrailleCssCascader implements CssCascader {
 		private Iterable<RuleTextTransform> textTransformRules = null;
 		private Iterable<RuleHyphenationResource> hyphenationResourceRules = null;
 		private Iterable<RuleCounterStyle> counterStyleRules = null;
-		private Iterable<AnyAtRule> otherAtRules = null;
+		private Iterable<VendorAtRule<? extends Rule<?>>> otherAtRules = null;
 
 		protected Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
 			if (isBrailleCss && pageRules == null) {
@@ -188,7 +185,7 @@ public class BrailleCssCascader implements CssCascader {
 				textTransformRules = Iterables.filter(styleSheet, RuleTextTransform.class);
 				hyphenationResourceRules = Iterables.filter(styleSheet, RuleHyphenationResource.class);
 				counterStyleRules = Iterables.filter(styleSheet, RuleCounterStyle.class);
-				otherAtRules = Iterables.filter(styleSheet, AnyAtRule.class);
+				otherAtRules = (Iterable<VendorAtRule<? extends Rule<?>>>)(Iterable)Iterables.filter(styleSheet, VendorAtRule.class);
 			}
 			StringBuilder style = new StringBuilder();
 			if (mainStyle != null)
@@ -217,7 +214,7 @@ public class BrailleCssCascader implements CssCascader {
 						insertHyphenationResourceDefinition(style, r);
 					for (RuleCounterStyle r : counterStyleRules)
 						insertCounterStyleDefinition(style, r);
-					for (AnyAtRule r : otherAtRules) {
+					for (VendorAtRule<? extends Rule<?>> r : otherAtRules) {
 						if (style.length() > 0 && !style.toString().endsWith("} ")) {
 							style.insert(0, "{ ");
 							style.append("} "); }
@@ -319,7 +316,7 @@ public class BrailleCssCascader implements CssCascader {
 
 	private static void insertMarginStyle(StringBuilder builder, RuleMargin ruleMargin) {
 		builder.append("@").append(ruleMargin.getMarginArea()).append(" { ");
-		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleDeclarationTransformer, brailleCSS));
+		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleCSS));
 		builder.append("} ");
 	}
 
@@ -534,11 +531,11 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("} ");
 	}
 
-	private static void insertAtRule(StringBuilder builder, AnyAtRule rule) {
+	private static void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
 		builder.append("@").append(rule.getName()).append(" { ");
 		for (Declaration decl : Iterables.filter(rule, Declaration.class))
 			insertDeclaration(builder, decl);
-		for (AnyAtRule r : Iterables.filter(rule, AnyAtRule.class))
+		for (VendorAtRule<? extends Rule<?>> r : Iterables.filter(rule, VendorAtRule.class))
 			insertAtRule(builder, r);
 		builder.append("} ");
 	}
