@@ -101,7 +101,7 @@ public final class BrailleCssSerializer {
 		if (value != null)
 			return toString(value);
 		else
-			return propValue.getProperty().toString();
+			return propValue.getCSSProperty().toString();
 	}
 
 	public static String toString(RuleMainBlock rule) {

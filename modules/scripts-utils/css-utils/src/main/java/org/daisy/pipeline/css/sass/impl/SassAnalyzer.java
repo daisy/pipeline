@@ -186,7 +186,7 @@ public class SassAnalyzer {
 				Reader r = ss.getReader();
 				if (r == null)
 					r = new InputStreamReader(ss.getInputStream(), StandardCharsets.UTF_8);
-				stylesheets.add(new CSSSource(CharStreams.toString(r), null, base, 0, 0));
+				stylesheets.add(new CSSSource(CharStreams.toString(r), (String)null, base, 0, 0));
 			} else {
 				if (base == null) {
 					InputSource is = SAXSource.sourceToInputSource(s);
@@ -200,7 +200,7 @@ public class SassAnalyzer {
 						else
 							throw new IllegalArgumentException("unexpected source: no content and no base URI");
 					}
-					stylesheets.add(new CSSSource(CharStreams.toString(r), null, base, 0, 0));
+					stylesheets.add(new CSSSource(CharStreams.toString(r), (String)null, base, 0, 0));
 				} else
 					stylesheets.add(new CSSSource(base, StandardCharsets.UTF_8, null));
 			}
