@@ -24,7 +24,6 @@ import cz.vutbr.web.csskit.DefaultNetworkProcessor;
 
 import org.apache.xerces.parsers.DOMParser;
 
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.SelectorImpl.NegationPseudoClassImpl;
@@ -48,8 +47,9 @@ public class PseudoClassTest {
 	private static final RuleFactory rf = new BrailleCSSRuleFactory();
 	
 	public PseudoClassTest() {
-		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
-		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
+		SupportedBrailleCSS css = new SupportedBrailleCSS();
+		CSSFactory.registerSupportedCSS(css);
+		CSSFactory.registerDeclarationTransformer(css);
 	}
 	
 	@Test
