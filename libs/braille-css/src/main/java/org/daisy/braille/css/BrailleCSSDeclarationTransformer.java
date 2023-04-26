@@ -384,7 +384,9 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 		return genericOneIdentOrIdentifier(Flow.class, Flow.identifier, true,
 				d, properties, values);
 	}
-	
+
+	private static final Pattern HYPHENATE_CHARACTER_RE = Pattern.compile("[\u2800-\u28ff]+");
+
 	@SuppressWarnings("unused")
 	private boolean processHyphenateCharacter(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
@@ -395,6 +397,9 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 		if (genericTermIdent(HyphenateCharacter.class, term, ALLOW_INH, prop, properties))
 			return true;
 		else if (TermString.class.isInstance(term)) {
+			if (!HYPHENATE_CHARACTER_RE.matcher("" + term.getValue()).matches()) {
+				return false;
+			}
 			properties.put(prop, HyphenateCharacter.braille_string);
 			values.put(prop, term);
 			return true; }
