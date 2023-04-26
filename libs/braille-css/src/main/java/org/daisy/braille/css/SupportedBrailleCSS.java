@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.Set;
+
+import com.google.common.collect.ForwardingMap;
 
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.CSSProperty;
@@ -84,10 +88,31 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	}
 
 	public SupportedBrailleCSS(boolean allowComponentProperties, boolean allowShorthandProperties) {
+		this(allowComponentProperties, allowShorthandProperties, Collections.emptyList(), true);
+	}
+
+	/**
+	 * @param allowUnknownVendorExtensions Whether to allow unknown vendor extensions.
+	 */
+	public SupportedBrailleCSS(boolean allowComponentProperties,
+	                           boolean allowShorthandProperties,
+	                           Collection<BrailleCSSExtension> extensions,
+	                           boolean allowUnknownVendorExtensions) {
 		// SupportedCSSImpl is defined at the bottom of this file
 		// it is a separate class because we need an argument to pass to the constructor of DeclarationTransformer
-		super(new SupportedCSSImpl(allowComponentProperties, allowShorthandProperties));
+		super(new SupportedCSSImpl(allowComponentProperties, allowShorthandProperties, extensions));
+		this.methods = parsingMethods(extensions);
+		this.extensions = new ArrayList<>();
+		for (BrailleCSSExtension x : extensions)
+			if (x.getPrefix() == null || !x.getPrefix().matches("-.+-"))
+				log.warn("CSS extension without prefix ignored: " + x);
+			else
+				this.extensions.add(x);
+		this.allowUnknownVendorExtensions = allowUnknownVendorExtensions;
 	}
+
+	protected final Collection<BrailleCSSExtension> extensions;
+	protected final boolean allowUnknownVendorExtensions;
 
 	///////////////////////////////////////////////////////////////
 	// DeclarationTransformer
@@ -95,8 +120,19 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 
 	@Override
 	protected Map<String, Method> parsingMethods() {
+		return null;
+	}
+
+	private Map<String, Method> parsingMethods(Collection<BrailleCSSExtension> extensions) {
 		Map<String, Method> map = new HashMap<String, Method>(css.getTotalProperties(), 1.0f);
 		for (String property : css.getDefinedPropertyNames()) {
+			boolean isExtensionProperty = false; {
+				for (BrailleCSSExtension x : extensions)
+					if (property.startsWith(x.getPrefix())) {
+						isExtensionProperty = true;
+						break; }}
+			if (isExtensionProperty)
+				continue; // will be handled by extension
 			try {
 				Method m = SupportedBrailleCSS.class.getDeclaredMethod(
 					camelCase("process-" + property),
@@ -120,31 +156,45 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@Override
 	public boolean parseDeclaration(Declaration d, Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		String property = d.getProperty().toLowerCase();
-		if (!css.isSupportedCSSProperty(property)) {
-			if (property.startsWith("-")) {
-				// vendor extension
-				if (d.size() == 1) {
-					Term<?> term = d.get(0);
-					if (term instanceof TermIdent)
-						return genericProperty(GenericVendorCSSPropertyProxy.class, (TermIdent)term,
-						                       true, properties, property);
-					else if (term instanceof TermInteger)
-						return genericTerm(TermInteger.class, term, d.getProperty(),
-						                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
-					else if (term instanceof TermFunction)
-						return genericTerm(TermFunction.class, term, d.getProperty(),
-						                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
+		if (property.startsWith("-")) {
+			for (BrailleCSSExtension x : extensions)
+				if (property.startsWith(x.getPrefix())) {
+					if (!x.isSupportedCSSProperty(property)) {
+						log.debug("Ignoring unsupported property: " + property);
+						return false;
+					} else if (x.parseDeclaration(d, properties, values)) {
+						return true;
+					} else {
+						log.warn("Ignoring unsupported declaration: " + declarationToString(d));
+						return false;
+					}
 				}
-				log.warn("Ignoring unsupported declaration: " + declarationToString(d));
-			} else {
+			if (!allowUnknownVendorExtensions) {
 				log.debug("Ignoring unsupported property: " + property);
+				return false;
 			}
-		} else {
+			if (d.size() == 1) {
+				Term<?> term = d.get(0);
+				if (term instanceof TermIdent)
+					return genericProperty(GenericVendorCSSPropertyProxy.class, (TermIdent)term,
+					                       ALLOW_INH, properties, property);
+				else if (term instanceof TermInteger)
+					return genericTerm(TermInteger.class, term, d.getProperty(),
+					                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
+				else if (term instanceof TermFunction)
+					return genericTerm(TermFunction.class, term, d.getProperty(),
+					                   GenericVendorCSSPropertyProxy.valueOf(null), false, properties, values);
+			}
+			log.warn("Ignoring unsupported declaration: " + declarationToString(d));
+			return false;
+		}
+		if (css.isSupportedCSSProperty(property)) {
 			try {
 				Method m = methods.get(property);
 				if (m != null)
 					try {
-						return (Boolean)m.invoke(this, d, properties, values);
+						if ((Boolean)m.invoke(this, d, properties, values))
+							return true;
 					} catch (IllegalAccessException e) {
 						if (super.parseDeclaration(d, properties, values))
 							return true;
@@ -153,11 +203,51 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 							return true;
 					} catch (InvocationTargetException e) {
 					}
+				// might be a declaration with a non-standard value that an extension can parse
+				for (BrailleCSSExtension x : extensions)
+					if (x.parseDeclaration(d, properties, values))
+						return true;
 			} catch (Exception e) {
 			}
-			log.warn("Ignoring unsupported declaration: " + declarationToString(d));
+		} else {
+			// might be an unprefixed extension property (which the extension's parser may or may not support)
+			for (BrailleCSSExtension x : extensions)
+				if (x.isSupportedCSSProperty(x.getPrefix() + property))
+					if (x.parseDeclaration(d,
+					                       new NormalizingMap<CSSProperty>(x, properties),
+					                       new NormalizingMap<Term<?>>(x, values)))
+						return true;
 		}
+		log.warn("Ignoring unsupported declaration: " + declarationToString(d));
 		return false;
+	}
+
+	/**
+	 * Normalize property names by adding a prefix if needed. No warnings are issued.
+	 */
+	private class NormalizingMap<T> extends ForwardingMap<String,T> {
+
+		private final BrailleCSSExtension extension;
+		private final Map<String,T> map;
+
+		public NormalizingMap(BrailleCSSExtension extension, Map<String,T> map) {
+			this.extension = extension;
+			this.map = map;
+		}
+
+		@Override
+		protected Map<String,T> delegate() {
+			return map;
+		}
+
+		@Override
+		public T put(String propertyName, T value) {
+			if (!extension.isSupportedCSSProperty(propertyName)
+			    && !propertyName.startsWith(extension.getPrefix())
+			    && extension.isSupportedCSSProperty(extension.getPrefix() + propertyName))
+				propertyName = extension.getPrefix() + propertyName;
+			return super.put(propertyName, value);
+		}
 	}
 
 	private static String declarationToString(Declaration d) {
@@ -352,7 +442,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	= new HashSet<String>(Arrays.asList("content", "attr", "counter", "counters", "string", "leader", "flow",
 	                                    "target-text", "target-string", "target-counter", "target-content"));
 
-	private final static Pattern customContentFuncName = Pattern.compile("^-.*"); // is the rest handled in ANTLR?
+	private final static Pattern customIdentOrFuncName = Pattern.compile("^-.*");
 
 	@SuppressWarnings("unused")
 	protected boolean processContent(Declaration d,
@@ -361,17 +451,37 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			return true;
 		TermList list = tf.createList();
 		for (Term<?> t : d.asList()) {
-			if (t instanceof TermString)
+			if (t instanceof TermString) {
 				list.add(t);
-			else if (t instanceof TermFunction) {
+				continue;
+			} else if (t instanceof TermFunction) {
 				String funcName = ((TermFunction)t).getFunctionName();
-				if (validContentFuncNames.contains(funcName.toLowerCase())
-				    || customContentFuncName.matcher(funcName).matches())
+				if (validContentFuncNames.contains(funcName.toLowerCase())) {
 					list.add(t);
-				else
-					return false; }
-			else
-				return false;
+					continue;
+				}
+			}
+			boolean parsedByExtension = false;
+			for (BrailleCSSExtension x : extensions) {
+				if (x.parseContentTerm(t, list)) {
+					parsedByExtension = true;
+					break;
+				}
+			}
+			if (parsedByExtension)
+				continue;
+			if (allowUnknownVendorExtensions)
+				if (t instanceof TermFunction) {
+					String funcName = ((TermFunction)t).getFunctionName();
+					if (customIdentOrFuncName.matcher(funcName).matches()) {
+						for (BrailleCSSExtension x : extensions)
+							if (funcName.startsWith(x.getPrefix()))
+								return false; // x.parseContentTerm() above should have returned true
+						list.add(t);
+						continue;
+					}
+				}
+			return false;
 		}
 		if (list.isEmpty())
 			return false;
@@ -379,8 +489,6 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		values.put("content", list);
 		return true;
 	}
-
-	private final static Pattern customDisplayIdent = Pattern.compile("^-.*"); // is the rest handled in ANTLR?
 
 	@SuppressWarnings("unused")
 	private boolean processDisplay(Declaration d,
@@ -391,11 +499,16 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		String prop = d.getProperty();
 		if (genericTermIdent(Display.class, t, ALLOW_INH, prop, properties))
 			return true;
-		if (t instanceof TermIdent) {
-			if (customDisplayIdent.matcher(((TermIdent)t).getValue()).matches()) {
-				properties.put(prop, Display.custom);
-				values.put(prop, t);
-				return true; }}
+		if (allowUnknownVendorExtensions)
+			if (t instanceof TermIdent) {
+				String ident = ((TermIdent)t).getValue();
+				if (customIdentOrFuncName.matcher(ident).matches()) {
+					for (BrailleCSSExtension x : extensions)
+						if (ident.startsWith(x.getPrefix()))
+							return false;
+					properties.put(prop, Display.custom);
+					values.put(prop, t);
+					return true; }}
 		return false;
 	}
 
@@ -744,19 +857,21 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		if (genericOneIdent(VolumeBreakInside.class, d, properties))
 			return true;
-		if (d.size() == 1) {
-			Term<?> term = d.get(0);
-			if (term instanceof TermFunction) {
-				TermFunction fun = (TermFunction)term;
-				if ("-obfl-keep".equals(fun.getFunctionName())
-					&& fun.size() == 1
-					&& fun.get(0) instanceof TermInteger) {
-					properties.put("volume-break-inside", VolumeBreakInside.obfl_keep);
-					values.put("volume-break-inside", fun);
-					return true;
+		if (allowUnknownVendorExtensions)
+			if (d.size() == 1) {
+				Term<?> term = d.get(0);
+				if (term instanceof TermFunction) {
+					String funcName = ((TermFunction)term).getFunctionName();
+					if (customIdentOrFuncName.matcher(funcName).matches()) {
+						for (BrailleCSSExtension x : extensions)
+							if (funcName.startsWith(x.getPrefix()))
+								return false;
+						properties.put("volume-break-inside", VolumeBreakInside.custom);
+						values.put("volume-break-inside", term);
+						return true;
+					}
 				}
 			}
-		}
 		return false;
 	}
 
@@ -1113,8 +1228,6 @@ class SupportedCSSImpl implements SupportedCSS {
 
 	private static Logger log = LoggerFactory.getLogger(SupportedBrailleCSS.class);
 
-	private static final int TOTAL_SUPPORTED_DECLARATIONS = 70;
-
 	private static final TermFactory tf = CSSFactory.getTermFactory();
 
 	private static final CSSProperty DEFAULT_UA_TEXT_ALIGN = TextAlign.LEFT;
@@ -1128,14 +1241,17 @@ class SupportedCSSImpl implements SupportedCSS {
 	private static final Term<?> DEFAULT_UA_LETTER_SPACING = tf.createInteger(1);
 	private static final Term<?> DEFAULT_UA_WORD_SPACING = tf.createInteger(1);
 
+	private final int TOTAL_SUPPORTED_DECLARATIONS;
+
 	private Set<String> supportedCSSproperties;
 	private Map<String, CSSProperty> defaultCSSproperties;
 	private Map<String, Term<?>> defaultCSSvalues;
 	private Map<String, Integer> ordinals;
 	private Map<Integer, String> ordinalsRev;
 
-	SupportedCSSImpl(boolean allowComponentProperties, boolean allowShorthandProperties) {
-		this.setSupportedCSS(allowComponentProperties, allowShorthandProperties);
+	SupportedCSSImpl(boolean allowComponentProperties, boolean allowShorthandProperties, Collection<BrailleCSSExtension> extensions) {
+		this.TOTAL_SUPPORTED_DECLARATIONS = 70 + 2 * extensions.stream().mapToInt(BrailleCSSExtension::getTotalProperties).sum();
+		this.setSupportedCSS(allowComponentProperties, allowShorthandProperties, extensions);
 		this.setOridinals();
 	}
 
@@ -1217,7 +1333,7 @@ class SupportedCSSImpl implements SupportedCSS {
 			defaultCSSvalues.put(name, defaultValue);
 	}
 
-	private void setSupportedCSS(boolean allowComponentProperties, boolean allowShorthandProperties) {
+	private void setSupportedCSS(boolean allowComponentProperties, boolean allowShorthandProperties, Collection<BrailleCSSExtension> extensions) {
 
 		supportedCSSproperties = new HashSet<String>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
 		defaultCSSproperties = new HashMap<String, CSSProperty>(TOTAL_SUPPORTED_DECLARATIONS, 1.0f);
@@ -1321,6 +1437,12 @@ class SupportedCSSImpl implements SupportedCSS {
 		setProperty("letter-spacing", LetterSpacing.length, DEFAULT_UA_LETTER_SPACING);
 		setProperty("word-spacing", WordSpacing.length, DEFAULT_UA_WORD_SPACING);
 		setProperty("flow", Flow.NORMAL);
+
+		// vendor extensions
+		for (BrailleCSSExtension x : extensions)
+			for (String p : x.getDefinedPropertyNames())
+				// p includes prefix
+				setProperty(p, x.getDefaultProperty(p), x.getDefaultValue(p));
 	}
 
 	private void setOridinals() {
