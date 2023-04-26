@@ -9,7 +9,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 	 ************************************************************************/
 	
 	public enum AbsoluteMargin implements BrailleCSSProperty {
-		integer(""), INHERIT("inherit"), INITIAL("initial");
+		integer(""), AUTO("auto"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
 
