@@ -926,8 +926,9 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			return false;
 		return genericTermIdent(type, d.get(0), ALLOW_INH, d.getProperty(),
 				properties)
-				|| genericTerm(TermIdent.class, d.get(0), d.getProperty(),
-						identifierIdentification, sanify, properties, values);
+				|| (genericTerm(TermIdent.class, d.get(0), d.getProperty(),
+						identifierIdentification, sanify, properties, values)
+					&& !((TermIdent)d.get(0)).getValue().startsWith("-"));
 	}
 
 	/****************************************************************
