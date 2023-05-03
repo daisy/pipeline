@@ -61,8 +61,11 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			}
 		if (parentStyle != null) {
 			super.inheritFrom(parentStyle.concretize());
-			super.concretize();
-			inherited = concretized = true;
+			super.concretize(true, true);
+			inherited = concretizedInherit = concretizedInitial = true;
+		} else {
+			super.concretize(false, true);
+			concretizedInitial = true;
 		}
 	}
 	
@@ -144,21 +147,28 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		return false;
 	}
 	
-	private boolean concretized = false;
+	private boolean concretizedInherit = false;
+	private boolean concretizedInitial = false;
 	private boolean copiedForConcretize = false;
 
 	@Override
 	public SimpleInlineStyle concretize() {
-		if (concretized)
+		return (SimpleInlineStyle)super.concretize();
+	}
+
+	@Override
+	public SimpleInlineStyle concretize(boolean concretizeInherit, boolean concretizeInitial) {
+		if ((concretizedInherit || !concretizeInherit) && (concretizedInitial || !concretizeInitial))
 			return this;
 		else if (copiedForConcretize) {
-			super.concretize();
-			concretized = true;
+			super.concretize(concretizeInherit, concretizeInitial);
+			concretizedInherit = concretizeInherit;
+			concretizedInitial = concretizeInitial;
 			return this;
 		} else {
 			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
 			copy.copiedForConcretize = true;
-			copy.concretize();
+			copy.concretize(concretizeInherit, concretizeInitial);
 			copy.copiedForConcretize = false;
 			return copy;
 		}
@@ -171,7 +181,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	public SimpleInlineStyle inheritFrom(NodeData parent) throws ClassCastException {
 		if (inherited)
 			throw new UnsupportedOperationException("Can not inherit from more than one parent style");
-		else if (concretized)
+		else if (concretizedInherit)
 			throw new UnsupportedOperationException("Can not inherit from a parent style: 'inherit' values were already concretized.");
 		else if (copiedForInherit) {
 			super.inheritFrom(parent);
