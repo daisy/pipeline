@@ -3,6 +3,113 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                stylesheet="../../main/resources/xml/braille-css.xsl">
 	
+	<x:scenario label="test_02">
+		<x:call template="css:specified-properties">
+			<x:param name="properties"
+			         select="('display',              'border-left-align',      'text-align',           'white-space',
+			                  'flow',                 'border-right-pattern',   'page-break-before',    'hyphens',
+			                  'left',                 'border-right-style',     'page-break-after',     'hyphenate-character',
+			                  'right',                'border-right-width',     'page-break-inside',    'size',
+			                  'margin-left',          'border-right-align',     'volume-break-before',  'max-height',
+			                  'margin-right',         'border-bottom-pattern',  'volume-break-after',   'min-length',
+			                  'margin-top',           'border-bottom-style',    'volume-break-inside',  'max-length',
+			                  'margin-bottom',        'border-bottom-width',    'orphans',              'text-transform',
+			                  'padding-left',         'border-bottom-align',    'widows',               'braille-charset',
+			                  'padding-right',        'border-top-pattern',     'page',                 'line-height',
+			                  'padding-bottom',       'border-top-style',       'string-set',           'letter-spacing',
+			                  'padding-top',          'border-top-width',       'counter-reset',        'word-spacing',
+			                  'border-left-pattern',  'border-top-align',       'counter-set',          'render-table-by',
+			                  'border-left-style',    'text-indent',            'counter-increment',    'table-header-policy',
+			                  'border-left-width',    'list-style-type',        'content',              '-obfl-right-text-indent'
+			                  )"/>
+			<x:param name="concretize-inherit" select="true()"/>
+			<x:param name="context" select="//bar">
+				<bar style="display: initial;                 border-bottom-pattern: initial;   page: initial;
+				            flow: initial;                    border-bottom-style: initial;     string-set: initial;
+				            left: initial;                    border-bottom-width: initial;     counter-reset: initial;
+				            right: initial;                   border-bottom-align: initial;     counter-set: initial;
+				            margin-left: initial;             border-top-pattern: initial;      counter-increment: initial;
+				            margin-right: initial;            border-top-style: initial;        content: initial;
+				            margin-top: initial;              border-top-width: initial;        white-space: initial;
+				            margin-bottom: initial;           border-top-align: initial;        hyphens: initial;
+				            padding-left: initial;            text-indent: initial;             hyphenate-character: initial;
+				            padding-right: initial;           list-style-type: initial;         size: initial;
+				            padding-bottom: initial;          text-align: initial;              max-height: initial;
+				            padding-top: initial;             page-break-before: initial;       min-length: initial;
+				            border-left-pattern: initial;     braille-charset: initial;         max-length: initial;
+				            border-left-style: initial;       page-break-after: initial;        text-transform: initial;
+				            border-left-width: initial;       page-break-inside: initial;       line-height: initial;
+				            border-left-align: initial;       volume-break-before: initial;     letter-spacing: initial;
+				            border-right-pattern: initial;    volume-break-after: initial;      word-spacing: initial;
+				            border-right-style: initial;      volume-break-inside: initial;     render-table-by: initial;
+				            border-right-width: initial;      orphans: initial;                 table-header-policy: initial;
+				            border-right-align: initial;      widows: initial;                  -obfl-right-text-indent: initial;
+				            "/>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:property name="-obfl-right-text-indent" value="0"/>
+			<css:property name="border-bottom-align" value="center"/>
+			<css:property name="border-bottom-pattern" value="none"/>
+			<css:property name="border-bottom-style" value="none"/>
+			<css:property name="border-bottom-width" value="1"/>
+			<css:property name="border-left-align" value="center"/>
+			<css:property name="border-left-pattern" value="none"/>
+			<css:property name="border-left-style" value="none"/>
+			<css:property name="border-left-width" value="1"/>
+			<css:property name="border-right-align" value="center"/>
+			<css:property name="border-right-pattern" value="none"/>
+			<css:property name="border-right-style" value="none"/>
+			<css:property name="border-right-width" value="1"/>
+			<css:property name="border-top-align" value="center"/>
+			<css:property name="border-top-pattern" value="none"/>
+			<css:property name="border-top-style" value="none"/>
+			<css:property name="border-top-width" value="1"/>
+			<css:property name="braille-charset" value="unicode"/>
+			<css:property name="content"/>
+			<css:property name="counter-increment"/>
+			<css:property name="counter-reset"/>
+			<css:property name="counter-set"/>
+			<css:property name="display" value="inline"/>
+			<css:property name="flow" value="normal"/>
+			<css:property name="hyphenate-character" value="auto"/>
+			<css:property name="hyphens" value="manual"/>
+			<css:property name="left" value="auto"/>
+			<css:property name="letter-spacing" value="0"/>
+			<css:property name="line-height" value="1"/>
+			<css:property name="list-style-type" value="none"/>
+			<css:property name="margin-bottom" value="0"/>
+			<css:property name="margin-left" value="0"/>
+			<css:property name="margin-right" value="0"/>
+			<css:property name="margin-top" value="0"/>
+			<css:property name="max-height" value="none"/>
+			<css:property name="max-length" value="auto"/>
+			<css:property name="min-length" value="auto"/>
+			<css:property name="orphans" value="0"/>
+			<css:property name="padding-bottom" value="0"/>
+			<css:property name="padding-left" value="0"/>
+			<css:property name="padding-right" value="0"/>
+			<css:property name="padding-top" value="0"/>
+			<css:property name="page" value="auto"/>
+			<css:property name="page-break-after" value="auto"/>
+			<css:property name="page-break-before" value="auto"/>
+			<css:property name="page-break-inside" value="auto"/>
+			<css:property name="render-table-by" value="auto"/>
+			<css:property name="right" value="auto"/>
+			<css:property name="size" value="auto"/>
+			<css:property name="string-set"/>
+			<css:property name="table-header-policy" value="once"/>
+			<css:property name="text-align" value="left"/>
+			<css:property name="text-indent" value="0"/>
+			<css:property name="text-transform" value="auto"/>
+			<css:property name="volume-break-after" value="auto"/>
+			<css:property name="volume-break-before" value="auto"/>
+			<css:property name="volume-break-inside" value="auto"/>
+			<css:property name="white-space" value="normal"/>
+			<css:property name="widows" value="0"/>
+			<css:property name="word-spacing" value="1"/>
+		</x:expect>
+	</x:scenario>
 	<x:scenario label="test_03">
 		<x:call template="css:specified-properties">
 			<x:param name="properties"
@@ -15,7 +122,8 @@
 			                  'border-left-pattern', 'page-break-before',   'counter-reset',       'max-length',          '-foo-someprop',
 			                  'border-left-style',   'page-break-after',    'counter-set',         'text-transform',      'someprop',
 			                  'border-left-width',   'page-break-inside',   'counter-increment',   'braille-charset',
-			                  'border-left-align',   'volume-break-before', 'content',             'color'                )"/>
+			                  'border-left-align',   'volume-break-before', 'content'
+			                  )"/>
 			<x:param name="concretize-inherit" select="true()"/>
 			<x:param name="context" select="//bar">
 				<foo css:orphans="3" css:_obfl-right-text-indent="2">
@@ -64,7 +172,6 @@
 					            word-spacing: -1;                                  /* invalid */
 					            render-table-by: 123;                              /* invalid */
 					            table-header-policy: foo;                          /* invalid */
-					            color: #000000;                                    /* invalid */
 					            someprop: someval;                                 /* invalid */
 					            -foo-someprop: someval;                            /* valid */
 					            -obfl-right-text-indent: inherit;                  /* valid */
@@ -129,7 +236,6 @@
 			<css:property name="braille-charset" value="unicode"/>
 			<css:property name="border-left-align" value="center"/>
 			<css:property name="content"/>
-			<css:property name="color" value="#000000"/>
 		</x:expect>
 	</x:scenario>
 	

@@ -21,7 +21,6 @@
         <xsl:copy>
             <xsl:apply-templates select="@* except @style"/>
             <xsl:variable name="style" as="item()" select="css:parse-stylesheet(string(@style))"/>
-            <xsl:variable name="inherited-style" as="item()" select="css:parse-stylesheet(string(@style),$parent-style)"/>
             <!--
                 filter
             -->
@@ -37,20 +36,18 @@
             </xsl:variable>
             <xsl:sequence select="css:style-attribute($rest-style)"/>
             <!--
-                default
+                inherit
             -->
             <xsl:variable name="property-names" as="xs:string*" select="for $p in $properties return s:property($p)"/>
+            <xsl:variable name="inherited-style" as="item()" select="css:parse-stylesheet(string(@style),$parent-style)"/>
             <xsl:variable name="properties" as="item()*"
                           select="s:iterator($inherited-style)[s:property(.)=$property-names]"/>
-            <xsl:variable name="properties" as="element(css:property)*"
-                          select="for $p in $properties return s:toXml($p)"/>
-            <xsl:variable name="properties" as="element(css:property)*">
-                <xsl:apply-templates select="$properties" mode="css:default"/>
-            </xsl:variable>
             <!--
                 make attributes
             -->
-            <xsl:apply-templates select="$properties" mode="css:property-as-attribute"/>
+            <xsl:variable name="properties" as="element(css:property)*"
+                          select="for $p in $properties return s:toXml($p)"/>
+            <xsl:apply-templates mode="css:property-as-attribute" select="$properties"/>
             <xsl:apply-templates select="node()">
                 <xsl:with-param name="parent-style" tunnel="yes" select="$style"/>
             </xsl:apply-templates>

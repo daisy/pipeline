@@ -163,28 +163,11 @@
         </xsl:choose>
     </xsl:template>
     
-    <xsl:template match="css:property" mode="css:default">
-        <xsl:choose>
-            <xsl:when test="@value='initial' and @name=('content',
-                                                        'string-set',
-                                                        'counter-set',
-                                                        'counter-reset',
-                                                        'counter-increment')">
-                <xsl:copy>
-                    <xsl:sequence select="@* except @value"/>
-                </xsl:copy>
-            </xsl:when>
-            <xsl:when test="@value='initial'">
-                <xsl:copy>
-                    <xsl:sequence select="@* except @value"/>
-                    <xsl:attribute name="value" select="css:initial-value(@name)"/>
-                </xsl:copy>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:sequence select="."/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
+    <xsl:function name="css:initial-value" as="xs:string?">
+        <xsl:param name="property" as="xs:string"/>
+        <xsl:sequence select="for $value in s:get(css:parse-stylesheet(concat($property,': initial')), $property)
+                              return string($value)"/>
+    </xsl:function>
     
     <xsl:template match="css:property" mode="css:compute">
         <!--
@@ -274,25 +257,34 @@
             <xsl:for-each select="distinct-values($properties)">
                 <xsl:variable name="property" as="xs:string" select="."/>
                 <xsl:if test="not($declarations/self::css:property[@name=$property])">
-                    <css:property name="{$property}" value="{if (css:is-inherited($property))
-                                                             then 'inherit'
-                                                             else 'initial'}"/>
+                    <css:property name="{$property}">
+                        <xsl:choose>
+                            <xsl:when test="css:is-inherited($property)">
+                                <xsl:attribute name="value" select="'inherit'"/>
+                            </xsl:when>
+                            <xsl:when test="$property=('content',
+                                                       'string-set',
+                                                       'counter-set',
+                                                       'counter-reset',
+                                                       'counter-increment')"/>
+                            <xsl:otherwise>
+                                <xsl:attribute name="value" select="css:initial-value($property)"/>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </css:property>
                 </xsl:if>
             </xsl:for-each>
         </xsl:variable>
-        <xsl:variable name="declarations" as="element()*">
-            <xsl:choose>
-                <xsl:when test="$concretize-inherit">
-                    <xsl:apply-templates select="$declarations" mode="css:inherit">
-                        <xsl:with-param name="context" select="$context"/>
-                    </xsl:apply-templates>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$declarations"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:apply-templates select="$declarations" mode="css:default"/>
+        <xsl:choose>
+            <xsl:when test="$concretize-inherit">
+                <xsl:apply-templates select="$declarations" mode="css:inherit">
+                    <xsl:with-param name="context" select="$context"/>
+                </xsl:apply-templates>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="$declarations"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
     
     <xsl:template name="css:computed-properties" as="element()*">

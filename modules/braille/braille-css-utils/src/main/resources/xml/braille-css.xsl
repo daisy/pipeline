@@ -148,72 +148,6 @@
                  '.*',
                  '^(block|list-item)$')"/>
     
-    <xsl:variable name="css:initial-values" as="xs:string*"
-        select="('inline',
-                 'normal',
-                 'auto',
-                 'auto',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 '0',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 'none',
-                 'none',
-                 '1',
-                 'center',
-                 '0',
-                 'none',
-                 'left',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'auto',
-                 '0',
-                 '0',
-                 'auto',
-                 'none',
-                 'none',
-                 'none',
-                 'none',
-                 'none',
-                 'normal',
-                 'manual',
-                 'auto',
-                 'auto',
-                 'none',
-                 'auto',
-                 'auto',
-                 'auto',
-                 'unicode',
-                 'normal',
-                 'normal',
-                 'none',
-                 '#000000',
-                 '1',
-                 '0',
-                 '1',
-                 'auto',
-                 'once',
-                 '0')"/>
-    
     <xsl:variable name="css:media" as="xs:string*"
         select="('embossed',
                  'embossed',
@@ -305,14 +239,6 @@
                  'page-break-inside',
                  'orphans',
                  'widows')"/>
-    
-    <xsl:function name="css:initial-value" as="xs:string?">
-        <xsl:param name="property" as="xs:string"/>
-        <xsl:variable name="index" select="index-of($css:properties, $property)"/>
-        <xsl:if test="$index">
-            <xsl:sequence select="$css:initial-values[$index]"/>
-        </xsl:if>
-    </xsl:function>
     
     <xsl:function name="css:is-inherited" as="xs:boolean">
         <xsl:param name="property" as="xs:string"/>
