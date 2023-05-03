@@ -1239,7 +1239,7 @@ class SupportedCSSImpl implements SupportedCSS {
 	private static final Term<?> DEFAULT_UA_ORPHANS = tf.createInteger(2);
 	private static final Term<?> DEFAULT_UA_WIDOWS = tf.createInteger(2);
 	private static final Term<?> DEFAULT_UA_LINE_HEIGHT = tf.createInteger(1);
-	private static final Term<?> DEFAULT_UA_LETTER_SPACING = tf.createInteger(1);
+	private static final Term<?> DEFAULT_UA_LETTER_SPACING = tf.createInteger(0);
 	private static final Term<?> DEFAULT_UA_WORD_SPACING = tf.createInteger(1);
 
 	private final int TOTAL_SUPPORTED_DECLARATIONS;
