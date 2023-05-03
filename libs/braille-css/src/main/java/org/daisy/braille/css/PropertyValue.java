@@ -99,19 +99,21 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 			return new PropertyValue(propertyName, q);
 	}
 	
-	private boolean concretized = false;
+	private boolean concretizedInherit = false;
+	private boolean concretizedInitial = false;
 	
 	/**
 	 * Does not mutate the object. Returns a new object if needed.
 	 */
-	public PropertyValue concretize() {
-		if (concretized)
+	public PropertyValue concretize(boolean concretizeInherit, boolean concretizeInitial) {
+		if ((concretizedInherit || !concretizeInherit) && (concretizedInitial || !concretizeInitial))
 			return this;
 		else {
 			Quadruple q = (Quadruple)propertyValue.clone();
-			q.concretize();
+			q.concretize(concretizeInherit, concretizeInitial);
 			PropertyValue concretized = new PropertyValue(propertyName, q);
-			concretized.concretized = true;
+			concretized.concretizedInherit = concretizeInherit;
+			concretized.concretizedInitial = concretizeInitial;
 			return concretized;
 		}
 	}
@@ -124,13 +126,13 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	public PropertyValue inheritFrom(PropertyValue parent) {
 		if (inherited)
 			throw new UnsupportedOperationException("Can not inherit from more than one parent style");
-		else if (concretized)
+		else if (concretizedInherit)
 			throw new UnsupportedOperationException("Can not inherit from a parent style: 'inherit' values were already concretized.");
 		Quadruple q = (Quadruple)propertyValue.clone();
-		q.inheritFrom(parent.concretize().propertyValue);
-		q.concretize();
+		q.inheritFrom(parent.concretize(true, false).propertyValue);
+		q.concretize(true, false);
 		PropertyValue inherited = new PropertyValue(propertyName, q);
-		inherited.inherited = inherited.concretized = true;
+		inherited.inherited = inherited.concretizedInherit = true;
 		return inherited;
 	}
 	

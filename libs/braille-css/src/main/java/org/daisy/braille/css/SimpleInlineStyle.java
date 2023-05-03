@@ -61,8 +61,11 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			}
 		if (parentStyle != null) {
 			super.inheritFrom(parentStyle.concretize());
-			super.concretize();
-			inherited = concretized = true;
+			super.concretize(true, true);
+			inherited = concretizedInherit = concretizedInitial = true;
+		} else {
+			super.concretize(false, true);
+			concretizedInitial = true;
 		}
 	}
 	
@@ -143,22 +146,29 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		return false;
 	}
 	
-	private boolean concretized = false;
+	private boolean concretizedInherit = false;
+	private boolean concretizedInitial = false;
 
 	@Override
 	public SimpleInlineStyle concretize() {
-		if (concretized)
+		return (SimpleInlineStyle)super.concretize();
+	}
+
+	@Override
+	public SimpleInlineStyle concretize(boolean concretizeInherit, boolean concretizeInitial) {
+		if ((concretizedInherit || !concretizeInherit) && (concretizedInitial || !concretizeInitial))
 			return this;
 		else {
 			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
-			copy.noCopyConcretize();
+			copy.noCopyConcretize(concretizeInherit, concretizeInitial);
 			return copy;
 		}
 	}
 	
-	private void noCopyConcretize() {
-		super.concretize();
-		concretized = true;
+	private void noCopyConcretize(boolean concretizeInherit, boolean concretizeInitial) {
+		super.concretize(concretizeInherit, concretizeInitial);
+		concretizedInherit = concretizeInherit;
+		concretizedInitial = concretizeInitial;
 	}
 
 	private boolean inherited = false;
@@ -167,14 +177,14 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	public SimpleInlineStyle inheritFrom(NodeData parent) throws ClassCastException {
 		if (inherited)
 			throw new UnsupportedOperationException("Can not inherit from more than one parent style");
-		else if (concretized)
+		else if (concretizedInherit)
 			throw new UnsupportedOperationException("Can not inherit from a parent style: 'inherit' values were already concretized.");
 		else if (!(parent instanceof SimpleInlineStyle))
 			throw new UnsupportedOperationException("Can only inherit from another SimpleInlineStyle");
 		else {
 			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
 			copy.noCopyInheritFrom(((SimpleInlineStyle)parent).concretize());
-			copy.noCopyConcretize();
+			copy.noCopyConcretize(true, false);
 			return copy;
 		}
 	}
