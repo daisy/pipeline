@@ -7,12 +7,22 @@
 	<x:script>
 		<p:pipeline version="1.0" type="px:uppercase-block-translator">
 			<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/expand-pseudo-elements.xsl"/>
+				</p:input>
+			</p:xslt>
 			<css:parse-properties properties="display"/>
 			<p:xslt>
 				<p:input port="stylesheet">
 					<p:document href="../resources/uppercase-block-translator.xsl"/>
 				</p:input>
 				<p:with-param name="braille-charset" select="'custom'"/>
+			</p:xslt>
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/collapse-pseudo-elements.xsl"/>
+				</p:input>
 			</p:xslt>
 		</p:pipeline>
 	</x:script>
@@ -38,7 +48,7 @@
 			<x:document type="inline">
 				<doc style="text-transform: none; braille-charset: custom">
 					<h style="display: block; string-set: running-footer &quot;foobar&quot;">FOOBAR</h>
-					<p style="display: block; &amp;::after { content: &quot;BAR&quot; } &amp;::before { content: &quot;bar&quot; counter(page); text-transform: auto }">FOO</p>
+					<p style="display: block; &amp;::after { content: 'BAR' } &amp;::before { content: 'BAR' } &amp;::before::after { content: counter(page); text-transform: auto }">FOO</p>
 					<pagenum style="display: none; string-set: print-page &quot;ii&quot;, foo &quot;bar&quot;">II</pagenum>
 				</doc>
 			</x:document>
@@ -61,7 +71,7 @@
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
 				<doc xml:lang="en-Brai" style="text-transform: none; braille-charset: custom">
-					<br style="&amp;::before { content: &quot;\A &quot;; white-space: pre-line }"/>
+					<br style="&amp;::before { content: '\A '; white-space: pre-line }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -74,6 +84,7 @@
 					<div style="hyphens: auto">
 						<p>foobar</p>
 						<p>busstopp</p>
+						<p style="&amp;::after { content: 'busstopp' }"/>
 					</div>
 				</x:document>
 			</x:input>
@@ -86,6 +97,7 @@
 				<div style="text-transform: none; braille-charset: custom">
 					<p>FOO=BAR</p>
 					<p><_ style="hyphens: auto; text-transform: auto">busstopp</_></p>
+					<p style="&amp;::after { content: 'busstopp'; hyphens: auto; text-transform: auto }"/>
 				</div>
 			</x:document>
 		</x:expect>
@@ -107,7 +119,7 @@
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
 				<doc style="text-transform: none; braille-charset: custom">
-					<div style="&amp;::after { content: &quot;FOO&quot; } &amp;::after::before { content: &quot;BAR&quot;; display: block }"/>
+					<div style="&amp;::after { content: 'FOO' } &amp;::after::before { content: 'BAR'; display: block }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -130,7 +142,7 @@
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
 				<doc style="text-transform: none; braille-charset: custom">
-					<div style="&amp;::table-by(foo)::list-item::after { content: &quot;,&quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
+					<div style="&amp;::table-by(foo)::list-item::after { content: &quot;, &quot;; text-transform: auto } &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -139,7 +151,7 @@
 	<x:scenario label="test_06">
 		<x:call step="px:uppercase-block-translator">
 			<x:input port="source">
-				<x:document type="inline">
+				<x:document type="inline" xml:base="file:/test.xml">
 					<doc>
 						<a href="#foo" style="&amp;::after { content: target-counter(attr(href), page)
 						                                              target-string(attr(href), print-page)
@@ -155,7 +167,7 @@
 		<x:expect label="result" type="compare">
 			<x:document type="inline">
 				<doc style="text-transform: none; braille-charset: custom">
-					<a href="#foo" style="&amp;::after { content: target-counter(url(&quot;#foo&quot;), page) target-string(url(&quot;#foo&quot;), print-page) target-text(url(&quot;#foo&quot;)) target-content(url(&quot;#foo&quot;)); text-transform: auto }"/>
+					<a href="#foo" style="&amp;::after { content: target-counter(url(&quot;file:/test.xml#foo&quot;), page) target-string(url(&quot;file:/test.xml#foo&quot;), print-page) target-text(url(&quot;file:/test.xml#foo&quot;)) target-content(url(&quot;file:/test.xml#foo&quot;)); text-transform: auto }"/>
 				</doc>
 			</x:document>
 		</x:expect>
@@ -203,8 +215,8 @@
 				<doc style="text-transform: none; braille-charset: custom">
 					<p style="display: block">FOO<span>BAR</span></p>
 					<p style="display: block">FOO<span>BAR</span></p>
-					<p style="display: block; &amp;::after { content: &quot;BAR&quot; }">FOO</p>
-					<p style="display: block; &amp;::after { content: leader(&quot;⠀&quot;) &quot;⠃⠁⠗&quot;; braille-charset: unicode }">FOO</p>
+					<p style="display: block; &amp;::after { content: 'BAR' }">FOO</p>
+					<p style="display: block; &amp;::after { braille-charset: unicode; content: leader('⠀') } &amp;::after::after { content: 'BAR' }">FOO</p>
 				</doc>
 			</x:document>
 		</x:expect>
