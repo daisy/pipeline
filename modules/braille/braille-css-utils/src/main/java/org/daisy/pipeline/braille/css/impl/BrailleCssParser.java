@@ -34,7 +34,7 @@ public class BrailleCssParser {
 	/**
 	 * Style assumed to be specified in the context of a (pseudo-)element.
 	 *
-	 * @param context element for evaluating attr() values against.
+	 * @param context element for evaluating attr() and content() values against.
 	 * @param mutable Whether the caller wishes to mutate the returned declaration.
 	 */
 	public static Optional<Declaration> parseDeclaration(String property, String value, Element context, boolean mutable) {
@@ -62,12 +62,12 @@ public class BrailleCssParser {
 
 	/**
 	 * @param style assumed to be specified in the context of a (pseudo-)element
-	 * @param context element for evaluating attr() values against.
+	 * @param context element for evaluating attr() and content() values against.
 	 * @param mutable Whether the caller wishes to mutate the returned style object.
 	 */
 	public static SimpleInlineStyle parseSimpleInlineStyle(String style, Element context, boolean mutable) {
 		BrailleCssStyle s = BrailleCssStyle.of(style, Context.ELEMENT);
-		// evaluate attr() values in content and string-set properties
+		// evaluate attr() and content() values in content and string-set properties
 		if (context != null)
 			s = s.evaluate(context);
 		try {

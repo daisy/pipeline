@@ -13,6 +13,8 @@ import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
 import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
+import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
 import org.w3c.dom.Element;
 
@@ -61,7 +63,7 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 			throw new UnsupportedOperationException("Unmodifiable");
 		}
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private StringSet evaluate(Element context) {
 			ContentList evaluatedValue = value.clone();
@@ -144,7 +146,7 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 	}
 
 	/**
-	 * Evaluate <code>attr()</code> values.
+	 * Evaluate <code>attr()</code> and <code>content()</code> values.
 	 *
 	 * This method is mutating, but we can still say that the object is immutable because the method
 	 * is package private and only used by {@link BrailleCssStyle} and {@link BrailleCssParser}

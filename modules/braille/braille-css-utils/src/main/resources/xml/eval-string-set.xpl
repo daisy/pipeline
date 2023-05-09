@@ -14,9 +14,7 @@
         <p:documentation>
             The 'string-set' properties of elements in the input must be declared in css:string-set
             attributes, and must conform to
-            http://braillespecs.github.io/braille-css/#the-string-set-property. If a 'string-set'
-            property contains the value 'content()', content must not have been transformed yet and
-            pseudo-elements must not have been generated yet.
+            http://braillespecs.github.io/braille-css/#the-string-set-property.
         </p:documentation>
     </p:input>
     

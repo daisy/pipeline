@@ -164,4 +164,25 @@
     </x:expect>
   </x:scenario>
   
+  <x:scenario label="test_15">
+    <x:context>
+      <doc>
+        <body>
+          <h style="display: block; string-set: running-header content()">
+            foo
+          </h>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <h style="display: block; string-set: running-header &quot;\A             foo\A           &quot;">
+            foo
+          </h>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>
