@@ -18,12 +18,10 @@
         <xsl:copy>
             <xsl:if test="@css:string-set!='none'">
                 <xsl:variable name="evaluated-string-set" as="element(css:property)*">
-                    <xsl:variable name="context" as="element()" select="."/>
                     <xsl:for-each select="s:toXml(css:parse-stylesheet(@css:string-set))">
                         <xsl:copy>
                             <xsl:sequence select="@*"/>
                             <xsl:apply-templates mode="string-set" select="css:string-set">
-                                <xsl:with-param name="context" select="$context" tunnel="yes"/>
                             </xsl:apply-templates>
                         </xsl:copy>
                     </xsl:for-each>
@@ -49,11 +47,6 @@
         <xsl:value-of select="string(@value)"/>
     </xsl:template>
     
-    <xsl:template mode="string-set" match="css:content[not(@target|@target-attribute)]" as="xs:string">
-        <xsl:param name="context" as="element()" tunnel="yes"/>
-        <xsl:sequence select="string($context)"/>
-    </xsl:template>
-    
     <xsl:template mode="string-set"
                   match="css:attr|
                          css:text[@target-attribute]|
@@ -61,6 +54,10 @@
                          css:counter[@target-attribute]|
                          css:content[@target-attribute]">
         <xsl:message terminate="yes">Coding error: evaluation of attr() should already have been done</xsl:message>
+    </xsl:template>
+    
+    <xsl:template mode="string-set" match="css:content[not(@target|@target-attribute)]" as="xs:string">
+        <xsl:message terminate="yes">Coding error: evaluation of content() should already have been done</xsl:message>
     </xsl:template>
     
     <xsl:template mode="string-set" match="*">
