@@ -142,7 +142,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 	}
 
 	/**
-	 * Evaluate <code>attr()</code> values.
+	 * Evaluate <code>attr()</code> and <code>content()</code> values.
 	 *
 	 * This method is mutating, but we can still say that the object is immutable because the method
 	 * is package private and only used by {@link BrailleCssStyle}, {@link StringSetList} and {@link
@@ -210,7 +210,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private Term<String> evaluate(Element context) {
 			Attr attr = context.getAttributeNode(name.getValue());
@@ -262,7 +262,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private URL evaluate(Element context) {
 			if (urlAttr != null) {
@@ -320,9 +320,9 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
-		private ContentFunction evaluate(Element context) {
+		private Term<?> evaluate(Element context) {
 			if (target.isPresent()) {
 				URL url = target.get();
 				URL evaluatedURL = url.evaluate(context);
@@ -330,7 +330,8 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 					return null;
 				else if (evaluatedURL != url)
 					return new ContentFunction(evaluatedURL);
-			}
+			} else
+				return new UnmodifiableTermString(new TermStringImpl(){}.setValue(context.getTextContent()));
 			return this;
 		}
 	}
@@ -444,7 +445,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private StringFunction evaluate(Element context) {
 			if (target.isPresent()) {
@@ -568,7 +569,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private CounterFunction evaluate(Element context) {
 			if (target.isPresent()) {
@@ -615,7 +616,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		}
 
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private TextFunction evaluate(Element context) {
 			URL evaluatedTarget = target.evaluate(context);

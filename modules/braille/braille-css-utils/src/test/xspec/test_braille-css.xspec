@@ -254,7 +254,7 @@
 	<x:scenario label="test_09">
 		<x:call function="css:parse-stylesheet-to-xml">
 			<x:param select="/*/@style">
-				<pagenum value="1" style="  display: none;  string-set : print-page attr(value) ;  "/>
+				<pagenum style="  display: none;  string-set : print-page content() ;  ">1</pagenum>
 			</x:param>
 		</x:call>
 		<x:expect label="result">
