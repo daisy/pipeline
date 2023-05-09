@@ -73,6 +73,7 @@
 				<x:document type="inline">
 					<div style="hyphens: auto">
 						<p>foobar</p>
+						<p>busstopp</p>
 					</div>
 				</x:document>
 			</x:input>
@@ -84,6 +85,7 @@
 			<x:document type="inline">
 				<div style="text-transform: none; braille-charset: custom">
 					<p>FOO=BAR</p>
+					<p><_ style="hyphens: auto; text-transform: auto">busstopp</_></p>
 				</div>
 			</x:document>
 		</x:expect>
