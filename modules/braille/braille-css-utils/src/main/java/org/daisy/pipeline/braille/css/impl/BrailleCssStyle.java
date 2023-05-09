@@ -104,7 +104,8 @@ public final class BrailleCssStyle implements Cloneable {
 	private boolean evaluated = false;
 
 	/**
-	 * Evaluate <code>attr()</code> values in <code>content</code> and <code>string-set</code> properties.
+	 * Evaluate <code>attr()</code> and <code>content()</code> values in <code>content</code> and
+	 * <code>string-set</code> properties.
 	 */
 	public BrailleCssStyle evaluate(Element context) {
 		if (evaluated) return this;

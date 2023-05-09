@@ -57,11 +57,10 @@
 			</css:rule>
 			<xsl:sequence select="$style[@selector]"/>
 		</xsl:variable>
-		<xsl:variable name="context" as="element()" select="."/>
 		<xsl:variable name="translated-style" as="element(css:rule)*">
 			<xsl:call-template name="translate-style">
 				<xsl:with-param name="style" select="$style"/>
-				<xsl:with-param name="context" tunnel="yes" select="$context"/>
+				<xsl:with-param name="context" tunnel="yes" select="."/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:element name="{name(.)}" namespace="{namespace-uri(.)}">
@@ -147,7 +146,6 @@
 							<xsl:with-param name="progress" select="string($group-portion)"/>
 						</xsl:call-template>
 						<xsl:apply-templates select="$block/css:block">
-							<xsl:with-param name="context" select="$context"/>
 							<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 							<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 							<xsl:with-param name="portion" select="$group-portion"/>
@@ -300,82 +298,6 @@
 		<css:property name="braille-charset" value="{if ($braille-charset!='') then 'custom' else 'unicode'}"/>
 	</xsl:template>
 	
-	<xsl:template mode="translate-style" match="css:property[@name='string-set'][not(@value)]">
-		<xsl:if test="exists(css:string-set)">
-			<xsl:copy>
-				<xsl:sequence select="@*"/>
-				<xsl:apply-templates mode="string-set" select="css:string-set"/>
-			</xsl:copy>
-		</xsl:if>
-	</xsl:template>
-	
-	<xsl:template mode="translate-style"
-	              match="css:content|css:string[@name]|css:counter|css:text|css:leader|css:custom-func|css:flow[@from]">
-		<xsl:sequence select="."/>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:string-set" as="element(css:string-set)">
-		<xsl:copy>
-			<xsl:sequence select="@name"/>
-			<xsl:apply-templates mode="#current" select="*">
-				<xsl:with-param name="string-name" select="@name" tunnel="yes"/>
-			</xsl:apply-templates>
-		</xsl:copy>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:string[@value]" as="element(css:string)">
-		<xsl:sequence select="."/>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:content[not(@target|@target-attribute)]" as="element(css:string)?">
-		<xsl:param name="context" as="element()" tunnel="yes"/>
-		<xsl:variable name="as-string" as="xs:string" select="string($context)"/>
-		<xsl:if test="not($as-string='')">
-			<css:string value="{$as-string}"/>
-		</xsl:if>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:string[@name][not(@target|@target-attribute)]">
-		<xsl:message>string() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:counter[not(@target|@target-attribute)]">
-		<xsl:message>counter() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:text[@target]">
-		<xsl:message>target-text() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:string[@name][@target]">
-		<xsl:message>target-string() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:counter[@target]">
-		<xsl:message>target-counter() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:content[@target]">
-		<xsl:message>target-content() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:leader">
-		<xsl:message>leader() function not supported in string-set property</xsl:message>
-	</xsl:template>
-	
-	<xsl:template mode="string-set" match="css:custom-func">
-		<xsl:message><xsl:value-of select="@name"/>() function not supported in string-set property</xsl:message>
-	</xsl:template>
-
-	<xsl:template mode="string-set"
-	              match="css:attr|
-	                     css:text[@target-attribute]|
-	                     css:string[@name][@target-attribute]|
-	                     css:counter[@target-attribute]|
-	                     css:content[@target-attribute]">
-		<xsl:message terminate="yes">Coding error: evaluation of attr() should already have been done</xsl:message>
-	</xsl:template>
-	
 	<xsl:template mode="translate-style" match="css:property[@name='content' and not(@value)]" name="translate-content-list">
 		<xsl:copy>
 			<xsl:sequence select="@*"/>
@@ -404,7 +326,6 @@
 		<xsl:variable name="result-style" as="element()*" select="$result-style"/>
 		<xsl:variable name="translated-block" as="node()*">
 			<xsl:apply-templates select="$block/css:block">
-				<xsl:with-param name="context" select="$context"/>
 				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
 				<xsl:with-param name="result-style" tunnel="yes" select="$result-style"/>
 			</xsl:apply-templates>
@@ -429,11 +350,10 @@
 		</xsl:variable>
 		<xsl:variable name="style" as="element(css:rule)*"
 		              select="if (exists($style)) then $style else $empty-style"/>
-		<xsl:variable name="context" as="element()" select="."/>
 		<xsl:variable name="translated-style" as="element(css:rule)*">
 			<xsl:call-template name="translate-style">
 				<xsl:with-param name="style" select="$style"/>
-				<xsl:with-param name="context" tunnel="yes" select="$context"/>
+				<xsl:with-param name="context" tunnel="yes" select="."/>
 			</xsl:call-template>
 		</xsl:variable>
 		<xsl:element name="{name(.)}" namespace="{namespace-uri(.)}">

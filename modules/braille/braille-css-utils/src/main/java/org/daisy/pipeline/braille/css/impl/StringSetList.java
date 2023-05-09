@@ -47,7 +47,7 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 			throw new UnsupportedOperationException("Unmodifiable");
 		}
 		/**
-		 * Evaluate <code>attr()</code> values.
+		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */
 		private StringSet evaluate(Element context) {
 			ContentList evaluatedValue = value.clone();
@@ -130,7 +130,7 @@ public class StringSetList extends AbstractList<StringSetList.StringSet> impleme
 	}
 
 	/**
-	 * Evaluate <code>attr()</code> values.
+	 * Evaluate <code>attr()</code> and <code>content()</code> values.
 	 *
 	 * This method is mutating, but we can still say that the object is immutable because the method
 	 * is package private and only used by {@link BrailleCssStyle} and {@link BrailleCssParser}

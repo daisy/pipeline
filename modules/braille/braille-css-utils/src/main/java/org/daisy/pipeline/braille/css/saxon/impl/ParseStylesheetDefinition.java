@@ -84,7 +84,7 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 					} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
 						// assuming that context is a (pseudo-)element
 						// assuming that the value is not "inherit"
-						// not assuming that attr() values have already been evaluated (although normally they will)
+						// not assuming that attr() and content() values have already been evaluated (although normally they will)
 						Optional<Declaration> declaration = BrailleCssParser.parseDeclaration(name, argStringValue, element, false);
 						if (declaration.isPresent())
 							return new DeclarationStyle(declaration.get());
