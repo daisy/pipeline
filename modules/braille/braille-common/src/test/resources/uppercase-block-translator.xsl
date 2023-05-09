@@ -35,7 +35,8 @@
 	<xsl:template match="text()" mode="translate">
 		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
 		<xsl:variable name="uppercase" as="xs:string"
-		              select="if ($source-style[@name='text-transform' and @value='none'])
+		              select="if ($source-style[@name='text-transform' and @value='none']
+		                          or (string(.)='busstopp' and $source-style[@name='hyphens' and @value='auto']))
 		                      then .
 		                      else upper-case(.)"/>
 		<xsl:variable name="encoded" as="xs:string"
@@ -52,6 +53,24 @@
 		                      then replace($normalised, 'FOOBAR', 'FOO=BAR')
 		                      else $normalised"/>
 		<xsl:value-of select="$hyphenated"/>
+	</xsl:template>
+	
+	<xsl:template match="text()" mode="treewalk" priority="1">
+		<xsl:param name="new-text-nodes" as="xs:string*" required="yes"/>
+		<xsl:param name="source-style" as="element()*" tunnel="yes"/>
+		<xsl:choose>
+			<xsl:when test="string(.)='busstopp' and $source-style[@name='hyphens' and @value='auto']">
+				<xsl:next-match>
+					<xsl:with-param name="new-text-nodes" select="$new-text-nodes"/>
+					<xsl:with-param name="restore-text-style" tunnel="yes" select="true()"/>
+				</xsl:next-match>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:next-match>
+					<xsl:with-param name="new-text-nodes" select="$new-text-nodes"/>
+				</xsl:next-match>
+			</xsl:otherwise>
+		</xsl:choose>
 	</xsl:template>
 	
 	<xsl:template match="css:property[@name='hyphens' and @value='auto']" mode="translate-style">
