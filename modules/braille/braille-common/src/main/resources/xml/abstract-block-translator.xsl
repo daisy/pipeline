@@ -69,7 +69,7 @@
 			<xsl:call-template name="insert-style">
 				<xsl:with-param name="style" select="$translated-style"/>
 			</xsl:call-template>
-			<xsl:variable name="lang" as="xs:string" select="(ancestor-or-self::*[@xml:lang][1]/@xml:lang,'und')[1]"/>
+			<xsl:variable name="lang" as="xs:string?" select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
 			<xsl:if test="@xml:lang
 			              or (
 			                ancestor::*[@xml:lang]
@@ -391,7 +391,7 @@
 		<xsl:param name="context" as="element()" tunnel="yes"/>
 		<xsl:param name="source-style" as="element(css:property)*" tunnel="yes"/>
 		<xsl:param name="result-style" as="element(css:property)*" tunnel="yes"/>
-		<xsl:variable name="lang" as="xs:string?" select="($context/ancestor-or-self::*[@xml:lang][1]/@xml:lang,'und')[1]"/>
+		<xsl:variable name="lang" as="xs:string?" select="$context/ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
 		<xsl:variable name="block">
 			<xsl:element name="css:block">
 				<xsl:if test="$lang">
@@ -447,7 +447,7 @@
 			                and $translated-style[not(@selector)]/css:property[@name='text-transform']
 			                and not($translated-style[not(@selector)]/css:property[@name='text-transform'][1]/@value/string(.)
 			                        =($result-style[@name='text-transform']/@value/string(.),'auto')[1]))">
-				<xsl:variable name="lang" as="xs:string" select="(ancestor-or-self::*[@xml:lang][1]/@xml:lang,'und')[1]"/>
+				<xsl:variable name="lang" as="xs:string" select="ancestor-or-self::*[@xml:lang][1]/@xml:lang"/>
 				<xsl:attribute name="xml:lang"
 				               select="if (($translated-style[not(@selector)]/css:property[@name='text-transform']/@value/string(.),
 				                            $result-style[@name='text-transform']/@value/string(.),
