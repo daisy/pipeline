@@ -95,6 +95,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		}
 		for (Method method : definition.getDeclaredMethods()) {
 			if (Modifier.isPublic(method.getModifiers())) {
+				if ("toString".equals(method.getName())
+				    && method.getParameterCount() == 0
+				    && !Modifier.isStatic(method.getModifiers())) {
+					// skip because the method can already be called through the string() function:
+					// ObjectValue.getStringValueCS() calls Object.toString()
+					continue;
+				}
 				List<Executable> list = methods.get(method.getName());
 				if (list == null) {
 					list = new ArrayList<>();
@@ -637,9 +644,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				return (T)objectFromItem(item, Boolean.class);
 			else if (item instanceof AnyURIValue)
 				return (T)objectFromItem(item, URI.class);
-			else
-				throw new IllegalArgumentException();
-		else if (item instanceof ObjectValue) {
+		if (item instanceof ObjectValue) {
 			Object o = ((ObjectValue<?>)item).getObject();
 			if (type.isInstance(o))
 				return (T)o;

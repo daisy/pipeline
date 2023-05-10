@@ -14,8 +14,10 @@ import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -57,7 +59,9 @@ public class UrlBasedDatatypeService implements DatatypeService{
         /** The Constant SCRIPT_ID. */
         public static final String DATATYPE_ID = "data-type.id";
 
-        private static final URL TYPE_DECL_SCHEMA_URL = UrlBasedDatatypeService.class.getResource("/org/daisy/pipeline/datatypes/resources/data-type.rnc");
+        private static final URL TYPE_DECL_SCHEMA_URL
+            = UrlBasedDatatypeService.class.getResource("/org/daisy/pipeline/datatypes/resources/data-type.rnc");
+        private static final String TYPE_DECL_XSLT_PATH = "/org/daisy/pipeline/datatypes/resources/data-type.normalize-space.xsl";
         
         private String id;
         private URL url;
@@ -97,6 +101,12 @@ public class UrlBasedDatatypeService implements DatatypeService{
                 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
                 DocumentBuilder builder = factory.newDocumentBuilder();
                 Document document = builder.parse(url.openStream());
+                // normalize space inside documentation elements
+                DOMResult result = new DOMResult();
+                TransformerFactory.newInstance()
+                                  .newTransformer(new StreamSource(UrlBasedDatatypeService.class.getResourceAsStream(TYPE_DECL_XSLT_PATH)))
+                                  .transform(new DOMSource(document), result);
+                document = (Document)result.getNode();
                 return document;
         }
 
