@@ -1,24 +1,81 @@
 ## Generate with:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.12 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["gui","server", "cli"] else ["gui","server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.0.0 '.[] | select(.tag_name == $version)|{gui_github_tag:$version,gui_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.14 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.1.0 '.[] | select(.tag_name == $version)|{gui_github_tag:$version,gui_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.14.14"
+  sort: "1.14.14"
+  state: stable
+  github_tag: "v1.14.14"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.14"
+  gui_github_tag: "1.1.0"
+  gui_github_url: "https://github.com/daisy/pipeline-ui/releases/tag/1.1.0"
+  description: >
+    Includes the standalone desktop application and the web server. Versions available for
+    Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
+    application). The Linux packages (ZIP and DEB files) include only the web server. The
+    ZIP package also includes the command line interface.
+  files:
+  - platform: macosx
+    package: dmg
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.1.0/DAISY.Pipeline.2023-Setup-1.1.0.dmg"
+    size: 175959730
+  - platform: windows
+    package: installer
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.1.0/DAISY.Pipeline.2023.Setup.1.1.0.exe"
+    size: 130172006
+  - platform: debian
+    package: deb
+    content: [server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.14/pipeline2-1.14.14_debian.deb"
+    size: 61411766
+  - platform: linux
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.14/pipeline2-1.14.14_linux.zip"
+    size: 69236125
+
+- group: main
+  version: "1.14.13"
+  sort: "1.14.13"
+  state: stable
+  github_tag: "v1.14.13"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.13"
+  description: >
+    Includes the server and the command line interface. Versions available for Mac OS (a
+    ZIP file) and Linux (ZIP and DEB files). The DEB does not include the command line
+    interface.
+  files:
+  - platform: debian
+    package: deb
+    content: [server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.13/pipeline2-1.14.13_debian.deb"
+    size: 61411698
+  - platform: linux
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.13/pipeline2-1.14.13_linux.zip"
+    size: 69236113
+  - platform: macosx
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.13/pipeline2-1.14.13_mac.zip"
+    size: 99139701
 
 - group: main
   version: "1.14.12"
   sort: "1.14.12"
   state: stable
   github_tag: "v1.14.12"
-  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.11"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.12"
   gui_github_tag: "1.0.0"
   gui_github_url: "https://github.com/daisy/pipeline-ui/releases/tag/1.0.0"
   description: >
     Includes the standalone desktop application and the server. Versions available for
     Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
     application).
-  #description: >
-  #  Includes the standalone desktop application and the web server. Versions available for
-  #  Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
-  #  application). The Linux packages (ZIP and DEB files) include only the web server. The
-  #  ZIP package also includes the command line interface.
   files:
   - platform: macosx
     package: dmg
