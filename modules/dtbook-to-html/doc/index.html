@@ -708,7 +708,19 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="57">
+      
+        <a href="/pipeline/Modules" tabindex="57">
+      
+      Writing Modules
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="58">
       XProc
       </a>
       
@@ -719,7 +731,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="58">
+        <a href="/pipeline/XProcExtensions" tabindex="59">
       
       XProc Extensions
       </a>
@@ -736,7 +748,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="59">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="60">
       
       Testing
       </a>
@@ -748,7 +760,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="60">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="61">
       
       Debugging
       </a>
@@ -760,7 +772,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="61">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="62">
       
       Release Management
       </a>
@@ -777,7 +789,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="62">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="63">
       
       Easy Hacks
       </a>
@@ -908,19 +920,6 @@ The resulting HTML document.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
-<div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
@@ -949,6 +948,19 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-desc">
+Whether to stop processing and raise an error on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 </ul>
@@ -1000,16 +1012,16 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
+<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

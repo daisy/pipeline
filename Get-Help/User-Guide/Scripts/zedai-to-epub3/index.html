@@ -708,7 +708,19 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="57">
+      
+        <a href="/pipeline/Modules" tabindex="57">
+      
+      Writing Modules
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="58">
       XProc
       </a>
       
@@ -719,7 +731,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="58">
+        <a href="/pipeline/XProcExtensions" tabindex="59">
       
       XProc Extensions
       </a>
@@ -736,7 +748,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="59">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="60">
       
       Testing
       </a>
@@ -748,7 +760,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="60">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="61">
       
       Debugging
       </a>
@@ -760,7 +772,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="61">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="62">
       
       Release Management
       </a>
@@ -777,7 +789,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="62">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="63">
       
       Easy Hacks
       </a>
@@ -870,6 +882,21 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">ZedAI document</div>
+<div class="synopsis-input-desc">
+Input ZedAI.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.daisy.org/z3998/2012/z3998-2012.html" class="media-type external-link" target="_blank">application/z3998-auth+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Configuration file for the text-to-speech.
@@ -888,39 +915,11 @@ if (window.addEventListener) {
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
 </li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">ZedAI document</div>
-<div class="synopsis-input-desc">
-Input ZedAI.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.daisy.org/z3998/2012/z3998-2012.html" class="media-type external-link" target="_blank">application/z3998-auth+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
 </ul>
 
   <h3 id="outputs">Outputs</h3>
 
   <ul class="synopsis-outputs">
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">EPUB</div>
-<div class="synopsis-output-desc">
-The resulting EPUB 3 publication.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text</li>
-</ul>
-</div>
-</li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-output-name">TTS log</div>
@@ -935,30 +934,24 @@ property.</p>
 </div>
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">EPUB</div>
+<div class="synopsis-output-desc">
+The resulting EPUB 3 publication.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the ZedAI become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
-</div>
-</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Enable TTS log</div>
@@ -990,6 +983,25 @@ Whether to use a speech synthesizer to produce audio files.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the ZedAI become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
 </div>
 </li>
 </ul>
@@ -1036,19 +1048,15 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
-<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
-</td>
-<td>Configuration file for the text-to-speech.
-</td>
-</tr>
-<tr>
 <td>--source <span style="text-transform: uppercase">source</span>
 </td>
 <td>Input ZedAI.</td>
 </tr>
 <tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--tts-config <span style="text-transform: uppercase">tts-config</span>
+</td>
+<td>Configuration file for the text-to-speech.
+</td>
 </tr>
 <tr>
 <td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
@@ -1057,6 +1065,10 @@ Options:</pre>
 <tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
 <td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

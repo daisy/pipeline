@@ -708,7 +708,19 @@
       
         <li class="spine-item">
       
-      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="57">
+      
+        <a href="/pipeline/Modules" tabindex="57">
+      
+      Writing Modules
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="58">
       XProc
       </a>
       
@@ -719,7 +731,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/XProcExtensions" tabindex="58">
+        <a href="/pipeline/XProcExtensions" tabindex="59">
       
       XProc Extensions
       </a>
@@ -736,7 +748,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="59">
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="60">
       
       Testing
       </a>
@@ -748,7 +760,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="60">
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="61">
       
       Debugging
       </a>
@@ -760,7 +772,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="61">
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="62">
       
       Release Management
       </a>
@@ -777,7 +789,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="62">
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="63">
       
       Easy Hacks
       </a>
@@ -930,6 +942,24 @@ This page describes the steps, comments and issues related to this transformatio
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">EPUB 3 file name</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+</div>
+<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+
+<p>This option can be used to set a custom file name.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Include Media Overlay</div>
 <div class="synopsis-option-desc">
 Whether or not to include media overlays and associated audio files.
@@ -952,24 +982,6 @@ Whether or not to include NCX-file, OPF guide element and backwards-compatible m
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">EPUB 3 file name</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-</div>
-<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-
-<p>This option can be used to set a custom file name.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -1021,16 +1033,16 @@ Options:</pre>
 <td></td>
 </tr>
 <tr>
+<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
+<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
 <td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
 <td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
 <td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
-<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
