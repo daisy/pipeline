@@ -46,25 +46,20 @@ These are the most important classes in the Java API:
 [`org.daisy.pipeline.script.ScriptRegistry`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/ScriptRegistry.html)
 : List available scripts.
 
-[`org.daisy.pipeline.script.XProcScript`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/XProcScript.html)
+[`org.daisy.pipeline.script.Script`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/Script.html)
 : List available inputs, options and outputs of a script.
 
 [`org.daisy.pipeline.datatypes.DatatypeRegistry`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/datatypes/DatatypeRegistry.html)
 : Get data types of script options.
 
-[`org.daisy.pipeline.script.BoundXProcScript`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/BoundXProcScript.html)
-[`org.daisy.common.xproc.XProcInput`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/XProcInput.html)
+[`org.daisy.pipeline.script.BoundScript`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/script/BoundScript.html)
 : Specify job inputs/options.
 
 [`org.daisy.pipeline.job.JobManagerFactory`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/job/JobManagerFactory.html)
-[`org.daisy.pipeline.job.JobManager`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/job/JobManager.html)
 : Create, delete and queue jobs.
 
 [`org.daisy.pipeline.job.Job`](http://daisy.github.io/pipeline/api/org/daisy/pipeline/job/Job.html)
 : Run and monitor jobs and access job results.
-
-[`org.daisy.common.messaging.MessageAccessor`](http://daisy.github.io/pipeline/api/org/daisy/common/messaging/MessageAccessor.html)
-: Access job messages.
 
 Providers of the `ScriptRegistry`, `DatatypeRegistry` and
 `JobManagerFactory` services can be loaded using the
