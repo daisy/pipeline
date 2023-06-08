@@ -6,43 +6,42 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.24-SNAPSHOT</version>
-    <relativePath>../../parent/</relativePath>
+    <version>1.14.14-SNAPSHOT</version>
+    <relativePath>../../parent</relativePath>
   </parent>
 
-  <artifactId>dtbook-utils</artifactId>
-  <version>4.1.2-SNAPSHOT</version>
+  <artifactId>dtbook-cleaner</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
-  <name>DAISY Pipeline 2 module :: DTBook Utils</name>
+  <name>DAISY Pipeline 2 module :: DTBook Cleaner</name>
+  <description>Script to apply cleanup routines and optionally tag sentences on a given dtbook</description>
   
   <dependencies>
+    <!-- for XProcScriptService and UrlBasedDatatypeService -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
-      <artifactId>saxon-adapter</artifactId>
-      <scope>provided</scope>
+      <artifactId>framework-core</artifactId>
     </dependency>
-
-    <!-- Required for dtbook-doctyping to work with correct serialized result -->
+    <!--
+        runtime dependencies
+    -->
+    <!-- Required for serialization done in the dtbook doctyping -->
     <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>com.xmlcalabash</artifactId>
       <version>1.1.20-p12-98</version>
       <scope>runtime</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>ds-to-spi-runtime</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <!--
-        runtime dependencies
-    -->
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+      <version>3.1.1-SNAPSHOT</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -52,41 +51,21 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>file-utils</artifactId>
+      <artifactId>dtbook-break-detection</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mediatype-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>validation-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>metadata-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>mathml-utils</artifactId>
-      <scope>runtime</scope>
+      <artifactId>nlp-omnilang-lexer</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
-  
+
   <properties>
     <expose-services>
-        org.daisy.pipeline.modules.impl.Module_dtbook_utils,
-        org.daisy.pipeline.modules.dtbook_utils.impl.DTBookCleanerLibrary$Provider
+      org.daisy.pipeline.modules.impl.Module_dtbook_cleaner,
+      org.daisy.pipeline.script.impl.XProcScript_dtbook_cleaner
     </expose-services>
   </properties>
-  
+
 </project>
