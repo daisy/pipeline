@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.14-SNAPSHOT</version>
+  <version>1.14.15-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -69,7 +69,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.12</version>
+        <version>1.14.13</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
