@@ -30,7 +30,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 		<!-- directory used for temporary files -->
 	</p:option>
 
-	<p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+	<p:option name="result" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">EPUB 3</h2>
 		</p:documentation>
@@ -107,7 +107,7 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
 					<p:pipe step="load" port="result.in-memory"/>
 				</p:input>
 				<p:with-option name="result-base"
-				               select="concat($output-dir,'/',
+				               select="concat($result,'/',
 				                              replace(replace($source,'(\.epub|/mimetype)$',''),'^.*/([^/]+)$','$1'),
 				                              '.epub!/')"/>
 			</px:epub2-to-epub3>

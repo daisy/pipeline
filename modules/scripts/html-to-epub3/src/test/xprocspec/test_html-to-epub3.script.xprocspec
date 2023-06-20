@@ -6,8 +6,8 @@
 
 	<x:scenario label="minimal">
 		<x:call step="px:html-to-epub3.script">
-			<x:option name="html" select="resolve-uri('../resources/minimal.xhtml')"/>
-			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+			<x:option name="source" select="resolve-uri('../resources/minimal.xhtml')"/>
+			<x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output EPUB">
 			<x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/minimal.epub" ordered="true"/>
@@ -31,8 +31,8 @@
 			(See https://github.com/daisy/pipeline-modules/issues/56)
 		</x:documentation>
 		<x:call step="px:html-to-epub3.script">
-			<x:option name="html" select="resolve-uri('../resources/minimal.xhtml')"/>
-			<x:option name="output-dir" select="resolve-uri('path%20with%20special%20characters/output-dir/',$temp-dir)"/>
+			<x:option name="source" select="resolve-uri('../resources/minimal.xhtml')"/>
+			<x:option name="result" select="resolve-uri('path%20with%20special%20characters/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output EPUB">
 			<x:document type="zip" base-uri="temp-dir" href="path%20with%20special%20characters/output-dir/minimal.epub" ordered="true"/>

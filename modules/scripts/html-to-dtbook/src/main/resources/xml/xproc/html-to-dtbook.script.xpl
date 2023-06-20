@@ -12,14 +12,14 @@
         </a>
     </p:documentation>
 
-    <p:option name="html" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">HTML document</h2>
             <p px:role="desc">The (X)HTML document to convert</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">The directory that will contain the resulting DTBook. The name of the
@@ -56,10 +56,10 @@
             <p:pipe step="html" port="result.in-memory"/>
         </p:output>
         <px:fileset-create>
-            <p:with-option name="base" select="resolve-uri('./',$html)"/>
+            <p:with-option name="base" select="resolve-uri('./',$source)"/>
         </px:fileset-create>
         <px:fileset-add-entry media-type="application/xhtml+xml">
-            <p:with-option name="href" select="$html"/>
+            <p:with-option name="href" select="$source"/>
         </px:fileset-add-entry>
         <px:html-load name="html"/>
     </p:group>
@@ -69,7 +69,7 @@
         the HTML file.
     </p:documentation>
     <px:fileset-copy name="copy">
-        <p:with-option name="target" select="$output-dir"/>
+        <p:with-option name="target" select="$result"/>
         <p:input port="source.in-memory">
             <p:pipe step="html-and-resources" port="in-memory"/>
         </p:input>

@@ -57,20 +57,20 @@ This will remove any existing media overlays in the EPUB.</p>
 		<!-- directory used for temporary files -->
 	</p:option>
 
-	<p:option name="epub3-output-dir" required="true" px:output="result" px:type="anyDirURI">
+	<p:option name="epub3" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Intermediary EPUB 3 with media-overlays</h2>
 			<p>Note that the conversion may fail but still output a EPUB 3 document.</p>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="daisy202-output-dir" required="true" px:output="result" px:type="anyDirURI">
+	<p:option name="daisy202" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">DAISY 2.02</h2>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="daisy3-output-dir" required="true" px:output="result" px:type="anyDirURI">
+	<p:option name="daisy3" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">DAISY 3</h2>
 		</p:documentation>
@@ -147,9 +147,9 @@ This will remove any existing media overlays in the EPUB.</p>
 				<p:input port="source.in-memory">
 					<p:pipe step="load" port="result.in-memory"/>
 				</p:input>
-				<p:with-option name="epub3-output-dir" select="$epub3-output-dir"/>
-				<p:with-option name="daisy202-output-dir" select="$daisy202-output-dir"/>
-				<p:with-option name="daisy3-output-dir" select="$daisy3-output-dir"/>
+				<p:with-option name="epub3-output-dir" select="$epub3"/>
+				<p:with-option name="daisy202-output-dir" select="$daisy202"/>
+				<p:with-option name="daisy3-output-dir" select="$daisy3"/>
 				<p:with-option name="tts" select="$tts"/>
 				<p:input port="tts-config">
 					<p:pipe step="main" port="tts-config"/>

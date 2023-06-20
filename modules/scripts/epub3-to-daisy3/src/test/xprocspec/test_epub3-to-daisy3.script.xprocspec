@@ -7,9 +7,9 @@
 
 	<x:scenario label="minimal">
 		<x:call step="px:epub3-to-daisy3.script">
-			<x:option name="epub" select="resolve-uri('../resources/minimal.epub/mimetype')"/>
+			<x:option name="source" select="resolve-uri('../resources/minimal.epub/mimetype')"/>
 			<x:option name="validation" select="'off'"/>
-			<x:option name="output-dir" select="resolve-uri('out/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('out/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('tmp/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">

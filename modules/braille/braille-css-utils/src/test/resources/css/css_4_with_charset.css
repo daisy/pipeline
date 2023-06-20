@@ -1,0 +1,5 @@
+@charset "CP852";
+
+p::after {
+	content: '€‚ƒ„…';
+}

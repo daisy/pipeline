@@ -11,12 +11,7 @@
                 exclude-result-prefixes="#all">
 
     <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
-    <!--
-        due to a bug in Saxon this does not work outside OSGi because a different uri-functions.xsl
-        is imported from http://www.daisy.org/pipeline/modules/file-utils/library.xsl
-    -->
-    <!-- <xsl:import href="uri-functions.xsl"/> -->
-    <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
+    <xsl:import href="library.xsl"/>
 
     <xsl:param name="source-renamed" as="xs:boolean" select="false()"/>
 

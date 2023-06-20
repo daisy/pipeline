@@ -50,14 +50,14 @@
 		</p:documentation>
 	</p:input>
 
-	<p:option name="include-table-of-content" required="false" select="'false'">
+	<p:option name="include-table-of-content" px:type="boolean" required="false" select="'false'">
 		<p:documentation>
 			<h2 px:role="name">Include table of content</h2>
 			<p px:role="desc">A boolean indicating if a TOC should be generated.</p>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="include-page-number" required="false" select="'false'">
+	<p:option name="include-page-number" px:type="boolean" required="false" select="'false'">
 		<p:documentation>
 			<h2 px:role="name">Include page number</h2>
 			<p px:role="desc">A boolean indicating if a TOC should be generated.</p>
@@ -68,7 +68,7 @@
 		<!-- directory used for temporary files -->
 	</p:option>
 
-	<p:option name="output-dir" px:output="result" px:type="anyDirURI" required="true">
+	<p:option name="result" px:output="result" px:type="anyDirURI" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">RTF file</h2>
 			<p px:role="desc">The resulting rtf file.</p>
@@ -80,7 +80,7 @@
 	<p:import href="convert.xpl"/>
 
 	<px:normalize-uri name="output-dir-uri">
-		<p:with-option name="href" select="concat($output-dir,'/')"/>
+		<p:with-option name="href" select="concat($result,'/')"/>
 	</px:normalize-uri>
 
 	<p:group>

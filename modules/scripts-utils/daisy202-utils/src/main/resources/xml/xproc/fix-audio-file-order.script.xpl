@@ -31,7 +31,7 @@
 		</p:documentation>
 	</p:option>
 
-	<p:option name="output-dir" px:output="result" px:type="anyDirURI" required="true">
+	<p:option name="result" px:output="result" px:type="anyDirURI" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Output DAISY 2.02</h2>
 			<p px:role="desc">The unscrambled DAISY 2.02.</p>
@@ -65,7 +65,7 @@
 	</px:daisy202-load>
 
 	<px:fileset-copy name="copy">
-		<p:with-option name="target" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+		<p:with-option name="target" select="pf:normalize-uri(concat($result,'/'))"/>
 		<p:input port="source.in-memory">
 			<p:pipe step="load" port="in-memory.out"/>
 		</p:input>

@@ -7,10 +7,10 @@
 
   <x:scenario label="test C00000.epub with default.css">
     <x:call step="px:epub3-to-pef.script">
-      <x:option name="epub" select="resolve-uri('../resources/C00000.epub')"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="source" select="resolve-uri('../resources/C00000.epub')"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'C00000/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'C00000/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'C00000/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory contents">
@@ -21,11 +21,11 @@
   
   <x:scenario label="test default.css + reset.css + style.css">
     <x:call step="px:epub3-to-pef.script">
-      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="source" select="resolve-uri('../resources/simple-epub/package.opf')"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'C00000_reset/temp-dir/')"/>
       <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
       <x:option name="show-braille-page-numbers" select="false()"/>
@@ -69,12 +69,12 @@
       Tests stylesheet option with path relative to the EPUB.
     </x:documentation>
     <x:call step="px:epub3-to-pef.script">
-      <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+      <x:option name="source" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'stylesheet-relative/temp-dir/')"/>
     </x:call>
     <x:context label="result">
@@ -113,11 +113,11 @@
 
   <x:scenario label="option: apply-document-specific-stylesheets (enabled)">
       <x:call step="px:epub3-to-pef.script">
-          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="source" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
           <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-          <x:option name="output-dir" select="''"/>
+          <x:option name="result" select="''"/>
           <x:option name="include-pef" select="'true'"/>
-          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/output-dir/')"/>
+          <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
           <x:option name="show-braille-page-numbers" select="false()"/>
@@ -165,11 +165,11 @@
 
   <x:scenario label="option: apply-document-specific-stylesheets (disabled)">
       <x:call step="px:epub3-to-pef.script">
-          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="source" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
           <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-          <x:option name="output-dir" select="''"/>
+          <x:option name="result" select="''"/>
           <x:option name="include-pef" select="'true'"/>
-          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/output-dir/')"/>
+          <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="false()"/>
           <x:option name="show-braille-page-numbers" select="false()"/>
@@ -217,11 +217,11 @@
 
   <x:scenario label="option: apply-document-specific-stylesheets (enabled, with global override)">
       <x:call step="px:epub3-to-pef.script">
-          <x:option name="epub" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
+          <x:option name="source" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
           <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-          <x:option name="output-dir" select="''"/>
+          <x:option name="result" select="''"/>
           <x:option name="include-pef" select="'true'"/>
-          <x:option name="pef-output-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/output-dir/')"/>
+          <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-override/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
           <x:option name="stylesheet" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets.override.css')"/>
@@ -270,12 +270,12 @@
   
   <x:scenario label="include-obfl">
     <x:call step="px:epub3-to-pef.script">
-      <x:option name="epub" select="resolve-uri('../resources/simple-epub/package.opf')"/>
+      <x:option name="source" select="resolve-uri('../resources/simple-epub/package.opf')"/>
       <x:option name="include-obfl" select="'true'"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
-      <x:option name="obfl-output-dir" select="concat($temp-dir,'include-obfl/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'include-obfl/output-dir/')"/>
+      <x:option name="obfl" select="concat($temp-dir,'include-obfl/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'include-obfl/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory contents">
@@ -289,13 +289,13 @@
     <x:call step="px:epub3-to-pef.script"/>
    <x:scenario label="output-file-format has priority over dc:language">
      <x:call>
-       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
+       <x:option name="source" select="resolve-uri('../resources/test_ascii-table_1/package.opf')"/>
        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
        <x:option name="output-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                     (line-breaks:DOS)
                                                     (page-breaks:&quot;---&quot;)
                                                     (pad:BOTH)'"/>
-       <x:option name="output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="result" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
        <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
      </x:call>
      <x:context label="brf">
@@ -308,12 +308,12 @@
 
    <x:scenario label="Table can be found by locale">
      <x:call>
-       <x:option name="epub" select="resolve-uri('../resources/test_ascii-table_2/package.opf')"/>
+       <x:option name="source" select="resolve-uri('../resources/test_ascii-table_2/package.opf')"/>
        <x:option name="output-file-format" select="'(line-breaks:DOS)
                                                     (page-breaks:&quot;---&quot;)
                                                     (pad:BOTH)'"/>
        <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(type:literary)'"/>
-       <x:option name="output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+       <x:option name="result" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
        <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
      </x:call>
      <x:context label="brf">

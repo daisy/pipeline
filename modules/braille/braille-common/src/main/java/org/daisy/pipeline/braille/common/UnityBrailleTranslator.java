@@ -2,7 +2,6 @@ package org.daisy.pipeline.braille.common;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -84,10 +83,6 @@ public  class UnityBrailleTranslator extends AbstractBrailleTranslator implement
 											logger.warn("'{}: {}' not supported in combination with 'text-transform: none'",
 											            prop, style.get(prop));
 											logger.debug("(text was: '" + text + "')"); }}
-									Map<String,String> attrs = styledText.getTextAttributes();
-									if (attrs != null)
-										for (String k : attrs.keySet())
-											logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
 									if (unicodeBraille && brailleCharset != null) {
 										StringBuilder b; {
 											b = new StringBuilder();
@@ -158,10 +153,6 @@ public  class UnityBrailleTranslator extends AbstractBrailleTranslator implement
 											logger.warn("'{}: {}' not supported in combination with 'text-transform: none'",
 											            prop, style.get(prop));
 											logger.debug("(text was: '" + text + "')"); }}
-									Map<String,String> attrs = styledText.getTextAttributes();
-									if (attrs != null)
-										for (String k : attrs.keySet())
-											logger.warn("Text attribute \"{}:{}\" ignored", k, attrs.get(k));
 									if (unicodeBraille && brailleCharset != null) {
 										StringBuilder b; {
 											b = new StringBuilder();

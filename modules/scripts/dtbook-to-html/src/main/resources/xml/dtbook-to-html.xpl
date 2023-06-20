@@ -52,7 +52,7 @@
         <p:pipe step="result" port="status"/>
     </p:output>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">HTML</h2>
             <p px:role="desc">The resulting HTML document.</p>
@@ -139,7 +139,7 @@
             <!--<p:variable name="encoded-title" select="'book'"/>-->
                 <p:variable name="encoded-title"
                             select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')"/>
-                <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+                <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($result,'/'))"/>
                 <p:variable name="html-file-uri" select="concat($output-dir-uri,$encoded-title,'.epub')"/>
                 <p:sink/>
 

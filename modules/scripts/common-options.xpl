@@ -209,7 +209,7 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 	    zedai-to-pef
 	    epub3-to-epub3
 	-->
-	<p:option name="stylesheet" required="false" px:type="xs:anyURI" select="''" px:sequence="true" px:separator=" "
+	<p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
 	          px:media-type="text/css application/xslt+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
@@ -299,7 +299,7 @@ with the "Braille code" option this determines the transformer that is selected.
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
-	<p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI" px:media-type="text">
+	<p:option name="result" required="true" px:output="result" px:type="anyDirURI" px:media-type="text">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Output file</h2>
 			<p px:role="desc">The output braille file.</p>
@@ -355,7 +355,7 @@ If left blank, the locale information in the input document will be used to sele
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
-	<p:option name="preview-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
+	<p:option name="preview" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Preview</h2>
 			<p px:role="desc">An HTML preview of the braille result.</p>
@@ -381,7 +381,7 @@ If left blank, the locale information in the input document will be used to sele
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
-	<p:option name="pef-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml" select="''">
+	<p:option name="pef" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/x-pef+xml" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">PEF</h2>
 			<p px:role="desc">The intermediary PEF file.</p>
@@ -394,7 +394,7 @@ If left blank, the locale information in the input document will be used to sele
 	    epub3-to-pef
 	-->
 	<p:option name="include-obfl" required="false" px:type="boolean" select="'false'">
-		<p:documentation>
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include OBFL</h2>
 			<p px:role="desc" xml:space="preserve">Whether or not the keep the intermediary OBFL file (for debugging).</p>
 		</p:documentation>
@@ -405,10 +405,55 @@ If left blank, the locale information in the input document will be used to sele
 	    html-to-pef
 	    epub3-to-pef
 	-->
-	<p:option name="obfl-output-dir" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
+	<p:option name="obfl" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/x-obfl+xml" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">OBFL</h2>
 			<p px:role="desc">The intermediary OBFL file.</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    daisy202-to-mp3
+	    daisy3-to-mp3
+	-->
+	<p:option name="player-type" select="'1'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Player type</h2>
+			<p px:role="desc" xml:space="preserve">The type of MegaVoice Envoy device.</p>
+		</p:documentation>
+		<p:pipeinfo>
+			<px:type>
+				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+					<value>1</value>
+					<a:documentation xml:lang="en">Type 1: This produces a folder structure that is four
+					levels deep. At the top level there can be up to 8 folders. Each of these
+					folders can have up to 20 sub-folders. The sub-folders can have up to 999
+					sub-sub-folders, each of which can contain up to 999 MP3
+					files.</a:documentation>
+					<value>2</value>
+					<a:documentation xml:lang="en">Type 2: This produces a folder structure that is two
+					levels deep. On the top level there can be up to 999 folders, and each of these
+					folders can have up to 999 MP3 files.</a:documentation>
+				</choice>
+			</px:type>
+		</p:pipeinfo>
+	</p:option>
+
+	<!--
+	    daisy202-to-mp3
+	    daisy3-to-mp3
+	-->
+	<p:option name="book-folder-level" px:type="integer" select="'1'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Book folder level</h2>
+			<p px:role="desc" xml:space="preserve">The folder level corresponding with the book, expressed as a 0-based number.
+
+Value `0` means that top-level folders correspond with top-level sections of the book. Value `1`
+means that the book is contained in a single top-level folder (if it is not too big) with
+sub-folders that correspond with top-level sections of the book.
+
+Must be a non-negative integer value, less than or equal to 3 for type 1 players, and less than or
+equal to 1 for type 2 players.</p>
 		</p:documentation>
 	</p:option>
 

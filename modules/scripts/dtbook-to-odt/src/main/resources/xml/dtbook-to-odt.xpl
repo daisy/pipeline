@@ -35,7 +35,7 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation>
             <h2 px:role="name">ODT</h2>
             <p px:role="desc">The resulting ODT file.</p>
@@ -180,7 +180,7 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
             <p:input port="source.in-memory">
                 <p:pipe step="odt" port="in-memory.out"/>
             </p:input>
-            <p:with-option name="href" select="concat($output-dir, '/', replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt')">
+            <p:with-option name="href" select="concat($result, '/', replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1'), '.odt')">
                 <p:pipe step="main" port="source"/>
             </p:with-option>
         </px:odf-store>

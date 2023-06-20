@@ -3,10 +3,8 @@ import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 import org.ops4j.pax.exam.ProbeBuilder;
 import org.ops4j.pax.exam.TestProbeBuilder;
 
-public class PaxExamConfig extends AbstractXSpecAndXProcSpecTest {
-	
-	public static boolean onWindows = System.getProperty("os.name").toLowerCase().startsWith("windows");
-	
+public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
+
 	@Override
 	protected String[] testDependencies() {
 		return new String[] {
@@ -23,7 +21,7 @@ public class PaxExamConfig extends AbstractXSpecAndXProcSpecTest {
 			"org.daisy.pipeline.modules:file-utils:?",
 		};
 	}
-	
+
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
 		probe.setHeader("Bundle-Name", "test-module");

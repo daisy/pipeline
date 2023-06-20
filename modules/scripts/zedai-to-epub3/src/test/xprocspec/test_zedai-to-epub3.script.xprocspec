@@ -11,7 +11,7 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/resources/alice.xml"/>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('alice/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('alice/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">
@@ -51,7 +51,7 @@
 					</document>
 				</x:document>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">

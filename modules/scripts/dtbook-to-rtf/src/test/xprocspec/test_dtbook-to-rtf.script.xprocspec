@@ -19,7 +19,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="output-dir" select="concat($temp-dir,'minimal/output-dir/')"/>
+      <x:option name="result" select="concat($temp-dir,'minimal/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'minimal/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory">

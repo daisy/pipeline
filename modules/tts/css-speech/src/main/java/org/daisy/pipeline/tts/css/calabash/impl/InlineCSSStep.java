@@ -1,11 +1,13 @@
 package org.daisy.pipeline.tts.css.calabash.impl;
 
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -55,21 +57,29 @@ public class InlineCSSStep extends DefaultStep implements TreeWriterFactory, XPr
 		mRuntime = runtime;
 		mNetwork = new DefaultNetworkProcessor() {
 			@Override
-			public InputStream fetch(URL url) throws IOException {
+			public Reader fetch(URL url, Charset encoding, boolean forceEncoding, boolean assertEncoding) throws IOException {
 				try {
 					if (url != null) {
 						Source resolved = resolver.resolve(url.toString(), "");
 						if (resolved != null) {
-							if (resolved instanceof StreamSource)
-								return ((StreamSource)resolved).getInputStream();
-							else
+							if (resolved instanceof StreamSource) {
+								InputStreamReader r = detectEncodingAndSkipBOM(
+									((StreamSource)resolved).getInputStream(), null, encoding, forceEncoding);
+								if (assertEncoding) {
+									if (encoding == null)
+										throw new IllegalArgumentException("encoding must not be null");
+									if (!encoding.equals(getEncoding(r)))
+										throw new IOException("Failed to read URL as " + encoding + ": " + url);
+								}
+								return r;
+							} else
 								url = new URL(resolved.getSystemId());
 						}
 					}
 				} catch (TransformerException e) {
 				} catch (MalformedURLException e) {
 				}
-				return super.fetch(url);
+				return super.fetch(url, encoding, forceEncoding, assertEncoding);
 			}
 		};
 	}

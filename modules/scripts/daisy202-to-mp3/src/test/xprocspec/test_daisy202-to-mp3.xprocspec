@@ -30,6 +30,8 @@
 				</x:document>
 			</x:input>
 			<x:input port="source.in-memory"/>
+			<x:option name="file-limit" select="[-1,-1,-1]"/>
+			<x:option name="level-offset" select="1"/>
 			<x:option name="output-dir" select="resolve-uri('dontworrybehappy/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('dontworrybehappy/temp-dir/',$temp-dir)"/>
 		</x:call>
@@ -40,25 +42,25 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline" base-uri="temp-dir">
 				<d:fileset>
-					<d:file href="dontworrybehappy/output-dir/001/001/001%20Don't%20Worry,%20Be%20Happy.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/001/001%20Don't%20Worry,%20Be%20Happy.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp1.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/002/001/001%20Introductio.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/002/001%20Introductio.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp2.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/003/001/001%20Versa%20media,%20pre%20peripetum.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/003/001%20Versa%20media,%20pre%20peripetum.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp3.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/003/002/001%20Culmen%20interludiaris.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/003/002%20Culmen%20interludiaris.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp4.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/004/001/001%20Concludio.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/004/001%20Concludio.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp5.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/004/002/001%20Repetitio%20ad%20nauseam.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/004/002%20Repetitio%20ad%20nauseam.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp6.mp3"/>
-					<d:file href="dontworrybehappy/output-dir/005/001/001%20Notes.mp3"
+					<d:file href="dontworrybehappy/output-dir/volume%201/001/005/001%20Notes.mp3"
 					        media-type="audio/mpeg"
 					        original-href="dontworrybehappy/temp-dir/tmp7.mp3"/>
 				</d:fileset>

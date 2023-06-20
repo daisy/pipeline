@@ -15,7 +15,7 @@
         </a>
     </p:documentation>
 
-    <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB 3 Publication</h2>
             <p px:role="desc" xml:space="preserve">The EPUB 3 you want to convert to DAISY 3.
@@ -32,7 +32,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         <!-- directory used for temporary files -->
     </p:option>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DAISY 3</h2>
         </p:documentation>
@@ -65,7 +65,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
     </p:import>
 
     <px:epub-load version="3" name="load" px:message="Loading EPUB 3" px:progress="1/10">
-        <p:with-option name="href" select="$epub"/>
+        <p:with-option name="href" select="$source"/>
         <p:with-option name="validation" select="not($validation='off')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub-load>
@@ -108,7 +108,7 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
                 <p:input port="source.in-memory">
                     <p:pipe step="load" port="result.in-memory"/>
                 </p:input>
-                <p:with-option name="output-dir" select="$output-dir"/>
+                <p:with-option name="output-dir" select="$result"/>
             </px:epub3-to-daisy3>
 
             <px:fileset-store name="store" px:message="Storing DAISY 3" px:progress="1/9">

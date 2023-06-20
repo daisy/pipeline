@@ -28,7 +28,7 @@
         </p:documentation>
     </p:input>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DAISY 2.02</h2>
             <p px:role="desc">The produced DAISY 2.02 DTB.</p>
@@ -75,7 +75,7 @@
     <!-- GLOBAL VARIABLES                                                        -->
     <!--=========================================================================-->
     <p:variable name="output-dir-checked"
-        select="resolve-uri(replace($output-dir,'(.+?)/?$','$1/'))"/>
+        select="resolve-uri(replace($result,'(.+?)/?$','$1/'))"/>
     <p:variable name="type" xmlns:opf="http://openebook.org/namespaces/oeb-package/1.0/"
         select="/opf:package/opf:metadata/opf:x-metadata/
                  opf:meta[@name='dtb:multimediaType'][1]/@content"/>

@@ -219,6 +219,7 @@ marked up.</p>
     </p:option>
     
     <p:option name="stylesheet" select="''">
+        <!-- defined in ../../../../../common-options.xpl -->
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
             <p px:role="desc" xml:space="preserve">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
@@ -273,7 +274,7 @@ elements that represent the sentences.</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation>
             <h2 px:role="name">Output EPUB 3</h2>
         </p:documentation>
@@ -318,7 +319,7 @@ elements that represent the sentences.</p>
             <p:pipe step="load" port="result.in-memory"/>
         </p:input>
         <p:with-option name="result-base"
-                       select="concat($output-dir,'/',replace(replace($source,'(\.epub|/mimetype)$',''),'^.*/([^/]+)$','$1'),'.epub!/')"/>
+                       select="concat($result,'/',replace(replace($source,'(\.epub|/mimetype)$',''),'^.*/([^/]+)$','$1'),'.epub!/')"/>
         <p:input port="metadata">
             <p:pipe port="metadata" step="main"/>
         </p:input>

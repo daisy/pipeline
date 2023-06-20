@@ -18,7 +18,7 @@
         </address>
     </p:documentation>
 
-    <p:option name="epub" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB</h2>
             <p px:role="desc">Either a *.epub file or a *.opf file.</p>
@@ -67,7 +67,7 @@ option is only available for zipped EPUBs.</p>
     </p:import>
 
     <px:epub-validate px:progress="1" version="3" name="validate">
-        <p:with-option name="epub" select="$epub"/>
+        <p:with-option name="epub" select="$source"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="accessibility-check" select="$accessibility-check"/>
     </px:epub-validate>

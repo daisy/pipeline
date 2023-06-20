@@ -10,7 +10,7 @@
             <!--
                 reusing test data from daisy202-to-epub3
             -->
-            <x:option name="ncc" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
+            <x:option name="source" select="resolve-uri('../../../../daisy202-to-epub3/src/test/resources/input/book1/ncc.html')"/>
         </x:call>
         <x:context label="the validation status">
             <x:document type="port" port="validation-status"/>

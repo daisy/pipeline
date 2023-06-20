@@ -11,7 +11,7 @@
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
 			<x:option name="zedai-filename" select="'result.xml'"/>
-			<x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory contents">
 			<x:document type="directory" base-uri="temp-dir" href="minimal/output-dir/"/>
@@ -78,7 +78,7 @@
 			</x:input>
 			<x:option name="zedai-filename" select="'result.xml'"/>
 			<x:option name="validation" select="'report'"/>
-			<x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output ZedAI">
 			<x:document type="file" base-uri="temp-dir" href="issue-94/output-dir/result.xml" select="//z:h[@xml:id='chapter_1']"/>

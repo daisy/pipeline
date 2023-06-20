@@ -37,13 +37,13 @@
     <!-- defined in ../../../../../common-options.xpl -->
     <p:option name="stylesheet"/>
     <p:option name="transform"/>
-    <p:option name="output-dir"/>
+    <p:option name="result"/>
     <p:option name="output-file-format"/>
     <p:option name="include-preview"/>
     <p:option name="preview-table"/>
-    <p:option name="preview-output-dir"/>
+    <p:option name="preview"/>
     <p:option name="include-pef"/>
-    <p:option name="pef-output-dir"/>
+    <p:option name="pef"/>
     
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <!-- directory used for temporary files -->
@@ -98,9 +98,9 @@
         <p:with-option name="include-preview" select="$include-preview"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
-        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="output-dir" select="$result"/>
+        <p:with-option name="pef-output-dir" select="$pef"/>
+        <p:with-option name="preview-output-dir" select="$preview"/>
     </px:xml-to-pef.store>
     
 </p:declare-step>

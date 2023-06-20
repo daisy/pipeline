@@ -28,12 +28,12 @@
         </address>
     </p:documentation>
 
-    <p:option name="href" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">NCC</h2>
         </p:documentation>
     </p:option>
-    <p:option name="output" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB 3</h2>
         </p:documentation>
@@ -74,7 +74,7 @@ This option can be used to set a custom file name.</p>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="convert/convert.xpl"/>
 
-    <p:variable name="output-dir" select="if (ends-with($output,'/')) then $output else concat($output,'/')"/>
+    <p:variable name="output-dir" select="if (ends-with($result,'/')) then $result else concat($result,'/')"/>
     <p:variable name="tempDir" select="if (ends-with($temp-dir,'/')) then $temp-dir else concat($temp-dir,'/')"/>
 
     <!-- validate options -->
@@ -86,8 +86,8 @@ This option can be used to set a custom file name.</p>
         </p:input>
     </p:identity>
     <px:assert message="href: '$1' is not a valid URI. You probably either forgot to prefix the path with file:/, or if you're using Windows, remember to replace all directory separators (\) with forward slashes (/)." error-code="PDE01">
-        <p:with-option name="test" select="matches($href,'\w+:/')"/>
-        <p:with-option name="param1" select="$href"/>
+        <p:with-option name="test" select="matches($source,'\w+:/')"/>
+        <p:with-option name="param1" select="$source"/>
     </px:assert>
     <px:assert message="output: '$1' is not a valid URI. You probably either forgot to prefix the path with file:/, or if you're using Windows, remember to replace all directory separators (\) with forward slashes (/)." error-code="PDE05">
         <p:with-option name="test" select="matches($output-dir,'\w+:/')"/>
@@ -108,7 +108,7 @@ This option can be used to set a custom file name.</p>
 
     <!-- load -->
     <px:daisy202-load name="load">
-        <p:with-option name="ncc" select="$href"/>
+        <p:with-option name="ncc" select="$source"/>
     </px:daisy202-load>
 
     <!-- convert -->

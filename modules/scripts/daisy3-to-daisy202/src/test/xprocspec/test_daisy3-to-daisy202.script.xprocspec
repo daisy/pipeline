@@ -9,7 +9,7 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/Chimpanzee/package.opf"/>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('Chimpanzee/output-dir/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('Chimpanzee/output-dir/',$temp-dir)"/>
 			<x:option name="temp-dir" select="resolve-uri('Chimpanzee/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory">

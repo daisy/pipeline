@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:daisy3-to-mp3.script"
                 name="main">
 
@@ -20,7 +21,14 @@
 		</p:documentation>
 	</p:input>
 
-	<p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+	<p:option name="player-type">
+		<!-- defined in ../../../../../common-options.xpl -->
+	</p:option>
+	<p:option name="book-folder-level">
+		<!-- defined in ../../../../../common-options.xpl -->
+	</p:option>
+
+	<p:option name="result" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">MP3 files</h2>
 			<p px:role="desc">The produced folder structure with MP3 files.</p>
@@ -65,7 +73,10 @@
 		<p:input port="source.in-memory">
 			<p:pipe step="load" port="result.in-memory"/>
 		</p:input>
-		<p:with-option name="output-dir" select="$output-dir"/>
+		<p:with-option name="file-limit" select="     if ($player-type='1') then [8,20,999,999]
+		                                         else  (: $player-type='2' :)    [     999,999]"/>
+		<p:with-option name="level-offset" select="xs:integer($book-folder-level)"/>
+		<p:with-option name="output-dir" select="$result"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 	</px:daisy3-to-mp3>
 

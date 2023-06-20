@@ -7,7 +7,7 @@
 	<x:scenario label="dontworrybehappy">
 		<x:call step="px:daisy202-to-daisy3.script">
 			<x:option name="source" select="resolve-uri('../resources/daisy202/dontworrybehappy/ncc.html')"/>
-			<x:option name="output-dir" select="resolve-uri('dontworrybehappy/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('dontworrybehappy/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory">
 			<x:document type="directory" base-uri="temp-dir" href="dontworrybehappy/" recursive="true"/>
@@ -20,7 +20,7 @@
 	<x:scenario label="dontworrybehappy-nccOnly">
 		<x:call step="px:daisy202-to-daisy3.script">
 			<x:option name="source" select="resolve-uri('../resources/daisy202/dontworrybehappy-nccOnly/ncc.html')"/>
-			<x:option name="output-dir" select="resolve-uri('dontworrybehappy-nccOnly/',$temp-dir)"/>
+			<x:option name="result" select="resolve-uri('dontworrybehappy-nccOnly/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output directory">
 			<x:document type="directory" base-uri="temp-dir" href="dontworrybehappy-nccOnly/" recursive="true"/>

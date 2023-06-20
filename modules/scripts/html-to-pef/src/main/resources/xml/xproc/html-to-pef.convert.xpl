@@ -23,16 +23,23 @@
             <p>PEF</p>
         </p:documentation>
     </p:output>
-    <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
+    <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true and d:status result="ok"-->
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>OBFL</p>
         </p:documentation>
         <p:pipe step="transform" port="obfl"/>
     </p:output>
+    <p:output port="css" sequence="false">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>HTML with inline CSS</p>
+        </p:documentation>
+        <p:pipe step="html-with-css" port="result"/>
+    </p:output>
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>Whether or not the conversion was successful. When include-obfl is true, the
-            conversion may fail but still output a document on the "obfl" port.</p>
+            <p>Whether or not the conversion was successful. When include-css and/or include-obfl is
+            true, the conversion may fail but still output documents on the "css" and/or "obfl"
+            ports.</p>
         </p:documentation>
         <p:pipe step="transform" port="status"/>
     </p:output>
@@ -151,6 +158,7 @@
             </p:input>
         </px:apply-stylesheets>
     </p:group>
+    <p:identity name="html-with-css"/>
     
     <p:viewport match="math:math" px:progress=".10" px:message="Transforming MathML">
         <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]">
@@ -172,33 +180,20 @@
         <p:variable name="lang" select="(/*/@xml:lang,/*/@lang,'und')[1]"/>
         <p:variable name="locale-query" select="concat('(document-locale:',$lang,')')"/>
         <p:when test="$include-obfl='true'">
-            <p:output port="pef" primary="true" sequence="true"/>
-            <p:output port="obfl">
-                <p:pipe step="obfl" port="result"/>
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="obfl" sequence="true">
+                <p:pipe step="try-obfl" port="result"/>
             </p:output>
             <p:output port="status">
                 <p:pipe step="try-pef" port="status"/>
             </p:output>
-            <p:group name="obfl" px:message="Transforming from XML with CSS to OBFL" px:progress=".5">
-                <p:output port="result"/>
-                <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
-                <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
-                    <p:with-option name="query" select="$transform-query"/>
-                    <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
-                    <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
-                    </p:input>
-                </px:transform>
-            </p:group>
-            <p:try name="try-pef" px:message="Transforming from OBFL to PEF" px:progress=".5">
+            <p:try name="try-obfl" px:message="Transforming from XML with CSS to OBFL" px:progress=".5">
                 <p:group>
-                    <p:output port="pef" primary="true"/>
+                    <p:output port="result" primary="true"/>
                     <p:output port="status">
-                        <p:inline>
-                            <d:status result="ok"/>
-                        </p:inline>
+                        <p:inline><d:status result="ok"/></p:inline>
                     </p:output>
-                    <p:variable name="transform-query" select="'(input:obfl)(input:text-css)(output:pef)'"/>
+                    <p:variable name="transform-query" select="concat('(input:css)(output:obfl)',$transform,$locale-query)"/>
                     <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
                         <p:with-option name="query" select="$transform-query"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
@@ -208,17 +203,49 @@
                     </px:transform>
                 </p:group>
                 <p:catch name="catch">
-                    <p:output port="pef" primary="true">
-                        <p:empty/>
-                    </p:output>
+                    <p:output port="result" primary="true" sequence="true"/>
                     <p:output port="status">
-                        <p:pipe step="status" port="result"/>
+                        <p:inline><d:status result="error"/></p:inline>
                     </p:output>
                     <p:identity>
                         <p:input port="source">
-                            <p:inline>
-                                <d:status result="error"/>
-                            </p:inline>
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                    <px:message severity="ERROR">
+                        <p:input port="error">
+                            <p:pipe step="catch" port="error"/>
+                        </p:input>
+                    </px:message>
+                    <p:identity px:message-severity="ERROR" px:message="Failed to convert XML with CSS to OBFL"/>
+                </p:catch>
+            </p:try>
+            <p:try name="try-pef" px:progress=".5">
+                <p:group>
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="status">
+                        <p:pipe step="try-obfl" port="status"/>
+                    </p:output>
+                    <p:variable name="transform-query" select="'(input:obfl)(input:text-css)(output:pef)'"/>
+                    <p:for-each px:progress="1">
+                        <p:identity px:message="Transforming from OBFL to PEF"/>
+                        <px:transform px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
+                            <p:with-option name="query" select="$transform-query"/>
+                            <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
+                            <p:input port="parameters">
+                                <p:pipe port="result" step="parameters"/>
+                            </p:input>
+                        </px:transform>
+                    </p:for-each>
+                </p:group>
+                <p:catch name="catch">
+                    <p:output port="result" primary="true" sequence="true"/>
+                    <p:output port="status">
+                        <p:inline><d:status result="error"/></p:inline>
+                    </p:output>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
                         </p:input>
                     </p:identity>
                     <p:choose>
@@ -242,14 +269,12 @@
                         </p:otherwise>
                     </p:choose>
                     <p:identity px:message-severity="ERROR" px:message="Failed to convert OBFL to PEF"/>
-                    <p:identity name="status"/>
-                    <p:sink/>
                 </p:catch>
             </p:try>
         </p:when>
         <p:otherwise px:message="Transforming from XML with inline CSS to PEF">
-            <p:output port="pef" primary="true"/>
-            <p:output port="obfl">
+            <p:output port="result" primary="true" sequence="true"/>
+            <p:output port="obfl" sequence="true">
                 <p:empty/>
             </p:output>
             <p:output port="status">
@@ -258,11 +283,9 @@
             <p:variable name="transform-query" select="concat('(input:css)(output:pef)',$transform,$locale-query)"/>
             <p:try name="try-pef" px:progress="1" px:message-severity="DEBUG" px:message="px:transform query={$transform-query}">
                 <p:group>
-                    <p:output port="pef" primary="true"/>
+                    <p:output port="result" primary="true"/>
                     <p:output port="status">
-                        <p:inline>
-                            <d:status result="ok"/>
-                        </p:inline>
+                        <p:inline><d:status result="ok"/></p:inline>
                     </p:output>
                     <px:transform px:progress="1">
                         <p:with-option name="query" select="$transform-query"/>
@@ -273,17 +296,13 @@
                     </px:transform>
                 </p:group>
                 <p:catch name="catch">
-                    <p:output port="pef" primary="true">
-                        <p:empty/>
-                    </p:output>
+                    <p:output port="result" primary="true" sequence="true"/>
                     <p:output port="status">
-                        <p:pipe step="status" port="result"/>
+                        <p:inline><d:status result="error"/></p:inline>
                     </p:output>
                     <p:identity>
                         <p:input port="source">
-                            <p:inline>
-                                <d:status result="error"/>
-                            </p:inline>
+                            <p:empty/>
                         </p:input>
                     </p:identity>
                     <p:choose>
@@ -308,8 +327,6 @@
                             <p:identity px:message-severity="ERROR" px:message="Failed to convert XML with inline CSS to PEF"/>
                         </p:otherwise>
                     </p:choose>
-                    <p:identity name="status"/>
-                    <p:sink/>
                 </p:catch>
             </p:try>
         </p:otherwise>

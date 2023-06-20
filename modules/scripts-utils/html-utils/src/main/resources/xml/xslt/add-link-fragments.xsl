@@ -9,12 +9,7 @@
                 xpath-default-namespace="http://www.w3.org/1999/xhtml"
                 exclude-result-prefixes="#all">
     
-    <!--
-        due to a bug in Saxon this does not work outside OSGi because a different uri-functions.xsl
-        is imported from http://www.daisy.org/pipeline/modules/file-utils/library.xsl
-    -->
-    <!-- <xsl:import href="uri-functions.xsl"/> -->
-    <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
+    <xsl:import href="library.xsl"/>
 
     <xsl:variable name="doc-base" select="pf:html-base-uri(/)"/>
     <xsl:variable name="file-to-body-id" as="element()">

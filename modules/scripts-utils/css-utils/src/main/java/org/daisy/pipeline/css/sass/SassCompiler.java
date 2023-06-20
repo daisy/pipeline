@@ -1,12 +1,11 @@
 package org.daisy.pipeline.css.sass;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -89,8 +88,9 @@ public class SassCompiler implements CssPreProcessor {
 								return ImmutableList.of(
 									new Import(uri, abs,
 									           preProcess(
-										           byteSource(resolved.getInputStream())
-										           .asCharSource(StandardCharsets.UTF_8).read()))); }
+									               byteSource(resolved.getInputStream())
+									               // why are we assuming UTF-8?
+									               .asCharSource(StandardCharsets.UTF_8).read()))); }
 							catch (RuntimeException e) {
 								throw new IOException(e); }}
 						catch (TransformerException e) {
@@ -119,29 +119,11 @@ public class SassCompiler implements CssPreProcessor {
 	private static final Base64.Decoder base64Decoder = Base64.getDecoder();
 	
 	/**
-	 * @param encoding the encoding of the input or null if unknown
-	 * @throws IOException if something goes wrong reading the input
-	 * @throws RuntimeException if the compilation fails.
-	 */
-	public PreProcessingResult compile(Source sass, Charset encoding) throws IOException {
-		String base = sass.getSystemId();
-		if (sass instanceof StreamSource)
-			return compile(((StreamSource)sass).getInputStream(), URLs.asURL(base), encoding);
-		else
-			try {
-				return compile(resolver.resolve(base, base), encoding);
-			} catch (TransformerException e) {
-				throw new IOException(e);
-			}
-	}
-
-	/**
-	 * @param encoding the encoding of the input or null if unknown
 	 * @throws IOException if something goes wrong reading the input
 	 * @throws RuntimeException if the compilation fails.
 	 */
 	@Override
-	public PreProcessingResult compile(InputStream sass, URL base, Charset encoding) throws IOException {
+	public PreProcessingResult compile(PreProcessingSource source) throws IOException {
 		Compiler sassCompiler = new Compiler();
 		Options options = new Options();
 		options.setIsIndentedSyntaxSrc(false);
@@ -169,47 +151,32 @@ public class SassCompiler implements CssPreProcessor {
 				scss.append("$").append(var).append(": ").append(value).append(";\n");
 			}
 		}
-		// FIXME: if stream starts with BOM, encoding should be UTF-8
-		BufferedInputStream bufferedStream = new BufferedInputStream(sass);
-		bufferedStream.mark(1000);
-		BufferedReader r = new BufferedReader(new InputStreamReader(bufferedStream,
-		                                                            encoding != null ? encoding : StandardCharsets.UTF_8));
-		String firstLine = r.readLine();
+		BufferedReader stream = new BufferedReader(source.stream);
+		String firstLine = stream.readLine();
 		Matcher m = charsetRule.matcher(firstLine);
 		if (m.matches()) {
 			String charset = m.group(2);
 			firstLine = firstLine.substring(m.group(1).length());
-			if (encoding == null)
-				try {
-					encoding = Charset.forName(charset);
-				} catch (UnsupportedCharsetException e) {
-					logger.warn("Ignoring @charset \"" + charset + "\";");
-				}
-			else
-				logger.warn("Ignoring @charset \"" + charset + "\";");
-		}
-		if (encoding == null)
-			encoding = StandardCharsets.UTF_8;
-		if (encoding != StandardCharsets.UTF_8) {
-			if (firstLine.getBytes(StandardCharsets.UTF_8).length < 1000) {
-				bufferedStream.reset();
-				r = new BufferedReader(new InputStreamReader(bufferedStream, encoding));
-				firstLine = r.readLine();
+			try {
+				stream = new BufferedReader(source.reread(Charset.forName(charset)));
+				firstLine = stream.readLine();
 				m = charsetRule.matcher(firstLine);
 				if (m.matches()) { // must be true
 					firstLine = firstLine.substring(m.group(1).length());
 				}
-			} else {
-				logger.warn("Ignoring @charset \"" + encoding + "\";");
+			} catch (UnsupportedCharsetException e) {
+				logger.warn("Ignoring @charset \"" + charset + "\";");
+			} catch (IOException e) {
+				logger.warn("Ignoring @charset \"" + charset + "\";");
 			}
 		}
 		scss.append(firstLine).append("\n");
-		scss.append(CharStreams.toString(r));
-		r.close();
+		scss.append(CharStreams.toString(stream));
+		stream.close();
 		try {
 			// FIXME: Note that preProcess() breaks the original column info in sourceMap. Luckily
 			// this is not a real problem because only the base info is used.
-			Output result = sassCompiler.compileString(preProcess(scss.toString()), URLs.asURI(base), null, options);
+			Output result = sassCompiler.compileString(preProcess(scss.toString()), source.base, null, options);
 			String css = result.getCss();
 			String sourceMap = null; {
 				int lastNewlineIdx = css.lastIndexOf('\n');
@@ -222,14 +189,14 @@ public class SassCompiler implements CssPreProcessor {
 			// FIXME: Note that postProcess() breaks the column info in sourceMap. Luckily this only
 			// happens in selectors, not in url() values.
 			css = postProcess(css);
-			logger.debug(base + " compiled to:\n---\n" + css + "---\n");
+			logger.debug(source.base + " compiled to:\n---\n" + css + "---\n");
 			return new PreProcessingResult(
-				new ByteArrayInputStream(css.getBytes(StandardCharsets.UTF_8)),
+				new StringReader(css),
 				sourceMap,
 				// in source map files are relative to the current working directory
 				sourceMap != null
 					? URLs.asURI(new File("").getAbsoluteFile())
-					: URLs.asURI(base)); }
+					: source.base); }
 		catch (CompilationException e) {
 			throw new RuntimeException("Could not compile SASS style sheet", e); }
 	}

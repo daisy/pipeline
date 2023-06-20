@@ -68,7 +68,7 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
+    <p:option name="result" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validation reports</h2>
             <p px:role="desc">All validation reports.</p>
@@ -124,7 +124,7 @@
             <p:pipe step="validate-nimas-fileset" port="package-doc-validation-report"/>
             <p:pipe step="validate-nimas-fileset" port="dtbook-validation-report"/>
         </p:input>
-        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="output-dir" select="$result"/>
     </pxi:nimas-fileset-validator.store>
 
 </p:declare-step>

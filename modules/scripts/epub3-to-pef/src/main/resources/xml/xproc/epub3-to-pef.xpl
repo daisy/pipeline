@@ -18,7 +18,7 @@
         </a>
     </p:documentation>
 
-    <p:option name="epub" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/epub+zip application/oebps-package+xml">
+    <p:option name="source" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Input EPUB 3</h2>
             <p px:role="desc" xml:space="preserve">The EPUB you want to convert to braille.
@@ -101,10 +101,10 @@ even though the provided CSS is more specific.
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
     <p:option name="notes-placement"/>
-    <p:option name="output-dir"/>
-    <p:option name="pef-output-dir"/>
-    <p:option name="preview-output-dir"/>
-    <p:option name="obfl-output-dir"/>
+    <p:option name="result"/>
+    <p:option name="pef"/>
+    <p:option name="preview"/>
+    <p:option name="obfl"/>
     
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <!-- directory used for temporary files -->
@@ -154,10 +154,10 @@ even though the provided CSS is more specific.
                                            include-pef
                                            include-preview
                                            include-obfl
-                                           output-dir
-                                           pef-output-dir
-                                           preview-output-dir
-                                           obfl-output-dir
+                                           result
+                                           pef
+                                           preview
+                                           obfl
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -173,7 +173,7 @@ even though the provided CSS is more specific.
     <!-- LOAD EPUB 3 and PREAMBLE HTML -->
     <!-- ============================= -->
     <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".04">
-        <p:with-option name="epub" select="$epub"/>
+        <p:with-option name="epub" select="$source"/>
         <p:with-option name="preamble" select="$preamble"/>
         <p:with-option name="temp-dir" select="concat($temp-dir,'load/')"/>
     </px:epub3-to-pef.load>
@@ -193,7 +193,7 @@ even though the provided CSS is more specific.
         </p:input>
     </p:identity>
     <px:epub3-to-pef name="convert" px:message="Converting from EPUB to PEF" px:progress=".90">
-        <p:with-option name="epub" select="$epub"/>
+        <p:with-option name="epub" select="$source"/>
         <p:input port="in-memory.in">
             <p:pipe port="in-memory.out" step="load"/>
         </p:input>
@@ -220,7 +220,7 @@ even though the provided CSS is more specific.
     </p:identity>
     <p:delete match="/*/@xml:base"/>
     <px:epub3-to-pef.store px:message="Storing results" px:progress=".05">
-        <p:with-option name="epub" select="$epub"/>
+        <p:with-option name="epub" select="$source"/>
         <p:input port="opf">
             <p:pipe step="opf" port="result"/>
         </p:input>
@@ -231,10 +231,10 @@ even though the provided CSS is more specific.
         <p:with-option name="include-preview" select="$include-preview"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
-        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
+        <p:with-option name="output-dir" select="$result"/>
+        <p:with-option name="pef-output-dir" select="$pef"/>
+        <p:with-option name="preview-output-dir" select="$preview"/>
+        <p:with-option name="obfl-output-dir" select="$obfl"/>
     </px:epub3-to-pef.store>
     
 </p:declare-step>

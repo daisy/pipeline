@@ -39,7 +39,7 @@
 		</p:documentation>
 	</p:option>
 
-	<p:option name="output-dir" px:output="result" px:type="anyDirURI" required="true">
+	<p:option name="result" px:output="result" px:type="anyDirURI" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">DAISY 3</h2>
 			<p px:role="desc">The resulting DAISY 3.</p>
@@ -85,7 +85,7 @@ If no value is supplied, a value is extracted from the input NCC.</p>
 		<p:input port="source.in-memory">
 			<p:pipe step="load" port="in-memory.out"/>
 		</p:input>
-		<p:with-option name="output-dir" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+		<p:with-option name="output-dir" select="pf:normalize-uri(concat($result,'/'))"/>
 	</px:daisy202-to-daisy3>
 
 	<px:fileset-store px:progress="0.1" px:message="Storing DAISY 3">

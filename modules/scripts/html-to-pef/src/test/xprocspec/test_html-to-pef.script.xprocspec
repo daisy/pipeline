@@ -6,11 +6,11 @@
   
   <x:scenario label="alice.xhtml with default.css">
     <x:call step="px:html-to-pef.script">
-      <x:option name="html" select="resolve-uri('../resources/alice.xhtml')"/>
+      <x:option name="source" select="resolve-uri('../resources/alice.xhtml')"/>
       <x:option name="include-preview" select="'true'"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="output-dir" select="''"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'alice/output-dir/')"/>
+      <x:option name="result" select="''"/>
+      <x:option name="pef" select="concat($temp-dir,'alice/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'alice/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory contents">
@@ -22,12 +22,12 @@
   
   <x:scenario label="reset.css">
     <x:call step="px:html-to-pef.script">
-      <x:option name="html" select="resolve-uri('../resources/reset-test.html')"/>
+      <x:option name="source" select="resolve-uri('../resources/reset-test.html')"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="show-braille-page-numbers" select="false()"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'alice_reset/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'alice_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'alice_reset/temp-dir/')"/>
     </x:call>
     <x:context label="pef">
@@ -61,13 +61,13 @@
     <x:call step="px:html-to-pef.script"/>
     <x:scenario label="output-file-format has priority over dc:language / xml:lang">
       <x:call step="px:html-to-pef.script">
-        <x:option name="html" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
+        <x:option name="source" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
         <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
         <x:option name="output-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                      (line-breaks:DOS)
                                                      (page-breaks:&quot;---&quot;)
                                                      (pad:BOTH)'"/>
-        <x:option name="output-dir" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="result" select="resolve-uri('ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('ascii-table/temp-dir',$temp-dir)"/>
       </x:call>
       <x:context label="brf">
@@ -79,12 +79,12 @@
     </x:scenario>
     <x:scenario label="Table can be found by locale">
       <x:call step="px:html-to-pef.script">
-        <x:option name="html" select="resolve-uri('../resources/test_ascii-table_2.xhtml')"/>
+        <x:option name="source" select="resolve-uri('../resources/test_ascii-table_2.xhtml')"/>
         <x:option name="output-file-format" select="'(line-breaks:DOS)
                                                      (page-breaks:&quot;---&quot;)
                                                      (pad:BOTH)'"/>
         <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(type:literary)'"/>
-        <x:option name="output-dir" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
+        <x:option name="result" select="resolve-uri('default-ascii-table/output-dir',$temp-dir)"/>
         <x:option name="temp-dir" select="resolve-uri('default-ascii-table/temp-dir',$temp-dir)"/>
       </x:call>
       <x:context label="brf">

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <x:scenario label="test_01">
     <x:documentation>
-      Tests that Unicode characters 2800-28FF are recognized just fine if not on Windows.
+      Tests embedded style sheet with non-ASCII characters within UTF-8 encoded document.
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">
@@ -41,8 +40,82 @@
   
   <x:scenario label="test_02">
     <x:documentation>
-      Tests that a SASS style sheet with non-ASCII characters does not cause a parse error if not on
-      Windows.
+      Tests CP852 encoded style sheet with non-ASCII characters.
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <!--
+                  css_4_with_charset.css
+                  ======================
+                  @charset "CP852";
+                  p::after {
+                    content: 'Çüéâäů';
+                  }
+              -->
+              <link type="text/css" rel="stylesheet" href="../../resources/css/css_4_with_charset.css" media="embossed"/>
+            </head>
+            <body>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="&amp;::after { content: 'Çüéâäů'; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:documentation>
+      Tests CP852 encoded style sheet with non-ASCII characters but without @charset rule.
+    </x:documentation>
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <!--
+                  css_5_without_charset.css
+                  ======================
+                  p::after {
+                    content: 'Çüéâäů';
+                  }
+              -->
+              <link type="text/css" rel="stylesheet" href="../../resources/css/css_5_without_charset.css" media="embossed"/>
+            </head>
+            <body>
+              <p/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="the non-ASCII characters are misinterpreted" type="compare">
+      <x:document type="inline">
+        <body>
+          <p style="&amp;::after { content: '������'; }"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_04">
+    <x:documentation>
+      Tests UTF-8 encoded SASS style sheet with non-ASCII characters.
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">
@@ -78,10 +151,9 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_03">
+  <x:scenario label="test_05">
     <x:documentation>
-      Tests that a SASS style sheet with non-ASCII characters does not cause a parse error if not on
-      Windows.
+      Tests UTF-8 encoded SASS style sheet with non-ASCII characters within comment.
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">

@@ -56,7 +56,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="output-dir" select="$temp-dir"/>
+      <x:option name="result" select="$temp-dir"/>
     </x:call>
     <x:context label="the output directory">
       <x:document type="directory" base-uri="temp-dir" href="./" recursive="true"/>

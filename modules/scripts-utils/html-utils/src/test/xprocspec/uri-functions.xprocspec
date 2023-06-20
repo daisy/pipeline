@@ -14,7 +14,7 @@
                 <p:input port="stylesheet">
                     <p:inline>
                         <xsl:stylesheet version="2.0" xpath-default-namespace="http://www.w3.org/1999/xhtml">
-                            <xsl:import href="../../main/resources/xml/xslt/uri-functions.xsl"/>
+                            <xsl:import href="../../main/resources/xml/xslt/library.xsl"/>
                             <xsl:template name="main">
                                 <c:result>
                                     <xsl:value-of select="pf:html-base-uri(/*/body)"/>

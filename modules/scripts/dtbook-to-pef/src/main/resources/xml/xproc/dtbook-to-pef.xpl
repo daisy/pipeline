@@ -90,10 +90,10 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
     <p:option name="notes-placement"/>
-    <p:option name="output-dir"/>
-    <p:option name="pef-output-dir"/>
-    <p:option name="preview-output-dir"/>
-    <p:option name="obfl-output-dir"/>
+    <p:option name="result"/>
+    <p:option name="pef"/>
+    <p:option name="preview"/>
+    <p:option name="obfl"/>
     
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <!-- directory used for temporary files -->
@@ -139,10 +139,10 @@ sheet modules) are available for use in Sass style sheets:
                                            include-pef
                                            include-preview
                                            include-obfl
-                                           output-dir
-                                           pef-output-dir
-                                           preview-output-dir
-                                           obfl-output-dir
+                                           result
+                                           pef
+                                           preview
+                                           obfl
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -195,10 +195,10 @@ sheet modules) are available for use in Sass style sheets:
         <p:with-option name="include-preview" select="$include-preview"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
-        <p:with-option name="output-dir" select="$output-dir"/>
-        <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
-        <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
-        <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
+        <p:with-option name="output-dir" select="$result"/>
+        <p:with-option name="pef-output-dir" select="$pef"/>
+        <p:with-option name="preview-output-dir" select="$preview"/>
+        <p:with-option name="obfl-output-dir" select="$obfl"/>
     </px:dtbook-to-pef.store>
     
 </p:declare-step>

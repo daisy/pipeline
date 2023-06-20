@@ -6,8 +6,8 @@
 
     <x:scenario label="test">
         <x:call step="px:html-to-dtbook.script">
-            <x:option name="html" select="resolve-uri('../resources/single-html/C00000.xhtml')"/>
-            <x:option name="output-dir" select="resolve-uri('output/',$temp-dir)"/>
+            <x:option name="source" select="resolve-uri('../resources/single-html/C00000.xhtml')"/>
+            <x:option name="result" select="resolve-uri('output/',$temp-dir)"/>
         </x:call>
         <x:context label="output directory">
             <x:document type="directory" base-uri="temp-dir" href="output" recursive="true"/>

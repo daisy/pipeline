@@ -27,7 +27,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         <p:empty/>
     </p:input>
 
-    <p:option name="html" required="true" px:type="anyFileURI"
+    <p:option name="source" required="true" px:type="anyFileURI"
         px:media-type="application/xhtml+xml text/html" px:sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">HTML document(s)</h2>
@@ -35,7 +35,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB</h2>
             <p px:role="desc">The resulting EPUB 3 publication.</p>
@@ -71,7 +71,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
     </p:import>
 
     <px:normalize-uri name="output-dir-uri">
-        <p:with-option name="href" select="concat($output-dir,'/')"/>
+        <p:with-option name="href" select="concat($result,'/')"/>
     </px:normalize-uri>
     <p:sink/>
 
@@ -80,7 +80,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
             <p:pipe step="output-dir-uri" port="normalized"/>
         </p:variable>
         <p:variable name="epub-file-uri"
-            select="concat($output-dir-uri,if (ends-with($html,'/')) then 'result' else replace($html,'^.*/([^/]*)\.[^/\.]*$','$1'),'.epub')"/>
+            select="concat($output-dir-uri,if (ends-with($source,'/')) then 'result' else replace($source,'^.*/([^/]*)\.[^/\.]*$','$1'),'.epub')"/>
 
         <p:group name="load">
             <p:output port="fileset" primary="true"/>
@@ -91,7 +91,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
                 <p:input port="source.fileset">
                     <p:inline><d:fileset/></p:inline>
                 </p:input>
-                <p:with-option name="href" select="tokenize($html,'\s+')"/>
+                <p:with-option name="href" select="tokenize($source,'\s+')"/>
             </px:fileset-add-entries>
             <px:fileset-join/>
             <px:html-load name="html-load"/>

@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:opf="http://openebook.org/namespaces/oeb-package/1.0/"
                 type="px:daisy3-to-mp3"
                 name="main">
@@ -30,6 +31,21 @@
 			<p>Empty directory dedicated to this step. If set, the directory will be used to store
 			audio files. If not set, the audio files will be stored in temporary directory that is
 			automatically created.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="file-limit" select="[8,20,999,999]">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>An array of integers specifying the maximum number of files within each level of the
+			folder structure, beginning from the top level and ending with the innermost level. The
+			array must be at least one integer long (in which case the output is a flat list of
+			audio files).</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="level-offset" cx:as="xs:integer" select="0">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Offset between folder level and section level.</p>
+			<p>By default (offset 0) top-level folders correspond with level 1 sections.</p>
+			<p>Non-negative integer.</p>
 		</p:documentation>
 	</p:option>
 
@@ -115,6 +131,8 @@
 		<p:with-param port="parameters" name="smils" select="collection()">
 			<p:pipe step="smils" port="result"/>
 		</p:with-param>
+		<p:with-param port="parameters" name="file-limit" select="$file-limit"/>
+		<p:with-param port="parameters" name="level-offset" select="$level-offset"/>
 		<p:with-option name="output-base-uri" select="pf:normalize-uri(concat($output-dir,'/'))"/>
 	</p:xslt>
 	<p:add-xml-base name="mapping"/>

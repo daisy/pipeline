@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml">
 
 	<xsl:param name="smils" as="document-node(element(smil))*" required="yes"/> <!-- in reading order -->
-	<xsl:param name="depth" as="xs:integer" required="no" select="3"/> <!-- positive number (1 means no folders, 2 means 1 level of folders) -->
+	<xsl:param name="file-limit" as="array(xs:integer)" required="no" select="[-1,-1,-1]"/>
+	<xsl:param name="level-offset" as="xs:integer" required="no" select="0"/>
 	<xsl:param name="max-folder-name-length" as="xs:integer" required="no" select="58"/>
 	<xsl:param name="max-file-name-length" as="xs:integer" required="no" select="185"/>
 
@@ -14,6 +16,9 @@
 	<xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
 
+	<xsl:variable name="depth" select="array:size($file-limit)">
+		<!-- depth of folder structure; positive number (1 means no folders, 2 means 1 level of folders) -->
+	</xsl:variable>
 	<xsl:variable name="media-type" select="'audio/mpeg'"/>
 	<xsl:variable name="file-extension" select="'mp3'"/>
 	<xsl:variable name="smil-doc-index-from-base-uri" as="map(xs:string,xs:integer)">
@@ -31,7 +36,7 @@
 			<xsl:iterate select="html:body//*">
 				<xsl:param name="from-smil-doc" as="xs:integer" select="0"/> <!-- index in $smils -->
 				<xsl:param name="from-smil-elem" as="element()?" select="()"/> <!-- par|seq -->
-				<xsl:param name="dest-file" as="xs:integer*" select="for $x in 1 to $depth return 0"/> <!-- (0,0,0,...) -->
+				<xsl:param name="dest-file" as="xs:integer*" select="(1,for $x in 1 to $depth return 0)"/> <!-- (1,0,0,0,...) -->
 				<xsl:param name="label" as="xs:string" select="''"/>
 				<xsl:param name="clips-for-dest-file" as="element(audio)*" select="()"/> <!-- with absolute and normalized @src -->
 				<xsl:on-completion>
@@ -74,8 +79,8 @@
 						                      else $to-smil-elem"/>
 						<xsl:if test="not(exists($to-smil-elem))">
 							<xsl:call-template name="pf:error">
-								<xsl:with-param name="msg">NCC invalid: "href" attribute contains a broken
-								reference: {}</xsl:with-param>
+								<xsl:with-param name="msg">NCC invalid: "href" attribute contains a
+								broken reference: {}</xsl:with-param>
 								<xsl:with-param name="args" select="html:a/@href"/>
 							</xsl:call-template>
 						</xsl:if>
@@ -90,7 +95,7 @@
 								</xsl:call-template>
 							</xsl:if>
 						</xsl:variable>
-						<xsl:variable name="level" as="xs:integer" select="xs:integer(substring-after(local-name(),'h'))"/>
+						<xsl:variable name="level" as="xs:integer" select="xs:integer(substring-after(local-name(),'h')) + $level-offset"/>
 						<xsl:choose>
 							<xsl:when test="$level&lt;=$depth">
 								<xsl:call-template name="add-clips-to-dest-file">
@@ -102,16 +107,38 @@
 										</xsl:call-template>
 									</xsl:with-param>
 								</xsl:call-template>
+								<xsl:variable name="dest-file" as="xs:integer*">
+									<xsl:choose>
+										<xsl:when test="empty($clips-for-dest-file)
+										                and (every $x in $level + 1 to $depth satisfies $dest-file[1 + $x] eq 1)">
+											<xsl:sequence select="$dest-file"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<!-- split levels/volumes that are full -->
+											<xsl:iterate select="reverse(0 to $level)">
+												<xsl:variable name="level" as="xs:integer" select="."/>
+												<xsl:choose>
+													<xsl:when test="$level&gt;0 and
+													                $file-limit[$level]&gt;0 and
+													                $dest-file[1 + $level]=$file-limit[$level]">
+														<xsl:next-iteration/>
+													</xsl:when>
+													<xsl:otherwise>
+														<!-- level is number between 0 and $depth -->
+														<!-- $level=0 means start a new volume -->
+														<xsl:break select="(for $x in 0 to $level - 1 return max((1,$dest-file[1 + $x])),
+														                    $dest-file[1 + $level] + 1,
+														                    for $x in $level + 1 to $depth return 1)"/>
+													</xsl:otherwise>
+												</xsl:choose>
+											</xsl:iterate>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:variable>
 								<xsl:next-iteration>
 									<xsl:with-param name="from-smil-doc" select="$to-smil-doc"/>
 									<xsl:with-param name="from-smil-elem" select="$to-smil-elem"/>
-									<xsl:with-param name="dest-file"
-									                select="if (empty($clips-for-dest-file)
-									                            and (every $x in $level + 1 to $depth satisfies $dest-file[$x] eq 1))
-									                        then $dest-file
-									                        else (for $x in 1 to $level - 1 return $dest-file[$x],
-									                              $dest-file[$level] + 1,
-									                              for $x in $level + 1 to $depth return 1)"/>
+									<xsl:with-param name="dest-file" select="$dest-file"/>
 									<xsl:with-param name="label" select="normalize-space(string(.))"/>
 									<xsl:with-param name="clips-for-dest-file" select="()"/>
 								</xsl:next-iteration>
@@ -201,9 +228,13 @@
 	<xsl:template name="dest-file" as="xs:string">
 		<xsl:param name="index" as="xs:integer*" required="yes"/>
 		<xsl:param name="label" as="xs:string" required="yes"/>
-		<xsl:variable name="folder-index" as="xs:integer*" select="$index[position()&lt;last()]"/>
+		<xsl:variable name="volume" as="xs:integer" select="$index[1]"/>
+		<xsl:variable name="folder-index" as="xs:integer*" select="$index[position()&gt;1 and position()&lt;last()]"/>
 		<xsl:variable name="file-index" as="xs:integer" select="$index[last()]"/>
 		<xsl:sequence select="concat(
+		                        'volume%20',
+		                        $volume,
+		                        '/',
 		                        string-join(for $x in $folder-index return
 		                                      substring(
 		                                        format-number($x,'000'),

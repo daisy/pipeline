@@ -33,7 +33,7 @@
 		<!-- defined in ../../../../../../scripts/common-options.xpl -->
 	</p:option>
 
-	<p:option name="output-dir" px:output="result" px:type="anyDirURI" required="true">
+	<p:option name="result" px:output="result" px:type="anyDirURI" required="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Output DAISY 3</h2>
 			<p px:role="desc">The upgraded DAISY 3.</p>
@@ -76,7 +76,7 @@
 		<p:input port="source.in-memory">
 			<p:pipe step="load" port="result.in-memory"/>
 		</p:input>
-		<p:with-option name="output-dir" select="$output-dir"/>
+		<p:with-option name="output-dir" select="$result"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:with-option name="ensure-core-media" xmlns:_="daisy3" select="$_:ensure-core-media='true'"/>
 	</px:daisy3-upgrader>

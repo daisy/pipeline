@@ -101,15 +101,18 @@ public class LiblouisTranslatorJnaImplTest {
 		);
 		Translator liblouisTranslator = new Translator(table.getAbsolutePath());
 		LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl stream
-		= new LiblouisTranslatorImpl.LineBreaker.BrailleStreamImpl(
-			liblouisTranslator,
-			StandardDisplayTables.DEFAULT,
-			null,
-			hyphenator,
-			null,
-			null,
-			styledText("volleyballederen volleyballederen", "hyphens:auto"),
-			0, -1);
+			= new LiblouisTranslatorImpl(
+				new LiblouisTableJnaImplProvider().new LiblouisTableJnaImpl(
+					liblouisTranslator,
+					liblouisTranslator.asDisplayTable(),
+					null),
+				new AbstractHyphenator() {
+					public LineBreaker asLineBreaker() throws UnsupportedOperationException {
+						return hyphenator; }},
+				LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL
+			).new LineBreaker(
+				null
+			).new BrailleStreamImpl(styledText("volleyballederen volleyballederen", "hyphens:auto"), 0, -1);
 		assertEquals("volleyballederen ", stream.next(26, false, true));
 		assertEquals("volleyballederen", stream.next(26, false, true));
 		assertFalse(stream.hasNext());

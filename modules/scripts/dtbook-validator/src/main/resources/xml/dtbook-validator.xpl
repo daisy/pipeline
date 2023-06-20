@@ -50,14 +50,14 @@
 
     <!-- we are using a string option instead of an XML input source because
         the wellformedness of the document cannot be taken for granted -->
-    <p:option name="input-dtbook" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
+    <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/x-dtbook+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">DTBook</h2>
             <p px:role="desc">The input DTBook document.</p>
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="false" px:output="result" px:type="anyDirURI" select="''">
+    <p:option name="result" required="false" px:output="result" px:type="anyDirURI" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Validation report in XML and HTML</h2>
             <p px:role="desc" xml:space="preserve">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
@@ -101,8 +101,8 @@
         </p:documentation>
     </p:import>
     
-    <px:fileset-add-entry media-type="application/x-dtbook+xml" px:message="DTBook validator: {$input-dtbook}">
-        <p:with-option name="href" select="$input-dtbook"/>
+    <px:fileset-add-entry media-type="application/x-dtbook+xml" px:message="DTBook validator: {$source}">
+        <p:with-option name="href" select="$source"/>
         <p:input port="source.fileset">
             <p:inline>
                 <d:fileset/>
@@ -123,7 +123,7 @@
         <p:input port="html-report">
             <p:pipe step="validate-dtbook" port="html-report"/>
         </p:input>
-        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="output-dir" select="$result"/>
     </pxi:dtbook-validator.store>
     
 </p:declare-step>

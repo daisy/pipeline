@@ -9,7 +9,7 @@
 			<x:input port="source.fileset">
 				<x:document type="inline" xml:base="../resources/dontworrybehappy/">
 					<d:fileset>
-						<d:file href="ncc.html" media-type="application/xhtml+xml" media-version="4.0" original-href="ncc.html"/>
+						<d:file href="ncc.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8" original-href="ncc.html"/>
 						<d:file href="speechgen0001.smil" media-type="application/smil+xml"/>
 						<d:file href="speechgen0002.smil" media-type="application/smil+xml" original-href="speechgen0002.smil"/>
 						<d:file href="speechgen0003.smil" media-type="application/smil+xml" original-href="speechgen0003.smil"/>
@@ -137,7 +137,7 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml" media-version="4.0"/>
+					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0001.smil" media-type="application/smil+xml"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0002.smil" media-type="application/smil+xml"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0003.smil" media-type="application/smil+xml"/>

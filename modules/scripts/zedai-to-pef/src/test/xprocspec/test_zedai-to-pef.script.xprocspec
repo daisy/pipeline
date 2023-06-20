@@ -10,9 +10,9 @@
         <x:document type="file" href="../resources/alice.xml"/>
       </x:input>
       <x:option name="include-preview" select="'true'"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'alice/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'alice/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'alice/temp-dir/')"/>
     </x:call>
     <x:context label="the output directory contents">
@@ -41,9 +41,9 @@
         </x:document>
       </x:input>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-      <x:option name="output-dir" select="''"/>
+      <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
-      <x:option name="pef-output-dir" select="concat($temp-dir,'reset/output-dir/')"/>
+      <x:option name="pef" select="concat($temp-dir,'reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'reset/temp-dir/')"/>
     </x:call>
     <x:context label="pef">

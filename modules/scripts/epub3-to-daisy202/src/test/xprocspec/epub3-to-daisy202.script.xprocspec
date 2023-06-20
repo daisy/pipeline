@@ -7,8 +7,8 @@
     
     <x:scenario label="moby-dick">
         <x:call step="px:epub3-to-daisy202.script">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.epub')"/>
-            <x:option name="output-dir" select="resolve-uri('moby-dick/output-dir/',$temp-dir)"/>
+            <x:option name="source" select="resolve-uri('moby-dick-mo-20120214.small.epub')"/>
+            <x:option name="result" select="resolve-uri('moby-dick/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the output directory">
@@ -51,9 +51,9 @@
             Regression test for https://github.com/daisy/pipeline/issues/529
         </x:documentation>
         <x:call step="px:epub3-to-daisy202.script">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.2/mimetype')"/>
+            <x:option name="source" select="resolve-uri('moby-dick-mo-20120214.small.2/mimetype')"/>
             <x:option name="validation" select="'report'"/>
-            <x:option name="output-dir" select="resolve-uri('issue-529/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('issue-529/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('issue-529/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the validation-status port">
@@ -101,12 +101,12 @@
     
     <x:scenario label="validation">
         <x:call step="px:epub3-to-daisy202.script">
-            <x:option name="epub" select="resolve-uri('moby-dick-mo-20120214.small.invalid/mimetype')"/>
+            <x:option name="source" select="resolve-uri('moby-dick-mo-20120214.small.invalid/mimetype')"/>
         </x:call>
         <x:scenario label="validation = off">
             <x:call>
                 <x:option name="validation" select="'off'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/off/output-dir/',$temp-dir)"/>
+                <x:option name="result" select="resolve-uri('validation/off/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('validation/off/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the validation-status port">
@@ -125,7 +125,7 @@
         <x:scenario label="validation = report">
             <x:call>
                 <x:option name="validation" select="'report'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/report/output-dir/',$temp-dir)"/>
+                <x:option name="result" select="resolve-uri('validation/report/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('validation/report/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the validation-status port">
@@ -144,7 +144,7 @@
         <x:scenario label="validation = abort">
             <x:call>
                 <x:option name="validation" select="'abort'"/>
-                <x:option name="output-dir" select="resolve-uri('validation/abort/output-dir/',$temp-dir)"/>
+                <x:option name="result" select="resolve-uri('validation/abort/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('validation/abort/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the validation-status port">

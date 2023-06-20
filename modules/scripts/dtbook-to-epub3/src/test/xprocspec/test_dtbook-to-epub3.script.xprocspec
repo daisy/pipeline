@@ -13,7 +13,7 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
-            <x:option name="output-dir" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
@@ -80,7 +80,7 @@
         <x:scenario label="abort (default)">
             <x:call>
                 <x:option name="validation" select="'abort'"/>
-                <x:option name="output-dir" select="resolve-uri('validation-abort/output-dir/',$temp-dir)"/>
+                <x:option name="result" select="resolve-uri('validation-abort/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('validation-abort/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the status">
@@ -100,7 +100,7 @@
         <x:scenario label="report">
             <x:call>
                 <x:option name="validation" select="'report'"/>
-                <x:option name="output-dir" select="resolve-uri('validation-report/output-dir/',$temp-dir)"/>
+                <x:option name="result" select="resolve-uri('validation-report/output-dir/',$temp-dir)"/>
                 <x:option name="temp-dir" select="resolve-uri('validation-report/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the status">
@@ -147,7 +147,7 @@
                 </x:document>
             </x:input>
             <x:option name="validation" select="'report'"/>
-            <x:option name="output-dir" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('issue-94/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
@@ -176,7 +176,7 @@
                 <x:document type="file" href="../resources/dtbook110.xml"/>
             </x:input>
             <x:option name="validation" select="'abort'"/>
-            <x:option name="output-dir" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('dtbook110/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
@@ -232,7 +232,7 @@
                     </dtbook>
                 </x:document>
             </x:input>
-            <x:option name="output-dir" select="resolve-uri('dir-attribute/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('dir-attribute/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dir-attribute/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
@@ -274,7 +274,7 @@
             </x:input>
             <x:option name="audio" select="true()"/>
             <x:option name="audio-file-type" select="'audio/x-wav'"/>
-            <x:option name="output-dir" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
+            <x:option name="result" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">

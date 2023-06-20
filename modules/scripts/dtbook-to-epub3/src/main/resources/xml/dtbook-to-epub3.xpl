@@ -38,7 +38,7 @@
         </p:documentation>
     </p:option>
 
-    <p:option name="output-dir" required="true" px:output="result" px:type="anyDirURI">
+    <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB</h2>
             <p px:role="desc">The resulting EPUB 3 publication.</p>
@@ -166,7 +166,7 @@
 	    <p:pipe step="convert" port="tts-log"/>
 	  </p:output>
 	  <p:variable name="output-name" select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')"/>
-	  <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($output-dir,'/'))"/>
+	  <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($result,'/'))"/>
 	  <p:variable name="epub-file-uri" select="concat($output-dir-uri,$output-name,'.epub')"/>
 	  <p:sink/>
 

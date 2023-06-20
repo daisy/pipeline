@@ -1,7 +1,9 @@
 package org.daisy.pipeline.css;
 
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.net.URL;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -20,6 +22,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.URIResolver;
 
 import com.google.common.collect.Iterables;
+import com.google.common.io.CharStreams;
 
 import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.CSSFactory;
@@ -51,8 +54,6 @@ import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.StyleMap;
 import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.om.NodeInfo;
-
-import org.apache.commons.io.input.BOMInputStream;
 
 import org.daisy.common.file.URLs;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
@@ -113,24 +114,28 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		this.xsltProcessor = xsltProcessor;
 		NetworkProcessor network = new DefaultNetworkProcessor() {
 				@Override
-				public InputStream fetch(URL url) throws IOException {
-					InputStream is;
+				public Reader fetch(URL url, Charset encoding, boolean forceEncoding, boolean assertEncoding) throws IOException {
 					logger.debug("Fetching style sheet: " + url);
 					Source resolved; {
 						try {
 							resolved = uriResolver.resolve(URLs.asURI(url).toASCIIString(), ""); }
 						catch (javax.xml.transform.TransformerException e) {
 							throw new IOException(e); }}
-					if (resolved != null && resolved instanceof StreamSource)
-						is = ((StreamSource)resolved).getInputStream();
-					else {
+					if (resolved != null && resolved instanceof StreamSource) {
+						InputStreamReader r = detectEncodingAndSkipBOM(
+							((StreamSource)resolved).getInputStream(), null, encoding, forceEncoding);
+						if (assertEncoding) {
+							if (encoding == null)
+								throw new IllegalArgumentException("encoding must not be null");
+							if (!encoding.equals(getEncoding(r)))
+								throw new IOException("Failed to read URL as " + encoding + ": " + url);
+						}
+						return r;
+					} else {
 						if (resolved != null)
 							url = new URL(resolved.getSystemId());
-						is = super.fetch(url);
+						return super.fetch(url, encoding, forceEncoding, assertEncoding);
 					}
-					// skip BOM
-					is = new BOMInputStream(is);
-					return is;
 				}
 			};
 		/*
@@ -161,51 +166,68 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							throw new IOException(e);
 						}
 					}
-					CSSInputStream stream = super.read(source);
+					CSSInputStream cssStream = super.read(source);
 					if (!("text/css".equals(source.mediaType)
 					      || source.mediaType == null && (source.type != CSSSource.SourceType.URL
 					                                      || ((URL)source.source).toString().endsWith(".css")))) {
 						// preProcessor must be non-null
 						try {
-							CssPreProcessor.PreProcessingResult result
-								= preProcessor.compile(stream.stream, stream.base, stream.encoding);
+							CssPreProcessor.PreProcessingResult result = preProcessor.compile(
+								new CssPreProcessor.PreProcessingSource(cssStream.stream, URLs.asURI(cssStream.base)) {
+									@Override
+									public Reader reread(Charset encoding) throws IOException {
+										Reader r = cssStream.reread(encoding);
+										stream.close();
+										return r;
+									}
+								}
+							);
 							SourceMap sourceMap; {
 								if (result.sourceMap != null) {
 									SourceMap m = SourceMapReader.read(result.sourceMap, result.base);
-									if (stream.sourceMap != null) {
+									if (cssStream.sourceMap != null) {
 										sourceMap = new SourceMap() {
 											public SourceLocator get(int line, int column) {
 												SourceLocator loc = m.get(line, column);
-												if (loc != null && loc.getURL().equals(stream.base))
-													loc = stream.sourceMap.get(loc.getLineNumber(), loc.getColumnNumber());
+												if (loc != null && loc.getURL().equals(cssStream.base))
+													loc = cssStream.sourceMap.get(loc.getLineNumber(), loc.getColumnNumber());
 												return loc;
 											}
 											public SourceLocator floor(int line, int column) {
 												SourceLocator loc = m.floor(line, column);
-												if (loc != null && loc.getURL().equals(stream.base))
-													loc = stream.sourceMap.floor(loc.getLineNumber(), loc.getColumnNumber());
+												if (loc != null && loc.getURL().equals(cssStream.base))
+													loc = cssStream.sourceMap.floor(loc.getLineNumber(), loc.getColumnNumber());
 												return loc;
 											}
 											public SourceLocator ceiling(int line, int column) {
 												SourceLocator loc = m.ceiling(line, column);
-												if (loc != null && loc.getURL().equals(stream.base))
-													loc = stream.sourceMap.ceiling(loc.getLineNumber(), loc.getColumnNumber());
+												if (loc != null && loc.getURL().equals(cssStream.base))
+													loc = cssStream.sourceMap.ceiling(loc.getLineNumber(), loc.getColumnNumber());
 												return loc;
 											}
 										};
 									} else
 										sourceMap = m;
 								} else
-									sourceMap = stream.sourceMap;
+									sourceMap = cssStream.sourceMap;
 							}
-							return new CSSInputStream(result.stream, stream.encoding, stream.base, sourceMap);
+							String resultString = CharStreams.toString(result.stream);
+							return new CSSInputStream(new StringReader(resultString), cssStream.base, sourceMap) {
+								@Override
+								public Reader reread(Charset encoding) throws IOException {
+									// assuming that the preprocessor has already handled @charset rules
+									// simply return the remainder of the stream
+									result.stream.close();
+									return new StringReader(resultString);
+								}
+							};
 						} catch (RuntimeException e) {
 							throw new IOException(
 								(source.mediaType != null ? (source.mediaType + " p") : "P")
 								+ "re-processing failed: " + e.getMessage(), e);
 						}
 					} else
-						return stream;
+						return cssStream;
 				}
 			};
 	}
@@ -274,7 +296,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 			synchronized(JStyleParserCssCascader.class) {
 				// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 				CSSFactory.registerCSSParserFactory(parserFactory);
-				styleSheet = CSSFactory.getUsedStyles(document, null, nodeLocator, medium, cssReader, styleSheet);
+				styleSheet = CSSFactory.getUsedStyles(document, nodeLocator, medium, cssReader, styleSheet);
 			}
 
 			// FIXME: use a dedicated parser to parse @xslt rules (and ignore all the rest)
@@ -323,7 +345,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 										// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 										CSSFactory.registerCSSParserFactory(parserFactory);
 										// not using element.getOwnerDocument() because base URI is null/empty in some cases
-										s = CSSFactory.getUsedStyles(doc, null, nodeLocator, medium, cssReader, s);
+										s = CSSFactory.getUsedStyles(doc, nodeLocator, medium, cssReader, s);
 									}
 									style = new Analyzer(s, declarationTransformer, supportedCSS)
 									            .evaluateDOM(doc, medium, true); }
@@ -370,7 +392,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 											while (!match) {
 												while (preceding != null && !(preceding instanceof Element))
 													preceding = preceding.getPreviousSibling();
-												if (preceding != null)
+												if (preceding == null)
 													break;
 												match = s.matches((Element)preceding);
 												preceding = preceding.getPreviousSibling(); }}
@@ -414,7 +436,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				synchronized(JStyleParserCssCascader.class) {
 					// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 					CSSFactory.registerCSSParserFactory(parserFactory);
-					styleSheet = CSSFactory.getUsedStyles(document, null, nodeLocator, medium, cssReader, styleSheet);
+					styleSheet = CSSFactory.getUsedStyles(document, nodeLocator, medium, cssReader, styleSheet);
 				}
 			}
 			styleMap = new Analyzer(styleSheet, declarationTransformer, supportedCSS).evaluateDOM(document, medium, false);

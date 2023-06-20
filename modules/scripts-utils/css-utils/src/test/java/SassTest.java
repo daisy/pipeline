@@ -1,7 +1,9 @@
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -27,6 +29,7 @@ import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.css.CssPreProcessor.PreProcessingResult;
+import org.daisy.pipeline.css.CssPreProcessor.PreProcessingSource;
 import org.daisy.pipeline.css.SourceMapReader;
 import org.daisy.pipeline.css.sass.SassCompiler;
 
@@ -54,7 +57,9 @@ public class SassTest {
 	public void testSourceMap() throws Exception {
 		SassCompiler compiler = new SassCompiler(null, null);
 		File scssFile = getTestResource("nested_properties.scss");
-		PreProcessingResult sassCompilationResult = compiler.compile(new FileInputStream(scssFile), URLs.asURL(scssFile), null);
+		PreProcessingResult sassCompilationResult = compiler.compile(
+			new PreProcessingSource(new InputStreamReader(new FileInputStream(scssFile), StandardCharsets.UTF_8),
+			                        URLs.asURI(scssFile)));
 		Assert.assertEquals(";AAAA,AAAA,IAAI,CAAC;EAEG,UAAG,EAAE,EAAE;EACP,aAAM,EAAE,EAAE;CAEjB",
 		                    Json.read(sassCompilationResult.sourceMap).at("mappings").asString());
 		SourceMap sourceMap = SourceMapReader.read(sassCompilationResult.sourceMap, sassCompilationResult.base);
@@ -65,7 +70,6 @@ public class SassTest {
 		assertLineAndColumnEquals(3, 16, sourceMap.floor(3, 17)); // ⠒
 		CSSInputStream cssStream = CSSInputStream.newInstance(
 			sassCompilationResult.stream,
-			null,
 			URLs.asURL(sassCompilationResult.base),
 			sourceMap);
 		CSSLexer lexer = new CSSLexer(cssStream);
@@ -92,9 +96,17 @@ public class SassTest {
 		File scssFile = getTestResource(scssPath);
 		File expectedCssFile = getTestResource(expectedCssPath);
 		SassCompiler compiler = new SassCompiler(null, null);
-		InputStream css = compiler.compile(new FileInputStream(scssFile), URLs.asURL(scssFile), null).stream;
+		Reader css = compiler.compile(
+			new PreProcessingSource(new InputStreamReader(new FileInputStream(scssFile), StandardCharsets.UTF_8),
+			                        URLs.asURI(scssFile)) {
+				@Override
+				public Reader reread(Charset encoding) throws IOException {
+					stream.close();
+					return new InputStreamReader(new FileInputStream(scssFile), encoding);
+				}
+			}).stream;
 		Assert.assertEquals(new String(Files.readAllBytes(expectedCssFile.toPath()), StandardCharsets.UTF_8),
-		                    CharStreams.toString(new InputStreamReader(css)));
+		                    CharStreams.toString(css));
 	}
 	
 	private static File getTestResource(String path) {

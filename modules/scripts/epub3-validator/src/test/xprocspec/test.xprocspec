@@ -10,7 +10,7 @@
             <!--
                 reusing test data from epub-utils
             -->
-            <x:option name="epub"
+            <x:option name="source"
                       select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214.OK.epub')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick',$temp-dir)"/>
             <x:option name="accessibility-check" select="'true'"/>
@@ -40,7 +40,7 @@
             <!--
                 reusing test data from epub-utils
             -->
-            <x:option name="epub"
+            <x:option name="source"
                       select="resolve-uri('../../../../../scripts-utils/epub-utils/src/test/resources/moby-dick-mo-20120214/OPS/package.opf')"/>
             <x:option name="temp-dir" select="resolve-uri('moby-dick-unzipped',$temp-dir)"/>
         </x:call>

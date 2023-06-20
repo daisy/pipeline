@@ -95,7 +95,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		private final DisplayTable displayTable;
 		private final TableInfo info;
 		
-		private LiblouisTableJnaImpl(Translator translator, DisplayTable displayTable, TableInfo info) {
+		LiblouisTableJnaImpl(Translator translator, DisplayTable displayTable, TableInfo info) {
 			super(translator.getTable());
 			this.translator = translator;
 			this.displayTable = displayTable;
