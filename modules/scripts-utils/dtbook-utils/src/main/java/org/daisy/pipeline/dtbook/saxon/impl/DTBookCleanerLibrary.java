@@ -1,18 +1,18 @@
-package org.daisy.pipeline.modules.dtbook_utils.impl;
+package org.daisy.pipeline.dtbook.saxon.impl;
 
 import java.util.Locale;
 import java.util.Date;
 import java.text.SimpleDateFormat;
+
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
 import org.osgi.service.component.annotations.Component;
 
-
 public class DTBookCleanerLibrary {
 
     @Component(
-            name = "DTBookCleanerLibrary",
-            service = { ExtensionFunctionProvider.class }
+        name = "DTBookCleanerLibrary",
+        service = { ExtensionFunctionProvider.class }
     )
     public static class Provider extends ReflexiveExtensionFunctionProvider {
         public Provider() {
@@ -20,13 +20,11 @@ public class DTBookCleanerLibrary {
         }
     }
 
-    public String getDefaultLocale(){
+    public static String getDefaultLocale() {
         return Locale.getDefault().toString().replace('_', '-');
     }
 
-    public String getDate(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        return sdf.format(new Date());
+    public static String getDate() {
+        return new SimpleDateFormat("yyyy-MM-dd").format(new Date());
     }
-
 }

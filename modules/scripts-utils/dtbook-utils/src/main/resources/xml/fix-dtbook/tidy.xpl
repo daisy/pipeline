@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                type="px:dtbook-tidy" name="main">
+                type="pxi:dtbook-tidy" name="main">
 
     <p:input port="source" px:media-type="application/x-dtbook+xml" sequence="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -16,25 +17,24 @@
         </p:documentation>
     </p:output>
 
-    <p:option name="simplifyHeadingLayout" required="false" select="false()">
+    <p:option name="simplifyHeadingLayout" select="false()" cx:as="xs:boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Simplify headings layout</h2>
-            <p px:role="desc">TBD</p>
+            <h2>Simplify headings layout</h2>
+            <p>TBD</p>
         </p:documentation>
     </p:option>
-    <p:option name="externalizeWhitespace" required="false" select="false()">
+    <p:option name="externalizeWhitespace" select="false()" cx:as="xs:boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Externalize whitespaces</h2>
-            <p px:role="desc">TBD</p>
+            <h2>Externalize whitespaces</h2>
+            <p>TBD</p>
         </p:documentation>
     </p:option>
-    <p:option name="documentLanguage" required="false" select="''">
+    <p:option name="documentLanguage" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Document language</h2>
-            <p px:role="desc">TBD</p>
+            <h2>Document language</h2>
+            <p>TBD</p>
         </p:documentation>
     </p:option>
-
 
     <p:xslt name="tidy-remove-empty-elements" px:message="tidy-remove-empty-elements">
         <p:input port="stylesheet"><p:document href="xsl/tidy-remove-empty-elements.xsl"/></p:input>
@@ -47,7 +47,9 @@
                 <p:input port="parameters"><p:empty/></p:input>
             </p:xslt>
         </p:when>
-        <p:otherwise><p:identity /></p:otherwise>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
     </p:choose>
     <p:xslt name="tidy-move-pagenum" px:message="tidy-move-pagenum">
         <p:input port="stylesheet"><p:document href="xsl/tidy-move-pagenum.xsl"/></p:input>
@@ -76,7 +78,9 @@
                 <p:input port="parameters"><p:empty/></p:input>
             </p:xslt>
         </p:when>
-        <p:otherwise><p:identity /></p:otherwise>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
     </p:choose>
     <p:xslt name="tidy-indent" px:message="tidy-indent">
         <p:input port="stylesheet"><p:document href="xsl/tidy-indent.xsl"/></p:input>

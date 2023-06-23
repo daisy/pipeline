@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                type="px:dtbook-narrator" name="main">
+                type="pxi:dtbook-narrator">
 
     <p:input port="source" px:media-type="application/x-dtbook+xml" sequence="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -15,11 +16,10 @@
             <p>The result DTBook document</p>
         </p:documentation>
     </p:output>
-
-    <p:option name="publisher" required="false" select="''" >
+    <p:option name="publisher" select="''" >
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Publisher</h2>
-            <p px:role="desc">Publisher to be added as dc:Publisher in the dtbook</p>
+            <h2>Publisher</h2>
+            <p>Publisher to be added as dc:Publisher in the dtbook</p>
         </p:documentation>
     </p:option>
 

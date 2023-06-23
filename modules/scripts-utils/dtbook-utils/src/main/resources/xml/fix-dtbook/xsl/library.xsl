@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet
-		xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
-		xmlns:xs="http://www.w3.org/2001/XMLSchema"
-		xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-		xmlns:Library="org.daisy.pipeline.modules.dtbook_utils.impl.DTBookCleanerLibrary"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:Library="org.daisy.pipeline.dtbook.saxon.impl.DTBookCleanerLibrary"
                 exclude-result-prefixes="#all">
-
-    <xsl:variable name="_lib_" select="Library:new()" />
 
     <!-- Get the default locale from the JVM -->
     <xsl:function name="pf:default-locale" as="xs:string">
-        <xsl:value-of select="Library:getDefaultLocale($_lib_)">
+        <xsl:value-of select="Library:getDefaultLocale()">
             <!--
-                Implemented in java/org/daisy/pipeline/modules/dtbook_cleaner/impl/Pipeline1LibraryDefinition.java
+                Implemented in ../../../../java/org/daisy/pipeline/dtbook/saxon/impl/DTBookCleanerLibrary.java
             -->
         </xsl:value-of>
     </xsl:function>
-
 
     <!-- content serialization
        < et > are replaced respectively by ￼ et � for tags and ease unserialization

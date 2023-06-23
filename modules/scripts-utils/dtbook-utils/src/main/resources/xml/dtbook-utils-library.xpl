@@ -23,8 +23,5 @@
     <p:import href="validate-dtbook/validate-dtbook.xpl"/>
     <p:import href="dtbook-to-mods-meta.xpl"/>
     <p:import href="dtbook-update-links.xpl"/>
-
-    <p:import href="fix-dtbook/fix-dtbook.xpl"/>
-    <p:import href="fix-dtbook/doctyping.xpl"/>
     
 </p:library>

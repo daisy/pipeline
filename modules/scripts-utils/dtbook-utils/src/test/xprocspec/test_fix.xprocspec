@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-               script="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               script="../../main/resources/xml/fix-dtbook/fix-dtbook.xpl">
 
     <x:scenario label="Tidy, repair and narrator execution test">
-        <x:call step="px:dtbook-fix">
+        <x:call step="pxi:dtbook-fix">
             <x:input port="source">
                 <x:document type="inline">
                     <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
@@ -40,7 +40,7 @@
                     <head>
                         <meta name="dc:Publisher" content="DAISY Consortium"/>
                         <meta name="dc:Language" content="fr-FR"/>
-                        <meta name="dtb:uid" content="AUTO-UID-d990e3"/>
+                        <meta name="dtb:uid" content="AUTO-UID-d518e3"/> <!-- FIXME: brittle -->
                         <meta name="dc:Date" content="2023-06-08+02:00"/>
                         <title>Title</title>
                         <meta name="dc:Title" content="Title"/>
