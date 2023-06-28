@@ -102,6 +102,12 @@
         </p:documentation>
     </p:option>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
+        <p:documentation>
+            px:dtbook-break-detect
+            px:dtbook-unwrap-words
+        </p:documentation>
+    </p:import>
     <p:import href="../upgrade-dtbook/upgrade-dtbook.xpl">
         <p:documentation>
             px:dtbook-upgrade
@@ -133,6 +139,17 @@
             <p:with-option name="narrator" select="$narrator='true'"/>
             <p:with-option name="publisher" select="$publisher='true'"/>
         </pxi:dtbook-fix>
+
+        <p:choose>
+            <p:when test="$ApplySentenceDetection='true'">
+                <px:dtbook-break-detect/>
+                <px:dtbook-unwrap-words/>
+            </p:when>
+            <p:otherwise>
+                <p:identity/>
+            </p:otherwise>
+        </p:choose>
+
         <!--
             FIXME: this should be handled with px:fileset-store
         -->
