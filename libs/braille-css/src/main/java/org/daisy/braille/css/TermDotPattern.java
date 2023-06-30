@@ -23,11 +23,6 @@ public class TermDotPattern extends TermImpl<Character> {
 	public static TermDotPattern createDotPattern(TermIdent ident) {
 		TermDotPattern pattern = new TermDotPattern();
 		String value = ident.getValue();
-		try {
-			// Mac OS: re-encode String
-			value = new String(value.getBytes(), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-		}
 		if (value.length() != 1) {
 			throw new IllegalArgumentException(
 					"Invalid value for TermDotPattern(" + value + ")");
