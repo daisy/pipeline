@@ -54,8 +54,8 @@
 </td>
 <td>
 <p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The validation report</p>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The port is empty if the <code>validation</code> option is 'off' or if the input is a
-			valid EPUB.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The port is empty if the <code>validation</code> option is set to 'false' or if the
+			input is a valid EPUB.</p>
 </td>
 </tr>
 <tr>
@@ -65,8 +65,7 @@
 <td>
 <p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The <a href="/pipeline/StatusXML">validation
 			status</a> document</p>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'ok' if the <code>validation</code> option not 'abort' or if the input is a valid
-			EPUB, 'error' otherwise.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'ok' if the input is a valid EPUB, 'error' otherwise.</p>
 </td>
 </tr>
 </tbody>
@@ -115,18 +114,8 @@
 <span class="">validation</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'off'</td>
-<td>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to perform validation of the input:</p>
-<dl xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
-				<dt>off</dt>
-				<dd>No validation</dd>
-				<dt>report</dt>
-				<dd>Report validation issues</dd>
-				<dt>abort</dt>
-				<dd>Abort on validation issues</dd>
-			</dl>
-</td>
+<td width="10px" class="nowrap code">false()</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether to perform validation of the input.</p></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

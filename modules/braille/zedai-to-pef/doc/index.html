@@ -985,6 +985,19 @@ The intermediary PEF file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-desc">
+Whether or not to include a HTML preview of the braille result.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Transformer features</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">Features of the braille transformer.
@@ -1018,13 +1031,13 @@ value
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Output file format</div>
+<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">The file format in which to store the braille result.
+<div class="shortdesc">The ASCII braille table used to render the HTML preview.
 </div>
-<div class="longdesc">The file format in which to store the braille result.
+<div class="longdesc">The ASCII braille table used to render the HTML preview.
 
-<p>If left blank, the braille will be stored in PEF format.</p>
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
@@ -1058,6 +1071,37 @@ Whether or not to keep the intermediary PEF file (for debugging).
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Output file format</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The file format in which to store the braille result.
+</div>
+<div class="longdesc">The file format in which to store the braille result.
+
+<p>If left blank, the braille will be stored in PEF format.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1098,59 +1142,10 @@ manual</a>.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Zero or more of the following:<dl class="choice">
-<dt><var>&lt;anyFileURI&gt;</var></dt>
-<dd>File path relative to input ZedAI.</dd>
-<dt><var>&lt;anyURI&gt;</var></dt>
-<dd>Any other absolute URI</dd>
-</dl>
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The ASCII braille table used to render the HTML preview.
-</div>
-<div class="longdesc">The ASCII braille table used to render the HTML preview.
-
-<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Include preview</div>
-<div class="synopsis-option-desc">
-Whether or not to include a HTML preview of the braille result.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1202,28 +1197,28 @@ Options:</pre>
 <td>The ZedAI you want to convert to braille.</td>
 </tr>
 <tr>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
 <td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
 <td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
-</tr>
-<tr>
-<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
-<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
-<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
 <td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
-<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--include-pef [<span style="text-transform: uppercase">include-pef</span>]</td>
+<td>Include PEF (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
+<td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -109,13 +109,15 @@
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="required">new-audio-dir</span><span class="details"> required</span>
+<span class="">new-audio-dir</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code"></td>
+<td width="10px" class="nowrap code">''</td>
 <td>
 <p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">URI of the folder within the output fileset that should contain the transcoded audio
 			files.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">If not specified or empty, will use the deepest common directory that contains all
+			the matched files.</p>
 <p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The actual files will be stored in a temporary location.</p>
 </td>
 </tr>

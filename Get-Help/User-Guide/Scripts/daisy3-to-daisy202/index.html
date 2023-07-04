@@ -906,6 +906,36 @@ The package file of the input DAISY 3 DTB.
 <div class="synopsis-output-desc">
 The produced DAISY 2.02 DTB.
 </div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
+</ul>
+
+  <h3 id="options">Options</h3>
+
+  <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Ensure core media</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Ensure that the output DAISY 2.02 uses allowed file formats only.
+</div>
+<div class="longdesc">Ensure that the output DAISY 2.02 uses allowed file formats only.
+
+<p><a href="https://www.daisy.org/z3986/specifications/daisy_202.html#audioformats" class="external-link" target="_blank">Allowed formats</a> for audio
+files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
 </li>
 </ul>
 
@@ -954,6 +984,10 @@ Options:</pre>
 <td>--source <span style="text-transform: uppercase">source</span>
 </td>
 <td>The package file of the input DAISY 3 DTB.</td>
+</tr>
+<tr>
+<td>--_:ensure-core-media [<span style="text-transform: uppercase">_:ensure-core-media</span>]</td>
+<td>Ensure core media (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

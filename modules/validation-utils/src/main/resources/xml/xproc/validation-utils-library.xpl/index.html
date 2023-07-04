@@ -11,12 +11,18 @@
 <body><div class="code" about="../validation-utils-library.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
 
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Validation Utilities Library&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
-        &lt;<span class="code-xml-element-local-name">div</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"author maintainer"</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Romain Deltour&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-            &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"contact"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mailto:rdeltour@gmail.com"</span>&gt;rdeltour@gmail.com&lt;/<span class="code-xml-element-local-name">a</span>&gt;
-            &lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"organization"</span>&gt;DAISY Consortium&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-        &lt;/<span class="code-xml-element-local-name">div</span>&gt;
+        &lt;<span class="code-xml-element-local-name">h1</span>&gt;Validation Utilities Library&lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+        &lt;<span class="code-xml-element-local-name">address</span>&gt;
+            Authors:
+            &lt;<span class="code-xml-element-local-name">dl</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"author"</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dt</span>&gt;Name:&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dd</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Romain Deltour&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dt</span>&gt;E-mail:&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dd</span>&gt;&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"contact"</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"mailto:rdeltour@gmail.com"</span>&gt;rdeltour@gmail.com&lt;/<span class="code-xml-element-local-name">a</span>&gt;&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dt</span>&gt;Organization:&lt;/<span class="code-xml-element-local-name">dt</span>&gt;
+                &lt;<span class="code-xml-element-local-name">dd</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"organization"</span>&gt;DAISY Consortium&lt;/<span class="code-xml-element-local-name">dd</span>&gt;
+            &lt;/<span class="code-xml-element-local-name">dl</span>&gt;
+        &lt;/<span class="code-xml-element-local-name">address</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/validation-utils/src/main/resources/xml/xproc/combine-validation-reports.xpl" class="source">combine-validation-reports.xpl</a>"</span>&gt;
@@ -47,13 +53,11 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Performs RELAX NG validation, returning two results: the source document (validated, if validation succeeds) and a report of the validation errors (if any).&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/validation-utils/src/main/resources/xml/xproc/validate-with-relax-ng-and-report.xpl" class="source">validate-with-relax-ng-and-report.xpl</a>"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Performs RELAX NG validation, and if there are validation errors, sends them to the error listener as warnings. If 'assert-valid' is true, also raises an error.&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
-    
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/validation-utils/src/main/resources/xml/xproc/relax-ng-to-schematron.xpl" class="source">relax-ng-to-schematron.xpl</a>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Extracts embedded Schematron rules from a RELAX NG schema (not in compact syntax).&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/validation-utils/src/main/resources/xml/xproc/report-errors.xpl" class="source">report-errors.xpl</a>"</span>/&gt;
     
 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">library</span>&gt;</div></body>
 </html>

@@ -63,18 +63,19 @@
 <tbody>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="">validation-status</span><span class="details"></span>
+<span class="">tts-log</span><span class="details"> sequence</span>
 </td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Status</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Whether or not the conversion was successful.
-
-When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 publication even if the text-to-speech process has errors.</p>
-</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px" class="nowrap name">
-<span class="">tts-log</span><span class="details"> sequence</span>
+<span class="">validation-report</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">validation-status</span><span class="details"> primary</span>
 </td>
 <td></td>
 </tr>
@@ -117,21 +118,23 @@ When text-to-speech is enabled, the conversion may output a (incomplete) EPUB 3 
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code"></td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Temporary directory</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Directory used for temporary files.</p>
-</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">
-<span class="">assert-valid</span><span class="details"></span>
+<span class="">validation</span><span class="details"></span>
 </td>
 <td width="10px" class="nowrap uri"></td>
-<td width="10px" class="nowrap code">'true'</td>
-<td>
-<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Assert validity</h2>
-<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Whether to stop processing and raise an error on validation issues.</p>
+<td width="10px" class="nowrap code">'abort'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">nimas</span><span class="details"></span>
 </td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
+<td></td>
 </tr>
 <tr>
 <td width="150px;" class="nowrap name">

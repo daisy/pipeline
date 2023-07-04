@@ -932,6 +932,12 @@ The input DTBook document.
 <p><a href="/pipeline/ValidationReportXML">More details on the XML format</a>.</p>
 </div>
 </div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
 </li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
@@ -952,16 +958,27 @@ The input DTBook document.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Validate against NIMAS 1.1</div>
+<div class="synopsis-option-desc">
+Validate using NIMAS 1.1 rules for DTBook.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">MathML version</div>
 <div class="synopsis-option-desc">
-Version of MathML in the DTBook file.
+Version of MathML in the DTBook file(s).
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: One of the following:<dl class="choice">
 <dt><code>3.0</code></dt>
 <dt><code>2.0</code></dt>
-<dt><code>1.01</code></dt>
-<dt><code>1.0</code></dt>
 </dl>
 </div>
 <div class="synopsis-option-default">
@@ -973,19 +990,6 @@ Version of MathML in the DTBook file.
 <div class="synopsis-option-name">Check that images exist</div>
 <div class="synopsis-option-desc">
 Check to see that referenced images exist on disk.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Validate against NIMAS 1.1</div>
-<div class="synopsis-option-desc">
-Validate using NIMAS 1.1 rules for DTBook.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1043,16 +1047,16 @@ Options:</pre>
 <td>The input DTBook document.</td>
 </tr>
 <tr>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>Validate against NIMAS 1.1 (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
 <td>--mathml-version [<span style="text-transform: uppercase">mathml-version</span>]</td>
 <td>MathML version (default: <span class="synopsis-option-default"><code>3.0</code></span>)</td>
 </tr>
 <tr>
 <td>--check-images [<span style="text-transform: uppercase">check-images</span>]</td>
 <td>Check that images exist (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
-<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
-<td>Validate against NIMAS 1.1 (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -954,6 +954,26 @@ The resulting DAISY 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether or not to make the TTS log available.
+</div>
+<div class="longdesc">Whether or not to make the TTS log available.
+
+<p>The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name"></div>
 <div class="synopsis-option-desc">
 
@@ -986,29 +1006,22 @@ reading systems can’t handle the word tags.</p>
 &lt;/li&gt;
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-name">Publisher</div>
 <div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
+The agency responsible for making the Digital Talking Book available. If left blank, it will be retrieved from the DTBook meta-data.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">Whether or not to make the TTS log available.
-</div>
-<div class="longdesc">Whether or not to make the TTS log available.
-
-<p>The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.</p>
-</div>
+Whether to use a speech synthesizer to produce audio files.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1028,19 +1041,6 @@ Includes DTBook in output, as opposed to audio only.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Publisher</div>
-<div class="synopsis-option-desc">
-The agency responsible for making the Digital Talking Book available. If left blank, it will be retrieved from the DTBook meta-data.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
 </div>
 </li>
 &lt;/ul&gt;
@@ -1100,6 +1100,10 @@ Options:</pre>
 <td>The 2005-3 DTBook file to be transformed.</td>
 </tr>
 <tr>
+<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
+<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
 <td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
 <td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
 </tr>
@@ -1108,20 +1112,16 @@ Options:</pre>
 <td>Detect words (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
+<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
+<td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
 <td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
-<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
 <td>--with-text [<span style="text-transform: uppercase">with-text</span>]</td>
 <td>With text (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
-<td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

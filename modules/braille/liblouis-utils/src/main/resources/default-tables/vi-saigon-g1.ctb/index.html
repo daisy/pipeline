@@ -868,7 +868,7 @@ if (window.addEventListener) {
 <div class="language-plaintext highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre>#-index-name: Vietnamese, Saigon, contracted
-#-display-name: Southern Vietnamese braille
+#-display-name: Vietnamese Saigon braille
 #
 #+language: vi
 #+type: literary
@@ -881,7 +881,7 @@ if (window.addEventListener) {
 #-copyright: Sao Mai Center for the Blind &lt;www.saomaicenter.org/en&gt;
 #-license: LGPLv2.1
 #
-#  Copyright (C) 2018 by Sao Mai Center for the Blind &lt;www.saomaicenter.org/en&gt;
+#  Copyright (C) 2018, 2023 by Sao Mai Center for the Blind &lt;www.saomaicenter.org/en&gt;
 #
 #  This file is part of liblouis.
 #
@@ -904,25 +904,45 @@ if (window.addEventListener) {
 #-author: Dang Hoai Phúc &lt;danghoaiphuc@gmail.com&gt;
 #-maintainer: Dang Hoai Phuc &lt;danghoaiphuc@gmail.com&gt;
 #
-#-updated: 2020-11-17
+#-updated: 2023-1-16
 #
 # Based on &lt;https://www.saomaicenter.org/en/blog/accessible-formats/vietnamese-saigon-braille-grade-1&gt;
 #
 # This braille system still used by many visually impaired adults in the Southern area of Vietnam.
 
+# This table uses old letter d dots 1356 and đ dots 145.
+
+# These definitions need to be placed before AND after the
+# "vi-charsdef.uti" include in order for both the lower- and uppercase
+# part to take precedence (see issue https://github.com/liblouis/liblouis/issues/384).
+lowercase d 1356
+lowercase đ 145
+lowercase \x00f0 145 ð
+
 include vi-charsdef.uti
 
-# Braille indicators definition
-numsign 3456
+lowercase d 1356
+lowercase đ 145
+lowercase \x00f0 145 ð
+
+# number indicator definitions
+numsign 3456  number sign, just a dots operand
+numericmodechars .,
+nocontractsign 6
+nonumsign 6
+numericnocontchars abcdefghij
+
+# Braille letter indicator definition
 #letsign 6
 # caps indicator
 capsletter 46
-begcapsword 456
+begcapsword 46-46
 endcapsword 46-13
 lencapsphrase 5
 begcapsphrase 46-46
 begcaps 46-46
 endcaps 46-13
+
 # no letter sign before Vietnamese single-letter words
 #noletsign áàảãạắằẳẵặấầẩẫậéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ
 #word a =

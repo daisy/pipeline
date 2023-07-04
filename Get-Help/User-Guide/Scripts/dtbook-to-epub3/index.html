@@ -917,6 +917,18 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 </li>
 </ul>
 
+  <h3 id="reports">Reports</h3>
+
+  <ul class="synopsis-reports">
+<li class="synopsis-report details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-report-name">Validation reports</div>
+<div class="synopsis-report-desc">
+
+</div>
+</li>
+</ul>
+
   <h3 id="outputs">Outputs</h3>
 
   <ul class="synopsis-outputs">
@@ -967,15 +979,21 @@ Whether to use a speech synthesizer to produce audio files.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name"></div>
+<div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
 
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>audio/mpeg</code>
+<b>Default value</b>: <code>-1</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -993,34 +1011,48 @@ Language code of the input document.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Assert validity</div>
+<div class="synopsis-option-name">NIMAS input</div>
 <div class="synopsis-option-desc">
-Whether to stop processing and raise an error on validation issues.
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-name">Validation</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
+Whether to abort on validation issues.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
+<b>Default value</b>: <code>abort</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name"></div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>audio/mpeg</code>
 </div>
 </li>
 </ul>
@@ -1082,20 +1114,24 @@ Options:</pre>
 <td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
-<td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
 </tr>
 <tr>
 <td>--language [<span style="text-transform: uppercase">language</span>]</td>
 <td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--assert-valid [<span style="text-transform: uppercase">assert-valid</span>]</td>
-<td>Assert validity (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+</tr>
+<tr>
+<td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
+<td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -27,12 +27,18 @@
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Transforms DTBook XML into ZedAI XML.</p>
 <a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai">
             Online documentation
-        </a><div xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="author maintainer">
-            <p px:role="name">Marisa DeMeglio</p>
-            <a px:role="contact" href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a>
-            <p px:role="organization">DAISY Consortium</p>
-        </div>
-<div>Defined in:
+        </a><address xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+            Authors:
+            </address>
+<dl xmlns:px="http://www.daisy.org/ns/pipeline/xproc" px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Marisa DeMeglio</dd>
+                <dt>E-mail:</dt>
+                <dd><a href="mailto:marisa.demeglio@gmail.com">marisa.demeglio@gmail.com</a></dd>
+                <dt>Organization:</dt>
+                <dd px:role="organization">DAISY Consortium</dd>
+            </dl>
+        <div>Defined in:
           <span class="uri">http://www.daisy.org/pipeline/modules/dtbook-to-zedai/dtbook-to-zedai.xpl</span>
 </div>
 <h3>Input Ports</h3>
@@ -50,6 +56,27 @@
 <p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</p>
 </td>
 </tr></tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">validation-report</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">status</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+</tbody>
 </table>
 <h3>Options</h3>
 <table border="1">
@@ -88,6 +115,14 @@
 </td>
 <td width="10px" class="nowrap uri"></td>
 <td width="10px" class="nowrap code">'abort'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">nimas</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'false'</td>
 <td></td>
 </tr>
 <tr>

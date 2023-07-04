@@ -22,6 +22,8 @@
     	
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"dc:Format[text() = 'NIMAS 1.1']"</span>&gt;dc:Format metadata must equal NIMAS 1.1&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Subject) &gt;=1"</span>&gt;dc:Subject is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;	
+    	
+    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(dc:Date[@event='DCTERMS.created']) &gt;= 1"</span>&gt;DCTERMS.created metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     &lt;/<span class="code-xml-element-local-name">rule</span>&gt;
     
     &lt;<span class="code-xml-element-local-name">rule</span> <span class="code-xml-attribute-local-name">context</span>=<span class="code-xml-attribute-value">"//pkg:package/pkg:metadata/pkg:x-metadata"</span>&gt;
@@ -57,7 +59,6 @@
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.date.dateCopyrighted']) &gt;= 1"</span>&gt;DCTERMS.date.dateCopyrighted metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.description.version']) &gt;= 1"</span>&gt;DCTERMS.description.version metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.audience.educationLevel']) &gt;= 1"</span>&gt;DCTERMS.audience.educationLevel metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
-    	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.created']) &gt;= 1"</span>&gt;DCTERMS.created metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.publisher.place']) &gt;= 1"</span>&gt;DCTERMS.publisher.place metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	&lt;<span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"count(pkg:meta[@name='DCTERMS.date.issued']) &gt;= 1"</span>&gt;DCTERMS.date.issued metadata is required by NIMAS.&lt;/<span class="code-xml-element-local-name">assert</span>&gt;
     	
