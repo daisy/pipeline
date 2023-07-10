@@ -182,4 +182,15 @@ public class VolumeBreaksTest extends AbstractFormatterEngineTest {
         );
     }
 
+    @Ignore @Test // bug in implementation of display-when
+    public void testDisplayWhenStartsAtTopOfPageInsideVolumeTransition() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/volume-break/display-when-starts-at-top-of-page-inside-volume-transition-input.obfl",
+            "resource-files/volume-break/display-when-starts-at-top-of-page-inside-volume-transition-expected.pef",
+            false
+        );
+    }
 }

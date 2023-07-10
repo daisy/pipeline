@@ -1,0 +1,22 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>$starts-at-top-of-page variable inside any-interrupted</dc:title>
+		<dc:description>Tests $starts-at-top-of-page variable inside any-interrupted. An any-interrupted block never starts at the top of a page, so display-when="(! $starts-at-top-of-page)" should always evaluate to true.</dc:description>
+	</meta>
+	<layout-master name="main" duplex="true" page-width="10" page-height="5">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<volume-template sheets-in-volume-max="3"/>
+	<volume-transition range="sheet">
+		<any-interrupted>
+			<block display-when="(! $starts-at-top-of-page)" margin-top="1"/>
+			<block>⠒⠒⠒</block>
+		</any-interrupted>
+	</volume-transition>
+	<sequence master="main">
+		<block>⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿</block>
+	</sequence>
+</obfl>

@@ -96,7 +96,10 @@
 
     <entry key="ro">resource-files/ro.xml</entry>
 
+<!--
+    Removed due to crash. Unable to load language file.
     <entry key="ru">resource-files/ru.xml</entry>
+-->
 
     <entry key="sa">resource-files/sa.xml</entry>
 

@@ -2,6 +2,7 @@ package org.daisy.dotify.formatter.test;
 
 import org.daisy.dotify.api.engine.LayoutEngineException;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -114,6 +115,18 @@ public class VerticalPositionTest extends AbstractFormatterEngineTest {
         testPEF(
             "resource-files/vertical-position/vertical-position-passed-input.obfl",
             "resource-files/vertical-position/vertical-position-passed-expected.pef",
+            false
+        );
+    }
+
+    @Ignore @Test // bug in implementation of display-when
+    public void testDisplayWhenStartsAtTopOfPageAfterVerticalPosition() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/vertical-position/display-when-starts-at-top-of-page-after-vertical-position-input.obfl",
+            "resource-files/vertical-position/display-when-starts-at-top-of-page-after-vertical-position-expected.pef",
             false
         );
     }

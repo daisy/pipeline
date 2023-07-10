@@ -9,6 +9,7 @@ import org.daisy.dotify.api.formatter.StringField;
 import org.daisy.dotify.api.translator.BrailleTranslatorFactoryMaker;
 import org.daisy.dotify.api.translator.TextBorderFactoryMaker;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
+import org.daisy.dotify.common.text.IdentityFilter;
 import org.daisy.dotify.formatter.impl.core.FormatterContext;
 import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.search.DocumentSpace;
@@ -16,6 +17,9 @@ import org.daisy.dotify.formatter.impl.search.PageDetails;
 import org.daisy.dotify.formatter.impl.search.PageId;
 import org.daisy.dotify.formatter.impl.search.SequenceId;
 import org.daisy.dotify.formatter.impl.search.Space;
+import org.daisy.dotify.translator.DefaultBrailleFilter;
+import org.daisy.dotify.translator.SimpleBrailleTranslator;
+import org.daisy.dotify.translator.impl.DefaultBrailleFinalizer;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -77,4 +81,26 @@ public class FieldResolverTest {
         assertEquals(10, resolver.getWidth(1, 8));
     }
 
+    @Test
+    public void testFieldWithSoftHyphen() {
+        assertEquals(
+            Arrays.asList("xxxxxx"),
+            new FieldResolver(
+                null,
+                new FormatterContext(
+                    BrailleTranslatorFactoryMaker.newInstance(),
+                    null,
+                    new FormatterConfiguration.Builder("sv-SE", "bypass").build()),
+                null,
+                null
+            ).resolveField(
+                null,
+                new FieldList.Builder(Arrays.asList(new StringField("xxx\u00adxxx"))).build(),
+                new SimpleBrailleTranslator(
+                    new DefaultBrailleFilter(new IdentityFilter(), "und", null, null),
+                    new DefaultBrailleFinalizer(), "bypass"),
+                null
+            )
+        );
+    }
 }

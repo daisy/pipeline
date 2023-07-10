@@ -85,6 +85,7 @@ class PaginatorTools {
                     units.set(longestChunk,
                             truncate(units.get(longestChunk), longestChunkLength + totalSpace)
                     );
+                    totalSpace = 0;
                 } else {
                     throw new PaginatorToolsException(
                         "Text does not fit within provided space of " + width + ": " + units

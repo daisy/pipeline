@@ -122,7 +122,8 @@ class FieldResolver {
         }
     }
 
-    private List<String> resolveField(
+    /* package private for unit testing */
+    List<String> resolveField(
         PageDetails p,
         FieldList chunks,
         BrailleTranslator translator,
@@ -131,7 +132,7 @@ class FieldResolver {
         List<String> chunkF = new ArrayList<>();
         for (Field f : chunks.getFields()) {
             DefaultTextAttribute.Builder b = new DefaultTextAttribute.Builder(null);
-            String resolved = softHyphen.matcher(resolveField(f, p, b, noField)).replaceAll("");
+            String resolved = resolveField(f, p, b, noField);
             Translatable.Builder tr = Translatable.text(
                 fcontext.getConfiguration().isMarkingCapitalLetters() ?
                 resolved :
@@ -185,10 +186,13 @@ class FieldResolver {
             ret = resolveCompoundMarkerReferenceField((CompoundMarkerReferenceField) field, p, b2, noField);
         } else if (field instanceof MarkerReferenceField) {
             ret = crh.findMarker(p.getPageId(), (MarkerReferenceField) field);
+            ret = softHyphen.matcher(ret).replaceAll("");
         } else if (field instanceof CurrentPageField) {
             ret = resolveCurrentPageField((CurrentPageField) field, p);
+            ret = softHyphen.matcher(ret).replaceAll("");
         } else {
             ret = field.toString();
+            ret = softHyphen.matcher(ret).replaceAll("");
         }
         if (ret.length() > 0) {
             b.add(b2.build(ret.length()));

@@ -1,0 +1,17 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>$starts-at-top-of-page variable after vertical-position</dc:title>
+		<dc:description>Tests $starts-at-top-of-page variable after a block with vertical-position.</dc:description>
+	</meta>
+	<layout-master name="main" duplex="true" page-width="10" page-height="5">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="main">
+		<block>⠤⠤⠤</block>
+		<block vertical-align="after" vertical-position="3"/>
+		<block display-when="(! $starts-at-top-of-page)">⠿⠿⠿⠿⠿</block>
+	</sequence>
+</obfl>
