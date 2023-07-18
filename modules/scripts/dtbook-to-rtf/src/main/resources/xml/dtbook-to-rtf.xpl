@@ -50,14 +50,14 @@
 		</p:documentation>
 	</p:input>
 
-	<p:option name="include-table-of-content" required="false" select="'false'">
+	<p:option name="include-table-of-content" px:type="boolean" required="false" select="'false'">
 		<p:documentation>
 			<h2 px:role="name">Include table of content</h2>
 			<p px:role="desc">A boolean indicating if a TOC should be generated.</p>
 		</p:documentation>
 	</p:option>
 
-	<p:option name="include-page-number" required="false" select="'false'">
+	<p:option name="include-page-number" px:type="boolean" required="false" select="'false'">
 		<p:documentation>
 			<h2 px:role="name">Include page number</h2>
 			<p px:role="desc">A boolean indicating if a TOC should be generated.</p>
