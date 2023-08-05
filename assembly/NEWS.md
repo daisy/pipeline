@@ -1,3 +1,28 @@
+Changes in release v1.14.17
+===========================
+
+## Framework
+- **NEW** API for getting and setting TTS and other properties globally
+
+## Modules
+
+- **NEW** Script option for specifying aural CSS style sheets for TTS
+- **FIX** Support for linking to aural CSS style sheets from source document
+- **FIX** Support for `speech-rate` CSS property with Azure voices
+- **FIX** Simplified Azure voice names
+- **FIX** Improved interpretation of voice configuration XML
+  - region subtags are now significant
+  - engine overall priority is taken into account
+- **FIX** Drop `title` attribute from page breaks when creating HTML from DTBook/ZedAI
+- **FIX** Take into account `enum` and `start` attributes on DTBook lists when converting to RTF
+- **FIX** Various issues reported by EPUBCheck and Ace in EPUBs created from DTBook, ZedAI and HTML
+- Other bugfixes
+- Changes to braille production scripts, see release notes of braille modules [v1.14.19](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11419) and [v1.14.21](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11421)
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/3). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 3`
+
 Changes in release v1.14.16
 ===========================
 
@@ -26,7 +51,7 @@ Changes in release v1.14.15
 - **FIX** Better marking of page breaks in EPUB 3 output
 - **FIX** Issues in SAPI adapter
 - Other bugfixes
-- Changes to braille production scripts, see [release notes of braille modules v1.14.14](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11414)
+- Changes to braille production scripts, see release notes of braille modules [v1.14.15](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11415) and [v1.14.16](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11416)
 
 Backwards incompatibility note: some script options were renamed. Please check the [script
 documentation](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/) and update your client
@@ -34,7 +59,7 @@ code if needed.
 
 ## Details
 
-See [all the closed issues of this release](https://github.com/orgs/daisy/projects/2).
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/2). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 2`
 
 Changes in release v1.14.14
 ===========================
@@ -72,7 +97,7 @@ Changes in release v1.14.13
 
 ## Details
 
-See [all the closed issues of this release](https://github.com/orgs/daisy/projects/1).
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/1). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 1`
 
 Changes in release v1.14.12
 ===========================
