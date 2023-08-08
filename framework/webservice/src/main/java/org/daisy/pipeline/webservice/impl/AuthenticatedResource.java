@@ -40,9 +40,15 @@ public abstract class AuthenticatedResource extends GenericResource {
                 }
                 this.client=optionalClient.get();
                 RequestLog requestLog = webservice().getStorage().getRequestLog();
-                return new Authenticator(requestLog).authenticate(this.client, getQuery().getFirstValue("sign"),
-                                getQuery().getFirstValue("time"), getQuery().getFirstValue("nonce"), getReference().toString(),
-                                maxRequestTime);
+                return new Authenticator(requestLog).authenticate(
+                        this.client,
+                        getQuery().getFirstValue("sign"),
+                        getQuery().getFirstValue("urlsign"),
+                        getQuery().getFirstValue("time"),
+                        getQuery().getFirstValue("nonce"),
+                        getReference().toString(),
+                        maxRequestTime
+                );
         }
 
         public boolean isAuthenticated() {

@@ -46,3 +46,25 @@ This is the URI to submit to the Web Service. If `myclient` has a
 permission level to do what they want, then their request will be
 accepted.  Currently, only admin requests require a client to have a
 special permission level (`ADMIN` instead of the default `CLIENTAPP`).
+
+### Signing using the `urlsign` parameter instead
+
+Another approach that is similar but might be simpler to handle is using the `urlsign` parameter.
+To do this, you follow the approach above but generate a Base64Url encoded string instead and add that at the end of the URL.
+
+For example
+
+`http://example.org/ws/scripts?authid=myclient&time=2012-02-09T02:23:40Z&nonce=533473712461604713238933268313&urlsign=gq_lpIuWqEDjhWviAjyccNTzdZk`
+
+This format is supported by libraries or built-in for most languages. To describe it briefly, you need to generate a standard Base64, replace some characters and remove the padding.
+
+Let's take the example of `gq/lpIuWqEDjhWviAjyccNT+zdZk==`
+
+The replacements we need to do is
+```
+replace + with -
+replace / with _
+remove padding of =
+```
+
+The result we get then is `gq_lpIuWqEDjhWviAjyccNT-zdZk`
