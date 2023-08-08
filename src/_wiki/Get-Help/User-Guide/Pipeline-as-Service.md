@@ -131,10 +131,6 @@ The following command line arguments are available. Combinations are possible.
 : Run Pipeline server in "local" mode. Has the same effect as setting
   `PIPELINE2_WS_LOCALFS=true` and `PIPELINE2_WS_AUTHENTICATION=false`.
 
-`gui`
-: Launch the graphical user interface instead of the web service. See
-  also [Desktop Application](http://daisy.github.io/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide/).
-
 `clean`
 : Clean the program data.
 
