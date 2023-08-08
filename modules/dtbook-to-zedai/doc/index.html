@@ -97,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -963,6 +963,45 @@ The resulting ZedAI XML file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">MODS filename</div>
+<div class="synopsis-option-desc">
+Filename for the generated MODS file
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>zedai-mods.xml</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Copy external resources</div>
+<div class="synopsis-option-desc">
+Include any referenced external resources like images and CSS-files to the output.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ZedAI filename</div>
+<div class="synopsis-option-desc">
+Filename for the generated ZedAI file
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>zedai.xml</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Language code</div>
 <div class="synopsis-option-desc">
 Language code of the input document.
@@ -972,6 +1011,19 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-desc">
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -996,19 +1048,6 @@ Whether to abort on validation issues.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">ZedAI filename</div>
-<div class="synopsis-option-desc">
-Filename for the generated ZedAI file
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>zedai.xml</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">CSS filename</div>
 <div class="synopsis-option-desc">
 Filename for the generated CSS file
@@ -1018,45 +1057,6 @@ Filename for the generated CSS file
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>zedai-css.css</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">NIMAS input</div>
-<div class="synopsis-option-desc">
-Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">MODS filename</div>
-<div class="synopsis-option-desc">
-Filename for the generated MODS file
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>zedai-mods.xml</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Copy external resources</div>
-<div class="synopsis-option-desc">
-Include any referenced external resources like images and CSS-files to the output.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
 </div>
 </li>
 </ul>
@@ -1108,32 +1108,32 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--lang [<span style="text-transform: uppercase">lang</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
-<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
-</tr>
-<tr>
-<td>--zedai-filename [<span style="text-transform: uppercase">zedai-filename</span>]</td>
-<td>ZedAI filename (default: <span class="synopsis-option-default"><code>zedai.xml</code></span>)</td>
-</tr>
-<tr>
-<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
-<td>CSS filename (default: <span class="synopsis-option-default"><code>zedai-css.css</code></span>)</td>
-</tr>
-<tr>
-<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
-<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
 <td>--mods-filename [<span style="text-transform: uppercase">mods-filename</span>]</td>
 <td>MODS filename (default: <span class="synopsis-option-default"><code>zedai-mods.xml</code></span>)</td>
 </tr>
 <tr>
 <td>--copy-external-resources [<span style="text-transform: uppercase">copy-external-resources</span>]</td>
 <td>Copy external resources (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+</tr>
+<tr>
+<td>--zedai-filename [<span style="text-transform: uppercase">zedai-filename</span>]</td>
+<td>ZedAI filename (default: <span class="synopsis-option-default"><code>zedai.xml</code></span>)</td>
+</tr>
+<tr>
+<td>--lang [<span style="text-transform: uppercase">lang</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+</tr>
+<tr>
+<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
+<td>CSS filename (default: <span class="synopsis-option-default"><code>zedai-css.css</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

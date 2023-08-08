@@ -97,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -942,15 +942,20 @@ This page describes the steps, comments and issues related to this transformatio
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Backwards compatible</div>
+<div class="synopsis-option-name">EPUB 3 file name</div>
 <div class="synopsis-option-desc">
-Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.
+<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+</div>
+<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+
+<p>This option can be used to set a custom file name.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -968,20 +973,15 @@ Whether or not to include media overlays and associated audio files.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">EPUB 3 file name</div>
+<div class="synopsis-option-name">Backwards compatible</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-</div>
-<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-
-<p>This option can be used to set a custom file name.</p>
-</div>
+Whether or not to include NCX-file, OPF guide element and backwards-compatible metadata.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 </ul>
@@ -1033,16 +1033,16 @@ Options:</pre>
 <td></td>
 </tr>
 <tr>
-<td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
-<td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
+<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
 <td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
-<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
+<td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

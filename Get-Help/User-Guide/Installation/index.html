@@ -97,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -886,10 +886,10 @@ starting with the installation make sure the
 
 <h3 id="windows">Windows</h3>
 
-<p>For Windows users there is the Windows installer. It automatically
-installs the desktop application, the server and the command line
-tool. Simply launch the installer and follow the instructions on the
-screen.</p>
+<p>For Windows users there is the Windows installer. It installs the
+desktop application. Launch the installer and follow the instructions
+on the screen. The desktop application can also be used to run a
+server.</p>
 
 <h3 id="mac-os">Mac OS</h3>
 
@@ -898,6 +898,8 @@ application. To install, open the image and drag the application file
 to the “Applications” folder, or any other destination you want.</p>
 
 <p><img src="/pipeline/Get-Help/User-Guide/Installation/disk-image.png" alt="Contents of the disc image" width="600px"></p>
+
+<p>The desktop application can also be used to run a server.</p>
 
 <h3 id="debian">Debian</h3>
 
@@ -914,8 +916,8 @@ following command:</p>
 </div>
 </div>
 
-<p>The Debian package includes the desktop application, the server and
-the command line tool.</p>
+<p>The Debian package includes the server and the command line tool, not
+the desktop application.</p>
 
 <h3 id="red-hat">Red Hat</h3>
 
@@ -931,14 +933,14 @@ you have downloaded the RPM file, then execute the following command:</p>
 </div>
 </div>
 
-<p>The RPM package includes the desktop application, the server and the
-command line tool.</p>
+<p>The RPM package includes the server and the command line tool, not the
+desktop application.</p>
 
 <h3 id="linux-zip">Linux (ZIP)</h3>
 
-<p>The ZIP can be installed on all Linux distros. It includes the desktop
-application, the server and the command line tool. To install, simply
-extract the contents to any destination you want.</p>
+<p>The ZIP package for Linux can be installed on all distros. It includes
+the server and the command line tool. To install, extract the contents
+to any destination you want.</p>
 
 <h3 id="docker">Docker</h3>
 
@@ -1070,59 +1072,15 @@ following content and run <code>docker-compose up</code>.</p>
 
 <p>To learn more about Docker see <a href="https://docs.docker.com" class="external-link" target="_blank">https://docs.docker.com</a>.</p>
 
-<h2 id="updater">Updater</h2>
-
-<p>Some packages also include an updater tool that you can use for quickly
-updating your current installation to the latest version. The updater
-can be invoked either via the desktop application or via the command
-line. The desktop application has a menu item “Check updates” under
-“Help”. On the command line it is different for each platform.</p>
-
-<!-- Windows: to do -->
-
-<h3 id="mac-os-1">Mac OS</h3>
-
-<div class="language-sh highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre>/Applications/DAISY\ Pipeline\ 2.app/Contents/Java/updater/pipeline-updater \
-    -service="http://daisy.github.io/pipeline-assembly/releases/" \
-    -install-dir="/Applications/DAISY Pipeline 2.app/Contents/Java/" \
-    -descriptor="/Applications/DAISY Pipeline 2.app/Contents/Java/etc/releaseDescriptor.xml" \
-    -version=current
-</pre></div>
-</div>
-</div>
-
-<p>In the above command replace “/Applications” with whichever directory
-you have installed the application file in.</p>
-
-<!-- Debian and Red Hat: updater not available -->
-
-<h3 id="linux-zip-1">Linux (ZIP)</h3>
-
-<div class="language-sh highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre>/home/bert/pipeline2/updater/pipeline-updater \
-    -service="http://daisy.github.io/pipeline-assembly/releases/" \
-    -install-dir=/home/bert/pipeline2/ \
-    -descriptor=/home/bert/pipeline2/etc/releaseDescriptor.xml \
-    -version=current
-</pre></div>
-</div>
-</div>
-
-<p>In the above command replace “/home/bert/pipeline2” with whichever directory
-you have unpacked the ZIP file to.</p>
-
 <h2 id="system-requirements">System Requirements</h2>
 
 <h3 id="java">Java</h3>
 
-<p>The server and the desktop application require a Java runtime
-environment. Windows and Mac users do not have to worry about Java
-because it is included in the DAISY Pipeline installation. Linux users
-however are on their own. The minimum required version of Java
-is 11. We recommend installing Java from https://adoptium.net/.</p>
+<p>The standalone server requires a Java runtime environment. The minimum
+required version of Java is 11. We recommend installing Java from
+https://adoptium.net/. Users of the desktop application (Windows and
+MacOS) do not have to worry about Java because it is included in the
+application.</p>
 
     </div>
   </body>

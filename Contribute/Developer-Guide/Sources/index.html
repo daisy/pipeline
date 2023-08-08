@@ -97,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -895,31 +895,18 @@ form the Java application.</p>
   <li>
 <a href="https://github.com/daisy/pipeline-framework" class="external-link" target="_blank">pipeline-framework</a>: The runtime framework</li>
   <li>
-<a href="https://github.com/daisy/pipeline-scripts" class="external-link" target="_blank">pipeline-scripts</a>: The script modules</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-scripts-utils" class="external-link" target="_blank">pipeline-scripts-utils</a>: Utility modules related to various input or output formats</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-modules-common" class="external-link" target="_blank">pipeline-modules-common</a>: General-purpose utility modules</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-mod-braille" class="external-link" target="_blank">pipeline-mod-braille</a>: Utility modules related to braille production</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-mod-tts" class="external-link" target="_blank">pipeline-mod-tts</a>: Utility modules related to speech synthesis</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-mod-audio" class="external-link" target="_blank">pipeline-mod-audio</a>: Utility modules related to audio encoding</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-mod-nlp" class="external-link" target="_blank">pipeline-mod-nlp</a>: Utility modules related to natural language processing</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-gui" class="external-link" target="_blank">pipeline-gui</a>: The graphical user interface</li>
-  <li>
-<a href="https://github.com/daisy/pipeline-updater-gui" class="external-link" target="_blank">pipeline-updater-gui</a>: Graphical user interface for the updater tool</li>
+<a href="https://github.com/daisy/pipeline-modules" class="external-link" target="_blank">pipeline-modules</a>: The conversion code</li>
 </ul>
 
-<p>The main Java component, which provides the web server and the GUI, is
-complemented by a number of secondary components. They either act as
-as clients of the web server (the graphical client and the command
-line client), or work independently (the updater).</p>
+<p>The main Java component is complemented by a number of other
+components. They either act as as clients of the web server (the
+graphical client and the command line client), or work independently
+(the updater).</p>
 
 <ul>
+  <li>
+<a href="https://github.com/daisy/pipeline-ui" class="external-link" target="_blank">pipeline-ui</a>: The graphical user interface, written in Javascript
+(Electron).</li>
   <li>
 <a href="https://github.com/daisy/pipeline-webui" class="external-link" target="_blank">pipeline-webui</a>: The web-based graphical user interface, written
 in Java/Scala (uses the Play! framework)</li>
@@ -946,11 +933,31 @@ demonstrating and testing Pipeline scripts</li>
 to the Pipeline build system</li>
 </ul>
 
-<p>Finally, there are some repositories that have been deprecated:</p>
+<p>Finally, there are some repositories that have been archived:</p>
 
 <ul>
   <li>
-<a href="https://github.com/daisy/pipeline-cli" class="external-link" target="_blank">pipeline-cli</a>: Command line tool written in Ruby</li>
+<a href="https://github.com/daisy/pipeline-cli-ruby" class="external-link" target="_blank">pipeline-cli-ruby</a>: Command line tool written in Ruby</li>
+</ul>
+
+<p>The Pipeline modules used to live in several repositories, which are
+now archived:</p>
+
+<ul>
+  <li>
+<a href="https://github.com/daisy/pipeline-scripts" class="external-link" target="_blank">pipeline-scripts</a>: The script modules</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-scripts-utils" class="external-link" target="_blank">pipeline-scripts-utils</a>: Utility modules related to various input or output formats</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-modules-common" class="external-link" target="_blank">pipeline-modules-common</a>: General-purpose utility modules</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-mod-braille" class="external-link" target="_blank">pipeline-mod-braille</a>: Utility modules related to braille production</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-mod-tts" class="external-link" target="_blank">pipeline-mod-tts</a>: Utility modules related to speech synthesis</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-mod-audio" class="external-link" target="_blank">pipeline-mod-audio</a>: Utility modules related to audio encoding</li>
+  <li>
+<a href="https://github.com/daisy/pipeline-mod-nlp" class="external-link" target="_blank">pipeline-mod-nlp</a>: Utility modules related to natural language processing</li>
 </ul>
 
 <h2 id="dependencies">Dependencies</h2>
@@ -971,16 +978,10 @@ have a larger scope and are therefore treated specially here:</p>
 <ul>
   <li>Liblouis (<a href="https://github.com/liblouis/liblouis" class="external-link" target="_blank">liblouis</a>, <a href="https://github.com/liblouis/liblouis-java" class="external-link" target="_blank">liblouis-java</a>): Braille translator
 library written in C and maintained by SBS.</li>
-  <li>Dotify (<a href="https://github.com/brailleapps/dotify.api" class="external-link" target="_blank">api</a>, <a href="https://github.com/brailleapps/dotify.common" class="external-link" target="_blank">common</a>,
-<a href="https://github.com/brailleapps/dotify.formatter.impl" class="external-link" target="_blank">formatter.impl</a>,
-<a href="https://github.com/brailleapps/dotify.hyphenator.impl" class="external-link" target="_blank">hyphenator.impl</a>,
-<a href="https://github.com/brailleapps/dotify.text.impl" class="external-link" target="_blank">text.impl</a>, <a href="https://github.com/brailleapps/dotify.task-api" class="external-link" target="_blank">task-api</a>,
-<a href="https://github.com/brailleapps/dotify.task.impl" class="external-link" target="_blank">task.impl</a>, <a href="https://github.com/brailleapps/dotify.task-runner" class="external-link" target="_blank">task-runner</a>,
-<a href="https://github.com/brailleapps/dotify.translator.impl" class="external-link" target="_blank">translator.impl</a> ): Braille translator and
-formatter written in Java and owned by MTM.</li>
-  <li>Braille Utils (<a href="https://github.com/brailleapps/braille-utils.api" class="external-link" target="_blank">api</a>, <a href="https://github.com/brailleapps/braille-utils.impl" class="external-link" target="_blank">impl</a>,
-<a href="https://github.com/brailleapps/braille-utils.pef-tools" class="external-link" target="_blank">pef-tools</a>): Java Library for embossing
-and converting braille in PEF-format, owned by MTM.</li>
+  <li>
+<a href="https://github.com/mtmse/dotify.library" class="external-link" target="_blank">Dotify</a>: Braille translator and formatter, and
+library for embossing and converting braille in PEF-format, written
+in Java and maintained by MTM.</li>
 </ul>
 
 <p>Then there are some third-party projects that we have contributed to
@@ -1006,8 +1007,6 @@ utilities:</p>
   <li>
 <a href="https://github.com/daisy/xspec-maven-plugin" class="external-link" target="_blank">xspec-maven-plugin</a>: For running
 <a href="https://github.com/expath/xspec/wiki" class="external-link" target="_blank">XSpec</a> tests in JUnit or Maven</li>
-  <li>
-<a href="https://github.com/daisy/maven-parents" class="external-link" target="_blank">maven-parents</a>: DAISY organisation wide Maven parent POMs</li>
 </ul>
 
 <h2 id="aggregator-project">Aggregator project</h2>
@@ -1028,54 +1027,20 @@ dependencies into
     </ul>
   </li>
   <li><a href="https://github.com/daisy/pipeline-framework" class="external-link" target="_blank">framework</a></li>
-  <li><a href="https://github.com/daisy/pipeline-gui" class="external-link" target="_blank">gui</a></li>
+  <li><a href="https://github.com/daisy/pipeline-ui" class="external-link" target="_blank">ui</a></li>
   <li>libs
     <ul>
       <li><a href="https://github.com/daisy/braille-css" class="external-link" target="_blank">braille-css</a></li>
-      <li>braille-utils
-        <ul>
-          <li><a href="https://github.com/brailleapps/braille-utils.api" class="external-link" target="_blank">braille-utils.api</a></li>
-          <li><a href="https://github.com/brailleapps/braille-utils.impl" class="external-link" target="_blank">braille-utils.impl</a></li>
-          <li><a href="https://github.com/brailleapps/braille-utils.pef-tools" class="external-link" target="_blank">braille-utils.pef-tools</a></li>
-        </ul>
-      </li>
       <li><a href="http://github.com/daisy/xmlcalabash1" class="external-link" target="_blank">com.xmlcalabash</a></li>
-      <li>dotify
-        <ul>
-          <li><a href="https://github.com/brailleapps/dotify.api" class="external-link" target="_blank">dotify.api</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.common" class="external-link" target="_blank">dotify.common</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.formatter.impl" class="external-link" target="_blank">dotify.formatter.impl</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.hyphenator.impl" class="external-link" target="_blank">dotify.hyphenator.impl</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.text.impl" class="external-link" target="_blank">dotify.text.impl</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.task-api" class="external-link" target="_blank">dotify.task-api</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.task.impl" class="external-link" target="_blank">dotify.task.impl</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.task-runner" class="external-link" target="_blank">dotify.task-runner</a></li>
-          <li><a href="https://github.com/brailleapps/dotify.translator.impl" class="external-link" target="_blank">dotify.translator.impl</a></li>
-        </ul>
-      </li>
+      <li><a href="https://github.com/mtmse/dotify.library" class="external-link" target="_blank">dotify.library</a></li>
       <li><a href="https://github.com/daisy/jStyleParser" class="external-link" target="_blank">jstyleparser</a></li>
       <li><a href="https://github.com/liblouis/liblouis" class="external-link" target="_blank">liblouis</a></li>
       <li><a href="https://github.com/liblouis/liblouis-java" class="external-link" target="_blank">liblouis-java</a></li>
       <li><a href="https://github.com/daisy/osgi-libs" class="external-link" target="_blank">osgi-libs</a></li>
     </ul>
   </li>
-  <li>modules
-    <ul>
-      <li><a href="https://github.com/daisy/pipeline-mod-audio" class="external-link" target="_blank">audio</a></li>
-      <li><a href="https://github.com/daisy/pipeline-mod-braille" class="external-link" target="_blank">braille</a></li>
-      <li><a href="https://github.com/daisy/pipeline-modules-common" class="external-link" target="_blank">common</a></li>
-      <li><a href="https://github.com/daisy/pipeline-mod-nlp" class="external-link" target="_blank">nlp</a></li>
-      <li><a href="https://github.com/daisy/pipeline-scripts" class="external-link" target="_blank">scripts</a></li>
-      <li><a href="https://github.com/daisy/pipeline-scripts-utils" class="external-link" target="_blank">scripts-utils</a></li>
-      <li><a href="https://github.com/daisy/pipeline-mod-tts" class="external-link" target="_blank">tts</a></li>
-    </ul>
-  </li>
-  <li>updater
-    <ul>
-      <li><a href="https://github.com/daisy/pipeline-updater" class="external-link" target="_blank">cli</a></li>
-      <li><a href="https://github.com/daisy/pipeline-updater-gui" class="external-link" target="_blank">gui</a></li>
-    </ul>
-  </li>
+  <li><a href="https://github.com/daisy/pipeline-modules" class="external-link" target="_blank">modules</a></li>
+  <li><a href="https://github.com/daisy/pipeline-updater" class="external-link" target="_blank">updater</a></li>
   <li>utils
     <ul>
       <li><a href="https://github.com/daisy/pipeline-build-utils" class="external-link" target="_blank">build-utils</a></li>
@@ -1124,18 +1089,6 @@ languages. Languages used in the main code are:</p>
 <p>Pipeline <em>modules</em> are the JAR files (bundles) that contain all the
 conversion logic and that are “run” by the Pipeline framework. They
 are the most obvious extension point of the Pipeline.</p>
-
-<p>The core Pipeline modules live in these repositories:</p>
-
-<ul>
-  <li><a href="https://github.com/daisy/pipeline-scripts" class="external-link" target="_blank">pipeline-scripts</a></li>
-  <li><a href="https://github.com/daisy/pipeline-scripts-utils" class="external-link" target="_blank">pipeline-scripts-utils</a></li>
-  <li><a href="https://github.com/daisy/pipeline-modules-common" class="external-link" target="_blank">pipeline-modules-common</a></li>
-  <li><a href="https://github.com/daisy/pipeline-mod-braille" class="external-link" target="_blank">pipeline-mod-braille</a></li>
-  <li><a href="https://github.com/daisy/pipeline-mod-tts" class="external-link" target="_blank">pipeline-mod-tts</a></li>
-  <li><a href="https://github.com/daisy/pipeline-mod-nlp" class="external-link" target="_blank">pipeline-mod-nlp</a></li>
-  <li><a href="https://github.com/daisy/pipeline-mod-audio" class="external-link" target="_blank">pipeline-mod-audio</a></li>
-</ul>
 
 <p>Some examples of third-party modules are:</p>
 

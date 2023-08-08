@@ -97,7 +97,7 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/DAISY-Pipeline-2-User-Guide" tabindex="9">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
       
       Desktop Application
       </a>
@@ -941,6 +941,19 @@ The ZedAI you want to convert to braille.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-output-name">PEF</div>
+<div class="synopsis-output-desc">
+The intermediary PEF file.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-output-name">Preview</div>
 <div class="synopsis-output-desc">
 An HTML preview of the braille result.
@@ -965,19 +978,6 @@ The output braille file.
 </ul>
 </div>
 </li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">PEF</div>
-<div class="synopsis-output-desc">
-The intermediary PEF file.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://files.pef-format.org/specifications/pef-2008-1/pef-specification.html" class="media-type external-link" target="_blank">application/x-pef+xml</a></li>
-</ul>
-</div>
-</li>
 </ul>
 
   <h3 id="options">Options</h3>
@@ -985,15 +985,46 @@ The intermediary PEF file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include preview</div>
+<div class="synopsis-option-name">Style sheets</div>
 <div class="synopsis-option-desc">
-Whether or not to include a HTML preview of the braille result.
+<div class="shortdesc">A list of CSS/Sass style sheets to apply.
+</div>
+<div class="longdesc">A list of CSS/Sass style sheets to apply.
+
+<p>DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
+future. It is recommended to apply any XSLT style sheets during pre-processing of the document.</p>
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>”. Style sheets can also be attached to the
+source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a>”. They can be linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>).</p>
+
+<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
+CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
+the author style sheets, in the order in which they are specified.</p>
+
+<p>All CSS/Sass style sheets are applied at once, but the order in which they are specified (first user
+style sheets, then author style sheets) has an influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading
+order</a>.</p>
+
+<p>CSS/Sass style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
+CSS</a> rules.</p>
+
+<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
+manual</a>.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1106,46 +1137,15 @@ value
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-name">Include preview</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS/Sass style sheets to apply.
-</div>
-<div class="longdesc">A list of CSS/Sass style sheets to apply.
-
-<p>DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
-future. It is recommended to apply any XSLT style sheets during pre-processing of the document.</p>
-
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>”. Style sheets can also be attached to the
-source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>”. They can be linked (using an
-<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
-element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
-element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
-attributes</a>).</p>
-
-<p>Style sheets are applied to the document in the following way: XSLT style sheets are applied before
-CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
-the author style sheets, in the order in which they are specified.</p>
-
-<p>All CSS/Sass style sheets are applied at once, but the order in which they are specified (first user
-style sheets, then author style sheets) has an influence on the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading
-order</a>.</p>
-
-<p>CSS/Sass style sheets are interpreted according to <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille
-CSS</a> rules.</p>
-
-<p>For info on how to use Sass (Syntactically Awesome StyleSheets) see the <a href="http://sass-lang.com/documentation/file.SASS_REFERENCE.html" class="external-link" target="_blank">Sass
-manual</a>.</p>
-</div>
+Whether or not to include a HTML preview of the braille result.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+<b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1197,8 +1197,8 @@ Options:</pre>
 <td>The ZedAI you want to convert to braille.</td>
 </tr>
 <tr>
-<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
-<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
@@ -1217,8 +1217,8 @@ Options:</pre>
 <td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>
+<td>Include preview (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
