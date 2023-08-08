@@ -4,10 +4,10 @@ collections:
     output: true
     permalink: /:path/
     alternative_base: "https://github.com/daisy/pipeline/wiki"
-  wiki_gui:
+  wiki_ui:
     output: true
     permalink: /Get-Help/User-Guide/Desktop-Application/:path/
-    alternative_base: "https://github.com/daisy/pipeline-gui/wiki"
+    alternative_base: "https://github.com/daisy/pipeline-ui/wiki"
   wiki_webui:
     output: true
     permalink: /Get-Help/User-Guide/Web-Application/:path/
@@ -18,11 +18,11 @@ defaults:
       layout: wiki
       spine: sitemap
       edit_button: wiki
-  - scope: {path: "", type: wiki_gui}
+  - scope: {path: "", type: wiki_ui}
     values:
       layout: wiki
       spine: sitemap
-      edit_button: wiki-gui
+      edit_button: wiki-ui
   - scope: {path: "", type: wiki_webui}
     values:
       layout: wiki

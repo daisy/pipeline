@@ -22,8 +22,7 @@ appropriate sub-project and open the **Issues** tab.
   daisy/pipeline-clientlib-go
   daisy/pipeline-clientlib-java
   daisy/pipeline-framework
-  daisy/pipeline-gui
-  daisy/pipeline-it
+  daisy/pipeline-modules
   daisy/pipeline-mod-audio
   daisy/pipeline-mod-braille
   daisy/pipeline-mod-nlp
@@ -32,8 +31,8 @@ appropriate sub-project and open the **Issues** tab.
   daisy/pipeline-samples
   daisy/pipeline-scripts
   daisy/pipeline-scripts-utils
+  daisy/pipeline-ui
   daisy/pipeline-updater
-  daisy/pipeline-updater-gui
   daisy/pipeline-webui
   daisy/braille-css
   daisy/jStyleParser

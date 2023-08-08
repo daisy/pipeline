@@ -15,10 +15,10 @@ starting with the installation make sure the
 
 ### Windows
 
-For Windows users there is the Windows installer. It automatically
-installs the desktop application, the server and the command line
-tool. Simply launch the installer and follow the instructions on the
-screen.
+For Windows users there is the Windows installer. It installs the
+desktop application. Launch the installer and follow the instructions
+on the screen. The desktop application can also be used to run a
+server.
 
 ### Mac OS
 
@@ -27,6 +27,8 @@ application. To install, open the image and drag the application file
 to the "Applications" folder, or any other destination you want.
 
 <img src="Get-Help/User-Guide/Installation/disk-image.png" alt="Contents of the disc image" width="600px"/>
+
+The desktop application can also be used to run a server.
 
 ### Debian
 
@@ -40,8 +42,8 @@ following command:
 dpkg -i daisy-pipeline2_x.y.z.deb
 ~~~
 
-The Debian package includes the desktop application, the server and
-the command line tool.
+The Debian package includes the server and the command line tool, not
+the desktop application.
 
 ### Red Hat
 
@@ -54,14 +56,14 @@ you have downloaded the RPM file, then execute the following command:
 yum install daisy-pipeline2_x.y.z.rpm
 ~~~
 
-The RPM package includes the desktop application, the server and the
-command line tool.
+The RPM package includes the server and the command line tool, not the
+desktop application.
 
 ### Linux (ZIP)
 
-The ZIP can be installed on all Linux distros. It includes the desktop
-application, the server and the command line tool. To install, simply
-extract the contents to any destination you want.
+The ZIP package for Linux can be installed on all distros. It includes
+the server and the command line tool. To install, extract the contents
+to any destination you want.
 
 ### Docker
 
@@ -169,52 +171,12 @@ volumes:
 
 To learn more about Docker see [https://docs.docker.com](https://docs.docker.com).
 
-
-## Updater
-
-Some packages also include an updater tool that you can use for quickly
-updating your current installation to the latest version. The updater
-can be invoked either via the desktop application or via the command
-line. The desktop application has a menu item "Check updates" under
-"Help". On the command line it is different for each platform.
-
-<!-- Windows: to do -->
-
-### Mac OS
-
-~~~sh
-/Applications/DAISY\ Pipeline\ 2.app/Contents/Java/updater/pipeline-updater \
-    -service="http://daisy.github.io/pipeline-assembly/releases/" \
-    -install-dir="/Applications/DAISY Pipeline 2.app/Contents/Java/" \
-    -descriptor="/Applications/DAISY Pipeline 2.app/Contents/Java/etc/releaseDescriptor.xml" \
-    -version=current
-~~~
-
-In the above command replace "/Applications" with whichever directory
-you have installed the application file in.
-
-<!-- Debian and Red Hat: updater not available -->
-
-### Linux (ZIP)
-
-~~~sh
-/home/bert/pipeline2/updater/pipeline-updater \
-    -service="http://daisy.github.io/pipeline-assembly/releases/" \
-    -install-dir=/home/bert/pipeline2/ \
-    -descriptor=/home/bert/pipeline2/etc/releaseDescriptor.xml \
-    -version=current
-~~~
-
-In the above command replace "/home/bert/pipeline2" with whichever directory
-you have unpacked the ZIP file to.
-
-
 ## System Requirements
 
 ### Java
 
-The server and the desktop application require a Java runtime
-environment. Windows and Mac users do not have to worry about Java
-because it is included in the DAISY Pipeline installation. Linux users
-however are on their own. The minimum required version of Java
-is 11. We recommend installing Java from https://adoptium.net/.
+The standalone server requires a Java runtime environment. The minimum
+required version of Java is 11. We recommend installing Java from
+https://adoptium.net/. Users of the desktop application (Windows and
+MacOS) do not have to worry about Java because it is included in the
+application.

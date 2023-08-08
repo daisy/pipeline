@@ -1,5 +1,5 @@
 source 'https://rubygems.org' do
-  ruby '>= 2.3.3'
+  ruby '>= 2.7.2'
   gem 'jekyll', '4.2.0'
   gem 'rdf', '3.1.15'
   gem 'rdf-xsd', '3.1.1'

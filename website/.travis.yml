@@ -1,9 +1,0 @@
-install:
-  - bundle install --path gems
-script:
-  - make
-after_success:
-  - source .travis/publish.sh
-cache:
-  directories:
-    - gems

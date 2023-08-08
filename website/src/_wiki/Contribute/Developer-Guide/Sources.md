@@ -19,21 +19,15 @@ JAR artefacts (hereafter called "bundles"). Together all these bundles
 form the Java application.
 
 - [pipeline-framework][]: The runtime framework
-- [pipeline-scripts][]: The script modules
-- [pipeline-scripts-utils][]: Utility modules related to various input or output formats
-- [pipeline-modules-common][]: General-purpose utility modules
-- [pipeline-mod-braille][]: Utility modules related to braille production
-- [pipeline-mod-tts][]: Utility modules related to speech synthesis
-- [pipeline-mod-audio][]: Utility modules related to audio encoding
-- [pipeline-mod-nlp][]: Utility modules related to natural language processing
-- [pipeline-gui][]: The graphical user interface
-- [pipeline-updater-gui][]: Graphical user interface for the updater tool
+- [pipeline-modules][]: The conversion code
 
-The main Java component, which provides the web server and the GUI, is
-complemented by a number of secondary components. They either act as
-as clients of the web server (the graphical client and the command
-line client), or work independently (the updater).
+The main Java component is complemented by a number of other
+components. They either act as as clients of the web server (the
+graphical client and the command line client), or work independently
+(the updater).
 
+- [pipeline-ui][]: The graphical user interface, written in Javascript
+  (Electron).
 - [pipeline-webui][]: The web-based graphical user interface, written
   in Java/Scala (uses the Play! framework)
 - [pipeline-cli-go][]: The official command line tool, written in Go
@@ -50,10 +44,20 @@ A second group of repositories are some auxiliary repositories:
 - [pipeline-build-utils][]: Various build and test utilities specific
   to the Pipeline build system
 
-Finally, there are some repositories that have been deprecated:
+Finally, there are some repositories that have been archived:
 
-- [pipeline-cli][]: Command line tool written in Ruby
+- [pipeline-cli-ruby][]: Command line tool written in Ruby
 
+The Pipeline modules used to live in several repositories, which are
+now archived:
+
+- [pipeline-scripts][]: The script modules
+- [pipeline-scripts-utils][]: Utility modules related to various input or output formats
+- [pipeline-modules-common][]: General-purpose utility modules
+- [pipeline-mod-braille][]: Utility modules related to braille production
+- [pipeline-mod-tts][]: Utility modules related to speech synthesis
+- [pipeline-mod-audio][]: Utility modules related to audio encoding
+- [pipeline-mod-nlp][]: Utility modules related to natural language processing
 
 ## Dependencies
 
@@ -69,16 +73,9 @@ Some libraries are projects developed by DAISY members:
 
 - Liblouis ([liblouis][], [liblouis-java][]): Braille translator
   library written in C and maintained by SBS.
-- Dotify ([api][dotify.api], [common][dotify.common],
-  [formatter.impl][dotify.formatter.impl],
-  [hyphenator.impl][dotify.hyphenator.impl],
-  [text.impl][dotify.text.impl], [task-api][dotify.task-api],
-  [task.impl][dotify.task.impl], [task-runner][dotify.task-runner],
-  [translator.impl][dotify.translator.impl] ): Braille translator and
-  formatter written in Java and owned by MTM.
-- Braille Utils ([api][braille-utils.api], [impl][braille-utils.impl],
-  [pef-tools][braille-utils.pef-tools]): Java Library for embossing
-  and converting braille in PEF-format, owned by MTM.
+- [Dotify][dotify.library]: Braille translator and formatter, and
+  library for embossing and converting braille in PEF-format, written
+  in Java and maintained by MTM.
 
 Then there are some third-party projects that we have contributed to
 (either forked or upstream):
@@ -94,7 +91,6 @@ utilities:
 - [xproc-maven-plugin][]: For running XProcSpec tests in JUnit or Maven
 - [xspec-maven-plugin][]: For running
   [XSpec](https://github.com/expath/xspec/wiki) tests in JUnit or Maven
-- [maven-parents][]: DAISY organisation wide Maven parent POMs
 
 
 ## Aggregator project
@@ -111,39 +107,17 @@ dependencies into
   - [java][pipeline-clientlib-java]
   - [go][pipeline-clientlib-go]
 - [framework][pipeline-framework]
-- [gui][pipeline-gui]
+- [ui][pipeline-ui]
 - libs
   - [braille-css][]
-  - braille-utils
-    - [braille-utils.api][]
-    - [braille-utils.impl][]
-    - [braille-utils.pef-tools][]
   - [com.xmlcalabash][xmlcalabash1]
-  - dotify
-    - [dotify.api][]
-    - [dotify.common][]
-    - [dotify.formatter.impl][]
-    - [dotify.hyphenator.impl][]
-    - [dotify.text.impl][]
-    - [dotify.task-api][]
-    - [dotify.task.impl][]
-    - [dotify.task-runner][]
-    - [dotify.translator.impl][]
+  - [dotify.library][]
   - [jstyleparser][jStyleParser]
   - [liblouis][]
   - [liblouis-java][]
   - [osgi-libs][]
-- modules
-  - [audio][pipeline-mod-audio]
-  - [braille][pipeline-mod-braille]
-  - [common][pipeline-modules-common]
-  - [nlp][pipeline-mod-nlp]
-  - [scripts][pipeline-scripts]
-  - [scripts-utils][pipeline-scripts-utils]
-  - [tts][pipeline-mod-tts]
-- updater
-  - [cli][pipeline-updater]
-  - [gui][pipeline-updater-gui]
+- [modules][pipeline-modules]
+- [updater][pipeline-updater]
 - utils
   - [build-utils][pipeline-build-utils]
   - [xproc-maven-plugin][]
@@ -186,16 +160,6 @@ Additional languages used in third-party libraries are:
 Pipeline *modules* are the JAR files (bundles) that contain all the
 conversion logic and that are "run" by the Pipeline framework. They
 are the most obvious extension point of the Pipeline.
-
-The core Pipeline modules live in these repositories:
-
-- [pipeline-scripts][]
-- [pipeline-scripts-utils][]
-- [pipeline-modules-common][]
-- [pipeline-mod-braille][]
-- [pipeline-mod-tts][]
-- [pipeline-mod-nlp][]
-- [pipeline-mod-audio][]
 
 Some examples of third-party modules are:
 
@@ -278,6 +242,7 @@ technical reasons the branch may not contain any merge commits.
 
 [pipeline-assembly]: https://github.com/daisy/pipeline-assembly
 [pipeline-framework]: https://github.com/daisy/pipeline-framework
+[pipeline-modules]: https://github.com/daisy/pipeline-modules
 [pipeline-scripts]: https://github.com/daisy/pipeline-scripts
 [pipeline-scripts-utils]: https://github.com/daisy/pipeline-scripts-utils
 [pipeline-modules-common]: https://github.com/daisy/pipeline-modules-common
@@ -285,36 +250,23 @@ technical reasons the branch may not contain any merge commits.
 [pipeline-mod-tts]: https://github.com/daisy/pipeline-mod-tts
 [pipeline-mod-nlp]: https://github.com/daisy/pipeline-mod-nlp
 [pipeline-mod-audio]: https://github.com/daisy/pipeline-mod-audio
-[pipeline-gui]: https://github.com/daisy/pipeline-gui
 [pipeline-cli-go]: https://github.com/daisy/pipeline-cli-go
-[pipeline-cli]: https://github.com/daisy/pipeline-cli
+[pipeline-cli-ruby]: https://github.com/daisy/pipeline-cli-ruby
 [pipeline-webui]: https://github.com/daisy/pipeline-webui
 [pipeline-clientlib-java]: https://github.com/daisy/pipeline-clientlib-java
 [pipeline-clientlib-go]: https://github.com/daisy/pipeline-clientlib-go
+[pipeline-ui]: https://github.com/daisy/pipeline-ui
 [pipeline-updater]: https://github.com/daisy/pipeline-updater
-[pipeline-updater-gui]: https://github.com/daisy/pipeline-updater-gui
 [pipeline-samples]: https://github.com/daisy/pipeline-samples
 [pipeline-build-utils]: https://github.com/daisy/pipeline-build-utils
-[maven-parents]: https://github.com/daisy/maven-parents
 [xprocspec]: https://github.com/daisy/xprocspec
 [xproc-maven-plugin]: https://github.com/daisy/xproc-maven-plugin
 [xspec-maven-plugin]: https://github.com/daisy/xspec-maven-plugin
 [liblouis]: https://github.com/liblouis/liblouis
 [liblouis-java]: https://github.com/liblouis/liblouis-java
-[dotify.api]: https://github.com/brailleapps/dotify.api
-[dotify.common]: https://github.com/brailleapps/dotify.common
-[dotify.formatter.impl]: https://github.com/brailleapps/dotify.formatter.impl
-[dotify.hyphenator.impl]: https://github.com/brailleapps/dotify.hyphenator.impl
-[dotify.text.impl]: https://github.com/brailleapps/dotify.text.impl
-[dotify.task-api]: https://github.com/brailleapps/dotify.task-api
-[dotify.task.impl]: https://github.com/brailleapps/dotify.task.impl
-[dotify.task-runner]: https://github.com/brailleapps/dotify.task-runner
-[dotify.translator.impl]: https://github.com/brailleapps/dotify.translator.impl
+[dotify.library]: https://github.com/mtmse/dotify.library
 [braille-css]: https://github.com/daisy/braille-css
 [jStyleParser]: https://github.com/daisy/jStyleParser
-[braille-utils.api]: https://github.com/brailleapps/braille-utils.api
-[braille-utils.impl]: https://github.com/brailleapps/braille-utils.impl
-[braille-utils.pef-tools]: https://github.com/brailleapps/braille-utils.pef-tools
 [osgi-libs]: https://github.com/daisy/osgi-libs
 [epubcheck]: https://github.com/daisy/epubcheck
 [jhyphen]: https://github.com/daisy/jhyphen

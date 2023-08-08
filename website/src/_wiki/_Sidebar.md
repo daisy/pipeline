@@ -4,7 +4,7 @@
   * [[User Guide|User-Guide]]
     * [[Installation|Installation]]
       * [[Web Application|https://github.com/daisy/pipeline-webui/wiki/Installation-and-configuation]]
-    * [[Desktop Application|https://github.com/daisy/pipeline-gui/wiki/DAISY-Pipeline-2-User-Guide]]
+    * [[Desktop Application|https://github.com/daisy/pipeline-ui/wiki/Quick-Start-Guide]]
     * [[Web Application|https://github.com/daisy/pipeline-webui/wiki/User-Guide]]
       * [[Templating|https://github.com/daisy/pipeline-webui/wiki/Templating]]
       * [[Administrator Settings|https://github.com/daisy/pipeline-webui/wiki/Administrator-settings]]
