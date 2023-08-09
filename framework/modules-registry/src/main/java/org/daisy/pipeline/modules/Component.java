@@ -81,6 +81,16 @@ public class Component {
 		}
 	}
 
+	/**
+	 * Get the version of this component.
+	 *
+	 * Defaults to the version number of the module. Method should be overridden by components that
+	 * have their own versioning.
+	 */
+	public String getVersion() {
+		return getModule().getVersion();
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
