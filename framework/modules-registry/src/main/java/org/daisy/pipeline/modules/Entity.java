@@ -8,57 +8,32 @@ import org.daisy.common.file.URLs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-// TODO: Auto-generated Javadoc
 /**
  * Entity represents a public id and its path inside the module. Only handles
  * publicId as the privates one will be loaded as components.
  */
 public class Entity {
 
-	/** The Public id. */
+	private final Module mModule;
 	private final String mPublicId;
-
-	/** The Path. */
 	private final String mPath;
 
-		/** The loader. */
-	private final ResourceLoader mLoader;
-
-	/** The module. */
-	private Module mModule;
-
 	private static Logger mLogger = LoggerFactory.getLogger(Entity.class);
+
 	/**
 	 * Instantiates a new entity.
-	 *
-	 * @param publicId the public id
-	 * @param path the path
-	 * @param loader the loader
 	 */
-	public Entity(String publicId, String path, ResourceLoader loader) {
-		super();
+	public Entity(Module module, String publicId, String path) {
+		mModule = module;
 		mPublicId = publicId;
 		mPath = path;
-		mLoader = loader;
 	}
 
 	/**
-	 * Gets the module.
-	 *
-	 * @return the module
+	 * Gets the module owner of this entity.
 	 */
 	public Module getModule() {
 		return mModule;
-	}
-
-	/**
-	 * Sets the module.
-	 *
-	 * @param module the new module
-	 */
-	public void setModule(Module module) {
-		mModule = module;
 	}
 
 	/**
@@ -76,30 +51,17 @@ public class Entity {
 	 * @return the path
 	 */
 	public URI getResource() {
-try {
-
+		try {
 			mLogger.trace("Getting resource from entity " + this + ": " + mPath);
-			URL url= mLoader.loadResource(mPath);
-			if(url!=null) {
+			URL url = mModule.loader.loadResource(mPath);
+			if (url != null) {
 				return URLs.asURI(url);
 			} else {
 				return null;
 			}
-
 		} catch (Exception e) {
 			mLogger.debug("Resource " + mPath + " does not exist", e);
 			return null;
 		}
 	}
-
-	/**
-	 * Gets the loader.
-	 *
-	 * @return the loader
-	 */
-	public ResourceLoader getLoader() {
-		return mLoader;
-	}
-
-
 }

@@ -42,8 +42,8 @@ public class ModuleTest {
 				throw new UnsupportedOperationException("not implemented");
 			}
 		};
-		Module module = new Module("name", "version", "title") {};
-		module.parseCatalog(catalog, resourceLoader);
+		Module module = new Module("name", "version", "title", resourceLoader) {};
+		Module.parseCatalog(module, catalog);
 		Iterator<Component> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());
 		Component c = components.next();

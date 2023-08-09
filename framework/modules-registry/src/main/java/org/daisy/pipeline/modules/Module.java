@@ -34,6 +34,7 @@ public abstract class Module {
 	private String title;
 	private final Map<URI,Component> components = new HashMap<>();
 	private final Map<String,Entity> entities = new HashMap<>();
+	ResourceLoader loader; // used in Component and Entity
 
 	private static final Logger mLogger = LoggerFactory.getLogger(Module.class);
 
@@ -41,24 +42,19 @@ public abstract class Module {
 	 * Instantiate a new module
 	 */
 	protected Module(String name, String version, String title) {
-		this.name = name;
-		this.version = version;
-		this.title = title;
-	}
-
-	/**
-	 * Initialize the module
-	 */
-	protected void init(XmlCatalogParser parser) {
-		Class<?> thisClass = this.getClass();
-		try {
-			URI jarFileURI = thisClass.getProtectionDomain().getCodeSource().getLocation().toURI();
+		if (OSGiHelper.inOSGiContext())
+			OSGiHelper.populate(this);
+		else {
+			this.name = name;
+			this.version = version;
+			this.title = title;
 			try {
+				URI jarFileURI = getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+				if (!jarFileURI.toString().startsWith("file:"))
+					throw new RuntimeException("unexpected code source location: " + jarFileURI);
 				File jarFile = new File(jarFileURI);
-				mLogger.trace("Creating module from JAR: " + jarFile);
-				parseCatalog(
-					parser,
-					new ResourceLoader() {
+				getLogger().trace("Creating module from JAR: " + jarFile);
+				this.loader = new ResourceLoader() {
 						// Can't use ClassLoader.getResource() because there can be name
 						// clashes between resources in different JARs. Alternative
 						// solution would be to have a ClassLoader for each JAR.
@@ -81,22 +77,41 @@ public abstract class Module {
 						public Iterable<URL> loadResources(final String path) {
 							throw new UnsupportedOperationException("Not supported without OSGi.");
 						}
-					});
-			} catch (IllegalArgumentException e) {
-				// Could be because we are running in OSGi context
-				OSGiHelper.init(this, parser);
+					};
+			} catch (URISyntaxException e) {
+				throw new RuntimeException(e);
 			}
-		} catch (URISyntaxException e) {
-			throw new RuntimeException(e);
 		}
+	}
+
+	protected Module(String name, String version, String title, ResourceLoader loader) {
+		if (OSGiHelper.inOSGiContext())
+			throw new RuntimeException("Constructor not supported in OSGi");
+		this.name = name;
+		this.version = version;
+		this.title = title;
+		this.loader = loader;
+	}
+
+	protected Logger getLogger() {
+		return mLogger;
 	}
 
 	// static nested class in order to delay class loading
 	private static abstract class OSGiHelper {
-		static void init(Module thiz, XmlCatalogParser parser) {
+
+		static boolean inOSGiContext() {
+			try {
+				return FrameworkUtil.getBundle(OSGiHelper.class) != null;
+			} catch (NoClassDefFoundError e) {
+				return false;
+			}
+		}
+
+		static void populate(Module thiz) {
 			Bundle bundle = FrameworkUtil.getBundle(thiz.getClass());
-			mLogger.trace("Creating module from OSGi bundle: " + bundle);
-			ResourceLoader loader = new ResourceLoader() {
+			thiz.getLogger().trace("Creating module from OSGi bundle: " + bundle);
+			thiz.loader = new ResourceLoader() {
 				@Override
 				public URL loadResource(String path) {
 					// Paths are assumed to be relative to META-INF
@@ -118,7 +133,6 @@ public abstract class Module {
 					};
 				}
 			};
-			thiz.parseCatalog(parser, loader);
 			// these fields are already set, but now get the values from the bundle metadata
 			thiz.name = bundle.getHeaders().get("Bundle-Name").toString();
 			thiz.version = bundle.getVersion().toString();
@@ -129,52 +143,59 @@ public abstract class Module {
 	/**
 	 * Parse catalog.xml file
 	 */
-	private void parseCatalog(XmlCatalogParser parser, ResourceLoader loader) {
-		URL catalogURL = loader.loadResource("../META-INF/catalog.xml");
+	public static void parseCatalog(Module module, XmlCatalogParser parser) {
+		URL catalogURL = module.loader.loadResource("../META-INF/catalog.xml");
 		if (catalogURL == null)
 			throw new RuntimeException("/META-INF/catalog.xml file not found");
 		XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
-		parseCatalog(catalog, loader);
+		parseCatalog(module, catalog);
 	}
 
-	// package private for unit tests
-	void parseCatalog(XmlCatalog catalog, ResourceLoader loader) {
+	public static void parseCatalog(Module module, XmlCatalog catalog) {
 		for (Map.Entry<URI, URI> entry : catalog.getSystemIdMappings().entrySet()) {
-			addComponent(entry.getKey(), entry.getValue().toString(), loader);
+			module.addComponent(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<URI, URI> entry : catalog.getUriMappings().entrySet()) {
-			addComponent(entry.getKey(), entry.getValue().toString(), loader);
+			module.addComponent(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<String, URI> entry : catalog.getPublicMappings().entrySet()) {
-			addEntity(entry.getKey(), entry.getValue().toString(), loader);
+			module.addEntity(entry.getKey(), entry.getValue().toString());
 		}
 		for (Map.Entry<URI, URI> rule : catalog.getRewriteUris().entrySet()) {
-			Iterable<URL> entries = loader.loadResources(rule.getValue().toString());
+			Iterable<URL> entries = module.loader.loadResources(rule.getValue().toString());
 			for (URL url : entries) {
 				try {
 					// get tail of the path i.e. ../static/css/ -> /css/
 					String path = url.toURI().getPath().toString().replace(rule.getValue().toString().replace("..",""),"");
-					addComponent(rule.getKey().resolve(URI.create(path)), url.toString(), loader);
+					module.addComponent(rule.getKey().resolve(URI.create(path)), url.toString());
 				} catch (URISyntaxException e) {
-					mLogger.warn("Exception while generating paths");
+					module.getLogger().warn("Exception while generating paths");
 				}
 			}
 		}
 	}
 
-	private void addComponent(URI uri, String path, ResourceLoader loader) {
-		mLogger.trace("add component:" + uri.toString() + ", path: " + path);
-		Component component = new Component(uri, path, loader);
-		component.setModule(this);
-		components.put(component.getURI(), component);
+	/**
+	 * This method can be overridden to exclude certain components that have unmet dependencies.
+	 */
+	protected boolean addComponent(URI uri, String path) {
+		getLogger().trace("Adding component: " + uri.toString() + ", path: " + path);
+		return addComponent(new Component(this, uri, path));
 	}
-	
-	
-	private void addEntity(String publicId, String path, ResourceLoader loader) {
-		mLogger.trace("add entity:" + publicId.toString() + ", path: " + path);
-		Entity entity = new Entity(publicId, path, loader);
-		entity.setModule(this);
+
+	protected boolean addComponent(Component component) {
+		components.put(component.getURI(), component);
+		return true;
+	}
+
+	protected boolean addEntity(String publicId, String path) {
+		getLogger().trace("Adding entity: " + publicId.toString() + ", path: " + path);
+		return addEntity(new Entity(this, publicId, path));
+	}
+
+	protected boolean addEntity(Entity entity) {
 		entities.put(entity.getPublicId(), entity);
+		return true;
 	}
 
 	/**

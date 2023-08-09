@@ -74,7 +74,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		policy = ReferencePolicy.DYNAMIC
 	)
 	public void addModule(Module module) {
-		logger.debug("Registring module {}", module.getName());
+		logger.debug("Adding module {}", module.getName());
 		modules.add(module);
 		for (Component component : module.getComponents()) {
 			logger.debug("  - {}", component.getURI());

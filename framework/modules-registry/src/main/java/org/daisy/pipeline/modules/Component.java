@@ -13,37 +13,19 @@ import org.slf4j.LoggerFactory;
  */
 public class Component {
 
-
-
-	/** The uri. */
+	private final Module module;
 	private final URI uri;
-
-	/** The path. */
 	private final String path;
-	// private Space space;
-	/** The loader. */
-	private final ResourceLoader loader;
 
-	/** The module. */
-	private Module module;
-
-	/** The m logger. */
 	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 
 	/**
 	 * Instantiates a new component.
-	 *
-	 * @param uri
-	 *            the uri
-	 * @param path
-	 *            the path
-	 * @param loader
-	 *            the loader which actually able to load the resource.
 	 */
-	public Component(URI uri, String path, ResourceLoader loader) {
+	public Component(Module module, URI uri, String path) {
+		this.module = module;
 		this.uri = uri;
 		this.path = path;
-		this.loader = loader;
 	}
 
 	/**
@@ -55,10 +37,6 @@ public class Component {
 		return uri;
 	}
 
-	/*
-	 * public Space getSpace() { return space; }
-	 */
-
 	/**
 	 * Gets the resource's real uri.
 	 *
@@ -66,15 +44,9 @@ public class Component {
 	 */
 	public URI getResource() {
 		try {
-
 			mLogger.trace("Getting resource from component " + this + ": " + path);
-			URL url= loader.loadResource(path);
-			if(url!=null) {
-				return URLs.asURI(url);
-			} else {
-				return null;
-			}
-
+			URL url = module.loader.loadResource(path);
+			return url != null ? URLs.asURI(url) : null;
 		} catch (Exception e) {
 			mLogger.debug("Resource " + path + " does not exist", e);
 			return null;
@@ -88,7 +60,14 @@ public class Component {
 	 * have their own versioning.
 	 */
 	public String getVersion() {
-		return getModule().getVersion();
+		return module.getVersion();
+	}
+
+	/**
+	 * Gets the module owner of this component.
+	 */
+	public Module getModule() {
+		return module;
 	}
 
 	/*
@@ -99,24 +78,5 @@ public class Component {
 	@Override
 	public String toString() {
 		return "[" + uri + "]";
-	}
-
-	/**
-	 * Gets the module owner of this component.
-	 *
-	 * @return the module
-	 */
-	public Module getModule() {
-		return module;
-	}
-
-	/**
-	 * Sets the module.
-	 *
-	 * @param module
-	 *            the new module
-	 */
-	public void setModule(Module module) {
-		this.module = module;
 	}
 }

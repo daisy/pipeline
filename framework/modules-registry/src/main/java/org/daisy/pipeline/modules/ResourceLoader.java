@@ -11,7 +11,7 @@ public interface ResourceLoader {
 	/**
 	 * Loads the resource.
 	 *
-	 * @param path the path
+	 * @param path the path, relative to catalog.xml
 	 * @return the uRL
 	 */
 	URL loadResource(String path);
