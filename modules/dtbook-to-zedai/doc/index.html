@@ -963,15 +963,35 @@ The resulting ZedAI XML file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">CSS filename</div>
+<div class="synopsis-option-name">Validation</div>
 <div class="synopsis-option-desc">
-Filename for the generated CSS file
+Whether to abort on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>abort</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ZedAI filename</div>
+<div class="synopsis-option-desc">
+Filename for the generated ZedAI file
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>zedai-css.css</code>
+<b>Default value</b>: <code>zedai.xml</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -989,22 +1009,15 @@ Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-name">CSS filename</div>
 <div class="synopsis-option-desc">
-Whether to abort on validation issues.
+Filename for the generated CSS file
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>off</code></dt>
-<dd>No validation</dd>
-<dt><code>report</code></dt>
-<dd>Report validation issues</dd>
-<dt><code>abort</code></dt>
-<dd>Abort on validation issues</dd>
-</dl>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>abort</code>
+<b>Default value</b>: <code>zedai-css.css</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1044,19 +1057,6 @@ Filename for the generated MODS file
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>zedai-mods.xml</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">ZedAI filename</div>
-<div class="synopsis-option-desc">
-Filename for the generated ZedAI file
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>zedai.xml</code>
 </div>
 </li>
 </ul>
@@ -1108,16 +1108,20 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
-<td>CSS filename (default: <span class="synopsis-option-default"><code>zedai-css.css</code></span>)</td>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+</tr>
+<tr>
+<td>--zedai-filename [<span style="text-transform: uppercase">zedai-filename</span>]</td>
+<td>ZedAI filename (default: <span class="synopsis-option-default"><code>zedai.xml</code></span>)</td>
 </tr>
 <tr>
 <td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
 <td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
-<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
-<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+<td>--css-filename [<span style="text-transform: uppercase">css-filename</span>]</td>
+<td>CSS filename (default: <span class="synopsis-option-default"><code>zedai-css.css</code></span>)</td>
 </tr>
 <tr>
 <td>--lang [<span style="text-transform: uppercase">lang</span>]</td>
@@ -1130,10 +1134,6 @@ Options:</pre>
 <tr>
 <td>--mods-filename [<span style="text-transform: uppercase">mods-filename</span>]</td>
 <td>MODS filename (default: <span class="synopsis-option-default"><code>zedai-mods.xml</code></span>)</td>
-</tr>
-<tr>
-<td>--zedai-filename [<span style="text-transform: uppercase">zedai-filename</span>]</td>
-<td>ZedAI filename (default: <span class="synopsis-option-default"><code>zedai.xml</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

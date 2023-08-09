@@ -914,6 +914,19 @@ Validation report comprising all documents' reports.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-output-name">Validation reports</div>
+<div class="synopsis-output-desc">
+All validation reports.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text</li>
+</ul>
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-output-name">DTBook XML Report</div>
 <div class="synopsis-output-desc">
 Raw validation output for the DTBook file(s).
@@ -926,24 +939,24 @@ Raw validation output for the DTBook file(s).
 Raw validation output for the package document.
 </div>
 </li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">Validation reports</div>
-<div class="synopsis-output-desc">
-All validation reports.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text</li>
-</ul>
-</div>
-</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Check that images exist</div>
+<div class="synopsis-option-desc">
+Check to see that images referenced by DTBook file(s) exist on disk.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">MathML version</div>
@@ -958,19 +971,6 @@ Version of MathML in the DTBook file(s).
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>3.0</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Check that images exist</div>
-<div class="synopsis-option-desc">
-Check to see that images referenced by DTBook file(s) exist on disk.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1022,12 +1022,12 @@ Options:</pre>
 <td>The package document (*.opf) of the input NIMAS fileset.</td>
 </tr>
 <tr>
-<td>--mathml-version [<span style="text-transform: uppercase">mathml-version</span>]</td>
-<td>MathML version (default: <span class="synopsis-option-default"><code>3.0</code></span>)</td>
-</tr>
-<tr>
 <td>--check-images [<span style="text-transform: uppercase">check-images</span>]</td>
 <td>Check that images exist (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--mathml-version [<span style="text-transform: uppercase">mathml-version</span>]</td>
+<td>MathML version (default: <span class="synopsis-option-default"><code>3.0</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

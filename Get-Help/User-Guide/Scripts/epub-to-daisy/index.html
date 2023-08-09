@@ -940,6 +940,13 @@ if (window.addEventListener) {
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-output-name">Intermediary EPUB 3 with media-overlays</div>
+<div class="synopsis-output-desc">
+
+</div>
+</li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-output-name">DAISY 2.02</div>
 <div class="synopsis-output-desc">
 
@@ -952,18 +959,31 @@ if (window.addEventListener) {
 
 </div>
 </li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-output-name">Intermediary EPUB 3 with media-overlays</div>
-<div class="synopsis-output-desc">
-
-</div>
-</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-desc">
+Whether to abort on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>off</code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Perform text-to-speech</div>
@@ -987,26 +1007,6 @@ if (window.addEventListener) {
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>default</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Validation</div>
-<div class="synopsis-option-desc">
-Whether to abort on validation issues.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>off</code></dt>
-<dd>No validation</dd>
-<dt><code>report</code></dt>
-<dd>Report validation issues</dd>
-<dt><code>abort</code></dt>
-<dd>Abort on validation issues</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>off</code>
 </div>
 </li>
 </ul>
@@ -1065,12 +1065,12 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
-<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
-</tr>
-<tr>
 <td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
 <td>Validation (default: <span class="synopsis-option-default"><code>off</code></span>)</td>
+</tr>
+<tr>
+<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
+<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
