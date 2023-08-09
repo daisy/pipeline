@@ -886,6 +886,21 @@ designed to work with both.</p>
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook</div>
+<div class="synopsis-input-desc">
+The DTBook to transform.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name">Template</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">OpenOffice template file (.ott) that contains the style definitions.
@@ -901,21 +916,6 @@ designed to work with both.</p>
 <b>Media-type</b>:
 <ul class="media-types">
 <li>application/vnd.oasis.opendocument.text-template</li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook</div>
-<div class="synopsis-input-desc">
-The DTBook to transform.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -940,25 +940,9 @@ The resulting ODT file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">ASCIIMath handling</div>
+<div class="synopsis-option-name">Float page numbers</div>
 <div class="synopsis-option-desc">
-How to render ASCIIMath-encoded formulas.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>ASCIIMATH</code></dt>
-<dt><code>MATHML</code></dt>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>ASCIIMATH</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Page numbers</div>
-<div class="synopsis-option-desc">
-Whether to show page numbers or not.
+Try to float page numbers to an appropriate place as opposed to exactly following print.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -969,9 +953,25 @@ Whether to show page numbers or not.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Float page numbers</div>
+<div class="synopsis-option-name">Images handling</div>
 <div class="synopsis-option-desc">
-Try to float page numbers to an appropriate place as opposed to exactly following print.
+How to render images.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>EMBED</code></dt>
+<dt><code>LINK</code></dt>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>EMBED</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Page numbers</div>
+<div class="synopsis-option-desc">
+Whether to show page numbers or not.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -995,18 +995,18 @@ Resolution of images in DPI.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Images handling</div>
+<div class="synopsis-option-name">ASCIIMath handling</div>
 <div class="synopsis-option-desc">
-How to render images.
+How to render ASCIIMath-encoded formulas.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>EMBED</code></dt>
-<dt><code>LINK</code></dt>
+<dt><code>ASCIIMATH</code></dt>
+<dt><code>MATHML</code></dt>
 </dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>EMBED</code>
+<b>Default value</b>: <code>ASCIIMATH</code>
 </div>
 </li>
 </ul>
@@ -1053,35 +1053,35 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>The DTBook to transform.</td>
+</tr>
+<tr>
 <td>--template <span style="text-transform: uppercase">template</span>
 </td>
 <td>OpenOffice template file (.ott) that contains the style definitions.
 </td>
 </tr>
 <tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>The DTBook to transform.</td>
+<td>--page-numbers-float [<span style="text-transform: uppercase">page-numbers-float</span>]</td>
+<td>Float page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--asciimath [<span style="text-transform: uppercase">asciimath</span>]</td>
-<td>ASCIIMath handling (default: <span class="synopsis-option-default"><code>ASCIIMATH</code></span>)</td>
+<td>--images [<span style="text-transform: uppercase">images</span>]</td>
+<td>Images handling (default: <span class="synopsis-option-default"><code>EMBED</code></span>)</td>
 </tr>
 <tr>
 <td>--page-numbers [<span style="text-transform: uppercase">page-numbers</span>]</td>
 <td>Page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--page-numbers-float [<span style="text-transform: uppercase">page-numbers-float</span>]</td>
-<td>Float page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
 <td>--image-dpi [<span style="text-transform: uppercase">image-dpi</span>]</td>
 <td>Image resolution (default: <span class="synopsis-option-default"><code>600</code></span>)</td>
 </tr>
 <tr>
-<td>--images [<span style="text-transform: uppercase">images</span>]</td>
-<td>Images handling (default: <span class="synopsis-option-default"><code>EMBED</code></span>)</td>
+<td>--asciimath [<span style="text-transform: uppercase">asciimath</span>]</td>
+<td>ASCIIMath handling (default: <span class="synopsis-option-default"><code>ASCIIMATH</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
