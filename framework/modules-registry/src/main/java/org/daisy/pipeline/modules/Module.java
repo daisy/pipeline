@@ -301,4 +301,29 @@ public abstract class Module {
 	public String toString() {
 		return getName() + " [" + getVersion() + "]";
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof Module))
+			return false;
+		Module that = (Module)o;
+		if (!name.equals(that.name))
+			return false;
+		if (!version.equals(that.version))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + name.hashCode();
+		result = prime * result + version.hashCode();
+		return result;
+	}
 }

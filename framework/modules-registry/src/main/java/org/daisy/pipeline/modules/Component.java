@@ -9,7 +9,7 @@ import org.daisy.common.file.URLs;
 /**
  * Module component now based on expath package components.
  */
-public class Component {
+public class Component implements Dependency {
 
 	private final Module module;
 	private final URI uri;
@@ -69,5 +69,30 @@ public class Component {
 	@Override
 	public String toString() {
 		return "[" + uri + "]";
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof Component))
+			return false;
+		Component that = (Component)o;
+		if (!module.equals(that.module))
+			return false;
+		if (!uri.equals(that.uri))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + module.hashCode();
+		result = prime * result + uri.hashCode();
+		return result;
 	}
 }
