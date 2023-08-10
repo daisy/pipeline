@@ -30,10 +30,10 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <!-- for OSGIModuleBuilder -->
+      <!-- needed by DefaultModuleRegistry (VersionRange) regardless of whether we're in a OSGi
+           runtime or not, so scope needs to be 'compile', not 'provided' -->
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>

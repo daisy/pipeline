@@ -16,6 +16,7 @@ public class Component {
 	private final Module module;
 	private final URI uri;
 	private final String path;
+	private final String version;
 
 	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 
@@ -26,6 +27,7 @@ public class Component {
 		this.module = module;
 		this.uri = uri;
 		this.path = path;
+		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
 	}
 
 	/**
@@ -60,7 +62,7 @@ public class Component {
 	 * have their own versioning.
 	 */
 	public String getVersion() {
-		return module.getVersion();
+		return version;
 	}
 
 	/**

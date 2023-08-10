@@ -11,9 +11,12 @@ import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.osgi.framework.Version;
+import org.osgi.framework.VersionRange;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
@@ -56,9 +59,31 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	}
 
 	@Override
-	public Module resolveDependency(URI component, Module source) {
-		// TODO check cache, otherwise delegate to resolver
-		return null;
+	public Module getModuleByComponent(URI uri, String versionRange) {
+		Module module = getModuleByComponent(uri);
+		if (module != null && versionRange != null) {
+			Component component = module.getComponent(uri);
+			if (component == null)
+				throw new IllegalStateException("coding error"); // can not happen
+			Version version; {
+				try {
+					version = Version.parseVersion(component.getVersion());
+				} catch (IllegalArgumentException e) {
+					logger.debug("Version of " + uri + " can not be parsed: " + component.getVersion());
+					return null;
+				}
+			}
+			try {
+				if (!(new VersionRange(versionRange).includes(version))) {
+					logger.debug("Version of " + uri + " (" + version + ") not in requested range (" + versionRange + ")");
+					return null;
+				}
+			} catch (IllegalArgumentException e) {
+				logger.debug("Version range can not be parsed: " + versionRange);
+				return null;
+			}
+		}
+		return module;
 	}
 
 	@Override
