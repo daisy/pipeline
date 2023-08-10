@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.impl.tracker;
+package org.daisy.pipeline.modules.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;

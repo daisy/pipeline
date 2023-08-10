@@ -71,8 +71,8 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-              org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+              org.daisy.pipeline.modules.impl.ModuleUriResolver,
+              org.daisy.pipeline.modules.impl.DefaultModuleRegistry,
               org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
@@ -97,8 +97,8 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-                org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+                org.daisy.pipeline.modules.impl.ModuleUriResolver,
+                org.daisy.pipeline.modules.impl.DefaultModuleRegistry,
                 org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
               </includes>
             </configuration>

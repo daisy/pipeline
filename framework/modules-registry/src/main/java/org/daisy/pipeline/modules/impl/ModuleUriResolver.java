@@ -1,4 +1,4 @@
-package org.daisy.pipeline.modules.impl.resolver;
+package org.daisy.pipeline.modules.impl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
