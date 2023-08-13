@@ -1,7 +1,6 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
-import java.net.URL;
 
 import org.daisy.common.file.URLs;
 
@@ -53,12 +52,7 @@ public class Entity {
 	public URI getResource() {
 		try {
 			mLogger.trace("Getting resource from entity " + this + ": " + mPath);
-			URL url = mModule.loader.loadResource(mPath);
-			if (url != null) {
-				return URLs.asURI(url);
-			} else {
-				return null;
-			}
+			return URLs.asURI(mModule.getResource(mPath));
 		} catch (Exception e) {
 			mLogger.debug("Resource " + mPath + " does not exist", e);
 			return null;

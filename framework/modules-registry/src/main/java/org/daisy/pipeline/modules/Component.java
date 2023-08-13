@@ -1,7 +1,6 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
-import java.net.URL;
 
 import org.daisy.common.file.URLs;
 
@@ -30,6 +29,13 @@ public class Component {
 		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
 	}
 
+	public Component(Module module, URI uri, URL resource) {
+		this.module = module;
+		this.uri = uri;
+		this.resource = resource;
+		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
+	}
+
 	/**
 	 * Gets the component's URI.
 	 *
@@ -47,8 +53,7 @@ public class Component {
 	public URI getResource() {
 		try {
 			mLogger.trace("Getting resource from component " + this + ": " + path);
-			URL url = module.loader.loadResource(path);
-			return url != null ? URLs.asURI(url) : null;
+			return URLs.asURI(module.getResource(path));
 		} catch (Exception e) {
 			mLogger.debug("Resource " + path + " does not exist", e);
 			return null;
