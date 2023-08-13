@@ -28,6 +28,12 @@ public interface ModuleRegistry extends Iterable<Module> {
 	public Module getModuleByEntity(String publicId);
 
 	/**
+	 * Gets the module which has the specified class among its resources, or {@code null} if no such
+	 * module can be found.
+	 */
+	public Module getModuleByClass(Class<?> clazz);
+
+	/**
 	 * Returns the list of available components.
 	 */
 	public Iterable<URI> getComponents();

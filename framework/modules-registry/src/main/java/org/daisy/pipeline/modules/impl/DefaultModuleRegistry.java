@@ -32,9 +32,10 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	private static final Logger logger = LoggerFactory
 			.getLogger(DefaultModuleRegistry.class);
 
-	private final HashMap<URI, Module> componentsMap = new HashMap<URI, Module>();
-	private final HashMap<String, Module> entityMap = new HashMap<String, Module>();
-	private final HashSet<Module> modules = new HashSet<Module>();
+	private final HashMap<URI,Module> componentsMap = new HashMap<>();
+	private final HashMap<String,Module> entityMap = new HashMap<>();
+	private final HashMap<URL,Module> codeSourceLocationMap = new HashMap<>();
+	private final HashSet<Module> modules = new HashSet<>();
 
 	public DefaultModuleRegistry() {
 	}
@@ -109,6 +110,10 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			logger.debug("  - {}", entity.getPublicId());
 			entityMap.put(entity.getPublicId(), module);
 		}
+		URL codeSourceLocation = getCodeSourceLocation(module.getClass());
+		if (codeSourceLocationMap.containsKey(codeSourceLocation))
+			throw new IllegalStateException("Not more than one module is allowed in one bundle");
+		codeSourceLocationMap.put(codeSourceLocation, module);
 	}
 
 	public void removeModule(Module module) {
@@ -125,5 +130,15 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 		return entityMap.keySet();
 	}
 
+	@Override
+	public Module getModuleByClass(Class<?> clazz) {
+		return codeSourceLocationMap.get(getCodeSourceLocation(clazz));
+	}
 
+	private static URL getCodeSourceLocation(Class<?> clazz) throws IllegalArgumentException {
+		URL location = clazz.getProtectionDomain().getCodeSource().getLocation();
+		if (!(location.toString().startsWith("file:") || location.toString().startsWith("bundle:")))
+			throw new RuntimeException("unexpected code source location: " + location);
+		return location;
+	}
 }
