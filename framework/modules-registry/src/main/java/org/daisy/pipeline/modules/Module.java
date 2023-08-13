@@ -1,11 +1,18 @@
 package org.daisy.pipeline.modules;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -34,9 +41,11 @@ public abstract class Module {
 	private String title;
 	private final Map<URI,Component> components = new HashMap<>();
 	private final Map<String,Entity> entities = new HashMap<>();
-	ResourceLoader loader; // used in Component and Entity
+	private ResourceLoader loader;
 
 	private static final Logger mLogger = LoggerFactory.getLogger(Module.class);
+
+	private static final Map<String,Object> fsEnv = Collections.<String,Object>emptyMap();
 
 	/**
 	 * Instantiate a new module
@@ -53,24 +62,44 @@ public abstract class Module {
 				if (!jarFileURI.toString().startsWith("file:"))
 					throw new RuntimeException("unexpected code source location: " + jarFileURI);
 				File jarFile = new File(jarFileURI);
+				if (!jarFile.exists())
+					throw new RuntimeException("coding error");
 				getLogger().trace("Creating module from JAR: " + jarFile);
 				this.loader = new ResourceLoader() {
 						// Can't use ClassLoader.getResource() because there can be name
 						// clashes between resources in different JARs. Alternative
 						// solution would be to have a ClassLoader for each JAR.
 						@Override
-						public URL loadResource(String path) {
+						public URL loadResource(String path) throws NoSuchFileException {
 							// Paths are assumed to be relative to META-INF
 							if (!path.startsWith("../")) {
 								throw new RuntimeException("Paths must start with '../' but got '" + path + "'");
 							}
-							path = path.substring(2);
-							try {
-								return jarFile.isDirectory() ?
-									new URL(jarFile.toURI().toASCIIString() + path) :
-									new URL("jar:" + jarFile.toURI().toASCIIString() + "!" + path);
-							} catch (MalformedURLException e) {
-								throw new RuntimeException(e);
+							path = path.substring(3);
+							if (jarFile.isDirectory()) {
+								File f = new File(jarFile, path);
+								if (!f.exists())
+									throw new NoSuchFileException("file does not exist: " + f);
+								return URLs.asURL(f);
+							} else {
+								FileSystem fs; {
+									try {
+										fs = FileSystems.newFileSystem(URLs.asURI("jar:" + jarFileURI), fsEnv); }
+									catch (IOException e) {
+										throw new RuntimeException(e); }}
+								try {
+									Path f = fs.getPath("/" + path);
+									if (!Files.exists(f))
+										throw new NoSuchFileException("file does not exist: " + f);
+									try {
+										return new URL("jar:" + jarFileURI + "!/" + path); }
+									catch (MalformedURLException e) {
+										throw new RuntimeException(e); }}
+								finally {
+									try {
+										fs.close(); }
+									catch (IOException e) {
+										throw new RuntimeException(e); }}
 							}
 						}
 						@Override
@@ -144,11 +173,13 @@ public abstract class Module {
 	 * Parse catalog.xml file
 	 */
 	public static void parseCatalog(Module module, XmlCatalogParser parser) {
-		URL catalogURL = module.loader.loadResource("../META-INF/catalog.xml");
-		if (catalogURL == null)
-			throw new RuntimeException("/META-INF/catalog.xml file not found");
-		XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
-		parseCatalog(module, catalog);
+		try {
+			URL catalogURL = module.loader.loadResource("../META-INF/catalog.xml");
+			XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
+			parseCatalog(module, catalog);
+		} catch (NoSuchFileException e) {
+			throw new RuntimeException("/META-INF/catalog.xml file not found", e);
+		}
 	}
 
 	public static void parseCatalog(Module module, XmlCatalog catalog) {
@@ -217,6 +248,19 @@ public abstract class Module {
 	 */
 	public String getTitle() {
 		return title;
+	}
+
+	/**
+	 * Get the specified resource from the module. This includes all resources, also the ones that
+	 * are not exposed as components. The method can be overridden to exclude certain resources that
+	 * have unmet dependencies.
+	 *
+	 * @param path The (not URL-encoded) path of a resource inside the JAR or class directory of the module.
+	 * @return An encoded absolute URL
+	 * @throws NoSuchFileException if the resource at {@code path} is not available
+	 */
+	public URL getResource(String path) throws NoSuchFileException {
+		return loader.loadResource(path);
 	}
 
 	/**

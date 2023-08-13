@@ -143,7 +143,7 @@ public final class URLs {
 		return base.relativize(url);
 	}
 	
-	private static Map<String,Object> fsEnv = Collections.<String,Object>emptyMap();
+	private static final Map<String,Object> fsEnv = Collections.<String,Object>emptyMap();
 	
 	/**
 	 * @param resource The (not URL-encoded) path of a resource inside the specified JAR or class directory
