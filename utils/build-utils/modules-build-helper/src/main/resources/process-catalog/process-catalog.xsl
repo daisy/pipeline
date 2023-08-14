@@ -10,6 +10,7 @@
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:GenerateModuleClass="org.daisy.pipeline.maven.plugin.GenerateModuleClassFunctionProvider$GenerateModuleClass"
                 exclude-result-prefixes="#all" version="2.0">
     
     <xsl:param name="generatedSourcesDirectory" required="yes" as="xs:string"/>
@@ -97,48 +98,11 @@
     
     <xsl:template name="module-class">
         <xsl:variable name="className" select="concat('Module_',replace($moduleName,'-','_'))"/>
-        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.modules.impl;
-
-import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
-@Component(
-    name = "org.daisy.pipeline.modules.impl.<xsl:value-of select="$className"/>",
-    service = { Module.class }
-)
-public class <xsl:value-of select="$className"/> extends Module {
-
-    private XmlCatalogParser catalogParser;
-
-    public <xsl:value-of select="$className"/>() {
-        super("<xsl:value-of select="$moduleName"/>",
-              "<xsl:value-of select="$moduleVersion"/>",
-              "<xsl:value-of select="replace(replace($moduleTitle,'&quot;','\\&quot;'),'\\','\\\\')"/>");
-    }
-
-    @Activate
-    public void activate() {
-        super.init(catalogParser);
-    }
-
-    @Reference(
-        name = "XmlCatalogParser",
-        unbind = "-",
-        service = XmlCatalogParser.class,
-        cardinality = ReferenceCardinality.MANDATORY,
-        policy = ReferencePolicy.STATIC
-    )
-    public void setParser(XmlCatalogParser parser) {
-        catalogParser = parser;
-    }
-}
-</c:data></xsl:result-document>
+        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data><xsl:value-of select="GenerateModuleClass:apply(GenerateModuleClass:new(),
+                                                                         $className,
+                                                                         $moduleName,
+                                                                         $moduleVersion,
+                                                                         $moduleTitle)"/></c:data></xsl:result-document>
     </xsl:template>
     
     <xsl:template match="@*|node()">

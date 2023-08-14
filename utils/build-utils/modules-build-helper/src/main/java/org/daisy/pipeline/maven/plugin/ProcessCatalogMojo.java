@@ -9,6 +9,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import net.sf.saxon.lib.ExtensionFunctionDefinition;
+
 import org.apache.maven.model.Resource;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoFailureException;
@@ -18,7 +20,7 @@ import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.plugins.annotations.ResolutionScope;
 import org.apache.maven.project.MavenProject;
 
-import org.daisy.maven.xproc.api.XProcEngine;
+import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
@@ -85,7 +87,14 @@ public class ProcessCatalogMojo extends AbstractMojo {
 			getLog().info("Skipping the execution.");
 			return; }
 		try {
-			XProcEngine engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
+			CalabashWithPipelineModules engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
+			ExtensionFunctionProvider generateModuleClassFunctionProvider = new GenerateModuleClassFunctionProvider(getLog());
+			engine.setConfiguration(
+				config -> {
+					for (ExtensionFunctionDefinition function : generateModuleClassFunctionProvider.getDefinitions())
+						config.getProcessor().getUnderlyingConfiguration().registerExtensionFunction(function);
+				}
+			);
 			Map<String,String> options = new HashMap<String,String>(); {
 				options.put("generatedResourcesDirectory", asURI(generatedResourcesDirectory).toASCIIString());
 				options.put("generatedSourcesDirectory", asURI(generatedSourcesDirectory).toASCIIString());
