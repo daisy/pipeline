@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.function.Consumer;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class Calabash implements XProcEngine {
 	
 	private URIResolver nextURIResolver = null;
 	private String nextCatalogFile = null;
-	private XdmNode nextConfig = null;
+	private Object nextConfig = null; // XdmNode|Consumer<XProcConfiguration>
 	private XdmNode nextDefaultConfig = null;
 	
 	@Reference(
@@ -96,6 +97,10 @@ public class Calabash implements XProcEngine {
 			catch (SaxonApiException e) {
 					throw new RuntimeException(e); }
 	}
+
+	public void setConfiguration(Consumer<XProcConfiguration> config) {
+		nextConfig = config;
+	}
 	
 	// Settings to be always applied
 	public void setDefaultConfiguration(Reader defaultConfig) {
@@ -110,10 +115,10 @@ public class Calabash implements XProcEngine {
 	private XProcRuntime currentRuntime = null;
 	private URIResolver currentURIResolver = null;
 	private String currentCatalogFile = null;
-	private XdmNode currentConfig = null;
+	private Object currentConfig = null; // XdmNode|Consumer<XProcConfiguration>
 	private XdmNode currentDefaultConfig = null;
 	
-	private XProcRuntime runtime() {
+	protected XProcRuntime runtime() {
 		
 		// A new runtime needs to be created for every run because of
 		// a bug in XMLCalabash with p:iteration-position().
@@ -130,14 +135,20 @@ public class Calabash implements XProcEngine {
 			if (nextDefaultConfig != null)
 				config.parse(nextDefaultConfig);
 			if (nextConfig != null)
-				config.parse(nextConfig);
+				if (nextConfig instanceof XdmNode)
+					config.parse((XdmNode)nextConfig);
+				else
+					((Consumer)nextConfig).accept(config);
 			if (config.saxonConfig != null) {
 				// because the above does not properly set Saxon configuration from "saxon-config" setting
 				config = new XProcConfiguration(config.saxonConfig);
 				if (nextDefaultConfig != null)
 					config.parse(nextDefaultConfig);
 				if (nextConfig != null)
-					config.parse(nextConfig);
+					if (nextConfig instanceof XdmNode)
+						config.parse((XdmNode)nextConfig);
+					else
+						((Consumer)nextConfig).accept(config);
 			}
 			currentRuntime = new XProcRuntime(config); }
 		if (nextURIResolver == null)
