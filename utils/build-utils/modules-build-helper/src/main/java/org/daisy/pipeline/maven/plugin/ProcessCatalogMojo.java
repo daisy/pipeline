@@ -22,6 +22,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 
+import static org.daisy.pipeline.maven.plugin.utils.getClassLoader;
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
 @Mojo(
@@ -87,8 +88,12 @@ public class ProcessCatalogMojo extends AbstractMojo {
 			getLog().info("Skipping the execution.");
 			return; }
 		try {
-			CalabashWithPipelineModules engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
-			ExtensionFunctionProvider generateModuleClassFunctionProvider = new GenerateModuleClassFunctionProvider(getLog());
+			ClassLoader compileClassPath = getClassLoader(mavenProject.getCompileClasspathElements());
+			CalabashWithPipelineModules engine = new CalabashWithPipelineModules(compileClassPath);
+			ExtensionFunctionProvider generateModuleClassFunctionProvider = new GenerateModuleClassFunctionProvider(
+				compileClassPath,
+				mavenProject.getCompileSourceRoots(),
+				getLog());
 			engine.setConfiguration(
 				config -> {
 					for (ExtensionFunctionDefinition function : generateModuleClassFunctionProvider.getDefinitions())
