@@ -36,7 +36,7 @@ import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 import static org.daisy.pipeline.maven.plugin.utils.URLs.relativize;
 import static org.daisy.pipeline.maven.plugin.utils.XML.evaluateXPath;
 import static org.daisy.pipeline.maven.plugin.utils.XML.transform;
-import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
+import org.daisy.pipeline.modules.impl.ModuleUriResolver;
 
 /**
  * @goal htmlize-sources

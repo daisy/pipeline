@@ -29,6 +29,11 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>logging-activator</artifactId>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
         <version>${modules.version}</version>

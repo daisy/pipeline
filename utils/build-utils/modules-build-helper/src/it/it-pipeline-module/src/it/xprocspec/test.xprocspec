@@ -455,10 +455,10 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
-					<c:file name="d428e26.html"/>
-					<c:file name="d428e5.html"/>
-					<c:file name="d428e54.html"/>
-					<c:file name="d428e87.html"/>
+					<c:file name="d427e26.html"/>
+					<c:file name="d427e5.html"/>
+					<c:file name="d427e54.html"/>
+					<c:file name="d427e87.html"/>
 					<c:file name="index.html"/>
 					<c:file name="libraries.html"/>
 					<c:file name="org/daisy/pipeline/modules/foo-utils/foo.xpl.html"/>

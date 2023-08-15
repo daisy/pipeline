@@ -16,7 +16,7 @@ import org.daisy.common.spi.ServiceLoader;
 
 import org.daisy.maven.xproc.calabash.Calabash;
 
-import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
+import org.daisy.pipeline.modules.impl.ModuleUriResolver;
 
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
