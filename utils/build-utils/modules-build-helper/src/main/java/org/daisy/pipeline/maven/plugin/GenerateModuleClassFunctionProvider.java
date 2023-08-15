@@ -47,7 +47,7 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			result.append("\n");
 			result.append("    @Activate\n");
 			result.append("    public void activate() {\n");
-			result.append("        super.init(catalogParser);\n");
+			result.append("        super.parseCatalog(catalogParser);\n");
 			result.append("    }\n");
 			result.append("\n");
 			result.append("    @Reference(\n");

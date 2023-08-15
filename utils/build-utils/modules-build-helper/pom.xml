@@ -22,10 +22,10 @@
     <ds-to-spi-maven-plugin.version>1.1.3</ds-to-spi-maven-plugin.version>
     <ds-to-spi-runtime.version>1.2.0</ds-to-spi-runtime.version>
     <xprocspec.version>1.4.2</xprocspec.version>
-    <framework.version>1.14.14</framework.version>
+    <framework.version>1.14.15-SNAPSHOT</framework.version>
     <modules.version>1.14.15</modules.version>
     <modules-test-helper.version>2.2.4-SNAPSHOT</modules-test-helper.version>
-    <xproc-engine-daisy-pipeline.version>1.14.5</xproc-engine-daisy-pipeline.version>
+    <xproc-engine-daisy-pipeline.version>1.14.6-SNAPSHOT</xproc-engine-daisy-pipeline.version>
   </properties>
 
   <dependencyManagement>
