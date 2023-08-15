@@ -90,19 +90,23 @@
         <!--
             generate Java files
         -->
-        <xsl:if test="$catalog/self::*">
-            <xsl:call-template name="module-class"/>
+        <xsl:if test="./child::*">
+            <xsl:call-template name="module-class">
+                <xsl:with-param name="catalog-xml" select="."/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:apply-templates mode="java"/>
     </xsl:template>
     
     <xsl:template name="module-class">
+        <xsl:param name="catalog-xml" as="element(cat:catalog)" required="yes"/>
         <xsl:variable name="className" select="concat('Module_',replace($moduleName,'-','_'))"/>
         <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data><xsl:value-of select="GenerateModuleClass:apply(GenerateModuleClass:new(),
                                                                          $className,
                                                                          $moduleName,
                                                                          $moduleVersion,
-                                                                         $moduleTitle)"/></c:data></xsl:result-document>
+                                                                         $moduleTitle,
+                                                                         $catalog-xml)"/></c:data></xsl:result-document>
     </xsl:template>
     
     <xsl:template match="@*|node()">
@@ -111,9 +115,11 @@
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="cat:uri[@px:content-type=('script','data-type','xslt-package') or @px:export-functions]" priority="1">
+    <xsl:template match="cat:uri">
         <xsl:if test="@name">
-            <xsl:next-match/>
+            <xsl:copy>
+                <xsl:apply-templates select="@*|node()" mode="#current"/>
+            </xsl:copy>
         </xsl:if>
     </xsl:template>
     

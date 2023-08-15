@@ -1,11 +1,6 @@
 package org.daisy.pipeline.maven.plugin;
 
-import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Collection;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
@@ -24,7 +19,7 @@ import org.xml.sax.InputSource;
 
 class CalabashWithPipelineModules extends Calabash {
 	
-	CalabashWithPipelineModules(Collection<String> classPath) {
+	CalabashWithPipelineModules(ClassLoader classPath) {
 		super();
 		final URIResolver resolver = getModuleUriResolver(classPath);
 		setURIResolver(new URIResolver() {
@@ -43,24 +38,15 @@ class CalabashWithPipelineModules extends Calabash {
 		});
 	}
 	
-	static URIResolver getModuleUriResolver(Collection<String> classPath) {
+	// also used in HtmlizeSourcesMojo
+	static URIResolver getModuleUriResolver(ClassLoader classLoader) {
 		ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
 		try {
-			URLClassLoader classLoader; {
-				URL[] classPathURLs = new URL[classPath.size()]; {
-					int i = 0;
-					for (String path : classPath)
-						classPathURLs[i++] = new File(path).toURI().toURL();
-				}
-				classLoader = new URLClassLoader(classPathURLs, Thread.currentThread().getContextClassLoader());
-			}
 			Thread.currentThread().setContextClassLoader(classLoader);
 			for (URIResolver r : ServiceLoader.load(URIResolver.class))
 				if (r instanceof ModuleUriResolver)
 					return r;
 			throw new RuntimeException("No ModuleUriResolver found");
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("No ModuleUriResolver found", e);
 		} finally {
 			Thread.currentThread().setContextClassLoader(restoreClassLoader);
 		}

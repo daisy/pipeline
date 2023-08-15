@@ -20,6 +20,7 @@ import org.apache.maven.project.MavenProject;
 
 import org.daisy.maven.xproc.api.XProcEngine;
 
+import static org.daisy.pipeline.maven.plugin.utils.getClassLoader;
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 
 @Mojo(
@@ -85,7 +86,7 @@ public class ProcessTestCatalogMojo extends AbstractMojo {
 			getLog().info("Tests are skipped.");
 			return; }
 		try {
-			XProcEngine engine = new CalabashWithPipelineModules(mavenProject.getCompileClasspathElements());
+			XProcEngine engine = new CalabashWithPipelineModules(getClassLoader(mavenProject.getCompileClasspathElements()));
 			Map<String,String> options = new HashMap<String,String>(); {
 				options.put("generatedResourcesDirectory", asURI(generatedResourcesDirectory).toASCIIString());
 				options.put("generatedSourcesDirectory", asURI(generatedSourcesDirectory).toASCIIString());
