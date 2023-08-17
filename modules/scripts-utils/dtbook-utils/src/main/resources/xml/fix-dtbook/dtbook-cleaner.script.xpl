@@ -47,7 +47,7 @@
             <p px:role="desc">Apply repair routines on the DTBook</p>
         </p:documentation>
     </p:option>
-    <p:option name="fixCharset" select="'false'" px:type="boolean">
+    <p:option name="fixCharset" select="'false'" px:type="boolean" px:hidden="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Repair - Fix charset</h2>
             <p px:role="desc">Fix the document charset (To be implemented)</p>
@@ -62,13 +62,13 @@
     <p:option name="simplifyHeadingLayout" select="'false'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tidy - Simplify headings layout</h2>
-            <p px:role="desc">TBD</p>
+            <!--<p px:role="desc">TBD</p>-->
         </p:documentation>
     </p:option>
     <p:option name="externalizeWhitespace" select="'false'" px:type="boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Tidy - Externalize whitespaces</h2>
-            <p px:role="desc">TBD</p>
+            <!-- <p px:role="desc">TBD</p> -->
         </p:documentation>
     </p:option>
     <p:option name="documentLanguage" select="''">
