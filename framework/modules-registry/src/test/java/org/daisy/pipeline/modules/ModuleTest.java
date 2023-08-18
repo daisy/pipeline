@@ -43,7 +43,10 @@ public class ModuleTest {
 				throw new UnsupportedOperationException("not implemented");
 			}
 		};
-		Module module = new Module("name", "version", "title", resourceLoader) {};
+		Module module = new Module("name", "version", "title", resourceLoader) {
+			@Override
+			public void init() {}
+		};
 		Module.parseCatalog(module, catalog);
 		Iterator<Component> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());

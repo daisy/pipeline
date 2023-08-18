@@ -170,6 +170,11 @@ public abstract class Module {
 	}
 
 	/**
+	 * Called by {@link ModuleRegistry} to initialize the module.
+	 */
+	public abstract void init();
+
+	/**
 	 * Parse catalog.xml file
 	 */
 	public static void parseCatalog(Module module, XmlCatalogParser parser) {
