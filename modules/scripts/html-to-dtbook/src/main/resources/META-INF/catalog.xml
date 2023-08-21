@@ -9,9 +9,4 @@
     <uri name="http://www.daisy.org/pipeline/modules/html-to-dtbook/format-list.xsl" uri="../xml/xslt/format-list.xsl"/>
     <uri name="http://www.daisy.org/pipeline/modules/html-to-dtbook/library.xpl" uri="../xml/xproc/library.xpl"/>
     
-    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-    
 </catalog>

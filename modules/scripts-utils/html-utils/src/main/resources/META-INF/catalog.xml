@@ -40,7 +40,7 @@
 
     <group> <!-- xhtml 1.1 -->
         <public publicId="-//W3C//DTD XHTML 1.1//EN" uri="../xml/dtd/xhtml11/xhtml11.dtd" />
-        <public publicId="-//W3C//DTD XHTML Architecture 1.1//EN" uri="../xml/dtd/xhtml11/xhtml11-arch.dtd" />
+        <!-- <public publicId="-//W3C//DTD XHTML Architecture 1.1//EN" uri="../xml/dtd/xhtml11/xhtml11-arch.dtd" /> -->
         <public publicId="-//W3C//ELEMENTS XHTML BIDI Override Element 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-bdo-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Base Architecture 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-arch-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Base Element 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-base-1.mod" />
@@ -71,7 +71,7 @@
         <public publicId="-//W3C//ELEMENTS XHTML Name Identifier 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-nameident-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Param Element 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-param-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Presentation 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-pres-1.mod" />
-        <public publicId="-//W3C//ELEMENTS XHTML Redeclarations 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-redecl-1.mod" />
+        <!-- <public publicId="-//W3C//ELEMENTS XHTML Redeclarations 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-redecl-1.mod" /> -->
         <public publicId="-//W3C//ELEMENTS XHTML Ruby 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-ruby-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Scripting 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-script-1.mod" />
         <public publicId="-//W3C//ELEMENTS XHTML Server-side Image Maps 1.0//EN" uri="../xml/dtd/xhtml11/xhtml-ssismap-1.mod" />
@@ -115,13 +115,5 @@
         <system systemId="http://www.w3.org/TR/xhtml-modularization/DTD/xhtml-form-1.mod" uri="../xml/dtd/xhtml11/xhtml-form-1.mod" />
         <system systemId="http://www.w3.org/TR/xhtml-modularization/DTD/xhtml-struct-1.mod" uri="../xml/dtd/xhtml11/xhtml-struct-1.mod" />
     </group>
-
-    <!-- dependencies -->
-
-    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
 
 </catalog>

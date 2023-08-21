@@ -4,11 +4,4 @@
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/daisy202-validator.xpl" uri="../xml/xproc/daisy202-validator.xpl" px:content-type="script" px:id="daisy202-validator"/>
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-validator/library.xpl" uri="../xml/xproc/library.xpl"/>
     
-    <nextCatalog catalog="org:daisy:pipeline:modules:daisy202-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-    
 </catalog>

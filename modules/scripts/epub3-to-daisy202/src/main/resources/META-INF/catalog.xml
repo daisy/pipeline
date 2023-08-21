@@ -5,13 +5,4 @@
 	   px:content-type="script" px:id="epub3-to-daisy202" px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/epub3-to-daisy202/library.xpl" uri="../xml/xproc/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:daisy202-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
-
 </catalog>

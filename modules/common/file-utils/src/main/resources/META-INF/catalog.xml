@@ -7,6 +7,4 @@
 
      <uri uri="../config-calabash.xml" px:content-type="calabash-config"/>
 
-     <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-
 </catalog>

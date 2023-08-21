@@ -5,16 +5,4 @@
        px:content-type="script" px:id="dtbook-to-daisy3" px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-daisy3/library.xpl" uri="../xml/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
-  
-  <!--
-      removed dependency in order to be able to mock it in the tests
-  -->
-  <!-- <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-tts"/> -->
 </catalog>

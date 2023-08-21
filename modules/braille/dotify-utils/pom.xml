@@ -51,6 +51,10 @@
       <artifactId>braille-css-utils</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
@@ -73,14 +77,6 @@
       <artifactId>annotation</artifactId>
       <version>2.3.0</version>
       <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <!--
         OSGi runtime dependency of dotify.library

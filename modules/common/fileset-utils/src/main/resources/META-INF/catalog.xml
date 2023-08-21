@@ -5,8 +5,4 @@
     
     <uri name="http://www.daisy.org/pipeline/modules/fileset-utils/fileset.rnc" uri="../xml/schemas/fileset.rnc"/>
     
-    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
-    
 </catalog>

@@ -332,7 +332,7 @@
                                     <p:output port="result"/>
                                     <p:identity name="use-nimas-schematron">
                                         <p:input port="source">
-                                            <p:document href="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.nimas.sch"/>
+                                            <p:document href="schema/sch/dtbook.mathml.nimas.sch"/>
                                         </p:input>
                                     </p:identity>
                                 </p:when>
@@ -340,7 +340,7 @@
                                     <p:output port="result"/>
                                     <p:identity name="use-default-schematron">
                                         <p:input port="source">
-                                            <p:document href="http://www.daisy.org/pipeline/modules/dtbook-utils/schema/dtbook.mathml.sch"/>
+                                            <p:document href="schema/sch/dtbook.mathml.sch"/>
                                         </p:input>
                                     </p:identity>
                                 </p:otherwise>

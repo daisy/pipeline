@@ -5,14 +5,4 @@
 	   px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/epub3-to-daisy3/library.xpl" uri="../xml/library.xpl"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-to-dtbook"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-to-html"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
-
 </catalog>

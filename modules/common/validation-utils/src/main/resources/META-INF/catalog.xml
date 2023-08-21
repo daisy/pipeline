@@ -2,7 +2,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
    <uri name="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"
         uri="../xml/xproc/validation-utils-library.xpl"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
 </catalog>

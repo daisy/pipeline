@@ -102,10 +102,7 @@ sheet modules) are available for use in Sass style sheets:
     <!-- ======= -->
     <!-- Imports -->
     <!-- ======= -->
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl">
-        <!-- FIXME: we cannot use a relative url to import px:dtbook-to-pef.load and
-             px:dtbook-to-pef directly here because this script uses px:extends-script in the XML
-             catalog which changes the base URI of the script at build time. -->
+    <p:import href="library.xpl">
         <p:documentation>
             px:dtbook-to-pef
             px:dtbook-to-pef.store
