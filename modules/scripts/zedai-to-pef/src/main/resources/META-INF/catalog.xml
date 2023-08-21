@@ -5,13 +5,4 @@
        px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/library.xpl" uri="../xml/library.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/zedai-to-pef/reset.css" uri="../css/reset.css"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-epub3" />
 </catalog>

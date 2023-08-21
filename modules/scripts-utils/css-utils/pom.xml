@@ -32,6 +32,18 @@
             <artifactId>common-utils</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>file-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>fileset-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline.modules</groupId>
+            <artifactId>mediatype-utils</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.daisy.libs</groupId>
             <artifactId>io.bit3.jsass</artifactId>
         </dependency>
@@ -70,24 +82,6 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <!--
-            runtime dependencies
-        -->
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>file-utils</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>fileset-utils</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.daisy.pipeline.modules</groupId>
-            <artifactId>mediatype-utils</artifactId>
-            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

@@ -112,10 +112,7 @@ sheet modules) are available for use in Sass style sheets:
             px:parse-query
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
-        <!-- FIXME: we cannot use a relative url to import px:html-to-pef directly here because this
-             script uses px:extends-script in the XML catalog which changes the base URI of the
-             script at build time. -->
+    <p:import href="library.xpl">
         <p:documentation>
             px:html-to-pef
             px:html-to-pef.store

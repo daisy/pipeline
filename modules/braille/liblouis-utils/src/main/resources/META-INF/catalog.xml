@@ -2,8 +2,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri name="http://www.liblouis.org/tables/" uri="../default-tables/"
        px:content-type="liblouis-tables" px:id="default-liblouis-tables"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
 </catalog>

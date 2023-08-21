@@ -2,11 +2,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri name="http://www.daisy.org/pipeline/modules/html-to-epub3/html-to-epub3.xpl" uri="../xml/xproc/html-to-epub3.xpl" px:content-type="script" px:id="html-to-epub3"/>
   <uri name="http://www.daisy.org/pipeline/modules/html-to-epub3/library.xpl" uri="../xml/xproc/library.xpl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-html" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub3-tts" />
 </catalog>

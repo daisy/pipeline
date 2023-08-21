@@ -21,13 +21,4 @@
    <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"
         uri="../xml/dtbook-utils-library.xpl"/>
 
-   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-   <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
-   <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
 </catalog>
