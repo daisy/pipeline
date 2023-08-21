@@ -28,6 +28,11 @@ public interface ModuleRegistry extends Iterable<Module> {
 	public Module getModuleByEntity(String publicId);
 
 	/**
+	 * Gets the module which has an XSLT package identified by the given name.
+	 */
+	public Module getModuleByXSLTPackage(String name);
+
+	/**
 	 * Gets the module which has the specified class among its resources, or {@code null} if no such
 	 * module can be found.
 	 */
