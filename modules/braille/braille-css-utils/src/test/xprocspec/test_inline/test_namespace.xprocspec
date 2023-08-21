@@ -42,11 +42,11 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body xmlns="http://www.w3.org/1999/xhtml">
-          <p style="display: block;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-align: center;"/>
-          <p xmlns="" style="display: block; margin-top: 1;"/>
+          <p style="display: block"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-align: center"/>
+          <p xmlns="" style="display: block; margin-top: 1"/>
         </body>
       </x:document>
     </x:expect>
@@ -92,11 +92,11 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body xmlns="http://www.w3.org/1999/xhtml">
-          <p style="text-align: center; text-indent: 2;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
-          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2;"/>
-          <p xmlns="" style="margin-top: 1; text-indent: 2;"/>
+          <p style="text-align: center; text-indent: 2"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2"/>
+          <p xmlns="http://example.com/ns/" style="display: block; text-indent: 2"/>
+          <p xmlns="" style="margin-top: 1; text-indent: 2"/>
         </body>
       </x:document>
     </x:expect>
@@ -144,10 +144,10 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body xmlns="http://www.w3.org/1999/xhtml">
-          <p class="foo" style="display: block; margin-top: 1; padding-left: 2; text-indent: 2;"/>
-          <p xmlns:x="http://example.com/ns/" x:class="foo" style="text-align: center; text-indent: 2;"/>
-          <p xmlns:x="http://example.com/ns/" x:class="foo"  style="text-align: center; text-indent: 2;"/>
-          <p xmlns:x="http://www.w3.org/1999/xhtml" x:class="foo" style="text-indent: 2;"/>
+          <p class="foo" style="display: block; margin-top: 1; padding-left: 2; text-indent: 2"/>
+          <p xmlns:x="http://example.com/ns/" x:class="foo" style="text-align: center; text-indent: 2"/>
+          <p xmlns:x="http://example.com/ns/" x:class="foo"  style="text-align: center; text-indent: 2"/>
+          <p xmlns:x="http://www.w3.org/1999/xhtml" x:class="foo" style="text-indent: 2"/>
         </body>
       </x:document>
     </x:expect>
@@ -179,7 +179,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p xml:space="preserve" style="white-space: pre-wrap;"/>
+          <p xml:space="preserve" style="white-space: pre-wrap"/>
         </body>
       </x:document>
     </x:expect>

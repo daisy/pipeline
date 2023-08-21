@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -7,6 +8,7 @@ import com.google.common.base.Optional;
 import static com.google.common.collect.Iterables.size;
 
 import cz.vutbr.web.css.CSSProperty;
+import cz.vutbr.web.css.TermIdent;
 
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
@@ -40,14 +42,14 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 	}
 	
 	private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
-		public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+		public java.lang.Iterable<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
 			int size = size(styledText);
 			if (to < 0) to = size;
-			String[] braille = new String[to - from];
+			CSSStyledText[] braille = new CSSStyledText[to - from];
 			int i = 0;
 			for (CSSStyledText t : styledText) {
 				if (i >= from && i < to)
-					braille[i - from] = NumberBrailleTranslator.this.transform(t);
+					braille[i - from] = new CSSStyledText(NumberBrailleTranslator.this.transform(t));
 				i++; }
 			return Arrays.asList(braille);
 		}
@@ -102,7 +104,7 @@ public class NumberBrailleTranslator extends AbstractBrailleTranslator {
 				noTransform = true;
 				style.removeProperty("text-transform");
 			} else if (textTransform == TextTransform.list_values
-			           && style.getValue("text-transform").toString().equals("downshift")) {
+			           && ((List<TermIdent>)style.getValue("text-transform")).get(0).getValue().equals("downshift")) {
 				downShift = true;
 				style.removeProperty("text-transform");
 			}

@@ -30,9 +30,9 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <body style="display: block;">
-          <h style="display: block;">foo</h>
-          <p style="display: block;">foo</p>
+        <body style="display: block">
+          <h style="display: block">foo</h>
+          <p style="display: block">foo</p>
         </body>
       </x:document>
     </x:expect>
@@ -64,7 +64,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="display: block;">foo</p>
+          <p style="display: block">foo</p>
         </body>
       </x:document>
     </x:expect>
@@ -101,7 +101,7 @@
         <body>
           <p>foo</p>
           <section>
-            <p style="display: block;">foo</p>
+            <p style="display: block">foo</p>
           </section>
         </body>
       </x:document>
@@ -140,7 +140,7 @@
       <x:document type="inline">
         <body>
           <section>
-            <p style="display: block;">foo</p>
+            <p style="display: block">foo</p>
             <sidebar>
               <p>foo</p>
             </sidebar>
@@ -179,7 +179,7 @@
       <x:document type="inline">
         <body>
           <h>foo</h>
-          <p style="display: block;">foo</p>
+          <p style="display: block">foo</p>
           <p>foo</p>
         </body>
       </x:document>
@@ -222,12 +222,12 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h foo="foo" style="display: block; margin-left: 1;"/>
-          <p foo="foo" style="display: block;"/>
-          <p foo="bar" style="display: block; margin-bottom: 1; margin-right: 1; margin-top: 1;"/>
-          <p foo="barz" style="display: block;"/>
-          <p foo="bar-z" style="display: block; margin-bottom: 1;"/>
-          <p foo="bar baz" style="display: block; margin-top: 1;"/>
+          <h foo="foo" style="display: block; margin-left: 1"/>
+          <p foo="foo" style="display: block"/>
+          <p foo="bar" style="display: block; margin-bottom: 1; margin-right: 1; margin-top: 1"/>
+          <p foo="barz" style="display: block"/>
+          <p foo="bar-z" style="display: block; margin-bottom: 1"/>
+          <p foo="bar baz" style="display: block; margin-top: 1"/>
           <p>foo</p>
         </body>
       </x:document>
@@ -264,10 +264,10 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h class="foo" style="display: block; margin-left: 1;"/>
-          <p class="foo" style="display: block;"/>
+          <h class="foo" style="display: block; margin-left: 1"/>
+          <p class="foo" style="display: block"/>
           <p class="foobar"/>
-          <p class="foo bar" style="display: block;"/>
+          <p class="foo bar" style="display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -303,8 +303,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p id="foo" style="display: block;"/>
-          <p id="bar" style="margin-left: 1;"/>
+          <p id="foo" style="display: block"/>
+          <p id="bar" style="margin-left: 1"/>
           <p xml:id="baz"/>
         </body>
       </x:document>
@@ -352,16 +352,16 @@
       <x:document type="inline">
         <body>
           <ul>
-            <li style="margin-left: 1;"/>
+            <li style="margin-left: 1"/>
             <li/>
-            <li style="margin-top: 1;">
+            <li style="margin-top: 1">
               <ol>
-                <li style="margin-bottom: 1; margin-left: 1; margin-right: 1;"/>
+                <li style="margin-bottom: 1; margin-left: 1; margin-right: 1"/>
               </ol>
             </li>
-            <li style="margin-right: 1;"/>
+            <li style="margin-right: 1"/>
           </ul>
-          <pagenum style="&amp;:top-of-page { display: none; }"/>
+          <pagenum style="&amp;:top-of-page { display: none }"/>
         </body>
       </x:document>
     </x:expect>
@@ -397,7 +397,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="display: block; &amp;::after { display: block; } &amp;::after::before { display: block; } &amp;::before { display: block; } &amp;::table-by(foo) { display: block; }">foobar</p>
+          <p style="display: block; &amp;::after { display: block } &amp;::after::before { display: block } &amp;::before { display: block } &amp;::table-by(foo) { display: block }">foobar</p>
         </body>
       </x:document>
     </x:expect>
@@ -414,19 +414,16 @@
             <head>
               <style media="embossed" type="text/css">
                 table {
-                  display: table;
-                  -obfl-table-col-spacing: 1;
-                  -obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); }
-                table:-obfl-alternate-scenario {
-                  -obfl-scenario-cost: 3;
+                  display: table; }
+                table:-foo-alternate-scenario {
                   display: block;
                   render-table-by:row; }
-                table:-obfl-alternate-scenario::table-by(row) {
+                table:-foo-alternate-scenario::table-by(row) {
                   display:block;
                   margin-left:2; }
-                table:-obfl-alternate-scenario::table-by(row)::list-item {
+                table:-foo-alternate-scenario::table-by(row)::list-item {
                   display:block; }
-                table:-obfl-alternate-scenario::table-by(row)::list-item:first-child {
+                table:-foo-alternate-scenario::table-by(row)::list-item:first-child {
                   text-indent:-2;
               </style>
             </head>
@@ -443,7 +440,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <table style="-obfl-scenario-cost: -obfl-evaluate('$forced-break-count'); -obfl-table-col-spacing: 1; display: table; &amp;:-obfl-alternate-scenario { -obfl-scenario-cost: 3; display: block; render-table-by: row; } &amp;:-obfl-alternate-scenario::table-by(row) { display: block; margin-left: 2; } &amp;:-obfl-alternate-scenario::table-by(row)::list-item { display: block; }"/>
+          <table style="display: table; &amp;:-foo-alternate-scenario { display: block; render-table-by: row } &amp;:-foo-alternate-scenario::table-by(row) { display: block; margin-left: 2 } &amp;:-foo-alternate-scenario::table-by(row)::list-item { display: block }"/>
         </body>
       </x:document>
     </x:expect>
@@ -474,7 +471,7 @@
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">
-        <document style="display: block;">
+        <document style="display: block">
           <head>
             <style media="embossed" type="text/css">
               :root { display: block }
@@ -498,7 +495,7 @@
           <document>
             <head>
               <style media="embossed" type="text/css">
-                table:-obfl-alternate-scenario tr:blank::after {
+                table:-foo-alternate-scenario tr:blank::after {
                   content: "(empty)"
                 }
               </style>
@@ -518,7 +515,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <table style="&amp;:-obfl-alternate-scenario tr:blank::after { content: &apos;(empty)&apos;; }">
+          <table style="&amp;:-foo-alternate-scenario tr:blank::after { content: &apos;(empty)&apos; }">
             <tr/>
           </table>
         </body>
@@ -560,9 +557,9 @@
       <x:document type="inline">
         <body>
           <section>
-            <p style="display: block;">foo</p>
+            <p style="display: block">foo</p>
             <section>
-              <p style="display: block;">foo</p>
+              <p style="display: block">foo</p>
             </section>
           </section>
         </body>

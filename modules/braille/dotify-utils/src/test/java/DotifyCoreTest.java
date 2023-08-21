@@ -8,6 +8,7 @@ import org.daisy.braille.css.SimpleInlineStyle;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.junit.AbstractTest;
 
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testTranslate() {
-		assertEquals(braille("⠋⠕⠕⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","")));
@@ -54,7 +55,7 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test
 	public void testTranslateAndHyphenate() {
-		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕\u00AD⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)(document-locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","hyphens:auto")));
@@ -63,11 +64,13 @@ public class DotifyCoreTest extends AbstractTest {
 	
 	@Test(expected=RuntimeException.class)
 	public void testTranslateAndNotHyphenate() {
-		assertEquals(braille("⠋⠕⠕\u00AD⠃⠁⠗"),
+		assertEquals(styledText("⠋⠕⠕\u00AD⠃⠁⠗", ""),
 		             provider.get(query("(locale:sv-SE)")).iterator().next()
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","hyphens:auto")));
 	}
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
@@ -75,16 +78,12 @@ public class DotifyCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, new SimpleInlineStyle(s)));
+				styledText.add(new CSSStyledText(text, cssParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
 		if (textSet)
 			throw new RuntimeException();
 		return styledText;
-	}
-	
-	private Iterable<String> braille(String... text) {
-		return Arrays.asList(text);
 	}
 }

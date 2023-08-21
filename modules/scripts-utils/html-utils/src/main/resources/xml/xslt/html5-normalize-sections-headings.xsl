@@ -14,7 +14,7 @@
 	<xsl:param name="fix-untitled-sections" required="yes"/> <!-- keep | imply-heading | imply-heading-from-aria-label -->
 
 	<xsl:include href="untitled-section-titles.xsl"/>
-	<xsl:include href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
+	<xsl:include href="library.xsl"/>
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 
 	<!--

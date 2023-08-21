@@ -32,8 +32,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <h1 style="display: block; text-align: center;"/>
-          <p style="display: block;"/>
+          <h1 style="display: block; text-align: center"/>
+          <p style="display: block"/>
         </body>
       </x:document>
     </x:expect>
@@ -67,7 +67,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="orphans: 3;"/>
+          <p style="orphans: 3"/>
         </body>
       </x:document>
     </x:expect>
@@ -99,7 +99,7 @@
       <x:document type="inline">
         <body>
           <h1/>
-          <p style="hyphens: auto;"/>
+          <p style="hyphens: auto"/>
         </body>
       </x:document>
     </x:expect>

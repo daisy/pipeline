@@ -35,7 +35,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@text-transform foo { system: -foo-transform; x: 1; y: 2; z: ''\27 3\27 ''; }'"/>
+              equals="'@text-transform foo { system: -foo-transform; x: 1; y: 2; z: ''\27 3\27 '' }'"/>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
     </x:context>
@@ -43,7 +43,7 @@
       <x:document type="inline">
         <body>
           <p>
-            foo <b style="text-transform: foo;">bar</b>
+            foo <b style="text-transform: foo">bar</b>
           </p>
         </body>
       </x:document>

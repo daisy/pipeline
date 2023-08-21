@@ -13,7 +13,7 @@
     </x:context>
     <x:expect label="result">
       <doc>
-        <body style="display: block;" css:page="size: 30 30; @top-center {{ content: string(running-header); }}">
+        <body style="display: block" css:page="size: 30 30; @top-center {{ content: string(running-header) }}">
           <p> foo </p>
         </body>
       </doc>
@@ -34,7 +34,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block;" css:before="display: block; margin-left: 2; content: 'bar';">
+          <p style="display: block" css:before="content: 'bar'; display: block; margin-left: 2">
             foo
           </p>
         </body>
@@ -47,16 +47,16 @@
       <doc style="@page {{ margin-top: 1 }} @page:left {{ margin-top: 2 }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:page="margin-top: 1; &amp;:left {{ margin-top: 2; }}"/>
+      <doc css:page="margin-top: 1; &amp;:left {{ margin-top: 2 }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_04">
     <x:context>
-      <doc style="&amp;::-x-foo::before {{ display: block }}"/>
+      <doc style="&amp;::-foo-on-volume-start::before {{ display: block }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:_x-foo="&amp;::before {{ display: block; }}"/>
+      <doc css:_foo-on-volume-start="&amp;::before {{ display: block }}"/>
     </x:expect>
   </x:scenario>
   
@@ -65,26 +65,26 @@
       <doc style="@text-transform  foo  {{ system: foo; x: &quot;'y'&quot; }} @text-transform  bar  {{ system: bar }} "/>
     </x:context>
     <x:expect label="result">
-      <doc css:text-transform="&amp; bar {{ system: bar; }} &amp; foo {{ system: foo; x: '\27 y\27 '; }}"/>
+      <doc css:text-transform="&amp; bar {{ system: bar }} &amp; foo {{ system: foo; x: '\27 y\27 ' }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_06">
     <x:context>
-      <doc style="&amp;::list-item {{ x:y }} &amp;::table-by(row) {{ x:y }} &amp;::table-by(row)::list-item {{ x:y }} &amp;::after::table-by(row) {{ x:y }}"/>
+      <doc style="&amp;::list-item {{ display:block }} &amp;::table-by(row) {{ display:block }} &amp;::table-by(row)::list-item {{ display:block }} &amp;::after::table-by(row) {{ display:block }}"/>
     </x:context>
     <x:expect label="result">
-      <doc style="&amp;::list-item {{ x: y }} &amp;::table-by(row) {{ x: y }} &amp;::table-by(row)::list-item {{ x: y }}"
-           css:after="&amp;::table-by(row) {{ x: y; }}"/>
+      <doc style="&amp;::list-item {{ display: block }} &amp;::table-by(row) {{ display: block }} &amp;::table-by(row)::list-item {{ display: block }}"
+           css:after="&amp;::table-by(row) {{ display: block }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_07">
     <x:context>
-      <table style="&amp;:-obfl-alternate-scenario {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row) {{ x:y }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ x:y }}"/>
+      <table style="&amp;:-foo-alternate-scenario {{ display: block }} &amp;:-foo-alternate-scenario::table-by(row) {{ display:block }} &amp;:-foo-alternate-scenario::table-by(row)::list-item {{ display:block }}"/>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="x: y; &amp;::table-by(row) {{ x: y; }} &amp;::table-by(row)::list-item {{ x: y; }}" />
+      <table css:_foo-alternate-scenario="display: block; &amp;::table-by(row) {{ display: block }} &amp;::table-by(row)::list-item {{ display: block }}" />
     </x:expect>
   </x:scenario>
   
@@ -93,18 +93,18 @@
       <doc style="@volume {{ max-length: 3; @begin {{ content: flow(next-front) }} }} @volume:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:volume="max-length: 3; @begin {{ content: flow(next-front); }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front); }} }}" />
+      <doc css:volume="max-length: 3; @begin {{ content: flow(next-front) }} &amp;:first {{ max-length: 3; @begin {{ content: flow(first-front) }} }}" />
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_09">
     <x:context>
-      <table style="&amp;:-obfl-alternate-scenario tr:blank::after {{ content: '(empty)'; }}">
+      <table style="&amp;:-foo-alternate-scenario tr:blank::after {{ content: '(empty)'; }}">
         <tr/>
       </table>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="&amp; tr:blank::after {{ content: '(empty)'; }}">
+      <table css:_foo-alternate-scenario="&amp; tr:blank::after {{ content: '(empty)' }}">
         <tr/>
       </table>
     </x:expect>
@@ -115,16 +115,16 @@
       <doc style="@volume:nth(2) {{ max-length: auto; }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:volume="&amp;:nth(2) {{ max-length: auto; }}"/>
+      <doc css:volume="&amp;:nth(2) {{ max-length: auto }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_11">
     <x:context>
-      <doc style="@-obfl-volume-transition {{ @any-interrupted {{ content: flow(volume-end); }} }}"/>
+      <doc style="@-foo-volume-transition {{ @any-interrupted {{ content: flow(volume-end); }} }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:_obfl-volume-transition="@any-interrupted {{ content: flow(volume-end); }}"/>
+      <doc css:_foo-volume-transition="@any-interrupted {{ content: flow(volume-end) }}"/>
     </x:expect>
   </x:scenario>
   
@@ -133,7 +133,7 @@
       <pagenum style="&amp;:top-of-page {{ display: none; }}"/>
     </x:context>
     <x:expect label="result">
-      <pagenum css:top-of-page="display: none;" />
+      <pagenum css:top-of-page="display: none" />
     </x:expect>
   </x:scenario>
 
@@ -143,7 +143,45 @@
                   @counter-style dice {{ system: additive; additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:counter-style="&amp; dice {{ system: additive; additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; }} &amp; trinary {{ system: numeric; symbols: '0' '1' '2'; }}"/>
+      <doc css:counter-style="&amp; dice {{ additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; system: additive }} &amp; trinary {{ symbols: '0' '1' '2'; system: numeric }}"/>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_14">
+    <x:context>
+      <doc>
+        <body>
+          <pagenum num="1" style="string-set: print-page attr(num)"/>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <pagenum num="1" style="string-set: print-page '1'"/>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_15">
+    <x:context>
+      <doc>
+        <body>
+          <h style="display: block; string-set: running-header content()">
+            foo
+          </h>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <h style="display: block; string-set: running-header '\A             foo\A           '">
+            foo
+          </h>
+        </body>
+      </doc>
     </x:expect>
   </x:scenario>
   

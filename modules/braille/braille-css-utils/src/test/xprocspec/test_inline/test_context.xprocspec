@@ -70,7 +70,7 @@
       <x:document type="inline">
         <html>
           <body>
-            <h style="page-break-after: avoid; text-align: center;">foobar</h>
+            <h style="page-break-after: avoid; text-align: center">foobar</h>
           </body>
         </html>
       </x:document>

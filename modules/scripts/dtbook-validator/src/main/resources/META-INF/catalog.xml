@@ -2,7 +2,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
   <uri uri="../xml/dtbook-validator.xpl" px:content-type="script" px:id="dtbook-validator"
        px:extends="../../../../../common-options.xpl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
 </catalog>

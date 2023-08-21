@@ -24,6 +24,14 @@
 
   See [XProc documentation](resources/xml/library.xpl)
 
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-id`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java)
+
+  Move css:id attributes to inline boxes, see [XProc documentation](resources/xml/shift-id.xpl)
+
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java)
+
+  Move 'string-set' declarations to inline boxes, see [XProc documentation](resources/xml/shift-string-set.xpl)
+
 - [`{http://www.daisy.org/ns/pipeline/xproc/internal}shift-obfl-marker`](java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftObflMarkerStep.java)
 
   Used in [resources/xml/shift-obfl-marker.xpl](resources/xml/shift-obfl-marker.xpl)
@@ -37,4 +45,6 @@
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/dotify/impl/DotifyHyphenatorImpl.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/dotify/calabash/impl/OBFLToPEFStep.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/dotify/calabash/impl/FileToOBFLStep.java"/>
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftIdStep.java"/>
+<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftStringSetStep.java"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>

@@ -90,6 +90,11 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			return translator;
 		}
 		
+		public boolean usesCustomDisplayTable() {
+			return displayTable != unicodeDisplayTable
+				&& displayTable != unicodeDisplayTableWithNoBreakSpace;
+		}
+		
 		public DisplayTable getDisplayTable() {
 			return displayTable;
 		}

@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -64,7 +65,7 @@
         </css:_obfl-on-resumed>
     </xsl:template>
     
-    <xsl:template match="*[@css:*[matches(local-name(),'^_obfl-alternate-scenario(-[1-9][0-9]*)?$')]]">
+    <xsl:template match="*[@css:*[matches(local-name(),'^_obfl-alternate-scenario')]]">
         <xsl:if test="@css:flow[not(.='normal')]">
             <xsl:message terminate="yes">Elements with a :-obfl-alternate-scenario pseudo-class must participate in the normal flow.</xsl:message>
         </xsl:if>
@@ -77,8 +78,7 @@
         <xsl:variable name="this" as="element()" select="."/>
         <css:_ css:_obfl-scenarios="_" css:display="block">
             <xsl:variable name="scenario-attributes" as="attribute()*"
-                          select="@css:obfl-alternate-scenario|
-                                  @css:*[matches(local-name(),'^_obfl-alternate-scenario-[1-9][0-9]*$')]"/>
+                          select="@css:*[matches(local-name(),'^_obfl-alternate-scenario')]"/>
             <xsl:copy>
                 <xsl:attribute name="css:_obfl-scenario" select="'_'"/>
                 <xsl:sequence select="@* except $scenario-attributes"/>
@@ -122,9 +122,7 @@
                             </xsl:when>
                             <xsl:otherwise>
                                 <!-- merge @style and @css:_obfl-alternate-scenario* -->
-                                <xsl:attribute name="style" select="css:serialize-stylesheet(
-                                                                      for $s in $style return
-                                                                        css:parse-stylesheet($s))"/>
+                                <xsl:sequence select="css:style-attribute(for $s in $style return css:parse-stylesheet($s))"/>
                             </xsl:otherwise>
                         </xsl:choose>
                         <!-- skip all css:* attributes except property attributes but including css:flow

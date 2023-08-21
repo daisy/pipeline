@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/flow-from.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="pxi:flow-from">
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <h1> chapter 1 </h1>
+            <noteref css:id="a">(1)</noteref>
+            <noteref css:id="b">(2)</noteref>
+            <css:flow from="notes"/>
+            <h1> chapter 2 </h1>
+            <noteref css:id="c">(3)</noteref>
+            <span css:id="d"/>
+            <span css:id="f"/>
+            <noteref css:id="g">(5)</noteref>
+            <css:flow from="y" scope="document"/>
+          </body>
+        </x:document>
+        <x:document type="inline">
+          <css:_ css:flow="notes">
+            <note css:anchor="a"> note 1 </note>
+            <note css:anchor="b"> note 2 </note>
+            <note css:anchor="c"> note 3 </note>
+            <note css:anchor="e"> note 4 </note>
+            <note css:anchor="g"> note 5 </note>
+          </css:_>
+        </x:document>
+        <x:document type="inline">
+          <css:_ css:flow="x">
+            <div css:anchor="d">
+              <noteref css:id="e">(4)</noteref>
+            </div>
+          </css:_>
+        </x:document>
+        <x:document type="inline">
+          <css:_ css:flow="y">
+            <div css:anchor="f">
+              <css:flow from="notes"/>
+            </div>
+          </css:_>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <h1> chapter 1 </h1>
+          <noteref css:id="a">(1)</noteref>
+          <noteref css:id="b">(2)</noteref>
+          <note css:anchor="a"> note 1 </note>
+          <note css:anchor="b"> note 2 </note>
+          <h1> chapter 2 </h1>
+          <noteref css:id="c">(3)</noteref>
+          <span css:id="d"/>
+          <span css:id="f"/>
+          <noteref css:id="g">(5)</noteref>
+          <div css:anchor="f">
+            <note css:anchor="c"> note 3 </note>
+            <note css:anchor="e"> note 4 </note>
+          </div>
+        </body>
+      </x:document>
+      <x:document type="inline">
+        <css:_ css:flow="notes">
+          <note css:anchor="a"> note 1 </note>
+          <note css:anchor="b"> note 2 </note>
+          <note css:anchor="c"> note 3 </note>
+          <note css:anchor="e"> note 4 </note>
+          <note css:anchor="g"> note 5 </note>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_ css:flow="x">
+          <div css:anchor="d">
+            <noteref css:id="e">(4)</noteref>
+          </div>
+        </css:_>
+      </x:document>
+      <x:document type="inline">
+        <css:_ css:flow="y">
+          <div css:anchor="f">
+            <note css:anchor="c"> note 3 </note>
+            <note css:anchor="e"> note 4 </note>
+          </div>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

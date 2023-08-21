@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                stylesheet="../../main/resources/xml/generate-obfl-layout-master.xsl">
   
@@ -11,9 +12,7 @@
   
   <x:scenario label="test_01">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page"/>
-      </x:param>
+      <x:param name="page-style" select="()"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -29,23 +28,18 @@
   
   <x:scenario label="test_02">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 15"/>
-          </css:rule>
-          <css:rule selector="@top-right">
-            <css:property name="content">
-              <css:counter name="page" style="lower-roman"/>
-            </css:property>
-          </css:rule>
-          <css:rule selector="@bottom-center">
-            <css:property name="content">
-              <css:string value="footer"/>
-            </css:property>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 15
+                                                    @top-right {
+                                                      content: counter(page, lower-roman)
+                                                    }
+                                                    @bottom-center {
+                                                      content: &quot;footer&quot;
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -78,33 +72,24 @@
   
   <x:scenario label="test_03">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 15"/>
-          </css:rule>
-          <css:rule selector="&amp;:right">
-            <css:rule>
-              <css:property name="margin-top" value="1"/>
-            </css:rule>
-            <css:rule selector="@top-right">
-              <css:property name="content">
-                <css:counter name="page"/>
-              </css:property>
-            </css:rule>
-          </css:rule>
-          <css:rule selector="&amp;:left">
-            <css:rule>
-              <css:property name="margin-top" value="2"/>
-            </css:rule>
-            <css:rule selector="@top-left">
-              <css:property name="content">
-                <css:counter name="page"/>
-              </css:property>
-            </css:rule>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 15
+                                                  }
+                                                  @page:right {
+                                                    margin-top: 1
+                                                    @top-right {
+                                                      content: counter(page)
+                                                    }
+                                                  }
+                                                  @page:left {
+                                                    margin-top: 2
+                                                    @top-left {
+                                                      content: counter(page)
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -150,14 +135,13 @@
   
   <x:scenario label="test_04">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="1"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 1
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -180,14 +164,13 @@
   
   <x:scenario label="test_05">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="2"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 2
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -218,19 +201,16 @@
   
   <x:scenario label="test_06">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule selector="@bottom-left">
-            <css:property name="content">
-              <css:string value="⠆"/>
-            </css:property>
-          </css:rule>
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="1"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 1
+                                                    @bottom-left {
+                                                      content: &quot;⠆&quot;
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -253,19 +233,16 @@
   
   <x:scenario label="test_07">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule selector="@bottom-left">
-            <css:property name="content">
-              <css:string value="⠆"/>
-            </css:property>
-          </css:rule>
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="2"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 2
+                                                    @bottom-left {
+                                                      content: &quot;⠆&quot;
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -296,20 +273,17 @@
   
   <x:scenario label="test_08">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule selector="@bottom-left">
-            <css:property name="content">
-              <css:string value="⠆&#xa;⠆⠆"/>
-            </css:property>
-            <css:property name="white-space" value="pre-wrap"/>
-          </css:rule>
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="2"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 2
+                                                    @bottom-left {
+                                                      content: &quot;⠆\A ⠆⠆&quot;;
+                                                      white-space: pre-wrap
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -340,20 +314,17 @@
   
   <x:scenario label="test_09">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule selector="@bottom-left">
-            <css:property name="content">
-              <css:string value="⠆&#xa;⠆⠆"/>
-            </css:property>
-            <css:property name="white-space" value="pre-wrap"/>
-          </css:rule>
-          <css:rule>
-            <css:property name="size" value="15 5"/>
-            <css:property name="margin-bottom" value="1"/>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 5;
+                                                    margin-bottom: 1
+                                                    @bottom-left {
+                                                      content: &quot;⠆\A ⠆⠆&quot;;
+                                                      white-space: pre-wrap
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -384,35 +355,26 @@
   
   <x:scenario label="test_10">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="28 28"/>
-          </css:rule>
-          <css:rule selector="&amp;:right">
-            <css:rule>
-              <css:property name="margin-bottom" value="1"/>
-            </css:rule>
-            <css:rule selector="@bottom-left">
-              <css:property name="content">
-                <css:string name="print-page" scope="spread-start-except-last"/>
-                <css:string name="slash-print-page" scope="spread-last"/>
-              </css:property>
-              <css:property name="text-transform" value="print-page"/>
-            </css:rule>
-            <css:rule selector="@bottom-center">
-              <css:property name="content">
-                <css:string name="running-footer" scope="spread-start"/>
-              </css:property>
-            </css:rule>
-            <css:rule selector="@bottom-right">
-              <css:property name="content">
-                <css:counter name="page"/>
-              </css:property>
-            </css:rule>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 28 28
+                                                  }
+                                                  @page:right {
+                                                    margin-bottom: 1
+                                                    @bottom-left {
+                                                      content: string(print-page, spread-start-except-last)
+                                                               string(slash-print-page, spread-last);
+                                                      text-transform: print-page
+                                                    }
+                                                    @bottom-center {
+                                                      content: string(running-footer, spread-start)
+                                                    }
+                                                    @bottom-right {
+                                                      content: counter(page)
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -458,20 +420,17 @@
   
   <x:scenario label="test_11">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 15"/>
-          </css:rule>
-          <css:rule selector="@footnotes">
-            <css:property name="border-top-pattern" value="⠒"/>
-            <css:property name="max-height" value="10"/>
-            <css:property name="content">
-              <css:flow from="footnote"/>
-            </css:property>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 15
+                                                    @footnotes {
+                                                      border-top-pattern: ⠒;
+                                                      max-height: 10;
+                                                      content: flow(footnote)
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -490,32 +449,25 @@
 
   <x:scenario label="test_12">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet">
-        <css:rule selector="@page">
-          <css:rule>
-            <css:property name="size" value="15 15"/>
-          </css:rule>
-          <css:rule selector="@footnotes">
-            <css:property name="border-top-pattern" value="⠒"/>
-            <css:property name="max-height" value="10"/>
-            <css:property name="content">
-              <css:flow from="footnote"/>
-            </css:property>
-          </css:rule>
-          <css:rule selector="&amp;:left">
-            <css:rule>
-              <css:property name="size" value="15 15"/>
-            </css:rule>
-            <css:rule selector="@footnotes">
-              <css:property name="border-top-pattern" value="⠒"/>
-              <css:property name="max-height" value="10"/>
-              <css:property name="content">
-                <css:flow from="footnote"/>
-              </css:property>
-            </css:rule>
-          </css:rule>
-        </css:rule>
-      </x:param>
+      <x:param name="page-style" select="s:get(
+                                                css:parse-stylesheet('
+                                                  @page {
+                                                    size: 15 15
+                                                    @footnotes {
+                                                      border-top-pattern: ⠒;
+                                                      max-height: 10;
+                                                      content: flow(footnote)
+                                                    }
+                                                  }
+                                                  @page:left {
+                                                    size: 15 15
+                                                    @footnotes {
+                                                      border-top-pattern: ⠒;
+                                                      max-height: 10;
+                                                      content: flow(footnote)
+                                                    }
+                                                  }
+                                                '),'@page')"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>

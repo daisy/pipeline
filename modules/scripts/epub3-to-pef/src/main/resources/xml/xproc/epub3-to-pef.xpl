@@ -107,10 +107,7 @@ even though the provided CSS is more specific.
     <!-- ======= -->
     <!-- Imports -->
     <!-- ======= -->
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl">
-        <!-- FIXME: we cannot use a relative url to import px:epub3-to-pef.load, etc. directly here
-             because this script uses px:extends-script in the XML catalog which changes the base URI of
-             the script at build time. -->
+    <p:import href="library.xpl">
         <p:documentation>
             px:epub3-to-pef.load
             px:epub3-to-pef

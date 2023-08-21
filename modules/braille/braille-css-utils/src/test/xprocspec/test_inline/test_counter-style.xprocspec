@@ -38,7 +38,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@counter-style decimal { system: numeric; symbols: ''0'' ''1'' ''2'' ''3'' ''4'' ''5'' ''6'' ''7'' ''8'' ''9''; } @counter-style lower-roman { system: additive; range: 1 3999; additive-symbols: 1000 m 900 cm 500 d 400 cd 100 c 90 xc 50 l 40 xl 10 x 9 ix 5 v 4 iv 1 i; }'"/>
+              equals="'@counter-style decimal { symbols: ''0'' ''1'' ''2'' ''3'' ''4'' ''5'' ''6'' ''7'' ''8'' ''9''; system: numeric } @counter-style lower-roman { additive-symbols: 1000 m, 900 cm, 500 d, 400 cd, 100 c, 90 xc, 50 l, 40 xl, 10 x, 9 ix, 5 v, 4 iv, 1 i; range: 1 3999; system: additive }'"/>
   </x:scenario>
   
 </x:description>

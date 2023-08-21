@@ -55,6 +55,10 @@
       <artifactId>braille-css-utils</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
@@ -109,15 +113,21 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dotify_utils,
+      org.daisy.pipeline.braille.dotify.calabash.impl.EvalCounterStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLToPEFStep$Provider,
+      org.daisy.pipeline.braille.dotify.calabash.impl.ShiftIdStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftObflMarkerStep$Provider,
+      org.daisy.pipeline.braille.dotify.calabash.impl.ShiftStringSetStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.TemporaryBrailleTranslatorProvider,
       org.daisy.pipeline.braille.dotify.impl.BrailleFilterFactoryImpl,
       org.daisy.pipeline.braille.dotify.impl.BrailleTranslatorFactoryServiceImpl,
       org.daisy.pipeline.braille.dotify.impl.DotifyCSSStyledDocumentTransform$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyTranslatorImpl$Provider,
-      org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider
+      org.daisy.pipeline.braille.dotify.impl.DotifyCSSExtension,
+      org.daisy.pipeline.braille.dotify.impl.OBFLExtension,
+      org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider,
+      org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle$ObflStyleFunctionProvider
     </expose-services>
   </properties>
   

@@ -3,8 +3,4 @@
   <uri name="http://www.daisy.org/pipeline/modules/nimas-fileset-validator/nimas-fileset-validator.xpl"
        uri="../xml/nimas-fileset-validator.xpl" px:content-type="script" px:id="nimas-fileset-validator"
        px:extends="../../../../../common-options.xpl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
 </catalog>

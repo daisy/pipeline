@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
     <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" />
     
-    <xsl:template match="@css:page" mode="css:attribute-as-property"/>
-    
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
+    </xsl:template>
+    
+    <xsl:template match="*[not(self::css:_)]" priority="1">
+        <xsl:param name="style" as="item()?" tunnel="yes" select="()"/>
+        <xsl:next-match>
+            <xsl:with-param name="style" tunnel="yes" select="s:merge((
+                                                                css:parse-stylesheet(@style,$style),
+                                                                (@css:* except @css:page)/css:parse-stylesheet(.)))"/>
+        </xsl:next-match>
     </xsl:template>
     
     <xsl:template match="*[css:_obfl-on-toc-start|
@@ -98,11 +106,10 @@
                          css:_obfl-on-volume-end|
                          css:_obfl-on-collection-end|
                          css:_obfl-on-toc-end">
+        <xsl:param name="style" as="item()?" tunnel="yes" select="()"/>
         <xsl:copy>
             <xsl:sequence select="@* except @style"/>
-            <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
-                                  css:computed-properties(($css:properties,'#all'), true(), false(), false(), .)
-                                  [not(@value='initial')]))"/>
+            <xsl:sequence select="css:style-attribute($style)"/>
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>

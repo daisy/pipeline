@@ -694,35 +694,22 @@
 	<xsl:template name="recStart">
 		<xsl:param name="abstLevel" as="xs:string"/>
 		<xsl:param name="level" as="xs:integer"/>
+		<xsl:variable name="levelNumberingScheme" select="$numberingXml//w:numbering/w:abstractNum[@w:abstractNumId=$abstLevel]/w:lvl[@w:ilvl=$level]" />
 		<xsl:choose>
-			<xsl:when test="$level=0">
-				<xsl:variable name="strStart" as="xs:string" select="$numberingXml//w:numbering/w:abstractNum[@w:abstractNumId=$abstLevel]/w:lvl[@w:ilvl=$level]/w:start/@w:val"/>
-				<xsl:choose>
-					<xsl:when test="$strStart=''">
-						<xsl:sequence select="d:sink(d:StartString($myObj,$level,'0'))"/> <!-- empty -->
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:sequence select="d:sink(d:StartString($myObj,$level,$strStart))"/> <!-- empty -->
-					</xsl:otherwise>
-				</xsl:choose>
+			<xsl:when test="$levelNumberingScheme/w:start/@w:val">
+				<xsl:sequence select="d:sink(d:StartString($myObj,$level,$levelNumberingScheme/w:start/@w:val))"/>
 			</xsl:when>
-			<xsl:otherwise>
-				<xsl:variable name="strStart" as="xs:string" select="$numberingXml//w:numbering/w:abstractNum[@w:abstractNumId=$abstLevel]/w:lvl[@w:ilvl=$level]/w:start/@w:val"/>
-				<xsl:choose>
-					<xsl:when test="$strStart=''">
-						<xsl:sequence select="d:sink(d:StartString($myObj,$level,'0'))"/> <!-- empty -->
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:sequence select="d:sink(d:StartString($myObj,$level,$strStart))"/> <!-- empty -->
-					</xsl:otherwise>
-				</xsl:choose>
-				<xsl:variable name="dec" as="xs:integer" select="$level - 1"/>
-				<xsl:call-template name="recStart">
-					<xsl:with-param name="abstLevel" select="$abstLevel"/>
-					<xsl:with-param name="level" select="$dec"/>
-				</xsl:call-template>
+			<xsl:otherwise> <!-- Non incrementable lists -->
+				<xsl:sequence select="d:sink(d:StartString($myObj,$level,'0'))"/>
 			</xsl:otherwise>
 		</xsl:choose>
+		<xsl:if test="$level &gt; 0">
+			<xsl:variable name="dec" as="xs:integer" select="$level - 1"/>
+			<xsl:call-template name="recStart">
+				<xsl:with-param name="abstLevel" select="$abstLevel"/>
+				<xsl:with-param name="level" select="$dec"/>
+			</xsl:call-template>
+		</xsl:if>
 	</xsl:template>
 	
 	<!--Template to Close Complex List-->

@@ -1,24 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<p:pipeline type="px:block-translate" version="1.0"
-            xmlns:p="http://www.w3.org/ns/xproc"
+<p:pipeline xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
             xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-            xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-            exclude-inline-prefixes="#all">
+            exclude-inline-prefixes="#all"
+            type="px:block-translate">
 	
 	<p:option name="text-transform" select="''"/>
 	<p:option name="braille-charset" select="''"/>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
+		<p:documentation>
+			px:css-parse-properties
+		</p:documentation>
+	</p:import>
 	
-	<css:parse-properties px:message="Parsing CSS properties" px:message-severity="DEBUG" px:progress=".05"
-	                      properties="display"/>
+	<p:xslt px:progress="0.05">
+		<p:documentation>
+			Make css:before and css:after elements from pseudo-element rules.
+		</p:documentation>
+		<p:input port="stylesheet">
+			<p:document href="expand-pseudo-elements.xsl"/>
+		</p:input>
+	</p:xslt>
 	
-	<p:xslt px:message="Translating CSS blocks" px:message-severity="DEBUG" px:progress=".95">
+	<px:css-parse-properties px:message="Parsing CSS properties" px:message-severity="DEBUG" px:progress=".05"
+	                         properties="display"/>
+	
+	<p:xslt px:message="Translating CSS blocks" px:message-severity="DEBUG" px:progress=".85">
 		<p:input port="stylesheet">
 			<p:document href="block-translator-from-text-transform.xsl"/>
 		</p:input>
 		<p:with-param name="text-transform" select="$text-transform"/>
 		<p:with-param name="braille-charset" select="$braille-charset"/>
+	</p:xslt>
+	
+	<p:xslt px:progress="0.05">
+		<p:documentation>
+			Convert css:before and css:after elements back to pseudo-element rules.
+		</p:documentation>
+		<p:input port="stylesheet">
+			<p:document href="collapse-pseudo-elements.xsl"/>
+		</p:input>
 	</p:xslt>
 	
 </p:pipeline>

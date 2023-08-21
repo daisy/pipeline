@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/make-boxes.xsl">
+  
+  <x:scenario label="test_01">
+    <x:context>
+      <doc xml:lang="en">
+        <head css:display="none">
+          <meta name="author" content="Bert" css:string-set="author 'Bert'"/>
+        </head>
+        <body>
+          <p css:display="block" css:counter-reset="baz" style="margin-left: 2" foo="bar">
+            <css:string value="baz"/>
+          </p>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="inline" name="doc" xml:lang="en">
+        <css:_ name="head">
+          <css:_ name="meta" css:string-set="author 'Bert'"/>
+        </css:_>
+        <css:box type="inline" name="body">
+          <css:box type="block" name="p" css:counter-reset="baz" style="margin-left: 2">
+            <css:string value="baz"/>
+          </css:box>
+        </css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:context>
+      <ul style="list-style-type: decimal">
+        <li css:display="list-item"/>
+        <li css:display="list-item"/>
+      </ul>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="inline" name="ul">
+        <css:box type="block" name="li" css:counter-increment="list-item">
+          <css:box type="inline" name="css:marker">
+            <css:counter name="list-item" style="decimal" />
+          </css:box>
+        </css:box>
+        <css:box type="block" name="li" css:counter-increment="list-item">
+          <css:box type="inline" name="css:marker">
+            <css:counter name="list-item" style="decimal" />
+          </css:box>
+        </css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <table xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+             css:table="_">
+        <caption css:table-caption="_">
+          <p>Caption</p>
+        </caption>
+        <thead>
+          <tr>
+            <th css:table-cell="_" css:table-row="1" css:table-column="1">I</th>
+            <th css:table-cell="_" css:table-row="1" css:table-column="2">II</th>
+            <th css:table-cell="_" css:table-row="1" css:table-column="3">III</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td css:table-cell="_" css:table-row="1" css:table-column="1">a</td>
+            <td css:table-cell="_" css:table-row="1" css:table-column="2">b</td>
+            <td css:table-cell="_" css:table-row="1" css:table-column="3">c</td>
+          </tr>
+          <pagenum/>
+          <tr>
+            <td css:table-cell="_" css:table-row="2" css:table-column="1">d</td>
+            <td css:table-cell="_" css:table-row="2" css:table-column="2">e</td>
+            <td css:table-cell="_" css:table-row="2" css:table-column="3">f</td>
+          </tr>
+        </tbody>
+      </table>
+    </x:context>
+    <x:expect label="result">
+      <css:box type="block" name="table">
+        <css:box type="block" name="caption">
+          <css:box type="inline" name="p">Caption</css:box>
+        </css:box>
+        <css:box type="table">
+          <css:_ name="thead">
+            <css:_ name="tr">
+              <css:box type="table-cell" name="th" css:table-row="1" css:table-column="1">I</css:box>
+              <css:box type="table-cell" name="th" css:table-row="1" css:table-column="2">II</css:box>
+              <css:box type="table-cell" name="th" css:table-row="1" css:table-column="3">III</css:box>
+            </css:_>
+          </css:_>
+          <css:_ name="tbody">
+            <css:_ name="tr">
+              <css:box type="table-cell" name="td" css:table-row="1" css:table-column="1">a</css:box>
+              <css:box type="table-cell" name="td" css:table-row="1" css:table-column="2">b</css:box>
+              <css:box type="table-cell" name="td" css:table-row="1" css:table-column="3">c</css:box>
+            </css:_>
+            <css:_ name="pagenum" />
+            <css:_ name="tr">
+              <css:box type="table-cell" name="td" css:table-row="2" css:table-column="1">d</css:box>
+              <css:box type="table-cell" name="td" css:table-row="2" css:table-column="2">e</css:box>
+              <css:box type="table-cell" name="td" css:table-row="2" css:table-column="3">f</css:box>
+            </css:_>
+          </css:_>
+        </css:box>
+      </css:box>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

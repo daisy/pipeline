@@ -27,7 +27,6 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
 

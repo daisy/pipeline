@@ -1,7 +1,9 @@
 package org.daisy.pipeline.braille.common;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -14,9 +16,11 @@ import org.daisy.braille.css.BrailleCSSProperty.BrailleCharset;
 import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +57,17 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 
 	private FromStyledTextToBraille fromStyledTextToBraille = null;
 
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	private final static PropertyValue TEXT_TRANSFORM_NONE
+		= cssParser.parse("text-transform: none").get("text-transform");
+	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
+		= cssParser.parse("braille-charset: custom").get("braille-charset");
+
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		if (fromStyledTextToBraille == null)
 			fromStyledTextToBraille = new FromStyledTextToBraille() {
-					public Iterable<String> transform(Iterable<CSSStyledText> input, int from, int to) {
-						List<String> braille = new ArrayList<>(); {
+					public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> input, int from, int to) {
+						List<CSSStyledText> braille = new ArrayList<>(); {
 							int i = 0;
 							for (CSSStyledText styledText : input) {
 								if (i >= from && (to < 0 || i < to)) {
@@ -65,28 +75,18 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 									String text = styledText.getText();
 									boolean unicodeBraille = brailleCharset == null || !useBrailleCharsetForInput;
 									if (style != null) {
+										style = (SimpleInlineStyle)style.clone();
 										CSSProperty val = style.getProperty("hyphens");
 										if (val == Hyphens.MANUAL || val == Hyphens.NONE) {
 											if (val == Hyphens.NONE)
 												text = text.replaceAll("[\u00AD\u200B]","");
 											style.removeProperty("hyphens"); }
-										val = style.getProperty("white-space");
-										if (val != null)
-											style.removeProperty("white-space");
-										val = style.getProperty("text-transform");
-										if (val == TextTransform.NONE || val == TextTransform.AUTO)
-											style.removeProperty("text-transform");
 										val = style.getProperty("braille-charset");
 										if (val != null) {
 											if (val == BrailleCharset.CUSTOM)
 												unicodeBraille = false;
 											else if (val == BrailleCharset.UNICODE)
-												unicodeBraille = true;
-											style.removeProperty("braille-charset"); }
-										for (String prop : style.getPropertyNames()) {
-											logger.warn("'{}: {}' not supported in combination with 'text-transform: none'",
-											            prop, style.get(prop));
-											logger.debug("(text was: '" + text + "')"); }}
+												unicodeBraille = true; }}
 									if (unicodeBraille && brailleCharset != null) {
 										StringBuilder b; {
 											b = new StringBuilder();
@@ -97,9 +97,45 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 												special = !special;
 											}
 										}
-										braille.add(b.toString());
-									} else
-										braille.add(text);
+										text = b.toString();
+									}
+									// update/add text-transform and braille-charset properties
+									List<PropertyValue> s = null; {
+										if (style == null) {
+											if (s == null) s = new ArrayList<>();
+											s.add(TEXT_TRANSFORM_NONE);
+											if (brailleCharset != null)
+												s.add(BRAILLE_CHARSET_CUSTOM);
+										} else {
+											TextTransform tt = style.getProperty("text-transform");
+											if (tt != TextTransform.NONE) {
+												if (tt != null)
+													style.removeProperty("text-transform");
+												if (s == null) s = new ArrayList<>();
+												s.add(TEXT_TRANSFORM_NONE);
+											}
+											BrailleCharset bc = style.getProperty("braille-charset");
+											if (brailleCharset != null) {
+												if (bc != BrailleCharset.CUSTOM) {
+													if (bc != null)
+														style.removeProperty("braille-charset");
+													if (s == null) s = new ArrayList<>();
+													s.add(BRAILLE_CHARSET_CUSTOM);
+												}
+											} else
+												if (bc != null && bc != BrailleCharset.UNICODE)
+													style.removeProperty("braille-charset");
+										}
+									}
+									if (s != null) {
+										if (style != null)
+											style.forEach(s::add);
+										style = new SimpleInlineStyle(s);
+									}
+									Map<String,String> a = styledText.getTextAttributes();
+									if (a != null)
+										a = new HashMap<>(a);
+									braille.add(new CSSStyledText(text, style, a));
 								}
 								i++;
 							}
@@ -128,6 +164,8 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 								String text = styledText.getText();
 								if (i >= from && (to < 0 || i < to)) {
 									SimpleInlineStyle style = styledText.getStyle();
+									if (style != null)
+										style = (SimpleInlineStyle)style.clone();
 									boolean unicodeBraille = brailleCharset == null || !useBrailleCharsetForInput;
 									if (style != null) {
 										CSSProperty val = style.getProperty("hyphens");

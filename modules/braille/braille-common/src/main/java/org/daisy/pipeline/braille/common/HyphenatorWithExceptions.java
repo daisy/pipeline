@@ -19,11 +19,14 @@ import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultLineBrea
 import org.daisy.pipeline.braille.common.util.Strings;
 import org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HyphenatorWithExceptions extends AbstractHyphenator {
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 
 	private final Hyphenator hyphenator;
 	private final Reader exceptionsFile;
@@ -148,7 +151,7 @@ public class HyphenatorWithExceptions extends AbstractHyphenator {
 			// LineBreaker that breaks words at SHY at ZWSP. It is expected that ZWSP have already been inserted after
 			// hard hyphens.
 			LineBreaker standardLineBreaker = new DefaultLineBreaker() {};
-			SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+			SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 			lineBreaker = new DefaultLineBreaker() {
 					@Override
 					public LineIterator transform(String text, Locale language) {

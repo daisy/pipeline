@@ -1124,43 +1124,43 @@
       </x:param>
     </x:call>
     <x:expect label="result">
-      <table style="display: a;">
+      <table style="display: a">
         <css:table-by axis="row">
-          <css:list-item style="display: b;">
-            <css:table-by axis="column" style="display: c;">
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+          <css:list-item style="display: b">
+            <css:table-by axis="column" style="display: c">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 1.1</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 1.2</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; display: f; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e; display: f }}">
                 <td>Cell 1.3</td>
               </css:list-item>
             </css:table-by>
           </css:list-item>
-          <css:list-item style="display: b;">
-            <css:table-by axis="column" style="display: c;">
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+          <css:list-item style="display: b">
+            <css:table-by axis="column" style="display: c">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 2.1</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 2.2</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; display: f; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e; display: f }}">
                 <td>Cell 2.3</td>
               </css:list-item>
             </css:table-by>
           </css:list-item>
-          <css:list-item style="display: b;">
-            <css:table-by axis="column" style="display: c;">
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+          <css:list-item style="display: b">
+            <css:table-by axis="column" style="display: c">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 3.1</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e }}">
                 <td>Cell 3.2</td>
               </css:list-item>
-              <css:list-item style="display: d; &amp;::after {{ display: e; display: f; }}">
+              <css:list-item style="display: d; &amp;::after {{ display: e; display: f }}">
                 <td>Cell 3.3</td>
               </css:list-item>
             </css:table-by>

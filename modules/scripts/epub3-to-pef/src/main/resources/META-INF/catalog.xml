@@ -14,14 +14,4 @@
   <!-- style sheets -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/reset.css" uri="../css/reset.css"/>
   
-  <!-- dependencies -->
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:html-to-pef"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
-  
 </catalog>

@@ -68,46 +68,46 @@
 		</x:context>
 		<x:expect label="stylesheet" type="compare" normalize-space="false">
 			<x:document type="inline">
-				<c:result content-type="text/plain">@page page-1 {
+				<c:result content-type="text/plain">#a {
+	page: page-2;
+}
+#b {
+	display: block;
+	page: page-1;
+}
+#c {
+	border-bottom-align: center;
+	border-bottom-pattern: ⠒;
+	border-bottom-style: none;
+	border-bottom-width: 1;
+	display: block;
+}
+#d, #e {
+	display: block;
+}
+#f {
+	display: block;
+}
+#f::before {
+	content: 'foo';
+}
+@page page-1 {
 	@top-left {
-		content: "foo"
+		content: 'foo';
+	}
+}
+@page page-1:left {
+	@top-left {
+		content: 'foo';
+	}
+	@top-right {
+		content: 'bar';
 	}
 }
 @page page-2 {
 	@top-left {
-		content: "foo"
+		content: 'foo';
 	}
-}
-@page page-2:left {
-	@top-left {
-		content: "foo"
-	}
-	@top-right {
-		content: "bar"
-	}
-}
-#a {
-	page: page-1
-}
-#b {
-	display: block;
-	page: page-2
-}
-#c {
-	display: block;
-	border-bottom-align: center;
-	border-bottom-pattern: ⠒;
-	border-bottom-style: none;
-	border-bottom-width: 1
-}
-#d, #e {
-	display: block
-}
-#f {
-	display: block
-}
-#f::before {
-	content: "foo"
 }
 </c:result>
 			</x:document>

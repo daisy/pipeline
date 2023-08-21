@@ -3,11 +3,4 @@
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-epub3/dtbook-to-epub3.xpl" uri="../xml/dtbook-to-epub3.xpl"
        px:content-type="script" px:id="dtbook-to-epub3" px:extends="../../../../../common-options.xpl"/>
   <uri name="http://www.daisy.org/pipeline/modules/dtbook-to-epub3/library.xpl" uri="../xml/library.xpl"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-zedai"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-epub3"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
 </catalog>

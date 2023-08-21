@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               stylesheet="../../main/resources/xml/css-to-obfl.xsl">
+
+	<x:param name="document-locale"></x:param>
+	<x:param name="page-counters">page</x:param>
+	<x:param name="braille-charset-table" select="''"/>
+	<x:param name="default-text-transform" select="''"/>
+
+	<x:scenario label="test_1">
+		<x:call function="pxi:resolve-css-string">
+			<x:param select="'print-page'"/>
+			<x:param select="//p[last()]">
+				<body>
+					<pagenum css:string-set="print-page '1'"/>
+					<p/>
+					<pagenum css:string-set="print-page '2'"/>
+					<p/>
+					<pagenum css:string-set="print-page '3'"/>
+					<p/>
+				</body>
+			</x:param>
+		</x:call>
+		<x:expect label="result">
+			<css:string value="3"/>
+		</x:expect>
+	</x:scenario>
+
+</x:description>
