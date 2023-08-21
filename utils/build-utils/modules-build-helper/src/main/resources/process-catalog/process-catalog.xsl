@@ -170,7 +170,7 @@
                                                    'liblouis-tables',
                                                    'libhyphen-tables')]|
                          cat:uri/@px:content-type[.=('script',
-                                                     'xsl-package',
+                                                     'xslt-package',
                                                      'data-type',
                                                      'params',
                                                      'calabash-config',
@@ -247,65 +247,6 @@ public class <xsl:value-of select="$className"/> extends XProcScriptService {
 	@Activate
 	public void activate(Map&lt;?,?&gt; properties) {
 		super.activate(properties, <xsl:value-of select="$className"/>.class);
-	}
-}</c:data></xsl:result-document>
-    </xsl:template>
-    
-    <xsl:template match="cat:uri[@px:content-type='xslt-package']" mode="java">
-        <xsl:variable name="doc" select="document(@uri,.)"/>
-        <xsl:if test="not($doc/xsl:package)">
-            <xsl:message terminate="yes">not a xsl:package: <xsl:sequence select="@uri"/></xsl:message>
-        </xsl:if>
-        <xsl:if test="not($doc/*/@name)">
-            <xsl:message terminate="yes">missing @name: <xsl:sequence select="@uri"/></xsl:message>
-        </xsl:if>
-        <xsl:call-template name="package-details-class">
-            <xsl:with-param name="name" select="$doc/*/@name"/>
-            <xsl:with-param name="version" select="($doc/*/@package-version,$moduleVersion)[1]"/>
-            <!--
-                assuming catalog.xml is placed in META-INF
-            -->
-            <xsl:with-param name="path" select="pf:normalize-path(concat('/META-INF/',@uri))"/>
-        </xsl:call-template>
-        <xsl:next-match/>
-    </xsl:template>
-    
-    <xsl:template name="package-details-class">
-        <xsl:param name="name" as="xs:string" required="yes"/>
-        <xsl:param name="version" as="xs:string" required="yes"/>
-        <xsl:param name="path" as="xs:string" required="yes"/>
-        <xsl:variable name="className" select="concat('PackageDetails_',replace($name,'[^a-zA-Z]','_'))"/>
-        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/common/saxon/impl/{$className}.java"
-                             method="text" xml:space="preserve"><c:data>package org.daisy.common.saxon.impl;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import javax.xml.transform.stream.StreamSource;
-
-import net.sf.saxon.trans.packages.PackageDetails;
-import net.sf.saxon.trans.packages.VersionedPackageName;
-import net.sf.saxon.trans.XPathException;
-
-import org.daisy.common.file.URLs;
-
-import org.osgi.service.component.annotations.Component;
-
-@Component(
-	name = "<xsl:value-of select="$className"/>",
-	service = { PackageDetails.class }
-)
-public class <xsl:value-of select="$className"/> extends PackageDetails {
-	public <xsl:value-of select="$className"/>() {
-		try {
-			nameAndVersion = new VersionedPackageName("<xsl:value-of select="$name"/>", "<xsl:value-of select="$version"/>");
-			URL url = URLs.getResourceFromJAR("<xsl:value-of select="$path"/>",
-			                                  <xsl:value-of select="$className"/>.class);
-			sourceLocation = new StreamSource(url.openStream(), url.toURI().toASCIIString());
-		} catch (XPathException|IOException|URISyntaxException e) {
-			throw new IllegalStateException(
-				"Failed to create PackageDetails object for package '<xsl:value-of select="$name"/>'", e);
-		}
 	}
 }</c:data></xsl:result-document>
     </xsl:template>

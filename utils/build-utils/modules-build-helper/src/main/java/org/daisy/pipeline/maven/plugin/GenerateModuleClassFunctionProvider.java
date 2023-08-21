@@ -27,6 +27,7 @@ import org.daisy.pipeline.modules.RelaxNGResource;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.modules.UseXSLTPackage;
 import org.daisy.pipeline.modules.XProcResource;
+import org.daisy.pipeline.modules.XSLTPackage;
 import org.daisy.pipeline.modules.XSLTResource;
 
 import org.osgi.framework.Version;
@@ -92,7 +93,9 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 					}
 				};
 			boolean hasCatalog = false;
+			Map<URI,XSLTPackage> xsltPackages = new HashMap<>();
 			Map<URI,String> componentDependencyChecks = new HashMap<>();
+			Map<String,String> xsltPackageDependencyChecks = new HashMap<>();
 			Map<String,String> resourceDependencyChecks = new HashMap<>();
 			boolean componentChecks = false;
 			boolean extensionFunctionChecks = false;
@@ -100,6 +103,16 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			for (CatalogEntry entry : catalogEntries) {
 				if (entry.name != null)
 					hasCatalog = true;
+				if (entry.contentType == ContentType.XSLT_PACKAGE) {
+					try {
+						XSLTPackage p = new XSLTPackage(moduleUnderCompilation, entry.uri.toString(), xmlParser);
+						xsltPackages.put(entry.uri, p);
+					} catch (NoSuchFileException e) {
+						throw new RuntimeException("Could not process catalog entry: resource not found: " + entry.uri.toString(), e);
+					} catch (IllegalArgumentException e) {
+						throw new RuntimeException("Could not process catalog entry: invalid XSLT package: " + entry.uri.toString(), e);
+					}
+				}
 				Set<Dependency> dependencies; {
 					try {
 						if (entry.uri.toString().endsWith(".xpl"))
@@ -146,6 +159,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 					}
 					if (entry.name != null)
 						componentDependencyChecks.put(entry.name, s.toString());
+					else if (entry.contentType == ContentType.XSLT_PACKAGE)
+						xsltPackageDependencyChecks.put(entry.uri.toString(), s.toString());
 					else
 						resourceDependencyChecks.put(entry.uri.toString(), s.toString());
 				}
@@ -161,15 +176,15 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				StringBuilder imports = new StringBuilder();
 				if (componentChecks)
 					imports.append("import java.net.URI;\n");
-				if (!resourceDependencyChecks.isEmpty())
+				if (!resourceDependencyChecks.isEmpty() || !xsltPackageDependencyChecks.isEmpty())
 					imports.append("import java.net.URL;\n");
-				if (!resourceDependencyChecks.isEmpty() || extensionFunctionChecks)
+				if (!resourceDependencyChecks.isEmpty() || !xsltPackageDependencyChecks.isEmpty() || extensionFunctionChecks)
 					imports.append("import java.nio.file.NoSuchFileException;\n");
 				if (xsltPackageChecks)
 					imports.append("import java.util.ArrayList;\n");
 				if (componentChecks)
 					imports.append("import java.util.HashMap;\n");
-				if (!componentDependencyChecks.isEmpty())
+				if (!componentDependencyChecks.isEmpty() || !xsltPackageDependencyChecks.isEmpty())
 					imports.append("import java.util.LinkedList;\n");
 				if (xsltPackageChecks)
 					imports.append("import java.util.List;\n");
@@ -178,6 +193,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				if (imports.length() > 0)
 					result.append(imports.toString()).append("\n");
 			}
+			if (!xsltPackageDependencyChecks.isEmpty())
+				result.append("import javax.xml.stream.XMLInputFactory;\n").append("\n");
 			{
 				StringBuilder imports = new StringBuilder();
 				if (extensionFunctionChecks)
@@ -234,6 +251,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			if (hasCatalog)
 				result.append("    private boolean initialized = false;\n");
 			result.append("    private XmlCatalogParser catalogParser;\n");
+			if (!xsltPackageDependencyChecks.isEmpty())
+				result.append("    private XMLInputFactory xmlParser;\n");
 			if (extensionFunctionChecks)
 				result.append("    private XPathFunctionRegistry xpathFunctions;\n");
 			if (xsltPackageChecks)
@@ -244,6 +263,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				result.append("    private final LinkedList<Component> componentsToAdd;\n");
 				result.append("    private final LinkedList<Component> componentsBeingAdded;\n");
 			}
+			if (!xsltPackageDependencyChecks.isEmpty()) {
+				result.append("    private final LinkedList<String> xsltPackagesToAdd;\n");
+				result.append("    private final LinkedList<String> xsltPackagesBeingAdded;\n");
+			}
 			result.append("\n");
 			result.append("    public " + className + "() {\n");
 			result.append("        super(\"" + moduleName + "\",\n");
@@ -252,6 +275,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			if (!componentDependencyChecks.isEmpty()) {
 				result.append("        componentsToAdd = new LinkedList<>();\n");
 				result.append("        componentsBeingAdded = new LinkedList<>();\n");
+			}
+			if (!xsltPackageDependencyChecks.isEmpty()) {
+				result.append("        xsltPackagesToAdd = new LinkedList<>();\n");
+				result.append("        xsltPackagesBeingAdded = new LinkedList<>();\n");
 			}
 			result.append("    }\n");
 			result.append("\n");
@@ -266,6 +293,19 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			result.append("        catalogParser = parser;\n");
 			result.append("    }\n");
 			result.append("\n");
+			if (!xsltPackageDependencyChecks.isEmpty()) {
+				result.append("    @Reference(\n");
+				result.append("        name = \"XMLInputFactory\",\n");
+				result.append("        unbind = \"-\",\n");
+				result.append("        service = XMLInputFactory.class,\n");
+				result.append("        cardinality = ReferenceCardinality.MANDATORY,\n");
+				result.append("        policy = ReferencePolicy.STATIC\n");
+				result.append("    )\n");
+				result.append("    protected void setXMLInputFactory(XMLInputFactory parser) {\n");
+				result.append("        xmlParser = parser;\n");
+				result.append("    }\n");
+				result.append("\n");
+			}
 			if (componentChecks) {
 				result.append("    @Reference(\n");
 				result.append("        name = \"ModuleRegistry\",\n");
@@ -287,7 +327,7 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				result.append("    }\n");
 				result.append("\n");
 			}
-			if (!componentDependencyChecks.isEmpty()) {
+			if (!componentDependencyChecks.isEmpty() || !xsltPackageDependencyChecks.isEmpty()) {
 				result.append("    // Not calling init() during object construction yet because it depends on other\n");
 				result.append("    // modules, and other modules may depend on this module. The init() method will be\n");
 				result.append("    // called when the object gets bound in ModuleRegistry. The method may recursively\n");
@@ -296,68 +336,123 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				result.append("    @Override\n");
 				result.append("    public void init() {\n");
 				result.append("        if (!initialized) {\n");
-				result.append("            boolean recursive = !componentsBeingAdded.isEmpty();\n");
+				if (!componentDependencyChecks.isEmpty() && !xsltPackageDependencyChecks.isEmpty())
+					result.append("            boolean recursive = !componentsBeingAdded.isEmpty() || !xsltPackagesBeingAdded.isEmpty();\n");
+				else if (!componentDependencyChecks.isEmpty())
+					result.append("            boolean recursive = !componentsBeingAdded.isEmpty();\n");
+				else
+					result.append("            boolean recursive = !xsltPackagesBeingAdded.isEmpty();\n");
 				result.append("            if (recursive)\n");
 				result.append("                logger.trace(\"Initializing (continuing in recursive call)\");\n");
 				result.append("            else\n");
 				result.append("                logger.trace(\"Initializing\");\n");
 				result.append("            if (!recursive) {\n");
-				result.append("                Module tmpModule = new Module(getName(), getVersion(), getTitle()) {\n");
-				result.append("                    @Override public void init() {}\n");
-				result.append("                    @Override public Logger getLogger() { return NOP_LOGGER; }\n");
-				result.append("                };\n");
-				result.append("                Module.parseCatalog(tmpModule, catalogParser);\n");
-				result.append("                for (Entity e : tmpModule.getEntities()) {\n");
-				result.append("                    logger.trace(\"Adding entity: \" + e.getPublicId());\n");
-				result.append("                    addEntity(e);\n");
-				result.append("                }\n");
-				result.append("                for (Component c : tmpModule.getComponents())\n");
-				result.append("                    componentsToAdd.add(c);\n");
+				if (!componentDependencyChecks.isEmpty()) {
+					result.append("                Module tmpModule = new Module(getName(), getVersion(), getTitle()) {\n");
+					result.append("                    @Override public void init() {}\n");
+					result.append("                    @Override public Logger getLogger() { return NOP_LOGGER; }\n");
+					result.append("                };\n");
+					result.append("                Module.parseCatalog(tmpModule, catalogParser);\n");
+					result.append("                for (Entity e : tmpModule.getEntities()) {\n");
+					result.append("                    logger.trace(\"Adding entity: \" + e.getPublicId());\n");
+					result.append("                    addEntity(e);\n");
+					result.append("                }\n");
+					result.append("                for (Component c : tmpModule.getComponents())\n");
+					result.append("                    componentsToAdd.add(c);\n");
+				} else if (hasCatalog)
+					result.append("                Module.parseCatalog(this, catalogParser);\n");
+				for (URI path : xsltPackages.keySet()) {
+					XSLTPackage p = xsltPackages.get(path);
+					if (xsltPackageDependencyChecks.containsKey(path.toString())) {
+						result.append("                xsltPackagesToAdd.add(\"" + path + "\");\n");
+					} else {
+						result.append("                try {\n");
+						result.append("                    addXSLTPackage(\"" + p.getName() + "\",\n");
+						result.append("                                   \"" + p.getVersion() + "\",\n");
+						result.append("                                   \"" + path + "\");\n");
+						result.append("                } catch (NoSuchFileException e) {\n");
+						result.append("                    logger.warn(\"Component can not be started: resource not found: \" + path);\n");
+						result.append("                }\n");
+					}
+				}
 				result.append("            }\n");
-				result.append("            while (true) {\n");
-				result.append("                if (componentsToAdd.isEmpty()) {\n");
-				result.append("                    if (componentsBeingAdded.isEmpty())\n");
-				result.append("                        break;\n");
-				result.append("                    componentsToAdd.addAll(componentsBeingAdded);\n");
-				result.append("                    componentsBeingAdded.clear();\n");
-				result.append("                }\n");
-				result.append("                Component c = componentsToAdd.poll();\n");
-				result.append("                logger.trace(\"Adding component: \" + c.getURI());\n");
-				result.append("                componentsBeingAdded.add(c);\n");
-				result.append("                addComponent(c); // may call init() recursively\n");
-				result.append("                componentsBeingAdded.remove(c);\n");
-				result.append("                componentsToAdd.remove(c);\n");
-				result.append("            }\n");
+				if (!componentDependencyChecks.isEmpty()) {
+					result.append("            while (true) {\n");
+					result.append("                if (componentsToAdd.isEmpty()) {\n");
+					result.append("                    if (componentsBeingAdded.isEmpty())\n");
+					result.append("                        break;\n");
+					result.append("                    componentsToAdd.addAll(componentsBeingAdded);\n");
+					result.append("                    componentsBeingAdded.clear();\n");
+					result.append("                }\n");
+					result.append("                Component c = componentsToAdd.poll();\n");
+					result.append("                logger.trace(\"Adding component: \" + c.getURI());\n");
+					result.append("                componentsBeingAdded.add(c);\n");
+					result.append("                addComponent(c); // may call init() recursively\n");
+					result.append("                componentsBeingAdded.remove(c);\n");
+					result.append("                componentsToAdd.remove(c);\n");
+					result.append("            }\n");
+				}
+				if (!xsltPackageDependencyChecks.isEmpty()) {
+					result.append("            while (true) {\n");
+					result.append("                if (xsltPackagesToAdd.isEmpty()) {\n");
+					result.append("                    if (xsltPackagesBeingAdded.isEmpty())\n");
+					result.append("                        break;\n");
+					result.append("                    xsltPackagesToAdd.addAll(xsltPackagesBeingAdded);\n");
+					result.append("                    xsltPackagesBeingAdded.clear();\n");
+					result.append("                }\n");
+					result.append("                String p = xsltPackagesToAdd.poll();\n");
+					result.append("                logger.trace(\"Adding XSLT package: \" + p);\n");
+					result.append("                xsltPackagesBeingAdded.add(p);\n");
+					result.append("                try {\n");
+					result.append("                    addXSLTPackage(p, xmlParser); // may call init() recursively\n");
+					result.append("                } catch (NoSuchFileException e) {\n");
+					result.append("                    logger.warn(\"Component can not be started: resource not found: \" + p);\n");
+					result.append("                } catch (IllegalArgumentException e) {\n");
+					result.append("                    throw new IllegalStateException(); // should not happen: file validated during compilation\n");
+					result.append("                }\n");
+					result.append("                xsltPackagesBeingAdded.remove(p);\n");
+					result.append("                xsltPackagesToAdd.remove(p);\n");
+					result.append("            }\n");
+				}
 				result.append("            if (!initialized)\n");
 				result.append("                logger.debug(\"Initialized\");\n");
 				result.append("            initialized = true;\n");
 				result.append("        }\n");
 				result.append("    }\n");
-				result.append("\n");
-				result.append("    @Override\n");
-				result.append("    protected boolean addComponent(Component component) {\n");
-				result.append("        String name = component.getURI().toString();\n");
-				boolean first = true;
-				for (URI componentName : componentDependencyChecks.keySet()) {
-					result.append("        ");
-					if (!first)
-						result.append(" else ");
-					first = false;
-					result.append("if (\"" + componentName + "\".equals(name)) {\n");
-					for (String s : componentDependencyChecks.get(componentName).split("\n"))
-						result.append("            ").append(s).append("\n");
-					result.append("        }");
+				if (!componentDependencyChecks.isEmpty()) {
+					result.append("\n");
+					result.append("    @Override\n");
+					result.append("    protected boolean addComponent(Component component) {\n");
+					result.append("        String name = component.getURI().toString();\n");
+					boolean first = true;
+					for (URI componentName : componentDependencyChecks.keySet()) {
+						result.append("        ");
+						if (!first)
+							result.append(" else ");
+						first = false;
+						result.append("if (\"" + componentName + "\".equals(name)) {\n");
+						for (String s : componentDependencyChecks.get(componentName).split("\n"))
+							result.append("            ").append(s).append("\n");
+						result.append("        }");
+					}
+					result.append("\n");
+					result.append("        return super.addComponent(component);\n");
+					result.append("    }\n");
 				}
-				result.append("\n");
-				result.append("        return super.addComponent(component);\n");
-				result.append("    }\n");
-			} else if (hasCatalog) {
+			} else if (hasCatalog || !xsltPackages.isEmpty()) {
 				result.append("    @Activate\n");
 				result.append("    @Override\n");
 				result.append("    public void init() {\n");
 				result.append("        if (!initialized) {\n");
 				result.append("            logger.trace(\"Initializing\");\n");
-				result.append("            Module.parseCatalog(this, catalogParser);\n");
+				if (hasCatalog)
+					result.append("            Module.parseCatalog(this, catalogParser);\n");
+				for (URI path : xsltPackages.keySet()) {
+					XSLTPackage p = xsltPackages.get(path);
+					result.append("            addXSLTPackage(\"" + p.getName() + "\",\n");
+					result.append("                           \"" + p.getVersion() + "\",\n");
+					result.append("                           \"" + path + "\");\n");
+				}
 				result.append("            initialized = true;\n");
 				result.append("            logger.trace(\"Initialized\");\n");
 				result.append("        }\n");
@@ -465,7 +560,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				result.append("        return module;\n");
 				result.append("    }\n");
 			}
-			if (!resourceDependencyChecks.isEmpty()) {
+			if (!resourceDependencyChecks.isEmpty() || !xsltPackageDependencyChecks.isEmpty()) {
+				resourceDependencyChecks.putAll(xsltPackageDependencyChecks);
 				result.append("\n");
 				for (int i = 1; i <= resourceDependencyChecks.size(); i++) {
 					result.append("    private URL resource" + i + " = null;\n");
@@ -502,6 +598,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 	private static final QName CAT_REWRITE_URI = new QName(XML_CATALOG_NS, "rewriteURI");
 	private static final QName _NAME = new QName("name");
 	private static final QName _URI = new QName("uri");
+	private static final String PIPELINE_EXT_NS = "http://www.daisy.org/ns/pipeline";
+	private static final QName PX_CONTENT_TYPE = new QName(PIPELINE_EXT_NS, "content-type");
 
 	private static Set<CatalogEntry> parseCatalog(Element catalog) {
 		Set<CatalogEntry> entries = new HashSet<>();
@@ -510,8 +608,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			Element e = (Element)children.item(i);
 			Attr name = e.getAttributeNodeNS(_NAME.getNamespaceURI(), _NAME.getLocalPart());
 			Attr uri = e.getAttributeNodeNS(_URI.getNamespaceURI(), _URI.getLocalPart());
+			Attr contentType = e.getAttributeNodeNS(PX_CONTENT_TYPE.getNamespaceURI(), PX_CONTENT_TYPE.getLocalPart());
 			entries.add(new CatalogEntry(name != null ? URI.create(name.getValue()) : null,
-			                             uri != null ? URI.create(uri.getValue()) : null));
+			                             uri != null ? URI.create(uri.getValue()) : null,
+			                             contentType != null ?  ContentType.create(contentType.getValue()) : null));
 		}
 		return entries;
 	}
@@ -519,11 +619,37 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 	private static class CatalogEntry {
 		public final URI name;
 		public final URI uri;
-		public CatalogEntry(URI name, URI uri) {
+		public final ContentType contentType;
+		public CatalogEntry(URI name, URI uri, ContentType contentType) {
 			if (uri == null)
 				throw new IllegalArgumentException("uri must not be null");
 			this.name = name;
 			this.uri = uri;
+			this.contentType = contentType;
+		}
+	}
+
+	private static enum ContentType {
+
+		SCRIPT("script"),
+		DATA_TYPE("data-type"),
+		XSLT_PACKAGE("xslt-package"),
+		PARAMS("params"),
+		CALABASH_CONFIG("calabash-config"),
+		LIBLOUIS_TABLES("liblouis-tables"),
+		LIBHYPHEN_TABLES("libhyphen-tables");
+
+		private final String type;
+
+		private ContentType(String type) {
+			this.type = type;
+		}
+
+		public static ContentType create(String type) {
+			for (ContentType t : ContentType.values())
+				if (t.type.equals(type))
+					return t;
+			throw new IllegalArgumentException("Not a valid content-type: " + type);
 		}
 	}
 
