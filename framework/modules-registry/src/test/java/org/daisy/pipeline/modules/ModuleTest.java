@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLInputFactory;
@@ -22,7 +23,7 @@ import org.junit.Test;
 public class ModuleTest {
 	
 	@Test
-	public void testBuildModule() {
+	public void testBuildModule() throws NoSuchFileException {
 		StaxXmlCatalogParser catalogParser = new StaxXmlCatalogParser();
 		catalogParser.setFactory(XMLInputFactory.newInstance());
 		catalogParser.activate();

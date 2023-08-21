@@ -1,11 +1,10 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
+import java.net.URL;
+import java.nio.file.NoSuchFileException;
 
 import org.daisy.common.file.URLs;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Entity represents a public id and its path inside the module. Only handles
@@ -13,26 +12,24 @@ import org.slf4j.LoggerFactory;
  */
 public class Entity {
 
-	private final Module mModule;
-	private final String mPublicId;
-	private final String mPath;
-
-	private static Logger mLogger = LoggerFactory.getLogger(Entity.class);
+	private final Module module;
+	private final String publicId;
+	private final URL resource;
 
 	/**
 	 * Instantiates a new entity.
 	 */
-	public Entity(Module module, String publicId, String path) {
-		mModule = module;
-		mPublicId = publicId;
-		mPath = path;
+	public Entity(Module module, String publicId, String path) throws NoSuchFileException {
+		this.module = module;
+		this.publicId = publicId;
+		resource = module.getResource(path);
 	}
 
 	/**
 	 * Gets the module owner of this entity.
 	 */
 	public Module getModule() {
-		return mModule;
+		return module;
 	}
 
 	/**
@@ -41,7 +38,7 @@ public class Entity {
 	 * @return the public id
 	 */
 	public String getPublicId() {
-		return mPublicId;
+		return publicId;
 	}
 
 	/**
@@ -50,12 +47,6 @@ public class Entity {
 	 * @return the path
 	 */
 	public URI getResource() {
-		try {
-			mLogger.trace("Getting resource from entity " + this + ": " + mPath);
-			return URLs.asURI(mModule.getResource(mPath));
-		} catch (Exception e) {
-			mLogger.debug("Resource " + mPath + " does not exist", e);
-			return null;
-		}
+		return URLs.asURI(resource);
 	}
 }
