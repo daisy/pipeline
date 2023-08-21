@@ -15,6 +15,7 @@ import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Entity;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.XSLTPackage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 
 	private final HashMap<URI,Module> componentsMap = new HashMap<>();
 	private final HashMap<String,Module> entityMap = new HashMap<>();
+	private final HashMap<String,Module> xsltPackageMap = new HashMap<>();
 	private final HashMap<URL,Module> codeSourceLocationMap = new HashMap<>();
 	private final List<Module> modules = new ArrayList<>();
 	private final Iterator<Module> nextModules;
@@ -94,6 +96,9 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 			for (Entity entity: module.getEntities()) {
 				logger.debug("  - {}", entity.getPublicId());
 				entityMap.put(entity.getPublicId(), module);
+			}
+			for (XSLTPackage pack : module.getXSLTPackages()) {
+				xsltPackageMap.put(pack.getName(), module);
 			}
 			URL codeSourceLocation = getCodeSourceLocation(module.getClass());
 			if (codeSourceLocationMap.containsKey(codeSourceLocation))
@@ -236,6 +241,25 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 					break;
 				}
 		return entityMap.keySet();
+	}
+
+	/**
+	 * {@link Module} objects that call this method should be aware that this may call their own
+	 * {@link Module#init} method.
+	 */
+	@Override
+	public synchronized Module getModuleByXSLTPackage(String name) {
+		do {
+			Module module = xsltPackageMap.get(name);
+			if (module != null)
+				return module;
+			try {
+				addNextModule();
+			} catch (NoSuchElementException e) {
+				break;
+			}
+		} while (true);
+		return null;
 	}
 
 	/**

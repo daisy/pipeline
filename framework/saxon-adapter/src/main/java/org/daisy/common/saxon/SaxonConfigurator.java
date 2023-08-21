@@ -2,12 +2,16 @@ package org.daisy.common.saxon;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.transform.URIResolver;
 
 import net.sf.saxon.Configuration;
@@ -22,6 +26,9 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.xpath.XPathFactoryImpl;
 
 import org.daisy.common.xpath.saxon.XPathFunctionRegistry;
+import org.daisy.pipeline.modules.Module;
+import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.XSLTPackage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,6 +148,32 @@ public class SaxonConfigurator {
 		if (packages == null)
 			packages = new ArrayList<PackageDetails>();
 		packages.add(pack);
+	}
+
+	@Reference(
+		name = "ModuleRegistry",
+		unbind = "-",
+		service = ModuleRegistry.class,
+		cardinality = ReferenceCardinality.OPTIONAL,
+		policy = ReferencePolicy.STATIC
+	)
+	public void setModuleRegistry(ModuleRegistry moduleRegistry) {
+		for (Module module : moduleRegistry) {
+			for (XSLTPackage pack : module.getXSLTPackages()) {
+				addPackageDetails(
+					new PackageDetails() {{
+						try {
+							nameAndVersion = new VersionedPackageName(pack.getName(), pack.getVersion());
+							URL url = pack.getResource();
+							sourceLocation = new StreamSource(url.openStream(), url.toURI().toASCIIString());
+						} catch (XPathException|IOException|URISyntaxException e) {
+							throw new IllegalStateException(
+								"Failed to create PackageDetails object for package '" + pack.getName() + "'", e);
+						}
+					}}
+				);
+			}
+		}
 	}
 
 	public void removePackageDetails(PackageDetails pack) {

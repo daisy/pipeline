@@ -22,6 +22,10 @@
       <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>modules-registry</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
     </dependency>
@@ -42,14 +46,6 @@
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>ds-to-spi-runtime</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies (for javax.xml.transform.URIResolver)
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>modules-registry</artifactId>
-      <scope>runtime</scope>
     </dependency>
   </dependencies>
   

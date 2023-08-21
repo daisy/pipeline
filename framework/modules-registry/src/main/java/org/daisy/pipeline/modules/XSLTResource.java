@@ -34,8 +34,8 @@ public class XSLTResource {
 	private static final QName XSL_INCLUDE = new QName(XSLT_NS, "include");
 	private static final QName XSL_USE_PACKAGE = new QName(XSLT_NS, "use-package");
 	private static final QName _HREF = new QName("href");
-	private static final QName _NAME = new QName("name");
-	private static final QName _PACKAGE_VERSION = new QName("package-version");
+	protected static final QName _NAME = new QName("name");
+	protected static final QName _PACKAGE_VERSION = new QName("package-version");
 
 	private final URL resource;
 	private final Module module;
@@ -57,6 +57,10 @@ public class XSLTResource {
 			throw new RuntimeException("coding error");
 		}
 		this.module = component.getModule();
+	}
+
+	public URL getResource() {
+		return resource;
 	}
 
 	/**
