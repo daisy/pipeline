@@ -27,7 +27,6 @@
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="META-INF/catalog.xml"/>
 					<c:file name="META-INF/services/net.sf.saxon.lib.ExtensionFunctionDefinition"/>
-					<c:file name="META-INF/services/net.sf.saxon.trans.packages.PackageDetails"/>
 					<c:file name="META-INF/services/org.daisy.Foo"/>
 					<c:file name="META-INF/services/org.daisy.common.xpath.saxon.ExtensionFunctionProvider"/>
 					<c:file name="META-INF/services/org.daisy.common.xproc.calabash.ConfigurationFileProvider"/>
@@ -36,7 +35,6 @@
 					<c:file name="META-INF/services/org.daisy.pipeline.datatypes.DatatypeService"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.modules.Module"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.script.XProcScriptService"/>
-					<c:file name="OSGI-INF/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.xml"/>
 					<c:file name="OSGI-INF/calabash-config-it-pipeline-module.xml"/>
 					<c:file name="OSGI-INF/foo-choice.xml"/>
 					<c:file name="OSGI-INF/foo-service.xml"/>
@@ -68,8 +66,6 @@
 					<c:file name="impl/JavaStep.class"/>
 					<c:file name="impl/JavaStep_Provider_SPI.class"/>
 					<c:file name="org/daisy/Foo.class"/>
-					<c:file name="org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.class"/>
-					<c:file name="org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl_SPI.class"/>
 					<c:file name="org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module.class"/>
 					<c:file name="org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module_SPI.class"/>
 					<c:file name="org/daisy/common/xproc/calabash/impl/ConfigurationFileProvider_it_pipeline_module.class"/>
@@ -294,10 +290,6 @@
 					<c:file name="src/main/java/impl/package-summary.html"/>
 					<c:file name="src/main/java/index.html"/>
 					<c:file name="src/main/java/org/daisy/Foo.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl_SPI.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/package-frame.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module_SPI.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/package-frame.html"/>
