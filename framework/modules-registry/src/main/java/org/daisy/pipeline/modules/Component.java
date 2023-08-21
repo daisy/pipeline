@@ -1,11 +1,10 @@
 package org.daisy.pipeline.modules;
 
 import java.net.URI;
+import java.net.URL;
+import java.nio.file.NoSuchFileException;
 
 import org.daisy.common.file.URLs;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Module component now based on expath package components.
@@ -14,18 +13,16 @@ public class Component {
 
 	private final Module module;
 	private final URI uri;
-	private final String path;
+	private final URL resource;
 	private final String version;
-
-	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
 
 	/**
 	 * Instantiates a new component.
 	 */
-	public Component(Module module, URI uri, String path) {
+	public Component(Module module, URI uri, String path) throws NoSuchFileException {
 		this.module = module;
 		this.uri = uri;
-		this.path = path;
+		resource = module.getResource(path);
 		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
 	}
 
@@ -44,13 +41,7 @@ public class Component {
 	 * @return the resource
 	 */
 	public URI getResource() {
-		try {
-			mLogger.trace("Getting resource from component " + this + ": " + path);
-			return URLs.asURI(module.getResource(path));
-		} catch (Exception e) {
-			mLogger.debug("Resource " + path + " does not exist", e);
-			return null;
-		}
+		return URLs.asURI(resource);
 	}
 
 	/**

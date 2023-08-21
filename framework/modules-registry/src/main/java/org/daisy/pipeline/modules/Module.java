@@ -173,16 +173,22 @@ public abstract class Module {
 	 * Parse catalog.xml file
 	 */
 	public static void parseCatalog(Module module, XmlCatalogParser parser) {
+		URL catalogURL; {
+			try {
+				catalogURL = module.loader.loadResource("../META-INF/catalog.xml");
+			} catch (NoSuchFileException e) {
+				throw new RuntimeException("/META-INF/catalog.xml file not found", e);
+			}
+		}
+		XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
 		try {
-			URL catalogURL = module.loader.loadResource("../META-INF/catalog.xml");
-			XmlCatalog catalog = parser.parse(URLs.asURI(catalogURL));
 			parseCatalog(module, catalog);
-		} catch (NoSuchFileException e) {
-			throw new RuntimeException("/META-INF/catalog.xml file not found", e);
+		} catch (Throwable e) {
+			throw new RuntimeException("catalog.xml can not be parsed", e);
 		}
 	}
 
-	public static void parseCatalog(Module module, XmlCatalog catalog) {
+	public static void parseCatalog(Module module, XmlCatalog catalog) throws NoSuchFileException {
 		for (Map.Entry<URI, URI> entry : catalog.getSystemIdMappings().entrySet()) {
 			module.addComponent(entry.getKey(), entry.getValue().toString());
 		}
@@ -209,7 +215,7 @@ public abstract class Module {
 	/**
 	 * This method can be overridden to exclude certain components that have unmet dependencies.
 	 */
-	protected boolean addComponent(URI uri, String path) {
+	protected boolean addComponent(URI uri, String path) throws NoSuchFileException {
 		getLogger().trace("Adding component: " + uri.toString() + ", path: " + path);
 		return addComponent(new Component(this, uri, path));
 	}
@@ -219,7 +225,7 @@ public abstract class Module {
 		return true;
 	}
 
-	protected boolean addEntity(String publicId, String path) {
+	protected boolean addEntity(String publicId, String path) throws NoSuchFileException {
 		getLogger().trace("Adding entity: " + publicId.toString() + ", path: " + path);
 		return addEntity(new Entity(this, publicId, path));
 	}
