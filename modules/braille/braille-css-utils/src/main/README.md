@@ -23,21 +23,11 @@
   of medium "print" is supported though, namely the properties color,
   font-style, font-weight, text-decoration.
 
-## XMLCalabash XProc steps ([`org.daisy.common.xproc.calabash.XProcStepProvider`](http://daisy.github.io/pipeline/api/org/daisy/common/xproc/calabash/XProcStepProvider.html))
-
-- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-id`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java)
-
-  Move css:id attributes to inline boxes, see [XProc documentation](resources/xml/shift-id.xpl)
-
-- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java)
-
-  Move 'string-set' declarations to inline boxes, see [XProc documentation](resources/xml/shift-string-set.xpl)
-
 ## Saxon XPath functions ([`net.sf.saxon.lib.ExtensionFunctionDefinition`](https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/lib/ExtensionFunctionDefinition.html))
 
 - [`{http://www.daisy.org/ns/pipeline/braille-css}parse-stylesheet`](java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java)
 
-  Parse a style sheet, see [XSLT documentation](resources/xml/base.xsl)
+  Parse a style sheet, see [XSLT documentation](resources/xml/library.xsl)
 
 - [`{http://www.daisy.org/ns/pipeline/braille-css}render-table-by`](java/org/daisy/pipeline/braille/css/saxon/impl/RenderTableByDefinition.java)
 
@@ -46,8 +36,6 @@
 
 <link rev="dp2:doc" href="./"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/impl/BrailleCssCascader.java"/>
-<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java"/>
-<link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java"/>
 <link rev="dp2:doc" href="java/org/daisy/pipeline/braille/css/saxon/impl/RenderTableByDefinition.java"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc"/>

@@ -38,6 +38,7 @@ import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -87,11 +88,6 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	
 	private final BrailleTranslatorFactory factory = new BrailleTranslatorFactoryImpl();
 	
-	/*
-	 * Mode for pre-translated text with support for text-level CSS and line
-	 * breaking according to CSS. Corresponds with translator query
-	 * `(input:braille)(input:text-css)(output:braille)`
-	 */
 	private class BrailleTranslatorFactoryImpl implements BrailleTranslatorFactory {
 		public BrailleTranslator newTranslator(String locale, String mode) throws TranslatorConfigurationException {
 			Matcher m = QUERY.matcher(mode);
@@ -198,6 +194,9 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			null);
 	}
 
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	private final static SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
+
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
 	                                                                     TextAttribute attributes,
 	                                                                     Locale language,
@@ -205,16 +204,13 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	                                                                     SimpleInlineStyle parentStyle) {
 		if (attributes != null && attributes.getWidth() != text.length())
 			throw new RuntimeException("Coding error");
-		SimpleInlineStyle style; {
+		SimpleInlineStyle style = null; {
 			String s = attributes != null ? attributes.getDictionaryIdentifier() : null;
-			if (s == null && parentStyle == null)
-				style = null;
-			else
-				// FIXME: extend caching of parsed CSS to support parentStyle!
-				style = new SimpleInlineStyle(s != null ? s : "", parentStyle);
+			if (s != null || parentStyle != null)
+				style = cssParser.parse(s != null ? s : "", parentStyle);
 			if (hyphenating && (style == null || style.getProperty("hyphens") == null))
-				// FIXME: add hyphens declaration through braille-css model
-				style = new SimpleInlineStyle("hyphens: auto", style); }
+				style = HYPHENS_AUTO.inheritFrom(style);
+		}
 		if (attributes != null && attributes.hasChildren())
 			return cssStyledTextFromTranslatable(text, attributes.iterator(), language, false, style);
 		else
@@ -261,11 +257,10 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			throw new RuntimeException("Coding error");
 		SimpleInlineStyle style; {
 			String s = attributes != null ? attributes.getName().orElse(null) : null;
-			if (s == null && parentStyle == null)
-				style = null;
+			if (s != null || parentStyle != null)
+				style = cssParser.parse(s != null ? s : "", parentStyle);
 			else
-				// FIXME: extend caching of parsed CSS to support parentStyle!
-				style = new SimpleInlineStyle(s != null ? s : "", parentStyle);
+				style = null;
 		}
 		if (attributes != null && attributes.hasChildren())
 			return cssStyledTextFromTranslatable(preceding, text, following, attributes.iterator(), style);

@@ -9,7 +9,7 @@
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xsl"
          uri="../xml/xslt/library.xsl"/>
 
-    <public publicId="-//DAISY//DTD content v2.02//EN" uri="../xml/schemas/d202/xhtml1-transitional-bodyref.dtd" />
+    <!-- <public publicId="-//DAISY//DTD content v2.02//EN" uri="../xml/schemas/d202/xhtml1-transitional-bodyref.dtd" /> -->
     <public publicId="-//DAISY//DTD ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.dtd" />
     <public publicId="-//DAISY//RNG ncc v2.02//EN" uri="../xml/schemas/d202/d202ncc.rng" />
     <public publicId="-//DAISY//DTD nccmulti v2.02//EN" uri="../xml/schemas/d202/d202nccmulti.dtd" />
@@ -25,13 +25,5 @@
          uri="../xml/schemas/d202/d202smil.rng"/>
     <uri name="http://www.daisy.org/pipeline/modules/daisy202-utils/d202ncc.rng"
          uri="../xml/schemas/d202/d202ncc.rng"/>
-
-    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:html-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:smil-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-    <nextCatalog catalog="org:daisy:pipeline:modules:audio-common"/>
 
 </catalog>

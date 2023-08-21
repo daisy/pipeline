@@ -14,79 +14,9 @@
           <document>
             <head>
               <style media="embossed" type="text/css">
-                p#1 { foo: bar }
-                p#2 { -x-foo: bar }
-              </style>
-            </head>
-            <body>
-              <p id="1"/>
-              <p id="2"/>
-            </body>
-          </document>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result" select="//body"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <body>
-          <p id="1"/>
-          <p id="2" style="-x-foo: bar;"/>
-        </body>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
-  <!--
-      Custom values
-  -->
-  <x:scenario label="test_02">
-    <x:call step="px:css-cascade">
-      <x:input port="source">
-        <x:document type="inline">
-          <document>
-            <head>
-              <style media="embossed" type="text/css">
-                p#1 { display: foo }
-                p#2 { display: -x-foo }
-              </style>
-            </head>
-            <body>
-              <p id="1"/>
-              <p id="2"/>
-            </body>
-          </document>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result" select="//body"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <body>
-          <p id="1"/>
-          <p id="2" style="display: -x-foo;"/>
-        </body>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
-  <!--
-      Custom functions
-  -->
-  <x:scenario label="test_03">
-    <x:call step="px:css-cascade">
-      <x:input port="source">
-        <x:document type="inline">
-          <document>
-            <head>
-              <style media="embossed" type="text/css">
-                p#1 { content: foo(bar) }
-                p#2 { content: -x-foo(bar) }
-                p#3 { content: -x-foo(bar, '⠿') }
+                p#1 { right-text-indent: 2 }
+                p#2 { -foo-right-text-indent: 2 }
+                p#3 { -x-right-text-indent: 2 }
               </style>
             </head>
             <body>
@@ -104,26 +34,26 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p id="1"/>
-          <p id="2" style="content: -x-foo(bar);"/>
-          <p id="3" style="content: -x-foo(bar, '⠿');"/>
+          <p id="1" style="-foo-right-text-indent: 2"/>
+          <p id="2" style="-foo-right-text-indent: 2"/>
+          <p id="3"/>
         </body>
       </x:document>
     </x:expect>
   </x:scenario>
   
   <!--
-      Custom pseudo elements
+      Custom values
   -->
-  <x:scenario label="test_04">
+  <x:scenario label="test_02">
     <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
           <document>
             <head>
               <style media="embossed" type="text/css">
-                p#1::foo { display: block }
-                p#2::-x-foo { display: block }
+                p#1 { display: bar }
+                p#2 { display: -foo-bar }
               </style>
             </head>
             <body>
@@ -141,7 +71,77 @@
       <x:document type="inline">
         <body>
           <p id="1"/>
-          <p id="2" style="&amp;::-x-foo { display: block; }"/>
+          <p id="2" style="display: -foo-bar"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Custom functions
+  -->
+  <x:scenario label="test_03">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                p#1 { content: marker-indicator(bar, '⠿') }
+                p#2 { content: -foo-marker-indicator(bar, '⠿') }
+              </style>
+            </head>
+            <body>
+              <p id="1"/>
+              <p id="2"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p id="1"/>
+          <p id="2" style="content: -foo-marker-indicator(bar, '⠿')"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <!--
+      Custom pseudo elements
+  -->
+  <x:scenario label="test_04">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                p#1::on-volume-start { display: block }
+                p#2::-foo-on-volume-start { display: block }
+              </style>
+            </head>
+            <body>
+              <p id="1"/>
+              <p id="2"/>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <p id="1"/>
+          <p id="2" style="&amp;::-foo-on-volume-start { display: block }"/>
         </body>
       </x:document>
     </x:expect>

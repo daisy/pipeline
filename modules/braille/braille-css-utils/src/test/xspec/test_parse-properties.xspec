@@ -3,13 +3,13 @@
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                stylesheet="../../main/resources/xml/parse-properties.xsl">
   
-  <x:param name="property-names" select="'display counter-reset'"/>
+  <x:param name="property-names" select="('display','counter-reset','content')"/>
   
   <x:scenario label="test_01">
     <x:context>
       <doc>
         <body>
-          <p style="display: block; margin-left: 2; counter-reset: braille-page 1">
+          <p style="display: initial; margin-left: 2; counter-reset: braille-page 1">
             foo
           </p>
         </body>
@@ -18,7 +18,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p css:display="block" css:counter-reset="braille-page 1" style="margin-left: 2">
+          <p css:display="inline" css:counter-reset="braille-page 1" style="margin-left: 2">
             foo
           </p>
         </body>
@@ -38,6 +38,27 @@
       <doc>
         <body>
           <a href="foo" style="&amp;::after {{ content: target-counter(attr(href url), page) }}"/>
+        </body>
+      </doc>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_03">
+    <x:context>
+      <doc>
+        <body>
+          <a href="foo">
+            <css:after style="content: target-counter(attr(href url), page)"/>
+          </a>
+        </body>
+      </doc>
+    </x:context>
+    <x:expect label="result">
+      <doc>
+        <body>
+          <a href="foo">
+            <css:after css:content="target-counter(attr(href url), page)"/>
+          </a>
         </body>
       </doc>
     </x:expect>

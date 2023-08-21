@@ -96,7 +96,7 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 	private static abstract class TransformImpl<T> {
 
 		abstract Iterable<T> transform(Iterable<CSSStyledText> styledText, int from, int to, String textTransform);
-		abstract Iterable<String> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform);
+		abstract Iterable<CSSStyledText> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform);
 		
 		abstract boolean supports(String textTransform);
 
@@ -108,7 +108,8 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 			List<T> transformed = new ArrayList<>();
 			if (from == to) return transformed;
 			List<CSSStyledText> styledTextList = new ArrayList<>();
-			styledText.forEach(styledTextList::add);
+			for (CSSStyledText t : styledText)
+				styledTextList.add(t.clone());
 			// segments with same text-transform to be transformed next
 			List<CSSStyledText> buffer = new ArrayList<CSSStyledText>();
 			// already transformed segments (text-transform: none) to be used as context for next transformation
@@ -167,12 +168,12 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 						// set context for next transform
 						try {
 							int j = 0;
-							for (String s : transformContext(org.daisy.pipeline.braille.common.util.Iterables.clone(
-							                                     Iterables.concat(buffer, context)),
-							                                 from > i ? from - i : 0,
-							                                 buffer.size(),
-							                                 textTransform))
-								context.add(j++, new CSSStyledText(s, "text-transform: none; braille-charset: custom"));
+							for (CSSStyledText t : transformContext(org.daisy.pipeline.braille.common.util.Iterables.clone(
+							                                            Iterables.concat(buffer, context)),
+							                                        from > i ? from - i : 0,
+							                                        buffer.size(),
+							                                        textTransform))
+								context.add(j++, t);
 							buffer.clear();
 						} catch (NonStandardHyphenationException e) {
 							// try without hyphenation
@@ -182,14 +183,11 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 								if (style != null && style.getProperty("hyphens") == Hyphens.AUTO)
 									style.removeProperty("hyphens");
 								buffer.set(j, st);
-								context.add(0,
-								            new CSSStyledText(
-								                transformContext(org.daisy.pipeline.braille.common.util.Iterables.clone(
-								                                     Iterables.concat(buffer, context)),
-								                                 j,
-								                                 j + 1,
-								                                 textTransform).iterator().next(),
-								                "text-transform: none; braille-charset: custom"));
+								context.add(0, transformContext(org.daisy.pipeline.braille.common.util.Iterables.clone(
+								                                    Iterables.concat(buffer, context)),
+								                                j,
+								                                j + 1,
+								                                textTransform).iterator().next());
 								buffer.remove(j);
 							}
 						}
@@ -216,18 +214,18 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 			throw new UnsupportedOperationException();
 		if (fromStyledTextToBraille == null)
 			fromStyledTextToBraille = new FromStyledTextToBraille() {
-					TransformImpl<String> impl = new TransformImpl<String>() {
-							Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
+					TransformImpl<CSSStyledText> impl = new TransformImpl<CSSStyledText>() {
+							Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
 								return translators.get(textTransform).fromStyledTextToBraille().transform(styledText, from, to);
 							}
-							Iterable<String> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
+							Iterable<CSSStyledText> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
 								return transform(styledText, from, to, textTransform);
 							}
 							boolean supports(String textTransform) {
 								return translators.containsKey(textTransform);
 							}
 						};
-					public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+					public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to) {
 						return impl.transform(styledText, from, to);
 					}
 					@Override
@@ -255,7 +253,7 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 								return Collections.singleton(
 									translators.get(textTransform).lineBreakingFromStyledText().transform(styledText, from, to));
 							}
-							Iterable<String> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
+							Iterable<CSSStyledText> transformContext(Iterable<CSSStyledText> styledText, int from, int to, String textTransform) {
 								return translators.get(textTransform).fromStyledTextToBraille().transform(styledText, from, to);
 							}
 							boolean supports(String textTransform) {

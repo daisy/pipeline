@@ -23,13 +23,4 @@
 
    <uri uri="../xml/fix-dtbook/dtbook-cleaner.script.xpl" px:content-type="script" px:id="dtbook-cleaner"/>
 
-   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-   <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
-   <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
-   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-break-detection"/>
 </catalog>

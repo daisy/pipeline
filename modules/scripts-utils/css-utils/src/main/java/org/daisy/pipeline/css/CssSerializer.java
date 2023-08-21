@@ -1,12 +1,14 @@
 package org.daisy.pipeline.css;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.List;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
+import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumber;
@@ -53,7 +55,7 @@ public final class CssSerializer {
 		else if (term instanceof TermPair) {
 			TermPair<?,?> pair = (TermPair<?,?>)term;
 			Object val = pair.getValue();
-			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val, toStringFunction) : val.toString()); }
+			return "" + pair.getKey() + " " + (val instanceof Term ? toStringFunction.apply((Term<?>)val) : val.toString()); }
 		else if (term instanceof TermURI) {
 			TermURI termURI = (TermURI)term;
 			URI uri = URLs.asURI(termURI.getValue());
@@ -63,15 +65,18 @@ public final class CssSerializer {
 		else if (term instanceof TermString) {
 			TermString string = (TermString)term;
 			return "'" + string.getValue().replaceAll("\n", "\\\\A ").replaceAll("'", "\\\\27 ") + "'"; }
+		else if (term instanceof TermIdent) {
+			TermIdent ident = (TermIdent)term;
+			return ident.getValue(); }
 		else
 			return term.toString().replaceAll("^[,/ ]+", "");
 	}
 
-	public static String serializeTermList(List<? extends Term<?>> termList) {
+	public static String serializeTermList(Collection<? extends Term<?>> termList) {
 		return serializeTermList(termList, t -> toString(t));
 	}
 
-	public static String serializeTermList(List<? extends Term<?>> termList, Function<Term<?>,String> toStringFunction) {
+	public static String serializeTermList(Collection<? extends Term<?>> termList, Function<Term<?>,String> toStringFunction) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {

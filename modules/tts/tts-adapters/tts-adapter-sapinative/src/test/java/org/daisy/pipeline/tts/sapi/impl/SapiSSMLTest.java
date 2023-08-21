@@ -84,9 +84,9 @@ public class SapiSSMLTest {
 		XdmNode toTest = Proc.newDocumentBuilder().build(new StreamSource(new StringReader(
 				"<s:speak xmlns:s=\"http://www.w3.org/2001/10/synthesis\" s:version=\"1.0\">" +
 						"<s:s>" +
-						"<s:token>this</s:token>" +
-						"<s:token>is</s:token>" +
-						"<s:token>a</s:token>" +
+						"<s:token>this</s:token> " +
+						"<s:token>is</s:token> " +
+						"<s:token>a</s:token> " +
 						"<s:token>sentence</s:token>" +
 						"</s:s>" +
 					"</s:speak>"

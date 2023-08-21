@@ -33,7 +33,7 @@
         <body>
           <p foo="bar">
             <css:after>
-              <css:after css:content="attr(foo)"/>
+              <css:after css:content="'bar'"/>
             </css:after>
           </p>
         </body>
@@ -56,10 +56,10 @@
     <x:context>
       <toc>
         <entry ref="h1" style="display: block">
-          <css:after css:content="target-text(attr(ref)) ' '
+          <css:after css:content="target-text(url(h1)) ' '
                                   leader('⠄⠄') ' '
-                                  target-counter(attr(ref), braille-page) ' '
-                                  target-string(attr(ref), print-page)"/>
+                                  target-counter(url(h1), braille-page) ' '
+                                  target-string(url(h1), print-page)"/>
         </entry>
       </toc>
     </x:context>

@@ -62,12 +62,17 @@
       <groupId>com.openhtmltopdf</groupId>
       <artifactId>openhtmltopdf-slf4j</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
     <!--
         OSGi runtime dependency of dotify.library
     -->
     <dependency>
       <groupId>org.liblouis</groupId>
       <artifactId>liblouis-java</artifactId>
+      <scope>runtime</scope>
     </dependency>
     <!--
         for processing org.daisy.pipeline.braille.pef.impl.TableCatalog_SPI in generate-spi-classes

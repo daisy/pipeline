@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:new="css:new-definition"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
+                xmlns:o="org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                xmlns:re="regex-utils">
-    
+                xmlns:re="regex-utils"
+                exclude-result-prefixes="#all">
+
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+
     <xsl:param name="initial-braille-charset" select="'unicode'"/>
 
-    <xsl:variable name="new:properties" as="xs:string*"
+    <xsl:variable name="obfl-properties" as="xs:string*"
                   select="('margin-left',           'page-break-before', 'text-indent', 'text-transform',      '-obfl-vertical-align',
                            'margin-right',          'page-break-after',  'text-align',  'braille-charset',     '-obfl-vertical-position',
                            'margin-top',            'page-break-inside', 'line-height', 'hyphens',             '-obfl-toc-range',
@@ -22,105 +26,93 @@
                            'border-bottom-pattern', 'border-bottom-style',                                     '-obfl-scenario-cost',
                                                                                                                '-obfl-right-text-indent'
                            )"/>
-    
-    <xsl:variable name="_OBFL_KEEP_FN_RE">-obfl-keep\(\s*[1-9]\s*\)</xsl:variable>
-    
-    <xsl:function name="new:is-valid" as="xs:boolean">
-        <xsl:param name="css:property" as="element()"/>
-        <xsl:param name="context" as="element()"/>
-        <xsl:variable name="valid" as="xs:boolean"
-                      select="new:applies-to($css:property/@name, $context)
-                              and (
-                                if ($css:property/@name='-obfl-vertical-align')
-                                then $css:property/@value=('before','center','after')
-                                else if ($css:property/@name=('-obfl-vertical-position',
-                                                              '-obfl-table-col-spacing',
-                                                              '-obfl-table-row-spacing',
-                                                              '-obfl-preferred-empty-space'))
-                                then matches($css:property/@value,'^auto|0|[1-9][0-9]*$')
-                                else if ($css:property/@name='-obfl-toc-range')
-                                then ($context/@css:_obfl-toc and $css:property/@value=('document','volume'))
-                                else if ($css:property/@name='-obfl-use-when-collection-not-empty')
-                                then matches($css:property/@value,re:exact($css:IDENT_RE))
-                                else if ($css:property/@name='-obfl-underline')
-                                then matches($css:property/@value,re:exact(re:or(($css:BRAILLE_CHAR_RE,'none'))))
-                                else if ($css:property/@name=('-obfl-keep-with-previous-sheets',
-                                                              '-obfl-keep-with-next-sheets'))
-                                then matches($css:property/@value,'^[0-9]$')
-                                else if ($css:property/@name='volume-break-inside')
-                                then matches($css:property/@value,re:exact(re:or(('auto',$_OBFL_KEEP_FN_RE))))
-                                else if ($css:property/@name='-obfl-scenario-cost')
-                                then matches($css:property/@value,re:exact(re:or(('none',$css:INTEGER_RE,$css:VENDOR_PRF_FN_RE))))
-                                else if ($css:property/@name=('volume-break-after',
-                                                              'volume-break-before'))
-                                then $css:property/@value=('auto','always')
-                                else (
-                                  css:is-valid($css:property)
-                                  and not($css:property/@value=('inherit','initial'))
-                                )
-                              )"/>
-        <!--
-            TODO: move to css:new-definition?
-        -->
-        <xsl:if test="not($valid)
-                      and not($css:property/@value=('inherit','initial'))
-                      and not(css:is-inherited($css:property/@name))">
-            <xsl:message select="concat($css:property/@name,': ',$css:property/@value,' not supported (display: ',$context/@type,')')"/>
-        </xsl:if>
-        <xsl:sequence select="$valid"/>
-    </xsl:function>
-    
-    <xsl:function name="new:initial-value" as="xs:string">
-        <xsl:param name="property" as="xs:string"/>
-        <xsl:param name="context" as="element()"/>
-        <xsl:sequence select="if ($property='-obfl-vertical-align')
-                              then 'after'
-                              else if ($property='-obfl-vertical-position')
-                              then 'auto'
-                              else if ($property='-obfl-toc-range')
-                              then 'document'
-                              else if ($property=('-obfl-table-col-spacing','-obfl-table-row-spacing'))
-                              then '0'
-                              else if ($property='-obfl-preferred-empty-space')
-                              then '2'
-                              else if ($property='-obfl-use-when-collection-not-empty')
-                              then 'normal'
-                              else if ($property='-obfl-underline')
-                              then 'none'
-                              else if ($property=('-obfl-keep-with-previous-sheets','-obfl-keep-with-next-sheets'))
-                              then '0'
-                              else if ($property='-obfl-scenario-cost')
-                              then 'none'
-                              else if ($property='braille-charset')
-                              then $initial-braille-charset
-                              else css:initial-value($property)"/>
-    </xsl:function>
-    
-    <xsl:function name="new:is-inherited" as="xs:boolean">
-        <xsl:param name="property" as="xs:string"/>
-        <xsl:param name="context" as="element()"/>
-        <xsl:sequence select="$property=('text-transform','hyphens','word-spacing')"/>
-    </xsl:function>
-    
-    <xsl:function name="new:applies-to" as="xs:boolean">
-        <xsl:param name="property" as="xs:string"/>
-        <xsl:param name="context" as="element()"/>
-        <xsl:sequence select="$property=('text-transform','braille-charset','hyphens','hyphenate-character','word-spacing')
-                              or (
-                                if (matches($property,'^(border|margin|padding)-'))
-                                then $context/@type=('block','table','table-cell')
-                                else if ($property='line-height')
-                                then $context/@type=('block','table')
-                                else if ($property=('text-indent','text-align'))
-                                then $context/@type=('block','table-cell')
-                                else if ($property=('-obfl-table-col-spacing',
-                                                    '-obfl-table-row-spacing',
-                                                    '-obfl-preferred-empty-space'))
-                                then $context/@type='table'
-                                else if ($property='-obfl-use-when-collection-not-empty')
-                                then exists($context/parent::css:_[@css:flow])
-                                else $context/@type='block'
-                              )"/>
-    </xsl:function>
-    
+
+    <xsl:template match="*">
+        <xsl:copy>
+            <xsl:sequence select="@*"/>
+            <xsl:apply-templates/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match="text()">
+        <xsl:sequence select="."/>
+    </xsl:template>
+
+    <xsl:template match="/*">
+        <xsl:next-match>
+            <xsl:with-param name="result-style" tunnel="yes"
+                            select="o:of(css:parse-stylesheet(concat('braille-charset: ',$initial-braille-charset)))"/>
+        </xsl:next-match>
+    </xsl:template>
+
+    <xsl:template match="css:box">
+        <xsl:param name="source-style" as="item()?" select="()" tunnel="yes"/>
+        <xsl:param name="result-style" as="item()?" select="()" tunnel="yes"/>
+        <xsl:variable name="source-style" as="item()" select="css:parse-stylesheet(@style,$source-style)"/>
+        <xsl:variable name="source-style" as="item()" select="s:merge(($source-style,
+                                                                       @css:*[replace(local-name(),'^_','-')=$obfl-properties]
+                                                                             /css:parse-stylesheet(.)))"/>
+        <xsl:variable name="obfl-style" as="item()" select="o:of($source-style)"/>
+        <xsl:copy>
+            <xsl:sequence select="@* except (@style|@css:*[replace(local-name(),'^_','-')=$obfl-properties])"/>
+            <xsl:variable name="obfl-style" as="item()*">
+                <xsl:variable name="context" as="element()" select="."/>
+                <xsl:for-each select="s:iterate($obfl-style)">
+                    <xsl:variable name="property-name" as="xs:string" select="s:property(.)"/>
+                    <xsl:choose>
+                        <!--
+                            skip OBFL properties that do not apply in the current context
+                            
+                            properties apply if their corresponding CSS property applies, except:
+                            
+                            - the (inherited) properties line-height, text-align and text-indent only apply on
+                              block boxes that have no child block boxes
+                            - text-align, text-indent, page-break-after, page-break-before, page-break-inside,
+                              volume-break-after, volume-break-before and volume-break-inside do not apply on
+                              table boxes
+                            - -obfl-table-col-spacing, -obfl-table-row-spacing and -obfl-preferred-empty-space
+                              apply on table boxes only
+                            - -obfl-use-when-collection-not-empty applies on boxes with a flow property
+                            - other -obfl- prefixed properties apply on any box
+                        -->
+                        <xsl:when test="if ($property-name=('text-transform','braille-charset','hyphens','hyphenate-character',
+                                                            'word-spacing','white-space','letter-spacing'))
+                                        then true()
+                                        else if (matches($property-name,'^(border|margin|padding)-'))
+                                        then $context/@type=('block','table','table-cell')
+                                        else if ($property-name='line-height')
+                                        then $context[@type=('block','table') and not(descendant::css:box[@type='block'])]
+                                        else if ($property-name=('text-indent','text-align'))
+                                        then $context[@type=('block','table-cell') and not(descendant::css:box[@type='block'])]
+                                        else if ($property-name=('-obfl-table-col-spacing',
+                                                                 '-obfl-table-row-spacing',
+                                                                 '-obfl-preferred-empty-space'))
+                                        then $context/@type='table'
+                                        else if ($property-name='-obfl-use-when-collection-not-empty')
+                                        then exists($context/parent::css:_[@css:flow])
+                                        else $context/@type='block'">
+                            <xsl:sequence select="."/>
+                        </xsl:when>
+                        <xsl:when test="$property-name=('text-align','text-indent')">
+                            <!-- don't show a warning if the property is inherited on child boxes -->
+                        </xsl:when>
+                        <xsl:when test="not(matches($property-name,'^(page|volume)-break-')
+                                            and $context/@type='table')">
+                            <!-- don't show a warning if the corresponding CSS property does not apply either -->
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:message select="concat(string(.),' not supported (display: ',$context/@type,')')"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:for-each>
+            </xsl:variable>
+            <xsl:variable name="obfl-style" as="item()?" select="s:merge($obfl-style)"/>
+            <xsl:sequence select="s:toAttributes($obfl-style,$result-style)"/>
+            <xsl:apply-templates>
+                <xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+                <xsl:with-param name="result-style" tunnel="yes" select="$obfl-style"/>
+            </xsl:apply-templates>
+        </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>

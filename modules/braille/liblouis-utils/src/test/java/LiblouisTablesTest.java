@@ -49,7 +49,7 @@ public class LiblouisTablesTest extends AbstractTest {
 	public void testUnicodeBraille() {
 		assertTrue(provider.get(query("(document-locale:nl-BE)")).iterator().next()
 		           .fromStyledTextToBraille()
-		           .transform(Optional.of(new CSSStyledText("foobar")).asSet()).iterator().next()
+		           .transform(Optional.of(new CSSStyledText("foobar")).asSet()).iterator().next().getText()
 		           .matches("[\\s\\t\\n\u00a0\u00ad\u200b\u2800-\u28ff]*"));
 	}
 	

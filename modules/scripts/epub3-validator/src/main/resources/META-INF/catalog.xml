@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
-
    <uri uri="../xml/xproc/epub3-validator.xpl" px:content-type="script" px:id="epub3-validator"/>
-
-   <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils" />
-
 </catalog>

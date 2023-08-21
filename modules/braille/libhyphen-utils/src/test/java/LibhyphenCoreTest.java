@@ -12,6 +12,7 @@ import static org.daisy.pipeline.braille.common.Hyphenator.LineBreaker;
 import static org.daisy.pipeline.braille.common.Hyphenator.LineIterator;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.daisy.pipeline.braille.libhyphen.LibhyphenHyphenator;
 
@@ -98,6 +99,8 @@ public class LibhyphenCoreTest extends AbstractTest {
 		             "bar",
 		             fillLines(hyphenator.transform("foo-bar", null), 6, '-'));
 	}
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
@@ -105,7 +108,7 @@ public class LibhyphenCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, s));
+				styledText.add(new CSSStyledText(text, cssParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
@@ -117,7 +120,7 @@ public class LibhyphenCoreTest extends AbstractTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, cssParser.parse("")));
 		return styledText;
 	}
 	

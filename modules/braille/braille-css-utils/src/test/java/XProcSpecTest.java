@@ -26,7 +26,8 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
 		probe.setHeader("Bundle-Name", "test-module");
 		// needed because it can not be generated with maven-bundle-plugin
-		probe.setHeader("Service-Component", "OSGI-INF/module.xml");
+		probe.setHeader("Service-Component", "OSGI-INF/module.xml,"
+		                                   + "OSGI-INF/mock-css-extension.xml");
 		return probe;
 	}
 }

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
-                xmlns:java="implemented-in-java">
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions">
 
     <xsl:import href="encoding-functions.xsl">
         <!--
@@ -17,24 +16,16 @@
             <p>Apply a text transformer to a string sequence.</p>
         </desc>
     </doc>
-    <java:function name="pf:text-transform" as="xs:string*">
+    <xsl:function name="pf:text-transform" as="item()*">
         <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-    </java:function>
-    <java:function name="pf:text-transform" as="xs:string*">
-        <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-        <xsl:param name="style" as="xs:string*"/>
-    </java:function>
-    <java:function name="pf:text-transform" as="xs:string*">
-        <xsl:param name="query" as="xs:string"/>
-        <xsl:param name="text" as="xs:string*"/>
-        <xsl:param name="style" as="xs:string*"/>
-        <xsl:param name="lang" as="xs:string*"/>
-        <!--
-            Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java
-        -->
-    </java:function>
+        <xsl:param name="styled-text" as="item()*"/>
+        <xsl:sequence select="TextTransform:transform($query,$styled-text)"
+                      xmlns:TextTransform="org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition$TextTransform">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
 
     <!--
         FIXME: delete when major version is updated

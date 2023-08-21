@@ -7,10 +7,12 @@ import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermList;
 
 import org.daisy.braille.css.SimpleInlineStyle;
+import org.daisy.braille.css.BrailleCSSProperty.ListStyleType;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
@@ -88,21 +90,28 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 							// can not be computed yet (see org.daisy.dotify.formatter.impl.row.SegmentProcessor).
 						} else {
 							int counterValue = Integer.parseInt(t);
-							Term<?> symbolsFunction = s.getValue("-dotify-counter-style");
-							if (symbolsFunction != null) {
-								try {
-									t = CounterStyle.fromSymbolsFunction(symbolsFunction).format(counterValue);
-								} catch (IllegalArgumentException e) {
-									// FIXME: show warning
+							ListStyleType counterStyle = s.getProperty("-dotify-counter-style");
+							if (counterStyle != null)
+								switch (counterStyle) {
+								case symbols_fn:
+									Term<?> symbolsFunction = s.getValue("-dotify-counter-style");
+									if (symbolsFunction != null && symbolsFunction instanceof TermFunction) {
+										try {
+											t = CounterStyle.fromSymbolsFunction(symbolsFunction).format(counterValue);
+										} catch (IllegalArgumentException e) {
+										}
+									}
+									break;
+								case counter_style_name:
+									if (customCounterStyles != null) {
+										Term<?> counterStyleName = s.getValue("-dotify-counter-style");
+										if (counterStyleName != null && counterStyleName instanceof TermIdent)
+											if (customCounterStyles.containsKey(counterStyleName.getValue()))
+												t = customCounterStyles.get(counterStyleName.getValue()).format(counterValue);
+									}
+									break;
+								default:
 								}
-							} else {
-								CSSProperty counterStyleName = s.getProperty("-dotify-counter-style");
-								if (counterStyleName != null
-								    && customCounterStyles != null
-								    && customCounterStyles.containsKey(counterStyleName.toString())) {
-									t = customCounterStyles.get(counterStyleName.toString()).format(counterValue);
-								}
-							}
 						}
 					}
 				}

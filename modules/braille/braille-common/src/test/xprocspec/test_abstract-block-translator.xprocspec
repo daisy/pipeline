@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css">
+
+	<x:script>
+		<p:pipeline version="1.0" type="px:uppercase-block-translator">
+			<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl"/>
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/expand-pseudo-elements.xsl"/>
+				</p:input>
+			</p:xslt>
+			<px:css-parse-properties properties="display"/>
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../resources/uppercase-block-translator.xsl"/>
+				</p:input>
+				<p:with-param name="braille-charset" select="'custom'"/>
+			</p:xslt>
+			<p:xslt>
+				<p:input port="stylesheet">
+					<p:document href="../../main/resources/xml/collapse-pseudo-elements.xsl"/>
+				</p:input>
+			</p:xslt>
+		</p:pipeline>
+	</x:script>
+
+	<x:scenario label="test_01">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc>
+						<h style="display: block; string-set: running-footer content()">foobar</h>
+						<p style="display: block;
+						          &amp;::before { content: 'bar' counter(page) }
+						          &amp;::after { content: 'bar' }">foo</p>
+						<pagenum style="display: none; string-set: print-page content(), foo 'bar'">ii</pagenum>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none">
+					<h style="display: block; string-set: running-footer 'foobar'">FOOBAR</h>
+					<p style="display: block; &amp;::after { content: 'BAR' } &amp;::before { content: 'BAR' } &amp;::before::after { braille-charset: unicode; content: counter(page); text-transform: auto }">FOO</p>
+					<pagenum style="display: none; string-set: print-page 'ii', foo 'bar'">II</pagenum>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_02">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc xml:lang="en">
+						<br style="&amp;::before { content: '\A'; white-space: pre-line }"/>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc xml:lang="en-Brai" style="braille-charset: custom; text-transform: none">
+					<br style="&amp;::before { content: '\A '; white-space: pre-line }"/>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_03">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<div style="hyphens: auto">
+						<p>foobar</p>
+						<p>busstopp</p>
+						<p style="&amp;::after { content: 'busstopp' }"/>
+					</div>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<div style="braille-charset: custom; text-transform: none">
+					<p>FOO=BAR</p>
+					<p><_ style="braille-charset: unicode; hyphens: auto; text-transform: auto">busstopp</_></p>
+					<p style="&amp;::after { braille-charset: unicode; content: 'busstopp'; hyphens: auto; text-transform: auto }"/>
+				</div>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_04">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc>
+						<div style="&amp;::after { content: 'foo' } &amp;::after::before { display: block; content: 'bar' }"/>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none">
+					<div style="&amp;::after { content: 'FOO' } &amp;::after::before { content: 'BAR'; display: block }"/>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_05">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc>
+						<div style="&amp;::table-by(foo)::list-item::after { content: ', ' }
+						            &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none">
+					<div style="&amp;::table-by(foo) { braille-charset: unicode; text-transform: auto } &amp;::table-by(foo)::list-item { braille-charset: unicode; text-transform: auto } &amp;::table-by(foo)::list-item::after { content: ', ' } &amp;::table-by(foo)::list-item:last-child::after { content: none }"/>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_06">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline" xml:base="file:/test.xml">
+					<doc>
+						<a href="#foo" style="&amp;::after { content: target-counter(attr(href), page)
+						                                              target-string(attr(href), print-page)
+						                                              target-text(attr(href))
+						                                              target-content(attr(href)) }"/>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none">
+					<a href="#foo" style="&amp;::after { braille-charset: unicode; content: target-counter(url(&quot;file:/test.xml#foo&quot;), page) target-string(url(&quot;file:/test.xml#foo&quot;), print-page) target-text(url(&quot;file:/test.xml#foo&quot;)) target-content(url(&quot;file:/test.xml#foo&quot;)); text-transform: auto }"/>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_07">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc style="@page {
+					              @bottom-right {
+					                content: counter(page, lower-roman);
+					                text-transform: uncontracted; } }"/>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none; @page { @bottom-right { content: counter(page, lower-roman); text-transform: uncontracted } }"/>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="test_08">
+		<x:call step="px:uppercase-block-translator">
+			<x:input port="source">
+				<x:document type="inline">
+					<doc>
+						<p style="display: block">foo<span style="text-transform: none">⠃⠁⠗</span></p>
+						<p style="display: block">foo<span style="braille-charset: custom; text-transform: none">BAR</span></p>
+						<p style="display: block; &amp;::after { content: '⠃⠁⠗'; text-transform: none }">foo</p>
+						<p style="display: block; &amp;::after { content: leader('⠀') '⠃⠁⠗'; text-transform: none }">foo</p>
+					</doc>
+				</x:document>
+			</x:input>
+		</x:call>
+		<x:context label="result">
+			<x:document type="port" port="result"/>
+		</x:context>
+		<x:expect label="result" type="compare">
+			<x:document type="inline">
+				<doc style="braille-charset: custom; text-transform: none">
+					<p style="display: block">FOO<span>BAR</span></p>
+					<p style="display: block">FOO<span>BAR</span></p>
+					<p style="display: block; &amp;::after { content: 'BAR' }">FOO</p>
+					<p style="display: block; &amp;::after { braille-charset: unicode; content: leader('⠀') } &amp;::after::after { content: 'BAR' }">FOO</p>
+				</doc>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+</x:description>

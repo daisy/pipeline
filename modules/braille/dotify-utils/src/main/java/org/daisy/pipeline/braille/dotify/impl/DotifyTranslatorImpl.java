@@ -3,8 +3,10 @@ package org.daisy.pipeline.braille.dotify.impl;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import com.google.common.base.MoreObjects;
@@ -42,8 +44,10 @@ import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import static org.daisy.pipeline.braille.common.TransformProvider.util.varyLocale;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 
 import org.osgi.framework.FrameworkUtil;
@@ -60,6 +64,9 @@ import org.slf4j.LoggerFactory;
  * @see <a href="../../../../../../../../../doc/">User documentation</a>.
  */
 public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements DotifyTranslator {
+	
+	private final static char SHY = '\u00AD';  // soft hyphen
+	private final static char ZWSP = '\u200B'; // zero-width space
 	
 	private final BrailleFilter filter;
 	private final boolean hyphenating;
@@ -106,14 +113,22 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 	}
 	
 	private final FromStyledTextToBraille fromStyledTextToBraille = new FromStyledTextToBraille() {
-		public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+		public java.lang.Iterable<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
 			int size = size(styledText);
 			if (to < 0) to = size;
-			String[] braille = new String[to - from];
+			CSSStyledText[] braille = new CSSStyledText[to - from];
 			int i = 0;
 			for (CSSStyledText t : styledText) {
-				if (i >= from && i < to)
-					braille[i - from] = DotifyTranslatorImpl.this.transform(t.getText(), t.getStyle());
+				if (i >= from && i < to) {
+					SimpleInlineStyle style = t.getStyle();
+					if (style != null)
+						style = (SimpleInlineStyle)style.clone();
+					String b = DotifyTranslatorImpl.this.transform(t.getText(), style);
+					Map<String,String> a = t.getTextAttributes();
+					if (a != null)
+						a = new HashMap<>(a);
+					braille[i - from] = new CSSStyledText(b, style, a);
+				}
 				i++; }
 			return Arrays.asList(braille);
 		}
@@ -123,15 +138,23 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 	public LineBreakingFromStyledText lineBreakingFromStyledText() {
 		return lineBreakingFromStyledText;
 	}
-		
+	
 	private final LineBreakingFromStyledText lineBreakingFromStyledText
 	= new DefaultLineBreaker() {
 		protected BrailleStream translateAndHyphenate(final java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-			return new FullyHyphenatedAndTranslatedString(join(fromStyledTextToBraille.transform(styledText, from, to)));
+			List<String> braille = new ArrayList<>();
+			for (CSSStyledText t : fromStyledTextToBraille.transform(styledText, from, to)) {
+				braille.add(t.getText());
+				SimpleInlineStyle s = t.getStyle();
+				if (s != null)
+					for (String prop : s.getPropertyNames())
+						logger.warn("{}: {} not supported", prop, s.get(prop));
+			}
+			return new FullyHyphenatedAndTranslatedString(join(braille));
 		}
 	};
 	
-	private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+	private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.getInstance().parse("hyphens: auto");
 	
 	private String transform(String text, boolean hyphenate) {
 		if (hyphenate && !hyphenating)
@@ -147,18 +170,16 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 			throw new RuntimeException(e); }
 	}
 	
-	public String transform(String text, SimpleInlineStyle style) {
+	private String transform(String text, SimpleInlineStyle style) {
 		boolean hyphenate = false;
 		if (style != null) {
 			CSSProperty val = style.getProperty("hyphens");
 			if (val != null) {
 				if (val == Hyphens.AUTO)
 					hyphenate = true;
-				else if (val == Hyphens.MANUAL)
-					logger.warn("hyphens:{} not supported", val);
-				style.removeProperty("hyphens"); }
-			for (String prop : style.getPropertyNames())
-				logger.warn("CSS property {} not supported", style.getSourceDeclaration(prop)); }
+				else if (val == Hyphens.NONE)
+					text = extractHyphens(text, false, SHY, ZWSP)._1;
+				style.removeProperty("hyphens"); }}
 		return transform(text, hyphenate);
 	}
 	

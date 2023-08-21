@@ -223,9 +223,12 @@ public interface CSSBlockTransform {
 			}
 		}
 		
-		// FIXME: should ideally bind BrailleTranslatorRegistry, but does not work because
+		// FIXME: should ideally bind BrailleTranslatorRegistry, but that does not work because
 		// BrailleTranslatorRegistry binds BrailleTranslatorProvider, which CSSBlockTransform
-		// implements (so there's a cyclic dependency)
+		// implements, so there would be a cyclic dependency. Note that this is very brittle,
+		// because there will be a cyclic dependency anyway if at least one other
+		// BrailleTranslatorProvider would bind BrailleTranslatorProvider.
+
 		@Reference(
 			name = "BrailleTranslatorProvider",
 			unbind = "-",

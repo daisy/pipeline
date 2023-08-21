@@ -3,8 +3,9 @@ package org.daisy.pipeline.braille.liblouis.impl;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+
 import static java.util.Collections.singleton;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -21,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.size;
 import static com.google.common.collect.Iterables.toArray;
-import com.google.common.collect.Iterators;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CSSProperty.FontStyle;
@@ -37,6 +37,7 @@ import org.daisy.braille.css.BrailleCSSProperty.Hyphens;
 import org.daisy.braille.css.BrailleCSSProperty.LetterSpacing;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
@@ -67,6 +68,7 @@ import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
@@ -176,10 +178,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				handleNonStandardHyphenation));
 		if (translators.apply(NOP_LOGGER).iterator().hasNext()) {
 			// all translators use the same display table
-			// FIXME: display table has already been computed in the getSimpleTranslator() call above
-			DisplayTable displayTable = tableProvider.withContext(NOP_LOGGER).get(q).iterator().next().getDisplayTable();
+			// FIXME: table has already been computed in the getSimpleTranslator() call above
+			LiblouisTableJnaImpl t = tableProvider.withContext(NOP_LOGGER).get(q).iterator().next();
 			BrailleTranslator unityTranslator = new UnityBrailleTranslator(
-				new LiblouisDisplayTableBrailleConverter(displayTable), false);
+				t.usesCustomDisplayTable()
+					? new LiblouisDisplayTableBrailleConverter(t.getDisplayTable())
+					: null,
+				false);
 			return Iterables.transform(
 				translators,
 				new Function<LiblouisTranslator,LiblouisTranslator>() {
@@ -208,7 +213,13 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	public ToStringHelper toStringHelper() {
 		return MoreObjects.toStringHelper("LiblouisTranslatorJnaImplProvider");
 	}
-	
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	private final static PropertyValue TEXT_TRANSFORM_NONE
+		= cssParser.parse("text-transform: none").get("text-transform");
+	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
+		= cssParser.parse("braille-charset: custom").get("braille-charset");
+
 	class LiblouisTranslatorImpl extends AbstractBrailleTranslator implements LiblouisTranslator {
 		
 		private final LiblouisTableJnaImpl table;
@@ -334,10 +345,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		public FromStyledTextToBraille fromStyledTextToBraille() {
 			if (fromStyledTextToBraille == null)
 				fromStyledTextToBraille = new FromStyledTextToBraille() {
-					public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to)
+					public java.lang.Iterable<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to)
 							throws TransformationException {
 						try {
-							List<String> result = LiblouisTranslatorImpl.this.transform(styledText, false, false);
+							List<CSSStyledText> result = LiblouisTranslatorImpl.this.transform(styledText, false, false);
 							if (to < 0) to = result.size();
 							if (from > 0 || to < result.size())
 								return result.subList(from, to);
@@ -362,8 +373,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			if (lineBreakingFromStyledText == null)
 				lineBreakingFromStyledText = new LineBreaker(
 					new FromStyledTextToBraille() {
-						public java.lang.Iterable<String> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-							List<String> result = LiblouisTranslatorImpl.this.transform(styledText, true, true);
+						public java.lang.Iterable<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
+							List<CSSStyledText> result = LiblouisTranslatorImpl.this.transform(styledText, true, true);
 							if (to < 0) to = result.size();
 							if (from > 0 || to < result.size())
 								return result.subList(from, to);
@@ -393,32 +404,42 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			}
 			
 			protected BrailleStream translateAndHyphenate(java.lang.Iterable<CSSStyledText> styledText, int from, int to) {
-				// styledText is cloned because we are mutating the style objects
-				java.lang.Iterable<CSSStyledText> styledTextCopy
-					= org.daisy.pipeline.braille.common.util.Iterables.clone(styledText);
-				java.lang.Iterable<String> braille;
+				java.lang.Iterable<CSSStyledText> braille;
 				try {
-					braille = fullTranslator.transform(styledTextCopy); }
+					braille = fullTranslator.transform(styledText); }
 				catch (NonStandardHyphenationException e) {
 					return new BrailleStreamImpl(styledText,
 					                             from,
 					                             to); }
 				// style is mutated and may not be empty
-				Iterator<SimpleInlineStyle> style = Iterators.transform(styledTextCopy.iterator(), CSSStyledText::getStyle);
 				List<String> brailleWithPreservedWS = new ArrayList<>(); {
-					for (String s : braille) {
+					for (CSSStyledText b : braille) {
+						String t = b.getText();
 						// the only property expected in the output is white-space
 						// ignore other properties
-						SimpleInlineStyle st = style.next();
-						if (st != null) {
-							CSSProperty ws = st.getProperty("white-space");
+						SimpleInlineStyle s = b.getStyle();
+						if (s != null) {
+							Hyphens h = s.getProperty("hyphens");
+							if (h == Hyphens.NONE || h == Hyphens.MANUAL) {
+								if (h == Hyphens.NONE)
+									t = t.replaceAll("[\u00AD\u200B]","");
+								s.removeProperty("hyphens"); }
+							WhiteSpace ws = s.getProperty("white-space");
 							if (ws != null) {
 								if (ws == WhiteSpace.PRE_WRAP)
-									s = s.replaceAll("[\\x20\t\\u2800]+", "$0"+ZWSP)
-										.replaceAll("[\\x20\t\\u2800]", ""+NBSP);
+									t = t.replaceAll("[\\x20\t\\u2800]+", "$0"+ZWSP)
+									     .replaceAll("[\\x20\t\\u2800]", ""+NBSP);
 								if (ws == WhiteSpace.PRE_WRAP || ws == WhiteSpace.PRE_LINE)
-									s = s.replaceAll("[\\n\\r]", ""+LS); }}
-						brailleWithPreservedWS.add(s);
+									t = t.replaceAll("[\\n\\r]", ""+LS);
+								s.removeProperty("white-space"); }
+							TextTransform tt = s.getProperty("text-transform");
+							if (tt == TextTransform.NONE)
+								s.removeProperty("text-transform");
+							s.removeProperty("braille-charset");
+							for (String prop : s.getPropertyNames())
+								logger.warn("{}: {} not supported", prop, s.get(prop));
+						}
+						brailleWithPreservedWS.add(t);
 					}
 				}
 				StringBuilder joined = new StringBuilder();
@@ -502,6 +523,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						for (CSSStyledText t : styledText) {
 							text[i] = t.getText();
 							styles[i] = t.getStyle();
+							if (styles[i] != null)
+								styles[i] = (SimpleInlineStyle)styles[i].clone();
 							languages[i] = t.getLanguage();
 							i++; }}
 					
@@ -1039,10 +1062,10 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				}
 			}
 		}
-		
-		private List<String> transform(java.lang.Iterable<CSSStyledText> styledText,
-		                               boolean forceBraille,
-		                               boolean failWhenNonStandardHyphenation) throws NonStandardHyphenationException {
+
+		private List<CSSStyledText> transform(java.lang.Iterable<CSSStyledText> styledText,
+		                                      boolean forceBraille,
+		                                      boolean failWhenNonStandardHyphenation) throws NonStandardHyphenationException {
 			try {
 				if (fullHyphenator == compoundWordHyphenator)
 					if (any(styledText, t -> {
@@ -1068,10 +1091,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						logger.debug("Deferring hyphenation to formatting phase due to non-standard hyphenation points.");
 						
 						// TODO: split up text in words and only defer the words with non-standard hyphenation
-						List<String> result = new ArrayList<>();
-						for (CSSStyledText t : styledText) result.add(t.getText());
+						List<CSSStyledText> result = new ArrayList<>();
+						for (CSSStyledText t : styledText) result.add(t);
 						return result; }}
-			
 			int size = size(styledText);
 			String[] text = new String[size];
 			SimpleInlineStyle[] style = new SimpleInlineStyle[size];
@@ -1079,12 +1101,58 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			for (CSSStyledText t : styledText) {
 				text[i] = t.getText();
 				style[i] = t.getStyle();
-				if (style[i] != null)
-					style[i].removeProperty("hyphens"); // handled above
+				if (style[i] != null) {
+					style[i] = (SimpleInlineStyle)style[i].clone();
+					style[i].removeProperty("hyphens"); } // handled above
 				i++; }
-			return Arrays.asList(transform(text, style));
+			String[] braille = transform(text, style);
+			List<CSSStyledText> result = new ArrayList<>();
+			i = 0;
+			for (CSSStyledText t : styledText) {
+				// update/add text-transform and braille-charset properties
+				List<PropertyValue> s = null; {
+					if (style[i] == null) {
+						if (s == null) s = new ArrayList<>();
+						s.add(TEXT_TRANSFORM_NONE);
+						if (table.usesCustomDisplayTable())
+							s.add(BRAILLE_CHARSET_CUSTOM);
+					} else {
+						if (style[i].getProperty("text-transform") != TextTransform.NONE) {
+							style[i].removeProperty("text-transform");
+							if (s == null) s = new ArrayList<>();
+							s.add(TEXT_TRANSFORM_NONE);
+						}
+						BrailleCharset bc = style[i].getProperty("braille-charset");
+						if (table.usesCustomDisplayTable()) {
+							if (bc != BrailleCharset.CUSTOM) {
+								if (bc != null)
+									style[i].removeProperty("braille-charset");
+								if (s == null) s = new ArrayList<>();
+								s.add(BRAILLE_CHARSET_CUSTOM);
+							}
+						} else
+							if (bc != null && bc != BrailleCharset.UNICODE)
+								style[i].removeProperty("braille-charset");
+					}
+				}
+				if (s != null) {
+					if (style[i] != null)
+						style[i].forEach(s::add);
+					style[i] = new SimpleInlineStyle(s);
+				}
+				Map<String,String> a = t.getTextAttributes();
+				if (a != null)
+					a = new HashMap<>(a);
+				result.add(new CSSStyledText(braille[i], style[i], a));
+				i++;
+			}
+			return result;
 		}
-		
+
+		/**
+		 * The {@link SimpleInlineStyle} objects are modified so that on return they represent the
+		 * output style.
+		 */
 		private String[] transform(String[] text, SimpleInlineStyle[] styles) {
 			int size = text.length;
 			Typeform[] typeform = new Typeform[size];
@@ -1111,22 +1179,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 							// "text-transform: none" is handled by HandleTextTransformNone, but HandleTextTransformNone
 							// is a CompoundBrailleTranslator and CompoundBrailleTranslator puts "text-transform: none"
 							// on (already translated) context segments. We assume that all Liblouis tables correctly
-							// handle Unicode braille. If this is not the case, it is not the end of the words because
+							// handle Unicode braille. If this is not the case, it is not the end of the world because
 							// this is a context segment.
 							val = style.getProperty("braille-charset");
 							if (val != null) {
 								if (val == BrailleCharset.CUSTOM)
 									// translate to Unicode braille
-									text[i] = displayTable.decode(text[i]);
-								style.removeProperty("braille-charset"); }
-							style.removeProperty("text-transform");
+									text[i] = displayTable.decode(text[i]); }
 							continue; }
 						else if (val == TextTransform.AUTO) {}
 						else if (val == TextTransform.list_values) {
 							TermList values = style.getValue(TermList.class, "text-transform");
 							text[i] = textFromTextTransform(text[i], values);
-							typeform[i] = typeform[i].add(typeformFromTextTransform(values, translator, supportedTypeforms)); }
-						style.removeProperty("text-transform"); }
+							typeform[i] = typeform[i].add(typeformFromTextTransform(values, translator, supportedTypeforms)); }}
 					val = style.getProperty("letter-spacing");
 					if (val != null) {
 						if (val == LetterSpacing.length) {
@@ -1135,10 +1200,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								logger.warn("letter-spacing: {} not supported, must be non-negative", val);
 								letterSpacing[i] = 0; }}
 						style.removeProperty("letter-spacing"); }
-					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));
-					for (String prop : style.getPropertyNames())
-						if (!"white-space".equals(prop))
-							logger.warn("{}: {} not supported", prop, style.get(prop)); }}
+					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));}}
 			
 			return transform(text, typeform, preserveLines, preserveSpace, letterSpacing);
 		}
@@ -1554,7 +1616,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return hyphenator.transform(text);
 		}
 		
-		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+		private final static SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 		
 		public byte[] hyphenate(String text, Locale language) {
 			return extractHyphens(

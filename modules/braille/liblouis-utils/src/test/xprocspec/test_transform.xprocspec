@@ -3,6 +3,115 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                script="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
     
+    <x:scenario label="br">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc xml:lang="en">
+                        foo<br style="&amp;::before { content: '\A'; white-space: pre-line }"/>bar
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(document-locale:en-US)(grade:2)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc xml:lang="en-Brai" style="text-transform: none">         ⠋⠕⠕<br style="&amp;::before { content: '\A '; white-space: pre-line }"/>⠃⠜       </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="italic">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc xml:lang="en">
+                        <p style="display: block; text-transform: louis-ital">
+                            foo <span style="text-transform: louis-bold">bar</span>
+                        </p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(document-locale:en-US)(grade:2)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc xml:lang="en-Brai" style="text-transform: none">
+                    <p style="display: block">           ⠨⠋⠕⠕ <span>⠸⠨⠨⠃⠜</span>         </p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="hyphens">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc xml:lang="en">
+                        <p style="display: block">
+                            <span style="hyphens: auto; white-space: pre-wrap">
+                                foo<span style="font-weight: bold">bar</span>
+                            </span>
+                        </p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(document-locale:en-US)(grade:2)(hyphenator:hyphen)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc xml:lang="en-Brai" style="text-transform: none">
+                    <p style="display: block">
+                        <span style="white-space: pre-wrap">
+                            ⠋⠕⠕­<span>⠃⠜</span>
+                        </span>
+                    </p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="hyphens and lang">
+        <x:documentation>
+            test that hyphenation rules are adapted to language
+        </x:documentation>
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc xml:lang="en" style="hyphens: auto">
+                        <p style="display: block">
+                            foobar
+                        </p>
+                        <p style="display: block" xml:lang="ja">
+                            foobar <span xml:lang="en">foobar</span>
+                        </p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(document-locale:en-US)(grade:2)(hyphenator:hyphen)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc xml:lang="en-Brai" style="text-transform: none">
+                    <p style="display: block">           ⠋⠕⠕­⠃⠜         </p>
+                    <p xml:lang="ja-Brai" style="display: block">           ⠋⠕⠕⠃⠜ <span xml:lang="en-Brai">⠋⠕⠕­⠃⠜</span>        </p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
     <x:scenario label="custom @text-transform rule">
         <x:call step="px:transform">
             <x:input port="source">
@@ -20,7 +129,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille; contraction: no }">
+                <doc style="text-transform: none; @text-transform uncontracted { contraction: no; system: braille }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -44,7 +153,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform { system: braille; contraction: no }">
+                <doc style="text-transform: none; @text-transform { contraction: no; system: braille }">
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
             </x:document>
@@ -68,7 +177,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
+                <doc style="text-transform: none; @text-transform uncontracted { liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;); system: braille }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -93,7 +202,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille; contraction: no }">
+                <doc style="text-transform: none; @text-transform uncontracted { contraction: no; system: braille }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠨⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -118,7 +227,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform ueb { locale: en; system: ueb }">
+                <doc style="text-transform: none; @text-transform ueb { locale: en; system: ueb }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠜</p>
                 </doc>
@@ -143,7 +252,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @hyphenation-resource:lang(foo) { system: mock }">
+                <doc style="text-transform: none; @hyphenation-resource:lang(foo) { system: mock }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block" xml:lang="foo-Brai">⠋⠥­⠃⠁⠗</p>
                 </doc>

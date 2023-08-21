@@ -1,8 +1,4 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
-
   <uri name="http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl"
        uri="../xml/library.xpl"/>
-
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-
 </catalog>

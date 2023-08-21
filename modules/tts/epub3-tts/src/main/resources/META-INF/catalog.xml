@@ -6,11 +6,4 @@
                                         px:stylesheet-for-content-type="application/xhtml+xml"
                                         px:stylesheet-for-media="speech"/>
 
-  <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:html-break-detection"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/> <!-- to remove the CSS attributes -->
-  <nextCatalog catalog="org:daisy:pipeline:modules:tts-common"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:mathml-to-ssml"/>
-
 </catalog>

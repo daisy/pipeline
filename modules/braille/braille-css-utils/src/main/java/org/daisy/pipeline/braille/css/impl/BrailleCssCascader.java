@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -25,7 +26,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
-import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.NodeData;
 import cz.vutbr.web.css.Rule;
@@ -39,12 +39,14 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
+import cz.vutbr.web.csskit.DeclarationImpl;
 import cz.vutbr.web.csskit.RuleFactoryImpl;
+import cz.vutbr.web.csskit.TermURIImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
-import org.daisy.braille.css.AnyAtRule;
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
+import org.daisy.braille.css.BrailleCSSExtension;
 import org.daisy.braille.css.BrailleCSSParserFactory;
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.RuleCounterStyle;
@@ -53,11 +55,12 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
-import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.braille.css.VendorAtRule;
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.braille.css.SupportedPrintCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.CssPreProcessor;
@@ -65,7 +68,14 @@ import org.daisy.pipeline.css.JStyleParserCssCascader;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.XsltProcessor;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -75,6 +85,8 @@ import org.w3c.dom.Node;
 	service = { CssCascader.class }
 )
 public class BrailleCssCascader implements CssCascader {
+
+	private static final Logger logger = LoggerFactory.getLogger(BrailleCssCascader.class);
 
 	/**
 	 * Note that this implementation only supports a very small subset of medium "print", namely the
@@ -106,7 +118,7 @@ public class BrailleCssCascader implements CssCascader {
 		case EMBOSSED:
 		case BRAILLE:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
-			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
+			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleCSS);
 		case PRINT:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
@@ -122,13 +134,51 @@ public class BrailleCssCascader implements CssCascader {
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 
 	// medium braille/embossed
-	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
-	private static final DeclarationTransformer brailleDeclarationTransformer
-		= new BrailleCSSDeclarationTransformer(brailleCSS);
-	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
-	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
+	private final List<BrailleCSSExtension> brailleCSSExtensions = new ArrayList<>();
+	private SupportedBrailleCSS brailleCSS = null;
+	private BrailleCSSRuleFactory brailleRuleFactory = null;
+	private BrailleCSSParserFactory brailleParserFactory = null;
+	private BrailleCssParser brailleCSSParser = null;
 
-	private static class Transformer extends JStyleParserCssCascader {
+
+	@Reference(
+		name = "BrailleCSSExtension",
+		unbind = "-",
+		service = BrailleCSSExtension.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void addBrailleCSSExtension(BrailleCSSExtension x) {
+		logger.debug("Binding BrailleCSSExtension: {}", x);
+		brailleCSSExtensions.add(x);
+	}
+
+	@Activate
+	protected void init() {
+		boolean allowUnknownVendorExtensions = false;
+		brailleCSS = new SupportedBrailleCSS(false, true, brailleCSSExtensions, allowUnknownVendorExtensions);
+		brailleRuleFactory = new BrailleCSSRuleFactory(brailleCSSExtensions, allowUnknownVendorExtensions);
+		brailleParserFactory = new BrailleCSSParserFactory(brailleRuleFactory);
+		brailleCSSParser = new BrailleCssParser() {
+				@Override
+				public BrailleCSSParserFactory getBrailleCSSParserFactory() {
+					return brailleParserFactory;
+				}
+				@Override
+				public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
+					switch (context) {
+					case ELEMENT:
+					case PAGE:
+					case VOLUME:
+						return Optional.of(brailleCSS);
+					default:
+						return Optional.empty();
+					}
+				}
+			};
+	}
+
+	private class Transformer extends JStyleParserCssCascader {
 
 		private final QName attributeName;
 		private final boolean isBrailleCss;
@@ -148,7 +198,7 @@ public class BrailleCssCascader implements CssCascader {
 		private Iterable<RuleTextTransform> textTransformRules = null;
 		private Iterable<RuleHyphenationResource> hyphenationResourceRules = null;
 		private Iterable<RuleCounterStyle> counterStyleRules = null;
-		private Iterable<AnyAtRule> otherAtRules = null;
+		private Iterable<VendorAtRule<? extends Rule<?>>> otherAtRules = null;
 
 		protected Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
 			if (isBrailleCss && pageRules == null) {
@@ -188,7 +238,7 @@ public class BrailleCssCascader implements CssCascader {
 				textTransformRules = Iterables.filter(styleSheet, RuleTextTransform.class);
 				hyphenationResourceRules = Iterables.filter(styleSheet, RuleHyphenationResource.class);
 				counterStyleRules = Iterables.filter(styleSheet, RuleCounterStyle.class);
-				otherAtRules = Iterables.filter(styleSheet, AnyAtRule.class);
+				otherAtRules = (Iterable<VendorAtRule<? extends Rule<?>>>)(Iterable)Iterables.filter(styleSheet, VendorAtRule.class);
 			}
 			StringBuilder style = new StringBuilder();
 			if (mainStyle != null)
@@ -202,11 +252,11 @@ public class BrailleCssCascader implements CssCascader {
 				boolean isRoot = (context.getParentNode().getNodeType() != Node.ELEMENT_NODE);
 				Map<String,RulePage> pageRule = getPageRule(mainStyle, pageRules);
 				if (pageRule != null) {
-					insertPageStyle(style, pageRule, true); }
+					insertPageStyle(style, pageRule); }
 				else if (isRoot) {
 					pageRule = getPageRule("auto", pageRules);
 					if (pageRule != null)
-						insertPageStyle(style, pageRule, true); }
+						insertPageStyle(style, pageRule); }
 				if (isRoot) {
 					Map<String,RuleVolume> volumeRule = getVolumeRule("auto", volumeRules);
 					if (volumeRule != null)
@@ -217,15 +267,16 @@ public class BrailleCssCascader implements CssCascader {
 						insertHyphenationResourceDefinition(style, r);
 					for (RuleCounterStyle r : counterStyleRules)
 						insertCounterStyleDefinition(style, r);
-					for (AnyAtRule r : otherAtRules) {
+					for (VendorAtRule<? extends Rule<?>> r : otherAtRules) {
 						if (style.length() > 0 && !style.toString().endsWith("} ")) {
 							style.insert(0, "{ ");
 							style.append("} "); }
 						insertAtRule(style, r); }}}
-			if (!style.toString().replaceAll("\\s+", "").isEmpty())
-				return ImmutableMap.of(attributeName, style.toString().trim());
-			else
+			if (style.toString().trim().isEmpty())
 				return null;
+			if (style.length() > 1 && style.substring(style.length() - 2).equals("; "))
+				style.delete(style.length() - 2, style.length());
+			return ImmutableMap.of(attributeName, style.toString().trim());
 		}
 
 		protected String serializeValue(Term<?> value) {
@@ -256,20 +307,17 @@ public class BrailleCssCascader implements CssCascader {
 		}
 	};
 
-	// FIXME: move parts of this to BrailleCssSerializer
+	// FIXME: make more use of BrailleCssSerializer
 
 	private static void insertStyle(StringBuilder builder, NodeData nodeData) {
-		List<String> keys = new ArrayList<String>(nodeData.getPropertyNames());
-		keys.remove("page");
-		Collections.sort(keys);
-		for (String key : keys) {
-			Term<?> value = nodeData.getValue(key, false);
-			if (value != null)
-				builder.append(key).append(": ").append(BrailleCssSerializer.toString(value)).append("; ");
-			else {
-				CSSProperty prop = nodeData.getProperty(key, false);
-				if (prop != null) // can be null for unspecified inherited properties
-					builder.append(key).append(": ").append(prop).append("; "); }}
+		List<String> properties = new ArrayList<String>(nodeData.getPropertyNames());
+		properties.remove("page");
+		Collections.sort(properties);
+		for (String prop : properties) {
+			String val = BrailleCssSerializer.serializePropertyValue(nodeData, prop, false);
+			if (val != null) // can be null for unspecified inherited properties
+				builder.append(prop).append(": ").append(val).append("; ");
+		}
 	}
 
 	private static void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
@@ -288,51 +336,29 @@ public class BrailleCssCascader implements CssCascader {
 				builder.append("(").append(s).append(")"); }}
 	}
 
-	private static void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
-	                                      Map<String,Map<String,RulePage>> pageRules) {
+	private void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
+	                               Map<String,Map<String,RulePage>> pageRules) {
 		pseudoElementToString(builder, elem);
 		builder.append(" { ");
 		insertStyle(builder, nodeData);
 		Map<String,RulePage> pageRule = getPageRule(nodeData, pageRules);
 		if (pageRule != null)
-			insertPageStyle(builder, pageRule, false);
+			insertPageStyle(builder, pageRule);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 
-	private static void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule, boolean topLevel) {
+	private void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule) {
 		for (RulePage r : pageRule.values())
-			insertPageStyle(builder, r, topLevel);
+			insertPageStyle(builder, r);
 	}
 
-	private static void insertPageStyle(StringBuilder builder, RulePage pageRule, boolean topLevel) {
-		builder.append("@page");
-		String pseudo = pageRule.getPseudo();
-		if (pseudo != null && !"".equals(pseudo))
-			builder.append(":").append(pseudo);
-		builder.append(" { ");
-		for (Declaration decl : Iterables.filter(pageRule, Declaration.class))
-			insertDeclaration(builder, decl);
-		for (RuleMargin margin : Iterables.filter(pageRule, RuleMargin.class))
-			insertMarginStyle(builder, margin);
-		builder.append("} ");
+	private void insertPageStyle(StringBuilder builder, RulePage pageRule) {
+		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
-	private static void insertMarginStyle(StringBuilder builder, RuleMargin ruleMargin) {
-		builder.append("@").append(ruleMargin.getMarginArea()).append(" { ");
-		insertStyle(builder, new SimpleInlineStyle(ruleMargin, null, brailleDeclarationTransformer, brailleCSS));
-		builder.append("} ");
-	}
-
-	private static void insertDeclaration(StringBuilder builder, Declaration decl) {
-		StringBuilder s = new StringBuilder();
-		Iterator<Term<?>> it = decl.iterator();
-		while (it.hasNext()) {
-			s.append(BrailleCssSerializer.toString(it.next()));
-			if (it.hasNext()) s.append(" "); }
-		builder.append(decl.getProperty()).append(": ").append(s).append("; ");
-	}
-
-	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
+	private Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
 		BrailleCSSProperty.Page pageProperty; {
 			if (nodeData != null)
 				pageProperty = nodeData.<BrailleCSSProperty.Page>getProperty("page", false);
@@ -354,7 +380,7 @@ public class BrailleCssCascader implements CssCascader {
 			return null;
 	}
 
-	private static Map<String,RulePage> getPageRule(String name, Map<String,Map<String,RulePage>> pageRules) {
+	private Map<String,RulePage> getPageRule(String name, Map<String,Map<String,RulePage>> pageRules) {
 		Map<String,RulePage> auto = pageRules == null ? null : pageRules.get("auto");
 		Map<String,RulePage> named = null;
 		if (!name.equals("auto"))
@@ -386,7 +412,7 @@ public class BrailleCssCascader implements CssCascader {
 		return result;
 	}
 
-	private static RulePage makePageRule(String name, String pseudo, List<RulePage> from) {
+	private RulePage makePageRule(String name, String pseudo, List<RulePage> from) {
 		RulePage pageRule = brailleRuleFactory.createPage().setName(name).setPseudo(pseudo);
 		for (RulePage f : from)
 			for (Rule<?> r : f)
@@ -424,28 +450,32 @@ public class BrailleCssCascader implements CssCascader {
 		return null;
 	}
 
-	private static void insertVolumeStyle(StringBuilder builder, Map<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeStyle(StringBuilder builder, Map<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
 		for (Map.Entry<String,RuleVolume> r : volumeRule.entrySet())
 			insertVolumeStyle(builder, r, pageRules);
 	}
 
-	private static void insertVolumeStyle(StringBuilder builder, Map.Entry<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeStyle(StringBuilder builder, Map.Entry<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
 		builder.append("@volume");
 		String pseudo = volumeRule.getKey();
 		if (pseudo != null && !"".equals(pseudo))
 			builder.append(":").append(pseudo);
 		builder.append(" { ");
-		for (Declaration decl : Iterables.filter(volumeRule.getValue(), Declaration.class))
-			insertDeclaration(builder, decl);
+		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(volumeRule.getValue(), Declaration.class));
+		if (!declarations.isEmpty())
+			builder.append(declarations).append("; ");
 		for (RuleVolumeArea volumeArea : Iterables.filter(volumeRule.getValue(), RuleVolumeArea.class))
 			insertVolumeAreaStyle(builder, volumeArea, pageRules);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 
-	private static void insertVolumeAreaStyle(StringBuilder builder, RuleVolumeArea ruleVolumeArea, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeAreaStyle(StringBuilder builder, RuleVolumeArea ruleVolumeArea, Map<String,Map<String,RulePage>> pageRules) {
 		builder.append("@").append(ruleVolumeArea.getVolumeArea().value).append(" { ");
 		StringBuilder innerStyle = new StringBuilder();
 		Map<String,RulePage> pageRule = null;
+		List<Declaration> declarations = new ArrayList<>();
 		for (Declaration decl : Iterables.filter(ruleVolumeArea, Declaration.class))
 			if ("page".equals(decl.getProperty())) {
 				StringBuilder s = new StringBuilder();
@@ -455,9 +485,13 @@ public class BrailleCssCascader implements CssCascader {
 					if (it.hasNext()) s.append(" "); }
 				pageRule = getPageRule(s.toString(), pageRules); }
 			else
-				insertDeclaration(innerStyle, decl);
+				declarations.add(decl);
+		if (!declarations.isEmpty())
+			innerStyle.append(BrailleCssSerializer.serializeDeclarationList(declarations)).append("; ");
 		if (pageRule != null)
-			insertPageStyle(innerStyle, pageRule, false);
+			insertPageStyle(innerStyle, pageRule);
+		if (innerStyle.length() > 1 && innerStyle.substring(innerStyle.length() - 2).equals("; "))
+			innerStyle.replace(innerStyle.length() - 2, innerStyle.length(), " ");
 		builder.append(innerStyle).append("} ");
 	}
 
@@ -466,9 +500,10 @@ public class BrailleCssCascader implements CssCascader {
 		String name = rule.getName();
 		if (name != null) builder.append(' ').append(name);
 		builder.append(" { ");
-		for (Declaration decl : rule) {
-			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {
-				TermURI term = (TermURI)decl.get(0);
+		List<Declaration> declarationList = new ArrayList<>();
+		for (Declaration d : rule) {
+			if (d.size() == 1 && d.get(0) instanceof TermURI) {
+				TermURI term = (TermURI)d.get(0);
 				URI uri = URLs.asURI(term.getValue());
 				if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
 					// relative resource: make absolute and convert to "volatile-file" URI to bypass
@@ -485,12 +520,14 @@ public class BrailleCssCascader implements CssCascader {
 					} catch (IllegalArgumentException e) {
 						// not a file URI
 					}
+					d = createDeclaration(d.getProperty(), createTermURI(uri));
 				}
-				builder.append(decl.getProperty()).append(": ").append("url(\"" + uri + "\")").append("; ");
-				continue;
 			}
-			insertDeclaration(builder, decl);
+			declarationList.add(d);
 		}
+		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
@@ -498,9 +535,10 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("@hyphenation-resource");
 		builder.append(":lang(").append(BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
 		builder.append(" { ");
-		for (Declaration decl : rule) {
-			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {
-				TermURI term = (TermURI)decl.get(0);
+		List<Declaration> declarationList = new ArrayList<>();
+		for (Declaration d : rule) {
+			if (d.size() == 1 && d.get(0) instanceof TermURI) {
+				TermURI term = (TermURI)d.get(0);
 				URI uri = URLs.asURI(term.getValue());
 				if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
 					// relative resource: make absolute and convert to "volatile-file" URI to bypass
@@ -517,29 +555,53 @@ public class BrailleCssCascader implements CssCascader {
 					} catch (IllegalArgumentException e) {
 						// not a file URI
 					}
+					try {
+						d = createDeclaration(d.getProperty(), createTermURI(uri));
+					} catch (RuntimeException e) {
+						e.printStackTrace();
+						throw e;
+					}
 				}
-				builder.append(decl.getProperty()).append(": ").append("url(\"" + uri + "\")").append("; ");
-				continue;
 			}
-			insertDeclaration(builder, decl);
+			declarationList.add(d);
 		}
+		String declarations = BrailleCssSerializer.serializeDeclarationList(declarationList);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
+	}
+
+	private static Declaration createDeclaration(String prop, Term<?> val) {
+		return new DeclarationImpl() {{
+			this.property = prop;
+			this.list = ImmutableList.of(val);
+		}};
+	}
+
+	private static TermURI createTermURI(URI uri) {
+		return new TermURIImpl() {{
+			this.value = uri.toString();
+		}};
 	}
 
 	private static void insertCounterStyleDefinition(StringBuilder builder, RuleCounterStyle rule) {
 		String name = rule.getName();
 		builder.append("@counter-style ").append(name).append(" { ");
-		for (Declaration decl : rule)
-			insertDeclaration(builder, decl);
+		String declarations = BrailleCssSerializer.serializeDeclarationList(rule);
+		if (!declarations.isEmpty())
+			builder.append(declarations).append(" ");
 		builder.append("} ");
 	}
 
-	private static void insertAtRule(StringBuilder builder, AnyAtRule rule) {
+	private static void insertAtRule(StringBuilder builder, VendorAtRule<? extends Rule<?>> rule) {
 		builder.append("@").append(rule.getName()).append(" { ");
-		for (Declaration decl : Iterables.filter(rule, Declaration.class))
-			insertDeclaration(builder, decl);
-		for (AnyAtRule r : Iterables.filter(rule, AnyAtRule.class))
+		String declarations = BrailleCssSerializer.serializeDeclarationList(Iterables.filter(rule, Declaration.class));
+		if (!declarations.isEmpty())
+			builder.append(declarations).append("; ");
+		for (VendorAtRule<? extends Rule<?>> r : Iterables.filter(rule, VendorAtRule.class))
 			insertAtRule(builder, r);
+		if (builder.substring(builder.length() - 2).equals("; "))
+			builder.replace(builder.length() - 2, builder.length(), " ");
 		builder.append("} ");
 	}
 

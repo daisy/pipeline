@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                type="css:parse-properties"
+                type="px:css-parse-properties"
                 exclude-inline-prefixes="#all"
                 version="1.0">
     
@@ -16,10 +15,9 @@
         </p:documentation>
     </p:input>
     
-    <p:option name="properties" select="'#all'">
+    <p:option name="properties" required="true">
         <p:documentation>
-            The 'properties' option must be a space separated list of property names, or the word
-            '#all'.
+            The 'properties' option must be a space separated list of property names.
         </p:documentation>
     </p:option>
     
@@ -31,8 +29,7 @@
             attributes in the input with the same name will be overwritten. The property values
             'inherit' and 'initial' are concretized. Invalid declarations are dropped. Declarations
             whose property names are not specified in the 'properties' option are retained in the
-            style attribute, which is dropped when empty. If the 'properties' option is '#all', all
-            declarations are extracted.
+            style attribute, which is dropped when empty.
         </p:documentation>
     </p:output>
     
@@ -40,7 +37,7 @@
         <p:input port="stylesheet">
             <p:document href="parse-properties.xsl"/>
         </p:input>
-        <p:with-param name="property-names" select="$properties"/>
+        <p:with-param name="property-names" select="tokenize(normalize-space($properties),' ')"/>
     </p:xslt>
     
 </p:declare-step>

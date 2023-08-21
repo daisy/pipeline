@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/obfl-css-definition.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="pxi:obfl-css-definition">
+      <x:input port="source">
+        <x:document type="inline">
+          <css:_ css:page="size: 10 10">
+            <css:box type="block" css:hyphens="auto" css:text-align="center">
+              <css:box type="block" css:hyphens="auto"/>
+            </css:box>
+          </css:_>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <css:_ css:page="size: 10 10">
+          <css:box type="block" css:hyphens="auto">
+            <css:box type="block" css:text-align="center"/>
+          </css:box>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:call step="pxi:obfl-css-definition">
+      <x:input port="source">
+        <x:document type="inline">
+          <css:_>
+            <css:box type="block" style="-obfl-right-text-indent: 5"/>
+          </css:_>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <css:_>
+          <css:box type="block" css:_obfl-right-text-indent="5"/>
+        </css:_>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

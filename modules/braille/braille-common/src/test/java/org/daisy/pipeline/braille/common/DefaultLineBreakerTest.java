@@ -9,13 +9,14 @@ import java.util.regex.Pattern;
 
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class DefaultLineBreakerTest {
-	
+
 	@Test
 	public void testNonStandardLineBreaking() {
 		TestHyphenator hyphenator = new TestHyphenator();
@@ -83,16 +84,16 @@ public class DefaultLineBreakerTest {
 				new AbstractBrailleTranslator() {
 					public BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille() {
 						return new BrailleTranslator.FromStyledTextToBraille() {
-							public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+							public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to) {
 								if (from < 0 || (to >= 0 && from > to))
 									throw new IndexOutOfBoundsException();
-								List<String> transformed = new ArrayList<>();
+								List<CSSStyledText> transformed = new ArrayList<>();
 								int i = 0;
 								for (CSSStyledText t : styledText) {
 									if (to >= 0 && i >= to)
 										break;
 									if (i >= from)
-										transformed.add(t.getText().toUpperCase());
+										transformed.add(new CSSStyledText(t.getText().toUpperCase()));
 									i++;
 								}
 								return transformed;
@@ -250,7 +251,9 @@ public class DefaultLineBreakerTest {
 		};
 	}
 	
-	private static class TestTranslator extends AbstractBrailleTranslator {
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	
+	private class TestTranslator extends AbstractBrailleTranslator {
 		
 		private final Hyphenator hyphenator;
 		
@@ -261,9 +264,9 @@ public class DefaultLineBreakerTest {
 		public TestTranslator _withHyphenator(Hyphenator hyphenator) {
 			return new TestTranslator(hyphenator);
 		}
-		
-		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
-		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+
+		private final Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
+		private final SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
 			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
@@ -361,7 +364,7 @@ public class DefaultLineBreakerTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, cssParser.parse("")));
 		return styledText;
 	}
 	
