@@ -119,6 +119,8 @@ public class PipelineWebService extends Application {
                 // init the administrative paths
                 router.attach(Routes.CLIENTS_ROUTE, ClientsResource.class);
                 router.attach(Routes.CLIENT_ROUTE, ClientResource.class);
+                router.attach(Routes.PROPERTIES_ROUTE, PropertiesResource.class);
+                router.attach(Routes.PROPERTY_ROUTE, PropertyResource.class);
                 router.attach(Routes.HALT_ROUTE, HaltResource.class);
                 router.attach(Routes.SIZES_ROUTE, SizesResource.class  );
                 router.attach(Routes.QUEUE_ROUTE, QueueResource.class  );

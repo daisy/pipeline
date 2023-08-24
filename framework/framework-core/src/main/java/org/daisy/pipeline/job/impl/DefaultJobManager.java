@@ -2,6 +2,7 @@ package org.daisy.pipeline.job.impl;
 
 import java.util.List;
 
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJob;
@@ -34,6 +35,7 @@ public class DefaultJobManager implements JobManager {
         private final XProcEngine xprocEngine;
         private final JobStorage storage;
         private final JobExecutionService executionService;
+        private final Property logLevelProperty;
 
         /**
          * @param storage
@@ -43,12 +45,14 @@ public class DefaultJobManager implements JobManager {
                                  JobMonitorFactory monitorFactory,
                                  XProcEngine xprocEngine,
                                  JobStorage storage,
-                                 JobExecutionService executionService) {
+                                 JobExecutionService executionService,
+                                 Property logLevelProperty) {
                 this.client = client;
                 this.monitorFactory = monitorFactory;
                 this.xprocEngine = xprocEngine;
                 this.storage = storage;
                 this.executionService = executionService;
+                this.logLevelProperty = logLevelProperty;
         }
 
         @SuppressWarnings("unchecked") // safe cast to Iterable<Job>
@@ -104,7 +108,9 @@ public class DefaultJobManager implements JobManager {
                                              xprocEngine,
                                              client,
                                              boundScript,
-                                             true) {
+                                             true,
+                                             logLevelProperty
+                ) {
                         @SuppressWarnings("unchecked") // safe cast to Optional<Job>
                         @Override
                         public Optional<Job> build() {

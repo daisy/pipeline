@@ -10,7 +10,6 @@ import org.daisy.common.messaging.MessageAccessor;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.ProgressMessage;
 import org.daisy.common.priority.Priority;
-import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.job.Job;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.script.ScriptPort;
@@ -43,14 +42,7 @@ public class JobXmlWriter {
         private static Logger logger = LoggerFactory.getLogger(JobXmlWriter.class
                         .getName());
 
-        private static HashSet<Level> MSG_LEVELS = new HashSet<Level>();
-        static {
-                MSG_LEVELS.add(Level.WARNING);
-                MSG_LEVELS.add(Level.INFO);
-                MSG_LEVELS.add(Level.ERROR);
-                if (Properties.getProperty("org.daisy.pipeline.log.level", "INFO").toUpperCase().equals("DEBUG"))
-                    MSG_LEVELS.add(Level.DEBUG);
-        }
+        private final HashSet<Level> MSG_LEVELS;
 
         /**
          * @param baseUrl Prefix to be included at the beginning of <code>href</code>
@@ -59,8 +51,18 @@ public class JobXmlWriter {
          *                absolute paths relative to the domain name.
          */
         public JobXmlWriter(Job job, String baseUrl) {
+                this(job, Level.TRACE, baseUrl);
+        }
+
+        public JobXmlWriter(Job job, Level messagesThreshold, String baseUrl) {
                 this.job = job;
                 this.baseUrl = baseUrl;
+                MSG_LEVELS = new HashSet<Level>();
+                MSG_LEVELS.add(Level.ERROR);
+                MSG_LEVELS.add(Level.WARNING);
+                MSG_LEVELS.add(Level.INFO);
+                if (Level.INFO.isMoreSevereThan(messagesThreshold))
+                        MSG_LEVELS.add(Level.DEBUG);
         }
 
         public Document getXmlDocument() {

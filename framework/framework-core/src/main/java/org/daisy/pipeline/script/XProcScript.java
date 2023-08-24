@@ -317,6 +317,8 @@ public final class XProcScript extends Script {
 				datatype = DatatypeService.XS_STRING;
 			else if ("xs:integer".equals(type) || "integer".equals(type))
 				datatype = DatatypeService.XS_INTEGER;
+			else if ("xs:nonNegativeInteger".equals(type) || "nonNegativeInteger".equals(type))
+				datatype = DatatypeService.XS_NON_NEGATIVE_INTEGER;
 			else if ("xs:boolean".equals(type) || "boolean".equals(type))
 				datatype = DatatypeService.XS_BOOLEAN;
 			else if ("xs:anyURI".equals(type) || "anyURI".equals(type))

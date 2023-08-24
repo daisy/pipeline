@@ -8,6 +8,11 @@ import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
+import com.xmlcalabash.core.XProcConfiguration;
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.core.XProcStep;
+import com.xmlcalabash.runtime.XAtomicStep;
+
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -19,21 +24,18 @@ import org.daisy.common.xproc.calabash.ConfigurationFileProvider;
 import org.daisy.common.xproc.calabash.XProcConfigurationFactory;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XProcStepRegistry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.InputSource;
-
-import com.xmlcalabash.core.XProcConfiguration;
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.core.XProcStep;
-import com.xmlcalabash.runtime.XAtomicStep;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import org.xml.sax.InputSource;
 
 /**
  * Mainly thought to be used throught OSGI this class creates configuration
@@ -62,11 +64,11 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 * ()
 	 */
 	@Override
-	public XProcConfiguration newConfiguration() {
+	public XProcConfiguration newConfiguration(XProcMonitor monitor, Map<String,String> properties) {
 		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
 		Processor processor = new Processor(false);
 		saxonConfigurator.configure(processor);
-		XProcConfiguration config = new DynamicXProcConfiguration(processor, this);
+		XProcConfiguration config = new DynamicXProcConfiguration(processor, this, monitor, properties);
 		for (ConfigurationFileProvider f : configurationFiles) {
 			logger.debug("Reading {}", f);
 			loadConfigurationFile(config, f.get());
@@ -84,10 +86,10 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 */
 	@Reference(
 		name = "XProcStepProvider",
-		unbind = "removeStep",
+		unbind = "-",
 		service = XProcStepProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addStep(XProcStepProvider stepProvider, Map<?, ?> properties) {
 		QName type = QName.fromClarkName((String) properties.get("type"));
@@ -109,10 +111,10 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 */
 	@Reference(
 		name = "ConfigurationFileProvider",
-		unbind = "removeConfigurationFile",
+		unbind = "-",
 		service = ConfigurationFileProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addConfigurationFile(ConfigurationFileProvider provider) {
 		logger.debug("Adding " + provider);
@@ -148,10 +150,9 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	 * com.xmlcalabash.runtime.XAtomicStep)
 	 */
 	@Override
-	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(QName type, XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		XProcStepProvider stepProvider = stepProviders.get(type);
-		return (stepProvider != null) ? stepProvider.newStep(runtime, step)
-				: null;
+		return (stepProvider != null) ? stepProvider.newStep(runtime, step, monitor, properties) : null;
 	}
 
 	private void loadConfigurationFile(XProcConfiguration conf, InputStream config) {
@@ -162,8 +163,7 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 			doc = builder.build(source);
 		} catch (SaxonApiException e) {
 			logger.error("Error loading configuration file", e);
-			throw new RuntimeException("error loading configuration file",
-					e);
+			throw new RuntimeException("error loading configuration file", e);
 		}
 		conf.parse(doc);
 	}

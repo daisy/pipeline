@@ -1,0 +1,5 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+include "propertyElement.rnc"
+
+start = property

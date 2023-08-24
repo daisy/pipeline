@@ -90,7 +90,7 @@ public class XProcScriptService implements ScriptService<XProcScript> {
 	@Override
 	public XProcScript load() {
 		if (parser == null)
-			throw new IllegalStateException("Object was not property initialized");
+			throw new IllegalStateException("Object was not properly initialized");
 		if (script == null) {
 			script = parser.parse(this);
 		}

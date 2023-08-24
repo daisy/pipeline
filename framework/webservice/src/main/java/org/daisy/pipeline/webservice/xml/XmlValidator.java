@@ -53,6 +53,7 @@ public class XmlValidator {
 	public static final URL SIZES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice/resources/job/sizes.rnc");
 	public static final URL QUEUE_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice/resources/queue/queue.rnc");
 	public static final URL DATATYPES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice/resources/datatypes.rnc");
+	public static final URL PROPERTY_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice/resources/properties/property.rnc");
 	public static final URL PROPERTIES_SCHEMA_URL = XmlValidator.class.getResource("/org/daisy/pipeline/webservice/resources/properties/properties.rnc");
 	
 	public static boolean validate(Document document, URL schemaUrl) {

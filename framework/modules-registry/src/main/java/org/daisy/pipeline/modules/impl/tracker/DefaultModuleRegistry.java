@@ -68,10 +68,10 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 
 	@Reference(
 		name = "Module",
-		unbind = "removeModule",
+		unbind = "-",
 		service = Module.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addModule(Module module) {
 		logger.debug("Registring module {}", module.getName());

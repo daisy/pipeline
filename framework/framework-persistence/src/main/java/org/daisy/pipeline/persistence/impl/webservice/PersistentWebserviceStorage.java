@@ -27,8 +27,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class PersistentWebserviceStorage implements WebserviceStorage {
 
-	private static final boolean PERSISTENCE_DISABLED = "false".equalsIgnoreCase(
-		Properties.getProperty("org.daisy.pipeline.persistence"));
 	private static final Logger logger = LoggerFactory
 			.getLogger(PersistentWebserviceStorage.class);
 	private ClientStorage clientStore;
@@ -53,7 +51,7 @@ public class PersistentWebserviceStorage implements WebserviceStorage {
 	 */
 	@Activate
 	public void activate() {
-		if (PERSISTENCE_DISABLED)
+		if ("false".equalsIgnoreCase(System.getProperty("org.daisy.pipeline.persistence"))) // property only used in tests
 			throw new RuntimeException("Persistent storage is disabled");
 		logger.debug("Bringing PersistentWebserviceStorage up");
 		this.clientStore = new PersistentClientStorage(this.database);

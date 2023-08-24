@@ -195,6 +195,8 @@ public class JobsResource extends AuthenticatedResource {
                 getStorage().getJobConfigurationStorage()
                     .add(job.get().getId(), XmlUtils.nodeToString(doc));
 
+                // Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
+                // filtering of messages on log level already happens in MessageBus and JobProgressAppender.
                 JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
                 if (job.get().getStatus() == Job.Status.IDLE) {
                         writer.withPriority(getJobPriority(job.get()));

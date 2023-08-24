@@ -133,10 +133,10 @@ public class SaxonConfigurator {
 
 	@Reference(
 		name = "PackageDetails",
-		unbind = "removePackageDetails",
+		unbind = "-",
 		service = PackageDetails.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addPackageDetails(PackageDetails pack) {
 		if (packages == null)

@@ -1,12 +1,16 @@
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
+import java.util.Map;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.library.Identity;
 import com.xmlcalabash.runtime.XAtomicStep;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -41,7 +45,7 @@ public class SleepStep extends Identity implements XProcStep {
 		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc}sleep" }
 	)
 	public static class Provider implements XProcStepProvider {
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new SleepStep(runtime, step);
 		}
 	}

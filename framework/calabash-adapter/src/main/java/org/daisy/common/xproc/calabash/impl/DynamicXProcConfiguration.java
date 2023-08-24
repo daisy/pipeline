@@ -1,14 +1,17 @@
 package org.daisy.common.xproc.calabash.impl;
 
-import org.daisy.common.xproc.calabash.XProcStepRegistry;
-
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.QName;
+import java.util.Map;
 
 import com.xmlcalabash.core.XProcConfiguration;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.core.XProcStep;
 import com.xmlcalabash.runtime.XAtomicStep;
+
+import org.daisy.common.xproc.calabash.XProcStepRegistry;
+import org.daisy.common.xproc.XProcMonitor;
+
+import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.QName;
 
 /**
  * This class allows to add new steps dynamically to calabash.
@@ -16,13 +19,17 @@ import com.xmlcalabash.runtime.XAtomicStep;
 public class DynamicXProcConfiguration extends XProcConfiguration {
 
 	private final XProcStepRegistry stepRegistry;
+	private final XProcMonitor monitor;
+	private final Map<String,String> properties;
 
 	/**
 	 * Instantiates a new DynamicXProcConfiguration which holds the given step registry.
 	 */
-	public DynamicXProcConfiguration(Processor processor, XProcStepRegistry stepRegistry) {
+	public DynamicXProcConfiguration(Processor processor, XProcStepRegistry stepRegistry, XProcMonitor monitor, Map<String,String> properties) {
 		super(processor);
 		this.stepRegistry = stepRegistry;
+		this.monitor = monitor;
+		this.properties = properties;
 		extensionValues = true;
 		sequenceAsContext = true;
 		// FIXME: This is a hack to disable the Calabash hack that makes sure the Saxon processor
@@ -49,7 +56,7 @@ public class DynamicXProcConfiguration extends XProcConfiguration {
 		if (step == null) {
 			return null;
 		} else {
-			XProcStep xprocStep = stepRegistry.newStep(step.getType(), runtime, step);
+			XProcStep xprocStep = stepRegistry.newStep(step.getType(), runtime, step, monitor, properties);
 			return (xprocStep != null) ? xprocStep : super.newStep(runtime, step);
 		}
 	}

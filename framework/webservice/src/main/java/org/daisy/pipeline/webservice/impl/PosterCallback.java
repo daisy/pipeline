@@ -48,6 +48,8 @@ public class PosterCallback extends Callback {
 
 	public boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress) {
 		logger.debug("Posting messages to " + url);
+		// Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
+		// filtering of messages on log level already happens in MessageBus and JobProgressAppender.
 		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
 		writer.withMessages(messages, newerThan);
 		writer.withProgress(progress);

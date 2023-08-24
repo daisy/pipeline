@@ -60,7 +60,7 @@ public class DefaultJobExecutionServiceTest {
         public void setUp() {
                 mon = new Monitor();
                 tracker = new RunnableTracker();
-                service = Mockito.spy(new DefaultJobExecutionService());
+                service = Mockito.spy(new DefaultJobExecutionService(2));
                 jobs = new AbstractJob[100];
                 for (int i=0;i<100;i++){
                         AbstractJobContext ctxt = Mockito.mock(AbstractJobContext.class);
@@ -182,25 +182,9 @@ public class DefaultJobExecutionServiceTest {
         }
         @Test
         public void buildExecutor() {
-                String old=System.getProperty(DefaultJobExecutionService.NUM_PROCS);
-                //No config 
-                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"");
-                PriorityThreadPoolExecutor<Job> res=DefaultJobExecutionService.configureExecutor();
-                Assert.assertEquals("2 threads by default",res.getMaximumPoolSize(),2);
-                //configured to other value
-                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"5");
-                res=DefaultJobExecutionService.configureExecutor();
-                Assert.assertEquals("configured for 5 threads",res.getMaximumPoolSize(),5);
-                //nonsense 
-                System.setProperty(DefaultJobExecutionService.NUM_PROCS,"gimme chocolate!!");
-                res=DefaultJobExecutionService.configureExecutor();
-                Assert.assertEquals("non int is trated as 2",res.getMaximumPoolSize(),2);
-
-
-
-
-
+                PriorityThreadPoolExecutor<Job> res = DefaultJobExecutionService.configureExecutor(2);
+                Assert.assertEquals("2 threads by default", res.getMaximumPoolSize(), 2);
+                res = DefaultJobExecutionService.configureExecutor(5);
+                Assert.assertEquals("configured for 5 threads", res.getMaximumPoolSize(), 5);
         }
-
-
 }

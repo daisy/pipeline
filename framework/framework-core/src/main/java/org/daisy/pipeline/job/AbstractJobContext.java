@@ -1,8 +1,9 @@
 package org.daisy.pipeline.job;
 
 import java.net.URI;
-import java.util.List;
 import java.util.function.Consumer;
+import java.util.List;
+import java.util.Map;
 
 import org.daisy.common.messaging.MessageBus;
 import org.daisy.pipeline.clients.Client;
@@ -28,6 +29,7 @@ public abstract class AbstractJobContext {
         // accessed in DefaultJobBuilder and AbstractJob
         protected MessageBus messageBus;
         protected List<Consumer<Job.Status>> statusListeners;
+        protected Map<String,String> properties;
 
         // used by DefaultJobBuilder and PersistentJobContext
         protected AbstractJobContext() {}
@@ -48,6 +50,7 @@ public abstract class AbstractJobContext {
                 this.monitor = from.monitor;
                 this.messageBus = from.messageBus;
                 this.statusListeners = from.statusListeners;
+                this.properties = from.properties;
         }
 
         public URI getLogFile() {

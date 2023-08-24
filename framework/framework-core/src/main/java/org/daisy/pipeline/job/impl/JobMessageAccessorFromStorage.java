@@ -14,19 +14,15 @@ import org.slf4j.LoggerFactory;
 public class JobMessageAccessorFromStorage extends AbstractMessageAccessor {
 
 	private static Logger logger = LoggerFactory.getLogger(JobMessageAccessorFromStorage.class);
-	private static Message.Level threshold;
-	static {
-		try {
-			threshold = Message.Level.valueOf(Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
-		} catch (IllegalArgumentException e) {
-			threshold = Message.Level.INFO;
-		}
-	}
 
 	private final JobId id;
 	private final MessageStorage storage;
 
 	public JobMessageAccessorFromStorage(JobId id, MessageStorage storage) {
+		this(id, storage, Message.Level.TRACE);
+	}
+
+	public JobMessageAccessorFromStorage(JobId id, MessageStorage storage, Message.Level threshold) {
 		super(threshold);
 		this.id = id;
 		this.storage = storage;

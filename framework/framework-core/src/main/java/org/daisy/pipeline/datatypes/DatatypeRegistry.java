@@ -47,10 +47,10 @@ public class DatatypeRegistry {
 
 	@Reference(
 		name = "datatype-services",
-		unbind = "unregister",
+		unbind = "-",
 		service = DatatypeService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void register(DatatypeService service) {
 		logger.debug("Registering " + service.toString());

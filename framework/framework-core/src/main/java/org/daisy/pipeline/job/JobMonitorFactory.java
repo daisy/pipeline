@@ -77,6 +77,9 @@ public class JobMonitorFactory {
 				return m;
 			// Otherwise load the messages from storage (assumes the job has finished).
 			else {
+				// Note that we're not using JobMessageAccessorFromStorage's messagesThreshold
+				// argument. It is no use because filtering of messages on log level already happens
+				// in MessageBus and JobProgressAppender.
 				MessageAccessor messageAccessor = new JobMessageAccessorFromStorage(id, messageStorage);
 				StatusNotifier statusNotifier = new StatusNotifier() {
 						public void listen(Consumer<Job.Status> listener) {}

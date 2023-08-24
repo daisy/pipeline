@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.priority.Priority;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
@@ -34,20 +35,11 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	private final Client client;
 	private final BoundScript boundScript;
 	private final boolean managed;
+	private final Property logLevelProperty;
 	private boolean closeOnExit = false;
 	private JobBatchId batchId;
 	private String niceName = "";
 	private Priority priority = Priority.MEDIUM;
-
-	private static Level messagesThreshold;
-	static {
-		try {
-			messagesThreshold = Level.valueOf(
-				Properties.getProperty("org.daisy.pipeline.log.level", "INFO"));
-		} catch (IllegalArgumentException e) {
-			messagesThreshold = Level.INFO;
-		}
-	}
 
 	/**
 	 * @param managed Whether the Job will be managed by a JobManager.
@@ -56,12 +48,14 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	                         XProcEngine xprocEngine,
 	                         Client client,
 	                         BoundScript boundScript,
-	                         boolean managed) {
+	                         boolean managed,
+	                         Property logLevelProperty) {
 		this.monitorFactory = monitorFactory;
 		this.xprocEngine = xprocEngine;
 		this.client = client;
 		this.boundScript = boundScript;
 		this.managed = managed;
+		this.logLevelProperty = logLevelProperty;
 	}
 
 	@Override
@@ -117,6 +111,14 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 				if (resources != null) {
 					logger.debug("Storing the resource collection"); // because not persisted
 					IOHelper.dump(resources, uriMapper);
+				}
+				properties = Properties.getSnapshot();
+				Level messagesThreshold; {
+					try {
+						messagesThreshold = Level.valueOf(logLevelProperty.getValue(properties));
+					} catch (IllegalArgumentException e) {
+						messagesThreshold = Level.INFO;
+					}
 				}
 				messageBus = new MessageBus(id.toString(), messagesThreshold);
 				statusListeners = new LinkedList<>();

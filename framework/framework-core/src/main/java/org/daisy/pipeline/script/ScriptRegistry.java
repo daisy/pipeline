@@ -50,25 +50,25 @@ public class ScriptRegistry {
 	@Activate
 	protected void activate() {
 		logger.debug("Activating script registry");
+		for (ScriptService<?> script : descriptors.values())
+			if (script instanceof XProcScriptService)
+				((XProcScriptService)script).setParser(parser);
 	}
 
 	@Reference(
 		name = "script-service",
-		unbind = "unregister",
+		unbind = "-",
 		service = XProcScriptService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	protected void register(XProcScriptService script) {
 		logger.debug("Registering script {}", script.getId());
-		script.setParser(parser);
-		// TODO check
 		descriptors.put(script.getId(), script);
 	}
 
 	protected void unregister(XProcScriptService script) {
 		logger.debug("Unregistering script {}", script.getId());
-		// TODO check
 		descriptors.remove(script.getId());
 	}
 

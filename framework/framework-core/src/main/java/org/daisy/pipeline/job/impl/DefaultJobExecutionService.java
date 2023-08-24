@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job.impl;
 
+import com.google.common.base.Predicate;
+
 import org.daisy.common.priority.Prioritizable;
 import org.daisy.common.priority.PrioritizableRunnable;
 import org.daisy.common.priority.PriorityThreadPoolExecutor;
@@ -16,43 +18,36 @@ import org.daisy.pipeline.job.impl.fuzzy.FuzzyJobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Predicate;
-
 /**
  * DefaultJobExecutionService is the defualt way to execute jobs
  */
 public class DefaultJobExecutionService implements JobExecutionService {
 
-        static final String NUM_PROCS="org.daisy.pipeline.procs";
         /** The Constant logger. */
         private static final Logger logger = LoggerFactory
                         .getLogger(DefaultJobExecutionService.class);
 
         private PriorityThreadPoolExecutor<Job> executor;
         private JobQueue executionQueue;
-        //Get the executor configured by the system property
-        static PriorityThreadPoolExecutor<Job> configureExecutor(){
-                int procs=2;
 
-                try{
-                        String confProcs=Properties.getProperty(NUM_PROCS,"2");
-                        procs=Integer.parseInt(confProcs);
-                }catch(NumberFormatException e){
-                        logger.info(String.format("Error parsing %s %s",NUM_PROCS,procs));
-                }
-                logger.info(String.format("Initialising number of processors to %s",procs));
+        // package private for unit test
+        static PriorityThreadPoolExecutor<Job> configureExecutor(int procs) {
+                logger.info(String.format("Initialising number of processors to %s", procs));
                 PriorityThreadPoolExecutor<Job> executor = PriorityThreadPoolExecutor
                         .newFixedSizeThreadPoolExecutor(
                                         procs,
                                         TimeTrackerFactory.newFactory(1,
                                                 TimeFunctions.newLinearTimeFunctionFactory()));
-
                 return executor;
         }
 
         public DefaultJobExecutionService() {
-                this.executor=DefaultJobExecutionService.configureExecutor();
-                this.executionQueue=new DefaultJobQueue(this.executor); 
+                this(2);
+        }
+
+        public DefaultJobExecutionService(int procs) {
+                this.executor=DefaultJobExecutionService.configureExecutor(procs);
+                this.executionQueue=new DefaultJobQueue(this.executor);
         }
 
         private DefaultJobExecutionService(PriorityThreadPoolExecutor<Job> executor,

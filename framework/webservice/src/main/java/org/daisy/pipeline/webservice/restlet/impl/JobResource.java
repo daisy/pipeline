@@ -84,8 +84,11 @@ public class JobResource extends AuthenticatedResource {
                 }
 
                 setStatus(Status.SUCCESS_OK);
+
+                // Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
+                // filtering of messages on log level already happens in MessageBus and JobProgressAppender.
                 JobXmlWriter writer = new JobXmlWriter(job.get(), getRequest().getRootRef().toString());
-        
+
                 writer.withFullResults(true);
                 if (getConfiguration().isLocalFS()) {
                 	writer.withLocalPaths();

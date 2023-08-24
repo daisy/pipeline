@@ -116,7 +116,7 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 					MessageBus messageBus = new MessageBus(jobId, messagesThreshold);
 					MessageEventListener listener = new MessageEventListener(messageBus);
 					try {
-						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, null);
+						results = xprocPipeline.run(inputBuilder.build(), () -> messageBus, Properties.getSnapshot());
 						// store messages XML
 						try {
 							Class.forName("org.daisy.pipeline.webservice.xml.JobXmlWriter");

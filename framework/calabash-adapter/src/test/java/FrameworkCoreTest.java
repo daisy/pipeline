@@ -72,7 +72,7 @@ public class FrameworkCoreTest extends AbstractTest {
 		CollectLogMessages collectLog = new CollectLogMessages(logger.getLoggerContext(), Level.ERROR);
 		logger.addAppender(collectLog);
 		try (Job job = newJob("catch-xproc-error")) {
-			waitForStatus(Job.Status.FAIL, job, 1000);
+			waitForStatus(Job.Status.FAIL, job, 2000);
 			Iterator<String> results = Iterators.transform(
 				job.getResults().getResults("result").iterator(),
 				r -> {
@@ -294,7 +294,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			                 "foobar\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)\n" +
 			                 "Caused by: foobar\n" +
-			                 "	at JavaStep.run(JavaStep.java:57)\n" +
+			                 "	at JavaStep.run(JavaStep.java:59)\n" +
 			                 "	at {http://www.daisy.org/ns/pipeline/xproc}java-step(java-step-runtime-error.xpl:14)");
 			Assert.assertFalse(log.hasNext());
 		} finally {

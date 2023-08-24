@@ -53,7 +53,6 @@ public abstract class Base extends AbstractTest {
 	protected String[] testDependencies() {
 		return new String[]{
 			"org.daisy.pipeline:clientlib-java-jaxb:?",
-			"org.daisy.pipeline:webservice-jaxb:?",
 			"commons-codec:commons-codec:?",
 			"commons-fileupload:commons-fileupload:?",
 			"commons-io:commons-io:?",
@@ -74,7 +73,7 @@ public abstract class Base extends AbstractTest {
 		return options(
 			composite(super.config()),
 			
-			// for webservice-jaxb
+			// for clientlib-java-jaxb
 			bootDelegationPackage("com.sun.xml.internal.bind"),
 			
 			// for TestPushNotifications

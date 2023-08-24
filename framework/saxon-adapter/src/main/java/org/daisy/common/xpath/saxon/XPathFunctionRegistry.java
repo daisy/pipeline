@@ -29,10 +29,10 @@ public class XPathFunctionRegistry  {
 
 	@Reference(
 		name = "ExtensionFunctionDefinition",
-		unbind = "removeFunction",
+		unbind = "-",
 		service = ExtensionFunctionDefinition.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addFunction(ExtensionFunctionDefinition functionDefinition) throws XPathException {
 		mLogger.info("Adding extension function definition to registry {}", functionDefinition.getFunctionQName().toString());
@@ -46,10 +46,10 @@ public class XPathFunctionRegistry  {
 
 	@Reference(
 		name = "ExtensionFunctionProvider",
-		unbind = "removeFunctionProvider",
+		unbind = "-",
 		service = ExtensionFunctionProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addFunctionProvider(ExtensionFunctionProvider functionProvider) throws XPathException {
 		for (ExtensionFunctionDefinition f : functionProvider.getDefinitions())

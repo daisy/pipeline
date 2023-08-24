@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.14.16-SNAPSHOT</version>
+  <version>1.14.17-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.16-SNAPSHOT</version>
+        <version>1.14.17-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -142,13 +142,8 @@
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
-        <artifactId>webservice-jaxb</artifactId>
-        <version>4.0.0</version>
-      </dependency>
-      <dependency>
-        <groupId>org.daisy.pipeline</groupId>
         <artifactId>clientlib-java-jaxb</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.maven</groupId>

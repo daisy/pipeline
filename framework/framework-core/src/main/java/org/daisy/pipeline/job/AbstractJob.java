@@ -174,7 +174,7 @@ public abstract class AbstractJob implements Job {
 
                 changeStatus(Status.RUNNING);
                 XProcPipeline pipeline = null;
-                if (ctxt.messageBus == null || xprocEngine == null)
+                if (ctxt.messageBus == null || ctxt.properties == null || xprocEngine == null)
                         // This means we've tried to execute a PersistentJob that was read from the
                         // database. This should not happen because upon creation jobs are
                         // immediately submitted to DefaultJobExecutionService, which keeps them in
@@ -185,7 +185,7 @@ public abstract class AbstractJob implements Job {
                         pipeline = xprocEngine.load(((XProcScript)script).getURI());
                         XProcDecorator decorator = XProcDecorator.from((XProcScript)script, ctxt.uriMapper);
                         XProcInput input = decorator.decorate(ctxt.input);
-                        XProcResult result = pipeline.run(input, () -> ctxt.messageBus, null);
+                        XProcResult result = pipeline.run(input, () -> ctxt.messageBus, ctxt.properties);
                         XProcOutput output = decorator.decorate(new XProcOutput.Builder().build());
                         result.writeTo(output); // writes to files and/or streams specified in output
                         ctxt.results = buildResultSet((XProcScript)script, input, output, ctxt.uriMapper, newResultSetBuilder(script));

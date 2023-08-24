@@ -57,6 +57,23 @@ public interface DatatypeService {
 			}
 		};
 
+	public static final DatatypeService XS_NON_NEGATIVE_INTEGER = new DatatypeService() {
+			public String getId() {
+				return "nonNegativeInteger";
+			}
+			public Document asDocument() throws Exception {
+				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"nonNegativeInteger\"/>");
+			}
+			public ValidationResult validate(String content) {
+				try {
+					Integer.parseInt(content);
+					return valid();
+				} catch (NumberFormatException e) {
+					return notValid("Not an integer: " + content);
+				}
+			}
+		};
+
 	public static final DatatypeService XS_BOOLEAN = new DatatypeService() {
 			public String getId() {
 				return "boolean";

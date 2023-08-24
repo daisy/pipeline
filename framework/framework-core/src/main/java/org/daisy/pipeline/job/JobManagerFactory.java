@@ -1,5 +1,7 @@
 package org.daisy.pipeline.job;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobBuilder;
@@ -15,6 +17,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Component(
     name = "job-manager-factory",
     service = {
@@ -24,13 +29,27 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class JobManagerFactory implements JobFactory {
 
+        private static final Logger logger = LoggerFactory.getLogger(JobManagerFactory.class);
+
+        private final static Property procsProperty = Properties.getProperty("org.daisy.pipeline.procs",
+                                                                             false,
+                                                                             "Maximum allowed number of jobs running simultaneously",
+                                                                             false,
+                                                                             "2");
+        private final static Property logLevelProperty = Properties.getProperty("org.daisy.pipeline.log.level",
+                                                                                true,
+                                                                                "Disable job messages below this level",
+                                                                                false,
+                                                                                "INFO");
+
         @Override
         public JobFactory.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(JobMonitorFactory.LIVE_MONITOR_FACTORY,
                                              xprocEngine,
                                              null,
                                              boundScript,
-                                             false);
+                                             false,
+                                             logLevelProperty);
         }
 
         /**
@@ -59,7 +78,8 @@ public class JobManagerFactory implements JobFactory {
                                              monitorFactory,
                                              xprocEngine,
                                              storage.filterBy(client),
-                                             executionService.filterBy(client));
+                                             executionService.filterBy(client),
+                                             logLevelProperty);
         }
 
         /**
@@ -75,7 +95,8 @@ public class JobManagerFactory implements JobFactory {
                                              monitorFactory,
                                              xprocEngine,
                                              storage.filterBy(client).filterBy(batchId),
-                                             executionService.filterBy(client));
+                                             executionService.filterBy(client),
+                                             logLevelProperty);
         }
 
         private JobStorage storage;
@@ -88,7 +109,15 @@ public class JobManagerFactory implements JobFactory {
                 if (storage == null)
                         storage = new VolatileJobStorage();
                 monitorFactory = new JobMonitorFactory(storage);
-                this.executionService = new DefaultJobExecutionService();
+                int procs = 2; {
+                        String prop = procsProperty.getValue();
+                        try {
+                                procs = Integer.parseInt(prop);
+                        } catch (NumberFormatException e) {
+                                logger.info(String.format("Failed to parse property '%s': %s", procsProperty.getName(), prop));
+                        }
+                }
+                this.executionService = new DefaultJobExecutionService(procs);
         }
 
         @Reference(

@@ -1,0 +1,9 @@
+datatypes xsd = "http://www.w3.org/2001/XMLSchema-datatypes"
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+property = element property {
+    attribute href { xsd:anyURI }?
+    & attribute name { text }
+    & attribute value { text }?
+    & attribute desc { text }?
+}

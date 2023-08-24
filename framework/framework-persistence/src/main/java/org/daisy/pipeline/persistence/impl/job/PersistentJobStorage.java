@@ -42,8 +42,6 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 )
 public class PersistentJobStorage implements JobStorage {
 
-        private static final boolean PERSISTENCE_DISABLED = "false".equalsIgnoreCase(
-                    Properties.getProperty("org.daisy.pipeline.persistence"));
         private final static String STORE_MODE="javax.persistence.cache.storeMode";
         private static final Logger logger = LoggerFactory
                         .getLogger(PersistentJobStorage.class);
@@ -121,7 +119,7 @@ public class PersistentJobStorage implements JobStorage {
          */
         @Activate
         protected void activate() throws RuntimeException {
-                if (PERSISTENCE_DISABLED)
+                if ("false".equalsIgnoreCase(System.getProperty("org.daisy.pipeline.persistence"))) // property only used in tests
                         throw new RuntimeException("Persistent storage is disabled");
                 jobMonitorFactory = new JobMonitorFactory(this);
         }
