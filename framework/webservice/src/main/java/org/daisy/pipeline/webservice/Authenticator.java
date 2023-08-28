@@ -17,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.clients.RequestLog;
 import org.daisy.pipeline.clients.RequestLogEntry;
+import org.daisy.pipeline.webservice.impl.SimpleRequestLogEntry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

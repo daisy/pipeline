@@ -56,7 +56,7 @@ public class PushNotifier implements CallbackHandler {
 
         private Timer timer = null;
 
-        PushNotifier(JobManagerFactory jobManagerFactory) {
+        public PushNotifier(JobManagerFactory jobManagerFactory) {
                 logger.debug("Activating push notifier");
                 jobManager = jobManagerFactory.create();
                 callbacks = new HashMap<>();
@@ -66,7 +66,7 @@ public class PushNotifier implements CallbackHandler {
                 startTimer();
         }
 
-        void close() {
+        public void close() {
                 cancelTimer();
         }
 

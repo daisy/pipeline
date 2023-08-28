@@ -949,7 +949,7 @@
                 <configuration>
                   <includeProjectDependencies>true</includeProjectDependencies>
                   <classpathScope>test</classpathScope>
-                  <mainClass>org.daisy.pipeline.webservice.impl.PipelineWebService</mainClass>
+                  <mainClass>org.daisy.pipeline.webservice.restlet.impl.PipelineWebService</mainClass>
                   <systemProperties>
                     <systemProperty>
                       <key>org.daisy.pipeline.data</key>

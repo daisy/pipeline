@@ -5,7 +5,6 @@ import org.daisy.pipeline.clients.ClientStorage;
 import org.daisy.pipeline.clients.JobConfigurationStorage;
 import org.daisy.pipeline.clients.RequestLog;
 import org.daisy.pipeline.clients.WebserviceStorage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,4 +38,3 @@ public class VolatileWebserviceStorage   implements WebserviceStorage{
 		return this.jobCnfStorage;
 	}
 }
-
