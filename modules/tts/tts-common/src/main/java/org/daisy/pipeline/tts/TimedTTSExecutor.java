@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.calabash.impl;
+package org.daisy.pipeline.tts;
 
 import static java.lang.Math.addExact;
 import static java.lang.Math.multiplyExact;
@@ -6,16 +6,13 @@ import static java.lang.Math.toIntExact;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSEngine.SynthesisResult;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.TTSTimeout;
-import org.daisy.pipeline.tts.Voice;
 
 import net.sf.saxon.s9api.XdmNode;
 
-class TimedTTSExecutor {
+public class TimedTTSExecutor {
 
 	private static final int FIRST_CHARACTERS = 2500;
 	private static final int SHORT_SENTENCE_THRESHOLD = 25;
@@ -111,7 +108,7 @@ class TimedTTSExecutor {
 		}
 	}
 
-	static class TimeoutException extends RuntimeException {
+	public static class TimeoutException extends RuntimeException {
 
 		private final int seconds;
 

@@ -1,7 +1,6 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
 import java.io.File;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
@@ -16,12 +15,9 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import javax.sound.sampled.AudioFileFormat;
-import javax.xml.transform.sax.SAXSource;
 
 import net.sf.saxon.s9api.Axis;
-import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
@@ -29,28 +25,23 @@ import org.daisy.common.messaging.MessageAppender;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
+import org.daisy.pipeline.tts.Sentence;
 import org.daisy.pipeline.tts.StructuredSSMLSplitter;
 import org.daisy.pipeline.tts.TTSEngine;
-import org.daisy.pipeline.tts.TTSEngine.SynthesisResult;
+import org.daisy.pipeline.tts.TTSLog;
+import org.daisy.pipeline.tts.TTSLog.ErrorCode;
 import org.daisy.pipeline.tts.TTSRegistry;
-import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
-import org.daisy.pipeline.tts.TTSService;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.TTSTimeout;
-import org.daisy.pipeline.tts.TTSTimeout.ThreadFreeInterrupter;
+import org.daisy.pipeline.tts.TimedTTSExecutor;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.Voice.MarkSupport;
 import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import org.daisy.pipeline.tts.VoiceManager;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
-import org.daisy.pipeline.tts.calabash.impl.TTSLog.ErrorCode;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.xml.sax.InputSource;
 
 import com.google.common.collect.Iterables;
 
@@ -124,192 +115,13 @@ public class SSMLtoAudio implements FormatSpecifications {
 		mAudioDir = audioDir;
 		mAudioFileFormat = audioFileFormat;
 		mTTSlog = logs;
-
-		/*
-		 * Create a piece of SSML that will be used for testing. Useless
-		 * attributes and namespaces are inserted on purpose. A <mark> is
-		 * included for engines that support marks. It is inserted somewhere
-		 * in the middle of the string because the SAPI adapter ignores
-		 * marks that appear at the end.
-		 */
-		DocumentBuilder docBuilder = proc.newDocumentBuilder();
-		XdmNode testingSSMLWithoutMark; {
-			String ssml = "<s:speak version=\"1.0\" xmlns:s=\"http://www.w3.org/2001/10/synthesis\">"
-			        + "<s:s xmlns:tmp=\"http://\" id=\"s1\"><s:token>small</s:token> sentence</s:s></s:speak>";
-			try {
-				testingSSMLWithoutMark = docBuilder.build(new SAXSource(new InputSource(new StringReader(ssml))));
-			} catch (SaxonApiException e) {
-				throw new RuntimeException(e); // should not happen
-			}
-		}
-		XdmNode testingSSMLWithMark; {
-			String ssml = "<s:speak version=\"1.0\" xmlns:s=\"http://www.w3.org/2001/10/synthesis\">"
-			        + "<s:s xmlns:tmp=\"http://\" id=\"s1\"><s:token>small</s:token>"
-			        + "<s:mark name=\"mark\"></s:mark> sentence</s:s></s:speak>";
-			try {
-				testingSSMLWithMark = docBuilder.build(new SAXSource(new InputSource(new StringReader(ssml))));
-			} catch (SaxonApiException e) {
-				throw new RuntimeException(e); // should not happen
-			}
-		}
-
 		/*
 		 * initialize the TTS engines
 		 */
-
-		TTSTimeout timeout = new TTSTimeout();
 		mProperties = configExt.getAllProperties();
-		List<TTSEngine> workingEngines = new ArrayList<TTSEngine>();
-		List<String> engineStatus = new ArrayList<String>();
-		for (TTSService service : ttsregistry.getServices()) {
-			TTSEngine engine = null;
-			try {
-				engine = createAndTestEngine(
-					service, mProperties, testingSSMLWithoutMark, testingSSMLWithMark, timeout);
-				workingEngines.add(engine);
-				engineStatus.add("[x] " + service.getName());
-			} catch (Throwable e) {
-				// Show the full error with stack trace only in the main and TTS log. A short version is included
-				// in the engine status summary. An engine that could not be activated is not an error
-				// unless no engines could be activated at all. This is to not confuse users because it
-				// is normal that only a part of the engines work.
-				String msg = service.getName() + " could not be activated";
-				mTTSlog.addGeneralError(ErrorCode.WARNING, msg + ": " + e.getMessage(), e);
-				engineStatus.add("[ ] " + msg);
-			}
-
-		}
-		timeout.close();
-		String summary = "Number of working TTS engine(s): " + workingEngines.size() + "/"
-			+ ttsregistry.getServices().size();
-		if (workingEngines.size() == 0) {
-			mLogger.error(summary);
-			for (String s : engineStatus)
-				mLogger.error(" * " + s);
-		} else {
-			mLogger.info(summary);
-			for (String s : engineStatus)
-				mLogger.info(" * " + s);
-		}
-
-		mVoiceManager = new VoiceManager(workingEngines, configExt.getVoiceDeclarations());
-	}
-
-	/**
-	 * @throws Throwable if an engine could not be created or when the test failed. The exception is
-	 *                   included in the TTS and the message is included in the engine status
-	 *                   summary. The stack trace is printed in the detailed log.
-	 */
-	private TTSEngine createAndTestEngine(final TTSService service, Map<String, String> properties,
-	                                      XdmNode testingSSMLWithoutMark, XdmNode testingSSMLWithMark,
-	                                      TTSTimeout timeout)
-			throws Throwable {
-
-		//create the engine
-		TTSEngine engine = null;
-		timeout.enableForCurrentThread(2);
-		try {
-			engine = service.newEngine(properties);
-		} finally {
-			timeout.disable();
-		}
-
-		//get a voice supporting SSML marks (so far as they are supported by the engine)
-		Voice firstVoice = null;
-		int timeoutSecs = 30;
-		timeout.enableForCurrentThread(timeoutSecs);
-		try {
-			for (Voice v : engine.getAvailableVoices()) {
-				if (!engine.handlesMarks() || v.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED) {
-					firstVoice = v;
-					break;
-				}
-			}
-			if (firstVoice == null) {
-				throw new Exception("no voices available");
-			}
-		} catch (InterruptedException e) {
-			throw new Exception("timeout while retrieving voices (exceeded "
-			                    + timeoutSecs + " seconds)");
-		} catch (Exception e) {
-			throw new Exception("failed to retreive voices: " + e.getMessage(), e);
-		} finally {
-			timeout.disable();
-		}
-
-		//allocate resources for testing purpose
-		final TTSEngine fengine = engine;
-		TTSResource resource = null;
-		timeout.enableForCurrentThread(2);
-		try {
-			resource = engine.allocateThreadResources();
-		} catch (Exception e) {
-			throw new Exception("could not allocate resources: " + e.getMessage(), e);
-		} finally {
-			timeout.disable();
-		}
-
-		//create a custom interrupter in case the engine hangs
-		final TTSResource res = resource;
-		TTSTimeout.ThreadFreeInterrupter interrupter = new ThreadFreeInterrupter() {
-			@Override
-			public void threadFreeInterrupt() {
-				mTTSlog.addGeneralError(
-					ErrorCode.WARNING,
-					"Timeout while initializing " + service.getName()
-					+ ". Forcing interruption of the current work of " + service.getName() + "...");
-				fengine.interruptCurrentWork(res);
-			}
-		};
-
-		//run the text-to-speech on the testing input
-		SynthesisResult result = null;
-		try {
-			XdmNode ssml = engine.handlesMarks() ? testingSSMLWithMark : testingSSMLWithoutMark;
-			result = mExecutor.synthesizeWithTimeout(
-				timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
-				engine, firstVoice, res);
-		} catch (Exception e) {
-			throw new Exception("test failed: " + e.getMessage(), e);
-		} finally {
-			if (res != null)
-				timeout.enableForCurrentThread(2);
-				try {
-					engine.releaseThreadResources(res);
-				} catch (Exception e) {
-					mTTSlog.addGeneralError(
-						ErrorCode.WARNING,
-						"Error while releasing resource of " + service.getName() + ": " + e.getMessage(),
-						e);
-				} finally {
-					timeout.disable();
-				}
-		}
-
-		//check that the output buffer is big enough
-		String msg = "";
-		if (result.audio.getFrameLength() * result.audio.getFormat().getFrameSize() < 2500) {
-			msg = "Audio output is not big enough. ";
-		}
-
-		if (engine.handlesMarks()) {
-			// test SSML contains one mark
-			String details = " voice: "+firstVoice;
-			if (result.marks.size() != 1) {
-				msg += "One bookmark events expected, but received " + result.marks.size() + " events instead. "+details;
-			} else {
-				int offset = result.marks.get(0);
-				if (offset < 2500) {
-					msg += "Expecting mark offset to be bigger, got "
-					        + offset + " as offset. "+details;
-				}
-			}
-		}
-		if (!msg.isEmpty()) {
-			throw new Exception("test failed: " + msg);
-		}
-
-		return engine;
+		mVoiceManager = new VoiceManager(
+			ttsregistry.getWorkingEngines(mProperties, mTTSlog, mLogger),
+			configExt.getVoiceDeclarations());
 	}
 
 	/**

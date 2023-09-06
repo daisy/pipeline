@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.calabash.impl;
+package org.daisy.pipeline.tts;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,8 +10,6 @@ import java.util.Set;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.audio.AudioClip;
-import org.daisy.pipeline.tts.Voice;
-
 import org.slf4j.Logger;
 
 /**

@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.daisy.pipeline.tts.Sentence;
+
 /**
  * List of sentences adjacent to each other in the original document. Positions
  * in the document are kept so as to adequately name the sound files.

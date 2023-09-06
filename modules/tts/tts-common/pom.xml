@@ -31,6 +31,10 @@
       <artifactId>calabash-adapter</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
@@ -95,6 +99,7 @@
       org.daisy.pipeline.tts.calabash.impl.GetAnnotationsProvider,
       org.daisy.pipeline.tts.calabash.impl.GetLexiconsProvider,
       org.daisy.pipeline.tts.calabash.impl.SynthesizeProvider,
+      org.daisy.pipeline.tts.impl.VoicesWebServiceExtension,
       org.daisy.pipeline.modules.impl.Module_tts_common
     </expose-services>
   </properties>

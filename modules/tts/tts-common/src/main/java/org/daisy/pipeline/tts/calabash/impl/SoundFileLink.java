@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.daisy.pipeline.audio.AudioClip;
+import org.daisy.pipeline.tts.TTSLog;
 
 /**
  * Mapping between a fragment in the XML document and a fragment in an audio file.

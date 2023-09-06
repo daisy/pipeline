@@ -13,8 +13,9 @@ import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
+import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSTimeout;
-import org.daisy.pipeline.tts.calabash.impl.TTSLog.ErrorCode;
+import org.daisy.pipeline.tts.TTSLog.ErrorCode;
 
 /**
  * Consumes a shared queue of PCM packets. PCM packets are then provided to

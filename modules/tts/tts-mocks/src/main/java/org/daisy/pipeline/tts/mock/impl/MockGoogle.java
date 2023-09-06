@@ -102,12 +102,12 @@ public class MockGoogle {
 								switch (voice.getGender().get()) {
 								case MALE_ADULT:
 								case MALE_CHILD:
-								case MALE_ELDERY:
+								case MALE_ELDERLY:
 									gender = "MALE";
 									break;
 								case FEMALE_CHILD:
 								case FEMALE_ADULT:
-								case FEMALE_ELDERY:
+								case FEMALE_ELDERLY:
 									gender = "FEMALE";
 									break;
 								case ANY:

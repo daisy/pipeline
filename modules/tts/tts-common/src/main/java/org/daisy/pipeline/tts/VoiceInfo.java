@@ -30,10 +30,10 @@ public class VoiceInfo {
 		ANY("*", "neutral"),
 		MALE_ADULT("male", "man", "male-adult"),
 		MALE_CHILD("boy", "male-young", "male-child"),
-		MALE_ELDERY("man-old", "male-old", "male-elder", "man-elder"),
+		MALE_ELDERLY("man-old", "male-old", "male-elder", "man-elder", "male-elderly", "man-elderly"),
 		FEMALE_CHILD("girl", "female-young", "female-child"),
 		FEMALE_ADULT("woman", "female", "female-adult"),
-		FEMALE_ELDERY("woman-old", "female-old", "woman-elder", "female-elder");
+		FEMALE_ELDERLY("woman-old", "female-old", "woman-elder", "female-elder", "woman-elderly", "female-elderly");
 
 		private final List<String> variants;
 
@@ -61,6 +61,11 @@ public class VoiceInfo {
 
 		public static Gender of(String gender) {
 			return gender == null ? null : lookup.get(gender.toLowerCase().replace("_", "-"));
+		}
+
+		@Override
+		public String toString() {
+			return this == ANY ? "*" : super.toString().toLowerCase().replace("_", "-");
 		}
 	}
 	
