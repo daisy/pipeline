@@ -7,101 +7,24 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    openConnection
- * Signature: ()J
- */
-JNIEXPORT jlong JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_openConnection
-  (JNIEnv *, jclass);
+
 
 /*
  * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    closeConnection
- * Signature: (J)I
+ * Method:    getVoices
+ * Signature: ()[Lorg/daisy/pipeline/tts/Voice;
  */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_closeConnection
-  (JNIEnv *, jclass, jlong);
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoices
+(JNIEnv*, jclass);
 
 /*
  * Class:     org_daisy_pipeline_tts_onecore_SAPI
  * Method:    speak
- * Signature: (JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;)I
+ * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJ)Lorg/daisy/pipeline/tts/onecore/NativeSynthesisResult;
  */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak
-  (JNIEnv *, jclass, jlong, jstring, jstring, jstring);
+JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak
+(JNIEnv*, jclass, jstring, jstring, jstring, jint, jshort);
 
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getStreamSize
- * Signature: (J)I
- */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getStreamSize
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    readStream
- * Signature: (J[BI)I
- */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_readStream
-  (JNIEnv *, jclass, jlong, jbyteArray, jint);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getVoiceVendors
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceVendors
-  (JNIEnv *, jclass);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getVoiceNames
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceNames
-  (JNIEnv *, jclass);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getVoiceLocales
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceLocales
-  (JNIEnv *, jclass);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getVoiceGenders
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceGenders
-  (JNIEnv *, jclass);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getVoiceAges
- * Signature: ()[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoiceAges
-  (JNIEnv *, jclass);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getBookmarkNames
- * Signature: (J)[Ljava/lang/String;
- */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookmarkNames
-  (JNIEnv *, jclass, jlong);
-
-/*
- * Class:     org_daisy_pipeline_tts_onecore_SAPI
- * Method:    getBookmarkPositions
- * Signature: (J)[J
- */
-JNIEXPORT jlongArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getBookmarkPositions
-  (JNIEnv *, jclass, jlong);
 
 /*
  * Class:     org_daisy_pipeline_tts_onecore_SAPI

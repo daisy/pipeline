@@ -7,7 +7,7 @@
 /// Voice template to be used for sapi and onecore calls.<br/>
 /// This class also expose a Map subclass to manage Voice dictionnary using a (name,vendor) paire as reference key.
 /// </summary>
-/// <typeparam name="TokenPointerType">Type of token used by the API to select a voice for speaking action</typeparam>
+/// <typeparam name="RawVoiceType">Type of token used by the API to select a voice for speaking action</typeparam>
 template<typename RawVoiceType>
 class Voice {
 public:

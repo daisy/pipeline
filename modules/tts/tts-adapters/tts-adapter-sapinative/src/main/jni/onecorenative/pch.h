@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <unknwn.h>
 #include <sstream>
+#include <cwctype>
+#include <algorithm>
 #include <winrt/Windows.Foundation.h>
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Media.SpeechSynthesis.h>

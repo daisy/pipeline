@@ -7,6 +7,9 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <cwctype>
+#include <algorithm>
+#include <stack>
 // ajouter les en-têtes à précompiler ici
 #include "framework.h"
 #include "queue_stream.h"
