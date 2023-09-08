@@ -57,15 +57,15 @@ inline void exitCom(std::stack<IUnknown*>& refsStack) {
 /// </summary>
 /// <param name="env"></param>
 /// <returns></returns>
-inline Voice<ISpObjectToken*>::Map getVoices(JNIEnv* env, std::stack<IUnknown*>& currentRefStack) {
-    auto voicesMap = Voice<ISpObjectToken*>::Map();
+inline Voice<ISpObjectToken*>::List getVoices(JNIEnv* env, std::stack<IUnknown*>& currentRefStack) {
+    auto voicesList = Voice<ISpObjectToken*>::List();
 
     //get the voice information  
     ISpObjectTokenCategory* category;
     if (FAILED(CoCreateInstance(CLSID_SpObjectTokenCategory, NULL, CLSCTX_ALL, IID_ISpObjectTokenCategory, (void**)(&category)))) {
         CoUninitialize();
         raiseException(env, COULD_NOT_CREATE_CATEGORY, L"Could not create sapi token category");
-        return voicesMap;
+        return voicesList;
     }
     category->AddRef();
     category->SetId(SPCAT_VOICES, false);
@@ -75,7 +75,7 @@ inline Voice<ISpObjectToken*>::Map getVoices(JNIEnv* env, std::stack<IUnknown*>&
         category->Release();
         exitCom(currentRefStack);
         raiseException(env, COULD_NOT_ENUM_CATEGORY, L"Could not enumerate sapi categories");
-        return voicesMap;
+        return voicesList;
     }
     cpEnum->AddRef();
 
@@ -85,7 +85,26 @@ inline Voice<ISpObjectToken*>::Map getVoices(JNIEnv* env, std::stack<IUnknown*>&
         category->Release();
         exitCom(currentRefStack);
         raiseException(env, COULD_NOT_COUNT_ENUM, L"Could not count enumeration");
-        return voicesMap;
+        return voicesList;
+    }
+
+    ISpVoice* defaultVoice;
+    ISpObjectToken* defaultVoiceToken;
+    ISpDataKey* defaultVoiceAttributes;
+    wchar_t* defaultVoiceName = NULL;
+    bool defaultVoiceFound = false;
+    if (SUCCEEDED(CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (LPVOID*)&defaultVoice))) {
+        defaultVoice->AddRef();
+        if (SUCCEEDED(defaultVoice->GetVoice(&defaultVoiceToken))) {
+            defaultVoiceToken->AddRef();
+            if (SUCCEEDED(defaultVoiceToken->OpenKey(L"attributes", &defaultVoiceAttributes))) {
+                defaultVoiceAttributes->AddRef();
+                defaultVoiceAttributes->GetStringValue(L"name", &defaultVoiceName);
+                defaultVoiceAttributes->Release();
+            }
+            defaultVoiceToken->Release();
+        }
+        defaultVoice->Release();
     }
 
     wchar_t* vendor; //encoded as UTF-16
@@ -123,16 +142,20 @@ inline Voice<ISpObjectToken*>::Map getVoices(JNIEnv* env, std::stack<IUnknown*>&
                     // but the use of "sapi" as vendor could lead to errors in voice 
                     // identification if some vendors decided to provided voices with the same
                     // name
-                    voicesMap.insert(std::make_pair(
-                        std::pair<std::wstring, std::wstring>(L"sapi", name),
-                        Voice<ISpObjectToken*>(cpToken,
-                            std::wstring(name),
-                            std::wstring(L"sapi"),
-                            std::wstring(langCode != nullptr ? langCode : L""),
-                            std::wstring(gender != nullptr ? gender : L""),
-                            std::wstring(age != nullptr ? age : L"")
-                        )
-                    ));
+                    Voice<ISpObjectToken*> voice = Voice<ISpObjectToken*>(cpToken,
+                        std::wstring(name),
+                        std::wstring(L"sapi"),
+                        std::wstring(langCode != nullptr ? langCode : L""),
+                        std::wstring(gender != nullptr ? gender : L""),
+                        std::wstring(age != nullptr ? age : L"")
+                    );
+                    // insert default voice at the begining
+                    if (defaultVoiceName != NULL && wcscmp(defaultVoiceName, name) == 0) {
+                        voicesList.insert(voicesList.begin(), voice);
+                    }
+                    else {
+                        voicesList.insert(voicesList.end(), voice);
+                    }
                     currentRefStack.push(cpToken);
                 }
                 else cpToken->Release();
@@ -143,7 +166,7 @@ inline Voice<ISpObjectToken*>::Map getVoices(JNIEnv* env, std::stack<IUnknown*>&
     }
     cpEnum->Release();
     category->Release();
-    return voicesMap;
+    return voicesList;
 }
 
 
@@ -208,7 +231,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
     getWaveFormat(env, sampleRate, bitsPerSample);
 
     // try to get the list of voices, and return an error if cannot be done
-    Voice<ISpObjectToken*>::Map voices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
     if (voices.size() == 0) {
         return COULD_NOT_SET_VOICE;
     }
@@ -230,14 +253,14 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoice
         raiseException(env, COULD_NOT_INIT_COM, L"Could not init com server");
         return NULL;
     }
-    Voice<ISpObjectToken*>::Map voices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
     if (voices.size() == 0) {
         exitCom(refsStack);
         raiseException(env, COULD_NOT_SET_VOICE, L"No voice returned by SAPI");
     }
 
     exitCom(refsStack);
-    return VoicesMapToPipelineVoicesArray<ISpObjectToken*>(env, voices, L"sapi");
+    return VoicesListToPipelineVoicesArray<ISpObjectToken*>(env, voices, L"sapi");
 }
 
 
@@ -265,17 +288,22 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
 
     std::wstring vendor = jstringToWstring(env, voiceVendor);
     std::wstring name = jstringToWstring(env, voiceName);
-    Voice<ISpObjectToken*>::Map voices = getVoices(env, refsStack);
-    Voice<ISpObjectToken*>::Map::iterator it = voices.find(
-        std::make_pair(vendor, name)
-    );
+    Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List::iterator it = voices.begin();
+    while (it != voices.end()
+        && (it->vendor.compare(vendor) != 0
+            || it->name.compare(name) != 0
+            )
+        ) {
+        ++it;
+    }
     if (it == voices.end()) {
         exitCom(refsStack);
         raiseException(env, VOICE_NOT_FOUND, L"Voice not found");
         return NULL;
     }
 
-    ISpObjectToken* foundVoice = it->second.rawVoice;
+    ISpObjectToken* foundVoice = it->rawVoice;
 
     ISpVoice* talker;
     hr = CoCreateInstance(CLSID_SpVoice, NULL, CLSCTX_ALL, IID_ISpVoice, (void**)(&talker));
@@ -427,7 +455,7 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
             std::regex_constants::ECMAScript
         );
         std::wostringstream newTagStream;
-        newTagStream << L"$1 xml:lang=\"" << it->second.language << "\">";
+        newTagStream << L"$1 xml:lang=\"" << it->language << "\">";
         sentence = std::regex_replace(sentence, speakTagSearch, newTagStream.str());
 
     }
@@ -526,7 +554,7 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
     }
     catch (const std::exception& e) {
         std::wostringstream excep;
-        excep << L"Exception raised while speaking " << sentence << std::endl << L"With voice " << it->second.name << L" : " << std::endl;
+        excep << L"Exception raised while speaking " << sentence << std::endl << L"With voice " << it->name << L" : " << std::endl;
         excep << e.what() << std::endl;
         exitCom(refsStack);
         raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());

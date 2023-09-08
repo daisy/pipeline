@@ -17,8 +17,9 @@ using namespace winrt::Windows::Media::SpeechSynthesis;
 using winrtConnection = winrt::onecorenative::Connection;
 
 
-inline Voice<winrt::hstring>::Map getVoices(winrtConnection& onecore) {
-    auto voicesMap = Voice<winrt::hstring>::Map();
+inline Voice<winrt::hstring>::List getVoices(winrtConnection& onecore) {
+    auto voicesList = Voice<winrt::hstring>::List();
+    auto defaultVoice = onecore.defaultVoice();
     for each (auto rawVoice in onecore.voices())
     {
         auto voice = Voice<winrt::hstring>(
@@ -31,13 +32,12 @@ inline Voice<winrt::hstring>::Map getVoices(winrtConnection& onecore) {
             static_cast<std::wstring>(rawVoice.Gender() == VoiceGender::Male ? L"Male" : L"Female"),
             std::wstring(L"")
         );
-
-        voicesMap.insert(std::make_pair(
-            std::pair<std::wstring, std::wstring>(voice.vendor, voice.name),
-            voice
-        ));
+        if (rawVoice.DisplayName() == defaultVoice.DisplayName()) {
+            voicesList.insert(voicesList.begin(), voice);
+        }
+        else voicesList.insert(voicesList.end(), voice);
     }
-    return voicesMap;
+    return voicesList;
 }
 
 
@@ -46,7 +46,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_initialize(JN
     try {
         
         winrtConnection onecore = winrtConnection();
-        Voice<winrt::hstring>::Map voices = getVoices(onecore);
+        Voice<winrt::hstring>::List voices = getVoices(onecore);
         if (voices.size() == 0) {
             return COULD_NOT_SET_VOICE;
         }
@@ -65,8 +65,8 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_initialize(JN
 
 JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVoices(JNIEnv* env, jclass) {
     winrtConnection onecore = winrtConnection();
-    Voice<winrt::hstring>::Map voices = getVoices(onecore);
-    return VoicesMapToPipelineVoicesArray<winrt::hstring>(env, voices, L"onecore");
+    Voice<winrt::hstring>::List voices = getVoices(onecore);
+    return VoicesListToPipelineVoicesArray<winrt::hstring>(env, voices, L"onecore");
 }
 
 // ---- END CONNECTION HANDLING
@@ -75,15 +75,19 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_getVo
 
 JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_speak(JNIEnv* env, jclass, jstring voiceVendor, jstring voiceName, jstring text) {
     
-    
+    std::wstring vendor = jstringToWstring(env, voiceVendor);
+    std::wstring name = jstringToWstring(env, voiceName);
+
     winrtConnection onecore = winrtConnection();
-    Voice<winrt::hstring>::Map voices = getVoices(onecore);
-    Voice<winrt::hstring>::Map::iterator it = voices.find(
-        std::make_pair(
-            jstringToWstring(env, voiceVendor), 
-            jstringToWstring(env, voiceName)
-        )
-    );
+    Voice<winrt::hstring>::List voices = getVoices(onecore);
+    Voice<winrt::hstring>::List::iterator it = voices.begin();
+    while (it != voices.end()
+        && (it->vendor.compare(vendor) != 0
+            || it->name.compare(name) != 0
+            )
+    ) {
+        ++it;
+    }
     if (it == voices.end()) {
         raiseException(env, VOICE_NOT_FOUND, L"Voice not found");
         return NULL;
@@ -91,7 +95,7 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_Onecore_speak(JNIE
 
     // VoiceInformation seems to create an exception, so we use the voice display name for now
     winrt::hstring ssmltext = winrt::hstring(jstringToWstring(env, text));
-    winrt::hstring foundVoiceName = it->second.rawVoice;
+    winrt::hstring foundVoiceName = it->rawVoice;
         
     try {
         winrt::com_array<uint8_t> streamData = onecore.speak(ssmltext, foundVoiceName);

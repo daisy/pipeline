@@ -9,6 +9,7 @@ namespace winrt::onecorenative::implementation
         Connection() = default;
         
         static com_array<Windows::Media::SpeechSynthesis::VoiceInformation> voices();
+        static Windows::Media::SpeechSynthesis::VoiceInformation defaultVoice();
         com_array<uint8_t> speak(winrt::hstring ssml, winrt::hstring voiceName);
         com_array<hstring> marksNames();
         com_array<int64_t> marksPositions();

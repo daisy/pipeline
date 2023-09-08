@@ -12,9 +12,9 @@ template<typename RawVoiceType>
 class Voice {
 public:
     /// <summary>
-    /// Voice map using name and vendor as reference key
+    /// Voice ordered list, that should start with the default voice
     /// </summary>
-    using Map = std::map<std::pair<std::wstring, std::wstring>, Voice>;
+    using List = std::list<Voice>;
 
     /// <summary>
     /// Voice Name

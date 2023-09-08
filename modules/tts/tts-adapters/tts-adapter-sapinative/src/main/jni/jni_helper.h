@@ -102,9 +102,9 @@ inline jobject getStaticEnumValue(JNIEnv* env, jclass enumClass, const char* sig
 }
 
 template<typename T >
-jobjectArray VoicesMapToPipelineVoicesArray(
+jobjectArray VoicesListToPipelineVoicesArray(
     JNIEnv* env,
-    std::map<std::pair<std::wstring, std::wstring>, Voice<T>> &map,
+    std::list<Voice<T>> &list,
     const wchar_t* engineName
 ) {
     jclass voiceClass = env->FindClass("org/daisy/pipeline/tts/Voice");
@@ -136,15 +136,15 @@ jobjectArray VoicesMapToPipelineVoicesArray(
     jclass genderClass = env->FindClass("org/daisy/pipeline/tts/VoiceInfo$Gender");
     const char* genderClassSig = "Lorg/daisy/pipeline/tts/VoiceInfo$Gender;";
     
-    size_t size = map.size();
+    size_t size = list.size();
     jobjectArray voicesArray = env->NewObjectArray(static_cast<int>(size), voiceClass, 0);
     if (size > 0) {
-        auto items = map.begin();
+        auto items = list.begin();
         for (int i = 0; i < static_cast<int>(size); ++items, ++i) {
-            std::wstring currentGender =  items->second.gender;
+            std::wstring currentGender =  items->gender;
             std::transform(currentGender.begin(), currentGender.end(), currentGender.begin(), ::towlower);
 
-            std::wstring currentAge = items->second.age;
+            std::wstring currentAge = items->age;
             std::transform(currentAge.begin(), currentAge.end(), currentAge.begin(), ::towlower);
 
 
@@ -180,11 +180,11 @@ jobjectArray VoicesMapToPipelineVoicesArray(
                     voiceClass,
                     voiceConstructor,
                     env->NewString((const jchar*)engineName, static_cast<jsize>(std::wcslen(engineName))),
-                    env->NewString((const jchar*)items->second.name.c_str(), static_cast<jsize>(std::wcslen(items->second.name.c_str()))),
+                    env->NewString((const jchar*)items->name.c_str(), static_cast<jsize>(std::wcslen(items->name.c_str()))),
                     env->CallStaticObjectMethod(
                         voiceInfoClass,
                         tagToLocaleID,
-                        env->NewString((const jchar*)items->second.language.c_str(), static_cast<jsize>(std::wcslen(items->second.language.c_str())))
+                        env->NewString((const jchar*)items->language.c_str(), static_cast<jsize>(std::wcslen(items->language.c_str())))
                     ),
                     selected
                 )

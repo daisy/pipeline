@@ -11,6 +11,12 @@ namespace winrt::onecorenative::implementation
 		return com_array<Windows::Media::SpeechSynthesis::VoiceInformation>(rawList.begin(), rawList.end());
 	}
 
+	Windows::Media::SpeechSynthesis::VoiceInformation Connection::defaultVoice()
+	{
+		auto synth = Windows::Media::SpeechSynthesis::SpeechSynthesizer();
+		return synth.DefaultVoice();
+	}
+
 	com_array<uint8_t> Connection::speak(winrt::hstring ssml, winrt::hstring voiceName)
 	{
 		auto synth = Windows::Media::SpeechSynthesis::SpeechSynthesizer();

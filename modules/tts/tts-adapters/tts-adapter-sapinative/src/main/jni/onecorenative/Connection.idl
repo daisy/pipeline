@@ -5,6 +5,7 @@ namespace onecorenative
     {
         Connection();
         Windows.Media.SpeechSynthesis.VoiceInformation[] voices();
+        Windows.Media.SpeechSynthesis.VoiceInformation defaultVoice();
         UInt8[] speak(String ssml, String voiceName);
         String[] marksNames();
         Int64[] marksPositions();
