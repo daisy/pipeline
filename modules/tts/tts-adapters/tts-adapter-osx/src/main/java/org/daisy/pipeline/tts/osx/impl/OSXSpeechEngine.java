@@ -50,7 +50,7 @@ public class OSXSpeechEngine extends TTSEngine {
 		
 		String sentence; {
 			Map<String,Object> xsltParams = new HashMap<>(); {
-				xsltParams.put("voice", voice.name);
+				xsltParams.put("voice", voice.getName());
 			}
 			try {
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
@@ -62,7 +62,7 @@ public class OSXSpeechEngine extends TTSEngine {
 		try {
 			waveOut = File.createTempFile("pipeline", ".wav");
 			new CommandRunner(mSayPath, "--data-format=LEI16@22050", "-o",
-			                  waveOut.getAbsolutePath(), "-v", voice.name)
+			                  waveOut.getAbsolutePath(), "-v", voice.getName())
 				.feedInput(sentence.getBytes("utf-8"))
 				.consumeError(mLogger)
 				.run();

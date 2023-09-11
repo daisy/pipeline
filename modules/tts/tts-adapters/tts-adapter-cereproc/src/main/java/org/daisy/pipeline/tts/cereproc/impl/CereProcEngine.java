@@ -166,7 +166,7 @@ public class CereProcEngine extends TTSEngine {
 			String[] cmd = new String[this.cmd.length + 3];
 			System.arraycopy(this.cmd, 0, cmd, 0, this.cmd.length);
 			cmd[cmd.length - 3] = "-V";
-			cmd[cmd.length - 2] = voice.name;
+			cmd[cmd.length - 2] = voice.getName();
 			cmd[cmd.length - 1] = txtFile.getAbsolutePath();
 			String filteredSentence = transformSSML(sentence, voice);
 			try (OutputStream os = new FileOutputStream(txtFile)) {
@@ -242,7 +242,7 @@ public class CereProcEngine extends TTSEngine {
 		}
 		XdmNode ssmlOut = (XdmNode)ssmlProcessed.get(0);
 		Map<String,Object> params = new TreeMap<>(); {
-			params.put("voice", v.name);
+			params.put("voice", v.getName());
 		}
 		try {
 			return transformSsmlNodeToString(ssmlOut, ssmLxslTransformerURL, params);

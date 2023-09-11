@@ -13,6 +13,16 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 public class VoiceInfo {
+
+	public Gender gender;
+	public String voiceName;
+	public String voiceEngine;
+	public Locale language;
+	public float priority;
+
+	public static Locale NO_DEFINITE_LANG = new Locale("mul");
+	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
+
 	private static Pattern localePattern = Pattern
 	        .compile("(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*");
 
@@ -131,14 +141,4 @@ public class VoiceInfo {
 	public boolean isMultiLang(){
 		return this.language == NO_DEFINITE_LANG;
 	}
-
-	public Gender gender;
-	public String voiceName;
-	public String voiceEngine;
-	public Locale language;
-	public float priority;
-	
-	public static Locale NO_DEFINITE_LANG = new Locale("mul");
-	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
-
 }

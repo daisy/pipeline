@@ -84,8 +84,8 @@ public class MockGoogle {
 					for (Voice v : engine.getAvailableVoices())
 						// only list voices with locale and gender because we don't want to read configuration files
 						if (v.getLocale().isPresent() && v.getGender().isPresent()) {
-							voices.put(v.name, v);
-							engines.put(v.name, engine); }}
+							voices.put(v.getName(), v);
+							engines.put(v.getName(), engine); }}
 				catch (Throwable e) {
 					e.printStackTrace();
 					continue; }
@@ -115,7 +115,7 @@ public class MockGoogle {
 									gender = "NEUTRAL";
 									break; }}
 							jsonVoices = jsonVoices.put(
-								new JSONObject().put("name", voice.name)
+								new JSONObject().put("name", voice.getName())
 								                .put("languageCodes", new JSONArray(new String[]{locale.toLanguageTag()}))
 								                .put("ssmlGender", gender));
 						}
@@ -155,7 +155,7 @@ public class MockGoogle {
 						// assume audioEncoding is "LINEAR16" (linear PCM, 16-bit, signed, little-endian)
 						AudioFormat audioFormat = new AudioFormat(sampleRateHertz, 16, 1, true, false);
 						// other settings are ignored
-						TTSEngine engine = engines.get(voice.name);
+						TTSEngine engine = engines.get(voice.getName());
 						TTSResource threadResources = engine.allocateThreadResources();
 						AudioInputStream audio; {
 							try {

@@ -73,7 +73,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 	
 		String sentence; {
 			Map<String,Object> xsltParams = new HashMap<>(); {
-				if (voice != null) xsltParams.put("voice", voice.name);
+				if (voice != null) xsltParams.put("voice", voice.getName());
 			}
 			try {
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
@@ -90,7 +90,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		String name;
 
 		if (voice != null) {
-			name = voice.name;
+			name = voice.getName();
 			languageCode = voice.getLocale().get().toLanguageTag(); // assume locale is declared
 		} else {
 			// by default the voice is set to English

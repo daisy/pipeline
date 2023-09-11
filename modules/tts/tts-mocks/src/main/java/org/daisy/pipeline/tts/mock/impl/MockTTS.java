@@ -43,9 +43,9 @@ public class MockTTS implements TTSService {
 				try {
 					return new SynthesisResult(
 						createAudioStream(
-							(voice.name.equals("alex")
+							(voice.getName().equals("alex")
 								? MockTTS.alexWaveOut
-								: voice.name.equals("vicki")
+								: voice.getName().equals("vicki")
 									? MockTTS.vickiWaveOut
 									: MockTTS.daisyPipelineWaveOut).openStream())); }
 				catch (Exception e) {

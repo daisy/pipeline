@@ -70,7 +70,7 @@ ESpeakService s = new ESpeakService();
 			Voice v = ite.next();
 			AudioInputStream audio = engine.synthesize(
 				parseSSML("<s xmlns=\"http://www.w3.org/2001/10/synthesis\">"
-				          + "<voice name=\"" + v.name + "\">small test</voice></s>"),
+				          + "<voice name=\"" + v.getName() + "\">small test</voice></s>"),
 				null, resource).audio;
 
 			sizes.add(getSize(audio) / 4); //div 4 helps being more robust to tiny differences

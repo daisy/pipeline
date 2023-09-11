@@ -162,7 +162,7 @@ public class AcapelaTest {
 
 		TTSResource r = tts.allocateThreadResources();
 		for (Voice v : voices) {
-			int size = getSize(tts.speak(format("this is a test", v.name), r, null));
+			int size = getSize(tts.speak(format("this is a test", v.getName()), r, null));
 			sizes.add(size / 4);
 		}
 		tts.releaseThreadResources(r);

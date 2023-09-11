@@ -17,7 +17,6 @@ import java.util.TreeSet;
 
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import static org.daisy.pipeline.tts.VoiceInfo.NO_DEFINITE_GENDER;
 import static org.daisy.pipeline.tts.VoiceInfo.NO_DEFINITE_LANG;
 
@@ -28,16 +27,33 @@ public class VoiceManager {
 
 	private Logger ServerLogger = LoggerFactory.getLogger(VoiceManager.class);
 
-	private final Map<Voice,TTSEngine> mBestEngines;
-	private final Map<VoiceKey,Voice> mPrimaryVoices;
-	private final Map<VoiceKey,Voice> mSecondaryVoices;
-	private final Map<VoiceKey,Voice> mVoiceIndex;
+	/**
+	 * Map of the best services for each available voice, given that two different services can serve the same voice
+	 */
+	private final Map<Voice,TTSEngine> bestEngines;
+	/**
+	 * Map from voice name/engine to voice
+	 */
+	private final Map<VoiceKey,Voice> primaryVoices;
+	/**
+	 * Map of the best fallback voice for each voice (name/engine)
+	 */
+	private final Map<VoiceKey,Voice> secondaryVoices;
+	/**
+	 * Map from voice properties (language/gender/engine) to voice. Each language/gender/engine
+	 * combination is mapped to at most one voice.
+	 */
+	private final Map<VoiceKey,Voice> voiceIndex;
+	/**
+	 * Map from voice properties (language/gender) to voices (name/engine). Each language/gender
+	 * combination can be mapped to multiple voices.
+	 */
+	private final List<VoiceInfo> voiceInfo;
 
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
 
-		// create a map of the best services for each available voice, given that two different
-		// services can serve the same voice
-		mBestEngines = new HashMap<Voice,TTSEngine>(); {
+		// create a map of the best services for each available voice
+		bestEngines = new HashMap<Voice,TTSEngine>(); {
 			TTSTimeout timeout = new TTSTimeout();
 			int timeoutSecs = 30;
 			for (TTSEngine tts : engines) {
@@ -46,10 +62,10 @@ public class VoiceManager {
 					Collection<Voice> voices = tts.getAvailableVoices();
 					if (voices != null)
 						for (Voice v : voices) {
-							TTSEngine competitor = mBestEngines.get(v);
+							TTSEngine competitor = bestEngines.get(v);
 							if (competitor == null
 							    || competitor.getOverallPriority() < tts.getOverallPriority()) {
-								mBestEngines.put(v, tts);
+								bestEngines.put(v, tts);
 							}
 						}
 				} catch (SynthesisException e) {
@@ -69,18 +85,18 @@ public class VoiceManager {
 		}
 
 		// get mappings from voice properties (language/gender) to voice (name/engine)
-		List<VoiceInfo> voiceInfo = new ArrayList<>();
+		voiceInfo = new ArrayList<>();
 
 		// get info from configuration
 		voiceInfo.addAll(voiceInfoFromConfig);
 
 		// get info from engines (lowest priority)
-		mPrimaryVoices = new HashMap<>();
-		for (Voice v : mBestEngines.keySet()) {
-			mPrimaryVoices.put(new VoiceKey(v.engine, v.name), v);
+		primaryVoices = new HashMap<>();
+		for (Voice v : bestEngines.keySet()) {
+			primaryVoices.put(new VoiceKey(v.getEngine(), v.getName()), v);
 			if (v.getLocale().isPresent() && v.getGender().isPresent())
-				voiceInfo.add(new VoiceInfo(v.engine,
-				                            v.name,
+				voiceInfo.add(new VoiceInfo(v.getEngine(),
+				                            v.getName(),
 				                            v.getLocale().get(),
 				                            v.getGender().get(),
 				                            0));
@@ -109,18 +125,18 @@ public class VoiceManager {
 		// filter available voices
 		List<VoiceInfo> availableVoiceInfo = new ArrayList<>(); {
 			for (VoiceInfo i : voiceInfo)
-				if (mPrimaryVoices.containsKey(new VoiceKey(i.voiceEngine, i.voiceName)))
+				if (primaryVoices.containsKey(new VoiceKey(i.voiceEngine, i.voiceName)))
 					availableVoiceInfo.add(i);
 		}
 
 		// create map of the best fallback for each voice
 		// engine is more important than gender and priority, gender is more important than priority
-		mSecondaryVoices = new HashMap<>(); {
+		secondaryVoices = new HashMap<>(); {
 			for (boolean sameEngine : new boolean[]{true, false})
 				for (boolean sameGender : new boolean[]{true, false})
 					for (VoiceInfo best : voiceInfo) {
 						VoiceKey bestKey = new VoiceKey(best.voiceEngine, best.voiceName);
-						if (!mSecondaryVoices.containsKey(bestKey))
+						if (!secondaryVoices.containsKey(bestKey))
 							for (VoiceInfo fallback : availableVoiceInfo) {
 								VoiceKey fallbackKey = new VoiceKey(fallback.voiceEngine, fallback.voiceName);
 								if (!fallbackKey.equals(bestKey))
@@ -130,7 +146,7 @@ public class VoiceManager {
 											// and engine are not criteria so as to prevent the algo
 											// from choosing a multilang voice with the same engine over
 											// a regular voice with a different engine.
-											mSecondaryVoices.put(bestKey, mPrimaryVoices.get(fallbackKey));
+											secondaryVoices.put(bestKey, primaryVoices.get(fallbackKey));
 											break;
 										}
 									} else if (fallback.language.equals(best.language)
@@ -141,7 +157,7 @@ public class VoiceManager {
 									                   && fallback.gender == best.gender))
 									           && (!sameEngine
 									               || fallback.voiceEngine.equals(best.voiceEngine))) {
-										mSecondaryVoices.put(bestKey, mPrimaryVoices.get(fallbackKey));
+										secondaryVoices.put(bestKey, primaryVoices.get(fallbackKey));
 										break;
 									}
 							}
@@ -155,7 +171,7 @@ public class VoiceManager {
 		Set<Gender> allGenders = new HashSet<Gender>(); {
 			for (VoiceInfo vi : availableVoiceInfo) allGenders.add(vi.gender);
 			allGenders.remove(NO_DEFINITE_GENDER); }
-		mVoiceIndex = new HashMap<VoiceKey,Voice>(); {
+		voiceIndex = new HashMap<VoiceKey,Voice>(); {
 			for (VoiceInfo vi : availableVoiceInfo) {
 				if (vi.isMultiLang())
 					// this is to make sure that a multi-lang voice wins from a regular voice if it has
@@ -167,30 +183,30 @@ public class VoiceManager {
 								// if it has a higher priority
 								for (Gender g : allGenders) {
 									VoiceKey k = new VoiceKey(l, g, sameEngine ? vi.voiceEngine : null);
-									if (!mVoiceIndex.containsKey(k))
-										mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+									if (!voiceIndex.containsKey(k))
+										voiceIndex.put(k, primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 								}
 							for (boolean sameGender : new boolean[]{true, false}) {
 								VoiceKey k = new VoiceKey(l,
 								                          sameGender ? vi.gender : null,
 								                          sameEngine ? vi.voiceEngine : null);
-								if (!mVoiceIndex.containsKey(k))
-									mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+								if (!voiceIndex.containsKey(k))
+									voiceIndex.put(k, primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 							}
 						}
 				for (boolean sameEngine : new boolean[]{true, false}) {
 					if (vi.gender == NO_DEFINITE_GENDER)
 						for (Gender g : allGenders) {
 							VoiceKey k = new VoiceKey(vi.language, g, sameEngine ? vi.voiceEngine : null);
-							if (!mVoiceIndex.containsKey(k))
-								mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+							if (!voiceIndex.containsKey(k))
+								voiceIndex.put(k, primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 						}
 					for (boolean sameGender : new boolean[]{true, false}) {
 						VoiceKey k = new VoiceKey(vi.language,
 						                          sameGender ? vi.gender : null,
 						                          sameEngine ? vi.voiceEngine : null);
-						if (!mVoiceIndex.containsKey(k))
-							mVoiceIndex.put(k, mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+						if (!voiceIndex.containsKey(k))
+							voiceIndex.put(k, primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 					}
 				}
 			}
@@ -198,7 +214,7 @@ public class VoiceManager {
 
 		// log
 		StringBuilder sb = new StringBuilder("Available voices:");
-		for (Entry<Voice,TTSEngine> e : mBestEngines.entrySet())
+		for (Entry<Voice,TTSEngine> e : bestEngines.entrySet())
 			sb.append("\n * ")
 			  .append(e.getKey());
 		ServerLogger.debug(sb.toString());
@@ -232,28 +248,12 @@ public class VoiceManager {
 			  .append(", gender:").append(vi.gender == NO_DEFINITE_GENDER ? "*" : vi.gender)
 			  .append("}")
 			  .append(" -> ")
-			  .append(mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+			  .append(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 		ServerLogger.debug(sb.toString());
 	}
 
-	/**
-	 * @return null if no voice is available for the given parameters.
-	 * @param voiceEngine is null if unknown
-	 * @param voiceName is null if unknown
-	 * @param lang is null if unknown
-	 * @param gender is null if unknown
-	 * @param exactMatch[0] will be set to True if an exact match is found. The
-	 *            argument can be null if the returned information is not
-	 *            required.
-	 */
-	public Voice findAvailableVoice(String voiceEngine, String voiceName, String lang,
-	                                String gender, boolean[] exactMatch) {
-		return findAvailableVoice(voiceEngine, voiceName, lang, Gender.of(gender),
-		                          exactMatch == null ? new boolean[1] : exactMatch);
-	}
-
 	public Voice findSecondaryVoice(Voice v) {
-		return mSecondaryVoices.get(new VoiceKey(v.engine, v.name));
+		return secondaryVoices.get(new VoiceKey(v.getEngine(), v.getName()));
 	}
 
 	/**
@@ -262,82 +262,103 @@ public class VoiceManager {
 	 *         whose OSGi service is no longer enable.
 	 */
 	public TTSEngine getTTS(Voice voice) {
-		return mBestEngines.get(voice);
+		return bestEngines.get(voice);
 	}
 
-	private Voice findAvailableVoice(String voiceEngine, String voiceName, String lang,
-	                                 Gender gender, boolean[] exactMatch) {
+	/**
+	 * @return null if no voice is available for the given parameters.
+	 * @param voiceEngine is null if unknown
+	 * @param voiceName is null if unknown
+	 * @param lang is null if unknown
+	 * @param gender is null if unknown
+	 */
+	public Voice findAvailableVoice(String voiceEngine, String voiceName, Locale lang, Gender gender) {
 
 		if (voiceEngine != null && !voiceEngine.isEmpty() && voiceName != null && !voiceName.isEmpty()) {
 			VoiceKey preferredVoice = new VoiceKey(voiceEngine, voiceName);
-			Voice voice = mPrimaryVoices.get(preferredVoice);
+			Voice voice = primaryVoices.get(preferredVoice);
 			if (voice != null) {
-				exactMatch[0] = true;
 				return voice;
 			} else {
-				Voice fallback = mSecondaryVoices.get(preferredVoice);
+				Voice fallback = secondaryVoices.get(preferredVoice);
 				if (fallback != null) {
-					exactMatch[0] = false;
 					return fallback;
 				}
 			}
 		}
 
-		exactMatch[0] = false;
-
-		Locale loc;
-		try {
-			loc = VoiceInfo.tagToLocale(lang);
-		} catch (UnknownLanguage e) {
+		if (lang == null) {
 			return null;
 		}
 
-		Locale shortLoc = new Locale(loc.getLanguage());
+		Locale shortLang = new Locale(lang.getLanguage());
 		Voice result;
 
 		// engine is more important than gender and priority, gender is more important than priority
-		exactMatch[0] = (voiceName == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang, gender, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, NO_DEFINITE_GENDER, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang, NO_DEFINITE_GENDER, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang, gender, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, NO_DEFINITE_GENDER, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang, NO_DEFINITE_GENDER, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER, voiceEngine))) != null)
 			return result;
-		exactMatch[0] = (voiceName == null && gender == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang, voiceEngine))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine))) != null)
 			return result;
-		exactMatch[0] = (voiceName == null && voiceEngine == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang, gender))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, NO_DEFINITE_GENDER))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang, NO_DEFINITE_GENDER))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang, gender))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, NO_DEFINITE_GENDER))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang, NO_DEFINITE_GENDER))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER))) != null)
 			return result;
-		exactMatch[0] = (voiceName == null && voiceEngine == null && gender == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(lang))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(shortLang))) != null)
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG))) != null)
+		if ((result = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG))) != null)
 			return result;
 
 		return null;
+	}
+
+	/**
+	 * Whether the given voice matches exactly the given voice engine, voice name, language and/or gender.
+	 */
+	public boolean matches(Voice voice, String voiceEngine, String voiceName, Locale lang, Gender gender) {
+		if (voiceEngine != null && !voiceEngine.equalsIgnoreCase(voice.getEngine()))
+			return false;
+		if (voiceName != null && !voiceName.equalsIgnoreCase(voice.getName()))
+			return false;
+		if (lang == null && gender == null)
+			return true;
+		for (VoiceInfo v : voiceInfo) {
+			if (v.voiceEngine.equals(voice.getEngine()) && v.voiceName.equals(voice.getName())) {
+				if (lang != null
+				    && v.language != NO_DEFINITE_LANG
+				    && !new Locale(v.language.getLanguage()).equals(new Locale(lang.getLanguage())))
+					continue;
+				if (gender != null
+				    && v.gender != NO_DEFINITE_GENDER
+				    && !v.gender.equals(gender))
+					continue;
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static String getStack(Throwable t) {

@@ -90,11 +90,11 @@ public class SAPIServiceTest {
         Collection<Voice> voices = engine.getAvailableVoices();
         Voice selectedVoice = null;
         for (Voice v: voices ) {
-            if (v.engine.equals("onecore")){
+            if (v.getEngine().equals("onecore")){
                 selectedVoice = v;
                 break;
             } else {
-                System.out.println(v.engine);
+                System.out.println(v.getEngine());
             }
         }
         if (selectedVoice == null){
@@ -115,11 +115,11 @@ public class SAPIServiceTest {
         Collection<Voice> voices = engine.getAvailableVoices();
         Voice selectedVoice = null;
         for (Voice v: voices ) {
-            if (v.engine.equals("sapi")){
+            if (v.getEngine().equals("sapi")) {
                 selectedVoice = v;
                 break;
             } else {
-                System.out.println(v.engine);
+                System.out.println(v.getEngine());
             }
         }
         if (selectedVoice == null){

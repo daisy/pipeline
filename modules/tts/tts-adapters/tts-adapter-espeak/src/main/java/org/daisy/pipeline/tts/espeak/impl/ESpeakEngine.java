@@ -57,7 +57,7 @@ public class ESpeakEngine extends TTSEngine {
 
 		String sentence; {
 			Map<String,Object> xsltParams = new HashMap<>(); {
-				if (voice != null) xsltParams.put("voice", voice.name);
+				if (voice != null) xsltParams.put("voice", voice.getName());
 			}
 			try {
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
