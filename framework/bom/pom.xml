@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-bom</artifactId>
-  <version>1.14.14-SNAPSHOT</version>
+  <version>1.14.14</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework BoM</name>
@@ -45,17 +45,17 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>calabash-adapter</artifactId>
-        <version>5.2.1-SNAPSHOT</version>
+        <version>5.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>common-utils</artifactId>
-        <version>5.7.0-SNAPSHOT</version>
+        <version>5.7.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-core</artifactId>
-        <version>7.0.2-SNAPSHOT</version>
+        <version>7.0.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -80,7 +80,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>saxon-adapter</artifactId>
-        <version>4.2.0-SNAPSHOT</version>
+        <version>4.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -90,7 +90,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>webservice</artifactId>
-        <version>3.2.0-SNAPSHOT</version>
+        <version>3.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
@@ -403,4 +403,8 @@
 
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.14.14</tag>
+  </scm>
 </project>
