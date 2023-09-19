@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-test-helper</artifactId>
-  <version>2.2.3-SNAPSHOT</version>
+  <version>2.2.3</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Test Helper</name>
@@ -134,4 +134,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>modules-test-helper-2.2.3</tag>
+  </scm>
 </project>
