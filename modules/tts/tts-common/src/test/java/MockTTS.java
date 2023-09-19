@@ -42,8 +42,8 @@ public class MockTTS implements TTSService {
 			@Override
 			public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource threadResources)
 					throws SynthesisException, InterruptedException {
-				if (!"mock-en".equals(voice.name)) {
-					throw new SynthesisException("Voice " + voice.name + " not supported");
+				if (!"mock-en".equals(voice.getName())) {
+					throw new SynthesisException("Voice " + voice.getName() + " not supported");
 				}
 				try {
 					String sentence = transformSsmlNodeToString(ssml, ssmlTransformer, new TreeMap<String,Object>());

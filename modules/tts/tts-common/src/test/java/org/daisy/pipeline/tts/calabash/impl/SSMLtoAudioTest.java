@@ -38,6 +38,7 @@ import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.TTSEngine;
+import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService;
@@ -235,7 +236,7 @@ public class SSMLtoAudioTest {
 			        monitor, Proc, config, logs);
 
 			for (String text : ssml) {
-				ssmlToAudio.dispatchSSML(SSMLinXML(text));
+				ssmlToAudio.dispatchSSML(SSMLinXML(text), null);
 			}
 
 			AudioServices audioRegistry = new AudioServices();

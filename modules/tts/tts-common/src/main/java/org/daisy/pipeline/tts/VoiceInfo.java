@@ -13,6 +13,16 @@ import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 
 public class VoiceInfo {
+
+	public Gender gender;
+	public String voiceName;
+	public String voiceEngine;
+	public Locale language;
+	public float priority;
+
+	public static Locale NO_DEFINITE_LANG = new Locale("mul");
+	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
+
 	private static Pattern localePattern = Pattern
 	        .compile("(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*");
 
@@ -20,10 +30,10 @@ public class VoiceInfo {
 		ANY("*", "neutral"),
 		MALE_ADULT("male", "man", "male-adult"),
 		MALE_CHILD("boy", "male-young", "male-child"),
-		MALE_ELDERY("man-old", "male-old", "male-elder", "man-elder"),
+		MALE_ELDERLY("man-old", "male-old", "male-elder", "man-elder", "male-elderly", "man-elderly"),
 		FEMALE_CHILD("girl", "female-young", "female-child"),
 		FEMALE_ADULT("woman", "female", "female-adult"),
-		FEMALE_ELDERY("woman-old", "female-old", "woman-elder", "female-elder");
+		FEMALE_ELDERLY("woman-old", "female-old", "woman-elder", "female-elder", "woman-elderly", "female-elderly");
 
 		private final List<String> variants;
 
@@ -51,6 +61,11 @@ public class VoiceInfo {
 
 		public static Gender of(String gender) {
 			return gender == null ? null : lookup.get(gender.toLowerCase().replace("_", "-"));
+		}
+
+		@Override
+		public String toString() {
+			return this == ANY ? "*" : super.toString().toLowerCase().replace("_", "-");
 		}
 	}
 	
@@ -131,14 +146,4 @@ public class VoiceInfo {
 	public boolean isMultiLang(){
 		return this.language == NO_DEFINITE_LANG;
 	}
-
-	public Gender gender;
-	public String voiceName;
-	public String voiceEngine;
-	public Locale language;
-	public float priority;
-	
-	public static Locale NO_DEFINITE_LANG = new Locale("mul");
-	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
-
 }

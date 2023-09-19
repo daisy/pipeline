@@ -77,7 +77,10 @@ public abstract class TTSEngine {
 	 * This method must be thread-safe. But @param threadResources is here to
 	 * prevent the service from locking internal resources.
 	 * 
-	 * @param sentence is the sentence to synthesize, as an SSML node.
+	 * @param sentence is the sentence to synthesize, as an SSML node. The node
+	 *                 is expected to be an {@code s} element with an
+	 *                 {@code xml:lang} attribute. It is however advised that
+	 *                 implementations do not assume this is the case.
 	 * @param voice is the voice the synthesizer must use. It is guaranteed to
 	 *            be one of those returned by getAvailableVoices(). This
 	 *            parameter can't be null.

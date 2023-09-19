@@ -11,9 +11,6 @@
   <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
   <xsl:param name="voice" select="''"/>
-  <xsl:param name="ending-mark">
-      <!-- not used -->
-  </xsl:param>
 
   <xsl:template match="*">
     <xsl:variable name="content" as="node()*" select="if (self::ssml:speak) then node() else ."/>

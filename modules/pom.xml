@@ -67,6 +67,7 @@
     <module>tts/tts-adapters/tts-adapter-qfrency</module>
     <module>tts/tts-adapters/tts-adapter-google</module>
     <module>tts/tts-adapters/tts-adapter-cereproc</module>
+    <module>tts/tts-adapters/tts-adapter-azure</module>
     <module>tts/tts-mocks</module>
     <module>tts/mathml-to-ssml</module>
     <module>braille/braille-common</module>

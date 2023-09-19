@@ -35,7 +35,6 @@ public class OSXSSMLTest {
 
 	@Test
 	public void simpleConversion() throws URISyntaxException, SaxonApiException {
-		String endingmark = "emark";
 		String voice = "john";
 
 		TreeWriter tw = new TreeWriter(Proc);
@@ -49,7 +48,6 @@ public class OSXSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		String result = Transformer.transformToString(tw.getResult(), params);
@@ -60,7 +58,6 @@ public class OSXSSMLTest {
 
 	@Test
 	public void noDocumentRoot() throws URISyntaxException, SaxonApiException {
-		String endingmark = "emark";
 		String voice = "john";
 
 		TreeWriter tw = new TreeWriter(Proc);
@@ -74,7 +71,6 @@ public class OSXSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		XdmNode firstChild = (XdmNode) tw.getResult().axisIterator(Axis.CHILD).next();

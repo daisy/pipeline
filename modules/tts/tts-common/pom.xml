@@ -10,7 +10,7 @@
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>4.1.1-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
   <artifactId>tts-common</artifactId>
   <packaging>bundle</packaging>
 
@@ -29,6 +29,10 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>webservice</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.libs</groupId>
@@ -95,6 +99,7 @@
       org.daisy.pipeline.tts.calabash.impl.GetAnnotationsProvider,
       org.daisy.pipeline.tts.calabash.impl.GetLexiconsProvider,
       org.daisy.pipeline.tts.calabash.impl.SynthesizeProvider,
+      org.daisy.pipeline.tts.impl.VoicesWebServiceExtension,
       org.daisy.pipeline.modules.impl.Module_tts_common
     </expose-services>
   </properties>

@@ -8,8 +8,6 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 import javax.sound.sampled.AudioInputStream;
@@ -50,11 +48,8 @@ public class QfrencyEngine extends TTSEngine {
 		File outFile = null;
 		String outPath = null;
 		String sentence; {
-			Map<String,Object> xsltParams = new HashMap<>(); {
-				xsltParams.put("voice", voice.name);
-			}
 			try {
-				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
+				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, null);
 			} catch (IOException | SaxonApiException e) {
 				throw new SynthesisException(e);
 			}
@@ -65,13 +60,13 @@ public class QfrencyEngine extends TTSEngine {
 			outFile.deleteOnExit();
 			outPath = outFile.getPath();
 			String [] lCmd = new String[7];
-			lCmd[0]=mQfrencyPath;
-			lCmd[1]="-a";
-			lCmd[2]=mHostAddress;
-			lCmd[3]="-s";
-			lCmd[4]=outPath;
-			lCmd[5]=voice.name;
-			lCmd[6]="\'"+sentence+"\'";
+			lCmd[0] = mQfrencyPath;
+			lCmd[1] = "-a";
+			lCmd[2] = mHostAddress;
+			lCmd[3] = "-s";
+			lCmd[4] = outPath;
+			lCmd[5] = voice.getName();
+			lCmd[6] = "\'" + sentence + "\'";
 			new CommandRunner(lCmd)
 				.consumeError(mLogger)
 				.run();

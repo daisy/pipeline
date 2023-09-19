@@ -7,12 +7,8 @@
     <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
     <xsl:param name="voice" select="''"/>
-    <xsl:param name="ending-mark" select="''"/>
 
     <xsl:variable name="end">
-    	<xsl:if test="$ending-mark != ''">
-    		<ssml:mark name="{$ending-mark}"/>
-    	</xsl:if>
     	<ssml:break time="250ms"/>
     </xsl:variable>
 

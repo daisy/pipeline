@@ -38,7 +38,6 @@ public class EspeakSSMLTest {
 	@Test
 	public void completeSSML() throws URISyntaxException, SaxonApiException, SAXException,
 	        IOException {
-		String endingmark = "emark";
 		String voice = "john";
 
 		TreeWriter tw = new TreeWriter(Proc);
@@ -53,7 +52,6 @@ public class EspeakSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		String result = Transformer.transformToString(tw.getResult(), params);
@@ -67,7 +65,6 @@ public class EspeakSSMLTest {
 	@Test
 	public void incompleteSSML() throws URISyntaxException, SaxonApiException, SAXException,
 	        IOException {
-		String endingmark = "emark";
 		String voice = "john";
 
 		TreeWriter tw = new TreeWriter(Proc);
@@ -81,7 +78,6 @@ public class EspeakSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		String result = Transformer.transformToString(tw.getResult(), params);
@@ -96,7 +92,6 @@ public class EspeakSSMLTest {
 	@Test
 	public void noDocumentRoot() throws URISyntaxException, SaxonApiException, SAXException,
 	        IOException {
-		String endingmark = "emark";
 		String voice = "john";
 
 		TreeWriter tw = new TreeWriter(Proc);
@@ -111,7 +106,6 @@ public class EspeakSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		XdmNode firstChild = (XdmNode) tw.getResult().axisIterator(Axis.CHILD).next();

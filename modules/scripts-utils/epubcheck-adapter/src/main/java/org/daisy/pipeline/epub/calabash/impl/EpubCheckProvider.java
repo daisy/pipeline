@@ -34,7 +34,17 @@ import com.adobe.epubcheck.opf.ValidationContext;
 import com.adobe.epubcheck.opf.OPFCheckerFactory;
 import com.adobe.epubcheck.ops.OPSCheckerFactory;
 import com.adobe.epubcheck.overlay.OverlayCheckerFactory;
-import com.adobe.epubcheck.util.*;
+import com.adobe.epubcheck.util.Archive;
+import com.adobe.epubcheck.util.EPUBVersion;
+import com.adobe.epubcheck.util.FeatureEnum;
+import com.adobe.epubcheck.util.FileResourceProvider;
+import com.adobe.epubcheck.util.GenericResourceProvider;
+import com.adobe.epubcheck.util.InvalidVersionException;
+import com.adobe.epubcheck.util.Messages;
+import com.adobe.epubcheck.util.OPSType;
+import com.adobe.epubcheck.util.PathUtil;
+import com.adobe.epubcheck.util.URLResourceProvider;
+import com.adobe.epubcheck.util.XmlReportImpl;
 
 import org.osgi.service.component.annotations.Component;
 

@@ -289,7 +289,7 @@ public class AcapelaEngine extends TTSEngine {
 
 		//note: the Acapela's markup for SSML interpretation is active by default.
 		Map<String,Object> xsltParams = new HashMap<>(); {
-			xsltParams.put("voice", voice.name);
+			xsltParams.put("voice", voice.getName());
 			// add ending mark to ensure the complete SSML is processed
 			xsltParams.put("ending-mark", "ending-mark");
 		}

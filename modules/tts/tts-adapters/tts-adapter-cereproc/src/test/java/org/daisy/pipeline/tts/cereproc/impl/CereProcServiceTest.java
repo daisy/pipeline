@@ -44,7 +44,7 @@ public class CereProcServiceTest extends AbstractTest {
 		Collection<Voice> voices = engine.getAvailableVoices();
 		Assert.assertEquals(2, voices.size());
 		Assert.assertEquals(ImmutableSet.of("William", "Ylva"),
-		                    voices.stream().map(v -> v.name).collect(Collectors.toSet()));
+		                    voices.stream().map(v -> v.getName()).collect(Collectors.toSet()));
 	}
 
 	@Test

@@ -91,7 +91,6 @@ public class AcapelaSSMLTest {
 	@Ignore
 	@Test
 	public void hardMarkName() throws URISyntaxException, SaxonApiException {
-		String endingmark = "e-mark";
 		String mark = "___m___";
 		String voice = "john";
 
@@ -109,15 +108,13 @@ public class AcapelaSSMLTest {
 		tw.addEndElement();
 
 		Map<String, Object> params = new TreeMap<String, Object>();
-		params.put("ending-mark", endingmark);
 		params.put("voice", voice);
 
 		XdmNode firstChild = (XdmNode) tw.getResult().axisIterator(Axis.CHILD).next();
 		String result = Transformer.transformToString(firstChild, params);
 
 		String expected = "\\voice{" + voice + "}<x><y attr=\"attr-val\"></y><mark name=\""
-		        + mark + "\"/>this is text</x><break time=\"250ms\"></break><mark name=\""
-		        + endingmark + "\"/>";
+		        + mark + "\"/>this is text</x><break time=\"250ms\"></break>";
 
 		Assert.assertEquals(expected, result.replaceAll("ZZZ", "_"));
 

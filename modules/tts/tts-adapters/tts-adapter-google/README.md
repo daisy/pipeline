@@ -18,4 +18,4 @@ To use Google Cloud Text-to-Speech (https://cloud.google.com/text-to-speech/docs
 
 ## Tests
 
-For unit test to work, please add the property "org.daisy.pipeline.tts.google.apikey" to either your configuration or pom, or add the option `-Dorg.daisy.pipeline.tts.google.apikey="your_key"` to your maven call. 
+For the unit test to work with the actual Google service instead of a mock, please modify the `org.daisy.pipeline.tts.google.apikey` property in pom.xml and comment out the `org.daisy.pipeline.tts.google.address` property.

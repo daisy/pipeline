@@ -272,15 +272,35 @@ tts-adapter-attbin:
 ### Google Cloud Text-to-speech
 
 `org.daisy.pipeline.tts.google.apikey`
-: (Mandatory) API key to connect to Google Text-To-Speech service
-: See [Google API key page](https://cloud.google.com/docs/authentication/api-keys)
-  for more information.
+: API key to connect to Google Text-To-Speech service. See
+  [Authenticate using API
+  keys](https://cloud.google.com/docs/authentication/api-keys).
+: Mandatory
 
 `org.daisy.pipeline.tts.google.samplerate`
 : Sample rate (in Hz)
 : Defaults to "22050"
 
 `org.daisy.pipeline.tts.google.priority`
+: This engine is chosen over another engine that serves the same voice
+  if this one has a higher priority.
+: Defaults to "15"
+
+### Microsoft Azure Cognitive Speech Services
+
+`org.daisy.pipeline.tts.azure.key`
+: Access key of your Cognitive Speech resource
+: Mandatory
+
+`org.daisy.pipeline.tts.azure.region`
+: Region of your Cognitive Speech resource
+: Mandatory
+
+`org.daisy.pipeline.tts.azure.threads`
+: Number of reserved text-to-speech threads
+: Defaults to "2"
+
+`org.daisy.pipeline.tts.azure.priority`
 : This engine is chosen over another engine that serves the same voice
   if this one has a higher priority.
 : Defaults to "15"

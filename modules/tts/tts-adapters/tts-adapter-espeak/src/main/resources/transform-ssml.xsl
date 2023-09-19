@@ -7,7 +7,6 @@
   <xsl:output method="text" omit-xml-declaration="yes" indent="no"/>
 
   <xsl:param name="voice" select="''"/>
-  <xsl:param name="ending-mark"/>
 
   <xsl:template match="*">
     <xsl:variable name="content" select="if (local-name() = 'speak') then node() else ."/>

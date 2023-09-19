@@ -12,8 +12,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -72,11 +70,8 @@ public class GoogleRestTTSEngine extends TTSEngine {
 			throws SynthesisException, InterruptedException {
 	
 		String sentence; {
-			Map<String,Object> xsltParams = new HashMap<>(); {
-				if (voice != null) xsltParams.put("voice", voice.name);
-			}
 			try {
-				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
+				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, null);
 			} catch (IOException | SaxonApiException e) {
 				throw new SynthesisException(e);
 			}
@@ -90,7 +85,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		String name;
 
 		if (voice != null) {
-			name = voice.name;
+			name = voice.getName();
 			languageCode = voice.getLocale().get().toLanguageTag(); // assume locale is declared
 		} else {
 			// by default the voice is set to English

@@ -2,8 +2,9 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:jhove="http://schema.openpreservation.org/ois/xml/ns/jhove"
                script="../../main/resources/xml/xproc/library.xpl">
-    
+
     <x:scenario label="regression for error: java.util.MissingFormatArgumentException: Format specifier '%3$s'">
         <x:call step="px:epubcheck">
             <x:option name="mode" select="'expanded'"/>
@@ -14,6 +15,7 @@
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect label="there should be a result document" type="count" min-count="1"/>
+        <x:expect label="the result should be a jhove document" type="xpath" test="/jhove:jhove[@name='epubcheck' and @release='4.2.5']"/>
     </x:scenario>
-    
+
 </x:description>

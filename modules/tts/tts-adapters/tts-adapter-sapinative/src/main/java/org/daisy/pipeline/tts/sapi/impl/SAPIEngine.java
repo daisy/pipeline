@@ -75,7 +75,7 @@ public class SAPIEngine extends TTSEngine {
 			throws SynthesisException {
 
 		Map<String,Object> xsltParams = new HashMap<>(); {
-			xsltParams.put("voice", voice.name);
+			xsltParams.put("voice", voice.getName());
 		}
 		try {
 			List<Integer> marks = new ArrayList<>();
@@ -90,11 +90,11 @@ public class SAPIEngine extends TTSEngine {
 	public AudioInputStream speak(String ssml, Voice voice, TTSResource resource, List<Integer> marks)
 			throws SynthesisException {
 
-		voice = mVoiceFormatConverter.get(voice.name.toLowerCase());
+		voice = mVoiceFormatConverter.get(voice.getName().toLowerCase());
 		ThreadResource tr = (ThreadResource)resource;
-		if (voice.engine.equals("sapi") ){
+		if (voice.getEngine().equals("sapi")) {
 			try {
-				int res = SAPI.speak(tr.SAPIConnection, voice.engine, voice.name, ssml);
+				int res = SAPI.speak(tr.SAPIConnection, voice.getEngine(), voice.getName(), ssml);
 				if (res != SAPIResult.SAPINATIVE_OK.value()) {
 					throw new SynthesisException("SAPI-legacy speak error " + res + " raised with voice "
 							+ voice + ": " +  SAPIResult.valueOfCode(res)+"\nFor text :"
@@ -126,7 +126,7 @@ public class SAPIEngine extends TTSEngine {
 			return createAudioStream(sapiAudioFormat, data);
 		} else { // use onecore engine
 			try {
-				int res = Onecore.speak(tr.onecoreConnection, voice.engine, voice.name, ssml);
+				int res = Onecore.speak(tr.onecoreConnection, voice.getEngine(), voice.getName(), ssml);
 				if (res != OnecoreResult.SAPINATIVE_OK.value()) {
 					throw new SynthesisException("SAPI-Onecore speak error " + res + " raised with voice "
 							+ voice + ": " +  OnecoreResult.valueOfCode(res)+"\nFor text :"
@@ -226,7 +226,7 @@ public class SAPIEngine extends TTSEngine {
 								selected = Gender.MALE_CHILD;
 								break;
 							case "elderly" :
-								selected = Gender.MALE_ELDERY;
+								selected = Gender.MALE_ELDERLY;
 								break;
 							case "adult" : // default to adult
 							default:
@@ -242,7 +242,7 @@ public class SAPIEngine extends TTSEngine {
 								selected = Gender.FEMALE_CHILD;
 								break;
 							case "elderly" :
-								selected = Gender.FEMALE_ELDERY;
+								selected = Gender.FEMALE_ELDERLY;
 								break;
 							case "adult" : // default to adult
 							default:
@@ -279,7 +279,7 @@ public class SAPIEngine extends TTSEngine {
 			Voice original = mVoiceFormatConverter.get(sapiVoice);
 			voices.add(
 				new Voice(
-					original.engine, // should be sapi or onecore, required for speak interactions (see the native libs code)
+					original.getEngine(), // should be sapi or onecore, required for speak interactions (see the native libs code)
 					sapiVoice,
 					original.getLocale().get(),
 					original.getGender().get()

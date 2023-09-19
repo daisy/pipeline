@@ -5,8 +5,18 @@ import java.util.Optional;
 
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
-/** Voice instances are expected to be created only by TTSEngine/TTSService implementations */
+/**
+ * Voice instances are expected to be created only by TTSEngine/TTSService implementations
+ */
 public class Voice {
+
+	// the upper-case versions need to be kept because some TTS Processors like SAPI
+	// are case-sensitive. Lower-case versions are only used for comparison.
+	private final String engine;
+	private final String name;
+	private final MarkSupport markSupport;
+	private final Optional<Locale> locale;
+	private final Optional<Gender> gender;
 
 	public enum MarkSupport {
 		DEFAULT,
@@ -27,25 +37,49 @@ public class Voice {
 	}
 
 	public Voice(String engine, String name, Locale locale, Gender gender, MarkSupport markSupport) {
-		//we keep the strings in their full case form because some engines might be case sensitive
+		// we keep the strings in their full case form because some engines might be case sensitive
 		this.engine = engine == null ? "" : engine;
 		this.name = name == null ? "" : name;
 		this.locale = Optional.ofNullable(locale);
 		this.gender = Optional.ofNullable(gender);
-		this.mMarkSupport = markSupport;
-		this.mEngine_lo = this.engine.toLowerCase();
-		this.mName_lo = this.name.toLowerCase();
+		this.markSupport = markSupport;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getEngine() {
+		return engine;
+	}
+
+	public MarkSupport getMarkSupport() {
+		return markSupport;
+	}
+
+	/**
+	 * The locale of this voice, or absent if it is not known.
+	 */
+	public Optional<Locale> getLocale() {
+		return locale;
+	}
+
+	/**
+	 * The gender of this voice, or absent if it is not known.
+	 */
+	public Optional<Gender> getGender() {
+		return gender;
 	}
 
 	public int hashCode() {
-		return mEngine_lo.hashCode() ^ mName_lo.hashCode();
+		return engine.toLowerCase().hashCode() ^ name.toLowerCase().hashCode();
 	}
 
 	public boolean equals(Object other) {
 		if (other == null)
 			return false;
-		Voice v2 = (Voice) other;
-		return mEngine_lo.equals(v2.mEngine_lo) && mName_lo.equals(v2.mName_lo);
+		Voice v2 = (Voice)other;
+		return engine.equalsIgnoreCase(v2.engine) && name.equalsIgnoreCase(v2.name);
 	}
 
 	public String toString() {
@@ -73,32 +107,4 @@ public class Voice {
 		s.append("}");
 		return s.toString();
 	}
-
-	public MarkSupport getMarkSupport() {
-		return mMarkSupport;
-	}
-
-	/**
-	 * The locale of this voice, or absent if it is not known.
-	 */
-	public Optional<Locale> getLocale() {
-		return locale;
-	}
-
-	/**
-	 * The gender of this voice, or absent if it is not known.
-	 */
-	public Optional<Gender> getGender() {
-		return gender;
-	}
-
-	//the upper-case versions need to be kept because some TTS Processors like SAPI
-	//are case-sensitive. Lower-case versions are only used for comparison.
-	public final String engine;
-	public final String name;
-	private String mEngine_lo;
-	private String mName_lo;
-	private final MarkSupport mMarkSupport;
-	private final Optional<Locale> locale;
-	private final Optional<Gender> gender;
 }

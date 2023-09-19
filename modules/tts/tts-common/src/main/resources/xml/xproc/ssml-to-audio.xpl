@@ -7,6 +7,7 @@
       <p>SSML documents.</p>
       <p>It is assumed that content documents have been prepared so that ID attributes are unique
       within the whole sequence of SSML documents.</p>
+      <p>All <code>s</code> elements are expected to have a <code>xml:lang</code> attribute.</p>
     </p:documentation>
   </p:input>
   <p:input port="config"/>

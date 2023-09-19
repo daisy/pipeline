@@ -5,7 +5,6 @@
 
   <xsl:output indent="no" omit-xml-declaration="yes" exclude-result-prefixes="#all"/>
 
-  <xsl:param name="voice" select="''"/>
   <xsl:param name="ending-mark" select="''"/>
 
   <xsl:template match="*">
