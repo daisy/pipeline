@@ -23,8 +23,6 @@ import org.daisy.pipeline.tts.onecore.SAPI;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.VoiceInfo;
-import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.Voice;
 
 import org.slf4j.Logger;
@@ -85,28 +83,11 @@ public class SAPIEngine extends TTSEngine {
 			throws SynthesisException {
 
 		voice = mVoiceFormatConverter.get(voice.getName().toLowerCase());
+		NativeSynthesisResult res;
+		// Speak
 		if (voice.getEngine().equals("sapi") ){
 			try {
-				NativeSynthesisResult res = SAPI.speak(voice.getEngine(),
-				                                       voice.getName(),
-				                                       ssml,
-				                                       (int)sapiAudioFormat.getSampleRate(),
-				                                       (short)sapiAudioFormat.getSampleSizeInBits());
-
-				String[] names = res.getMarksNames();
-				long[] positions = res.getMarksPositions();
-				float sampleRate = sapiAudioFormat.getSampleRate();
-				int bytesPerSample = sapiAudioFormat.getSampleSizeInBits() / 8;
-				for (int i = 0; i < names.length; ++i) {
-					int offset = (int) ((positions[i] * sampleRate * bytesPerSample) / 1000);
-					// it happens that SAPI / OneCore sometimes make empty bookmarks (for unknown reason)
-					if (names[i].length() > 0){
-						marks.add(offset);
-					}
-				}
-				return createAudioStream(sapiAudioFormat, res.getStreamData());
-
-
+				res = SAPI.speak(voice.getEngine(), voice.getName(), ssml, (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
 			} catch (RuntimeException e){
 				Logger.error("SAPI-legacy raised a RUNTIME exception while speaking " + ssml + " with " + voice + " : " + e.getMessage());
 				throw new SynthesisException("SAPI-legacy raised a RUNTIME exception while speaking " + ssml + " with " + voice, e);
@@ -116,26 +97,7 @@ public class SAPIEngine extends TTSEngine {
 			}
 		} else { // use onecore engine
 			try {
-				NativeSynthesisResult res = Onecore.speak(voice.getEngine(), voice.getName(), ssml);
-				String[] names = res.getMarksNames();
-				long[] positions = res.getMarksPositions();
-				AudioInputStream result;
-				try {
-					result = createAudioStream(new ByteArrayInputStream(res.getStreamData()));
-				} catch (Exception e) {
-					throw new SynthesisException(e);
-				}
-				AudioFormat resultFormat = result.getFormat();
-				float sampleRate = resultFormat.getSampleRate();
-				int bytesPerSample = resultFormat.getSampleSizeInBits() / 8;
-				for (int i = 0; i < names.length; ++i) {
-					int offset = (int) ((positions[i] * sampleRate * bytesPerSample) / 1000);
-					// it happens that SAPI / OneCore sometimes make empty bookmarks (for unknown reason)
-					if (names[i].length() > 0){
-						marks.add(offset);
-					}
-				}
-				return result;
+				res = Onecore.speak(voice.getEngine(), voice.getName(), ssml);
 			} catch (RuntimeException e){
 				Logger.error("SAPI-onecore raised a RUNTIME exception while speaking " + ssml + " with " + voice + " : " + e.getMessage());
 				throw new SynthesisException("SAPI-onecore raised a RUNTIME exception while speaking " + ssml + " with " + voice, e);
@@ -144,9 +106,47 @@ public class SAPIEngine extends TTSEngine {
 				throw new SynthesisException("SAPI-Onecore raised an exception while speaking " + ssml + " with " + voice, e);
 			}
 		}
+		if(res == null){
+			throw new SynthesisException("No synthesis result were returned while speaking " + ssml + " with " + voice);
+		}
+		try {
+			AudioInputStream result;
+			if(voice.getEngine().equals("sapi")){
+				result = createAudioStream(sapiAudioFormat, res.getStreamData());
+			} else {
+				result = createAudioStream(new ByteArrayInputStream(res.getStreamData()));
+			}
+			AudioFormat resultFormat = result.getFormat();
+			float sampleRate = resultFormat.getSampleRate();
+			int bytesPerSample = resultFormat.getSampleSizeInBits() / 8;
+			String[] names = res.getMarksNames();
+			long[] positions = res.getMarksPositions();
+			for (int i = 0; i < names.length; ++i) {
+				int offset = (int) ((positions[i] * sampleRate * bytesPerSample) / 1000);
+				// it happens that SAPI / OneCore sometimes make empty bookmarks (for unknown reason)
+				if (names[i].length() > 0){
+					marks.add(offset);
+				}
+			}
+			return result;
+		} catch (Exception e){
+			throw new SynthesisException("Exception raised while reconstructing AudioStream after speaking " + ssml + " with " + voice, e);
+		}
 	}
 
-
+	/**
+	 * Return voices form both SAPI and OneCore text-to-speech underlying engines.
+	 *
+	 * Notes :
+	 * - SAPI Voices are loaded first to prioritize third party voices that could have
+	 * been installed before (like acapela voices for windows or other third parties).
+	 * At this time, we are not aware of third party voices distributed for OneCore.
+	 *
+	 * - SAPI Voices that have a OneCore version installed are discarded in favor
+	 * of their OneCore version.
+	 *
+	 * @return the list of all available voices through SAPI and OneCore engines
+	 */
 	@Override
 	public Collection<Voice> getAvailableVoices() {
 		if (mVoiceFormatConverter == null) {

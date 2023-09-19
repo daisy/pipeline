@@ -23,6 +23,7 @@
 #endif
 
 #include <iostream>
+#include <shared_mutex>
 
 #if  _SAPI_VER <= 0x051
 #define CLIENT_SPEAK_FLAGS (SVSFIsXML | SVSFlagsAsync)
@@ -34,6 +35,7 @@
 #define MAX_SENTENCE_SIZE (1024*512)
 #define MAX_VOICE_NAME_SIZE 128
 
+using UniqueLock = std::unique_lock<std::shared_timed_mutex>;
 
 #pragma region Utilities
 
@@ -50,6 +52,7 @@ inline void exitCom(std::stack<IUnknown*>& refsStack) {
     }
     CoUninitialize();
 }
+
 
 
 /// <summary>
@@ -263,6 +266,11 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoice
     return VoicesListToPipelineVoicesArray<ISpObjectToken*>(env, voices, L"sapi");
 }
 
+// Taken from NVDA connector to onecore, apply also to sapi on windows 11 :
+// Using mutex and lock on the synthesis calls to prevent fast fail crash
+std::shared_timed_mutex SPEECH_MUTEX{};
+// setting timeout to 10 seconds as first unlock can be quite long
+std::chrono::duration MAX_WAIT(std::chrono::seconds(10));
 
 /// <summary>
 /// New speak functions with data isolation
@@ -460,107 +468,119 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
 
     }
 
-    dataStream.startWritingPhase();
     int 						currentBookmarkIndex = 0;
     std::vector<std::wstring>	bookmarkNames;
     std::vector<jlong>			bookmarkPositions;
-    try {
-        hr = talker->Speak(sentence.c_str(), CLIENT_SPEAK_FLAGS, 0);
-        if (hr == E_INVALIDARG) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_INVALIDARG, L"Could not speak : Invalid arguments reported");
-            return NULL;
-        }
-            
-
-        if (hr == E_POINTER) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_E_POINTER, L"Could not speak : Invalid pointer");
-            return NULL;
-        }
-
-        if (hr == E_OUTOFMEMORY) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_OUTOFMEMORY, L"Could not speak : Out of memory exception");
-            return NULL;
-        }
-
-        if (hr == SPERR_INVALID_FLAGS) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_INVALIDFLAGS, L"Could not speak : Invalid sapi flags");
-            return NULL;
-        }
-
-        if (hr == SPERR_DEVICE_BUSY) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_BUSY, L"Could not speak : Voice is busy");
-            return NULL;
-        }
-
-        if (hr == SPERR_UNSUPPORTED_FORMAT) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, COULD_NOT_SPEAK_THIS_FORMAT, L"Could not speak : unsupported text format received");
-            return NULL;
-        }
-
-        if (hr != S_OK) {
-            format = NULL;
-            exitCom(refsStack);
-            raiseException(env, hr, L"Could not speak : Unknown error code");
-            return NULL;
-        }
-        
-        
-        jlong duration = 0; //in milliseconds
-        bool end = false;
-        HRESULT eventFound = S_FALSE;
-        do {
-            // wait for a possible last event after end
-            talker->WaitForNotifyEvent(INFINITE);
-            SPEVENT event;
-            eventFound = S_FALSE;
-            do {
-                memset(&event, 0, sizeof(SPEVENT));
-                eventFound = talker->GetEvents(1, &event, NULL);
-                if (eventFound == S_OK) {
-                    switch (event.eEventId) {
-                    case SPEI_VISEME:
-                        duration += HIWORD(event.wParam);
-                        break;
-                    case SPEI_END_INPUT_STREAM:
-                        end = true;
-                        break;
-                    case SPEI_TTS_BOOKMARK:
-                        if (currentBookmarkIndex == bookmarkNames.size()) {
-                            int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
-                            bookmarkNames.resize(newsize);
-                            bookmarkPositions.resize(newsize);
-                        }
-                        //bookmarks are not pushed_back to prevent allocating/releasing all over the place
-                        bookmarkNames[currentBookmarkIndex] = (const wchar_t*)(event.lParam);
-                        bookmarkPositions[currentBookmarkIndex] = duration;
-                        ++(currentBookmarkIndex);
-                        break;
-                    }
-                }
-            } while (eventFound == S_OK);
-        } while (!end);
+    UniqueLock lock(SPEECH_MUTEX, std::defer_lock);
+    bool owned = lock.try_lock();
+    if (!owned) {
+        owned = lock.try_lock_for(MAX_WAIT);
     }
-    catch (const std::exception& e) {
-        std::wostringstream excep;
-        excep << L"Exception raised while speaking " << sentence << std::endl << L"With voice " << it->name << L" : " << std::endl;
-        excep << e.what() << std::endl;
-        exitCom(refsStack);
-        raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());
+    if (owned) {
+        dataStream.startWritingPhase();
+        try {
+            hr = talker->Speak(sentence.c_str(), CLIENT_SPEAK_FLAGS, 0);
+            if (hr == E_INVALIDARG) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_INVALIDARG, L"Could not speak : Invalid arguments reported");
+                return NULL;
+            }
+
+
+            if (hr == E_POINTER) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_E_POINTER, L"Could not speak : Invalid pointer");
+                return NULL;
+            }
+
+            if (hr == E_OUTOFMEMORY) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_OUTOFMEMORY, L"Could not speak : Out of memory exception");
+                return NULL;
+            }
+
+            if (hr == SPERR_INVALID_FLAGS) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_INVALIDFLAGS, L"Could not speak : Invalid sapi flags");
+                return NULL;
+            }
+
+            if (hr == SPERR_DEVICE_BUSY) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_BUSY, L"Could not speak : Voice is busy");
+                return NULL;
+            }
+
+            if (hr == SPERR_UNSUPPORTED_FORMAT) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, COULD_NOT_SPEAK_THIS_FORMAT, L"Could not speak : unsupported text format received");
+                return NULL;
+            }
+
+            if (hr != S_OK) {
+                format = NULL;
+                exitCom(refsStack);
+                raiseException(env, hr, L"Could not speak : Unknown error code");
+                return NULL;
+            }
+
+
+            jlong duration = 0; //in milliseconds
+            bool end = false;
+            HRESULT eventFound = S_FALSE;
+            do {
+                // wait for a possible last event after end
+                talker->WaitForNotifyEvent(INFINITE);
+                SPEVENT event;
+                eventFound = S_FALSE;
+                do {
+                    memset(&event, 0, sizeof(SPEVENT));
+                    eventFound = talker->GetEvents(1, &event, NULL);
+                    if (eventFound == S_OK) {
+                        switch (event.eEventId) {
+                        case SPEI_VISEME:
+                            duration += HIWORD(event.wParam);
+                            break;
+                        case SPEI_END_INPUT_STREAM:
+                            end = true;
+                            break;
+                        case SPEI_TTS_BOOKMARK:
+                            if (currentBookmarkIndex == bookmarkNames.size()) {
+                                int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
+                                bookmarkNames.resize(newsize);
+                                bookmarkPositions.resize(newsize);
+                            }
+                            //bookmarks are not pushed_back to prevent allocating/releasing all over the place
+                            bookmarkNames[currentBookmarkIndex] = (const wchar_t*)(event.lParam);
+                            bookmarkPositions[currentBookmarkIndex] = duration;
+                            ++(currentBookmarkIndex);
+                            break;
+                        }
+                    }
+                } while (eventFound == S_OK);
+            } while (!end);
+        }
+        catch (const std::exception& e) {
+            std::wostringstream excep;
+            excep << L"Exception raised while speaking " << sentence << std::endl << L"With voice " << it->name << L" : " << std::endl;
+            excep << e.what() << std::endl;
+            exitCom(refsStack);
+            raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());
+            return NULL;
+        }
+        dataStream.endWritingPhase();
+        lock.unlock();
+    } else {
+        raiseException(env, COULD_NOT_SPEAK, L"Could not speak : speech mutex lock has timedout");
         return NULL;
     }
-    dataStream.endWritingPhase();
+    
 
     const int dataSize = dataStream.in_avail();
     uint8_t* fullAudio = new uint8_t[dataStream.in_avail()];

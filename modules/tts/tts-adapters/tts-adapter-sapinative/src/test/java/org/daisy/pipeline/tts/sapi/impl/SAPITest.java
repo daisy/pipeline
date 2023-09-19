@@ -60,6 +60,36 @@ public class SAPITest {
 		speakCycle(SSML("this is a test"));
 	}
 
+	@Test
+	public void speakALot() throws IOException {
+		for(int i = 0; i < 10 ; ++i){
+			speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun."));
+		}
+	}
+
+	@Test
+	public void speakALotInThreads() throws IOException, InterruptedException {
+		Thread[] threads = new Thread[4];
+		for (int i = 0; i < threads.length; ++i) {
+			final int j = i;
+			threads[i] = new Thread() {
+				public void run() {
+					try{
+						for(int t = 0; t < 100 ; ++t){
+							speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun " + j + " - " + t + "." ));
+						}
+					} catch (IOException e){
+
+					}
+				}
+			};
+		}
+		for (int i = 0; i < threads.length; ++i)
+			threads[i].start();
+		for (Thread t : threads)
+			t.join();
+	}
+
 	private static SAPIEngine allocateEngine() throws Throwable {
 		SAPIService s = new SAPIService();
 		return (SAPIEngine) s.newEngine(new HashMap<String, String>());

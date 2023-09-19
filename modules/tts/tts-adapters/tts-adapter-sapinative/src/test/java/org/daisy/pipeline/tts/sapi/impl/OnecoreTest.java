@@ -13,6 +13,8 @@ import org.junit.*;
 
 public class OnecoreTest {
 
+	private final static String osName = System.getProperty("os.name");
+
 	/**
 	 * Initialization of the Onecore runtime
 	 * @throws SynthesisException if the loading and initialization of Onecore fails
@@ -66,14 +68,48 @@ public class OnecoreTest {
 	static NativeSynthesisResult speakCycle(String text) throws IOException {
 		Voice[] voices = Onecore.getVoices();
 		Assert.assertTrue(voices.length > 0);
-		NativeSynthesisResult res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), text);
+		NativeSynthesisResult res;
+		res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), text);
+
 		Assert.assertTrue(res.getStreamData().length > 200);
 		return res;
 	}
 
 	@Test
 	public void speakEasy() throws IOException {
+		System.out.println(osName);
 		speakCycle(SSML("this is a test"));
+	}
+
+	@Test
+	public void speakALot() throws IOException {
+		for(int i = 0; i < 10 ; ++i){
+			speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun."));
+		}
+	}
+
+	@Test
+	public void speakALotInThreads() throws IOException, InterruptedException {
+		Thread[] threads = new Thread[4];
+		for (int i = 0; i < threads.length; ++i) {
+			final int j = i;
+			threads[i] = new Thread() {
+				public void run() {
+
+					try{
+						for(int t = 0; t < 100 ; ++t){
+							speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun : " + j + " - " + t + "." ));
+						}
+					} catch (IOException e){
+
+					}
+				}
+			};
+		}
+		for (int i = 0; i < threads.length; ++i)
+			threads[i].start();
+		for (Thread t : threads)
+			t.join();
 	}
 
 	/**
