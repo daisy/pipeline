@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.15-SNAPSHOT</version>
+    <version>1.14.15</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>1.0.7-SNAPSHOT</version>
+  <version>1.0.7</version>
   <artifactId>tts-adapter-qfrency</artifactId>
   <packaging>bundle</packaging>
 
