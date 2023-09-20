@@ -76,7 +76,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.15</version>
+        <version>1.14.16-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -978,6 +978,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>tts-adapter-azure</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-adapter-cereproc</artifactId>
       <exclusions>
         <exclusion>
@@ -1339,6 +1349,16 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.microsoft.cognitiveservices.speech</groupId>
+      <artifactId>client-sdk</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2342,6 +2362,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-azure</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-adapter-cereproc</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2498,6 +2522,13 @@
                 <artifactItem>
                   <groupId>org.apache.commons</groupId>
                   <artifactId>commons-compress</artifactId>
+                </artifactItem>
+                <!--
+                    for tts-adapter-azure
+                -->
+                <artifactItem>
+                  <groupId>com.microsoft.cognitiveservices.speech</groupId>
+                  <artifactId>client-sdk</artifactId>
                 </artifactItem>
                 <!--
                     for tts-adapter-google
