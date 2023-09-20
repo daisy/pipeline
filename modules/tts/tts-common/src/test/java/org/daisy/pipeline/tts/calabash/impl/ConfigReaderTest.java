@@ -15,6 +15,7 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.config.ConfigReader;
+import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 
 import org.junit.Test;
 

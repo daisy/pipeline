@@ -21,12 +21,13 @@ import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioFileTypes;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
+import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
+import org.daisy.pipeline.tts.config.ConfigReader;
+import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSLog.ErrorCode;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
-import org.daisy.pipeline.tts.config.ConfigReader;
-import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 
 import com.google.common.collect.Iterables;
 import com.xmlcalabash.core.XProcException;

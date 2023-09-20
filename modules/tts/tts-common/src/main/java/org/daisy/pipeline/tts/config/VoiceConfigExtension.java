@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.calabash.impl;
+package org.daisy.pipeline.tts.config;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import org.daisy.pipeline.tts.config.ConfigProperties;
 import org.daisy.pipeline.tts.config.ConfigReader;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

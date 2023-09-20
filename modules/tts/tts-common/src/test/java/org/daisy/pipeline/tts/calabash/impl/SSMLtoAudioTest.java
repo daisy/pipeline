@@ -36,6 +36,7 @@ import static org.daisy.pipeline.audio.AudioFileTypes.MP3;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
+import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSLog;

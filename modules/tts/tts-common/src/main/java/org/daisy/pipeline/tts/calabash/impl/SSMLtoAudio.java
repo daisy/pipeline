@@ -24,6 +24,8 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
+import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
+import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
 import org.daisy.pipeline.tts.Sentence;
 import org.daisy.pipeline.tts.StructuredSSMLSplitter;
@@ -38,7 +40,6 @@ import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import org.daisy.pipeline.tts.VoiceManager;
-import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

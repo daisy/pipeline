@@ -3,6 +3,11 @@ package org.daisy.pipeline.tts.impl;
 import java.util.Collections;
 import java.util.Locale;
 
+import net.sf.saxon.s9api.Processor;
+
+import org.daisy.pipeline.tts.config.ConfigReader;
+import org.daisy.pipeline.tts.config.VoiceConfigExtension;
+import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
@@ -30,6 +35,7 @@ public class VoicesResource extends AuthenticatedResource {
 	static final String TTS_REGISTRY_KEY = "tts-registry";
 
 	private static final Logger logger = LoggerFactory.getLogger(VoicesResource.class.getName());
+	private static final Processor saxonProcessor = new Processor(false);
 
 	private VoiceManager voiceManager;
 	private String engineAttr;
@@ -49,9 +55,11 @@ public class VoicesResource extends AuthenticatedResource {
 		nameAttr = getQuery().getFirstValue("name");
 		langAttr = getQuery().getFirstValue("lang");
 		genderAttr = getQuery().getFirstValue("gender");
+		VoiceConfigExtension voiceConfigExt = new VoiceConfigExtension();
+		ConfigReader cr = new ConfigReader(saxonProcessor, voiceConfigExt);
 		voiceManager = new VoiceManager(
-			ttsRegistry.getWorkingEngines(Collections.EMPTY_MAP, null, null),
-			Collections.EMPTY_LIST);
+			ttsRegistry.getWorkingEngines(cr.getAllProperties(), new TTSLog(logger), logger),
+			voiceConfigExt.getVoiceDeclarations());
 	}
 
 	/**
