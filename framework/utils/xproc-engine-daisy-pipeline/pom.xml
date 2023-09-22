@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.14</version>
+    <version>1.14.15-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-engine-daisy-pipeline</artifactId>
-  <version>1.14.5</version>
+  <version>1.14.6-SNAPSHOT</version>
   <packaging>bundle</packaging>
   <name>xproc-engine-daisy-pipeline</name>
   
