@@ -120,7 +120,7 @@ class AggregatedBrailleTranslatorResult implements BrailleTranslatorResult {
         BrailleTranslatorResult current = computeNext();
         while (limit > row.length()) {
             String s = current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
-            if (s.isEmpty()) {
+            if (s.isEmpty() && current.hasNext()) {
                 break;
             } else {
                 force = false;
