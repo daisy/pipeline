@@ -292,8 +292,8 @@ public class XSLT extends DefaultStep {
             try {
                 transformer.transform();
             } catch (SaxonApiException sae) {
-                Throwable e = sae.getCause();
-                if (e instanceof TransformerException) {
+                if (sae.getCause() instanceof TransformerException) {
+                    TransformerException e = (TransformerException)sae.getCause();
                     QName code = null; {
                         if (e instanceof XPathException) {
                             StructuredQName qn = ((XPathException)e).getErrorCodeQName();
@@ -305,23 +305,15 @@ public class XSLT extends DefaultStep {
                     if (e instanceof TerminationException) {
                         message = catchMessages.getTerminatingMessage();
                     }
-                    TransformerException location = (TransformerException)e;
+                    TransformerException location = e;
                     Throwable cause = e.getCause();
                     if (cause != null) {
+                        XProcException errorCause = XProcException.fromException(cause)
+                                                                  .rebase(null, new RuntimeException().getStackTrace());
                         if (message != null)
-                            throw new XProcException(
-                                code,
-                                location,
-                                message,
-                                XProcException.fromException(cause)
-                                              .rebase(null, new RuntimeException().getStackTrace()));
+                            throw new XProcException(code, location, message, errorCause);
                         else
-                            throw new XProcException(
-                                code,
-                                location,
-                                e,
-                                XProcException.fromException(cause)
-                                              .rebase(null, new RuntimeException().getStackTrace()));
+                            throw new XProcException(code, location, e, errorCause);
                     } else if (message != null)
                         throw new XProcException(code, location, message);
                     else

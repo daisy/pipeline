@@ -980,7 +980,7 @@ public class XAtomicStep extends XStep {
             }
         } catch (SaxonApiException sae) {
             if (S9apiUtils.xpathSyntaxError(sae)) {
-                throw XProcException.dynamicError(23, step.getNode(), sae.getCause().getMessage());
+                throw XProcException.dynamicError(23, this, sae.getCause().getMessage());
             } else {
                 throw new XProcException(this, sae);
             }
