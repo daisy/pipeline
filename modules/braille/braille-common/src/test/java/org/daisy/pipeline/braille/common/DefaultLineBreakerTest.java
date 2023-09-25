@@ -77,6 +77,35 @@ public class DefaultLineBreakerTest {
 		assertEquals(
 			"",
 			fillLines(translator.lineBreakingFromStyledText().transform(text("\u200B")), 10));
+		assertEquals(
+			"XXX⠀XXX",
+			fillLines(
+				new AbstractBrailleTranslator() {
+					public BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille() {
+						return new BrailleTranslator.FromStyledTextToBraille() {
+							public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+								if (from < 0 || (to >= 0 && from > to))
+									throw new IndexOutOfBoundsException();
+								List<String> transformed = new ArrayList<>();
+								int i = 0;
+								for (CSSStyledText t : styledText) {
+									if (to >= 0 && i >= to)
+										break;
+									if (i >= from)
+										transformed.add(t.getText().toUpperCase());
+									i++;
+								}
+								return transformed;
+							}
+						};
+					}
+				}.lineBreakingFromStyledText().transform(
+					text("xxx",
+					     " ",
+					     " ",
+					     " ",
+					     "xxx")),
+				10));
 	}
 	
 	@Test

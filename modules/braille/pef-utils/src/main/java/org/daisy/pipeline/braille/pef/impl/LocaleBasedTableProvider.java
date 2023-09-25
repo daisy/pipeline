@@ -44,6 +44,7 @@ public class LocaleBasedTableProvider extends AbstractTableProvider {
 	
 	public LocaleBasedTableProvider() {
 		tableFromLocale.put("en", "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US");
+		tableFromLocale.put("de", "org_daisy.EmbosserTableProvider.TableType.DE_DE");
 		tableFromLocale.put("nl", "com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01");
 	}
 

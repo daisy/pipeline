@@ -288,7 +288,7 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 			while (limit > row.length()) {
 				if (current == null || current == prev) break;
 				String s = current.nextTranslatedRow(limit - row.length(), force, wholeWordsOnly);
-				if (s.isEmpty())
+				if (s.isEmpty() && current.hasNext())
 					break;
 				else
 					force = false;

@@ -59,16 +59,8 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 	@Override
 	public URL resolve(URI resource) {
 		URL resolved = super.resolve(resource);
-		if (resolved == null) {
-			if ("volatile-file".equals(resource.getScheme()))
-				try {
-					resource = new URI("file", resource.getSchemeSpecificPart(), resource.getFragment());
-				} catch (Exception e) {
-					// should not happen
-					throw new IllegalStateException(e);
-				}
+		if (resolved == null)
 			resolved = fileSystem.resolve(resource);
-		}
 		return resolved;
 	}
 	
@@ -107,6 +99,13 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 		}
 		
 		public URL resolve(URI resource) {
+			if ("volatile-file".equals(resource.getScheme()))
+				try {
+					resource = new URI("file", resource.getSchemeSpecificPart(), resource.getFragment());
+				} catch (Exception e) {
+					// should not happen
+					throw new IllegalStateException(e);
+				}
 			try {
 				resource = resource.normalize();
 				resource = identifier.resolve(resource);

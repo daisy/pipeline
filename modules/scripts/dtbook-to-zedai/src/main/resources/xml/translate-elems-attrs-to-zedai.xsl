@@ -52,6 +52,7 @@
                                                         //dtb:q[not(@id)]|
                                                         //dtb:table[not(@id)]|
                                                         //dtb:col[not(@id)]|
+                                                        //dtb:colgroup[not(@id)]|
                                                         //dtb:thead[not(@id)]|
                                                         //dtb:tfoot[not(@id)]|
                                                         //dtb:tbody[not(@id)]|
