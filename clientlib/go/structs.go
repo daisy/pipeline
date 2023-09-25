@@ -108,6 +108,11 @@ type XsInteger struct {
 	Documentation string
 }
 
+type XsNonNegativeInteger struct {
+	XmlDefinition string
+	Documentation string
+}
+
 type XsString struct {
 	XmlDefinition string
 	Documentation string

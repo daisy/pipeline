@@ -171,6 +171,9 @@ func processInputsAndOptions(p Pipeline, script *Script) (err error) {
 			if option.TypeAttr == "integer" || option.TypeAttr == "xs:integer" {
 				optionType = XsInteger{
 					XmlDefinition: "<data type=\"integer\"/>"}
+			} else if option.TypeAttr == "nonNegativeInteger" || option.TypeAttr == "xs:nonNegativeInteger" {
+				optionType = XsNonNegativeInteger{
+					XmlDefinition: "<data type=\"nonNegativeInteger\"/>"}
 			} else if option.TypeAttr == "boolean" || option.TypeAttr == "xs:boolean" {
 				optionType = XsBoolean{
 					XmlDefinition: "<data type=\"boolean\"/>"}
@@ -303,6 +306,11 @@ func parseDatatypeXmlDefinition(definition *datatypeXmlElement, documentation st
 			return
 		case "integer":
 			result = XsInteger{
+				XmlDefinition: serialized,
+				Documentation: documentation}
+			return
+		case "nonNegativeInteger":
+			result = XsNonNegativeInteger{
 				XmlDefinition: serialized,
 				Documentation: documentation}
 			return
