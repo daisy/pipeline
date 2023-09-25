@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.build</groupId>
   <artifactId>modules-test-helper</artifactId>
-  <version>2.2.3</version>
+  <version>2.2.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Modules Test Helper</name>
@@ -56,13 +56,13 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xproc-engine-daisy-pipeline</artifactId>
-      <version>1.14.4</version>
+      <version>1.14.5</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>saxon-adapter</artifactId>
-      <version>3.1.0</version>
+      <version>4.2.0</version>
       <scope>runtime</scope>
     </dependency>
     <!--

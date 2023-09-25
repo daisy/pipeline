@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.12</version>
+    <version>1.14.15</version>
     <relativePath/>
   </parent>
   <groupId>org.daisy.pipeline.build.modules-build-helper</groupId>
@@ -73,11 +73,6 @@
       <artifactId>org.osgi.compendium</artifactId>
       <version>4.3.1</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-appender</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
