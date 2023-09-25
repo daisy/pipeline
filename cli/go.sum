@@ -8,6 +8,12 @@ github.com/capitancambio/restclient v0.0.0-20150219172137-547c7b5e0857 h1:JjwRXa
 github.com/capitancambio/restclient v0.0.0-20150219172137-547c7b5e0857/go.mod h1:vKGyQZIyL/Ryo5QkEXw1xQIaLiJ/h/wionfFdXLc+5o=
 github.com/daisy/pipeline-clientlib-go v0.0.0-20200427151931-aad11eb63a65 h1:9/5fuP+lIM7KgFs3aMInV8LABZIZH2cjn/lUr2WNxaM=
 github.com/daisy/pipeline-clientlib-go v0.0.0-20200427151931-aad11eb63a65/go.mod h1:EqAuNzs3I84oUiMMlo787kGYRaNKozEPMfThpfj+sW8=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222103214-f83d7b8bf58f h1:0NlVgoyQ4+HnTspaFKokVCGII/LglfUyVv1ZLVVGGeg=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222103214-f83d7b8bf58f/go.mod h1:EqAuNzs3I84oUiMMlo787kGYRaNKozEPMfThpfj+sW8=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222110436-b4071cde0d7f h1:RpHcpLJLnxzxYTOlTbHbJR4a4YpijJzfAyU2BUKH7LE=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222110436-b4071cde0d7f/go.mod h1:EqAuNzs3I84oUiMMlo787kGYRaNKozEPMfThpfj+sW8=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222112022-be58359f0dc7 h1:7UrPVu10K/PzN7YYmF7hYpzrqklTovHpLEWjQBK8U0s=
+github.com/daisy/pipeline-clientlib-go v0.0.0-20231222112022-be58359f0dc7/go.mod h1:EqAuNzs3I84oUiMMlo787kGYRaNKozEPMfThpfj+sW8=
 github.com/hashicorp/go-version v1.0.0 h1:21MVWPKDphxa7ineQQTrCU5brh7OuVVAzGOCnnCPtE8=
 github.com/hashicorp/go-version v1.0.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 h1:iQTw/8FWTuc7uiaSepXwyf3o52HaUYcV+Tu66S3F5GA=

@@ -311,6 +311,8 @@ func optionTypeToString(optionType pipeline.DataType, optionName string, default
 		}
 	case pipeline.XsInteger:
 		return italic("INTEGER")
+	case pipeline.XsNonNegativeInteger:
+		return italic("NON-NEGATIVE-INTEGER")
 	case pipeline.Choice:
 		var choices []string
 		for _, value := range t.Values {
@@ -377,6 +379,12 @@ func optionTypeToDetailedHelp(optionType pipeline.DataType) string {
 			help += t.Documentation
 		} else {
 			help += "An _INTEGER_"
+		}
+	case pipeline.XsNonNegativeInteger:
+		if t.Documentation != "" {
+			help += t.Documentation
+		} else {
+			help += "An non-negative _INTEGER_"
 		}
 	case pipeline.Choice:
 		help += "One of the following:\n"
@@ -506,6 +514,13 @@ func validateOption(value string, optionType pipeline.DataType, link *PipelineLi
 		}
 	case pipeline.XsInteger:
 		_, err = strconv.ParseInt(value, 0, 0)
+	case pipeline.XsNonNegativeInteger:
+		var i int64
+		i, err = strconv.ParseInt(value, 0, 0)
+		if (i < 0) {
+			err = errors.New("does not match " + uncolor(optionTypeToString(t, "", "") + ": value is negative"))
+			return
+		}
 	case pipeline.XsAnyURI:
 		// _, err = url.Parse(value)
 	case pipeline.AnyFileURI:

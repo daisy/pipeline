@@ -1,0 +1,43 @@
+name: compile for all platforms
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '^1.21.3'
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Cache downloaded Go dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Cache downloaded Java dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Build
+        run: mvn --batch-mode clean verify
+      - name: Upload the artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: "cli"
+          path: target/*.zip
