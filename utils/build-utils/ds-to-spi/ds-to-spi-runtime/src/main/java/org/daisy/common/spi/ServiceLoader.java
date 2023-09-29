@@ -22,8 +22,8 @@ public class ServiceLoader<S> implements Iterable<S> {
 	private static ClassLoader lastContextClassLoader = null;
 	
 	public static <S> ServiceLoader<S> load(Class<S> serviceType) {
-		ClassLoader ccl = Thread.currentThread().getContextClassLoader();
-		if (ccl != lastContextClassLoader) {
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		if (classLoader != lastContextClassLoader) {
 			cache.clear();
 			synchronized (Memoize.singletons) {
 				for (Object o : Memoize.singletons.values())
@@ -34,53 +34,62 @@ public class ServiceLoader<S> implements Iterable<S> {
 				Memoize.singletons.clear();
 			}
 		}
-		lastContextClassLoader = ccl;
+		lastContextClassLoader = classLoader;
 		ServiceLoader<S> loader;
 		if (cache.containsKey(serviceType)) {
 			loader = (ServiceLoader<S>)cache.get(serviceType);
 		} else {
-			loader = new ServiceLoader<S>(serviceType);
+			loader = new ServiceLoader<S>(serviceType, classLoader);
 			cache.put(serviceType, loader);
 		}
 		return loader;
 	}
 	
-	private Class<S> serviceType;
+	private final Class<S> serviceType;
 	private Iterable<S> serviceLoader;
+	private final ClassLoader classLoader;
 	
-	private ServiceLoader(Class<S> serviceType) {
+	private ServiceLoader(Class<S> serviceType, ClassLoader classLoader) {
 		this.serviceType = serviceType;
+		this.classLoader = classLoader;
 	}
 	
 	public Iterator<S> iterator() {
 		return new AbstractIterator<S>() {
 			Iterator<S> serviceIterator;
 			public S computeNext() {
-				if (serviceIterator == null) {
-					try {
-						if (serviceLoader == null) {
-							serviceLoader = memoize(serviceType, java.util.ServiceLoader.load(serviceType));
-						}
-						serviceIterator = serviceLoader.iterator();
-					} catch (Throwable e) {
-						logger.error("Failed to load service providers", e);
-						return endOfData();
-					}
-				}
-				while (serviceIterator.hasNext()) {
-					try {
-						return serviceIterator.next();
-					} catch (Throwable e) {
-						if (e instanceof ServiceConfigurationError && e.getCause() instanceof ActivationException) {
-							logger.info(e.getMessage() + ": " + e.getCause().getMessage());
-							if (e.getCause().getCause() != null)
-								logger.trace("Cause:", e.getCause().getCause());
-						} else {
-							logger.error("Failed to instantiate provider of service '" + serviceType.getCanonicalName() + "'", e);
+				ClassLoader restoreClassLoader = Thread.currentThread().getContextClassLoader();
+				if (classLoader != restoreClassLoader)
+					Thread.currentThread().setContextClassLoader(classLoader);
+				try {
+					if (serviceIterator == null) {
+						try {
+							if (serviceLoader == null)
+								serviceLoader = memoize(serviceType, java.util.ServiceLoader.load(serviceType));
+							serviceIterator = serviceLoader.iterator();
+						} catch (Throwable e) {
+							logger.error("Failed to load service providers", e);
+							return endOfData();
 						}
 					}
+					while (serviceIterator.hasNext()) {
+						try {
+							return serviceIterator.next();
+						} catch (Throwable e) {
+							if (e instanceof ServiceConfigurationError && e.getCause() instanceof ActivationException) {
+								logger.info(e.getMessage() + ": " + e.getCause().getMessage());
+								if (e.getCause().getCause() != null)
+									logger.trace("Cause:", e.getCause().getCause());
+							} else {
+								logger.error("Failed to instantiate provider of service '" + serviceType.getCanonicalName() + "'", e);
+							}
+						}
+					}
+					return endOfData();
+				} finally {
+					if (classLoader != restoreClassLoader)
+						Thread.currentThread().setContextClassLoader(restoreClassLoader);
 				}
-				return endOfData();
 			}
 		};
 	}
