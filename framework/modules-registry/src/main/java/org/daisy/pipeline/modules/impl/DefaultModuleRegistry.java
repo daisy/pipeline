@@ -42,6 +42,11 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 	private final List<Module> modules = new ArrayList<>();
 	private final Iterator<Module> nextModules;
 	private final LinkedList<Module> modulesBeingInitialized = new LinkedList<>();
+	/*
+	 * Note that thanks to SaxonConfigurator.setModuleRegistry(), which calls
+	 * ModuleRegistry.iterator(), the module registry and all modules will be fully initialized
+	 * before the web service goes up.
+	*/
 	private boolean initialized = false;
 	private int detectEndlessRecursion = 0;
 
