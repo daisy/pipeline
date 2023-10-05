@@ -7,8 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.nio.file.NoSuchFileException;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -66,7 +68,7 @@ public class XProcResource {
 	 * handled recursively.
 	 */
 	public Set<Dependency> listDependencies(ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser) {
-		return listDependencies(resource, true, false, module, resolver, sourceRoots, parser);
+		return listDependencies(resource, true, false, module, resolver, sourceRoots, parser, new LinkedList<>());
 	}
 
 	/**
@@ -81,11 +83,16 @@ public class XProcResource {
 	 * @param parser      The StAX input factory for parsing the XML.
 	 */
 	private static Set<Dependency> listDependencies(URL file, boolean ensureXProc, boolean ensureXSLT, Module module,
-	                                                ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser) {
+	                                                ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser,
+	                                                Deque<URL> stack) {
 		if (cache.containsKey(file)) {
 			return cache.get(file);
 		} else {
 			Set<Dependency> dependencies = new HashSet<>();
+			if (stack.contains(file)) {
+				// cyclic dependencies within the same module are supported
+				return dependencies;
+			}
 			try (InputStream is = file.openStream()) {
 				XMLEventReader reader = parser.createXMLEventReader(is);
 				try {
@@ -134,9 +141,11 @@ public class XProcResource {
 									}
 								} else {
 									// resolve relative path
+									stack.push(file);
 									dependencies.addAll(
 										listDependencies(URLs.resolve(URLs.asURI(file), uri).toURL(), P_IMPORT.equals(name),
-										                 CX_IMPORT.equals(name), module, resolver, sourceRoots, parser));
+										                 CX_IMPORT.equals(name), module, resolver, sourceRoots, parser, stack));
+									stack.pop();
 								}
 							}
 							depth++;
