@@ -11,7 +11,7 @@ public interface ResourceLoader {
 	/**
 	 * Loads the resource.
 	 *
-	 * @param path the path, relative to catalog.xml
+	 * @param path the (not URL-encoded) path, relative to catalog.xml
 	 * @return An encoded absolute URL
 	 * @throws NoSuchFileException if the resource is not available
 	 */

@@ -198,21 +198,33 @@ public abstract class Module {
 
 	public static void parseCatalog(Module module, XmlCatalog catalog) throws NoSuchFileException {
 		for (Map.Entry<URI, URI> entry : catalog.getSystemIdMappings().entrySet()) {
-			module.addComponent(entry.getKey(), entry.getValue().toString());
+			URI path = entry.getValue();
+			if (path.isAbsolute() || path.getSchemeSpecificPart().startsWith("/"))
+				throw new NoSuchFileException("Expected a relative path, but got: " + path);
+			module.addComponent(entry.getKey(), path.getPath());
 		}
 		for (Map.Entry<URI, URI> entry : catalog.getUriMappings().entrySet()) {
-			module.addComponent(entry.getKey(), entry.getValue().toString());
+			URI path = entry.getValue();
+			if (path.isAbsolute() || path.getSchemeSpecificPart().startsWith("/"))
+				throw new NoSuchFileException("Expected a relative path, but got: " + path);
+			module.addComponent(entry.getKey(), path.getPath());
 		}
 		for (Map.Entry<String, URI> entry : catalog.getPublicMappings().entrySet()) {
-			module.addEntity(entry.getKey(), entry.getValue().toString());
+			URI path = entry.getValue();
+			if (path.isAbsolute() || path.getSchemeSpecificPart().startsWith("/"))
+				throw new NoSuchFileException("Expected a relative path, but got: " + path);
+			module.addEntity(entry.getKey(), path.getPath());
 		}
 		for (Map.Entry<URI, URI> rule : catalog.getRewriteUris().entrySet()) {
-			Iterable<URL> entries = module.loader.loadResources(rule.getValue().toString());
+			URI path = rule.getValue();
+			if (path.isAbsolute() || path.getSchemeSpecificPart().startsWith("/"))
+				throw new NoSuchFileException("Expected a relative path, but got: " + path);
+			Iterable<URL> entries = module.loader.loadResources(path.getPath());
 			for (URL url : entries) {
 				try {
 					// get tail of the path i.e. ../static/css/ -> /css/
-					String path = url.toURI().getPath().toString().replace(rule.getValue().toString().replace("..",""),"");
-					module.addComponent(rule.getKey().resolve(URI.create(path)), url.toString());
+					String rewritten = url.toURI().getPath().replace(path.getPath().replace("..", ""), "");
+					module.addComponent(new Component(module, rule.getKey().resolve(URI.create(rewritten)), url));
 				} catch (URISyntaxException e) {
 					module.getLogger().warn("Exception while generating paths");
 				}
@@ -282,7 +294,8 @@ public abstract class Module {
 	 * are not exposed as components. The method can be overridden to exclude certain resources that
 	 * have unmet dependencies.
 	 *
-	 * @param path The (not URL-encoded) path of a resource inside the JAR or class directory of the module.
+	 * @param path The (not URL-encoded) path, relative to catalog.xml, of a resource inside the JAR
+	 *             or class directory of the module.
 	 * @return An encoded absolute URL
 	 * @throws NoSuchFileException if the resource at {@code path} is not available
 	 */

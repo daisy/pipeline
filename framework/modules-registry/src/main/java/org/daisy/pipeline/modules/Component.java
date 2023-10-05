@@ -26,6 +26,13 @@ public class Component implements Dependency {
 		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
 	}
 
+	public Component(Module module, URI uri, URL resource) {
+		this.module = module;
+		this.uri = uri;
+		this.resource = resource;
+		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
+	}
+
 	/**
 	 * Gets the component's URI.
 	 *
