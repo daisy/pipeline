@@ -621,4 +621,32 @@ public class TTSRegistryTest {
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
+
+	@Test
+	public void orderOrAvailableVoices() throws UnknownLanguage {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice3", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+			availableVoices.add(new Voice("vendor", "voice1", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+			availableVoices.add(new Voice("vendor", "voice2", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = EMPTY_LIST;
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		Locale en = VoiceInfo.tagToLocale("en");
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en, null).iterator();
+		Assert.assertTrue(vv.hasNext());
+		Voice v = vv.next();
+		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertEquals("voice3", v.getName());
+		Assert.assertTrue(vv.hasNext());
+		v = vv.next();
+		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertEquals("voice1", v.getName());
+		Assert.assertTrue(vv.hasNext());
+		v = vv.next();
+		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertEquals("voice2", v.getName());
+		Assert.assertFalse(vv.hasNext());
+	}
 }

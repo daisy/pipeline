@@ -59,7 +59,7 @@
         </xsl:if>
         <xsl:for-each select="@css:*[matches(local-name(),'^alternate-[1-9][0-9]*$')]">
             <xsl:variable name="i" as="xs:integer" select="xs:integer(number(replace(local-name(.),'^alternate-([1-9][0-9]*)$','$1')))"/>
-            <xsl:if test="not($i=1 and @css:alternate)">
+            <xsl:if test="not($i=1 and ../@css:alternate)">
                 <css:alternate css:anchor="{$id}" style="{.}" name="{concat(f:name($this),'::alternate(',$i,')')}"/>
             </xsl:if>
         </xsl:for-each>

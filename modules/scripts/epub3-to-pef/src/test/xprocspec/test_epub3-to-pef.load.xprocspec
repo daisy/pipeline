@@ -91,9 +91,9 @@
       <x:document type="inline">
         <d:fileset>
           <d:file href="../resources/simple-epub/package.opf" media-type="application/oebps-package+xml" media-version="3.0"/>
-          <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml" media-version="5.0"/>
-          <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml" media-version="5.0"/>
-          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml" role="nav" media-version="5.0"/>
+          <d:file href="../resources/simple-epub/content-1.xhtml" media-type="application/xhtml+xml" media-version="5.0" doctype="&lt;!DOCTYPE html&gt;"/>
+          <d:file href="../resources/simple-epub/content-2.xhtml" media-type="application/xhtml+xml" media-version="5.0" doctype="&lt;!DOCTYPE html&gt;"/>
+          <d:file href="../resources/simple-epub/nav.xhtml" media-type="application/xhtml+xml" role="nav" media-version="5.0" doctype="&lt;!DOCTYPE html&gt;"/>
 		  <d:file href="../resources/preamble.html" media-type="application/xhtml+xml" role="preamble"/>
         </d:fileset>
       </x:document>

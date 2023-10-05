@@ -20,8 +20,8 @@
             <x:expect label="the pagebreak is integrated in the following item">
                 <ul id="id">
                     <li>1</li>
-                    <li><span epub:type="pagebreak" title="42"/><span epub:type="pagebreak" title="43"/>2</li>
-                    <li><span epub:type="pagebreak" title="44"/>3</li>
+                    <li><span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/><span epub:type="pagebreak" role="doc-pagebreak" title="43" aria-label=" 43. "/>2</li>
+                    <li><span epub:type="pagebreak" role="doc-pagebreak" title="44" aria-label=" 44. "/>3</li>
                 </ul>
             </x:expect>
         </x:scenario>
@@ -35,8 +35,8 @@
                 </z:list>
             </x:context>
             <x:expect label="it is moved before the list">
-                <div epub:type="pagebreak" title="42"/>
-                <div epub:type="pagebreak" title="43"/>
+                <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+                <div epub:type="pagebreak" role="doc-pagebreak" title="43" aria-label=" 43. "/>
                 <ul id="id">
                     <li>1</li>
                     <li>2</li>
@@ -57,8 +57,8 @@
                     <li>1</li>
                     <li>2</li>
                 </ul>
-                <div epub:type="pagebreak" title="42"/>
-                <div epub:type="pagebreak" title="43"/>
+                <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+                <div epub:type="pagebreak" role="doc-pagebreak" title="43" aria-label=" 43. "/>
             </x:expect>
         </x:scenario>
     </x:scenario>

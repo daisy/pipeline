@@ -255,9 +255,19 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 			<h2 px:role="name">Style sheet parameters</h2>
 			<p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
 
-Style sheets, whether they're specified with the "stylesheets" option or associated with the source,
-may have parameters (variables in case of Sass). The "stylesheet-parameters" option can be used to
-set these parameters.</p>
+Style sheets, whether they're specified with the "stylesheet" option or associated with the source,
+may have parameters (Sass variables). The "stylesheet-parameters" option, which takes a list of
+parenthesis enclosed key-value pairs, can be used to set these variables.
+
+For example, if a style sheet uses the Sass variable "foo":
+
+~~~sass
+@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+~~~
+
+you can control that variable with the following parameters list: `(foo:true)`.</p>
 		</p:documentation>
 	</p:option>
 
@@ -316,6 +326,11 @@ with the "Braille code" option this determines the transformer that is selected.
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Output file format</h2>
 			<p px:role="desc" xml:space="preserve">The file format in which to store the braille result.
+
+The file format must be expressed as a list of parenthesis enclosed key-value pairs. For example, to
+select a file format suited for the U.S., set the option to `(locale:en-US)`. To use the braille
+character set used in the Netherlands and store to a file with extension ".brl", set the option to
+`(locale:nl)(file-extension:'.brl')`.
 
 If left blank, the braille will be stored in PEF format.</p>
 		</p:documentation>

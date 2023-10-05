@@ -220,5 +220,75 @@
 		<x:expect label="the title of the package document" type="xpath"
 		          test="/opf:package/opf:metadata/dc:title/string(.)" equals="'Minimal DTBook'"/>
 	</x:scenario>
-	
+
+	<x:scenario label="conversion of page breaks">
+		<x:call step="px:dtbook-to-epub3">
+			<x:input port="source.fileset">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="content.xml" media-type="application/x-dtbook+xml"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="content.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+						<book>
+							<bodymatter>
+								<level1>
+									<pagenum id="page_1">1</pagenum>
+									<h1>Chapter</h1>
+									<p>Paragraph</p>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+			</x:input>
+			<x:input port="tts-config"/>
+			<x:option name="language" select="''"/>
+			<x:option name="validation" select="'off'"/>
+			<x:option name="audio" select="false()"/>
+			<x:option name="output-name" select="'content'"/>
+			<x:option name="output-dir" select="resolve-uri('result/')"/>
+			<x:option name="temp-dir" select="$temp-dir"/>
+		</x:call>
+		<x:context label="the result.fileset port">
+			<x:document type="port" port="result.fileset"/>
+		</x:context>
+		<x:expect label="the result.fileset port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline" base-uri="temp-dir">
+				<d:fileset>
+					<d:file href="epub3/out/epub/EPUB/content-1.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/content-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
+				</d:fileset>
+			</x:document>
+		</x:expect>
+		<x:context label="the content-2.xhtml document on the result.in-memort port">
+			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'/content-2.xhtml')]"/>
+		</x:context>
+		<x:expect label="the content-2.xhtml document" type="compare">
+			<x:document type="inline">
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+				      xmlns:epub="http://www.idpf.org/2007/ops">
+					<head>
+						<meta charset="UTF-8"/>
+						<title></title>
+					</head>
+					<body epub:type="bodymatter" id="id_6">
+						<section id="id_1">
+							<span title="1" epub:type="pagebreak" role="doc-pagebreak" aria-label=" 1. " id="page_1"/>
+							<h3 id="id_7">Chapter</h3>
+							<p>Paragraph</p>
+						</section>
+					</body>
+				</html>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
 </x:description>

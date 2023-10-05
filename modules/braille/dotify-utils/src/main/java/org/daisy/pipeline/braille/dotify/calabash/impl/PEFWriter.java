@@ -53,7 +53,11 @@ class PEFWriter extends PEFMediaWriter implements PagedMediaWriter {
 			if (space != '\u2800')
 				chars = chars.replace('\u2800', space);
 			if (brailleCharset != null) {
-				pst.print(" " + DP2_ASCII.getPrefix() + ":" + DP2_ASCII.getLocalPart() + "=\"" + chars.replace("\"", "&quot;") + "\"");
+				pst.print(" " + DP2_ASCII.getPrefix() + ":" + DP2_ASCII.getLocalPart() + "=\"" + chars.replace("&", "&amp;")
+				                                                                                      .replace("\"", "&quot;")
+				                                                                                      .replace("<", "&lt;")
+				                                                                                      .replace(">", "&gt;")
+				                                                                                      + "\"");
 				try {
 					chars = brailleCharset.toBraille(chars);
 				} catch (RuntimeException e) {

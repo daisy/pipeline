@@ -1,5 +1,6 @@
 package org.daisy.pipeline.tts.sapi.impl;
 
+import org.daisy.pipeline.tts.onecore.NativeSynthesisResult;
 import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.onecore.SAPI;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
@@ -14,19 +15,22 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.sound.sampled.AudioFormat;
+
 public class SAPITest {
+
+	private static final int sampleRate = 22050;
+	private static final short bytesPerSample = 2;
+
+	private static AudioFormat sapiAudioFormat = new AudioFormat(sampleRate, 8 * bytesPerSample, 1, true, false);
 
 	@BeforeClass
 	public static void load() throws SynthesisException {
-		SAPIService.loadAndInitializeSAPI(22050, 2);
+		SAPIService.loadAndInitializeSAPI(sampleRate, bytesPerSample);
 	}
 
 	@AfterClass
 	public static void dispose() {
-		System.out.println("WARNING notice: you may encountered an exception when the dll is released by the JVM after finishing tests, with an error log generated in the project folder.");
-		System.out.println("This exception does not prevent the tests and build to complete in success, and has not yet occured in real-world production tests.");
-		System.out.println("You can ignore it and the error log.");
-
 		SAPIService.ReleaseSAPI();
 	}
 
@@ -35,73 +39,55 @@ public class SAPITest {
 		        + "</s></speak>";
 	}
 
-	static long speakCycle(String text) throws IOException {
-		String[] names = SAPI.getVoiceNames();
-		String[] vendors = SAPI.getVoiceVendors();
-		String[] locales = SAPI.getVoiceLocales();
-		Assert.assertTrue(names.length > 0);
-		Assert.assertTrue(vendors.length > 0);
-		long connection = SAPI.openConnection();
-		Assert.assertNotSame(0, connection);
-		int error = SAPI.speak(connection, vendors[0], names[0], text);
-		int spoken = -1;
-		if (error == 0) {
-			spoken = SAPI.getStreamSize(connection);
-			if (spoken > 0) {
-				int offset = 5000;
-				byte[] audio = new byte[offset + spoken];
-				SAPI.readStream(connection, audio, offset);
-			}
-			if (spoken <= 200) {
-				error = -1;
-			}
-		}
-		if (error != 0)
-			SAPI.closeConnection(connection);
-		Assert.assertSame(0, error);
-		return connection;
+	static NativeSynthesisResult speakCycle(String text) throws IOException {
+		Voice[] voices = SAPI.getVoices();
+
+		Assert.assertTrue(voices.length > 0);
+
+		return SAPI.speak(voices[0].getEngine(), voices[0].getName(), text, (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
+
 	}
 
+
 	@Test
-	public void getVoiceNames() {
-		String[] voices = SAPI.getVoiceNames();
+	public void getVoices() throws IOException {
+		Voice[] voices = SAPI.getVoices();
 		Assert.assertTrue(voices.length > 0);
 	}
 
 	@Test
-	public void getVoiceVendors() {
-		String[] vendors = SAPI.getVoiceVendors();
-		Assert.assertTrue(vendors.length > 0);
-	}
-
-	@Test
-	public void getVoiceLocales() {
-		String[] locales = SAPI.getVoiceLocales();
-		Assert.assertTrue(locales.length > 0);
-	}
-
-	@Test
-	public void getVoiceGenders() {
-		String[] genders = SAPI.getVoiceGenders();
-		Assert.assertTrue(genders.length > 0);
-	}
-
-	@Test
-	public void getVoiceAges() {
-		String[] ages = SAPI.getVoiceAges();
-		Assert.assertTrue(ages.length > 0);
-	}
-
-	@Test
-	public void manageConnection() throws IOException {
-		long connection = SAPI.openConnection();
-		Assert.assertNotSame(0, connection);
-		SAPI.closeConnection(connection);
-	}
-	@Test
 	public void speakEasy() throws IOException{
-		long connection = speakCycle(SSML("this is a test"));
-		SAPI.closeConnection(connection);
+		speakCycle(SSML("this is a test"));
+	}
+
+	@Test
+	public void speakALot() throws IOException {
+		for(int i = 0; i < 10 ; ++i){
+			speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun."));
+		}
+	}
+
+	@Test
+	public void speakALotInThreads() throws IOException, InterruptedException {
+		Thread[] threads = new Thread[4];
+		for (int i = 0; i < threads.length; ++i) {
+			final int j = i;
+			threads[i] = new Thread() {
+				public void run() {
+					try{
+						for(int t = 0; t < 100 ; ++t){
+							speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun " + j + " - " + t + "." ));
+						}
+					} catch (IOException e){
+
+					}
+				}
+			};
+		}
+		for (int i = 0; i < threads.length; ++i)
+			threads[i].start();
+		for (Thread t : threads)
+			t.join();
 	}
 
 	private static SAPIEngine allocateEngine() throws Throwable {
@@ -117,45 +103,31 @@ public class SAPITest {
 
 	@Test
 	public void speakTwice() throws IOException {
-		String[] names = SAPI.getVoiceNames();
-		String[] vendors = SAPI.getVoiceVendors();
-		Assert.assertTrue(names.length > 0);
-		Assert.assertTrue(vendors.length > 0);
-		long connection = SAPI.openConnection();
-		Assert.assertNotSame(0, connection);
+		Voice[] voices = SAPI.getVoices();
+
+		Assert.assertTrue(voices.length > 0);
+
 		String text = SSML("small test");
-		int error1 = SAPI.speak(connection, vendors[0], names[0], text);
-		int spoken1 = SAPI.getStreamSize(connection);
-		if (spoken1 > 0) {
-			SAPI.readStream(connection, new byte[spoken1], 0); //skip data
-		}
-		int error2 = SAPI.speak(connection, vendors[0], names[0], text);
-		int spoken2 = SAPI.getStreamSize(connection);
-		SAPI.closeConnection(connection);
-		Assert.assertSame(0, error1);
-		Assert.assertSame(0, error2);
-		Assert.assertTrue(spoken1 >= 200);
-		Assert.assertTrue(spoken2 >= 200);
-		Assert.assertEquals(spoken1, spoken2);
+		NativeSynthesisResult spoken1 = SAPI.speak(voices[0].getEngine(), voices[0].getName(), text,  (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
+		NativeSynthesisResult spoken2 = SAPI.speak(voices[0].getEngine(), voices[0].getName(), text,  (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
+		Assert.assertTrue(spoken1.getStreamData().length >= 200);
+		Assert.assertTrue(spoken1.getStreamData().length >= 200);
+		Assert.assertEquals(spoken1.getStreamData().length, spoken1.getStreamData().length);
 	}
 
 	@Test
 	public void bookmarkReply() throws IOException {
-		long connection = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
-		String[] names = SAPI.getBookmarkNames(connection);
-		long[] pos = SAPI.getBookmarkPositions(connection);
-		SAPI.closeConnection(connection);
-		Assert.assertSame(1, names.length);
-		Assert.assertSame(1, pos.length);
+		NativeSynthesisResult res = speakCycle(SSML("this is <mark name=\"t\"/> a bookmark"));
+		Assert.assertSame(1, res.getMarksNames().length);
+		Assert.assertSame(1, res.getMarksPositions().length);
 	}
 
 	@Test
 	public void oneBookmark() throws IOException {
 		String bookmark = "bmark";
-		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
-		String[] names = SAPI.getBookmarkNames(connection);
-		long[] pos = SAPI.getBookmarkPositions(connection);
-		SAPI.closeConnection(connection);
+		NativeSynthesisResult res =  speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
+		String[] names = res.getMarksNames();
+		long[] pos = res.getMarksPositions();
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
 		Assert.assertEquals(bookmark, names[0]);
@@ -164,10 +136,9 @@ public class SAPITest {
 	 @Test
 	public void endingBookmark() throws IOException {
 		String bookmark = "endingmark";
-		long connection = speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark + "\"/> "));
-		String[] names = SAPI.getBookmarkNames(connection);
-		long[] pos = SAPI.getBookmarkPositions(connection);
-		SAPI.closeConnection(connection);
+		 NativeSynthesisResult res =  speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark + "\"/> "));
+		 String[] names = res.getMarksNames();
+		 long[] pos = res.getMarksPositions();
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
 		Assert.assertEquals(bookmark, names[0]);
@@ -177,11 +148,10 @@ public class SAPITest {
 	public void twoBookmarks() throws IOException {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
-		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
+		NativeSynthesisResult res = speakCycle(SSML("one two three four <mark name=\"" + b1
 		                                  + "\"/> five six <mark name=\"" + b2 + "\"/> seven"));
-		String[] names = SAPI.getBookmarkNames(connection);
-		long[] pos = SAPI.getBookmarkPositions(connection);
-		SAPI.closeConnection(connection);
+		String[] names = res.getMarksNames();
+		long[] pos = res.getMarksPositions();
 		Assert.assertSame(2, names.length);
 		Assert.assertSame(2, pos.length);
 		Assert.assertEquals(b1, names[0]);
@@ -192,8 +162,7 @@ public class SAPITest {
 	}
 
 	static private int[] findSize(final String[] sentences, int startShift) throws InterruptedException, IOException {
-		final String[] names = SAPI.getVoiceNames();
-		final String[] vendors = SAPI.getVoiceVendors();
+		Voice[] voices = SAPI.getVoices();
 		final int[] foundSize = new int[sentences.length];
 		Thread[] threads = new Thread[sentences.length];
 		for (int i = 0; i < threads.length; ++i) {
@@ -201,10 +170,8 @@ public class SAPITest {
 			threads[i] = new Thread() {
 				public void run() {
 					try{
-						long connection = SAPI.openConnection();
-						SAPI.speak(connection, vendors[0], names[0], sentences[j]);
-						foundSize[j] = SAPI.getStreamSize(connection);
-						SAPI.closeConnection(connection);
+						NativeSynthesisResult res = SAPI.speak(voices[0].getEngine(), voices[0].getName(), sentences[j],  (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
+						foundSize[j] = res.getStreamData().length;
 					} catch (IOException e){
 
 					}

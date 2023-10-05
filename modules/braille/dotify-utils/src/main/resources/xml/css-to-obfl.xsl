@@ -2260,6 +2260,7 @@
             <xsl:message terminate="yes">Coding error</xsl:message>
         </xsl:if>
         <xsl:variable name="text-transform" as="xs:string" select="($pending-text-transform,$text-transform)[1]"/>
+        <xsl:variable name="text-transform-none" as="xs:boolean" select="$text-transform='none'"/>
         <xsl:variable name="hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
         <xsl:variable name="style" as="xs:string*">
             <xsl:variable name="text-transform" as="xs:string*">
@@ -2273,8 +2274,10 @@
             <xsl:if test="exists($text-transform)">
                 <xsl:sequence select="concat('text-transform: ',string-join($text-transform,' '))"/>
             </xsl:if>
-            <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
-                <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+            <xsl:if test="$text-transform-none">
+                <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                    <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="$hyphens='none'">
                 <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
@@ -2387,8 +2390,10 @@
             <xsl:if test="not($text-transform=('auto','none'))">
                 <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
             </xsl:if>
-            <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
-                <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+            <xsl:if test="$text-transform='none'">
+                <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                    <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="$hyphens='none'">
                 <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
@@ -2668,8 +2673,10 @@
                     <xsl:if test="not($text-transform=('none','auto'))">
                         <xsl:sequence select="concat('text-transform: ',$text-transform)"/>
                     </xsl:if>
-                    <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
-                        <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+                    <xsl:if test="$text-transform='none'">
+                        <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
+                            <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
+                        </xsl:if>
                     </xsl:if>
                     <!--
                         hyphens handled through hyphenate attribute but not OBFL counterpart for value 'none'

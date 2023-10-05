@@ -388,14 +388,15 @@
                     <xsl:attribute name="ref" select="replace(@imgref, '#', '')"/>
                 </xsl:when>
                 <xsl:when test="parent::dtb:imggroup">
-                    <!-- get the id of the image in the imggroup and use it as a ref -->
-                    <!-- we know that images with no IDs had them generated in the img template, so re-use that ID. -->
-                    <xsl:variable name="img-id" as="xs:string">
+                    <!-- get the id of the (first) image in the imggroup and use it as a ref -->
+                    <xsl:variable name="img-id" as="xs:string*">
                         <xsl:for-each select="../dtb:img">
                             <xsl:call-template name="generate-id"/>
                         </xsl:for-each>
                     </xsl:variable>
-                    <xsl:attribute name="ref" select="$img-id"/>
+                    <xsl:if test="exists($img-id)">
+                        <xsl:attribute name="ref" select="$img-id[1]"/>
+                    </xsl:if>
                 </xsl:when>
             </xsl:choose>
             <xsl:call-template name="attrs"/>

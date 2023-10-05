@@ -24,7 +24,7 @@
 		</p:documentation>
 	</p:output>
 
-	<p:xslt name="compute-durations">
+	<p:xslt name="compute-durations" template-name="main">
 		<p:input port="stylesheet">
 			<p:document href="compute-elapsed-time.xsl"/>
 		</p:input>

@@ -9,13 +9,20 @@
 
 	<xsl:template name="main">
 		<!-- Get the last SMIL file. -->
-		<xsl:variable name="last-smil" as="document-node(element(s:smil))" select="collection()[last()]"/>
-		<!-- Assumes that it has the dtb:totalElapsedTime metadata. -->
-		<xsl:variable name="time-elapsed" as="xs:decimal"
-		              select="pf:smil-clock-value-to-seconds($last-smil/s:smil/s:head/s:meta[@name='dtb:totalElapsedTime']/@content)"/>
-		<xsl:variable name="time-in-this-smil" as="xs:decimal" select="pf:smil-total-seconds($last-smil/*)"/>
+		<xsl:variable name="last-smil" as="document-node(element(s:smil))?" select="collection()[last()]"/>
 		<total-time>
-			<xsl:value-of select="pf:smil-seconds-to-full-clock-value($time-elapsed + $time-in-this-smil)"/>
+			<xsl:choose>
+				<xsl:when test="exists($last-smil)">
+					<!-- Assumes that it has the dtb:totalElapsedTime metadata. -->
+					<xsl:variable name="time-elapsed" as="xs:decimal"
+					              select="pf:smil-clock-value-to-seconds($last-smil/s:smil/s:head/s:meta[@name='dtb:totalElapsedTime']/@content)"/>
+					<xsl:variable name="time-in-this-smil" as="xs:decimal" select="pf:smil-total-seconds($last-smil/*)"/>
+					<xsl:value-of select="pf:smil-seconds-to-full-clock-value($time-elapsed + $time-in-this-smil)"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="pf:smil-seconds-to-full-clock-value(0)"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</total-time>
 	</xsl:template>
 

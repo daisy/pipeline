@@ -130,23 +130,25 @@ public class AzureCognitiveSpeechTest {
 	}
 
 	@Test
-	public void twoBookmarks() throws Throwable {
+	public void bookmarks() throws Throwable {
 		AzureCognitiveSpeechEngine engine = allocateEngine();
 		TTSResource resource = engine.allocateThreadResources();
 		String text = " One two three four five six seven eight nine ten. ";
 		SynthesisResult result = engine.synthesize(
-			parseSSML("<s xmlns=\"http://www.w3.org/2001/10/synthesis\">"
-			          + text + text + "<mark name='1'/>"
-			          + text + text + "<mark name='2'/></s>"),
+			parseSSML("<s xmlns=\"http://www.w3.org/2001/10/synthesis\"><mark name='1'/>"
+			          + text + text + "<mark name='2'/><mark name='3'/>"
+			          + text + text + "<mark name='4'/></s>"),
 			testVoice,
 			resource);
 		engine.releaseThreadResources(resource);
 		int size = getSize(result.audio);
 		Assert.assertTrue("the audio should be long enough", size > 50000);
 		Assert.assertTrue("bookmarks should be found", result.marks != null);
-		Assert.assertEquals("two bookmark should be found", 2, result.marks.size());
-		Assert.assertTrue("mark 1 should be around the middle", Math.abs(result.marks.get(1) / 2 - result.marks.get(0)) < 20000);
-		Assert.assertTrue("mark 2 should be near the end", size - result.marks.get(1) < 50000);
+		Assert.assertEquals("four bookmarks should be found", 4, result.marks.size());
+		Assert.assertEquals("mark 1 should be at the very beginning", 0, result.marks.get(0).intValue());
+		Assert.assertTrue("mark 2 should be around the middle", Math.abs(result.marks.get(3) / 2 - result.marks.get(1)) < 20000);
+		Assert.assertEquals("mark 3 should be at the exact same position as mark 2", result.marks.get(1).intValue(), result.marks.get(2).intValue());
+		Assert.assertTrue("mark 4 should be near the end", size - result.marks.get(3) < 50000);
 	}
 
 	private static final Processor proc = new Processor(false);

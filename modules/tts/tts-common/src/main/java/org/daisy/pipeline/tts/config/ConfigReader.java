@@ -69,9 +69,9 @@ public class ConfigReader implements ConfigProperties {
 		mAllProps = new HashMap<String, String>();
 		mAllProps.putAll(mStaticProps);
 		String hostProtection = Properties.getProperty(HostProtectionProperty);
-		if (hostProtection != null)
-			Logger.warn("'" + HostProtectionProperty + "' setting is deprecated. " +
-			            "It may become unavailable in future version of DAISY Pipeline.");
+		//if (hostProtection != null)
+		//	Logger.warn("'" + HostProtectionProperty + "' setting is deprecated. " +
+		//	            "It may become unavailable in future version of DAISY Pipeline.");
 		if (hostProtection != null && hostProtection.equalsIgnoreCase("false"))
 			mAllProps.putAll(mDynamicProps);
 		else

@@ -19,13 +19,16 @@ import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
 import com.microsoft.cognitiveservices.speech.audio.AudioOutputStream;
 import com.microsoft.cognitiveservices.speech.audio.PullAudioOutputStream;
 import com.microsoft.cognitiveservices.speech.SpeechConfig;
+import com.microsoft.cognitiveservices.speech.SpeechSynthesisBookmarkEventArgs;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisCancellationDetails;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisOutputFormat;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesisResult;
 import com.microsoft.cognitiveservices.speech.SpeechSynthesizer;
 import com.microsoft.cognitiveservices.speech.SynthesisVoicesResult;
+import com.microsoft.cognitiveservices.speech.util.EventHandler;
 import com.microsoft.cognitiveservices.speech.VoiceInfo;
 
+import net.sf.saxon.dom.ElementOverNodeInfo;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -45,6 +48,12 @@ import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 public class AzureCognitiveSpeechEngine extends TTSEngine {
 
@@ -84,27 +93,19 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			}
 		}
 		try (PullAudioOutputStream stream = AudioOutputStream.createPullStream()) {
-			List<Integer> marks = new ArrayList<>();
+			BookmarkListener bookmarkListener = new BookmarkListener(getMarkNames(ssml));
 			try (
 				AudioConfig audioConfig = AudioConfig.fromStreamOutput(stream);
 				SpeechSynthesizer synth = new SpeechSynthesizer(speechConfig, audioConfig)
 			) {
-				synth.BookmarkReached.addEventListener((sender, mark) -> {
-						long offset = mark.getAudioOffset(); // audio offset in ticks (1 tick = 100 ns)
-						// convert to bytes
-						// (1 sample = 1/22050 s = 45,35 µs = 453,5 tick)
-						// (1 byte = 1/2 sample = 22,68 µs = 226,8 tick)
-						offset *= bytesPerSample;
-						offset /= 1000;
-						offset *= sampleRate;
-						offset /= 10000;
-						marks.add(Math.toIntExact(offset));
-					});
+				synth.BookmarkReached.addEventListener(bookmarkListener);
+
 				// Retry after a delay if the number of parallel requests exceeds the number of allowed concurrent
 				// transcriptions for the subscription. Increase the delay exponentially. See also:
 				// - https://learn.microsoft.com/en-us/azure/cognitive-services/speech-service/speech-services-quotas-and-limits#general-best-practices-to-mitigate-throttling-during-autoscaling
 				// - https://learn.microsoft.com/en-us/azure/architecture/patterns/retry
 				retry.launch(() -> {
+						bookmarkListener.reset();
 						try (
 							SpeechSynthesisResult result = synth.SpeakSsmlAsync(sentence).get() // get() throws InterruptedException
 						) {
@@ -121,6 +122,10 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 										throw new RecoverableError(
 											new SynthesisException(
 												"Synthesis failed: too many requests: " + cancellation.getErrorDetails()));
+									case BadRequest:
+										throw new SynthesisException(
+											"Synthesis failed: bad request: " + cancellation.getErrorDetails() + "\n"
+											+ "Sentence was: " + sentence);
 									default:
 										throw new SynthesisException(
 											"Synthesis failed: " + cancellation.getErrorCode() + ": " + cancellation.getErrorDetails());
@@ -140,7 +145,8 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			// synthesized successfully
 			byte[] pcm = ByteStreams.toByteArray(new PullAudioOutputStreamAsInputStream(stream)); // raw PCM data
 			AudioInputStream audio = createAudioStream(audioFormat, pcm);
-			return new SynthesisResult(audio, marks.isEmpty() ? null : marks);
+			List<Integer> marks = bookmarkListener.getMarks(pcm.length); // throws SynthesisException
+			return new SynthesisResult(audio, marks);
 		} catch (InterruptedException e) {
 			throw e;
 		} catch (FatalError e) {
@@ -251,5 +257,115 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			System.arraycopy(data, 0, b, off, r);
 			return r;
 		}
+	}
+
+	private static class BookmarkListener implements EventHandler<SpeechSynthesisBookmarkEventArgs> {
+
+		private final List<String> markNames;
+		private final List<Integer> marks;
+		private final List<String> unprocessedMarkNames;
+		private final Collection<String> processedMarkNames;
+		private final Collection<String> skippedMarkNames;
+		private IllegalStateException illegalState = null;
+
+		/**
+		 * @param markNames Marks in the input (name attributes)
+		 */
+		public BookmarkListener(List<String> markNames) {
+			this.markNames = markNames;
+			marks = new ArrayList<>();
+			unprocessedMarkNames = new ArrayList<>();
+			processedMarkNames = new ArrayList<>();
+			skippedMarkNames = new ArrayList<>();
+			unprocessedMarkNames.addAll(markNames);
+		}
+
+		public void reset() {
+			marks.clear();
+			unprocessedMarkNames.clear();
+			processedMarkNames.clear();
+			skippedMarkNames.clear();
+			illegalState = null;
+			unprocessedMarkNames.addAll(markNames);
+		}
+
+		public void onEvent(Object sender, SpeechSynthesisBookmarkEventArgs bookmark) {
+			if (illegalState != null)
+				return;
+			try {
+				String name = bookmark.getText();
+				if (processedMarkNames.contains(name))
+					throw new IllegalStateException("Mark duplicated in the output");
+				if (skippedMarkNames.contains(name))
+					throw new IllegalStateException("Marks do not have the same order as in the input");
+				if (!unprocessedMarkNames.contains(name))
+					throw new IllegalStateException("Encountered mark that does not exist in the input");
+				long offset = bookmark.getAudioOffset(); // audio offset in ticks (1 tick = 100 ns)
+				// convert to bytes
+				// (1 sample = 1/22050 s = 45,35 µs = 453,5 tick)
+				// (1 byte = 1/2 sample = 22,68 µs = 226,8 tick)
+				offset *= bytesPerSample;
+				offset /= 1000;
+				offset *= sampleRate;
+				offset /= 10000;
+				while (true) {
+					marks.add(Math.toIntExact(offset));
+					String m = unprocessedMarkNames.remove(0);
+					if (m.equals(name)) {
+						processedMarkNames.add(m);
+						break;
+					} else
+						// mark has not been encountered in the output. add a mark with the same
+						// offset as the following one
+						skippedMarkNames.add(m);
+				}
+			} catch (IllegalStateException e) {
+				illegalState = e;
+			}
+		}
+
+		/**
+		 * @param totalLength Total length of the audio stream in bytes.
+		 * @return Marks in the output (audio offsets in bytes)
+		 * @throws SynthesisException if marks could not be processed correctly for some reason
+		 */
+		public List<Integer> getMarks(int totalLength) throws SynthesisException {
+			if (illegalState != null)
+				throw new SynthesisException("Synthesis failed: marks could not be processed", illegalState);
+			for (String m : unprocessedMarkNames) {
+				// marks were skipped from the output. add the same number of marks at the very end of the stream
+				marks.add(totalLength);
+			}
+			return marks;
+		}
+	}
+
+	/**
+	 * @param ssml The sentence as an SSML node containing {@code mark} elements. It can not be
+	 *             assumed that the node is a root element.
+	 * @return The ordered list of mark names contained in the sentence
+	 * @throws SynthesisException if the input SSML is invalid
+	 */
+	private static List<String> getMarkNames(XdmNode ssml) throws SynthesisException {
+		List<String> marks = new ArrayList<>();
+		Node ssmlElem = ElementOverNodeInfo.wrap(ssml.getUnderlyingNode());
+		if (ssmlElem instanceof Element)
+			;
+		else if (ssmlElem instanceof Document)
+			ssmlElem = ((Document)ssmlElem).getDocumentElement();
+		else
+			throw new IllegalArgumentException();
+		NodeList markElems = ((Element)ssmlElem).getElementsByTagNameNS("http://www.w3.org/2001/10/synthesis", "mark");
+		for (int i = 0; i < markElems.getLength(); i++) {
+			Element markElem = (Element)markElems.item(i);
+			Attr nameAttr = markElem.getAttributeNode("name");
+			if (nameAttr == null)
+				throw new SynthesisException("Invalid SSML: mark element does not have a name attribute");
+			String name = nameAttr.getValue();
+			if (marks.contains(name))
+				throw new SynthesisException("Invalid SSML: mark elements do not have a unique name");
+			marks.add(name);
+		}
+		return marks;
 	}
 }

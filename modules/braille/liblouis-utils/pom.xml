@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.16-SNAPSHOT</version>
+    <version>1.14.18-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-utils</artifactId>
-  <version>5.1.2-SNAPSHOT</version>
+  <version>5.2.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils</name>
@@ -134,7 +134,7 @@
   </dependencies>
 
   <properties>
-    <liblouis.version>3.25.0-p1</liblouis.version>
+    <liblouis.version>3.27.0-p1</liblouis.version>
     <liblouisutdml.liblouis.version>2.6.3</liblouisutdml.liblouis.version>
     <expose-services>
       org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_default_liblouis_tables,
@@ -383,26 +383,26 @@
               <tasks>
                 <copy todir="target/generated-resources/native/liblouis">
                   <fileset dir="target/dependency/liblouis">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
                 <copy todir="target/generated-resources/native/liblouisutdml">
                   <fileset dir="target/dependency/liblouisutdml">
-                    <include name="**/*.so" />
-                    <include name="**/*.dylib" />
-                    <include name="**/*.dll" />
-                    <include name="**/file2brl" />
-                    <include name="**/file2brl.exe" />
+                    <include name="**/*.so"/>
+                    <include name="**/*.dylib"/>
+                    <include name="**/*.dll"/>
+                    <include name="**/file2brl"/>
+                    <include name="**/file2brl.exe"/>
                   </fileset>
                   <mapper>
-                    <globmapper handledirsep="yes" from="bin/*" to="*" />
-                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2" />
+                    <globmapper handledirsep="yes" from="bin/*" to="*"/>
+                    <regexpmapper handledirsep="yes" from="lib/(.*)/shared/(.*)$" to="\1/\2"/>
                   </mapper>
                 </copy>
               </tasks>
@@ -501,7 +501,7 @@
               <instructions combine.self="replace">
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.linux.LiblouisNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-linux</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.linux
@@ -528,7 +528,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.mac.LiblouisNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-mac</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.mac
@@ -554,7 +554,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.liblouis-utils-windows</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Import-Package>!org.daisy.common.spi,*</Import-Package>
                 <Private-Package>
                   org.daisy.pipeline.braille.liblouis.impl.windows

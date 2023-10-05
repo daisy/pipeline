@@ -86,7 +86,7 @@
 		</p:input>
 	</px:fileset-purge>
 
-	<px:fileset-load media-types="text/html application/xhtml+xml" name="htmls">
+	<px:fileset-load media-types="text/html application/xhtml+xml" detect-serialization-properties="true" name="htmls">
 		<p:input port="in-memory">
 			<p:pipe step="main" port="source.in-memory"/>
 		</p:input>
@@ -95,6 +95,7 @@
 	<p:for-each>
 		<p:identity name="html"/>
 
+		<!-- list HTML files and resources referenced from them -->
 		<p:xslt>
 			<p:input port="stylesheet">
 				<p:document href="../xslt/html-to-fileset.xsl"/>
@@ -106,6 +107,25 @@
 				<p:pipe step="main" port="source.in-memory"/>
 			</p:with-param>
 		</p:xslt>
+		<!-- copy detected serialization properties -->
+		<p:group>
+			<p:identity name="fileset"/>
+			<p:sink/>
+			<px:fileset-intersect name="files-in-source">
+				<p:input port="source">
+					<p:pipe step="htmls" port="result.fileset"/>
+					<p:pipe step="fileset" port="result"/>
+				</p:input>
+			</px:fileset-intersect>
+			<p:sink/>
+			<px:fileset-join>
+				<p:input port="source">
+					<p:pipe step="files-in-source" port="result"/>
+					<p:pipe step="fileset" port="result"/>
+				</p:input>
+			</px:fileset-join>
+		</p:group>
+		<!-- detect media types of resources -->
 		<px:mediatype-detect/>
 		<p:identity name="html-and-resources"/>
 		<p:sink/>

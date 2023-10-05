@@ -14,7 +14,7 @@
     <AppContainerApplication>true</AppContainerApplication>
     <ApplicationType>Windows Store</ApplicationType>
     <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
-    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition=" '$(WindowsTargetPlatformVersion)' == '' ">10.0.22000.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.17134.0</WindowsTargetPlatformMinVersion>
     <CppWinRTProjectLanguage>C++/WinRT</CppWinRTProjectLanguage>
   </PropertyGroup>
@@ -120,7 +120,7 @@
       <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
       <ModuleDefinitionFile>onecorenative.def</ModuleDefinitionFile>
     </Link>
@@ -167,6 +167,7 @@
     <ClInclude Include="..\jni_helper.h" />
     <ClInclude Include="..\Voice.hpp" />
     <ClInclude Include="Generated Files\Connection.g.h" />
+    <ClInclude Include="Generated Files\SpeechResult.g.h" />
     <ClInclude Include="org_daisy_pipeline_tts_onecore_Onecore.h" />
     <ClInclude Include="org_daisy_pipeline_tts_onecore_OnecoreResult.h" />
     <ClInclude Include="pch.h" />
@@ -175,7 +176,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="jni_helper.cpp" />
     <ClCompile Include="org_daisy_pipeline_tts_onecore_Onecore.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

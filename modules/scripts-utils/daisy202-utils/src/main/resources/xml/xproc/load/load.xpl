@@ -96,10 +96,10 @@
         <px:fileset-add-entry media-type="application/xhtml+xml">
             <p:with-option name="href" select="$href"/>
         </px:fileset-add-entry>
-        <px:fileset-load name="in-memory.ncc"/>
+        <px:fileset-load name="in-memory.ncc" detect-serialization-properties="true"/>
         <px:message severity="DEBUG"
             message="Making an ordered list of SMIL-files referenced from the NCC according to the flow (reading order)"/>
-        <p:xslt name="fileset.smil">
+        <p:xslt>
             <p:input port="parameters">
                 <p:empty/>
             </p:input>
@@ -109,12 +109,11 @@
         </p:xslt>
 
         <px:message severity="DEBUG" message="Loading all SMIL files"/>
-        <px:fileset-load>
+        <px:fileset-load detect-serialization-properties="true" name="in-memory.smil">
             <p:input port="in-memory">
                 <p:empty/>
             </p:input>
         </px:fileset-load>
-        <p:identity name="in-memory.smil"/>
 
         <p:for-each px:message="Listing audio files referenced from the SMIL files" px:message-severity="DEBUG">
             <px:smil-to-audio-fileset/>
@@ -142,7 +141,7 @@
             <p:add-attribute match="d:file[matches(lower-case(@href),'\.x?html$')]"
                              attribute-name="media-type" attribute-value="application/xhtml+xml"/>
             <!-- determine encoding -->
-            <px:fileset-load media-types="application/xhtml+xml" name="load"/>
+            <px:fileset-load media-types="application/xhtml+xml" detect-serialization-properties="true" name="load"/>
             <p:for-each name="html-encodings">
                 <p:output port="result"/>
                 <p:sink/>
@@ -181,24 +180,27 @@
                 <p:pipe step="html-load" port="result.in-memory"/>
             </p:input>
         </p:identity>
+        <p:sink/>
+
+        <p:add-attribute match="d:file" attribute-name="encoding" name="fileset.ncc">
+            <p:input port="source">
+                <p:pipe step="in-memory.ncc" port="result.fileset"/>
+            </p:input>
+            <p:with-option name="attribute-value" select="pf:html-encoding(/)">
+                <p:pipe step="in-memory.ncc" port="result"/>
+            </p:with-option>
+        </p:add-attribute>
+        <p:sink/>
 
         <px:fileset-join>
             <p:input port="source">
-                <p:pipe port="result" step="fileset.smil"/>
+                <p:pipe step="fileset.ncc" port="result"/>
+                <p:pipe step="in-memory.smil" port="result.fileset"/>
                 <p:pipe port="result" step="fileset.audio"/>
                 <p:pipe step="html" port="fileset"/>
                 <p:pipe port="result" step="fileset.html-resources"/>
             </p:input>
         </px:fileset-join>
-        <px:fileset-add-entry media-type="application/xhtml+xml" first="true">
-            <p:with-option name="href" select="base-uri(.)">
-                <p:pipe port="result" step="in-memory.ncc"/>
-            </p:with-option>
-            <p:with-param port="file-attributes" name="encoding" select="pf:html-encoding(/)">
-                <p:pipe port="result" step="in-memory.ncc"/>
-            </p:with-param>
-        </px:fileset-add-entry>
-        <px:fileset-join/>
         <px:mediatype-detect>
             <p:input port="in-memory">
                 <p:pipe port="result" step="in-memory"/>

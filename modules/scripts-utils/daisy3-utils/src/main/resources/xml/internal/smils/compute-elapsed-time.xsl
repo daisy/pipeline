@@ -8,7 +8,7 @@
 
   <xsl:include href="http://www.daisy.org/pipeline/modules/smil-utils/clock-functions.xsl"/>
 
-  <xsl:template match="/">
+  <xsl:template name="main">
     <d:durations>
       <xsl:call-template name="accu"/>
     </d:durations>

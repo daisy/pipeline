@@ -1,13 +1,23 @@
 namespace onecorenative
 {
     [default_interface]
+    runtimeclass SpeechResult
+    {
+        SpeechResult(UInt8[] speech, String[] marksNames,Int64[] marksPositions, UInt8 errorFlag);
+        UInt8[] getSpeech();
+        String[] getMarksNames();
+        Int64[] getMarksPositions();
+        UInt8 getErrorFlag();
+        void setErrorFlag(UInt8 error);
+    }
+
+    [default_interface]
     runtimeclass Connection
     {
         Connection();
         Windows.Media.SpeechSynthesis.VoiceInformation[] voices();
-        UInt8[] speak(String ssml, String voiceName);
-        String[] marksNames();
-        Int64[] marksPositions();
+        Windows.Media.SpeechSynthesis.VoiceInformation defaultVoice();
+        SpeechResult speak(String ssml, String voiceName);
 
     }
 }

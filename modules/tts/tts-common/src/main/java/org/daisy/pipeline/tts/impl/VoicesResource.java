@@ -1,9 +1,15 @@
 package org.daisy.pipeline.tts.impl;
 
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.Collections;
 import java.util.Locale;
 
+import javax.xml.transform.sax.SAXSource;
+
 import net.sf.saxon.s9api.Processor;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
@@ -23,12 +29,15 @@ import org.restlet.data.Status;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
+import org.restlet.resource.Post;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import org.xml.sax.InputSource;
 
 public class VoicesResource extends AuthenticatedResource {
 
@@ -37,7 +46,7 @@ public class VoicesResource extends AuthenticatedResource {
 	private static final Logger logger = LoggerFactory.getLogger(VoicesResource.class.getName());
 	private static final Processor saxonProcessor = new Processor(false);
 
-	private VoiceManager voiceManager;
+	private TTSRegistry ttsRegistry;
 	private String engineAttr;
 	private String nameAttr;
 	private String langAttr;
@@ -50,16 +59,11 @@ public class VoicesResource extends AuthenticatedResource {
 		if (!isAuthenticated()) {
 			return;
 		}
-		TTSRegistry ttsRegistry = (TTSRegistry)getContext().getAttributes().get(TTS_REGISTRY_KEY);
+		ttsRegistry = (TTSRegistry)getContext().getAttributes().get(TTS_REGISTRY_KEY);
 		engineAttr = getQuery().getFirstValue("engine");
 		nameAttr = getQuery().getFirstValue("name");
 		langAttr = getQuery().getFirstValue("lang");
 		genderAttr = getQuery().getFirstValue("gender");
-		VoiceConfigExtension voiceConfigExt = new VoiceConfigExtension();
-		ConfigReader cr = new ConfigReader(saxonProcessor, voiceConfigExt);
-		voiceManager = new VoiceManager(
-			ttsRegistry.getWorkingEngines(cr.getAllProperties(), new TTSLog(logger), logger),
-			voiceConfigExt.getVoiceDeclarations());
 	}
 
 	/**
@@ -69,11 +73,42 @@ public class VoicesResource extends AuthenticatedResource {
 	 */
 	@Get("xml")
 	public Representation getResource() {
+		return getResource(null);
+	}
+
+	/**
+	 * @param ttsConfig
+	 */
+	@Post("xml")
+	public Representation getResource(Representation ttsConfig) {
 		logRequest();
 		maybeEnableCORS();
 		if (!isAuthenticated()) {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
+		}
+		VoiceManager voiceManager; {
+			VoiceConfigExtension voiceConfigExt = new VoiceConfigExtension();
+			XdmNode configXML = null; {
+				if (ttsConfig != null) {
+					try {
+						configXML = saxonProcessor.newDocumentBuilder().build(
+							new SAXSource(new InputSource(new StringReader(ttsConfig.getText()))));
+					} catch (IOException|SaxonApiException e) {
+						logger.error("bad request:", e);
+						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+						return getErrorRepresentation(e.getMessage());
+					}
+				}
+			}
+			ConfigReader cr = new ConfigReader(saxonProcessor, configXML, voiceConfigExt);
+			if (configXML != null) {
+				logger.debug("Voice configuration XML:\n" + configXML);
+				logger.debug("Parsed voice configuration:\n" + voiceConfigExt.getVoiceDeclarations());
+			}
+			voiceManager = new VoiceManager(
+				ttsRegistry.getWorkingEngines(cr.getAllProperties(), new TTSLog(logger), logger),
+				voiceConfigExt.getVoiceDeclarations());
 		}
 		Iterable<Voice> availableVoices; {
 			Locale lang; {

@@ -15,15 +15,24 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8"/>
-					<d:file href="../resources/dontworrybehappy/content.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0001.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0002.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0003.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0004.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0005.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0006.smil" media-type="application/smil+xml"/>
-					<d:file href="../resources/dontworrybehappy/speechgen0007.smil" media-type="application/smil+xml"/>
+					<d:file href="../resources/dontworrybehappy/ncc.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8"
+					        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
+					<d:file href="../resources/dontworrybehappy/content.html" media-type="application/xhtml+xml" media-version="4.0" encoding="utf-8"
+					        doctype-public="-//W3C//DTD XHTML 1.0 Strict//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0001.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0002.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0003.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0004.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0005.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0006.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
+					<d:file href="../resources/dontworrybehappy/speechgen0007.smil" media-type="application/smil+xml"
+					        doctype-public="-//W3C//DTD SMIL 1.0//EN" doctype-system="http://www.w3.org/TR/REC-SMIL/SMIL10.dtd"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0001.mp3" media-type="audio/mpeg"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0002.mp3" media-type="audio/mpeg"/>
 					<d:file href="../resources/dontworrybehappy/speechgen0003.mp3" media-type="audio/mpeg"/>

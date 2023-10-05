@@ -686,6 +686,7 @@
       <xsl:call-template name="role">
         <xsl:with-param name="roles" select="('pagebreak',@role)"/>
       </xsl:call-template>
+      <xsl:attribute name="role" select="'doc-pagebreak'"/>
       <xsl:apply-templates select="@* except @role"/>
     </div>
   </xsl:template>
@@ -694,11 +695,15 @@
       <xsl:call-template name="role">
         <xsl:with-param name="roles" select="('pagebreak',@role)"/>
       </xsl:call-template>
+      <xsl:attribute name="role" select="'doc-pagebreak'"/>
       <xsl:apply-templates select="@* except @role"/>
     </span>
   </xsl:template>
   <xsl:template match="pagebreak/@value" mode="#all">
     <xsl:attribute name="title" select="."/>
+    <xsl:attribute name="aria-label" select="concat(' ',.,'. ')"/> <!-- append period and surround with extra
+                                                                        spaces to help AT speaking the page
+                                                                        number correctly -->
   </xsl:template>
 
   <!--====== Quote module =======================================-->

@@ -13,7 +13,7 @@
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-unscrambler/">
 			Online documentation
 		</a>
-        <address>
+		<address>
 			Authors:
 			<dl px:role="author">
 				<dt>Name:</dt>

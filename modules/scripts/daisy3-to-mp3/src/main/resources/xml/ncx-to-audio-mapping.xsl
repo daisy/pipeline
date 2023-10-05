@@ -116,6 +116,7 @@
 								<xsl:variable name="dest-file" as="xs:integer*">
 									<xsl:choose>
 										<xsl:when test="empty($clips-for-dest-file)
+										                and $level&lt;$depth
 										                and (every $x in $level + 1 to $depth satisfies $dest-file[1 + $x] eq 1)">
 											<xsl:sequence select="$dest-file"/>
 										</xsl:when>

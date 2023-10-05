@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 
+import org.daisy.pipeline.tts.onecore.NativeSynthesisResult;
 import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
@@ -11,6 +12,8 @@ import org.daisy.pipeline.tts.Voice;
 import org.junit.*;
 
 public class OnecoreTest {
+
+	private final static String osName = System.getProperty("os.name");
 
 	/**
 	 * Initialization of the Onecore runtime
@@ -23,51 +26,15 @@ public class OnecoreTest {
 
 	@AfterClass
 	public static void dispose() {
-		System.out.println("WARNING notice: you may encountered an exception when the dll is released by the JVM after finishing tests, with an error log generated in the project folder.");
-		System.out.println("This exception does not prevent the tests and build to complete in success, and has not yet occured in real-world production tests.");
-		System.out.println("You can ignore it and the error log.");
 		SAPIService.ReleaseOnecore();
 	}
 
 	@Test
-	public void getVoiceNames() {
-		String[] voices = Onecore.getVoiceNames();
+	public void getVoiceNames() throws IOException {
+		Voice[] voices = Onecore.getVoices();
 		Assert.assertTrue(voices.length > 0);
 	}
 
-	@Test
-	public void getVoiceVendors() {
-		String[] vendors = Onecore.getVoiceVendors();
-		Assert.assertTrue(vendors.length > 0);
-	}
-
-	@Test
-	public void getVoiceLocales() {
-		String[] locales = Onecore.getVoiceLocales();
-		Assert.assertTrue(locales.length > 0);
-	}
-
-	@Test
-	public void getVoiceGenders() {
-		String[] genders = Onecore.getVoiceGenders();
-		Assert.assertTrue(genders.length > 0);
-	}
-
-	@Test
-	public void getVoiceAges() {
-		String[] ages = Onecore.getVoiceAges();
-		Assert.assertTrue(ages.length > 0);
-	}
-
-	/**
-	 * Test to connect with the TTS API
-	 */
-	@Test
-	public void manageConnection() {
-		long connection = Onecore.openConnection();
-		Assert.assertNotSame(0, connection);
-		Onecore.closeConnection(connection);
-	}
 
 	/**
 	 * Test if voices can be recovered with the TTS engine
@@ -98,37 +65,51 @@ public class OnecoreTest {
 	 * @param text the text to speak
 	 * @return the pointer of the connection opened with the TTS API
 	 */
-	static long speakCycle(String text) throws IOException {
-		String[] names = Onecore.getVoiceNames();
-		String[] vendors = Onecore.getVoiceVendors();
-		String[] locales = Onecore.getVoiceLocales();
-		Assert.assertTrue(names.length > 0);
-		Assert.assertTrue(vendors.length > 0);
-		long connection = Onecore.openConnection();
-		Assert.assertNotSame(0, connection);
-		int error = Onecore.speak(connection, vendors[0], names[0], text);
-		int spoken = -1;
-		if (error == 0) {
-			spoken = Onecore.getStreamSize(connection);
-			if (spoken > 0) {
-				int offset = 5000;
-				byte[] audio = new byte[offset + spoken];
-				Onecore.readStream(connection, audio, offset);
-			}
-			if (spoken <= 200) {
-				error = -1;
-			}
-		}
-		if (error != 0)
-			Onecore.closeConnection(connection);
-		Assert.assertSame(0, error);
-		return connection;
+	static NativeSynthesisResult speakCycle(String text) throws IOException {
+		Voice[] voices = Onecore.getVoices();
+		Assert.assertTrue(voices.length > 0);
+		NativeSynthesisResult res;
+		res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), text);
+
+		Assert.assertTrue(res.getStreamData().length > 200);
+		return res;
 	}
 
 	@Test
 	public void speakEasy() throws IOException {
-		long connection = speakCycle(SSML("this is a test"));
-		Onecore.closeConnection(connection);
+		System.out.println(osName);
+		speakCycle(SSML("this is a test"));
+	}
+
+	@Test
+	public void speakALot() throws IOException {
+		for(int i = 0; i < 10 ; ++i){
+			speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun."));
+		}
+	}
+
+	@Test
+	public void speakALotInThreads() throws IOException, InterruptedException {
+		Thread[] threads = new Thread[4];
+		for (int i = 0; i < threads.length; ++i) {
+			final int j = i;
+			threads[i] = new Thread() {
+				public void run() {
+
+					try{
+						for(int t = 0; t < 100 ; ++t){
+							speakCycle(SSML("this is a test with a longer sentence that i hope should be long enough to create some kind of long audio and could provoque a stack overrun : " + j + " - " + t + "." ));
+						}
+					} catch (IOException e){
+
+					}
+				}
+			};
+		}
+		for (int i = 0; i < threads.length; ++i)
+			threads[i].start();
+		for (Thread t : threads)
+			t.join();
 	}
 
 	/**
@@ -146,23 +127,16 @@ public class OnecoreTest {
 	 */
 	@Test
 	public void speakTwice() throws IOException {
-		String[] names = Onecore.getVoiceNames();
-		String[] vendors = Onecore.getVoiceVendors();
-		Assert.assertTrue(names.length > 0);
-		Assert.assertTrue(vendors.length > 0);
-		long connection = Onecore.openConnection();
-		Assert.assertNotSame(0, connection);
+		Voice[] voices = Onecore.getVoices();
+		Assert.assertTrue(voices.length > 0);
+
 		String text = SSML("small test");
-		int error1 = Onecore.speak(connection, vendors[0], names[0], text);
-		int spoken1 = Onecore.getStreamSize(connection);
-		if (spoken1 > 0) {
-			Onecore.readStream(connection, new byte[spoken1], 0); //skip data
-		}
-		int error2 = Onecore.speak(connection, vendors[0], names[0], text);
-		int spoken2 = Onecore.getStreamSize(connection);
-		Onecore.closeConnection(connection);
-		Assert.assertSame(0, error1);
-		Assert.assertSame(0, error2);
+		NativeSynthesisResult res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), text);
+
+
+		int spoken1 = res.getStreamData().length;
+		res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), text);
+		int spoken2 =  res.getStreamData().length;
 		Assert.assertTrue(spoken1 >= 200);
 		Assert.assertTrue(spoken2 >= 200);
 		Assert.assertEquals(spoken1, spoken2);
@@ -175,10 +149,10 @@ public class OnecoreTest {
 	@Test
 	public void oneBookmark() throws IOException {
 		String bookmark = "bmark";
-		long connection = speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
-		String[] names = Onecore.getBookmarkNames(connection);
-		long[] pos = Onecore.getBookmarkPositions(connection);
-		Onecore.closeConnection(connection);
+		NativeSynthesisResult res = speakCycle(SSML("this is <mark name=\"" + bookmark + "\"/> a bookmark"));
+
+		String[] names = res.getMarksNames();
+		long[] pos = res.getMarksPositions();
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
 		Assert.assertEquals(bookmark, names[0]);
@@ -190,11 +164,10 @@ public class OnecoreTest {
 	@Test
 	public void endingBookmark() throws IOException {
 		String bookmark = "endingmark";
-		long connection = speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark
+		NativeSynthesisResult res = speakCycle(SSML("this is an ending mark <mark name=\"" + bookmark
 		        + "\"/> "));
-		String[] names = Onecore.getBookmarkNames(connection);
-		long[] pos = Onecore.getBookmarkPositions(connection);
-		Onecore.closeConnection(connection);
+		String[] names = res.getMarksNames();
+		long[] pos = res.getMarksPositions();
 		Assert.assertSame(1, names.length);
 		Assert.assertSame(1, pos.length);
 		Assert.assertEquals(bookmark, names[0]);
@@ -207,11 +180,11 @@ public class OnecoreTest {
 	public void twoBookmarks() throws IOException {
 		String b1 = "bmark1";
 		String b2 = "bmark2";
-		long connection = speakCycle(SSML("one two three four <mark name=\"" + b1
+		NativeSynthesisResult res = speakCycle(SSML("one two three four <mark name=\"" + b1
 		                                  + "\"/> five six <mark name=\"" + b2 + "\"/> seven"));
-		String[] names = Onecore.getBookmarkNames(connection);
-		long[] pos = Onecore.getBookmarkPositions(connection);
-		Onecore.closeConnection(connection);
+		String[] names = res.getMarksNames();
+		long[] pos = res.getMarksPositions();
+
 		Assert.assertSame(2, names.length);
 		Assert.assertSame(2, pos.length);
 		Assert.assertEquals(b1, names[0]);
@@ -228,23 +201,21 @@ public class OnecoreTest {
 	 * @return an array of the stream size for each sentence spoken
 	 * @throws InterruptedException
 	 */
-	static private int[] findSize(final String[] sentences, int startShift) throws InterruptedException {
-		final String[] names = Onecore.getVoiceNames();
-		final String[] vendors = Onecore.getVoiceVendors();
+	static private int[] findSize(final String[] sentences, int startShift) throws InterruptedException, IOException {
+		final  Voice[] voices = Onecore.getVoices();
 		final int[] foundSize = new int[sentences.length];
 		Thread[] threads = new Thread[sentences.length];
 		for (int i = 0; i < threads.length; ++i) {
 			final int j = i;
 			threads[i] = new Thread() {
 				public void run() {
-					long connection = Onecore.openConnection();
+
 					try{
-						Onecore.speak(connection, vendors[0], names[0], sentences[j]);
-						foundSize[j] = Onecore.getStreamSize(connection);
+						NativeSynthesisResult res = Onecore.speak(voices[0].getEngine(), voices[0].getName(), sentences[j]);
+						foundSize[j] = res.getStreamData().length;
 					} catch (IOException e){
 
 					}
-					Onecore.closeConnection(connection);
 				}
 			};
 		}
