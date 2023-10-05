@@ -60,7 +60,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 				if (nextModules.hasNext())
 					module = nextModules.next();
 				else if (!modulesBeingInitialized.isEmpty()) {
-					if (detectEndlessRecursion > modulesBeingInitialized.size())
+					if (detectEndlessRecursion > 2 * modulesBeingInitialized.size())
 						throw new RuntimeException("Circular dependency detected");
 					module = modulesBeingInitialized.poll();
 				} else {
