@@ -284,7 +284,7 @@ public class DefaultModuleRegistry implements ModuleRegistry {
 
 	private static URL getCodeSourceLocation(Class<?> clazz) throws IllegalArgumentException {
 		URL location = clazz.getProtectionDomain().getCodeSource().getLocation();
-		if (!(location.toString().startsWith("file:") || location.toString().startsWith("bundle:")))
+		if (!(location.toString().startsWith("file:") || location.toString().startsWith("bundle:")  || location.toString().startsWith("mvn:")))
 			throw new RuntimeException("unexpected code source location: " + location);
 		return location;
 	}
