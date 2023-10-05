@@ -532,6 +532,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				result.append("        logger.warn(\"Component can not be started: unresolved XSLT package \" + name + \" with version=\" + versionRange);\n");
 				result.append("        return false;\n");
 				result.append("    }\n");
+
+				// FIXME: move to DefaultModuleRegistry
+				// => but should not depend on Saxon: port code?
+
 				result.append("\n");
 				result.append("    public Module getModuleByXSLTPackage(String name, String versionRange) {\n");
 				result.append("        Module module = moduleRegistry.getModuleByXSLTPackage(name);\n");

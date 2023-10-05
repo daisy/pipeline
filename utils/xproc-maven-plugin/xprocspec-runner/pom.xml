@@ -21,7 +21,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.10</version>
+        <version>1.14.15-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -113,11 +113,11 @@
           <source>1.8</source>
           <target>1.8</target>
         </configuration>
-      </plugin>
+      </plugin><!--
       <plugin>
         <groupId>org.daisy.pipeline.build</groupId>
         <artifactId>modules-build-helper</artifactId>
-        <version>2.5.0</version>
+        <version>3.0.0-SNAPSHOT</version>
         <executions>
           <execution>
             <id>process-catalog</id>
@@ -127,7 +127,7 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>

@@ -203,6 +203,11 @@
           <artifactId>xproc-maven-plugin</artifactId>
           <version>1.0.2</version>
           <dependencies>
+            <dependency>
+              <groupId>org.daisy.maven</groupId>
+              <artifactId>xprocspec-runner</artifactId>
+              <version>1.2.7-SNAPSHOT</version>
+            </dependency>
             <!--
                 provided dependencies of xprocspec-runner
                 
