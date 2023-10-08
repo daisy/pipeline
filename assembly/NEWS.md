@@ -1,3 +1,32 @@
+Changes in release v1.14.15
+===========================
+
+## Framework
+
+- **FIX** Some vulnerable dependencies were eliminated
+- Bugfixes
+
+## Modules
+
+- **NEW** Support for Microsoft Azure Cognitive Speech Services
+- **NEW** Options for the DAISY 3 and DAISY 2.02 MegaVoice multi-level scripts to choose the player
+  type and book folder level.
+- **FIX** Better support for HTML with other encodings than UTF-8
+- **FIX** Retain master.smil if present in a DAISY 2.02 publication
+- **FIX** Preserve indentation and DOCTYPE declaration of documents in a DAISY 2.02 publication
+- **FIX** Better marking of page breaks in EPUB 3 output
+- **FIX** Issues in SAPI adapter
+- Other bugfixes
+- Changes to braille production scripts, see [release notes of braille modules v1.14.14](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11414)
+
+Backwards incompatibility note: some script options were renamed. Please check the [script
+documentation](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/) and update your client
+code if needed.
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/2).
+
 Changes in release v1.14.14
 ===========================
 

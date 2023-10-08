@@ -29,8 +29,30 @@
 				</pluginRepository>
 			</pluginRepositories>
 		</profile>
+		<profile>
+			<id>snapshots</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>sonatype-snapshots</id>
+					<name>OSS Sonatype repo (snapshots)</name>
+					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+					<releases>
+						<enabled>false</enabled>
+					</releases>
+					<snapshots>
+						<enabled>true</enabled>
+						<updatePolicy>always</updatePolicy>
+						<checksumPolicy>warn</checksumPolicy>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
 	</profiles>
 	<activeProfiles>
 		<activeProfile>central-https</activeProfile>
+		<!-- <activeProfile>snapshots</activeProfile> -->
 	</activeProfiles>
 </settings>

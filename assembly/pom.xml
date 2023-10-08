@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.14</version>
+        <version>1.14.15</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.16-SNAPSHOT</version>
+        <version>1.14.17</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1894,10 +1894,10 @@
                     assembly. (It does work in unit tests.) As a workaround, log JUL messages to
                     stdout through the logging.properties configuration file.
                 -->
-                <!--<artifactItem>
+                <artifactItem>
                   <groupId>org.slf4j</groupId>
                   <artifactId>jul-to-slf4j</artifactId>
-                </artifactItem>-->
+                </artifactItem>
                 <artifactItem>
                   <groupId>org.slf4j</groupId>
                   <artifactId>jcl-over-slf4j</artifactId>
@@ -2525,6 +2525,8 @@
                 </artifactItem>
                 <!--
                     for tts-adapter-azure
+
+                    FIXME: does not work with OSGi
                 -->
                 <artifactItem>
                   <groupId>com.microsoft.cognitiveservices.speech</groupId>
