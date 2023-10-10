@@ -66,7 +66,8 @@ public class SaxonConfigurator {
 			"<configuration xmlns='http://saxon.sf.net/ns/configuration'>" +
 			"   <global expandAttributeDefaults='false'" +
 			"           lineNumbering='true'" +
-			"           suppressXsltNamespaceCheck='true'/>" +
+			"           suppressXsltNamespaceCheck='true'" +
+			"           stripSpace='none'/>" +
 			"</configuration>\n"
 			).getBytes(StandardCharsets.UTF_8));
 	}
