@@ -142,7 +142,33 @@ public class VoiceInfo {
 			return false;
 		return true;
 	}
-	
+
+	@Override
+	public String toString() {
+		String s = "";
+		if (voiceEngine != null) {
+			s += ("engine=" + voiceEngine);
+		}
+		if (voiceName != null) {
+			if (s.length() > 0) s += ", ";
+			s += ("name=" + voiceName);
+		}
+		if (language != null) {
+			if (s.length() > 0) s += ", ";
+			s += ("lang=" + (language == NO_DEFINITE_LANG ? "*" : language));
+		}
+		if (gender != null) {
+			if (s.length() > 0) s += ", ";
+			s += ("gender=" + (gender == NO_DEFINITE_GENDER ? "*" : gender));
+		}
+		{
+			if (s.length() > 0) s += ", ";
+			s += ("priority=" + priority);
+		}
+		s = "VoiceInfo[" + s + "]";
+		return s;
+	}
+
 	public boolean isMultiLang(){
 		return this.language == NO_DEFINITE_LANG;
 	}

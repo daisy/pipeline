@@ -100,6 +100,10 @@ public abstract class TTSEngine {
 		throws SynthesisException, InterruptedException;
 
 	/**
+	 * Return the list of available voices for this engine. Voices that come before other voices in
+	 * the list are prioritized by {@link VoiceManager} when there are no other discriminating
+	 * factors.
+	 *
 	 * Need not be thread-safe. This method is called from the main thread.
 	 */
 	abstract public Collection<Voice> getAvailableVoices() throws SynthesisException,

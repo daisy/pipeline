@@ -137,13 +137,12 @@ public class SAPIEngine extends TTSEngine {
 	/**
 	 * Return voices form both SAPI and OneCore text-to-speech underlying engines.
 	 *
-	 * Notes :
-	 * - SAPI Voices are loaded first to prioritize third party voices that could have
-	 * been installed before (like acapela voices for windows or other third parties).
-	 * At this time, we are not aware of third party voices distributed for OneCore.
+	 * SAPI voices are listed first to prioritize third party voices that could have been installed
+	 * before (like Acapela voices for Windows or other third parties). At this time, we are not
+	 * aware of third party voices distributed for OneCore.
 	 *
-	 * - SAPI Voices that have a OneCore version installed are discarded in favor
-	 * of their OneCore version.
+	 * SAPI voices that have a OneCore version installed are discarded in favor of their OneCore
+	 * version.
 	 *
 	 * @return the list of all available voices through SAPI and OneCore engines
 	 */

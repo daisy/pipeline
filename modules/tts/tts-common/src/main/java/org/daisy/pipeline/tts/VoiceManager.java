@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -52,7 +53,7 @@ public class VoiceManager {
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
 
 		// create a map of the best services for each available voice
-		bestEngines = new HashMap<Voice,TTSEngine>(); {
+		bestEngines = new LinkedHashMap<Voice,TTSEngine>(); { // LinkedHashMap: iteration order = insertion order
 			TTSTimeout timeout = new TTSTimeout();
 			int timeoutSecs = 30;
 			for (TTSEngine tts : engines) {
@@ -116,6 +117,7 @@ public class VoiceManager {
 		voiceInfo.addAll(derivedVoiceInfo);
 
 		// sort by priority (descending)
+		// voices with equal priority will not be reordered as a result of the sort
 		Collections.sort(voiceInfo, sortByPriority);
 
 		// filter available voices
