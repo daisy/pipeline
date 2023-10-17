@@ -5,6 +5,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline"
                 xmlns:pxd="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cat="urn:oasis:names:tc:entity:xmlns:xml:catalog"
+                xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
                 exclude-result-prefixes="#all"
                 version="2.0">
 	
@@ -95,6 +96,11 @@
 		</xsl:choose>
 	</xsl:template>
 	
+	<xsl:template mode="serialize"
+	              match="/*/p:option/p:pipeinfo/pxd:type//a:documentation[not(@xml:space='preserve')]/text()">
+		<xsl:value-of select="normalize-space(.)"/>
+	</xsl:template>
+
 	<xsl:template name="set-rel">
 		<xsl:param name="rel" required="yes"/>
 		<span rel="{$rel}">
