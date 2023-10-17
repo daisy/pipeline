@@ -1,6 +1,29 @@
 ## Generate with:
-## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.14 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.15 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
 ## curl -u bertfrees:*** https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.1.0 '.[] | select(.tag_name == $version)|{gui_github_tag:$version,gui_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.14.15"
+  sort: "1.14.15"
+  state: stable
+  github_tag: "v1.14.15"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.14.15"
+  description: >
+    Includes the standalone desktop application and the web server. Versions available for
+    Windows (an installer EXE) and Mac OS (a DMG disk image containing a standard Mac OS
+    application). The Linux packages (ZIP and DEB files) include only the web server. The
+    ZIP package also includes the command line interface.
+  files:
+  - platform: debian
+    package: deb
+    content: [server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.15/pipeline2-1.14.15_debian.deb"
+    size: 77002372
+  - platform: linux
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.14.15/pipeline2-1.14.15_linux.zip"
+    size: 84827167
 
 - group: main
   version: "1.14.14"
