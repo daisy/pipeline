@@ -158,8 +158,6 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: audio-common
 - group: org.daisy.pipeline.modules
-  artifact: css-speech
-- group: org.daisy.pipeline.modules
   artifact: tts-common
 - group: org.daisy.pipeline.modules
   artifact: dtbook-tts
@@ -167,8 +165,6 @@ xprocdoc:
   artifact: epub3-tts
 - group: org.daisy.pipeline.modules
   artifact: mathml-to-ssml
-- group: org.daisy.pipeline.modules
-  artifact: text-to-ssml
 - group: org.daisy.pipeline.modules
   artifact: nlp-common
 - group: org.daisy.pipeline.modules
