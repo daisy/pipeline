@@ -10,7 +10,7 @@ For installation instructions see
 
 {% assign stable = all | where:'state','stable' %}
 
-## Latest major version: {{ stable.last.version }}
+## Latest stable version: {{ stable.last.version }} (App version {{ stable.last.app_version }})
 
 {{ stable.last.description }}
 
