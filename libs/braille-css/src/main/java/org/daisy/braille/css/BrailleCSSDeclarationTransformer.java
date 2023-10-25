@@ -325,7 +325,7 @@ public class BrailleCSSDeclarationTransformer extends DeclarationTransformer {
 	}
 	
 	private final static Set<String> validContentFuncNames
-	= new HashSet<String>(Arrays.asList("content", "attr", "counter", "string", "leader", "flow",
+	= new HashSet<String>(Arrays.asList("content", "attr", "counter", "counters", "string", "leader", "flow",
 	                                    "target-text", "target-string", "target-counter", "target-content"));
 	
 	private final static Pattern customContentFuncName = Pattern.compile("^-.*"); // is the rest handled in ANTLR?

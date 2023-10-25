@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 public class BrailleCSSParserFactory extends CSSParserFactory {
 	
-	private static final RuleFactory ruleFactory = new BrailleCSSRuleFactory();
+	private static final BrailleCSSRuleFactory ruleFactory = new BrailleCSSRuleFactory();
 	
 	@Override
 	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
@@ -129,6 +129,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		PAGE,
 		VOLUME,
 		TEXT_TRANSFORM,
+		HYPHENATION_RESOURCE,
 		COUNTER_STYLE,
 		VENDOR_RULE
 	}
@@ -261,6 +262,8 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 					return (CommonTree) parser.inline_pagestyle().getTree();
 				case VOLUME:
 					return (CommonTree) parser.inline_volumestyle().getTree();
+				case HYPHENATION_RESOURCE:
+					return (CommonTree) parser.inline_hyphenation_resourcestyle().getTree();
 				case VENDOR_RULE:
 					return (CommonTree) parser.inline_vendor_atrulestyle().getTree(); }}
 			catch (RecognitionException re) {

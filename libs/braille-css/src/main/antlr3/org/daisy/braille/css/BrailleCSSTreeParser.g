@@ -17,7 +17,6 @@ import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.MediaQueryList;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleList;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RulePage;
@@ -31,7 +30,7 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
 @members {
     private Preparator preparator;
     
-    public void init(Preparator preparator, RuleFactory ruleFactory, Map<String,String> namespaces) {
+    public void init(Preparator preparator, BrailleCSSRuleFactory ruleFactory, Map<String,String> namespaces) {
         gCSSTreeParser.init(preparator, namespaces);
         gCSSTreeParser.rf = ruleFactory;
         this.preparator = preparator;
@@ -51,11 +50,12 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
 }
 
 // @Override
-// Added volume, text_transform_def and counter_style_def
+// Added volume, text_transform_def, hyphenation_resource_def and counter_style_def
 unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
     | (tt=text_transform_def) { $stmnt = tt; }
+    | (hr=hyphenation_resource_def) { $stmnt = hr; }
     | (cs=counter_style_def) { $stmnt = cs; }
     | (aar=any_atrule) { $stmnt = aar; }
     | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
@@ -127,6 +127,40 @@ text_transform_def returns [RuleTextTransform def]
       }
     ;
 
+hyphenation_resource_def returns [RuleHyphenationResource def]
+    : ^( HYPHENATION_RESOURCE l=LANG decl=declarations ) {
+          String[] languageRanges = l.getText().replaceAll("^lang\\(\\s*", "").replaceAll("\\s*\\)$", "").split("\\s*,\\s*");
+          if (languageRanges.length > 1) {
+              gCSSTreeParser.debug(
+                  "Comma-separated list of language ranges (CSS Level 4) not supported: " + l.getText());
+              $def = null;
+          } else {
+              String tag = (languageRanges[0].startsWith("\"") || languageRanges[0].startsWith("\""))
+                  ? org.unbescape.css.CssEscape.unescapeCss(languageRanges[0])
+                  : languageRanges[0].replace("\\*", "*");
+              if (tag.contains("*")) {
+                  gCSSTreeParser.debug("Wildcard language matching (CSS Level 4) not supported: " + tag);
+                  $def = null;
+              } else {
+                  try {
+                      LanguageRange range = new LanguageTag(tag);
+                      if ((decl == null || decl.isEmpty())) {
+                          gCSSTreeParser.debug("Empty @hyphenation-resource rule was omited");
+                          $def = null;
+                      } else {
+                          $def = new RuleHyphenationResource(range);
+                          $def.replaceAll(decl);
+                          gCSSTreeParser.debug("Create @hyphenation-resource with:\n{}", $def);
+                      }
+                  } catch (IllegalArgumentException e) {
+                      gCSSTreeParser.debug("Not a valid language tag: " + tag);
+                      $def = null;
+                  }
+              }
+          }
+      }
+    ;
+
 counter_style_def returns [RuleCounterStyle def]
     : ^( COUNTER_STYLE n=IDENT decl=declarations ) {
           $def = preparator.prepareRuleCounterStyle(n.getText(), decl);
@@ -182,6 +216,10 @@ pseudo returns [Selector.PseudoPage pseudoPage]
       }
     | ^(PSEUDOCLASS HAS rsl=relative_selector_list) {
           $pseudoPage = rsl == null ? null : new SelectorImpl.RelationalPseudoClassImpl(rsl);
+      }
+    | ^(PSEUDOCLASS l=LANG) {
+          gCSSTreeParser.error(l, "unsupported pseudo declaration :{}", l);
+          $pseudoPage = null;
       }
     | ^(PSEUDOCLASS m=MINUS? f=FUNCTION i=IDENT) {
           String func = f.getText();
@@ -432,6 +470,7 @@ inlineblock returns [RuleBlock<?> b]
           $b = preparator.prepareInlineRuleSet(decl, null);
       }
     | tt=text_transform_def { $b = tt; }
+    | hr=hyphenation_resource_def { $b = hr; }
     | cs=counter_style_def { $b = cs; }
     | p=page { $b = p; }
     | v=volume { $b = v; }
@@ -442,6 +481,7 @@ inlineblock returns [RuleBlock<?> b]
          (rr=relative_rule { $b = rr; }
          |p=page { $b = new InlineStyle.RuleRelativePage(p); } // relative @page pseudo rule
          |v=volume { $b = new InlineStyle.RuleRelativeVolume(v); } // relative @volume pseudo rule
+         |hr=hyphenation_resource_def { $b = new InlineStyle.RuleRelativeHyphenationResource(hr); } // relative @hyphenation-resource pseudo rule
          ))
     ;
 

@@ -70,6 +70,7 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					nestedStyles.add(new RuleRelativeBlock(relativeSelector, set));
 				}
 			} else if (block instanceof RuleTextTransform
+			           || block instanceof RuleHyphenationResource
 			           || block instanceof RuleCounterStyle
 			           || block instanceof RulePage
 			           || block instanceof RuleVolume
@@ -78,6 +79,7 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 			           || block instanceof RuleRelativeBlock
 			           || block instanceof RuleRelativePage
 			           || block instanceof RuleRelativeVolume
+			           || block instanceof RuleRelativeHyphenationResource
 			           || block instanceof AnyAtRule
 			           ) {
 				nestedStyles.add(block);
@@ -262,6 +264,25 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 		@Override
 		public RuleRelativeVolume clone() {
 			return new RuleRelativeVolume((RuleVolume)delegate.clone());
+		}
+	}
+	
+	public static class RuleRelativeHyphenationResource extends ForwardingRuleBlock<Declaration> implements RuleBlock<Declaration> {
+		
+		private final RuleHyphenationResource hyphenationResource;
+		
+		public RuleRelativeHyphenationResource(RuleHyphenationResource hyphenationResource) {
+			super(hyphenationResource);
+			this.hyphenationResource = hyphenationResource;
+		}
+		
+		public RuleHyphenationResource asRuleHyphenationResource() {
+			return hyphenationResource;
+		}
+		
+		@Override
+		public RuleRelativeHyphenationResource clone() {
+			return new RuleRelativeHyphenationResource((RuleHyphenationResource)delegate.clone());
 		}
 	}
 	

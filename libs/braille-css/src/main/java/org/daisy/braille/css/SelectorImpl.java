@@ -261,6 +261,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		private static enum PseudoElementDef {
 			BEFORE("before"),
 			AFTER("after"),
+			MARKER("marker"),
 			DUPLICATE("duplicate"),
 			ALTERNATE("alternate", 0, 1),
 			LIST_ITEM("list-item"),
