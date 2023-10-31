@@ -5,7 +5,9 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:opf="http://www.idpf.org/2007/opf"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:epub3-add-navigation-doc" name="main">
 
 	<p:input port="source.fileset" primary="true">
@@ -125,6 +127,22 @@
 			<p>The CSS style sheet to attach to the navigation document.</p>
 		</p:documentation>
 	</p:option>
+	<p:option name="reserved-prefixes" required="false" select="'#default'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>The <a
+			href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab">reserved
+			prefix mappings</a> of the resulting package document. By default, prefixes that are
+			used but not declared in the input are also not declared in the output, and if "schema"
+			is not used in the input, it is declared in the output.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="compatibility-mode" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether to be backward compatible with <a
+			href="http://idpf.org/epub/20/spec/OPF_2.0.1_draft.htm">Open Package Format
+			2.0.1</a>.</p>
+		</p:documentation>
+	</p:option>
 
 	<p:import href="epub3-nav-create-toc.xpl">
 		<p:documentation>
@@ -144,6 +162,11 @@
 	<p:import href="../pub/opf-spine-to-fileset.xpl">
 		<p:documentation>
 			px:opf-spine-to-fileset
+		</p:documentation>
+	</p:import>
+	<p:import href="../pub/add-metadata.xpl">
+		<p:documentation>
+			px:epub3-add-metadata
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -515,7 +538,7 @@
 			<p:when test="//d:file">
 				<p:output port="fileset" primary="true"/>
 				<p:output port="in-memory" sequence="true">
-					<p:pipe step="result" port="result.in-memory"/>
+					<p:pipe step="update-metadata" port="in-memory"/>
 				</p:output>
 				<px:fileset-load name="input-package-doc">
 					<p:input port="in-memory">
@@ -534,7 +557,7 @@
 				</p:for-each>
 				<p:identity name="package-doc"/>
 				<p:sink/>
-				<px:fileset-update name="result">
+				<px:fileset-update name="package-doc-with-nav-property">
 					<p:input port="source.fileset">
 						<p:pipe step="add-nav-doc" port="result.fileset"/>
 					</p:input>
@@ -548,6 +571,109 @@
 						<p:pipe step="package-doc" port="result"/>
 					</p:input>
 				</px:fileset-update>
+				<p:documentation>Update metadata with accessibility metadata</p:documentation>
+				<p:choose name="update-metadata">
+					<p:xpath-context>
+						<p:pipe step="package-doc" port="result"/>
+					</p:xpath-context>
+					<p:when test="//opf:metadata/opf:meta[@property='schema:accessibilityFeature']
+					                                     [string(.)=('tableOfContents','pageNavigation')]
+					                                     [not(@refines)]">
+						<p:output port="fileset" primary="true"/>
+						<p:output port="in-memory" sequence="true">
+							<p:pipe step="package-doc-with-nav-property" port="result.in-memory"/>
+						</p:output>
+						<p:identity/>
+					</p:when>
+					<p:otherwise>
+						<p:output port="fileset" primary="true">
+							<p:pipe step="add-metadata" port="result.fileset"/>
+						</p:output>
+						<p:output port="in-memory" sequence="true">
+							<p:pipe step="add-metadata" port="result.in-memory"/>
+						</p:output>
+						<px:epub3-add-metadata name="add-metadata">
+							<p:input port="source.in-memory">
+								<p:pipe step="package-doc-with-nav-property" port="result.in-memory"/>
+							</p:input>
+							<p:input port="metadata">
+								<p:pipe step="accessibility-metadata" port="result"/>
+							</p:input>
+							<p:with-option name="compatibility-mode" select="$compatibility-mode"/>
+							<p:with-option name="reserved-prefixes" select="$reserved-prefixes"/>
+						</px:epub3-add-metadata>
+						<p:sink/>
+						<p:group name="accessibility-metadata">
+							<p:output port="result"/>
+							<!--
+							    combine <meta property="schema:accessibilityFeature">tableOfContents</meta> and
+							    <meta property="schema:accessibilityFeature">pageNavigation</meta> with existing
+							    schema:accessibilityFeature metadata (if we would simply include the new element, it
+							    would overwrite the existing metadata)
+							-->
+							<p:delete match="opf:metadata/*[
+							                   not(self::opf:meta[@property='schema:accessibilityFeature']
+							                                     [not(string(.)=('tableOfContents','pageNavigation'))]
+							                                     [not(@refines)])]">
+								<p:input port="source" select="//opf:metadata">
+									<p:pipe step="package-doc" port="result"/>
+								</p:input>
+							</p:delete>
+							<p:choose>
+								<p:xpath-context>
+									<p:pipe step="add-nav-doc" port="nav.in-memory"/>
+								</p:xpath-context>
+								<p:when test="//html:nav[@epub:type='toc']">
+									<p:insert position="last-child">
+										<p:input port="insertion">
+											<p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+												<meta property="schema:accessibilityFeature">tableOfContents</meta>
+											</p:inline>
+										</p:input>
+									</p:insert>
+								</p:when>
+								<p:otherwise>
+									<p:identity/>
+								</p:otherwise>
+							</p:choose>
+							<p:choose>
+								<p:xpath-context>
+									<p:pipe step="add-nav-doc" port="nav.in-memory"/>
+								</p:xpath-context>
+								<p:when test="//html:nav[@epub:type='page-list']">
+									<p:insert position="last-child">
+										<p:input port="insertion">
+											<p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+												<meta property="schema:accessibilityFeature">pageNavigation</meta>
+											</p:inline>
+										</p:input>
+									</p:insert>
+								</p:when>
+								<p:otherwise>
+									<p:identity/>
+								</p:otherwise>
+							</p:choose>
+							<p:choose>
+								<p:when test="$reserved-prefixes='#default'">
+									<p:add-attribute match="/*"
+									                 attribute-name="prefix"
+									                 attribute-value="schema: http://schema.org/">
+										<!--
+										    note that if there was already "schema" metadata present in the
+										    input, and the "schema" prefix was not declared,
+										    px:epub3-add-metadata will make sure that the prefix will not be
+										    declared in the output either
+										-->
+									</p:add-attribute>
+								</p:when>
+								<p:otherwise>
+									<p:identity/>
+								</p:otherwise>
+							</p:choose>
+						</p:group>
+						<p:sink/>
+					</p:otherwise>
+				</p:choose>
 			</p:when>
 			<p:otherwise>
 				<p:output port="fileset" primary="true"/>

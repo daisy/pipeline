@@ -28,7 +28,7 @@
             </x:param>
         </x:call>
         <x:expect label="">
-            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="rtl">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="rtl">
                 <head>
                     <meta charset="UTF-8"/>
                     <title/>

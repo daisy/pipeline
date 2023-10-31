@@ -1,5 +1,7 @@
 package org.daisy.pipeline.braille.common.calabash.impl;
 
+import java.util.Map;
+
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.library.DefaultStep;
@@ -12,6 +14,7 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XMLCalabashOptionValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.marshallQuery;
 
@@ -26,7 +29,7 @@ public class PxParseQueryStep extends DefaultStep implements XProcStep {
 	)
 	public static class StepProvider implements XProcStepProvider {
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new PxParseQueryStep(runtime, step);
 		}
 	}

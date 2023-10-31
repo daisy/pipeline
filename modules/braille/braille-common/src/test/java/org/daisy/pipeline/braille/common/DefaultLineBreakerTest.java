@@ -3,11 +3,11 @@ package org.daisy.pipeline.braille.common;
 import java.util.ArrayList;
 import static java.util.Collections.singleton;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.daisy.braille.css.SimpleInlineStyle;
-import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.junit.Test;
@@ -221,12 +221,13 @@ public class DefaultLineBreakerTest {
 			private final static char ZWSP = '\u200B';
 
 			protected boolean isCodePointAware() { return false; }
+			protected boolean isLanguageAdaptive() { return false; }
 		
-			protected byte[] getHyphenationOpportunities(String text) throws RuntimeException {
+			protected byte[] getHyphenationOpportunities(String text, Locale _language) throws NonStandardHyphenationException {
 				if (text.contains("busstopp"))
-					throw new RuntimeException("text contains non-standard break points");
+					throw new NonStandardHyphenationException();
 				else
-					return extractHyphens(text, false, SHY, ZWSP)._2;
+					return new byte[text.length() - 1];
 			}
 		};
 		
@@ -236,7 +237,7 @@ public class DefaultLineBreakerTest {
 		}
 		
 		private final LineBreaker lineBreaker = new AbstractHyphenator.util.DefaultLineBreaker() {
-			protected Break breakWord(String word, int limit, boolean force) {
+			protected Break breakWord(String word, Locale _language, int limit, boolean force) {
 				if (limit >= 4 && word.equals("busstopp"))
 					return new Break("bussstopp", 4, true);
 				else if (limit >= word.length())
@@ -255,6 +256,10 @@ public class DefaultLineBreakerTest {
 		
 		private TestTranslator(Hyphenator hyphenator) {
 			this.hyphenator = hyphenator;
+		}
+		
+		public TestTranslator _withHyphenator(Hyphenator hyphenator) {
+			return new TestTranslator(hyphenator);
 		}
 		
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
@@ -304,7 +309,7 @@ public class DefaultLineBreakerTest {
 										else if (available <= 0)
 											break;
 										else {
-											Hyphenator.LineIterator lines = hyphenator.asLineBreaker().transform(word);
+											Hyphenator.LineIterator lines = hyphenator.asLineBreaker().transform(word, null);
 											String line = lines.nextLine(available, force, allowHyphens);
 											if (line.length() == available && lines.lineHasHyphen()) {
 												lines.reset();

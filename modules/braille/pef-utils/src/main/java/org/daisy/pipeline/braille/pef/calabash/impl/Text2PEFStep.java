@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import net.sf.saxon.s9api.QName;
@@ -14,6 +15,7 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.braille.utils.pef.TextHandler;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.dotify.api.table.Table;
 import org.daisy.dotify.api.table.TableCatalogService;
 import org.daisy.pipeline.braille.common.Query;
@@ -124,7 +126,7 @@ public class Text2PEFStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new Text2PEFStep(runtime, step, tableCatalog, tableRegistry);
 		}
 		

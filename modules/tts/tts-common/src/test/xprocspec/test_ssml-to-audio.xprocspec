@@ -48,7 +48,7 @@
 		</x:context>
 		<x:expect label="the success rate should be 75%" type="compare">
 			<x:document type="inline">
-				<d:status result="error" success-rate="75%"/>
+				<d:status result="error" tts-success-rate="75%"/>
 			</x:document>
 		</x:expect>
 		<x:context label="the result port">
@@ -56,9 +56,9 @@
 		</x:context>
 		<x:expect label="there should be 3 audio clips"
 		          type="xpath" test="count(/d:audio-clips/d:clip)" equals="3"/>
-		<x:expect label="one for A" type="xpath" test="/d:audio-clips/d:clip/@idref='A'"/>
-		<x:expect label="one for B" type="xpath" test="/d:audio-clips/d:clip/@idref='B'"/>
-		<x:expect label="one for D" type="xpath" test="/d:audio-clips/d:clip/@idref='D'"/>
+		<x:expect label="one for A" type="xpath" test="/d:audio-clips/d:clip[ends-with(@textref,'#A')]"/>
+		<x:expect label="one for B" type="xpath" test="/d:audio-clips/d:clip[ends-with(@textref,'#B')]"/>
+		<x:expect label="one for D" type="xpath" test="/d:audio-clips/d:clip[ends-with(@textref,'#D')]"/>
 		<!--
 		<x:context label="the log port">
 			<x:document type="port" port="log"/>

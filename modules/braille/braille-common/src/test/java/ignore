@@ -1,5 +1,6 @@
 # XSpecAndXProcSpecTest.java
 # org/daisy/pipeline/braille/common/DefaultLineBreakerTest.java
+# org/daisy/pipeline/braille/common/HyphenatorWithExceptionsTest.java
 # org/daisy/pipeline/braille/common/LocalesTest.java
 # org/daisy/pipeline/braille/common/QueryTest.java
 # org/daisy/pipeline/braille/common/UtilsTest.java

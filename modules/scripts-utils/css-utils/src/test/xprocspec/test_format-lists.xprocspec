@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
+               script="../../main/resources/xml/css-cascade.xpl">
+
+  <x:scenario label="default">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li>• a</li>
+            <li>• b</li>
+            <li>• c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="ol">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                list[type="ol"] {
+                  list-style-type: decimal;
+                }
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list type="ol">
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+              <list type="ol">
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list type="ol">
+            <li>1. a</li>
+            <li>2. b</li>
+            <li>3. c</li>
+          </list>
+          <list type="ol">
+            <li>1. a</li>
+            <li>2. b</li>
+            <li>3. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="enum">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                list[type="ol"],
+                list[type="ol"][enum="1"] { list-style-type: decimal;     }
+                list[type="ol"][enum="a"] { list-style-type: lower-alpha; }
+                list[type="ol"][enum="U"] { list-style-type: upper-alpha; }
+                list[type="ol"][enum="i"] { list-style-type: lower-roman; }
+                list[type="ol"][enum="X"] { list-style-type: upper-roman; }
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list type="ol" enum="i">
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list type="ol" enum="i">
+            <li>i. a</li>
+            <li>ii. b</li>
+            <li>iii. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="counter-style">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                @counter-style my-decimal {
+                  system: numeric;
+                  symbols: 〇 一 二 三 四 五 六 七 八 九;
+                }
+                list {
+                  list-style-type: my-decimal;
+                }
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li>一. a</li>
+            <li>二. b</li>
+            <li>三. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="marker">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                li {
+                  display: list-item;
+                  counter-increment: my-list-item;
+                }
+                li::marker {
+                  content: counter(my-list-item, decimal) '. ';
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li>1. a</li>
+            <li>2. b</li>
+            <li>3. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="nested">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                list {
+                  list-style-type: decimal;
+                  counter-reset: list-item;
+                }
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a
+                  <list>
+                    <li>a</li>
+                    <li>b</li>
+                    <li>c</li>
+                  </list>
+                </li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li>1. a
+                  <list>
+                <li>1. a</li>
+                <li>2. b</li>
+                <li>3. c</li>
+              </list>
+            </li>
+            <li>2. b</li>
+            <li>3. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="counters">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                list {
+                  counter-reset: list-item;
+                }
+                li {
+                  display: list-item;
+                }
+                li::marker {
+                  content: '(' counters(list-item, '.', decimal) ') ';
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a
+                  <list>
+                    <li>a</li>
+                    <li>b</li>
+                    <li>c</li>
+                  </list>
+                </li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li>(1) a
+                  <list>
+                <li>(1.1) a</li>
+                <li>(1.2) b</li>
+                <li>(1.3) c</li>
+              </list>
+            </li>
+            <li>(2) b</li>
+            <li>(3) c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="start">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                li {
+                  display: list-item;
+                }
+                list {
+                  list-style-type: decimal;
+                }
+                /* handle "start" attribute */
+                @xslt "../../../../../scripts/dtbook-to-pef/src/main/resources/css/lists.xsl";
+              </style>
+            </head>
+            <book>
+              <list start="3">
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//dtb:book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+        <book>
+          <list start="3" style="counter-reset: list-item 2">
+            <li>3. a</li>
+            <li>4. b</li>
+            <li>5. c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="attribute" xmlns:css="css">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <head>
+              <style type="text/css">
+                li {
+                  display: list-item;
+                }
+              </style>
+            </head>
+            <book>
+              <list>
+                <li>a</li>
+                <li>b</li>
+                <li>c</li>
+              </list>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:option name="attribute-name" select="QName('css', 'css:_')"/>
+      <x:option name="multiple-attributes" select="true()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <list>
+            <li css:marker-content="• ">a</li>
+            <li css:marker-content="• ">b</li>
+            <li css:marker-content="• ">c</li>
+          </list>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

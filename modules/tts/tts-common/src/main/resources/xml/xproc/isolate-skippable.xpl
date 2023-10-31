@@ -40,6 +40,7 @@
         </ul>
         <p>The reading order is preserved, and apart from elements that are broken up and wrapper
         <code>span</code> elements that are inserted, the structure of the DTBook is preserved.</p>
+        <p>Wrapper <code>span</code> elements</p> are given a unique <code>id</code> attribute.
       </p:documentation>
     </p:output>
     <p:output port="skippable-ids">
@@ -51,11 +52,14 @@
       <p:pipe step="skippables" port="result"/>
     </p:output>
 
-    <p:option name="id-prefix" select="''"/>
-
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
       <p:documentation>
         px:add-ids
+      </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+      <p:documentation>
+        px:set-base-uri
       </p:documentation>
     </p:import>
 
@@ -75,7 +79,13 @@
         <p:with-option name="attribute-value" select="/*/@id"/>
       </p:add-attribute>
     </p:for-each>
-    <p:wrap-sequence wrapper="d:skippables" name="skippables"/>
+    <p:wrap-sequence wrapper="d:skippables"/>
+    <px:set-base-uri name="skippables">
+      <p:documentation>Give the skippable IDs document the same base URI as the source and result documents.</p:documentation>
+      <p:with-option name="base-uri" select="base-uri(/*)">
+        <p:pipe step="main" port="source"/>
+      </p:with-option>
+    </px:set-base-uri>
     <p:sink/>
 
     <p:xslt>
@@ -86,7 +96,9 @@
       <p:input port="stylesheet">
         <p:document href="isolate-skippable.xsl"/>
       </p:input>
-      <p:with-param name="id-prefix" select="$id-prefix"/>
+      <p:input port="parameters">
+        <p:empty/>
+      </p:input>
     </p:xslt>
 
 </p:declare-step>

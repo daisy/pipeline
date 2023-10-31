@@ -93,7 +93,7 @@
 	<p:input port="tts-config" px:media-type="application/vnd.pipeline.tts-config+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Text-to-speech configuration file</h2>
-			<p px:role="desc" xml:space="preserve">Configuration file for the text-to-speech.
+			<p px:role="desc" xml:space="preserve">Configuration file for text-to-speech.
 
 [More details on the configuration file format](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).</p>
 		</p:documentation>
@@ -210,10 +210,10 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 	    epub3-to-epub3
 	-->
 	<p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-	          px:media-type="text/css application/xslt+xml">
+	          px:media-type="text/css text/x-scss application/xslt+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
-			<p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to apply.
+			<p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
 
 DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
 future. It is recommended to apply any XSLT style sheets during pre-processing of the document.
@@ -227,21 +227,54 @@ sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". They can be linked (u
 ['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
 element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
 element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
-attributes](https://www.w3.org/TR/css-style-attr/)).
+attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that apply to "embossed"
+media are taken into account.
 
 Style sheets are applied to the document in the following way: XSLT style sheets are applied before
 CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
 the author style sheets, in the order in which they are specified.
 
-All CSS/Sass style sheets are applied at once, but the order in which they are specified (first user
-style sheets, then author style sheets) has an influence on the [cascading
-order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+All CSS/Sass style sheets are applied at once, but the order in which they are specified has an
+influence on the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author
+styles take precedence over user styles.
 
 CSS/Sass style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules.
 
 For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    dtbook-to-daisy3
+	    dtbook-to-epub3
+	    zedai-to-epub3
+	    epub-to-daisy
+	    epub3-to-epub3
+	-->
+	<p:option xmlns:_="tts" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+	          px:media-type="text/css text/x-scss">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Style sheets</h2>
+			<p px:role="desc" xml:space="preserve">A list of CSS style sheets to take into account.
+
+Must be a space separated list of URIs, absolute or relative to the input.
+
+Style sheets specified through this option are called "[user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be attached to the
+source document. These are referred to as "[author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". They can be linked (using an
+['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that apply to
+"[speech](https://www.w3.org/TR/CSS2/aural.html)" media are taken into account.
+
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
+precedence over user styles.
+			</p>
 		</p:documentation>
 	</p:option>
 
@@ -255,9 +288,10 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 			<h2 px:role="name">Style sheet parameters</h2>
 			<p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
 
-Style sheets, whether they're specified with the "stylesheet" option or associated with the source,
-may have parameters (Sass variables). The "stylesheet-parameters" option, which takes a list of
-parenthesis enclosed key-value pairs, can be used to set these variables.
+Style sheets, whether they're user style sheets (specified with the "stylesheet" option) or author
+style sheets (associated with the source), may have parameters (Sass variables). The
+"stylesheet-parameters" option, which takes a list of parenthesis enclosed key-value pairs, can be
+used to set these variables.
 
 For example, if a style sheet uses the Sass variable "foo":
 
@@ -358,7 +392,7 @@ If left blank, the braille will be stored in PEF format.</p>
 	<p:option name="preview-table" required="false" px:type="transform-query" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">ASCII braille table for HTML preview</h2>
-			<p px:role="desc" xml:space="preserve">The ASCII braille table used to render the HTML preview.
+			<p px:role="desc" xml:space="preserve">The ASCII braille table used to render the HTML and PDF previews.
 
 If left blank, the locale information in the input document will be used to select a suitable table.</p>
 		</p:documentation>
@@ -374,6 +408,28 @@ If left blank, the locale information in the input document will be used to sele
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Preview</h2>
 			<p px:role="desc">An HTML preview of the braille result.</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    html-to-pef
+	-->
+	<p:option name="include-pdf" required="false" px:type="boolean" select="'false'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Include PDF</h2>
+			<p px:role="desc" xml:space="preserve">Whether or not to include a PDF version of the braille result showing ASCII braille.
+
+The `wkhtmltopdf` tool must be installed on the system for the PDF export to work.</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    html-to-pef
+	-->
+	<p:option name="pdf" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PDF</h2>
+			<p px:role="desc">A PDF version of the braille showing ASCII braille.</p>
 		</p:documentation>
 	</p:option>
 

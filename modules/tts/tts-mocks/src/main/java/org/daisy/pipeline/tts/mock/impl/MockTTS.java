@@ -15,6 +15,8 @@ import org.daisy.pipeline.tts.TTSService;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -55,9 +57,9 @@ public class MockTTS implements TTSService {
 			@Override
 			public Collection<Voice> getAvailableVoices() throws SynthesisException, InterruptedException {
 				List<Voice> voices = new ArrayList<Voice>();
-				voices.add(new Voice(getProvider().getName(), "alex"));
-				voices.add(new Voice(getProvider().getName(), "vicki"));
-				voices.add(new Voice(getProvider().getName(), "foo", VoiceInfo.NO_DEFINITE_LANG, VoiceInfo.NO_DEFINITE_GENDER));
+				voices.add(new Voice(getProvider().getName(), "alex", new LanguageRange("en"), Gender.MALE_ADULT));
+				voices.add(new Voice(getProvider().getName(), "vicki", new LanguageRange("en"), Gender.FEMALE_ADULT));
+				voices.add(new Voice(getProvider().getName(), "foo", new LanguageRange("*"), Gender.ANY));
 				return voices;
 			}
 			

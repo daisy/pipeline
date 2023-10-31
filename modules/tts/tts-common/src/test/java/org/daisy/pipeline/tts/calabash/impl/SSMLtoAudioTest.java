@@ -47,7 +47,6 @@ import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 
 import org.junit.Test;
 
@@ -74,34 +73,10 @@ public class SSMLtoAudioTest {
 		public Collection<VoiceInfo> getVoiceDeclarations() {
 			try {
 				return Arrays.asList(new VoiceInfo(Engine, VoiceName, "en", Gender.MALE_ADULT, 1.0f));
-			} catch (UnknownLanguage e) {
+			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 				return null;
 			}
-		}
-
-		@Override
-		public Map<String, String> getAllProperties() {
-			return Collections.EMPTY_MAP;
-		}
-
-		@Override
-		public Map<String, String> getStaticProperties() {
-			return Collections.EMPTY_MAP;
-		}
-
-		@Override
-		public Map<String, String> getDynamicProperties() {
-			return Collections.EMPTY_MAP;
-		}
-	}
-
-	private class VoiceConfigForSingleThread extends CustomVoiceConfig {
-		@Override
-		public Map<String, String> getAllProperties() {
-			Map<String, String> props = new HashMap<String, String>();
-			props.put("org.daisy.pipeline.tts.threads.number", "1");
-			return props;
 		}
 	}
 
@@ -207,23 +182,32 @@ public class SSMLtoAudioTest {
 	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors)
 	        throws SynthesisException, EncodingException, InterruptedException, SaxonApiException {
 		runTest(ttsservice, markHandler, audioEncoder, expectedGeneralErrors,
-		        expectedSentErrors, new CustomVoiceConfig());
+		        expectedSentErrors, Runtime.getRuntime().availableProcessors());
 	}
 
 	public void runTest(TTSService ttsservice, DynamicMarkHandler markHandler,
 	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors,
-	        VoiceConfigExtension config) throws SynthesisException, EncodingException,
-	        InterruptedException, SaxonApiException {
+	        int numberOfCores)
+	        throws SynthesisException, EncodingException, InterruptedException, SaxonApiException {
 		runTest(ttsservice, markHandler, audioEncoder, expectedGeneralErrors,
-		        expectedSentErrors, config, "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>",
+		        expectedSentErrors, numberOfCores,
+		        "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>",
 		        "<ssml xml:lang=\"en\" id=\"s2\">test</ssml>");
 	}
 
 	public void runTest(TTSService ttsservice, DynamicMarkHandler markHandler,
 	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors,
-	        VoiceConfigExtension config, String... ssml) throws SynthesisException,
-	        InterruptedException, SaxonApiException, EncodingException {
+	        String... ssml)
+	        throws SynthesisException, InterruptedException, SaxonApiException, EncodingException {
+		runTest(ttsservice, markHandler, audioEncoder, expectedGeneralErrors,
+		        expectedSentErrors, Runtime.getRuntime().availableProcessors(), ssml);
+	}
 
+	public void runTest(TTSService ttsservice, DynamicMarkHandler markHandler,
+	        AudioEncoderService audioEncoder, int expectedGeneralErrors, int expectedSentErrors,
+	        int numberOfCores, String... ssml)
+	        throws SynthesisException, InterruptedException, SaxonApiException, EncodingException {
+		VoiceConfigExtension config = new CustomVoiceConfig();
 		for (boolean withEndingMark = true; withEndingMark; withEndingMark = !withEndingMark) {
 			markHandler.enableMark(withEndingMark);
 
@@ -234,7 +218,8 @@ public class SSMLtoAudioTest {
 			TTSLog logs = new TTSLog();
 
 			SSMLtoAudio ssmlToAudio = new SSMLtoAudio(new File("/tmp/"), MP3, 100, registry, Logger,
-			        monitor, Proc, config, logs);
+			        monitor, Proc, Collections.EMPTY_MAP, config, logs);
+			ssmlToAudio.numberOfCores = numberOfCores;
 
 			for (String text : ssml) {
 				ssmlToAudio.dispatchSSML(SSMLinXML(text), null);
@@ -469,8 +454,7 @@ public class SSMLtoAudioTest {
 		};
 
 		DefaultAudioEncoder encoder = new DefaultAudioEncoder();
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2,
-		        new CustomVoiceConfig(), ssml);
+		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2, ssml);
 		Assert.assertEquals("No PCM chunk can be produced", 0, encoder.count);
 	}
 
@@ -498,8 +482,7 @@ public class SSMLtoAudioTest {
 		};
 
 		DefaultAudioEncoder encoder = new DefaultAudioEncoder();
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2,
-		        new CustomVoiceConfig(), ssml);
+		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2, ssml);
 		Assert.assertEquals("No PCM chunk can be produced", 0, encoder.count);
 	}
 
@@ -528,8 +511,7 @@ public class SSMLtoAudioTest {
 		};
 
 		DefaultAudioEncoder encoder = new DefaultAudioEncoder();
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2,
-		        new CustomVoiceConfig(), ssml);
+		runTest(service, (DynamicMarkHandler) service.engine, encoder, 0, 2, ssml);
 		Assert.assertEquals("No PCM chunk can be produced", 0, encoder.count);
 	}
 
@@ -587,10 +569,8 @@ public class SSMLtoAudioTest {
 				);
 			}
 		};
-
 		try {
-			runTest(service, (DynamicMarkHandler) service.engine, encoder, 1, 0,
-			        new VoiceConfigForSingleThread(),
+			runTest(service, (DynamicMarkHandler) service.engine, encoder, 1, 0, 1,
 			        "<ssml xml:lang=\"en\" id=\"s1\">test</ssml>");
 			Assert.fail("EncodingException expected");
 		} catch (EncodingException e) {}
@@ -648,8 +628,7 @@ public class SSMLtoAudioTest {
 		};
 
 		DefaultAudioEncoder encoder = new DefaultAudioEncoder();
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 2, 0,
-		        new VoiceConfigForSingleThread());
+		runTest(service, (DynamicMarkHandler) service.engine, encoder, 2, 0, 1);
 	}
 
 	@Test
@@ -665,7 +644,6 @@ public class SSMLtoAudioTest {
 		};
 
 		DefaultAudioEncoder encoder = new DefaultAudioEncoder();
-		runTest(service, (DynamicMarkHandler) service.engine, encoder, 2, 0,
-		        new VoiceConfigForSingleThread());
+		runTest(service, (DynamicMarkHandler) service.engine, encoder, 2, 0, 1);
 	}
 }

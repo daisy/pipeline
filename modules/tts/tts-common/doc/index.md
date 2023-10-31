@@ -16,44 +16,29 @@ combination of a text layer and an audio layer synchronized with each
 other.
 
 The way text-to-speech is configured is common to all scripts. Speech
-engines are configured with properties, and the exact aural rendering
-of the document (TTS voices, pronunciations, speech pitch, speech
-rates, speech levels, etc.) is controlled with CSS style sheets and
-PLS lexicons.
+engines are configured with [user
+properties](http://daisy.github.io/pipeline/Configuration-Files#user-properties),
+and the exact aural rendering of the document (TTS voices,
+pronunciations, speech pitch, speech rates, speech levels, etc.) is
+controlled with TTS configuration files, CSS style sheets and PLS
+lexicons.
 
-The following two properties must be set through the
-[pipeline.properties
-file](http://daisy.github.io/pipeline/Configuration-Files#user-properties).
+TTS configuration files may either be specified "statically", through
+the `org.daisy.pipeline.tts.config` user property, or "dynamically"
+through an optional script input.
 
 `org.daisy.pipeline.tts.config`
-: File to load TTS configuration properties from at start-up
+: File to load TTS configurations from at start-up
 : Defaults to the file "tts-default-config.xml" located in the "etc/"
   directory in the base directory of the Pipeline installation, or
   "/etc/opt/daisy-pipeline2/tts-default-config.xml" on Debian/Ubuntu.
 
-`org.daisy.pipeline.tts.host.protection`
-: Allow dynamic setting of properties
-: Defaults to "true"
-
-All other TTS properties may be specified through either the
-[pipeline.properties
-file](http://daisy.github.io/pipeline/Configuration-Files#user-properties)
-or special TTS configuration files. Aural CSS style sheets and PLS
-lexicons must be specified in TTS configuration files.
-
-
-Configuration files may either be specified "statically", through the
-user property `org.daisy.pipeline.tts.config` or "dynamically" through
-the optional script input. If `org.daisy.pipeline.tts.host.protection`
-is true, properties in dynamic configuration files are ignored. The
-configuration file format is as follows:
+The TTS configuration file format is as follows:
 
 ~~~xml
 <config>
-  <property key="org.daisy.pipeline.tts.acapela.samplerate" value="44100"/>
   <voice engine="acapela" name="claire" lang="fr" gender="female-adult" priority="12"/>
-  <css href="css/aural.css"/>
-  <lexicon href="lexicons/fr.pls"/>
+  ...
 </config>
 ~~~
 
@@ -62,14 +47,6 @@ TODO: what about <annotations type="" href="">
                     ...
                  </annotations>
 -->
-
-Both relative and absolute paths are accepted as a value of the "href"
-attributes. Relative paths are relative to the configuration file's
-location.
-
-<!-- Absolute paths work only when the Pipeline is running in "local
-mode" (true by default, see
-[Pipeline as a Service](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service/)). -->
 
 <!-- The elements can be put in any namespace since namespaces aren’t
 checked. If there is any syntax error in the file, you will be
@@ -116,7 +93,7 @@ install' already takes care of installing eSpeak to a known
 location. On Windows, however, the PATH variable must be changed
 manually using the 'environment variables' panel.-->
 
-The audio encoder and the TTS processors are configured with
+The audio encoder and the TTS processors are configured with user
 properties. The following properties are available:
 
 ### Common settings
@@ -346,27 +323,23 @@ tts-adapter-attbin:
 
 ## CSS
 
-The text-to-speech voices and prosody can be configured with Aural
-CSS. To do so, add one or more "css" elements to the configuration
-file. If the "href" attribute is missing, the CSS stylesheets will be
-interpreted as inlined in the configuration file:
+The text-to-speech voices and prosody can be configured with aural
+CSS. To do so, attach CSS style sheets to the source document. Style
+sheets can be linked (using an ['xml-stylesheet' processing
+instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded
+(using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or
+inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)). Below is an
+example of an aural CSS style sheet:
 
-~~~xml
-<config>
-  <css>
-    p {
-      volume: soft;
-      voice-family: female;
-    }
-  </css>
-</config>
+~~~css
+p {
+  volume: soft;
+  voice-family: female;
+}
 ~~~
-
-In addition to the configuration option, local CSS stylesheets
-referenced in
-['xml-stylesheet' processing instructions](https://www.w3.org/TR/xml-stylesheet)
-and by ['links'](https://www.w3.org/Style/styling-XML#External) in the
-header will be loaded too.
 
 The CSS properties that are supported by DAISY Pipeline are a subset
 of [Aural CSS 2.1](https://www.w3.org/TR/CSS2/aural.html) (and partly

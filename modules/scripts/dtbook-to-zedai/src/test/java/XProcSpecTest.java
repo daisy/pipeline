@@ -13,9 +13,4 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("mediatype-utils"),
 		};
 	}
-	
-	// XSpec tests are already run with Maven plugin
-	@Override
-	public void runXSpec() throws Exception {
-	}
 }

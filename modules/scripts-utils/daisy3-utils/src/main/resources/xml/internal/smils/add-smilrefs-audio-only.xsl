@@ -18,12 +18,12 @@
        make a special case of them.-->
   <xsl:variable name="ncx-linked" select="('levelhd', 'hd', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'note')"/>
 
-  <xsl:key name="clips" match="*[@idref]" use="@idref"/>
+  <xsl:key name="clips" match="d:clip" use="@textref"/>
 
   <xsl:template match="/*">
     <xsl:copy>
       <xsl:for-each-group group-by="(position() - 1) idiv 200"
-			  select="//*[@id and key('clips', @id, collection()[/d:audio-clips])]">
+			  select="//*[@id and key('clips',concat('#',@id),collection()[/d:audio-clips])]">
 	<xsl:variable name="smilfile" select="concat($mo-dir-rel, 'mo', position(), '.smil')"/>
 	<xsl:for-each select="current-group()">
 	  <!-- We take last() to handle cases when audio-order.xsl has moved notes into headings.  -->
@@ -45,7 +45,8 @@
 	           themselves in the SMIL files as <seq> elements.-->
 	      <!-- Warning: this script won't work well with pagenums inside headings! -->
 	      <xsl:variable name="children"
-	      		    select="$ncx-parent/descendant::*[@id and (key('clips', @id, collection()[/d:audio-clips]) or local-name()=$ncx-linked)]"/>
+	      		    select="$ncx-parent/descendant::*[@id and (key('clips',concat('#',@id),collection()[/d:audio-clips])
+								       or local-name()=$ncx-linked)]"/>
 	      <xsl:if test="not($children) or $children[1] is current()">
 		<!-- This way of dealing with NCX parents is slow. We could do a lot better. -->
 		<xsl:apply-templates select="$ncx-parent" mode="in-same-smil">

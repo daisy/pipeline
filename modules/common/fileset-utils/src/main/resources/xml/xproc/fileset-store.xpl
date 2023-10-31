@@ -452,103 +452,116 @@
                 <p:identity/>
             </p:when>
             <p:otherwise>
-                <p:documentation>File is in memory.</p:documentation>
-                <px:message severity="DEBUG">
-                    <p:with-option name="message"
-                        select="concat('Writing in-memory document to ',$href)"/>
-                </px:message>
-                <p:split-sequence>
-                    <p:with-option name="test"
-                        select="concat('base-uri(/*)=&quot;',$target,'&quot;')"/>
+                <p:documentation>File is in memory or is already stored.</p:documentation>
+                <p:sink/>
+                <p:split-sequence name="in-memory-doc">
+                    <p:with-option name="test" select="concat('base-uri(/*)=&quot;',$target,'&quot;')"/>
                     <p:input port="source">
                         <p:pipe step="normalize" port="in-memory"/>
                     </p:input>
                 </p:split-sequence>
-                <!-- guaranteed to return a single document (because purge option set on pxi:fileset-fix-original-hrefs above) -->
-                <p:split-sequence test="position()=1" initial-only="true"/>
-                <p:delete match="/*/@xml:base"/>
+                <p:count/>
                 <p:choose>
-                    <p:when test="starts-with($media-type,'binary/') or /c:data[@encoding='base64']">
-                        <p:output port="result">
-                            <p:pipe port="result" step="store-binary"/>
-                        </p:output>
-                        <p:store cx:decode="true" encoding="base64" name="store-binary">
-                            <p:with-option name="href" select="$target"/>
-                        </p:store>
-                    </p:when>
-                    <p:when
-                        test="/c:data or (starts-with($media-type,'text/') and not(starts-with($media-type,'text/xml')))">
-                        <p:output port="result">
-                            <p:pipe port="result" step="store-text"/>
-                        </p:output>
-                        <p:store method="text" name="store-text">
-                            <p:with-option name="href" select="$target"/>
-                            <p:with-option name="byte-order-mark" select="$byte-order-mark"/>
-                            <p:with-option name="encoding" select="$encoding"/>
-                            <p:with-option name="media-type" select="$media-type"/>
-                            <p:with-option name="normalization-form" select="$normalization-form"/>
-                        </p:store>
+                    <p:when test="string(/*)='0'">
+                        <p:documentation>File is not in memory and not at a original location, so it
+                        is already stored at the desired location. <!-- This is guaranteed by the
+                        pxi:fileset-fix-original-hrefs above (with "purge" set to "true" and
+                        "detect-existing" to "false"). --></p:documentation>
+                        <p:identity px:message-severity="DEBUG" px:message="{$href} already stored"/>
                     </p:when>
                     <p:otherwise>
-                        <p:output port="result"/>
-                        <p:store name="store-xml">
-                            <p:with-option name="href" select="$target"/>
-                            <p:with-option name="byte-order-mark" select="$byte-order-mark"/>
-                            <p:with-option name="cdata-section-elements" select="$cdata-section-elements"/>
-                            <p:with-option name="doctype-public" select="$doctype-public"/>
-                            <p:with-option name="doctype-system" select="$doctype-system"/>
-                            <p:with-option name="encoding" select="$encoding"/>
-                            <p:with-option name="escape-uri-attributes" select="$escape-uri-attributes"/>
-                            <p:with-option name="include-content-type" select="
-                                if ($include-content-type) then
-                                    $include-content-type
-                                else string($media-type!='application/xhtml+xml')"/>
-                            <p:with-option name="indent" select="$indent"/>
-                            <p:with-option name="media-type" select="$media-type"/>
-                            <p:with-option name="method" select="
-                                if ($media-type='application/xhtml+xml' and not($method)) then
-                                    'xhtml'
-                                else if ($method) then
-                                    $method
-                                else
-                                    'xml'"/>
-                            <p:with-option name="normalization-form" select="$normalization-form"/>
-                            <p:with-option name="omit-xml-declaration" select="$omit-xml-declaration"/>
-                            <p:with-option name="standalone" select="$standalone"/>
-                            <p:with-option name="undeclare-prefixes" select="$undeclare-prefixes"/>
-                            <p:with-option name="version" select="$version"/>
-                        </p:store>
-                        <p:identity>
+                        <p:sink/>
+                        <p:identity px:message-severity="DEBUG" px:message="Writing in-memory document to {$href}">
                             <p:input port="source">
-                                <p:pipe step="store-xml" port="result"/>
+                                <p:pipe step="in-memory-doc" port="matched"/>
                             </p:input>
                         </p:identity>
+                        <p:split-sequence test="position()=1" initial-only="true"/>
+                        <p:delete match="/*/@xml:base"/>
                         <p:choose>
-                            <p:when test="$doctype">
-                                <p:variable name="stored-file" select="/*/text()"/>
-                                <p:sink/>
-                                <px:set-doctype px:message="Setting doctype of {$stored-file} to {$doctype}" px:message-severity="DEBUG">
-                                    <p:with-option name="href" select="$stored-file"/>
-                                    <p:with-option name="doctype" select="$doctype"/>
-                                </px:set-doctype>
+                            <p:when test="starts-with($media-type,'binary/') or /c:data[@encoding='base64']">
+                                <p:output port="result">
+                                    <p:pipe port="result" step="store-binary"/>
+                                </p:output>
+                                <p:store cx:decode="true" encoding="base64" name="store-binary">
+                                    <p:with-option name="href" select="$target"/>
+                                </p:store>
                             </p:when>
-                            <p:otherwise>
-                                <p:identity/>
-                            </p:otherwise>
-                        </p:choose>
-                        <p:choose>
-                            <p:when test="$xml-declaration">
-                                <p:variable name="stored-file" select="/*/text()"/>
-                                <p:sink/>
-                                <px:set-xml-declaration px:message="Setting XML declaration of {$stored-file} to {$xml-declaration}"
-                                                        px:message-severity="DEBUG">
-                                    <p:with-option name="href" select="$stored-file"/>
-                                    <p:with-option name="xml-declaration" select="$xml-declaration"/>
+                            <p:when
+                                test="/c:data or (starts-with($media-type,'text/') and not(starts-with($media-type,'text/xml')))">
+                                <p:output port="result">
+                                    <p:pipe port="result" step="store-text"/>
+                                </p:output>
+                                <p:store method="text" name="store-text">
+                                    <p:with-option name="href" select="$target"/>
+                                    <p:with-option name="byte-order-mark" select="$byte-order-mark"/>
                                     <p:with-option name="encoding" select="$encoding"/>
-                                </px:set-xml-declaration>
+                                    <p:with-option name="media-type" select="$media-type"/>
+                                    <p:with-option name="normalization-form" select="$normalization-form"/>
+                                </p:store>
                             </p:when>
                             <p:otherwise>
-                                <p:identity/>
+                                <p:output port="result"/>
+                                <p:store name="store-xml">
+                                    <p:with-option name="href" select="$target"/>
+                                    <p:with-option name="byte-order-mark" select="$byte-order-mark"/>
+                                    <p:with-option name="cdata-section-elements" select="$cdata-section-elements"/>
+                                    <p:with-option name="doctype-public" select="$doctype-public"/>
+                                    <p:with-option name="doctype-system" select="$doctype-system"/>
+                                    <p:with-option name="encoding" select="$encoding"/>
+                                    <p:with-option name="escape-uri-attributes" select="$escape-uri-attributes"/>
+                                    <p:with-option name="include-content-type" select="
+                                        if ($include-content-type) then
+                                            $include-content-type
+                                        else string($media-type!='application/xhtml+xml')"/>
+                                    <p:with-option name="indent" select="$indent"/>
+                                    <p:with-option name="media-type" select="$media-type"/>
+                                    <p:with-option name="method" select="
+                                        if ($media-type='application/xhtml+xml' and not($method)) then
+                                            'xhtml'
+                                        else if ($method) then
+                                            $method
+                                        else
+                                            'xml'"/>
+                                    <p:with-option name="normalization-form" select="$normalization-form"/>
+                                    <p:with-option name="omit-xml-declaration" select="$omit-xml-declaration"/>
+                                    <p:with-option name="standalone" select="$standalone"/>
+                                    <p:with-option name="undeclare-prefixes" select="$undeclare-prefixes"/>
+                                    <p:with-option name="version" select="$version"/>
+                                </p:store>
+                                <p:identity>
+                                    <p:input port="source">
+                                        <p:pipe step="store-xml" port="result"/>
+                                    </p:input>
+                                </p:identity>
+                                <p:choose>
+                                    <p:when test="$doctype">
+                                        <p:variable name="stored-file" select="/*/text()"/>
+                                        <p:sink/>
+                                        <px:set-doctype px:message="Setting doctype of {$stored-file} to {$doctype}" px:message-severity="DEBUG">
+                                            <p:with-option name="href" select="$stored-file"/>
+                                            <p:with-option name="doctype" select="$doctype"/>
+                                        </px:set-doctype>
+                                    </p:when>
+                                    <p:otherwise>
+                                        <p:identity/>
+                                    </p:otherwise>
+                                </p:choose>
+                                <p:choose>
+                                    <p:when test="$xml-declaration">
+                                        <p:variable name="stored-file" select="/*/text()"/>
+                                        <p:sink/>
+                                        <px:set-xml-declaration px:message="Setting XML declaration of {$stored-file} to {$xml-declaration}"
+                                                                px:message-severity="DEBUG">
+                                            <p:with-option name="href" select="$stored-file"/>
+                                            <p:with-option name="xml-declaration" select="$xml-declaration"/>
+                                            <p:with-option name="encoding" select="$encoding"/>
+                                        </px:set-xml-declaration>
+                                    </p:when>
+                                    <p:otherwise>
+                                        <p:identity/>
+                                    </p:otherwise>
+                                </p:choose>
                             </p:otherwise>
                         </p:choose>
                     </p:otherwise>
@@ -628,21 +641,17 @@
                 <p:try cx:depends-on="mkdir" name="store.copy">
                     <p:group>
                         <p:output port="result"/>
+                        <p:variable name="original-filename" select="replace($on-disk,'^.*/([^/]*)$','$1')"/>
                         <px:copy name="store.copy.do">
                             <p:with-option name="href" select="$on-disk"/>
                             <p:with-option name="target" select="$target"/>
                         </px:copy>
-
-                        <p:identity>
+                        <p:identity cx:depends-on="store.copy.do"
+                                    px:message-severity="DEBUG" px:message="Copied {$original-filename} to {$href}">
                             <p:input port="source">
                                 <p:pipe port="current" step="store"/>
                             </p:input>
                         </p:identity>
-                        <px:message severity="DEBUG">
-                            <p:with-option name="message"
-                                select="concat('Copied ',replace($on-disk,'^.*/([^/]*)$','$1'),' to ',$href)"
-                            />
-                        </px:message>
                     </p:group>
                     <p:catch name="store.copy.catch">
                         <p:output port="result">

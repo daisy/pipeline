@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
@@ -17,34 +16,31 @@ import org.slf4j.LoggerFactory;
 
 public class AnnotationsConfigExtension implements ConfigReader.Extension {
 
-	private Logger Logger = LoggerFactory.getLogger(AnnotationsConfigExtension.class);
-	private final Processor saxonproc;
-	
-	public AnnotationsConfigExtension(Processor saxonproc) {
-		this.saxonproc = saxonproc;
-	}
-	
+	private static final Logger logger = LoggerFactory.getLogger(AnnotationsConfigExtension.class);
+
+	private final Map<String,List<XdmNode>> annotations = new HashMap<>();
+
 	@Override
-	public boolean parseNode(XdmNode node, URI documentURI) {
+	public boolean parseNode(XdmNode node, URI documentURI, ConfigReader parent) {
 		String name = node.getNodeName().getLocalName();
 		if ("annotations".equalsIgnoreCase(name)) {
 			String href = node.getAttributeValue(new QName(null, "href"));
 			String type = node.getAttributeValue(new QName(null, "type"));
 			if (type == null) {
-				Logger.debug("missing attribute @type in node <annotations> of the config file");
+				logger.debug("missing attribute @type in node <annotations> of the config file");
 				return false;
 			}
-			if (!mAnnotations.containsKey(type))
-				mAnnotations.put(type, new ArrayList<XdmNode>());
+			if (!annotations.containsKey(type))
+				annotations.put(type, new ArrayList<XdmNode>());
 			if (href != null) {
-				XdmNode external = ConfigReader.readFromURIinsideConfig(href, saxonproc, documentURI);
+				XdmNode external = parent.parseXML(href, documentURI);
 				if (external != null) {
-					Logger.info("custom annotations read from " + external.getBaseURI());
-					mAnnotations.get(type).add(external);
+					logger.info("custom annotations read from " + external.getBaseURI());
+					annotations.get(type).add(external);
 				}
 			} else {
-				Logger.info("custom embedded annotations read from " + documentURI);
-				mAnnotations.get(type).add(node);
+				logger.info("custom embedded annotations read from " + documentURI);
+				annotations.get(type).add(node);
 			}
 			return true;
 		}
@@ -52,15 +48,9 @@ public class AnnotationsConfigExtension implements ConfigReader.Extension {
 	}
 
 	public Collection<XdmNode> getAnnotations(String mediatype) {
-		Collection<XdmNode> res = mAnnotations.get(mediatype);
+		Collection<XdmNode> res = annotations.get(mediatype);
 		if (res != null)
 			return res;
 		return Collections.EMPTY_LIST;
 	}
-
-	@Override
-	public void setParentReader(ConfigReader cr) {
-	}
-
-	private Map<String, List<XdmNode>> mAnnotations = new HashMap<String, List<XdmNode>>();
 }

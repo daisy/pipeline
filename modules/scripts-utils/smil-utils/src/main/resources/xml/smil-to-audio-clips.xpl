@@ -10,15 +10,13 @@
     <p:input port="source" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>SMIL documents (all versions)</p>
-            <p>It is assumed that SMIL and content documents have been prepared so that all ID
-            attributes are unique in the whole publication.</p>
         </p:documentation>
     </p:input>
 
     <p:output port="result">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The d:audio-clips document</p>
-            <p>The document does not contain two clips with the same idref.</p>
+            <p>The document does not contain two clips with the same textref.</p>
         </p:documentation>
     </p:output>
 

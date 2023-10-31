@@ -1,13 +1,13 @@
 package org.daisy.pipeline.braille.common.impl;
 
-import java.util.Map;
 import java.net.URI;
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.runtime.XAtomicStep;
@@ -22,24 +22,24 @@ import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Function;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
+import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
+import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
+import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.BrailleTranslatorRegistry;
 import org.daisy.pipeline.braille.common.calabash.CxEvalBasedTransformer;
-import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
-import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
-import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
-import org.daisy.pipeline.braille.common.CompoundBrailleTranslator;
+import org.daisy.pipeline.braille.common.Hyphenator;
+import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-import org.daisy.pipeline.braille.common.TextTransformParser;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import org.daisy.pipeline.braille.common.util.Function0;
 import org.daisy.pipeline.braille.common.util.Functions;
@@ -76,6 +76,7 @@ public interface CSSBlockTransform {
 		@Activate
 		protected void activate(final Map<?,?> properties) {
 			href = URLs.asURI(URLs.getResourceFromJAR("xml/block-translator.xpl", CSSBlockTransform.class));
+			translatorRegistry = translatorRegistry.withContext(logger);
 		}
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
@@ -99,9 +100,8 @@ public interface CSSBlockTransform {
 			q.add("input", "text-css");
 			if (braille)
 				q.add("output", "braille");
-			Iterable<BrailleTranslator> translators = logSelect(q, translatorRegistry);
 			return transform(
-				translators,
+				logSelect(q, translatorRegistry.getWithHyphenator(q)),
 				new Function<BrailleTranslator,BrailleTranslator>() {
 					public BrailleTranslator _apply(BrailleTranslator translator) {
 						return __apply(
@@ -114,7 +114,7 @@ public interface CSSBlockTransform {
 			
 		@Override
 		public ToStringHelper toStringHelper() {
-			return MoreObjects.toStringHelper("o.d.p.b.common.impl.CSSBlockTransform$Provider");
+			return MoreObjects.toStringHelper("CSSBlockTransform$Provider");
 		}
 		
 		private class TransformImpl extends AbstractBrailleTranslator implements XProcStepProvider {
@@ -123,6 +123,7 @@ public interface CSSBlockTransform {
 			private final BrailleTranslator mainTranslator;
 			private final boolean forceMainTranslator;
 			private final Map<String,String> options;
+			private final String brailleCharset;
 			
 			/**
 			 * @param mainTranslator translator to be used for the parts of the document that do
@@ -137,10 +138,32 @@ public interface CSSBlockTransform {
 				this.mainTranslator = mainTranslator;
 				this.forceMainTranslator = forceMainTranslator;
 				mainQuery = query;
+				this.brailleCharset = brailleCharset;
+			}
+			
+			private Hyphenator hyphenator = null;
+			
+			private TransformImpl(TransformImpl from, BrailleTranslator mainTranslator) {
+				super(from);
+				this.mainQuery = from.mainQuery;
+				this.mainTranslator = mainTranslator;
+				this.forceMainTranslator = from.forceMainTranslator;
+				this.options = from.options;
+				this.brailleCharset = from.brailleCharset;
+			}
+			
+			/**
+			 * @throws UnsupportedOperationException if {@code mainTranslator.withHyphenator()} throws
+			 *                                       UnsupportedOperationException
+			 */
+			public TransformImpl _withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException {
+				TransformImpl t = new TransformImpl(this, mainTranslator.withHyphenator(hyphenator));
+				Provider.this.rememberId(t);
+				return t;
 			}
 			
 			@Override
-			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 				return XProcStep.of(
 					new SingleInSingleOutXMLTransformer() {
 						public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
@@ -148,29 +171,26 @@ public interface CSSBlockTransform {
 								if (!(source instanceof SaxonInputValue))
 									throw new IllegalArgumentException();
 								Mult<SaxonInputValue> mult = ((SaxonInputValue)source).mult(2);
+
 								// analyze the input
-								Map<String,Query> subTranslators
-									= readTextTransformRules(
-										mult.get().ensureSingleItem().asNodeIterator().next(),
-										mainQuery);
-								BrailleTranslator compoundTranslator;
+								Node doc = mult.get().ensureSingleItem().asNodeIterator().next();
+								if (!(doc instanceof Document))
+									throw new TransformerException(new IllegalArgumentException());
+								String style = (((Document)doc).getDocumentElement()).getAttribute("style");
+								URI styleBaseURI = URLs.asURI(((Document)doc).getBaseURI());
+								BrailleTranslator compoundTranslator
+									= translatorRegistry.getWithHyphenator(mainQuery, style, styleBaseURI, forceMainTranslator)
+									                    .iterator().next();
+								if (hyphenator != null)
+									compoundTranslator = compoundTranslator.withHyphenator(hyphenator);
 								Function0<Void> evictTempTranslator; {
-									if (subTranslators != null) {
-										BrailleTranslator defaultTranslator = mainTranslator;
-										Query defaultQuery = subTranslators.remove("auto");
-										if (!forceMainTranslator && defaultQuery != null && !defaultQuery.equals(mainQuery))
-											defaultTranslator = translatorRegistry.get(defaultQuery).iterator().next();
-										compoundTranslator = new CompoundBrailleTranslator(
-											defaultTranslator,
-											Maps.transformValues(
-												subTranslators,
-												q -> () -> translatorRegistry.get(q).iterator().next()));
+									if (compoundTranslator != mainTranslator)
+										// translatorRegistry.get() call above probably returned an object that was not cached
 										evictTempTranslator = Provider.this.provideTemporarily(compoundTranslator);
-									} else {
-										compoundTranslator = mainTranslator;
+									else
 										evictTempTranslator = Functions.noOp;
-									}
 								}
+
 								// run the transformation
 								new CxEvalBasedTransformer(
 									href,
@@ -180,7 +200,7 @@ public interface CSSBlockTransform {
 									            .put("text-transform",
 									                 mutableQuery().add("id", compoundTranslator.getIdentifier()).toString())
 									            .build()
-								).newStep(runtime, step).transform(
+								).newStep(runtime, step, monitor, properties).transform(
 									ImmutableMap.of(
 										new QName("source"), mult.get(),
 										new QName("parameters"), params),
@@ -198,17 +218,9 @@ public interface CSSBlockTransform {
 			
 			@Override
 			public ToStringHelper toStringHelper() {
-				return MoreObjects.toStringHelper("o.d.p.b.common.impl.CSSBlockTransform$Provider$TransformImpl")
+				return MoreObjects.toStringHelper("CSSBlockTransform$Provider$TransformImpl")
 					.add("translator", mainTranslator);
 			}
-		}
-		
-		private static Map<String,Query> readTextTransformRules(Node doc, Query baseQuery) {
-			if (!(doc instanceof Document))
-				throw new TransformerException(new IllegalArgumentException());
-			String style = (((Document)doc).getDocumentElement()).getAttribute("style");
-			URI baseURI = URLs.asURI(((Document)doc).getBaseURI());
-			return TextTransformParser.getBrailleTranslatorQueries(style, baseURI, baseQuery);
 		}
 		
 		// FIXME: should ideally bind BrailleTranslatorRegistry, but does not work because
@@ -223,6 +235,17 @@ public interface CSSBlockTransform {
 		)
 		protected void bindBrailleTranslatorProvider(BrailleTranslatorProvider<?> provider) {
 			translatorRegistry.addProvider(provider);
+		}
+		
+		@Reference(
+			name = "HyphenatorRegistry",
+			unbind = "-",
+			service = HyphenatorRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
+		)
+		protected void bindHyphenatorRegistry(HyphenatorRegistry registry) {
+			translatorRegistry.bindHyphenatorRegistry(registry);
 		}
 		
 		private BrailleTranslatorRegistry translatorRegistry = new BrailleTranslatorRegistry();

@@ -27,10 +27,10 @@ public class LexServiceRegistry {
 	 */
 	@Reference(
 		name = "LexService",
-		unbind = "removeLexService",
+		unbind = "-",
 		service = LexService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addLexService(LexService lexer) {
 		mLexerToTokens.put(lexer, new CopyOnWriteArrayList<LexService.LexerToken>());

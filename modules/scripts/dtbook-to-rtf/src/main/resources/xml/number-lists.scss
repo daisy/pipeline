@@ -1,0 +1,20 @@
+list[type="ol"] {
+	&[start],
+	&[enum="a"],
+	&[enum="U"],
+	&[enum="i"],
+	&[enum="X"] {
+		counter-reset: list-item;
+		> li {
+			display: list-item;
+		}
+	}
+	&[start][enum="1"] { list-style-type: decimal; }
+	&[enum="a"] { list-style-type: lower-alpha; }
+	&[enum="U"] { list-style-type: upper-alpha; }
+	&[enum="i"] { list-style-type: lower-roman; }
+	&[enum="X"] { list-style-type: upper-roman; }
+}
+
+/* handle list[start] */
+@xslt "number-lists.xsl";

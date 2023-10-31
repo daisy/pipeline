@@ -19,6 +19,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.Liblouisutdml;
@@ -47,7 +48,7 @@ public class TranslateFileStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new TranslateFileStep(runtime, step, liblouisutdml);
 		}
 		

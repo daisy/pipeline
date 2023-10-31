@@ -59,22 +59,22 @@
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> 1. </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> 1. </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> 2. </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> 2. </css:box>
               </css:marker>
               <ul>
                 <li>
                   <css:marker>
-                    <css:box type="inline" css:text-transform="auto"> 1. </css:box>
+                    <css:box type="inline" css:text-transform="auto" xml:lang=""> 1. </css:box>
                   </css:marker>
                 </li>
                 <li>
                   <css:marker>
-                    <css:box type="inline" css:text-transform="auto"> 2. </css:box>
+                    <css:box type="inline" css:text-transform="auto" xml:lang=""> 2. </css:box>
                   </css:marker>
                 </li>
               </ul>
@@ -83,12 +83,12 @@
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> * </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> * </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto"> † </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang=""> † </css:box>
               </css:marker>
             </li>
           </ul>
@@ -142,22 +142,22 @@
           <ul>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">one </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">one </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">two </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">two </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">three </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">three </css:box>
               </css:marker>
             </li>
             <li>
               <css:marker>
-                <css:box type="inline" css:text-transform="auto">IV </css:box>
+                <css:box type="inline" css:text-transform="auto" xml:lang="">IV </css:box>
               </css:marker>
             </li>
           </ul>

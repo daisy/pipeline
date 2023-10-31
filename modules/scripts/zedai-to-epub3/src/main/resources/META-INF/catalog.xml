@@ -9,6 +9,6 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-html" />
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils" />
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech" />
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
   <nextCatalog catalog="org:daisy:pipeline:modules:html-to-epub3" />
 </catalog>

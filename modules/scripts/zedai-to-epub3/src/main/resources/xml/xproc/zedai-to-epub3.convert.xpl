@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:zedai-to-epub3" name="main"
                 exclude-inline-prefixes="#all">
@@ -13,10 +14,15 @@
     <p:input port="tts-config">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2>Text-To-Speech configuration file</h2>
-            <p>Configuration file that contains Text-To-Speech properties, links to
-            aural CSS stylesheets and links to PLS lexicons.</p>
+            <p>Configuration file with voice mappings, PLS lexicons and annotations.</p>
         </p:documentation>
     </p:input>
+
+    <p:option name="stylesheet" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>CSS user style sheets as space separated list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
 
     <p:output port="fileset.out" primary="true">
         <p:pipe step="html-to-epub3" port="fileset.out"/>
@@ -24,7 +30,14 @@
     <p:output port="in-memory.out" sequence="true">
         <p:pipe step="html-to-epub3" port="in-memory.out"/>
     </p:output>
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Status of the TTS step and EPUB validation.</p>
+            <p>A <code>result</code> attribute indicates whether both the TTS step and the EPUB
+            validation were successful ("ok"), or whether at least one of them failed ("error").</p>
+            <p>A <code>tts-success-rate</code> attribute contains the percentage of the input text
+            that got successfully converted to speech.</p>
+        </p:documentation>
         <p:pipe step="status" port="result"/>
     </p:output>
     <p:output port="temp-audio-files">
@@ -53,6 +66,12 @@
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Empty directory dedicated to this conversion. May be left empty in which case a
             temporary directory will be automaticall created.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="output-validation" cx:type="off|report|abort" select="'off'">
+        <p:documentation>
+            Determines whether to validate the EPUB output and what to do on validation
+            errors. Defaults to 'off'.
         </p:documentation>
     </p:option>
     <p:option name="chunk-size" required="false" select="'-1'"/>
@@ -104,7 +123,12 @@
             px:assert
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
+        <p:documentation>
+            px:epub3-safe-uris
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
         <p:documentation>
             px:css-speech-cascade
         </p:documentation>
@@ -143,9 +167,7 @@
                 <p:input port="source.in-memory">
                     <p:pipe step="zedai" port="result"/>
                 </p:input>
-                <p:input port="config">
-                    <p:pipe step="main" port="tts-config"/>
-                </p:input>
+                <p:with-option name="user-stylesheet" select="$stylesheet"/>
             </px:css-speech-cascade>
             <p:sink/>
             <p:identity>
@@ -199,9 +221,16 @@
     <!-- CREATE EPUB                                                             -->
     <!--=========================================================================-->
 
+    <!-- skip-cleanup on px:html-to-epub3 skips not only HTML cleanup, but also px:epub3-safe-uris -->
+    <px:epub3-safe-uris name="safe-uris">
+        <p:input port="source.in-memory">
+            <p:pipe step="zedai-to-html" port="in-memory.out"/>
+        </p:input>
+    </px:epub3-safe-uris>
+
     <px:html-to-epub3 name="html-to-epub3" skip-cleanup="true" process-css="false">
         <p:input port="input.in-memory">
-            <p:pipe step="zedai-to-html" port="in-memory.out"/>
+            <p:pipe step="safe-uris" port="result.in-memory"/>
         </p:input>
         <p:input port="metadata">
             <p:pipe step="metadata" port="result"/>
@@ -214,6 +243,7 @@
         <p:with-option name="include-tts-log" select="$include-tts-log"/>
         <p:with-option name="output-dir" select="concat($output-dir,'epub/')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-option name="output-validation" select="$output-validation"/>
     </px:html-to-epub3>
     <p:sink/>
 

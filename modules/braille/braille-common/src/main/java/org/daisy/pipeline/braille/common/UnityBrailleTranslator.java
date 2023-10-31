@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * only braille and white space characters. Supports CSS properties "word-spacing", "hyphens",
  * "hyphenate-character", "white-space", and "braille-charset".
  */
-public  class UnityBrailleTranslator extends AbstractBrailleTranslator implements BrailleTranslator {
+public class UnityBrailleTranslator extends AbstractBrailleTranslator implements BrailleTranslator {
 
 	private static final Pattern SPECIAL_CHARS = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0\u00AD\u200B\u2028]+");
 
@@ -45,6 +45,10 @@ public  class UnityBrailleTranslator extends AbstractBrailleTranslator implement
 	public UnityBrailleTranslator(BrailleConverter brailleCharset, boolean useBrailleCharsetForInput) {
 		this.brailleCharset = brailleCharset;
 		this.useBrailleCharsetForInput = useBrailleCharsetForInput;
+	}
+
+	public UnityBrailleTranslator _withHyphenator(Hyphenator hyphenator) {
+		return this;
 	}
 
 	private FromStyledTextToBraille fromStyledTextToBraille = null;

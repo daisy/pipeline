@@ -3,6 +3,8 @@ package org.daisy.pipeline.tts.cereproc.impl;
 import java.io.File;
 import java.util.Map;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -15,46 +17,54 @@ public abstract class CereProcService implements TTSService {
 
 	private final static Logger logger = LoggerFactory.getLogger(CereProcService.class);
 
+	private static final Property CEREPROC_SERVER = Properties.getProperty("org.daisy.pipeline.tts.cereproc.server",
+	                                                                       false,
+	                                                                       "Address of CereProc speech engine server",
+	                                                                       false,
+	                                                                       "localhost");
+	private static final Property CEREPROC_CLIENT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.client",
+	                                                                       false,
+	                                                                       "Path of client program for communicating with CereProc server",
+	                                                                       false,
+	                                                                       "/usr/bin/cspeechclient");
+	private static final Property CEREPROC_PORT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.port",
+	                                                                     false,
+	                                                                     "Port of CereProc speech engine server for regular voices",
+	                                                                     false,
+	                                                                     null);
+	private static final Property CEREPROC_DNN_PORT = Properties.getProperty("org.daisy.pipeline.tts.cereproc.dnn.port",
+	                                                                         false,
+	                                                                         "Port of CereProc speech engine server for DNN voices",
+	                                                                         false,
+	                                                                         null);
+	private static final Property CEREPROC_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.cereproc.priority",
+	                                                                         true,
+	                                                                         "Priority of CereProc regular voices relative to voices of other speech engines",
+	                                                                         false,
+	                                                                         "15");
+	private static final Property CEREPROC_DNN_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.cereproc.dnn.priority",
+	                                                                             true,
+	                                                                             "Priority of CereProc DNN voices relative to voices of other speech engines",
+	                                                                             false,
+	                                                                             "15");
+
 	@Override
-	public TTSEngine newEngine(Map<String,String> params) throws Throwable {
-		String server; {
-			String prop = "org.daisy.pipeline.tts.cereproc.server";
-			String val = params.get(prop);
-			if (val != null) {
-				server = val;
-			} else {
-				server = "localhost";
-				logger.warn(prop + " property not set. Defaulting to " + server);
-			}
-		}
-		File client; {
-			String prop = "org.daisy.pipeline.tts.cereproc.client";
-			String val = params.get(prop);
-			if (val != null) {
-				client = new File(val);
-			} else {
-				client = new File("/usr/bin/cspeechclient");
-				logger.warn(prop + " property not set. Defaulting to " + client);
-			}
-		}
+	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
+		String server = CEREPROC_SERVER.getValue(properties);
+		File client = new File(CEREPROC_CLIENT.getValue(properties));
 		int priority; {
-			String prop = "org.daisy.pipeline.tts.cereproc.priority";
-			String val = params.get(prop);
-			if (val != null) {
-				try {
-					priority = Integer.valueOf(val);
-				} catch (NumberFormatException e) {
-					throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
-				}
-			} else {
-				priority = 15;
+			String prop = CEREPROC_PRIORITY.getValue(properties);
+			try {
+				priority = Integer.valueOf(prop);
+			} catch (NumberFormatException e) {
+				throw new SynthesisException(CEREPROC_PRIORITY.getName() + ": " + prop + "is not a valid number", e);
 			}
 		}
-		return newEngine(server, client, priority, params);
+		return newEngine(server, client, priority, properties);
 	}
 
 	protected abstract CereProcEngine newEngine(
-		String server, File client, int priority, Map<String,String> params) throws Throwable;
+		String server, File client, int priority, Map<String,String> properties) throws Throwable;
 
 	@Override
 	public String getName() {
@@ -69,19 +79,18 @@ public abstract class CereProcService implements TTSService {
 
 		@Override
 		protected CereProcEngine newEngine(
-				String server, File client, int priority, Map<String,String> params) throws Throwable {
+				String server, File client, int priority, Map<String,String> properties) throws Throwable {
 
 			int port; {
-				String prop = "org.daisy.pipeline.tts.cereproc.port";
-				String val = params.get(prop);
-				if (val != null) {
+				String prop = CEREPROC_PORT.getValue(properties);
+				if (prop != null) {
 					try {
-						port = Integer.valueOf(val);
+						port = Integer.valueOf(prop);
 					} catch (NumberFormatException e) {
-						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
+						throw new SynthesisException(CEREPROC_PORT.getName() + ": " + prop + "is not a valid number", e);
 					}
 				} else {
-					throw new SynthesisException(prop + " property not set.");
+					throw new SynthesisException(CEREPROC_PORT.getName() + " property not set.");
 				}
 			}
 			return new CereProcEngine(CereProcEngine.Variant.STANDARD,
@@ -109,32 +118,26 @@ public abstract class CereProcService implements TTSService {
 
 		@Override
 		protected CereProcEngine newEngine(
-				String server, File client, int priority, Map<String,String> params) throws Throwable {
+				String server, File client, int priority, Map<String,String> properties) throws Throwable {
 
 			int port; {
-				String prop = "org.daisy.pipeline.tts.cereproc.dnn.port";
-				String val = params.get(prop);
-				if (val != null) {
+				String prop = CEREPROC_DNN_PORT.getValue(properties);
+				if (prop != null) {
 					try {
-						port = Integer.valueOf(val);
+						port = Integer.valueOf(prop);
 					} catch (NumberFormatException e) {
-						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
+						throw new SynthesisException(CEREPROC_DNN_PORT.getName() + ": " + prop + "is not a valid number", e);
 					}
 				} else {
-					throw new SynthesisException(prop + " property not set.");
+					throw new SynthesisException(CEREPROC_DNN_PORT.getName() + " property not set.");
 				}
 			}
 			{
-				String prop = "org.daisy.pipeline.tts.cereproc.dnn.priority";
-				String val = params.get(prop);
-				if (val != null) {
-					try {
-						priority = Integer.valueOf(val);
-					} catch (NumberFormatException e) {
-						throw new SynthesisException(prop + ": " + val + "is not a valid number", e);
-					}
-				} else {
-					priority = 15;
+				String prop = CEREPROC_DNN_PRIORITY.getValue(properties);
+				try {
+					priority = Integer.valueOf(prop);
+				} catch (NumberFormatException e) {
+					throw new SynthesisException(CEREPROC_DNN_PRIORITY.getName() + ": " + prop + "is not a valid number", e);
 				}
 			}
 			return new CereProcEngine(CereProcEngine.Variant.DNN,

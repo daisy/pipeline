@@ -6,13 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.HashMap;
-
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmNode;
-
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
+import java.util.Map;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.WritablePipe;
@@ -45,6 +39,14 @@ import com.adobe.epubcheck.util.OPSType;
 import com.adobe.epubcheck.util.PathUtil;
 import com.adobe.epubcheck.util.URLResourceProvider;
 import com.adobe.epubcheck.util.XmlReportImpl;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -98,7 +100,7 @@ public class EpubCheckProvider implements XProcStepProvider {
 		documentValidatorFactoryMap = map;
 	}
 	
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new EpubCheckStep(runtime, step);
 	}
 

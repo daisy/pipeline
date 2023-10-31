@@ -16,7 +16,7 @@ public interface FormatSpecifications {
 	public static final QName Audio_attr_clipBegin = new QName("", "clipBegin");
 	public static final QName Audio_attr_clipEnd = new QName("", "clipEnd");
 	public static final QName Audio_attr_src = new QName("", "src");
-	public static final QName Audio_attr_id = new QName("", "idref");
+	public static final QName Audio_attr_textref = new QName("", "textref");
 
 	public static final QName SentenceTag = new QName(SSMLNS, "s");
 	public static final QName TokenTag = new QName(SSMLNS, "token");
@@ -44,5 +44,5 @@ public interface FormatSpecifications {
 
 	public static final QName StatusRootTag = new QName(StatusNS, "status");
 	public static final QName Status_attr_result = new QName("", "result");
-	public static final QName Status_attr_success_rate = new QName("", "success-rate");
+	public static final QName Status_attr_success_rate = new QName("", "tts-success-rate");
 }

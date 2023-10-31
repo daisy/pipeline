@@ -47,6 +47,7 @@
             px:fileset-filter
             px:fileset-filter-in-memory
             px:fileset-load
+            px:fileset-move
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
@@ -191,16 +192,10 @@
         </p:documentation>
         <p:output port="fileset" primary="true"/>
         <p:output port="in-memory" sequence="true">
-            <p:pipe step="in-memory" port="result"/>
+            <p:pipe step="move" port="result.in-memory"/>
         </p:output>
         <p:variable name="zedai-uri" select="(//d:file[@media-type='application/z3998-auth+xml'])[1]/resolve-uri(@href,base-uri(.))"/>
         <px:fileset-filter not-media-types="application/z3998-auth+xml"/>
-        <px:fileset-rebase>
-            <p:with-option name="new-base" select="$zedai-uri"/>
-        </px:fileset-rebase>
-        <px:set-base-uri>
-            <p:with-option name="base-uri" select="$output-dir"/>
-        </px:set-base-uri>
         <p:documentation>
             Remove files that are neither in memory nor on disk
         </p:documentation>
@@ -229,6 +224,16 @@
                 <p:pipe step="fileset.on-disk" port="result"/>
             </p:input>
         </px:fileset-join>
+        <!-- move to $output-dir-->
+        <px:fileset-rebase>
+            <p:with-option name="new-base" select="$zedai-uri"/>
+        </px:fileset-rebase>
+        <px:fileset-copy name="move">
+            <p:input port="source.in-memory">
+                <p:pipe step="in-memory" port="result"/>
+            </p:input>
+            <p:with-option name="target" select="$output-dir"/>
+        </px:fileset-copy>
         <!-- TODO: remove resources from fileset that are not referenced from any of the in-memory files -->
     </p:group>
     <p:sink/>

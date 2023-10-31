@@ -16,6 +16,11 @@
 	<p:input port="tts-config">
 		<p:inline><d:config/></p:inline>
 	</p:input>
+	<p:option name="stylesheet" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>CSS user style sheets as space separated list of absolute URIs.</p>
+		</p:documentation>
+	</p:option>
 	<p:option name="tts-audio-file-type" select="'audio/mpeg'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The desired file type of the generated audio files, specified as a MIME type.</p>
@@ -151,6 +156,7 @@
 		<p:input port="tts-config">
 			<p:pipe step="main" port="tts-config"/>
 		</p:input>
+		<p:with-option name="stylesheet" select="$stylesheet"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:with-option name="result-base" select="if ($epub3-output-dir!='')
 		                                          then $epub3-output-dir

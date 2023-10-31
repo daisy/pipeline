@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -14,8 +15,9 @@ import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator.LineBreakingFromStyledText;
-import org.daisy.pipeline.braille.css.CounterStyle;
+import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.css.CounterStyle;
 
 /**
  * {@link BrailleTranslator} that handles the <code>text-transform</code> value
@@ -26,13 +28,31 @@ import org.daisy.pipeline.braille.css.CSSStyledText;
  */
 public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator implements LineBreakingFromStyledText {
 
-	private final LineBreakingFromStyledText backingTranslator;
+	private final BrailleTranslator backingTranslator;
+	private final LineBreakingFromStyledText backingLineBreakingTranslator;
 	private final Map<String,CounterStyle> customCounterStyles;
 
 	public CounterHandlingBrailleTranslator(BrailleTranslator backingTranslator,
 	                                        Map<String,CounterStyle> customCounterStyles) {
-		this.backingTranslator = backingTranslator.lineBreakingFromStyledText();
+		this.backingTranslator = backingTranslator;
+		this.backingLineBreakingTranslator = backingTranslator.lineBreakingFromStyledText();
 		this.customCounterStyles = customCounterStyles;
+	}
+
+	private CounterHandlingBrailleTranslator(CounterHandlingBrailleTranslator from, BrailleTranslator backingTranslator) {
+		super(from);
+		this.backingTranslator = backingTranslator;
+		this.backingLineBreakingTranslator = backingTranslator.lineBreakingFromStyledText();
+		this.customCounterStyles = from.customCounterStyles;
+	}
+
+	/**
+	 * @throws UnsupportedOperationException if {@code backingTranslator.withHyphenator()} throws
+	 *                                       UnsupportedOperationException
+	 */
+	@Override
+	public CounterHandlingBrailleTranslator _withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException {
+		return new CounterHandlingBrailleTranslator(this, backingTranslator.withHyphenator(hyphenator));
 	}
 
 	@Override
@@ -41,17 +61,19 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 	}
 
 	public LineIterator transform(Iterable<CSSStyledText> styledText, int from, int to) {
-		return backingTranslator.transform(handleCounterStyles(styledText), from, to);
+		return backingLineBreakingTranslator.transform(handleCounterStyles(styledText), from, to);
 	}
 
 	private Iterable<CSSStyledText> handleCounterStyles(Iterable<CSSStyledText> styledText) {
 		List<CSSStyledText> segments = new ArrayList<CSSStyledText>();
 		String segment = null;
 		SimpleInlineStyle style = null;
+		Locale lang = null;
 		Map<String,String> attrs = null;
 		for (CSSStyledText st : styledText) {
 			String t = st.getText();
 			SimpleInlineStyle s = st.getStyle();
+			Locale l = st.getLanguage();
 			Map<String,String> a = st.getTextAttributes();
 			if (s != null) {
 				if (s.getProperty("text-transform") == TextTransform.list_values) {
@@ -69,7 +91,7 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 							Term<?> symbolsFunction = s.getValue("-dotify-counter-style");
 							if (symbolsFunction != null) {
 								try {
-									t = new CounterStyle(symbolsFunction).format(counterValue);
+									t = CounterStyle.fromSymbolsFunction(symbolsFunction).format(counterValue);
 								} catch (IllegalArgumentException e) {
 									// FIXME: show warning
 								}
@@ -86,12 +108,13 @@ public class CounterHandlingBrailleTranslator extends AbstractBrailleTranslator 
 				}
 				s.removeProperty("-dotify-counter-style"); }
 			if (segment != null)
-				segments.add(new CSSStyledText(segment, style, attrs));
+				segments.add(new CSSStyledText(segment, style, lang, attrs));
 			segment = t;
 			style = s;
+			lang = l;
 			attrs = a; }
 		if (segment != null)
-			segments.add(new CSSStyledText(segment, style, attrs));
+			segments.add(new CSSStyledText(segment, style, lang, attrs));
 		return segments;
 	}
 }

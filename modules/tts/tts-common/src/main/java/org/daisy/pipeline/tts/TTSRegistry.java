@@ -78,10 +78,10 @@ public class TTSRegistry {
 	 */
 	@Reference(
 		name = "TTSService",
-		unbind = "removeTTS",
+		unbind = "-",
 		service = TTSService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addTTS(TTSService tts) {
 		logger.info("Adding TTSService " + tts.getName());

@@ -1620,18 +1620,18 @@
     </x:expect>
   </x:scenario>
 
-  <x:scenario label="style-inheriting">
+  <x:scenario label="style-and-lang-inheriting">
     <x:call function="css:render-table-by">
       <x:param select="'row'"/>
       <x:param>
         <table>
-          <tbody style="word-spacing: 2">
+          <tbody style="word-spacing: 2" xml:lang="en">
             <tr style="text-transform: foo">
               <td>Cell 1.1</td>
               <td>Cell 1.2</td>
               <td>Cell 1.3</td>
             </tr>
-            <tr>
+            <tr xml:lang="und">
               <td>Cell 2.1</td>
               <td>Cell 2.2</td>
               <td>Cell 2.3</td>
@@ -1649,19 +1649,19 @@
       <table>
         <css:table-by axis="row">
           <css:list-item>
-            <td style="text-transform: foo; word-spacing: 2">Cell 1.1</td>
-            <td style="text-transform: foo; word-spacing: 2">Cell 1.2</td>
-            <td style="text-transform: foo; word-spacing: 2">Cell 1.3</td>
+            <td xml:lang="en" style="text-transform: foo; word-spacing: 2">Cell 1.1</td>
+            <td xml:lang="en" style="text-transform: foo; word-spacing: 2">Cell 1.2</td>
+            <td xml:lang="en" style="text-transform: foo; word-spacing: 2">Cell 1.3</td>
           </css:list-item>
           <css:list-item>
-            <td style="word-spacing: 2">Cell 2.1</td>
-            <td style="word-spacing: 2">Cell 2.2</td>
-            <td style="word-spacing: 2">Cell 2.3</td>
+            <td xml:lang="und" style="word-spacing: 2">Cell 2.1</td>
+            <td xml:lang="und" style="word-spacing: 2">Cell 2.2</td>
+            <td xml:lang="und" style="word-spacing: 2">Cell 2.3</td>
           </css:list-item>
           <css:list-item>
-            <td style="word-spacing: 2">Cell 3.1</td>
-            <td style="word-spacing: 2">Cell 3.2</td>
-            <td style="word-spacing: 2">Cell 3.3</td>
+            <td xml:lang="en" style="word-spacing: 2">Cell 3.1</td>
+            <td xml:lang="en" style="word-spacing: 2">Cell 3.2</td>
+            <td xml:lang="en" style="word-spacing: 2">Cell 3.3</td>
           </css:list-item>
         </css:table-by>
       </table>

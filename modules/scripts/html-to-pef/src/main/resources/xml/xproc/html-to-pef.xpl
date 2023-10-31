@@ -60,6 +60,7 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
+    <p:option name="include-pdf"/>
     <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
     <p:option name="include-css" px:type="boolean" select="'false'">
@@ -94,6 +95,7 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="result"/>
     <p:option name="pef"/>
     <p:option name="preview"/>
+    <p:option name="pdf"/>
     <p:option name="obfl"/>
     <p:option name="html-with-css" px:output="result" px:type="anyDirURI" px:media-type="application/xhtml+xml" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -210,12 +212,14 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="include-pdf" select="$include-pdf"/>
         <p:with-option name="include-css" select="$include-css"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$result"/>
         <p:with-option name="pef-output-dir" select="$pef"/>
         <p:with-option name="preview-output-dir" select="$preview"/>
+        <p:with-option name="pdf-output-dir" select="$pdf"/>
         <p:with-option name="obfl-output-dir" select="$obfl"/>
         <p:with-option name="css-output-dir" select="$html-with-css"/>
     </px:html-to-pef.store>

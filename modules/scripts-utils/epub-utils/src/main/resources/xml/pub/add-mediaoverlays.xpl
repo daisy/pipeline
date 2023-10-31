@@ -137,7 +137,7 @@
         </p:input>
     </px:fileset-join>
 
-    <p:documentation>Update metadata with duration information</p:documentation>
+    <p:documentation>Update metadata with duration information and accessibility metadata</p:documentation>
     <p:group name="update-metadata">
         <p:output port="result.fileset" primary="true">
             <p:pipe step="add-metadata" port="result.fileset"/>
@@ -153,6 +153,7 @@
             </p:input>
             <p:input port="metadata">
                 <p:pipe step="duration-metadata" port="result"/>
+                <p:pipe step="accessibility-metadata" port="result"/>
             </p:input>
             <p:with-option name="compatibility-mode" select="$compatibility-mode"/>
             <p:with-option name="reserved-prefixes" select="$reserved-prefixes"/>
@@ -218,10 +219,10 @@
             <p:sink/>
             <p:insert match="/*/*" position="last-child">
                 <p:input port="source">
-                    <p:inline>
-                        <opf:package>
-                            <opf:metadata/>
-                        </opf:package>
+                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                        <package>
+                            <metadata/>
+                        </package>
                     </p:inline>
                 </p:input>
                 <p:input port="insertion">
@@ -249,6 +250,83 @@
                 </p:when>
                 <p:otherwise>
                     <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
+        <p:group name="accessibility-metadata">
+            <p:output port="result" sequence="true"/>
+            <p:choose>
+                <p:when test="empty(//opf:metadata/*)"> <!-- no duration metadata means no media-overlays added -->
+                    <p:sink/>
+                    <p:identity>
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:identity>
+                </p:when>
+                <p:otherwise>
+                    <p:sink/>
+                    <p:choose>
+                        <p:xpath-context>
+                            <p:pipe step="package-doc" port="result"/>
+                        </p:xpath-context>
+                        <p:when test="//opf:metadata/opf:meta[@property='schema:accessMode'][not(@refines)][string(.)='auditory'] and
+                                      //opf:metadata/opf:meta[@property='schema:accessibilityFeature'][not(@refines)][string(.)='synchronizedAudioText']">
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:empty/>
+                                </p:input>
+                            </p:identity>
+                        </p:when>
+                        <p:otherwise>
+                            <!--
+                                combine <meta property="schema:accessMode">auditory</meta> and <meta
+                                property="schema:accessibilityFeature">synchronizedAudioText</meta> with
+                                existing schema:accessMode and schema:accessibilityFeature metadata (if we
+                                would simply include the new element, it would overwrite the existing
+                                metadata)
+                            -->
+                            <p:delete match="opf:metadata/*[
+                                               not(self::opf:meta[(@property='schema:accessMode' and not(string(.)='auditory')) or
+                                                                  (@property='schema:accessibilityFeature' and not(string(.)='synchronizedAudioText'))]
+                                                                 [not(@refines)])]">
+                                <p:input port="source" select="//opf:metadata">
+                                    <p:pipe step="package-doc" port="result"/>
+                                </p:input>
+                            </p:delete>
+                            <p:insert match="/opf:metadata" position="last-child">
+                                <p:input port="insertion">
+                                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                                        <meta property="schema:accessMode">auditory</meta>
+                                    </p:inline>
+                                </p:input>
+                            </p:insert>
+                            <p:insert position="last-child">
+                                <p:input port="insertion">
+                                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                                        <meta property="schema:accessibilityFeature">synchronizedAudioText</meta>
+                                    </p:inline>
+                                </p:input>
+                            </p:insert>
+                            <p:choose>
+                                <p:when test="$reserved-prefixes='#default'">
+                                    <p:add-attribute match="/*"
+                                                     attribute-name="prefix"
+                                                     attribute-value="schema: http://schema.org/">
+                                        <!--
+                                            note that if there was already "schema" metadata present in the
+                                            input, and the "schema" prefix was not declared,
+                                            px:epub3-add-metadata will make sure that the prefix will not be
+                                            declared in the output either
+                                        -->
+                                    </p:add-attribute>
+                                </p:when>
+                                <p:otherwise>
+                                    <p:identity/>
+                                </p:otherwise>
+                            </p:choose>
+                        </p:otherwise>
+                    </p:choose>
                 </p:otherwise>
             </p:choose>
         </p:group>

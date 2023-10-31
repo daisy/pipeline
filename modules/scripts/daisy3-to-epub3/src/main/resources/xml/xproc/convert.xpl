@@ -56,6 +56,7 @@
     <p:import href="http://www.daisy.org/pipeline/modules/smil-utils/library.xpl">
         <p:documentation>
             px:smil-to-audio-clips
+            px:audio-clips-update-files
         </p:documentation>
     </p:import>
     <p:import href="../internal/ncx-to-nav.xpl">
@@ -166,9 +167,8 @@
     <!--=========================================================================-->
 
     <!--TODO conditionally, if the MO option is set-->
-    <p:choose name="audio-clips" px:progress="1/19">
+    <p:choose px:progress="1/19">
         <p:when test="$mediaoverlays and $type='text+mo'">
-            <p:output port="result"/>
             <px:smil-to-audio-clips px:progress="1">
                 <p:input port="source">
                     <p:pipe step="smils" port="result"/>
@@ -179,7 +179,6 @@
             </px:smil-to-audio-clips>
         </p:when>
         <p:otherwise>
-            <p:output port="result"/>
             <p:identity>
                 <p:input port="source">
                     <p:inline><d:audio-clips/></p:inline>
@@ -187,6 +186,12 @@
             </p:identity>
         </p:otherwise>
     </p:choose>
+    <px:audio-clips-update-files name="audio-clips">
+        <p:input port="mapping">
+            <p:pipe step="content-docs" port="mapping"/>
+        </p:input>
+        <p:with-option name="output-base-uri" select="base-uri(/*)"/>
+    </px:audio-clips-update-files>
     <p:sink/>
 
     <!--=========================================================================-->

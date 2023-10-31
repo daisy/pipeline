@@ -145,7 +145,7 @@
             px:validation-report-to-html
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
         <p:documentation>
             px:css-speech-clean
         </p:documentation>

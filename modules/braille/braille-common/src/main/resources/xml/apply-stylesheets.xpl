@@ -196,10 +196,10 @@
 				                                           else string-join(('',$css-user-stylesheets),'&#x0A;- '))
 				                           else '')"/>
 				<px:css-cascade px:message="{$message}">
-					<p:with-option name="default-stylesheet" select="string-join($css-user-stylesheets,' ')"/>
+					<p:with-option name="user-stylesheet" select="string-join($css-user-stylesheets,' ')"/>
 					<p:with-option name="type" select="string-join(tokenize($type,'\s')[.=('text/css','text/x-scss')],' ')"/>
 					<p:with-option name="media" select="$media"/>
-					<p:input port="context">
+					<p:input port="source.in-memory">
 						<p:pipe step="main" port="context"/>
 					</p:input>
 					<p:input port="parameters">

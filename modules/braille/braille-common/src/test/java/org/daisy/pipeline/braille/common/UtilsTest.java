@@ -15,6 +15,7 @@ import com.google.common.collect.ImmutableMap;
 
 import static org.daisy.pipeline.braille.common.util.Iterables.combinations;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
+import static org.daisy.pipeline.braille.common.util.Strings.insertHyphens;
 
 public class UtilsTest {
 	
@@ -25,6 +26,13 @@ public class UtilsTest {
 		// grinning face emoji
 		assertEquals("[0, 0, 0, 0, 0, 1, 0, 0]", Arrays.toString(extractHyphens("\uD83D\uDE00 foo\u00ADbar", false, '\u00AD')._2));
 		assertEquals("[0, 0, 0, 0, 1, 0, 0]", Arrays.toString(extractHyphens("\uD83D\uDE00 foo\u00ADbar", true, '\u00AD')._2));
+	}
+	
+	@Test
+	public void testInsertHyphens() {
+		// grinning face emoji
+		assertEquals("\uD83D\uDE00 foo\u00ADbar", insertHyphens("\uD83D\uDE00 foobar", new byte[]{0, 0, 0, 0, 1, 0, 0},    true,  '\u00AD'));
+		assertEquals("\uD83D\uDE00 foo\u00ADbar", insertHyphens("\uD83D\uDE00 foobar", new byte[]{0, 0, 0, 0, 0, 1, 0, 0}, false, '\u00AD'));
 	}
 	
 	@Test

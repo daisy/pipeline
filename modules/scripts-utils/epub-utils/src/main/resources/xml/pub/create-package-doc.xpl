@@ -69,7 +69,7 @@
             href="http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-elem"><code>metadata</code>
             element</a> for the package document will be constructed.</p>
             <p>Will be augmented with "duration" metadata that is extracted from the media overlay
-            documents.</p>
+            documents and other automatically generated metadata.</p>
             <p>If not specified, a metadata element with the minimal required metadata will be
             included.</p>
         </p:documentation>
@@ -125,7 +125,7 @@
             </ul>
         </p:documentation>
     </p:option>
-    <p:option name="reserved-prefixes" required="false" select="'dc: http://purl.org/dc/elements/1.1/'">
+    <p:option name="reserved-prefixes" required="false" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>
                 The <a
@@ -393,6 +393,7 @@
                           match="d:file" attribute="id" label="concat('item_',1+count(preceding-sibling::*))"/>
 
         <p:documentation>Create manifest from fileset</p:documentation>
+        <!-- FIXME: check which items are actually referenced from the publication -->
         <p:xslt name="fileset-to-manifest">
             <p:input port="stylesheet">
                 <p:document href="create-package-doc.fileset-to-manifest.xsl"/>
@@ -580,17 +581,104 @@
             </p:input>
         </px:fileset-add-entry>
         <p:sink/>
-        <p:uuid name="default-metadata" match="dc:identifier/text()">
+        <p:group name="default-metadata">
+            <p:output port="result"/>
             <p:documentation>Minimal required metadata</p:documentation>
-            <p:input port="source">
-                <p:inline>
-                    <opf:metadata>
-                        <dc:title>Unknown</dc:title>
-                        <dc:identifier>generated-uuid</dc:identifier>
-                    </opf:metadata>
-                </p:inline>
-            </p:input>
-        </p:uuid>
+            <p:uuid match="dc:identifier/text()">
+                <p:input port="source">
+                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                        <metadata>
+                            <dc:title>Unknown</dc:title>
+                            <dc:identifier>generated-uuid</dc:identifier>
+                        </metadata>
+                    </p:inline>
+                </p:input>
+            </p:uuid>
+            <p:documentation>Generate metadata</p:documentation>
+            <p:insert match="//opf:metadata" position="last-child">
+                <p:input port="insertion">
+                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                        <meta property="schema:accessMode">textual</meta>
+                    </p:inline>
+                </p:input>
+            </p:insert>
+            <!--
+                <meta property="schema:accessMode">auditory</meta> added in px:epub3-add-mediaoverlays
+
+                FIXME: other access modes are not checked:
+                - visual (requires determining whether images are decorative or not)
+                - tactile
+            -->
+            <!--
+                <meta property="schema:accessibilityFeature">synchronizedAudioText</meta> added in px:epub3-add-mediaoverlays
+                <meta property="schema:accessibilityFeature">tableOfContents</meta> added in px:epub3-add-navigation-doc
+                <meta property="schema:accessibilityFeature">pageNavigation</meta> added in px:epub3-add-navigation-doc
+
+                FIXME: other accessibility features are not checked:
+                - alternativeText
+                - annotations
+                - ARIA
+                - audioDescription
+                - bookmarks
+                - braille
+                - captions
+                - ChemML
+                - describedMath
+                - displayTransformability
+                - highContrastAudio
+                - highContrastDisplay
+                - index
+                - largePrint
+                - latex
+                - longDescription
+                - MathML
+                - pageBreakMarkers
+                - printPageNumbers
+                - readingOrder
+                - rubyAnnotations
+                - signLanguage
+                - structuralNavigation
+                - taggedPDF
+                - tactileGraphic
+                - tactileObject
+                - timingControl
+                - transcript
+                - ttsMarkup
+                - unlocked
+            -->
+            <p:insert match="//opf:metadata" position="last-child">
+                <p:input port="insertion">
+                    <!--
+                        FIXME: accessibility hazards are not checked:
+                        - flashing
+                        - noFlashingHazard
+                        - motionSimulation
+                        - noMotionSimulationHazard
+                        - sound
+                        - noSoundHazard
+                    -->
+                    <p:inline exclude-inline-prefixes="#all" xmlns="http://www.idpf.org/2007/opf">
+                        <meta property="schema:accessibilityHazard">unknown</meta>
+                    </p:inline>
+                </p:input>
+            </p:insert>
+            <p:choose>
+                <p:when test="$reserved-prefixes='#default'">
+                    <p:add-attribute match="/*"
+                                     attribute-name="prefix"
+                                     attribute-value="schema: http://schema.org/">
+                        <!--
+                            note that if there was already "schema" metadata present in the input,
+                            and the "schema" prefix was not declared, px:epub3-add-metadata will
+                            make sure that the prefix will not be declared in the output either
+                        -->
+                    </p:add-attribute>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
         <p:sink/>
     </p:group>
 

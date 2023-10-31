@@ -1,18 +1,29 @@
 package org.daisy.pipeline.css;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.MediaExpression;
 import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.MediaQuery;
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermInteger;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
+import cz.vutbr.web.domassign.Analyzer;
 
 public class Medium {
 
 	public enum Type {
 		EMBOSSED,
+		SPEECH,
+		SCREEN,
 		PRINT;
 		public String toString() {
 			return super.toString().toLowerCase();
@@ -22,14 +33,31 @@ public class Medium {
 	private final Type type;
 	private final Integer width;
 	private final Integer height;
+	private final Map<String,String> customFeatures;
 
-	private Medium(Type type, Integer width, Integer height) {
+	// see https://drafts.csswg.org/mediaqueries/#media-descriptor-table
+	private final static Set<String> knownFeatures = new HashSet<>(
+		Arrays.asList(
+			"any-hover", "any-pointer", "aspect-ratio", "color", "color-gamut", "color-index",
+			"device-aspect-ratio", "device-height", "device-width", "grid", "height", "hover",
+			"monochrome", "orientation", "overflow-block", "overflow-inline", "pointer", "resolution",
+			"scan", "update", "width"));
+
+	/**
+	 * @param customFeatures can be used to pass additional properties of the target medium. Must
+	 *                       not include any <a
+	 *                       href="https://drafts.csswg.org/mediaqueries/#media-descriptor-table">known
+	 *                       features</a>
+	 */
+	private Medium(Type type, Integer width, Integer height, Map<String,String> customFeatures) {
 		switch (type) {
 		case EMBOSSED:
 			this.type = type;
 			this.width = width;
 			this.height = height;
 			break;
+		case SPEECH:
+		case SCREEN:
 		case PRINT:
 			if (width != null) {
 				throw new IllegalArgumentException("Unexpected 'width' argument for medium 'print'");
@@ -43,6 +71,9 @@ public class Medium {
 		default:
 			throw new IllegalArgumentException("Unexpected medium: " + type);
 		}
+		this.customFeatures = customFeatures != null
+			? Collections.unmodifiableMap(customFeatures)
+			: Collections.emptyMap();
 	}
 
 	/**
@@ -68,6 +99,13 @@ public class Medium {
 		return height;
 	}
 
+	/**
+	 * Additional properties of the target medium.
+	 */
+	public Map<String,String> getCustomFeatures() {
+		return customFeatures;
+	}
+
 	public boolean matches(String mediaQuery) {
 		return asMediaSpec().matches(CSSParserFactory.getInstance().parseMediaQuery(mediaQuery));
 	}
@@ -76,9 +114,11 @@ public class Medium {
 		StringBuilder s  = new StringBuilder();
 		s.append(type.toString());
 		if (width != null)
-			s.append(" AND (width:").append(width).append(")");
+			s.append(" AND (width: ").append(width).append(")");
 		if (height != null)
-			s.append(" AND (height:").append(height).append(")");
+			s.append(" AND (height: ").append(height).append(")");
+		for (String f : customFeatures.keySet())
+			s.append(" AND (").append(f).append(": ").append(customFeatures.get(f)).append(")");
 		return s.toString();
 	}
 
@@ -105,8 +145,6 @@ public class Medium {
 		if (q.size() != 1)
 			throw new IllegalArgumentException("Unexpected medium: " + medium);
 		Type type = null;
-		Integer width = null;
-		Integer height = null;
 		try {
 			type = Type.valueOf(q.get(0).getType().toUpperCase());
 		} catch (IllegalArgumentException e) {
@@ -114,6 +152,9 @@ public class Medium {
 		}
 		if (q.get(0).isNegative())
 			throw new IllegalArgumentException("Unexpected medium: contains NOT: " + medium);
+		Integer width = null;
+		Integer height = null;
+		Map<String,String> customFeatures = null;
 		for (MediaExpression e : q.get(0)) {
 			String feature = e.getFeature();
 			if ("width".equals(feature) || "height".equals(feature)) {
@@ -127,37 +168,75 @@ public class Medium {
 					width = i;
 				else
 					height = i;
-			} else
-				throw new IllegalArgumentException("Unexpected medium feature: " + feature);
+			} else if (knownFeatures.contains(feature)) {
+				throw new IllegalArgumentException("Unsupported medium feature: " + feature);
+			} else {
+				if (e.size() != 1)
+					throw new IllegalArgumentException("Unexpected value for medium feature: " + e);
+				Term<?> v = e.get(0);
+				if (!(v instanceof TermIdent))
+					throw new IllegalArgumentException("Unexpected value for medium feature: " + e);
+				if (customFeatures == null)
+					customFeatures = new HashMap<>();
+				customFeatures.put(feature, v.toString());
+			}
 		}
-		return new Medium(type, width, height);
+		return new Medium(type, width, height, customFeatures);
 	}
 
 	private MediaSpec mediaSpec;
 
 	/**
-	 * The medium as a jStyleParser {@link MediaSpec} object.
+	 * The medium as a jStyleParser {@link MediaSpec} object, used by {@link
+	 * JStyleParserCssCascader} for passing to {@link CSSFactory#getUsedStyles} and {@link
+	 * Analyzer#evaluateDOM}.
 	 */
 	public MediaSpec asMediaSpec() {
 		if (mediaSpec == null)
 			switch (type) {
 			case EMBOSSED:
-				MediaSpec spec = new MediaSpec(type.toString()) {
+				mediaSpec = new MediaSpec(type.toString()) {
 						// overriding getExpressionLengthPx() because MediaSpec expects width and height
 						// to be in pixels but width and height are specified in braille cells
 						@Override
 						protected Float getExpressionLengthPx(MediaExpression e) {
 							return (float)getExpressionInteger(e);
 						}
+						@Override
+						public boolean matches(MediaExpression e) {
+							String f = e.getFeature();
+							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
+								return super.matches(e);
+							else {
+								if (!customFeatures.isEmpty())
+									for (String ff : customFeatures.keySet())
+										if (ff.equals(f))
+											return customFeatures.get(ff).equals(getExpressionIdentifier(e));
+								return false;
+							}
+						}
 					};
 				if (width != null)
-					spec.setWidth((float)width);
+					mediaSpec.setWidth((float)width);
 				if (height != null)
-					spec.setWidth((float)height);
-				mediaSpec = spec;
+					mediaSpec.setWidth((float)height);
 				break;
 			default:
-				mediaSpec = new MediaSpec(type.toString());
+				mediaSpec = new MediaSpec(type.toString()) {
+						@Override
+						public boolean matches(MediaExpression e) {
+							String f = e.getFeature();
+							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
+								return super.matches(e);
+							else {
+								if (!customFeatures.isEmpty())
+									for (String ff : customFeatures.keySet())
+										if (ff.equals(f))
+											return customFeatures.get(ff).equals(getExpressionIdentifier(e));
+								return false;
+							}
+						}
+					};
 				break;
 			}
 		return mediaSpec;

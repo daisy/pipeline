@@ -182,8 +182,9 @@ public class SAPIEngine extends TTSEngine {
 				new Voice(
 					original.getEngine(), // should be sapi or onecore, required for speak interactions (see the native libs code)
 					original.getName(),
-					original.getLocale().get(),
-					original.getGender().get()
+					original.getLocale(),
+					original.getGender().get(),
+					original.getMarkSupport()
 				)
 			);
 		}

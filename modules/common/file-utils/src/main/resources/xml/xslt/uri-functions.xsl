@@ -270,7 +270,16 @@
 
         <xsl:choose>
             <xsl:when test="(not($uri-tokens[1]) or $uri-tokens[1]=$base-tokens[1]) and (not($uri-tokens[2]) or $uri-tokens[2]=$base-tokens[2])">
-                <xsl:sequence select="pf:recompose-uri(('','',pf:relativize-path($uri-tokens[3],$base-tokens[3]),$uri-tokens[4],$uri-tokens[5]))"/>
+                <xsl:variable name="relative-path" select="pf:relativize-path($uri-tokens[3],$base-tokens[3])"/>
+                <xsl:choose>
+                    <xsl:when test="$relative-path=replace($base-tokens[3],'^.*/([^/]+)$','$1') and $uri-tokens[4]='' and $uri-tokens[5]!=''">
+                        <!-- fragment reference in same file -->
+                        <xsl:sequence select="concat('#',$uri-tokens[5])"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:sequence select="pf:recompose-uri(('','',$relative-path,$uri-tokens[4],$uri-tokens[5]))"/>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:sequence select="pf:recompose-uri($uri-tokens)"/>

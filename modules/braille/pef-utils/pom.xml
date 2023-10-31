@@ -6,18 +6,22 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.23-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils</artifactId>
-  <version>5.0.5-SNAPSHOT</version>
+  <version>5.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils</name>
 
   <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>
       <artifactId>dotify.library</artifactId>
@@ -46,6 +50,14 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-pdfbox</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-slf4j</artifactId>
+    </dependency>
     <!--
         OSGi runtime dependency of dotify.library
     -->
@@ -64,14 +76,6 @@
       <version>2.3.0</version>
       <scope>provided</scope>
     </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>file-utils</artifactId>
-      <scope>runtime</scope>
-    </dependency>
   </dependencies>
   
   <properties>
@@ -84,6 +88,7 @@
       org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
       org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider,
       org.daisy.pipeline.braille.pef.impl.PEFFileFormat$Provider,
+      org.daisy.pipeline.braille.pef.calabash.impl.PEF2PDFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.Text2PEFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.ValidateStep$Provider,

@@ -82,10 +82,10 @@ public class LocaleBasedTableProvider extends AbstractTableProvider {
 	
 	@Reference(
 		name = "TableProvider",
-		unbind = "removeTableProvider",
+		unbind = "-",
 		service = org.daisy.dotify.api.table.TableProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
 		providers.add(provider);

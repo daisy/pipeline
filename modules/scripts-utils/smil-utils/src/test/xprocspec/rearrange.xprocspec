@@ -61,7 +61,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="px:mediaoverlay-rearrange - really big test">
+    <x:scenario label="px:mediaoverlay-rearrange - really big test" pending="FIXME: skip for now because it slows down tests too much">
         <x:call step="px:mediaoverlay-rearrange">
             <x:input port="mediaoverlay">
                 <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
@@ -80,7 +80,7 @@
         </x:expect>
     </x:scenario>
     
-    <x:scenario label="px:mediaoverlay-rearrange - test that took forever to run in v1.7">
+    <x:scenario label="px:mediaoverlay-rearrange - test that took forever to run in v1.7" pending="FIXME: skip for now because it slows down tests too much">
         <x:call step="px:mediaoverlay-rearrange">
             <x:input port="mediaoverlay">
                 <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>
@@ -101,7 +101,7 @@
         -->
     </x:scenario>
     
-    <x:scenario label="px:mediaoverlay-rearrange - another test that took forever to run in v1.7">
+    <x:scenario label="px:mediaoverlay-rearrange - another test that took forever to run in v1.7" pending="FIXME: skip for now because it slows down tests too much">
         <x:call step="px:mediaoverlay-rearrange">
             <x:input port="mediaoverlay">
                 <x:document type="file" method="xml" href="resources/mediaoverlay-joined.smil"/>

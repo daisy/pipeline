@@ -6,13 +6,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Files;
-
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
-import org.daisy.pipeline.file.FileUtils;
+import java.util.Map;
 
 import com.xmlcalabash.core.XProcConstants;
 import com.xmlcalabash.core.XProcRuntime;
@@ -22,6 +16,14 @@ import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 import com.xmlcalabash.util.Base64;
 import com.xmlcalabash.util.TreeWriter;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.pipeline.file.FileUtils;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,7 +35,7 @@ import org.osgi.service.component.annotations.Component;
 public class PeekProvider implements XProcStepProvider {
 
 	@Override
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new Peek(runtime, step);
 	}
 

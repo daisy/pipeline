@@ -24,6 +24,9 @@
                             <xsl:if test="not(@xml:base)">
                                 <xsl:attribute name="xml:base" select="base-uri(.)"/>
                             </xsl:if>
+                            <xsl:if test="not(@xml:lang)">
+	                            <xsl:sequence select="ancestor::*[@xml:lang][1]/@xml:lang"/>
+                            </xsl:if>
                             <xsl:sequence select="css:style-attribute(css:serialize-declaration-list(
                                                   css:specified-properties(($css:properties,'#all'), true(), false(), false(), .)
                                                   [not(@value='initial')]))"/>

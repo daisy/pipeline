@@ -18,11 +18,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
 import static org.daisy.pipeline.tts.VoiceInfo.NO_DEFINITE_GENDER;
-import static org.daisy.pipeline.tts.VoiceInfo.NO_DEFINITE_LANG;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,11 @@ public class VoiceManager {
 	 */
 	private final Map<VoiceKey,Collection<Voice>> secondaryVoices;
 	/**
-	 * Map from voice properties (language/gender/engine) to voices. Each language/gender/engine
-	 * combination is mapped to a collection of voices sorted by priority.
+	 * Map from voice properties (language/gender/engine) to voices. Each combination of primary
+	 * language, gender and engine is mapped to a collection of voices with corresponding language
+	 * range, sorted by priority.
 	 */
-	private final Map<VoiceKey,Collection<Voice>> voiceIndex;
+	private final Map<VoiceKey,Collection<Entry<Voice,Collection<LanguageRange>>>> voiceIndex;
 
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
 
@@ -87,38 +89,39 @@ public class VoiceManager {
 		// get mappings from voice properties (language/gender) to voice (name/engine)
 		List<VoiceInfo> voiceInfo = new ArrayList<>();
 
-		// get info from configuration
-		voiceInfo.addAll(voiceInfoFromConfig);
-
 		// get info from engines (lowest priority)
 		primaryVoices = new HashMap<>();
 		for (Voice v : bestEngines.keySet()) {
 			primaryVoices.put(new VoiceKey(v.getEngine(), v.getName()), v);
-			if (v.getLocale().isPresent() && v.getGender().isPresent())
-				voiceInfo.add(new VoiceInfo(v.getEngine(),
-				                            v.getName(),
-				                            v.getLocale().get(),
-				                            v.getGender().get(),
-				                            0));
+			if (!v.getLocale().isEmpty() && v.getGender().isPresent()) {
+				Gender g = v.getGender().get();
+				for (LanguageRange l : v.getLocale())
+					voiceInfo.add(new VoiceInfo(v.getEngine(), v.getName(), l, g, 0));
+			}
 		}
 
-		// voices can also be applied to less specific locales (without region tag)
+		// voices also match less specific locales (without region tag)
 		final float priorityVariantPenalty = 0.1f;
 		List<VoiceInfo> derivedVoiceInfo = new ArrayList<>(); {
-			for (VoiceInfo vi : voiceInfo)
-				if (!vi.isMultiLang()) {
-					Locale shortLang = new Locale(vi.language.getLanguage());
-					if (!vi.language.equals(shortLang))
-						derivedVoiceInfo.add(
-							new VoiceInfo(vi.voiceEngine, vi.voiceName, shortLang, vi.gender,
-							              vi.priority - priorityVariantPenalty));
-				}
+			for (VoiceInfo vi : voiceInfo) {
+				Locale shortLang = vi.language.getPrimaryLanguageSubTag();
+				if (shortLang != null && !shortLang.toString().equals(vi.language.toString()))
+					derivedVoiceInfo.add(
+						new VoiceInfo(vi.voiceEngine, vi.voiceName, shortLang, vi.gender,
+						              vi.priority - priorityVariantPenalty));
+			}
 		}
 		voiceInfo.addAll(derivedVoiceInfo);
 
-		// sort by priority (descending)
-		// voices with equal priority will not be reordered as a result of the sort
-		Collections.sort(voiceInfo, sortByPriority);
+		// get info from configuration
+		// the configuration is interpreted as-is. region and other subtags are significant
+		// due to fuzzy voice selection, a voice can be applied to less specific locales, but it is
+		// not an exact match
+		voiceInfo.addAll(voiceInfoFromConfig);
+
+		// sort by priority and language range specificity (descending)
+		// voices with equal priority and specificity will not be reordered as a result of the sort
+		Collections.sort(voiceInfo, sortByPriority.thenComparing(sortBySpecificity));
 
 		// filter available voices
 		List<VoiceInfo> availableVoiceInfo = new ArrayList<>(); {
@@ -137,7 +140,7 @@ public class VoiceManager {
 						for (VoiceInfo fallback : availableVoiceInfo) {
 							VoiceKey fallbackKey = new VoiceKey(fallback.voiceEngine, fallback.voiceName);
 							if (!fallbackKey.equals(bestKey))
-								if (fallback.isMultiLang()) {
+								if (best.language.getPrimaryLanguageSubTag() == null) {
 									if (!sameGender && !sameEngine) {
 										// multilang fallback voices are only considered when gender
 										// and engine are not criteria so as to prevent the algo
@@ -171,70 +174,100 @@ public class VoiceManager {
 
 		// create index of voices with language, engine and gender as keys
 		Set<Locale> allLangs = new HashSet<Locale>(); {
-			for (VoiceInfo vi : availableVoiceInfo) allLangs.add(vi.language);
-			allLangs.remove(NO_DEFINITE_LANG); }
+			for (VoiceInfo vi : availableVoiceInfo) {
+				Locale shortLang = vi.language.getPrimaryLanguageSubTag();
+				if (shortLang != null)
+					allLangs.add(shortLang); }}
 		Set<Gender> allGenders = new HashSet<Gender>(); {
 			for (VoiceInfo vi : availableVoiceInfo) allGenders.add(vi.gender);
 			allGenders.remove(NO_DEFINITE_GENDER); }
-		voiceIndex = new HashMap<>(); {
+		Map<VoiceKey,LinkedHashMap<Voice,Collection<LanguageRange>>> voiceIndex = new HashMap<>(); {
 			for (VoiceInfo vi : availableVoiceInfo) {
-				if (vi.isMultiLang())
+				if (vi.language.getPrimaryLanguageSubTag() == null)
 					// this is to make sure that a multi-lang voice wins from a regular voice if it has
 					// a higher priority
-					for (Locale l : allLangs)
+					for (Locale shortLang : allLangs)
 						for (boolean sameEngine : new boolean[]{true, false}) {
 							if (vi.gender == NO_DEFINITE_GENDER)
 								// this is to make sure that a voice with unknown gender wins from a regular voice
 								// if it has a higher priority
 								for (Gender g : allGenders) {
-									VoiceKey k = new VoiceKey(l, g, sameEngine ? vi.voiceEngine : null);
-									Collection<Voice> vv = voiceIndex.get(k);
+									VoiceKey k = new VoiceKey(shortLang, g, sameEngine ? vi.voiceEngine : null);
+									LinkedHashMap<Voice,Collection<LanguageRange>> vv = voiceIndex.get(k);
 									if (vv == null) {
-										vv = new LinkedHashSet<>();
+										vv = new LinkedHashMap<>();
 										voiceIndex.put(k, vv);
 									}
-									vv.add(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+									Voice v = primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName));
+									Collection<LanguageRange> lang = vv.get(v);
+									if (lang == null) {
+										lang = new HashSet<>();
+										vv.put(v, lang);
+									}
+									lang.add(vi.language);
 								}
 							for (boolean sameGender : new boolean[]{true, false}) {
-								VoiceKey k = new VoiceKey(l,
+								VoiceKey k = new VoiceKey(shortLang,
 								                          sameGender ? vi.gender : null,
 								                          sameEngine ? vi.voiceEngine : null);
-								Collection<Voice> vv = voiceIndex.get(k);
+								LinkedHashMap<Voice,Collection<LanguageRange>> vv = voiceIndex.get(k);
 								if (vv == null) {
-									vv = new LinkedHashSet<>();
+									vv = new LinkedHashMap<>();
 									voiceIndex.put(k, vv);
 								}
-								vv.add(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+								Voice v = primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName));
+								Collection<LanguageRange> lang = vv.get(v);
+								if (lang == null) {
+									lang = new HashSet<>();
+									vv.put(v, lang);
+								}
+								lang.add(vi.language);
 							}
 						}
-				for (boolean sameLanguage : new boolean[]{true, false})
+				for (boolean sameLanguage : new boolean[]{true, false}) {
+					Locale shortLang = vi.language.getPrimaryLanguageSubTag();
+					if (shortLang == null) shortLang = VoiceKey.MUL;
 					for (boolean sameEngine : new boolean[]{true, false}) {
 						if (vi.gender == NO_DEFINITE_GENDER)
 							for (Gender g : allGenders) {
-								VoiceKey k = new VoiceKey(sameLanguage ? vi.language : null,
+								VoiceKey k = new VoiceKey(sameLanguage ? shortLang : null,
 								                          g,
 								                          sameEngine ? vi.voiceEngine : null);
-								Collection<Voice> vv = voiceIndex.get(k);
+								LinkedHashMap<Voice,Collection<LanguageRange>> vv = voiceIndex.get(k);
 								if (vv == null) {
-									vv = new LinkedHashSet<>();
+									vv = new LinkedHashMap<>();
 									voiceIndex.put(k, vv);
 								}
-								vv.add(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+								Voice v = primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName));
+								Collection<LanguageRange> lang = vv.get(v);
+								if (lang == null) {
+									lang = new HashSet<>();
+									vv.put(v, lang);
+								}
+								lang.add(vi.language);
 							}
 						for (boolean sameGender : new boolean[]{true, false}) {
-							VoiceKey k = new VoiceKey(sameLanguage ? vi.language : null,
+							VoiceKey k = new VoiceKey(sameLanguage ? shortLang : null,
 							                          sameGender ? vi.gender : null,
 							                          sameEngine ? vi.voiceEngine : null);
-							Collection<Voice> vv = voiceIndex.get(k);
+							LinkedHashMap<Voice,Collection<LanguageRange>> vv = voiceIndex.get(k);
 							if (vv == null) {
-								vv = new LinkedHashSet<>();
+								vv = new LinkedHashMap<>();
 								voiceIndex.put(k, vv);
 							}
-							vv.add(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
+							Voice v = primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName));
+							Collection<LanguageRange> lang = vv.get(v);
+							if (lang == null) {
+								lang = new HashSet<>();
+								vv.put(v, lang);
+							}
+							lang.add(vi.language);
 						}
 					}
+				}
 			}
 		}
+		this.voiceIndex = Maps.transformValues(voiceIndex, Map::entrySet);
 
 		// log
 		StringBuilder sb = new StringBuilder("Available voices:");
@@ -248,8 +281,10 @@ public class VoiceManager {
 				public int compare(VoiceInfo vi1, VoiceInfo vi2) {
 					// first group by locale
 					// multi-lang voices last
-					if (vi1.isMultiLang() && !vi2.isMultiLang()) return 1;
-					else if (!vi1.isMultiLang() && vi2.isMultiLang()) return -1;
+					if (vi1.language.getPrimaryLanguageSubTag() == null && vi2.language.getPrimaryLanguageSubTag() != null)
+						return 1;
+					else if (vi1.language.getPrimaryLanguageSubTag() != null && vi2.language.getPrimaryLanguageSubTag() == null)
+						return -1;
 					int compare = vi1.language.toString().compareTo(vi2.language.toString());
 					if (compare != 0) return compare;
 					// then group by gender
@@ -274,8 +309,8 @@ public class VoiceManager {
 		sortedAvailableVoiceInfo.addAll(availableVoiceInfo);
 		for (VoiceInfo vi : sortedAvailableVoiceInfo)
 			sb.append("\n * {")
-			  .append("locale:").append(vi.language == NO_DEFINITE_LANG ? "*" : vi.language)
-			  .append(", gender:").append(vi.gender == NO_DEFINITE_GENDER ? "*" : vi.gender)
+			  .append("locale:").append(vi.language)
+			  .append(", gender:").append(vi.gender)
 			  .append("}")
 			  .append(" -> ")
 			  .append(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
@@ -324,79 +359,69 @@ public class VoiceManager {
 		}
 		if (lang != null || gender != null || voiceName == null) {
 			Locale shortLang = lang != null ? new Locale(lang.getLanguage()) : lang;
-			Collection<Voice> vv;
 
-			// engine is more important than gender and priority, gender is more important than priority
-			if ((vv = voiceIndex.get(new VoiceKey(lang, gender, voiceEngine))) != null)
-				voices.addAll(vv);
+			// engine is more important than gender, region and priority, gender is more important than region
+			// and priority, region is more important than priority
+			addExactMatches(voices, lang, shortLang, gender, voiceEngine);
 			if (gender != null && gender != NO_DEFINITE_GENDER)
-				if ((vv = voiceIndex.get(new VoiceKey(lang, NO_DEFINITE_GENDER, voiceEngine))) != null)
-					voices.addAll(vv);
+				addExactMatches(voices, lang, shortLang, NO_DEFINITE_GENDER, voiceEngine);
 			if (lang != null) {
 				if (!lang.equals(shortLang)) {
-					if ((vv = voiceIndex.get(new VoiceKey(shortLang, gender, voiceEngine))) != null)
-						voices.addAll(vv);
+					addExactMatches(voices, shortLang, shortLang, gender, voiceEngine);
 					if (gender != null && gender != NO_DEFINITE_GENDER)
-						if ((vv = voiceIndex.get(new VoiceKey(shortLang, NO_DEFINITE_GENDER, voiceEngine))) != null)
-							voices.addAll(vv);
+						addExactMatches(voices, shortLang, shortLang, NO_DEFINITE_GENDER, voiceEngine);
 				}
-				if (lang != NO_DEFINITE_LANG) {
-					if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine))) != null)
-						voices.addAll(vv);
+				if (!lang.equals(VoiceKey.MUL)) {
+					addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, gender, voiceEngine);
 					if (gender != null && gender != NO_DEFINITE_GENDER)
-						if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER, voiceEngine))) != null)
-							voices.addAll(vv);
+						addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, NO_DEFINITE_GENDER, voiceEngine);
 				}
 			}
 			if (gender != null) {
-				if ((vv = voiceIndex.get(new VoiceKey(lang, voiceEngine))) != null)
-					voices.addAll(vv);
+				addExactMatches(voices, lang, shortLang, null, voiceEngine);
 				if (lang != null) {
 					if (!lang.equals(shortLang))
-						if ((vv = voiceIndex.get(new VoiceKey(shortLang, voiceEngine))) != null)
-							voices.addAll(vv);
-					if (lang != NO_DEFINITE_LANG)
-						if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine))) != null)
-							voices.addAll(vv);
+						addExactMatches(voices, shortLang, shortLang, null, voiceEngine);
+					if (!lang.equals(VoiceKey.MUL))
+						addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, null, voiceEngine);
 				}
 			}
 			if (voiceEngine != null) {
-				if ((vv = voiceIndex.get(new VoiceKey(lang, gender))) != null)
-					voices.addAll(vv);
+				addExactMatches(voices, lang, shortLang, gender, null);
 				if (gender != null && gender != NO_DEFINITE_GENDER)
-					if ((vv = voiceIndex.get(new VoiceKey(lang, NO_DEFINITE_GENDER))) != null)
-						voices.addAll(vv);
+					addExactMatches(voices, lang, shortLang, NO_DEFINITE_GENDER, null);
 				if (lang != null) {
 					if (!lang.equals(shortLang)) {
-						if ((vv = voiceIndex.get(new VoiceKey(shortLang, gender))) != null)
-							voices.addAll(vv);
+						addExactMatches(voices, shortLang, shortLang, gender, null);
 						if (gender != null && gender != NO_DEFINITE_GENDER)
-							if ((vv = voiceIndex.get(new VoiceKey(shortLang, NO_DEFINITE_GENDER))) != null)
-								voices.addAll(vv);
+							addExactMatches(voices, shortLang, shortLang, NO_DEFINITE_GENDER, null);
 					}
-					if (lang != NO_DEFINITE_LANG) {
-						if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender))) != null)
-							voices.addAll(vv);
+					if (!lang.equals(VoiceKey.MUL)) {
+						addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, gender, null);
 						if (gender != null && gender != NO_DEFINITE_GENDER)
-							if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, NO_DEFINITE_GENDER))) != null)
-								voices.addAll(vv);
+							addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, NO_DEFINITE_GENDER, null);
 					}
 				}
 			}
 			if (gender != null && voiceEngine != null) {
-				if ((vv = voiceIndex.get(new VoiceKey(lang))) != null)
-					voices.addAll(vv);
+				addExactMatches(voices, lang, shortLang, null, null);
 				if (lang != null) {
 					if (!lang.equals(shortLang))
-						if ((vv = voiceIndex.get(new VoiceKey(shortLang))) != null)
-							voices.addAll(vv);
-					if (lang != NO_DEFINITE_LANG)
-						if ((vv = voiceIndex.get(new VoiceKey(NO_DEFINITE_LANG))) != null)
-							voices.addAll(vv);
+						addExactMatches(voices, shortLang, shortLang, null, null);
+					if (!lang.equals(VoiceKey.MUL))
+						addExactMatches(voices, VoiceKey.MUL, VoiceKey.MUL, null, null);
 				}
 			}
 		}
 		return voices;
+	}
+
+	private void addExactMatches(Collection<Voice> collect, Locale lang, Locale shortLang, Gender gender, String voiceEngine) {
+		Collection<Entry<Voice,Collection<LanguageRange>>> vv = voiceIndex.get(new VoiceKey(shortLang, gender, voiceEngine));
+		if (vv != null)
+			for (Entry<Voice,Collection<LanguageRange>> v : vv)
+				if (lang == null || LanguageRange.matches(v.getValue(), lang))
+					collect.add(v.getKey());
 	}
 
 	/**
@@ -409,20 +434,20 @@ public class VoiceManager {
 			return false;
 		if (lang == null && gender == null)
 			return true;
-		for (VoiceKey k : voiceIndex.keySet())
-			if (k.lang != null && k.gender != null && k.engine != null)
-				for (Voice v : voiceIndex.get(k))
-					if (v.equals(voice)) {
-						if (lang != null
-						    && k.lang != NO_DEFINITE_LANG
-						    && !new Locale(k.lang.getLanguage()).equals(new Locale(lang.getLanguage())))
-							continue;
-						if (gender != null
+		for (VoiceKey k : voiceIndex.keySet()) {
+			if (k.primaryLang != null && k.gender != null && k.engine != null)
+				for (Entry<Voice,Collection<LanguageRange>> v : voiceIndex.get(k))
+					if (v.getKey().equals(voice)) {
+						if (lang != null && !LanguageRange.matches(v.getValue(), lang))
+							break;
+						else if (gender != null
 						    && k.gender != NO_DEFINITE_GENDER
 						    && !k.gender.equals(gender))
-							continue;
-						return true;
+							break;
+						else
+							return true;
 					}
+		}
 		return false;
 	}
 
@@ -441,43 +466,28 @@ public class VoiceManager {
 			}
 		};
 
+	// sort VoiceInfo by specificity of language range (descending)
+	private static final Comparator<VoiceInfo> sortBySpecificity
+		= Comparator.<VoiceInfo>comparingInt(vi -> vi.language.getSpecificity()).reversed();
+
 	private static class VoiceKey {
+
+		private static final Locale MUL = new Locale("mul");
 
 		private final String engine;
 		private final String name;
-		private final Locale lang;
+		private final Locale primaryLang; // primary language subtag or "mul"
 		private final Gender gender;
 
 		public VoiceKey(String engine, String name) {
 			this.engine = engine == null ? null : engine.toLowerCase();
 			this.name = name == null ? null : name.toLowerCase();
-			this.lang = null;
+			this.primaryLang = null;
 			this.gender = null;
 		}
 
-		public VoiceKey(Locale lang) {
-			this.lang = lang;
-			this.gender = null;
-			this.engine = null;
-			this.name = null;
-		}
-
-		public VoiceKey(Locale lang, Gender gender) {
-			this.lang = lang;
-			this.gender = gender;
-			this.engine = null;
-			this.name = null;
-		}
-
-		public VoiceKey(Locale lang, String engine) {
-			this.lang = lang;
-			this.engine = engine == null ? null : engine.toLowerCase();
-			this.gender = null;
-			this.name = null;
-		}
-
-		public VoiceKey(Locale lang, Gender gender, String engine) {
-			this.lang = lang;
+		public VoiceKey(Locale primaryLang, Gender gender, String engine) {
+			this.primaryLang = primaryLang;
 			this.gender = gender;
 			this.engine = engine == null ? null : engine.toLowerCase();
 			this.name = null;
@@ -486,8 +496,8 @@ public class VoiceManager {
 		@Override
 		public int hashCode() {
 			int res = 0;
-			if (this.lang != null)
-				res ^=  this.lang.hashCode();
+			if (this.primaryLang != null)
+				res ^=  this.primaryLang.hashCode();
 			if (this.gender != null)
 				res ^= this.gender.hashCode();
 			if (this.engine != null)
@@ -500,10 +510,28 @@ public class VoiceManager {
 		@Override
 		public boolean equals(Object other) {
 			VoiceKey o = (VoiceKey) other;
-			return (lang == o.lang || (lang != null && lang.equals(o.lang)))
+			return (primaryLang == o.primaryLang || (primaryLang != null && primaryLang.equals(o.primaryLang)))
 			        && (gender == o.gender || (gender != null && gender.equals(o.gender)))
 			        && (engine == o.engine || (engine != null && engine.equals(o.engine)))
 			        && (name == o.name || (name != null && name.equals(o.name)));
+		}
+
+		@Override
+		public String toString() {
+			StringBuilder s = new StringBuilder();
+			s.append("{");
+			if (engine != null)
+				s.append("engine: " + engine);
+			if (name != null)
+				s.append(", name: " + name);
+			if (primaryLang != null)
+				s.append(", primaryLang: " + primaryLang);
+			if (gender != null)
+				s.append(", gender: " + gender);
+			if (s.length() > 1 && s.charAt(1) == ',')
+				s.delete(1, 3);
+			s.append("}");
+			return s.toString();
 		}
 	}
 }

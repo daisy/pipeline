@@ -233,7 +233,7 @@ public class CereProcEngine extends TTSEngine {
 					throw new RuntimeException(); // should not happen
 				}
 			}, conf).asXMLStreamWriter();
-		performSubstitutionRules(reader, writer, v.getLocale().get().getLanguage());
+		performSubstitutionRules(reader, writer, v.getLocale().iterator().next().getPrimaryLanguageSubTag().toString());
 		if (ssmlProcessed.size() != 1) {
 			throw new RuntimeException("Something went wrong");
 		}

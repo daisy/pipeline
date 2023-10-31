@@ -32,6 +32,10 @@
 
 	<p:xslt name="parsed">
 		<p:input port="stylesheet">
+			<!--
+			    note that we do it in XSLT but it could also be implemented in Java (see
+			    https://www.saxonica.com/html/documentation9.8/javadoc/net/sf/saxon/tree/util/ProcInstParser.html)
+			-->
 			<p:document href="../xslt/parse-xml-stylesheet-instructions.xsl"/>
 		</p:input>
 		<p:input port="parameters">

@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.common;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
@@ -7,10 +8,10 @@ import java.util.Map;
 
 import com.google.common.base.Function;
 import com.google.common.collect.AbstractIterator;
-import static com.google.common.collect.Iterables.transform;
+import com.google.common.collect.Iterables;
 
-import org.daisy.pipeline.braille.common.util.Locales;
 import org.daisy.pipeline.braille.common.Provider;
+import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
@@ -52,35 +53,89 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 		public static abstract class Memoize<T extends Transform>
 				extends Provider.util.Memoize<Query,T> implements MemoizingProvider<T> {
 			
-			private Map<Logger,TransformProvider<T>> providerCache = new HashMap<Logger,TransformProvider<T>>();
+			private final Map<Logger,TransformProvider<T>> providerCache;
+			private final boolean idOnly;
 			
 			public Memoize() {
-				providerCache.put(null, this);
+				this(false);
 			}
 			
+			/**
+			 * @param idOnly whether to memoize {@code (id:...)} lookups only.
+			 */
+			public Memoize(boolean idOnly) {
+				providerCache = new HashMap<Logger,TransformProvider<T>>();
+				providerCache.put(null, this);
+				this.idOnly = idOnly;
+			}
+			
+			/**
+			 * Create a new {@link Memoize} object that is based on the same underlying caches.
+			 */
+			protected Memoize(Memoize<T> shareCacheWith) {
+				super(shareCacheWith);
+				this.providerCache = shareCacheWith.providerCache;
+				this.idOnly = shareCacheWith.idOnly;
+			}
+			
+			protected boolean skip(Query query) {
+				return !idOnly || !(query.containsKey("id") && Iterables.size(query) == 1);
+			}
+			
+			@Override
+			public Iterable<T> get(Query query) {
+				MutableQuery q = mutableQuery(query);
+				if (q.containsKey("id")) {
+					Feature f = q.removeOnly("id");
+					if (q.isEmpty()) {
+						T t = fromId(f.getValue().get());
+						if (t != null)
+							return Collections.singleton(t); }}
+				return rememberId(super.get(query));
+			}
+			
+			private final Map<String,T> fromId = new HashMap<>();
+			
+			private T fromId(String id) {
+				return fromId.get(id);
+			}
+			
+			private T rememberId(T t) {
+				fromId.put(t.getIdentifier(), t);
+				return t;
+			}
+			
+			private Iterable<T> rememberId(final Iterable<T> iterable) {
+				return new java.lang.Iterable<T>() {
+					public Iterator<T> iterator() {
+						return new Iterator<T>() {
+							Iterator<T> i = iterable.iterator();
+							public boolean hasNext() {
+								return i.hasNext();
+							}
+							public T next() {
+								return rememberId(i.next());
+							}
+							public void remove() {
+								i.remove();
+							}
+						};
+					}
+				};
+			}
+			
+			/**
+			 * Create a new {@link TransformProvider} with the given context that is also memoizing
+			 * and is based on the same underlying caches.
+			 */
 			protected abstract TransformProvider<T> _withContext(Logger context);
 			
-			public final TransformProvider<T> withContext(Logger context) {
+			public TransformProvider<T> withContext(Logger context) {
 				if (providerCache.containsKey(context))
 					return providerCache.get(context);
-				TransformProvider<T> provider = new DerivativeProvider(_withContext(context));
+				TransformProvider<T> provider = _withContext(context);
 				providerCache.put(context, provider);
 				return provider;
-			}
-			
-			private class DerivativeProvider
-					extends Provider.util.Memoize<Query,T>
-					implements TransformProvider<T> {
-				private final TransformProvider<T> provider;
-				private DerivativeProvider(TransformProvider<T> provider) {
-					this.provider = provider;
-				}
-				public Iterable<T> _get(Query query) {
-					return provider.get(query);
-				}
-				public TransformProvider<T> withContext(Logger context) {
-					return Memoize.this.withContext(context);
-				}
 			}
 		}
 		
@@ -89,11 +144,15 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			private MemoizeFromProvider(TransformProvider<T> provider) {
 				this.provider = provider;
 			}
+			private MemoizeFromProvider(MemoizeFromProvider<T> provider) {
+				super(provider);
+				this.provider = provider.provider;
+			}
 			protected Iterable<T> _get(Query query) {
 				return provider.get(query);
 			}
 			protected TransformProvider<T> _withContext(Logger context) {
-				return provider.withContext(context);
+				return new MemoizeFromProvider<T>(provider.withContext(context));
 			}
 			@Override
 			public String toString() {
@@ -117,7 +176,7 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 			protected abstract Iterable<TransformProvider<T>> _dispatch();
 			
 			public final Iterable<Provider<Query,T>> dispatch() {
-				return transform(
+				return Iterables.transform(
 					_dispatch(),
 					new Function<TransformProvider<T>,Provider<Query,T>>() {
 						public Provider<Query,T> apply(TransformProvider<T> provider) {

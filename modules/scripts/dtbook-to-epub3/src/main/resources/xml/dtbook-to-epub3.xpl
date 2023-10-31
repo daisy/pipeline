@@ -58,7 +58,7 @@
         <p:pipe step="load" port="validation-report"/>
     </p:output>
 
-    <p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
+    <p:output port="status" px:media-type="application/vnd.pipeline.status+xml" primary="true">
       <!-- whether the conversion was aborted due to validation errors or text-to-speech errors -->
       <!-- when the conversion fails because of text-to-speech errors it may still output a
            (incomplete) EPUB 3 publication-->
@@ -72,6 +72,10 @@
       <!-- defined in ../../../../../common-options.xpl -->
       <p:inline><d:config/></p:inline>
     </p:input>
+
+    <p:option xmlns:_="tts" name="_:stylesheet" select="''">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
 
     <p:option xmlns:_="dtbook" name="_:chunk-size" select="'-1'">
       <!-- defined in ../../../../../common-options.xpl -->
@@ -161,11 +165,12 @@
 	  </p:input>
 	</p:split-sequence>
 	<p:group name="convert-and-store" px:progress="1">
-          <p:output port="status" primary="true"/>
+	  <p:output port="status" primary="true"/>
 	  <p:output port="tts-log" sequence="true">
 	    <p:pipe step="convert" port="tts-log"/>
 	  </p:output>
-	  <p:variable name="output-name" select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')"/>
+	  <p:variable name="dtbook-uri" select="base-uri(/)"/>
+	  <p:variable name="output-name" select="replace(replace($dtbook-uri,'^.*/([^/]+)$','$1'),'\.[^\.]*$','')"/>
 	  <p:variable name="output-dir-uri" select="pf:normalize-uri(concat($result,'/'))"/>
 	  <p:variable name="epub-file-uri" select="concat($output-dir-uri,$output-name,'.epub')"/>
 	  <p:sink/>
@@ -180,6 +185,10 @@
 	    <p:input port="tts-config">
 	      <p:pipe step="main" port="tts-config"/>
 	    </p:input>
+	    <p:with-option name="stylesheet" xmlns:_="tts" select="string-join(
+	                                                             for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
+	                                                               resolve-uri($s,$dtbook-uri),
+	                                                             ' ')"/>
 	    <p:with-option name="audio" select="$audio"/>
 	    <p:with-option name="audio-file-type" select="$audio-file-type"/>
 	    <p:with-option name="language" select="$language"/>
@@ -201,7 +210,7 @@
 
 	  <p:identity cx:depends-on="store">
 	    <p:input port="source">
-	      <p:pipe step="convert" port="validation-status"/>
+	      <p:pipe step="convert" port="status"/>
 	    </p:input>
 	  </p:identity>
 	</p:group>

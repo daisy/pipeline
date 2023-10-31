@@ -12,29 +12,59 @@
 			<x:input port="source.fileset">
 				<x:document type="inline">
 					<d:fileset>
-						<d:file href="../resources/minimal.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="minimal.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
-			<x:input port="source.in-memory"/>
+			<x:input port="source.in-memory">
+				<x:document type="inline" xml:base="minimal.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+						<head>
+							<meta name="dtb:uid" content="CECIREADER-TEST-CD46505C-6FD0-11E4-B2F6-BBE73AE121C6"/>
+							<meta name="dc:Title" content="Minimal DTBook"/>
+							<meta name="dc:Creator" content="Bert"/>
+							<link rel="stylesheet" type="text/css" media="speech" href="aural.css"/>
+						</head>
+						<book>
+							<frontmatter>
+								<doctitle>Minimal DTBook</doctitle>
+								<docauthor>Bert</docauthor>
+							</frontmatter>
+							<bodymatter>
+								<level1>
+									<pagenum id="page_1">1</pagenum>
+									<h1>Chapter</h1>
+									<p>Paragraph</p>
+									<pagenum id="page_2">2</pagenum>
+									<p>Another paragraph</p>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+				<x:document type="inline" xml:base="aural.css">
+					<c:data content-type="text/plain">
+						h1 {
+							voice-family: female;
+						}
+						p {
+							voice-family: male;
+						}
+					</c:data>
+				</x:document>
+			</x:input>
 			<x:input port="tts-config">
 				<x:document type="inline">
 					<config>
-						<css>
-							h1 {
-								voice-family: female;
-							}
-							p {
-								voice-family: male;
-							}
-						</css>
 						<voice engine="mock-tts" name="alex" lang="en" gender="male-adult"/>
 						<voice engine="mock-tts" name="vicki" lang="en" gender="female-adult"/>
 					</config>
 				</x:document>
 			</x:input>
 			<x:option name="language" select="''"/>
-			<x:option name="validation" select="'abort'"/>
+			<x:option name="validation" select="'off'"/>
+			<x:option name="dtbook-is-valid" select="true()"/>
 			<x:option name="audio" select="true()"/>
 			<x:option name="audio-file-type" select="'audio/x-wav'"/>
 			<x:option name="output-name" select="'minimal'"/>
@@ -50,10 +80,11 @@
 				<d:fileset>
 					<d:file href="epub3/out/epub/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
 					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.wav" original-href="epub3/temp/audio/part0000_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.wav" original-href="epub3/temp/audio/part0001_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.wav" original-href="epub3/temp/audio/part0002_00_000.wav" media-type="audio/x-wav"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.wav" original-href="epub3/temp/tts/audio/part0000_00_000.wav" media-type="audio/x-wav"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.wav" original-href="epub3/temp/tts/audio/part0001_00_000.wav" media-type="audio/x-wav"/>
+					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.wav" original-href="epub3/temp/tts/audio/part0002_00_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml" indent="true"/>
@@ -76,34 +107,34 @@
 					<body>
 						<nav epub:type="toc">
 							<h1>
-								<span id="st3-1">Table of contents</span>
+								<span id="id_1">Table of contents</span>
 							</h1>
 							<ol>
 								<li>
 									<a href="minimal-1.xhtml#id_1">
-										<span id="st3-2">Minimal DTBook</span>
+										<span id="id_2">Minimal DTBook</span>
 									</a>
 								</li>
 								<li>
 									<a href="minimal-2.xhtml#id_2">
-										<span id="st3-3">Chapter</span>
+										<span id="id_3">Chapter</span>
 									</a>
 								</li>
 							</ol>
 						</nav>
 						<nav epub:type="page-list" hidden="">
 							<h1>
-								<span id="st3-4">List of pages</span>
+								<span id="id_4">List of pages</span>
 							</h1>
 							<ol>
 								<li>
 									<a href="minimal-2.xhtml#page_1">
-										<span id="st3-5">1</span>
+										<span id="id_5">1.</span>
 									</a>
 								</li>
 								<li>
 									<a href="minimal-2.xhtml#page_2">
-										<span id="st3-6">2</span>
+										<span id="id_6">2.</span>
 									</a>
 								</li>
 							</ol>
@@ -120,27 +151,27 @@
 				<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
 					<body>
 						<par>
-							<text src="../toc.xhtml#st3-1"/>
+							<text src="../toc.xhtml#id_1"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
 						</par>
 						<par>
-							<text src="../toc.xhtml#st3-2"/>
+							<text src="../toc.xhtml#id_2"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
 						</par>
 						<par>
-							<text src="../toc.xhtml#st3-3"/>
+							<text src="../toc.xhtml#id_3"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:01.157" clipEnd="0:00:01.723"/>
 						</par>
 						<par>
-							<text src="../toc.xhtml#st3-4"/>
+							<text src="../toc.xhtml#id_4"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:01.723" clipEnd="0:00:02.301"/>
 						</par>
 						<par>
-							<text src="../toc.xhtml#st3-5"/>
+							<text src="../toc.xhtml#id_5"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:02.301" clipEnd="0:00:02.880"/>
 						</par>
 						<par>
-							<text src="../toc.xhtml#st3-6"/>
+							<text src="../toc.xhtml#id_6"/>
 							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:02.880" clipEnd="0:00:03.459"/>
 						</par>
 					</body>
@@ -158,12 +189,12 @@
 						<seq epub:textref="../minimal-1.xhtml#id_1">
 							<seq epub:textref="../minimal-1.xhtml#id_5" epub:type="title">
 								<par>
-									<text src="../minimal-1.xhtml#st1-1"/>
+									<text src="../minimal-1.xhtml#id_2"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
 								</par>
 							</seq>
 							<par>
-								<text src="../minimal-1.xhtml#st1-2"/>
+								<text src="../minimal-1.xhtml#id_3"/>
 								<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
 							</par>
 						</seq>
@@ -182,16 +213,16 @@
 						<seq epub:textref="../minimal-2.xhtml#id_2">
 							<seq epub:textref="../minimal-2.xhtml#id_7">
 								<par>
-									<text src="../minimal-2.xhtml#st2-1"/>
+									<text src="../minimal-2.xhtml#id_1"/>
 									<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.565"/>
 								</par>
 							</seq>
 							<par>
-								<text src="../minimal-2.xhtml#st2-2"/>
+								<text src="../minimal-2.xhtml#id_3"/>
 								<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:00.565" clipEnd="0:00:01.144"/>
 							</par>
 							<par>
-								<text src="../minimal-2.xhtml#st2-3"/>
+								<text src="../minimal-2.xhtml#id_4"/>
 								<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:01.144" clipEnd="0:00:01.723"/>
 							</par>
 						</seq>
@@ -255,6 +286,7 @@
 				<d:fileset>
 					<d:file href="epub3/out/epub/EPUB/content-1.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/content-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
 					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
@@ -266,7 +298,7 @@
 		</x:context>
 		<x:expect label="the content-2.xhtml document" type="compare">
 			<x:document type="inline">
-				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+				<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"
 				      xmlns:epub="http://www.idpf.org/2007/ops">
 					<head>
 						<meta charset="UTF-8"/>
@@ -274,7 +306,7 @@
 					</head>
 					<body epub:type="bodymatter" id="id_6">
 						<section id="id_1">
-							<span title="1" epub:type="pagebreak" role="doc-pagebreak" aria-label=" 1. " id="page_1"/>
+							<span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 1. " id="page_1"/>
 							<h3 id="id_7">Chapter</h3>
 							<p>Paragraph</p>
 						</section>

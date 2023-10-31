@@ -2,6 +2,7 @@ package org.daisy.pipeline.asciimathml.calabash.impl;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Map;
 
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.OutputKeys;
@@ -20,6 +21,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.asciimathml.ASCIIMathML;
 
 import org.osgi.service.component.annotations.Component;
@@ -37,7 +39,7 @@ import org.w3c.dom.Element;
 public class ASCIIMathMLProvider implements XProcStepProvider {
 	
 	@Override
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new ASCIIMathMLStep(runtime, step);
 	}
 	

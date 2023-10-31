@@ -3,7 +3,9 @@ package org.daisy.pipeline.epub.ace.impl;
 import java.io.File;
 import java.net.URI;
 import java.nio.file.Files;
+import java.util.Map;
 import java.util.Optional;
+
 import javax.xml.transform.stream.StreamSource;
 
 import com.xmlcalabash.core.XProcRuntime;
@@ -18,6 +20,7 @@ import org.daisy.common.shell.BinaryFinder;
 import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
 import org.osgi.service.component.annotations.Activate;
@@ -39,7 +42,7 @@ import org.slf4j.LoggerFactory;
 )
 public class AceProvider implements XProcStepProvider {
 
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new AceStep(runtime, step);
 	}
 

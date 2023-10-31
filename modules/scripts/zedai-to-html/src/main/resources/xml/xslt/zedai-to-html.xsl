@@ -4,6 +4,7 @@
                 xmlns:f="http://www.daisy.org/ns/functions-internal"
                 xmlns:pf="http://www.daisy.org/ns/functions"
                 xmlns:diagram="http://www.daisy.org/ns/z3998/authoring/features/description/"
+                xmlns:rend="http://www.daisy.org/ns/z3998/authoring/features/rend/"
                 xmlns:m="http://www.w3.org/1998/Math/MathML"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:its="http://www.w3.org/2005/11/its"
@@ -32,7 +33,8 @@
     <xsl:param name="nodes" as="node()*"/>
     <!--TODO config: externalize the profile definition-->
     <xsl:variable name="lang" select="$nodes/ancestor::*/@xml:lang[1]"/>
-    <html xml:lang="{if ($lang) then $lang else 'en'}">
+    <xsl:variable name="lang" select="($lang,'en')[1]"/>
+    <html xml:lang="{$lang}" lang="{$lang}">
       <xsl:apply-templates select="$nodes/ancestor::*/@its:dir[1]"/>
       <head>
         <meta charset="UTF-8"/>
@@ -572,6 +574,29 @@
   <xsl:template match="list[@type='ordered']/@start">
     <xsl:copy/>
   </xsl:template>
+  <xsl:template match="list[@type='ordered']/@rend:prefix">
+    <!-- http://www.daisy.org/z3998/2012/auth/features/rend/1.0/z3998-rend.html#z3998.rend.list.ordered.prefix.attrib -->
+    <xsl:choose>
+      <xsl:when test="string(.)='decimal'">
+        <xsl:attribute name="type" select="'1'"/> <!-- default -->
+      </xsl:when>
+      <xsl:when test="string(.)='lower-alpha'">
+        <xsl:attribute name="type" select="'a'"/>
+      </xsl:when>
+      <xsl:when test="string(.)='upper-alpha'">
+        <xsl:attribute name="type" select="'A'"/>
+      </xsl:when>
+      <xsl:when test="string(.)='lower-roman'">
+        <xsl:attribute name="type" select="'i'"/>
+      </xsl:when>
+      <xsl:when test="string(.)='upper-roman'">
+        <xsl:attribute name="type" select="'I'"/>
+      </xsl:when>
+      <xsl:when test="string(.)=('decimal-leading-zero','lower-greek','upper-greek')">
+        <xsl:attribute name="style" select="concat('list-style-type: ',string(.))"/>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
   <xsl:template match="item" mode="#all">
     <li>
       <xsl:apply-templates select="@*"/>
@@ -700,7 +725,10 @@
     </span>
   </xsl:template>
   <xsl:template match="pagebreak/@value" mode="#all">
-    <xsl:attribute name="title" select="."/>
+    <!-- include aria-label attribute and not title attribute because having both can be a source of
+         double speaking, and aria-label maps consistently to accessible name, whereas title can map
+         to either accessible description or accessible name -->
+    <!-- <xsl:attribute name="title" select="."/> -->
     <xsl:attribute name="aria-label" select="concat(' ',.,'. ')"/> <!-- append period and surround with extra
                                                                         spaces to help AT speaking the page
                                                                         number correctly -->

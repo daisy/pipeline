@@ -6,6 +6,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:epub="http://www.idpf.org/2007/ops"
                 xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+                xmlns:ssml="http://www.w3.org/2001/10/synthesis"
                 exclude-inline-prefixes="#all"
                 type="px:tts-for-epub3" name="main">
 
@@ -18,18 +19,15 @@
 
   <p:input port="config">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2>Text-To-Speech configuration file</h2>
-      <p>Configuration file that contains Text-To-Speech
-      properties, links to aural CSS stylesheets and links to PLS
-      lexicons.</p>
+      <h2>TTS configuration file</h2>
+      <p>Configuration file with voice mappings, PLS lexicons and annotations.</p>
     </p:documentation>
   </p:input>
 
   <p:output port="audio-map">
     <p:pipe port="audio-map" step="synthesize"/>
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-       <p>List of audio clips (see pipeline-mod-tts
-       documentation).</p>
+      <p>List of audio clips mapped to fragments in the HTML document set.</p>
     </p:documentation>
   </p:output>
 
@@ -40,18 +38,6 @@
        <p>The result fileset.</p>
        <p>HTML documents are enriched with IDs, words and sentences. Inlined aural CSS is
        removed.</p>
-    </p:documentation>
-  </p:output>
-
-  <p:output port="sentence-ids" sequence="true">
-    <p:pipe port="sentence-ids" step="synthesize"/>
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <p>Every document of this port is a list of nodes whose id
-      attribute refers to elements of the 'content.out'
-      documents. Grammatically speaking, the referred elements are
-      sentences even if the underlying XML elements are not meant to
-      be so. Documents are listed in the same order as in
-      'content.out'.</p>
     </p:documentation>
   </p:output>
 
@@ -93,6 +79,12 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="stylesheet" select="''">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>CSS user style sheets as space separated list of absolute URIs.</p>
+    </p:documentation>
+  </p:option>
+
   <p:option name="sentence-class" required="false" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Class attribute to mark sentences with.</p>
@@ -113,13 +105,6 @@
       <p>URI of an SSML file which contains a list of
       lexicon elements with their URI. The lexicons will be provided
       to the Text-To-Speech processors.</p>
-    </p:documentation>
-  </p:option>
-
-  <p:option name="anti-conflict-prefix" required="false"  select="''">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2>Prefix for IDs</h2>
-      <p>The IDs will be prefixed so as to prevent conflicts.</p>
     </p:documentation>
   </p:option>
 
@@ -147,7 +132,7 @@
       px:html-unwrap-words
     </p:documentation>
   </p:import>
-  <p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
+  <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
     <p:documentation>
       px:css-speech-cascade
       px:css-speech-clean
@@ -157,6 +142,11 @@
     <p:documentation>
       px:fileset-load
       px:fileset-update
+    </p:documentation>
+  </p:import>
+  <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+    <p:documentation>
+      px:add-ids
     </p:documentation>
   </p:import>
 
@@ -174,9 +164,7 @@
         <p:input port="source.in-memory">
           <p:pipe step="main" port="source.in-memory"/>
         </p:input>
-        <p:input port="config">
-          <p:pipe step="main" port="config"/>
-        </p:input>
+        <p:with-option name="user-stylesheet" select="$stylesheet"/>
       </px:css-speech-cascade>
     </p:when>
     <p:otherwise>
@@ -200,14 +188,11 @@
       <p:xpath-context>
         <p:empty/>
       </p:xpath-context>
+      <p:output port="html" primary="true" sequence="true"/>
       <p:output port="audio-map">
         <p:inline>
           <d:audio-clips/>
         </p:inline>
-      </p:output>
-      <p:output port="html" primary="true" sequence="true"/>
-      <p:output port="sentence-ids" sequence="true">
-        <p:empty/>
       </p:output>
       <p:output port="status">
         <p:inline>
@@ -222,14 +207,11 @@
 
     <!-- ====== TTS ON ====== -->
     <p:otherwise>
+      <p:output port="html" primary="true" sequence="true">
+        <p:pipe step="for-each" port="html"/>
+      </p:output>
       <p:output port="audio-map">
         <p:pipe port="result" step="to-audio"/>
-      </p:output>
-      <p:output port="html" primary="true" sequence="true">
-        <p:pipe step="loop" port="html"/>
-      </p:output>
-      <p:output port="sentence-ids" sequence="true">
-        <p:pipe port="sentence-ids" step="loop"/>
       </p:output>
       <p:output port="status">
         <p:pipe step="to-audio" port="status"/>
@@ -237,17 +219,14 @@
       <p:output port="log" sequence="true">
         <p:pipe step="to-audio" port="log"/>
       </p:output>
-      <p:for-each name="loop" px:progress="1/9">
+      <p:for-each name="for-each" px:progress="0.2">
         <p:output port="ssml" primary="true" sequence="true">
           <p:pipe step="ssml" port="result"/>
         </p:output>
         <p:output port="html">
-          <p:pipe port="result" step="rm-words"/>
+          <p:pipe step="clean-html" port="result"/>
         </p:output>
-        <p:output port="sentence-ids">
-          <p:pipe port="sentence-ids" step="lexing"/>
-        </p:output>
-        <p:group>
+        <p:group px:progress="1/5">
           <p:documentation>
             Insert "speech-only" spans from @tts:before and @tts:after attributes
           </p:documentation>
@@ -268,25 +247,23 @@
           <p:rename match="tts:before|tts:after"
                     new-name="span" new-namespace="http://www.w3.org/1999/xhtml"/>
         </p:group>
-        <px:html-break-detect name="lexing" px:progress="1/2" px:message="Performing sentence detection">
-          <p:with-option name="id-prefix" select="concat($anti-conflict-prefix, p:iteration-position(), '-')"/>
+        <px:html-break-detect name="break" px:progress="1/5" px:message="Performing sentence detection">
           <p:with-option name="sentence-attr" select="if ($sentence-class!='') then 'class' else ''"/>
           <p:with-option name="sentence-attr-val" select="$sentence-class"/>
         </px:html-break-detect>
-        <px:isolate-skippable name="isolate-skippable"
+        <px:isolate-skippable name="isolate-skippable" px:progress="1/5"
                               match="*[@epub:type/tokenize(.,'\s+')=('pagebreak','noteref')]|
                                      *[@role='doc-pagebreak']|
                                      *[@role='doc-noteref']">
           <!-- noterefs don't actually need to be skippable (only the notes), but they are isolated
                to not disturb the flow of the surrounding text -->
           <p:input port="sentence-ids">
-            <p:pipe step="lexing" port="sentence-ids"/>
+            <p:pipe step="break" port="sentence-ids"/>
           </p:input>
-          <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
         </px:isolate-skippable>
-        <px:epub3-to-ssml name="ssml" px:progress="1/2" px:message="Generating SSML from HTML">
+        <px:epub3-to-ssml px:progress="1/5" px:message="Generating SSML from HTML">
           <p:input port="sentence-ids">
-            <p:pipe port="sentence-ids" step="lexing"/>
+            <p:pipe step="break" port="sentence-ids"/>
           </p:input>
           <p:input port="skippable-ids">
             <p:pipe step="isolate-skippable" port="skippable-ids"/>
@@ -298,7 +275,11 @@
             <p:pipe port="config" step="main"/>
           </p:input>
         </px:epub3-to-ssml>
-        <p:group name="rm-css">
+        <px:add-ids match="ssml:s" name="ssml">
+          <p:documentation>px:ssml-to-audio requires that all sentences have an id attribute</p:documentation>
+        </px:add-ids>
+        <p:sink/>
+        <p:group px:progress="1/10">
           <p:documentation>
             Unwrap elements with @tts:speech-only attribute and remove text content.
           </p:documentation>
@@ -311,14 +292,16 @@
           <p:documentation>Remove @tts:* attributes and tts namespace nodes</p:documentation>
           <px:css-speech-clean/>
         </p:group>
-        <px:html-unwrap-words name="rm-words">
+        <px:html-unwrap-words px:progress="1/10">
           <p:documentation>
             Remove the word tags because it results in invalid EPUB. (The info is used in the
             synthesize step, but not for synchronization on word level.)
           </p:documentation>
         </px:html-unwrap-words>
+        <p:identity name="clean-html"/>
+        <p:sink/>
       </p:for-each>
-      <px:ssml-to-audio name="to-audio" px:progress="8/9" px:message="Processing SSML">
+      <px:ssml-to-audio name="to-audio" px:progress="7/9" px:message="Processing SSML">
         <p:input port="config">
           <p:pipe port="config" step="main"/>
         </p:input>

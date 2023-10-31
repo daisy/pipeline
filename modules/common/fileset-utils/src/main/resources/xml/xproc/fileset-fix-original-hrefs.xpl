@@ -18,6 +18,7 @@
 			<li>If <code>detect-existing</code> is true, set original-href attributes of files that exist on disk
 			according to @href.</li>
 			<li>Remove original-href attributes of files that exist in memory.</li>
+			<li>Unless <code>detect-existing</code> is true, remove original-href attributes that equal @href.</li>
 		</ul>
 	</p:documentation>
 

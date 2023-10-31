@@ -36,11 +36,21 @@ package org.daisy.pipeline.zip.calabash.impl;
  *     - slightly changed the meaning of the 'overwrite' option
  */
 
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.net.URI;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -49,20 +59,19 @@ import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
-import java.io.StringReader;
-
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.QName;
-import java.io.*;
-import java.net.URI;
-import java.util.zip.*;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(
 	name = "letex:unzip",
@@ -78,7 +87,7 @@ public class UnZipProvider implements XProcStepProvider {
      * @see org.daisy.common.xproc.calabash.XProcStepProvider#newStep(com.xmlcalabash.core.XProcRuntime, com.xmlcalabash.runtime.XAtomicStep)
      */
     @Override
-    public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+    public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
         return new UnZip(runtime, step);
     }
 

@@ -25,25 +25,28 @@
   <xsl:variable name="content-doc" select="/*"/>
   <xsl:variable name="content-doc-uri" select="pf:normalize-uri(base-uri($content-doc))"/>
 
-  <!-- d:audio-clips document with @src attributes relativized against $ncx-dir -->
-  <xsl:variable name="audio-map">
+  <!-- d:audio-clips document with @src attributes relativized against $ncx-dir and @textref attributes normalized and resolved -->
+  <xsl:variable name="audio-map" as="document-node(element(d:audio-clips))">
     <xsl:variable name="audio-map" select="collection()[/d:audio-clips]"/>
-    <xsl:variable name="audio-map-uri" select="base-uri($audio-map/*)"/>
-    <xsl:for-each select="$audio-map/*">
-      <xsl:copy>
-        <xsl:for-each-group select="*" group-by="@src">
-          <xsl:variable name="src" select="current-grouping-key()"/>
-          <xsl:variable name="src" select="resolve-uri($src,$audio-map-uri)"/>
-          <xsl:variable name="src" select="pf:relativize-uri($src,$ncx-dir)"/>
-          <xsl:for-each select="current-group()">
-            <xsl:copy>
-              <xsl:sequence select="@* except @src"/>
-              <xsl:attribute name="src" select="$src"/>
-            </xsl:copy>
-          </xsl:for-each>
-        </xsl:for-each-group>
-      </xsl:copy>
-    </xsl:for-each>
+    <xsl:document>
+      <xsl:for-each select="$audio-map/*">
+	<xsl:variable name="audio-map-uri" select="base-uri(.)"/>
+	<xsl:copy>
+	  <xsl:for-each-group select="*" group-by="@src">
+	    <xsl:variable name="src" select="current-grouping-key()"/>
+	    <xsl:variable name="src" select="resolve-uri($src,$audio-map-uri)"/>
+	    <xsl:variable name="src" select="pf:relativize-uri($src,$ncx-dir)"/>
+	    <xsl:for-each select="current-group()">
+	      <xsl:copy>
+		<xsl:sequence select="@* except (@src,@textref)"/>
+		<xsl:attribute name="src" select="$src"/>
+		<xsl:attribute name="textref" select="pf:normalize-uri(resolve-uri(@textref,$audio-map-uri))"/>
+	      </xsl:copy>
+	    </xsl:for-each>
+	  </xsl:for-each-group>
+	</xsl:copy>
+      </xsl:for-each>
+    </xsl:document>
   </xsl:variable>
 
   <xsl:variable name="navTargets">
@@ -69,7 +72,7 @@
     </xsl:choose>
   </xsl:variable>
 
-  <xsl:key name="clips" use="@idref" match="*[@idref]"/>
+  <xsl:key name="clips" match="d:clip" use="@textref"/>
   <xsl:key name="headings" use="generate-id()"
 	   match="*[contains($navPoints, concat(' ', local-name(), ' ')) and
 		  *[contains($titles, concat(' ', local-name(), ' '))]]"/>
@@ -247,16 +250,21 @@
     <text>
       <xsl:value-of select="d:getText(.)"/>
     </text> <!-- TODO: check if text != ''? -->
-    <xsl:variable name="all-clips" select="descendant-or-self::*[@id and key('clips', @id, $audio-map)]"/>
+    <xsl:variable name="all-clips" as="element(d:clip)*">
+      <xsl:for-each select="descendant-or-self::*[@id]">
+        <xsl:variable name="textref" select="concat($content-doc-uri,'#',@id)"/>
+	<xsl:sequence select="key('clips',$textref,$audio-map)[1]"/>
+      </xsl:for-each>
+    </xsl:variable>
     <xsl:if test="count($all-clips) > 0">
       <!-- The audio information are added only if the text has been synthesized into one single sound file, -->
       <!-- because the specifications do not allow multiple <audio> nodes. -->
-      <xsl:variable name="first-clip" select="key('clips', $all-clips[1]/@id, $audio-map)"/>
-      <xsl:variable name="last-clip" select="key('clips', $all-clips[last()]/@id, $audio-map)"/>
+      <xsl:variable name="first-clip" as="element(d:clip)" select="$all-clips[1]"/>
+      <xsl:variable name="last-clip" as="element(d:clip)" select="$all-clips[last()]"/>
       <xsl:if test="$first-clip/@src = $last-clip/@src">
-        <audio>
-          <xsl:sequence select="$first-clip/(@src|@clipBegin|@clipEnd)"/>
-        </audio>
+	<audio>
+	  <xsl:sequence select="$first-clip/(@src|@clipBegin|@clipEnd)"/>
+	</audio>
       </xsl:if>
     </xsl:if>
   </xsl:template>

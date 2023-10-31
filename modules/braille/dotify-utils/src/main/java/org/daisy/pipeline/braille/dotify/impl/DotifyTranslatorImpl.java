@@ -19,7 +19,6 @@ import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.dotify.api.translator.BrailleFilter;
 import org.daisy.dotify.api.translator.BrailleFilterFactoryService;
-import org.daisy.dotify.api.translator.BrailleTranslatorFactory;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslationException;
 import org.daisy.dotify.api.translator.TranslatorConfigurationException;
@@ -36,7 +35,6 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.l
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.Hyphenator;
-import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
@@ -66,21 +64,40 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 	private final BrailleFilter filter;
 	private final boolean hyphenating;
 	private final Hyphenator externalHyphenator;
+	private final Provider provider;
 	
-	protected DotifyTranslatorImpl(BrailleFilter filter, boolean hyphenating) {
+	private DotifyTranslatorImpl(BrailleFilter filter, boolean hyphenating, Provider provider) {
 		this.filter = filter;
 		this.hyphenating = hyphenating;
 		this.externalHyphenator = null;
+		this.provider = provider;
 	}
 	
-	protected DotifyTranslatorImpl(BrailleFilter filter, Hyphenator externalHyphenator) {
+	private DotifyTranslatorImpl(BrailleFilter filter, Hyphenator externalHyphenator, Provider provider) {
+		super(externalHyphenator, null);
 		this.filter = filter;
 		this.hyphenating = true;
 		this.externalHyphenator = externalHyphenator;
+		this.provider = provider;
+	}
+	
+	private DotifyTranslatorImpl(DotifyTranslatorImpl from, Hyphenator hyphenator) {
+		super(from);
+		this.filter = from.filter;
+		this.hyphenating = hyphenator != null;
+		this.externalHyphenator = hyphenator;
+		this.provider = from.provider;
 	}
 	
 	public BrailleFilter asBrailleFilter() {
 		return filter;
+	}
+	
+	@Override
+	public DotifyTranslatorImpl _withHyphenator(Hyphenator hyphenator) {
+		DotifyTranslatorImpl t = new DotifyTranslatorImpl(this, hyphenator);
+		provider.rememberId(t);
+		return t;
 	}
 	
 	@Override
@@ -170,6 +187,10 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 			return logSelect(q, _provider);
 		}
 		
+		protected DotifyTranslator rememberId(DotifyTranslator t) {
+			return super.rememberId(t);
+		}
+		
 		private final static Iterable<DotifyTranslator> empty = Iterables.<DotifyTranslator>empty();
 		
 		// "text-css" not supported: CSS styles not recognized and line breaking and white space
@@ -220,12 +241,6 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 								return empty; }
 						}
 						final String mode = TranslatorMode.Builder.withType(TranslatorType.UNCONTRACTED).build().toString();
-						String v = null;
-						if (q.containsKey("hyphenator"))
-							v = q.removeOnly("hyphenator").getValue().get();
-						else
-							v = "auto";
-						final String hyphenator = v;
 						if (!q.isEmpty()) {
 							logger.warn("Unsupported feature '"+ q.iterator().next().getKey() + "'");
 							return empty; }
@@ -245,31 +260,15 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 								new Function<BrailleFilter,Iterable<DotifyTranslator>>() {
 									public Iterable<DotifyTranslator> _apply(final BrailleFilter filter) {
 										Iterable<DotifyTranslator> translators = empty;
-										if (!"none".equals(hyphenator)) {
-											MutableQuery hyphenatorQuery = mutableQuery();
-											if (!"auto".equals(hyphenator))
-												hyphenatorQuery.add("hyphenator", hyphenator);
-											if (documentLocale != null)
-												// FIXME: better would be to use original document-locale (before varyLocale) for selecting hyphenator
-												hyphenatorQuery.add("document-locale", documentLocale.toLanguageTag());
-											Iterable<Hyphenator> hyphenators = logSelect(hyphenatorQuery, hyphenatorRegistry);
-											translators = Iterables.transform(
-												hyphenators,
-												new Function<Hyphenator,DotifyTranslator>() {
-													public DotifyTranslator _apply(Hyphenator hyphenator) {
-														return __apply(
-															logCreate(
-																(DotifyTranslator)new DotifyTranslatorImpl(filter, hyphenator))); }}); }
-										if ("auto".equals(hyphenator))
+										if (documentLocale != null && locale.getLanguage().equals(documentLocale.getLanguage()))
 											translators = concat(
 												translators,
 												Iterables.of(
-													logCreate((DotifyTranslator)new DotifyTranslatorImpl(filter, true))));
-										if ("none".equals(hyphenator))
-											translators = concat(
-												translators,
-												Iterables.of(
-													logCreate((DotifyTranslator)new DotifyTranslatorImpl(filter, false))));
+													logCreate((DotifyTranslator)new DotifyTranslatorImpl(filter, true, Provider.this))));
+										translators = concat(
+											translators,
+											Iterables.of(
+												logCreate((DotifyTranslator)new DotifyTranslatorImpl(filter, false, Provider.this))));
 										return translators;
 									}
 								}
@@ -285,10 +284,10 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		
 		@Reference(
 			name = "BrailleFilterFactoryService",
-			unbind = "unbindBrailleFilterFactoryService",
+			unbind = "-",
 			service = BrailleFilterFactoryService.class,
 			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			policy = ReferencePolicy.STATIC
 		)
 		protected void bindBrailleFilterFactoryService(BrailleFilterFactoryService service) {
 			if (!OSGiHelper.inOSGiContext())
@@ -302,23 +301,9 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 			invalidateCache();
 		}
 		
-		private HyphenatorRegistry hyphenatorRegistry;
-		
-		@Reference(
-			name = "HyphenatorRegistry",
-			unbind = "-",
-			service = HyphenatorRegistry.class,
-			cardinality = ReferenceCardinality.MANDATORY,
-			policy = ReferencePolicy.STATIC
-		)
-		protected void bindHyphenatorRegistry(HyphenatorRegistry registry) {
-			hyphenatorRegistry = registry;
-			logger.debug("Binding hyphenator registry: " + registry);
-		}
-		
 		@Override
 		public ToStringHelper toStringHelper() {
-			return MoreObjects.toStringHelper(DotifyTranslatorImpl.Provider.class.getName());
+			return MoreObjects.toStringHelper("DotifyTranslatorImpl$Provider");
 		}
 	}
 	

@@ -15,6 +15,8 @@ import java.util.Optional;
 import javax.sound.sampled.AudioFileFormat;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.audio.AudioEncoder;
 import org.daisy.pipeline.audio.AudioEncoderService;
@@ -33,6 +35,16 @@ import org.slf4j.LoggerFactory;
 public class LameEncoderService implements AudioEncoderService {
 
 	private static final Logger logger = LoggerFactory.getLogger(LameEncoderService.class);
+	private static final Property MP3_BITRATE = Properties.getProperty("org.daisy.pipeline.tts.mp3.bitrate",
+	                                                                   true,
+	                                                                   "Bit rate of MP3 files",
+	                                                                   false,
+	                                                                   null);
+	private static final Property CLI_OPTIONS = Properties.getProperty("org.daisy.pipeline.tts.lame.cli.options",
+	                                                                   false,
+	                                                                   "Additional command line options passed to lame (deprecated)",
+	                                                                   false,
+	                                                                   null);
 
 	@Override
 	public boolean supportsFileType(AudioFileFormat.Type fileType) {
@@ -54,13 +66,12 @@ public class LameEncoderService implements AudioEncoderService {
 	private static LameEncoder.LameEncodingOptions parseEncodingOptions(Map<String,String> params) {
 		LameEncoder.LameEncodingOptions opts = new LameEncoder.LameEncodingOptions();
 		{
-			String prop = "org.daisy.pipeline.tts.mp3.bitrate";
-			String bitrate = params.get(prop);
+			String bitrate = MP3_BITRATE.getValue(params);
 			if (bitrate != null) {
 				try {
 					opts.bitrate = Integer.valueOf(bitrate);
 				} catch (NumberFormatException e) {
-					logger.warn(prop + ": " + bitrate + "is not a valid number");
+					logger.warn(MP3_BITRATE.getName() + ": " + bitrate + "is  not a valid number");
 				}
 			}
 		}

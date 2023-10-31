@@ -15,7 +15,7 @@
 			<x:option name="temp-dir" select="resolve-uri('alice/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">
-			<x:document type="port" port="validation-status"/>
+			<x:document type="port" port="status"/>
 		</x:context>
 		<x:expect label="the conversion should succeed" type="compare">
 			<x:document type="inline">
@@ -55,7 +55,7 @@
 			<x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the status">
-			<x:document type="port" port="validation-status"/>
+			<x:document type="port" port="status"/>
 		</x:context>
 		<x:expect label="the conversion should succeed" type="compare">
 			<x:document type="inline">

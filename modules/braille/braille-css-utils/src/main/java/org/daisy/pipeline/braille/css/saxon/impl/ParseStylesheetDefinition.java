@@ -43,6 +43,7 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 	
 	private static final QName PAGE = new QName("page");
 	private static final QName VOLUME = new QName("volume");
+	private static final QName HYPHENATION_RESOURCE = new QName("hyphenation-resource");
 	private static final QName VENDOR_RULE = new QName("vendor-rule");
 	
 	public StructuredQName getFunctionQName() {
@@ -91,6 +92,8 @@ public class ParseStylesheetDefinition extends ExtensionFunctionDefinition {
 								styleCtxt = Context.PAGE;
 							else if (qn.equals(VOLUME))
 								styleCtxt = Context.VOLUME;
+							else if (qn.equals(HYPHENATION_RESOURCE))
+								styleCtxt = Context.HYPHENATION_RESOURCE;
 							else if (qn.equals(VENDOR_RULE))
 								styleCtxt = Context.VENDOR_RULE;
 							else

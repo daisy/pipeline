@@ -7,15 +7,34 @@
                 xmlns="http://www.w3.org/ns/SMIL"
                 exclude-result-prefixes="#all">
 
-    <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
 
     <xsl:param name="mo-dir" select="''"/>
 
     <xsl:variable name="content-doc-rel" select="pf:relativize-uri(base-uri(/*),$mo-dir)"/>
 
+    <!-- d:audio-clips document with @src attributes relativized against $mo-dir and @textref attributes normalized and resolved -->
+    <xsl:variable name="audio-map" as="document-node(element(d:audio-clips))">
+        <xsl:variable name="audio-map" select="collection()[/d:audio-clips]"/>
+        <xsl:document>
+            <xsl:for-each select="$audio-map/*">
+                <xsl:variable name="audio-map-uri" select="base-uri(.)"/>
+                <xsl:copy>
+                    <xsl:for-each select="*">
+                        <xsl:copy>
+                            <xsl:sequence select="@* except (@src,@textref)"/>
+                            <xsl:attribute name="src" select="pf:relativize-uri(resolve-uri(@src,$audio-map-uri),$mo-dir)"/>
+                            <xsl:attribute name="textref" select="pf:normalize-uri(resolve-uri(@textref,$audio-map-uri))"/>
+                        </xsl:copy>
+                    </xsl:for-each>
+                </xsl:copy>
+            </xsl:for-each>
+        </xsl:document>
+    </xsl:variable>
+
     <xsl:output indent="yes"/>
 
-    <xsl:key name="audio-clips" match="d:clip" use="@idref"/>
+    <xsl:key name="audio-clips" match="d:clip" use="pf:normalize-uri(resolve-uri(@textref,base-uri(.)))"/>
 
     <xsl:template match="/*">
         <smil version="3.0">
@@ -36,14 +55,15 @@
     </xsl:template>
 
     <xsl:template match="html:*[@id]" priority="1">
-        <xsl:variable name="clip" select="key('audio-clips',@id,collection()[/d:audio-clips])"/>
+        <xsl:variable name="textref" select="concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id)"/>
+        <xsl:variable name="clip" as="element(d:clip)?" select="key('audio-clips',$textref,$audio-map)"/>
         <xsl:choose>
             <xsl:when test="exists($clip)">
                 <par>
                     <xsl:copy-of select="@epub:type"/>
                     <text src="{concat($content-doc-rel,'#',@id)}"/>
-                    <audio src="{pf:relativize-uri($clip/resolve-uri(@src,pf:base-uri(.)),$mo-dir)}">
-                        <xsl:copy-of select="$clip/(@clipBegin|@clipEnd)"/>
+                    <audio>
+                        <xsl:copy-of select="$clip/(@src,@clipBegin|@clipEnd)"/>
                     </audio>
                 </par>
             </xsl:when>

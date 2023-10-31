@@ -92,9 +92,9 @@
             pef:add-metadata
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
         <p:documentation>
-            css:delete-stylesheets
+            px:css-detach
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -190,7 +190,7 @@
                 <p:delete match="@style"/>
             </p:otherwise>
         </p:choose>
-        <css:delete-stylesheets px:progress="1/2"/>
+        <px:css-detach px:progress="1/2"/>
         <p:filter select="/*/html:body"/>
         
         <!-- xml:base attribute is required for resolving cross-references between different bodies -->

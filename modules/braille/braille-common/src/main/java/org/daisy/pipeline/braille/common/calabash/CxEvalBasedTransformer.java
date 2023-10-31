@@ -14,6 +14,7 @@ import net.sf.saxon.s9api.QName;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 /**
  * Simple XProc (<code>p:pipeline</code>) based transformer that can be executed in a XMLCalabash runtime.
@@ -38,7 +39,7 @@ public class CxEvalBasedTransformer implements XProcStepProvider {
 		this.xprocOptions = options;
 	}
 
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new PreparedEval(runtime, step);
 	}
 

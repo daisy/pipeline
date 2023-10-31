@@ -16,15 +16,21 @@ import org.daisy.dotify.api.translator.UnsupportedMetricException;
 import org.daisy.pipeline.braille.common.Hyphenator.NonStandardHyphenationException;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.MoreObjects.ToStringHelper;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermList;
 
-/*
- * Translator that dispatches to sub-translator based on text-transform values.
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * {@link BrailleTranslator} that dispatches to sub-translators based on text-transform values.
  */
 public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 
@@ -41,6 +47,7 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 			try {
 				translators.put(t.getKey(), t.getValue().get());
 			} catch (NoSuchElementException e) {
+				logger.warn("No braille translator found for handling text-transform '" + t.getKey() + "'");
 			}
 		implementsFromStyledTextToBraille = Iterables.all(
 			translators.values(),
@@ -58,6 +65,32 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 					return true; }
 				catch (UnsupportedOperationException e) {
 					return false; }} );
+	}
+
+	protected CompoundBrailleTranslator(CompoundBrailleTranslator from) {
+		super(from);
+		this.translators = from.translators;
+		this.implementsFromStyledTextToBraille = from.implementsFromStyledTextToBraille;
+		this.implementsLineBreakingFromStyledText = from.implementsLineBreakingFromStyledText;
+	}
+
+	@Override
+	public ToStringHelper toStringHelper() {
+		return MoreObjects.toStringHelper("CompoundBrailleTranslator")
+			.add("translators", translators);
+	}
+
+	/**
+	 * @throws UnsupportedOperationException if the main translator or one of the sub-translators's
+	 *                                       {@code #withHyphenator()} method throws {@link UnsupportedOperationException}
+	 */
+	public CompoundBrailleTranslator _withHyphenator(Hyphenator hyphenator) {
+		Map<String,BrailleTranslator> translatorsWithHyphenator = new HashMap<>(); {
+			for (String k : translators.keySet())
+				translatorsWithHyphenator.put(k, translators.get(k).withHyphenator(hyphenator));
+		}
+		return new CompoundBrailleTranslator(translatorsWithHyphenator.remove("auto"),
+		                                     Maps.transformValues(translatorsWithHyphenator, x -> (() -> x)));
 	}
 
 	private static abstract class TransformImpl<T> {
@@ -173,6 +206,10 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 
 	private FromStyledTextToBraille fromStyledTextToBraille = null;
 
+	/**
+	 * @throws UnsupportedOperationException if the main translator or one of the sub-translators's
+	 *                                       {@code #withHyphenator()} method throws {@link UnsupportedOperationException}
+	 */
 	@Override
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		if (!implementsFromStyledTextToBraille)
@@ -193,12 +230,20 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 					public Iterable<String> transform(Iterable<CSSStyledText> styledText, int from, int to) {
 						return impl.transform(styledText, from, to);
 					}
+					@Override
+					public String toString() {
+						return CompoundBrailleTranslator.this.toString();
+					}
 				};
 		return fromStyledTextToBraille;
 	}
 
 	private LineBreakingFromStyledText lineBreakingFromStyledText = null;
 
+	/**
+	 * @throws UnsupportedOperationException if the main translator or one of the sub-translators's
+	 *                                       {@code #withHyphenator()} method throws {@link UnsupportedOperationException}
+	 */
 	@Override
 	public LineBreakingFromStyledText lineBreakingFromStyledText() {
 		if (!implementsLineBreakingFromStyledText)
@@ -219,6 +264,10 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 						};
 					public LineIterator transform(Iterable<CSSStyledText> styledText, int from, int to) {
 						return concatLineIterators(impl.transform(styledText, from, to));
+					}
+					@Override
+					public String toString() {
+						return CompoundBrailleTranslator.this.toString();
 					}
 				};
 		return lineBreakingFromStyledText;
@@ -337,4 +386,7 @@ public class CompoundBrailleTranslator extends AbstractBrailleTranslator {
 			throw new UnsupportedMetricException("Metric not supported: " + metric);
 		}
 	}
+
+	private static final Logger logger = LoggerFactory.getLogger(CompoundBrailleTranslator.class);
+
 }

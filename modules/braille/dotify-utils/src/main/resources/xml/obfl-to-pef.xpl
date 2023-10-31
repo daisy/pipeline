@@ -20,6 +20,7 @@
 		<p:option name="identifier" required="false" select="''"/>
 		<p:option name="style-type" required="false" select="''"/>
 		<p:option name="css-text-transform-definitions" required="false" select="''"/>
+		<p:option name="css-hyphenation-resource-definitions" required="false" select="''"/>
 		<p:option name="css-counter-style-definitions" required="false" select="''"/>
 		<p:option name="has-volume-transition" required="true"/>
 		<p:input port="parameters" kind="parameter" primary="false"/>
@@ -54,6 +55,9 @@
 	<p:delete match="/obfl:obfl/obfl:meta/dp2:css-text-transform-definitions">
 		<!-- We don't want this to end up in the PEF. -->
 	</p:delete>
+	<p:delete match="/obfl:obfl/obfl:meta/dp2:css-hyphenation-resource-definitions">
+		<!-- We don't want this to end up in the PEF. -->
+	</p:delete>
 	<p:delete match="/obfl:obfl/obfl:meta/dp2:css-counter-style-definitions">
 		<!-- We don't want this to end up in the PEF. -->
 	</p:delete>
@@ -75,6 +79,9 @@
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="css-text-transform-definitions" select="/obfl:obfl/obfl:meta/dp2:css-text-transform-definitions">
+			<p:pipe step="main" port="source"/>
+		</p:with-option>
+		<p:with-option name="css-hyphenation-resource-definitions" select="/obfl:obfl/obfl:meta/dp2:css-hyphenation-resource-definitions">
 			<p:pipe step="main" port="source"/>
 		</p:with-option>
 		<p:with-option name="css-counter-style-definitions" select="/obfl:obfl/obfl:meta/dp2:css-counter-style-definitions">

@@ -12,7 +12,7 @@
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Convert a PEF document to another braille file format and store to disk. Optionally also
-        store a HTML preview and the PEF itself.</p>
+        store a HTML preview, a PDF with ASCII braille, and the PEF itself.</p>
     </p:documentation>
     
     <p:input port="source" primary="true" px:media-type="application/x-pef+xml"/>
@@ -25,6 +25,7 @@
     <p:option name="pef-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-table" required="false" select="''"/> <!-- query -->
+    <p:option name="pdf-href" required="false" select="''"/> <!-- URI -->
     
     <p:import href="pef-to-html.convert.xpl">
         <p:documentation>
@@ -42,6 +43,16 @@
             px:copy-resource
         </p:documentation>
     </p:import>
+    
+    <p:declare-step type="pxi:pef2pdf">
+        <p:input port="source"/>
+        <p:output port="result" primary="false"/>
+        <p:option name="href" required="true"/>
+        <p:option name="table" required="true"/>
+        <!--
+            Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/PEF2PDFTextStep.java
+        -->
+    </p:declare-step>
     
     <!-- ============ -->
     <!-- STORE AS PEF -->
@@ -72,7 +83,7 @@
     <!-- STORE AS BRAILLE FILE -->
     <!-- ==================== -->
 
-    <p:choose px:progress=".17">
+    <p:choose px:progress=".15">
         <p:when test="not($output-dir='')" px:message="Storing braille file">
             <p:variable name="format" select="if (not($file-format='')) then $file-format else '(format:pef)'"/>
             <p:identity>
@@ -108,7 +119,7 @@
     <!-- STORE AS PEF PREVIEW -->
     <!-- ==================== -->
     
-    <p:choose px:progress=".82">
+    <p:choose px:progress=".64">
         <p:when test="not($preview-href='')" px:message="Storing HTML preview">
             <p:variable name="table" select="if (not($preview-table=''))
                                              then $preview-table
@@ -119,10 +130,10 @@
                 </p:input>
             </p:identity>
             <px:pef-to-html.convert px:message="Storing HTML preview to '{$preview-href}' using table '{$table}'"
-                                    px:message-severity="DEBUG" px:progress="80/82">
+                                    px:message-severity="DEBUG" px:progress="62/64">
                 <p:with-option name="table" select="$table"/>
             </px:pef-to-html.convert>
-            <p:store px:message="Storing HTML preview as '{$preview-href}'" px:message-severity="DEBUG" px:progress="1/82"
+            <p:store px:message="Storing HTML preview as '{$preview-href}'" px:message-severity="DEBUG" px:progress="1/64"
                      indent="false"
                      encoding="utf-8"
                      method="xhtml"
@@ -145,7 +156,7 @@
                 </p:input>
             </p:identity>
             <px:copy-resource px:message="Copying braille font file (odt2braille8.ttf) to HTML preview directory"
-                              px:message-severity="DEBUG" px:progress="1/82"
+                              px:message-severity="DEBUG" px:progress="1/64"
                               fail-on-error="true" cx:depends-on="mkdir">
                 <p:with-option name="href" select="resolve-uri('../odt2braille8.ttf')"/>
                 <p:with-option name="target" select="resolve-uri('odt2braille8.ttf', $preview-href)"/>
@@ -161,6 +172,53 @@
             <p:sink/>
         </p:when>
         <p:otherwise px:message="Not including HTML preview" px:message-severity="DEBUG">
+            <p:sink>
+                <p:input port="source">
+                    <p:empty/>
+                </p:input>
+            </p:sink>
+        </p:otherwise>
+    </p:choose>
+    
+    <!-- ============ -->
+    <!-- STORE AS PDF -->
+    <!-- ============ -->
+    
+    <p:choose px:progress=".20">
+        <p:when test="not($pdf-href='')" px:message="Storing PDF">
+            <p:choose>
+                <p:when test="not($preview-table='')">
+                    <p:choose>
+                        <p:when test="p:step-available('pxi:pef2pdf')">
+                            <p:identity>
+                                <p:input port="source">
+                                    <p:pipe step="store" port="source"/>
+                                </p:input>
+                            </p:identity>
+                            <pxi:pef2pdf px:message="Storing PDF to '{$pdf-href}' using table '{$preview-table}'" px:message-severity="DEBUG">
+                                <p:with-option name="href" select="$pdf-href"/>
+                                <p:with-option name="table" select="$preview-table"/>
+                            </pxi:pef2pdf>
+                        </p:when>
+                        <p:otherwise>
+                            <p:sink px:message="Not including PDF: wkhtmltopdf was not found on the system" px:message-severity="WARN">
+                                <p:input port="source">
+                                    <p:empty/>
+                                </p:input>
+                            </p:sink>
+                        </p:otherwise>
+                    </p:choose>
+                </p:when>
+                <p:otherwise>
+                    <p:sink px:message="Not including PDF: an ASCII table must be provided" px:message-severity="WARN">
+                        <p:input port="source">
+                            <p:empty/>
+                        </p:input>
+                    </p:sink>
+                </p:otherwise>
+            </p:choose>
+        </p:when>
+        <p:otherwise px:message="Not including PDF" px:message-severity="DEBUG">
             <p:sink>
                 <p:input port="source">
                     <p:empty/>

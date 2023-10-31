@@ -21,10 +21,12 @@ import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.InlineStyle;
 import org.daisy.braille.css.InlineStyle.RuleMainBlock;
 import org.daisy.braille.css.InlineStyle.RuleRelativeBlock;
+import org.daisy.braille.css.InlineStyle.RuleRelativeHyphenationResource;
 import org.daisy.braille.css.InlineStyle.RuleRelativePage;
 import org.daisy.braille.css.InlineStyle.RuleRelativeVolume;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 import org.daisy.braille.css.RuleCounterStyle;
+import org.daisy.braille.css.RuleHyphenationResource;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
@@ -133,6 +135,13 @@ public final class BrailleCssTreeBuilder {
 				: new Style().add("&:" + pseudo, style);
 		}
 
+		private static Style of(RuleHyphenationResource rule) {
+			return new Style().add("&:lang("
+			                       + BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())
+			                       + ")",
+			                       new Style().add((List<Declaration>)rule));
+		}
+
 		private static Style of(AnyAtRule rule) {
 			Style style = new Style();
 			for (Rule<?> r : rule)
@@ -174,6 +183,8 @@ public final class BrailleCssTreeBuilder {
 						style.add("@text-transform", textTransform);
 					else
 						style.add("@text-transform", new Style().add("& " + name, textTransform)); }
+				else if (rule instanceof RuleHyphenationResource)
+					style.add("@hyphenation-resource", Style.of((RuleHyphenationResource)rule));
 				else if (rule instanceof RuleCounterStyle) {
 					String name = ((RuleCounterStyle)rule).getName();
 					Style counterStyle = new Style().add((List<Declaration>)rule);
@@ -188,6 +199,8 @@ public final class BrailleCssTreeBuilder {
 					style.add(Style.of(((RuleRelativePage)rule).asRulePage()));
 				else if (rule instanceof RuleRelativeVolume)
 					style.add(Style.of(((RuleRelativeVolume)rule).asRuleVolume()));
+				else if (rule instanceof RuleRelativeHyphenationResource)
+					style.add(Style.of(((RuleRelativeHyphenationResource)rule).asRuleHyphenationResource()));
 				else if (rule instanceof AnyAtRule)
 					style.add("@" + ((AnyAtRule)rule).getName(),
 					          Style.of((AnyAtRule)rule));

@@ -13,11 +13,12 @@
 			<x:input port="source">
 				<x:document type="file" href="../resources/minimal.xml"/>
 			</x:input>
+            <x:option name="validation" select="'off'"/>
             <x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
-            <x:document type="port" port="validation-status"/>
+            <x:document type="port" port="status"/>
         </x:context>
         <x:expect label="the conversion should succeed" type="compare">
             <x:document type="inline">
@@ -44,6 +45,7 @@
                     <c:file name="EPUB/minimal-2.xhtml"/>
                     <c:file name="EPUB/package.opf"/>
                     <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="EPUB/zedai-mods.xml"/>
                     <c:file name="META-INF/container.xml"/>
                     <c:file name="mimetype"/>
                 </c:zipfile>
@@ -84,7 +86,7 @@
                 <x:option name="temp-dir" select="resolve-uri('validation-abort/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the status">
-                <x:document type="port" port="validation-status"/>
+                <x:document type="port" port="status"/>
             </x:context>
             <x:expect label="the conversion should succeed" type="compare">
                 <x:document type="inline">
@@ -104,7 +106,7 @@
                 <x:option name="temp-dir" select="resolve-uri('validation-report/temp-dir/',$temp-dir)"/>
             </x:call>
             <x:context label="the status">
-                <x:document type="port" port="validation-status"/>
+                <x:document type="port" port="status"/>
             </x:context>
             <x:expect label="the conversion should succeed" type="compare">
                 <x:document type="inline">
@@ -151,7 +153,7 @@
             <x:option name="temp-dir" select="resolve-uri('issue-94/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
-            <x:document type="port" port="validation-status"/>
+            <x:document type="port" port="status"/>
         </x:context>
         <x:expect label="the conversion should succeed" type="compare">
             <x:document type="inline">
@@ -180,7 +182,7 @@
             <x:option name="temp-dir" select="resolve-uri('dtbook110/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
-            <x:document type="port" port="validation-status"/>
+            <x:document type="port" port="status"/>
         </x:context>
         <x:expect label="the conversion should succeed" type="compare">
             <x:document type="inline">
@@ -192,7 +194,7 @@
         </x:context>
         <x:expect label="the result HTML file" type="compare">
             <x:document type="inline">
-                <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+                <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
                     <head>
                         <meta charset="UTF-8"/>
                         <title>Title</title>
@@ -232,11 +234,12 @@
                     </dtbook>
                 </x:document>
             </x:input>
+            <x:option name="validation" select="'off'"/>
             <x:option name="result" select="resolve-uri('dir-attribute/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('dir-attribute/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
-            <x:document type="port" port="validation-status"/>
+            <x:document type="port" port="status"/>
         </x:context>
         <x:expect label="the conversion should succeed" type="compare">
             <x:document type="inline">
@@ -272,13 +275,14 @@
                     </config>
                 </x:document>
             </x:input>
+            <x:option name="validation" select="'off'"/>
             <x:option name="audio" select="true()"/>
             <x:option name="audio-file-type" select="'audio/x-wav'"/>
             <x:option name="result" select="resolve-uri('tts/output-dir/',$temp-dir)"/>
             <x:option name="temp-dir" select="resolve-uri('tts/temp-dir/',$temp-dir)"/>
         </x:call>
         <x:context label="the status">
-            <x:document type="port" port="validation-status"/>
+            <x:document type="port" port="status"/>
         </x:context>
         <x:expect label="the conversion should succeed" type="compare">
             <x:document type="inline">
@@ -301,6 +305,7 @@
                     <c:file name="EPUB/mo/toc.smil"/>
                     <c:file name="EPUB/package.opf"/>
                     <c:file name="EPUB/toc.xhtml"/>
+                    <c:file name="EPUB/zedai-mods.xml"/>
                     <c:file name="META-INF/container.xml"/>
                     <c:file name="mimetype"/>
                 </c:zipfile>

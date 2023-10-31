@@ -144,15 +144,15 @@ jobjectArray VoicesListToPipelineVoicesArray(
         return NULL;
     }
 
-    jclass voiceInfoClass = env->FindClass("org/daisy/pipeline/tts/VoiceInfo");
-    if (voiceInfoClass == NULL) {
+    jclass localeClass = env->FindClass("java/util/Locale");
+    if (localeClass == NULL) {
         const wchar_t* str = L"VoiceInfo class not found in runtime";
         raiseIOException(env, (const jchar*)str, static_cast<jsize>(std::wcslen(str)));
         return NULL;
     }
-    jmethodID tagToLocaleID = env->GetStaticMethodID(voiceInfoClass, "tagToLocale", "(Ljava/lang/String;)Ljava/util/Locale;"); // TBD
-    if (tagToLocaleID == NULL) {
-        const wchar_t* str = L"tagToLocale method not found in runtime";
+    jmethodID forLanguageTagID = env->GetStaticMethodID(localeClass, "forLanguageTag", "(Ljava/lang/String;)Ljava/util/Locale;"); // TBD
+    if (forLanguageTagID == NULL) {
+        const wchar_t* str = L"forLanguageTag method not found in runtime";
         raiseIOException(env, (const jchar*)str, static_cast<jsize>(std::wcslen(str)));
         return NULL;
     }
@@ -206,8 +206,8 @@ jobjectArray VoicesListToPipelineVoicesArray(
                     env->NewString((const jchar*)engineName, static_cast<jsize>(std::wcslen(engineName))),
                     env->NewString((const jchar*)items->name.c_str(), static_cast<jsize>(std::wcslen(items->name.c_str()))),
                     env->CallStaticObjectMethod(
-                        voiceInfoClass,
-                        tagToLocaleID,
+                        localeClass,
+                        forLanguageTagID,
                         env->NewString((const jchar*)items->language.c_str(), static_cast<jsize>(std::wcslen(items->language.c_str())))
                     ),
                     selected

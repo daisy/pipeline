@@ -8,6 +8,7 @@
                 exclude-result-prefixes="#all">
     
     <xsl:import href="http://www.daisy.org/pipeline/modules/html-utils/library.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
     
     <!--
@@ -193,16 +194,20 @@
 
                                                       An alternative would be to merge the audio segments by wrapping them in a
                                                       seq (seq can be child of par and parent of audio).
+
+                                                      Another alternative would be to merge audio files.
                                                   -->
-                                                  <xsl:message select="concat(
-                                                                         'SMIL &quot;',replace($smil-base-uri,'^.*/([^/]+)^','$1'),
-                                                                         '&quot; references one or more segments inside a ',
-                                                                         if (starts-with(local-name(),'h')) then 'heading' else 'page number',
-                                                                         ' but the corresponding audio clips can not be combined: ',
-                                                                         string-join($audio-segments/concat(@src,' (',@clip-begin,'-',@clip-end,')'),', '))"/>
+                                                  <xsl:call-template name="pf:debug">
+                                                      <xsl:with-param name="msg">SMIL &quot;<xsl:value-of select="
+                                                      replace($smil-base-uri,'^.*/([^/]+)^','$1') "/>&quot; references one or more segments inside a
+                                                      <xsl:value-of select=" if (starts-with(local-name(),'h')) then 'heading' else 'page number'"/>
+                                                      but the corresponding audio clips can not be combined: <xsl:value-of select="
+                                                      string-join($audio-segments/concat(@src,' (',@clip-begin,'-',@clip-end,')'),', ')"/></xsl:with-param>
+                                                  </xsl:call-template>
                                                   <!--
-                                                      Create an intermediary seq that contains all the segments. Later it will be
-                                                      replaced with the pars in the seq.
+                                                      Create an intermediary seq that contains all
+                                                      the segments. Later it will be replaced with
+                                                      the pars in the seq.
                                                   -->
                                                   <seq id="{$par-id}" textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
                                                       <xsl:choose>

@@ -55,6 +55,16 @@ public class LibhyphenCoreTest extends AbstractTest {
 		assertEquals(text("foo\u00ADbar foob\u00ADar"), hyphenator.transform(styledText("foobar foob\u00ADar", "hyphens: auto")));
 	}
 	
+	@Test
+	public void testSurrogatePairs() {
+		FullHyphenator hyphenator= provider.withContext(messageBus)
+		                                   .get(query("(table:'standard.dic')"))
+		                                   .iterator().next()
+		                                   .asFullHyphenator();
+		assertEquals(text("\uD83D\uDE00\u00AD\uD83D\uDE00"), // \uD83D\uDE00 = U+1F600 grinning face
+		             hyphenator.transform(styledText("\uD83D\uDE00\u00AD\uD83D\uDE00", "hyphens: auto")));
+	}
+	
 	@Test(expected=RuntimeException.class)
 	public void testStandardHyphenationException() {
 		FullHyphenator hyphenator= provider.withContext(messageBus)
@@ -74,19 +84,19 @@ public class LibhyphenCoreTest extends AbstractTest {
 		             "oo\n" +
 		             "ba\n" +
 		             "r",
-		             fillLines(hyphenator.transform("foobar"), 2, '-'));
+		             fillLines(hyphenator.transform("foobar", null), 2, '-'));
 		assertEquals("fu-\n" +
 		             "bar",
-		             fillLines(hyphenator.transform("foobar"), 3, '-'));
+		             fillLines(hyphenator.transform("foobar", null), 3, '-'));
 		assertEquals("foo-\n" +
 		             "bar",
-		             fillLines(hyphenator.transform("foo-bar"), 4, '-'));
+		             fillLines(hyphenator.transform("foo-bar", null), 4, '-'));
 		assertEquals("foo-\n" +
 		             "bar",
-		             fillLines(hyphenator.transform("foo-bar"), 5, '-'));
+		             fillLines(hyphenator.transform("foo-bar", null), 5, '-'));
 		assertEquals("foo-\n" +
 		             "bar",
-		             fillLines(hyphenator.transform("foo-bar"), 6, '-'));
+		             fillLines(hyphenator.transform("foo-bar", null), 6, '-'));
 	}
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {

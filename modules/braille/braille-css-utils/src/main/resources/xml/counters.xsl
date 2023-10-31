@@ -58,6 +58,9 @@
         </xsl:analyze-string>
     </xsl:function>
     
+    <!--
+        see http://www.w3.org/TR/css3-lists/#counter
+    -->
     <xsl:function name="css:counter-value" as="xs:integer?">
         <xsl:param name="name" as="xs:string"/>
         <xsl:param name="context" as="element()"/>
@@ -135,7 +138,7 @@
         </xsl:choose>
     </xsl:function>
     
-    <xsl:function name="css:counter-style" as="element()">
+    <xsl:function name="css:counter-style" as="element(css:counter-style)">
         <xsl:param name="name-or-inline" as="xs:string"/>
         <xsl:analyze-string select="$name-or-inline" regex="^({$css:COUNTER_STYLE_RE})$">
             <xsl:matching-substring>
@@ -165,6 +168,9 @@
         </xsl:analyze-string>
     </xsl:function>
     
+    <!--
+        see http://www.w3.org/TR/css-counter-styles-3
+    -->
     <xsl:template name="css:counter-representation" as="xs:string*">
         <xsl:param name="value" as="xs:integer" required="yes"/>
         <xsl:param name="style" as="element()" required="yes"/>

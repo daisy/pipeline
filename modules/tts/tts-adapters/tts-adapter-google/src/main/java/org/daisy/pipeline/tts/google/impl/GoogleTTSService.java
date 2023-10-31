@@ -1,9 +1,12 @@
 package org.daisy.pipeline.tts.google.impl;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -20,25 +23,35 @@ import org.osgi.service.component.annotations.Component;
 )
 public class GoogleTTSService implements TTSService {
 
+	private static final Property GOOGLE_APIKEY = Properties.getProperty("org.daisy.pipeline.tts.google.apikey",
+	                                                                     true,
+	                                                                     "API key for Google cloud speech engine",
+	                                                                     true,
+	                                                                     null);
+	private static final Property GOOGLE_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.google.samplerate",
+	                                                                         true,
+	                                                                         "Audio sample rate of Google cloud voices (in Hz)",
+	                                                                         false,
+	                                                                         "22050");
+	private static final Property GOOGLE_ADDRESS = Properties.getProperty("org.daisy.pipeline.tts.google.address",
+	                                                                      false,
+	                                                                      "Address of Google cloud speech engine server",
+	                                                                      false,
+	                                                                      "https://texttospeech.googleapis.com");
+	private static final Property GOOGLE_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.google.priority",
+	                                                                       true,
+	                                                                       "Priority of Google cloud voices relative to voices of other engines",
+	                                                                       false,
+	                                                                       "15");
+
 	@Override
-	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
-		String serverAddress; {
-			String prop = "org.daisy.pipeline.tts.google.address"; // this is a hidden parameter, it is meant to be used in tests only
-			String val = params.get(prop);
-			if (val != null) {
-				serverAddress = val;
-			} else {
-				serverAddress = "https://texttospeech.googleapis.com";
-			}
-		}
-		String apiKey; {
-			String prop = "org.daisy.pipeline.tts.google.apikey";
-			apiKey = params.get(prop);
-			if (apiKey == null)
-				throw new SynthesisException("Property not set : " + prop);
-		}
-		int sampleRate = convertToInt(params, "org.daisy.pipeline.tts.google.samplerate", 22050);
-		int priority = convertToInt(params, "org.daisy.pipeline.tts.google.priority", 15);
+	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
+		String serverAddress = GOOGLE_ADDRESS.getValue(properties); // this is a hidden parameter, it is meant to be used in tests only
+		String apiKey = GOOGLE_APIKEY.getValue(properties);
+		if (apiKey == null)
+			throw new SynthesisException("Property not set : " + GOOGLE_APIKEY.getName());
+		int sampleRate = getPropertyAsInt(properties, GOOGLE_SAMPLERATE).get();
+		int priority = getPropertyAsInt(properties, GOOGLE_PRIORITY).get();
 		AudioFormat audioFormat = new AudioFormat((float) sampleRate, 16, 1, true, false);
 		return new GoogleRestTTSEngine(this, serverAddress, apiKey, audioFormat, priority);
 	}
@@ -48,17 +61,15 @@ public class GoogleTTSService implements TTSService {
 		return "google";
 	}
 
-	private static int convertToInt(Map<String, String> params, String prop, int defaultVal)
-	        throws SynthesisException {
-		String str = params.get(prop);
+	private static Optional<Integer> getPropertyAsInt(Map<String,String> properties, Property prop) throws SynthesisException {
+		String str = prop.getValue(properties);
 		if (str != null) {
 			try {
-				defaultVal = Integer.valueOf(str);
+				return Optional.of(Integer.valueOf(str));
 			} catch (NumberFormatException e) {
-				throw new SynthesisException(str + " is not a valid a value for property "
-				        + prop);
+				throw new SynthesisException(str + " is not a valid a value for property " + prop.getName());
 			}
 		}
-		return defaultVal;
+		return Optional.empty();
 	}
 }

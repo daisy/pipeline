@@ -4,8 +4,11 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:f="functions"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 exclude-result-prefixes="xs">
+
+  <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 
   <xsl:param name="output-ns"/>
   <xsl:param name="output-sentence-tag"/>
@@ -15,7 +18,6 @@
   <xsl:param name="exclusive-sentence-tag" select="'true'"/> <!-- false if the element can be used for another purpose -->
   <xsl:param name="exclusive-word-tag" select="'true'"/><!-- false if the element can be used for another purpose -->
   <xsl:param name="output-subsentence-tag" />
-  <xsl:param name="id-prefix" select="''"/>
 
   <!-- The words need an additional pair (attr, val), otherwise they
        could not be identified later on, unlike the sentences which
@@ -47,31 +49,26 @@
   <!-- FIND ALL THE SENTENCES' ID                               -->
   <!--========================================================= -->
 
-  <xsl:variable name="sentence-ids-tree">
-    <xsl:variable name="sentence-ids-tree">
-      <d:sentences>
-        <xsl:apply-templates select="/*" mode="sentence-ids"/>
-      </d:sentences>
+  <xsl:variable name="sentence-ids" as="document-node(element(d:sentences))">
+    <xsl:variable name="sentence-elements" as="document-node(element(d:sentences))">
+      <xsl:document>
+	<d:sentences>
+          <xsl:apply-templates select="/*" mode="sentence-elements"/>
+	</d:sentences>
+      </xsl:document>
     </xsl:variable>
-    <xsl:for-each select="$sentence-ids-tree/*">
-      <xsl:copy>
-        <xsl:for-each select="*">
-          <xsl:copy>
-            <xsl:attribute name="id" select="concat('st', $id-prefix, position())"/>
-            <xsl:sequence select="@*"/>
-          </xsl:copy>
-        </xsl:for-each>
-      </xsl:copy>
-    </xsl:for-each>
+    <xsl:document>
+      <xsl:apply-templates mode="sentence-ids" select="$sentence-elements/*"/>
+    </xsl:document>
   </xsl:variable>
 
-  <xsl:template match="*" mode="sentence-ids" priority="1">
+  <xsl:template match="*" mode="sentence-elements" priority="1">
     <xsl:apply-templates select="*" mode="#current"/>
   </xsl:template>
 
   <xsl:template match="*[local-name()=local-name-from-QName($tmp-sentence-tag)
 		         and namespace-uri()=namespace-uri-from-QName($tmp-sentence-tag)]"
-		mode="sentence-ids" priority="2">
+		mode="sentence-elements" priority="2">
     <d:sentence element="{generate-id(.)}">
       <xsl:copy-of select="@xml:lang"/> <!-- doesn't always exist -->
     </d:sentence>
@@ -82,7 +79,7 @@
        temporary sentence(s) will be ignored. Likewise, if a temporary
        sentence is the parent of existing sentence(s), the existing
        sentences will be discarded. -->
-  <xsl:template mode="sentence-ids" priority="3"
+  <xsl:template mode="sentence-elements" priority="3"
       match="*[@pxi:special-sentence or
 	     ($exclusive-sentence-tag = 'true' and local-name() = $output-sentence-tag)]">
     <!-- TODO: copy the @xml:lang -->
@@ -90,6 +87,27 @@
     <!-- Warning: a 'special-sentence', such as noteref, is unlikely
          to be stamped as 'recycled' because it is usually the child
          of a tmp:sentence (not the other way around). -->
+  </xsl:template>
+
+  <xsl:template match="d:sentences" mode="sentence-ids" priority="1">
+    <xsl:call-template name="pf:next-match-with-generated-ids">
+      <xsl:with-param name="prefix" select="'id_'"/>
+      <xsl:with-param name="for-elements" select="*"/>
+      <xsl:with-param name="in-use" select="collection()[1]//*/@id"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="d:sentences" mode="sentence-ids">
+    <xsl:copy>
+      <xsl:apply-templates mode="#current" select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="d:sentence" mode="sentence-ids">
+    <xsl:copy>
+      <xsl:call-template name="pf:generate-id"/>
+      <xsl:sequence select="@*|node()"/>
+    </xsl:copy>
   </xsl:template>
 
   <!--======================================================== -->
@@ -100,8 +118,8 @@
   <xsl:template match="/" priority="2">
     <xsl:apply-templates select="node()"/>
     <!-- Write the list of sentences on the secondary port. -->
-    <xsl:result-document href="{concat('sids', $id-prefix, generate-id(), '.xml')}" method="xml">
-      <xsl:for-each select="$sentence-ids-tree/*">
+    <xsl:result-document href="{concat('sids',generate-id(),'.xml')}" method="xml">
+      <xsl:for-each select="$sentence-ids/*">
         <xsl:copy>
           <xsl:for-each select="*">
             <xsl:copy>
@@ -114,7 +132,7 @@
   </xsl:template>
 
   <xsl:template match="node()" priority="1">
-    <xsl:variable name="entry" select="key('sentence-for-element', generate-id(.), $sentence-ids-tree)"/>
+    <xsl:variable name="entry" select="key('sentence-for-element', generate-id(.), $sentence-ids)"/>
     <xsl:choose>
       <xsl:when test="$entry and $entry/@recycled">
   	<xsl:copy copy-namespaces="no">

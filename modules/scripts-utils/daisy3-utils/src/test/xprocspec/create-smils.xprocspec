@@ -12,10 +12,10 @@
       <x:input port="audio-map">
   	<x:document type="inline">
   	  <d:audio-clips>
-	    <d:clip idref="s1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
-	    <d:clip idref="s2" src="audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
-	    <d:clip idref="s3" src="audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
-	    <d:clip idref="h1" src="audio/part_2.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
+	    <d:clip textref="dtbook.xml#s1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:01.500"/>
+	    <d:clip textref="dtbook.xml#s2" src="audio/part_1.mp3" clipBegin="0:00:01.500" clipEnd="0:00:04.000"/>
+	    <d:clip textref="dtbook.xml#s3" src="audio/part_1.mp3" clipBegin="0:00:04.000" clipEnd="0:00:04.500"/>
+	    <d:clip textref="dtbook.xml#h1" src="audio/part_2.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
   	  </d:audio-clips>
   	</x:document>
       </x:input>

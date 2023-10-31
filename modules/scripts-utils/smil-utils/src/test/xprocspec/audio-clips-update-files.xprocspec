@@ -8,22 +8,22 @@
     <x:scenario label="audio-clips-update-files">
         <x:call step="px:audio-clips-update-files">
             <x:input port="source">
-                <x:document type="inline" xml:base="file:/temp/">
+                <x:document type="inline" xml:base="file:/temp/content.xml">
                     <d:audio-clips>
-                        <d:clip idref="A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="part_1.mp3"/>
-                        <d:clip idref="B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_2.mp3"/>
-                        <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:00.500" src="part_3.mp3"/>
-                        <d:clip idref="C2" clipBegin="0:00:00.500" clipEnd="0:00:01.000" src="part_3.mp3"/>
+                        <d:clip textref="#A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="part_1.mp3"/>
+                        <d:clip textref="#B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="part_2.mp3"/>
+                        <d:clip textref="#C" clipBegin="0:00:00.000" clipEnd="0:00:00.500" src="part_3.mp3"/>
+                        <d:clip textref="#C2" clipBegin="0:00:00.500" clipEnd="0:00:01.000" src="part_3.mp3"/>
                     </d:audio-clips>
                 </x:document>
             </x:input>
             <x:input port="mapping">
-                <x:document type="inline" xml:base="file:/out/EPUB/">
+                <x:document type="inline" xml:base="file:/out/EPUB/content.xml">
                     <d:fileset>
                         <d:file href="audio/part_1.mp3" original-href="file:/temp/part_1.mp3"/>
                         <d:file href="audio/part_2.mp3" original-href="file:/temp/part_2.mp3"/>
                         <d:file href="audio/part_3.mp3" original-href="file:/temp/part_3.mp3"/>
-                        <d:file href="irrelevant">
+                        <d:file href="content.xml" original-href="file:/temp/content.xml">
                             <d:anchor id="C" original-id="C2"/>
                         </d:file>
                     </d:fileset>
@@ -36,14 +36,14 @@
         <x:expect type="compare" label="the result port">
             <x:document type="inline">
                 <d:audio-clips>
-                    <d:clip idref="A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="audio/part_1.mp3"/>
-                    <d:clip idref="B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="audio/part_2.mp3"/>
-                    <d:clip idref="C" clipBegin="0:00:00.000" clipEnd="0:00:01.000" src="audio/part_3.mp3"/>
+                    <d:clip textref="#A" clipBegin="0:00:00.000" clipEnd="0:00:00.565" src="audio/part_1.mp3"/>
+                    <d:clip textref="#B" clipBegin="0:00:00.000" clipEnd="0:00:00.578" src="audio/part_2.mp3"/>
+                    <d:clip textref="#C" clipBegin="0:00:00.000" clipEnd="0:00:01.000" src="audio/part_3.mp3"/>
                 </d:audio-clips>
             </x:document>
         </x:expect>
         <x:expect label="the base URI of the result document should be the base URI of the mapping document"
-                  type="xpath" test="base-uri(/*)" equals="'file:/out/EPUB/'"/>
+                  type="xpath" test="base-uri(/*)" equals="'file:/out/EPUB/content.xml'"/>
     </x:scenario>
     
 </x:description>

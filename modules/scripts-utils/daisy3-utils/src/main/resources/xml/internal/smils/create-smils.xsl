@@ -50,7 +50,7 @@
     </xsl:for-each>
   </xsl:variable>
 
-  <xsl:key name="clips" match="*[@idref]" use="@idref"/>
+  <xsl:key name="clips" match="d:clip" use="@textref"/>
   <xsl:key name="targets" match="*[@id and contains($ref-targets, concat(' ', local-name(), ' '))]" use="@id"/>
 
   <xsl:template match="/">
@@ -145,7 +145,7 @@
   </xsl:template>
 
   <xsl:template name="add-audio">
-    <xsl:variable name="clip" select="key('clips', @id, $audio-map)"/>
+    <xsl:variable name="clip" select="key('clips',concat('#',@id),$audio-map)"/>
     <xsl:if test="$audio-only='false'">
       <text src="{concat($content-doc-rel, '#', @id)}">
         <xsl:if test="self::math:*">

@@ -9,5 +9,5 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:zedai-to-epub3"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
-  <nextCatalog catalog="org:daisy:pipeline:modules:css-speech"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
 </catalog>

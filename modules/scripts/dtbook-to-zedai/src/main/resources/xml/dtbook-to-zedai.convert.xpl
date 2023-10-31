@@ -2,7 +2,6 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
                 xmlns:z="http://www.daisy.org/ns/z3998/authoring/"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -353,11 +352,26 @@
     </p:choose>
 
     <!-- =============================================================== -->
+    <!-- FIX DTBOOK -->
+    <!-- =============================================================== -->
+    <p:documentation>Normalize lang attributes</p:documentation>
+    <p:xslt>
+        <p:input port="stylesheet">
+            <p:document href="fix-dtbook.xsl"/>
+        </p:input>
+        <p:input port="parameters">
+            <p:empty/>
+        </p:input>
+    </p:xslt>
+
+    <!-- =============================================================== -->
     <!-- CREATE ZEDAI -->
     <!-- =============================================================== -->
 
     <p:documentation>Convert DTBook 2005-3 to ZedAI</p:documentation>
-    <pxi:dtbook2005-3-to-zedai name="transform-to-zedai" px:progress="5/23" px:message="Converting DTBook 2005-3 to ZedAI"/>
+    <pxi:dtbook2005-3-to-zedai name="transform-to-zedai" px:progress="5/23" px:message="Converting DTBook 2005-3 to ZedAI">
+        <p:with-option name="lang" select="$lang[normalize-space(.)]"/>
+    </pxi:dtbook2005-3-to-zedai>
 
     <!-- =============================================================== -->
     <!-- CSS -->
@@ -563,29 +577,6 @@
 
     <!-- unwrap the meta list that was wrapped with tmp:wrapper -->
     <p:unwrap name="unwrap-meta-list" match="//z:head/tmp:wrapper"/>
-
-    <!-- add xml:lang if not already present AND if specified by the lang option -->
-    <p:documentation>Add the xml:lang attribute</p:documentation>
-    <p:choose>
-        <p:when test="//z:document/@xml:lang">
-            <p:identity/>
-        </p:when>
-        <p:otherwise>
-            <p:choose>
-                <p:when test="string-length($lang) > 0">
-                    <p:add-attribute match="//z:document">
-                        <p:with-option name="attribute-name" select="'xml:lang'"/>
-                        <p:with-option name="attribute-value" select="$lang"/>
-                    </p:add-attribute>
-                </p:when>
-                <p:otherwise>
-                    <p:identity px:message-severity="WARNING"
-                                px:message="required xml:lang attribute not found, and no 'lang' option was passed to the converter."/>
-                    <p:identity/>
-                </p:otherwise>
-            </p:choose>
-        </p:otherwise>
-    </p:choose>
 
     <p:documentation>Set new base URI</p:documentation>
     <px:set-base-uri>

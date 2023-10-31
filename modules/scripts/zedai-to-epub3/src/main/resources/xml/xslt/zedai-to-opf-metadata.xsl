@@ -8,7 +8,7 @@
                 xmlns:rdfa="rdfa-functions"
                 xmlns="http://www.idpf.org/2007/opf"
                 xpath-default-namespace="http://www.idpf.org/2007/opf"
-                exclude-result-prefixes="xs z">
+                exclude-result-prefixes="xs z f pf rdfa">
 
   <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 

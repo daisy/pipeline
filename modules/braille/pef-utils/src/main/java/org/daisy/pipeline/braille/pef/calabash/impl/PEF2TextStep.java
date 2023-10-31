@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -34,6 +35,7 @@ import org.daisy.braille.utils.pef.PEFHandler.Alignment;
 import org.daisy.braille.utils.pef.UnsupportedWidthException;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.dotify.api.embosser.EmbosserWriter;
 import org.daisy.dotify.api.embosser.FileFormat;
 import org.daisy.pipeline.braille.common.Query;
@@ -225,7 +227,7 @@ public class PEF2TextStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new PEF2TextStep(runtime, step, fileFormatRegistry);
 		}
 		

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 
 import com.google.common.base.Optional;
@@ -35,6 +36,7 @@ import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.Query.util.QUERY;
+import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
@@ -98,7 +100,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			Query query = query(mode);
 			if (locale != null && !"und".equals(locale))
 				query = mutableQuery(query).add("document-locale", locale);
-			for (org.daisy.pipeline.braille.common.BrailleTranslator t : translatorRegistry.get(query))
+			for (org.daisy.pipeline.braille.common.BrailleTranslator t : translatorRegistry.getWithHyphenator(query))
 				try {
 					return new BrailleTranslatorFromBrailleTranslator(mode, t.lineBreakingFromStyledText()); }
 				catch (UnsupportedOperationException e) {}
@@ -159,7 +161,10 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 					// Because normally this will never end up in the resulting PEF, it is okay to replace
 					// it with "0". We choose a number because in some cases the translator may assume that
 					// the input is numerical.
-					styledText.set(i, new CSSStyledText("0", styledText.get(i).getStyle()));
+					styledText.set(i, new CSSStyledText("0",
+					                                    styledText.get(i).getStyle(),
+					                                    styledText.get(i).getLanguage(),
+					                                    styledText.get(i).getTextAttributes()));
 			return translate(styledText, from, to);
 		}
 		
@@ -184,15 +189,18 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	 * property is assumed to have been performed already.
 	 */
 	protected static Iterable<CSSStyledText> cssStyledTextFromTranslatable(Translatable specification) {
+		String locale = specification.getLocale();
 		return cssStyledTextFromTranslatable(
 			specification.getText(),
 			specification.getAttributes(),
+			locale != null ? parseLocale(locale) : null,
 			specification.isHyphenating(),
 			null);
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
 	                                                                     TextAttribute attributes,
+	                                                                     Locale language,
 	                                                                     boolean hyphenating,
 	                                                                     SimpleInlineStyle parentStyle) {
 		if (attributes != null && attributes.getWidth() != text.length())
@@ -208,20 +216,21 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 				// FIXME: add hyphens declaration through braille-css model
 				style = new SimpleInlineStyle("hyphens: auto", style); }
 		if (attributes != null && attributes.hasChildren())
-			return cssStyledTextFromTranslatable(text, attributes.iterator(), false, style);
+			return cssStyledTextFromTranslatable(text, attributes.iterator(), language, false, style);
 		else
-			return Collections.singleton(new CSSStyledText(text, style));
+			return Collections.singleton(new CSSStyledText(text, style, language));
 	}
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
 	                                                                     Iterator<TextAttribute> attributes,
+	                                                                     Locale language,
 	                                                                     boolean hyphenating,
 	                                                                     SimpleInlineStyle parentStyle) {
 		if (attributes.hasNext()) {
 			TextAttribute a = attributes.next();
 			int w = a.getWidth();
-			return concat(cssStyledTextFromTranslatable(text.substring(0, w), a, hyphenating, parentStyle),
-			              cssStyledTextFromTranslatable(text.substring(w), attributes, hyphenating, parentStyle)); }
+			return concat(cssStyledTextFromTranslatable(text.substring(0, w), a, language, hyphenating, parentStyle),
+			              cssStyledTextFromTranslatable(text.substring(w), attributes, language, hyphenating, parentStyle)); }
 		else
 			return empty;
 	}
@@ -302,12 +311,15 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		List<CSSStyledText> styledText = new ArrayList<>();
 		for (Object t : precedingOrFollowingText) {
 			String text;
+			String locale;
 			boolean hyphenate; {
 				if (t instanceof PrecedingText) {
 					text = ((PrecedingText)t).resolve();
+					locale = ((PrecedingText)t).getLocale().orElse(null);
 					hyphenate = ((PrecedingText)t).shouldHyphenate(); }
 				else if (t instanceof FollowingText) {
 					text = ((FollowingText)t).peek();
+					locale = ((FollowingText)t).getLocale().orElse(null);
 					hyphenate = ((FollowingText)t).shouldHyphenate(); }
 				else
 					throw new RuntimeException();
@@ -320,7 +332,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 				else
 					style = new SimpleInlineStyle("", parentStyle);
 			}
-			styledText.add(new CSSStyledText(text, style));
+			styledText.add(new CSSStyledText(text, style, locale != null ? parseLocale(locale) : null));
 		}
 		return styledText;
 	}

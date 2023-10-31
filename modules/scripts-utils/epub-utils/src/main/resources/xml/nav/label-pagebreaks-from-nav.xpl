@@ -30,7 +30,8 @@
 			<p>Output EPUB 3 fileset</p>
 			<p>The output manifest is identical to the input manifest. Content documents are
 			modified so that elements referenced by the "page-list" navigation are labeled with
-			<code>epub:type="pagebreak"</code>.</p>
+			<code>epub:type="pagebreak"</code>. A <code>aria-label</code> attribute is added if
+			missing.</p>
 		</p:documentation>
 		<p:pipe step="in-memory" port="result"/>
 	</p:output>

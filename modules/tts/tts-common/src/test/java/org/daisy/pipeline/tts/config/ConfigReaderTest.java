@@ -1,17 +1,24 @@
 package org.daisy.pipeline.tts.config;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
 
 import javax.xml.transform.sax.SAXSource;
 
 import junit.framework.Assert;
+
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.junit.After;
+import org.daisy.pipeline.tts.VoiceInfo;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
+
 import org.junit.Test;
+
 import org.xml.sax.InputSource;
 
 public class ConfigReaderTest {
@@ -19,40 +26,23 @@ public class ConfigReaderTest {
 	static Processor Proc = new Processor(false);
 	static String docDirectory = "file:///doc/";
 
-	public static ConfigReader initConfigReader(String xmlstr) throws SaxonApiException {
+	@Test
+	public void testVoiceDeclarations() throws SaxonApiException {
 		DocumentBuilder builder = Proc.newDocumentBuilder();
-		SAXSource source = new SAXSource(new InputSource(new StringReader("<config>" + xmlstr
-		        + "</config>")));
+		SAXSource source = new SAXSource(
+			new InputSource(
+				new StringReader("<config>" +
+				                 "  <voice engine=\"engine-1\" name=\"voice-1\" lang=\"fr\" gender=\"female\" priority=\"1\"/>" +
+				                 "</config>")));
 		source.setSystemId(docDirectory + "uri");
 		XdmNode document = builder.build(source);
-
-		return new ConfigReader(Proc, document);
-	}
-
-	@After
-	public void resetSystemProperties() {
-		System.setProperty(ConfigReader.HostProtectionProperty, "true");
-	}
-
-	@Test
-	public void withoutProtection() throws SaxonApiException {
-		System.setProperty(ConfigReader.HostProtectionProperty, "false");
-		ConfigReader cr = initConfigReader("<property key=\"org.daisy.pipeline.tts.key1\" value=\"val1\"/>" +
-		                                   "<property key=\"key2\" value=\"val2\"/>");
-		Assert.assertEquals("val1", cr.getAllProperties().get("org.daisy.pipeline.tts.key1"));
-		Assert.assertEquals("val2", cr.getDynamicProperties().get("org.daisy.pipeline.tts.key2"));
-		Assert.assertEquals(2, cr.getAllProperties().size());
-		Assert.assertEquals(2, cr.getDynamicProperties().size());
-	}
-
-	@Test
-	public void withProtection() throws SaxonApiException {
-		System.setProperty(ConfigReader.HostProtectionProperty, "true");
-		ConfigReader cr = initConfigReader("<property key=\"key1\" value=\"val1\"/>" +
-		                                   "<property key=\"key2\" value=\"val2\"/>" +
-		                                   "<property key=\"mp3.bitrate\" value=\"32\"/>");
-		Assert.assertEquals("32", cr.getAllProperties().get("org.daisy.pipeline.tts.mp3.bitrate"));
-		Assert.assertEquals(1, cr.getAllProperties().size());
-		Assert.assertEquals(3, cr.getDynamicProperties().size());
+		VoiceConfigExtension ext = new VoiceConfigExtension();
+		ConfigReader cr = new ConfigReader(Proc, document, ext);
+		Collection<VoiceInfo> voices = ext.getVoiceDeclarations();
+		Assert.assertEquals(2, voices.size());
+		Collection<VoiceInfo> expectedVoices = new ArrayList<>();
+		expectedVoices.add(new VoiceInfo("mock-tts", "mock-en", new Locale("en"), Gender.MALE_ADULT, 5));
+		expectedVoices.add(new VoiceInfo("engine-1", "voice-1", new Locale("fr"), Gender.FEMALE_ADULT, 1));
+		Assert.assertEquals(expectedVoices, voices);
 	}
 }

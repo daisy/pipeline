@@ -37,10 +37,10 @@ public class LibhyphenTableRegistry extends ResourceRegistry<LibhyphenTablePath>
 	
 	@Reference(
 		name = "LibhyphenTablePath",
-		unbind = "_unregister",
+		unbind = "-",
 		service = LibhyphenTablePath.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	protected void _register(LibhyphenTablePath path) {
 		register(path);

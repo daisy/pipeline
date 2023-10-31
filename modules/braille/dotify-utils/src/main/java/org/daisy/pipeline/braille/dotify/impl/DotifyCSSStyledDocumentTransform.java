@@ -1,10 +1,11 @@
 package org.daisy.pipeline.braille.dotify.impl;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.net.URI;
+
 import javax.xml.namespace.QName;
 
 import com.google.common.base.MoreObjects;
@@ -22,9 +23,8 @@ import org.daisy.common.transform.XMLInputValue;
 import org.daisy.common.transform.XMLOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.dotify.api.table.Table;
-
 import org.daisy.pipeline.braille.common.AbstractTransform;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
@@ -47,6 +47,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import static org.slf4j.helpers.NOPLogger.NOP_LOGGER;
 
 /**
  * @see <a href="../../../../../../../../../doc/">User documentation</a>.
@@ -97,7 +99,7 @@ public interface DotifyCSSStyledDocumentTransform {
 						q.removeOnly("force-pre-translation");
 					}
 					Query textTransformQuery = mutableQuery(q).add("input", "text-css").add("output", "braille");
-					if (logSelect(textTransformQuery, translatorRegistry).apply(null).iterator().hasNext()) {
+					if (logSelect(textTransformQuery, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext()) {
 						MutableQuery blockTransformQuery = null; {
 							// only pre-translate if an intermediary OBFL with braille content is requested
 							if (obfl && braille || forcePretranslation) {
@@ -149,7 +151,7 @@ public interface DotifyCSSStyledDocumentTransform {
 			}
 			
 			@Override
-			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+			public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 				return XProcStep.of(
 					new SingleInSingleOutXMLTransformer() {
 						public Runnable transform(XMLInputValue<?> source, XMLOutputValue<?> result, InputValue<?> params) {
@@ -200,7 +202,7 @@ public interface DotifyCSSStyledDocumentTransform {
 									href,
 									null,
 									options
-								).newStep(runtime, step).transform(
+								).newStep(runtime, step, monitor, properties).transform(
 									ImmutableMap.of(
 										new QName("source"), source,
 										new QName("parameters"), paramsCopy),
@@ -217,7 +219,7 @@ public interface DotifyCSSStyledDocumentTransform {
 			
 			@Override
 			public ToStringHelper toStringHelper() {
-				return MoreObjects.toStringHelper("o.d.p.b.dotify.impl.DotifyCSSStyledDocumentTransform$Provider$TransformImpl")
+				return MoreObjects.toStringHelper("DotifyCSSStyledDocumentTransform$Provider$TransformImpl")
 					.add("output", output)
 					.add("textTransform", textTransformQuery);
 			}
@@ -251,7 +253,7 @@ public interface DotifyCSSStyledDocumentTransform {
 		
 		@Override
 		public ToStringHelper toStringHelper() {
-			return MoreObjects.toStringHelper(DotifyCSSStyledDocumentTransform.Provider.class.getName());
+			return MoreObjects.toStringHelper("DotifyCSSStyledDocumentTransform$Provider");
 		}
 	}
 }

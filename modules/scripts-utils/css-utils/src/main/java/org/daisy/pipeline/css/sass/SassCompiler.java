@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
@@ -78,6 +79,12 @@ public class SassCompiler implements CssPreProcessor {
 				public Collection<Import> apply(String url, Import previous) {
 					URI uri = URLs.asURI(url);
 					URI base = previous.getAbsoluteUri();
+					if (!base.isAbsolute()) // why is scheme dropped?
+						try {
+							base = new URI("file", base.getAuthority(), base.getPath(), base.getQuery(), base.getFragment());
+						} catch (URISyntaxException e) {
+							throw new IllegalStateException("coding error");
+						}
 					logger.debug("Importing SASS style sheet: " + uri + " (base = " + base + ")");
 					try {
 						try {

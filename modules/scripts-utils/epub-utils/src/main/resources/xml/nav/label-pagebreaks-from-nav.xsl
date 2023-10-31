@@ -33,9 +33,9 @@
 		-->
 		<xsl:variable name="from-nav" as="element(d:anchor)?" select="key('id',@id,$pagebreaks-from-nav-in-doc)[1]"/>
 		<xsl:copy>
-			<xsl:apply-templates select="@* except @epub:type"/>
-			<xsl:if test="not(@title)">
-				<xsl:sequence select="$from-nav/@title"/>
+			<xsl:apply-templates select="@* except (@epub:type|@title)"/>
+			<xsl:if test="not(@aria-label)">
+				<xsl:sequence select="(@title,$from-nav/@title)[1]"/>
 			</xsl:if>
 			<xsl:attribute name="epub:type"
 			               select="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"/>

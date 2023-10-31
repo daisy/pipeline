@@ -126,7 +126,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		
 		@Override
 		public String toString() {
-			return MoreObjects.toStringHelper(this)
+			return MoreObjects.toStringHelper("LiblouisTableJnaImpl")
 			                  .add("translator", super.toString())
 			                  .add("displayTable", displayTable)
 			                  .toString();
@@ -292,7 +292,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	
 	@Override
 	public ToStringHelper toStringHelper() {
-		return MoreObjects.toStringHelper("o.d.p.b.liblouis.impl.LiblouisTableJnaImplProvider");
+		return MoreObjects.toStringHelper("LiblouisTableJnaImplProvider");
 	}
 	
 	private TransformProvider<LiblouisTableJnaImpl> _provider

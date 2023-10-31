@@ -626,7 +626,7 @@
                 <x:param name="uri" select="'file:/dir/file.xml#fragment'"/>
                 <x:param name="base" select="'file:/dir/file.xml'"/>
             </x:call>
-            <x:expect label="test #23" select="'file.xml#fragment'"/>
+            <x:expect label="test #23" select="'#fragment'"/>
         </x:scenario>
         <!--
             on MacOS /tmp is normalized to /private/tmp

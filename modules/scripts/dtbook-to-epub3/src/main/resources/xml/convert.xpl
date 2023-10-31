@@ -13,8 +13,8 @@
 	<p:output port="result.in-memory" sequence="true">
 		<p:pipe step="zedai-to-epub3" port="in-memory.out"/>
 	</p:output>
-	<p:output port="validation-status" px:media-type="application/vnd.pipeline.status+xml">
-		<p:pipe step="zedai-to-epub3" port="validation-status"/>
+	<p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
+		<p:pipe step="zedai-to-epub3" port="status"/>
 	</p:output>
 	<p:output port="tts-log" sequence="true">
 		<p:pipe step="zedai-to-epub3" port="tts-log"/>
@@ -22,11 +22,23 @@
 
 	<p:input port="tts-config"/>
 
+	<p:option name="stylesheet" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>CSS user style sheets as space separated list of absolute URIs.</p>
+		</p:documentation>
+	</p:option>
+
 	<p:option name="language" required="true"/>
 	<p:option name="validation" cx:type="off|report|abort" select="'off'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Whether to stop processing and raise an error on validation issues (abort), only
 			report them (report), or to ignore any validation issues (off).</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="output-validation" cx:type="off|report|abort" select="$validation">
+		<p:documentation>
+			Determines whether to validate the EPUB output and what to do on validation errors. When
+			not specified, follows the <code>validation</code> option.
 		</p:documentation>
 	</p:option>
 	<p:option name="dtbook-is-valid" cx:as="xs:boolean" select="true()">
@@ -56,7 +68,7 @@
 	<p:option name="output-dir" required="true"/>
 	<p:option name="temp-dir" required="true"/>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/css-speech/library.xpl">
+	<p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
 		<p:documentation>
 			px:css-speech-cascade
 		</p:documentation>
@@ -79,9 +91,7 @@
 				<p:input port="source.in-memory">
 					<p:pipe step="main" port="source.in-memory"/>
 				</p:input>
-				<p:input port="config">
-					<p:pipe step="main" port="tts-config"/>
-				</p:input>
+				<p:with-option name="user-stylesheet" select="$stylesheet"/>
 			</px:css-speech-cascade>
 			<p:sink/>
 			<p:identity>
@@ -122,13 +132,6 @@
 		<p:with-option name="nimas" select="$nimas"/>
 	</px:dtbook-to-zedai>
 
-	<!--TODO better handle core media type filtering-->
-	<!--TODO copy/translate CSS ?-->
-	<p:delete match="d:file[not(@media-type=('application/z3998-auth+xml',
-	                                         'image/gif','image/jpeg','image/png',
-	                                         'image/svg+xml','application/pls+xml',
-	                                         'audio/mpeg','audio/mp4','text/javascript'))]"/>
-
 	<px:zedai-to-epub3 name="zedai-to-epub3" process-css="false" px:message="Converting ZedAI to EPUB 3" px:progress="5/10">
 		<p:input port="in-memory.in">
 			<p:pipe step="dtbook-to-zedai" port="result.in-memory"/>
@@ -141,6 +144,9 @@
 		<p:with-option name="audio" select="$audio"/>
 		<p:with-option name="audio-file-type" select="$audio-file-type"/>
 		<p:with-option name="chunk-size" select="$chunk-size"/>
+		<p:with-option name="output-validation" select="if ($output-validation='abort')
+		                                                then 'report'
+		                                                else $output-validation"/>
 	</px:zedai-to-epub3>
 	
 </p:declare-step>

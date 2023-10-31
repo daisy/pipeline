@@ -61,16 +61,22 @@
 		          step="x:epub3-compare-package-doc">
 			<x:document type="inline">
 				<package xmlns="http://www.idpf.org/2007/opf"
-				         prefix="dcterms: http://purl.org/dc/terms/" unique-identifier="pub-id2" version="3.0">
+				         prefix="dcterms: http://purl.org/dc/terms/ schema: http://schema.org/ dc: http://purl.org/dc/elements/1.1/"
+				         unique-identifier="pub-id22"
+				         xml:lang="en"
+				         version="3.0">
 					<metadata>
-						<dc:title id="id_12">Alice's Adventures In Wonderland</dc:title>
-						<dc:identifier id="pub-id2">com.googlecode.zednext.alice</dc:identifier>
+						<dc:title id="id_122">Alice's Adventures In Wonderland</dc:title>
+						<dc:identifier id="pub-id22">com.googlecode.zednext.alice</dc:identifier>
 						<dc:language>en</dc:language>
 						<meta property="dcterms:modified">2020-03-25T18:01:20Z</meta>
-						<dc:format id="format22">EPUB3</dc:format>
+						<dc:format id="format222">EPUB3</dc:format>
+						<meta property="schema:accessibilityFeature">tableOfContents</meta>
 						<meta property="dc:publisher">CSU</meta>
 						<meta property="dc:date">2010-03-27T15:50:05Z</meta>
 						<meta property="dc:creator">Lewis Carroll</meta>
+						<meta property="schema:accessMode">textual</meta>
+						<meta property="schema:accessibilityHazard">unknown</meta>
 					</metadata>
 					<manifest>
 						<item href="alice-1.xhtml" media-type="application/xhtml+xml" id="item_1" properties="nav"/>

@@ -58,6 +58,7 @@ import net.sf.saxon.om.NodeInfo;
 import org.daisy.common.file.URLs;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
+import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeCharacters;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeComment;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeProcessingInstruction;
@@ -76,12 +77,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
+import org.w3c.dom.ProcessingInstruction;
 
 public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransformer {
 
-	private final String defaultStyleSheets;
+	private final String userStyleSheets;
 	private final MediaSpec medium;
-	private final QName attributeName;
+	private final QName removeInlineStyleAttribute;
 	private final CSSParserFactory parserFactory;
 	private final RuleFactory ruleFactory;
 	private final SupportedCSS supportedCSS;
@@ -97,16 +99,16 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 	public JStyleParserCssCascader(URIResolver uriResolver,
 	                               CssPreProcessor preProcessor,
 	                               XsltProcessor xsltProcessor,
-	                               String defaultStyleSheets,
+	                               String userStyleSheets,
 	                               Medium medium,
-	                               QName attributeName,
+	                               QName removeInlineStyleAttribute,
 	                               CSSParserFactory parserFactory,
 	                               RuleFactory ruleFactory,
 	                               SupportedCSS supportedCSS,
 	                               DeclarationTransformer declarationTransformer) {
-		this.defaultStyleSheets = defaultStyleSheets;
+		this.userStyleSheets = userStyleSheets;
 		this.medium = medium.asMediaSpec();
-		this.attributeName = attributeName;
+		this.removeInlineStyleAttribute = removeInlineStyleAttribute;
 		this.parserFactory = parserFactory;
 		this.ruleFactory = ruleFactory;
 		this.supportedCSS = supportedCSS;
@@ -116,26 +118,29 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				@Override
 				public Reader fetch(URL url, Charset encoding, boolean forceEncoding, boolean assertEncoding) throws IOException {
 					logger.debug("Fetching style sheet: " + url);
-					Source resolved; {
-						try {
-							resolved = uriResolver.resolve(URLs.asURI(url).toASCIIString(), ""); }
-						catch (javax.xml.transform.TransformerException e) {
-							throw new IOException(e); }}
-					if (resolved != null && resolved instanceof StreamSource) {
-						InputStreamReader r = detectEncodingAndSkipBOM(
-							((StreamSource)resolved).getInputStream(), null, encoding, forceEncoding);
-						if (assertEncoding) {
-							if (encoding == null)
-								throw new IllegalArgumentException("encoding must not be null");
-							if (!encoding.equals(getEncoding(r)))
-								throw new IOException("Failed to read URL as " + encoding + ": " + url);
+					if (uriResolver != null) {
+						Source resolved; {
+							try {
+								resolved = uriResolver.resolve(URLs.asURI(url).toASCIIString(), ""); }
+							catch (javax.xml.transform.TransformerException e) {
+								throw new IOException(e); }}
+						if (resolved != null) {
+							if (resolved instanceof StreamSource) {
+								InputStreamReader r = detectEncodingAndSkipBOM(
+									((StreamSource)resolved).getInputStream(), null, encoding, forceEncoding);
+								if (assertEncoding) {
+									if (encoding == null)
+										throw new IllegalArgumentException("encoding must not be null");
+									if (!encoding.equals(getEncoding(r)))
+										throw new IOException("Failed to read URL as " + encoding + ": " + url);
+								}
+								return r;
+							} else {
+								url = new URL(resolved.getSystemId());
+							}
 						}
-						return r;
-					} else {
-						if (resolved != null)
-							url = new URL(resolved.getSystemId());
-						return super.fetch(url, encoding, forceEncoding, assertEncoding);
 					}
+					return super.fetch(url, encoding, forceEncoding, assertEncoding);
 				}
 			};
 		/*
@@ -157,7 +162,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				}
 				@Override
 				public CSSInputStream read(CSSSource source) throws IOException {
-					if (source.type == CSSSource.SourceType.URL) {
+					if (source.type == CSSSource.SourceType.URL && uriResolver != null) {
 						try {
 							Source resolved = uriResolver.resolve(URLs.asURI((URL)source.source).toASCIIString(), "");
 							if (resolved != null)
@@ -277,10 +282,10 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				}
 			};
 			StyleMap styleMap;
-			StyleSheet defaultStyleSheet; {
+			StyleSheet userStyleSheet; {
 				StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-				if (defaultStyleSheets != null) {
-					StringTokenizer t = new StringTokenizer(defaultStyleSheets);
+				if (userStyleSheets != null) {
+					StringTokenizer t = new StringTokenizer(userStyleSheets);
 					while (t.hasMoreTokens()) {
 						URL u = URLs.asURL(URLs.resolve(baseURI, URLs.asURI(t.nextToken())));
 						if (!cssReader.supportsMediaType(null, u))
@@ -289,10 +294,10 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							s = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, s);
 					}
 				}
-				defaultStyleSheet = s;
+				userStyleSheet = s;
 			}
 			styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-			styleSheet.addAll(defaultStyleSheet);
+			styleSheet.addAll(userStyleSheet);
 			synchronized(JStyleParserCssCascader.class) {
 				// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 				CSSFactory.registerCSSParserFactory(parserFactory);
@@ -340,7 +345,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							public Optional<String> get(Element element, String property) {
 								if (style == null) {
 									StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-									s.addAll(defaultStyleSheet);
+									s.addAll(userStyleSheet);
 									synchronized(JStyleParserCssCascader.class) {
 										// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 										CSSFactory.registerCSSParserFactory(parserFactory);
@@ -432,18 +437,16 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				// We need to recompute the stylesheet because of any possible inline styles, which
 				// are attached to an element in the original document.
 				styleSheet = (StyleSheet)ruleFactory.createStyleSheet().unlock();
-				styleSheet.addAll(defaultStyleSheet);
+				styleSheet.addAll(userStyleSheet);
 				synchronized(JStyleParserCssCascader.class) {
 					// FIXME: CSSParserFactory injected in CSSAssignTraversal.<init> in CSSFactory.getUsedStyles
 					CSSFactory.registerCSSParserFactory(parserFactory);
 					styleSheet = CSSFactory.getUsedStyles(document, nodeLocator, medium, cssReader, styleSheet);
 				}
 			}
-			styleMap = new Analyzer(styleSheet, declarationTransformer, supportedCSS).evaluateDOM(document, medium, false);
+			styleMap = new Analyzer(styleSheet, declarationTransformer, supportedCSS).evaluateDOM(document, medium, true);
 			writer.setBaseURI(baseURI);
-			writer.writeStartDocument();
-			traverse(document.getDocumentElement(), styleMap, writer);
-			writer.writeEndDocument();
+			traverse(document, styleMap, writer);
 		} catch (TransformerException e) {
 			throw e;
 		} catch (Exception e) {
@@ -453,7 +456,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		}
 	}
 
-	protected abstract String serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context);
+	protected abstract Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context);
 
 	protected abstract String serializeValue(Term<?> value);
 
@@ -463,34 +466,53 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 		return styleSheet;
 	}
 
-	private void traverse(Node node, StyleMap styleMap, BaseURIAwareXMLStreamWriter writer) throws XMLStreamException {
-		if (node.getNodeType() == Node.ELEMENT_NODE) {
-			Element elem = (Element)node;
-			writeStartElement(writer, elem);
-			NamedNodeMap attributes = node.getAttributes();
-			for (int i = 0; i < attributes.getLength(); i++) {
-				Node attr = attributes.item(i);
-				if (!(attr.getPrefix() == null && "style".equals(attr.getLocalName())))
-					writeAttribute(writer, attr); }
-			Map<PseudoElement,NodeData> pseudoStyles = new java.util.HashMap<>(); {
-				for (PseudoElement pseudo : styleMap.pseudoSet(elem))
-					pseudoStyles.put(pseudo, styleMap.get(elem, pseudo)); }
-			String style = serializeStyle(
-				styleMap.get(elem),
-				pseudoStyles,
-				elem);
-			if (style != null)
-				writeAttribute(writer, attributeName, style);
+	protected void traverse(Node node, StyleMap styleMap, BaseURIAwareXMLStreamWriter writer) throws XMLStreamException {
+		if (node.getNodeType() == Node.DOCUMENT_NODE) {
+			writer.writeStartDocument();
 			for (Node child = node.getFirstChild(); child != null; child = child.getNextSibling())
 				traverse(child, styleMap, writer);
-			writer.writeEndElement(); }
+			writer.writeEndDocument(); }
+		else if (node.getNodeType() == Node.ELEMENT_NODE)
+			processElement((Element)node, styleMap, writer);
 		else if (node.getNodeType() == Node.COMMENT_NODE)
 			writeComment(writer, node);
 		else if (node.getNodeType() == Node.TEXT_NODE)
 			writeCharacters(writer, node);
 		else if (node.getNodeType() == Node.PROCESSING_INSTRUCTION_NODE)
-			writeProcessingInstruction(writer, node);
+			// FIXME: broken: writeProcessingInstruction(writer, node);
+			writer.writeProcessingInstruction(((ProcessingInstruction)node).getTarget(), node.getNodeValue());
 		else
 			throw new UnsupportedOperationException("Unexpected node type");
+	}
+
+	protected void processElement(Element element, StyleMap styleMap, BaseURIAwareXMLStreamWriter writer) throws XMLStreamException {
+		writeStartElement(writer, element);
+		copyAttributes(element, writer);
+		Map<PseudoElement,NodeData> pseudoStyles = new HashMap<>(); {
+			for (PseudoElement pseudo : styleMap.pseudoSet(element))
+				pseudoStyles.put(pseudo, styleMap.get(element, pseudo)); }
+		Map<QName,String> style = serializeStyle(
+			styleMap.get(element),
+			pseudoStyles,
+			element);
+		if (style != null)
+			writeAttributes(writer, style);
+		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+			traverse(child, styleMap, writer);
+		writer.writeEndElement();
+	}
+
+	protected void copyAttributes(Element element, BaseURIAwareXMLStreamWriter writer) throws XMLStreamException {
+		NamedNodeMap attributes = element.getAttributes();
+		for (int i = 0; i < attributes.getLength(); i++) {
+			Node attr = attributes.item(i);
+			if (removeInlineStyleAttribute == null || !nodeNameEquals(attr, removeInlineStyleAttribute))
+				writeAttribute(writer, attr); }
+	}
+
+	private static boolean nodeNameEquals(Node node, QName name) {
+		if (name == null)
+			return false;
+		return new QName(node.getNamespaceURI(), node.getLocalName()).equals(name);
 	}
 }

@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.IllformedLocaleException;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -94,11 +95,11 @@ public class OSXSpeechEngine extends TTSEngine {
 								if (mr.find()) {
 									String name = mr.group("name").trim();
 									try {
-										Locale locale = VoiceInfo.tagToLocale(mr.group("locale"));
+										Locale locale = (new Locale.Builder()).setLanguageTag(mr.group("locale").replace("_", "-")).build();
 										// Note that we could also maintain (hard-code) a mapping from voice to gender
 										Gender unknownGender = Gender.ANY;
 										result.add(new Voice(getProvider().getName(), name, locale, unknownGender));
-									} catch (VoiceInfo.UnknownLanguage e) {
+									} catch (IllformedLocaleException e) {
 										mLogger.debug("Could not parse line from `say -v ?' output: " + line);
 										mLogger.debug("Reason: could not parse locale: " + mr.group("locale"));
 										result.add(new Voice(getProvider().getName(), name));

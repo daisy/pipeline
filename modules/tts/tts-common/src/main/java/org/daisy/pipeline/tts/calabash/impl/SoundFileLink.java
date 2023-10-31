@@ -1,5 +1,6 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -11,8 +12,8 @@ import org.daisy.pipeline.tts.TTSLog;
  */
 class SoundFileLink {
 
-	/** ID of fragment in XML document */
-	private final String xmlID;
+	/** Reference to fragment in XML document */
+	private final URI textRef;
 	/** Time position where the audio fragment starts within <code>clipBase</code> */
 	private final Duration clipBegin;
 	/** Time position where the audio fragment ends within <code>clipBase</code> */
@@ -26,20 +27,20 @@ class SoundFileLink {
 	 */
 	public AtomicReference<AudioClip> clipBase;
 
-	public SoundFileLink(String xmlID, Duration clipBegin, Duration clipEnd) {
-		if (clipBegin == null || clipEnd == null || xmlID == null)
+	public SoundFileLink(URI textRef, Duration clipBegin, Duration clipEnd) {
+		if (clipBegin == null || clipEnd == null || textRef == null)
 			throw new NullPointerException();
 		if (clipBegin.compareTo(Duration.ZERO) < 0)
 			throw new IllegalArgumentException("Clip begin can not be negative: " + clipBegin);
 		if (clipEnd.compareTo(clipBegin) < 0)
 			throw new IllegalArgumentException("Clip end can not come before clip begin: " + clipEnd + " < " + clipBegin);
-		this.xmlID = xmlID;
+		this.textRef = textRef;
 		this.clipBegin = clipBegin;
 		this.clipEnd = clipEnd;
 	}
 
-	public String getTextFragment() {
-		return xmlID;
+	public URI getTextFragment() {
+		return textRef;
 	}
 
 	private AudioClip clip;
@@ -56,14 +57,14 @@ class SoundFileLink {
 			if (begin.compareTo(base.clipEnd) > 0) {
 				if (begin.minus(base.clipEnd).toMillis() > 1)
 					// this can not be a rounding error due to sampling
-					log.getOrCreateEntry(getTextFragment()).addError(
+					log.getOrCreateEntry(getTextFragment().toString()).addError(
 						new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, "clip not encoded"));
 				begin = base.clipEnd;
 				end = base.clipEnd;
 			} else if (end.compareTo(base.clipEnd) > 0) {
 				if (end.minus(base.clipEnd).toMillis() > 1)
 					// this can not be a rounding error due to sampling
-					log.getOrCreateEntry(getTextFragment()).addError(
+					log.getOrCreateEntry(getTextFragment().toString()).addError(
 						new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, "part of clip not encoded"));
 				end = base.clipEnd;
 			}

@@ -1,6 +1,8 @@
 package org.daisy.pipeline.file.calabash.impl;
 
 import java.net.URI;
+import java.util.Map;
+
 import javax.xml.transform.stream.StreamSource;
 
 import net.sf.saxon.s9api.QName;
@@ -8,6 +10,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.file.FileUtils.normalizeURI;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
@@ -26,7 +29,7 @@ import org.osgi.service.component.annotations.Component;
 public class NormalizeURIProvider implements XProcStepProvider {
 
 	@Override
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new NormalizeURI(runtime, step);
 	}
 

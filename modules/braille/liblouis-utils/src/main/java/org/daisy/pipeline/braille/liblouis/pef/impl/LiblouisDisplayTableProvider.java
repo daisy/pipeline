@@ -45,7 +45,7 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 	
 	@Reference(
 		name = "LiblouisTableJnaImplProvider",
-		unbind = "unbindLiblouisTableJnaImplProvider",
+		unbind = "-",
 		service = LiblouisTableJnaImplProvider.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC

@@ -27,10 +27,12 @@
     <p:option name="output-dir" select="''"/>
     <p:option name="pef-output-dir" select="''"/>
     <p:option name="preview-output-dir" select="''"/>
+    <p:option name="pdf-output-dir" select="''"/>
     <p:option name="obfl-output-dir" select="''"/>
     
     <p:option name="name" required="true"/>
     <p:option name="include-preview" select="'false'"/>
+    <p:option name="include-pdf" select="'false'"/>
     <p:option name="include-pef" select="'false'"/>
     <p:option name="output-file-format" select="''"/>
     <p:option name="preview-table" select="''"/>
@@ -84,6 +86,9 @@
                     <p:with-option name="preview-href" select="if ($include-preview='true' and $preview-output-dir!='')
                                                                then concat($preview-output-dir,'/',$name,'.pef.html')
                                                                else ''"/>
+                    <p:with-option name="pdf-href" select="if ($include-pdf='true' and $pdf-output-dir!='')
+                                                           then concat($pdf-output-dir,'/',$name,'.pdf')
+                                                           else ''"/>
                     <p:with-option name="output-dir" select="$output-dir"/>
                     <p:with-option name="name-pattern" select="concat($name,'_vol-{}')"/>
                     <p:with-option name="single-volume-name" select="$name"/>

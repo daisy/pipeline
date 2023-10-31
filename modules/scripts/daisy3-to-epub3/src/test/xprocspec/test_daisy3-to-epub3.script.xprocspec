@@ -35,6 +35,7 @@
 					<c:file name="EPUB/mo/book-2.smil"/>
 					<c:file name="EPUB/nav.xhtml"/>
 					<c:file name="EPUB/package.opf"/>
+					<c:file name="EPUB/zedai-mods.xml"/>
 					<c:file name="META-INF/container.xml"/>
 					<c:file name="mimetype"/>
 				</c:zipfile>

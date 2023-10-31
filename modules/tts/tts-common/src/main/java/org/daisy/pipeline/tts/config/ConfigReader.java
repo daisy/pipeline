@@ -3,10 +3,6 @@ package org.daisy.pipeline.tts.config;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
@@ -22,16 +18,13 @@ import org.daisy.common.properties.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.xml.sax.InputSource;
 
-public class ConfigReader implements ConfigProperties {
+public class ConfigReader {
 
-	private static Logger Logger = LoggerFactory.getLogger(ConfigReader.class);
-
-	static final String HostProtectionProperty = "org.daisy.pipeline.tts.host.protection";
-	private static final String ttsConfigProperty = "org.daisy.pipeline.tts.config";
-	private static final List<String> safeProperties = Arrays.asList(new String[] {
-			"org.daisy.pipeline.tts.mp3.bitrate" });
+	private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
+	private static final String staticConfigPath = Properties.getProperty("org.daisy.pipeline.tts.config");
 
 	public interface Extension {
 		/**
@@ -39,59 +32,24 @@ public class ConfigReader implements ConfigProperties {
 		 * @return false is the parsing can keep going with other extensions
 		 *         (most likely if @node is not related to the extension)
 		 */
-		public boolean parseNode(XdmNode node, URI documentURI);
-
-		public void setParentReader(ConfigReader cr);
+		public boolean parseNode(XdmNode node, URI documentURI, ConfigReader parent);
 	}
+
+	private final Processor saxonproc;
 
 	public ConfigReader(Processor saxonproc, Extension... extensions) {
 		this(saxonproc, null, extensions);
 	}
 
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
-		String staticConfigPath = Properties.getProperty(ttsConfigProperty);
+		this.saxonproc = saxonproc;
 		if (staticConfigPath != null) {
-			XdmNode content = readFromURL(staticConfigPath, saxonproc);
+			XdmNode content = parseXML(staticConfigPath);
 			if (content != null)
-				readConfig(null, content, extensions);
+				read(content, extensions);
 		}
 		if (doc != null) {
-			readConfig(mDynamicProps, doc, extensions);
-		}
-		for (String key : Properties.propertyNames()) {
-			if (key.startsWith("org.daisy.pipeline.tts.")
-			    && !key.equals(HostProtectionProperty)
-			    && !key.equals(ttsConfigProperty)) {
-				String value = Properties.getProperty(key);
-				mStaticProps.put(key, value);
-			}
-		}
-		mAllProps = new HashMap<String, String>();
-		mAllProps.putAll(mStaticProps);
-		String hostProtection = Properties.getProperty(HostProtectionProperty);
-		//if (hostProtection != null)
-		//	Logger.warn("'" + HostProtectionProperty + "' setting is deprecated. " +
-		//	            "It may become unavailable in future version of DAISY Pipeline.");
-		if (hostProtection != null && hostProtection.equalsIgnoreCase("false"))
-			mAllProps.putAll(mDynamicProps);
-		else
-			for (String k : mDynamicProps.keySet())
-				if (safeProperties.contains(k))
-					mAllProps.put(k, mDynamicProps.get(k));
-	}
-
-	/**
-	 * Resolve URL within TTS configuration document.
-	 *
-	 * @param url  The URL to resolve.
-	 * @param base The base URI of the configuration document.
-	 */
-	public static URL URIinsideConfig(String url, URI base) {
-		try {
-			return URLs.asURL(URLs.resolve(base, URLs.asURI(url)));
-		} catch (Exception e) {
-			Logger.debug("Malformed URL: " + url);
-			return null;
+			read(doc, extensions);
 		}
 	}
 
@@ -102,8 +60,18 @@ public class ConfigReader implements ConfigProperties {
 	 *             against the base URI of the configuration document.
 	 * @param base The base URI of the configuration document.
 	 */
-	public static XdmNode readFromURIinsideConfig(String url, Processor saxonproc, URI base) {
-		return readFromURL(URIinsideConfig(url, base), saxonproc);
+	protected XdmNode parseXML(String url, URI base) {
+		try {
+			return parseXML(resolve(url, base), saxonproc);
+		} catch (Exception e) {
+			logger.debug("Malformed URL: " + url);
+			return null;
+		}
+	}
+
+	// package private for unit tests
+	static URL resolve(String url, URI base) {
+		return URLs.asURL(URLs.resolve(base, URLs.asURI(url)));
 	}
 
 	/**
@@ -112,16 +80,16 @@ public class ConfigReader implements ConfigProperties {
 	 * @param url The URL to read from. If relative, it is resolved
 	 *            against the current directory.
 	 */
-	private static XdmNode readFromURL(String url, Processor saxonproc) {
-		return readFromURIinsideConfig(url, saxonproc, URLs.asURI(new File("./")));
+	protected XdmNode parseXML(String url) {
+		return parseXML(url, URLs.asURI(new File("./")));
 	}
 
 	/**
 	 * Read document from URL.
 	 *
-	 * @param url The URL to read from.
+	 * @param url The absolute URL to read from.
 	 */
-	private static XdmNode readFromURL(URL url, Processor saxonproc) {
+	private static XdmNode parseXML(URL url, Processor saxonproc) {
 		if (url == null)
 			return null;
 		try {
@@ -129,70 +97,34 @@ public class ConfigReader implements ConfigProperties {
 			source.setSystemId(url.toString());
 			return saxonproc.newDocumentBuilder().build(source);
 		} catch (Exception e) {
-			Logger.debug("error while reading " + url + ": " + e);
+			logger.debug("error while reading " + url + ": " + e);
 			return null;
 		}
 	}
 
-	private void readConfig(Map<String, String> props, XdmNode doc, Extension... extensions) {
-
-		for (Extension ext : extensions) {
-			ext.setParentReader(this);
-		}
-
+	private void read(XdmNode doc, Extension... extensions) {
 		URI docURI = doc.getBaseURI();
-
 		XdmSequenceIterator it = doc.axisIterator(Axis.CHILD);
 		XdmNode root = doc;
 		while (doc.getNodeKind() != XdmNodeKind.ELEMENT && it.hasNext())
 			root = (XdmNode) it.next();
-
 		it = root.axisIterator(Axis.CHILD);
 		while (it.hasNext()) {
 			XdmNode node = (XdmNode) it.next();
 			QName qname = node.getNodeName();
 			if (qname != null) {
-				if ("property".equalsIgnoreCase(qname.getLocalName())) {
-					String key = node.getAttributeValue(new QName(null, "key"));
-					String value = node.getAttributeValue(new QName(null, "value"));
-					if (key == null || value == null) {
-						Logger.warn("Missing key or value for config's property "
-						        + node.toString());
-					} else if (props != null) {
-						if (!key.startsWith("org.daisy.pipeline.tts."))
-							key = "org.daisy.pipeline.tts." + key;
-						props.put(key, value);
+				boolean parsed = false;
+				for (int k = 0; !parsed && k < extensions.length; ++k) {
+					if ("css".equalsIgnoreCase(qname.getLocalName())) {
+						logger.warn("Ignoring 'css' element " + node.toString()
+						            + " inside TTS config file.\nPlease specify CSS style sheets"
+						            + " through the designated option or attach them to the input"
+						            + " document.");
 					} else {
-						Logger.warn("Ignoring property " + node.toString()
-						        + " inside static TTS config file.\nPlease use a"
-						        + " system property or environment variable instead.");
-					}
-				} else {
-					boolean parsed = false;
-					for (int k = 0; !parsed && k < extensions.length; ++k) {
-						parsed = extensions[k].parseNode(node, docURI);
+						parsed = extensions[k].parseNode(node, docURI, this);
 					}
 				}
 			}
 		}
 	}
-
-	@Override
-	public Map<String, String> getDynamicProperties() {
-		return mDynamicProps;
-	}
-
-	@Override
-	public Map<String, String> getStaticProperties() {
-		return mStaticProps;
-	}
-
-	@Override
-	public Map<String, String> getAllProperties() {
-		return mAllProps;
-	}
-
-	private Map<String, String> mStaticProps = new HashMap<String, String>();
-	private Map<String, String> mDynamicProps = new HashMap<String, String>();
-	private Map<String, String> mAllProps;
 }

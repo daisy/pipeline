@@ -82,10 +82,10 @@ public class AudioServices {
 
 	@Reference(
 		name = "audio-encoder-service",
-		unbind = "removeEncoderService",
+		unbind = "-",
 		service = AudioEncoderService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addEncoderService(AudioEncoderService service) {
 		encoderServices.add(service);
@@ -97,10 +97,10 @@ public class AudioServices {
 
 	@Reference(
 		name = "audio-decoder-service",
-		unbind = "removeDecoderService",
+		unbind = "-",
 		service = AudioDecoderService.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addDecoderService(AudioDecoderService service) {
 		decoderServices.add(service);

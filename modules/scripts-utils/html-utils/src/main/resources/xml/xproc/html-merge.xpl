@@ -62,19 +62,41 @@
 		</p:documentation>
 	</p:import>
 
+	<p:count name="html-count"/>
+	<p:sink/>
+
 	<!--
 	    fix duplicate ids and also add ids to headings and sections so that this doesn't need to
 	    happen anymore in each individual px:html-outline because that would lead to duplicate ids
 	    again
 	-->
-	<px:html-add-ids name="fix-ids"/>
-	<p:count name="html-count"/>
-	<p:sink/>
+	<px:html-add-ids name="fix-ids">
+		<p:input port="source">
+			<p:pipe step="main" port="source"/>
+		</p:input>
+	</px:html-add-ids>
 
 	<!--
 	    file mapping
 	-->
 	<p:group name="file-mapping">
+		<p:output port="result"/>
+		<p:for-each>
+			<p:template>
+				<p:input port="template">
+					<p:inline>
+						<d:file href="{$output-base-uri}" original-href="{$input-base-uri}"/>
+					</p:inline>
+				</p:input>
+				<p:with-param port="parameters" name="output-base-uri" select="$output-base-uri"/>
+				<p:with-param port="parameters" name="input-base-uri" select="base-uri(/*)"/>
+			</p:template>
+		</p:for-each>
+		<p:wrap-sequence wrapper="d:fileset"/>
+	</p:group>
+	<p:sink/>
+
+	<p:group name="input-ids">
 		<p:output port="result"/>
 		<p:for-each>
 			<p:iteration-source>
@@ -96,11 +118,6 @@
 			</p:for-each>
 			<p:wrap-sequence wrapper="d:file"/>
 			<p:add-attribute match="/*" attribute-name="href">
-				<p:with-option name="attribute-value" select="$output-base-uri">
-					<p:empty/>
-				</p:with-option>
-			</p:add-attribute>
-			<p:add-attribute match="/*" attribute-name="original-href">
 				<p:with-option name="attribute-value" select="$input-base-uri">
 					<p:empty/>
 				</p:with-option>
@@ -115,6 +132,7 @@
 	-->
 	<px:fileset-compose name="mapping">
 		<p:input port="source">
+			<p:pipe step="input-ids" port="result"/>
 			<p:pipe step="fix-ids" port="mapping"/>
 			<p:pipe step="file-mapping" port="result"/>
 		</p:input>

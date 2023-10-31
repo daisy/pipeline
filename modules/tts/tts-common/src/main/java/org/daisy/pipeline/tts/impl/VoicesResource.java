@@ -2,8 +2,12 @@ package org.daisy.pipeline.tts.impl;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.IllformedLocaleException;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
@@ -11,15 +15,15 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
+import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.tts.config.ConfigReader;
+import org.daisy.pipeline.tts.config.DynamicPropertiesExtension;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.Voice;
-import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import static org.daisy.pipeline.tts.VoiceInfo.NO_DEFINITE_LANG;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
+import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
 import org.daisy.pipeline.tts.VoiceManager;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
@@ -89,6 +93,7 @@ public class VoicesResource extends AuthenticatedResource {
 		}
 		VoiceManager voiceManager; {
 			VoiceConfigExtension voiceConfigExt = new VoiceConfigExtension();
+			DynamicPropertiesExtension propsExt = new DynamicPropertiesExtension();
 			XdmNode configXML = null; {
 				if (ttsConfig != null) {
 					try {
@@ -101,19 +106,25 @@ public class VoicesResource extends AuthenticatedResource {
 					}
 				}
 			}
-			ConfigReader cr = new ConfigReader(saxonProcessor, configXML, voiceConfigExt);
+			new ConfigReader(saxonProcessor, configXML, voiceConfigExt, propsExt);
 			if (configXML != null) {
 				logger.debug("Voice configuration XML:\n" + configXML);
 				logger.debug("Parsed voice configuration:\n" + voiceConfigExt.getVoiceDeclarations());
 			}
+			Map<String,String> properties = Properties.getSnapshot();
+			Map<String,String> dynProperties = propsExt.getDynamicProperties();
+			if (dynProperties != null && !dynProperties.isEmpty()) {
+				properties = new HashMap<>(properties);
+				properties.putAll(dynProperties);
+			}
 			voiceManager = new VoiceManager(
-				ttsRegistry.getWorkingEngines(cr.getAllProperties(), new TTSLog(logger), logger),
+				ttsRegistry.getWorkingEngines(properties, new TTSLog(logger), logger),
 				voiceConfigExt.getVoiceDeclarations());
 		}
 		Iterable<Voice> availableVoices; {
 			Locale lang; {
 				try {
-					lang = langAttr == null ? null : VoiceInfo.tagToLocale(langAttr);
+					lang = langAttr == null ? null : (new Locale.Builder()).setLanguageTag(langAttr).build();
 					Gender gender = Gender.of(genderAttr);
 					if (gender != null || genderAttr == null) {
 						String voiceEngine = engineAttr;
@@ -124,7 +135,7 @@ public class VoicesResource extends AuthenticatedResource {
 						logger.error("Could not parse gender '" + genderAttr + "'");
 						availableVoices = Collections.EMPTY_LIST;
 					}
-				} catch (UnknownLanguage e) {
+				} catch (IllformedLocaleException e) {
 					logger.error(e.getMessage());
 					availableVoices = Collections.EMPTY_LIST;
 				}
@@ -139,13 +150,12 @@ public class VoicesResource extends AuthenticatedResource {
 				Element voiceElem = voicesDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "voice");
 				voiceElem.setAttribute("name", v.getName());
 				voiceElem.setAttribute("engine", v.getEngine());
-				if (v.getLocale().isPresent()) {
-					Locale lang = v.getLocale().get();
-					voiceElem.setAttribute("lang", lang == NO_DEFINITE_LANG ? "*" : lang.toLanguageTag());
+				Collection<LanguageRange> locale = v.getLocale();
+				if (!locale.isEmpty()) {
+					voiceElem.setAttribute("lang", LanguageRange.toString(v.getLocale()));
 				}
 				if (v.getGender().isPresent()) {
-					Gender gender = v.getGender().get();
-					voiceElem.setAttribute("gender", gender.toString());
+					voiceElem.setAttribute("gender", v.getGender().get().toString());
 				}
 				voicesElem.appendChild(voiceElem);
 			}

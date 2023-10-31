@@ -1,5 +1,7 @@
 package org.daisy.pipeline.common.calabash.impl;
 
+import java.util.Map;
+
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
@@ -17,6 +19,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -33,7 +36,7 @@ public class ChunkerStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new ChunkerStep(runtime, step);
 		}
 	}

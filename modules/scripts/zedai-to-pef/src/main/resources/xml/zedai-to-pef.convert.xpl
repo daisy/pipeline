@@ -72,7 +72,7 @@
     <p:identity name="zedai"/>
     
     <px:css-cascade media="embossed">
-        <p:with-option name="default-stylesheet"
+        <p:with-option name="user-stylesheet"
                        select="concat(
                                  if ($default-stylesheet!='#default')
                                    then $default-stylesheet

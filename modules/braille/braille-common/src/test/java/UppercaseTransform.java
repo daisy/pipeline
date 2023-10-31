@@ -1,6 +1,7 @@
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Optional;
 import com.xmlcalabash.core.XProcRuntime;
@@ -10,6 +11,7 @@ import static org.daisy.common.file.URLs.asURI;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
@@ -47,8 +49,8 @@ public class UppercaseTransform extends AbstractBrailleTranslator implements Bra
 	};
 	
 	@Override
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-		return stepProvider.newStep(runtime, step);
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
+		return stepProvider.newStep(runtime, step, monitor, properties);
 	}
 	
 	private static final Iterable<UppercaseTransform> empty = Optional.<UppercaseTransform>absent().asSet();

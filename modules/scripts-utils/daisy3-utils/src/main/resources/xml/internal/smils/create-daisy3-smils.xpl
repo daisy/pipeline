@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:smil="http://www.w3.org/2001/SMIL20/"
@@ -82,6 +84,11 @@
         px:message
       </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+      <p:documentation>
+        px:set-base-uri
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
       <p:documentation>
         px:fileset-create
@@ -94,6 +101,12 @@
         px:daisy3-smil-add-elapsed-time
       </p:documentation>
     </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+      <p:documentation>
+        pf:normalize-uri
+        pf:relativize-uri
+      </p:documentation>
+    </cx:import>
 
     <!-- They cannot hold a smilref attribute or they can contain
          levels (which would make them wrongly dispatched over
@@ -128,6 +141,40 @@
     <px:message severity="DEBUG" message="SMIL audio order generated"/>
     <p:sink/>
 
+    <p:group name="audio-map">
+      <p:documentation>Relativize and normalize src and textref attributes in d:audio-clips document.</p:documentation>
+      <p:output port="result"/>
+      <p:variable name="dtbook-base-uri" select="pf:normalize-uri(base-uri(/*))">
+	<p:pipe step="main" port="source.in-memory"/>
+      </p:variable>
+      <p:label-elements match="d:clip" attribute="src" px:message="dtbook-base-uri: {$dtbook-base-uri}">
+	<p:input port="source">
+	  <p:pipe step="main" port="audio-map"/>
+	</p:input>
+	  <p:with-option name="label"
+			 select="concat('
+				   pf:relativize-uri(pf:normalize-uri(resolve-uri(@src,base-uri(.))),
+				   &quot;',$dtbook-base-uri,'&quot;
+				   )
+				 ')"/>
+      </p:label-elements>
+      <p:label-elements match="d:clip" attribute="textref">
+	<p:input port="source">
+	  <p:pipe step="main" port="audio-map"/>
+	</p:input>
+	  <p:with-option name="label"
+			 select="concat('
+				   pf:relativize-uri(pf:normalize-uri(resolve-uri(@textref,base-uri(.))),
+				   &quot;',$dtbook-base-uri,'&quot;
+				   )
+				 ')"/>
+      </p:label-elements>
+      <px:set-base-uri>
+	<p:with-option name="base-uri" select="$dtbook-base-uri"/>
+      </px:set-base-uri>
+    </p:group>
+    <p:sink/>
+
     <p:load name="add-smilrefs-xsl">
       <p:with-option name="href"
       		     select="if ($audio-only='true') then 'add-smilrefs-audio-only.xsl' else 'add-smilrefs.xsl'"/>
@@ -136,7 +183,7 @@
     <p:xslt name="add-smilrefs" px:progress="1/6">
       <p:input port="source">
 	<p:pipe port="result" step="audio-order"/>
-	<p:pipe port="audio-map" step="main"/>
+	<p:pipe step="audio-map" port="result"/>
       </p:input>
       <p:input port="stylesheet">
 	<p:pipe port="result" step="add-smilrefs-xsl"/>
@@ -165,7 +212,7 @@
     <p:xslt name="create-smils" px:progress="1/6">
       <p:input port="source">
 	<p:pipe port="result" step="add-smilrefs"/>
-	<p:pipe port="audio-map" step="main"/>
+	<p:pipe step="audio-map" port="result"/>
       </p:input>
       <p:input port="stylesheet">
 	<p:document href="create-smils.xsl"/>

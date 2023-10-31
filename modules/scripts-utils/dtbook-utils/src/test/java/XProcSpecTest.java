@@ -13,7 +13,6 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 			pipelineModule("css-utils"),
 			pipelineModule("metadata-utils"),
 			pipelineModule("mathml-utils"),
-			pipelineModule("css-speech"),
 		};
 	}
 }

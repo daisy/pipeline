@@ -14,8 +14,6 @@
       <p:pipe port="sentence-ids" step="generic"/>
     </p:output>
 
-    <p:option name="id-prefix" required="false" select="''"/>
-
     <p:option name="sentence-attr" required="false" select="''">
       <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <p>Attribute to be added to sentence <code>span</code> elements.</p>
@@ -70,7 +68,6 @@
         output-subsentence-tag="span"
         exclusive-sentence-tag="false"
         exclusive-word-tag="false">
-      <p:with-option name="id-prefix" select="$id-prefix"/>
       <p:with-option name="sentence-attr" select="$sentence-attr"/>
       <p:with-option name="sentence-attr-val" select="$sentence-attr-val"/>
       <p:with-option name="special-sentences" select="$existing-sentence-match-pattern"/>

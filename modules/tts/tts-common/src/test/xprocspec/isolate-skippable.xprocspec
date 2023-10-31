@@ -18,7 +18,6 @@
 	</x:document>
       </x:input>
       <x:option name="match" select="'dtb:pagenum|dtb:noteref|dtb:annoref|dtb:linenum|math:math'"/>
-      <x:option name="id-prefix" select="'prefix'"/>
     </x:call>
 
     <x:scenario label="2 levels">
@@ -46,7 +45,7 @@
 	<x:document type="inline">
 	  <book>
 	    <sent id="sent1">
-	      <span id="prefixsent1-no-skippable">
+	      <span id="id_2">
 		<span id="span1" attr="attr-val">
 		  text1
 		</span>
@@ -54,7 +53,7 @@
 	      <span attr="attr-val">
 		<noteref id="id_1"/>
 	      </span>
-	      <span id="prefixsent1-id_1">
+	      <span id="id_3">
 		<span attr="attr-val">
 		  text2
 		</span>
@@ -129,11 +128,11 @@
 	<x:document type="inline">
 	  <book>
 	    <sent id="sent1">
-	      <span id="prefixsent1-no-skippable">
+	      <span id="id_2">
 		text1
 	      </span>
 	      <noteref id="id_1"/>
-	      <span id="prefixsent1-id_1">
+	      <span id="id_3">
 		text2
 	      </span>
 	    </sent>
@@ -169,11 +168,11 @@
 	<x:document type="inline">
 	  <book>
 	    <sent id="sent1">
-	      <span id="prefixsent1-no-skippable">
+	      <span id="id_1">
 		text1
 	      </span>
 	      <noteref id="noteref-id"/>
-	      <span id="prefixsent1-noteref-id">
+	      <span id="id_2">
 		text2
 	      </span>
 	    </sent>
@@ -209,11 +208,11 @@
 	<x:document type="inline">
 	  <book>
 	    <sent id="sent1">
-	      <span id="prefixsent1-no-skippable">
+	      <span id="id_2">
 		text1
 	      </span>
 	      <pagenum id="id_1">42</pagenum>
-	      <span id="prefixsent1-id_1">
+	      <span id="id_3">
 		text2
 	      </span>
 	    </sent>
@@ -249,12 +248,12 @@
 	<x:document type="inline">
           <book>
 	    <sent id="sent1">
-	      <span id="prefixsent1-no-skippable">
+	      <span id="id_2">
 		<w>w1</w>
 		<w>w2</w>
 	      </span>
 	      <pagenum id="id_1">42</pagenum>
-	      <span id="prefixsent1-id_1">
+	      <span id="id_3">
 		<w>w3</w>
 		<w>w4</w>
 	      </span>
@@ -317,13 +316,13 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <sent id="sent1">
-	    <span id="prefixsent1-no-skippable">
+	    <span id="id_3">
 	      text1
 	    </span>
 	    <pagenum id="id_1">42</pagenum>
-	    <span id="prefixsent1-id_1"/>
+	    <span id="id_4"/>
 	    <pagenum id="id_2">43</pagenum>
-	    <span id="prefixsent1-id_2">
+	    <span id="id_5">
 	      text2
 	    </span>
 	  </sent>

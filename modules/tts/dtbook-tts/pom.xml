@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.23-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
-  <version>3.1.2-SNAPSHOT</version>
+  <version>4.1.1-SNAPSHOT</version>
   <artifactId>dtbook-tts</artifactId>
   <packaging>bundle</packaging>
 
@@ -33,7 +33,7 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-speech</artifactId>
+      <artifactId>css-utils</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
@@ -43,12 +43,12 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>text-to-ssml</artifactId>
+      <artifactId>tts-common</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>tts-common</artifactId>
+      <artifactId>mathml-to-ssml</artifactId>
       <scope>runtime</scope>
     </dependency>
     <!--

@@ -26,7 +26,6 @@
                 </x:document>
                 <x:document type="inline">
                     <d:fileset xml:base="file:/Users/me/out/">
-                        <d:file href="merged.html" original-href="file:/Users/me/in/part1.html"/>
                         <d:file href="merged.xml" original-href="file:/Users/me/in/part1.xml"/>
                         <d:file href="merged.xml" original-href="../in/part2.xml">
                             <d:anchor id="i" original-id="b"/>
@@ -34,7 +33,7 @@
                         <d:file href="merged.xml" original-href="../in/part3.xml"/>
                         <d:file href="../in/other.xml">
                             <d:anchor id="j" original-id="f"/>
-                            <d:anchor id="k" original-id="e"/>
+                            <d:anchor id="k"/>
                         </d:file>
                         <d:file href="other.xml" original-href="../in/other.xml">
                             <d:anchor id="g"/>
@@ -52,34 +51,146 @@
                 </x:document>
             </x:input>
         </x:call>
+        <x:scenario label="without limit-scope">
+            <x:context label="the result port">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect type="compare" label="the result should be as expected">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/Users/me/out/">
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part1.html"/>
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part2.html">
+                            <d:anchor id="i" original-id="a"/>
+                        </d:file>
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part3.xml">
+                            <d:anchor id="d" original-id="c"/>
+                        </d:file>
+                        <d:file href="../in/other.xml">
+                            <d:anchor id="j" original-id="e"/>
+                            <d:anchor id="k"/>
+                        </d:file>
+                        <d:file href="other.xml" original-href="file:/Users/me/in/other.xml">
+                            <d:anchor id="g"/>
+                            <d:anchor id="l" original-id="h"/>
+                        </d:file>
+                        <d:file href="yet_another_split_1.xml" original-href="file:/Users/me/in/yet_another.html">
+                            <d:anchor id="m"/>
+                        </d:file>
+                        <d:file href="yet_another_split_2.xml" original-href="file:/Users/me/in/yet_another.html"/>
+                        <d:file href="yet_another_split_3.xml" original-href="file:/Users/me/in/yet_another.html">
+                            <d:anchor id="n"/>
+                        </d:file>
+                        <d:file href="images/img.png" original-href="file:/Users/me/in/img.png"/>
+                    </d:fileset>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+        <x:scenario label="with limit-scope">
+            <x:call>
+                <x:option name="limit-scope" select="true()"/>
+            </x:call>
+            <x:context label="the result port">
+                <x:document type="port" port="result"/>
+            </x:context>
+            <x:expect type="compare" label="the result should be as expected">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/Users/me/out/">
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part1.html"/>
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part2.html">
+                            <d:anchor id="i" original-id="a"/>
+                        </d:file>
+                        <d:file href="merged.xml" original-href="file:/Users/me/in/part3.xml">
+                            <d:anchor id="d" original-id="c"/>
+                        </d:file>
+                        <d:file href="../in/other.xml">
+                            <d:anchor id="j" original-id="e"/>
+                        </d:file>
+                        <d:file href="other.xml" original-href="file:/Users/me/in/other.xml">
+                            <d:anchor id="g"/>
+                            <d:anchor id="l" original-id="h"/>
+                        </d:file>
+                        <d:file href="yet_another_split_1.xml" original-href="file:/Users/me/in/yet_another.html"/>
+                        <d:file href="yet_another_split_2.xml" original-href="file:/Users/me/in/yet_another.html"/>
+                        <d:file href="yet_another_split_3.xml" original-href="file:/Users/me/in/yet_another.html"/>
+                    </d:fileset>
+                </x:document>
+            </x:expect>
+        </x:scenario>
+    </x:scenario>
+
+    <x:scenario label="map-ids">
+        <x:call step="px:fileset-compose">
+            <x:option name="limit-scope" select="true()"/>
+            <x:input port="source">
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/Users/me/">
+                        <d:file href="file_1.xhtml">
+                            <d:anchor id="id_1"/>
+                        </d:file>
+                        <d:file href="file_2.xhtml">
+                            <d:anchor id="id_1"/>
+                            <d:anchor id="id_2"/>
+                            <d:anchor id="id_3"/>
+                            <d:anchor id="id_4"/>
+                            <d:anchor id="id_5"/>
+                            <d:anchor id="id_6"/>
+                            <d:anchor id="id_7"/>
+                        </d:file>
+                        <d:file href="file_3.xhtml">
+                            <d:anchor id="id_1"/>
+                            <d:anchor id="id_2"/>
+                            <d:anchor id="id_3"/>
+                            <d:anchor id="id_4"/>
+                            <d:anchor id="id_5"/>
+                            <d:anchor id="id_6"/>
+                        </d:file>
+                    </d:fileset>
+                </x:document>
+                <x:document type="inline">
+                    <d:fileset xml:base="file:/Users/me/">
+                        <d:file href="file_2.xhtml">
+                            <d:anchor id="id_12" original-id="id_1"/>
+                        </d:file>
+                        <d:file href="file_3.xhtml">
+                            <d:anchor id="id_13" original-id="h_1"/>
+                            <d:anchor id="id_14" original-id="id_1"/>
+                            <d:anchor id="id_15" original-id="id_2"/>
+                            <d:anchor id="id_16" original-id="id_3"/>
+                            <d:anchor id="id_17" original-id="id_4"/>
+                            <d:anchor id="id_18" original-id="id_5"/>
+                            <d:anchor id="id_19" original-id="id_7"/>
+                            <d:anchor id="id_20" original-id="id_6"/>
+                        </d:file>
+                    </d:fileset>
+                </x:document>
+            </x:input>
+        </x:call>
         <x:context label="the result port">
             <x:document type="port" port="result"/>
         </x:context>
         <x:expect type="compare" label="the result should be as expected">
             <x:document type="inline">
-                <d:fileset xml:base="file:/Users/me/out/">
-                    <d:file href="merged.xml" original-href="file:/Users/me/in/part1.html"/>
-                    <d:file href="merged.xml" original-href="file:/Users/me/in/part2.html">
-                        <d:anchor id="i" original-id="a"/>
+                <d:fileset xml:base="file:/Users/me/">
+                    <d:file href="file_1.xhtml">
+                        <d:anchor id="id_1"/>
                     </d:file>
-                    <d:file href="merged.xml" original-href="file:/Users/me/in/part3.xml">
-                        <d:anchor id="d" original-id="c"/>
+                    <d:file href="file_2.xhtml">
+                        <d:anchor id="id_12" original-id="id_1"/>
+                        <d:anchor id="id_2"/>
+                        <d:anchor id="id_3"/>
+                        <d:anchor id="id_4"/>
+                        <d:anchor id="id_5"/>
+                        <d:anchor id="id_6"/>
+                        <d:anchor id="id_7"/>
                     </d:file>
-                    <d:file href="../in/other.xml">
-                        <d:anchor id="j" original-id="e"/>
+                    <d:file href="file_3.xhtml">
+                        <d:anchor id="id_14" original-id="id_1"/>
+                        <d:anchor id="id_15" original-id="id_2"/>
+                        <d:anchor id="id_16" original-id="id_3"/>
+                        <d:anchor id="id_17" original-id="id_4"/>
+                        <d:anchor id="id_18" original-id="id_5"/>
+                        <d:anchor id="id_20" original-id="id_6"/>
                     </d:file>
-                    <d:file href="other.xml" original-href="file:/Users/me/in/other.xml">
-                        <d:anchor id="g"/>
-                        <d:anchor id="l" original-id="h"/>
-                    </d:file>
-                    <d:file href="yet_another_split_1.xml" original-href="file:/Users/me/in/yet_another.html">
-                        <d:anchor id="m"/>
-                    </d:file>
-                    <d:file href="yet_another_split_2.xml" original-href="file:/Users/me/in/yet_another.html"/>
-                    <d:file href="yet_another_split_3.xml" original-href="file:/Users/me/in/yet_another.html">
-                        <d:anchor id="n"/>
-                    </d:file>
-                    <d:file href="images/img.png" original-href="file:/Users/me/in/img.png"/>
                 </d:fileset>
             </x:document>
         </x:expect>

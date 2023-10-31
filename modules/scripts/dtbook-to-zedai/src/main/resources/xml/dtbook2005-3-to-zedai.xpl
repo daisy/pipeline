@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"  version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 name="dtbook2005-3-to-zedai" type="pxi:dtbook2005-3-to-zedai"
                 exclude-inline-prefixes="pxi p">
 
@@ -11,6 +13,8 @@
 
     <p:input port="source" primary="true"/>
     
+    <p:option name="lang" cx:as="xs:string?" select="()"/>
+
     <!-- output is ZedAI -->
     <p:output port="result" primary="true">
         <p:pipe port="result" step="anchor-floating-annotations"/>
@@ -237,12 +241,10 @@
     
     <p:documentation>Translate element and attribute names from DTBook to ZedAI</p:documentation>
     <p:xslt name="translate-to-zedai" px:progress="1/22" px:message="Translate to ZedAI" px:message-severity="DEBUG">
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
         <p:input port="stylesheet">
             <p:document href="./translate-elems-attrs-to-zedai.xsl"/>
         </p:input>
+        <p:with-param port="parameters" name="lang" select="$lang"/>
     </p:xslt>
 
     <p:documentation>Anchor any floating anotations</p:documentation>

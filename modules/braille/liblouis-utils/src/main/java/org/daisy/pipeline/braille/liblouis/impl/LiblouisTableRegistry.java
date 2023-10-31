@@ -41,10 +41,10 @@ public class LiblouisTableRegistry extends ResourceRegistry<LiblouisTablePath> i
 	
 	@Reference(
 		name = "LiblouisTablePath",
-		unbind = "_unregister",
+		unbind = "-",
 		service = LiblouisTablePath.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	protected void _register(LiblouisTablePath path) {
 		register(path);

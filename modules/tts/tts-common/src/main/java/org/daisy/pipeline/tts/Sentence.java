@@ -1,5 +1,7 @@
 package org.daisy.pipeline.tts;
 
+import java.net.URI;
+
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmNodeKind;
@@ -11,12 +13,16 @@ import com.google.common.base.CharMatcher;
 
 public class Sentence implements FormatSpecifications {
 
+	private final String id;
 	private int size;
 	private final Voice voice;
 	private final XdmNode text;
 	private final TTSEngine ttsProc;
 
 	public Sentence(TTSEngine ttsProc, Voice voice, XdmNode text) {
+		id = text.getAttributeValue(Sentence_attr_id);
+		if (id == null)
+			throw new IllegalArgumentException("id must not be null");
 		this.voice = voice;
 		this.text = text;
 		this.ttsProc = ttsProc;
@@ -44,7 +50,11 @@ public class Sentence implements FormatSpecifications {
 	}
 
 	public String getID() {
-		return text.getAttributeValue(Sentence_attr_id);
+		return id;
+	}
+
+	public URI getBaseURI() {
+		return text.getBaseURI();
 	}
 
 	public static int computeSize(XdmNode node) {

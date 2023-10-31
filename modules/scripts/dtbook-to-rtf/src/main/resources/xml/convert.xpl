@@ -4,6 +4,7 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 type="px:dtbook-to-rtf" name="main">
 	
 	<p:input port="source.fileset" primary="true"/>
@@ -18,9 +19,26 @@
 	
 	<p:option name="temp-dir" required="true"/>
 	
-	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+		<p:documentation>
+			px:assert
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+		<p:documentation>
+			px:delete
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+		<p:documentation>
+			px:fileset-load
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+		<p:documentation>
+			px:css-cascade
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="tmpfile-uri" select="concat($temp-dir,'tmp.xml')"/>
 	
@@ -33,7 +51,7 @@
 	<px:assert message="No DTBook document found." test-count-min="1" error-code="PEZE00"/>
 	<px:assert message="More than one DTBook found in fileset." test-count-max="1" error-code="PEZE00"/>
 	
-	<p:xslt name="add-dtbook-id">
+	<p:xslt>
 		<p:input port="stylesheet">
 			<p:document href="add_ids_to_dtbook.xsl"/>
 		</p:input>
@@ -41,13 +59,24 @@
 			<p:empty/>
 		</p:input>
 	</p:xslt>
-	<p:sink/>
+
+	<!-- number lists using CSS -->
+	<p:choose>
+		<p:when test="//dtb:list[@type='ol'][@enum|@start]">
+			<px:css-cascade media="print and (counter-support: none)" multiple-attributes="true">
+				<p:with-option name="attribute-name" select="QName('css', 'css:_')"/>
+				<p:with-option name="user-stylesheet" select="resolve-uri('number-lists.scss')">
+					<p:inline><irrelevant/></p:inline>
+				</p:with-option>
+			</px:css-cascade>
+		</p:when>
+		<p:otherwise>
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
 	
 	<p:store name="store-tmpfile">
 		<p:with-option name="href" select="$tmpfile-uri"/>
-		<p:input port="source">
-			<p:pipe port="result" step="add-dtbook-id"/>
-		</p:input>
 	</p:store>
 
 	<p:xslt name="convert-to-rtf" template-name="start">

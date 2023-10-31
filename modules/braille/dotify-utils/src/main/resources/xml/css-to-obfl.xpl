@@ -18,7 +18,12 @@
     <p:input port="source"/>
     <p:output port="result"/>
     
-    <p:option name="document-locale" select="'und'"/>
+    <p:option name="document-locale" select="'und'">
+      <!--
+          This option exists in case a xml:lang attribute on the root element is not present, but
+          language information is available e.g. from "dc:language" meta data.
+      -->
+    </p:option>
     <p:option name="text-transform" select="''"/>
     <p:option name="braille-charset" select="''"/>
     <p:option name="page-width" select="'40'"/>
@@ -99,12 +104,12 @@
         <p:output port="result"/>
         <css:parse-stylesheet>
             <p:documentation>
-                Make css:page, css:volume, css:text-transform, css:counter-style, css:after,
-                css:before, css:footnote-call, css:duplicate, css:alternate, css:top-of-page,
-                css:_obfl-alternate-scenario*, css:_obfl-on-toc-start,
-                css:_obfl-on-collection-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
-                css:_obfl-on-collection-end, css:_obfl-on-toc-end, css:_obfl-volume-transition and
-                css:_obfl-on-resumed attributes.
+                Make css:page, css:volume, css:text-transform, css:hyphenation-resource,
+                css:counter-style, css:after, css:before, css:footnote-call, css:duplicate,
+                css:alternate, css:top-of-page, css:_obfl-alternate-scenario*,
+                css:_obfl-on-toc-start, css:_obfl-on-collection-start, css:_obfl-on-volume-start,
+                css:_obfl-on-volume-end, css:_obfl-on-collection-end, css:_obfl-on-toc-end,
+                css:_obfl-volume-transition and css:_obfl-on-resumed attributes.
             </p:documentation>
         </css:parse-stylesheet>
         <css:parse-properties properties="flow">
@@ -203,17 +208,22 @@
 
     <pxi:recursive-parse-stylesheet-and-make-pseudo-elements px:progress=".04">
         <p:documentation>
-            Make css:page, css:volume, css:text-transform, css:counter-style, css:top-of-page and
-            css:_obfl-volume-transition attributes, css:after, css:before, css:duplicate,
-            css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-            css:_obfl-on-volume-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
-            css:_obfl-alternate-scenario pseudo-elements.
+            Make css:page, css:volume, css:text-transform, css:hyphenation-resource,
+            css:counter-style, css:top-of-page and css:_obfl-volume-transition attributes,
+            css:after, css:before, css:duplicate, css:alternate, css:footnote-call,
+            css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+            css:_obfl-on-toc-end, css:_obfl-on-resumed and css:_obfl-alternate-scenario
+            pseudo-elements.
         </p:documentation>
     </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     
     <px:assert name="assert-text-transform-only-on-root"
                error-code="XXX" message="@text-transform rules are only allowed on root element">
         <p:with-option name="test" select="not(/_/*//*/@css:text-transform)"/>
+    </px:assert>
+    <px:assert name="assert-hyphenation-resource-only-on-root"
+               error-code="XXX" message="@hyphenation-resource rules are only allowed on root element">
+        <p:with-option name="test" select="not(/_/*//*/@css:hyphenation-resource)"/>
     </px:assert>
     <px:assert name="assert-counter-style-only-on-root"
                error-code="XXX" message="@counter-style rules are only allowed on root element">
@@ -224,11 +234,12 @@
         <p:with-option name="test" select="not(/_/*//*/@css:_obfl-volume-transition)"/>
     </px:assert>
     <p:delete match="@css:text-transform|
+                     @css:hyphenation-resource|
                      @css:counter-style|
                      @css:_obfl-volume-transition">
         <p:documentation>
-            Delete @css:text-transform, @css:counter-style and @css:_obfl-volume-transition
-            attributes.
+            Delete @css:text-transform, @css:hyphenation-resource, @css:counter-style and
+            @css:_obfl-volume-transition attributes.
         </p:documentation>
     </p:delete>
     
@@ -340,7 +351,7 @@
     </css:label-targets>
     
     <p:for-each>
-      <p:delete match="@xml:base"/>
+      <p:delete match="@xml:base"/> <!-- this sets the base URI to the empty string -->
     </p:for-each>
     
     <css:eval-target-content px:progress=".005">
@@ -893,6 +904,9 @@
         </p:with-param>
         <p:with-param name="text-transforms" select="/_/*/@css:text-transform">
             <p:pipe step="assert-text-transform-only-on-root" port="result"/>
+        </p:with-param>
+        <p:with-param name="hyphenation-resources" select="/_/*/@css:hyphenation-resource">
+            <p:pipe step="assert-hyphenation-resource-only-on-root" port="result"/>
         </p:with-param>
         <p:with-param name="counter-styles" select="/_/*/@css:counter-style">
             <p:pipe step="assert-counter-style-only-on-root" port="result"/>

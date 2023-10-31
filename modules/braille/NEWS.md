@@ -1,16 +1,77 @@
-v1.14.15
+v1.14.21
+========
+
+Changes
+-------
+- Option to include PDF version of the braille result showing ASCII braille
+
+Components
+----------
+- liblouis ([3.27.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- **braille-css** ([**1.24.0**](https://github.com/daisy/braille-css/releases/tag/1.23.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+v1.14.19
+========
+
+Changes
+-------
+- Adapt hyphenation to `xml:lang`
+- Add support for `@hyphenation-resource` rules
+- Add possibility to extend hyphenation table with exception words via `exception-words` descriptor
+  of `@hyphenation-resource` rule
+- Various bugfixes
+
+Components
+----------
+- liblouis ([3.27.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- **braille-css** ([**1.23.0**](https://github.com/daisy/braille-css/releases/tag/1.23.0))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+v1.14.16
 ========
 
 Changes
 -------
 - Update to Liblouis [3.27.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)
-- New option to store intermediary HTML with CSS styles inlined
 - Fixed bug that resulted in premature line breaks
 - Various other bugfixes
 
 Components
 ----------
 - **liblouis** ([**3.27.0**](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- braille-css ([1.22.1](https://github.com/daisy/braille-css/releases/tag/1.22.1))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+v1.14.15
+========
+
+Changes
+-------
+- New option to store intermediary HTML with CSS styles inlined
+- Various bugfixes
+
+Components
+----------
+- liblouis ([3.25.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
   liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - **dotify** ([**1.0.7**](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)

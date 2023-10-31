@@ -25,7 +25,13 @@
             <p>Directory for the audio files.</p>
         </p:documentation>
     </p:option>
-    <p:option name="flatten" select="true()"/>
+    <p:option name="flatten" select="true()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether to place audio files directly under <code>audio-dir</code>, or preserve the
+            directory structure from the input. When set to <code>false</code>, the base URI of the
+            <code>audio-map</code> input determines the base of the audio folder structure.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="anti-conflict-prefix" select="''"/>
     <p:option name="mediaoverlay-dir">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

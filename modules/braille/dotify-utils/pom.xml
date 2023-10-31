@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.23-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dotify-utils</artifactId>
-  <version>6.1.1-SNAPSHOT</version>
+  <version>6.2.2-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: dotify-utils</name>
@@ -41,6 +41,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -73,14 +77,6 @@
       <artifactId>annotation</artifactId>
       <version>2.3.0</version>
       <scope>provided</scope>
-    </dependency>
-    <!--
-        runtime dependencies
-    -->
-    <dependency>
-      <groupId>org.daisy.pipeline.modules</groupId>
-      <artifactId>css-utils</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <!--
         OSGi runtime dependency of dotify.library

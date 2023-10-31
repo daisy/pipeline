@@ -1,9 +1,10 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns:d="http://www.daisy.org/ns/pipeline/data"
 		xmlns:m="http://www.w3.org/1998/Math/MathML"
 		xmlns:ssml="http://www.w3.org/2001/10/synthesis"
-		exclude-result-prefixes="#all"
-		version="2.0">
+		exclude-result-prefixes="#all">
 
   <xsl:import href="mathml-serialization.xsl"/>
   <xsl:import href="mathml-normalization.xsl"/>
@@ -13,74 +14,83 @@
 
   <xsl:variable name="rules" select="document('mathml-rules.xml')"/>
 
-  <xsl:template match="/">
+  <!-- ==================================================== -->
+  <!-- == COMPILE THE CONVERSION RULES FOR ALL LANGUAGES == -->
+  <!-- ==================================================== -->
+  <xsl:variable name="compiled-rules" as="map(xs:string,document-node(element(d:rules)))">
+    <xsl:map>
+      <xsl:for-each select="distinct-values(//m:math/@xml:lang/substring-before(concat(.,'-'),'-'))">
+	<xsl:variable name="lang" select="."/>
+	<xsl:map-entry key="$lang">
+	  <xsl:document>
+	    <d:rules>
+	      <xsl:for-each select="$rules//d:rule[d:trans[not(@xml:lang) or @xml:lang = $lang][1]]">
+		<xsl:sort data-type="number" order="descending"
+			  select="if (current()/@priority) then current()/@priority else 0"/>
+		<xsl:copy>
+		  <xsl:variable name="pattern" select="node() except d:trans"/>
+		  <xsl:copy-of select="@* except regex except constant"/>
+		  <xsl:choose>
+		    <xsl:when test="count($pattern//d:group) + count($pattern//d:text) + count($pattern//d:optional-group) = 0">
+		      <xsl:attribute name="constant">
+			<xsl:value-of select="string-join(d:serialize($pattern, 'false'), '')"/>
+		      </xsl:attribute>
+		    </xsl:when>
+		    <xsl:otherwise>
+		      <xsl:attribute name="regex">
+			<xsl:value-of select="string-join(d:serialize($pattern, 'true'), '')"/>
+		      </xsl:attribute>
+		    </xsl:otherwise>
+		  </xsl:choose>
+		  <xsl:sequence select="d:trans[@xml:lang = $lang][1]"/>
+		</xsl:copy>
+	      </xsl:for-each>
+	    </d:rules>
+	  </xsl:document>
+	</xsl:map-entry>
+      </xsl:for-each>
+    </xsl:map>
+  </xsl:variable>
+
+  <!-- copy everything outside of MathML elements-->
+  <xsl:template match="@*|node()">
+    <xsl:copy>
+      <xsl:apply-templates select="@*|node()"/>
+    </xsl:copy>
+  </xsl:template>
+
+  <!-- process MathML -->
+  <!-- px:mathml-to-ssml ensures every m:math has a @xml:lang and @id -->
+  <xsl:template match="m:math[@id and @xml:lang]">
+
+    <!-- =========================================================== -->
+    <!-- ==================== APPLY THE RULES ====================== -->
+    <!-- =========================================================== -->
+    <xsl:variable name="lang" select="string(@xml:lang)"/>
+    <xsl:variable name="normalized">
+      <xsl:apply-templates select="." mode="normalize"/>
+    </xsl:variable>
     <ssml:speak version="1.1">
-      <xsl:for-each-group select="//m:math[@id and @xml:lang]"
-			  group-by="substring-before(concat(@xml:lang, '-'), '-')">
+      <xsl:copy-of select="@*"/> <!-- id, xml:lang and CSS -->
 
-	<xsl:variable name="lang" select="current-grouping-key()"/>
+      <!-- likely to come from left annotations: -->
+      <xsl:for-each select="m:*[local-name()!='text'][1]/preceding-sibling::m:text">
+	<xsl:value-of select="text()"/>
+      </xsl:for-each>
 
-	<!-- =========================================================== -->
-	<!-- == COMPILE THE CONVERSION RULES FOR THE CURRENT LANGUAGE == -->
-	<!-- =========================================================== -->
-	<xsl:variable name="compiled-rules">
-	  <d:rules>
-	    <xsl:for-each select="$rules//d:rule[d:trans[not(@xml:lang) or @xml:lang = $lang][1]]">
-	      <xsl:sort data-type="number" order="descending"
-			select="if (current()/@priority) then current()/@priority else 0"/>
-	      <xsl:copy>
-		<xsl:variable name="pattern" select="node() except d:trans"/>
-		<xsl:copy-of select="@* except regex except constant"/>
-		<xsl:choose>
-		  <xsl:when test="count($pattern//d:group) + count($pattern//d:text) + count($pattern//d:optional-group) = 0">
-		    <xsl:attribute name="constant">
-		      <xsl:value-of select="string-join(d:serialize($pattern, 'false'), '')"/>
-		    </xsl:attribute>
-		  </xsl:when>
-		  <xsl:otherwise>
-		    <xsl:attribute name="regex">
-		      <xsl:value-of select="string-join(d:serialize($pattern, 'true'), '')"/>
-		    </xsl:attribute>
-		  </xsl:otherwise>
-		</xsl:choose>
-		<xsl:sequence select="d:trans[@xml:lang = $lang][1]"/>
-	      </xsl:copy>
-	    </xsl:for-each>
-	  </d:rules>
-	</xsl:variable>
+      <!-- inner m:text will be lost -->
+      <!-- text only MathML will be lost -->
 
-	<!-- =========================================================== -->
-	<!-- ==================== APPLY THE RULES ====================== -->
-	<!-- =========================================================== -->
-	<xsl:for-each select="current-group()">
-	  <xsl:variable name="normalized">
-	    <xsl:apply-templates select="current()" mode="normalize"/>
-	  </xsl:variable>
-	  <ssml:s>
-	    <xsl:copy-of select="@*"/> <!-- @id and CSS -->
+      <xsl:call-template name="iterate-over-rules">
+	<!-- the MathML is serialized the same way as the matching rules have been serialized to regex. -->
+	<xsl:with-param name="serialized" select="string-join(d:serialize($normalized/node(), 'false'), '')"/>
+	<xsl:with-param name="compiled-rules" select="$compiled-rules($lang)"/>
+      </xsl:call-template>
 
-	    <!-- likely to come from left annotations: -->
-	    <xsl:for-each select="m:*[local-name()!='text'][1]/preceding-sibling::m:text">
-	      <xsl:value-of select="current()/text()"/>
-	    </xsl:for-each>
-
-	    <!-- inner m:text will be lost -->
-	    <!-- text only MathML will be lost -->
-
-	    <xsl:call-template name="iterate-over-rules">
-	      <!-- the MathML is serialized the same way as the matching rules have been serialized to regex. -->
-	      <xsl:with-param name="serialized" select="string-join(d:serialize($normalized/node(), 'false'), '')"/>
-	      <xsl:with-param name="compiled-rules" select="$compiled-rules"/>
-	    </xsl:call-template>
-
-	    <!-- likely to come from right annotations: -->
-	    <xsl:for-each select="m:*[local-name()!='text'][1]/following-sibling::m:text">
-	      <xsl:value-of select="current()/text()"/>
-	    </xsl:for-each>
-	  </ssml:s>
-
-	</xsl:for-each>
-      </xsl:for-each-group>
+      <!-- likely to come from right annotations: -->
+      <xsl:for-each select="m:*[local-name()!='text'][1]/following-sibling::m:text">
+	<xsl:value-of select="text()"/>
+      </xsl:for-each>
     </ssml:speak>
   </xsl:template>
 

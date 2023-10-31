@@ -1,7 +1,10 @@
 package org.daisy.pipeline.nlp.calabash.impl;
 
+import java.util.Map;
+
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.nlp.lexing.LexServiceRegistry;
 
 import com.xmlcalabash.core.XProcRuntime;
@@ -27,7 +30,7 @@ public class BreakDetectProvider implements XProcStepProvider {
 
 	@Reference(
 		name = "LexServiceRegistry",
-		unbind = "unsetLexServiceRegistry",
+		unbind = "-",
 		service = LexServiceRegistry.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
@@ -41,7 +44,7 @@ public class BreakDetectProvider implements XProcStepProvider {
 	}
 
 	@Override
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new BreakDetectStep(runtime, step, mRegistry);
 	}
 }

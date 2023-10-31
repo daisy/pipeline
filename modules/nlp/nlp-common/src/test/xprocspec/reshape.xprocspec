@@ -40,7 +40,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
     	<dtbook>
-    	  <level><p><sent id="st1">Simple sentence</sent></p></level>
+    	  <level><p><sent id="id_1">Simple sentence</sent></p></level>
     	</dtbook>
       </x:document>
     </x:expect>
@@ -62,7 +62,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
     	<dtbook>
-    	  <level><p><sent id="st1" xml:lang="en">Simple sentence</sent></p></level>
+    	  <level><p><sent id="id_1" xml:lang="en">Simple sentence</sent></p></level>
     	</dtbook>
       </x:document>
     </x:expect>
@@ -85,7 +85,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
     	<dtbook>
-    	  <level><p><sent id="st1"><w>Simple sentence</w></sent></p></level>
+    	  <level><p><sent id="id_1"><w>Simple sentence</w></sent></p></level>
     	</dtbook>
       </x:document>
     </x:expect>
@@ -107,7 +107,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
     	<dtbook>
-    	  <level><p><sent id="st1"><span><span><w>word</w></span></span></sent></p></level>
+    	  <level><p><sent id="id_1"><span><span><w>word</w></span></span></sent></p></level>
     	</dtbook>
       </x:document>
     </x:expect>
@@ -133,7 +133,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><span><w>left1</w><w>left2</w></span><w>right1</w><w>right2</w></sent>
+	    <sent id="id_1"><span><w>left1</w><w>left2</w></span><w>right1</w><w>right2</w></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -162,8 +162,8 @@
       <x:document type="inline">
 	<dtbook>
 	  <level>
-	    <p><sent id="st1"><w>Simple</w><w>sentence1</w></sent></p>
-	    <p><sent id="st2"><w>Another</w><w>sentence2</w></sent></p>
+	    <p><sent id="id_1"><w>Simple</w><w>sentence1</w></sent></p>
+	    <p><sent id="id_2"><w>Another</w><w>sentence2</w></sent></p>
 	  </level>
 	</dtbook>
       </x:document>
@@ -192,8 +192,8 @@
       <x:document type="inline">
 	<dtbook>
 	  <level>
-	    <p><sent id="st1" xml:lang="en"><w>Simple</w></sent></p>
-	    <p><sent id="st2" xml:lang="en"><w>Sentence</w></sent></p>
+	    <p><sent id="id_1" xml:lang="en"><w>Simple</w></sent></p>
+	    <p><sent id="id_2" xml:lang="en"><w>Sentence</w></sent></p>
 	  </level>
 	</dtbook>
       </x:document>
@@ -222,7 +222,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <pagenum id="st1">1</pagenum>
+	    <pagenum id="id_1">1</pagenum>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -250,7 +250,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1">
+	    <sent id="id_1">
 	      <pagenum>1</pagenum>
 	    </sent>
 	  </p></level>
@@ -278,7 +278,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1">  <pagenum>1</pagenum>  </sent>
+	    <sent id="id_1">  <pagenum>1</pagenum>  </sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -304,7 +304,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1">?!:;!.{}()¡…/@<pagenum>1</pagenum></sent>
+	    <sent id="id_1">?!:;!.{}()¡…/@<pagenum>1</pagenum></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -330,7 +330,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1">left<pagenum>1</pagenum></sent>
+	    <sent id="id_1">left<pagenum>1</pagenum></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -356,7 +356,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><span><w>left</w></span><w>right</w><pagenum>1</pagenum></sent>
+	    <sent id="id_1"><span><w>left</w></span><w>right</w><pagenum>1</pagenum></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -382,7 +382,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><span><w>left</w></span><pagenum>1</pagenum></sent>
+	    <sent id="id_1"><span><w>left</w></span><pagenum>1</pagenum></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -408,7 +408,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><w>existing</w> <w>sentence</w></sent>
+	    <sent id="id_1"><w>existing</w> <w>sentence</w></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -434,7 +434,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
+	    <sent id="id_1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -460,7 +460,7 @@
       <x:document type="inline">
 	<dtbook>
 	  <level><p>
-	    <sent id="st1"><w>existing</w> <w>sentence</w></sent>
+	    <sent id="id_1"><w>existing</w> <w>sentence</w></sent>
 	  </p></level>
 	</dtbook>
       </x:document>
@@ -486,7 +486,7 @@
       <x:document type="inline">
   	<dtbook>
   	  <level><p>
-	    <sent id="st1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
+	    <sent id="id_1"><span><span><w>existing</w> <w>sentence</w></span></span></sent>
   	  </p></level>
   	</dtbook>
       </x:document>
@@ -512,7 +512,7 @@
       <x:document type="inline">
   	<dtbook>
   	  <level><p>
-	    <sent id="st1"><w>existing</w></sent>
+	    <sent id="id_1"><w>existing</w></sent>
   	  </p></level>
   	</dtbook>
       </x:document>
@@ -538,7 +538,7 @@
       <x:document type="inline">
   	<dtbook>
   	  <level><p>
-	    <sent id="st1"><w>existing</w></sent>
+	    <sent id="id_1"><w>existing</w></sent>
   	  </p></level>
   	</dtbook>
       </x:document>
@@ -564,7 +564,7 @@
       <x:document type="inline">
   	<dtbook>
   	  <level><p>
-	    <sent id="st1"><w><span attr="id">existing</span></w></sent>
+	    <sent id="id_1"><w><span attr="id">existing</span></w></sent>
   	  </p></level>
   	</dtbook>
       </x:document>
@@ -590,12 +590,12 @@
       <x:document type="inline">
 	<dtbook>
 	  <line>
-	    <sent id="st1">
+	    <sent id="id_1">
 	      <w>before</w>
 	      <w>text</w>
 	    </sent>
-	    <linenum id="st2">2</linenum>
-	    <sent id="st3">
+	    <linenum id="id_2">2</linenum>
+	    <sent id="id_3">
 	      <w>after</w>
 	      <w>text</w>
 	    </sent>
@@ -624,17 +624,17 @@
       <x:document type="inline">
 	<dtbook>
 	  <td>
-	    <sent id="st1">
+	    <sent id="id_1">
 	      <w>before</w>
 	      <w>text</w>
 	    </sent>
 	    <epigraph>
-	      <sent id="st2">
+	      <sent id="id_2">
 		<w>inside</w>
 		<w>epigraph</w>
 	      </sent>
 	    </epigraph>
-	    <sent id="st3">
+	    <sent id="id_3">
 	      <w>after</w>
 	      <w>text</w>
 	    </sent>

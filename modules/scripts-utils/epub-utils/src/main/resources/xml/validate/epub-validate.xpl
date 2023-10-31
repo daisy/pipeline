@@ -2,8 +2,10 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 type="px:epub-validate">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -26,6 +28,21 @@
     <p:option name="version" required="false" select="'3'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>EPUB version: "2" or "3"</p>
+        </p:documentation>
+    </p:option>
+
+    <p:option name="report-method" cx:type="port|log|error" select="'port'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Select the method used for reporting validation issues:</p>
+            <dl>
+                <dt>port</dt>
+                <dd>Issues are reported only on the xml-report and html-report output ports.</dd>
+                <dt>log</dt>
+                <dd>In addition to the xml-report and html-report output ports, issues are also
+                reported through warning messages.</dd>
+                <dt>error</dt>
+                <dd>Issues are reported through error messages and also trigger an XProc error.</dd>
+            </dl>
         </p:documentation>
     </p:option>
 
@@ -54,9 +71,12 @@
         <p:pipe port="result" step="status"/>
     </p:output>
 
-    <p:option name="temp-dir" required="true" cx:type="xs:anyURI" cx:as="xs:string">
+    <p:option name="temp-dir" required="false" select="''" cx:as="xs:string">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2>Temporary directory</h2>
+            <p>In "expanded" mode, this directory will be used to store the zipped EPUB. The
+            directory must not exist yet. If this option is not provided, a default temporary
+            directory will be used.</p>
         </p:documentation>
     </p:option>
 
@@ -82,6 +102,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             px:assert
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            px:report-errors
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epubcheck-adapter/library.xpl">
@@ -159,6 +184,58 @@
         </p:insert>
         <p:delete match="//d:report/*[not(*)]"/>
     </p:group>
+
+    <!-- possibly report errors as warning messages -->
+    <p:choose>
+        <p:when test="$report-method=('log','error') and /d:document-validation-report/d:document-info/d:error-count[string(.)!='0']">
+            <p:xslt name="errors">
+                <p:input port="stylesheet">
+                    <p:inline>
+                        <xsl:stylesheet version="2.0" xpath-default-namespace="http://www.daisy.org/ns/pipeline/data">
+                            <xsl:template match="/*">
+                                <c:errors>
+                                    <xsl:for-each select="/*/reports/report/errors/error">
+                                        <c:error>
+                                            <xsl:variable name="desc" select="normalize-space(string(desc))"/>
+                                            <xsl:variable name="code" select="replace($desc,'^([a-zA-Z0-9_-]+):.*$','$1')"/>
+                                            <xsl:if test="not($code='')">
+                                                <xsl:attribute name="code" select="concat('EPUBCHECK:',$code)"/>
+                                            </xsl:if>
+                                            <xsl:if test="file">
+                                                <px:location>
+                                                    <px:file>
+                                                        <xsl:attribute name="href" select="normalize-space(string(file))"/> <!-- relative path -->
+                                                        <xsl:sequence select="location/(@line|@column)"/>
+                                                    </px:file>
+                                                </px:location>
+                                            </xsl:if>
+                                            <xsl:value-of select="replace($desc,'^([a-zA-Z0-9_-]+:\s+)','')"/>
+                                        </c:error>
+                                    </xsl:for-each>
+                                </c:errors>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
+            <p:sink/>
+            <px:report-errors>
+                <p:input port="source">
+                    <p:pipe step="xml-report" port="result"/>
+                </p:input>
+                <p:input port="report">
+                    <p:pipe step="errors" port="result"/>
+                </p:input>
+                <p:with-option name="method" select="$report-method"/>
+            </px:report-errors>
+        </p:when>
+        <p:otherwise>
+            <p:identity/>
+        </p:otherwise>
+    </p:choose>
 
     <p:xslt name="html-report">
         <p:input port="parameters">

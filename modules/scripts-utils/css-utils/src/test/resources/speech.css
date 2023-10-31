@@ -1,0 +1,44 @@
+div p {
+    speech-rate: 10;
+}
+
+div a {
+    speech-rate: 20;
+}
+
+div>x {
+    speech-rate: 30;
+}
+
+div+y {
+    speech-rate: 40;
+}
+
+simple {
+    voice-family: att,alain16;
+    volume: soft;
+    stress: 30;
+    richness: 10;
+    pause-before: 20;
+    pause-after: 20;
+    cue-before: url('beep-2.mp3');
+    cue-after: url('beep-2.mp3');
+    speech-rate: 22
+}
+
+simple2 {
+	pause: 10ms
+}
+
+simple3 {
+	pause: 10s
+}
+
+hyphens {
+    speech-rate: x-slow;
+    cue-before: url('a_b-c.mp3');
+}
+
+[*|type="prefixed"] {
+    cue-before: url('prefixed.mp3');
+}

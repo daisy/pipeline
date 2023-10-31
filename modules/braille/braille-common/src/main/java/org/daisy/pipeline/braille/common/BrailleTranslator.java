@@ -4,6 +4,15 @@ import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 public interface BrailleTranslator extends Transform {
+
+	/**
+	 * Return a new {@link BrailleTranslator} that uses the given {@link Hyphenator} to perform
+	 * hyphenation.
+	 *
+	 * The returned object should be selectable based on its identifier from the same {@link
+	 * BrailleTranslatorProvider} that provided this {@link BrailleTranslator}.
+	 */
+	public BrailleTranslator withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException;
 	
 	public FromStyledTextToBraille fromStyledTextToBraille() throws UnsupportedOperationException;
 	

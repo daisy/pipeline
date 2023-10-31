@@ -3,6 +3,8 @@ package org.daisy.pipeline.tts.qfrency.impl;
 import java.util.Map;
 import java.util.Optional;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.shell.BinaryFinder;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -14,35 +16,45 @@ import org.osgi.service.component.annotations.Component;
 	service = { TTSService.class }
 )
 public class QfrencyService implements TTSService {
-	
+
+	private static final Property QFRENCY_PATH = Properties.getProperty("org.daisy.pipeline.tts.qfrency.path",
+	                                                                    false,
+	                                                                    "Path of `synth` client program for communicating with Qfrency server",
+	                                                                    false,
+	                                                                    null);
+	private static final Property QFRENCY_ADDRESS = Properties.getProperty("org.daisy.pipeline.tts.qfrency.address",
+	                                                                       false,
+	                                                                       "Address if Qfrency speech engine server",
+	                                                                       false,
+	                                                                       "localhost");
+	private static final Property QFRENCY_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.qfrency.priority",
+	                                                                        true,
+	                                                                        "Priority of Qfrency voices relative to voices of other speech engines",
+	                                                                        false,
+	                                                                        "2");
+
 	@Override
-	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
+	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
 		// settings
-		String prop = "org.daisy.pipeline.tts.qfrency.path";
-		String qfrencyPath = params.get(prop);
+		String qfrencyPath = QFRENCY_PATH.getValue(properties);
 		if (qfrencyPath == null) {
 			Optional<String> epath = BinaryFinder.find("synth");
 			if (!epath.isPresent()) {
 				throw new SynthesisException(
-				        "Cannot find qfrency's binary and system property " + prop
-				                + " is not set.");
+					"Cannot find qfrency's binary and system property " + QFRENCY_PATH.getName() + " is not set.");
 			}
 			qfrencyPath = epath.get();
 		}
-		String address = params.get("org.daisy.pipeline.tts.qfrency.address");
-		if (address==null)
-			address="localhost";
-		String priority = params.get("org.daisy.pipeline.tts.qfrency.priority");
-		int intPriority = 2;
-		if (priority != null) {
+		String address = QFRENCY_ADDRESS.getValue(properties);
+		int priority; {
+			String prop = QFRENCY_PRIORITY.getValue(properties);
 			try {
-				intPriority = Integer.valueOf(priority);
+				priority = Integer.valueOf(prop);
 			} catch (NumberFormatException e) {
-
+				throw new SynthesisException(QFRENCY_PRIORITY.getName() + ": " + prop + "is not a valid number", e);
 			}
 		}
-
-		return new QfrencyEngine(this, qfrencyPath, address, intPriority);
+		return new QfrencyEngine(this, qfrencyPath, address, priority);
 	}
 
 	@Override

@@ -1,20 +1,22 @@
 package org.daisy.pipeline.tts.calabash.impl;
 
-import net.sf.saxon.s9api.Processor;
-import net.sf.saxon.s9api.QName;
-import net.sf.saxon.s9api.SaxonApiException;
-import net.sf.saxon.s9api.XdmNode;
-
-import org.daisy.common.xproc.calabash.XProcStep;
-import org.daisy.common.xproc.calabash.XProcStepProvider;
-import org.daisy.pipeline.tts.config.AnnotationsConfigExtension;
-import org.daisy.pipeline.tts.config.ConfigReader;
+import java.util.Map;
 
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
+
+import net.sf.saxon.s9api.QName;
+import net.sf.saxon.s9api.SaxonApiException;
+import net.sf.saxon.s9api.XdmNode;
+
+import org.daisy.common.xproc.calabash.XProcStep;
+import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
+import org.daisy.pipeline.tts.config.AnnotationsConfigExtension;
+import org.daisy.pipeline.tts.config.ConfigReader;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -26,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 public class GetAnnotationsProvider implements XProcStepProvider {
 
 	@Override
-	public XProcStep newStep(final XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(final XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new XProcStep() {
 
 			private String mContentType;
@@ -63,9 +65,8 @@ public class GetAnnotationsProvider implements XProcStepProvider {
 
 			public void run() throws SaxonApiException {
 
-				Processor proc = runtime.getProcessor();
-				AnnotationsConfigExtension annoExt = new AnnotationsConfigExtension(proc);
-				new ConfigReader(proc, mConfig.read(), annoExt);
+				AnnotationsConfigExtension annoExt = new AnnotationsConfigExtension();
+				new ConfigReader(runtime.getProcessor(), mConfig.read(), annoExt);
 
 				for (XdmNode annotations : annoExt.getAnnotations(mContentType)) {
 					mResult.write(annotations);

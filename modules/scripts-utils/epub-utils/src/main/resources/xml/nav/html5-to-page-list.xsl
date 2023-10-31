@@ -29,8 +29,8 @@
     <xsl:template match="*[@epub:type='pagebreak']">
         <xsl:variable name="content">
             <xsl:choose>
-                <xsl:when test="@title">
-                    <xsl:value-of select="@title"/>
+                <xsl:when test="@aria-label|@title">
+                    <xsl:value-of select="normalize-space((@aria-label,@title)[1])"/>
                 </xsl:when>
                 <xsl:when test="@id and normalize-space()=''">
                     <xsl:message select="concat('WARNING page break with ID ',@id,' has no value')"/>

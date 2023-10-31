@@ -5,7 +5,7 @@
   
   <x:scenario label="test_01">
     <x:documentation>
-      Tests that spaces in file paths are handled correctly in default-stylesheet option.
+      Tests that spaces in file paths are handled correctly in user-stylesheet option.
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">
@@ -18,7 +18,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:option name="default-stylesheet" select="'../../resources/dir%20with%20spaces/css_1.css'"/>
+      <x:option name="user-stylesheet" select="'../../resources/dir%20with%20spaces/css_1.css'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>
@@ -35,7 +35,7 @@
   
   <x:scenario label="test_02">
     <x:documentation>
-      Tests that spaces in .scss file paths are handled correctly in default-stylesheet option.
+      Tests that spaces in .scss file paths are handled correctly in user-stylesheet option.
     </x:documentation>
     <x:call step="px:css-cascade">
       <x:input port="source">
@@ -48,7 +48,7 @@
           </document>
         </x:document>
       </x:input>
-      <x:option name="default-stylesheet" select="'../../resources/dir%20with%20spaces/sass_1.scss'"/>
+      <x:option name="user-stylesheet" select="'../../resources/dir%20with%20spaces/sass_1.scss'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result" select="//body"/>

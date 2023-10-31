@@ -234,17 +234,29 @@
 		<x:expect label="the result" type="custom" href="../../../main/resources/xml/pub/compare-package-doc.xpl"
 		          step="x:epub3-compare-package-doc">
 			<x:document type="inline">
-				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id2" version="3.0"
-				         prefix="media: http://www.idpf.org/epub/vocab/overlays/#">
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id23" version="3.0"
+				         xml:lang="en" prefix="media: http://www.idpf.org/epub/vocab/overlays/# schema: http://schema.org/">
 					<metadata>
 						<dc:title>Minimal DTBook</dc:title>
-						<dc:identifier id="pub-id2">my-id</dc:identifier>
+						<dc:identifier id="pub-id23">my-id</dc:identifier>
 						<dc:language>en</dc:language>
 						<meta property="dcterms:modified">2019-10-17T17:37:04Z</meta>
 						<meta name="dcterms:modified" content="2019-10-17T17:37:04Z"/>
 						<dc:publisher>unknown</dc:publisher>
 						<meta property="media:duration">0:00:30.048</meta>
 						<meta name="media:duration" content="0:00:30.048"/>
+						<meta property="schema:accessibilityFeature">tableOfContents</meta>
+						<meta name="schema:accessibilityFeature" content="tableOfContents"/>
+						<meta property="schema:accessibilityFeature">pageNavigation</meta>
+						<meta name="schema:accessibilityFeature" content="pageNavigation"/>
+						<meta property="schema:accessibilityFeature">synchronizedAudioText</meta>
+						<meta name="schema:accessibilityFeature" content="synchronizedAudioText"/>
+						<meta property="schema:accessMode">textual</meta>
+						<meta name="schema:accessMode" content="textual"/>
+						<meta property="schema:accessMode">auditory</meta>
+						<meta name="schema:accessMode" content="auditory"/>
+						<meta property="schema:accessibilityHazard">unknown</meta>
+						<meta name="schema:accessibilityHazard" content="unknown"/>
 						<meta property="media:duration" refines="#item_12">0:00:08.585</meta>
 						<meta property="media:duration" refines="#item_13">0:00:21.463</meta>
 					</metadata>

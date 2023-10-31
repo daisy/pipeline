@@ -68,16 +68,6 @@ can be selected using a transformer query that contains
 `locale`
 : Shorthand for `language` and `region`.
 
-`hyphenator`
-: A value "none" will disable hyphenation. "auto" is the default and
-  will match any Dotify translator, whether it supports hyphenation
-  [out-of-the-box](#dotify-based-hyphenation), with the help of an
-  external
-  [hyphenator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#hyphenation),
-  or not at all. A value not equal to "none" or "auto" will match
-  every Dotify translator that uses an external hyphenator that
-  matches this feature.
-
 `force-pre-translation`
 : A value "true" will enable the pre-translation step. Disabled by default.
 

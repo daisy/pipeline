@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IllformedLocaleException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
@@ -129,12 +130,12 @@ public class ESpeakEngine extends TTSEngine {
 									if (mr.find()) {
 										String name = mr.group("name");
 										try {
-											Locale locale = VoiceInfo.tagToLocale(mr.group("locale"));
+											Locale locale = (new Locale.Builder()).setLanguageTag(mr.group("locale").replace("_", "-")).build();
 											Gender gender = "f".equals(mr.group("gender").trim().toLowerCase())
 												? Gender.FEMALE_ADULT
 												: Gender.MALE_ADULT;
 											result.add(new Voice(getProvider().getName(), name, locale, gender));
-										} catch (VoiceInfo.UnknownLanguage e) {
+										} catch (IllformedLocaleException e) {
 											mLogger.debug("Could not parse line from `espeak --voices' output: " + line);
 											mLogger.debug("Reason: could not parse locale: " + mr.group("locale"));
 											result.add(new Voice(getProvider().getName(), name));

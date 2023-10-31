@@ -6,13 +6,15 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.PriorityBlockingQueue;
+import java.util.HashMap;
+import java.util.IllformedLocaleException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.sound.sampled.AudioFileFormat;
 
@@ -22,6 +24,8 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.messaging.MessageAppender;
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
@@ -36,9 +40,7 @@ import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.TimedTTSExecutor;
 import org.daisy.pipeline.tts.Voice;
-import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 import org.daisy.pipeline.tts.VoiceManager;
 
 import org.slf4j.Logger;
@@ -79,6 +81,27 @@ import com.google.common.collect.Iterables;
  */
 public class SSMLtoAudio implements FormatSpecifications {
 
+	private static final Property THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.number",
+	                                                                      false,
+	                                                                      "Number of threads for speech synthesis and audio encoding",
+	                                                                      false,
+	                                                                      ""+Runtime.getRuntime().availableProcessors());
+	private static final Property ENCODING_THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.encoding.number",
+	                                                                               false,
+	                                                                               "Number of threads for audio encoding",
+	                                                                               false,
+	                                                                               null);
+	private static final Property SPEAKING_THREADS_NUMBER = Properties.getProperty("org.daisy.pipeline.tts.threads.speaking.number",
+	                                                                               false,
+	                                                                               "Number of threads for speech synthesis",
+	                                                                               false,
+	                                                                               null);
+	private static final Property THREADS_MEMLIMIT = Properties.getProperty("org.daisy.pipeline.tts.threads.each.memlimit",
+	                                                                        false,
+	                                                                        "Maximum amount of memory consumed by each speech synthesis thread (in Mb)",
+	                                                                        false,
+	                                                                        "20"); // 20 Mb
+
 	private TTSEngine mLastTTS; //used if no TTS is found for the current sentence
 	private TTSRegistry mTTSRegistry;
 	private Logger mLogger;
@@ -97,14 +120,16 @@ public class SSMLtoAudio implements FormatSpecifications {
 	private Processor mProc;
 	private VoiceManager mVoiceManager;
 	private TimedTTSExecutor mExecutor = new TimedTTSExecutor();
-	private Map<String, String> mProperties;
+	private final Map<String,String> mProperties;
 	private TTSLog mTTSlog;
 	private int mErrorCounter;
+
+	int numberOfCores = getPropertyAsInt(THREADS_NUMBER).get(); // for unit tests to override
 
 	public SSMLtoAudio(File audioDir, AudioFileFormat.Type audioFileFormat,
 	        int maxSentencesPerSection, TTSRegistry ttsregistry, Logger logger,
 	        AudioFootprintMonitor audioFootprintMonitor, Processor proc,
-	        VoiceConfigExtension configExt, TTSLog logs) {
+	        Map<String,String> properties, VoiceConfigExtension configExt, TTSLog logs) {
 		mTTSRegistry = ttsregistry;
 		mLogger = logger;
 		mCurrentSection = null;
@@ -119,9 +144,9 @@ public class SSMLtoAudio implements FormatSpecifications {
 		/*
 		 * initialize the TTS engines
 		 */
-		mProperties = configExt.getAllProperties();
+		mProperties = properties;
 		mVoiceManager = new VoiceManager(
-			ttsregistry.getWorkingEngines(mProperties, mTTSlog, mLogger),
+			ttsregistry.getWorkingEngines(properties, mTTSlog, mLogger),
 			configExt.getVoiceDeclarations());
 	}
 
@@ -146,8 +171,8 @@ public class SSMLtoAudio implements FormatSpecifications {
 			String langAttr = node.getAttributeValue(Sentence_attr_lang);
 			if (langAttr != null) {
 				try {
-					lang = VoiceInfo.tagToLocale(langAttr);
-				} catch (UnknownLanguage e) {
+					lang = (new Locale.Builder()).setLanguageTag(langAttr).build();
+				} catch (IllformedLocaleException e) {
 					lang = null;
 				}
 			}
@@ -192,8 +217,8 @@ public class SSMLtoAudio implements FormatSpecifications {
 			String langAttr = ssml.getAttributeValue(Sentence_attr_lang);
 			if (langAttr != null) {
 				try {
-					lang = VoiceInfo.tagToLocale(langAttr);
-				} catch (UnknownLanguage e) {
+					lang = (new Locale.Builder()).setLanguageTag(langAttr).build();
+				} catch (IllformedLocaleException e) {
 					lang = null;
 				}
 			}
@@ -284,14 +309,11 @@ public class SSMLtoAudio implements FormatSpecifications {
 			if (tts != null && tts.reservedThreadNum() > 0)
 				reservedThreadNum += tts.reservedThreadNum();
 		}
-		int cores = Runtime.getRuntime().availableProcessors();
-		int ttsThreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.number", cores);
-		int encodingThreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.encoding.number",
-		        ttsThreadNum);
-		int regularTTSthreadNum = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.speaking.number",
-		        ttsThreadNum);
+		int ttsThreadNum = numberOfCores;
+		int encodingThreadNum = getPropertyAsInt(ENCODING_THREADS_NUMBER).orElse(ttsThreadNum);
+		int regularTTSthreadNum = getPropertyAsInt(SPEAKING_THREADS_NUMBER).orElse(ttsThreadNum);
 		int totalTTSThreads = regularTTSthreadNum + reservedThreadNum;
-		int maxMemPerTTSThread = convertToInt(mProperties, "org.daisy.pipeline.tts.threads.each.memlimit", 20)*1048576; //20MB
+		int maxMemPerTTSThread = getPropertyAsInt(THREADS_MEMLIMIT).get() * 1048576;
 		mLogger.info("Number of encoding threads: " + encodingThreadNum);
 		mLogger.info("Number of regular text-to-speech threads: " + regularTTSthreadNum);
 		mLogger.info("Number of reserved text-to-speech threads: " + reservedThreadNum);
@@ -458,16 +480,16 @@ public class SSMLtoAudio implements FormatSpecifications {
 		newSections.add(currentSection);
 	}
 
-	private int convertToInt(Map<String, String> params, String prop, int defaultVal) {
-		String str = params.get(prop);
+	private Optional<Integer> getPropertyAsInt(Property prop) {
+		String str = prop.getValue(mProperties);
 		if (str != null) {
 			try {
-				defaultVal = Integer.valueOf(str);
+				return Optional.of(Integer.valueOf(str));
 			} catch (NumberFormatException e) {
 				mTTSlog.addGeneralError(
-					ErrorCode.WARNING, str + " is not a valid value for property " + prop, e);
+					ErrorCode.WARNING, str + " is not a valid value for property " + prop.getName(), e);
 			}
 		}
-		return defaultVal;
+		return Optional.empty();
 	}
 }

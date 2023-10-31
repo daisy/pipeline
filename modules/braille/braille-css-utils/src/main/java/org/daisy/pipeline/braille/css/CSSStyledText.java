@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.css;
 
 import java.util.function.Function;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
 
@@ -18,40 +19,60 @@ import cz.vutbr.web.css.RuleBlock;
  * SimpleInlineStyle#iterator()} methods).
  */
 public class CSSStyledText implements Cloneable {
-		
+	
 	private final String text;
+	private final Locale language;
 	private Map<String,String> textAttributes;
 	private Style style;
 	
 	private static final Function<String,Style> parseCSS = memoize(Style::parse);
 	
 	public CSSStyledText(String text, SimpleInlineStyle style) {
-		this(text, style, null);
+		this(text, style, null, null);
+	}
+	
+	public CSSStyledText(String text, SimpleInlineStyle style, Locale language) {
+		this(text, style, language, null);
 	}
 	
 	public CSSStyledText(String text, SimpleInlineStyle style, Map<String,String> textAttributes) {
+		this(text, style, null, textAttributes);
+	}
+	
+	public CSSStyledText(String text, SimpleInlineStyle style, Locale language, Map<String,String> textAttributes) {
 		this.text = text;
 		this.style = new Style();
 		this.style.properties = style;
+		this.language = language;
 		this.textAttributes = textAttributes;
 	}
 	
 	public CSSStyledText(String text, String style) {
-		this(text, style, null);
+		this(text, style, null, null);
+	}
+	
+	public CSSStyledText(String text, String style, Locale language) {
+		this(text, style, language, null);
 	}
 	
 	public CSSStyledText(String text, String style, Map<String,String> textAttributes) {
+		this(text, style, null, textAttributes);
+	}
+	
+	public CSSStyledText(String text, String style, Locale language, Map<String,String> textAttributes) {
 		this.text = text;
 		if (style == null)
 			this.style = null;
 		else
 			this.style = parseCSS.apply(style);
+		this.language = language;
 		this.textAttributes = textAttributes;
 	}
 	
 	public CSSStyledText(String text) {
 		this.text = text;
 		this.style = null;
+		this.language = null;
 		this.textAttributes = null;
 	}
 	
@@ -66,6 +87,7 @@ public class CSSStyledText implements Cloneable {
 			return style.properties;
 	}
 	
+	// currently not used
 	public RuleTextTransform getDefaultTextTransformDefinition() {
 		if (style == null)
 			return null;
@@ -73,11 +95,16 @@ public class CSSStyledText implements Cloneable {
 			return style.defaultTextTransformDef;
 	}
 	
+	// currently not used
 	public RuleTextTransform getTextTransformDefinition(String name) {
 		if (style == null || style.textTransformDefs == null)
 			return null;
 		else
 			return style.textTransformDefs.get(name);
+	}
+	
+	public Locale getLanguage() {
+		return language;
 	}
 	
 	public Map<String,String> getTextAttributes() {
@@ -105,6 +132,8 @@ public class CSSStyledText implements Cloneable {
 		String s = text;
 		if (style != null && style.properties != null && !style.properties.isEmpty())
 			s += "{" + style.properties + "}";
+		if (language != null && !"und".equals(language.toLanguageTag()))
+			s += "{" + language.toLanguageTag() + "}";
 		return s;
 	}
 

@@ -2,21 +2,29 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
                script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
   
   <x:scenario label="test_01">
     <x:call step="px:css-cascade">
       <x:input port="source">
         <x:document type="inline">
+          <d:fileset>
+            <d:file href="doc.html" media-type="application/xhtml+xml"/>
+            <d:file href="default.scss" media-type="text/x-scss"/>
+            <d:file href="mod.scss" media-type="text/x-scss"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="doc.html">
           <html>
             <body>
               <h>foobar</h>
             </body>
           </html>
         </x:document>
-      </x:input>
-      <x:input port="context">
-        <x:document type="inline" xml:base="http://example.org/default.scss">
+        <x:document type="inline" xml:base="default.scss">
           <c:result content-type="text/plain">
             @import "mod.scss";
             h {
@@ -24,7 +32,7 @@
             }
           </c:result>
         </x:document>
-        <x:document type="inline" xml:base="http://example.org/mod.scss">
+        <x:document type="inline" xml:base="mod.scss">
           <c:result content-type="text/plain">
             h {
               page-break-after: avoid
@@ -32,10 +40,10 @@
           </c:result>
         </x:document>
       </x:input>
-      <x:option name="default-stylesheet" select="'http://example.org/default.scss'"/>
+      <x:option name="user-stylesheet" select="resolve-uri('default.scss')"/>
     </x:call>
     <x:context label="result">
-      <x:document type="port" port="result"/>
+      <x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(.),'/doc.html')]"/>
     </x:context>
     <x:expect label="result" type="compare">
       <x:document type="inline">

@@ -1,12 +1,16 @@
+import java.util.Locale;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
 
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
+import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultFullHyphenator;
 import org.daisy.pipeline.braille.common.AbstractHyphenator.util.DefaultLineBreaker;
 import org.daisy.pipeline.braille.common.AbstractTransformProvider;
 import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.Query;
 import static org.daisy.pipeline.braille.common.Query.util.query;
+import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 import org.osgi.service.component.annotations.Component;
@@ -14,7 +18,7 @@ import org.osgi.service.component.annotations.Component;
 public class MockHyphenator extends AbstractHyphenator {
 	
 	private static final LineBreaker lineBreaker = new DefaultLineBreaker() {
-		protected Break breakWord(String word, int limit, boolean force) {
+		protected Break breakWord(String word, Locale language, int limit, boolean force) {
 			if (limit >= 3 && word.equals("foobarz"))
 				return new Break("fubbarz", 3, true);
 			else if (limit >= word.length())
@@ -26,9 +30,16 @@ public class MockHyphenator extends AbstractHyphenator {
 		}
 	};
 	
-	private static final FullHyphenator fullHyphenator = new FullHyphenator() {
-		public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> text) throws NonStandardHyphenationException {
-			throw new NonStandardHyphenationException();
+	private final static char SHY = '\u00AD';
+	private final static char ZWSP = '\u200B';
+	
+	private final FullHyphenator fullHyphenator = new DefaultFullHyphenator() {
+		protected boolean isCodePointAware() { return false; }
+		protected boolean isLanguageAdaptive() { return false; }
+		protected byte[] getHyphenationOpportunities(String textWithoutHyphens, Locale language) throws NonStandardHyphenationException {
+			if (textWithoutHyphens.contains("foobarz"))
+				throw new NonStandardHyphenationException();
+			return extractHyphens(textWithoutHyphens.replace("foobar", "foo\u00ADbar"), true, SHY, ZWSP)._2;
 		}
 	};
 	

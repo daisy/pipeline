@@ -42,7 +42,11 @@
     <p:option name="tts" required="false" select="'default'" cx:as="xs:string"/>
     <p:option name="sentence-detection" required="false" select="'false'" cx:as="xs:string"/>
     <p:option name="braille-translator" select="''"/>
-    <p:option name="stylesheet" select="''"/>
+    <p:option name="stylesheet" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>CSS user style sheets as space separated list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
     <p:option name="set-default-rendition-to-braille" select="'false'" cx:as="xs:string"/>
     <p:option name="content-media-types" select="'application/xhtml+xml'">
@@ -131,9 +135,13 @@
             px:apply-stylesheets
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+        <p:documentation>
+            px:css-detach
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
         <p:documentation>
-            css:delete-stylesheets
             css:extract
         </p:documentation>
     </p:import>
@@ -527,7 +535,7 @@
         </p:output>
         <!--
             Read navigation document and label page break elements with epub:type="pagebreak" if
-            missing (and also add title attribute if missing)
+            missing (and also add aria-label attribute if missing)
         -->
         <px:epub3-label-pagebreaks-from-nav name="label-pagebreaks-from-nav" px:progress="5/10">
             <p:input port="source.in-memory">
@@ -648,6 +656,22 @@
                             <p:pipe step="fix-pagenum" port="in-memory"/>
                         </p:input>
                     </px:opf-spine-to-fileset>
+                    <!-- add CSS -->
+                    <p:group>
+                        <p:sink/>
+                        <px:fileset-filter name="css" media-types="text/css text/x-scss">
+                            <p:input port="source">
+                                <p:pipe step="fix-pagenum" port="fileset"/>
+                            </p:input>
+                        </px:fileset-filter>
+                        <p:sink/>
+                        <px:fileset-join>
+                            <p:input port="source">
+                                <p:pipe step="spine" port="result"/>
+                                <p:pipe step="css" port="result"/>
+                            </p:input>
+                        </px:fileset-join>
+                    </p:group>
                     <px:tts-for-epub3 name="do-tts" audio="true" px:progress="1">
                         <p:input port="source.in-memory">
                             <p:pipe step="fix-pagenum" port="in-memory"/>
@@ -655,6 +679,7 @@
                         <p:input port="config">
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
+                        <p:with-option name="stylesheet" select="$stylesheet"/>
                         <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
                         <p:with-option name="temp-dir" select="if ($temp-dir='') then $temp-dir else concat($temp-dir,'tts/')"/>
@@ -748,7 +773,6 @@
                 <p:for-each name="sentence-detection" px:progress="1">
                     <p:output port="result"/>
                     <px:html-break-detect name="break-detect">
-                        <p:with-option name="id-prefix" select="concat(p:iteration-position(),'-')"/>
                         <p:with-option name="sentence-attr" select="if ($sentence-class!='') then 'class' else ''"/>
                         <p:with-option name="sentence-attr-val" select="$sentence-class"/>
                     </px:html-break-detect>
@@ -758,7 +782,6 @@
                         <p:input port="sentence-ids">
                             <p:pipe step="break-detect" port="sentence-ids"/>
                         </p:input>
-                        <p:with-option name="id-prefix" select="concat('i', p:iteration-position())"/>
                     </px:isolate-skippable>
                     <px:html-unwrap-words>
                         <!-- only keep the sentences, not the words -->
@@ -928,7 +951,7 @@
                             <p:delete match="@style"/>
                         </p:otherwise>
                     </p:choose>
-                    <css:delete-stylesheets/>
+                    <px:css-detach/>
                     <!-- media="braille" would be more appropriate, see https://github.com/braillespecs/braille-css/issues/1 -->
                     <px:apply-stylesheets type="text/css text/x-scss" media="embossed">
                         <p:with-option name="stylesheets" select="($stylesheet,$default-stylesheet)[not(.='')][1]"/>

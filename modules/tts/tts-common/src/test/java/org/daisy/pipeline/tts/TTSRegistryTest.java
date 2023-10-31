@@ -16,7 +16,6 @@ import net.sf.saxon.s9api.XdmNode;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,6 +60,12 @@ public class TTSRegistryTest {
 	}
 
 	static Configuration Conf = new Processor(false).getUnderlyingConfiguration();
+	static Locale EN = Locale.forLanguageTag("en");
+	static Locale EN_US = Locale.forLanguageTag("en-US");
+	static Locale EN_IN = Locale.forLanguageTag("en-IN");
+	static Locale FR = Locale.forLanguageTag("fr");
+	static Gender MALE = Gender.MALE_ADULT;
+	static Gender FEMALE = Gender.FEMALE_ADULT;
 
 	@Test
 	public void simpleInit() {
@@ -81,12 +86,12 @@ public class TTSRegistryTest {
 	}
 
 	@Test
-	public void customVoice() throws UnknownLanguage {
+	public void customVoice() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 10));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
@@ -101,7 +106,7 @@ public class TTSRegistryTest {
 	}
 
 	@Test
-	public void onlyLanguage() throws UnknownLanguage {
+	public void onlyLanguage() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("v2", "wrong-lang1"));
 			availableVoices.add(new Voice("v", "low-prio"));
@@ -109,29 +114,28 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("v2", "wrong-lang2"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang1", "fr", Gender.of("male-adult"), 15));
-			voiceInfoFromConfig.add(new VoiceInfo("v", "low-prio", "en", Gender.of("male-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang2", "fr", Gender.of("male-adult"), 15));
+			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang1", FR, MALE, 15));
+			voiceInfoFromConfig.add(new VoiceInfo("v", "low-prio", EN, MALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("v2", "wrong-lang2", FR, MALE, 15));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en, null).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN, null).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("low-prio", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void withGenderAndLang() throws UnknownLanguage {
+	public void withGenderAndLang() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "male-voice"));
 			availableVoices.add(new Voice("vendor", "female-voice"));
@@ -140,96 +144,92 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("vendor", "lowprio2"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "male-voice", "en", Gender.of("male-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "female-voice", "en", Gender.of("female-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "fr-voice", "fr", Gender.of("female-adult"), 15));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio1", "en", Gender.of("female-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio2", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "male-voice", EN, MALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "female-voice", EN, FEMALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "fr-voice", FR, FEMALE, 15));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio1", EN, FEMALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "lowprio2", EN, MALE, 5));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN, MALE));
 		Assert.assertEquals("male-voice", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN, MALE));
 		Assert.assertEquals("lowprio2", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, null, null, en, male));
+		Assert.assertFalse(vm.matches(v, null, null, EN, MALE));
 		Assert.assertEquals("female-voice", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, null, null, en, male));
+		Assert.assertFalse(vm.matches(v, null, null, EN, MALE));
 		Assert.assertEquals("lowprio1", v.getName());
 		Assert.assertFalse(vv.hasNext());
-		Gender female = Gender.of("female-adult");
-		vv = vm.findAvailableVoices(null, null, en, female).iterator();
+		vv = vm.findAvailableVoices(null, null, EN, FEMALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, female));
+		Assert.assertTrue(vm.matches(v, null, null, EN, FEMALE));
 		Assert.assertEquals("female-voice", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, female));
+		Assert.assertTrue(vm.matches(v, null, null, EN, FEMALE));
 		Assert.assertEquals("lowprio1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, null, null, en, female));
+		Assert.assertFalse(vm.matches(v, null, null, EN, FEMALE));
 		Assert.assertEquals("male-voice", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, null, null, en, female));
+		Assert.assertFalse(vm.matches(v, null, null, EN, FEMALE));
 		Assert.assertEquals("lowprio2", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void withVendorAndLang() throws UnknownLanguage {
+	public void withVendorAndLang() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor1", "voice1"));
 			availableVoices.add(new Voice("vendor2", "voice2"));
 			availableVoices.add(new Voice("vendor1", "voice-fr"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice-fr", "fr", Gender.of("male-adult"), 15));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", EN, MALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice-fr", FR, MALE, 15));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, en, null).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, EN, null).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor1", null, en, null));
+		Assert.assertTrue(vm.matches(v, "vendor1", null, EN, null));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor1", null, en, null));
+		Assert.assertFalse(vm.matches(v, "vendor1", null, EN, null));
 		Assert.assertEquals("voice2", v.getName());
 		Assert.assertFalse(vv.hasNext());
-		vv = vm.findAvailableVoices("vendor2", null, en, null).iterator();
+		vv = vm.findAvailableVoices("vendor2", null, EN, null).iterator();
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor2", null, en, null));
+		Assert.assertTrue(vm.matches(v, "vendor2", null, EN, null));
 		Assert.assertEquals("voice2", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor2", null, en, null));
+		Assert.assertFalse(vm.matches(v, "vendor2", null, EN, null));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void withVendorAndLangAndGender() throws UnknownLanguage {
+	public void withVendorAndLangAndGender() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor2", "male-voice"));
 			availableVoices.add(new Voice("vendor1", "male-voice"));
@@ -237,158 +237,166 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("vendor1", "low-prio"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "male-voice", "en", Gender.of("male-adult"), 100));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "male-voice", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "wrong", "fr", Gender.of("male-adult"), 100));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "low-prio", "en", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "male-voice", EN, MALE, 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "male-voice", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "wrong", FR, MALE, 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "low-prio", EN, MALE, 5));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, en, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, EN, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor1", null, en, male));
+		Assert.assertTrue(vm.matches(v, "vendor1", null, EN, MALE));
 		Assert.assertEquals("vendor1", v.getEngine());
 		Assert.assertEquals("male-voice", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor1", null, en, male));
+		Assert.assertTrue(vm.matches(v, "vendor1", null, EN, MALE));
 		Assert.assertEquals("vendor1", v.getEngine());
 		Assert.assertEquals("low-prio", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor1", null, en, male));
+		Assert.assertFalse(vm.matches(v, "vendor1", null, EN, MALE));
 		Assert.assertEquals("vendor2", v.getEngine());
 		Assert.assertEquals("male-voice", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void voiceNotFound() throws UnknownLanguage {
+	public void voiceNotFound() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 			availableVoices.add(new Voice("vendor", "wrongvoice"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", FR, MALE, 100));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Gender female = Gender.of("female-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", en, female).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", EN, FEMALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", en, female));
+		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", EN, FEMALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void approximateMatch1() throws UnknownLanguage {
+	public void approximateMatch1() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 			availableVoices.add(new Voice("vendor", "wrongvoice1"));
 			availableVoices.add(new Voice("another-vendor", "wrongvoice2"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice1", "fr", Gender.of("male-adult"), 100));
-			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrongvoice2", "en", Gender.of("male-adult"), 200));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice1", FR, MALE, 100));
+			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrongvoice2", EN, MALE, 200));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Gender female = Gender.of("female-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("vendor", null, en, female).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("vendor", null, EN, FEMALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor", null, en, female));
+		Assert.assertFalse(vm.matches(v, "vendor", null, EN, FEMALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor", null, en, female));
+		Assert.assertFalse(vm.matches(v, "vendor", null, EN, FEMALE));
 		Assert.assertEquals("wrongvoice2", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void approximateMatch2() throws UnknownLanguage {
+	public void approximateMatch2() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 			availableVoices.add(new Voice("vendor", "wrongvoice"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 100));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", FR, MALE, 100));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("wrong-vendor", null, en, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("wrong-vendor", null, EN, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertFalse(vm.matches(v, "wrong-vendor", null, en, male));
+		Assert.assertFalse(vm.matches(v, "wrong-vendor", null, EN, MALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void langVariantPriority() throws UnknownLanguage {
+	public void langVariant() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice-a"));
 			availableVoices.add(new Voice("vendor", "voice-b"));
 			availableVoices.add(new Voice("vendor", "voice-c"));
-			availableVoices.add(new Voice("vendor", "voice1"));
-			availableVoices.add(new Voice("vendor", "voice-d"));
-			availableVoices.add(new Voice("vendor", "voice-e"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-a", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-b", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-c", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en-us", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-d", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-e", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-a", EN, MALE, 0));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-b", EN_US, MALE, 0));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-c", EN_IN, MALE, 0));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en_US = VoiceInfo.tagToLocale("en-us");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en_US, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
-		Assert.assertEquals("voice1", v.getName());
+		Assert.assertTrue(vm.matches(v, null, null, EN, MALE));
+		Assert.assertEquals("voice-a", v.getName());
+		Assert.assertFalse(vv.hasNext());
+		vv = vm.findAvailableVoices(null, null, EN_US, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN_US, MALE));
+		Assert.assertEquals("voice-b", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
-		Assert.assertTrue(vv.hasNext());
-		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
-		Assert.assertTrue(vv.hasNext());
-		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
-		Assert.assertTrue(vv.hasNext());
-		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN_US, MALE));
+		Assert.assertEquals("voice-a", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void voiceFallback1() throws UnknownLanguage {
+	public void langVariantPriority() {
+		List<Voice> availableVoices = new ArrayList<>(); {
+			availableVoices.add(new Voice("vendor", "voice-a"));
+			availableVoices.add(new Voice("vendor", "voice-b"));
+			availableVoices.add(new Voice("vendor", "voice-c"));
+		}
+		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-a", EN, MALE, 1));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-b", EN_US, MALE, 2));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice-c", EN_IN, MALE, 0));
+		}
+		VoiceManager vm = new VoiceManager(
+			singletonList(new SimplifiedProcessor(availableVoices)),
+			voiceInfoFromConfig);
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN_IN, MALE).iterator();
+		Assert.assertTrue(vv.hasNext());
+		Voice v = vv.next();
+		Assert.assertTrue(vm.matches(v, null, null, EN_IN, MALE));
+		// the "en" voice wins because it has a higher priority
+		// the higher priority "en-US" voice is not a match
+		Assert.assertEquals("voice-a", v.getName());
+		Assert.assertTrue(vv.hasNext());
+		v = vv.next();
+		Assert.assertTrue(vm.matches(v, null, null, EN_IN, MALE));
+		Assert.assertEquals("voice-c", v.getName());
+		Assert.assertFalse(vv.hasNext());
+	}
+
+	@Test
+	public void voiceFallback1() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor1", "voice1"));
 			availableVoices.add(new Voice("vendor2", "wrong-choice"));
@@ -396,20 +404,18 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("vendor2", "voice2"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", "en", Gender.of("male-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", "en", Gender.of("female-adult"), 19));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", "en", Gender.of("male-adult"), 18));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", EN, MALE, 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", EN, MALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", EN, FEMALE, 19));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice2", EN, MALE, 18));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en_US = VoiceInfo.tagToLocale("en-us");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en_US, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN_US, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN_US, MALE));
 		Assert.assertEquals("voice1", v.getName());
 		v = vm.findSecondaryVoice(v);
 		Assert.assertNotNull(v);
@@ -417,19 +423,19 @@ public class TTSRegistryTest {
 		Assert.assertTrue("voice2".equals(v.getName()) || "voice3".equals(v.getName()));
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN_US, MALE));
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en_US, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN_US, MALE));
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, null, null, en_US, male));
+		Assert.assertFalse(vm.matches(v, null, null, EN_US, MALE));
 		Assert.assertEquals("voice3", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void voiceFallback2() throws UnknownLanguage {
+	public void voiceFallback2() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "wrong-voice1"));
 			availableVoices.add(new Voice("vendor", "voice2"));
@@ -437,11 +443,11 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("another-vendor", "wrong-voice3"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "en", Gender.of("male-adult"), 20));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice1", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice2", "en", Gender.of("male-adult"), 20));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice2", "en", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrong-voice3", "en", Gender.of("male-adult"), 50));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", EN, MALE, 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice1", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice2", EN, MALE, 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrong-voice2", EN, MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("another-vendor", "wrong-voice3", EN, MALE, 50));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
@@ -467,7 +473,7 @@ public class TTSRegistryTest {
 	}
 
 	@Test
-	public void voiceFallback3() throws UnknownLanguage {
+	public void voiceFallback3() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor1", "voice1"));
 			availableVoices.add(new Voice("vendor2", "wrong-choice"));
@@ -475,46 +481,44 @@ public class TTSRegistryTest {
 			availableVoices.add(new Voice("vendor1", "voice2"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", "en", Gender.of("male-adult"), 5));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", "en", Gender.of("male-adult"), 19));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice2", "en", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", EN, MALE, 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "wrong-choice", EN, MALE, 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor2", "voice3", EN, MALE, 19));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice2", EN, MALE, 10));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en_US = VoiceInfo.tagToLocale("en-us");
-		Gender male = Gender.of("male-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, en_US, male).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("vendor1", null, EN_US, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor1", null, en_US, male));
+		Assert.assertTrue(vm.matches(v, "vendor1", null, EN_US, MALE));
 		Assert.assertEquals("voice1", v.getName());
 		v = vm.findSecondaryVoice(v);
 		Assert.assertNotNull(v);
 		Assert.assertEquals("voice2", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, "vendor1", null, en_US, male));
+		Assert.assertTrue(vm.matches(v, "vendor1", null, EN_US, MALE));
 		Assert.assertEquals("voice2", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor1", null, en_US, male));
+		Assert.assertFalse(vm.matches(v, "vendor1", null, EN_US, MALE));
 		Assert.assertEquals("voice3", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "vendor1", null, en_US, male));
+		Assert.assertFalse(vm.matches(v, "vendor1", null, EN_US, MALE));
 		Assert.assertEquals("wrong-choice", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void voiceFallback4() throws UnknownLanguage {
+	public void voiceFallback4() {
 		List<Voice> availableVoices = new ArrayList<>(); {
-			availableVoices.add(new Voice("vendor1", "voice1", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+			availableVoices.add(new Voice("vendor1", "voice1", EN, MALE));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", "en", Gender.of("male-adult"), 20));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor1", "voice1", EN, MALE, 20));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
@@ -530,60 +534,56 @@ public class TTSRegistryTest {
 	}
 
 	@Test
-	public void multiLangVoice() throws UnknownLanguage {
+	public void multiLangVoice() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", MALE, 10));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale fr = VoiceInfo.tagToLocale("fr");
-		Gender female = Gender.of("female-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", fr, female).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", FR, FEMALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", fr, female));
+		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", FR, FEMALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void multiLangVoicePriority() throws UnknownLanguage {
+	public void multiLangVoicePriority() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("vendor", "voice1"));
 			availableVoices.add(new Voice("vendor", "wrongvoice"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", Gender.of("male-adult"), 10));
-			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", "fr", Gender.of("male-adult"), 5));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "voice1", "*", MALE, 10));
+			voiceInfoFromConfig.add(new VoiceInfo("vendor", "wrongvoice", FR, MALE, 5));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale fr = VoiceInfo.tagToLocale("fr");
-		Gender female = Gender.of("female-adult");
-		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", fr, female).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices("any-vendor", "any-voice", FR, FEMALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", fr, female));
+		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", FR, FEMALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", fr, female));
+		Assert.assertFalse(vm.matches(v, "any-vendor", "any-voice", FR, FEMALE));
 		Assert.assertEquals("wrongvoice", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void caseInsensitivity() throws UnknownLanguage {
+	public void caseInsensitivity() {
 		List<Voice> availableVoices = new ArrayList<>(); {
 			availableVoices.add(new Voice("Vendor1", "Voice1"));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = new ArrayList<VoiceInfo>(); {
-			voiceInfoFromConfig.add(new VoiceInfo("Vendor1", "Voice1", "*", Gender.of("male-adult"), 10));
+			voiceInfoFromConfig.add(new VoiceInfo("Vendor1", "Voice1", "*", MALE, 10));
 		}
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
@@ -598,54 +598,51 @@ public class TTSRegistryTest {
 	}
 
 	@Test
-	public void voiceWithKnownLanguageAndUnknownGender() throws UnknownLanguage {
+	public void voiceWithKnownLanguageAndUnknownGender() {
 		List<Voice> availableVoices = new ArrayList<>(); {
-			availableVoices.add(new Voice("vendor", "voice1", Locale.forLanguageTag("en"), Gender.ANY));
+			availableVoices.add(new Voice("vendor", "voice1", EN, Gender.ANY));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = EMPTY_LIST;
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en, null).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN, null).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
-		Gender male = Gender.of("male-adult");
-		vv = vm.findAvailableVoices(null, null, en, male).iterator();
+		vv = vm.findAvailableVoices(null, null, EN, MALE).iterator();
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, male));
+		Assert.assertTrue(vm.matches(v, null, null, EN, MALE));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}
 
 	@Test
-	public void orderOrAvailableVoices() throws UnknownLanguage {
+	public void orderOfAvailableVoices() {
 		List<Voice> availableVoices = new ArrayList<>(); {
-			availableVoices.add(new Voice("vendor", "voice3", Locale.forLanguageTag("en"), Gender.of("male-adult")));
-			availableVoices.add(new Voice("vendor", "voice1", Locale.forLanguageTag("en"), Gender.of("male-adult")));
-			availableVoices.add(new Voice("vendor", "voice2", Locale.forLanguageTag("en"), Gender.of("male-adult")));
+			availableVoices.add(new Voice("vendor", "voice3", EN, MALE));
+			availableVoices.add(new Voice("vendor", "voice1", EN, MALE));
+			availableVoices.add(new Voice("vendor", "voice2", EN, MALE));
 		}
 		List<VoiceInfo> voiceInfoFromConfig = EMPTY_LIST;
 		VoiceManager vm = new VoiceManager(
 			singletonList(new SimplifiedProcessor(availableVoices)),
 			voiceInfoFromConfig);
-		Locale en = VoiceInfo.tagToLocale("en");
-		Iterator<Voice> vv = vm.findAvailableVoices(null, null, en, null).iterator();
+		Iterator<Voice> vv = vm.findAvailableVoices(null, null, EN, null).iterator();
 		Assert.assertTrue(vv.hasNext());
 		Voice v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("voice3", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("voice1", v.getName());
 		Assert.assertTrue(vv.hasNext());
 		v = vv.next();
-		Assert.assertTrue(vm.matches(v, null, null, en, null));
+		Assert.assertTrue(vm.matches(v, null, null, EN, null));
 		Assert.assertEquals("voice2", v.getName());
 		Assert.assertFalse(vv.hasNext());
 	}

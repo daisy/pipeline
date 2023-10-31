@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.naming.directory.InvalidAttributeValueException;
 import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.onecore.OnecoreResult;
 import org.daisy.pipeline.tts.onecore.SAPI;
@@ -31,7 +34,23 @@ import org.slf4j.LoggerFactory;
 )
 public class SAPIService implements TTSService {
 
-	private static final Logger Logger = LoggerFactory.getLogger(SAPIEngine.class);
+	private static final Logger logger = LoggerFactory.getLogger(SAPIEngine.class);
+
+	private static final Property SAPI_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.sapi.samplerate",
+	                                                                       true,
+	                                                                       "Audio sample rate of legacy Windows voices (in Hz)",
+	                                                                       false,
+	                                                                       "22050");
+	private static final Property SAPI_BYTESPERSAMPLE = Properties.getProperty("org.daisy.pipeline.tts.sapi.bytespersample",
+	                                                                           true,
+	                                                                           "Audio bit depth of legacy Windows voices (in bytes per sample)",
+	                                                                           false,
+	                                                                           "2");
+	private static final Property SAPI_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.sapi.priority",
+	                                                                     true,
+	                                                                     "Priority of Windows voices relative to voices of other engines",
+	                                                                     false,
+	                                                                     "7");
 
 	private static boolean onecoreDLLIsLoaded = false;
 	private static boolean onecoreIsInitialized = false;
@@ -46,19 +65,19 @@ public class SAPIService implements TTSService {
 	private static AudioFormat sapiAudioFormat = null;
 
 	@Override
-	public TTSEngine newEngine(Map<String, String> params) throws Throwable {
-		int priority = convertToInt(params, "org.daisy.pipeline.tts.sapi.priority", 7);
+	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
+		int priority = getPropertyAsInt(properties, SAPI_PRIORITY).get();
 		synchronized (this) {
 			// try to load both sapi and onecore to keep using third party voices that could have
 			// been installed on sapi registry and not exposed to the onecore registry
 			try {
 				loadAndInitializeOnecore();
 			} catch (Exception e) {
-				Logger.warn(e.getMessage());
+				logger.warn(e.getMessage());
 			}
 			try {
-				int sapiSampleRate = convertToInt(params, "org.daisy.pipeline.tts.sapi.samplerate", 22050);
-				int sapiBytesPerSample = convertToInt(params, "org.daisy.pipeline.tts.sapi.bytespersample", 2);
+				int sapiSampleRate = getPropertyAsInt(properties, SAPI_SAMPLERATE).get();
+				int sapiBytesPerSample = getPropertyAsInt(properties, SAPI_BYTESPERSAMPLE).get();
 				AudioFormat format = new AudioFormat(sapiSampleRate, 8 * sapiBytesPerSample, 1, true, false);
 				if (sapiAudioFormat != null && !sapiAudioFormat.matches(format)) {
 					throw new InvalidAttributeValueException(
@@ -67,7 +86,7 @@ public class SAPIService implements TTSService {
 				loadAndInitializeSAPI(sapiSampleRate,sapiBytesPerSample);
 
 			} catch (Exception e){
-				Logger.warn(e.getMessage());
+				logger.warn(e.getMessage());
 			}
 			if (!onecoreIsInitialized && sapiAudioFormat == null){
 				throw new SynthesisException("Neither SAPI or Onecore libraries could be loaded.");
@@ -87,16 +106,16 @@ public class SAPIService implements TTSService {
 		ReleaseSAPI();
 	}
 
-	private static int convertToInt(Map<String, String> params, String prop, int defaultVal) throws SynthesisException {
-		String str = params.get(prop);
+	private static Optional<Integer> getPropertyAsInt(Map<String,String> properties, Property prop) throws SynthesisException {
+		String str = prop.getValue(properties);
 		if (str != null) {
 			try {
-				defaultVal = Integer.parseInt(str);
+				return Optional.of(Integer.valueOf(str));
 			} catch (NumberFormatException e) {
-				throw new SynthesisException(str + " is not a valid a value for property " + prop);
+				throw new SynthesisException(str + " is not a valid a value for property " + prop.getName());
 			}
 		}
-		return defaultVal;
+		return Optional.empty();
 	}
 
 	/**
@@ -231,6 +250,5 @@ public class SAPIService implements TTSService {
 			}
 		}
 		System.load(dllFile.getAbsolutePath());
-
 	}
 }

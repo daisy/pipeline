@@ -54,6 +54,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.file.FileUtils.normalizeURI;
 import org.daisy.pipeline.fileset.Fileset;
 import org.daisy.pipeline.audio.AudioClip;
@@ -81,7 +82,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 		private AudioServices audioServices;
 
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new AudioRearrangeStep(runtime, step, audioServices);
 		}
 

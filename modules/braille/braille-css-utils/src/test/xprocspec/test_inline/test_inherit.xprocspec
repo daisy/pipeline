@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <document>
+            <head>
+              <style media="embossed" type="text/css">
+                body { display: block }
+                p { display: inherit }
+              </style>
+            </head>
+            <body>
+              <h>foo</h>
+              <p>bar</p>
+            </body>
+          </document>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body style="display: block;">
+          <h>foo</h>
+          <p style="display: block;">bar</p>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

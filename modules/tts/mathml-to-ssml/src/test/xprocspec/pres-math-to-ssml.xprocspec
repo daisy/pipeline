@@ -2,8 +2,9 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
 	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:m="http://www.w3.org/1998/Math/MathML"
 	       xmlns="http://www.w3.org/1998/Math/MathML"
-               script="../../main/resources/xml/mathml-to-ssml.xpl">
+	       script="../../main/resources/xml/mathml-to-ssml.xpl">
 
   <x:scenario label="empty mathml">
     <x:call step="px:mathml-to-ssml">
@@ -16,14 +17,12 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1"/>
       </x:document>
     </x:expect>
   </x:scenario>
-
 
   <x:scenario label="mtext only">
     <x:call step="px:mathml-to-ssml">
@@ -39,10 +38,9 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1"> text1  text2 </ssml:speak>
       </x:document>
     </x:expect>
   </x:scenario>
@@ -67,9 +65,14 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  before1  before2
+	  <ssml:break time="300ms"/> x
+	  <ssml:break time="300ms"/> over
+	  <ssml:break time="300ms"/> y
+	  <ssml:break time="300ms"/> after1  after2
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -92,10 +95,9 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1"> sin applied on x </ssml:speak>
       </x:document>
     </x:expect>
   </x:scenario>
@@ -117,10 +119,9 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1"> x plus y </ssml:speak>
       </x:document>
     </x:expect>
   </x:scenario>
@@ -141,9 +142,13 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  <ssml:break time="300ms"/> x
+	  <ssml:break time="300ms"/> over
+	  <ssml:break time="300ms"/> y
+	  <ssml:break time="300ms"/>
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -169,9 +174,13 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  <ssml:break time="300ms"/> x minus y
+	  <ssml:break time="300ms"/> over
+	  <ssml:break time="300ms"/> z
+	  <ssml:break time="300ms"/>
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -193,10 +202,9 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1">one half</ssml:speak>
       </x:document>
     </x:expect>
   </x:scenario>
@@ -219,10 +227,9 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="en" id="m1">left square bracket 1 comma 2 semi-colon 3 semi-colon 4 right round bracket</ssml:speak>
       </x:document>
     </x:expect>
   </x:scenario>
@@ -246,9 +253,12 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  root of degree	n  of
+	  <ssml:break time="300ms"/> 3  over  4
+	  <ssml:break time="300ms"/>
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -273,9 +283,11 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  <ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
+	  root of  x  over  y
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -303,9 +315,14 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
+	<ssml:speak version="1.1" xml:lang="en" id="m1">
+	  X  surrounded by
+	  d  1  at lower right,
+	  c  2  at upper right,
+	  b  at lower left and
+	  a  at upper left
 	</ssml:speak>
       </x:document>
     </x:expect>
@@ -331,10 +348,54 @@
     <x:context label="result">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="ssml" type="compare" xfail="FIXME: fix expected output">
+    <x:expect label="ssml" type="compare">
       <x:document type="inline">
-	<ssml:speak version="1.1">
-	</ssml:speak>
+	<ssml:speak version="1.1" xml:lang="zz" id="m1"/>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="mathml without id">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+	<x:document type="inline">
+	  <m:math xml:lang="en">
+	    <m:mtext>text1</m:mtext>
+	    <m:mtext>text2</m:mtext>
+	  </m:math>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="dtbook with ssml" type="compare">
+      <x:document type="inline">
+	<ssml:speak version="1.1" xml:lang="en" id="id_1"> text1  text2 </ssml:speak>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="mathml inside dtbook">
+    <x:call step="px:mathml-to-ssml">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+	    <m:math id="s1"><m:mi>x</m:mi></m:math>
+	    <sent id="s2"><w>regular</w></sent>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="dtbook with ssml" type="compare">
+      <x:document type="inline">
+	<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en">
+	  <ssml:speak version="1.1" xml:lang="en" id="s1">x</ssml:speak>
+	  <sent id="s2"><w>regular</w></sent>
+	</dtbook>
       </x:document>
     </x:expect>
   </x:scenario>

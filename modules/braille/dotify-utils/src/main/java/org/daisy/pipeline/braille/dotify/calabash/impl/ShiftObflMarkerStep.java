@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.dotify.calabash.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
@@ -29,7 +30,6 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeEvent;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
-
 import org.daisy.common.transform.InputValue;
 import org.daisy.common.transform.SingleInSingleOutXMLTransformer;
 import org.daisy.common.transform.TransformerException;
@@ -39,6 +39,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 
 import org.osgi.service.component.annotations.Component;
@@ -56,7 +57,7 @@ public class ShiftObflMarkerStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new ShiftObflMarkerStep(runtime, step);
 		}
 	}

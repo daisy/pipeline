@@ -21,15 +21,16 @@
       <p:pipe port="result" step="ssml-gen" />
     </p:output>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/text-to-ssml/library.xpl">
-      <p:documentation>
-	px:text-to-ssml
-      </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
       <p:documentation>
 	px:get-tts-lexicons
 	px:get-tts-annotations
+	px:text-to-ssml
+      </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl">
+      <p:documentation>
+	px:mathml-to-ssml
       </p:documentation>
     </p:import>
 
@@ -73,6 +74,10 @@
 	<p:empty/>
       </p:input>
     </p:xslt>
+
+    <px:mathml-to-ssml>
+      <p:documentation>Transform MathML to SSML islands</p:documentation>
+    </px:mathml-to-ssml>
 
     <px:text-to-ssml name="ssml-gen">
       <!-- output ssml.out and content.out -->

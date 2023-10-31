@@ -18,10 +18,10 @@ public class LiblouisutdmlConfigRegistry extends ResourceRegistry<LiblouisutdmlC
 	
 	@Reference(
 		name = "LiblouisutdmlConfigPath",
-		unbind = "_unregister",
+		unbind = "-",
 		service = LiblouisutdmlConfigPath.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	protected void _register(LiblouisutdmlConfigPath path) {
 		register(path);

@@ -93,15 +93,6 @@
     </p:documentation>
   </p:option>
 
-  <p:option name="id-prefix" required="false" select="''">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      Generated IDs will be prefixed with this option so as to prevent
-      conflicts when the lexing is run multiple times whereas the
-      produced IDs are intented to be stored in the same place, such
-      as a central list of audio clips.
-    </p:documentation>
-  </p:option>
-
   <p:option name="output-subsentence-tag" required="true"/>
   <p:option name="exclusive-word-tag" select="'true'"/>
   <p:option name="exclusive-sentence-tag" select="'true'"/>
@@ -114,7 +105,8 @@
 
   <p:output port="result" primary="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      Input document with the words and the sentences.
+      Input document with the words and the sentences. Sentence elements are given a unique
+      <code>id</code> attribute.
     </p:documentation>
   </p:output>
 
@@ -169,7 +161,6 @@
     <p:with-option name="tmp-sentence-tag" select="$tmp-sentence-tag"/>
     <p:with-option name="exclusive-word-tag" select="$exclusive-word-tag"/>
     <p:with-option name="exclusive-sentence-tag" select="$exclusive-sentence-tag"/>
-    <p:with-option name="id-prefix" select="$id-prefix"/>
   </px:reshape>
 
 </p:declare-step>

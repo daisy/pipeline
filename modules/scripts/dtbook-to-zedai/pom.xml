@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.23-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>dtbook-to-zedai</artifactId>
-  <version>3.0.5-SNAPSHOT</version>
+  <version>3.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to ZedAI</name>
@@ -64,5 +64,20 @@
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_zedai_script_validation
     </expose-services>
   </properties>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xspec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>xspecTest</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
   
 </project>

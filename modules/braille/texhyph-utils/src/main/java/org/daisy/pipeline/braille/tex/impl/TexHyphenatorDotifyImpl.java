@@ -66,7 +66,7 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 	
 	@Reference(
 		name = "TexHyphenatorTableRegistry",
-		unbind = "unbindTableRegistry",
+		unbind = "-",
 		service = TexHyphenatorTableRegistry.class,
 		cardinality = ReferenceCardinality.MANDATORY,
 		policy = ReferencePolicy.STATIC
@@ -219,8 +219,11 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 				private final static char ZWSP = '\u200B';
 
 				protected boolean isCodePointAware() { return true; }
-		
-				protected byte[] getHyphenationOpportunities(String textWithoutHyphens) throws RuntimeException {
+				protected boolean isLanguageAdaptive() { return false; }
+				/**
+				 * @param language ignored
+				 */
+				protected byte[] getHyphenationOpportunities(String textWithoutHyphens, Locale language) throws RuntimeException {
 					try {
 						Tuple2<String,byte[]> t = extractHyphens(
 							hyphenator.hyphenate(textWithoutHyphens, beginLimit, endLimit), true, SHY, ZWSP);
@@ -235,7 +238,7 @@ public class TexHyphenatorDotifyImpl extends AbstractTransformProvider<TexHyphen
 	
 	@Override
 	public ToStringHelper toStringHelper() {
-		return MoreObjects.toStringHelper(TexHyphenatorDotifyImpl.class.getName());
+		return MoreObjects.toStringHelper("TexHyphenatorDotifyImpl");
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(TexHyphenatorDotifyImpl.class);

@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.14.19-SNAPSHOT</version>
+        <version>1.14.23-SNAPSHOT</version>
         <relativePath>../../parent/</relativePath>
     </parent>
 
     <artifactId>css-utils</artifactId>
-    <version>4.1.4-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: CSS Utils</name>
@@ -20,7 +20,9 @@
         <expose-services>
             org.daisy.pipeline.modules.impl.Module_css_utils,
             org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
+            org.daisy.pipeline.css.impl.DefaultCssCascader,
             org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition,
+            org.daisy.pipeline.css.speech.impl.SpeechCssCascader,
             org.daisy.pipeline.css.StyleAccessor$Provider
             <!-- org.daisy.common.saxon.impl.PackageDetails_http___www_daisy_org_pipeline_modules_css_utils_library_xsl -->
         </expose-services>
@@ -66,6 +68,18 @@
         <dependency>
             <groupId>org.daisy.libs</groupId>
             <artifactId>jstyleparser</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.unbescape</groupId>
+            <artifactId>unbescape</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.braille</groupId>
+            <artifactId>braille-css</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

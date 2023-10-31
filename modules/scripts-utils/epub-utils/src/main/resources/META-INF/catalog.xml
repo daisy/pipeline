@@ -11,6 +11,7 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:zip-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:odf-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:daisy3-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:epubcheck-adapter"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:ace-adapter"/>
 </catalog>

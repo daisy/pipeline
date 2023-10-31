@@ -60,6 +60,10 @@
     <p:inline><d:config/></p:inline>
   </p:input>
 
+  <p:option xmlns:_="tts" name="_:stylesheet" select="''">
+    <!-- defined in ../../../../../common-options.xpl -->
+  </p:option>
+
   <p:option name="audio" select="'false'">
     <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
@@ -114,14 +118,21 @@ reading systems can't handle the word tags.</p>
     <p:input port="tts-config">
       <p:pipe step="main" port="tts-config"/>
     </p:input>
+    <p:with-option name="stylesheet" xmlns:_="tts" select="string-join(
+                                                             for $output-fileset-base in string(/c:result) return
+                                                             for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
+                                                               resolve-uri($s,$output-fileset-base),
+                                                             ' ')">
+      <p:pipe step="output-dir-uri" port="normalized"/>
+    </p:with-option>
     <p:with-option name="publisher" select="$publisher"/>
     <p:with-option name="output-fileset-base" select="/c:result/string()">
       <p:pipe step="output-dir-uri" port="normalized"/>
     </p:with-option>
-    <p:with-option name="audio" select="$audio"/>
-    <p:with-option name="audio-only" select="$with-text = 'false'"/>
+    <p:with-option name="audio" select="$audio='true'"/>
+    <p:with-option name="audio-only" select="$with-text='false'"/>
     <p:with-option name="audio-file-type" select="$audio-file-type"/>
-    <p:with-option name="word-detection" select="$word-detection"/>
+    <p:with-option name="word-detection" select="$word-detection='true'"/>
     <p:with-option name="include-tts-log" select="$include-tts-log"/>
   </px:dtbook-to-daisy3>
 

@@ -57,8 +57,11 @@ public class TextTransformParser {
 					if (query.containsKey("system"))
 						query.removeAll("system");
 					query.add("system", system); }
-				if (translator != null)
+				if (translator != null) {
+					if (query.containsKey("translator"))
+						query.removeAll("translator");
 					query.add("translator", translator);
+				}
 				for (Declaration d : rule)
 					if (d.getProperty().equals("system")) continue;
 					else if (d.size() == 1
@@ -70,6 +73,12 @@ public class TextTransformParser {
 							// (silently) ignoring this feature because all braille translators
 							// used in the whole conversion must use the same output character set
 							continue;
+						} else if (key.equals("document-locale")) {
+							// document-locale is an internal feature and not supported in @text-transform rules
+							query = null;
+							break;
+						} else if (key.equals("hyphenator")) {
+							// FIXME: deprecate hyphenator feature (in favor of @hyphenation-resource rules)
 						}
 						String value;
 						if (d.get(0) instanceof TermURI) {
@@ -90,6 +99,7 @@ public class TextTransformParser {
 								value = "" + d.get(0).getValue();
 						}
 						if (query.containsKey(key))
+							// features in base query are overridden by descriptors in @text-transform rule
 							query.removeAll(key);
 						if (translator != null && key.equals("translator") && !translator.equals(value)) {
 							query = null;

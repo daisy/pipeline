@@ -15,17 +15,6 @@ can be selected using a query that contains
 `translator`
 : Will only match if the value is "liblouis".
 
-`hyphenator`
-: A value "none" will disable hyphenation. "liblouis" will match only
-  Liblouis translators that support hyphenation out-of-the-box. "auto"
-  is the default and will match any Liblouis translator, whether it
-  supports hyphenation out-of-the-box, with the help of an external
-  [hyphenator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/#hyphenation),
-  or not at all. A value not equal to "none", "liblouis" or "auto"
-  will match every Liblouis translator that uses an external
-  hyphenator that matches this feature. A translator will only use
-  external hyphenators with the same locale as the document.
-
 `table`
 `liblouis-table`
 : A Liblouis table is a list of URIs that can be either a file name, a

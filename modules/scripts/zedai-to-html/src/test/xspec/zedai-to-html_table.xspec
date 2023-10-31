@@ -301,7 +301,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>V1</td>
+                        <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>V1</td>
                     <td>V2</td>
                 </tr>
             </table>
@@ -329,7 +329,7 @@
                 </tr>
                 <tr>
                     <th>
-                        <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>V1</th>
+                        <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>V1</th>
                     <th>V2</th>
                 </tr>
             </table>
@@ -347,7 +347,7 @@
             <tr>
                 <th>H1</th>
                 <th>
-                    <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>H2</th>
+                    <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>H2</th>
             </tr>
         </x:expect>
     </x:scenario>
@@ -363,7 +363,7 @@
             <tr>
                 <td>V1</td>
                 <td>
-                    <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>V2</td>
+                    <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>V2</td>
             </tr>
         </x:expect>
     </x:scenario>
@@ -389,7 +389,7 @@
                 </tr>
                 <tr>
                     <td>
-                        <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>V1</td>
+                        <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>V1</td>
                     <td>V2</td>
                 </tr>
             </table>
@@ -412,7 +412,7 @@
                     <td>X</td>
                 </tr>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Table :: Page break after the last cell">
@@ -432,7 +432,7 @@
                     <td>X</td>
                 </tr>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Table :: Page break at the end of the header's rows">
@@ -464,7 +464,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                         <td>X</td>
                     </tr>
                 </tbody>
@@ -500,7 +500,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                         <td>X</td>
                     </tr>
                 </tbody>
@@ -533,7 +533,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                     </tr>
                 </tbody>
             </table>
@@ -565,7 +565,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                     </tr>
                 </tbody>
             </table>
@@ -597,7 +597,7 @@
                 <tfoot>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                     </tr>
                 </tfoot>
             </table>
@@ -629,7 +629,7 @@
                 <tfoot>
                     <tr>
                         <td>
-                            <span epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>X</td>
+                            <span epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>X</td>
                     </tr>
                 </tfoot>
             </table>
@@ -654,7 +654,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Table :: Page break at the end of a body's cells">
@@ -676,7 +676,7 @@
                     </tr>
                 </tbody>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Table :: Page break at the end of a footer's rows">
@@ -708,7 +708,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Table :: Page break at the end of a footer's cells">
@@ -740,7 +740,7 @@
                     </tr>
                 </tfoot>
             </table>
-            <div epub:type="pagebreak" role="doc-pagebreak" title="42" aria-label=" 42. "/>
+            <div epub:type="pagebreak" role="doc-pagebreak" aria-label=" 42. "/>
         </x:expect>
     </x:scenario>
 </x:description>

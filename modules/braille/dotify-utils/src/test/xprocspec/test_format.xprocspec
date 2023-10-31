@@ -9,7 +9,7 @@
                xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
   <x:script>
-    <p:declare-step type="dotify:format" version="1.0">
+    <p:declare-step type="dotify:format" name="main" version="1.0">
       <p:input port="source"/>
       <p:output port="result" primary="true">
         <p:pipe step="pef" port="result"/>
@@ -25,6 +25,7 @@
       <p:import href="../../main/resources/xml/css-to-obfl.xpl"/>
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
+      <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
       <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
                        duplex="true">
         <p:with-option name="document-locale" select="$document-locale"/>
@@ -35,6 +36,11 @@
       <pxi:obfl-normalize-space px:progress=".01"/>
       <p:try px:progress=".10">
         <p:group>
+          <px:set-base-uri>
+            <p:with-option name="base-uri" select="base-uri(/*)">
+              <p:pipe step="main" port="source"/>
+            </p:with-option>
+          </px:set-base-uri>
           <px:obfl-to-pef px:message="obfl-to-pef" px:progress="1">
             <p:with-param port="parameters" name="allow-text-overflow-trimming" select="$allow-text-overflow-trimming"/>
           </px:obfl-to-pef>
@@ -2098,13 +2104,13 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block><span translate="">1. </span>⠤⠤⠤ </block>
-            <block><span translate="">2. </span>⠤⠤⠤ </block>
-            <block><span translate="">i. </span>⠤⠤⠤ </block>
-            <block><span translate="">ii. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">1. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">2. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">i. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">ii. </span>⠤⠤⠤ </block>
             <block>⠶ ⠤⠤⠤ </block>
             <block>⠶ ⠤⠤⠤ </block>
-            <block><span translate="">3. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">3. </span>⠤⠤⠤ </block>
           </sequence>
         </obfl>
       </x:document>
@@ -6359,9 +6365,9 @@
                 <tbody>
                   <tr>
                     <td>
-                      <block><span translate="">1.</span></block>
-                      <block><span translate="">2.</span></block>
-                      <block><span translate="">3.</span></block>
+                      <block><span xml:lang="" translate="">1.</span></block>
+                      <block><span xml:lang="" translate="">2.</span></block>
+                      <block><span xml:lang="" translate="">3.</span></block>
                     </td>
                     <td>⠤⠤⠤</td>
                     <td>⠤⠤⠤</td>
@@ -7042,27 +7048,27 @@
           <collection name="footnotes">
             <item id="a">
               <block translate="pre-translated-text-css">
-                <span translate="">1</span> ⠿⠿⠿
+                <span xml:lang="" translate="">1</span> ⠿⠿⠿
               </block>
             </item>
             <item id="b">
               <block translate="pre-translated-text-css">
-                <span translate="">2</span> ⠿⠿⠿
+                <span xml:lang="" translate="">2</span> ⠿⠿⠿
               </block>
             </item>
             <item id="c">
               <block translate="pre-translated-text-css">
-                <span translate="">3</span> ⠿⠿⠿
+                <span xml:lang="" translate="">3</span> ⠿⠿⠿
               </block>
             </item>
           </collection>
           <sequence master="main">
             <block translate="pre-translated-text-css">
-              ⠤⠤⠤ ⠦<span translate="">1</span>⠴
+              ⠤⠤⠤ ⠦<span xml:lang="" translate="">1</span>⠴
               <anchor item="a"/>
-              ⠤⠤⠤ ⠦<span translate="">2</span>⠴
+              ⠤⠤⠤ ⠦<span xml:lang="" translate="">2</span>⠴
               <anchor item="b"/>
-              ⠤⠤⠤ ⠦<span translate="">3</span>⠴
+              ⠤⠤⠤ ⠦<span xml:lang="" translate="">3</span>⠴
               <anchor item="c"/>
             </block>
           </sequence>
@@ -7285,10 +7291,10 @@
           </layout-master>
           <sequence master="main">
             <block>
-              <block> ⠤⠤⠤ ⠦<span translate="">1</span>⠴ ⠤⠤⠤ ⠦<span translate="">2</span>⠴ ⠤⠤⠤ </block>
+              <block> ⠤⠤⠤ ⠦<span xml:lang="" translate="">1</span>⠴ ⠤⠤⠤ ⠦<span xml:lang="" translate="">2</span>⠴ ⠤⠤⠤ </block>
               <block>
-                <block><span translate="">1</span> ⠿⠿⠿ </block>
-                <block><span translate="">2</span> ⠿⠿⠿ </block>
+                <block><span xml:lang="" translate="">1</span> ⠿⠿⠿ </block>
+                <block><span xml:lang="" translate="">2</span> ⠿⠿⠿ </block>
               </block>
             </block>
           </sequence>
@@ -16502,13 +16508,13 @@
             </pre-content>
           </volume-template>
           <sequence master="master">
-            <block>⠈ ⠤⠤⠤</block>
-            <block>⠉ ⠤⠤⠤</block>
-            <block>⠙ ⠤⠤⠤</block>
-            <block>⠛ ⠤⠤⠤</block>
-            <block>⠻ ⠤⠤⠤</block>
-            <block>⠿ ⠤⠤⠤</block>
-            <block>⠿⠈ ⠤⠤⠤</block>
+            <block><span xml:lang="">⠈</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠉</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠙</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠛</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠻</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠿</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠿⠈</span> ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -16844,14 +16850,17 @@
     </x:expect>
   </x:scenario>
   
-   <x:scenario label="test_141">
+  <x:scenario label="test_141">
     <x:documentation>
       Tests hyphenation during formatting.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="@page { size: 12 25; }">
+          <doc style="@page { size: 12 40; }
+                      @hyphenation-resource:lang(foo) {
+                        system: libhyphen;
+                        table: url(../resources/foo.dic) }">
             <p style="display: block; hyphens: none">
               xxxxxx foo-bar xxxxxx
             </p>
@@ -16861,6 +16870,12 @@
             <p style="display: block; hyphens: auto">
               xxxxxx foo-bar xxxxxx
             </p>
+            <p style="display: block" xml:lang="und">
+              xxxxxx foo-bar xxxxxx
+            </p>
+            <p style="display: block" xml:lang="foo">
+              xxxxxx foo-bar xxxxxx
+            </p>
             <p style="display: block; hyphens: none">
               xxxxxx foo­bar xxxxxx
             </p>
@@ -16868,6 +16883,12 @@
               xxxxxx foo­bar xxxxxx
             </p>
             <p style="display: block; hyphens: auto">
+              xxxxxx foo­bar xxxxxx
+            </p>
+            <p style="display: block" xml:lang="und">
+              xxxxxx foo­bar xxxxxx
+            </p>
+            <p style="display: block" xml:lang="foo">
               xxxxxx foo­bar xxxxxx
             </p>
             <p style="display: block; hyphens: none">
@@ -16877,6 +16898,12 @@
               xxxxxx foobar xxxxxx
             </p>
             <p style="display: block; hyphens: auto">
+              xxxxxx foobar xxxxxx
+            </p>
+            <p style="display: block; hyphens: auto" xml:lang="und">
+              xxxxxx foobar xxxxxx
+            </p>
+            <p style="display: block; hyphens: auto" xml:lang="foo">
               xxxxxx foobar xxxxxx
             </p>
           </doc>
@@ -16893,8 +16920,14 @@
         <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en" hyphenate="false">
           <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
             <dp2:style-type>text/css</dp2:style-type>
+            <dp2:css-hyphenation-resource-definitions>
+              @hyphenation-resource:lang(foo) {
+                system: libhyphen;
+                table: url("../resources/foo.dic")
+              }
+            </dp2:css-hyphenation-resource-definitions>
           </meta>
-          <layout-master name="a" page-width="12" page-height="25" duplex="true">
+          <layout-master name="a" page-width="12" page-height="40" duplex="true">
             <default-template>
               <header/>
               <footer/>
@@ -16910,6 +16943,12 @@
             <block hyphenate="true">
               xxxxxx foo-bar xxxxxx
             </block>
+            <block xml:lang="und">
+              xxxxxx foo-bar xxxxxx
+            </block>
+            <block xml:lang="foo">
+              xxxxxx foo-bar xxxxxx
+            </block>
             <block>
               <style name="hyphens: none">xxxxxx foo­bar xxxxxx</style>
             </block>
@@ -16919,6 +16958,12 @@
             <block hyphenate="true">
               xxxxxx foo­bar xxxxxx
             </block>
+            <block xml:lang="und">
+              xxxxxx foo­bar xxxxxx
+            </block>
+            <block xml:lang="foo">
+              xxxxxx foo­bar xxxxxx
+            </block>
             <block>
               <style name="hyphens: none">xxxxxx foobar xxxxxx</style>
             </block>
@@ -16926,6 +16971,12 @@
               xxxxxx foobar xxxxxx
             </block>
             <block hyphenate="true">
+              xxxxxx foobar xxxxxx
+            </block>
+            <block xml:lang="und" hyphenate="true">
+              xxxxxx foobar xxxxxx
+            </block>
+            <block xml:lang="foo" hyphenate="true">
               xxxxxx foobar xxxxxx
             </block>
           </sequence>
@@ -16944,10 +16995,14 @@
             </meta>
           </head>
           <body>
-            <volume cols="12" rows="25" rowgap="0" duplex="true">
+            <volume cols="12" rows="40" rowgap="0" duplex="true">
               <section>
                 <page>
                   <!-- foo-bar -->
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
                   <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
                   <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
                   <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
@@ -16962,6 +17017,10 @@
                   <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
                   <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
                   <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
+                  <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
                   <!-- foobar -->
                   <row>⠭⠭⠭⠭⠭⠭</row>
                   <row>⠋⠕⠕⠃⠁⠗</row>
@@ -16971,6 +17030,11 @@
                   <row>⠭⠭⠭⠭⠭⠭</row>
                   <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠤</row>
                   <row>⠃⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠋⠕⠕⠃⠁⠗</row>
+                  <row>⠭⠭⠭⠭⠭⠭</row>
+                  <row>⠭⠭⠭⠭⠭⠭⠀⠋⠕⠕⠃⠤</row>
+                  <row>⠁⠗⠀⠭⠭⠭⠭⠭⠭</row>
                 </page>
               </section>
             </volume>

@@ -10,39 +10,43 @@
     <xsl:param name="output-base-uri" required="yes"/>
 
     <xsl:key name="original-href" match="d:file" use="string(@original-href)"/>
-    <xsl:key name="original-id" match="d:anchor" use="string(@original-id)"/>
 
     <xsl:variable name="mapping" as="document-node(element(d:fileset))">
         <xsl:document>
-            <xsl:apply-templates mode="normalize" select="collection()[2]"/>
+            <xsl:apply-templates mode="normalize" select="collection()[2]/*"/>
         </xsl:document>
     </xsl:variable>
 
     <xsl:template mode="normalize"
                   match="d:file/@href|
-                         d:file/@original-href">
-        <xsl:attribute name="{name()}" select="pf:normalize-uri(resolve-uri(.,base-uri(.)))"/>
+                         d:file/@original-href|
+                         d:clip/@src|
+                         d:clip/@textref">
+        <xsl:attribute name="{name()}" select="pf:normalize-uri(resolve-uri(.,pf:base-uri(..)))"/>
     </xsl:template>
 
     <xsl:template match="/d:audio-clips">
-        <xsl:variable name="idrefs" as="xs:string*" select="./d:clip/@idref"/>
-        <xsl:if test="not(count($idrefs)=count(distinct-values($idrefs)))">
-            <xsl:message terminate="yes">d:audio-clips document contains clips with the same idref</xsl:message>
+        <xsl:variable name="audio-clips" as="element(d:audio-clips)">
+            <xsl:apply-templates mode="normalize" select="."/>
+        </xsl:variable>
+        <xsl:variable name="textrefs" as="xs:string*" select="$audio-clips/d:clip/@textref"/>
+        <xsl:if test="not(count($textrefs)=count(distinct-values($textrefs)))">
+            <xsl:message terminate="yes">d:audio-clips document contains clips with the same textref</xsl:message>
         </xsl:if>
         <!--
-            update idref and src of clips
+            update textref and src of clips
         -->
         <xsl:variable name="audio-clips" as="element(d:audio-clips)">
-            <xsl:next-match/>
+            <xsl:apply-templates mode="map" select="$audio-clips"/>
         </xsl:variable>
         <!--
-            merge clips with same idref
+            merge clips with same textref
         -->
         <xsl:variable name="audio-clips" as="element(d:audio-clips)">
             <xsl:for-each select="$audio-clips">
                 <xsl:copy>
                     <xsl:sequence select="@*"/>
-                    <xsl:for-each-group select="d:clip" group-by="@idref">
+                    <xsl:for-each-group select="d:clip" group-by="@textref">
                         <xsl:variable name="clips" as="element(d:clip)*" select="current-group()"/>
                         <xsl:choose>
                             <xsl:when test="count($clips)=1">
@@ -58,7 +62,7 @@
                                     <xsl:when test="every $i in 1 to count($clips) - 1
                                                     satisfies $clips[$i]/@src=$clips[$i + 1]/@src
                                                     and $clips[$i]/@clipEnd=$clips[$i + 1]/@clipBegin">
-                                        <d:clip idref="{$clips[1]/@idref}"
+                                        <d:clip textref="{$clips[1]/@textref}"
                                                 src="{$clips[1]/@src}"
                                                 clipBegin="{$clips[1]/@clipBegin}"
                                                 clipEnd="{$clips[last()]/@clipEnd}"/>
@@ -79,25 +83,31 @@
         <xsl:sequence select="$audio-clips"/>
     </xsl:template>
 
-    <xsl:template match="d:clip">
-        <xsl:variable name="src" select="pf:normalize-uri(resolve-uri(@src,pf:base-uri(.)))"/>
-        <xsl:variable name="file" as="element(d:file)?" select="key('original-href',$src,$mapping)"/>
-        <xsl:variable name="anchor" as="element(d:anchor)?" select="key('original-id',@idref,$mapping)"/>
-        <xsl:copy>
-            <xsl:apply-templates select="@* except (@src|@idref)"/>
-            <xsl:attribute name="src" select="pf:relativize-uri(($file/@href,$src)[1],$output-base-uri)"/>
-            <xsl:choose>
-                <xsl:when test="exists($anchor)">
-                    <xsl:attribute name="idref" select="$anchor/@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="@idref"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:copy>
+    <xsl:template mode="map" match="d:clip/@src">
+        <xsl:variable name="file" as="xs:string" select="."/>
+        <xsl:variable name="new-file" as="element(d:file)?" select="key('original-href',$file,$mapping)"/>
+        <xsl:variable name="new-file" as="xs:string?" select="$new-file/@href"/>
+        <xsl:attribute name="src" select="pf:relativize-uri(($new-file,$file)[1],$output-base-uri)"/>
     </xsl:template>
 
-    <xsl:template mode="#default normalize" match="@*|node()">
+    <xsl:template mode="map" match="d:clip/@textref">
+        <xsl:variable name="uri" as="xs:string" select="."/>
+        <xsl:variable name="uri" as="xs:string*" select="pf:tokenize-uri($uri)"/>
+        <xsl:variable name="fragment" as="xs:string" select="$uri[5]"/>
+        <xsl:variable name="file" as="xs:string" select="pf:recompose-uri($uri[position()&lt;5])"/>
+        <xsl:variable name="new-file" as="element(d:file)*" select="key('original-href',$file,$mapping)"/>
+        <xsl:variable name="new-file" as="element(d:file)?" select="($new-file[d:anchor[(@original-id,@id)[1]=$fragment]],
+                                                                     $new-file)[1]"/>
+        <xsl:variable name="new-fragment" as="xs:string?" select="if (exists($new-file))
+                                                                  then $new-file/d:anchor[(@original-id,@id)[1]=$fragment]/@id
+                                                                  else $mapping/*/d:file[not(@original-href)][@href=$file][1]
+                                                                                 /d:anchor[(@original-id,@id)[1]=$fragment]/@id"/>
+        <xsl:variable name="new-file" as="xs:string?" select="$new-file/@href"/>
+        <xsl:variable name="new-uri" select="string-join((($new-file,$file)[1],($new-fragment,$fragment)[1]),'#')"/>
+        <xsl:attribute name="textref" select="pf:relativize-uri($new-uri,$output-base-uri)"/>
+    </xsl:template>
+
+    <xsl:template mode="#default normalize map" match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates mode="#current" select="@*|node()"/>
         </xsl:copy>

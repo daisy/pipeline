@@ -7,11 +7,13 @@ import java.io.LineNumberReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.net.URI;
+import java.util.Map;
 
 import javax.xml.transform.stream.StreamSource;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -125,7 +127,7 @@ public class ValidateStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new ValidateStep(runtime, step);
 		}
 	}

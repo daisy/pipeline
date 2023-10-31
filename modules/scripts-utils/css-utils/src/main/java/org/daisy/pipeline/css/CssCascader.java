@@ -20,11 +20,17 @@ public interface CssCascader {
 
 	public boolean supportsMedium(Medium medium);
 
+	/**
+	 * @param multipleAttrs When {@code true}, cascade the styles into multiple attributes per
+	 *                      element. In this case the namespace and prefix of {@code attributeName}
+	 *                      are used for the attributes, the local part is ignored.
+	 */
 	public XMLTransformer newInstance(Medium medium,
-	                                  String defaultStylesheet,
+	                                  String userStylesheet,
 	                                  URIResolver uriResolver,
 	                                  CssPreProcessor preProcessor,
 	                                  XsltProcessor xsltProcessor,
-	                                  QName attributeName);
+	                                  QName attributeName,
+	                                  boolean multipleAttrs);
 
 }

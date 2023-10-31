@@ -222,32 +222,47 @@ marked up.</p>
         <!-- defined in ../../../../../common-options.xpl -->
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Style sheets</h2>
-            <p px:role="desc" xml:space="preserve">CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+            <p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
 
-All CSS style sheets are applied at once, but the order in which they are specified has an influence
-on the cascading order.
+A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
+rendition is requested), and for text-to-speech (if text-to-speech is enabled).
 
-If the "Apply document-specific CSS" option is enabled, the document-specific style sheets will be
-applied before the ones specified through this option (see below).
+Must be a space separated list of URIs, absolute or relative to the input.
+
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+
+If the "Apply author style sheets" option is enabled, [author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade) will be taken into account and will take
+precedence over any style sheets specified through this option ([user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
+
+When generating the braille rendition, style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
+interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
+
+For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
 </p>
         </p:documentation>
     </p:option>
     
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Apply document-specific CSS</h2>
-            <p px:role="desc" xml:space="preserve">If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
+            <h2 px:role="name">Apply author CSS style sheets</h2>
+            <p px:role="desc" xml:space="preserve">If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
 
-The HTML files inside the source EPUB may already contain CSS that applies to embossed media. Style
-sheets can be associated with an HTML file in several ways: linked (using an 'xml-stylesheet'
-processing instruction or a 'link' element), embedded (using a 'style' element) and/or inlined
-(using 'style' attributes).
+The EPUB's content documents may contain CSS ([author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to "embossed" or
+"[speech](https://www.w3.org/TR/CSS2/aural.html)" media. Style sheets can be associated with an HTML
+file in several ways: linked (using an 'xml-stylesheet' processing instruction or a 'link' element),
+embedded (using a 'style' element) and/or inlined (using 'style' attributes).
 
-Document-specific CSS takes precedence over any CSS provided through the "Style sheets" option. For
-instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and using this script the
-rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left` property will get the
-value `2` because that's what was defined in the EPUB, even though the provided CSS is more
-specific.
+Author style sheets take precedence over user style sheets (any CSS provided through the "Style
+sheets" option). For instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and
+using this script the rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left`
+property will get the value `2` because that's what was defined in the EPUB, even though the
+provided CSS is more specific.
 </p>
         </p:documentation>
     </p:option>
@@ -324,7 +339,10 @@ elements that represent the sentences.</p>
             <p:pipe port="metadata" step="main"/>
         </p:input>
         <p:with-option name="braille-translator" select="$braille-translator"/>
-        <p:with-option name="stylesheet" select="$stylesheet"/>
+        <p:with-option name="stylesheet" select="string-join(
+                                                   for $s in tokenize($stylesheet,'\s+')[not(.='')] return
+                                                     resolve-uri($s,$source),
+                                                   ' ')"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
         <p:with-option name="braille" select="$braille"/>

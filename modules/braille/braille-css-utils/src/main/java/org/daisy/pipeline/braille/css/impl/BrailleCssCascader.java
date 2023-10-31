@@ -22,6 +22,7 @@ import javax.xml.transform.URIResolver;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -47,6 +48,7 @@ import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.RuleCounterStyle;
+import org.daisy.braille.css.RuleHyphenationResource;
 import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
@@ -89,17 +91,22 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	public XMLTransformer newInstance(Medium medium,
-	                                  String defaultStylesheet,
+	                                  String userStylesheet,
 	                                  URIResolver uriResolver,
 	                                  CssPreProcessor preProcessor,
 	                                  XsltProcessor xsltProcessor,
-	                                  QName attributeName) {
+	                                  QName attributeName,
+	                                  boolean multipleAttrs) {
+		if (multipleAttrs)
+			throw new UnsupportedOperationException("Cascading to multiple attributes per element not supported");
+		if (attributeName == null)
+			throw new UnsupportedOperationException("A style attribute must be specified");
 		switch (medium.getType()) {
 		case EMBOSSED:
-			return new Transformer(uriResolver, preProcessor, xsltProcessor, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
 		case PRINT:
-			return new Transformer(uriResolver, preProcessor, xsltProcessor, defaultStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
 		default:
 			throw new IllegalArgumentException("medium not supported: " + medium);
@@ -114,31 +121,34 @@ public class BrailleCssCascader implements CssCascader {
 
 	// medium embossed
 	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
-	private static DeclarationTransformer brailleDeclarationTransformer
+	private static final DeclarationTransformer brailleDeclarationTransformer
 		= new BrailleCSSDeclarationTransformer(brailleCSS);
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
 	private static class Transformer extends JStyleParserCssCascader {
 
+		private final QName attributeName;
 		private final boolean isBrailleCss;
 
 		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
-		                    String defaultStyleSheet, Medium medium, QName attributeName,
+		                    String userStyleSheet, Medium medium, QName attributeName,
 		                    CSSParserFactory parserFactory, RuleFactory ruleFactory,
 		                    SupportedCSS supportedCss, DeclarationTransformer declarationTransformer) {
-			super(resolver, preProcessor, xsltProcessor, defaultStyleSheet, medium, attributeName,
+			super(resolver, preProcessor, xsltProcessor, userStyleSheet, medium, attributeName,
 			      parserFactory, ruleFactory, supportedCss, declarationTransformer);
+			this.attributeName = attributeName;
 			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED;
 		}
 
 		private Map<String,Map<String,RulePage>> pageRules = null;
 		private Map<String,Map<String,RuleVolume>> volumeRules = null;
 		private Iterable<RuleTextTransform> textTransformRules = null;
+		private Iterable<RuleHyphenationResource> hyphenationResourceRules = null;
 		private Iterable<RuleCounterStyle> counterStyleRules = null;
 		private Iterable<AnyAtRule> otherAtRules = null;
 
-		protected String serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
+		protected Map<QName,String> serializeStyle(NodeData mainStyle, Map<PseudoElement,NodeData> pseudoStyles, Element context) {
 			if (isBrailleCss && pageRules == null) {
 				StyleSheet styleSheet = getParsedStyleSheet();
 				pageRules = new HashMap<String,Map<String,RulePage>>(); {
@@ -174,6 +184,7 @@ public class BrailleCssCascader implements CssCascader {
 					}
 				}
 				textTransformRules = Iterables.filter(styleSheet, RuleTextTransform.class);
+				hyphenationResourceRules = Iterables.filter(styleSheet, RuleHyphenationResource.class);
 				counterStyleRules = Iterables.filter(styleSheet, RuleCounterStyle.class);
 				otherAtRules = Iterables.filter(styleSheet, AnyAtRule.class);
 			}
@@ -200,6 +211,8 @@ public class BrailleCssCascader implements CssCascader {
 						insertVolumeStyle(style, volumeRule, pageRules);
 					for (RuleTextTransform r : textTransformRules)
 						insertTextTransformDefinition(style, r);
+					for (RuleHyphenationResource r : hyphenationResourceRules)
+						insertHyphenationResourceDefinition(style, r);
 					for (RuleCounterStyle r : counterStyleRules)
 						insertCounterStyleDefinition(style, r);
 					for (AnyAtRule r : otherAtRules) {
@@ -208,7 +221,7 @@ public class BrailleCssCascader implements CssCascader {
 							style.append("} "); }
 						insertAtRule(style, r); }}}
 			if (!style.toString().replaceAll("\\s+", "").isEmpty())
-				return style.toString().trim();
+				return ImmutableMap.of(attributeName, style.toString().trim());
 			else
 				return null;
 		}
@@ -247,15 +260,14 @@ public class BrailleCssCascader implements CssCascader {
 		List<String> keys = new ArrayList<String>(nodeData.getPropertyNames());
 		keys.remove("page");
 		Collections.sort(keys);
-		for(String key : keys) {
-			builder.append(key).append(": ");
-			Term<?> value = nodeData.getValue(key, true);
+		for (String key : keys) {
+			Term<?> value = nodeData.getValue(key, false);
 			if (value != null)
-				builder.append(BrailleCssSerializer.toString(value));
+				builder.append(key).append(": ").append(BrailleCssSerializer.toString(value)).append("; ");
 			else {
-				CSSProperty prop = nodeData.getProperty(key);
-				builder.append(prop); }
-			builder.append("; "); }
+				CSSProperty prop = nodeData.getProperty(key, false);
+				if (prop != null) // can be null for unspecified inherited properties
+					builder.append(key).append(": ").append(prop).append("; "); }}
 	}
 
 	private static void pseudoElementToString(StringBuilder builder, PseudoElement elem) {
@@ -451,6 +463,38 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("@text-transform");
 		String name = rule.getName();
 		if (name != null) builder.append(' ').append(name);
+		builder.append(" { ");
+		for (Declaration decl : rule) {
+			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {
+				TermURI term = (TermURI)decl.get(0);
+				URI uri = URLs.asURI(term.getValue());
+				if (!uri.isAbsolute() && !uri.getSchemeSpecificPart().startsWith("/")) {
+					// relative resource: make absolute and convert to "volatile-file" URI to bypass
+					// caching in AbstractTransformProvider
+					if (term.getBase() != null)
+						uri = URLs.resolve(URLs.asURI(term.getBase()), uri);
+					try {
+						new File(uri);
+						try {
+							uri = new URI("volatile-file", uri.getSchemeSpecificPart(), uri.getFragment());
+						} catch (URISyntaxException e) {
+							throw new IllegalStateException(e); // should not happen
+						}
+					} catch (IllegalArgumentException e) {
+						// not a file URI
+					}
+				}
+				builder.append(decl.getProperty()).append(": ").append("url(\"" + uri + "\")").append("; ");
+				continue;
+			}
+			insertDeclaration(builder, decl);
+		}
+		builder.append("} ");
+	}
+
+	private static void insertHyphenationResourceDefinition(StringBuilder builder, RuleHyphenationResource rule) {
+		builder.append("@hyphenation-resource");
+		builder.append(":lang(").append(BrailleCssSerializer.serializeLanguageRanges(rule.getLanguageRanges())).append(")");
 		builder.append(" { ");
 		for (Declaration decl : rule) {
 			if (decl.size() == 1 && decl.get(0) instanceof TermURI) {

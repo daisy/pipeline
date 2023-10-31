@@ -7,7 +7,7 @@
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc style="@text-transform uncontracted { system: braille-translator; contraction: no; }">
+                    <doc style="@text-transform uncontracted { system: braille; contraction: no; }">
                         <p style="display: block">foobar</p>
                         <p style="display: block; text-transform: uncontracted">foobar</p>
                     </doc>
@@ -20,7 +20,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; contraction: no }">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille; contraction: no }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -32,7 +32,7 @@
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc style="@text-transform { system: braille-translator; contraction: no; }">
+                    <doc style="@text-transform { system: braille; contraction: no; }">
                         <p style="display: block">foobar</p>
                     </doc>
                 </x:document>
@@ -44,7 +44,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform { system: braille-translator; contraction: no }">
+                <doc style="text-transform: none @text-transform { system: braille; contraction: no }">
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
             </x:document>
@@ -55,7 +55,7 @@
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc style="@text-transform uncontracted { system: braille-translator; liblouis-table: url(../resources/tables/foobar.utb); }">
+                    <doc style="@text-transform uncontracted { system: braille; liblouis-table: url(../resources/tables/foobar.utb); }">
                         <p style="display: block">foobar</p>
                         <p style="display: block; text-transform: uncontracted">foobar</p>
                     </doc>
@@ -68,7 +68,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille; liblouis-table: url(&quot;../resources/tables/foobar.utb&quot;) }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -80,7 +80,7 @@
         <x:call step="px:transform">
             <x:input port="source">
                 <x:document type="inline">
-                    <doc style="@text-transform uncontracted { system: braille-translator; contraction: no; }">
+                    <doc style="@text-transform uncontracted { system: braille; contraction: no; }">
                         <p style="display: block">foobar</p>
                         <p style="display: block; text-transform: uncontracted -louis-italic">foobar</p>
                     </doc>
@@ -93,7 +93,7 @@
         </x:context>
         <x:expect label="result" type="compare">
             <x:document type="inline">
-                <doc style="text-transform: none @text-transform uncontracted { system: braille-translator; contraction: no }">
+                <doc style="text-transform: none @text-transform uncontracted { system: braille; contraction: no }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠨⠋⠕⠕⠃⠁⠗</p>
                 </doc>
@@ -121,6 +121,31 @@
                 <doc style="text-transform: none @text-transform ueb { locale: en; system: ueb }">
                     <p style="display: block">⠋⠥⠃⠁⠗</p>
                     <p style="display: block">⠋⠕⠕⠃⠜</p>
+                </doc>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+    
+    <x:scenario label="@hyphenation-resource rule">
+        <x:call step="px:transform">
+            <x:input port="source">
+                <x:document type="inline">
+                    <doc style="hyphens: auto; @hyphenation-resource:lang(foo) { system: mock; }">
+                        <p style="display: block">foobar</p>
+                        <p style="display: block" xml:lang="foo">foobar</p>
+                    </doc>
+                </x:document>
+            </x:input>
+            <x:option name="query" select="'(input:css)(output:css)(translator:liblouis)(locale:foo)(contraction:full)'"/>
+        </x:call>
+        <x:context label="result">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="result" type="compare">
+            <x:document type="inline">
+                <doc style="text-transform: none @hyphenation-resource:lang(foo) { system: mock }">
+                    <p style="display: block">⠋⠥⠃⠁⠗</p>
+                    <p style="display: block" xml:lang="foo-Brai">⠋⠥­⠃⠁⠗</p>
                 </doc>
             </x:document>
         </x:expect>

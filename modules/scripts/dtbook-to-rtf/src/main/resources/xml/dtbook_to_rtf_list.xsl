@@ -23,7 +23,6 @@
 
 	<!-- #### li ELEMENT ####-->
 	<xsl:template match="li|dtb:li">
-		<xsl:variable name="curnum" select="count(preceding-sibling::li|preceding-sibling::dtb:li)+1"/>
 		<xsl:variable name="indentcount" select ="count(ancestor::li)"/>
 		<xsl:choose>
 			<xsl:when test="text()|*[not(self::list|self::dtb:list)]">
@@ -65,16 +64,35 @@
 
 	<!-- #### ORDERED LIST ITEMS #### -->
 	<xsl:template name="LI_OL">
-		<xsl:variable name="curnum" select="count(preceding-sibling::li|preceding-sibling::dtb:li)+1"/>
-		<xsl:variable name="indentcount" select ="count(ancestor::li)"/>
-		<xsl:text>\pard{\pntext </xsl:text>
-		<xsl:value-of select="$curnum"/>
-		<xsl:text>.\tab}{\*\pn\pndec\pnf2\pnlvl</xsl:text>
-		<xsl:value-of select="(($indentcount+2) mod 9)+1"/>
-		<xsl:text>}</xsl:text>
-		<xsl:call-template name="NORMAL_STYLE"/>
-		<xsl:value-of select="concat('\li',283*($indentcount+1))"/>
-		<xsl:text>\fi-283\sb50\sa50 </xsl:text>
+		<xsl:variable name="indentcount" select="count(ancestor::li)"/>
+		<xsl:text>\pard</xsl:text>
+		<!--
+		    Note that an "ol" list with an "enum" or "start" attribute is handled like a "pl" list
+		    and looks and behaves different from other "ol" lists. We choose not to preformat *all*
+		    lists however because we prefer real lists when editing the file in MS Word.
+		-->
+		<xsl:choose>
+			<xsl:when test="exists(@css:marker-content)" xmlns:css="css">
+				<xsl:call-template name="NORMAL_STYLE"/>
+				<xsl:value-of select="concat('\li',283*($indentcount+1))"/>
+				<xsl:text>\sb50\sa50 </xsl:text>
+				<!-- css:marker-content attributes previously created by px:css-cascade-->
+				<xsl:value-of select="normalize-space(@css:marker-content)"/>
+				<xsl:text>	</xsl:text>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:text>{\pntext </xsl:text>
+				<xsl:value-of select="count(preceding-sibling::li|preceding-sibling::dtb:li)+1"/>
+				<xsl:text>.\tab}</xsl:text>
+				<xsl:text>{\*\pn\pndec\pnf2\pnlvl</xsl:text>
+				<xsl:value-of select="(($indentcount+2) mod 9)+1"/>
+				<xsl:text>}</xsl:text>
+				<xsl:call-template name="NORMAL_STYLE"/>
+				<xsl:value-of select="concat('\li',283*($indentcount+1))"/>
+				<xsl:text>\fi-283</xsl:text>
+				<xsl:text>\sb50\sa50 </xsl:text>
+			</xsl:otherwise>
+		</xsl:choose>
 		<xsl:apply-templates/>
 		<xsl:call-template name="LI_END"/>
 	</xsl:template>

@@ -22,6 +22,7 @@
 						<d:file href="EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="EPUB/aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
 			</x:input>
@@ -52,6 +53,7 @@
 							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
 							<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
 							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="css" href="aural.css" media-type="text/css"/>
 						</manifest>
 						<spine>
 							<itemref idref="cover"/>
@@ -59,6 +61,17 @@
 							<itemref idref="chapter"/>
 						</spine>
 					</package>
+				</x:document>
+				<x:document type="inline" xml:base="EPUB/aural.css">
+					<c:data content-type="text/plain">
+						@namespace epub url(http://www.idpf.org/2007/ops);
+						[epub|type~=pagebreak]::before {
+							content: 'page ';
+						}
+						[epub|type~=pagebreak]:empty[title]::before {
+							content: 'page ' attr(title);
+						}
+					</c:data>
 				</x:document>
 				<x:document type="inline" xml:base="EPUB/nav.xhtml">
 					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -125,6 +138,7 @@
 							<meta name="dc:identifier" content="id"/>
 							<link rel="prev" href="cover.xhtml"/>
 							<link rel="next" href="chapter.xhtml"/>
+							<link rel="stylesheet" type="text/css" media="speech" href="aural.css"/>
 						</head>
 						<body id="front" epub:type="frontmatter">
 							<h1 id="h_1">Title</h1>
@@ -148,6 +162,7 @@
 							<title>minimal</title>
 							<meta name="dc:identifier" content="id"/>
 							<link rel="prev" href="front.xhtml"/>
+							<link rel="stylesheet" type="text/css" media="speech" href="aural.css"/>
 						</head>
 						<body id="chap_1" epub:type="bodymatter chapter">
 							<!-- Note that ssml:phoneme is also recognized as an inline element
@@ -190,15 +205,6 @@
 					<x:document type="inline">
 						<config>
 							<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
-							<css>
-								@namespace epub url(http://www.idpf.org/2007/ops);
-								[epub|type~=pagebreak]::before {
-									content: 'page ';
-								}
-								[epub|type~=pagebreak]:empty[title]::before {
-									content: 'page ' attr(title);
-								}
-							</css>
 						</config>
 					</x:document>
 				</x:input>
@@ -218,6 +224,7 @@
 						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 						<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml" indent="true"/>
 						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml" indent="true"/>
 						<d:file href="result/EPUB/mo/chapter.smil" media-type="application/smil+xml" indent="true"/>
@@ -237,11 +244,11 @@
 			<x:expect label="package.opf" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
 				<x:document type="inline">
-					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id2" xml:lang="en">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id3" xml:lang="en">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-							<dc:title id="title2">minimal</dc:title>
-							<dc:identifier id="pub-id2">id</dc:identifier>
-							<meta refines="#pub-id2" property="identifier-type" scheme="xsd:string">uuid</meta>
+							<dc:title id="title3">minimal</dc:title>
+							<dc:identifier id="pub-id3">id</dc:identifier>
+							<meta refines="#pub-id3" property="identifier-type" scheme="xsd:string">uuid</meta>
 							<dc:language>en</dc:language>
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
@@ -250,6 +257,10 @@
 							<meta name="media:duration" content="0:00:22.014"/>
 							<meta property="schema:accessibilityFeature">captions</meta>
 							<meta name="schema:accessibilityFeature" content="captions"/>
+							<meta property="schema:accessibilityFeature">synchronizedAudioText</meta>
+							<meta name="schema:accessibilityFeature" content="synchronizedAudioText"/>
+							<meta property="schema:accessMode">auditory</meta>
+							<meta name="schema:accessMode" content="auditory"/>
 							<meta property="media:duration" refines="#item_1">0:00:01.223</meta>
 							<meta property="media:duration" refines="#item_2">0:00:08.561</meta>
 							<meta property="media:duration" refines="#item_3">0:00:12.230</meta>
@@ -259,6 +270,7 @@
 							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml" media-overlay="item_1"/>
 							<item id="front" href="front.xhtml" media-type="application/xhtml+xml" media-overlay="item_2"/>
 							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml" media-overlay="item_3"/>
+							<item id="css" href="aural.css" media-type="text/css"/>
 							<item id="item_1" href="mo/cover.smil" media-type="application/smil+xml"/>
 							<item id="item_2" href="mo/front.smil" media-type="application/smil+xml"/>
 							<item id="item_3" href="mo/chapter.smil" media-type="application/smil+xml"/>
@@ -321,102 +333,85 @@
 						</head>
 						<body id="cover" epub:type="cover">
 							<p>
-								<span id="st1-1">...</span>
+								<span id="id_1">...</span>
 							</p>
 						</body>
 					</html>
 				</x:document>
 			</x:expect>
 			<x:context label="front.xhtml">
-				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/front.xhtml')]//html:body"/>
 			</x:context>
 			<x:expect label="front.xhtml" type="compare">
-				<x:document type="inline">
-					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-						<head>
-							<meta charset="UTF-8"/>
-							<title>minimal</title>
-							<meta name="dc:identifier" content="id"/>
-							<link rel="prev" href="cover.xhtml"/>
-							<link rel="next" href="chapter.xhtml"/>
-						</head>
-						<body id="front" epub:type="frontmatter">
-							<h1 id="h_1">
-								<span id="st2-1">Title</span>
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<body id="front" epub:type="frontmatter">
+						<h1 id="h_1">
+							<span id="id_1">Title</span>
+						</h1>
+						<p>
+							<span id="id_2">...</span>
+						</p>
+						<section id="contents">
+							<h2 id="h_1_1">
+								<span id="id_3">List of contents</span>
+							</h2>
+							<table>...</table>
+							<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv">
+								<span id="id_4"/>
+							</div>
+						</section>
+						<section id="preface" aria-labelledby="aria_label_1">
+							<h1 id="aria_label_1">
+								<span id="id_5">Preface</span>
 							</h1>
 							<p>
-								<span id="st2-2">...</span>
+								<span id="id_6">...</span>
 							</p>
-							<section id="contents">
-								<h2 id="h_1_1">
-									<span id="st2-3">List of contents</span>
-								</h2>
-								<table>...</table>
-								<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv">
-									<span id="st2-4"/>
-								</div>
-							</section>
-							<section id="preface" aria-labelledby="aria_label_1">
-								<h1 id="aria_label_1">
-									<span id="st2-5">Preface</span>
-								</h1>
-								<p>
-									<span id="st2-6">...</span>
-								</p>
-								<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v">
-									<span id="st2-7"/>
-								</div>
-							</section>
-						</body>
-					</html>
+							<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v">
+								<span id="id_7"/>
+							</div>
+						</section>
+					</body>
 				</x:document>
 			</x:expect>
 			<x:context label="chapter.xhtml">
-				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]//html:body"/>
 			</x:context>
 			<x:expect label="chapter.xhtml" type="compare">
-				<x:document type="inline">
-					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
-						<head>
-							<meta charset="UTF-8"/>
-							<title>minimal</title>
-							<meta name="dc:identifier" content="id"/>
-							<link rel="prev" href="front.xhtml"/>
-						</head>
-						<body id="chap_1" epub:type="bodymatter chapter">
-							<h1 id="h_1">
-								<span id="st3-1">Chapter <span ssml:ph="wʌn">I</span>
-								<ssml:phoneme alphabet="ipa" ph="tuː">two</ssml:phoneme></span>
-							</h1>
-							<p>
-								<span id="st3-2">
-									<span id="i3st3-2-no-skippable">This paragraph contains</span>
-									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
-									<span id="i3st3-2-page_5">a page break.</span>
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<body id="chap_1" epub:type="bodymatter chapter">
+						<h1 id="h_1">
+							<span id="id_1">Chapter <span ssml:ph="wʌn">I</span>
+							<ssml:phoneme alphabet="ipa" ph="tuː">two</ssml:phoneme></span>
+						</h1>
+						<p>
+							<span id="id_2">
+								<span id="id_8">This paragraph contains</span>
+								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
+								<span id="id_9">a page break.</span>
+							</span>
+						</p>
+						<figcaption id="caption_1">
+							<strong>
+								<span id="id_3">
+									Illustration 1 A.
 								</span>
-							</p>
-							<figcaption id="caption_1">
-								<strong>
-									<span id="st3-3">
-										Illustration 1 A.
-									</span>
-								</strong>
-								<span id="st3-4">
-									This is an illustration.
-								</span>
-							</figcaption>
-							<p>
-								<span id="st3-5">
-									<span id="i3st3-5-no-skippable">This paragraph contains a note reference.</span>
-									<a id="id_1" epub:type="noteref" href="#note_1">*</a>
-									<span id="i3st3-5-id_1"> This is the second sentence.</span>
-								</span>
-							</p>
-							<p id="note_1">
-								<span id="st3-6">This is a note.</span>
-							</p>
-						</body>
-					</html>
+							</strong>
+							<span id="id_4">
+								This is an illustration.
+							</span>
+						</figcaption>
+						<p>
+							<span id="id_5">
+								<span id="id_10">This paragraph contains a note reference.</span>
+								<a id="id_7" epub:type="noteref" href="#note_1">*</a>
+								<span id="id_11"> This is the second sentence.</span>
+							</span>
+						</p>
+						<p id="note_1">
+							<span id="id_6">This is a note.</span>
+						</p>
+					</body>
 				</x:document>
 			</x:expect>
 			<x:context label="cover.smil">
@@ -427,7 +422,7 @@
 					<smil xmlns="http://www.w3.org/ns/SMIL" version="3.0">
 						<body epub:textref="../cover.xhtml#cover" epub:type="cover">
 							<par>
-								<text src="../cover.xhtml#st1-1"/>
+								<text src="../cover.xhtml#id_1"/>
 								<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 							</par>
 						</body>
@@ -443,24 +438,24 @@
 						<body epub:textref="../front.xhtml#front" epub:type="frontmatter">
 							<seq epub:textref="../front.xhtml#h_1">
 								<par>
-									<text src="../front.xhtml#st2-1"/>
+									<text src="../front.xhtml#id_1"/>
 									<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
 							<par>
-								<text src="../front.xhtml#st2-2"/>
+								<text src="../front.xhtml#id_2"/>
 								<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 							</par>
 							<seq epub:textref="../front.xhtml#contents">
 								<seq epub:textref="../front.xhtml#h_1_1">
 									<par>
-										<text src="../front.xhtml#st2-3"/>
+										<text src="../front.xhtml#id_3"/>
 										<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 									</par>
 								</seq>
 								<seq epub:textref="../front.xhtml#page_front_4" epub:type="pagebreak">
 									<par>
-										<text src="../front.xhtml#st2-4"/>
+										<text src="../front.xhtml#id_4"/>
 										<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
 									</par>
 								</seq>
@@ -468,17 +463,17 @@
 							<seq epub:textref="../front.xhtml#preface">
 								<seq epub:textref="../front.xhtml#aria_label_1">
 									<par>
-										<text src="../front.xhtml#st2-5"/>
+										<text src="../front.xhtml#id_5"/>
 										<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:04.892" clipEnd="0:00:06.115"/>
 									</par>
 								</seq>
 								<par>
-									<text src="../front.xhtml#st2-6"/>
+									<text src="../front.xhtml#id_6"/>
 									<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:06.115" clipEnd="0:00:07.338"/>
 								</par>
 								<seq epub:textref="../front.xhtml#page_front_5" epub:type="pagebreak">
 									<par>
-										<text src="../front.xhtml#st2-7"/>
+										<text src="../front.xhtml#id_7"/>
 										<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:07.338" clipEnd="0:00:08.561"/>
 									</par>
 								</seq>
@@ -496,13 +491,13 @@
 						<body epub:textref="../chapter.xhtml#chap_1" epub:type="bodymatter chapter">
 							<seq epub:textref="../chapter.xhtml#h_1">
 								<par>
-									<text src="../chapter.xhtml#st3-1"/>
+									<text src="../chapter.xhtml#id_1"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 							</seq>
-							<seq epub:textref="../chapter.xhtml#st3-2">
+							<seq epub:textref="../chapter.xhtml#id_2">
 								<par>
-									<text src="../chapter.xhtml#i3st3-2-no-skippable"/>
+									<text src="../chapter.xhtml#id_8"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 								</par>
 								<par epub:type="pagebreak">
@@ -510,37 +505,37 @@
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:09.784" clipEnd="0:00:11.007"/>
 								</par>
 								<par>
-									<text src="../chapter.xhtml#i3st3-2-page_5"/>
+									<text src="../chapter.xhtml#id_9"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 								</par>
 							</seq>
 							<seq epub:textref="../chapter.xhtml#caption_1">
 								<par>
-									<text src="../chapter.xhtml#st3-3"/>
+									<text src="../chapter.xhtml#id_3"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
 								</par>
 								<par>
-									<text src="../chapter.xhtml#st3-4"/>
+									<text src="../chapter.xhtml#id_4"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:04.892" clipEnd="0:00:06.115"/>
 								</par>
 							</seq>
-							<seq epub:textref="../chapter.xhtml#st3-5">
+							<seq epub:textref="../chapter.xhtml#id_5">
 								<par>
-									<text src="../chapter.xhtml#i3st3-5-no-skippable"/>
+									<text src="../chapter.xhtml#id_10"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:06.115" clipEnd="0:00:07.338"/>
 								</par>
 								<par epub:type="noteref">
-									<text src="../chapter.xhtml#id_1"/>
+									<text src="../chapter.xhtml#id_7"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:11.007" clipEnd="0:00:12.230"/>
 								</par>
 								<par>
-									<text src="../chapter.xhtml#i3st3-5-id_1"/>
+									<text src="../chapter.xhtml#id_11"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:07.338" clipEnd="0:00:08.561"/>
 								</par>
 							</seq>
 							<seq epub:textref="../chapter.xhtml#note_1">
 								<par>
-									<text src="../chapter.xhtml#st3-6"/>
+									<text src="../chapter.xhtml#id_6"/>
 									<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:08.561" clipEnd="0:00:09.784"/>
 								</par>
 							</seq>
@@ -561,7 +556,7 @@
 				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
 					<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"
 					     style="visibility: hidden">
-						<span id="st2-4">iv</span>
+						<span id="id_4">iv</span>
 					</div>
 				</x:document>
 			</x:expect>
@@ -586,6 +581,7 @@
 						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -611,6 +607,7 @@
 							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
 							<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
 							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="css" href="aural.css" media-type="text/css"/>
 						</manifest>
 						<spine>
 							<itemref idref="cover"/>
@@ -654,51 +651,43 @@
 				</x:document>
 			</x:expect>
 			<x:context label="chapter.xhtml">
-				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]"/>
+				<x:document type="port" port="result.in-memory" select="/*[base-uri()=resolve-uri('result/EPUB/chapter.xhtml')]//html:body"/>
 			</x:context>
 			<x:expect label="chapter.xhtml" type="compare">
-				<x:document type="inline">
-					<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" ssml:alphabet="ipa">
-						<head>
-							<meta charset="UTF-8"/>
-							<title>minimal</title>
-							<meta name="dc:identifier" content="id"/>
-							<link rel="prev" href="front.xhtml"/>
-						</head>
-						<body id="chap_1" epub:type="bodymatter chapter">
-							<h1 id="h_1">
-								<span id="st3-1" class="sentence">Chapter <span ssml:ph="wʌn">I</span>
-								<ssml:phoneme alphabet="ipa" ph="tuː">two</ssml:phoneme></span>
-							</h1>
-							<p>
-								<span id="st3-2" class="sentence">
-									<span id="i3st3-2-no-skippable">This paragraph contains</span>
-									<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
-									<span id="i3st3-2-page_5">a page break.</span>
+				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
+					<body id="chap_1" epub:type="bodymatter chapter">
+						<h1 id="h_1">
+							<span id="id_1" class="sentence">Chapter <span ssml:ph="wʌn">I</span>
+							<ssml:phoneme alphabet="ipa" ph="tuː">two</ssml:phoneme></span>
+						</h1>
+						<p>
+							<span id="id_2" class="sentence">
+								<span id="id_8">This paragraph contains</span>
+								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
+								<span id="id_9">a page break.</span>
+							</span>
+						</p>
+						<figcaption id="caption_1">
+							<strong>
+								<span id="id_3" class="sentence">
+									Illustration 1 A.
 								</span>
-							</p>
-							<figcaption id="caption_1">
-								<strong>
-									<span id="st3-3" class="sentence">
-										Illustration 1 A.
-									</span>
-								</strong>
-								<span id="st3-4" class="sentence">
-									This is an illustration.
-								</span>
-							</figcaption>
-							<p>
-								<span id="st3-5" class="sentence">
-									<span id="i3st3-5-no-skippable">This paragraph contains a note reference.</span>
-									<a id="id_1" epub:type="noteref" href="#note_1">*</a>
-									<span id="i3st3-5-id_1"> This is the second sentence.</span>
-								</span>
-							</p>
-							<p id="note_1">
-								<span id="st3-6" class="sentence">This is a note.</span>
-							</p>
-						</body>
-					</html>
+							</strong>
+							<span id="id_4" class="sentence">
+								This is an illustration.
+							</span>
+						</figcaption>
+						<p>
+							<span id="id_5" class="sentence">
+								<span id="id_10">This paragraph contains a note reference.</span>
+								<a id="id_7" epub:type="noteref" href="#note_1">*</a>
+								<span id="id_11"> This is the second sentence.</span>
+							</span>
+						</p>
+						<p id="note_1">
+							<span id="id_6" class="sentence">This is a note.</span>
+						</p>
+					</body>
 				</x:document>
 			</x:expect>
 		</x:scenario>
@@ -738,6 +727,7 @@
 						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
 						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -769,6 +759,7 @@
 							<item id="cover" href="cover.xhtml" media-type="application/xhtml+xml"/>
 							<item id="front" href="front.xhtml" media-type="application/xhtml+xml"/>
 							<item id="chapter" href="chapter.xhtml" media-type="application/xhtml+xml"/>
+							<item id="css" href="aural.css" media-type="text/css"/>
 						</manifest>
 						<spine>
 							<itemref idref="cover"/>
@@ -1214,30 +1205,30 @@
 					      id="level1_1" epub:type="cover">
 						<section id="prodnote_1" class="render-optional rearcover">
 							<p>
-								<span id="st1-1">Gro försöker att få Runa på gott humör igen.</span></p>
+								<span id="id_1">Gro försöker att få Runa på gott humör igen.</span></p>
 							<p>
-								<span id="st1-2">– Vi har det bara så långtråkigt.</span>
-								<span id="st1-3">Du har tur.</span>
-								<span id="st1-4">Du får gå ut och in i tornet.</span>
-								<span id="st1-5">Alvilda och jag måste sitta här dag ut och dag in.</span>
-								<span id="st1-6">Bara om natten får vi komma till kvinnosalen.</span>
-								<span id="st1-7">Om det bara snart ville kommma någon som kan slå ihjäl ormen.</span></p>
+								<span id="id_2">– Vi har det bara så långtråkigt.</span>
+								<span id="id_3">Du har tur.</span>
+								<span id="id_4">Du får gå ut och in i tornet.</span>
+								<span id="id_5">Alvilda och jag måste sitta här dag ut och dag in.</span>
+								<span id="id_6">Bara om natten får vi komma till kvinnosalen.</span>
+								<span id="id_7">Om det bara snart ville kommma någon som kan slå ihjäl ormen.</span></p>
 							<p>
-								<span id="st1-8">Gro suckar djupt.</span>
-								<span id="st1-9">Liksom Alvilda är hon trött på att vara inspärrad.</span></p>
+								<span id="id_8">Gro suckar djupt.</span>
+								<span id="id_9">Liksom Alvilda är hon trött på att vara inspärrad.</span></p>
 							<p>
-								<span id="st1-10">Alvilda tittar ner på sina bröder igen.</span></p>
+								<span id="id_10">Alvilda tittar ner på sina bröder igen.</span></p>
 							<p>
-								<span id="st1-11">– Jag vill hellre lära mig att slåss, mumlar hon.</span>
-								<span id="st1-12">Då skulle jag själv kunna slå ihjäl odjuret.</span></p>
+								<span id="id_11">– Jag vill hellre lära mig att slåss, mumlar hon.</span>
+								<span id="id_12">Då skulle jag själv kunna slå ihjäl odjuret.</span></p>
 							<p>
-								<span id="st1-13">– Jag hörde nog vad du sa.</span>
-								<span id="st1-14">Runa ruskar på huvudet.</span>
-								<span id="st1-15">Du vet inte vad som är bäst för dig.</span>
-								<span id="st1-16">Tänk på allt det besvär din pappa och mamma har haft.</span>
-								<span id="st1-17">Först byggde de det här tornet av koppar.</span>
-								<span id="st1-18">Sedan har de skaffat en orm, som kan vakta din dygd.</span>
-								<span id="st1-19">Många unga män har mist sina liv för din skull.</span></p>
+								<span id="id_13">– Jag hörde nog vad du sa.</span>
+								<span id="id_14">Runa ruskar på huvudet.</span>
+								<span id="id_15">Du vet inte vad som är bäst för dig.</span>
+								<span id="id_16">Tänk på allt det besvär din pappa och mamma har haft.</span>
+								<span id="id_17">Först byggde de det här tornet av koppar.</span>
+								<span id="id_18">Sedan har de skaffat en orm, som kan vakta din dygd.</span>
+								<span id="id_19">Många unga män har mist sina liv för din skull.</span></p>
 						</section>
 					</body>
 				</x:document>
@@ -1252,79 +1243,79 @@
 						<body epub:textref="../C00000-1-cover.xhtml#level1_1" epub:type="cover">
 							<seq epub:textref="../C00000-1-cover.xhtml#prodnote_1">
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-1"/>
+									<text src="../C00000-1-cover.xhtml#id_1"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:01.223"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-2"/>
+									<text src="../C00000-1-cover.xhtml#id_2"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:01.223" clipEnd="0:00:02.446"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-3"/>
+									<text src="../C00000-1-cover.xhtml#id_3"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:02.446" clipEnd="0:00:03.669"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-4"/>
+									<text src="../C00000-1-cover.xhtml#id_4"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:03.669" clipEnd="0:00:04.892"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-5"/>
+									<text src="../C00000-1-cover.xhtml#id_5"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:04.892" clipEnd="0:00:06.115"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-6"/>
+									<text src="../C00000-1-cover.xhtml#id_6"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:06.115" clipEnd="0:00:07.338"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-7"/>
+									<text src="../C00000-1-cover.xhtml#id_7"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:07.338" clipEnd="0:00:08.561"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-8"/>
+									<text src="../C00000-1-cover.xhtml#id_8"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:08.561" clipEnd="0:00:09.784"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-9"/>
+									<text src="../C00000-1-cover.xhtml#id_9"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:09.784" clipEnd="0:00:11.007"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-10"/>
+									<text src="../C00000-1-cover.xhtml#id_10"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:11.007" clipEnd="0:00:12.230"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-11"/>
+									<text src="../C00000-1-cover.xhtml#id_11"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:12.230" clipEnd="0:00:13.453"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-12"/>
+									<text src="../C00000-1-cover.xhtml#id_12"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:13.453" clipEnd="0:00:14.677"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-13"/>
+									<text src="../C00000-1-cover.xhtml#id_13"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:14.677" clipEnd="0:00:15.900"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-14"/>
+									<text src="../C00000-1-cover.xhtml#id_14"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:15.900" clipEnd="0:00:17.123"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-15"/>
+									<text src="../C00000-1-cover.xhtml#id_15"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:17.123" clipEnd="0:00:18.346"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-16"/>
+									<text src="../C00000-1-cover.xhtml#id_16"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:18.346" clipEnd="0:00:19.569"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-17"/>
+									<text src="../C00000-1-cover.xhtml#id_17"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:19.569" clipEnd="0:00:20.792"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-18"/>
+									<text src="../C00000-1-cover.xhtml#id_18"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:20.792" clipEnd="0:00:22.015"/>
 								</par>
 								<par>
-									<text src="../C00000-1-cover.xhtml#st1-19"/>
+									<text src="../C00000-1-cover.xhtml#id_19"/>
 									<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:22.015" clipEnd="0:00:23.238"/>
 								</par>
 							</seq>

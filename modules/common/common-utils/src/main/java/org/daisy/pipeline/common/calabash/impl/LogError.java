@@ -1,5 +1,7 @@
 package org.daisy.pipeline.common.calabash.impl;
 
+import java.util.Map;
+
 import javax.xml.namespace.QName;
 
 import com.google.common.collect.ImmutableMap;
@@ -15,6 +17,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcError;
+import org.daisy.common.xproc.XProcMonitor;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -30,7 +33,7 @@ public class LogError implements XProcStepProvider {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogError.class);
 
-	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new LogErrorStep(runtime, step);
 	}
 

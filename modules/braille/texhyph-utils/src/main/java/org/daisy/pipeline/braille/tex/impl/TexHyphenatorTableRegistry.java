@@ -26,10 +26,10 @@ public class TexHyphenatorTableRegistry extends ResourceRegistry<TexHyphenatorTa
 	
 	@Reference(
 		name = "TexHyphenatorTablePath",
-		unbind = "_unregister",
+		unbind = "-",
 		service = TexHyphenatorTablePath.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	protected void _register(TexHyphenatorTablePath path) {
 		register(path);

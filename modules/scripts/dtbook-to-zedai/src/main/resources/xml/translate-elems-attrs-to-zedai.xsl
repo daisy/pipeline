@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
@@ -15,6 +15,8 @@
                 exclude-result-prefixes="#all">
 
     <xsl:import href="translate-mathml-to-zedai.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/numeral-conversion.xsl"/>
+    <xsl:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
     <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
 
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
@@ -23,6 +25,7 @@
     </doc>
 
     <xsl:param name="css-filename"/>
+    <xsl:param name="lang" as="xs:string?"/>
 
     <xsl:key name="ids" match="*" use="@id"/>
 
@@ -67,7 +70,6 @@
     </xsl:template>
 
     <xsl:template name="generate-id">
-        <xsl:param name="f:generated-ids" tunnel="yes" select="()"/>
         <xsl:choose>
             <xsl:when test="@id">
                 <xsl:attribute name="xml:id" select="@id"/>
@@ -105,11 +107,19 @@
             <!-- make sure xml:lang is set - if not, try to infer from:
               1. a dc:language metadata
               2. an xml:lang attribute on the book element
+              3. a provided language
               3. the default value 'en' -->
             <xsl:if test="empty(@xml:lang)">
-                <xsl:attribute name="xml:lang"
-                    select="(dtb:head/dtb:meta[lower-case(@name)='dc:language'][1]/@content,dtb:book/@xml:lang,'en')[1]"
-                />
+                <xsl:variable name="inferred-lang" as="xs:string?"
+                              select="(dtb:head/dtb:meta[lower-case(@name)='dc:language'][1]/@content,
+                                       dtb:book/@xml:lang,
+                                       $lang[normalize-space(.)])"/>
+                <xsl:if test="empty($inferred-lang)">
+                    <xsl:call-template name="pf:warn">
+                        <xsl:with-param name="msg" select="'required xml:lang attribute not found, and no ''lang'' option was passed to the converter.'"/>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:attribute name="xml:lang" select="($inferred-lang,'en')[1]"/>
             </xsl:if>
             <xsl:call-template name="attrs"/>
             <xsl:apply-templates/>
@@ -263,10 +273,10 @@
                     <xsl:copy-of select="@start"/>
                 </xsl:when>
                 <xsl:when test="@start and @enum=('i','I')">
-                    <xsl:attribute name="start" select="f:roman-to-decimal(@start)"/>
+                    <xsl:attribute name="start" select="pf:numeric-roman-to-decimal(@start)"/>
                 </xsl:when>
                 <xsl:when test="@start and @enum=('a','A')">
-                    <xsl:attribute name="start" select="f:alpha-to-decimal(@start)"/>
+                    <xsl:attribute name="start" select="pf:numeric-alpha-to-decimal(lower-case(@start))"/>
                 </xsl:when>
                 <xsl:when test="@start">
                     <xsl:message>Unparsable start attribute '<xsl:value-of select="@start"/>'</xsl:message>
@@ -1297,22 +1307,5 @@
         </span>
     </xsl:template>
     <xsl:template match="tmp:code-phrase/dtb:br"/>
-
-    <!--TODO move to external common utils implementation if/when UTFX support catalogs-->
-    <xsl:function name="f:roman-to-decimal" as="xs:integer">
-        <xsl:param name="roman" as="xs:string"/>
-        <!-- TODO: throw error for strings containing characters other than MDCLXVI (case insensitive), the seven characters still in use. -->
-        <xsl:variable name="hindu-sequence"
-            select="for $char in string-to-codepoints($roman) return
-            number(replace(replace(replace(replace(replace(replace(replace(upper-case(codepoints-to-string($char)),'I','1'),'V','5'),'X','10'),'L','50'),'C','100'),'D','500'),'M','1000'))"/>
-        <xsl:variable name="hindu-sequence-signed"
-            select="for $i in 1 to count($hindu-sequence) return if (subsequence($hindu-sequence,$i+1) &gt; $hindu-sequence[$i]) then -$hindu-sequence[$i] else $hindu-sequence[$i]"/>
-        <xsl:value-of select="sum($hindu-sequence-signed)"/>
-    </xsl:function>
-    <xsl:function name="f:alpha-to-decimal" as="xs:integer">
-        <xsl:param name="alpha" as="xs:string"/>
-        <xsl:message select="$alpha"/>
-        <xsl:sequence select="string-to-codepoints(lower-case($alpha))-96"/>
-    </xsl:function>
 
 </xsl:stylesheet>

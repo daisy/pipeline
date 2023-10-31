@@ -65,7 +65,7 @@ public class CereProcEngineTest {
 		writer.close();
 
 		XdmNode node = (XdmNode)ssmlProcessed.get(0);
-		Voice  v = new Voice("cereproc", "Ylva", new Locale("sv"), null, null);
+		Voice  v = new Voice("cereproc", "Ylva", new Locale("sv"), null);
 		Assert.assertEquals(
 			"<voice name=\"Ylva\">This is a  gamma . test roman letter  tre, lorem ipsum Tjugosjunde kapitlet.</voice>" +
 			"<break time=\"250ms\"></break>",

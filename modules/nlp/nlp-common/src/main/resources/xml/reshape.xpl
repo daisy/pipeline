@@ -21,12 +21,13 @@
   <p:option name="tmp-sentence-tag" required="true"/>
   <p:option name="exclusive-word-tag" select="'true'"/>
   <p:option name="exclusive-sentence-tag" select="'true'"/>
-  <p:option name="id-prefix" required="false" select="''"/>
 
   <p:input port="source" primary="true"/>
-  <p:output port="result" primary="true"/>
+  <p:output port="result" primary="true">
+    <p:pipe step="result" port="result"/>
+  </p:output>
   <p:output port="sentence-ids">
-    <p:pipe port="secondary" step="create-valid"/>
+    <p:pipe step="sentence-ids" port="result"/>
   </p:output>
 
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -108,7 +109,6 @@
     <p:with-param name="output-subsentence-tag" select="$output-subsentence-tag"/>
     <p:with-param name="exclusive-word-tag" select="$exclusive-word-tag"/>
     <p:with-param name="exclusive-sentence-tag" select="$exclusive-sentence-tag"/>
-    <p:with-param name="id-prefix" select="$id-prefix"/>
     <p:input port="source">
       <p:pipe step="distribute" port="result"/>
       <p:pipe step="options" port="result"/>
@@ -117,11 +117,23 @@
       <p:document href="create-valid-breaks.xsl"/>
     </p:input>
   </p:xslt>
-  <px:set-base-uri>
+  <px:set-base-uri name="result">
     <!-- not sure why this is needed -->
     <p:with-option name="base-uri" select="base-uri(/*)">
       <p:pipe step="main" port="source"/>
     </p:with-option>
   </px:set-base-uri>
+  <p:sink/>
+
+  <px:set-base-uri name="sentence-ids">
+    <p:documentation>Give the sentence IDs document the same base URI as the source and result documents.</p:documentation>
+    <p:input port="source">
+      <p:pipe step="create-valid" port="secondary"/>
+    </p:input>
+    <p:with-option name="base-uri" select="base-uri(/*)">
+      <p:pipe step="main" port="source"/>
+    </p:with-option>
+  </px:set-base-uri>
+  <p:sink/>
 
 </p:declare-step>

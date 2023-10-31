@@ -127,11 +127,29 @@
 			</p:otherwise>
 		</p:choose>
 	</p:viewport>
+
+	<!-- Set unique-identifier attribute -->
 	<p:add-attribute match="/*" attribute-name="unique-identifier">
 		<!-- this assumes there is at least one dc:identifier in source or metadata (required for valid EPUB) -->
 		<!-- and we know that if there is a dc:identifier without a @refines, pxi:merge-metadata puts it first -->
 		<p:with-option name="attribute-value" select="/opf:package/opf:metadata/dc:identifier[1]/@id"/>
 	</p:add-attribute>
+
+	<!-- Set xml:lang attribute to be equal to the first dc:language -->
+	<p:choose>
+		<p:when test="/*/opf:metadata/dc:language[not(@refines)]">
+			<p:add-attribute match="/*" attribute-name="xml:lang">
+				<p:with-option name="attribute-value" select="/*/opf:metadata/dc:language[not(@refines)][1]/string(.)"/>
+			</p:add-attribute>
+		</p:when>
+		<p:otherwise>
+			<!-- At least one dc:language should be present, but if there isn't, preserve any
+			     xml:lang attributes that were already present on the package element. -->
+			<p:identity/>
+		</p:otherwise>
+	</p:choose>
+
+	<!-- Move prefix attribute to package element -->
 	<p:choose>
 		<p:when test="/*/opf:metadata/@prefix">
 			<p:add-attribute attribute-name="prefix" match="/*">
@@ -143,6 +161,14 @@
 			<p:delete match="/*/@prefix"/>
 		</p:otherwise>
 	</p:choose>
+
+	<!-- Resources must not be listed both as a "link" element in the package metadata and as a
+	     manifest item. For simplicity, we assume that when the metadata contains a link element,
+	     the resource is not referenced anywhere else and can therefore be safely removed from the
+	     manifest. Note that this is a very brittle solution though!
+	-->
+	<p:delete match="opf:manifest/opf:item[string(@href)=/*/opf:metadata/opf:link/@href/string(.)]"/>
+
 	<p:identity name="updated-package-doc"/>
 	<p:sink/>
 

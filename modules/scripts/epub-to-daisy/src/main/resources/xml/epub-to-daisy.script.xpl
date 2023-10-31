@@ -53,6 +53,10 @@ This will remove any existing media overlays in the EPUB.</p>
 		<p:inline><d:config/></p:inline>
 	</p:input>
 
+	<p:option xmlns:_="tts" name="_:stylesheet" select="''">
+		<!-- defined in ../../../../../common-options.xpl -->
+	</p:option>
+
 	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
 		<!-- directory used for temporary files -->
 	</p:option>
@@ -154,6 +158,10 @@ This will remove any existing media overlays in the EPUB.</p>
 				<p:input port="tts-config">
 					<p:pipe step="main" port="tts-config"/>
 				</p:input>
+				<p:with-option name="stylesheet" xmlns:_="tts" select="string-join(
+				                                                         for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
+				                                                           resolve-uri($s,$source),
+				                                                         ' ')"/>
 				<p:with-option name="temp-dir" select="$temp-dir"/>
 			</px:epub-to-daisy>
 

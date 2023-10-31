@@ -362,9 +362,11 @@
                                               then QName('','page')
                                               else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@volume'])
                                                 then QName('','volume')
-                                                else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
-                                                  then QName('','vendor-rule')
-                                                  else ())"/>
+                                                else if ($stylesheet/parent::*/ancestor-or-self::css:rule[@selector='@hyphenation-resource'])
+                                                  then QName('','hyphenation-resource')
+                                                  else if ($stylesheet/parent::*/ancestor-or-self::css:rule[matches(@selector,'^@-')])
+                                                    then QName('','vendor-rule')
+                                                    else ())"/>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:sequence select="css:parse-stylesheet($stylesheet, true())"/>

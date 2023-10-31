@@ -4,17 +4,20 @@
 
   <p:input port="source" primary="true" sequence="true" px:media-type="application/ssml+xml">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <p>SSML documents.</p>
-      <p>It is assumed that content documents have been prepared so that ID attributes are unique
-      within the whole sequence of SSML documents.</p>
-      <p>All <code>s</code> elements are expected to have a <code>xml:lang</code> attribute.</p>
+      <p>The SSML documents.</p>
+      <p>All <code>s</code> elements are expected to have <code>id</code> and <code>xml:lang</code>
+      attributes.</p>
+      <p>Mark names are expected to be of the form "X___Y", where "X" uniquely identifies the part
+      of the sentence before the mark (and after the preceding mark), and where "Y" uniquely
+      identifies the part of the sentence after the mark (and before the following mark).</p>
     </p:documentation>
   </p:input>
   <p:input port="config"/>
   <p:output port="result" primary="true">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p><code>d:audio-clips</code> document that lists the generated audio files and maps SSML
-      elements (sentences) to audio clips (audio file, start time, end time).</p>
+      elements (sentences, or parts of sentences before/after/between marks) to audio clips (audio
+      file, start time, end time).</p>
     </p:documentation>
   </p:output>
   <p:output port="status">
@@ -25,7 +28,7 @@
         href="http://daisy.github.io/pipeline/StatusXML">application/vnd.pipeline.status+xml</a>"
         format: a <code>d:status</code> element with a <code>result</code> attribute that
         has the value "ok" if there were no errors, or "error" when there was at least one
-        error. A <code>success-rate</code> attribute contains the percentage of the SSML
+        error. A <code>tts-success-rate</code> attribute contains the percentage of the SSML
         input that got successfully converted to speech.
       </p>
     </p:documentation>

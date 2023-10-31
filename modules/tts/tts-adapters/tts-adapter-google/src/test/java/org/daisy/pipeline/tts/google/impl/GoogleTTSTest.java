@@ -93,7 +93,7 @@ public class GoogleTTSTest {
 		Collection<Voice> voices = allocateEngine().getAvailableVoices();
 		if (System.getProperty("org.daisy.pipeline.tts.google.address") != null)
 			// assume we're using MockGoogle
-			Assert.assertEquals(1, voices.size()); // mock-tts has 1 voice with locale and gender
+			Assert.assertEquals(2, voices.size()); // mock-tts has 2 voices with locale ≠ * and gender
 		else
 			Assert.assertTrue(voices.size() > 5);
 	}

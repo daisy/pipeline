@@ -10,45 +10,43 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
-import org.daisy.pipeline.tts.config.ConfigProperties;
 import org.daisy.pipeline.tts.config.ConfigReader;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class VoiceConfigExtension implements ConfigReader.Extension, ConfigProperties {
+public class VoiceConfigExtension implements ConfigReader.Extension {
 
-	private Logger Logger = LoggerFactory.getLogger(VoiceConfigExtension.class);
+	private static final Logger logger = LoggerFactory.getLogger(VoiceConfigExtension.class);
 
 	@Override
-	public boolean parseNode(XdmNode node, URI documentURI) {
+	public boolean parseNode(XdmNode node, URI documentURI, ConfigReader parent) {
 		String name = node.getNodeName().getLocalName();
 		if ("voice".equalsIgnoreCase(name)) {
 			String lang = node.getAttributeValue(new QName(null, "lang"));
 			if (lang == null)
-				node.getAttributeValue(new QName("http://www.w3.org/XML/1998/namespace",
-				        "lang"));
+				node.getAttributeValue(new QName("http://www.w3.org/XML/1998/namespace", "lang"));
 			String vengine = node.getAttributeValue(new QName(null, "engine"));
 			String vname = node.getAttributeValue(new QName(null, "name"));
 			String priority = node.getAttributeValue(new QName(null, "priority"));
 			Gender gender = Gender.of(node.getAttributeValue(new QName(null, "gender")));
 			if (node.getAttributeValue(new QName(null, "marks")) != null) {
-				Logger.warn("mark attribute on voice is deprecated");
+				logger.warn("mark attribute on voice is deprecated");
 			}
 
 			if (priority == null)
 				priority = "5";
 			if (lang == null || vengine == null || vname == null || gender == null) {
-				Logger.warn("Config file invalid near " + node.toString());
+				logger.warn("Config file invalid near " + node.toString());
 			} else {
 				try {
 					mVoices.add(new VoiceInfo(vengine, vname, lang, gender, Float.valueOf(priority)));
 				} catch (NumberFormatException e) {
-					Logger.warn("Error while converting config file's priority " + priority
+					logger.warn("Error while converting config file's priority " + priority
 					        + " to float.");
-				} catch (UnknownLanguage e) {
-					Logger.warn("Unknown language in config file: " +lang);
+				} catch (IllegalArgumentException e) {
+					logger.warn("Invalid language in config file: " + lang);
+					logger.debug("Invalid language in config file: " + lang, e);
 				}
 			}
 			return true;
@@ -56,30 +54,9 @@ public class VoiceConfigExtension implements ConfigReader.Extension, ConfigPrope
 		return false;
 	}
 
-	@Override
-	public void setParentReader(ConfigReader cr) {
-		mConfigReader = cr;
-	}
-
 	public Collection<VoiceInfo> getVoiceDeclarations() {
 		return mVoices;
 	}
 
-	@Override
-	public Map<String, String> getStaticProperties() {
-		return mConfigReader.getStaticProperties();
-	}
-
-	@Override
-	public Map<String, String> getDynamicProperties() {
-		return mConfigReader.getStaticProperties();
-	}
-
-	@Override
-	public Map<String, String> getAllProperties() {
-		return mConfigReader.getAllProperties();
-	}
-
-	private ConfigReader mConfigReader;
 	private Collection<VoiceInfo> mVoices = new ArrayList<VoiceInfo>();
 }

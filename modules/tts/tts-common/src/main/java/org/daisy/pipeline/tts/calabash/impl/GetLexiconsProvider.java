@@ -2,6 +2,14 @@ package org.daisy.pipeline.tts.calabash.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
+
+import com.xmlcalabash.core.XProcRuntime;
+import com.xmlcalabash.io.ReadablePipe;
+import com.xmlcalabash.io.WritablePipe;
+import com.xmlcalabash.model.RuntimeValue;
+import com.xmlcalabash.runtime.XAtomicStep;
+import com.xmlcalabash.util.TreeWriter;
 
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
@@ -10,15 +18,9 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.LexiconsConfigExtension;
-
-import com.xmlcalabash.core.XProcRuntime;
-import com.xmlcalabash.io.ReadablePipe;
-import com.xmlcalabash.io.WritablePipe;
-import com.xmlcalabash.model.RuntimeValue;
-import com.xmlcalabash.runtime.XAtomicStep;
-import com.xmlcalabash.util.TreeWriter;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -30,7 +32,7 @@ import org.osgi.service.component.annotations.Component;
 public class GetLexiconsProvider implements XProcStepProvider {
 
 	@Override
-	public XProcStep newStep(final XProcRuntime runtime, XAtomicStep step) {
+	public XProcStep newStep(final XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 		return new XProcStep() {
 
 			private ReadablePipe mConfig;
@@ -58,12 +60,9 @@ public class GetLexiconsProvider implements XProcStepProvider {
 			}
 
 			public void run() throws SaxonApiException {
-
 				Processor proc = runtime.getProcessor();
-				
-				LexiconsConfigExtension lexiconExt = new LexiconsConfigExtension(proc);
+				LexiconsConfigExtension lexiconExt = new LexiconsConfigExtension();
 				new ConfigReader(proc, mConfig.read(), lexiconExt);
-				
 				int i = 0;
 				for (XdmNode lexicon : lexiconExt.getLexicons()) {
 					TreeWriter tw = new TreeWriter(proc);
@@ -86,7 +85,6 @@ public class GetLexiconsProvider implements XProcStepProvider {
 			@Override
 			public void setParameter(String arg0, QName arg1, RuntimeValue arg2) {
 			}
-
 		};
 	}
 }

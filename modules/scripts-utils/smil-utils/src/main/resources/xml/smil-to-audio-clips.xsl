@@ -19,18 +19,18 @@
             </audio-clips>
         </xsl:variable>
         <!--
-            Remove duplicate clips (two clips could have the same idref if the SMILs contain two
+            Remove duplicate clips (two clips could have the same textref if the SMILs contain two
             text references to the same element)
         -->
         <xsl:for-each select="$audio-clips">
             <xsl:copy>
-                <xsl:for-each-group select="d:clip" group-by="@idref">
+                <xsl:for-each-group select="d:clip" group-by="@textref">
                     <xsl:variable name="clips" as="element(d:clip)*" select="current-group()"/>
                     <xsl:variable name="clip" as="element(d:clip)" select="$clips[1]"/>
                     <xsl:if test="$clips[not(@clipBegin=$clip/@clipBegin and @clipEnd=$clip/@clipEnd)]">
                         <xsl:message terminate="yes">
                             <xsl:text>SMILs contain two text references to the same element (</xsl:text>
-                            <xsl:value-of select="$clip/@idref"/>
+                            <xsl:value-of select="$clip/@textref"/>
                             <xsl:text>) but with different clipBegin and/or clipEnd.</xsl:text>
                         </xsl:message>
                     </xsl:if>
@@ -53,8 +53,8 @@
                 select="(@src|*[local-name()='text']/@src)[1]"/> spans over multiple files.</xsl:message>
               </xsl:if>
               <!-- FIXME: normalize clock values -->
-              <clip idref="{substring-after($text/@src,'#')}"
-                    src="{pf:relativize-uri(resolve-uri($audio[1]/@src,base-uri(.)),$output-base-uri)}"
+              <clip textref="{pf:relativize-uri($text/resolve-uri(@src,base-uri(.)),$output-base-uri)}"
+                    src="{pf:relativize-uri($audio[1]/resolve-uri(@src,base-uri(.)),$output-base-uri)}"
                     clipBegin="{$audio[1]/@clipBegin}"
                     clipEnd="{$audio[@src=$audio[1]/@src][last()]/@clipEnd}"/>
             </xsl:if>

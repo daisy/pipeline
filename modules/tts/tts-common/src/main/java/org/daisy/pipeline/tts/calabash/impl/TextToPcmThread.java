@@ -501,7 +501,7 @@ public class TextToPcmThread implements FormatSpecifications {
 		if (marks.size() == 0) {
 			mLinksOfCurrentFile.add(
 				new SoundFileLink(
-					sentence.getID(),
+					sentence.getBaseURI().resolve("#" + sentence.getID()),
 					AudioUtils.getDuration(mLastFormat, begin),
 					AudioUtils.getDuration(mLastFormat, mOffsetInFile)));
 		} else {
@@ -523,7 +523,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			for (String id : all) {
 				mLinksOfCurrentFile.add(
 					new SoundFileLink(
-						id,
+						sentence.getBaseURI().resolve("#" + id),
 						AudioUtils.getDuration(mLastFormat,
 						                       starts.containsKey(id)
 						                           ? begin + starts.get(id)

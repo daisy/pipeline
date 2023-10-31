@@ -64,12 +64,12 @@
         <x:expect label="should be as expected" type="compare">
             <x:document type="inline">
                 <d:fileset>
-                    <d:file href="file:/merged.html" original-href="file:/part3.html">
-                        <d:anchor id="id_7" original-id="x"/>
-                    </d:file>
                     <d:file href="file:/merged.html" original-href="file:/part1.html"/>
                     <d:file href="file:/merged.html" original-href="file:/part2.html">
                         <d:anchor id="x"/>
+                    </d:file>
+                    <d:file href="file:/merged.html" original-href="file:/part3.html">
+                        <d:anchor id="id_7" original-id="x"/>
                     </d:file>
                 </d:fileset>
             </x:document>

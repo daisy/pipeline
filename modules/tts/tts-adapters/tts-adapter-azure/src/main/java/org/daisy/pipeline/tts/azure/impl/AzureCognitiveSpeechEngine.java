@@ -6,7 +6,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.IllformedLocaleException;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
@@ -42,8 +44,6 @@ import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
-import org.daisy.pipeline.tts.VoiceInfo.UnknownLanguage;
-import static org.daisy.pipeline.tts.VoiceInfo.tagToLocale;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 
 import org.slf4j.Logger;
@@ -85,7 +85,8 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 		String sentence; {
 			try {
 				Map<String,Object> params = new HashMap<>(); {
-					params.put("voice", voice.getName());
+					// for unit tests also allow voices that are not instances of AzureVoice
+					params.put("voice", (voice instanceof AzureVoice) ? ((AzureVoice)voice).info.getShortName() : voice.getName());
 				}
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, params);
 			} catch (IOException|SaxonApiException e) {
@@ -168,24 +169,10 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			case VoicesListRetrieved:
 				Collection<Voice> voices = new ArrayList<Voice>();
 				for (VoiceInfo voice : result.getVoices()) {
-					String name = voice.getShortName();
-					Gender gender; {
-						switch (voice.getGender()) {
-						case Female:
-							gender = Gender.FEMALE_ADULT;
-							break;
-						case Male:
-							gender = Gender.MALE_ADULT;
-							break;
-						case Unknown:
-						default:
-							gender = Gender.ANY;
-						}
-					}
 					try {
-						voices.add(new Voice(getProvider().getName(), name, tagToLocale(voice.getLocale()), gender));
-					} catch (UnknownLanguage e) {
-						logger.debug("Could not parse locale: " + voice.getLocale() + "; skipping " + name);
+						voices.add(new AzureVoice(voice));
+					} catch (IllformedLocaleException e) {
+						logger.debug("Could not parse locale: " + voice.getLocale() + "; skipping " + voice.getShortName());
 					}
 				}
 				return voices;
@@ -196,6 +183,31 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			throw e;
 		} catch (Throwable e) {
 			throw new SynthesisException(e);
+		}
+	}
+
+	private class AzureVoice extends Voice {
+
+		public final VoiceInfo info;
+
+		public AzureVoice(VoiceInfo info) throws IllformedLocaleException {
+			super(getProvider().getName(),
+			      info.getLocalName(),
+			      (new Locale.Builder()).setLanguageTag(info.getLocale().replace("_", "-")).build(),
+			      AzureCognitiveSpeechEngine.getGender(info));
+			this.info = info;
+		}
+	}
+
+	private static Gender getGender(VoiceInfo info) {
+		switch (info.getGender()) {
+		case Female:
+			return Gender.FEMALE_ADULT;
+		case Male:
+			return Gender.MALE_ADULT;
+		case Unknown:
+		default:
+			return Gender.ANY;
 		}
 	}
 

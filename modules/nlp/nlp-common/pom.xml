@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.23-SNAPSHOT</version>
     <relativePath>../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-common</artifactId>
-  <version>2.0.6-SNAPSHOT</version>
+  <version>3.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: NLP API</name>

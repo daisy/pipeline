@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.common.calabash.impl;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.xml.namespace.QName;
@@ -25,7 +26,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashParameterInputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
-
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.common.Transform;
 import org.daisy.pipeline.braille.common.TransformProvider;
 import org.daisy.pipeline.braille.common.Query;
@@ -44,6 +45,8 @@ import org.slf4j.LoggerFactory;
 
 public class PxTransformStep extends DefaultStep implements XProcStep {
 	
+	private final XProcMonitor monitor;
+	private final Map<String,String> properties;
 	private final TransformProvider<Transform> provider;
 	private ReadablePipe source = null;
 	private WritablePipe result = null;
@@ -51,8 +54,14 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 	
 	private static final net.sf.saxon.s9api.QName _query = new net.sf.saxon.s9api.QName("query");
 	
-	private PxTransformStep(XProcRuntime runtime, XAtomicStep step, TransformProvider<Transform> provider) {
+	private PxTransformStep(XProcRuntime runtime,
+	                        XAtomicStep step,
+	                        XProcMonitor monitor,
+	                        Map<String,String> properties,
+	                        TransformProvider<Transform> provider) {
 		super(runtime, step);
+		this.monitor = monitor;
+		this.properties = properties;
 		this.provider = provider;
 	}
 
@@ -91,7 +100,7 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 				for (Transform t : logSelect(query, provider, logger))
 					if (t instanceof XProcStepProvider) {
 						// if the transform is a XProcStepProvider, it is assumed to be declared as a p:pipeline
-						xmlTransformer = ((XProcStepProvider)t).newStep(runtime, step);
+						xmlTransformer = ((XProcStepProvider)t).newStep(runtime, step, monitor, properties);
 						break; }
 					else if (t instanceof XMLTransform) {
 						// fromXmlToXml() is assumed to have only a "source", a "parameters" and a "result" port
@@ -126,16 +135,16 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 	public static class StepProvider implements XProcStepProvider {
 		
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-			return new PxTransformStep(runtime, step, provider);
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
+			return new PxTransformStep(runtime, step, monitor, properties, provider);
 		}
 		
 		@Reference(
 			name = "XProcTransformProvider",
-			unbind = "unbindXProcTransformProvider",
+			unbind = "-",
 			service = TransformProvider.class,
 			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			policy = ReferencePolicy.STATIC
 		)
 		@SuppressWarnings(
 			"unchecked" // safe cast to TransformProvider<XProcTransform>
@@ -151,7 +160,7 @@ public class PxTransformStep extends DefaultStep implements XProcStep {
 		}
 		
 		private List<TransformProvider<Transform>> providers = new ArrayList<>();
-		private TransformProvider<Transform> provider = dispatch(providers);
+		private TransformProvider<Transform> provider = dispatch(providers).withContext(logger);
 		
 	}
 	

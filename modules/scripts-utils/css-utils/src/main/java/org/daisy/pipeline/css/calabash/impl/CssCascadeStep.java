@@ -36,6 +36,7 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashParameterInputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.sass.SassCompiler;
@@ -59,10 +60,11 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private final URIResolver cssURIResolver;
 	private final Iterable<CssCascader> inliners;
 
-	private static final QName _default_stylesheet = new QName("default-stylesheet");
+	private static final QName _user_stylesheet = new QName("user-stylesheet");
 	private static final QName _type = new QName("type");
 	private static final QName _media = new QName("media");
 	private static final QName _attribute_name = new QName("attribute-name");
+	private static final QName _multiple_attributes = new QName("multiple-attributes");
 
 	private static final String DEFAULT_MEDIUM = "embossed";
 	private static final String DEFAULT_TYPES = "text/css text/x-scss";
@@ -124,17 +126,31 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 			boolean enableSass = types.contains("text/x-scss");
 			for (CssCascader inliner : inliners)
 				if (inliner.supportsMedium(medium)) {
-					QName attributeName = getOption(_attribute_name, DEFAULT_ATTRIBUTE_NAME);
+					QName attributeName; {
+						RuntimeValue v = getOption(_attribute_name);
+						if (v == null)
+							attributeName = DEFAULT_ATTRIBUTE_NAME;
+						else if (v.getValue().size() == 0)
+							attributeName = null;
+						else
+							attributeName = v.getQName(); }
+					boolean multipleAttrs = getOption(_multiple_attributes, false);
+					if (multipleAttrs && (attributeName == null
+					                      || attributeName.getNamespaceURI() == null
+					                      || "".equals(attributeName.getNamespaceURI())))
+						throw new IllegalArgumentException(
+							"Namespace must be specified when cascading to multiple attributes per element");
 					inMemoryResolver.setContext(contextPipe);
 					inliner.newInstance(
 						medium,
-						getOption(_default_stylesheet, ""),
+						getOption(_user_stylesheet, ""),
 						cssURIResolver,
 						enableSass
 							? new SassCompiler(cssURIResolver, Collections.unmodifiableMap(sassVariables))
 							: null,
 						new XSLT(runtime, step),
-						SaxonHelper.jaxpQName(attributeName)
+						attributeName != null ? SaxonHelper.jaxpQName(attributeName) : null,
+						multipleAttrs
 					).transform(
 						new XMLCalabashInputValue(sourcePipe),
 						new XMLCalabashOutputValue(resultPipe, runtime)
@@ -198,7 +214,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 		private final List<CssCascader> inliners = new ArrayList<>();
 
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new CssCascadeStep(runtime, step, inliners, resolver);
 		}
 
@@ -215,10 +231,10 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 
 		@Reference(
 			name = "CssCascader",
-			unbind = "unbindCssCascader",
+			unbind = "-",
 			service = CssCascader.class,
 			cardinality = ReferenceCardinality.MULTIPLE,
-			policy = ReferencePolicy.DYNAMIC
+			policy = ReferencePolicy.STATIC
 		)
 		public void bindCssCascader(CssCascader inliner) {
 			this.inliners.add(inliner);

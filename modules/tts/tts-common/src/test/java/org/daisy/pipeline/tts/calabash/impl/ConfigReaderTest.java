@@ -14,6 +14,8 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.VoiceInfo;
+import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
 
@@ -44,9 +46,9 @@ public class ConfigReaderTest {
 		boolean found = false;
 		for (VoiceInfo v : voices)
 			if ("voice-name".equals(v.voiceName)) {
-				Assert.assertEquals(new Locale("en"), v.language);
+				Assert.assertEquals(new LanguageRange("en"), v.language);
 				Assert.assertEquals("engine", v.voiceEngine);
-				Assert.assertEquals(VoiceInfo.Gender.MALE_ADULT, v.gender);
+				Assert.assertEquals(Gender.MALE_ADULT, v.gender);
 				Assert.assertEquals(42, (int) v.priority);
 				found = true;
 				break;

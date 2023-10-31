@@ -37,6 +37,7 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.file.FileUtils;
 import org.daisy.pipeline.fileset.Fileset;
 
@@ -53,7 +54,7 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 	)
 	public static class StepProvider implements XProcStepProvider {
 		@Override
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new AddEntriesStep(runtime, step);
 		}
 	}

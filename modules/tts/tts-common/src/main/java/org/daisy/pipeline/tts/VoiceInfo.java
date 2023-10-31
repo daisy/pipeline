@@ -1,11 +1,12 @@
 package org.daisy.pipeline.tts;
 
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Preconditions;
@@ -17,14 +18,10 @@ public class VoiceInfo {
 	public Gender gender;
 	public String voiceName;
 	public String voiceEngine;
-	public Locale language;
+	public LanguageRange language;
 	public float priority;
 
-	public static Locale NO_DEFINITE_LANG = new Locale("mul");
 	public static Gender NO_DEFINITE_GENDER = Gender.ANY;
-
-	private static Pattern localePattern = Pattern
-	        .compile("(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*");
 
 	public enum Gender {
 		ANY("*", "neutral"),
@@ -68,36 +65,155 @@ public class VoiceInfo {
 			return this == ANY ? "*" : super.toString().toLowerCase().replace("_", "-");
 		}
 	}
-	
-	public static class UnknownLanguage extends Exception{
-		public UnknownLanguage(String message) {
-	        super(message);
-	    }
+
+	public static class LanguageRange {
+
+		private static final Pattern LANGUAGE_RANGE = Pattern.compile("(\\p{Alpha}{1,8}|\\*)(-(\\p{Alnum}{1,8}|\\*))*");
+
+		private final String range;
+		private final Locale primaryLanguageSubTag;
+		private final int specificity;
+
+		/**
+		 * @throws IllegalArgumentException if the argument does not represent a valid language range
+		 */
+		public LanguageRange(String range) {
+			if (range == null)
+				throw new IllegalArgumentException();
+			if ("mul".equalsIgnoreCase(range)) {
+				this.range = "*";
+				primaryLanguageSubTag = null;
+				specificity = 0;
+			} else {
+				if (!LANGUAGE_RANGE.matcher(range).matches())
+					throw new IllegalArgumentException("Not a valid language range: " + range);
+				if (range.equals("*")) {
+					primaryLanguageSubTag = null;
+					specificity = 0;
+				} else if (!range.contains("*"))
+					try {
+						Locale locale = (new Locale.Builder()).setLanguageTag(range).build();
+						primaryLanguageSubTag = new Locale(locale.getLanguage());
+						range = locale.toLanguageTag();
+						specificity = range.split("-").length;
+					} catch (IllformedLocaleException e) {
+						throw new IllegalArgumentException("Not a valid language range: '" + range, e);
+					}
+				else
+					throw new IllegalArgumentException("FIXME: Extended language ranges not implemented yet");
+				this.range = range;
+			}
+		}
+
+		public LanguageRange(Locale locale) {
+			this(locale == null ? null : locale.toLanguageTag());
+		}
+
+		/**
+		 * Whether the language range matches the given locale.
+		 */
+		public boolean matches(Locale locale) {
+			if (locale == null)
+				throw new IllegalArgumentException();
+			if (this.range.equals("*"))
+				return true;
+			String tag = locale.toLanguageTag().toLowerCase();
+			String range = this.range.toLowerCase();
+			return tag.equals(range) || tag.startsWith(range + "-");
+		}
+
+		/**
+		 * Whether the language list matches the given locale.
+		 */
+		public static boolean matches(Collection<LanguageRange> languageList, Locale locale) {
+			if (locale == null)
+				throw new IllegalArgumentException();
+			for (LanguageRange l : languageList)
+				if (l.matches(locale))
+					return true;
+			return false;
+		}
+
+		/**
+		 * The primary language subtag if it is not equal to "*", {@code null} otherwise.
+		 */
+		public Locale getPrimaryLanguageSubTag() {
+			return primaryLanguageSubTag;
+		}
+
+		/**
+		 * To determine whether a language range is more specific than another language range.
+		 */
+		public int getSpecificity() {
+			return specificity;
+		}
+
+		@Override
+		public String toString() {
+			return range;
+		}
+
+		/**
+		 * Print language list as comma-separated list.
+		 */
+		public static String toString(Collection<LanguageRange> languageList) {
+			StringBuilder s = new StringBuilder();
+			boolean first = true;
+			for (LanguageRange l : languageList) {
+				if (!first) s.append(", ");
+				s.append(l);
+				first = false;
+			}
+			return s.toString();
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + range.toLowerCase().hashCode();
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			LanguageRange other = (LanguageRange)obj;
+			if (!range.equalsIgnoreCase(other.range))
+				return false;
+			return true;
+		}
 	}
 
-	public static Locale tagToLocale(String langtag) throws UnknownLanguage {
-		if (langtag == null || "*".equals(langtag) || "mul".equals(langtag))
-			return NO_DEFINITE_LANG;
-		Locale locale = Locale.forLanguageTag(langtag.replace("_", "-"));
-		if (locale == null || "und".equals(locale.toLanguageTag()))
-			throw new UnknownLanguage(langtag);
-		return locale;
-	}
-
+	/**
+	 * @throws IllegalArgumentException if language or gender can not be parsed.
+	 */
 	public VoiceInfo(String voiceEngine, String voiceName, String language, Gender gender, float priority)
-			throws UnknownLanguage {
-		this(voiceEngine, voiceName, tagToLocale(language), gender, priority);
+			throws IllegalArgumentException {
+		this(voiceEngine, voiceName, new LanguageRange(language), gender, priority);
 	}
 
-	VoiceInfo(String voiceEngine, String voiceName, Locale locale, Gender gender, float priority) {
-		Preconditions.checkNotNull(gender);
-		Preconditions.checkNotNull(voiceName);
+	public VoiceInfo(String voiceEngine, String voiceName, Locale language, Gender gender, float priority)
+			throws IllegalArgumentException {
+		this(voiceEngine, voiceName, new LanguageRange(language), gender, priority);
+	}
+
+	public VoiceInfo(String voiceEngine, String voiceName, LanguageRange language, Gender gender, float priority)
+			throws IllegalArgumentException {
 		Preconditions.checkNotNull(voiceEngine);
+		Preconditions.checkNotNull(voiceName);
+		Preconditions.checkNotNull(language);
+		Preconditions.checkNotNull(gender);
 		this.voiceEngine = voiceEngine;
 		this.voiceName = voiceName;
-		this.language = locale;
-		this.priority = priority;
+		this.language = language;
 		this.gender = gender;
+		this.priority = priority;
 	}
 
 	@Override
@@ -155,11 +271,11 @@ public class VoiceInfo {
 		}
 		if (language != null) {
 			if (s.length() > 0) s += ", ";
-			s += ("lang=" + (language == NO_DEFINITE_LANG ? "*" : language));
+			s += ("lang=" + language);
 		}
 		if (gender != null) {
 			if (s.length() > 0) s += ", ";
-			s += ("gender=" + (gender == NO_DEFINITE_GENDER ? "*" : gender));
+			s += ("gender=" + gender);
 		}
 		{
 			if (s.length() > 0) s += ", ";
@@ -167,9 +283,5 @@ public class VoiceInfo {
 		}
 		s = "VoiceInfo[" + s + "]";
 		return s;
-	}
-
-	public boolean isMultiLang(){
-		return this.language == NO_DEFINITE_LANG;
 	}
 }

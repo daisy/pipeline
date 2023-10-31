@@ -1,0 +1,744 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+	       xmlns:m="http://www.w3.org/1998/Math/MathML"
+	       xmlns="http://www.w3.org/2001/10/synthesis"
+               script="../../main/resources/xml/xproc/text-to-ssml.xpl">
+
+  <x:scenario label="Full workflow">
+    <x:call step="px:text-to-ssml">
+      <x:input port="fileset.in">
+	<x:document type="inline">
+	  <d:fileset/>
+	</x:document>
+      </x:input>
+      <x:input port="user-lexicons">
+	<x:document type="inline">
+	  <tmp:nothing/>
+	</x:document>
+      </x:input>
+      <x:input port="sentence-ids">
+	<x:document type="inline">
+	  <d:sentences>
+	    <d:s id="s1"/>
+	    <d:s id="s2"/>
+	    <d:s id="s3"/>
+	    <d:s id="s4"/>
+	    <d:s id="s5"/>
+	  </d:sentences>
+	</x:document>
+      </x:input>
+      <x:input port="skippable-ids">
+	<x:document type="inline">
+	  <d:sk>
+	    <d:ski id="sk1"/>
+	    <d:ski id="sk2"/>
+	    <d:ski id="sk3"/>
+	    <d:ski id="sk4"/>
+	  </d:sk>
+	</x:document>
+      </x:input>
+      <x:option name="word-element" select="'w'"/>
+    </x:call>
+
+    <x:scenario label="basic transformation">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <w>abc</w><sent id="s1"><w>xzy</w></sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>xzy</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="basic transformation with 1 skippable structure">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <sent id="s1">
+		<span id="sp1"><w>text1</w></span>
+		<span>
+		  <pagenum id="sk1">13</pagenum>
+		</span>
+		<span id="sp2"><w>text2</w></span>
+	      </sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>text1</token> <mark name="sp1___sp2"/> <token>text2</token></s>
+	    <s id="sk1" xml:lang="en">13</s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="basic transformation with 2 skippable structures">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <sent id="s1">
+		<span id="sp1"><w>text1</w></span>
+		<span>
+		  <pagenum id="sk1">13</pagenum>
+		</span>
+		<span id="sp2"><w>text2</w></span>
+		<span>
+		  <pagenum id="sk2">14</pagenum>
+		</span>
+		<span id="sp3"><w>text3</w></span>
+	      </sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>text1</token> <mark name="sp1___sp2"/> <token>text2</token> <mark name="sp2___sp3"/> <token>text3</token></s>
+	    <s xml:lang="en">13 , <mark name="sk1___sk2"/> . 14 ,</s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="both sentence and skippable structure">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <pagenum id="s1"><w>1</w></pagenum>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+	<x:input port="skippable-ids">
+	  <x:document type="inline">
+	    <d:sk>
+	      <d:ski id="s1"/>
+	    </d:sk>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en"><token>1</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+
+    <x:scenario label="Language inheritance">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <level xml:lang="fr">
+		<span id="s1"><w>sentence</w></span>
+	      </level>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="fr"><token>sentence</token></s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS properties outside sentences">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en" tmp:pitch="1">
+	      <level tmp:volume="2" tmp:speech-rate="3">
+		<span tmp:pitch="0">
+		  <sent id="s1"><w>sentence</w></sent>
+		</span>
+	      </level>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<!-- Order should not matter but it makes the comparison simpler. -->
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en">
+	      <prosody volume="2">
+		<prosody pitch="0">
+		  <prosody rate="3">
+		    <token>sentence</token>
+		  </prosody>
+		</prosody>
+	      </prosody>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside sentence">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <ssml:s id="s1">
+	      <w>word1</w>
+	      <span tmp:speech-rate="0" tmp:volume="1">
+		<span tmp:pitch="2" tmp:speech-rate="3"><w>word2</w></span>
+	      </span>
+	    </ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en">
+  	      <token>word1</token>
+  	      <prosody volume="1">
+  		<prosody rate="0">
+  		  <prosody pitch="2">
+  		    <prosody rate="3">
+  		      <token>word2</token>
+  		    </prosody>
+  		  </prosody>
+  		</prosody>
+  	      </prosody>
+  	    </s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en" tmp:volume="1">
+  	    <ssml:s id="s1"><w>word1</w><span><span tmp:volume="2"><w>word2</w></span></span></ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en">
+  	      <prosody volume="1">
+  		<token>word1</token>
+  		<prosody volume="2">
+  		  <token>word2</token>
+  		</prosody>
+  	      </prosody>
+  	    </s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence on standalone skippable elt V1">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en" tmp:voice-family="engine,name">
+  	    <ssml:s id="s1"><span tmp:volume="2"><pagenum id="sk1">1</pagenum></span></ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+              <prosody volume="2">1</prosody>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence on standalone skippable elt V2">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en" tmp:volume="2">
+  	    <ssml:s id="s1"><span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span></ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+              <prosody volume="2">1</prosody>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence on separated skippable elt V1">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en" tmp:voice-family="engine,name">
+  	    <ssml:s id="s1">
+	      <span id="left"><w>left</w></span>
+	      <span tmp:volume="2"><pagenum id="sk1">1</pagenum></span>
+	      <span id="right"><w>right</w></span>
+	    </ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+              <token>left</token>
+              <mark name="left___right"/>
+              <token>right</token>
+	    </s>
+	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+              <prosody volume="2">1</prosody>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence on separated skippable elt V2">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en" tmp:volume="2">
+  	    <ssml:s id="s1">
+	      <span id="left"><w>left</w></span>
+	      <span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span>
+	      <span id="right"><w>right</w></span>
+	    </ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en">
+	      <prosody volume="2">
+		<token>left</token>
+		<mark name="left___right"/>
+		<token>right</token>
+	      </prosody>
+	    </s>
+	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+              <prosody volume="2">1</prosody>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS inside and outside sentence on two separated skippables elt">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <ssml:s id="s1">
+	      <span id="left"><w>left</w></span>
+	      <span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span>
+	      <span id="middle"><w>middle</w></span>
+	      <span tmp:voice-family="engine,name"><pagenum id="sk2">2</pagenum></span>
+	      <span id="right"><w>right</w></span>
+	    </ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en">
+	      <token>left</token>
+	      <mark name="left___middle"/>
+	      <token>middle</token>
+	      <mark name="middle___right"/>
+	      <token>right</token>
+	    </s>
+	    <s xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	      1, <mark name="sk1___sk2"/> . 2,
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Pre-existing SSML prosody node">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <ssml:s id="s1"><ssml:prosody volume="1"><w>sentence</w></ssml:prosody></ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en">
+  	      <prosody volume="1"><token>sentence</token></prosody>
+  	    </s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+
+  <!-- Not implemented yet. It seems to be only allowed in ZedAI documents. -->
+  <!-- <x:scenario label="Pre-existent outside SSML"> -->
+  <!--   <x:call step="pxi:text-to-ssml-wrapper"> -->
+  <!--     <x:input port="content.in"> -->
+  <!-- 	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/"> -->
+  <!-- 	  <dtbook xml:lang="en"> -->
+  <!-- 	    <ssml:prosody volume="1"><ssml:s id="s1">sentence</ssml:s></ssml:prosody> -->
+  <!-- 	  </dtbook> -->
+  <!--       </x:document> -->
+  <!--     </x:input> -->
+  <!--   </x:call> -->
+  <!--   <x:context label="result"> -->
+  <!--     <x:document type="port" port="result"/> -->
+  <!--   </x:context> -->
+  <!--   <x:expect label="result" type="compare"> -->
+  <!--     <x:document type="inline"> -->
+  <!-- 	<speak version="1.1"> -->
+  <!-- 	  <s id="s1" xml:lang="en"> -->
+  <!-- 	    <prosody volume="1">sentence</prosody> -->
+  <!-- 	  </s> -->
+  <!-- 	</speak> -->
+  <!--     </x:document> -->
+  <!--   </x:expect> -->
+  <!-- </x:scenario> -->
+
+    <x:scenario label="Preexisting SSML tokens">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <ssml:s id="s1" xml:lang="en">
+  	      <ssml:token>word1</ssml:token> <ssml:token>word2</ssml:token>
+  	    </ssml:s>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en">
+  	      <token>word1</token> <token>word2</token>
+  	    </s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Voice family">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <level>
+  	      <ssml:s tmp:voice-family="espeak" id="s1"><w>sentence1</w></ssml:s>
+  	      <ssml:s tmp:voice-family="att,alain16" id="s2"><w>sentence2</w></ssml:s>
+  	      <ssml:s tmp:voice-family="att,16" id="s3"><w>sentence3</w></ssml:s>
+  	      <ssml:s tmp:voice-family="16,male,att" id="s4"><w>sentence4</w></ssml:s>
+  	      <ssml:s tmp:voice-family="female,15" id="s5"><w>sentence5</w></ssml:s>
+  	    </level>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en" voice-selector1="espeak"><token>sentence1</token></s>
+  	    <s id="s2" xml:lang="en" voice-selector1="att" voice-selector2="alain16"><token>sentence2</token></s>
+  	    <s id="s3" xml:lang="en" voice-selector1="att" voice-age="16"><token>sentence3</token></s>
+  	    <s id="s4" xml:lang="en" voice-selector1="att" voice-age="16" voice-gender="male"><token>sentence4</token></s>
+  	    <s id="s5" xml:lang="en" voice-age="15" voice-gender="female"><token>sentence5</token></s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+
+    <x:scenario label="SSML say-as">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <level>
+  	      <ssml:s tmp:speak='spell-out' id="s1"><w>sentence1</w></ssml:s>
+  	      <ssml:s tmp:speak-numeral='digits' id="s2"><w>sentence2</w></ssml:s>
+  	      <ssml:s tmp:speak-numeral='continuous' id="s3"><w>sentence3</w></ssml:s>
+  	    </level>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en"><say-as interpret-as="characters"><token>sentence1</token></say-as></s>
+  	    <s id="s2" xml:lang="en"><say-as interpret-as="ordinal"><token>sentence2</token></say-as></s>
+  	    <s id="s3" xml:lang="en"><say-as interpret-as="cardinal"><token>sentence3</token></say-as></s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS pause-before">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <level tmp:pause-before='10'>
+  	      <ssml:s id="s1"><w>sentence</w></ssml:s>
+  	    </level>
+  	  </dtbook>
+        </x:document>
+      	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en"><break time="10"/><token>sentence</token></s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS pause-after">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <level>
+  	      <ssml:s id="s1"><span tmp:pause-after="10"><w>sentence</w></span></ssml:s>
+  	    </level>
+  	  </dtbook>
+        </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en"><token>sentence</token><break time="10"/></s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="CSS mixed cues and pauses">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+  	  <dtbook xml:lang="en">
+  	    <level tmp:pause-before="1" tmp:pause-after="2">
+  	      <level tmp:cue-after="file:///foo/beep1.mp3"/>
+  	    </level>
+  	    <level tmp:pause-before="3" tmp:cue-before="file:/foo/beep2.mp3" tmp:pause-after="6">
+  	      <level tmp:pause-before="4" tmp:pause-after="5">
+  	    	<ssml:s id="s1"><w>sentence1</w></ssml:s>
+  	      </level>
+  	      <ssml:s id="s2"><w>sentence2</w></ssml:s>
+  	    </level>
+  	    <level tmp:cue-after="/foo/beep3.mp3" tmp:pause-after="7"/>
+  	  </dtbook>
+        </x:document>
+      	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+  	  <speak version="1.1">
+  	    <s id="s1" xml:lang="en">
+  	      <break time="1"/>
+  	      <audio src="/foo/beep1.mp3"/>
+  	      <break time="2"/>
+  	      <break time="3"/>
+  	      <audio src="/foo/beep2.mp3"/>
+  	      <break time="4"/><token>sentence1</token><break time="5"/>
+  	    </s>
+  	    <s id="s2" xml:lang="en">
+  	      <token>sentence2</token>
+  	      <break time="6"/>
+  	      <break time="7"/>
+  	      <audio src="/foo/beep3.mp3"/>
+  	    </s>
+  	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Standalone MathML">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <ssml:speak version="1.1" id="s1" xml:lang="en">
+		<ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
+		root of  x  over  y
+	      </ssml:speak>
+	      <sent id="s2"><w>regular</w></sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	    <s id="s1" xml:lang="en">
+	      <ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
+	      root of  x  over  y
+            </s>
+	    <s id="s2" xml:lang="en">
+              <token>regular</token>
+	    </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="Skippable MathML">
+      <x:call step="px:text-to-ssml">
+	<x:input port="content.in">
+	  <x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
+	    <dtbook xml:lang="en">
+	      <sent id="s1">
+		<span id="sp1"><w>before</w></span>
+		<ssml:speak version="1.1" id="sk1" xml:lang="en">
+		  <ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
+		  root of  x  over  y
+		</ssml:speak>
+		<span id="sp2"><w>after</w></span>
+	      </sent>
+	      <sent id="s2"><w>regular</w></sent>
+	    </dtbook>
+	  </x:document>
+	</x:input>
+      </x:call>
+      <x:context label="result">
+	<x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+	<x:document type="inline">
+	  <speak version="1.1">
+	     <s id="s1" xml:lang="en">
+               <token>before</token>
+               <mark name="sp1___sp2"/>
+               <token>after</token>
+	     </s>
+	     <s id="sk1" xml:lang="en">
+	      <ssml:say-as interpret-as="ordinal"> 12 </ssml:say-as>
+	      root of  x  over  y
+	     </s>
+	     <s id="s2" xml:lang="en">
+               <token>regular</token>
+	     </s>
+	  </speak>
+	</x:document>
+      </x:expect>
+    </x:scenario>
+
+  </x:scenario>
+
+</x:description>

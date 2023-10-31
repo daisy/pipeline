@@ -1,9 +1,16 @@
 package org.daisy.pipeline.tts;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import com.google.common.collect.Collections2;
+
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
+import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
 
 /**
  * Voice instances are expected to be created only by TTSEngine/TTSService implementations
@@ -15,7 +22,7 @@ public class Voice {
 	private final String engine;
 	private final String name;
 	private final MarkSupport markSupport;
-	private final Optional<Locale> locale;
+	private final Collection<LanguageRange> locale;
 	private final Optional<Gender> gender;
 
 	public enum MarkSupport {
@@ -25,24 +32,46 @@ public class Voice {
 	}
 
 	public Voice(String engine, String name) {
-		this(engine, name, MarkSupport.DEFAULT);
+		this(engine, name, Collections.emptyList(), null, MarkSupport.DEFAULT);
 	}
 
-	public Voice(String engine, String name, MarkSupport markSupport) {
-		this(engine, name, null, null, markSupport);
+	/**
+	 * @throws IllegalArgumentException if language or gender can not be parsed.
+	 */
+	public Voice(String engine, String name, Locale locale, Gender gender) throws IllegalArgumentException {
+		this(engine,
+		     name,
+		     locale != null ? new LanguageRange(locale) : null,
+		     gender);
 	}
 
-	public Voice(String engine, String name, Locale locale, Gender gender) {
-		this(engine, name, locale, gender, MarkSupport.DEFAULT);
+	public Voice(String engine, String name, LanguageRange locale, Gender gender) throws IllegalArgumentException {
+		this(engine,
+		     name,
+		     Optional.ofNullable(locale).map(x -> listOf(x)).orElseGet(Collections::emptyList),
+		     gender,
+		     MarkSupport.DEFAULT);
 	}
 
-	public Voice(String engine, String name, Locale locale, Gender gender, MarkSupport markSupport) {
+	public Voice(String engine, String name, Collection<Locale> locale, Gender gender) throws IllegalArgumentException {
+		this(engine, name, Collections2.transform(locale, LanguageRange::new), gender, MarkSupport.DEFAULT);
+	}
+
+	public Voice(String engine, String name, Collection<LanguageRange> locale, Gender gender, MarkSupport markSupport)
+			throws IllegalArgumentException {
 		// we keep the strings in their full case form because some engines might be case sensitive
 		this.engine = engine == null ? "" : engine;
 		this.name = name == null ? "" : name;
-		this.locale = Optional.ofNullable(locale);
+		this.locale = Collections.unmodifiableCollection(locale);
 		this.gender = Optional.ofNullable(gender);
 		this.markSupport = markSupport;
+	}
+
+	// see List.of() method in Java 9
+	private static <E> List<E> listOf(E element) {
+		if (element == null)
+			throw new NullPointerException();
+		return Collections.unmodifiableList(Arrays.asList(element));
 	}
 
 	public String getName() {
@@ -58,9 +87,9 @@ public class Voice {
 	}
 
 	/**
-	 * The locale of this voice, or absent if it is not known.
+	 * The language range(s) of this voice, or empty if it is not known.
 	 */
-	public Optional<Locale> getLocale() {
+	public Collection<LanguageRange> getLocale() {
 		return locale;
 	}
 
@@ -87,17 +116,20 @@ public class Voice {
 		boolean first = true;
 		s.append("{");
 		if (!engine.isEmpty()) {
-			s.append("engine:").append(engine);
+			s.append("engine: ").append(engine);
 			first = false;
 		}
 		if (!name.isEmpty()) {
 			if (!first) s.append(", ");
-			s.append("name:").append(name);
+			s.append("name: ").append(name);
 			first = false;
 		}
-		if (locale.isPresent()) {
+		if (!locale.isEmpty()) {
 			if (!first) s.append(", ");
-			s.append("locale:").append(locale.get());
+			s.append("locale: ");
+			if (locale.size() > 1) s.append("\"");
+			s.append(LanguageRange.toString(locale));
+			if (locale.size() > 1) s.append("\"");
 			first = false;
 		}
 		if (gender.isPresent()) {

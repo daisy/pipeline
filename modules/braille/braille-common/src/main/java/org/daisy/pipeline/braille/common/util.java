@@ -495,7 +495,7 @@ public abstract class util {
 			int j = 0;
 			for (Character c : text.toCharArray()) {
 				hyphenatedText.append(c);
-				if (j < hyphens.length && text.codePointAt(i) == c) {
+				if (j < hyphens.length && (!codePointBased || text.codePointAt(i) == c)) {
 					if (hyphens[j] != 0) {
 						for (int k = 0; k < characters.length; k++) {
 							byte b = (byte)(1 << k);

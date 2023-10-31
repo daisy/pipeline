@@ -1,5 +1,9 @@
 package org.daisy.pipeline.braille.common;
 
+import java.util.Collections;
+import java.util.Locale;
+
+import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 /**
@@ -23,6 +27,13 @@ public interface Hyphenator extends Transform {
 	/**
 	 * Break the input into lines of a preferred and maximal length. Transformations such
 	 * as non-standard hyphenation are allowed.
+	 *
+	 * A {@link LineBreaker} is not required to do any special white space processing, but
+	 * it may.
+	 *
+	 * If the {@link FullHyphenator} returned by {@link #asFullHyphenator()} throws a {@link
+	 * NonStandardHyphenationException}, the {@link #asLineBreaker()} method must not throw a {@link
+	 * UnsupportedOperationException}.
 	 */
 	public LineBreaker asLineBreaker() throws UnsupportedOperationException;
 	
@@ -34,6 +45,14 @@ public interface Hyphenator extends Transform {
 		
 		public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> text) throws NonStandardHyphenationException;
 		
+		/**
+		 * This method is intended to be overridden with a more optimal implementation.
+		 */
+		public default String transform(String text, SimpleInlineStyle style, Locale language)
+				throws NonStandardHyphenationException {
+			return transform(Collections.singleton(new CSSStyledText(text, style, language)))
+			       .iterator().next().getText();
+		}
 	}
 	
 	/* --------------- */
@@ -42,7 +61,7 @@ public interface Hyphenator extends Transform {
 	
 	public interface LineBreaker {
 		
-		public LineIterator transform(String input);
+		public LineIterator transform(String input, Locale language);
 		
 	}
 	
@@ -74,11 +93,12 @@ public interface Hyphenator extends Transform {
 		
 		/**
 		 * Get the next line of text, with a length as close as possible to, but not
-		 * exceding `limit` characters, breaking a word if needed. `limit` must be greater
-		 * than 0. If `force` is true, may not return an empty string. If `allowHyphens`
-		 * is false, breaking words is not permitted unless `force` is true and an empty
-		 * string would otherwise be returned. Must throw an exception if there is no
-		 * remaining text to make a new line of.
+		 * exceding `limit` characters, breaking a word if needed. The line does not
+		 * include a possible hyphen character (see {@link lineHasHyphen()}). `limit` must
+		 * be greater than 0. If `force` is true, may not return an empty string. If
+		 * `allowHyphens` is false, breaking words is not permitted unless `force` is true
+		 * and an empty string would otherwise be returned. Must throw an exception if
+		 * there is no remaining text to make a new line of.
 		 */
 		public String nextLine(int limit, boolean force, boolean allowHyphens);
 		public String nextLine(int limit, boolean force);

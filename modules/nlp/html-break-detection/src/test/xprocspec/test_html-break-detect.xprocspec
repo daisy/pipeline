@@ -39,11 +39,11 @@
 				<html xmlns="http://www.w3.org/1999/xhtml">
 					<body>
 						<p>
-							<span id="st1" class="sentence">This is a paragraph.</span>
+							<span id="id_1" class="sentence">This is a paragraph.</span>
 						</p>
 						<p>
-							<span id="st2" class="sentence">First sentence of paragraph.</span>
-							<span id="st3" class="sentence">Second sentence of paragraph.</span>
+							<span id="id_2" class="sentence">First sentence of paragraph.</span>
+							<span id="id_3" class="sentence">Second sentence of paragraph.</span>
 						</p>
 					</body>
 				</html>
@@ -55,9 +55,9 @@
 		<x:expect label="the sentence-ids" type="compare">
 			<x:document type="inline">
 				<d:sentences>
-					<d:sentence id="st1"/>
-					<d:sentence id="st2"/>
-					<d:sentence id="st3"/>
+					<d:sentence id="id_1"/>
+					<d:sentence id="id_2"/>
+					<d:sentence id="id_3"/>
 				</d:sentences>
 			</x:document>
 		</x:expect>
@@ -85,18 +85,18 @@
 				<html xmlns="http://www.w3.org/1999/xhtml">
 					<body>
 						<p>
-							<span id="st1" class="sentence">
+							<span id="id_1" class="sentence">
 								<span>This</span> <span>is</span> <span>a</span> <span>paragraph</span>.</span>
 						</p>
 						<p>
-							<span id="st2" class="sentence">
+							<span id="id_2" class="sentence">
 								<span>First sentence of paragraph,</span>
 								<span>second sentence of paragraph.</span>
 							</span>
 						</p>
 						<p>
-							<span id="st3" class="sentence">First sentence of paragraph.</span>
-							<span id="st4" class="sentence">Second sentence of paragraph.</span>
+							<span id="id_3" class="sentence">First sentence of paragraph.</span>
+							<span id="id_4" class="sentence">Second sentence of paragraph.</span>
 						</p>
 					</body>
 				</html>
@@ -131,12 +131,12 @@
 				<html xmlns="http://www.w3.org/1999/xhtml">
 					<body>
 						<p>
-							<span id="st1" class="sentence">First sentence of paragraph.</span>
-							<span id="st2" class="sentence">Second sentence of paragraph.</span>
+							<span id="id_1" class="sentence">First sentence of paragraph.</span>
+							<span id="id_2" class="sentence">Second sentence of paragraph.</span>
 						</p>
 						<p>
-							<span id="st3" class="sentence">First sentence of paragraph,</span>
-							<span id="st4" class="sentence">second sentence of paragraph.</span>
+							<span id="id_3" class="sentence">First sentence of paragraph,</span>
+							<span id="id_4" class="sentence">second sentence of paragraph.</span>
 						</p>
 					</body>
 				</html>

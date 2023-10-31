@@ -147,10 +147,10 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 	
 	@Reference(
 		name = "FileFormatProvider",
-		unbind = "removeFileFormatProvider",
+		unbind = "-",
 		service = org.daisy.dotify.api.embosser.FileFormatProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addFileFormatProvider(org.daisy.dotify.api.embosser.FileFormatProvider provider) {
 		if (!OSGiHelper.inOSGiContext())
@@ -166,10 +166,10 @@ public class BrailleUtilsFileFormatCatalog implements FileFormatProvider {
 	
 	@Reference(
 		name = "EmbosserProvider",
-		unbind = "removeEmbosserProvider",
+		unbind = "-",
 		service = EmbosserProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
-		policy = ReferencePolicy.DYNAMIC
+		policy = ReferencePolicy.STATIC
 	)
 	public void addEmbosserProvider(EmbosserProvider provider) {
 		if (!OSGiHelper.inOSGiContext())

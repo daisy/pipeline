@@ -2,6 +2,7 @@
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
                xmlns:m="http://www.w3.org/1998/Math/MathML"
                xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -21,6 +22,7 @@
 				<x:document type="inline">
 					<config>
 						<voice engine="mock-tts" name="foo" lang="fr" gender="male-adult"/>
+						<voice engine="mock-tts" name="foo" lang="en" gender="male-adult"/>
 					</config>
 				</x:document>
 			</x:input>
@@ -228,7 +230,7 @@
 			<x:option name="audio-only" select="false()"/>
 			<x:option name="date" select="'2020-02-27'"/>
 			<x:option name="output-fileset-base" select="resolve-uri('result/')"/>
-			<x:option name="word-detection" select="'false'"/>
+			<x:option name="word-detection" select="false()"/>
 		</x:call>
 		<x:context label="the fileset.out port">
 			<x:document type="port" port="fileset.out"/>
@@ -275,13 +277,13 @@
 					<book>
 						<frontmatter>
 							<doctitle smilref="mo0.smil#sdoctitle" id="doctitle">
-								<sent smilref="mo0.smil#sst1" id="st1">title</sent>
+								<sent smilref="mo0.smil#sid_1" id="id_1">title</sent>
 							</doctitle>
 						</frontmatter>
 						<bodymatter>
 							<level1>
 								<h1 smilref="mo0.smil#sch1" id="ch1">
-									<sent smilref="mo0.smil#sst2" id="st2">chapter</sent>
+									<sent smilref="mo0.smil#sid_2" id="id_2">chapter</sent>
 								</h1>
 								<p smilref="mo0.smil#sp1" id="p1">
 									<m:math dtb:smilref="mo0.smil#sm1" id="m1" alttext="Math Formulae" altimg="math-formulae.png">
@@ -319,13 +321,13 @@
 					<body>
 						<seq id="root-seq">
 							<seq id="sdoctitle" class="doctitle">
-								<par id="sst1" class="sent">
-									<text src="dtbook.xml#st1"/>
+								<par id="sid_1" class="sent">
+									<text src="dtbook.xml#id_1"/>
 								</par>
 							</seq>
 							<seq id="sch1" class="h1">
-								<par id="sst2" class="sent">
-									<text src="dtbook.xml#st2"/>
+								<par id="sid_2" class="sent">
+									<text src="dtbook.xml#id_2"/>
 								</par>
 							</seq>
 							<seq id="sp1" class="p">
@@ -468,6 +470,82 @@
 						</nodeSet>
 					</scope>
 				</resources>
+			</x:document>
+		</x:expect>
+	</x:scenario>
+
+	<x:scenario label="minimal book with css and resources">
+		<x:call step="px:dtbook-to-daisy3">
+			<x:input port="fileset.in">
+				<x:document type="inline">
+					<d:fileset>
+						<d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+						<d:file href="image.png" media-type="image/png" original-href="../resources/samples/image.png"/>
+						<d:file href="aural.css" media-type="text/css"/>
+					</d:fileset>
+				</x:document>
+			</x:input>
+			<x:input port="in-memory.in">
+				<x:document type="inline" xml:base="dtbook.xml">
+					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="en">
+						<head>
+							<meta name="dtb:uid" content="uid"/>
+							<meta name="dc:Title" content="title"/>
+							<link rel="stylesheet" type="text/css" media="speech" href="aural.css"/>
+						</head>
+						<book>
+							<frontmatter>
+								<doctitle id="doctitle">title</doctitle>
+							</frontmatter>
+							<bodymatter>
+								<level1>
+									<h1 id="ch1">chapter</h1>
+									<p id="p1">
+										<img src="image.png"/>
+									</p>
+								</level1>
+							</bodymatter>
+						</book>
+					</dtbook>
+				</x:document>
+				<x:document type="inline" xml:base="aural.css">
+					<c:data content-type="text/plain">p { speech-rate: 100 }</c:data>
+				</x:document>
+			</x:input>
+			<x:option name="audio" select="false()"/>
+			<x:option name="audio-only" select="false()"/>
+			<x:option name="date" select="'2020-02-27'"/>
+			<x:option name="output-fileset-base" select="resolve-uri('result/')"/>
+			<x:option name="word-detection" select="false()"/>
+		</x:call>
+		<x:context label="the fileset.out port">
+			<x:document type="port" port="fileset.out"/>
+		</x:context>
+		<x:expect label="the fileset.out port"
+		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
+			<x:document type="inline">
+				<d:fileset>
+					<d:file href="result/dtbook.xml" media-type="application/x-dtbook+xml"
+					        doctype-public="-//NISO//DTD dtbook 2005-3//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd"/>
+					<d:file href="result/image.png" media-type="image/png"
+					        original-href="../resources/samples/image.png"/>
+					<d:file href="result/aural.css" media-type="text/css"/>
+					<d:file href="result/mo0.smil" media-type="application/smil" indent="true"
+					        doctype-system="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"
+					        doctype-public="-//NISO//DTD dtbsmil 2005-2//EN"/>
+					<d:file href="result/navigation.ncx" media-type="application/x-dtbncx+xml"
+					        indent="true"
+					        doctype-public="-//NISO//DTD ncx 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/ncx-2005-1.dtd"/>
+					<d:file href="result/resources.res" media-type="application/x-dtbresource+xml"
+					        doctype-public="-//NISO//DTD resource 2005-1//EN"
+					        doctype-system="http://www.daisy.org/z3986/2005/resource-2005-1.dtd"/>
+					<d:file href="result/book.opf" media-type="text/xml"
+					        indent="true"
+					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"
+					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
+				</d:fileset>
 			</x:document>
 		</x:expect>
 	</x:scenario>

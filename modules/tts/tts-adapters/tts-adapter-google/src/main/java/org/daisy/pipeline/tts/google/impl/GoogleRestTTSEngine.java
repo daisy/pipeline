@@ -12,6 +12,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.IllformedLocaleException;
+import java.util.List;
+import java.util.Locale;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -86,7 +89,9 @@ public class GoogleRestTTSEngine extends TTSEngine {
 
 		if (voice != null) {
 			name = voice.getName();
-			languageCode = voice.getLocale().get().toLanguageTag(); // assume locale is declared
+			// take first language code declared on voice (assume at least one is declared)
+			// FIXME: take language of SSML
+			languageCode = voice.getLocale().iterator().next().toString();
 		} else {
 			// by default the voice is set to English
 			languageCode = "en-GB";
@@ -185,14 +190,19 @@ public class GoogleRestTTSEngine extends TTSEngine {
 							}
 						}
 						if (gender != null) {
-							// assume "languageCodes" array is present and is not empty
-							// only take the language that is listed first
-							String locale = voice.getJSONArray("languageCodes").getString(0);
-							try {
-								result.add(new Voice(getProvider().getName(), name, VoiceInfo.tagToLocale(locale), gender));
-							} catch (VoiceInfo.UnknownLanguage e) {
-								logger.debug("Could not parse locale: " + locale);
+							List<Locale> locale = new ArrayList<>(); {
+								JSONArray codes = voice.getJSONArray("languageCodes");
+								if (codes != null)
+									for (int j = 0; j < codes.length(); j++)
+										try {
+											locale.add((new Locale.Builder()).setLanguageTag(codes.getString(j).replace("_", "-")).build());
+										} catch (IllformedLocaleException e) {
+											logger.debug("Could not parse locale: " + locale);
+										}
 							}
+							if (locale.isEmpty())
+								continue;
+							result.add(new Voice(getProvider().getName(), name, locale, gender));
 						}
 					}
 				} catch (JSONException e) {

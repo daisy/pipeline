@@ -20,9 +20,7 @@ import ch.sbs.jhyphen.StandardHyphenationException;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
-import com.google.common.base.Splitter;
 import com.google.common.cache.CacheBuilder;
-import static com.google.common.collect.Iterables.transform;
 
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.common.AbstractHyphenator;
@@ -39,6 +37,7 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import org.daisy.pipeline.braille.common.HyphenatorProvider;
 import org.daisy.pipeline.braille.common.NativePath;
+import static org.daisy.pipeline.braille.common.Provider.util.memoize;
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
@@ -125,32 +124,40 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				if (h != null)
 					ret = fromNullable(h);
 				else
-					ret = of(get(URLs.asURI(v)));
+					ret = of(
+						new WithSideEffect<LibhyphenHyphenator,Logger>() {
+							public LibhyphenHyphenator _apply() {
+								LibhyphenTable t = __apply(libhyphenTableProvider.get(URLs.asURI(v)));
+								return __apply(logCreate(new LibhyphenHyphenatorImpl(t, null))); }});
 				if (q.isEmpty())
 					return ret;
 				else
 					return intersection(_get(q), ret); }}
-		String table = null;
-		if (q.containsKey("libhyphen-table"))
-			table = q.removeOnly("libhyphen-table").getValue().get();
-		if (q.containsKey("hyphen-table"))
-			if (table != null) {
-				logger.warn("A query with both 'libhyphen-table' and 'hyphen-table' never matches anything");
-				return empty; }
-			else
+		String tableKey;
+		String table; {
+			if (q.containsKey("libhyphen-table")) {
+				table = q.removeOnly("libhyphen-table").getValue().get();
+				tableKey = "libhyphen-table";
+				if (q.containsKey("hyphen-table")) {
+					logger.warn("A query with both 'libhyphen-table' and 'hyphen-table' never matches anything");
+					return empty; }
+				else if (q.containsKey("table")) {
+					logger.warn("A query with both 'libhyphen-table' and 'table' never matches anything");
+					return empty; }
+			} else if (q.containsKey("hyphen-table")) {
 				table = q.removeOnly("hyphen-table").getValue().get();
-		if (q.containsKey("table"))
-			if (table != null) {
-				logger.warn("A query with both 'table' and '(lib)hyphen-table' never matches anything");
-				return empty; }
-			else
+				tableKey = "hyphen-table";
+				if (q.containsKey("table")) {
+					logger.warn("A query with both 'hyphen-table' and 'table' never matches anything");
+					return empty; }
+			} else if (q.containsKey("table")) {
 				table = q.removeOnly("table").getValue().get();
-		if (table != null) {
-			if (!q.isEmpty()) {
-				logger.warn("A query with both 'table' or '(lib)hyphen-table' and '"
-				            + q.iterator().next().getKey() + "' never matches anything");
-				return empty; }
-			return of(get(URLs.asURI(table))); }
+				tableKey = "table";
+			} else {
+				table = null;
+				tableKey = null;
+			}
+		}
 		Locale locale; {
 			String loc = "und";
 			if (q.containsKey("document-locale"))
@@ -161,38 +168,85 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 				logger.error("Invalid locale", e);
 				return empty; }
 		}
+		if (table != null) {
+			if (!q.isEmpty()) {
+				logger.warn("A query with both '" + tableKey + "' and '"
+				            + q.iterator().next().getKey() + "' never matches anything");
+				return empty; }
+			return of(
+				new WithSideEffect<LibhyphenHyphenator,Logger>() {
+					public LibhyphenHyphenator _apply() {
+						LibhyphenTable t = __apply(libhyphenTableProvider.get(URLs.asURI(table)));
+						return __apply(logCreate(new LibhyphenHyphenatorImpl(t, null))); }}); }
+		if (UND.equals(locale))
+			return of(
+				new WithSideEffect<LibhyphenHyphenator,Logger>() {
+					public LibhyphenHyphenator _apply() {
+						return __apply(logCreate(new LibhyphenHyphenatorImpl(null, UND))); }});
 		return transform(
-			tableRegistry.get(locale),
-			new Function<URI,LibhyphenHyphenator>() {
-				public LibhyphenHyphenator _apply(URI table) {
-					return __apply(get(table)); }});
+			libhyphenTableProvider.get(locale),
+			new Function<LibhyphenTable,LibhyphenHyphenator>() {
+				public LibhyphenHyphenator _apply(LibhyphenTable table) {
+					return __apply(logCreate(new LibhyphenHyphenatorImpl(table, locale))); }});
 	}
 	
-	private WithSideEffect<LibhyphenHyphenator,Logger> get(final URI table) {
-		try {
-			return logCreate((LibhyphenHyphenator)new LibhyphenHyphenatorImpl(table)); }
-		catch (CompilationException|FileNotFoundException e) {
-			return new WithSideEffect<LibhyphenHyphenator,Logger>() {
-				public LibhyphenHyphenator _apply() throws NoSuchElementException {
-					__apply(debug("Could not create hyphenator for table " + table));
-					throw new NoSuchElementException();
-				}
-			};
+	private class LibhyphenTable {
+		private URI table;
+		private Hyphenator hyphenator;
+		private LibhyphenTable(URI table) throws CompilationException, FileNotFoundException {
+			this.table = table;
+			this.hyphenator = compileTable(table);
 		}
 	}
+	
+	private final LibhyphenTableProvider libhyphenTableProvider = new LibhyphenTableProvider();
+	
+	private class LibhyphenTableProvider {
+		public WithSideEffect<LibhyphenTable,Logger> get(final URI table) {
+			try {
+				return WithSideEffect.of(new LibhyphenTable(table)); }
+			catch (CompilationException|FileNotFoundException e) {
+				return new WithSideEffect<LibhyphenTable,Logger>() {
+					public LibhyphenTable _apply() throws NoSuchElementException {
+						__apply(debug("Could not create hyphenator for table " + table));
+						throw new NoSuchElementException();
+					}
+				};
+			}
+		}
+		public Iterable<LibhyphenTable> get(Locale locale) {
+			return transform(
+				tableRegistry.get(locale),
+				new Function<URI,LibhyphenTable>() {
+					public LibhyphenTable _apply(URI table) {
+						return __apply(get(table)); }});
+		}
+	}
+
+	private final static Locale UND = parseLocale("und");
 	
 	private class LibhyphenHyphenatorImpl extends AbstractHyphenator implements LibhyphenHyphenator {
 		
-		private final URI table;
-		private final Hyphenator hyphenator;
+		private final Locale mainLanguage;
+		private final LibhyphenTable mainTable;
+		private final org.daisy.pipeline.braille.common.Provider<Locale,WithSideEffect<LibhyphenTable,Logger>> subHyphenators;
 		
-		private LibhyphenHyphenatorImpl(URI table) throws CompilationException, FileNotFoundException {
-			this.table = table;
-			hyphenator = compileTable(table);
+		/**
+		 * @param table        When {@code null}, there is no main hyphenation table. Each language
+		 *                     is handled with an appropriate table.
+		 * @param mainLanguage {@code null} means that the main hyphenation table (which may not be
+		 *                     {@code null}) should be used to handle all languages.
+		 */
+		private LibhyphenHyphenatorImpl(LibhyphenTable table, Locale mainLanguage) {
+			if (table == null && mainLanguage == null)
+				throw new IllegalArgumentException();
+			this.mainLanguage = mainLanguage;
+			this.mainTable = table;
+			this.subHyphenators = memoize(libhyphenTableProvider::get);
 		}
 		
 		public URI asLibhyphenTable() {
-			return table;
+			return mainTable != null ? mainTable.table : null;
 		}
 		
 		@Override
@@ -202,9 +256,15 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 		
 		private final FullHyphenator fullHyphenator = new DefaultFullHyphenator() {
 			protected boolean isCodePointAware() { return false; }
-			protected byte[] getHyphenationOpportunities(String textWithoutHyphens) throws NonStandardHyphenationException, RuntimeException {
+			protected boolean isLanguageAdaptive() { return true; }
+			protected byte[] getHyphenationOpportunities(String textWithoutHyphens, Locale language)
+					throws NonStandardHyphenationException, RuntimeException {
+				LibhyphenTable table = getTable(language);
+				if (table == null)
+					// note that breaking after hard hyphens is handled by DefaultFullHyphenator
+					return null;
 				try {
-					return hyphenator.hyphenate(textWithoutHyphens);
+					return table.hyphenator.hyphenate(textWithoutHyphens);
 				} catch (StandardHyphenationException e) {
 					throw new NonStandardHyphenationException(e);
 				} catch (Exception e) {
@@ -217,18 +277,23 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 			}
 		};
 		
+		// FIXME: this LineBreaker does not consider SHY or ZWSP characters in the input
 		@Override
 		public LineBreaker asLineBreaker() {
 			return lineBreaker;
 		}
 		
 		private final LineBreaker lineBreaker = new DefaultLineBreaker() {
-			protected Break breakWord(String word, int limit, boolean force) {
-				Hyphenator.Break br = hyphenator.hyphenate(word, limit);
-				if (force && br.getBreakPosition() == 0)
-					return new Break(word, limit, false);
-				else
-					return new Break(br.getText(), br.getBreakPosition(), br.hasHyphen());
+			protected Break breakWord(String word, Locale language, int limit, boolean force) {
+				LibhyphenTable table = getTable(language);
+				if (table != null) {
+					Hyphenator.Break br = table.hyphenator.hyphenate(word, limit);
+					if (force && br.getBreakPosition() == 0)
+						return new Break(word, limit, false);
+					else
+						return new Break(br.getText(), br.getBreakPosition(), br.hasHyphen());
+				}
+				return super.breakWord(word, language, limit, force);
 			}
 			@Override
 			public String toString() {
@@ -236,10 +301,25 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 			}
 		};
 		
+		private LibhyphenTable getTable(Locale language) {
+			if (mainLanguage == null || mainLanguage.equals(language))
+				return mainTable;
+			else if (language == null || UND.equals(language))
+				return null;
+			else
+				try {
+					return subHyphenators.get(language).iterator().next().apply(logger);
+				} catch (NoSuchElementException e) {
+					logger.warn("No hyphenator for language " + language);
+					return null;
+				}
+		}
+		
 		@Override
 		public ToStringHelper toStringHelper() {
-			return MoreObjects.toStringHelper("o.d.p.b.libhyphen.impl.LibhyphenJnaImpl$LibhyphenHyphenatorImpl")
-				.add("table", table);
+			return MoreObjects.toStringHelper("LibhyphenJnaImpl$LibhyphenHyphenatorImpl")
+				.add("language", mainLanguage)
+				.add("table", asLibhyphenTable());
 		}
 		
 		@Override
@@ -251,7 +331,12 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 			if (getClass() != o.getClass())
 				return false;
 			LibhyphenHyphenatorImpl that = (LibhyphenHyphenatorImpl)o;
-			if (!this.table.equals(that.table))
+			if (this.mainTable == null) {
+				if (that.mainTable != null)
+					return false;
+			} else if (that.mainTable == null)
+				return false;
+			else if (!this.mainTable.table.equals(that.mainTable.table))
 				return false;
 			return true;
 		}
@@ -289,7 +374,7 @@ public class LibhyphenJnaImpl extends AbstractTransformProvider<LibhyphenHyphena
 
 	@Override
 	public ToStringHelper toStringHelper() {
-		return MoreObjects.toStringHelper(LibhyphenJnaImpl.class.getName());
+		return MoreObjects.toStringHelper("LibhyphenJnaImpl");
 	}
 	
 	private static final Logger logger = LoggerFactory.getLogger(LibhyphenJnaImpl.class);

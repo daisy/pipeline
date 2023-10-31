@@ -73,20 +73,33 @@
 
 	<p:group name="result.in-memory" cx:pure="true">
 		<p:output port="result" sequence="true"/>
+		<!--
+			normalize document base URIs
+		-->
 		<p:for-each name="source.in-memory.normalized">
 			<p:iteration-source>
 				<p:pipe step="main" port="source.in-memory"/>
 			</p:iteration-source>
 			<p:output port="result"/>
-			<p:variable name="new-base" select="pf:normalize-uri(base-uri(/*))"/>
+			<p:variable name="old-base" select="base-uri(/)"/>
+			<p:variable name="old-root-base" select="base-uri(/*)"/>
+			<p:variable name="new-base" select="pf:normalize-uri($old-root-base)"/>
 			<p:choose>
-				<p:when test="$new-base!=base-uri(/)">
+				<p:when test="$new-base=$old-base">
+					<p:identity/>
+				</p:when>
+				<!--
+				    if for some reason there is an issue with the base URI of the root element, fix it here too
+				-->
+				<p:when test="$old-root-base=''">
 					<px:set-base-uri>
-						<p:with-option name="base-uri" select="$new-base"/>
+						<p:with-option name="base-uri" select="pf:normalize-uri($old-base)"/>
 					</px:set-base-uri>
 				</p:when>
 				<p:otherwise>
-					<p:identity/>
+					<px:set-base-uri>
+						<p:with-option name="base-uri" select="$new-base"/>
+					</px:set-base-uri>
 				</p:otherwise>
 			</p:choose>
 		</p:for-each>

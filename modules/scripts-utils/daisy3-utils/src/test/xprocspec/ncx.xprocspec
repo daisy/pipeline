@@ -10,7 +10,7 @@
       <x:input port="audio-map">
         <x:document type="inline">
           <d:audio-clips>
-            <d:clip idref="h1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
+            <d:clip textref="dtbook.xml#h1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
           </d:audio-clips>
         </x:document>
       </x:input>
@@ -169,7 +169,7 @@
       <x:input port="audio-map">
         <x:document type="inline">
           <d:audio-clips>
-            <d:clip idref="s1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
+            <d:clip textref="dtbook.xml#s1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.500"/>
           </d:audio-clips>
         </x:document>
       </x:input>
@@ -231,8 +231,8 @@
       <x:input port="audio-map">
         <x:document type="inline">
           <d:audio-clips>
-            <d:clip idref="w1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.250"/>
-            <d:clip idref="w2" src="audio/part_1.mp3" clipBegin="0:00:00.250" clipEnd="0:00:00.500"/>
+            <d:clip textref="dtbook.xml#w1" src="audio/part_1.mp3" clipBegin="0:00:00.000" clipEnd="0:00:00.250"/>
+            <d:clip textref="dtbook.xml#w2" src="audio/part_1.mp3" clipBegin="0:00:00.250" clipEnd="0:00:00.500"/>
           </d:audio-clips>
         </x:document>
       </x:input>

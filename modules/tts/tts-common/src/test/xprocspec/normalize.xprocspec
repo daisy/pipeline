@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+	       xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+	       xmlns:p="http://www.w3.org/ns/xproc"
+	       xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+	       xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+	       xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
+	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tts">
+
+  <x:script>
+    <p:declare-step version="1.0" type="pxi:normalize">
+      <p:input port="source" primary="true"/>
+      <p:output port="result" primary="true"/>
+      <p:option name="word-attr" select="''" required="false"/>
+      <p:option name="word-attr-val" select="''" required="false"/>
+      <p:xslt>
+	<p:with-param name="word-element" select="'w'"/>
+	<p:with-param name="word-attr" select="$word-attr"/>
+	<p:with-param name="word-attr-val" select="$word-attr-val"/>
+  	<p:input port="stylesheet">
+  	  <p:document href="../../main/resources/xml/xproc/normalize.xsl"/>
+  	</p:input>
+	<p:with-param port="parameters" name="sentence-ids" select="/">
+	  <p:inline>
+	    <d:sentences>
+	      <d:s id="s1"/>
+	      <d:s id="s2"/>
+	      <d:s id="s3"/>
+	      <d:s id="s4"/>
+	      <d:s id="s5"/>
+	    </d:sentences>
+	  </p:inline>
+	</p:with-param>
+      </p:xslt>
+      <!-- It doesn't matter if token's attributes are kept or not: -->
+      <p:delete match="ssml:token/@*[namespace-uri() != 'http://www.daisy.org/ns/pipeline/tts']"/>
+    </p:declare-step>
+  </x:script>
+
+  <x:scenario label="Regular sentence normalization">
+    <x:call step="pxi:normalize">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <span id="s1">sentence1</span>
+	    <level>
+	      <span id="s2">sentence2</span>
+	    </level>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+	<dtbook>
+	  <ssml:s id="s1">sentence1</ssml:s>
+	  <level><ssml:s id="s2">sentence2</ssml:s></level>
+	</dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Regular word normalization">
+    <x:call step="pxi:normalize">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <span id="s1"><w>word1</w> <w>word2</w></span>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+	<dtbook><ssml:s id="s1"><ssml:token>word1</ssml:token> <ssml:token>word2</ssml:token></ssml:s></dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Attribute-dependent Word normalization">
+    <x:call step="pxi:normalize">
+      <x:option name="word-attr" select="'attr'"/>
+      <x:option name="word-attr-val" select="'right'"/>
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <span id="s1"><w>word1</w> <w attr="wrong">word2</w> <w attr="right">word3</w></span>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+	<dtbook><ssml:s id="s1"><w>word1</w> <w attr="wrong">word2</w> <ssml:token>word3</ssml:token></ssml:s></dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+
+  <x:scenario label="Keep CSS attributes on sentences">
+    <x:call step="pxi:normalize">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <span id="s1" tmp:volume="3">sentence</span>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+	<dtbook><ssml:s id="s1" tmp:volume="3">sentence</ssml:s></dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="Keep CSS attributes on words">
+    <x:call step="pxi:normalize">
+      <x:input port="source">
+	<x:document type="inline">
+	  <dtbook>
+	    <span id="s1"><w tmp:volume="3">word</w></span>
+	  </dtbook>
+	</x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare">
+      <x:document type="inline">
+	<dtbook><ssml:s id="s1"><ssml:token tmp:volume="3">word</ssml:token></ssml:s></dtbook>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>
