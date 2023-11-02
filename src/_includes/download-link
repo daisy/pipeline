@@ -1,12 +1,16 @@
 <a href="{{include.file.url}}">
 For
 {% case include.file.platform %}
-{% when 'windows' %} Windows
-{% when 'macosx' %}  Mac OS X
-{% when 'linux' %}   Linux
-{% when 'debian' %}  Debian/Ubuntu
-{% when 'redhat' %}  Red Hat/CentOS
-{% else %}           Other
+{% when 'windows' %}    Windows
+{% when 'windows-64' %} Windows (64-bit)
+{% when 'windows-32' %} Windows (32-bit)
+{% when 'macosx' %}     macOS
+{% when 'linux' %}      Linux
+{% when 'linux-64' %}   Linux (64-bit)
+{% when 'linux-32' %}   Linux (32-bit)
+{% when 'debian' %}     Debian/Ubuntu
+{% when 'redhat' %}     Red Hat/CentOS
+{% else %}              Other
 {% endcase %}
 users
 </a>

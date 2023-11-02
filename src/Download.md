@@ -6,10 +6,6 @@ layout: default
 For installation instructions see
 [Installation]({{site.baseurl}}/Get-Help/User-Guide/Installation/).
 
-Some packages do not include the command line tool. You can download
-it from
-[https://github.com/daisy/pipeline-cli-go/releases](https://github.com/daisy/pipeline-cli-go/releases).
-
 {% assign all = site.data.downloads | where:'group','main' | sort:'sort' %}
 
 {% assign stable = all | where:'state','stable' %}
@@ -71,6 +67,18 @@ downloads for this update.
 </ul>
 
 {% endif %}
+
+{% assign cli = site.data.downloads | where:'group','cli' | sort:'version' %}
+
+## Latest command line tool: {{ cli.last.version }}
+
+{{ cli.last.description }}
+
+<ul>
+{% for file in cli.last.files %}
+<li> {% include download-link file=file %} </li>
+{% endfor %}
+</ul>
 
 {% assign webui = site.data.downloads | where:'group','webui' | sort:'version' %}
 
