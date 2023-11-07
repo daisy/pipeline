@@ -36,46 +36,83 @@
             <p:identity/>
         </p:otherwise>
     </p:choose>
+    <!--Removes levelx if it has descendant headings of x-1 (this simplifies later steps).
+        Note: Level normalizer cannot fix level1/level2/level1-->
     <p:xslt px:message="repair-levelnormalizer">
         <p:input port="stylesheet"><p:document href="xsl/repair-levelnormalizer.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Splits a level into several levels on every additional heading on the same level-->
     <p:xslt px:message="repair-levelsplitter">
         <p:input port="stylesheet"><p:document href="xsl/repair-levelsplitter.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Add levels where needed.-->
     <p:xslt px:message="repair-add-levels">
         <p:input port="stylesheet"><p:document href="xsl/repair-add-levels.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Changes a hx into a p with @class="hx" if parent isn't levelx
+        Note:
+            "Remove illegal headings" cannot handle hx in inline context.
+            Support for this could be added.-->
     <p:xslt px:message="repair-remove-illegal-headings">
         <p:input port="stylesheet"><p:document href="xsl/repair-remove-illegal-headings.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Removes nested p-->
     <p:xslt px:message="repair-flatten-redundant-nesting">
         <p:input port="stylesheet"><p:document href="xsl/repair-flatten-redundant-nesting.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Adds an empty p-tag if hx is the last element-->
     <p:xslt px:message="repair-complete-structure">
         <p:input port="stylesheet"><p:document href="xsl/repair-complete-structure.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--List fix:
+        - wraps a list in li when the parent of the list is another list
+        - adds @type if missing (default value is "pl")
+        - corrects @depth atribute
+        - removes enum attribute if the list is not ordered
+        - removes start attribute if the list is not ordered-->
     <p:xslt px:message="repair-lists">
         <p:input port="stylesheet"><p:document href="xsl/repair-lists.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--idref must be present on noteref and annoref. Add idref if missing or
+        change if empty.
+
+        The value of the idref must include a fragment identifier.
+        Add a hash mark in the beginning of all idref attributes that don't
+        contain a hash mark.-->
     <p:xslt px:message="repair-idref">
         <p:input port="stylesheet"><p:document href="xsl/repair-idref.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Similar to tidy-remove-empty-elements, but removes empty/whitespace elements
+        that must have children.-->
     <p:xslt px:message="repair-remove-empty-elements">
         <p:input port="stylesheet"><p:document href="xsl/repair-remove-empty-elements.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!--Update the @page attribute to make it match the contents of the pagenum element.
+        If @page="normal" but the contents of the element doesn't match "normal"
+        content, the @page attribute is changed to:
+          - @page="front" if the contents is roman numerals and the pagenum element
+            is located in the frontmatter of the book
+          - @page="special" otherwise
+        If @page="front" but the contents of the element doesn't match "front"
+        content (neither roman nor arabic numerals), the @page attribute is changed to "special"-->
     <p:xslt px:message="repair-pagenum-type">
         <p:input port="stylesheet"><p:document href="xsl/repair-pagenum-type.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
+    <!-- - fix metadata case errors
+         - remove unknown dc-metadata
+         - add dtb:uid (if missing) from dc:Identifier
+         - add dc:Title (if missing) from doctitle
+         - add auto-generated dtb:uid if missing (or if it has empty contents)-->
     <p:xslt px:message="repair-metadata">
         <p:input port="stylesheet"><p:document href="xsl/repair-metadata.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
