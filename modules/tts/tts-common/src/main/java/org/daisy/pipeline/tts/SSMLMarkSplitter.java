@@ -42,6 +42,11 @@ public interface SSMLMarkSplitter {
 
 		private String leftmark;
 		private XdmNode ssml;
+
+		@Override
+		public String toString() {
+			return "Chunk{" + leftmark + "}";
+		}
 	}
 
 }

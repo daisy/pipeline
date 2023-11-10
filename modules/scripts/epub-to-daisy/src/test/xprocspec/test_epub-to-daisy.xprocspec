@@ -68,20 +68,12 @@
 					<d:file href="out/epub3/EPUB/mo/chapter.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="out/epub3/EPUB/mo/cover.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="out/epub3/EPUB/mo/front.smil" media-type="application/smil+xml" indent="true"/>
-					<d:file href="out/epub3/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_01_000.wav"/>
-					<d:file href="out/epub3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
-					<d:file href="out/epub3/EPUB/audio/part0001_02_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_02_000.wav"/>
-					<d:file href="out/epub3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav"/>
 					<d:file href="out/epub3/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
 					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0000_00_000.wav"/>
-					<d:file href="out/epub3/EPUB/audio/part0001_03_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_03_000.wav"/>
-					<d:file href="out/epub3/EPUB/audio/part0002_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_01_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav"/>
+					<d:file href="out/epub3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -116,20 +108,12 @@
 					<d:file href="out/daisy3/book.opf" media-type="text/xml" indent="true"
 					        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"
 					        doctype-public="+//ISBN 0-9673008-1-9//DTD OEB 1.2 Package//EN"/>
-					<d:file href="out/daisy3/EPUB/audio/part0001_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_01_000.wav"/>
-					<d:file href="out/daisy3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
-					<d:file href="out/daisy3/EPUB/audio/part0001_02_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_02_000.wav"/>
-					<d:file href="out/daisy3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav"/>
 					<d:file href="out/daisy3/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
 					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0000_00_000.wav"/>
-					<d:file href="out/daisy3/EPUB/audio/part0001_03_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_03_000.wav"/>
-					<d:file href="out/daisy3/EPUB/audio/part0002_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_01_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav"/>
+					<d:file href="out/daisy3/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -155,20 +139,12 @@
 					<d:file href="out/daisy202/id/content.html" media-type="application/xhtml+xml"
 					        doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"
 					        doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"/>
-					<d:file href="out/daisy202/id/part0001_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_01_000.wav"/>
-					<d:file href="out/daisy202/id/part0002_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
-					<d:file href="out/daisy202/id/part0001_02_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_02_000.wav" />
-					<d:file href="out/daisy202/id/part0001_00_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav" />
 					<d:file href="out/daisy202/id/part0000_00_000.wav" media-type="audio/x-wav"
 					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0000_00_000.wav" />
-					<d:file href="out/daisy202/id/part0001_03_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_03_000.wav"/>
-					<d:file href="out/daisy202/id/part0002_01_000.wav" media-type="audio/x-wav"
-					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_01_000.wav"/>
+					<d:file href="out/daisy202/id/part0001_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0001_00_000.wav" />
+					<d:file href="out/daisy202/id/part0002_00_000.wav" media-type="audio/x-wav"
+					        original-href="../../../target/xprocspec/test_epub-to-daisy/minimal/tts/audio/part0002_00_000.wav"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>

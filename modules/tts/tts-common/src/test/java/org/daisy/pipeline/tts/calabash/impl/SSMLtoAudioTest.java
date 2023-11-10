@@ -233,7 +233,7 @@ public class SSMLtoAudioTest {
 			AudioFootprintMonitor monitor = new AudioFootprintMonitor();
 			TTSLog logs = new TTSLog();
 
-			SSMLtoAudio ssmlToAudio = new SSMLtoAudio(new File("/tmp/"), MP3, registry, Logger,
+			SSMLtoAudio ssmlToAudio = new SSMLtoAudio(new File("/tmp/"), MP3, 100, registry, Logger,
 			        monitor, Proc, config, logs);
 
 			for (String text : ssml) {
@@ -554,7 +554,7 @@ public class SSMLtoAudioTest {
 		};
 
 		try {
-			runTest(service, (DynamicMarkHandler) service.engine, encoder, 2, 0);
+			runTest(service, (DynamicMarkHandler) service.engine, encoder, 1, 0);
 			Assert.fail("EncodingException expected");
 		} catch (EncodingException e) {}
 

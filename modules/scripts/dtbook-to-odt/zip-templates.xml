@@ -1,0 +1,31 @@
+<project name="zip_templates" default="dist" basedir="./">
+    <taskdef resource="net/sf/antcontrib/antlib.xml"/>
+    <!-- to be called by maven-->
+    <target name="dist">
+        <delete dir="${basedir}/target/generated-resources/templates"/>
+        <mkdir dir="${basedir}/target/generated-resources/templates"/>
+        <!--for each folder in src/main/resources/templates, create a template archive -->
+        <foreach target="zip_odt" param="template">
+            <path>
+                <dirset dir="src/main/resources/templates/" includes="*"/>
+            </path>
+        </foreach>
+    </target>
+    <target name="zip_odt">
+        <basename property="templateName" file="${template}"/>
+        <!-- create a zip of the same name in ${project.basedir}/target/generated-resources/templates -->
+        <!-- add the mimetype file uncompressed (-0) without extra attributes (-X, defaults with ant zip)  -->
+        <zip destFile="${basedir}/target/generated-resources/templates/${templateName}"
+             basedir="${template}"
+             includes="mimetype"
+             compress="false" keepcompression="false" />
+        <!-- add all remaining files and folder into the zip
+        -->
+        <zip destFile="${basedir}/target/generated-resources/templates/${templateName}"
+             basedir="${template}"
+             update="true"
+             includes="**/**"
+             excludes="mimetype"
+             compress="true" keepcompression="false"/>
+    </target>
+</project>

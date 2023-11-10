@@ -26,9 +26,9 @@ import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
+import org.daisy.pipeline.tts.DefaultSSMLMarkSplitter;
 import org.daisy.pipeline.tts.SSMLMarkSplitter;
 import org.daisy.pipeline.tts.Sentence;
-import org.daisy.pipeline.tts.StructuredSSMLSplitter;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSLog.ErrorCode;
@@ -79,17 +79,16 @@ import com.google.common.collect.Iterables;
  */
 public class SSMLtoAudio implements FormatSpecifications {
 
-	/*
-	 * The maximum number of sentences that a section (ContiguousText) can contain.
-	 */
-	private static int MAX_SENTENCES_PER_SECTION = 100;
-
 	private TTSEngine mLastTTS; //used if no TTS is found for the current sentence
 	private TTSRegistry mTTSRegistry;
 	private Logger mLogger;
 	private ContiguousText mCurrentSection;
 	private File mAudioDir; //where all the sound files will be stored
 	private final AudioFileFormat.Type mAudioFileFormat;
+	/*
+	 * The maximum number of sentences that a section (ContiguousText) can contain.
+	 */
+	private final int mMaxSentencesPerSection;
 	private int mSentenceCounter = 0;
 	private long mTotalTextSize;
 	private int mDocumentPosition;
@@ -103,7 +102,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 	private int mErrorCounter;
 
 	public SSMLtoAudio(File audioDir, AudioFileFormat.Type audioFileFormat,
-	        TTSRegistry ttsregistry, Logger logger,
+	        int maxSentencesPerSection, TTSRegistry ttsregistry, Logger logger,
 	        AudioFootprintMonitor audioFootprintMonitor, Processor proc,
 	        VoiceConfigExtension configExt, TTSLog logs) {
 		mTTSRegistry = ttsregistry;
@@ -115,6 +114,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 		mProc = proc;
 		mAudioDir = audioDir;
 		mAudioFileFormat = audioFileFormat;
+		mMaxSentencesPerSection = maxSentencesPerSection;
 		mTTSlog = logs;
 		/*
 		 * initialize the TTS engines
@@ -140,7 +140,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 		if (SentenceTag.equals(node.getNodeName())) {
 			if (!dispatchSSML(node, lang))
 				mErrorCounter++;
-			if (++mSentenceCounter % MAX_SENTENCES_PER_SECTION == 0)
+			if (mMaxSentencesPerSection > 0 && ++mSentenceCounter % mMaxSentencesPerSection == 0)
 				endSection();
 		} else {
 			String langAttr = node.getAttributeValue(Sentence_attr_lang);
@@ -209,7 +209,6 @@ public class SSMLtoAudio implements FormatSpecifications {
 			                + new Voice(voiceEngine, voiceName)
 			                + " or providing the language '" + lang + "'";
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
-			endSection();
 			return false;
 		}
 
@@ -222,7 +221,6 @@ public class SSMLtoAudio implements FormatSpecifications {
 			String err = "could not find any TTS engine for the voice "
 				+ new Voice(voiceEngine, voiceName);
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
-			endSection();
 			return false;
 		}
 
@@ -274,7 +272,9 @@ public class SSMLtoAudio implements FormatSpecifications {
 		MessageAppender activeBlock = MessageAppender.getActiveBlock(); // px:ssml-to-audio step
 
 		//SSML mark splitter shared by the threads:
-		SSMLMarkSplitter ssmlSplitter = new StructuredSSMLSplitter(mProc);
+		SSMLMarkSplitter ssmlSplitter = new DefaultSSMLMarkSplitter(mProc); // StructuredSSMLSplitter makes assumptions
+		                                                                    // that are not always met, e.g. marks may
+		                                                                    // be contained within a a prosody element
 
 		reorganizeSections();
 
@@ -393,16 +393,19 @@ public class SSMLtoAudio implements FormatSpecifications {
 		mTotalTextSize = 0;
 		int sectionCount = 0;
 		for (List<ContiguousText> sections : mOrganizedText.values()) {
-			//compute the sections' size: needed for displaying the progress,
-			//splitting the sections and sorting them
-			for (ContiguousText section : sections)
-				section.computeSize();
 
+			// compute the sections' size: needed for displaying the progress,
+			// splitting the sections and sorting them
 			for (ContiguousText section : sections) {
+				section.computeSize();
 				mTotalTextSize += section.getStringSize();
 			}
-			//split up the sections that are too big
-			int maxSize = (int) (mTotalTextSize / 15); //should it depend on the total size or be an absolute max?
+
+			// split up the sections that are too big
+			// FIXME: Explain what is "too big".
+			// FIXME: Code was disabled for now because it does not make sense to let the maximum
+			// size depend on the total size (and mTotalTextSize isn't even constant).
+			/*int maxSize = (int) (mTotalTextSize / 15);
 			List<ContiguousText> newSections = new ArrayList<ContiguousText>();
 			List<ContiguousText> toRemove = new ArrayList<ContiguousText>();
 			for (ContiguousText section : sections) {
@@ -411,15 +414,15 @@ public class SSMLtoAudio implements FormatSpecifications {
 					splitSection(section, maxSize, newSections);
 				}
 			}
-
 			sections.removeAll(toRemove);
-			sections.addAll(newSections);
+			sections.addAll(newSections);*/
 
-			//sort the sections according to their size in descending-order
+			// sort the sections according to their size in descending order
+			// FIXME: Explain why this is done.
 			Collections.sort(sections);
 
-			//keep sorted only the smallest sections (50% of total) so the biggest sections won't
-			//necessarily be processed at the same time, as that may consume too much memory.
+			// keep sorted only the smallest sections (50% of total) so the biggest sections won't
+			// necessarily be processed at the same time, as that may consume too much memory.
 			Collections.shuffle(sections.subList(0, sections.size() / 2));
 
 			sectionCount += sections.size();

@@ -52,15 +52,8 @@
 					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.wav" original-href="epub3/temp/audio/part0000_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_01_000.wav" original-href="epub3/temp/audio/part0000_01_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.wav" original-href="epub3/temp/audio/part0001_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0001_01_000.wav" original-href="epub3/temp/audio/part0001_01_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0001_02_000.wav" original-href="epub3/temp/audio/part0001_02_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.wav" original-href="epub3/temp/audio/part0002_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_01_000.wav" original-href="epub3/temp/audio/part0002_01_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_02_000.wav" original-href="epub3/temp/audio/part0002_02_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_03_000.wav" original-href="epub3/temp/audio/part0002_03_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_04_000.wav" original-href="epub3/temp/audio/part0002_04_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml" indent="true"/>
@@ -132,23 +125,23 @@
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-2"/>
-							<audio src="../audio/part0002_01_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-3"/>
-							<audio src="../audio/part0002_02_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.565"/>
+							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:01.157" clipEnd="0:00:01.723"/>
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-4"/>
-							<audio src="../audio/part0002_03_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:01.723" clipEnd="0:00:02.301"/>
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-5"/>
-							<audio src="../audio/part0002_04_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:02.301" clipEnd="0:00:02.880"/>
 						</par>
 						<par>
 							<text src="../toc.xhtml#st3-6"/>
-							<audio src="../audio/part0002_04_000.wav" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
+							<audio src="../audio/part0002_00_000.wav" clipBegin="0:00:02.880" clipEnd="0:00:03.459"/>
 						</par>
 					</body>
 				</smil>
@@ -171,7 +164,7 @@
 							</seq>
 							<par>
 								<text src="../minimal-1.xhtml#st1-2"/>
-								<audio src="../audio/part0000_01_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+								<audio src="../audio/part0000_00_000.wav" clipBegin="0:00:00.578" clipEnd="0:00:01.157"/>
 							</par>
 						</seq>
 					</body>
@@ -195,11 +188,11 @@
 							</seq>
 							<par>
 								<text src="../minimal-2.xhtml#st2-2"/>
-								<audio src="../audio/part0001_01_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+								<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:00.565" clipEnd="0:00:01.144"/>
 							</par>
 							<par>
 								<text src="../minimal-2.xhtml#st2-3"/>
-								<audio src="../audio/part0001_02_000.wav" clipBegin="0:00:00.000" clipEnd="0:00:00.578"/>
+								<audio src="../audio/part0001_00_000.wav" clipBegin="0:00:01.144" clipEnd="0:00:01.723"/>
 							</par>
 						</seq>
 					</body>

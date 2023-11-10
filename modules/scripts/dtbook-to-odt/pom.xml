@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.18-SNAPSHOT</version>
+    <version>1.14.19-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
   
@@ -87,32 +87,40 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>shell-maven-plugin</artifactId>
-        <version>1.0-beta-1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.1.0</version>
+        <dependencies>
+          <dependency>
+            <groupId>ant-contrib</groupId>
+            <artifactId>ant-contrib</artifactId>
+            <version>1.0b3</version>
+            <exclusions>
+              <exclusion>
+                <groupId>ant</groupId>
+                <artifactId>ant</artifactId>
+              </exclusion>
+            </exclusions>
+          </dependency>
+          <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-nodeps</artifactId>
+            <version>1.8.1</version>
+          </dependency>
+        </dependencies>
         <executions>
           <execution>
-            <id>generate-ott</id>
+            <id>generate-ott-ant</id>
             <phase>generate-resources</phase>
             <goals>
-              <goal>shell</goal>
+              <goal>run</goal>
             </goals>
             <configuration>
-              <workDir>${project.basedir}</workDir>
-              <chmod>true</chmod>
-              <script>
-                #!/bin/sh
-                zip_odt() {
-                  cd $1
-                  zip -0 -X $2 mimetype
-                  zip -r $2 * -x mimetype
-                }
-                rm -rf target/generated-resources/templates
-                mkdir -p target/generated-resources/templates
-                for template in $(ls src/main/resources/templates); do
-                  (zip_odt src/main/resources/templates/${template} $(pwd)/target/generated-resources/templates/${template})
-                done
-              </script>
+              <target>
+                <ant antfile="${project.basedir}/zip-templates.xml">
+                  <target name="dist"/>
+                </ant>
+              </target>
             </configuration>
           </execution>
         </executions>

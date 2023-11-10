@@ -32,6 +32,23 @@
 		<xsl:apply-templates mode="#current" select="node()"/>
 	</xsl:template>
 
+	<xsl:template mode="copy" match="prosody/@rate">
+		<xsl:choose>
+			<xsl:when test="matches(.,'^ *[0-9]+ *$')">
+				<!--
+					Azure interprets a numeric rate as a relative value (see
+					https://learn.microsoft.com/en-us/azure/ai-services/speech-service/speech-synthesis-markup-voice#adjust-prosody)
+					so divide by the "normal" rate of 200 words per minute (see
+					https://www.w3.org/TR/CSS2/aural.html#voice-char-props).
+				-->
+				<xsl:attribute name="{name(.)}" select="number(string(.)) div 200"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:next-match/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 	<!-- rename mark to bookmark: not needed: regular SSML marks also supported -->
 	<!--
 	<xsl:template mode="copy" match="mark">

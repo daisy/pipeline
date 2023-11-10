@@ -105,36 +105,14 @@
 						        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
 						<d:file href="result/part0000_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_00_000.wav"/>
-						<d:file href="result/part0000_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_01_000.wav"/>
-						<d:file href="result/part0000_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_02_000.wav"/>
 						<d:file href="result/part0001_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_00_000.wav"/>
-						<d:file href="result/part0001_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_01_000.wav"/>
-						<d:file href="result/part0001_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_02_000.wav"/>
 						<d:file href="result/part0002_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_00_000.wav"/>
-						<d:file href="result/part0002_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_01_000.wav"/>
-						<d:file href="result/part0002_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_02_000.wav"/>
-						<d:file href="result/part0002_03_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_03_000.wav"/>
 						<d:file href="result/part0003_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_00_000.wav"/>
-						<d:file href="result/part0003_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_01_000.wav"/>
-						<d:file href="result/part0003_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_02_000.wav"/>
-						<d:file href="result/part0003_03_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_03_000.wav"/>
 						<d:file href="result/part0004_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0004_00_000.wav"/>
-						<d:file href="result/part0004_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0004_01_000.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -147,36 +125,14 @@
 					<d:fileset>
 						<d:file href="result/part0000_00_000.wav" to-delete="true"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_00_000.wav"/>
-						<d:file href="result/part0000_01_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_01_000.wav"/>
-						<d:file href="result/part0000_02_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0000_02_000.wav"/>
 						<d:file href="result/part0001_00_000.wav" to-delete="true"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_00_000.wav"/>
-						<d:file href="result/part0001_01_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_01_000.wav"/>
-						<d:file href="result/part0001_02_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0001_02_000.wav"/>
 						<d:file href="result/part0002_00_000.wav" to-delete="true"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_00_000.wav"/>
-						<d:file href="result/part0002_01_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_01_000.wav"/>
-						<d:file href="result/part0002_02_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_02_000.wav"/>
-						<d:file href="result/part0002_03_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0002_03_000.wav"/>
 						<d:file href="result/part0003_00_000.wav" to-delete="true"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_00_000.wav"/>
-						<d:file href="result/part0003_01_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_01_000.wav"/>
-						<d:file href="result/part0003_02_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_02_000.wav"/>
-						<d:file href="result/part0003_03_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0003_03_000.wav"/>
 						<d:file href="result/part0004_00_000.wav" to-delete="true"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0004_00_000.wav"/>
-						<d:file href="result/part0004_01_000.wav" to-delete="true"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/with-audio/audio/part0004_01_000.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -218,36 +174,14 @@
 						        doctype-system="http://openebook.org/dtds/oeb-1.2/oebpkg12.dtd"/>
 						<d:file href="result/part0000_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0000_00_000.wav"/>
-						<d:file href="result/part0000_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0000_01_000.wav"/>
-						<d:file href="result/part0000_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0000_02_000.wav"/>
 						<d:file href="result/part0001_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0001_00_000.wav"/>
-						<d:file href="result/part0001_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0001_01_000.wav"/>
-						<d:file href="result/part0001_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0001_02_000.wav"/>
 						<d:file href="result/part0002_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0002_00_000.wav"/>
-						<d:file href="result/part0002_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0002_01_000.wav"/>
-						<d:file href="result/part0002_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0002_02_000.wav"/>
-						<d:file href="result/part0002_03_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0002_03_000.wav"/>
 						<d:file href="result/part0003_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0003_00_000.wav"/>
-						<d:file href="result/part0003_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0003_01_000.wav"/>
-						<d:file href="result/part0003_02_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0003_02_000.wav"/>
-						<d:file href="result/part0003_03_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0003_03_000.wav"/>
 						<d:file href="result/part0004_00_000.wav" media-type="audio/x-wav"
 						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0004_00_000.wav"/>
-						<d:file href="result/part0004_01_000.wav" media-type="audio/x-wav"
-						        original-href="../../../target/xprocspec/test_dtbook-to-daisy3/shuffled_7019_xmldtbook_1/audio-only/audio/part0004_01_000.wav"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>

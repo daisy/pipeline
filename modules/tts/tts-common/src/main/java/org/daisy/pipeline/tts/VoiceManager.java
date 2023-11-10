@@ -56,18 +56,18 @@ public class VoiceManager {
 		bestEngines = new LinkedHashMap<Voice,TTSEngine>(); { // LinkedHashMap: iteration order = insertion order
 			TTSTimeout timeout = new TTSTimeout();
 			int timeoutSecs = 30;
-			for (TTSEngine tts : engines) {
+			// sort engines by engine priority, so that voice info from engines (see below) is sorted by engine priority
+			// as well
+			List<TTSEngine> sortedEngines = new ArrayList<>(engines);
+			Collections.sort(sortedEngines, Comparator.comparingInt(TTSEngine::getOverallPriority).reversed());
+			for (TTSEngine tts : sortedEngines) {
 				timeout.enableForCurrentThread(timeoutSecs);
 				try {
 					Collection<Voice> voices = tts.getAvailableVoices();
 					if (voices != null)
-						for (Voice v : voices) {
-							TTSEngine competitor = bestEngines.get(v);
-							if (competitor == null
-							    || competitor.getOverallPriority() < tts.getOverallPriority()) {
+						for (Voice v : voices)
+							if (!bestEngines.containsKey(v))
 								bestEngines.put(v, tts);
-							}
-						}
 				} catch (SynthesisException e) {
 					ServerLogger.error("error while retrieving the voices of "
 					                   + tts.getProvider().getName());

@@ -368,7 +368,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						long currentDestinationElapsed = 0; // in frames
 						int fileCounter = 0;
 						MessageAppender progress = MessageAppender.getActiveBlock(); // px:audio-rearrange step
-						BigDecimal progressInc = BigDecimal.TEN.divide(new BigDecimal(desired.size()), MathContext.DECIMAL128);
+						BigDecimal progressInc = BigDecimal.ONE.divide(new BigDecimal(desired.size()), MathContext.DECIMAL128);
 						int clipCounter = 0;
 						for (Map.Entry<AudioClip,AudioClip> entry : desired.entrySet()) {
 							AudioClip destinationClip = entry.getKey(); // destination clips are in order and don't overlap

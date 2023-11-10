@@ -188,7 +188,7 @@
 							</xsl:call-template>
 						</xsl:if>
 						<xsl:sequence select="$from-smil-elem/(following::*|descendant::*)
-						                      intersect $to-smil-elem/preceding::audio"/>
+						                      intersect $to-smil-elem/preceding::smil:audio"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:sequence select="$from-smil-elem/(following::smil:audio|descendant::smil:audio)"/>
@@ -206,7 +206,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="add-clips-to-dest-file">
+	<xsl:template name="add-clips-to-dest-file" as="element(d:file)*">
 		<xsl:param name="audio-clips" as="element(smil:audio)*" required="yes"/>
 		<xsl:param name="dest-file" as="xs:string" required="yes"/>
 		<xsl:variable name="clips" as="element(d:clip)*">

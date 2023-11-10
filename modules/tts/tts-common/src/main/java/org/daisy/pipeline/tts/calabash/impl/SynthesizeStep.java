@@ -181,9 +181,20 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		}
 		audioOutputDir.mkdirs();
 		audioOutputDir.deleteOnExit();
+		int maxSentencesPerSection = 100; {
+			String prop = "org.daisy.pipeline.tts.sentences.per.file";
+			String v = cr.getDynamicProperties().get(prop);
+			if (v != null) {
+				try {
+					maxSentencesPerSection = Integer.valueOf(v);
+				} catch (NumberFormatException e) {
+					throw new RuntimeException(v + " is not a valid a value for property " + prop);
+				}
+			}
+		}
 
-		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mAudioFileType, mTTSRegistry, logger,
-		        mAudioFootprintMonitor, mRuntime.getProcessor(), configExt, log);
+		SSMLtoAudio ssmltoaudio = new SSMLtoAudio(audioOutputDir, mAudioFileType, maxSentencesPerSection,
+		        mTTSRegistry, logger, mAudioFootprintMonitor, mRuntime.getProcessor(), configExt, log);
 
 		Iterable<SoundFileLink> soundFragments = Collections.EMPTY_LIST;
 		try {
