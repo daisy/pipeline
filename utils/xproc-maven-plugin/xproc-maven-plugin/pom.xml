@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-maven-plugin</artifactId>
-  <version>1.0.3-SNAPSHOT</version>
+  <version>1.0.3</version>
   <packaging>maven-plugin</packaging>
   <name>xproc-maven-plugin</name>
   
@@ -50,7 +50,7 @@
     <dependency>
       <groupId>org.daisy.maven</groupId>
       <artifactId>xprocspec-runner</artifactId>
-      <version>1.2.5</version>
+      <version>1.2.7</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -146,4 +146,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>v1.0.3</tag>
+  </scm>
 </project>
