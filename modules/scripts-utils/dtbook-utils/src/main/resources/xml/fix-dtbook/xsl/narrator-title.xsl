@@ -46,16 +46,16 @@
 			<xsl:when test="string-length(normalize-space(//dtb:head/dtb:meta[@name='dc:Title']/@content))>0">
 				<xsl:value-of select="normalize-space(//dtb:head/dtb:meta[@name='dc:Title']/@content)"/>
 			</xsl:when>
-			<!-- If it exists, takes the value from the first 'doctitle' in the bodymatter -->
-			<xsl:when test="string-length(normalize-space(//dtb:bodymatter//dtb:doctitle[1]))>0">
-				<xsl:value-of select="normalize-space(//dtb:bodymatter//dtb:doctitle[1])"/>
+			<!-- If it exists, takes the value from the first 'doctitle' in the frontmatter -->
+			<xsl:when test="string-length(normalize-space(//dtb:frontmatter//dtb:doctitle[1]))>0">
+				<xsl:value-of select="normalize-space(//dtb:frontmatter//dtb:doctitle[1])"/>
 			</xsl:when>
 			<!-- Otherwise, takes the value from the first h1 or hd (which exists: Rule 100) -->
 			<xsl:when test="//dtb:h1">
-				<xsl:value-of select="normalize-space(//dtb:h1[1])"/>
+				<xsl:value-of select="normalize-space((//dtb:h1)[1])"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="normalize-space(//dtb:hd[1])"/>
+				<xsl:value-of select="normalize-space((//dtb:hd)[1])"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:param>
