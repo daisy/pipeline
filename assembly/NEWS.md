@@ -1,3 +1,12 @@
+Changes in release v1.14.16
+===========================
+
+## Modules
+
+- **FIX** Connection issue in Google TTS adapter
+- **FIX** Reduce the number of audio files in books generated with text-to-speech
+- Other bugfixes
+
 Changes in release v1.14.15
 ===========================
 

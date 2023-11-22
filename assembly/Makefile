@@ -92,19 +92,59 @@ target/assembly-$(assembly/VERSION)-mac.zip                                   : 
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-mac \
                                                                                     -Punpack-updater-mac
-ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
-target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Passemble-mac-zip
-ifndef DUMP_PROFILES
-	exit(new File("$@").exists());
-endif
-else
+ifneq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pbuild-jre-mac
-# -Passemble-mac-zip run separately because -Pbuild-jre-mac also run separately
+endif
 ifndef DUMP_PROFILES
+target/assembly-$(assembly/VERSION)-mac.zip                                   :
+ifeq ($(OS), MACOSX)
+	List<String> identities = new ArrayList<>();                                                                \
+	List<String> identityDescriptions = new ArrayList<>();                                                      \
+	Pattern ID_LINE = Pattern.compile("^ *[0-9]+\\) +(?<id>[0-9A-F]+) +\"(?<desc>.+)\" *$$");                   \
+	exitOnError(                                                                                                \
+	    captureOutput(                                                                                          \
+	        line -> {                                                                                           \
+	            Matcher m = ID_LINE.matcher(line);                                                              \
+	            if (m.matches()) {                                                                              \
+	                identities.add(m.group("id"));                                                              \
+	                identityDescriptions.add("" + identities.size() + ") " + m.group("desc")); }},              \
+	        "security", "find-identity", "-v", "-p", "codesigning"));                                           \
+	if (identities.isEmpty())                                                                                   \
+	    err.println("No identity found to sign code");                                                          \
+	else {                                                                                                      \
+	    String id = identities.size() == 1 ? identities.get(0) : null;                                          \
+	    File tmpDir = new File("target/codesign-workaround/");                                                  \
+	    File jar = new File("target/jars/common/com.microsoft.cognitiveservices.speech.client-sdk-1.27.0.jar"); \
+	    File unzipDir = new File(tmpDir, jar.getName().replaceAll(".jar$$", ""));                               \
+	    mkdirs(unzipDir);                                                                                       \
+	    // FIXME: not using unzip() because it currently does not preserve file permissions                     \
+	    //unzip(jar, unzipDir);                                                                                 \
+	    exitOnError(captureOutput(err::println, unzipDir, "unzip", jar.getAbsolutePath()));                     \
+	    // replace signature of *.extension.kws.ort.dylib files                                                 \
+	    for (File f : glob(unzipDir.getPath() + "/ASSETS/osx-*/*.extension.kws.ort.dylib")) {                   \
+	        exitOnError(captureOutput(err::println, "codesign", "--remove-signature", f.getPath()));            \
+	        if (id == null) {                                                                                   \
+	            err.println("Choose identity to sign code (move with arrows and press ENTER):");                \
+	            try {                                                                                           \
+	                id = identities.get(prompt(identityDescriptions));                                          \
+	            } catch (IOException e) {                                                                       \
+	                System.exit(1);                                                                             \
+	            }                                                                                               \
+	        }                                                                                                   \
+	        exitOnError(captureOutput(err::println, "codesign", "-s", id, "-v", f.getPath())); }                \
+	    // delete META-INF folder with signature files                                                          \
+	    rm(new File(unzipDir, "META-INF"));                                                                     \
+	    File fixedJar = new File(tmpDir, jar.getName());                                                        \
+	    exitOnError(                                                                                            \
+	        captureOutput(err::println, "jar", "cvf", fixedJar.getPath(), "-C", unzipDir.getPath(), "."));      \
+	    rm(jar);                                                                                                \
+	    cp(fixedJar, jar);                                                                                      \
+	    rm(tmpDir);                                                                                             \
+	}
+endif
 	exec("$(MVN)", "assembly:single", "-Passemble-mac-zip");
 	exit(new File("$@").exists());
 endif
-endif # --without-jre
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-win \

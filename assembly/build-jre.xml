@@ -22,6 +22,17 @@
             <noHeaderFiles>true</noHeaderFiles>
             <noManPages>true</noManPages>
             <compress>1</compress>
+            <addModules>
+              <addModule>java.base</addModule>
+              <addModule>java.desktop</addModule>
+              <addModule>java.instrument</addModule>
+              <addModule>java.security.jgss</addModule>
+              <addModule>java.sql</addModule>
+              <addModule>java.xml</addModule>
+              <addModule>jdk.management.agent</addModule>
+              <addModule>jdk.zipfs</addModule>
+              <addModule>jdk.crypto.ec</addModule>
+            </addModules>
           </configuration>
         </plugin>
       </plugins>
@@ -45,18 +56,6 @@
                 </goals>
                 <configuration>
                   <classifier>linux</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.security.jgss</addModule>
-                    <addModule>java.scripting</addModule> <!-- for gui -->
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
                   <modulePaths>
                     <modulePath>src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7/jmods</modulePath>
                   </modulePaths>
@@ -81,18 +80,6 @@
                 <id>default-cli</id> <!-- run directly from Makefile -->
                 <configuration>
                   <classifier>mac</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.security.jgss</addModule>
-                    <addModule>java.scripting</addModule> <!-- for gui -->
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.unsupported</addModule> <!-- for gui -->
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
                   <modulePaths>
                     <modulePath>src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7/Contents/Home/jmods</modulePath>
                   </modulePaths>
@@ -117,15 +104,6 @@
                 <id>default-cli</id> <!-- run directly from Makefile -->
                 <configuration>
                   <classifier>win32</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
                   <modulePaths>
                     <modulePath>src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7/jmods</modulePath>
                   </modulePaths>
@@ -138,6 +116,9 @@
     </profile>
     <profile>
       <id>build-jre-win64</id>
+      <!--
+          this profile needs to be run with JDK 17
+      -->
       <build>
         <plugins>
           <plugin>
@@ -147,15 +128,6 @@
                 <id>default-cli</id> <!-- run directly from Makefile -->
                 <configuration>
                   <classifier>win64</classifier>
-                  <addModules>
-                    <addModule>java.base</addModule>
-                    <addModule>java.desktop</addModule>
-                    <addModule>java.instrument</addModule>
-                    <addModule>java.sql</addModule>
-                    <addModule>java.xml</addModule>
-                    <addModule>jdk.management.agent</addModule>
-                    <addModule>jdk.zipfs</addModule>
-                  </addModules>
                   <modulePaths>
                     <modulePath>src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7/jmods</modulePath>
                   </modulePaths>
