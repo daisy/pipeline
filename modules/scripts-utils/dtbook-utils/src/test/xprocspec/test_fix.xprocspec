@@ -3,7 +3,25 @@
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                script="../../main/resources/xml/fix-dtbook/fix-dtbook.xpl">
 
-    <x:scenario label="Tidy, repair and narrator execution test">
+    <!--
+    - Tidy :
+    Removes
+        * empty/whitespace p except when
+                1. preceded by hx or no preceding element and parent is a level
+                and
+                2. followed only by other empty p
+        * empty/whitespace em, strong, sub, sup
+    Moves
+        * pagenum inside h[x] before h[x]
+        * pagenum inside a word after the word
+    Removes otherwise empty p or li around pagenum (except p in td)
+    Inserts docauthor and doctitle if a frontmatter exists without those elements
+    Adds @xml:lang to dtbook, if dc:Language metadata is present
+    Removes existing whitespace nodes and indents output to aid debugging.
+            - Does not remove whitespace or apply indentation in inline context
+            - Does not apply indentation when number of children is 1
+    -->
+    <x:scenario label="Tidy execution test">
         <x:call step="pxi:dtbook-fix">
             <x:input port="source">
                 <x:document type="inline">
@@ -12,11 +30,18 @@
                             <meta name="dc:Date" content="2023-06-08+02:00"/>
                             <title>Title</title>
                             <meta name="dc:Title" content="Title"/>
+                            <meta name="dc:Creator" content="DAISY Consortium"/>
+                            <meta name="dc:Language" content="fr-FR"/>
                         </head>
                         <book>
+                            <frontmatter />
                             <bodymatter>
                                 <level1>
-                                    <p>Blah</p>
+                                    <h1><pagenum>1</pagenum>Test</h1>
+                                    <p>Blah <em/> Blah <strong/> Blah <sub/> Blah <sup/></p>
+                                    <p/>
+                                    <p><pagenum>3</pagenum></p>
+                                    <p>Inside a w<pagenum>3</pagenum>ord</p>
                                     <p/>
                                 </level1>
                             </bodymatter>
@@ -25,7 +50,243 @@
                 </x:document>
             </x:input>
             <x:option name="tidy" select="true()" />
+            <x:option name="repair" select="false()" />
+            <x:option name="narrator" select="false()" />
+            <x:option name="documentLanguage" select="'fr-FR'"/>
+            <x:option name="publisher" select="'DAISY Consortium'"/>
+        </x:call>
+        <x:context label="the processed dtbook 2005-3">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the dtbook 2005-3 should be as expected"
+                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+            <x:document type="inline">
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr-FR">
+                    <head>
+                        <meta name="dc:Date" content="2023-06-08+02:00"/>
+                        <title>Title</title>
+                        <meta name="dc:Title" content="Title"/>
+                        <meta name="dc:Creator" content="DAISY Consortium"/>
+                        <meta name="dc:Language" content="fr-FR"/>
+                    </head>
+                    <book>
+                        <frontmatter>
+                            <doctitle>Title</doctitle>
+                            <docauthor>DAISY Consortium</docauthor>
+                        </frontmatter>
+                        <bodymatter>
+                            <level1>
+                                <pagenum>1</pagenum>
+                                <h1>Test</h1>
+                                <p>Blah  Blah  Blah  Blah</p>
+                                <pagenum>3</pagenum>
+                                <p>Inside a word<pagenum>3</pagenum></p>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <!--
+    - Repair
+    Removes levelx if it has descendant headings of x-1 (this simplifies later steps).
+        Note: Level normalizer cannot fix level1/level2/level1
+    Splits a level into several levels on every additional heading on the same level
+    Add levels where needed
+    Changes a hx into a p with @class="hx" if parent isn't levelx
+    Removes nested p
+    Adds an empty p-tag if hx is the last element
+    List fix:
+        - wraps a list in li when the parent of the list is another list
+        - adds @type if missing (default value is "pl")
+        - corrects @depth atribute
+        - removes enum attribute if the list is not ordered
+        - removes start attribute if the list is not ordered
+    idref must be present on noteref and annoref. Add idref if missing or change if empty.
+    tidy-remove-empty-elements, but removes empty/whitespace elements that must have children.
+    - fix metadata case errors
+     - remove unknown dc-metadata
+     - add dtb:uid (if missing) from dc:Identifier
+     - add dc:Title (if missing) from doctitle
+     - add auto-generated dtb:uid if missing (or if it has empty contents)
+
+     Notes : Level splitter currently levels by adding unescaped </levelx><levelx>
+     that needs to be written &lt;/levelx&gt;&lt;levelx&gt; in expected document
+    -->
+    <x:scenario label="Repair execution test">
+        <x:call step="pxi:dtbook-fix">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
+                        <head>
+                            <meta name="dc:Identifier" content="9780120348123" scheme="ean13"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>Test repair</doctitle>
+                                <docauthor>DAISY Consortium</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <h1>Test 1</h1>
+                                    <p>First chapter<noteref id="noteref-1"/></p>
+                                    <h1>Test 2</h1>
+                                    <p>Second chapter<annoref id="annoref-1"/></p>
+                                </level1>
+                                <level1>
+                                    <level2>
+                                        <h1>Test 3</h1>
+                                        <p>Third chapter</p>
+                                    </level2>
+                                </level1>
+                                <level1>
+                                    <h1>Test 4</h1>
+                                    <p>Fourth chapter</p>
+                                    <h2>Subchapter</h2>
+                                    <p>First subchapter</p>
+                                    <p>
+                                        <p>Nested paragraph</p>
+                                    </p>
+                                </level1>
+                                <level1>
+                                    <h1>Empty chapter</h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="tidy" select="false()" />
             <x:option name="repair" select="true()" />
+            <x:option name="narrator" select="false()" />
+            <x:option name="documentLanguage" select="'fr-FR'"/>
+            <x:option name="publisher" select="'DAISY Consortium'"/>
+        </x:call>
+        <x:context label="the processed dtbook 2005-3">
+            <x:document type="port" port="result"/>
+        </x:context>
+        <x:expect label="the dtbook 2005-3 should be as expected"
+                  type="custom" href="http://www.daisy.org/xprocspec/custom-assertion-steps.xpl" step="x:compare-except-ids">
+            <x:document type="inline">
+                <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3">
+                    <head>
+                        <meta name="dtb:uid" content="9780120348123"/>
+                        <meta name="dc:Title" content="Test repair"/>
+                        <meta name="dc:Identifier" content="9780120348123" scheme="ean13"/>
+                    </head>
+                    <book>
+                        <frontmatter>
+                            <doctitle>Test repair</doctitle>
+                            <docauthor>DAISY Consortium</docauthor>
+                        </frontmatter>
+                        <bodymatter>
+                            <level1>
+                                <h1>Test 1</h1>
+                                <p>First chapter<noteref id="noteref-1" idref="#"/></p>
+                                    &lt;/level1&gt;&lt;level1&gt;<h1>Test 2</h1>
+                                <p>Second chapter<annoref id="annoref-1" idref="#"/></p>
+                            </level1>
+                            <level1>
+                                <h1>Test 3</h1>
+                                <p>Third chapter</p>
+                            </level1>
+                            <level1>
+                                <h1>Test 4</h1>
+                                <p>Fourth chapter</p>
+                                <level2>
+                                    <h2>Subchapter</h2>
+                                    <p>First subchapter</p>
+                                    <p>Nested paragraph</p>
+                                </level2>
+                            </level1>
+                            <level1>
+                                <h1>Empty chapter</h1>
+                                <p/>
+                            </level1>
+                        </bodymatter>
+                    </book>
+                </dtbook>
+            </x:document>
+        </x:expect>
+    </x:scenario>
+
+    <!-- - Narrator
+    * Adds dc:Language, dc:Date and dc:Publisher to dtbook, if not present in input,
+      or given but with null/whitespace only content values.
+    * * dc:Language is taken from xml:lang if set, else inparam
+    * * dc:Date is taken as inparam
+    * * dc:Publisher is taken as inparam
+    * Removes dc:description and dc:subject if not valued
+    * Removes dc:Format (will be added by the fileset generator)
+    Prepare a dtbook to the Narrator schematron rules:
+    - Rule 07: No <list> or <dl> inside <p> :
+      - Breaks the parent paragraph into a sequence of paragraphs, list and dl
+      - Each newly created paragraph has the same attributes as the original one
+      - New paragraph IDs are created if necessary
+      - The original paragraph ID is conserved for the first paragraph created
+    - Rule 14: Don't allow <h x+1> in <level x+1> unless <h x> in <level x> is present
+    This fix assumes headings are not empty (e.g. empty headings were
+    removed by a previous fix)
+    - Rule 100: Every document needs at least one heading on level 1
+    This fix assumes headings are not empty (e.g. empty headings were
+    removed by a previous fix)
+    - Adds the dc:Title meta element, if not present in input,
+    or given but with null/whitespace only content values.
+    - Adds the doctitle element in the frontmatter, if not
+    present in input, or given but with null/whitespace only
+    content values.
+    -->
+    <x:scenario label="Narrator execution test">
+        <x:call step="pxi:dtbook-fix">
+            <x:input port="source">
+                <x:document type="inline">
+                    <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr-FR">
+                        <head>
+                            <meta name="dc:Identifier" content="9780120348123" scheme="ean13"/>
+                            <meta name="dc:Description"/>
+                            <meta name="dc:Format"/>
+                            <meta name="dc:Date" content="2023-11-22+01:00"/>
+                        </head>
+                        <book>
+                            <frontmatter>
+                                <doctitle>Test repair</doctitle>
+                                <docauthor>DAISY Consortium</docauthor>
+                            </frontmatter>
+                            <bodymatter>
+                                <level1>
+                                    <h1>Test 1</h1>
+                                    <p>First chapter<noteref id="noteref-1"/></p>
+                                    <h1>Test 2</h1>
+                                    <p>Second chapter<annoref id="annoref-1"/></p>
+                                    <p>test <list>
+                                    </list><dl>
+
+                                    </dl></p>
+                                </level1>
+                                <level1>
+                                    <level2>
+                                        <h1>Test 3</h1>
+                                        <p>Third chapter</p>
+                                    </level2>
+                                </level1>
+                                <level1>
+                                    <h1>Test 4</h1>
+                                    <p>Fourth chapter</p>
+                                    <h2>Subchapter</h2>
+                                    <p>First subchapter</p>
+                                </level1>
+                                <level1>
+                                    <h1>Empty chapter</h1>
+                                </level1>
+                            </bodymatter>
+                        </book>
+                    </dtbook>
+                </x:document>
+            </x:input>
+            <x:option name="tidy" select="false()" />
+            <x:option name="repair" select="false()" />
             <x:option name="narrator" select="true()" />
             <x:option name="documentLanguage" select="'fr-FR'"/>
             <x:option name="publisher" select="'DAISY Consortium'"/>
@@ -38,18 +299,43 @@
             <x:document type="inline">
                 <dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" version="2005-3" xml:lang="fr-FR">
                     <head>
+                        <meta name="dc:Title" content="Test repair"/>
                         <meta name="dc:Publisher" content="DAISY Consortium"/>
                         <meta name="dc:Language" content="fr-FR"/>
-                        <meta name="dtb:uid" content="AUTO-UID-d518e3"/> <!-- FIXME: brittle -->
-                        <meta name="dc:Date" content="2023-06-08+02:00"/>
-                        <title>Title</title>
-                        <meta name="dc:Title" content="Title"/>
+                        <meta name="dc:Identifier" content="9780120348123" scheme="ean13"/>
+                        <meta name="dc:Date" content="2023-11-22+01:00"/>
                     </head>
                     <book>
+                        <frontmatter>
+                            <doctitle>Test repair</doctitle>
+                            <docauthor>DAISY Consortium</docauthor></frontmatter>
                         <bodymatter>
                             <level1>
-                                <h1>Titre vide</h1>
-                                <p>Blah</p>
+                                <h1>Test 1</h1>
+                                <p>First chapter
+                                    <noteref id="noteref-1"/></p>
+                                <h1>Test 2</h1>
+                                <p>Second chapter
+                                    <annoref id="annoref-1"/></p>
+                                <p>test </p>
+                                <list></list>
+                                <dl></dl>
+                                <p/>
+                            </level1>
+                            <level1>
+                                <level2>
+                                    <h1>Test 3</h1>
+                                    <p>Third chapter</p>
+                                </level2>
+                            </level1>
+                            <level1>
+                                <h1>Test 4</h1>
+                                <p>Fourth chapter</p>
+                                <h2>Subchapter</h2>
+                                <p>First subchapter</p>
+                            </level1>
+                            <level1>
+                                <h1>Empty chapter</h1>
                             </level1>
                         </bodymatter>
                     </book>
