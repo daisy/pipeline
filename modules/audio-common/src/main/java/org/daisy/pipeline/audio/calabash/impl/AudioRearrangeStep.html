@@ -377,7 +377,7 @@
 <a class="jxr_linenumber" name="L368" href="#L368">368</a> 						<strong class="jxr_keyword">long</strong> currentDestinationElapsed = 0; <em class="jxr_comment">// in frames</em>
 <a class="jxr_linenumber" name="L369" href="#L369">369</a> 						<strong class="jxr_keyword">int</strong> fileCounter = 0;
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> 						MessageAppender progress = MessageAppender.getActiveBlock(); <em class="jxr_comment">// px:audio-rearrange step</em>
-<a class="jxr_linenumber" name="L371" href="#L371">371</a> 						BigDecimal progressInc = BigDecimal.TEN.divide(<strong class="jxr_keyword">new</strong> BigDecimal(desired.size()), MathContext.DECIMAL128);
+<a class="jxr_linenumber" name="L371" href="#L371">371</a> 						BigDecimal progressInc = BigDecimal.ONE.divide(<strong class="jxr_keyword">new</strong> BigDecimal(desired.size()), MathContext.DECIMAL128);
 <a class="jxr_linenumber" name="L372" href="#L372">372</a> 						<strong class="jxr_keyword">int</strong> clipCounter = 0;
 <a class="jxr_linenumber" name="L373" href="#L373">373</a> 						<strong class="jxr_keyword">for</strong> (Map.Entry&lt;AudioClip,AudioClip&gt; entry : desired.entrySet()) {
 <a class="jxr_linenumber" name="L374" href="#L374">374</a> 							AudioClip destinationClip = entry.getKey(); <em class="jxr_comment">// destination clips are in order and don't overlap</em>

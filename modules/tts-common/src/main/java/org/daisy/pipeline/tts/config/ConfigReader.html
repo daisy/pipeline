@@ -78,9 +78,9 @@
 <a class="jxr_linenumber" name="L69" href="#L69">69</a>  		mAllProps = <strong class="jxr_keyword">new</strong> HashMap&lt;String, String&gt;();
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  		mAllProps.putAll(mStaticProps);
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  		String hostProtection = Properties.getProperty(HostProtectionProperty);
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<strong class="jxr_keyword">if</strong> (hostProtection != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			Logger.warn(<span class="jxr_string">"'"</span> + HostProtectionProperty + <span class="jxr_string">"' setting is deprecated. "</span> +
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			            <span class="jxr_string">"It may become unavailable in future version of DAISY Pipeline."</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		<em class="jxr_comment">//if (hostProtection != null)</em>
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  		<em class="jxr_comment">//	Logger.warn("'" + HostProtectionProperty + "' setting is deprecated. " +</em>
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		<em class="jxr_comment">//	            "It may become unavailable in future version of DAISY Pipeline.");</em>
 <a class="jxr_linenumber" name="L75" href="#L75">75</a>  		<strong class="jxr_keyword">if</strong> (hostProtection != <strong class="jxr_keyword">null</strong> &amp;&amp; hostProtection.equalsIgnoreCase(<span class="jxr_string">"false"</span>))
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			mAllProps.putAll(mDynamicProps);
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">else</strong>
