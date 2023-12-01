@@ -980,19 +980,6 @@ The produced EPUB.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Include Media Overlays</div>
-<div class="synopsis-option-desc">
-Whether or not to include media overlays and associated audio files (true or false).
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Validation</div>
 <div class="synopsis-option-desc">
 Whether to abort on validation issues.
@@ -1009,6 +996,19 @@ Whether to abort on validation issues.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>off</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Include Media Overlays</div>
+<div class="synopsis-option-desc">
+Whether or not to include media overlays and associated audio files (true or false).
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1079,12 +1079,12 @@ Options:</pre>
 <td>The package file of the input DTB.</td>
 </tr>
 <tr>
-<td>--mediaoverlays [<span style="text-transform: uppercase">mediaoverlays</span>]</td>
-<td>Include Media Overlays (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
 <td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
 <td>Validation (default: <span class="synopsis-option-default"><code>off</code></span>)</td>
+</tr>
+<tr>
+<td>--mediaoverlays [<span style="text-transform: uppercase">mediaoverlays</span>]</td>
+<td>Include Media Overlays (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>

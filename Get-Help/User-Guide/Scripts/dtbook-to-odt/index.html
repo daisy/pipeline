@@ -1000,9 +1000,22 @@ The resulting ODT file.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Page numbers</div>
+<div class="synopsis-option-name">Image resolution</div>
 <div class="synopsis-option-desc">
-Whether to show page numbers or not.
+Resolution of images in DPI.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>600</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Float page numbers</div>
+<div class="synopsis-option-desc">
+Try to float page numbers to an appropriate place as opposed to exactly following print.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1045,22 +1058,9 @@ How to render ASCIIMath-encoded formulas.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Image resolution</div>
+<div class="synopsis-option-name">Page numbers</div>
 <div class="synopsis-option-desc">
-Resolution of images in DPI.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>600</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Float page numbers</div>
-<div class="synopsis-option-desc">
-Try to float page numbers to an appropriate place as opposed to exactly following print.
+Whether to show page numbers or not.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
@@ -1124,8 +1124,12 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--page-numbers [<span style="text-transform: uppercase">page-numbers</span>]</td>
-<td>Page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+<td>--image-dpi [<span style="text-transform: uppercase">image-dpi</span>]</td>
+<td>Image resolution (default: <span class="synopsis-option-default"><code>600</code></span>)</td>
+</tr>
+<tr>
+<td>--page-numbers-float [<span style="text-transform: uppercase">page-numbers-float</span>]</td>
+<td>Float page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--images [<span style="text-transform: uppercase">images</span>]</td>
@@ -1136,12 +1140,8 @@ Options:</pre>
 <td>ASCIIMath handling (default: <span class="synopsis-option-default"><code>ASCIIMATH</code></span>)</td>
 </tr>
 <tr>
-<td>--image-dpi [<span style="text-transform: uppercase">image-dpi</span>]</td>
-<td>Image resolution (default: <span class="synopsis-option-default"><code>600</code></span>)</td>
-</tr>
-<tr>
-<td>--page-numbers-float [<span style="text-transform: uppercase">page-numbers-float</span>]</td>
-<td>Float page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
+<td>--page-numbers [<span style="text-transform: uppercase">page-numbers</span>]</td>
+<td>Page numbers (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
