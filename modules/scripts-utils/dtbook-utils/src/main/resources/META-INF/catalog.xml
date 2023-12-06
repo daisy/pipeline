@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
 
    <public publicId='-//NISO//DTD dtbook 2005-1//EN' uri='../xml/dtd/dtbook-2005-1.dtd'/>
    <system systemId='http://www.daisy.org/z3986/2005/dtbook-2005-1.dtd' uri='../xml/dtd/dtbook-2005-1.dtd'/>
@@ -21,6 +21,8 @@
    <uri name="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"
         uri="../xml/dtbook-utils-library.xpl"/>
 
+   <uri uri="../xml/fix-dtbook/dtbook-cleaner.script.xpl" px:content-type="script" px:id="dtbook-cleaner"/>
+
    <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mediatype-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:validation-utils"/>
@@ -29,4 +31,5 @@
    <nextCatalog catalog="org:daisy:pipeline:modules:css-utils" />
    <nextCatalog catalog="org:daisy:pipeline:modules:metadata-utils"/>
    <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
+   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-break-detection"/>
 </catalog>
