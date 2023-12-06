@@ -140,7 +140,10 @@ run-docker-detached : dist-docker-image
            -e PIPELINE2_WS_AUTHENTICATION=false \
 	       -p 8181:8181 daisyorg/pipeline:latest-snapshot
 
-SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) modules/scripts-utils/daisy202-utils modules/scripts-utils/daisy3-utils
+SCRIPTS := $(filter modules/scripts/%,$(MAVEN_MODULES)) \
+           modules/scripts-utils/daisy202-utils \
+           modules/scripts-utils/daisy3-utils \
+           modules/scripts-utils/dtbook-utils
 
 .PHONY : $(addprefix run-,$(SCRIPTS))
 $(addprefix run-,$(SCRIPTS)) : run-% : %/.compile-dependencies %/.test-dependencies
