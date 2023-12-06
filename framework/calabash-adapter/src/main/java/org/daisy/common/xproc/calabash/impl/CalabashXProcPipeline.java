@@ -25,6 +25,7 @@ import com.xmlcalabash.model.Output;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.model.SequenceType;
 import com.xmlcalabash.runtime.XPipeline;
+import com.xmlcalabash.util.XProcSystemPropertySet;
 
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
@@ -182,6 +183,20 @@ public class CalabashXProcPipeline implements XProcPipeline {
 			if (messageListener != null)
 				((XProcMessageListenerAggregator)pipeline.xpipe.getStep().getXProc().getMessageListener())
 					.add(messageListener);
+			if (properties != null)
+				// for p:system-property() function
+				pipeline.runtime.addSystemPropertySet(
+					new XProcSystemPropertySet() {
+						@Override
+						public String systemProperty(XProcRuntime runtime, net.sf.saxon.s9api.QName propertyName) throws XProcException {
+							if ("http://www.daisy.org/ns/pipeline/data".equals(propertyName.getNamespaceURI())) {
+								String p = propertyName.getLocalName();
+								String v = properties.get(p);
+								if (v == null) // if property not settable
+									v = Properties.getProperty(p);
+								return v;
+							} else
+								return null; }});
 			// bind inputs
 			for (String name : pipeline.xpipe.getInputs()) {
 				boolean cleared = false;

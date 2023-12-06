@@ -3,6 +3,7 @@ package org.daisy.pipeline.datatypes;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.function.Supplier;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 
@@ -11,27 +12,36 @@ import static org.daisy.pipeline.datatypes.ValidationResult.valid;
 
 import org.w3c.dom.Document;
 
-public interface DatatypeService {
+public abstract class DatatypeService {
+
+	Supplier<String> id = null; // also accessed from DatatypeRegistry and UrlBasedDatatypeService
+
+	protected DatatypeService() {
+		this.id = () -> null;
+	}
+
+	protected DatatypeService(String id) {
+		this.id = () -> id;
+	}
 
 	/**
 	 * Get the datatype ID.
 	 */
-	public String getId();
+	public final String getId() {
+		return id.get();
+	}
 
 	/**
 	 * Get the XML definition of the datatype.
 	 */
-	public Document asDocument() throws Exception;
+	public abstract Document asDocument() throws Exception;
 
 	/**
 	 * Test whether a value matches the datatype.
 	 */
-	public ValidationResult validate(String content);
+	public abstract ValidationResult validate(String content);
 
-	public static final DatatypeService XS_STRING = new DatatypeService() {
-			public String getId() {
-				return "string";
-			}
+	public static final DatatypeService XS_STRING = new DatatypeService("string") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"string\"/>");
 			}
@@ -40,10 +50,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService XS_INTEGER = new DatatypeService() {
-			public String getId() {
-				return "integer";
-			}
+	public static final DatatypeService XS_INTEGER = new DatatypeService("integer") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"integer\"/>");
 			}
@@ -57,10 +64,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService XS_NON_NEGATIVE_INTEGER = new DatatypeService() {
-			public String getId() {
-				return "nonNegativeInteger";
-			}
+	public static final DatatypeService XS_NON_NEGATIVE_INTEGER = new DatatypeService("nonNegativeInteger") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"nonNegativeInteger\"/>");
 			}
@@ -74,10 +78,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService XS_BOOLEAN = new DatatypeService() {
-			public String getId() {
-				return "boolean";
-			}
+	public static final DatatypeService XS_BOOLEAN = new DatatypeService("boolean") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"boolean\"/>");
 			}
@@ -88,10 +89,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService XS_ANY_URI = new DatatypeService() {
-			public String getId() {
-				return "anyURI";
-			}
+	public static final DatatypeService XS_ANY_URI = new DatatypeService("anyURI") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"anyURI\"/>");
 			}
@@ -105,10 +103,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService ANY_FILE_URI = new DatatypeService() {
-			public String getId() {
-				return "anyFileURI";
-			}
+	public static final DatatypeService ANY_FILE_URI = new DatatypeService("anyFileURI") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
 					"<data type=\"anyFileURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>");
@@ -128,10 +123,7 @@ public interface DatatypeService {
 			}
 		};
 
-	public static final DatatypeService ANY_DIR_URI = new DatatypeService() {
-			public String getId() {
-				return "anyDirURI";
-			}
+	public static final DatatypeService ANY_DIR_URI = new DatatypeService("anyDirURI") {
 			public Document asDocument() throws Exception {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(
 					"<data type=\"anyDirURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>");

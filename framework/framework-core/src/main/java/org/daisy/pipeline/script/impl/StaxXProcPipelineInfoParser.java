@@ -228,7 +228,7 @@ public class StaxXProcPipelineInfoParser {
 			if (selectAttr != null) {
 				select = selectAttr.getValue();
 			}
-			infoBuilder.withOption(XProcOptionInfo.newOption(name, required, select));
+			infoBuilder.withOption(XProcOptionInfo.newOption(name, elem.getNamespaceContext(), null, required, select));
 		}
 		// consume whole element
 		int depth = 1;

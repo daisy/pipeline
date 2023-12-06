@@ -6,17 +6,12 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Iterator;
-import java.util.List;
 import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.sax.SAXSource;
-
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 
 import org.daisy.common.priority.Priority;
 import org.daisy.pipeline.job.Job;
@@ -33,6 +28,7 @@ import org.daisy.pipeline.webservice.Callback.CallbackType;
 import org.daisy.pipeline.webservice.impl.PosterCallback;
 import org.daisy.pipeline.webservice.CallbackHandler;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
+import org.daisy.pipeline.webservice.restlet.MultipartRequestData;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
 import org.daisy.pipeline.webservice.xml.ValidationStatus;
@@ -42,7 +38,6 @@ import org.daisy.pipeline.webservice.xml.XmlUtils;
 import org.restlet.Request;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
@@ -66,12 +61,8 @@ import com.google.common.base.Optional;
  */
 public class JobsResource extends AuthenticatedResource {
 
-        /** The tempfile prefix. */
-        private final String tempfilePrefix = "p2ws";
-        private final String tempfileSuffix = ".zip";
-
-        private final String JOB_DATA_FIELD = "job-data";
-        private final String JOB_REQUEST_FIELD = "job-request";
+        private static final String JOB_DATA_FIELD = "job-data";
+        private static final String JOB_REQUEST_FIELD = "job-request";
 
         /** The logger. */
         private static Logger logger = LoggerFactory.getLogger(JobsResource.class.getName());
@@ -135,9 +126,12 @@ public class JobsResource extends AuthenticatedResource {
                         Request request = getRequest();
                         // sort through the multipart request
                         MultipartRequestData data = null;
-                        try{
-                                data = processMultipart(request);
-                        }catch(Exception e){
+                        try {
+                                data = MultipartRequestData.processMultipart(request,
+                                                                             JOB_DATA_FIELD,
+                                                                             JOB_REQUEST_FIELD,
+                                                                             new File(getConfiguration().getTmpDir()));
+                        } catch (Exception e) {
                                 return badRequest(e);
                         }
                         if (data == null) {
@@ -221,114 +215,6 @@ public class JobsResource extends AuthenticatedResource {
                 logger.error("bad request:", e);
                 setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
                 return this.getErrorRepresentation(e.getMessage());
-        }
-        
-        /*
-         * taken from an example at:
-         * http://wiki.restlet.org/docs_2.0/13-restlet/28-restlet/64-restlet.html
-         */
-        /**
-         * Process multipart.
-         *
-         * @param request the request
-         * @return the multipart request data
-         */
-        private MultipartRequestData processMultipart(Request request) throws Exception {
-
-                String tmpdir = getConfiguration().getTmpDir();
-                logger.debug("Tmpdir: "+tmpdir);
-                // 1/ Create a factory for disk-based file items
-                DiskFileItemFactory fileItemFactory = new DiskFileItemFactory();
-                fileItemFactory.setSizeThreshold(1000240);
-
-                // 2/ Create a new file upload handler based on the Restlet
-                // FileUpload extension that will parse Restlet requests and
-                // generates FileItems.
-                RestletFileUpload upload = new RestletFileUpload(fileItemFactory);
-                List<FileItem> items;
-
-                ZipFile zip = null;
-                String xml = "";
-                        items = upload.parseRequest(request);
-                        Iterator<FileItem> it = items.iterator();
-                        while (it.hasNext()) {
-                                FileItem fi = it.next();
-                                if (fi.getFieldName().equals(JOB_DATA_FIELD)) {
-                                        logger.debug("Reading zip file");
-                                        File file = File.createTempFile(tempfilePrefix, tempfileSuffix, new File(tmpdir));
-                                        fi.write(file);
-
-                                        // re-opening the file after writing to it
-                                        File file2 = new File(file.getAbsolutePath());
-                                        zip = new ZipFile(file2);
-                                }
-                                else if (fi.getFieldName().equals(JOB_REQUEST_FIELD)) {
-                                        xml = fi.getString("utf-8");
-                                        logger.debug("XML multi:"+xml);
-                                }
-                        }
-
-                        if (zip == null || xml.length() == 0) {
-                                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                                return null;
-                        }
-
-                        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                        docFactory.setNamespaceAware(true);
-                        DocumentBuilder builder = docFactory.newDocumentBuilder();
-                        InputSource is = new InputSource(new StringReader(xml));
-                        Document doc = builder.parse(is);
-                        MultipartRequestData data = new MultipartRequestData(zip, doc);
-                        return data;
-
-        }
-
-        // just a convenience class for representing the parts of a multipart request
-        /**
-         * The Class MultipartRequestData.
-         */
-        private class MultipartRequestData {
-
-                /**
-                 * Process multipart.
-                 *
-                 * @param request the request
-                 * @return the multipart request data
-                 */
-                /** The zip. */
-                private final ZipFile zip;
-
-                /** The xml. */
-                private final Document xml;
-
-                /**
-                 * Instantiates a new multipart request data.
-                 *
-                 * @param zip the zip
-                 * @param xml the xml
-                 */
-                MultipartRequestData(ZipFile zip, Document xml) {
-                        this.zip = zip;
-                        this.xml = xml;
-                }
-
-                /**
-                 * Gets the zip file.
-                 *
-                 * @return the zip file
-                 */
-                ZipFile getZipFile() {
-                        return zip;
-                }
-
-                /**
-                 * Gets the xml.
-                 *
-                 * @return the xml
-                 */
-                Document getXml() {
-                        return xml;
-                }
         }
 
         /**

@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -32,6 +33,7 @@ import net.sf.saxon.trans.XPathException;
 import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.BigDecimalValue;
 import net.sf.saxon.value.BooleanValue;
+import net.sf.saxon.value.DoubleValue;
 import net.sf.saxon.value.EmptySequence;
 import net.sf.saxon.value.FloatValue;
 import net.sf.saxon.value.IntegerValue;
@@ -66,12 +68,16 @@ public final class SaxonHelper {
 			return IntegerValue.makeIntegerValue(BigInteger.valueOf((Long)object));
 		else if (object instanceof Float)
 			return FloatValue.makeFloatValue((Float)object);
+		else if (object instanceof Double)
+			return DoubleValue.makeDoubleValue((Double)object);
 		else if (object instanceof BigDecimal)
 			return new BigDecimalValue((BigDecimal)object);
 		else if (object instanceof Boolean)
 			return BooleanValue.get((Boolean)object);
 		else if (object instanceof URI)
 			return new AnyURIValue(((URI)object).toASCIIString());
+		else if (object instanceof Locale)
+			return itemFromObject(((Locale)object).toLanguageTag());
 		else if (object instanceof Map)
 			return mapItemFromMap((Map<?,?>)object);
 		else

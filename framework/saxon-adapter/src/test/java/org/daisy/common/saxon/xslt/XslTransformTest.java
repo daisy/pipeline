@@ -1,4 +1,4 @@
-package org.daisy.common.xslt;
+package org.daisy.common.saxon.xslt;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;

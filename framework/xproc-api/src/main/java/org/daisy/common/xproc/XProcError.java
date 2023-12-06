@@ -154,7 +154,11 @@ public abstract class XProcError {
 				if (_HREF.equals(name))
 					href = value;
 				else if (_LINE.equals(name))
-					line = Integer.parseInt(value);
+					try {
+						line = Integer.parseInt(value);
+					} catch (NumberFormatException e) {
+						// ignore
+					}
 			}
 			skipElement(reader);
 		}

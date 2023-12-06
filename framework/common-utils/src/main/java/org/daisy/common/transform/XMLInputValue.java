@@ -9,7 +9,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
-import org.daisy.common.stax.DelegatingXMLStreamReader;
+import org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamReader;
 
 import org.w3c.dom.Node;
 
@@ -175,7 +175,7 @@ public class XMLInputValue<V> extends InputValue<V> {
 		} catch (XMLStreamException e) {
 			throw new TransformerException(e);
 		}
-		return new DelegatingXMLStreamReader() {
+		return new DelegatingBaseURIAwareXMLStreamReader() {
 			private boolean seenStartDocument = false;
 			private String firstNode = null;
 			private int elementDepth = 0;

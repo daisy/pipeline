@@ -30,6 +30,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.ProcessingInstruction;
 
 public final class XMLStreamWriterHelper {
 	
@@ -241,7 +242,7 @@ public final class XMLStreamWriterHelper {
 	}
 	
 	public static void writeProcessingInstruction(XMLStreamWriter writer, Node pi) throws XMLStreamException {
-		writer.writeProcessingInstruction(pi.getLocalName(), pi.getNodeValue());
+		writer.writeProcessingInstruction(((ProcessingInstruction)pi).getTarget(), pi.getNodeValue());
 	}
 	
 	public static void writeProcessingInstruction(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {

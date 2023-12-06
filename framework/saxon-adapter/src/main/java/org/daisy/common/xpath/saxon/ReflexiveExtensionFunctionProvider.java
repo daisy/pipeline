@@ -16,8 +16,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.IllformedLocaleException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -625,6 +627,16 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 					throw new IllegalArgumentException(e); // should not happen
 				}
 			else
+				throw new IllegalArgumentException();
+		else if (type.equals(Locale.class))
+			if (item instanceof StringValue) {
+				try {
+					return (T)(new Locale.Builder()).setLanguageTag((String)((StringValue)item).getStringValue().replace('_','-'))
+					                                .build();
+				} catch (IllformedLocaleException e) {
+					throw new IllegalArgumentException(e);
+				}
+			} else
 				throw new IllegalArgumentException();
 		else if (type.equals(Object.class))
 			// argument can be anything

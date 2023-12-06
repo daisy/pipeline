@@ -6,9 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+
+import org.daisy.common.properties.Properties;
 import org.daisy.common.xproc.XProcOptionInfo;
 import org.daisy.common.xproc.XProcPortInfo;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
@@ -16,9 +24,6 @@ import org.daisy.pipeline.datatypes.DatatypeService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * XProc based implementation of {@link Script}
@@ -32,6 +37,8 @@ public final class XProcScript extends Script {
 	private final List<XProcScriptOption> tempOptions;
 	private final Map<String,XProcScriptOption> resultOptions;
 	private final Optional<ScriptPort> statusPort;
+	final boolean someOptionsUseProperty; // whether one or more options have a default value that depends
+	                                      // on a (possibly settable) property
 
 	/**
 	 * The URI of the XProc pipeline.
@@ -271,6 +278,10 @@ public final class XProcScript extends Script {
 		this.tempOptions = ImmutableList.copyOf(tempOptions);
 		this.resultOptions = ImmutableMap.copyOf(resultOptions);
 		this.statusPort = Optional.ofNullable(statusPort);
+		this.someOptionsUseProperty = Iterables.any(options.values(), o -> ((XProcScriptOption)o).usesProperty)
+			|| Iterables.any(inputOptions.values(), o -> o.usesProperty)
+			|| Iterables.any(tempOptions, o -> o.usesProperty)
+			|| Iterables.any(resultOptions.values(), o -> o.usesProperty);
 	}
 
 	@Override
@@ -285,7 +296,13 @@ public final class XProcScript extends Script {
 		private final XProcOptionInfo info;
 		private final XProcOptionMetadata metadata;
 		private final String defaultValue;
+		final boolean usesProperty; // whether the default value depends on a (possibly settable) propeprty
 		private final DatatypeService datatype;
+
+		private static final Pattern SYSTEM_PROPERTY = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):system-property\\((?<arg>[^)]+)\\)$");
+		private static final Pattern QNAME = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):(?<localPart>[a-zA-Z_][\\w.-]*)");
+		private static final String NS_XPROC = "http://www.w3.org/ns/xproc";
+		private static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
 
 		public XProcScriptOption(String name,
 		                         XProcOptionInfo info,
@@ -296,21 +313,81 @@ public final class XProcScript extends Script {
 			this.metadata = metadata;
 			if (info.isRequired()) {
 				defaultValue = null;
+				usesProperty = false;
 			} else {
 				String select = info.getSelect();
+				boolean usesProperty = false;
+				if (select != null)
+					select = select.trim();
 				if (select == null || "".equals(select)) {
 					// script options must have a default value even if the XProc option does not have one
 					defaultValue = "";
 				} else {
-					// the default value of script options must be a string literal
+					// the default value of script options must be a string literal ...
 					char quote = select.charAt(0);
-					if ((quote == '"' || quote == '\'') && select.charAt(select.length() - 1) == quote)
-						defaultValue = select.substring(1, select.length() - 1);
-					else {
-						logger.debug("Select statement is not a string literal: " + select);
-						defaultValue = "";
+					if (quote == '"' || quote == '\'') {
+						if (select.charAt(select.length() - 1) == quote)
+							defaultValue = select.substring(1, select.length() - 1);
+						else {
+							logger.debug("Select statement is not a valid string literal: " + select);
+							defaultValue = "";
+						}
+					} else {
+						// ... or a p:system-property() function (allows for setting a default value
+						// globally through a Pipeline property)
+						String defaultValue = null;
+						NamespaceContext nsContext = info.getNamespaceContext();
+						if (nsContext != null) {
+							Matcher m = SYSTEM_PROPERTY.matcher(select);
+							if (m.matches()) {
+								String prf = m.group("prefix");
+								String ns = nsContext.getNamespaceURI(prf);
+								if (NS_XPROC.equals(ns)) {
+									String arg = m.group("arg").trim();
+									quote = arg.charAt(0);
+									if ((quote == '"' || quote == '\'') && arg.charAt(arg.length() - 1) == quote) {
+										arg = arg.substring(1, arg.length() - 1);
+										m = QNAME.matcher(arg);
+										if (m.matches()) {
+											prf = m.group("prefix");
+											ns = nsContext.getNamespaceURI(prf);
+											String prop = m.group("localPart");
+											if (NS_PIPELINE_DATA.equals(ns)) {
+												usesProperty = true;
+												defaultValue = Properties.getSnapshot().get(prop);
+												if (defaultValue == null) // if property not settable
+													defaultValue = Properties.getProperty(prop);
+												if (defaultValue == null) {
+													logger.debug("Property does not have a value: " + prop);
+													defaultValue = "";
+												}
+											} else if (ns == null)
+												logger.debug("Unbound namespace prefix: " + prf);
+											else {
+												logger.debug("Property '" + prop + "'is in an unknown namespace: '" + ns + "'");
+												defaultValue = "";
+											}
+										} else
+											logger.debug("system-property() argument is not a qualified name: " + arg);
+									} else
+										logger.debug("system-property() argument is not a string: " + arg);
+								} else if (ns == null)
+									logger.debug("Unbound namespace prefix: " + prf);
+								else
+									logger.debug("system-property() function is not in the '" + NS_XPROC + "' namespace: " + select);
+							}
+						}
+						if (defaultValue == null) {
+							defaultValue = "";
+							if (select.contains("system-property"))
+								logger.debug("Select statement is not a valid system-property() function: " + select);
+							else
+								logger.debug("Select statement is not a string literal or a system-property() function: " + select);
+						}
+						this.defaultValue = defaultValue;
 					}
 				}
+				this.usesProperty = usesProperty;
 			}
 			String type = metadata.getType();
 			if (type == null || "".equals(type) || "xs:string".equals(type) || "string".equals(type))

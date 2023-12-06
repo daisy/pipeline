@@ -17,7 +17,7 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.trans.XPathException;
 
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
-import org.daisy.common.stax.DelegatingXMLStreamWriter;
+import org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamWriter;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLOutputValue;
 
@@ -50,7 +50,7 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 	}
 
 	private static BaseURIAwareXMLStreamWriter createXMLStreamWriter(Consumer<XdmItem> itemConsumer, Configuration config) {
-		return new DelegatingXMLStreamWriter() {
+		return new DelegatingBaseURIAwareXMLStreamWriter() {
 			private BaseURIAwareXMLStreamWriter writer = null;
 			private Receiver receiver;
 			// "An XdmDestination is designed to hold a single tree rooted at a document node."

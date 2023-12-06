@@ -1,4 +1,4 @@
-package org.daisy.common.xslt;
+package org.daisy.common.saxon.xslt;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -10,12 +10,12 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.Serializer;
-import net.sf.saxon.s9api.XdmAtomicValue;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmNode;
+import net.sf.saxon.s9api.XdmValue;
 import net.sf.saxon.s9api.XsltTransformer;
 
-// FIXME: this class should be moved to org.daisy.common.saxon
+import org.daisy.common.saxon.SaxonHelper;
 
 /**
  * Transform a given XML tree or sub-tree, with optional XSLT parameters. The
@@ -62,24 +62,22 @@ public class ThreadUnsafeXslTransformer {
 		return sw.toString();
 	}
 
-	public void genericTransform(XdmNode input, Map<String, Object> parameters,
-	        Destination dest) throws SaxonApiException {
+	public void genericTransform(XdmNode input, Map<String, Object> parameters, Destination dest)
+			throws SaxonApiException {
 
-		if (parameters != null) {
-			for (Map.Entry<String, Object> param : parameters.entrySet()) {
-				this.transformer.setParameter(new QName(null, param.getKey()),
-				        new XdmAtomicValue(param.getValue().toString()));
-			}
-		}
-		this.transformer.setSource(input.asSource());
-		this.transformer.setDestination(dest);
-		this.transformer.transform();
-
-		if (parameters != null) {
-			//cancel the parameters
-			for (Map.Entry<String, Object> param : parameters.entrySet()) {
-				this.transformer.setParameter(new QName(null, param.getKey()), null);
-			}
+		try {
+			if (parameters != null)
+				for (Map.Entry<String, Object> param : parameters.entrySet())
+					this.transformer.setParameter(new QName(null, param.getKey()),
+					                              XdmValue.wrap(SaxonHelper.sequenceFromObject(param.getValue())));
+			transformer.setSource(input.asSource());
+			transformer.setDestination(dest);
+			transformer.transform();
+		} finally {
+			if (parameters != null)
+				//cancel the parameters
+				for (Map.Entry<String, Object> param : parameters.entrySet())
+					transformer.setParameter(new QName(null, param.getKey()), null);
 		}
 	}
 

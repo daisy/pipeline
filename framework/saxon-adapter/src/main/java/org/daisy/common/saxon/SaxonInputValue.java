@@ -22,7 +22,7 @@ import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmValue;
 
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
-import org.daisy.common.stax.DelegatingXMLStreamReader;
+import org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamReader;
 import org.daisy.common.transform.Mult;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLInputValue;
@@ -192,7 +192,7 @@ public class SaxonInputValue extends XMLInputValue<Void> {
 	private static BaseURIAwareXMLStreamReader concat(Iterator<BaseURIAwareXMLStreamReader> readers) {
 		if (!readers.hasNext())
 			return null;
-		return new DelegatingXMLStreamReader() {
+		return new DelegatingBaseURIAwareXMLStreamReader() {
 			private BaseURIAwareXMLStreamReader reader = null;
 			protected BaseURIAwareXMLStreamReader delegate() {
 				if (reader == null)

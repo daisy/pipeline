@@ -1,10 +1,8 @@
-package org.daisy.common.xslt;
+package org.daisy.common.saxon.xslt;
 
 import javax.xml.transform.URIResolver;
 
 import net.sf.saxon.s9api.XsltExecutable;
-
-// FIXME: this class should be moved to org.daisy.common.saxon
 
 /**
  * Allocate distinct ThreadUnsafeXslTransformer instances so that the same

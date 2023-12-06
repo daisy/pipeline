@@ -262,6 +262,19 @@ public class StaxXProcScriptParser {
 							parseOption(event.asStartElement(), b);
 							optionBuilders.add(b);
 						}
+					} else {
+						// consume whole p:option element to skip parsing of documentation insid
+						int depth = 1;
+						while (reader.hasNext()) {
+							event = readNext(reader);
+							if (event.isStartElement()) {
+								depth++;
+							} else if (event.isEndElement()) {
+								depth--;
+								if (depth == 0)
+									break;
+							}
+						}
 					}
 				}
 			}

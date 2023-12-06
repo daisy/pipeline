@@ -1,4 +1,4 @@
-package org.daisy.common.xslt;
+package org.daisy.common.saxon.xslt;
 
 import java.io.InputStream;
 
@@ -11,8 +11,6 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltCompiler;
 
 import com.xmlcalabash.core.XProcConfiguration;
-
-// FIXME: this class should be moved to org.daisy.common.saxon
 
 /**
  * Immutable XSLT compiler with an optional URIResolver.

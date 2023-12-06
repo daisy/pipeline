@@ -67,10 +67,7 @@ public class XProcScriptParserTest {
 		 StaxXProcScriptParser parser = new StaxXProcScriptParser();
 		 parser.setFactory(XMLInputFactory.newInstance());
 		 DatatypeRegistry datatypes = new DatatypeRegistry();
-		 datatypes.register(new DatatypeService() {
-			public String getId() {
-				return "dtbook:mydatatype";
-			}
+		 datatypes.register(new DatatypeService("dtbook:mydatatype") {
 			public Document asDocument() throws Exception {
 				throw new UnsupportedOperationException("Not implemented");
 			}
