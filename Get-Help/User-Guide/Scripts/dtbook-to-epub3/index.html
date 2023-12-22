@@ -655,9 +655,9 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="54">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="54">
       
-      Troubleshooting on Windows
+      Troubleshooting Desktop Application
       </a>
     
     </li>
@@ -942,21 +942,6 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file(s)</div>
-<div class="synopsis-input-desc">
-One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: yes</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Configuration file for the text-to-speech.
@@ -974,6 +959,21 @@ One or more DTBook files to be transformed. In the case of multiple files, a mer
 </div>
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook file(s)</div>
+<div class="synopsis-input-desc">
+One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: yes</div>
 </li>
 </ul>
 
@@ -1026,6 +1026,32 @@ property.</p>
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-desc">
+Whether to use a speech synthesizer to produce audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name"></div>
+<div class="synopsis-option-desc">
+
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>audio/mpeg</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Chunk size</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
@@ -1041,6 +1067,19 @@ split up if they exceed the given maximum size.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">NIMAS input</div>
+<div class="synopsis-option-desc">
+Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1074,45 +1113,6 @@ Language code of the input document.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
-<div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name"></div>
-<div class="synopsis-option-desc">
-
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>audio/mpeg</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">NIMAS input</div>
-<div class="synopsis-option-desc">
-Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
 </div>
 </li>
 </ul>
@@ -1159,27 +1159,15 @@ if (window.addEventListener) {
 Options:</pre>
   <table>
 <tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
-</tr>
-<tr>
 <td>--tts-config <span style="text-transform: uppercase">tts-config</span>
 </td>
 <td>Configuration file for the text-to-speech.
 </td>
 </tr>
 <tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
-</tr>
-<tr>
-<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
-<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
-</tr>
-<tr>
-<td>--language [<span style="text-transform: uppercase">language</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
@@ -1190,8 +1178,20 @@ Options:</pre>
 <td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
 </tr>
 <tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
 <td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
 <td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
+</tr>
+<tr>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -655,9 +655,9 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="54">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="54">
       
-      Troubleshooting on Windows
+      Troubleshooting Desktop Application
       </a>
     
     </li>
@@ -981,6 +981,24 @@ The produced folder structure with MP3 files.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Player type</div>
+<div class="synopsis-option-desc">
+The type of MegaVoice Envoy device.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>1</code></dt>
+<dd>Type 1: This produces a folder structure that is four levels deep. At the top level there can be up to 8 folders. Each of these folders can have up to 20 sub-folders. The sub-folders can have up to 999 sub-sub-folders, each of which can contain up to 999 MP3 files.</dd>
+<dt><code>2</code></dt>
+<dd>Type 2: This produces a folder structure that is two levels deep. On the top level there can be up to 999 folders, and each of these folders can have up to 999 MP3 files.</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Book folder level</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">The folder level corresponding with the book, expressed as a 0-based number.
@@ -997,24 +1015,6 @@ equal to 1 for type 2 players.</p>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>1</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Player type</div>
-<div class="synopsis-option-desc">
-The type of MegaVoice Envoy device.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>1</code></dt>
-<dd>Type 1: This produces a folder structure that is four levels deep. At the top level there can be up to 8 folders. Each of these folders can have up to 20 sub-folders. The sub-folders can have up to 999 sub-sub-folders, each of which can contain up to 999 MP3 files.</dd>
-<dt><code>2</code></dt>
-<dd>Type 2: This produces a folder structure that is two levels deep. On the top level there can be up to 999 folders, and each of these folders can have up to 999 MP3 files.</dd>
-</dl>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>1</code>
@@ -1069,12 +1069,12 @@ Options:</pre>
 <td>The NCC file of the input DAISY 2.02.</td>
 </tr>
 <tr>
-<td>--book-folder-level [<span style="text-transform: uppercase">book-folder-level</span>]</td>
-<td>Book folder level (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
-</tr>
-<tr>
 <td>--player-type [<span style="text-transform: uppercase">player-type</span>]</td>
 <td>Player type (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
+</tr>
+<tr>
+<td>--book-folder-level [<span style="text-transform: uppercase">book-folder-level</span>]</td>
+<td>Book folder level (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

@@ -655,9 +655,9 @@
         <li class="spine-item">
       
       
-        <a href="/pipeline/Get-Help/Troubleshooting/Common-Errors-Windows" tabindex="54">
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="54">
       
-      Troubleshooting on Windows
+      Troubleshooting Desktop Application
       </a>
     
     </li>
@@ -992,6 +992,19 @@ The resulting HTML document.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Language code</div>
+<div class="synopsis-option-desc">
+Language code of the input document.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">NIMAS input</div>
 <div class="synopsis-option-desc">
 Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
@@ -1040,19 +1053,6 @@ split up if they exceed the given maximum size.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>-1</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Language code</div>
-<div class="synopsis-option-desc">
-Language code of the input document.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -1104,6 +1104,10 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
 <td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
 <td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
@@ -1114,10 +1118,6 @@ Options:</pre>
 <tr>
 <td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
 <td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
-</tr>
-<tr>
-<td>--language [<span style="text-transform: uppercase">language</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
