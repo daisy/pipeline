@@ -620,6 +620,7 @@
                                     </p:iteration-source>
                                     <p:delete match="//@exclude-inline-prefixes"/>
                                 </p:for-each>
+                                <p:split-sequence test="position()=1"/>
                                 <p:identity name="step-declaration"/>
                                 <p:count/>
                                 <p:choose>
