@@ -67,6 +67,7 @@
         <p:input port="stylesheet">
             <p:document href="report-to-html.xsl"/>
         </p:input>
+        <p:with-option name="output-base-uri" select="base-uri(/)"/>
     </p:xslt>
     <p:identity name="html"/>
 
@@ -138,6 +139,7 @@
             <p:input port="stylesheet">
                 <p:document href="report-to-junit.xsl"/>
             </p:input>
+            <p:with-option name="output-base-uri" select="base-uri(/)"/>
         </p:xslt>
     </p:for-each>
     <p:wrap-sequence wrapper="testsuites"/>

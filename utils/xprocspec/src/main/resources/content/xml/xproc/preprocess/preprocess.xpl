@@ -386,6 +386,7 @@
                                     <p:input port="stylesheet">
                                         <p:document href="xprocTestSuite-to-xprocspec.xsl"/>
                                     </p:input>
+                                    <p:with-option name="output-base-uri" select="base-uri(/)"/>
                                 </p:xslt>
                             </p:otherwise>
                         </p:choose>
@@ -620,6 +621,7 @@
                                     </p:iteration-source>
                                     <p:delete match="//@exclude-inline-prefixes"/>
                                 </p:for-each>
+                                <p:split-sequence test="position()=1"/>
                                 <p:identity name="step-declaration"/>
                                 <p:count/>
                                 <p:choose>
@@ -736,13 +738,7 @@
                             <p:input port="stylesheet">
                                 <p:document href="infer-scenarios.xsl"/>
                             </p:input>
-                            <!--
-                                This was added to fix an issue where some documents in the output of
-                                pxi:test-preprocess would have a wrong base uri in certain
-                                cases. I'm unsure whether this is a bug in the XSLT, in other
-                                XProcSpec code, in Saxon or in Calabash.
-                            -->
-                            <p:with-option name="output-base-uri" select="base-uri(/*)"/>
+                            <p:with-option name="output-base-uri" select="base-uri(/)"/>
                         </p:xslt>
                         <p:for-each>
                             <p:iteration-source select="/*/*"/>

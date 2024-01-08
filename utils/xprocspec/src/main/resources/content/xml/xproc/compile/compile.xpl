@@ -78,6 +78,7 @@
                             <p:input port="stylesheet">
                                 <p:document href="description-to-invocation.xsl"/>
                             </p:input>
+                            <p:with-option name="output-base-uri" select="base-uri(/)"/>
                         </p:xslt>
                         <pxi:message message="   * done">
                             <p:with-option name="logfile" select="$logfile">

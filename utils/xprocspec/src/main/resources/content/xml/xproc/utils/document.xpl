@@ -343,11 +343,12 @@
                         <p:with-param name="test-base-uri" select="base-uri(/)">
                             <p:pipe step="main" port="document"/>
                         </p:with-param>
+                        <p:with-option name="output-base-uri" select="resolve-uri(base-uri(/*),$unfiltered-base)"/>
                     </p:xslt>
                     <p:add-attribute match="/*" attribute-name="type" attribute-value="inline"/>
                     <p:add-attribute match="/*" attribute-name="xml:space" attribute-value="preserve"/>
                     <p:add-attribute match="/*" attribute-name="xml:base">
-                        <p:with-option name="attribute-value" select="resolve-uri(base-uri(/*),$unfiltered-base)"/>
+                        <p:with-option name="attribute-value" select="base-uri(/)"/>
                     </p:add-attribute>
                 </p:for-each>
             </p:for-each>

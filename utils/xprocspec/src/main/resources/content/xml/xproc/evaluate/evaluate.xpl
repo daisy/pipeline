@@ -208,6 +208,7 @@
                                                 <p:input port="stylesheet">
                                                     <p:pipe port="result" step="xpath-xslt"/>
                                                 </p:input>
+                                                <p:with-option name="output-base-uri" select="base-uri(/)"/>
                                             </p:xslt>
                                         </p:for-each>
 
@@ -485,14 +486,7 @@ Error message: "{/*/text()/normalize-space()}"
                                             <p:input port="stylesheet">
                                                 <p:document href="expect-to-custom-invocation.xsl"/>
                                             </p:input>
-                                            <!--
-                                                This was added because in some cases the input has an empty
-                                                base URI, so that the output pipeline also gets an empty base
-                                                URI, which causes an error in the Calabash implementation of
-                                                p:split-sequence. The exact value of the base URI is not
-                                                important.
-                                            -->
-                                            <p:with-option name="output-base-uri" select="'file:/irrelevant'"/>
+                                            <p:with-option name="output-base-uri" select="base-uri(/)"/>
                                         </p:xslt>
 
                                         <!-- multiplex context and expect document sequences for cx:eval -->
