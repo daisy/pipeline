@@ -55,6 +55,9 @@
 	<xsl:template match="dtb:sup[(text() and count(node())=1 and normalize-space()='') or not(node())]">
 		<xsl:apply-templates/>
 	</xsl:template>
+	<xsl:template match="dtb:bdo[(text() and count(node())=1 and normalize-space()='') or not(node())]">
+		<xsl:apply-templates/>
+	</xsl:template>
 	<xsl:template match="dtb:h1|dtb:h2|dtb:h3|dtb:h4|dtb:h5|dtb:h6|dtb:hd">
 		<xsl:choose>
 			<xsl:when test="normalize-space()!=''"><xsl:call-template name="copy"/></xsl:when>
