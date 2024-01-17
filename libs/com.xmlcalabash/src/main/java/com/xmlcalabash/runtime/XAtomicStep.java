@@ -337,7 +337,7 @@ public class XAtomicStep extends XStep {
             }
 
             if (totalDocs != 1 && !input.getSequence()) {
-                throw XProcException.dynamicError(6, step.getNode(), totalDocs + " documents appear on the '" + port + "' port.");
+                throw XProcException.dynamicError(6, this, totalDocs + " documents appear on the '" + port + "' port.");
             }
         }
 

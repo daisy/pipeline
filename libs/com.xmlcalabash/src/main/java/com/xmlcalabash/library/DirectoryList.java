@@ -160,7 +160,12 @@ public class DirectoryList extends DefaultStep {
         } catch (FileNotFoundException e) {
             throw XProcException.stepError(17);
         } catch (IOException e) {
-            throw XProcException.stepError(12);
+            throw XProcException.stepError(12, step);
+        } catch (XProcException e) {
+            if (e.getErrorCode().equals(XProcConstants.stepError(12)))
+                throw new XProcException(e.getErrorCode(), step, e.getMessage(), e.getErrorCause());
+            else
+                throw e;
         }
 
         tree.addEndElement();

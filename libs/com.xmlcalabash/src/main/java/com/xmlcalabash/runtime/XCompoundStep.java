@@ -270,7 +270,14 @@ public class XCompoundStep extends XAtomicStep {
                     for (ReadablePipe reader : inputs.get(port)) {
                         while (reader.moreDocuments()) {
                             XdmNode doc = reader.read();
-                            pipe.write(doc);
+                            try {
+	                            pipe.write(doc);
+                            } catch (XProcException e) {
+	                            if (e.getErrorCode().equals(XProcConstants.dynamicError(7)))
+		                            throw new XProcException(e.getErrorCode(), this, e.getMessage(), e.getErrorCause());
+	                            else
+		                            throw e;
+                            }
                             logger.trace(MessageFormatter.nodeMessage(step.getNode(), "Compound output copy from " + reader + " to " + pipe));
                         }
                     }

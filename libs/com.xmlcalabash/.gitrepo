@@ -7,5 +7,5 @@
 	remote = git@github.com:daisy/xmlcalabash1.git
 	branch = org.daisy.libs
 	commit = cfb318a6142df5cf495f2a8f611aefba9574bd9a
-	parent = d4eaf44987cc1d3dc091ff93027648d05b609ae8
+	parent = 56836ecd985cb518311a06f3a09a80806fdc6f68
 	cmdver = 0.3.1

@@ -283,7 +283,13 @@ public class XSLT extends DefaultStep {
                 transformer.setBaseOutputURI(outputBaseURI.toASCIIString());
                 if (result != null) {
                     // The following hack works around https://saxonica.plan.io/issues/1724
-                    result.setBaseURI(outputBaseURI);
+                    try {
+                        result.setBaseURI(outputBaseURI);
+                    } catch (IllegalArgumentException e) {
+                        // e.g. if supplied base URI is not absolute
+                        throw XProcException.fromException(e)
+                                            .rebase(null, new RuntimeException().getStackTrace());
+                    }
                 }
             }
 
