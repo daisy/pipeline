@@ -155,26 +155,26 @@
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline" base-uri="temp-dir">
 					<d:fileset>
-						<d:file href="test/output-dir/1/volume%201/001/001/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp1.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/002/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp2.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/003/001%20Library%20of%20Congress%20Cataloging-in-Publication%20Data.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp3.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/004/001%20Contents.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp4.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/005/001%20Great%20Apes.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp5.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/006/001%20Chimpanzees%20And%20People.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp6.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/007/001%20Talking%20To%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp7.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/008/001%20What%20They%20Look%20Like.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp8.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/009/001%20The%20Chimpanzee's%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp9.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/010/001%20Everyday%20Life.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp10.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/011/001%20Chimp%20Communities.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp11.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/012/001%20Baby%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp12.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/013/001%20Jane%20Goodall.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp13.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/014/001%20Important%20Words.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp14.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/015/001%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp15.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/015/002%20All%20about%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp16.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/015/003%20African%20Primates%20at%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp17.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/015/004%20Animal%20Bytes:%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp18.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/016/001%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp19.mp3"/>
-						<d:file href="test/output-dir/1/volume%201/001/017/001%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp20.mp3"/>
+						<d:file href="test/output-dir/1/001/001/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp1.mp3"/>
+						<d:file href="test/output-dir/1/001/002/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp2.mp3"/>
+						<d:file href="test/output-dir/1/001/003/001%20Library%20of%20Congress%20Cataloging-in-Publication%20Data.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp3.mp3"/>
+						<d:file href="test/output-dir/1/001/004/001%20Contents.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp4.mp3"/>
+						<d:file href="test/output-dir/1/001/005/001%20Great%20Apes.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp5.mp3"/>
+						<d:file href="test/output-dir/1/001/006/001%20Chimpanzees%20And%20People.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp6.mp3"/>
+						<d:file href="test/output-dir/1/001/007/001%20Talking%20To%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp7.mp3"/>
+						<d:file href="test/output-dir/1/001/008/001%20What%20They%20Look%20Like.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp8.mp3"/>
+						<d:file href="test/output-dir/1/001/009/001%20The%20Chimpanzee's%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp9.mp3"/>
+						<d:file href="test/output-dir/1/001/010/001%20Everyday%20Life.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp10.mp3"/>
+						<d:file href="test/output-dir/1/001/011/001%20Chimp%20Communities.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp11.mp3"/>
+						<d:file href="test/output-dir/1/001/012/001%20Baby%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp12.mp3"/>
+						<d:file href="test/output-dir/1/001/013/001%20Jane%20Goodall.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp13.mp3"/>
+						<d:file href="test/output-dir/1/001/014/001%20Important%20Words.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp14.mp3"/>
+						<d:file href="test/output-dir/1/001/015/001%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp15.mp3"/>
+						<d:file href="test/output-dir/1/001/015/002%20All%20about%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp16.mp3"/>
+						<d:file href="test/output-dir/1/001/015/003%20African%20Primates%20at%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp17.mp3"/>
+						<d:file href="test/output-dir/1/001/015/004%20Animal%20Bytes:%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp18.mp3"/>
+						<d:file href="test/output-dir/1/001/016/001%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp19.mp3"/>
+						<d:file href="test/output-dir/1/001/017/001%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp20.mp3"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -192,23 +192,23 @@
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline" base-uri="temp-dir">
 					<d:fileset>
-						<d:file href="test/output-dir/2/volume%201/001/001/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp1.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/002%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp2.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/003%20Library%20of%20Congress%20Cataloging-in-Publication%20Data.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp3.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/004%20Contents.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp4.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/005%20Great%20Apes.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp5.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/006%20Chimpanzees%20And%20People.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp6.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/007%20Talking%20To%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp7.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/008%20What%20They%20Look%20Like.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp8.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/009%20The%20Chimpanzee's%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp9.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/010%20Everyday%20Life.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp10.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/011%20Chimp%20Communities.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp11.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/012%20Baby%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp12.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/013%20Jane%20Goodall.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp13.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/014%20Important%20Words.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp14.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/015%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp15.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/016%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp16.mp3"/>
-						<d:file href="test/output-dir/2/volume%201/001/001/017%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp17.mp3"/>
+						<d:file href="test/output-dir/2/001/001/001%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp1.mp3"/>
+						<d:file href="test/output-dir/2/001/001/002%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp2.mp3"/>
+						<d:file href="test/output-dir/2/001/001/003%20Library%20of%20Congress%20Cataloging-in-Publication%20Data.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp3.mp3"/>
+						<d:file href="test/output-dir/2/001/001/004%20Contents.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp4.mp3"/>
+						<d:file href="test/output-dir/2/001/001/005%20Great%20Apes.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp5.mp3"/>
+						<d:file href="test/output-dir/2/001/001/006%20Chimpanzees%20And%20People.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp6.mp3"/>
+						<d:file href="test/output-dir/2/001/001/007%20Talking%20To%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp7.mp3"/>
+						<d:file href="test/output-dir/2/001/001/008%20What%20They%20Look%20Like.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp8.mp3"/>
+						<d:file href="test/output-dir/2/001/001/009%20The%20Chimpanzee's%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp9.mp3"/>
+						<d:file href="test/output-dir/2/001/001/010%20Everyday%20Life.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp10.mp3"/>
+						<d:file href="test/output-dir/2/001/001/011%20Chimp%20Communities.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp11.mp3"/>
+						<d:file href="test/output-dir/2/001/001/012%20Baby%20Chimps.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp12.mp3"/>
+						<d:file href="test/output-dir/2/001/001/013%20Jane%20Goodall.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp13.mp3"/>
+						<d:file href="test/output-dir/2/001/001/014%20Important%20Words.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp14.mp3"/>
+						<d:file href="test/output-dir/2/001/001/015%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp15.mp3"/>
+						<d:file href="test/output-dir/2/001/001/016%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp16.mp3"/>
+						<d:file href="test/output-dir/2/001/001/017%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/2/tmp17.mp3"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>

@@ -196,7 +196,7 @@
 		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="add-clips-to-dest-file">
+	<xsl:template name="add-clips-to-dest-file" as="element(d:file)*">
 		<xsl:param name="audio-clips" as="element(audio)*" required="yes"/>
 		<xsl:param name="dest-file" as="xs:string" required="yes"/>
 		<xsl:variable name="clips" as="element(d:clip)*">

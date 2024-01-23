@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.14.23-SNAPSHOT</version>
+  <version>1.14.23</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -35,7 +35,7 @@
     <!--<module>scripts-utils/daisy202-utils</module>-->
     <!--<module>scripts-utils/daisy3-utils</module>-->
     <!--<module>scripts-utils/dtbook-utils</module>-->
-    <module>scripts-utils/epub-utils</module>
+    <!--<module>scripts-utils/epub-utils</module>-->
     <!--<module>scripts-utils/epubcheck-adapter</module>-->
     <!--<module>scripts-utils/epub3-to-html</module>-->
     <!--<module>scripts-utils/mathml-utils</module>-->
@@ -44,9 +44,9 @@
     <!--<module>scripts-utils/odf-utils</module>-->
     <!--<module>scripts-utils/zedai-utils</module>-->
     <!--<module>nlp/nlp-common</module>-->
-    <!--<module>nlp/lexers/ruled-lexer</module>-->
+    <module>nlp/lexers/ruled-lexer</module>
     <!--<module>nlp/lexers/light-lexer</module>-->
-    <!--<module>nlp/lexers/omnilang-lexer</module>-->
+    <module>nlp/lexers/omnilang-lexer</module>
     <!--<module>nlp/zedai-break-detection</module>-->
     <!--<module>nlp/html-break-detection</module>-->
     <!--<module>nlp/dtbook-break-detection</module>-->
@@ -61,7 +61,7 @@
     <!--<module>tts/tts-adapters/tts-adapter-espeak</module>-->
     <!--<module>tts/tts-adapters/tts-adapter-acapela</module>-->
     <!--<module>tts/tts-adapters/tts-adapter-osx</module>-->
-    <module>tts/tts-adapters/tts-adapter-sapinative</module>
+    <!--<module>tts/tts-adapters/tts-adapter-sapinative</module>-->
     <!--<module>tts/tts-adapters/tts-adapter-qfrency</module>-->
     <!--<module>tts/tts-adapters/tts-adapter-google</module>-->
     <!--<module>tts/tts-adapters/tts-adapter-cereproc</module>-->
@@ -70,7 +70,7 @@
     <!--<module>tts/mathml-to-ssml</module>-->
     <!--<module>braille/braille-common</module>-->
     <!--<module>braille/braille-css-utils</module>-->
-    <!--<module>braille/pef-utils</module>-->
+    <module>braille/pef-utils</module>
     <!--<module>braille/obfl-utils</module>-->
     <!--<module>braille/liblouis-utils</module>-->
     <!--<module>braille/dotify-utils</module>-->
@@ -79,12 +79,12 @@
     <!--<module>scripts/daisy202-to-epub3</module>-->
     <!--<module>scripts/daisy202-validator</module>-->
     <!--<module>scripts/daisy202-to-daisy3</module>-->
-    <!--<module>scripts/daisy202-to-mp3</module>-->
+    <module>scripts/daisy202-to-mp3</module>
     <!--<module>scripts/daisy3-to-daisy202</module>-->
-    <!--<module>scripts/daisy3-to-epub3</module>-->
-    <!--<module>scripts/daisy3-to-mp3</module>-->
+    <module>scripts/daisy3-to-epub3</module>
+    <module>scripts/daisy3-to-mp3</module>
     <!--<module>scripts/dtbook-to-daisy3</module>-->
-    <module>scripts/dtbook-to-epub3</module>
+    <!--<module>scripts/dtbook-to-epub3</module>-->
     <!--<module>scripts/dtbook-to-html</module>-->
     <!--<module>scripts/dtbook-to-odt</module>-->
     <!--<module>scripts/dtbook-to-pef</module>-->
@@ -139,4 +139,8 @@
       </plugin>
     </plugins>
   </build>
+
+  <scm>
+    <tag>v1.14.23</tag>
+  </scm>
 </project>

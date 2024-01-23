@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.23-SNAPSHOT</version>
+    <version>1.14.23</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
   <artifactId>nlp-omnilang-lexer</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Omni-lingual Lexer</name>

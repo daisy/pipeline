@@ -1,4 +1,4 @@
-package org.daisy.pipeline.braille.pef.calabash.impl;
+package org.daisy.pipeline.braille.pef.calabash.impl.pdf; // dedicated package to make openhtmltopdf dependency optional
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -68,7 +68,7 @@ import org.slf4j.LoggerFactory;
 
 public class PEF2PDFStep extends DefaultStep implements XProcStep {
 
-	private static final Logger logger = LoggerFactory.getLogger(PEF2TextStep.class);
+	private static final Logger logger = LoggerFactory.getLogger(PEF2PDFStep.class);
 
 	private static final QName _SOURCE = new QName("source");
 	private static final net.sf.saxon.s9api.QName _HREF = new net.sf.saxon.s9api.QName("href");

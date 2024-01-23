@@ -7,8 +7,8 @@
                 name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<h1 px:role="name">DAISY 3 to MegaVoice multi-level</h1>
-		<p px:role="desc">Transforms a DAISY 3 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices (all versions except the Envoy Connect).</p>
+		<h1 px:role="name">DAISY 3 to navigable MP3 file-set</h1>
+		<p px:role="desc">Transforms a DAISY 3 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices.</p>
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/">
 			Online documentation
 		</a>
@@ -21,10 +21,7 @@
 		</p:documentation>
 	</p:input>
 
-	<p:option name="player-type">
-		<!-- defined in ../../../../../common-options.xpl -->
-	</p:option>
-	<p:option name="book-folder-level">
+	<p:option name="folder-depth">
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
@@ -73,9 +70,10 @@
 		<p:input port="source.in-memory">
 			<p:pipe step="load" port="result.in-memory"/>
 		</p:input>
-		<p:with-option name="file-limit" select="     if ($player-type='1') then [8,20,999,999]
-		                                         else  (: $player-type='2' :)    [     999,999]"/>
-		<p:with-option name="level-offset" select="xs:integer($book-folder-level)"/>
+		<p:with-option name="file-limit" select="     if ($folder-depth='1') then [        1,999]
+		                                         else if ($folder-depth='2') then [    1,999,999]
+		                                         else  (: $folder-depth='3' :)    [1,999,999,999]"/>
+		<p:with-option name="level-offset" select="1"/>
 		<p:with-option name="output-dir" select="$result"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 	</px:daisy3-to-mp3>

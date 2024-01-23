@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-bom</artifactId>
-  <version>1.14.23-SNAPSHOT</version>
+  <version>1.14.23</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules BoM</name>
@@ -108,7 +108,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>pef-utils</artifactId>
-        <version>5.1.0</version>
+        <version>5.1.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -191,12 +191,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-omnilang-lexer</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>nlp-ruled-lexer</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
       </dependency>
       <!-- <dependency> -->
       <!--   <groupId>org.daisy.pipeline.modules</groupId> -->
@@ -294,7 +294,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy202-to-mp3</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -304,12 +304,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-to-epub3</artifactId>
-        <version>3.0.2</version>
+        <version>3.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>daisy3-to-mp3</artifactId>
-        <version>1.2.2</version>
+        <version>1.2.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -706,4 +706,8 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <scm>
+    <tag>v1.14.23</tag>
+  </scm>
 </project>

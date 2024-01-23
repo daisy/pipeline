@@ -102,7 +102,7 @@
         <p:input port="source.in-memory">
             <p:pipe step="load" port="result.in-memory"/>
         </p:input>
-        <p:with-option name="mediaoverlays" select="$mediaoverlays"/>
+        <p:with-option name="mediaoverlays" select="$mediaoverlays='true'"/>
         <p:with-option name="validation" select="$validation"/>
         <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>

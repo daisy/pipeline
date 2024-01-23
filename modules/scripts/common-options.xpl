@@ -487,45 +487,47 @@ The `wkhtmltopdf` tool must be installed on the system for the PDF export to wor
 	    daisy202-to-mp3
 	    daisy3-to-mp3
 	-->
-	<p:option name="player-type" select="'1'">
+	<p:option name="folder-depth" select="'1'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Player type</h2>
-			<p px:role="desc" xml:space="preserve">The type of MegaVoice Envoy device.</p>
+			<h2 px:role="name">Folder depth</h2>
+			<p px:role="desc" xml:space="preserve">The number of folder levels in the produced folder structure.
+
+The book is always, if possible, contained in a single top-level folder with MP3 files or
+sub-folders (files for folder depth 1, sub-folders for folder depths greater than 1) that correspond
+with top-level sections of the book.
+
+If there are more top-level sections than the maximum number of files/folders that a top-level
+folder can contain, the book is divided over multiple top-level folders. Similarly, if the number of
+level-two sections within a top-level section exceeds the maximum number of files/folders that a
+level-two folder can contain, the top-level section is divided over multiple level-two folders.</p>
 		</p:documentation>
 		<p:pipeinfo>
 			<px:type>
 				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
 					<value>1</value>
-					<a:documentation xml:lang="en">Type 1: This produces a folder structure that is four
-					levels deep. At the top level there can be up to 8 folders. Each of these
-					folders can have up to 20 sub-folders. The sub-folders can have up to 999
-					sub-sub-folders, each of which can contain up to 999 MP3
-					files.</a:documentation>
+					<a:documentation xml:lang="en">Produces a folder structure that is one level
+					deep. At the top level there is 1 folder, that contains entire book.  This
+					folder can have up to 999 MP3 files. Each MP3 file corresponds with a top-level
+					section of the book. This setting is suited for simple devices of type Envoy
+					Connect/Vine C2.</a:documentation>
 					<value>2</value>
-					<a:documentation xml:lang="en">Type 2: This produces a folder structure that is two
-					levels deep. On the top level there can be up to 999 folders, and each of these
-					folders can have up to 999 MP3 files.</a:documentation>
+					<a:documentation xml:lang="en">Produces a folder structure that is two levels
+					deep. At the top level there is 1 folder that contains entire book. This folder
+					can have up to 999 sub-folders, each of which can contain up to 999 MP3
+					files. Each MP3 file corresponds with a level-two section, a top-level section
+					without sub-sections, or the content within a top-level section before the first
+					sub-section.</a:documentation>
+					<value>3</value>
+					<a:documentation xml:lang="en">Produces a folder structure that is three levels
+					deep. At the top level there is 1 folder that contains entire book. This folder
+					can have up to 999 sub-folders. The sub-folders can have up to 999
+					sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file
+					corresponds with a level-three section, a top-level or level-two section without
+					sub-sections, or the content within a top-level or level-two section before the
+					first sub-section.</a:documentation>
 				</choice>
 			</px:type>
 		</p:pipeinfo>
-	</p:option>
-
-	<!--
-	    daisy202-to-mp3
-	    daisy3-to-mp3
-	-->
-	<p:option name="book-folder-level" px:type="integer" select="'1'">
-		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<h2 px:role="name">Book folder level</h2>
-			<p px:role="desc" xml:space="preserve">The folder level corresponding with the book, expressed as a 0-based number.
-
-Value `0` means that top-level folders correspond with top-level sections of the book. Value `1`
-means that the book is contained in a single top-level folder (if it is not too big) with
-sub-folders that correspond with top-level sections of the book.
-
-Must be a non-negative integer value, less than or equal to 3 for type 1 players, and less than or
-equal to 1 for type 2 players.</p>
-		</p:documentation>
 	</p:option>
 
 </p:declare-step>

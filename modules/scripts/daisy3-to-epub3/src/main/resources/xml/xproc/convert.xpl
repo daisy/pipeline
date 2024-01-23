@@ -3,6 +3,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-epub3"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:daisy3-to-epub3" version="1.0" name="main">
 
@@ -14,7 +15,7 @@
         <p:pipe step="convert" port="result.in-memory"/>
     </p:output>
 
-    <p:option name="mediaoverlays" required="true"/>
+    <p:option name="mediaoverlays" cx:as="xs:boolean" required="true"/>
     <p:option name="validation" cx:type="off|report|abort" select="'off'">
         <p:documentation>
             <p>Whether to stop processing and raise an error on validation issues (abort), only
