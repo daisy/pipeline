@@ -947,45 +947,32 @@ combination of a text layer and an audio layer synchronized with each
 other.</p>
 
 <p>The way text-to-speech is configured is common to all scripts. Speech
-engines are configured with properties, and the exact aural rendering
-of the document (TTS voices, pronunciations, speech pitch, speech
-rates, speech levels, etc.) is controlled with CSS style sheets and
-PLS lexicons.</p>
+engines are configured with <a href="/pipeline/Configuration-Files#user-properties">user
+properties</a>,
+and the exact aural rendering of the document (TTS voices,
+pronunciations, speech pitch, speech rates, speech levels, etc.) is
+controlled with TTS configuration files, CSS style sheets and PLS
+lexicons.</p>
 
-<p>The following two properties must be set through the
-<a href="/pipeline/Configuration-Files#user-properties">pipeline.properties
-file</a>.</p>
+<p>TTS configuration files may either be specified “statically”, through
+the <code>org.daisy.pipeline.tts.config</code> user property, or “dynamically”
+through an optional script input.</p>
 
 <dl>
   <dt><code>org.daisy.pipeline.tts.config</code></dt>
-  <dd>File to load TTS configuration properties from at start-up</dd>
+  <dd>File to load TTS configurations from at start-up</dd>
   <dd>Defaults to the file “tts-default-config.xml” located in the “etc/”
 directory in the base directory of the Pipeline installation, or
 “/etc/opt/daisy-pipeline2/tts-default-config.xml” on Debian/Ubuntu.</dd>
-  <dt><code>org.daisy.pipeline.tts.host.protection</code></dt>
-  <dd>Allow dynamic setting of properties</dd>
-  <dd>Defaults to “true”</dd>
 </dl>
 
-<p>All other TTS properties may be specified through either the
-<a href="/pipeline/Configuration-Files#user-properties">pipeline.properties
-file</a>
-or special TTS configuration files. Aural CSS style sheets and PLS
-lexicons must be specified in TTS configuration files.</p>
-
-<p>Configuration files may either be specified “statically”, through the
-user property <code>org.daisy.pipeline.tts.config</code> or “dynamically” through
-the optional script input. If <code>org.daisy.pipeline.tts.host.protection</code>
-is true, properties in dynamic configuration files are ignored. The
-configuration file format is as follows:</p>
+<p>The TTS configuration file format is as follows:</p>
 
 <div class="language-xml highlighter-coderay">
 <div class="CodeRay">
   <div class="code"><pre><span class="tag">&lt;config&gt;</span>
-  <span class="tag">&lt;property</span> <span class="attribute-name">key</span>=<span class="string"><span class="delimiter">"</span><span class="content">org.daisy.pipeline.tts.acapela.samplerate</span><span class="delimiter">"</span></span> <span class="attribute-name">value</span>=<span class="string"><span class="delimiter">"</span><span class="content">44100</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
   <span class="tag">&lt;voice</span> <span class="attribute-name">engine</span>=<span class="string"><span class="delimiter">"</span><span class="content">acapela</span><span class="delimiter">"</span></span> <span class="attribute-name">name</span>=<span class="string"><span class="delimiter">"</span><span class="content">claire</span><span class="delimiter">"</span></span> <span class="attribute-name">lang</span>=<span class="string"><span class="delimiter">"</span><span class="content">fr</span><span class="delimiter">"</span></span> <span class="attribute-name">gender</span>=<span class="string"><span class="delimiter">"</span><span class="content">female-adult</span><span class="delimiter">"</span></span> <span class="attribute-name">priority</span>=<span class="string"><span class="delimiter">"</span><span class="content">12</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;css</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">css/aural.css</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
-  <span class="tag">&lt;lexicon</span> <span class="attribute-name">href</span>=<span class="string"><span class="delimiter">"</span><span class="content">lexicons/fr.pls</span><span class="delimiter">"</span></span><span class="tag">/&gt;</span>
+  ...
 <span class="tag">&lt;/config&gt;</span>
 </pre></div>
 </div>
@@ -996,14 +983,6 @@ TODO: what about <annotations type="" href="">
                     ...
                  </annotations>
 -->
-
-<p>Both relative and absolute paths are accepted as a value of the “href”
-attributes. Relative paths are relative to the configuration file’s
-location.</p>
-
-<!-- Absolute paths work only when the Pipeline is running in "local
-mode" (true by default, see
-[Pipeline as a Service](http://daisy.github.io/pipeline/Get-Help/User-Guide/Pipeline-as-Service/)). -->
 
 <!-- The elements can be put in any namespace since namespaces aren’t
 checked. If there is any syntax error in the file, you will be
@@ -1063,7 +1042,7 @@ install' already takes care of installing eSpeak to a known
 location. On Windows, however, the PATH variable must be changed
 manually using the 'environment variables' panel.--></p>
 
-<p>The audio encoder and the TTS processors are configured with
+<p>The audio encoder and the TTS processors are configured with user
 properties. The following properties are available:</p>
 
 <h3 id="common-settings">Common settings</h3>
@@ -1284,30 +1263,26 @@ directories specified by the environment variable “PATH”.</dd>
 
 <h2 id="css">CSS</h2>
 
-<p>The text-to-speech voices and prosody can be configured with Aural
-CSS. To do so, add one or more “css” elements to the configuration
-file. If the “href” attribute is missing, the CSS stylesheets will be
-interpreted as inlined in the configuration file:</p>
+<p>The text-to-speech voices and prosody can be configured with aural
+CSS. To do so, attach CSS style sheets to the source document. Style
+sheets can be linked (using an <a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing
+instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded
+(using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or
+inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>). Below is an
+example of an aural CSS style sheet:</p>
 
-<div class="language-xml highlighter-coderay">
+<div class="language-css highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="tag">&lt;config&gt;</span>
-  <span class="tag">&lt;css&gt;</span>
-    p {
-      volume: soft;
-      voice-family: female;
-    }
-  <span class="tag">&lt;/css&gt;</span>
-<span class="tag">&lt;/config&gt;</span>
+  <div class="code"><pre><span class="tag">p</span> {
+  <span class="key">volume</span>: <span class="value">soft</span>;
+  <span class="key">voice-family</span>: <span class="value">female</span>;
+}
 </pre></div>
 </div>
 </div>
-
-<p>In addition to the configuration option, local CSS stylesheets
-referenced in
-<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instructions</a>
-and by <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘links’</a> in the
-header will be loaded too.</p>
 
 <p>The CSS properties that are supported by DAISY Pipeline are a subset
 of <a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">Aural CSS 2.1</a> (and partly

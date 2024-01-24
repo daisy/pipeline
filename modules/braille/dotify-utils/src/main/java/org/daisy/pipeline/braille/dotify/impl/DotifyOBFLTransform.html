@@ -21,7 +21,7 @@
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
 <a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.AbstractTransform;
 <a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.AbstractTransformProvider;
 <a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables;
@@ -85,24 +85,24 @@
 <a class="jxr_linenumber" name="L76" href="#L76">76</a>  			}
 <a class="jxr_linenumber" name="L77" href="#L77">77</a>  			
 <a class="jxr_linenumber" name="L78" href="#L78">78</a>  			@Override
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CxEvalBasedTransformer(href, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>).newStep(runtime, step);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  			<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map&lt;String,String&gt; properties) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> CxEvalBasedTransformer(href, <strong class="jxr_keyword">null</strong>, <strong class="jxr_keyword">null</strong>).newStep(runtime, step, monitor, properties);
 <a class="jxr_linenumber" name="L81" href="#L81">81</a>  			}
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  			
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  			@Override
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  			<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"o.d.p.b.dotify.impl.DotifyOBFLTransform$Provider$TransformImpl"</span>);
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  				<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"DotifyOBFLTransform$Provider$TransformImpl"</span>);
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  			}
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		}
 <a class="jxr_linenumber" name="L88" href="#L88">88</a>  		
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  		@Override
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(DotifyOBFLTransform.Provider.<strong class="jxr_keyword">class</strong>.getName());
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  			<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"DotifyOBFLTransform$Provider"</span>);
 <a class="jxr_linenumber" name="L92" href="#L92">92</a>  		}
 <a class="jxr_linenumber" name="L93" href="#L93">93</a>  	}
 <a class="jxr_linenumber" name="L94" href="#L94">94</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

@@ -70,7 +70,7 @@
 <a class="jxr_linenumber" name="L61" href="#L61">61</a>  	
 <a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Reference(
 <a class="jxr_linenumber" name="L63" href="#L63">63</a>  		name = <span class="jxr_string">"TexHyphenatorTableRegistry"</span>,
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		unbind = <span class="jxr_string">"unbindTableRegistry"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		unbind = <span class="jxr_string">"-"</span>,
 <a class="jxr_linenumber" name="L65" href="#L65">65</a>  		service = TexHyphenatorTableRegistry.<strong class="jxr_keyword">class</strong>,
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  		cardinality = ReferenceCardinality.MANDATORY,
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  		policy = ReferencePolicy.STATIC
@@ -158,37 +158,41 @@
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 				<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">char</strong> ZWSP = '\u200B';
 <a class="jxr_linenumber" name="L150" href="#L150">150</a> 
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 				<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isCodePointAware() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 		
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">protected</strong> byte[] getHyphenationOpportunities(String textWithoutHyphens) <strong class="jxr_keyword">throws</strong> RuntimeException {
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 						Tuple2&lt;String,byte[]&gt; t = extractHyphens(
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 							hyphenator.hyphenate(textWithoutHyphens), <strong class="jxr_keyword">true</strong>, SHY, ZWSP);
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						<strong class="jxr_keyword">if</strong> (!t._1.equals(textWithoutHyphens))
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Unexpected output from "</span> + hyphenator);
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 						<strong class="jxr_keyword">return</strong> t._2; }
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 					<strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Error during TeX hyphenation"</span>, e); }
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 				}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 			};
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 	}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 	<strong class="jxr_keyword">private</strong> URL resolveTable(URI table) {
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableRegistry.resolve(table);
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (resolvedTable == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Hyphenation table "</span> + table + <span class="jxr_string">" could not be resolved"</span>);
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">return</strong> resolvedTable;
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 	}
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	@Override
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 	<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(TexHyphenatorSimpleImpl.<strong class="jxr_keyword">class</strong>.getName());
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	}
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(TexHyphenatorSimpleImpl.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 	
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> }
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">boolean</strong> isLanguageAdaptive() { <strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 		
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> <em class="jxr_javadoccomment">				 * @param language ignored</em>
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> <em class="jxr_javadoccomment">				 */</em>
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 				<strong class="jxr_keyword">protected</strong> byte[] getHyphenationOpportunities(String textWithoutHyphens, Locale language) <strong class="jxr_keyword">throws</strong> RuntimeException {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 						Tuple2&lt;String,byte[]&gt; t = extractHyphens(
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 							hyphenator.hyphenate(textWithoutHyphens), <strong class="jxr_keyword">true</strong>, SHY, ZWSP);
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 						<strong class="jxr_keyword">if</strong> (!t._1.equals(textWithoutHyphens))
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Unexpected output from "</span> + hyphenator);
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 						<strong class="jxr_keyword">return</strong> t._2; }
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 					<strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 						<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Error during TeX hyphenation"</span>, e); }
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				}
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			};
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 	
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 	<strong class="jxr_keyword">private</strong> URL resolveTable(URI table) {
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 		URL resolvedTable = isAbsoluteFile(table) ? URLs.asURL(table) : tableRegistry.resolve(table);
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 		<strong class="jxr_keyword">if</strong> (resolvedTable == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Hyphenation table "</span> + table + <span class="jxr_string">" could not be resolved"</span>);
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> resolvedTable;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 	
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	@Override
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 	<strong class="jxr_keyword">public</strong> ToStringHelper toStringHelper() {
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 		<strong class="jxr_keyword">return</strong> MoreObjects.toStringHelper(<span class="jxr_string">"TexHyphenatorSimpleImpl"</span>);
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 	}
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 	
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(TexHyphenatorSimpleImpl.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 	
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

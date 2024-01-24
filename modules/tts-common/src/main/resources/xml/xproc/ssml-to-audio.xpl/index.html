@@ -12,17 +12,20 @@
 
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"application/ssml+xml"</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-      &lt;<span class="code-xml-element-local-name">p</span>&gt;SSML documents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-      &lt;<span class="code-xml-element-local-name">p</span>&gt;It is assumed that content documents have been prepared so that ID attributes are unique
-      within the whole sequence of SSML documents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
-      &lt;<span class="code-xml-element-local-name">p</span>&gt;All &lt;<span class="code-xml-element-local-name">code</span>&gt;s&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements are expected to have a &lt;<span class="code-xml-element-local-name">code</span>&gt;xml:lang&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;The SSML documents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;All &lt;<span class="code-xml-element-local-name">code</span>&gt;s&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements are expected to have &lt;<span class="code-xml-element-local-name">code</span>&gt;id&lt;/<span class="code-xml-element-local-name">code</span>&gt; and &lt;<span class="code-xml-element-local-name">code</span>&gt;xml:lang&lt;/<span class="code-xml-element-local-name">code</span>&gt;
+      attributes.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      &lt;<span class="code-xml-element-local-name">p</span>&gt;Mark names are expected to be of the form "X___Y", where "X" uniquely identifies the part
+      of the sentence before the mark (and after the preceding mark), and where "Y" uniquely
+      identifies the part of the sentence after the mark (and before the following mark).&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"config"</span>/&gt;
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
       &lt;<span class="code-xml-element-local-name">p</span>&gt;&lt;<span class="code-xml-element-local-name">code</span>&gt;d:audio-clips&lt;/<span class="code-xml-element-local-name">code</span>&gt; document that lists the generated audio files and maps SSML
-      elements (sentences) to audio clips (audio file, start time, end time).&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+      elements (sentences, or parts of sentences before/after/between marks) to audio clips (audio
+      file, start time, end time).&lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"status"</span>&gt;
@@ -32,7 +35,7 @@
         format is an extension of the "&lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://daisy.github.io/pipeline/StatusXML"</span>&gt;application/vnd.pipeline.status+xml&lt;/<span class="code-xml-element-local-name">a</span>&gt;"
         format: a &lt;<span class="code-xml-element-local-name">code</span>&gt;d:status&lt;/<span class="code-xml-element-local-name">code</span>&gt; element with a &lt;<span class="code-xml-element-local-name">code</span>&gt;result&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute that
         has the value "ok" if there were no errors, or "error" when there was at least one
-        error. A &lt;<span class="code-xml-element-local-name">code</span>&gt;success-rate&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute contains the percentage of the SSML
+        error. A &lt;<span class="code-xml-element-local-name">code</span>&gt;tts-success-rate&lt;/<span class="code-xml-element-local-name">code</span>&gt; attribute contains the percentage of the SSML
         input that got successfully converted to speech.
       &lt;/<span class="code-xml-element-local-name">p</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;

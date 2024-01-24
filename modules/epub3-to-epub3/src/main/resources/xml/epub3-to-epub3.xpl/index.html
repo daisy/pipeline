@@ -334,55 +334,85 @@ marked up.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     
-    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">stylesheet</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"text/css application/xslt+xml"</span></span>&gt;
+    <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">stylesheet</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="">''</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"text/css text/x-scss application/xslt+xml"</span></span>&gt;
         
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             <span property="name" content="Style sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Style sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content='CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+            <span property="desc" content='A list of CSS/Sass style sheets to take into account.
 
-All CSS style sheets are applied at once, but the order in which they are specified has an influence
-on the cascading order.
+A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
+rendition is requested), and for text-to-speech (if text-to-speech is enabled).
 
-If the "Apply document-specific CSS" option is enabled, the document-specific style sheets will be
-applied before the ones specified through this option (see below).
-'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;CSS style sheets to apply. A space separated list of URIs, absolute or relative to source.
+Must be a space separated list of URIs, absolute or relative to the input.
 
-All CSS style sheets are applied at once, but the order in which they are specified has an influence
-on the cascading order.
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
 
-If the "Apply document-specific CSS" option is enabled, the document-specific style sheets will be
-applied before the ones specified through this option (see below).
+If the "Apply author style sheets" option is enabled, [author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade) will be taken into account and will take
+precedence over any style sheets specified through this option ([user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
+
+When generating the braille rendition, style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
+interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
+
+For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
+'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of CSS/Sass style sheets to take into account.
+
+A list of CSS/Sass style sheets to take into account, both for braille transcription (if a braille
+rendition is requested), and for text-to-speech (if text-to-speech is enabled).
+
+Must be a space separated list of URIs, absolute or relative to the input.
+
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order).
+
+If the "Apply author style sheets" option is enabled, [author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade) will be taken into account and will take
+precedence over any style sheets specified through this option ([user style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)).
+
+When generating the braille rendition, style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules. When performing text-to-speech, they are
+interpreted as [aural CSS](https://www.w3.org/TR/CSS2/aural.html).
+
+For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
 &lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
     
     <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">apply-document-specific-stylesheets</span>"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-            <span property="name" content="Apply document-specific CSS">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Apply document-specific CSS&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-            <span property="desc" content="If this option is enabled, any pre-existing CSS in the EPUB for medium &quot;embossed&quot; will be taken into account for the translation, or preserved in the result EPUB.
+            <span property="name" content="Apply author CSS style sheets">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Apply author CSS style sheets&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+            <span property="desc" content="If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media &quot;embossed&quot; or &quot;speech&quot; will be taken into account.
 
-The HTML files inside the source EPUB may already contain CSS that applies to embossed media. Style
-sheets can be associated with an HTML file in several ways: linked (using an 'xml-stylesheet'
-processing instruction or a 'link' element), embedded (using a 'style' element) and/or inlined
-(using 'style' attributes).
+The EPUB's content documents may contain CSS ([author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to &quot;embossed&quot; or
+&quot;[speech](https://www.w3.org/TR/CSS2/aural.html)&quot; media. Style sheets can be associated with an HTML
+file in several ways: linked (using an 'xml-stylesheet' processing instruction or a 'link' element),
+embedded (using a 'style' element) and/or inlined (using 'style' attributes).
 
-Document-specific CSS takes precedence over any CSS provided through the &quot;Style sheets&quot; option. For
-instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and using this script the
-rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left` property will get the
-value `2` because that's what was defined in the EPUB, even though the provided CSS is more
-specific.
-">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;If this option is enabled, any pre-existing CSS in the EPUB for medium "embossed" will be taken into account for the translation, or preserved in the result EPUB.
+Author style sheets take precedence over user style sheets (any CSS provided through the &quot;Style
+sheets&quot; option). For instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and
+using this script the rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left`
+property will get the value `2` because that's what was defined in the EPUB, even though the
+provided CSS is more specific.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;If this option is enabled, any CSS style sheets attached to the EPUB's content documents for media "embossed" or "speech" will be taken into account.
 
-The HTML files inside the source EPUB may already contain CSS that applies to embossed media. Style
-sheets can be associated with an HTML file in several ways: linked (using an 'xml-stylesheet'
-processing instruction or a 'link' element), embedded (using a 'style' element) and/or inlined
-(using 'style' attributes).
+The EPUB's content documents may contain CSS ([author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)) that apply to "embossed" or
+"[speech](https://www.w3.org/TR/CSS2/aural.html)" media. Style sheets can be associated with an HTML
+file in several ways: linked (using an 'xml-stylesheet' processing instruction or a 'link' element),
+embedded (using a 'style' element) and/or inlined (using 'style' attributes).
 
-Document-specific CSS takes precedence over any CSS provided through the "Style sheets" option. For
-instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and using this script the
-rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left` property will get the
-value `2` because that's what was defined in the EPUB, even though the provided CSS is more
-specific.
+Author style sheets take precedence over user style sheets (any CSS provided through the "Style
+sheets" option). For instance, if the EPUB already contains the rule `p { padding-left: 2; }`, and
+using this script the rule `p#docauthor { padding-left: 4; }` is provided, then the `padding-left`
+property will get the value `2` because that's what was defined in the EPUB, even though the
+provided CSS is more specific.
 &lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
@@ -396,9 +426,9 @@ specific.
     
     <span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">tts-config</span>"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"false"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.pipeline.tts-config+xml</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Text-to-speech configuration file">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Text-to-speech configuration file&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="Configuration file for the text-to-speech.
+			<span property="desc" content="Configuration file for text-to-speech.
 
-[More details on the configuration file format](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Configuration file for the text-to-speech.
+[More details on the configuration file format](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Configuration file for text-to-speech.
 
 [More details on the configuration file format](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/).&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
@@ -492,7 +522,7 @@ property.
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"metadata"</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"main"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-translator"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-translator"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$stylesheet"</span>/&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(                                                    for $s in tokenize($stylesheet,'\s+')[not(.='')] return                                                      resolve-uri($s,$source),                                                    ' ')"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"apply-document-specific-stylesheets"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$apply-document-specific-stylesheets"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set-default-rendition-to-braille"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$set-default-rendition-to-braille"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille"</span>/&gt;

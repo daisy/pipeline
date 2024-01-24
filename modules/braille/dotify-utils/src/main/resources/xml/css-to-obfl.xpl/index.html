@@ -17,7 +17,9 @@
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"document-locale"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'und'"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"document-locale"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'und'"</span>&gt;
+      
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text-transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-charset"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-width"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'40'"</span>/&gt;
@@ -98,12 +100,12 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-stylesheet</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                Make css:page, css:volume, css:text-transform, css:counter-style, css:after,
-                css:before, css:footnote-call, css:duplicate, css:alternate, css:top-of-page,
-                css:_obfl-alternate-scenario*, css:_obfl-on-toc-start,
-                css:_obfl-on-collection-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
-                css:_obfl-on-collection-end, css:_obfl-on-toc-end, css:_obfl-volume-transition and
-                css:_obfl-on-resumed attributes.
+                Make css:page, css:volume, css:text-transform, css:hyphenation-resource,
+                css:counter-style, css:after, css:before, css:footnote-call, css:duplicate,
+                css:alternate, css:top-of-page, css:_obfl-alternate-scenario*,
+                css:_obfl-on-toc-start, css:_obfl-on-collection-start, css:_obfl-on-volume-start,
+                css:_obfl-on-volume-end, css:_obfl-on-collection-end, css:_obfl-on-toc-end,
+                css:_obfl-volume-transition and css:_obfl-on-resumed attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-stylesheet</span>&gt;
         &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"flow"</span>&gt;
@@ -157,16 +159,20 @@
 
     &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">recursive-parse-stylesheet-and-make-pseudo-elements</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".04"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            Make css:page, css:volume, css:text-transform, css:counter-style, css:top-of-page and
-            css:_obfl-volume-transition attributes, css:after, css:before, css:duplicate,
-            css:alternate, css:footnote-call, css:_obfl-on-toc-start, css:_obfl-on-volume-start,
-            css:_obfl-on-volume-end, css:_obfl-on-toc-end, css:_obfl-on-resumed and
-            css:_obfl-alternate-scenario pseudo-elements.
+            Make css:page, css:volume, css:text-transform, css:hyphenation-resource,
+            css:counter-style, css:top-of-page and css:_obfl-volume-transition attributes,
+            css:after, css:before, css:duplicate, css:alternate, css:footnote-call,
+            css:_obfl-on-toc-start, css:_obfl-on-volume-start, css:_obfl-on-volume-end,
+            css:_obfl-on-toc-end, css:_obfl-on-resumed and css:_obfl-alternate-scenario
+            pseudo-elements.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">recursive-parse-stylesheet-and-make-pseudo-elements</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"assert-text-transform-only-on-root"</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXX"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"@text-transform rules are only allowed on root element"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"not(/_/*//*/@css:text-transform)"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"assert-hyphenation-resource-only-on-root"</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXX"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"@hyphenation-resource rules are only allowed on root element"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"not(/_/*//*/@css:hyphenation-resource)"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span>&gt;
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"assert-counter-style-only-on-root"</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXX"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"@counter-style rules are only allowed on root element"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"not(/_/*//*/@css:counter-style)"</span>/&gt;
@@ -174,10 +180,10 @@
     &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"assert-volume-transition-only-on-root"</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXX"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"@-obfl-volume-transition rules are only allowed on root element"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"not(/_/*//*/@css:_obfl-volume-transition)"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@css:text-transform|                      @css:counter-style|                      @css:_obfl-volume-transition"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@css:text-transform|                      @css:hyphenation-resource|                      @css:counter-style|                      @css:_obfl-volume-transition"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            Delete @css:text-transform, @css:counter-style and @css:_obfl-volume-transition
-            attributes.
+            Delete @css:text-transform, @css:hyphenation-resource, @css:counter-style and
+            @css:_obfl-volume-transition attributes.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span>&gt;
     
@@ -284,7 +290,7 @@
     &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">label-targets</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
-      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@xml:base"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@xml:base"</span>/&gt; 
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-target-content</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span>&gt;
@@ -677,6 +683,9 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text-transforms"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:text-transform"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-text-transform-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"hyphenation-resources"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:hyphenation-resource"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-hyphenation-resource-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:counter-style"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-counter-style-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;

@@ -54,7 +54,7 @@
             &lt;<span class="code-xml-element-local-name">p</span>&gt;Sequence of &lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt; elements in the OPF namespace from which the &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-elem"</span>&gt;&lt;<span class="code-xml-element-local-name">code</span>&gt;metadata&lt;/<span class="code-xml-element-local-name">code</span>&gt;
             element&lt;/<span class="code-xml-element-local-name">a</span>&gt; for the package document will be constructed.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;Will be augmented with "duration" metadata that is extracted from the media overlay
-            documents.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+            documents and other automatically generated metadata.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;If not specified, a metadata element with the minimal required metadata will be
             included.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
@@ -98,7 +98,7 @@
             &lt;/<span class="code-xml-element-local-name">ul</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'dc: http://purl.org/dc/elements/1.1/'"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"reserved-prefixes"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"''"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
             &lt;<span class="code-xml-element-local-name">p</span>&gt;
                 The &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/epub/301/spec/epub-publications.html#sec-metadata-default-vocab"</span>&gt;reserved
@@ -362,6 +362,7 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"manifest-with-ids"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"d:file"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"id"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"concat('item_',1+count(preceding-sibling::*))"</span>/&gt;
 
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Create manifest from fileset&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"fileset-to-manifest"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/epub-utils/src/main/resources/xml/pub/create-package-doc.fileset-to-manifest.xsl" class="source">create-package-doc.fileset-to-manifest.xsl</a>"</span>/&gt;
@@ -547,17 +548,48 @@
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
         &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">fileset-add-entry</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">uuid</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-metadata"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dc:identifier/text()"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-metadata"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Minimal required metadata&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
-                    &lt;<span class="code-xml-element-prefix">opf:</span><span class="code-xml-element-local-name">metadata</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">title</span>&gt;Unknown&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">title</span>&gt;
-                        &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">identifier</span>&gt;generated-uuid&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">identifier</span>&gt;
-                    &lt;/<span class="code-xml-element-prefix">opf:</span><span class="code-xml-element-local-name">metadata</span>&gt;
-                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">uuid</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">uuid</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dc:identifier/text()"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/2007/opf"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">metadata</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">title</span>&gt;Unknown&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">title</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">identifier</span>&gt;generated-uuid&lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">identifier</span>&gt;
+                        &lt;/<span class="code-xml-element-local-name">metadata</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">uuid</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;Generate metadata&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//opf:metadata"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/2007/opf"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">property</span>=<span class="code-xml-attribute-value">"schema:accessMode"</span>&gt;textual&lt;/<span class="code-xml-element-local-name">meta</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
+            
+            
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"//opf:metadata"</span> <span class="code-xml-attribute-local-name">position</span>=<span class="code-xml-attribute-value">"last-child"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"insertion"</span>&gt;
+                    
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.idpf.org/2007/opf"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">property</span>=<span class="code-xml-attribute-value">"schema:accessibilityHazard"</span>&gt;unknown&lt;/<span class="code-xml-element-local-name">meta</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">inline</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">insert</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$reserved-prefixes='#default'"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"schema: http://schema.org/"</span>&gt;
+                        
+                    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
 

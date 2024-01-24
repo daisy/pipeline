@@ -91,10 +91,10 @@
 <a class="jxr_linenumber" name="L82" href="#L82">82</a>  
 <a class="jxr_linenumber" name="L83" href="#L83">83</a>  	@Reference(
 <a class="jxr_linenumber" name="L84" href="#L84">84</a>  		name = <span class="jxr_string">"audio-encoder-service"</span>,
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		unbind = <span class="jxr_string">"removeEncoderService"</span>,
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		unbind = <span class="jxr_string">"-"</span>,
 <a class="jxr_linenumber" name="L86" href="#L86">86</a>  		service = AudioEncoderService.<strong class="jxr_keyword">class</strong>,
 <a class="jxr_linenumber" name="L87" href="#L87">87</a>  		cardinality = ReferenceCardinality.MULTIPLE,
-<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		policy = ReferencePolicy.DYNAMIC
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  		policy = ReferencePolicy.STATIC
 <a class="jxr_linenumber" name="L89" href="#L89">89</a>  	)
 <a class="jxr_linenumber" name="L90" href="#L90">90</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addEncoderService(<a href="/pipeline/modules/audio-common/src/main/java/org/daisy/pipeline/audio/AudioEncoderService.html">AudioEncoderService</a> service) {
 <a class="jxr_linenumber" name="L91" href="#L91">91</a>  		encoderServices.add(service);
@@ -106,10 +106,10 @@
 <a class="jxr_linenumber" name="L97" href="#L97">97</a>  
 <a class="jxr_linenumber" name="L98" href="#L98">98</a>  	@Reference(
 <a class="jxr_linenumber" name="L99" href="#L99">99</a>  		name = <span class="jxr_string">"audio-decoder-service"</span>,
-<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		unbind = <span class="jxr_string">"removeDecoderService"</span>,
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 		unbind = <span class="jxr_string">"-"</span>,
 <a class="jxr_linenumber" name="L101" href="#L101">101</a> 		service = AudioDecoderService.<strong class="jxr_keyword">class</strong>,
 <a class="jxr_linenumber" name="L102" href="#L102">102</a> 		cardinality = ReferenceCardinality.MULTIPLE,
-<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		policy = ReferencePolicy.DYNAMIC
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 		policy = ReferencePolicy.STATIC
 <a class="jxr_linenumber" name="L104" href="#L104">104</a> 	)
 <a class="jxr_linenumber" name="L105" href="#L105">105</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addDecoderService(<a href="/pipeline/modules/audio-common/src/main/java/org/daisy/pipeline/audio/AudioDecoderService.html">AudioDecoderService</a> service) {
 <a class="jxr_linenumber" name="L106" href="#L106">106</a> 		decoderServices.add(service);
@@ -121,6 +121,6 @@
 <a class="jxr_linenumber" name="L112" href="#L112">112</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

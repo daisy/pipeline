@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../flatten-structure.xsl">
+</head>
+<body><div class="code" about="../flatten-structure.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsl</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/XSL/Transform"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">ssml</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/10/synthesis"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">tts</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/tts"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/tts-common/src/main/resources/xml/xproc/flatten-css.xsl" class="source">flatten-css.xsl</a>"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"style-ns"</span>/&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bindings"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@sent]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@sent"</span>/&gt;
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">key</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"parent-to-child"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@ancestor]"</span> <span class="code-xml-attribute-local-name">use</span>=<span class="code-xml-attribute-value">"@ancestor"</span>/&gt;
+
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-ancestors"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">tts:</span><span class="code-xml-element-local-name">parents</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//ssml:s"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"ancestor-or-self::*[@tts:cue-before or          @tts:cue-after or @tts:pause-before or @tts:pause-after]"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">tts:</span><span class="code-xml-element-local-name">parenting</span> <span class="code-xml-attribute-local-name">ancestor</span>=<span class="code-xml-attribute-value">"{generate-id(.)}"</span> <span class="code-xml-attribute-local-name">sent</span>=<span class="code-xml-attribute-value">"{$sent-id}"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">tts:</span><span class="code-xml-element-local-name">parents</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bindings"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">tts:</span><span class="code-xml-element-local-name">bindings</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"build-bindings"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/*"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">tts:</span><span class="code-xml-element-local-name">bindings</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$pause != '' or $cue != ''"</span>&gt;
+      &lt;<span class="code-xml-element-local-name">bind</span> <span class="code-xml-attribute-local-name">sent</span>=<span class="code-xml-attribute-value">"{$sent-id}"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$pause != ''"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$pause"</span>/&gt;&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$cue != ''"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span>&gt;&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$cue"</span>/&gt;&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-local-name">bind</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"bind-all-the-way-through"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sent-id"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-before"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-before"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"bind-all-the-way-through"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sent-id"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sent-id"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-after"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-after"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"ssml:s[@id]"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"build-bindings"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"2"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-before"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-before"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+    &lt;<span class="code-xml-element-local-name">content</span> <span class="code-xml-attribute-local-name">sent</span>=<span class="code-xml-attribute-value">"{@id}"</span>/&gt; 
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@id"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-after"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-after"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"build-bindings"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"1"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"descendants"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('parent-to-child', generate-id(), $sent-ancestors)"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$descendants"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$descendants[1]/@sent"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-before"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-before"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"build-bindings"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"bind-one-sent"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$descendants[last()]/@sent"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pause"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-after"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"cue"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-after"</span>/&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@tts:pause-before or @tts:cue-before or @tts:pause-after or @tts:cue-after"</span>&gt;
+	
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"neighbor"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"preceding::ssml:s[@id][1]|following::ssml:s[@id][1]"</span>/&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$neighbor"</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"bind-all-the-way-through"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sent-id"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$neighbor[1]/@id"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"build-bindings"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">speak</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.1"</span>&gt; 
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//ssml:s"</span>&gt;
+	&lt;<span class="code-xml-element-local-name">s</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"sentence"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence/@*"</span>/&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"flatten-css-properties"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"style-ns"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$style-ns"</span>/&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$lang"</span>/&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>&gt;
+	  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"key('bindings', $sentence/@id, $bindings)"</span>&gt;
+	    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"current()/@pause or current()/@cue"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()/@pause"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"pause"</span>/&gt;
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"current()/@cue"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"cue"</span>/&gt;
+	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+	      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+		
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence/node()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"inside-sentence"</span>/&gt;
+
+		
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"next-text-node"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$sentence/following-sibling::text()[normalize-space(.) != ''][1]"</span>/&gt;
+
+		&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$next-text-node"</span>&gt;
+		  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$next-text-node"</span> <span class="code-xml-attribute-local-name">regex</span>=<span class="code-xml-attribute-value">"^[\p{{Z}}]*([.!?…])"</span>&gt;
+		    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+		      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"regex-group(1)"</span>/&gt;
+		    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">matching-substring</span>&gt;
+		    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">non-matching-substring</span>/&gt;
+		  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">analyze-string</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+
+		
+		
+		
+		
+		
+
+		
+
+
+		
+	      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+	    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+	  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+	&lt;/<span class="code-xml-element-local-name">s</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">speak</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"inside-sentence"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-before"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"pause"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-before"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"cue"</span>/&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{name()}"</span> <span class="code-xml-attribute-local-name">namespace</span>=<span class="code-xml-attribute-value">"{namespace-uri()}"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@*"</span>/&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"node()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"inside-sentence"</span>/&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">element</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:cue-after"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"cue"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@tts:pause-after"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"pause"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"text()"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"inside-sentence"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"pause"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">break</span> <span class="code-xml-attribute-local-name">time</span>=<span class="code-xml-attribute-value">"{.}"</span>/&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@*"</span> <span class="code-xml-attribute-local-name">mode</span>=<span class="code-xml-attribute-value">"cue"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(., 'file:///')"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">audio</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{substring-after(., 'file://')}"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(., 'file:/')"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">audio</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{substring-after(., 'file:')}"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"starts-with(., '/')"</span>&gt;
+	&lt;<span class="code-xml-element-prefix">ssml:</span><span class="code-xml-element-local-name">audio</span> <span class="code-xml-attribute-local-name">src</span>=<span class="code-xml-attribute-value">"{.}"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

@@ -510,7 +510,7 @@
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 		<strong class="jxr_keyword">if</strong> (marks.size() == 0) {
 <a class="jxr_linenumber" name="L502" href="#L502">502</a> 			mLinksOfCurrentFile.add(
 <a class="jxr_linenumber" name="L503" href="#L503">503</a> 				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/calabash/impl/SoundFileLink.html">SoundFileLink</a>(
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 					sentence.getID(),
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 					sentence.getBaseURI().resolve(<span class="jxr_string">"#"</span> + sentence.getID()),
 <a class="jxr_linenumber" name="L505" href="#L505">505</a> 					AudioUtils.getDuration(mLastFormat, begin),
 <a class="jxr_linenumber" name="L506" href="#L506">506</a> 					AudioUtils.getDuration(mLastFormat, mOffsetInFile)));
 <a class="jxr_linenumber" name="L507" href="#L507">507</a> 		} <strong class="jxr_keyword">else</strong> {
@@ -532,7 +532,7 @@
 <a class="jxr_linenumber" name="L523" href="#L523">523</a> 			<strong class="jxr_keyword">for</strong> (String id : all) {
 <a class="jxr_linenumber" name="L524" href="#L524">524</a> 				mLinksOfCurrentFile.add(
 <a class="jxr_linenumber" name="L525" href="#L525">525</a> 					<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/calabash/impl/SoundFileLink.html">SoundFileLink</a>(
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 						id,
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 						sentence.getBaseURI().resolve(<span class="jxr_string">"#"</span> + id),
 <a class="jxr_linenumber" name="L527" href="#L527">527</a> 						AudioUtils.getDuration(mLastFormat,
 <a class="jxr_linenumber" name="L528" href="#L528">528</a> 						                       starts.containsKey(id)
 <a class="jxr_linenumber" name="L529" href="#L529">529</a> 						                           ? begin + starts.get(id)
@@ -579,6 +579,6 @@
 <a class="jxr_linenumber" name="L570" href="#L570">570</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

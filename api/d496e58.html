@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">css-cascade {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/css-utils/src/main/resources/xml/css-cascade.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">css-cascade</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc"><a href="http://braillespecs.github.io/braille-css/#h2_cascade" class="external-link" target="_blank">Cascade</a> and inline
+		CSS and <a href="https://sass-lang.com/documentation" class="external-link" target="_blank">SCSS</a> style sheets in XML.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Inlining is done with <code>style</code> attributes with the <a href="http://braillespecs.github.io/braille-css/#h2_style-attribute" class="external-link" target="_blank">syntax</a> described in
+		braille CSS.</p>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/css-utils/library.xpl.html">http://www.daisy.org/pipeline/modules/css-utils/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">source.in-memory</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The input fileset containing content and style files, if a <code>d:fileset</code>
+			document is received on the <code>source</code> port. Otherwise, the document that is
+			received on the <code>source</code> port is interpreted as the only content document,
+			and the <code>source.in-memory</code> port is checked for style files.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Style sheets can be associated with the source in several ways: linked (using an
+			<code>xml-stylesheet</code> processing instruction or a <code>link</code> element),
+			embedded (using a <code>style</code> element) and/or inlined (using <code>style</code>
+			attributes).</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Style sheets that are linked to from the source document, or included via the
+			'user-stylesheet' option, must either exist on disk, or must be part of the source
+			fileset.</p>
+</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">parameters</span><span class="details"> parameter</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Parameters that are passed to SCSS style sheets (as <a href="https://sass-lang.com/documentation/variables#scope" class="external-link" target="_blank">global variables</a>). They
+			are also passed to XSLT transformations that are included from CSS through
+			<code>@xslt</code> rules.
+			</p></td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">result</span><span class="details"> primary</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">result.in-memory</span><span class="details"> sequence</span>
+</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The output fileset, if a <code>d:fileset</code> document was received on the
+			<code>source</code> port. Otherwise, the <code>result</code> port holds the only output
+			content document, and the <code>result.in-memory</code> port is empty.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">All styles are parsed, validated, normalized, cascaded and finally serialized into
+			<code>style</code> attributes.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Shorthand declarations such as <code>margin: a b c d</code> are decomposed as
+			<code>margin-top: a; margin-right: b; margin-bottom: c; margin-left: d</code>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'before' and 'after' rules are serialized as <code>&amp;::before { ... }</code> and
+			<code>&amp;::after { ... }</code>.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'page' properties are replaced with the corresponding named 'page' rules (without the
+			page type selector). If the root element does not have a 'page' property, the default
+			page rule is inserted. 'page' rules are serialized as <code>@page { ... } @page:left {
+			... } @page:right { ... }</code>. The declarations that named page rules inherit from
+			the default page rule are made explicit. The declarations that 'left' and 'right' page
+			rules inherit from their principal page rule are also made explicit.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">'volume' rules are serialized as <code>@volume { ... } @volume:first { ... }
+			@volume:last { ... } @volume:nth(...) { ... } @volume:nth-last(...) { ... }</code> and
+			inserted for the root element. The declarations that '@volume:first' etc. inherit from
+			the principal volume rule are made explicit. ':nth(1)' and ':nth-last(1)' are normalized
+			to ':first' and ':last'. A special '@volume:only' rule, which is a combination of the
+			'@volume:first' and '@volume:last' rules, is created for the case that there is only a
+			single volume.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">content-type</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'text/html application/xhtml+xml application/x-dtbook+xml'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The type of document to be processed. Other input documents will be left
+			unchanged.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Ignored if the <code>source</code> port holds a document that is not a
+			<code>d:fileset</code>.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">user-stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Space separated list of URIs, absolute or relative to source. Applied prior to all
+			other style sheets defined within the source.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">type</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'text/css text/x-scss'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The type of associated style sheets to apply. May be a space separated list. Allowed
+			values are "text/css" and "text/x-scss". If omitted, all CSS and SCSS style sheets are
+			applied.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">media</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'embossed'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/" class="external-link" target="_blank">media
+			query</a>. All rules that are contained in a style sheet that matches the specified
+			medium are included. Supported media types are "embossed", "speech" and "print". When
+			the target medium is "embossed", CSS is interpreted according to the rules of <a href="http://braillespecs.github.io/braille-css" class="external-link" target="_blank">braille CSS</a>. Supported media
+			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width" class="external-link" target="_blank">width</a>' and '<a href="https://www.w3.org/TR/mediaqueries-4/#height" class="external-link" target="_blank">height</a>' In addition,
+			'<code>(counter-support: none)</code>' can be used to transform lists to preformatted
+			lists.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">attribute-name</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'style'</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Name of attribute to use for inlined styles. Default name is 'style'.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">multiple-attributes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Cascade the styles into multiple attributes per element. In this case the namespace
+			and prefix of <code>attribute-name</code> are used for the attributes, the local part is
+			ignored.</p></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

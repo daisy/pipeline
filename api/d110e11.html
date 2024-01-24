@@ -2,8 +2,8 @@
 <html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
 <head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title property="dc:title">opf-to-html-metadata {http://www.daisy.org/ns/pipeline/xproc}</title>
-<link rev="dp2:doc" href="../../src/main/resources/xml/xproc/opf-to-html-metadata.xpl">
+<title property="dc:title">mathml-to-ssml {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/mathml-to-ssml/src/main/resources/xml/mathml-to-ssml.xpl">
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
 <style type="text/css" prefix="">
         
@@ -21,12 +21,11 @@
 </head>
 <body>
 <h2>
-            Step <span class="name">opf-to-html-metadata</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+            Step <span class="name">mathml-to-ssml</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
 </h2>
-<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Convert <a href="https://w3c.github.io/publ-epub-revision/epub32/spec/epub-packages.html#sec-pkg-metadata" class="external-link" target="_blank">OPF
-		metadata</a> to a HTML metadata.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Transform MathML to SSML.</p>
 <div>Defined in:
-          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/epub3-to-html/library.xpl.html">http://www.daisy.org/pipeline/modules/epub3-to-html/library.xpl</a></span>
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/mathml-to-ssml/library.xpl.html">http://www.daisy.org/pipeline/modules/mathml-to-ssml/library.xpl</a></span>
 </div>
 <h3>Input Ports</h3>
 <table border="1">
@@ -34,22 +33,13 @@
 <td>Port</td>
 <td>Description</td>
 </tr></thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td width="150px" class="nowrap name">
 <span class="primary">source</span><span class="details"> primary</span>
 </td>
-<td>
-<code xmlns:xd="http://github.com/vojtechtoman/xprocdoc">package</code><code xmlns:xd="http://github.com/vojtechtoman/xprocdoc">metadata</code>
-</td>
-</tr>
-<tr>
-<td width="150px" class="nowrap name">
-<span class="">parameters</span><span class="details"> parameter</span>
-</td>
-<td></td>
-</tr>
-</tbody>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Either a standalone MathML document, or a document containing zero or more MathML
+      elements.</p></td>
+</tr></tbody>
 </table>
 <h3>Output Ports</h3>
 <table border="1">
@@ -61,7 +51,9 @@
 <td width="150px" class="nowrap name">
 <span class="primary">result</span><span class="details"> primary</span>
 </td>
-<td><code xmlns:xd="http://github.com/vojtechtoman/xprocdoc">head</code></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Copy of the source document with MathML elements replaced by SSML (<code>speak</code>
+      elements). <code>id</code> and other attributes that may be present on the MathML elements are
+      preserved. Elements without an <code>id</code> attributes are given one.</p></td>
 </tr></tbody>
 </table>
 </body>

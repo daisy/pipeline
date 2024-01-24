@@ -504,7 +504,7 @@
 <a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">int</strong> j = 0;
 <a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">for</strong> (Character c : text.toCharArray()) {
 <a class="jxr_linenumber" name="L497" href="#L497">497</a> 				hyphenatedText.append(c);
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 				<strong class="jxr_keyword">if</strong> (j &lt; hyphens.length &amp;&amp; text.codePointAt(i) == c) {
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 				<strong class="jxr_keyword">if</strong> (j &lt; hyphens.length &amp;&amp; (!codePointBased || text.codePointAt(i) == c)) {
 <a class="jxr_linenumber" name="L499" href="#L499">499</a> 					<strong class="jxr_keyword">if</strong> (hyphens[j] != 0) {
 <a class="jxr_linenumber" name="L500" href="#L500">500</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 0; k &lt; characters.length; k++) {
 <a class="jxr_linenumber" name="L501" href="#L501">501</a> 							byte b = (byte)(1 &lt;&lt; k);
@@ -719,6 +719,6 @@
 <a class="jxr_linenumber" name="L710" href="#L710">710</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2023 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>
