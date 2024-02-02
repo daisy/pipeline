@@ -387,14 +387,8 @@ public class CounterStyle {
 
 	private static List<String> readSymbols(List<Term<?>> terms) throws IllegalArgumentException {
 		List<String> symbols = new ArrayList<>();
-		for (Term<?> t : terms) {
-			if (t instanceof TermString)
-				symbols.add(((TermString)t).getValue());
-			else if (t instanceof TermIdent)
-				symbols.add(CssEscape.unescapeCss(((TermIdent)t).getValue()));
-			else
-				throw new IllegalArgumentException("Invalid symbol: " + t);
-		}
+		for (Term<?> t : terms)
+			symbols.add(readSymbol(t));
 		if (symbols.isEmpty())
 			throw new IllegalArgumentException("Empty symbols list");
 		return symbols;
@@ -414,11 +408,11 @@ public class CounterStyle {
 				prevWeight = weight;
 				if (tt.hasNext()) {
 					t = tt.next();
-					if (t instanceof TermString) {
-						String symbol = ((TermString)t).getValue();
-						symbols.add(new AdditiveTuple(weight, symbol));
-					} else
-						throw new IllegalArgumentException("Invalid additive tuple: expected symbol but got " + t);
+					try {
+						symbols.add(new AdditiveTuple(weight, readSymbol(t)));
+					} catch (IllegalArgumentException e) {
+						throw new IllegalArgumentException("Invalid additive tuple: expected symbol but got " + t, e);
+					}
 				} else
 					throw new IllegalArgumentException("Invalid additive tuple: expected symbol");
 			} else
@@ -427,6 +421,17 @@ public class CounterStyle {
 		if (symbols.isEmpty())
 			throw new IllegalArgumentException("Empty additive-symbols list");
 		return symbols;
+	}
+
+	private static String readSymbol(Term<?> term) {
+		if (term instanceof TermString)
+			return ((TermString)term).getValue();
+		else if (term instanceof TermIdent)
+			return CssEscape.unescapeCss(((TermIdent)term).getValue());
+		else if (term instanceof TermInteger)
+			return "" + ((TermInteger)term).getValue();
+		else
+			throw new IllegalArgumentException("Invalid symbol: " + term);
 	}
 
 	private static TermIdent readSingleIdent(String property, List<Term<?>> terms) throws IllegalArgumentException {
