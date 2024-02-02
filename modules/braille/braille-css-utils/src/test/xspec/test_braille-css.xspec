@@ -143,11 +143,24 @@
 			                 &amp;:-obfl-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; }
 			                 &amp;:-obfl-alternate-scenario(2) { display: table }
 			                 @text-transform  foo  { system: foo } @text-transform  bar  { system: bar }
-			                 @hyphenation-resource:lang(foo) { system: foo } @hyphenation-resource:lang(bar) { system: bar }'"/>
+			                 @hyphenation-resource:lang(foo) { system: foo } @hyphenation-resource:lang(bar) { system: bar }
+			                 @counter-style trinary { system: numeric; symbols: 0 1 2; }
+			                 @counter-style dice { system: additive; additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; }
+			                 '"/>
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
 				<css:property name="display" value="block"/>
+			</css:rule>
+			<css:rule selector="@counter-style">
+				<css:rule selector="&amp; dice">
+					<css:property name="additive-symbols" value="6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀"/>
+					<css:property name="system" value="additive"/>
+				</css:rule>
+				<css:rule selector="&amp; trinary">
+					<css:property name="symbols" value="0 1 2"/>
+					<css:property name="system" value="numeric"/>
+				</css:rule>
 			</css:rule>
 			<css:rule selector="@hyphenation-resource">
 				<css:rule selector="&amp;:lang(bar)">

@@ -3,6 +3,7 @@ package org.daisy.pipeline.braille.css.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -49,6 +50,7 @@ import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser.CachingDeclaration;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser.DeepDeclarationTransformer;
+import org.daisy.pipeline.css.CounterStyle;
 
 import org.w3c.dom.Element;
 
@@ -65,6 +67,8 @@ public final class BrailleCssStyle implements Cloneable {
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
 
 	private final Context context;
+	final Object underlyingObject; // - CounterStyle
+	                               // - null
 
 	/**
 	 * {@link SimpleInlineStyle} that is part of a {@link BrailleCssStyle}.
@@ -90,6 +94,7 @@ public final class BrailleCssStyle implements Cloneable {
 
 	private BrailleCssStyle(Builder builder) {
 		this.context = builder.context;
+		this.underlyingObject = builder.underlyingObject;
 		this.declarations = builder.declarations == null || builder.declarations.isEmpty()
 			? null
 			: builder.validate.isPresent()
@@ -675,6 +680,7 @@ public final class BrailleCssStyle implements Cloneable {
 	private static class Builder {
 
 		private final Context context;
+		private final Object underlyingObject;
 		/**
 		 * Whether to validate declarations (not of nested styles)
 		 */
@@ -686,16 +692,21 @@ public final class BrailleCssStyle implements Cloneable {
 		 * @param context <code>null</code> means neither of { ELEMENT, PAGE, VOLUME, TEXT_TRANSFORM, COUNTER_STYLE, VENDOR_RULE }
 		 */
 		private Builder(Context context) {
-			this.context = context;
+			this(context, null);
 		}
 
-		private Builder(BrailleCssStyle style) {
-			this(style.context);
-			add(style);
+		private Builder(Context context, Object underlyingObject) {
+			this.context = context;
+			this.underlyingObject = underlyingObject;
 		}
 
 		private Builder() {
-			this((Context)null);
+			this(null, null);
+		}
+
+		private Builder(BrailleCssStyle style) {
+			this(style.context, style.underlyingObject);
+			add(style);
 		}
 
 		/**
@@ -967,6 +978,7 @@ public final class BrailleCssStyle implements Cloneable {
 	// used in BrailleCssSerializer
 	static BrailleCssStyle of(InlineStyle inlineStyle, Context context) {
 		Builder style = new Builder(context);
+		Map<String,RuleCounterStyle> counterStyleRules = null;
 		for (RuleBlock<?> rule : inlineStyle) {
 			if (rule instanceof RuleMainBlock)
 				// Note that the declarations have not been transformed by SupportedBrailleCSS yet.
@@ -978,20 +990,32 @@ public final class BrailleCssStyle implements Cloneable {
 					                  context == Context.VOLUME) ? DEFAULT_VALIDATOR : null));
 			else if (rule instanceof RuleRelativeBlock) {
 				String[] selector = serializeSelector(((RuleRelativeBlock)rule).getSelector());
-				Builder decls = new Builder(); {
-					for (Rule<?> r : (RuleRelativeBlock)rule)
-						if (r instanceof Declaration)
-							decls.add((Declaration)r,
-							          Optional.ofNullable(context == Context.ELEMENT ? DEFAULT_VALIDATOR : null));
-						else if (r instanceof RulePage)
-							decls.add(of((RulePage)r));
-						else
-							throw new RuntimeException("coding error");
-				}
-				if (selector.length > 0) {
-					for (int i = selector.length - 1; i > 0; i--)
-						decls = new Builder().add(selector[i], decls);
-					style.add(selector[0], decls);
+				if (context == Context.COUNTER_STYLE && selector.length == 1 && selector[0].startsWith("& ")) {
+					String name = selector[0].substring(2);
+					RuleCounterStyle counterStyle = new RuleCounterStyle(name); {
+						for (Rule<?> r : (RuleRelativeBlock)rule)
+							if (!(r instanceof Declaration))
+								throw new RuntimeException(); // @page can not occur inside @counter-style
+						counterStyle.replaceAll((RuleBlock<Declaration>)rule); }
+					if (counterStyleRules == null)
+						counterStyleRules = new HashMap<>();
+					counterStyleRules.put(name, counterStyle);
+				} else {
+					Builder decls = new Builder(); {
+						for (Rule<?> r : (RuleRelativeBlock)rule)
+							if (r instanceof Declaration)
+								decls.add((Declaration)r,
+								          Optional.ofNullable(context == Context.ELEMENT ? DEFAULT_VALIDATOR : null));
+							else if (r instanceof RulePage)
+								decls.add(of((RulePage)r));
+							else
+								throw new RuntimeException("coding error");
+					}
+					if (selector.length > 0) {
+						for (int i = selector.length - 1; i > 0; i--)
+							decls = new Builder().add(selector[i], decls);
+						style.add(selector[0], decls);
+					}
 				}
 			} else if (rule instanceof RulePage)
 				style.add(of((RulePage)rule));
@@ -1009,11 +1033,9 @@ public final class BrailleCssStyle implements Cloneable {
 			else if (rule instanceof RuleHyphenationResource)
 				style.add(of((RuleHyphenationResource)rule));
 			else if (rule instanceof RuleCounterStyle) {
-				String name = ((RuleCounterStyle)rule).getName();
-				Builder counterStyle = new Builder(Context.COUNTER_STYLE);
-				for (Declaration d : (RuleCounterStyle)rule)
-					counterStyle.add(d, Optional.empty());
-				style.add("@counter-style", new Builder().add("& " + name, counterStyle)); }
+				if (counterStyleRules == null)
+					counterStyleRules = new HashMap<>();
+				counterStyleRules.put(((RuleCounterStyle)rule).getName(), (RuleCounterStyle)rule); }
 			else if (rule instanceof RuleMargin) {
 				Builder margin = new Builder();
 				for (Declaration d : (RuleMargin)rule)
@@ -1031,6 +1053,17 @@ public final class BrailleCssStyle implements Cloneable {
 				style.add("@" + ((AnyAtRule)rule).getName(), of((AnyAtRule)rule));
 			else
 				throw new RuntimeException("coding error");
+		}
+		if (counterStyleRules != null) {
+			for (Map.Entry<String,CounterStyle> e : CounterStyle.parseCounterStyleRules(counterStyleRules.values()).entrySet()) {
+				Builder counterStyle = new Builder(Context.COUNTER_STYLE, e.getValue());
+				for (Declaration d : counterStyleRules.get(e.getKey()))
+					counterStyle.add(d, Optional.empty());
+				if (context == Context.COUNTER_STYLE)
+					style.add("& " + e.getKey(), counterStyle);
+				else
+					style.add("@counter-style", new Builder().add("& " + e.getKey(), counterStyle));
+			}
 		}
 		return style.build();
 	}
