@@ -506,7 +506,7 @@
 			<x:param name="value" select="100"/>
 			<x:param name="style" select="css:counter-style('decimal')"/>
 		</x:call>
-		<x:expect label="result" select="('100','auto')"/>
+		<x:expect label="result" select="'100'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_20.2">
@@ -514,7 +514,7 @@
 			<x:param name="value" select="-25"/>
 			<x:param name="style" select="css:counter-style('decimal')"/>
 		</x:call>
-		<x:expect label="result" select="('-25','auto')"/>
+		<x:expect label="result" select="'-25'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_20.3">
@@ -522,7 +522,7 @@
 			<x:param name="value" select="100"/>
 			<x:param name="style" select="css:counter-style('lower-alpha')"/>
 		</x:call>
-		<x:expect label="result" select="('cv','auto')"/>
+		<x:expect label="result" select="'cv'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_20.4">
@@ -530,7 +530,7 @@
 			<x:param name="value" select="1998"/>
 			<x:param name="style" select="css:counter-style('lower-roman')"/>
 		</x:call>
-		<x:expect label="result" select="('mcmxcviii','auto')"/>
+		<x:expect label="result" select="'mcmxcviii'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_20.5">
@@ -538,7 +538,7 @@
 			<x:param name="value" select="1998"/>
 			<x:param name="style" select="css:counter-style('upper-roman')"/>
 		</x:call>
-		<x:expect label="result" select="('MCMXCVIII','auto')"/>
+		<x:expect label="result" select="'MCMXCVIII'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_21.1">
@@ -575,7 +575,7 @@
 				                   text-transform="auto"/>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="('vijf','auto')"/>
+		<x:expect label="result" select="'vijf'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_22.2">
@@ -588,7 +588,7 @@
 				                   text-transform="auto"/>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="('VI','auto')"/>
+		<x:expect label="result" select="'VI'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_27">
@@ -603,7 +603,7 @@
 				</ul>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="('3','auto')"/>
+		<x:expect label="result" select="'3'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_28">
