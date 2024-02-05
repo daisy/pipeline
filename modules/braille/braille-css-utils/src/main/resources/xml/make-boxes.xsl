@@ -40,16 +40,7 @@
                                       select="css:specified-properties('list-style-type', true(), true(), .)/@value"/>
                         <xsl:if test="$list-style-type!='none'">
                             <css:box type="inline" name="css:marker">
-                                <xsl:choose>
-                                    <xsl:when test="matches($list-style-type,re:exact($css:BRAILLE_STRING_RE))">
-                                        <xsl:attribute name="css:text-transform" select="'none'"/>
-                                        <xsl:value-of select="substring($list-style-type,2,string-length($list-style-type)-2)"/>
-                                        <xsl:text> </xsl:text>
-                                    </xsl:when>
-                                    <xsl:otherwise>
-                                        <css:counter name="list-item" style="{$list-style-type}"/>
-                                    </xsl:otherwise>
-                                </xsl:choose>
+                                <css:counter name="list-item" style="{$list-style-type}"/>
                             </css:box>
                         </xsl:if>
                     </xsl:if>
