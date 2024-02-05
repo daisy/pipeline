@@ -160,8 +160,7 @@
                                            prefix=""
                                            suffix=" "
                                            fallback="decimal"
-                                           negative="-"
-                                           text-transform="auto"/>
+                                           negative="-"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:matching-substring>
@@ -224,7 +223,7 @@
                               select="if ($with-prefix-suffix)
                                       then concat($style/@prefix,$formatted-value,$style/@suffix)
                                       else $formatted-value"/>
-                <xsl:variable name="text-transform" as="xs:string" select="$style/@text-transform"/>
+                <xsl:variable name="text-transform" as="xs:string?" select="$style/@text-transform[not(.='auto')]"/>
                 <xsl:sequence select="($formatted-value,$text-transform)"/>
             </xsl:when>
             <xsl:otherwise>
@@ -252,18 +251,21 @@
         <xsl:variable name="value" as="xs:integer?" select="css:counter-value($name, $context)"/>
         <xsl:if test="exists($value)">
             <xsl:choose>
-                <xsl:when test="$style and $style='none'">
+                <xsl:when test="empty($style)">
+                    <xsl:sequence select="$value"/>
+                </xsl:when>
+                <xsl:when test="$style='none'">
                     <xsl:sequence select="('','none')"/>
                 </xsl:when>
-                <xsl:when test="$style">
+                <xsl:when test="matches($style,re:exact($css:BRAILLE_STRING_RE))">
+                    <xsl:sequence select="(concat(css:parse-string($style)/@value,' '),'none')"/>
+                </xsl:when>
+                <xsl:otherwise>
                     <xsl:call-template name="css:counter-representation">
                         <xsl:with-param name="value" select="$value"/>
                         <xsl:with-param name="style" select="css:counter-style($style)"/>
                         <xsl:with-param name="with-prefix-suffix" select="$default-marker-contents"/>
                     </xsl:call-template>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="$value"/>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>

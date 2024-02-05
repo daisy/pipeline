@@ -337,7 +337,12 @@
                     <xsl:attribute name="prefix" select="($style/@prefix,'')[1]"/>
                     <xsl:attribute name="suffix" select="($style/@suffix,'. ')[1]"/>
                     <xsl:attribute name="fallback" select="($style/@fallback,'decimal')[1]"/>
-                    <xsl:attribute name="text-transform" select="($style/@text-transform,'auto')[1]"/>
+                    <xsl:if test="$style/@text-transform[not(.='auto')]">
+                        <xsl:attribute name="text-transform" select="$style/@text-transform"/>
+                        <xsl:message select="concat(
+                            '''text-transform'' descriptor in @counter-style rule is deprecated. ',
+                            'Use a ''text-transform'' property within the rule containing the ''content'' property instead.')"/>
+                    </xsl:if>
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
@@ -346,8 +351,7 @@
                                    negative="-"
                                    prefix=""
                                    suffix=". "
-                                   fallback="decimal"
-                                   text-transform="auto"/>
+                                   fallback="decimal"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>
@@ -446,17 +450,19 @@
                         <xsl:variable name="suffix" as="xs:string" select="($suffix,'. ')[1]"/>
                         <xsl:variable name="fallback" as="xs:string" select="(css:property[@name='fallback']/@value,
                                                                               'decimal')[1]"/>
-                        <xsl:variable name="text-transform" as="xs:string" select="(css:property[@name='text-transform']/@value,
-                                                                                    'auto')[1]"/>
+                        <xsl:variable name="text-transform" as="xs:string?"
+                                      select="css:property[@name='text-transform']/@value[1][not(.='auto')]"/>
                         <xsl:map-entry key="$name">
                             <css:counter-style system="{$system}"
                                                negative="{$negative}"
                                                prefix="{$prefix}"
                                                suffix="{$suffix}"
-                                               fallback="{$fallback}"
-                                               text-transform="{$text-transform}">
+                                               fallback="{$fallback}">
                                 <xsl:attribute name="{if ($system='additive') then 'additive-symbols' else 'symbols'}"
                                                select="$symbols"/>
+                                <xsl:if test="exists($text-transform)">
+                                    <xsl:attribute name="text-transform" select="$text-transform"/>
+                                </xsl:if>
                             </css:counter-style>
                         </xsl:map-entry>
                     </xsl:if>
