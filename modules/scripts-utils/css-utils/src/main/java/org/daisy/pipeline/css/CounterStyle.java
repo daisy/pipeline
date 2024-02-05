@@ -107,6 +107,7 @@ public class CounterStyle {
 	private final List<AdditiveTuple> additiveSymbols;
 	private final String negative;
 	private final Supplier<CounterStyle> fallback;
+	private final String textTransform; // for braille CSS
 	private final String prefix;
 	private final String suffix;
 
@@ -132,6 +133,7 @@ public class CounterStyle {
 		this.system = system;
 		this.negative = "-";
 		this.fallback = () -> DECIMAL;
+		this.textTransform = "auto";
 		this.prefix = "";
 		this.suffix = " ";
 	}
@@ -140,7 +142,6 @@ public class CounterStyle {
 	 * Create a CounterStyle from a <code>@counter-style</code> rule
 	 */
 	// FIXME: the "range" descriptor is not taken into account
-	// FIXME: the "text-transform" descriptor (from braille CSS) is not taken into account
 	private CounterStyle(RuleCounterStyle rule, Map<String,CounterStyle> fallbacks) throws IllegalArgumentException {
 		Declaration systemDecl = null;
 		Declaration symbolsDecl = null;
@@ -149,6 +150,7 @@ public class CounterStyle {
 		Declaration fallbackDecl = null;
 		Declaration prefixDecl = null;
 		Declaration suffixDecl = null;
+		Declaration textTransformDecl = null;
 		for (Declaration d : rule) {
 			String prop = d.getProperty();
 			if ("system".equals(prop)) {
@@ -165,6 +167,8 @@ public class CounterStyle {
 				if (prefixDecl == null) prefixDecl = d;
 			} else if ("suffix".equals(prop)) {
 				if (suffixDecl == null) suffixDecl = d;
+			} else if ("text-transform".equals(prop)) {
+				if (textTransformDecl == null) textTransformDecl = d;
 			}
 		}
 		System system; {
@@ -218,6 +222,20 @@ public class CounterStyle {
 				ident = "decimal";
 			fallback = ident;
 		}
+		String textTransform; {
+			textTransform = null;
+			if (textTransformDecl != null) {
+				logger.warn("'text-transform' descriptor in @counter-style rule is deprecated. "
+				            + "Use a 'text-transform' property within the rule containing the 'content' property instead.");
+				try {
+					textTransform = readSingleIdent("text-transform", textTransformDecl).getValue();
+				} catch (IllegalArgumentException e) {
+					logger.warn(e.getMessage());
+				}
+			}
+			if (textTransform == null)
+				textTransform = "auto";
+		}
 		String prefix; {
 			prefix = null;
 			if (prefixDecl != null)
@@ -254,6 +272,7 @@ public class CounterStyle {
 					return DECIMAL;
 			}
 		);
+		this.textTransform = textTransform;
 		this.prefix = prefix;
 		this.suffix = suffix;
 	}
@@ -271,6 +290,7 @@ public class CounterStyle {
 	private CounterStyle(List<String> symbols) {
 		system = System.CYCLIC;
 		this.symbols = symbols;
+		textTransform = "none";
 		prefix = "";
 		suffix = " ";
 		additiveSymbols = null;
@@ -328,6 +348,14 @@ public class CounterStyle {
 	}
 
 	public String format(int counterValue) {
+		Object o = formatOrFallback(counterValue);
+		if (o instanceof String)
+			return (String)o;
+		CounterStyle fallback = (CounterStyle)o;
+		return fallback.format(counterValue);
+	}
+	
+	private Object formatOrFallback(int counterValue) {
 		switch (system) {
 		case ALPHABETIC: {
 			Optional<String> formatted = counterRepresentationAlphabetic(counterValue, symbols);
@@ -358,7 +386,7 @@ public class CounterStyle {
 		}
 		if (fallback.get() == null || fallback.get() == this)
 			throw new IllegalStateException(); // can not happen
-		return fallback.get().format(counterValue);
+		return fallback.get();
 	}
 
 	public String format(int counterValue, boolean withPrefixAndSuffix) {
@@ -368,6 +396,15 @@ public class CounterStyle {
 			return prefix + format(counterValue) + suffix;
 		else
 			return format(counterValue);
+	}
+
+	@Deprecated
+	public String getTextTransform(int counterValue) {
+		Object o = formatOrFallback(counterValue);
+		if (o instanceof String)
+			return this.textTransform;;
+		CounterStyle fallback = (CounterStyle)o;
+		return fallback.textTransform;
 	}
 
 	/* ============ private ========================================================= */
