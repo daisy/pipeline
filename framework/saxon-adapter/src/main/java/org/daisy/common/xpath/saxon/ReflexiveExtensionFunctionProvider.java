@@ -55,40 +55,46 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	protected ReflexiveExtensionFunctionProvider(Class<?> definition) {
-		Map<String,List<Executable>> methods = new HashMap<>();
-		for (Constructor<?> constructor : definition.getConstructors()) {
-			if (Modifier.isPublic(constructor.getModifiers())) {
-				List<Executable> list = methods.get("new");
-				if (list == null) {
-					list = new ArrayList<>();
+		this(new Class<?>[]{definition});
+	}
+
+	protected ReflexiveExtensionFunctionProvider(Class<?>... definitions) {
+		this.definitions = new ArrayList<>();
+		for (Class<?> definition : definitions) {
+			Map<String,List<Executable>> methods = new HashMap<>();
+			for (Constructor<?> constructor : definition.getConstructors()) {
+				if (Modifier.isPublic(constructor.getModifiers())) {
+					List<Executable> list = methods.get("new");
+					if (list == null) {
+						list = new ArrayList<>();
+						methods.put("new", list);
+					}
+					list.add(constructor);
 					methods.put("new", list);
 				}
-				list.add(constructor);
-				methods.put("new", list);
 			}
-		}
-		for (Method method : definition.getDeclaredMethods()) {
-			if (Modifier.isPublic(method.getModifiers())) {
-				if ("toString".equals(method.getName())
-				    && method.getParameterCount() == 0
-				    && !Modifier.isStatic(method.getModifiers())) {
-					// skip because the method can already be called through the string() function:
-					// ObjectValue.getStringValueCS() calls Object.toString()
-					continue;
-				}
-				List<Executable> list = methods.get(method.getName());
-				if (list == null) {
-					list = new ArrayList<>();
+			for (Method method : definition.getDeclaredMethods()) {
+				if (Modifier.isPublic(method.getModifiers())) {
+					if ("toString".equals(method.getName())
+					    && method.getParameterCount() == 0
+					    && !Modifier.isStatic(method.getModifiers())) {
+						// skip because the method can already be called through the string() function:
+						// ObjectValue.getStringValueCS() calls Object.toString()
+						continue;
+					}
+					List<Executable> list = methods.get(method.getName());
+					if (list == null) {
+						list = new ArrayList<>();
+						methods.put(method.getName(), list);
+					}
+					list.add(method);
 					methods.put(method.getName(), list);
 				}
-				list.add(method);
-				methods.put(method.getName(), list);
 			}
-		}
-		definitions = new ArrayList<>();
-		for (List<Executable> m : methods.values()) {
-			Collections.sort(m, (a, b) -> new Integer(a.getParameterCount()).compareTo(b.getParameterCount()));
-			definitions.add(extensionFunctionDefinitionFromMethods(m));
+			for (List<Executable> m : methods.values()) {
+				Collections.sort(m, (a, b) -> new Integer(a.getParameterCount()).compareTo(b.getParameterCount()));
+				this.definitions.add(extensionFunctionDefinitionFromMethods(m));
+			}
 		}
 	}
 
