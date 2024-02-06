@@ -8,7 +8,6 @@
                 version="2.0">
     
     <xsl:import href="regex-utils.xsl"/>
-    <xsl:import href="counters.xsl"/>
     
     <!-- ====== -->
     <!-- Syntax -->
@@ -18,11 +17,6 @@
         <braille-character>: http://braillespecs.github.io/braille-css/#dfn-braille-character
     -->
     <xsl:variable name="css:BRAILLE_CHAR_RE" select="'\p{IsBraillePatterns}'"/>
-    
-    <!--
-        <braille-string>: http://braillespecs.github.io/braille-css/#dfn-braille-string
-    -->
-    <xsl:variable name="css:BRAILLE_STRING_RE">'\p{IsBraillePatterns}*?'|"\p{IsBraillePatterns}*?"</xsl:variable>
     
     <!--
         <ident>
@@ -62,6 +56,11 @@
     <xsl:variable name="css:VENDOR_PRF_FN_ARG_RE" select="re:or(($css:IDENT_RE,$css:STRING_RE,$css:INTEGER_RE))"/>
     <xsl:variable name="css:VENDOR_PRF_FN_RE" select="concat('(',$css:VENDOR_PRF_IDENT_RE,')\(\s*(',re:comma-separated($css:VENDOR_PRF_FN_ARG_RE),')\s*\)')"/>
     
+    <!--
+        symbols(<symbols-type>? <string>+)
+    -->
+    <xsl:variable name="css:SYMBOLS_FN_RE" select="concat('symbols\(\s*((',$css:IDENT_RE,')\s+)?((',$css:STRING_RE,')(\s+(',$css:STRING_RE,'))*)\s*\)')"/>
+
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->

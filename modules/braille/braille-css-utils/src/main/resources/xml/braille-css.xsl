@@ -310,162 +310,36 @@
     <!-- Counter Styles -->
     <!-- ============== -->
     
-    <xsl:function name="css:named-counter-style" as="element()">
-        <xsl:param name="name" as="xs:string"/>
-        <xsl:variable name="style" as="element()?"
-                      select="(css:custom-counter-style($name),$css:predefined-counter-styles[@name=$name])[1]"/>
-        <xsl:choose>
-            <xsl:when test="$style
-                            and ((($style/@system=('symbolic','alphabetic','numeric','cyclic','fixed')
-                                   or not($style/@system))
-                                  and $style/@symbols)
-                                 or ($style/@system='additive'
-                                     and $style/@additive-symbols))">
-                <xsl:element name="css:counter-style">
-                    <xsl:attribute name="system" select="($style/@system,'symbolic')[1]"/>
-                    <xsl:choose>
-                        <xsl:when test="$style/@system='additive'">
-                            <xsl:sequence select="$style/@additive-symbols"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:sequence select="$style/@symbols"/>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:if test="$style/@system=('symbolic','alphabetic','numeric','additive') or not($style/@system)">
-                        <xsl:attribute name="negative" select="($style/@negative,'-')[1]"/>
-                    </xsl:if>
-                    <xsl:attribute name="prefix" select="($style/@prefix,'')[1]"/>
-                    <xsl:attribute name="suffix" select="($style/@suffix,'. ')[1]"/>
-                    <xsl:attribute name="fallback" select="($style/@fallback,'decimal')[1]"/>
-                    <xsl:if test="$style/@text-transform[not(.='auto')]">
-                        <xsl:attribute name="text-transform" select="$style/@text-transform"/>
-                        <xsl:message select="concat(
-                            '''text-transform'' descriptor in @counter-style rule is deprecated. ',
-                            'Use a ''text-transform'' property within the rule containing the ''content'' property instead.')"/>
-                    </xsl:if>
-                </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-                <css:counter-style system="numeric"
-                                   symbols="'0' '1' '2' '3' '4' '5' '6' '7' '8' '9'"
-                                   negative="-"
-                                   prefix=""
-                                   suffix=". "
-                                   fallback="decimal"/>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:function>
-    
-	<!-- see https://www.w3.org/TR/css-counter-styles-3/#predefined-counters -->
-    <xsl:variable name="css:predefined-counter-styles" as="element()*">
-        <!-- FIXME: the "range" descriptor is not taken into account -->
-        <css:counter-style name="decimal"
-                           system="numeric"
-                           symbols="'0' '1' '2' '3' '4' '5' '6' '7' '8' '9'"
-                           negative="-"/>
-        <css:counter-style name="lower-alpha"
-                           system="alphabetic"
-                           symbols="'a' 'b' 'c' 'd' 'e' 'f' 'g' 'h' 'i' 'j' 'k' 'l' 'm' 'n' 'o' 'p' 'q' 'r' 's' 't' 'u' 'v' 'w' 'x' 'y' 'z'"/>
-        <css:counter-style name="upper-alpha"
-                           system="alphabetic"
-                           symbols="'A' 'B' 'C' 'D' 'E' 'F' 'G' 'H' 'I' 'J' 'K' 'L' 'M' 'N' 'O' 'P' 'Q' 'R' 'S' 'T' 'U' 'V' 'W' 'X' 'Y' 'Z'"/>
-        <css:counter-style name="lower-roman"
-                           system="additive"
-                           range="1 3999"
-                           additive-symbols="1000 'm', 900 'cm', 500 'd', 400 'cd', 100 'c', 90 'xc', 50 'l', 40 'xl', 10 'x', 9 'ix', 5 'v', 4 'iv', 1 'i'"/>
-        <css:counter-style name="upper-roman"
-                           system="additive"
-                           range="1 3999"
-                           additive-symbols="1000 'M', 900 'CM', 500 'D', 400 'CD', 100 'C', 90 'XC', 50 'L', 40 'XL', 10 'X', 9 'IX', 5 'V', 4 'IV', 1 'I'"/>
-    </xsl:variable>
-    
-    <xsl:function name="css:custom-counter-style" as="element(css:counter-style)?">
-        <xsl:param name="name" as="xs:string"/>
-    </xsl:function>
-    
-    <xsl:function name="css:parse-counter-styles" as="map(xs:string,element(css:counter-style))">
+    <xsl:function name="css:parse-counter-styles" as="map(xs:string,item())">
         <xsl:param name="stylesheet">
             <!--
                 input is either:
                 - a string, in which case it should be a regular style sheet consisting of @counter-style rules, or
                 - a `css:counter-style' attribute, in which case it should have the form "& style1 { ... } & style2 { ... }"
-                - the fully parsed style as a `css:rule` element with selector "@counter-style"
+                - an external object item
             -->
         </xsl:param>
         <xsl:map>
-            <xsl:variable name="stylesheet" as="element(css:rule)?">
+            <xsl:variable name="stylesheet" as="item()?">
                 <xsl:choose>
                     <xsl:when test="not(exists($stylesheet))"/>
-                    <xsl:when test="$stylesheet instance of element(css:rule)">
-                        <xsl:sequence select="$stylesheet[@selector='@counter-style']"/>
-                    </xsl:when>
                     <xsl:when test="string($stylesheet)=''"/>
+                    <xsl:when test="$stylesheet instance of xs:string or
+                                    $stylesheet instance of attribute()">
+                        <xsl:sequence select="s:get(css:parse-stylesheet($stylesheet),'@counter-style')"/>
+                    </xsl:when>
                     <xsl:otherwise>
-                        <xsl:sequence select="s:toXml(css:parse-stylesheet($stylesheet))[@selector='@counter-style']"/>
+                        <xsl:sequence select="$stylesheet"/>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:variable>
-            <xsl:for-each select="$stylesheet/css:rule">
-                <xsl:variable name="name" as="xs:string" select="replace(@selector,'^&amp; ','')"/>
+            <xsl:for-each select="for $s in $stylesheet return s:keys($s)">
+                <xsl:variable name="selector" as="xs:string" select="."/>
+                <xsl:variable name="name" as="xs:string" select="replace($selector,'^&amp; ','')"/>
                 <xsl:if test="matches($name,re:exact($css:IDENT_RE))">
-                    <!--
-                        note that validation and setting defaults happens again in css:named-counter-style,
-                        but we do it here anyway
-                    -->
-                    <xsl:variable name="system" as="xs:string" select="(css:property[@name='system']/@value,
-                                                                        'symbolic')[1]"/>
-                    <xsl:variable name="symbols" as="xs:string?"
-                                  select="if ($system='additive')
-                                          then (css:property[@name='additive-symbols']/@value)[1]
-                                          else (css:property[@name='symbols']/@value)[1]"/>
-                    <xsl:if test="$system=('cyclic','numeric','alphabetic','symbolic','additive','fixed')
-                                  and exists($symbols)">
-                        <xsl:variable name="negative" as="xs:string?"
-                                      select="for $s in css:property[@name='negative']/@value
-                                              return replace(replace(replace(
-                                                 substring($s,2,string-length($s)-2),
-                                                 '\\A\s?','&#xA;'),
-                                                 '\\27\s?',''''),
-                                                 '\\22\s?','&quot;')">
-                           <!-- FIXME: this assumes the value is a string, but both
-                                css:parse-string($s)/@value and matches($s,re:exact($css:STRING_RE))
-                                result in an error -->
-                        </xsl:variable>
-                        <xsl:variable name="prefix" as="xs:string?"
-                                      select="for $s in css:property[@name='prefix']/@value
-                                              return replace(replace(replace(
-                                                 substring($s,2,string-length($s)-2),
-                                                 '\\A\s?','&#xA;'),
-                                                 '\\27\s?',''''),
-                                                 '\\22\s?','&quot;')"/>
-                        <xsl:variable name="suffix" as="xs:string?"
-                                      select="for $s in css:property[@name='suffix']/@value
-                                              return replace(replace(replace(
-                                                 substring($s,2,string-length($s)-2),
-                                                 '\\A\s?','&#xA;'),
-                                                 '\\27\s?',''''),
-                                                 '\\22\s?','&quot;')"/>
-                        <xsl:variable name="negative" as="xs:string" select="($negative,'-')[1]"/>
-                        <xsl:variable name="prefix" as="xs:string" select="($prefix,'')[1]"/>
-                        <xsl:variable name="suffix" as="xs:string" select="($suffix,'. ')[1]"/>
-                        <xsl:variable name="fallback" as="xs:string" select="(css:property[@name='fallback']/@value,
-                                                                              'decimal')[1]"/>
-                        <xsl:variable name="text-transform" as="xs:string?"
-                                      select="css:property[@name='text-transform']/@value[1][not(.='auto')]"/>
-                        <xsl:map-entry key="$name">
-                            <css:counter-style system="{$system}"
-                                               negative="{$negative}"
-                                               prefix="{$prefix}"
-                                               suffix="{$suffix}"
-                                               fallback="{$fallback}">
-                                <xsl:attribute name="{if ($system='additive') then 'additive-symbols' else 'symbols'}"
-                                               select="$symbols"/>
-                                <xsl:if test="exists($text-transform)">
-                                    <xsl:attribute name="text-transform" select="$text-transform"/>
-                                </xsl:if>
-                            </css:counter-style>
-                        </xsl:map-entry>
-                    </xsl:if>
+                    <xsl:map-entry key="$name">
+                        <xsl:sequence select="s:get($stylesheet,$selector)"/>
+                    </xsl:map-entry>
                 </xsl:if>
             </xsl:for-each>
         </xsl:map>

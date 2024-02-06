@@ -29,6 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import org.unbescape.css.CssEscape;
 
+/**
+ * See http://www.w3.org/TR/css-counter-styles-3
+ */
 public class CounterStyle {
 
 	private enum System {
@@ -40,7 +43,8 @@ public class CounterStyle {
 		ADDITIVE
 	};
 
-	private static class AdditiveTuple {
+	// package private for tests
+	static class AdditiveTuple {
 		final int weight;
 		final String symbol;
 		AdditiveTuple(int weight, String symbol) {
@@ -256,7 +260,7 @@ public class CounterStyle {
 					logger.warn(e.getMessage());
 				}
 			if (suffix == null)
-				suffix = ". "; // note that for braille CSS this should be the empty string
+				suffix = ". ";
 		}
 		this.system = system;
 		this.symbols = symbols;
@@ -331,6 +335,14 @@ public class CounterStyle {
 				logger.warn(e.getMessage());
 			}
 		return namedStyles;
+	}
+
+	/**
+	 * Return the predefined counter style with the given name, or {@code null} if no counter style
+	 * with that name exists.
+	 */
+	public static CounterStyle predefined(String name) {
+		return predefinedCounterStyles.get(name);
 	}
 
 	/**
