@@ -427,7 +427,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.16</version>
+        <version>1.14.17-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>

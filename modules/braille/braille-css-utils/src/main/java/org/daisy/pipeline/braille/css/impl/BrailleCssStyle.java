@@ -67,8 +67,8 @@ public final class BrailleCssStyle implements Cloneable {
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
 
 	private final Context context;
-	final Object underlyingObject; // - CounterStyle
-	                               // - null
+	public final Object underlyingObject; // - CounterStyle
+	                                      // - null
 
 	/**
 	 * {@link SimpleInlineStyle} that is part of a {@link BrailleCssStyle}.

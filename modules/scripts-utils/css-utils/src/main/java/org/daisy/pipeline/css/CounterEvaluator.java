@@ -61,7 +61,7 @@ public abstract class CounterEvaluator<E> {
 	protected abstract CounterStyle getNamedCounterStyle(String name);
 
 	private final LinkedList<CounterStyle> listCounterStyle = new LinkedList<>();
-	private final LinkedList<Map<String,Integer>> counterValues = new LinkedList<>();
+	protected final LinkedList<Map<String,Integer>> counterValues = new LinkedList<>();
 	private boolean previousEventWasStartElement = true; // false = endElement
 
 	/**
