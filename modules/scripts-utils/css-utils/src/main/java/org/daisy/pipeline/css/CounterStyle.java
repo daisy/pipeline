@@ -29,6 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import org.unbescape.css.CssEscape;
 
+/**
+ * See http://www.w3.org/TR/css-counter-styles-3
+ */
 public class CounterStyle {
 
 	private enum System {
@@ -40,7 +43,8 @@ public class CounterStyle {
 		ADDITIVE
 	};
 
-	private static class AdditiveTuple {
+	// package private for tests
+	static class AdditiveTuple {
 		final int weight;
 		final String symbol;
 		AdditiveTuple(int weight, String symbol) {
