@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.List;
 
@@ -71,11 +72,11 @@ public final class CssSerializer {
 			return term.toString().replaceAll("^[,/ ]+", "");
 	}
 
-	public static String serializeTermList(List<Term<?>> termList) {
+	public static String serializeTermList(Collection<? extends Term<?>> termList) {
 		return serializeTermList(termList, t -> toString(t));
 	}
 
-	public static String serializeTermList(List<Term<?>> termList, Function<Term<?>,String> toStringFunction) {
+	public static String serializeTermList(Collection<? extends Term<?>> termList, Function<Term<?>,String> toStringFunction) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {

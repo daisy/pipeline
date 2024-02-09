@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.css.impl;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -248,7 +249,7 @@ public final class BrailleCssSerializer {
 		return b;
 	}
 
-	public static String serializeTermList(List<Term<?>> termList) {
+	public static String serializeTermList(Collection<? extends Term<?>> termList) {
 		return CssSerializer.serializeTermList(termList, t -> toString(t));
 	}
 
