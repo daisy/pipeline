@@ -20,7 +20,6 @@
     <p:import href="new-definition.xpl"/>
     <p:import href="padding-to-margin.xpl"/>
     <p:import href="parse-content.xpl"/>
-    <p:import href="parse-counter-set.xpl"/>
     <p:import href="parse-properties.xpl"/>
     <p:import href="parse-stylesheet.xpl"/>
     <p:import href="preserve-white-space.xpl"/>
