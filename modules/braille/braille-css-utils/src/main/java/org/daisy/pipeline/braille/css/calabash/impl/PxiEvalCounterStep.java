@@ -1,6 +1,6 @@
 package org.daisy.pipeline.braille.css.calabash.impl;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
 import static javax.xml.stream.XMLStreamConstants.END_ELEMENT;
@@ -16,8 +15,10 @@ import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
 import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.XMLConstants;
 
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
@@ -29,8 +30,6 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
-import cz.vutbr.web.css.TermPair;
-import cz.vutbr.web.csskit.TermPairImpl;
 
 import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.om.Item;
@@ -42,6 +41,7 @@ import org.daisy.common.saxon.SaxonBuffer;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
+import org.daisy.common.stax.XMLStreamWriterHelper;
 import static org.daisy.common.stax.XMLStreamWriterHelper.skipElement;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
@@ -58,8 +58,11 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
+import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.braille.css.impl.ContentList;
 import org.daisy.pipeline.braille.css.impl.ContentList.CounterFunction;
+import org.daisy.pipeline.braille.css.impl.CounterSetList;
+import org.daisy.pipeline.braille.css.impl.CounterSetList.CounterSet;
 import org.daisy.pipeline.braille.css.xpath.Style;
 import org.daisy.pipeline.braille.css.xpath.impl.FullStyle;
 import org.daisy.pipeline.css.CounterEvaluator;
@@ -133,11 +136,11 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 				? ((Predicate<String>)excludeCounterNames::contains).negate()
 				: counterNames::contains;
 			// first resolve counter() functions and compute counter values at all targets of target-counter() functions
-			PersistentCounterEvaluator normalFlowCounterEvaluator = new PersistentCounterEvaluator(counterFilter);
+			PersistentCounterEvaluator normalFlowCounterEvaluator = new PersistentCounterEvaluator();
 			new EvalCounter(namedCounterStyles,
 			                counterFilter,
 			                normalFlowCounterEvaluator,
-			                () -> new CounterEvaluatorImpl(counterFilter))
+			                () -> new CounterEvaluatorImpl())
 				// then resolve target-counter() functions
 				.andThen(new EvalTargetCounter(namedCounterStyles,
 				                               counterFilter,
@@ -175,12 +178,12 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 		private final Map<String,CounterStyle> namedCounterStyles;
 		private final Predicate<String> counterFilter;
 		private final PersistentCounterEvaluator normalFlowCounterEvaluator;
-		private final Supplier<CounterEvaluator<XMLStreamReader>> counterEvaluatorFactory;
+		private final Supplier<CounterEvaluator<ElementStyle>> counterEvaluatorFactory;
 
 		public EvalCounter(Map<String,CounterStyle> namedCounterStyles,
 		                   Predicate<String> counterFilter,
 		                   PersistentCounterEvaluator normalFlowCounterEvaluator,
-		                   Supplier<CounterEvaluator<XMLStreamReader>> counterEvaluatorFactory) {
+		                   Supplier<CounterEvaluator<ElementStyle>> counterEvaluatorFactory) {
 			this.namedCounterStyles = namedCounterStyles;
 			this.counterFilter = counterFilter;
 			this.normalFlowCounterEvaluator = normalFlowCounterEvaluator;
@@ -194,7 +197,8 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 		}
 
 		public void transform(BaseURIAwareXMLStreamReader reader, BaseURIAwareXMLStreamWriter writer) throws TransformerException {
-			CounterEvaluator<XMLStreamReader> evaluator = normalFlowCounterEvaluator;
+			CounterEvaluator<ElementStyle> evaluator = normalFlowCounterEvaluator;
+			Predicate<String> counterFilterNegated = counterFilter.negate();
 			boolean nextElementIsRoot = false;
 			boolean inNormalFlow = false;
 			int depth = 0;
@@ -220,6 +224,7 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 								else
 									evaluator = counterEvaluatorFactory.get();
 								nextElementIsRoot = false; }
+							ElementStyle elemStyle = null;
 							if (CSS_COUNTER.equals(elem)) {
 								String name = null;
 								String style = null;
@@ -249,7 +254,8 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 									break;
 								}
 							} else {
-								evaluator.startElement(reader);
+								elemStyle = new ElementStyle(reader);
+								evaluator.startElement(elemStyle.filter(counterFilter));
 								if (evaluator == normalFlowCounterEvaluator) {
 									String id = null; {
 										for (int i = 0; i < reader.getAttributeCount(); i++)
@@ -275,7 +281,21 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 											break; }
 							}
 							writeEvent(writer, reader);
-							writeAttributes(writer, reader);
+							// clean up attributes
+							if (CSS_COUNTER.equals(elem))
+								writeAttributes(writer, reader);
+							else {
+								elemStyle = elemStyle.filter(counterFilterNegated);
+								for (int i = 0; i < reader.getAttributeCount(); i++) {
+									QName n = reader.getAttributeName(i);
+									if (CSS_COUNTER_RESET.equals(n))
+										writeAttribute(writer, n, elemStyle.counterReset);
+									else if (CSS_COUNTER_SET.equals(n))
+										writeAttribute(writer, n, elemStyle.counterSet);
+									else if (CSS_COUNTER_INCREMENT.equals(n))
+										writeAttribute(writer, n, elemStyle.counterIncrement);
+									else
+										writeAttribute(writer, n, reader.getAttributeValue(i)); }}
 							depth++;
 							break; }
 						case END_ELEMENT: {
@@ -301,6 +321,18 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 				throw new TransformerException(e);
 			}
 		}
+
+		private static void writeAttribute(XMLStreamWriter writer, QName name, String value) throws XMLStreamException {
+			XMLStreamWriterHelper.writeAttribute(writer, name, value);
+		}
+
+		private static void writeAttribute(XMLStreamWriter writer, QName name, Collection<CounterSet> value) throws XMLStreamException {
+			if (value != null && !value.isEmpty()) {
+				String v = BrailleCssSerializer.serializeTermList(value);
+				if (!v.isEmpty())
+					writeAttribute(writer, name, v);
+			}
+		}
 	}
 
 	private static class EvalTargetCounter extends SingleInSingleOutXMLTransformer {
@@ -322,8 +354,6 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 				throw new IllegalArgumentException();
 			return () -> transform(source.asXMLStreamReader(), result.asXMLStreamWriter());
 		}
-
-		private static final Pattern deleteAttr = Pattern.compile("^counter-(reset|set|increment)-.+$");
 
 		public void transform(BaseURIAwareXMLStreamReader reader, BaseURIAwareXMLStreamWriter writer) throws TransformerException {
 			boolean nextElementIsRoot = false;
@@ -399,20 +429,12 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 											anchor = reader.getAttributeValue(i);
 											break; }
 							}
-							// clean up
 							// make sure css:* elements preserve their prefix
 							if (XMLNS_CSS.equals(elem.getNamespaceURI()))
 								writeStartElement(writer, new QName(elem.getNamespaceURI(), elem.getLocalPart(), "css"));
 							else
 								writeEvent(writer, reader);
-							// clean up attributes
-							if (CSS_COUNTER.equals(elem))
-								writeAttributes(writer, reader);
-							else
-								for (int i = 0; i < reader.getAttributeCount(); i++) {
-									QName n = reader.getAttributeName(i);
-									if (!(XMLNS_CSS.equals(n.getNamespaceURI()) && deleteAttr.matcher(n.getLocalPart()).matches()))
-										writeAttribute(writer, n, reader.getAttributeValue(i)); }
+							writeAttributes(writer, reader);
 							depth++;
 							break; }
 						case END_ELEMENT: {
@@ -480,10 +502,6 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 
 		private final Map<String,Map<String,Integer>> saved = new HashMap<>();
 
-		public PersistentCounterEvaluator(Predicate<String> counterFilter) {
-			super(counterFilter);
-		}
-
 		/**
 		 * Save the counter values at the current location and associate it with the given
 		 * identifier.
@@ -516,65 +534,85 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 		}
 	}
 
-	private static class CounterEvaluatorImpl extends CounterEvaluator<XMLStreamReader> {
+	public static class ElementStyle {
 
-		private final Predicate<String> counterFilter;
+		public final Collection<CounterSet> counterReset;
+		public final Collection<CounterSet> counterSet;
+		public final Collection<CounterSet> counterIncrement;
 
-		public CounterEvaluatorImpl(Predicate<String> counterFilter) {
-			this.counterFilter = counterFilter;
+		private ElementStyle(XMLStreamReader element) {
+			counterReset = getPairList(element, CSS_COUNTER_RESET);
+			counterSet = getPairList(element, CSS_COUNTER_SET);
+			counterIncrement = getPairList(element, CSS_COUNTER_INCREMENT);
 		}
 
-		@Override
-		protected List<TermPair<String,Integer>> getCounterReset(XMLStreamReader element) {
-			return getPairList(element, CSS_COUNTER_RESET);
+		private ElementStyle(Collection<CounterSet> counterReset,
+		                     Collection<CounterSet> counterSet,
+		                     Collection<CounterSet> counterIncrement) {
+			this.counterReset = counterReset;
+			this.counterSet = counterSet;
+			this.counterIncrement = counterIncrement;
 		}
 
-		@Override
-		protected List<TermPair<String,Integer>> getCounterSet(XMLStreamReader element) {
-			return getPairList(element, CSS_COUNTER_SET);
-		}
-
-		@Override
-		protected List<TermPair<String,Integer>> getCounterIncrement(XMLStreamReader element) {
-			return getPairList(element, CSS_COUNTER_INCREMENT);
-		}
-
-		private List<TermPair<String,Integer>> getPairList(XMLStreamReader element, QName attributeName) {
-			List<TermPair<String,Integer>> result = null;
-			String prefix = attributeName.getLocalPart() + "-";
+		private List<CounterSet> getPairList(XMLStreamReader element, QName attributeName) {
 			for (int i = 0; i < element.getAttributeCount(); i++)
-				if (attributeName.getNamespaceURI().equals(element.getAttributeName(i).getNamespaceURI())
-				    && element.getAttributeName(i).getLocalPart().startsWith(prefix)) {
-					String counterName = element.getAttributeName(i).getLocalPart().substring(prefix.length());
-					if (counterFilter.test(counterName)) {
-						try {
-							int val = Integer.parseInt(element.getAttributeValue(i));
-							if (result == null)
-								result = new ArrayList<>();
-							TermPair<String,Integer> pair = new TermPairImpl<String,Integer>(){}.setKey(counterName);
-							pair.setValue(val);
-							result.add(pair);
-						} catch (NumberFormatException e) {
-						}
-					}
+				if (attributeName.equals(element.getAttributeName(i))) {
+					Declaration d = BrailleCssParser.parseDeclaration(
+						attributeName.getLocalPart(), element.getAttributeValue(i), null, false
+					).orElse(null);
+					if (d instanceof PropertyValue) {
+						PropertyValue pv = (PropertyValue)d;
+						if (pv.getValue() instanceof CounterSetList)
+							return (CounterSetList)pv.getValue(); }
+					break;
 				}
-			return result;
+			return null;
+		}
+
+		public ElementStyle filter(Predicate<String> counterFilter) {
+			return new ElementStyle(filter(counterReset, counterFilter),
+			                        filter(counterSet, counterFilter),
+			                        filter(counterIncrement, counterFilter));
+		}
+
+		private static Collection<CounterSet> filter(Collection<CounterSet> list, Predicate<String> filter) {
+			return list != null
+				? Collections2.filter(list, x -> filter.test(x.getKey()))
+				: null;
+		}
+	}
+
+	private static class CounterEvaluatorImpl extends CounterEvaluator<ElementStyle> {
+
+		@Override
+		protected Collection<CounterSet> getCounterReset(ElementStyle element) {
+			return element.counterReset;
 		}
 
 		@Override
-		protected Display getDisplay(XMLStreamReader element) {
+		protected Collection<CounterSet> getCounterSet(ElementStyle element) {
+			return element.counterSet;
+		}
+
+		@Override
+		protected Collection<CounterSet> getCounterIncrement(ElementStyle element) {
+			return element.counterIncrement;
+		}
+
+		@Override
+		protected Display getDisplay(ElementStyle element) {
 			// incrementing 'list-item' counter is done in make-boxes.xsl
 			return Display.INLINE;
 		}
 
 		@Override
-		protected List<Term<?>> getMarkerContent(XMLStreamReader element) {
+		protected List<Term<?>> getMarkerContent(ElementStyle element) {
 			// does not matter because we're not calling generateMarkerContents()
 			return null;
 		}
 
 		@Override
-		protected CounterStyle getListStyleType(XMLStreamReader element, CounterStyle parentListStyleType) {
+		protected CounterStyle getListStyleType(ElementStyle element, CounterStyle parentListStyleType) {
 			// does not matter because we're not calling generateMarkerContents()
 			return null;
 		}

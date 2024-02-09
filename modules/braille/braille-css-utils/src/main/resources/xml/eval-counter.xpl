@@ -62,11 +62,6 @@
         </p:documentation>
     </p:output>
 
-    <p:import href="parse-counter-set.xpl">
-        <p:documentation>
-            css:parse-counter-set
-        </p:documentation>
-    </p:import>
     <cx:import href="braille-css.xsl" type="application/xslt+xml">
         <p:documentation>
             css:parse-counter-styles
@@ -84,14 +79,7 @@
         -->
     </p:declare-step>
 
-    <p:for-each px:progress=".5">
-        <css:parse-counter-set>
-            <p:with-option name="counters" select="$counters"/>
-            <p:with-option name="exclude-counters" select="$exclude-counters"/>
-        </css:parse-counter-set>
-    </p:for-each>
-
-    <pxi:eval-counter px:progress=".5" name="result">
+    <pxi:eval-counter px:progress="1" name="result">
         <p:with-option name="counter-names" select="tokenize(normalize-space($counters),' ')"/>
         <p:with-option name="exclude-counter-names" select="tokenize(normalize-space($exclude-counters),' ')"/>
         <!--
