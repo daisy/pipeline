@@ -9,7 +9,7 @@
         <x:document type="inline">
           <body>
             <ul>
-              <li css:counter-increment="list-item">
+              <li css:counter-increment="list-item foo 2 bar">
                 <css:marker>
                   <css:counter name="list-item"/>
                 </css:marker>
@@ -49,6 +49,7 @@
           </body>
         </x:document>
       </x:input>
+      <x:option name="counters" select="'list-item'"/>
     </x:call>
     <x:context label="result">
       <x:document type="port" port="result"/>
@@ -57,7 +58,7 @@
       <x:document type="inline">
         <body>
           <ul>
-            <li>
+            <li css:counter-increment="foo 2 bar 1">
               <css:marker>
                 <css:box type="inline" css:text-transform="auto" xml:lang=""> 1. </css:box>
               </css:marker>
