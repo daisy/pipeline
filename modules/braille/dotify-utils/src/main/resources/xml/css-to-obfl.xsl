@@ -274,6 +274,7 @@
     <xsl:variable name="initial-hyphens" as="xs:string" select="'manual'"/>
 	<xsl:variable name="initial-hyphenate-character" as="xs:string" select="'auto'"/>
     <xsl:variable name="initial-word-spacing" as="xs:integer" select="1"/>
+    <xsl:variable name="initial-letter-spacing" as="xs:integer" select="0"/>
     
     <!-- count the total number of text nodes with braille content so that we get a good estimate of the progress -->
     <xsl:variable name="progress-total" select="count(collection()//text()[matches(.,concat('[',
@@ -340,12 +341,14 @@
                 <xsl:with-param name="hyphens" tunnel="yes" select="$initial-hyphens"/>
                 <xsl:with-param name="hyphenate-character" tunnel="yes" select="$initial-hyphenate-character"/>
                 <xsl:with-param name="word-spacing" tunnel="yes" select="$initial-word-spacing"/>
+                <xsl:with-param name="letter-spacing" tunnel="yes" select="$initial-letter-spacing"/>
             </xsl:call-template>
         </obfl>
     </xsl:template>
     
     <xsl:template name="_start">
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
+        <xsl:param name="letter-spacing" as="xs:integer" tunnel="yes"/>
         <xsl:sequence select="$page-stylesheets"/>
         <xsl:if test="count($volume-stylesheets)&gt;1">
             <xsl:call-template name="pf:warn">
@@ -400,6 +403,7 @@
                                 <xsl:variable name="pending-hyphens" as="xs:string?" select="$volume-area-properties[@name='hyphens']/@value"/>
                                 <xsl:variable name="pending-hyphenate-character" as="xs:string?" select="$volume-area-properties[@name='hyphenate-character']/@value"/>
                                 <xsl:variable name="word-spacing" as="xs:integer" select="($volume-area-properties[@name='word-spacing']/@value,$word-spacing)[1]"/>
+                                <xsl:variable name="letter-spacing" as="xs:integer" select="($volume-area-properties[@name='letter-spacing']/@value,$letter-spacing)[1]"/>
                                 <xsl:variable name="white-space" as="xs:string?" select="$volume-area-properties[@name='white-space']/@value"/>
                                 <xsl:variable name="volume-area-content" as="element()*"> <!-- css:_|obfl:list-of-references -->
                                     <xsl:apply-templates mode="css:eval-volume-area-content-list"
@@ -489,6 +493,7 @@
                                                                         <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                         <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                         <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                        <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                         <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                     </xsl:call-template>
                                                                 </xsl:variable>
@@ -545,6 +550,7 @@
                                                                             <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                             <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                             <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                            <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                             <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                         </xsl:apply-templates>
                                                                     </table-of-contents>
@@ -556,6 +562,7 @@
                                                                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                                 <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                                 <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                             </xsl:apply-templates>
                                                                         </on-toc-start>
@@ -568,6 +575,7 @@
                                                                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                                 <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                                 <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                             </xsl:apply-templates>
                                                                         </on-volume-start>
@@ -580,6 +588,7 @@
                                                                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                                 <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                                 <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                             </xsl:apply-templates>
                                                                         </on-volume-end>
@@ -592,6 +601,7 @@
                                                                                 <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                                                                                 <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                                                                                 <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                                                                                <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                                                                                 <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                                                                             </xsl:apply-templates>
                                                                         </on-toc-end>
@@ -644,6 +654,7 @@
                     <xsl:variable name="pending-hyphens" as="xs:string?" select="css:property[@name='hyphens']/@value"/>
                     <xsl:variable name="pending-hyphenate-character" as="xs:string?" select="css:property[@name='hyphenate-character']/@value"/>
                     <xsl:variable name="word-spacing" as="xs:integer" select="(css:property[@name='word-spacing']/@value,$word-spacing)[1]"/>
+                    <xsl:variable name="letter-spacing" as="xs:integer" select="(css:property[@name='letter-spacing']/@value,$letter-spacing)[1]"/>
                     <xsl:variable name="white-space" as="xs:string?" select="css:property[@name='white-space']/@value"/>
                     <xsl:variable name="sequence-interrupted-resumed-content" as="element()*"> <!-- (css:_|css:box)* -->
                         <xsl:apply-templates mode="css:eval-sequence-interrupted-resumed-content-list"
@@ -693,6 +704,7 @@
                             <xsl:with-param name="pending-hyphens" tunnel="yes" select="$pending-hyphens"/>
                             <xsl:with-param name="pending-hyphenate-character" tunnel="yes" select="$pending-hyphenate-character"/>
                             <xsl:with-param name="word-spacing" tunnel="yes" select="$word-spacing"/>
+                            <xsl:with-param name="letter-spacing" tunnel="yes" select="$letter-spacing"/>
                             <xsl:with-param name="white-space" tunnel="yes" select="$white-space"/>
                         </xsl:apply-templates>
                     </xsl:variable>
@@ -1815,6 +1827,17 @@
     
     <xsl:template priority="1.01"
                   mode="block span td table toc-entry"
+                  match="css:box[@css:letter-spacing]">
+        <xsl:next-match>
+            <xsl:with-param name="letter-spacing" tunnel="yes" select="xs:integer(@css:letter-spacing)"/>
+        </xsl:next-match>
+    </xsl:template>
+    
+    <xsl:template mode="block-attr span-attr td-attr table-attr assert-nil-attr"
+                  match="css:box/@css:letter-spacing"/>
+    
+    <xsl:template priority="1.02"
+                  mode="block span td table toc-entry"
                   match="css:box[@css:white-space]|
                          css:string[@name][@css:white-space]|
                          css:counter[@target][@name=$page-counters][@css:white-space]|
@@ -2694,6 +2717,7 @@
         <xsl:param name="hyphens" as="xs:string" tunnel="yes"/>
         <xsl:param name="hyphenate-character" as="xs:string" tunnel="yes"/>
         <xsl:param name="word-spacing" as="xs:integer" tunnel="yes"/>
+        <xsl:param name="letter-spacing" as="xs:integer" tunnel="yes"/>
         <xsl:param name="white-space" as="xs:string?" tunnel="yes" select="()"/>
         <xsl:param name="pending-language" as="xs:string?" tunnel="yes"/>
         <xsl:param name="pending-text-transform" as="xs:string?" tunnel="yes"/>
@@ -2774,8 +2798,11 @@
                     <xsl:if test="$pending-hyphenate-character[not(.=$hyphenate-character)]">
                       <xsl:sequence select="concat('hyphenate-character: ',$pending-hyphenate-character)"/>
                     </xsl:if>
-                    <xsl:if test="not($word-spacing=1)">
+                    <xsl:if test="not($word-spacing=$initial-word-spacing)">
                         <xsl:sequence select="concat('word-spacing: ',format-number($word-spacing, '0'))"/>
+                    </xsl:if>
+                    <xsl:if test="not($letter-spacing=$initial-letter-spacing)">
+                        <xsl:sequence select="concat('letter-spacing: ',format-number($letter-spacing, '0'))"/>
                     </xsl:if>
                 </xsl:variable>
                 <xsl:choose>
