@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -45,6 +46,7 @@ import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory;
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.RuleCounterStyle;
@@ -57,6 +59,7 @@ import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.braille.css.SupportedPrintCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.CssPreProcessor;
@@ -122,6 +125,18 @@ public class BrailleCssCascader implements CssCascader {
 
 	// medium braille/embossed
 	private static final SupportedBrailleCSS brailleCSS = new SupportedBrailleCSS(false, true);
+	private static final BrailleCssParser brailleCSSParser = new BrailleCssParser() {
+			public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
+				switch (context) {
+				case ELEMENT:
+				case PAGE:
+				case VOLUME:
+					return Optional.of(brailleCSS);
+				default:
+					return Optional.empty();
+				}
+			}
+		};
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
@@ -302,7 +317,7 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	private static void insertPageStyle(StringBuilder builder, RulePage pageRule) {
-		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSS)).append(" ");
+		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
 	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {

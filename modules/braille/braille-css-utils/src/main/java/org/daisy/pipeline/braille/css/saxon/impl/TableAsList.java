@@ -97,6 +97,8 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 	private static final Splitter HEADERS_SPLITTER = Splitter.on(' ').trimResults().omitEmptyStrings();
 	private static final Splitter AXIS_SPLITTER = Splitter.on(',').trimResults().omitEmptyStrings();
 
+	private static final TextStyleParser cssParser = TextStyleParser.getInstance();
+
 	final List<String> axes;
 
 	TableAsList(String axes) {
@@ -172,7 +174,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 							// FIXME: We assume that not both a tbody/thead/tfoot and a child tr have a text-transform property,
 							// because two text-transform properties can not always simply be replaced with a single one.
 							if (style == null) style = "";
-							SimpleInlineStyle s = TextStyleParser.parse(style);
+							SimpleInlineStyle s = cssParser.parse(style);
 							if (!inheritedStyle.isEmpty())
 								s = s.inheritFrom(inheritedStyle.peek()).concretize();
 							inheritedStyle.push(s);
@@ -203,7 +205,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 										style = reader.getAttributeValue(i);
 										break; }}}
 							if (style == null) style = "";
-							withinCell.style = TextStyleParser.parse(style);
+							withinCell.style = cssParser.parse(style);
 							if (!inheritedStyle.isEmpty())
 								withinCell.style = withinCell.style.inheritFrom(inheritedStyle.peek()).concretize();
 							withinCell.lang = inheritedLang.isEmpty() ? null : inheritedLang.peek();

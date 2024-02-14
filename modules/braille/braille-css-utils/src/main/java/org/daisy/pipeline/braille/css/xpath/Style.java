@@ -13,7 +13,7 @@ import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
-import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.impl.ContentList;
 import org.daisy.pipeline.braille.css.xpath.impl.DeclarationStyle;
@@ -177,7 +177,7 @@ public abstract class Style {
 			if (s instanceof FullStyle)
 				head = s;
 			else if (s instanceof DeclarationStyle)
-				head = new FullStyle(BrailleCssStyle.of(((DeclarationStyle)s).declaration, Context.ELEMENT));
+				head = new FullStyle(BrailleCssStyle.of(((DeclarationStyle)s).declaration));
 			else { // s instanceof ValueStyle
 				if (!(((ValueStyle)s).value instanceof ContentList))
 					throw new IllegalArgumentException();
@@ -206,20 +206,25 @@ public abstract class Style {
 			return Optional.of(new FullStyle(((BrailleCssStyle)it.next()).add(it)));
 		} else { // head instanceof ValueStyle
 			List<Term<?>> content = new ArrayList<>();
-			SupportedBrailleCSS css = null;
+			BrailleCssParser parser = null;
+			Context context = null;
 			for (Style s : list) {
 				if (!(s instanceof ValueStyle))
 					throw new IllegalArgumentException();
 				ValueStyle v = (ValueStyle)s;
 				if (!(v.value instanceof ContentList))
 					throw new IllegalArgumentException();
-				if (css == null)
-					css = ((ContentList)v.value).getSupportedBrailleCSS();
-				else if (!css.equals(((ContentList)v.value).getSupportedBrailleCSS()))
+				if (parser == null)
+					parser = ((ContentList)v.value).getParser();
+				else if (parser != ((ContentList)v.value).getParser())
+					throw new IllegalArgumentException();
+				if (context == null)
+					context = ((ContentList)v.value).getContext();
+				else if (context != ((ContentList)v.value).getContext())
 					throw new IllegalArgumentException();
 				content.addAll(v.value);
 			}
-			return Optional.of(new ValueStyle(ContentList.of(content, css)));
+			return Optional.of(new ValueStyle(ContentList.of(parser, context, content)));
 		}
 	}
 }

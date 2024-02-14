@@ -57,10 +57,11 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 
 	private FromStyledTextToBraille fromStyledTextToBraille = null;
 
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	private final static PropertyValue TEXT_TRANSFORM_NONE
-		= TextStyleParser.parse("text-transform: none").get("text-transform");
+		= cssParser.parse("text-transform: none").get("text-transform");
 	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
-		= TextStyleParser.parse("braille-charset: custom").get("braille-charset");
+		= cssParser.parse("braille-charset: custom").get("braille-charset");
 
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		if (fromStyledTextToBraille == null)

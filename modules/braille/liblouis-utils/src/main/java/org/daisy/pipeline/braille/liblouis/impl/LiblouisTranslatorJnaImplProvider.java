@@ -214,10 +214,11 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		return MoreObjects.toStringHelper("LiblouisTranslatorJnaImplProvider");
 	}
 
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	private final static PropertyValue TEXT_TRANSFORM_NONE
-		= TextStyleParser.parse("text-transform: none").get("text-transform");
+		= cssParser.parse("text-transform: none").get("text-transform");
 	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
-		= TextStyleParser.parse("braille-charset: custom").get("braille-charset");
+		= cssParser.parse("braille-charset: custom").get("braille-charset");
 
 	class LiblouisTranslatorImpl extends AbstractBrailleTranslator implements LiblouisTranslator {
 		
@@ -1615,7 +1616,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return hyphenator.transform(text);
 		}
 		
-		private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
+		private final static SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 		
 		public byte[] hyphenate(String text, Locale language) {
 			return extractHyphens(

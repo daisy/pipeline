@@ -1,5 +1,6 @@
 package org.daisy.pipeline.braille.css.saxon.impl;
 
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.css.xpath.StyledText;
 
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
@@ -13,7 +14,7 @@ import org.osgi.service.component.annotations.Component;
 )
 public class StyledTextFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
-	public StyledTextFunctionProvider() {
-		super(StyledText.class);
+	protected StyledTextFunctionProvider() {
+		addExtensionFunctionDefinitionsFromClass(StyledText.class, new StyledText(TextStyleParser.getInstance()));
 	}
 }

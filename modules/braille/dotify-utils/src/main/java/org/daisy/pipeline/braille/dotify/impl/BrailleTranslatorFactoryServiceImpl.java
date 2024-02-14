@@ -194,7 +194,8 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			null);
 	}
 
-	private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	private final static SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 
 	private static Iterable<CSSStyledText> cssStyledTextFromTranslatable(String text,
 	                                                                     TextAttribute attributes,
@@ -207,7 +208,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			String s = attributes != null ? attributes.getDictionaryIdentifier() : null;
 			if (s != null || parentStyle != null) {
 				// FIXME: extend caching of parsed CSS to support parentStyle!
-				style = TextStyleParser.parse(s != null ? s : "");
+				style = cssParser.parse(s != null ? s : "");
 				if (parentStyle != null)
 					style = style.inheritFrom(parentStyle).concretize();
 			}
@@ -263,7 +264,7 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			String s = attributes != null ? attributes.getName().orElse(null) : null;
 			if (s != null || parentStyle != null) {
 				// FIXME: extend caching of parsed CSS to support parentStyle!
-				style = TextStyleParser.parse(s != null ? s : "");
+				style = cssParser.parse(s != null ? s : "");
 				if (parentStyle != null)
 					style = style.inheritFrom(parentStyle).concretize();
 			} else

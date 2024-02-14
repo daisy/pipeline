@@ -705,6 +705,8 @@ public class LiblouisCoreTest extends AbstractTest {
 		// this is expected to fail:
 		assertEquals(p, translator.transform(text("p")).iterator().next());
 	}
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
@@ -712,7 +714,7 @@ public class LiblouisCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
+				styledText.add(new CSSStyledText(text, cssParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
@@ -724,7 +726,7 @@ public class LiblouisCoreTest extends AbstractTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, TextStyleParser.parse("")));
+			styledText.add(new CSSStyledText(t, cssParser.parse("")));
 		return styledText;
 	}
 	
