@@ -2458,14 +2458,14 @@
     <!-- evaluate not allowed inside span -->
     <xsl:template priority="0.6"
                   mode="span"
-                  match="css:custom-func[@name='-obfl-evaluate'][matches(@arg1,$css:STRING_RE) and not (@arg2)]">
+                  match="css:custom-func[@name='-obfl-evaluate']">
         <xsl:next-match>
             <xsl:with-param name="inside-span" select="true()"/>
         </xsl:next-match>
     </xsl:template>
     
     <xsl:template mode="block toc-entry span"
-                  match="css:custom-func[@name='-obfl-evaluate'][matches(@arg1,$css:STRING_RE) and not (@arg2)]">
+                  match="css:custom-func[@name='-obfl-evaluate']">
         <xsl:param name="language" as="xs:string" tunnel="yes"/>
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
         <xsl:param name="braille-charset" as="xs:string" tunnel="yes"/>
@@ -2515,13 +2515,6 @@
                 <evaluate expression="{$expression}"/>
             </xsl:otherwise>
         </xsl:choose>
-    </xsl:template>
-    
-    <xsl:template mode="block toc-entry span"
-                  match="css:custom-func[@name='-obfl-evaluate'][@arg2]">
-        <xsl:call-template name="pf:warn">
-            <xsl:with-param name="msg">-obfl-evaluate() function requires exactly one string argument</xsl:with-param>
-        </xsl:call-template>
     </xsl:template>
     
     <!-- =============== -->

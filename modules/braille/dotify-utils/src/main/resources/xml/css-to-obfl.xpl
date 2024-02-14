@@ -511,7 +511,7 @@
                     Rename -obfl-collection() to flow() so that css:flow-from will process them.
                 </p:documentation>
                 <p:label-elements match="*[@css:_obfl-list-of-references]
-                                          //css:custom-func[@name='-obfl-collection'][@arg1]"
+                                          //css:custom-func[@name='-obfl-collection']"
                                   attribute="from" label="@arg1"/>
                 <p:rename match="css:custom-func[@name='-obfl-collection'][@from]" new-name="css:flow"/>
                 <p:label-elements match="css:flow[@name='-obfl-collection'][@arg2]" attribute="scope" label="@arg2"/>
