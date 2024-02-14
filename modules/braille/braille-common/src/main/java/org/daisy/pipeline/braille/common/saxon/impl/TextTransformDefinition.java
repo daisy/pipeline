@@ -26,7 +26,8 @@ import org.slf4j.LoggerFactory;
 public class TextTransformDefinition extends ReflexiveExtensionFunctionProvider {
 
 	public TextTransformDefinition() {
-		super(TextTransform.class);
+		super();
+		addExtensionFunctionDefinitionsFromClass(TextTransform.class, new TextTransform());
 	}
 
 	private BrailleTranslatorRegistry translatorRegistry;

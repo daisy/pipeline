@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
+import com.google.common.collect.Iterables;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
@@ -48,8 +49,8 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.VendorAtRule;
-import org.daisy.pipeline.braille.css.impl.BrailleCssParser.CachingDeclaration;
-import org.daisy.pipeline.braille.css.impl.BrailleCssParser.DeepDeclarationTransformer;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.ParsedDeclaration;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.ParsedDeclarations;
 import org.daisy.pipeline.css.CounterStyle;
 
 import org.w3c.dom.Element;
@@ -61,53 +62,54 @@ import org.w3c.dom.Element;
  */
 public final class BrailleCssStyle implements Cloneable {
 
+	public final static BrailleCssStyle EMPTY = new Builder().build();
+
 	// these fields need to be package private because they are used in BrailleCssSerializer and BrailleCssParser
 	// note that even though the declarations are assumed to not change, we don't assume they are unmodifiable
 	Iterable<? extends Declaration> declarations;
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
 
-	private final Context context;
+	private BrailleCssParser parser;
+	private Context context;
 	public final Object underlyingObject; // - CounterStyle
 	                                      // - null
 
-	/**
-	 * {@link SimpleInlineStyle} that is part of a {@link BrailleCssStyle}.
-	 *
-	 * The purpose of having this class instead of {@link SimpleInlineStyle} is:
-	 *
-	 * 1. to recognize styles that were created within {@link BrailleCssStyle} itself.
-	 *
-	 * 2. to control by whom and when styles can be mutated. Objects are mutable, but should be regarded as
-	 *    being immutable outside this class, unless the {@code locked} field was set to {@code false}.
-	 */
-	// also used in BrailleCssParser
-	static class ValidatedDeclarations extends SimpleInlineStyle {
-		private static final ValidatedDeclarations EMPTY = new ValidatedDeclarations(null);
-		private ValidatedDeclarations(Iterable<PropertyValue> validatedDeclarations) {
-			super(validatedDeclarations);
-		}
-		private ValidatedDeclarations(Iterable<? extends Declaration> declarations, SupportedBrailleCSS validator) {
-			super(declarations, null, validator);
-		}
-		private boolean locked = true;
-	}
-
 	private BrailleCssStyle(Builder builder) {
-		this.context = builder.context;
 		this.underlyingObject = builder.underlyingObject;
-		this.declarations = builder.declarations == null || builder.declarations.isEmpty()
-			? null
-			: builder.validate.isPresent()
-				? new ValidatedDeclarations(builder.declarations.values(), builder.validate.get())
-				: ImmutableList.copyOf(builder.declarations.values())
-			;
+		if ((builder.parser != null && builder.parser.getSupportedBrailleCSS(builder.context).isPresent())
+		    || builder.declarations != null && Iterables.any(builder.declarations.values(),
+		                                                     d -> d instanceof PropertyValue)) {
+			this.declarations = new ParsedDeclarations(builder.parser,
+			                                           builder.context,
+			                                           builder.declarations != null
+			                                               ? builder.declarations.values()
+			                                               : null);
+			this.parser = ((ParsedDeclarations)this.declarations).getParser();
+			this.context = ((ParsedDeclarations)this.declarations).getContext();
+		} else {
+			if (builder.declarations == null || builder.declarations.isEmpty())
+				this.declarations = null;
+			else
+				this.declarations = ImmutableList.copyOf(builder.declarations.values());
+			this.parser = builder.parser;
+			this.context = builder.context;
+		}
 		this.nestedStyles = builder.nestedStyles != null && !builder.nestedStyles.isEmpty()
 			? ImmutableSortedMap.copyOfSorted(builder.buildNestedStyles())
 			: null;
 	}
 
 	public boolean isEmpty() {
-		return declarations == null && nestedStyles == null;
+		if (nestedStyles != null)
+			return false;
+		if (declarations instanceof ParsedDeclarations)
+			// a ParsedDeclarations is never really empty because it contains information about initial values
+			return false;
+		if (declarations == null)
+			return true;
+		if (Iterables.isEmpty(declarations))
+			return true;
+		return false;
 	}
 
 	private boolean evaluated = false;
@@ -222,10 +224,10 @@ public final class BrailleCssStyle implements Cloneable {
 	 * @return a deep copy of the {@code declarations} field
 	 */
 	private Iterable<? extends Declaration> copyDeclarations() {
-		if (declarations instanceof ValidatedDeclarations)
-			// make sure that declarations field stays a ValidatedDeclarations object because
+		if (declarations instanceof ParsedDeclarations)
+			// make sure that declarations field stays a ParsedDeclarations object because
 			// it is assumed throughout the code
-			return (ValidatedDeclarations)((ValidatedDeclarations)declarations).clone();
+			return (ParsedDeclarations)((ParsedDeclarations)declarations).clone();
 		else {
 			List<Declaration> declarationsCopy = new ArrayList<>();
 			for (Declaration dd : declarations)
@@ -242,12 +244,7 @@ public final class BrailleCssStyle implements Cloneable {
 				if (declarationMap == null) {
 					declarationMap = new TreeMap<>();
 					for (Declaration d : declarations)
-						if (context == Context.ELEMENT) { // context not set if caching is not allowed
-							if (!(d instanceof PropertyValue))
-								throw new IllegalStateException(); // coding error
-							declarationMap.put(d.getProperty(), new CachingDeclaration((PropertyValue)d));
-						} else
-							declarationMap.put(d.getProperty(), d);
+						declarationMap.put(d.getProperty(), d);
 				}
 			}
 		}
@@ -287,7 +284,7 @@ public final class BrailleCssStyle implements Cloneable {
 					rules = new ArrayList<>();
 					for (Map.Entry<String,BrailleCssStyle> e : nestedStyles.entrySet()) {
 						String selector = e.getKey();
-						rules.add(new Builder(context).add(selector, e.getValue()).build());
+						rules.add(new Builder().add(selector, e.getValue()).build());
 					}
 				}
 			}
@@ -303,34 +300,33 @@ public final class BrailleCssStyle implements Cloneable {
 	 * @throws UnsupportedOperationException if this is not a simple inline style
 	 */
 	public SimpleInlineStyle asSimpleInlineStyle(boolean mutable) {
-		if (isEmpty())
-			return SimpleInlineStyle.EMPTY;
-		else if (nestedStyles != null
-		         || context != Context.ELEMENT)
+		if (nestedStyles != null)
 			throw new UnsupportedOperationException("not a simple inline style");
-		else {
-			if (!(declarations instanceof ValidatedDeclarations))
-				throw new IllegalStateException(); // coding error
-			ValidatedDeclarations s = (ValidatedDeclarations)declarations;
-			if (mutable) {
-				s = (ValidatedDeclarations)s.clone(); // make a deep copy
-				for (Declaration d : s) {
-					if (d instanceof PropertyValue) {
-						PropertyValue pv = (PropertyValue)d;
-						CSSProperty p = pv.getCSSProperty();
-						if (p == TextTransform.list_values) {
-							Term<?> v = pv.getValue();
-							if (v instanceof TextTransformList)
-								((TextTransformList)v).locked = false;
-							break;
-						}
+		else if (declarations == null)
+			return SimpleInlineStyle.EMPTY;
+		else if (context != Context.ELEMENT)
+			throw new UnsupportedOperationException("not a simple inline style");
+		else if (!(declarations instanceof ParsedDeclarations))
+			throw new IllegalStateException(); // coding error
+		ParsedDeclarations s = (ParsedDeclarations)declarations;
+		if (mutable && !s.isEmpty()) {
+			s = (ParsedDeclarations)s.clone(); // make a deep copy
+			for (Declaration d : s) {
+				if (d instanceof PropertyValue) {
+					PropertyValue pv = (PropertyValue)d;
+					CSSProperty p = pv.getCSSProperty();
+					if (p == TextTransform.list_values) {
+						Term<?> v = pv.getValue();
+						if (v instanceof TextTransformList)
+							((TextTransformList)v).locked = false;
+						break;
 					}
 				}
-				// mark as mutable
-				s.locked = false;
 			}
-			return s;
+			// mark as mutable
+			s.locked = false;
 		}
+		return s;
 	}
 
 	// used in BrailleCssParser
@@ -367,8 +363,8 @@ public final class BrailleCssStyle implements Cloneable {
 			if (d != null)
 				return d;
 		}
-		if (includeInitial)
-			return getDefaultPropertyValue(propertyName);
+		if (includeInitial && declarations instanceof ParsedDeclarations)
+			return ((ParsedDeclarations)declarations).getOrDefault(propertyName);
 		return null;
 	}
 
@@ -376,10 +372,21 @@ public final class BrailleCssStyle implements Cloneable {
 	 * Get the nested style for the given selector.
 	 */
 	public BrailleCssStyle getNestedStyle(String selector) {
-		if (nestedStyles != null)
-			return nestedStyles.get(selector);
-		else
-			return null;
+		if (nestedStyles != null) {
+			BrailleCssStyle n = nestedStyles.get(selector);
+			if (n != null)
+				return n;
+		}
+		if (parser != null)
+			switch (context) {
+			case ELEMENT:
+				if ("@page".equals(selector))
+					return new Builder(parser, Context.PAGE).build();
+				break;
+			default:
+				break;
+			}
+		return null;
 	}
 
 	/**
@@ -410,11 +417,7 @@ public final class BrailleCssStyle implements Cloneable {
 				b.add((BrailleCssStyle)s);
 			} else if (s instanceof Declaration) {
 				if (b == null) b = new Builder(this);
-				Declaration d = (Declaration)s;
-				if (d instanceof PropertyValue)
-					b.add(d, ((PropertyValue)d).getSupportedBrailleCSS());
-				else
-					b.add(d, Optional.empty());
+				b.add((Declaration)s);
 			} else
 				throw new IllegalArgumentException();
 		}
@@ -429,10 +432,21 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	public BrailleCssStyle add(Declaration declaration) {
 		Builder b = new Builder(this);
-		if (declaration instanceof PropertyValue)
-			b.add(declaration, ((PropertyValue)declaration).getSupportedBrailleCSS());
-		else
-			b.add(declaration, Optional.empty());
+		b.add(declaration);
+		return b.build();
+	}
+
+	/**
+	 * @param contentList assumed to not change
+	 */
+	public BrailleCssStyle add(String propertyName, ContentList contentList) {
+		Builder b = new Builder(this);
+		b.add(new ParsedDeclaration(contentList.getParser(),
+		                            contentList.getContext(),
+		                            propertyName,
+		                            Content.content_list,
+		                            contentList,
+		                            null));
 		return b.build();
 	}
 
@@ -467,34 +481,35 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	public String toString(BrailleCssStyle relativeTo) {
 		if (relativeTo != null) {
-			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof ValidatedDeclarations))
+			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof ParsedDeclarations))
 				throw new IllegalArgumentException();
-			String s = relativize((ValidatedDeclarations)relativeTo.declarations).build().toString();
-			if (context != null) // context not set if caching is not allowed
-				BrailleCssParser.cache.put(context,
-				                           s,
-				                           relativeTo.declarations != null
-				                               ? (ValidatedDeclarations)relativeTo.declarations
-				                               : ValidatedDeclarations.EMPTY,
-				                           true,
-				                           this);
+			String s = relativize((ParsedDeclarations)relativeTo.declarations).build().toString();
+			// cache
+			if (parser != null)
+				parser.cache.put(context,
+				                 s,
+				                 relativeTo.declarations != null
+				                     ? (ParsedDeclarations)relativeTo.declarations
+				                     : ParsedDeclarations.EMPTY,
+				                 true,
+				                 this);
 			return s;
 		}
 		if (serialized == null) {
 			serialized = toString(this, null);
 			// cache
-			if (context != null) // context not set if caching is not allowed
-				BrailleCssParser.cache.put(context, serialized, this);
+			if (parser != null)
+				parser.cache.put(context, serialized, this);
 		} else {
 			// access cache to keep entry longer in it
-			if (context != null)
-				BrailleCssParser.cache.get(context, serialized);
+			if (parser != null)
+				parser.cache.get(context, serialized);
 		}
 		return serialized;
 	}
 
-	private Builder relativize(ValidatedDeclarations base) {
-		if (declarations != null && !(declarations instanceof ValidatedDeclarations))
+	private Builder relativize(ParsedDeclarations base) {
+		if (declarations != null && !(declarations instanceof ParsedDeclarations))
 			throw new IllegalArgumentException();
 		Builder relative = new Builder(this);
 		if (base != null)
@@ -507,7 +522,7 @@ public final class BrailleCssStyle implements Cloneable {
 					} else {
 						PropertyValue def = p.getDefault();
 						if (def != null && !equalIgnoreSource(p, def))
-							relative.add(def, def.getSupportedBrailleCSS());
+							relative.add(def);
 					}
 				}
 			}
@@ -533,9 +548,9 @@ public final class BrailleCssStyle implements Cloneable {
 				if (relative.declarations != null && !relative.declarations.isEmpty()) {
 					relative.remove(sel);
 					if (main == null) main = relative.build();
-					if (main.declarations != null && !(main.declarations instanceof ValidatedDeclarations))
+					if (main.declarations != null && !(main.declarations instanceof ParsedDeclarations))
 						throw new IllegalStateException();
-					relative.add(sel, nested.relativize((ValidatedDeclarations)main.declarations));
+					relative.add(sel, nested.relativize((ParsedDeclarations)main.declarations));
 				}
 			} else {
 				relative.remove(sel);
@@ -584,8 +599,19 @@ public final class BrailleCssStyle implements Cloneable {
 		if (!(other instanceof BrailleCssStyle))
 			return false;
 		BrailleCssStyle that = (BrailleCssStyle)other;
-		if (context != that.context)
+		if (declarations == null)
+			return that.declarations == null;
+		else if (that.declarations == null)
 			return false;
+		if (declarations instanceof ParsedDeclarations) {
+			if (!(that.declarations instanceof ParsedDeclarations))
+				return false;
+			if (((ParsedDeclarations)that.declarations).getParser() != ((ParsedDeclarations)declarations).getParser())
+				return false;
+			if (((ParsedDeclarations)that.declarations).getContext() != ((ParsedDeclarations)declarations).getContext())
+				return false;
+		} else if (that.declarations instanceof ParsedDeclarations)
+					return false;
 		// using toString() for efficiency, because toString() is memoized
 		return toString().equals(that.toString());
 	}
@@ -650,79 +676,49 @@ public final class BrailleCssStyle implements Cloneable {
 			return a.equals(b);
 	}
 
-	// cache initial property values (initial according DEFAULT_VALIDATOR)
-	private final static Map<String,PropertyValue> defaultPropertyValues = new TreeMap<>();
-
-	private static PropertyValue getDefaultPropertyValue(String name) {
-		synchronized (defaultPropertyValues) {
-			PropertyValue def = defaultPropertyValues.get(name);
-			if (def == null) {
-				def = new PropertyValue(
-					name,
-					DEFAULT_VALIDATOR.getDefaultProperty(name),
-					DEFAULT_VALIDATOR.getDefaultValue(name),
-					null,
-					DEFAULT_VALIDATOR) {};
-				defaultPropertyValues.put(name, def);
-			}
-			return def;
-		}
-	}
-
-	private static PropertyValue getDefaultPropertyValue(PropertyValue p) {
-		PropertyValue def = p.getDefault();
-		if (def != null)
-			return def;
-		else
-			return getDefaultPropertyValue(p.getProperty());
-	}
-
 	private static class Builder {
 
+		private final BrailleCssParser parser;
 		private final Context context;
 		private final Object underlyingObject;
-		/**
-		 * Whether to validate declarations (not of nested styles)
-		 */
-		private Optional<SupportedBrailleCSS> validate;
 		private Map<String,Declaration> declarations;
 		private Map<String,Object> nestedStyles; // values are instances of Builder or BrailleCssStyle
 
 		/**
 		 * @param context <code>null</code> means neither of { ELEMENT, PAGE, VOLUME, TEXT_TRANSFORM, COUNTER_STYLE, VENDOR_RULE }
 		 */
-		private Builder(Context context) {
-			this(context, null);
+		private Builder(BrailleCssParser parser, Context context) {
+			this(parser, context, null);
 		}
 
-		private Builder(Context context, Object underlyingObject) {
+		private Builder(BrailleCssParser parser, Context context, Object underlyingObject) {
+			this.parser = parser;
 			this.context = context;
 			this.underlyingObject = underlyingObject;
 		}
 
+		/**
+		 * Create a non-parsing Builder.
+		 */
 		private Builder() {
-			this(null, null);
+			this(null, null, null);
+		}
+
+		private Builder(Object underlyingObject) {
+			this(null, null, underlyingObject);
 		}
 
 		private Builder(BrailleCssStyle style) {
-			this(style.context, style.underlyingObject);
+			this(style.parser, style.context, style.underlyingObject);
 			add(style);
 		}
 
 		/**
 		 * @param declaration assumed to not change
 		 */
-		private Builder add(Declaration declaration, SupportedBrailleCSS validate) {
-			return add(declaration, Optional.of(validate));
-		}
-
-		private Builder add(Declaration declaration, Optional<SupportedBrailleCSS> validate) {
+		private Builder add(Declaration declaration) {
 			if (declaration != null) {
-				if (this.declarations == null) {
-					this.declarations = new TreeMap<>();
-					this.validate = validate;
-				} else if (!this.validate.equals(validate))
-					throw new IllegalArgumentException();
+				if (declarations == null) declarations = new TreeMap<>();
 				declarations.put(declaration.getProperty(), declaration);
 			}
 			return this;
@@ -757,11 +753,8 @@ public final class BrailleCssStyle implements Cloneable {
 
 		private Builder add(BrailleCssStyle style) {
 			if (style.declarations != null)
-				for (Declaration d : style.declarations) {
-					if (d instanceof PropertyValue)
-						add(d, ((PropertyValue)d).getSupportedBrailleCSS());
-					else
-						add(d, Optional.empty()); }
+				for (Declaration d : style.declarations)
+					add(d);
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet())
 					add(e.getKey(), e.getValue());
@@ -771,7 +764,7 @@ public final class BrailleCssStyle implements Cloneable {
 		private Builder add(Builder style) {
 			if (style.declarations != null)
 				for (Declaration d : style.declarations.values())
-					add(d, style.validate);
+					add(d);
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,Object> e : style.nestedStyles.entrySet()) {
 					Object s = e.getValue();
@@ -818,71 +811,64 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param declarations assumed to not change
 	 */
-	public static BrailleCssStyle of(SimpleInlineStyle declarations, Context context) {
-		BrailleCssStyle style = new Builder(context).build();
-		style.declarations = declarations instanceof ValidatedDeclarations
-			? declarations
-			// assuming that declarations originate from a ValidatedDeclarations
-			: new ValidatedDeclarations(declarations); // shallow copy
-		return style;
+	public static BrailleCssStyle of(SimpleInlineStyle declarations) {
+		if (declarations == SimpleInlineStyle.EMPTY)
+			return BrailleCssStyle.EMPTY;
+		else if (declarations instanceof ParsedDeclarations) {
+			BrailleCssStyle style = new Builder().build();
+			style.declarations = declarations;
+			style.parser = ((ParsedDeclarations)declarations).getParser();
+			style.context = ((ParsedDeclarations)declarations).getContext();
+			((ParsedDeclarations)declarations).locked = true;
+			return style;
+		} else {
+			// assuming that declarations originate from a ParsedDeclarations
+			Builder b = new Builder();
+			for (PropertyValue d : declarations)
+				b.add(d);
+			return b.build();
+		}
 	}
 
 	/**
 	 * @param declaration assumed to not change
 	 */
-	public static BrailleCssStyle of(Declaration declaration, Context context) {
-		Builder style = new Builder(context);
-		if (declaration instanceof PropertyValue)
-			style.add(declaration, ((PropertyValue)declaration).getSupportedBrailleCSS());
-		else
-			style.add(declaration,
-			          Optional.ofNullable(
-			              (context == Context.ELEMENT ||
-			               context == Context.PAGE ||
-			               context == Context.VOLUME) ? DEFAULT_VALIDATOR : null));
+	public static BrailleCssStyle of(Declaration declaration) {
+		Builder style = new Builder();
+		style.add(declaration);
 		return style.build();
 	}
 
 	/**
 	 * @param page assumed to not change
+	 * @param parser {@link BrailleCssParser} for declarations inside page and margin area rules.
 	 */
-	private static BrailleCssStyle of(RulePage page) {
-		return of(page, false);
+	// also used in BrailleCssSerializer.toString(RulePage, BrailleCssParser)
+	static BrailleCssStyle of(BrailleCssParser parser, RulePage page) {
+		return of(parser, page, false);
 	}
 
-	private static BrailleCssStyle of(RuleRelativePage page) {
-		return of(page.asRulePage(), true);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleRelativePage page) {
+		return of(parser, page.asRulePage(), true);
 	}
 
-	private static BrailleCssStyle of(RulePage page, boolean relative) {
-		return of(page, relative, DEFAULT_VALIDATOR);
-	}
-
-	/**
-	 * @param supportedCss {@link SupportedBrailleCSS} for declarations inside page and margin area rules.
-	 */
-	// used in BrailleCssSerializer.toString(RulePage, SupportedBrailleCSS)
-	static BrailleCssStyle of(RulePage page, SupportedBrailleCSS supportedCss) {
-		return of(page, false, supportedCss);
-	}
-
-	private static BrailleCssStyle of(RulePage page, boolean relative, SupportedBrailleCSS validate) {
+	private static BrailleCssStyle of(BrailleCssParser parser, RulePage page, boolean relative) {
 		// assumed to be anonymous page
-		Builder style = new Builder(validate == DEFAULT_VALIDATOR ? Context.PAGE : null);
+		Builder style = new Builder(parser, Context.PAGE);
 		for (Rule<?> r : page)
 			if (r instanceof Declaration)
-				style.add((Declaration)r, validate);
+				style.add((Declaration)r);
 			else if (r instanceof RuleMargin) {
-				Builder margin = new Builder();
+				Builder margin = new Builder(parser, Context.PAGE);
 				for (Declaration d : (RuleMargin)r)
-					margin.add(d, validate);
+					margin.add(d);
 				style.add("@" + ((RuleMargin)r).getMarginArea(), margin);
 			} else
 				throw new RuntimeException("coding error");
 		String pseudo = page.getPseudo();
 		Builder relativeRule = (pseudo == null)
 			? style
-			: new Builder(validate == DEFAULT_VALIDATOR ? Context.PAGE : null).add("&:" + pseudo, style);
+			: new Builder(parser, Context.PAGE).add("&:" + pseudo, style);
 		if (relative)
 			return relativeRule.build();
 		else
@@ -892,13 +878,13 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param volumeArea assumed to not change
 	 */
-	private static BrailleCssStyle of(RuleVolumeArea volumeArea) {
-		Builder style = new Builder();
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleVolumeArea volumeArea) {
+		Builder style = new Builder(parser, Context.VOLUME);
 		for (Rule<?> r : volumeArea)
 			if (r instanceof Declaration)
-				style.add((Declaration)r, DEFAULT_VALIDATOR);
+				style.add((Declaration)r);
 			else if (r instanceof RulePage)
-				style.add(of((RulePage)r));
+				style.add(of(parser, (RulePage)r));
 			else
 				throw new RuntimeException("coding error");
 		return new Builder().add("@" + volumeArea.getVolumeArea().value, style).build();
@@ -907,27 +893,27 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param volume assumed to not change
 	 */
-	private static BrailleCssStyle of(RuleVolume volume) {
-		return of(volume, false);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleVolume volume) {
+		return of(parser, volume, false);
 	}
 
-	private static BrailleCssStyle of(RuleRelativeVolume volume) {
-		return of(volume.asRuleVolume(), true);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleRelativeVolume volume) {
+		return of(parser, volume.asRuleVolume(), true);
 	}
 
-	private static BrailleCssStyle of(RuleVolume volume, boolean relative) {
-		Builder style = new Builder(Context.VOLUME);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleVolume volume, boolean relative) {
+		Builder style = new Builder(parser, Context.VOLUME);
 		for (Rule<?> r : volume)
 			if (r instanceof Declaration)
-				style.add((Declaration)r, DEFAULT_VALIDATOR);
+				style.add((Declaration)r);
 			else if (r instanceof RuleVolumeArea)
-				style.add(of((RuleVolumeArea)r));
+				style.add(of(parser, (RuleVolumeArea)r));
 			else
 				throw new RuntimeException("coding error");
 		String pseudo = volume.getPseudo();
 		Builder relativeRule = (pseudo == null)
 			? style
-			: new Builder(Context.VOLUME).add("&:" + pseudo, style);
+			: new Builder(parser, Context.VOLUME).add("&:" + pseudo, style);
 		if (relative)
 			return relativeRule.build();
 		else
@@ -937,19 +923,19 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param hyphenationResource assumed to not change
 	 */
-	private static BrailleCssStyle of(RuleHyphenationResource hyphenationResource) {
-		return of(hyphenationResource, false);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleHyphenationResource hyphenationResource) {
+		return of(parser, hyphenationResource, false);
 	}
 
-	private static BrailleCssStyle of(RuleRelativeHyphenationResource hyphenationResource) {
-		return of(hyphenationResource.asRuleHyphenationResource(), true);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleRelativeHyphenationResource hyphenationResource) {
+		return of(parser, hyphenationResource.asRuleHyphenationResource(), true);
 	}
 
-	private static BrailleCssStyle of(RuleHyphenationResource hyphenationResource, boolean relative) {
-		Builder style = new Builder(Context.HYPHENATION_RESOURCE);
+	private static BrailleCssStyle of(BrailleCssParser parser, RuleHyphenationResource hyphenationResource, boolean relative) {
+		Builder style = new Builder(parser, Context.HYPHENATION_RESOURCE);
 		for (Declaration d : hyphenationResource)
-			style.add(d, Optional.empty());
-		Builder relativeRule = new Builder(Context.HYPHENATION_RESOURCE)
+			style.add(d);
+		Builder relativeRule = new Builder(parser, Context.HYPHENATION_RESOURCE)
 			.add("&:lang(" + BrailleCssSerializer.serializeLanguageRanges(hyphenationResource.getLanguageRanges()) + ")", style);
 		if (relative)
 			return relativeRule.build();
@@ -960,13 +946,13 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param rule assumed to not change
 	 */
-	private static BrailleCssStyle of(VendorAtRule<? extends Rule<?>> rule) {
+	private static BrailleCssStyle of(BrailleCssParser parser, VendorAtRule<? extends Rule<?>> rule) {
 		Builder style = new Builder();
 		for (Rule<?> r : rule)
 			if (r instanceof Declaration)
-				style.add((Declaration)r, Optional.empty());
+				style.add((Declaration)r);
 			else if (r instanceof VendorAtRule)
-				style.add("@" + ((VendorAtRule)r).getName(), of((VendorAtRule<? extends Rule<?>>)r));
+				style.add("@" + ((VendorAtRule)r).getName(), of(parser, (VendorAtRule<? extends Rule<?>>)r));
 			else
 				throw new RuntimeException("coding error");
 		return style.build();
@@ -975,19 +961,15 @@ public final class BrailleCssStyle implements Cloneable {
 	/**
 	 * @param inlineStyle assumed to not change
 	 */
-	// used in BrailleCssSerializer
-	static BrailleCssStyle of(InlineStyle inlineStyle, Context context) {
-		Builder style = new Builder(context);
+	private static BrailleCssStyle of(BrailleCssParser parser, Context context, InlineStyle inlineStyle) {
+		Builder style = new Builder(parser, context);
 		Map<String,RuleCounterStyle> counterStyleRules = null;
 		for (RuleBlock<?> rule : inlineStyle) {
 			if (rule instanceof RuleMainBlock)
 				// Note that the declarations have not been transformed by SupportedBrailleCSS yet.
 				// This will be done when build() is called.
 				for (Declaration d : (RuleMainBlock)rule)
-					style.add(d, Optional.ofNullable(
-					                 (context == Context.ELEMENT ||
-					                  context == Context.PAGE ||
-					                  context == Context.VOLUME) ? DEFAULT_VALIDATOR : null));
+					style.add(d);
 			else if (rule instanceof RuleRelativeBlock) {
 				String[] selector = serializeSelector(((RuleRelativeBlock)rule).getSelector());
 				if (context == Context.COUNTER_STYLE && selector.length == 1 && selector[0].startsWith("& ")) {
@@ -1001,123 +983,89 @@ public final class BrailleCssStyle implements Cloneable {
 						counterStyleRules = new HashMap<>();
 					counterStyleRules.put(name, counterStyle);
 				} else {
-					Builder decls = new Builder(); {
+					Builder decls = new Builder(parser, context); {
 						for (Rule<?> r : (RuleRelativeBlock)rule)
 							if (r instanceof Declaration)
-								decls.add((Declaration)r,
-								          Optional.ofNullable(context == Context.ELEMENT ? DEFAULT_VALIDATOR : null));
+								decls.add((Declaration)r);
 							else if (r instanceof RulePage)
-								decls.add(of((RulePage)r));
+								decls.add(of(parser, (RulePage)r));
 							else
 								throw new RuntimeException("coding error");
 					}
 					if (selector.length > 0) {
 						for (int i = selector.length - 1; i > 0; i--)
-							decls = new Builder().add(selector[i], decls);
+							decls = new Builder(parser, context).add(selector[i], decls);
 						style.add(selector[0], decls);
 					}
 				}
 			} else if (rule instanceof RulePage)
-				style.add(of((RulePage)rule));
+				style.add(of(parser, (RulePage)rule));
 			else if (rule instanceof RuleVolume)
-				style.add(of((RuleVolume)rule));
+				style.add(of(parser, (RuleVolume)rule));
 			else if (rule instanceof RuleTextTransform) {
 				String name = ((RuleTextTransform)rule).getName();
-				Builder textTransform = new Builder(Context.TEXT_TRANSFORM);
+				Builder textTransform = new Builder(parser, Context.TEXT_TRANSFORM);
 				for (Declaration d : (RuleTextTransform)rule)
-					textTransform.add(d, Optional.empty());
+					textTransform.add(d);
 				if (name == null)
 					style.add("@text-transform", textTransform);
 				else
-					style.add("@text-transform", new Builder().add("& " + name, textTransform)); }
+					style.add("@text-transform", new Builder(parser, Context.TEXT_TRANSFORM).add("& " + name, textTransform)); }
 			else if (rule instanceof RuleHyphenationResource)
-				style.add(of((RuleHyphenationResource)rule));
+				style.add(of(parser, (RuleHyphenationResource)rule));
 			else if (rule instanceof RuleCounterStyle) {
 				if (counterStyleRules == null)
 					counterStyleRules = new HashMap<>();
 				counterStyleRules.put(((RuleCounterStyle)rule).getName(), (RuleCounterStyle)rule); }
 			else if (rule instanceof RuleMargin) {
-				Builder margin = new Builder();
+				Builder margin = new Builder(parser, Context.PAGE);
 				for (Declaration d : (RuleMargin)rule)
-					margin.add(d, DEFAULT_VALIDATOR);
+					margin.add(d);
 				style.add("@" + ((RuleMargin)rule).getMarginArea(), margin);
 			} else if (rule instanceof RuleVolumeArea)
-				style.add(of((RuleVolumeArea)rule));
+				style.add(of(parser, (RuleVolumeArea)rule));
 			else if (rule instanceof RuleRelativePage)
-				style.add(of((RuleRelativePage)rule));
+				style.add(of(parser, (RuleRelativePage)rule));
 			else if (rule instanceof RuleRelativeVolume)
-				style.add(of((RuleRelativeVolume)rule));
+				style.add(of(parser, (RuleRelativeVolume)rule));
 			else if (rule instanceof RuleRelativeHyphenationResource)
-				style.add(of((RuleRelativeHyphenationResource)rule));
+				style.add(of(parser, (RuleRelativeHyphenationResource)rule));
 			else if (rule instanceof VendorAtRule)
-				style.add("@" + ((VendorAtRule)rule).getName(), of((VendorAtRule<? extends Rule<?>>)rule));
+				style.add("@" + ((VendorAtRule)rule).getName(), of(parser, (VendorAtRule<? extends Rule<?>>)rule));
 			else
 				throw new RuntimeException("coding error");
 		}
 		if (counterStyleRules != null) {
 			for (Map.Entry<String,CounterStyle> e : CounterStyle.parseCounterStyleRules(counterStyleRules.values()).entrySet()) {
-				Builder counterStyle = new Builder(Context.COUNTER_STYLE, e.getValue());
+				Builder counterStyle = new Builder(parser, Context.COUNTER_STYLE, e.getValue());
 				for (Declaration d : counterStyleRules.get(e.getKey()))
-					counterStyle.add(d, Optional.empty());
+					counterStyle.add(d);
 				if (context == Context.COUNTER_STYLE)
 					style.add("& " + e.getKey(), counterStyle);
 				else
-					style.add("@counter-style", new Builder().add("& " + e.getKey(), counterStyle));
+					style.add("@counter-style", new Builder(parser, Context.COUNTER_STYLE).add("& " + e.getKey(), counterStyle));
 			}
 		}
 		return style.build();
 	}
 
-	public static BrailleCssStyle of(String inlineStyle, Context context) {
+	// used in BrailleCssParser
+	static BrailleCssStyle of(BrailleCssParser parser, Context context, String inlineStyle) {
 		if (context == null)
 			throw new IllegalArgumentException();
-		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle);
-		if (s == null) {
-			// try if a declaration was cached
-			if (context == Context.ELEMENT) {
-				Declaration d = BrailleCssParser.declCache.get(inlineStyle);
-				if (d != null)
-					s = of(d, context);
-			}
-			if (s == null)
-				s = of(new InlineStyle(inlineStyle, context), context);
-			BrailleCssParser.cache.put(context, inlineStyle, s);
-		}
-		return s;
+		return of(parser, context, new InlineStyle(inlineStyle, context));
 	}
 
-	/**
-	 * Concretizes "inherit" even if the parent style is null or empty.
-	 */
-	public static BrailleCssStyle of(String inlineStyle, Context context, BrailleCssStyle parent) {
-		if (context != Context.ELEMENT)
-			throw new IllegalArgumentException();
-		ValidatedDeclarations parentDecls; {
-			if (parent == null || parent.declarations == null)
-				parentDecls = ValidatedDeclarations.EMPTY;
-			else if (!(parent.declarations instanceof ValidatedDeclarations))
-				throw new IllegalArgumentException();
-			else
-				parentDecls = (ValidatedDeclarations)parent.declarations;
-		}
-		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle, parentDecls, true);
-		if (s == null) {
-			s = of(inlineStyle, context);
-			s = s.inheritFrom(parentDecls);
-			BrailleCssParser.cache.put(context, inlineStyle, parentDecls, true, s);
-		}
-		return s;
-	}
-
-	private BrailleCssStyle inheritFrom(ValidatedDeclarations base) {
-		if (declarations != null && !(declarations instanceof ValidatedDeclarations))
+	// used in BrailleCssParser
+	BrailleCssStyle inheritFrom(ParsedDeclarations base) {
+		if (declarations != null && !(declarations instanceof ParsedDeclarations))
 			throw new IllegalStateException();
-		ValidatedDeclarations decls = declarations != null
-			? (ValidatedDeclarations)declarations
-			: ValidatedDeclarations.EMPTY;
+		ParsedDeclarations decls = declarations != null
+			? (ParsedDeclarations)declarations
+			: ParsedDeclarations.EMPTY;
 		if (!base.isEmpty())
-			decls = (ValidatedDeclarations)decls.inheritFrom(base);
-		decls = (ValidatedDeclarations)decls.concretize();
+			decls = (ParsedDeclarations)decls.inheritFrom(base);
+		decls = (ParsedDeclarations)decls.concretize();
 		if (!decls.isEmpty()) {
 			// Make sure that the resulting SimpleInlineStyle is not based on a parent and that it
 			// is not concretized because that would result in an exception when inheritFrom() is
@@ -1127,7 +1075,7 @@ public final class BrailleCssStyle implements Cloneable {
 			decls.forEach(list::add);
 			ListIterator<PropertyValue> i = list.listIterator();
 			while (i.hasNext()) {
-				PropertyValue v = i.next();
+				ParsedDeclaration v = (ParsedDeclaration)i.next();
 				PropertyValue flat = null;
 				if (!base.isEmpty() && v.getCSSProperty() instanceof TextTransform)
 					for (PropertyValue vv : base)
@@ -1135,27 +1083,29 @@ public final class BrailleCssStyle implements Cloneable {
 							TextTransformList t = TextTransformList.of(v);
 							t.inheritFrom(TextTransformList.of(vv)); // this mutates the value
 							if (t != v.getValue())
-								flat = new PropertyValue(
+								flat = new ParsedDeclaration(
+									v.getParser(),
+									v.getContext(),
 									v.getProperty(),
 									t.equalsAuto() ? TextTransform.AUTO
 									               : t.equalsInitial() ? TextTransform.INITIAL
 									                                   : t.equalsNone() ? TextTransform.NONE
 									                                                    : TextTransform.list_values,
 									t.equalsAuto() || t.equalsInitial() || t.equalsNone() ? null : t,
-									v.getSourceDeclaration(),
-									v.getSupportedBrailleCSS());
+									v.getSourceDeclaration());
 							break;
 						}
 				if (flat == null)
-					flat = new PropertyValue(
+					flat = new ParsedDeclaration(
+						v.getParser(),
+						v.getContext(),
 						v.getProperty(),
 						v.getCSSProperty(),
 						v.getValue(),
-						v.getSourceDeclaration(),
-						v.getSupportedBrailleCSS());
+						v.getSourceDeclaration());
 				i.set(flat);
 			}
-			decls = new ValidatedDeclarations(list);
+			decls = new ParsedDeclarations(parser, context, list);
 		}
 		SortedMap<String,BrailleCssStyle> nested = null;
 		if (nestedStyles != null)
@@ -1179,7 +1129,7 @@ public final class BrailleCssStyle implements Cloneable {
 				}
 		if (declarations != null || !decls.isEmpty() || nested != null) {
 			BrailleCssStyle copy = clone();
-			copy.declarations = decls.isEmpty() ? null : decls;
+			copy.declarations = decls.isEmpty() ? new ParsedDeclarations(parser, context, null) : decls;
 			copy.declarationMap = null;
 			if (nested != null) {
 				copy.nestedStyles = nested;
@@ -1281,7 +1231,4 @@ public final class BrailleCssStyle implements Cloneable {
 			return b.toString();
 		}
 	}
-
-	private static final SupportedBrailleCSS DEFAULT_VALIDATOR = new DeepDeclarationTransformer(true, false);
-
 }

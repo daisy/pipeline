@@ -42,8 +42,9 @@ public class ValueStyle extends Style {
 	protected Iterator<Style> iterator() {
 		if (value instanceof ContentList)
 			return Iterators.transform(value.iterator(),
-			                           v -> new ValueStyle(ContentList.of(Collections.singletonList(v),
-			                                                              ((ContentList)value).getSupportedBrailleCSS())));
+			                           v -> new ValueStyle(ContentList.of(((ContentList)value).getParser(),
+			                                                              ((ContentList)value).getContext(),
+			                                                              Collections.singletonList(v))));
 		return Collections.emptyIterator();
 	}
 
