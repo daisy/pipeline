@@ -74,8 +74,9 @@ public class Value extends Style {
 			return Iterators.transform(value.iterator(),
 			                           v -> v instanceof TermString
 			                                    ? ((TermString)v).getValue()
-			                           : new Value(ContentList.of(Collections.singletonList(v),
-			                                                      ((ContentList)value).getSupportedBrailleCSS())));
+			                           : new Value(ContentList.of(((ContentList)value).getParser(),
+			                                                      ((ContentList)value).getContext(),
+			                                                      Collections.singletonList(v))));
 		else if (value instanceof CounterSetList)
 			return Iterators.transform(value.iterator(),
 			                           v -> new Value(CounterSetList.of(Collections.singletonList(v))));

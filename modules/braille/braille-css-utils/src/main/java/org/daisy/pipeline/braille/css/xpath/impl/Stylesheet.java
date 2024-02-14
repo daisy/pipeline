@@ -125,15 +125,13 @@ public class Stylesheet extends Style {
 			return this.style != null ? Optional.of(this) : Optional.empty();
 		Style s = style.get();
 		if (s instanceof Stylesheet)
-			return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.of("", Context.ELEMENT))
+			return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.EMPTY)
 			                                  .add(key, ((Stylesheet)s).style)));
 		else if (s instanceof Value) {
 			Value v = (Value)s;
-			if (v.value instanceof ContentList) {
-				cz.vutbr.web.css.Declaration d = new PropertyValue(key, Content.content_list, (ContentList)v.value, null,
-				                                                   ((ContentList)v.value).getSupportedBrailleCSS());
-				return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.of("", Context.ELEMENT)).add(d)));
-			}
+			if (v.value instanceof ContentList)
+				return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.EMPTY)
+				                                  .add(key, (ContentList)v.value)));
 		}
 		throw new IllegalArgumentException();
 	}
@@ -153,10 +151,10 @@ public class Stylesheet extends Style {
 			return "";
 		else if (style == null)
 			// we may need to add declarations to cancel parent declarations
-			style = BrailleCssStyle.of("", Context.ELEMENT);
+			style = BrailleCssStyle.EMPTY;
 		else if (relativeTo == null && parent != null)
 			// we may want to remove unneeded declarations
-			relativeTo = BrailleCssStyle.of("", Context.ELEMENT);
+			relativeTo = BrailleCssStyle.EMPTY;
 		return style.toString(relativeTo);
 	}
 

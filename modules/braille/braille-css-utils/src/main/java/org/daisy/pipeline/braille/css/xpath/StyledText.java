@@ -13,8 +13,13 @@ import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.css.xpath.impl.Stylesheet;
 
-/* This interface is not meant to be implemented. It is merely a container of XPath function definitions. */
-public interface StyledText {
+public class StyledText {
+
+	private final TextStyleParser textStyleParser;
+
+	public StyledText(TextStyleParser textStyleParser) {
+		this.textStyleParser = textStyleParser;
+	}
 
 	public static String getText(CSSStyledText t) {
 		return t.getText();
@@ -27,7 +32,7 @@ public interface StyledText {
 		SimpleInlineStyle s = t.getStyle();
 		if (s == null || s.isEmpty())
 			return Optional.empty();
-		return Optional.of(new Stylesheet(BrailleCssStyle.of(s, Context.ELEMENT)));
+		return Optional.of(new Stylesheet(BrailleCssStyle.of(s)));
 	}
 
 	public static Optional<String> getLanguage(CSSStyledText t) {
@@ -42,19 +47,19 @@ public interface StyledText {
 		return map != null ? map : Collections.emptyMap();
 	}
 
-	public static CSSStyledText of(String text) {
+	public CSSStyledText of(String text) {
 		return of(text, Optional.empty());
 	}
 
-	public static CSSStyledText of(String text, Optional<Object> style) {
+	public CSSStyledText of(String text, Optional<Object> style) {
 		return of(text, style, Optional.empty());
 	}
 
-	public static CSSStyledText of(String text, Optional<Object> style, Optional<String> language) {
+	public CSSStyledText of(String text, Optional<Object> style, Optional<String> language) {
 		return of(text, style, language, null);
 	}
 
-	public static CSSStyledText of(String text, Optional<Object> style, Optional<String> language, Map<String,String> textAttributes) {
+	public CSSStyledText of(String text, Optional<Object> style, Optional<String> language, Map<String,String> textAttributes) {
 		Locale l = null; {
 			if (language != null && language.isPresent()) {
 				try {
@@ -83,7 +88,7 @@ public interface StyledText {
 				return new CSSStyledText(text, s, l, textAttributes);
 			} else if (o instanceof String) {
 				String s = (String)o;
-				return new CSSStyledText(text, TextStyleParser.parse(s), l, textAttributes);
+				return new CSSStyledText(text, textStyleParser.parse(s), l, textAttributes);
 			} else
 				throw new IllegalArgumentException("Unexpected style argument: expected `Style` object or string");
 		} else

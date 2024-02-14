@@ -134,13 +134,15 @@ public class LiblouisTranslatorJnaImplTest {
 		}
 	}
 	
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		String text = null;
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
+				styledText.add(new CSSStyledText(text, cssParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }

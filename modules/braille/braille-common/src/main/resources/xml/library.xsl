@@ -19,7 +19,7 @@
     <xsl:function name="pf:text-transform" as="item()*">
         <xsl:param name="query" as="xs:string"/>
         <xsl:param name="styled-text" as="item()*"/>
-        <xsl:sequence select="TextTransform:transform(TextTransform:new(),$query,$styled-text)"
+        <xsl:sequence select="TextTransform:transform($query,$styled-text)"
                       xmlns:TextTransform="org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition$TextTransform">
             <!--
                 Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/TextTransformDefinition.java

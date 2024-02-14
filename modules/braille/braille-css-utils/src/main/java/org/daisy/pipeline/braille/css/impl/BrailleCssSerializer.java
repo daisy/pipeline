@@ -38,9 +38,8 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
-import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.braille.css.impl.BrailleCssParser.CachingDeclaration;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.ParsedDeclaration;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.CounterFunction;
@@ -139,10 +138,6 @@ public final class BrailleCssSerializer {
 		return style.toString();
 	}
 
-	public static String toString(InlineStyle style) {
-		return toString(BrailleCssStyle.of(style, Context.ELEMENT));
-	}
-
 	public static String toString(NodeData style) {
 		List<String> declarations = new ArrayList<>();
 		for (String p : style.getPropertyNames()) {
@@ -175,8 +170,8 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String serializePropertyValue(PropertyValue propValue) {
-		if (propValue instanceof CachingDeclaration)
-			return ((CachingDeclaration)propValue).valueToString(); // this triggers caching
+		if (propValue instanceof ParsedDeclaration)
+			return ((ParsedDeclaration)propValue).valueToString(); // this may trigger caching
 		else {
 			Term<?> value = propValue.getValue();
 			if (value != null)
@@ -223,8 +218,8 @@ public final class BrailleCssSerializer {
 		return b.toString();
 	}
 
-	public static String toString(RulePage page, SupportedBrailleCSS supportedCss) {
-		return toString(BrailleCssStyle.of(page, supportedCss));
+	public static String toString(RulePage page, BrailleCssParser parser) {
+		return toString(BrailleCssStyle.of(parser, page));
 	}
 
 	public static String serializeRuleBlockList(Iterable<? extends RuleBlock<? extends Rule<?>>> ruleBlocks) {
@@ -327,7 +322,7 @@ public final class BrailleCssSerializer {
 	private static void toXml(BrailleCssStyle style,
 	                          XMLStreamWriter w,
 	                          boolean recursive) throws XMLStreamException {
-		if (style.declarations != null) {
+		if (style.declarations != null && !Iterables.isEmpty(style.declarations)) {
 			if (!recursive || style.nestedStyles != null)
 				writeStartElement(w, CSS_RULE);
 			List<Declaration> declarations = new ArrayList<>();

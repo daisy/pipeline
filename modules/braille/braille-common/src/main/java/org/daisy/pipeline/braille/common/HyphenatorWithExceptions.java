@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 public class HyphenatorWithExceptions extends AbstractHyphenator {
 
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
+
 	private final Hyphenator hyphenator;
 	private final Reader exceptionsFile;
 	private final Map<String,byte[]> exceptionWords;
@@ -149,7 +151,7 @@ public class HyphenatorWithExceptions extends AbstractHyphenator {
 			// LineBreaker that breaks words at SHY at ZWSP. It is expected that ZWSP have already been inserted after
 			// hard hyphens.
 			LineBreaker standardLineBreaker = new DefaultLineBreaker() {};
-			SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
+			SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 			lineBreaker = new DefaultLineBreaker() {
 					@Override
 					public LineIterator transform(String text, Locale language) {

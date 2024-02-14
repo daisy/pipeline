@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Set;
@@ -43,7 +44,9 @@ import cz.vutbr.web.csskit.RuleFactoryImpl;
 import cz.vutbr.web.csskit.TermURIImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
+import org.daisy.braille.css.BrailleCSSExtension;
 import org.daisy.braille.css.BrailleCSSParserFactory;
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.RuleCounterStyle;
@@ -57,6 +60,7 @@ import org.daisy.braille.css.VendorAtRule;
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.braille.css.SupportedPrintCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.CssPreProcessor;
@@ -64,7 +68,14 @@ import org.daisy.pipeline.css.JStyleParserCssCascader;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.XsltProcessor;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -74,6 +85,8 @@ import org.w3c.dom.Node;
 	service = { CssCascader.class }
 )
 public class BrailleCssCascader implements CssCascader {
+
+	private static final Logger logger = LoggerFactory.getLogger(BrailleCssCascader.class);
 
 	/**
 	 * Note that this implementation only supports a very small subset of medium "print", namely the
@@ -121,11 +134,43 @@ public class BrailleCssCascader implements CssCascader {
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 
 	// medium braille/embossed
-	private static final SupportedBrailleCSS brailleCSS = new SupportedBrailleCSS(false, true);
+	private final List<BrailleCSSExtension> brailleCSSExtensions = new ArrayList<>();
+	private SupportedBrailleCSS brailleCSS = null;
+	private BrailleCssParser brailleCSSParser = null;
 	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
 	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
-	private static class Transformer extends JStyleParserCssCascader {
+
+	@Reference(
+		name = "BrailleCSSExtension",
+		unbind = "-",
+		service = BrailleCSSExtension.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void addBrailleCSSExtension(BrailleCSSExtension x) {
+		logger.debug("Binding BrailleCSSExtension: {}", x);
+		brailleCSSExtensions.add(x);
+	}
+
+	@Activate
+	protected void init() {
+		brailleCSS = new SupportedBrailleCSS(false, true, brailleCSSExtensions, true);
+		brailleCSSParser = new BrailleCssParser() {
+				public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
+					switch (context) {
+					case ELEMENT:
+					case PAGE:
+					case VOLUME:
+						return Optional.of(brailleCSS);
+					default:
+						return Optional.empty();
+					}
+				}
+			};
+	}
+
+	private class Transformer extends JStyleParserCssCascader {
 
 		private final QName attributeName;
 		private final boolean isBrailleCss;
@@ -283,8 +328,8 @@ public class BrailleCssCascader implements CssCascader {
 				builder.append("(").append(s).append(")"); }}
 	}
 
-	private static void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
-	                                      Map<String,Map<String,RulePage>> pageRules) {
+	private void insertPseudoStyle(StringBuilder builder, NodeData nodeData, PseudoElement elem,
+	                               Map<String,Map<String,RulePage>> pageRules) {
 		pseudoElementToString(builder, elem);
 		builder.append(" { ");
 		insertStyle(builder, nodeData);
@@ -296,13 +341,13 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("} ");
 	}
 
-	private static void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule) {
+	private void insertPageStyle(StringBuilder builder, Map<String,RulePage> pageRule) {
 		for (RulePage r : pageRule.values())
 			insertPageStyle(builder, r);
 	}
 
-	private static void insertPageStyle(StringBuilder builder, RulePage pageRule) {
-		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSS)).append(" ");
+	private void insertPageStyle(StringBuilder builder, RulePage pageRule) {
+		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
 	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
@@ -397,12 +442,12 @@ public class BrailleCssCascader implements CssCascader {
 		return null;
 	}
 
-	private static void insertVolumeStyle(StringBuilder builder, Map<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeStyle(StringBuilder builder, Map<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
 		for (Map.Entry<String,RuleVolume> r : volumeRule.entrySet())
 			insertVolumeStyle(builder, r, pageRules);
 	}
 
-	private static void insertVolumeStyle(StringBuilder builder, Map.Entry<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeStyle(StringBuilder builder, Map.Entry<String,RuleVolume> volumeRule, Map<String,Map<String,RulePage>> pageRules) {
 		builder.append("@volume");
 		String pseudo = volumeRule.getKey();
 		if (pseudo != null && !"".equals(pseudo))
@@ -418,7 +463,7 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append("} ");
 	}
 
-	private static void insertVolumeAreaStyle(StringBuilder builder, RuleVolumeArea ruleVolumeArea, Map<String,Map<String,RulePage>> pageRules) {
+	private void insertVolumeAreaStyle(StringBuilder builder, RuleVolumeArea ruleVolumeArea, Map<String,Map<String,RulePage>> pageRules) {
 		builder.append("@").append(ruleVolumeArea.getVolumeArea().value).append(" { ");
 		StringBuilder innerStyle = new StringBuilder();
 		Map<String,RulePage> pageRule = null;

@@ -9,10 +9,7 @@ import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermPair;
 import cz.vutbr.web.css.TermString;
 
-import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
-import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
-
-import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 
@@ -82,7 +79,7 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 	/**
 	 * @param list assumed to not change
 	 */
-	public static StringSetList of(TermList list, SupportedBrailleCSS css) throws IllegalArgumentException {
+	public static StringSetList of(BrailleCssParser parser, Context context, TermList list) throws IllegalArgumentException {
 		List<Term<?>> pairs = new ArrayList<>();
 		for (Term<?> t : list) {
 			if (t instanceof TermPair) {
@@ -90,7 +87,7 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 				Object k = pair.getKey();
 				Object v = pair.getValue();
 				if (k instanceof String && v instanceof TermList)
-					pairs.add(new StringSet((String)k, ContentList.of((TermList)v, css), t.getOperator()));
+					pairs.add(new StringSet((String)k, ContentList.of(parser, context, (TermList)v), t.getOperator()));
 				else
 					throw new IllegalArgumentException("unexpected term in string-set list: " + t);
 			} else

@@ -112,6 +112,8 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 	private final static net.sf.saxon.s9api.QName _EXCLUDE_COUNTER_NAMES = new net.sf.saxon.s9api.QName(new QName("exclude-counter-names"));
 	private final static net.sf.saxon.s9api.QName _COUNTER_STYLES = new net.sf.saxon.s9api.QName(new QName("counter-styles"));
 
+	private final static BrailleCssParser cssParser = BrailleCssParser.getInstance();
+
 	@Override
 	public void run() throws SaxonApiException {
 		try {
@@ -480,7 +482,7 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 		if (style == null)
 			style = CounterStyle.predefined(attr);
 		if (style == null) {
-			Declaration d = BrailleCssParser.parseDeclaration(
+			Declaration d = cssParser.parseDeclaration(
 				"content", String.format("counter(x, %s)", attr), null, false
 			).orElse(null);
 			if (d instanceof PropertyValue) {
@@ -557,7 +559,7 @@ public class PxiEvalCounterStep extends DefaultStep implements XProcStep {
 		private List<CounterSet> getPairList(XMLStreamReader element, QName attributeName) {
 			for (int i = 0; i < element.getAttributeCount(); i++)
 				if (attributeName.equals(element.getAttributeName(i))) {
-					Declaration d = BrailleCssParser.parseDeclaration(
+					Declaration d = cssParser.parseDeclaration(
 						attributeName.getLocalPart(), element.getAttributeValue(i), null, false
 					).orElse(null);
 					if (d instanceof PropertyValue) {

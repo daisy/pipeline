@@ -69,6 +69,8 @@ public class DotifyCoreTest extends AbstractTest {
 		                     .fromStyledTextToBraille()
 		                     .transform(styledText("foobar","hyphens:auto")));
 	}
+
+	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	
 	private Iterable<CSSStyledText> styledText(String... textAndStyle) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
@@ -76,7 +78,7 @@ public class DotifyCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
+				styledText.add(new CSSStyledText(text, cssParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }

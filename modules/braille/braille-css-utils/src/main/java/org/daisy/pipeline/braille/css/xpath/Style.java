@@ -12,7 +12,7 @@ import javax.xml.stream.XMLStreamWriter;
 import cz.vutbr.web.css.Term;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
-import org.daisy.braille.css.SupportedBrailleCSS;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.impl.ContentList;
 import org.daisy.pipeline.braille.css.xpath.impl.Declaration;
@@ -182,7 +182,7 @@ public abstract class Style {
 			if (s instanceof Stylesheet)
 				head = s;
 			else if (s instanceof Declaration)
-				head = new Stylesheet(BrailleCssStyle.of(((Declaration)s).declaration, Context.ELEMENT));
+				head = new Stylesheet(BrailleCssStyle.of(((Declaration)s).declaration));
 			else { // s instanceof Value
 				if (!(((Value)s).value instanceof ContentList))
 					throw new IllegalArgumentException();
@@ -211,20 +211,25 @@ public abstract class Style {
 			return Optional.of(new Stylesheet(((BrailleCssStyle)it.next()).add(it)));
 		} else { // head instanceof Value
 			List<Term<?>> content = new ArrayList<>();
-			SupportedBrailleCSS css = null;
+			BrailleCssParser parser = null;
+			Context context = null;
 			for (Style s : list) {
 				if (!(s instanceof Value))
 					throw new IllegalArgumentException();
 				Value v = (Value)s;
 				if (!(v.value instanceof ContentList))
 					throw new IllegalArgumentException();
-				if (css == null)
-					css = ((ContentList)v.value).getSupportedBrailleCSS();
-				else if (!css.equals(((ContentList)v.value).getSupportedBrailleCSS()))
+				if (parser == null)
+					parser = ((ContentList)v.value).getParser();
+				else if (parser != ((ContentList)v.value).getParser())
+					throw new IllegalArgumentException();
+				if (context == null)
+					context = ((ContentList)v.value).getContext();
+				else if (context != ((ContentList)v.value).getContext())
 					throw new IllegalArgumentException();
 				content.addAll(v.value);
 			}
-			return Optional.of(new Value(ContentList.of(content, css)));
+			return Optional.of(new Value(ContentList.of(parser, context, content)));
 		}
 	}
 }

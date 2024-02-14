@@ -2,10 +2,7 @@ package org.daisy.pipeline.braille.css.saxon.impl;
 
 import java.util.Optional;
 
-import cz.vutbr.web.css.SupportedCSS;
-
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
-import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
 import org.daisy.pipeline.braille.css.xpath.impl.Declaration;
@@ -29,7 +26,7 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 
 	private static final String XMLNS_CSS = "http://www.daisy.org/ns/pipeline/braille-css";
 
-	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(true, false);
+	private static final BrailleCssParser parser = BrailleCssParser.getInstance();
 
 	public ParseStylesheetDefinition() {
 		super(ParseStylesheet.class);
@@ -49,12 +46,9 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 			String argStringValue;
 			Attr attr = null;
 			Element element = null;
-			if (style == null) {
-				if (parentStyle == null)
-					return Optional.empty();
-				else
-					argStringValue = "";
-			} else if (style instanceof Attr) {
+			if (style == null)
+				argStringValue = "";
+			else if (style instanceof Attr) {
 				attr = (Attr)style;
 				argStringValue = attr.getNodeValue();
 				element = (Element)attr.getParentNode();
@@ -80,12 +74,12 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 						styleCtxt = Context.TEXT_TRANSFORM;
 					} else if ("counter-style".equals(name)) {
 						styleCtxt = Context.COUNTER_STYLE;
-					} else if (brailleCSS.isSupportedCSSProperty(name) || name.startsWith("-")) {
+					} else if (parser.isSupportedCSSProperty(name) || name.startsWith("-")) {
 						// assuming that context is a (pseudo-)element
 						// assuming that the value is not "inherit"
 						// not assuming that attr() and content() values have already been evaluated (although normally they will)
 						Optional<cz.vutbr.web.css.Declaration> declaration
-							= BrailleCssParser.parseDeclaration(name, argStringValue, element, false);
+							= parser.parseDeclaration(name, argStringValue, element, false);
 						if (declaration.isPresent())
 							return Optional.of(new Declaration(declaration.get()));
 						else
@@ -94,8 +88,8 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 				}
 			}
 			BrailleCssStyle s = concretizeInherit
-				? BrailleCssStyle.of(argStringValue, styleCtxt, parentStyle != null ? ((Stylesheet)parentStyle).style : null)
-				: BrailleCssStyle.of(argStringValue, styleCtxt);
+				? parser.parseInlineStyle(argStringValue, styleCtxt, parentStyle != null ? ((Stylesheet)parentStyle).style : null)
+				: parser.parseInlineStyle(argStringValue, styleCtxt);
 			if (s.isEmpty())
 				return Optional.empty();
 			if (attr != null)

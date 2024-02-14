@@ -19,6 +19,7 @@ import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.TermStringImpl;
 import cz.vutbr.web.csskit.TermURIImpl;
 
+import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
 
@@ -31,18 +32,20 @@ import org.w3c.dom.Element;
 public class ContentList extends AbstractList<Term<?>> implements Term<ContentList> {
 
 	private List<Term<?>> list;
-	private final SupportedBrailleCSS css;
+	private final BrailleCssParser parser;
+	private final Context context;
 
-	private ContentList(List<Term<?>> list, SupportedBrailleCSS css) {
+	private ContentList(BrailleCssParser parser, Context context, List<Term<?>> list) {
 		super();
 		this.list = list;
-		this.css = css;
+		this.parser = parser;
+		this.context = context;
 	}
 
 	/**
 	 * @param list assumed to not change
 	 */
-	public static ContentList of(List<Term<?>> list, SupportedBrailleCSS css) {
+	public static ContentList of(BrailleCssParser parser, Context context, List<Term<?>> list) {
 		List<Term<?>> items = new ArrayList<>();
 		for (Term<?> t : list) {
 			if (t instanceof UnmodifiableTermString ||
@@ -85,7 +88,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 			} else
 				throw new IllegalArgumentException("unexpected term in content list: " + t);
 		}
-		return new ContentList(items, css);
+		return new ContentList(parser, context, items);
 	}
 
 	@Override
@@ -135,10 +138,17 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 	}
 
 	/**
-	 * {@link SupportedBrailleCSS} instance that was used to create this {@link ContentList}.
+	 * {@link BrailleCssParser} instance that was used to create this {@link ContentList}.
 	 */
-	public SupportedBrailleCSS getSupportedBrailleCSS() {
-		return css;
+	public BrailleCssParser getParser() {
+		return parser;
+	}
+
+	/**
+	 * {@link Context} in which this {@link ContentList} was created.
+	 */
+	public Context getContext() {
+		return context;
 	}
 
 	/**
