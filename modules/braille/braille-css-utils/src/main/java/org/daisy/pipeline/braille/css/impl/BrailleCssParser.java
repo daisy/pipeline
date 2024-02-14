@@ -23,11 +23,27 @@ import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle.ValidatedDeclarations;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.w3c.dom.Element;
 
+@Component(
+	name = "org.daisy.pipeline.braille.css.impl.BrailleCssParser",
+	service = { BrailleCssParser.class }
+)
 public class BrailleCssParser {
 
-	private BrailleCssParser() {}
+	private static final BrailleCssParser DEFAULT_INSTANCE = new BrailleCssParser(CssValidator.DEFAULT);
+
+	public static BrailleCssParser getDefaultInstance() {
+		return DEFAULT_INSTANCE;
+	}
+
+	private CssValidator validator;
+
+	private BrailleCssParser(CssValidator validator) {
+		this.validator = validator;
+	}
 
 	/**
 	 * Style assumed to be specified in the context of a (pseudo-)element.
@@ -35,7 +51,7 @@ public class BrailleCssParser {
 	 * @param context element for evaluating attr() and content() values against.
 	 * @param mutable Whether the caller wishes to mutate the returned declaration.
 	 */
-	public static Optional<Declaration> parseDeclaration(String property, String value, Element context, boolean mutable) {
+	public Optional<Declaration> parseDeclaration(String property, String value, Element context, boolean mutable) {
 		String style = String.format("%s: %s", property, value);
 		Declaration declaration = declCache.get(style);
 		if (declaration == null) {
@@ -63,7 +79,7 @@ public class BrailleCssParser {
 	 * @param context element for evaluating attr() and content() values against.
 	 * @param mutable Whether the caller wishes to mutate the returned style object.
 	 */
-	public static SimpleInlineStyle parseSimpleInlineStyle(String style, Element context, boolean mutable) {
+	public SimpleInlineStyle parseSimpleInlineStyle(String style, Element context, boolean mutable) {
 		BrailleCssStyle s = BrailleCssStyle.of(style, Context.ELEMENT);
 		// evaluate attr() and content() values in content and string-set properties
 		if (context != null)
@@ -75,17 +91,17 @@ public class BrailleCssParser {
 		}
 	}
 
-	final static Map<String,Declaration> declCache = CacheBuilder.newBuilder()
-	                                                             .expireAfterAccess(60, TimeUnit.SECONDS)
-	                                                             .<String,Declaration>build()
-	                                                             .asMap();
+	final Map<String,Declaration> declCache = CacheBuilder.newBuilder()
+	                                                      .expireAfterAccess(60, TimeUnit.SECONDS)
+	                                                      .<String,Declaration>build()
+	                                                      .asMap();
 
 	/**
 	 * Declaration that caches itself when it is serialized.
 	 *
 	 * Clones are not cached.
 	 */
-	static class CachingDeclaration extends PropertyValue {
+	class CachingDeclaration extends PropertyValue {
 
 		private boolean disableCaching = false;
 		private final PropertyValue declaration;
@@ -133,7 +149,7 @@ public class BrailleCssParser {
 	/* we keep it in this class because it is all related with parsing.    */
 	/* =================================================================== */
 
-	final static Cache cache = new Cache();
+	final Cache cache = new Cache();
 
 	static class Cache {
 
