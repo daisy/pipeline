@@ -230,19 +230,12 @@
                     </xsl:call-template>
                 </xsl:if>
                 <page-area align="bottom" max-height="{$footnotes-max-height}" collection="{@from}">
-                    <xsl:if test="exists($footnotes-fallback-collection) and matches($footnotes-fallback-collection, re:exact($css:IDENT_RE))">
+                    <xsl:if test="exists($footnotes-fallback-collection)
+                                  and matches($footnotes-fallback-collection, re:exact($css:IDENT_RE))
+                                  and not($footnotes-fallback-collection='normal')">
                         <fallback>
                             <rename collection="{@from}" to="{$footnotes-fallback-collection}"/>
                             <rename collection="meta/{@from}" to="meta/{$footnotes-fallback-collection}"/>
-                            <xsl:variable name="footnotes-fallback-extra" as="xs:string?"
-                                          select="$footnotes-properties[@name='-obfl-fallback-extra'][1]/@value"/>
-                            <xsl:if test="exists($footnotes-fallback-extra)
-                                          and matches($footnotes-fallback-extra, re:exact(re:comma-separated(concat($css:IDENT_RE,'\s+',$css:IDENT_RE))))">
-                                <xsl:for-each select="tokenize($footnotes-fallback-extra,',')">
-                                    <xsl:variable name="from-to" as="xs:string*" select="tokenize(normalize-space(.),'\s')"/>
-                                    <rename collection="{$from-to[1]}" to="{$from-to[2]}"/>
-                                </xsl:for-each>
-                            </xsl:if>
                         </fallback>
                     </xsl:if>
                     <xsl:if test="$footnotes-border-top!='none'">
