@@ -39,6 +39,7 @@ import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.CachingDeclaration;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.CounterFunction;
@@ -172,11 +173,15 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String serializePropertyValue(PropertyValue propValue) {
-		Term<?> value = propValue.getValue();
-		if (value != null)
-			return toString(value);
-		else
-			return propValue.getCSSProperty().toString();
+		if (propValue instanceof CachingDeclaration)
+			return ((CachingDeclaration)propValue).valueToString(); // this triggers caching
+		else {
+			Term<?> value = propValue.getValue();
+			if (value != null)
+				return toString(value);
+			else
+				return propValue.getCSSProperty().toString();
+		}
 	}
 
 	public static String toString(RuleMainBlock rule) {
