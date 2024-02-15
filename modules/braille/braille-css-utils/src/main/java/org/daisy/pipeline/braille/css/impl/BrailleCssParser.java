@@ -2,7 +2,6 @@ package org.daisy.pipeline.braille.css.impl;
 
 import java.util.concurrent.TimeUnit;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import com.google.common.cache.CacheBuilder;
@@ -18,6 +17,7 @@ import cz.vutbr.web.css.TermList;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
 
@@ -35,11 +35,21 @@ public class BrailleCssParser {
 	 */
 	public static Optional<Declaration> parseDeclaration(String property, String value, Element context, boolean mutable) {
 		String style = String.format("%s: %s", property, value);
-		try {
-			return Optional.of(parseSimpleInlineStyle(style, context, mutable).iterator().next());
-		} catch (NoSuchElementException e) {
-			return Optional.empty();
+		Declaration declaration = declCache.get(style);
+		if (declaration == null) {
+			declaration = BrailleCssStyle.of(style, Context.ELEMENT).getDeclaration(property);
+			if (declaration == null)
+				return Optional.empty();
+			declCache.put(style, declaration);
 		}
+		if (context != null) {
+			Declaration evaluated = BrailleCssStyle.evaluateDeclaration(declaration, context);
+			if (evaluated != declaration)
+				return Optional.of(evaluated);
+		}
+		if (mutable)
+			return Optional.of((Declaration)declaration.clone());
+		return Optional.of(declaration);
 	}
 
 	/**
@@ -62,6 +72,59 @@ public class BrailleCssParser {
 			return (SimpleInlineStyle)declarations.clone();
 		}
 		return declarations;
+	}
+
+	final static Map<String,Declaration> declCache = CacheBuilder.newBuilder()
+	                                                             .expireAfterAccess(60, TimeUnit.SECONDS)
+	                                                             .<String,Declaration>build()
+	                                                             .asMap();
+
+	/**
+	 * Declaration that caches itself when it is serialized.
+	 *
+	 * Clones are not cached.
+	 */
+	static class CachingDeclaration extends PropertyValue {
+
+		private boolean disableCaching = false;
+		private final PropertyValue declaration;
+
+		CachingDeclaration(PropertyValue declaration) {
+			super(declaration);
+			this.declaration = declaration;
+		}
+
+		private String valueSerialized = null;
+		private String serialized = null;
+
+		@Override
+		public String toString() {
+			if (serialized == null)
+				valueToString(); // this also sets serialized and updates cache
+			return serialized;
+		}
+
+		// for use in BrailleCssSerializer.serializePropertyValue()
+		String valueToString() {
+			if (valueSerialized == null) {
+				valueSerialized = BrailleCssSerializer.serializePropertyValue(declaration);
+				serialized = getProperty() + ": " + valueSerialized;
+				if (!disableCaching)
+					declCache.put(serialized, this);
+			} else {
+				// access cache to keep entry longer in it
+				if (!disableCaching)
+					declCache.get(serialized);
+			}
+			return valueSerialized;
+		}
+
+		@Override
+		public CachingDeclaration clone() {
+			CachingDeclaration clone = (CachingDeclaration)super.clone();
+			clone.disableCaching = true;
+			return clone;
+		}
 	}
 
 	/* =================================================================== */
