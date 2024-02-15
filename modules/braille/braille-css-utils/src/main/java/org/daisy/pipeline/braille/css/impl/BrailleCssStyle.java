@@ -42,6 +42,7 @@ import org.daisy.braille.css.RuleTextTransform;
 import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.RuleVolumeArea;
 import org.daisy.braille.css.VendorAtRule;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.CachingDeclaration;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser.DeepDeclarationTransformer;
 
 import org.w3c.dom.Element;
@@ -65,10 +66,10 @@ public final class BrailleCssStyle implements Cloneable {
 		this.declarations = builder.declarations == null || builder.declarations.isEmpty()
 			? null
 			: builder.validate.isPresent()
-				? new SimpleInlineStyle(builder.declarations,
+				? new SimpleInlineStyle(builder.declarations.values(),
 				                        null,
 				                        builder.validate.get())
-				: ImmutableList.copyOf(builder.declarations)
+				: ImmutableList.copyOf(builder.declarations.values())
 			;
 		this.nestedStyles = builder.nestedStyles != null && !builder.nestedStyles.isEmpty()
 			? ImmutableSortedMap.copyOfSorted(builder.buildNestedStyles())
@@ -88,36 +89,12 @@ public final class BrailleCssStyle implements Cloneable {
 		if (evaluated) return this;
 		BrailleCssStyle copy = null;
 		if (declarations != null) {
-			for (Declaration d : declarations) {
-				if (d instanceof PropertyValue) {
-					PropertyValue pv = (PropertyValue)d;
-					CSSProperty p = pv.getCSSProperty();
-					if (p == Content.content_list) {
-						Term<?> v = pv.getValue();
-						if (v instanceof ContentList) {
-							if (copy == null) {
-								copy = clone();
-								copy.declarations = copyDeclarations(); }
-							// find value in cloned declarations
-							for (Declaration dd : copy.declarations)
-								if (((PropertyValue)dd).getCSSProperty() == Content.content_list)
-									((ContentList)((PropertyValue)dd).getValue()).evaluate(context); // this mutates the value
-						} else
-							throw new IllegalStateException(); // coding error
-					} else if (p == StringSet.list_values) {
-						Term<?> v = pv.getValue();
-						if (v instanceof StringSetList) {
-							if (copy == null) {
-								copy = clone();
-								copy.declarations = copyDeclarations(); }
-							// find value in cloned declarations
-							for (Declaration dd : copy.declarations)
-								if (((PropertyValue)dd).getCSSProperty() == StringSet.list_values)
-									((StringSetList)((PropertyValue)dd).getValue()).evaluate(context); // this mutates the value
-						} else
-							throw new IllegalStateException(); // coding error
-					}
-				}
+			Iterable<? extends Declaration> evaluatedDeclarations = evaluateDeclarations(context);
+			if (copy == null && evaluatedDeclarations != declarations)
+				copy = clone();
+			if (copy != null) {
+				copy.declarations = evaluatedDeclarations;
+				copy.declarationMap = null;
 			}
 		}
 		if (nestedStyles != null) {
@@ -140,6 +117,76 @@ public final class BrailleCssStyle implements Cloneable {
 			return this;
 	}
 
+	private Iterable<? extends Declaration> evaluateDeclarations(Element context) {
+		Iterable<? extends Declaration> copy = null;
+		if (declarations != null)
+			for (Declaration d : declarations) {
+				if (d instanceof PropertyValue) {
+					PropertyValue pv = (PropertyValue)d;
+					CSSProperty p = pv.getCSSProperty();
+					if (p == Content.content_list) {
+						Term<?> v = pv.getValue();
+						if (v instanceof ContentList) {
+							// clone because evaluate() mutates the value
+							if (copy == null)
+								copy = copyDeclarations();
+							// find value in cloned declarations
+							for (Declaration dd : copy)
+								if (((PropertyValue)dd).getCSSProperty() == Content.content_list) {
+									((ContentList)((PropertyValue)dd).getValue()).evaluate(context);
+									break; }
+						} else
+							throw new IllegalStateException(); // coding error
+					} else if (p == StringSet.list_values) {
+						Term<?> v = pv.getValue();
+						if (v instanceof StringSetList) {
+							// clone because evaluate() mutates the value
+							if (copy == null)
+								copy = copyDeclarations();
+							// find value in cloned declarations
+							for (Declaration dd : copy)
+								if (((PropertyValue)dd).getCSSProperty() == StringSet.list_values) {
+									((StringSetList)((PropertyValue)dd).getValue()).evaluate(context);
+									break; }
+						} else
+							throw new IllegalStateException(); // coding error
+					}
+				}
+			}
+		if (copy != null)
+			return copy;
+		else
+			return declarations;
+	}
+
+	// also used in BrailleCssParser
+	static Declaration evaluateDeclaration(Declaration declaration, Element context) {
+		if (!(declaration instanceof PropertyValue))
+			return declaration;
+		PropertyValue pv = (PropertyValue)declaration;
+		PropertyValue copy = null;
+		CSSProperty p = pv.getCSSProperty();
+		if (p == Content.content_list) {
+			if (pv.getValue() instanceof ContentList) {
+				// clone because evaluate() mutates the value
+				copy = (PropertyValue)declaration.clone();
+				((ContentList)copy.getValue()).evaluate(context);
+			} else
+				throw new IllegalStateException(); // coding error
+		} else if (p == StringSet.list_values) {
+			if (pv.getValue() instanceof StringSetList) {
+				// clone because evaluate() mutates the value
+				copy = (PropertyValue)declaration.clone();
+				((StringSetList)copy.getValue()).evaluate(context);
+			} else
+				throw new IllegalStateException(); // coding error
+		}
+		if (copy != null)
+			return copy;
+		else
+			return declaration;
+	}
+
 	/**
 	 * @return a deep copy of the {@code declarations} field
 	 */
@@ -154,6 +201,38 @@ public final class BrailleCssStyle implements Cloneable {
 				declarationsCopy.add((Declaration)dd.clone());
 			return ImmutableList.copyOf(declarationsCopy);
 		}
+	}
+
+	private Map<String,Declaration> declarationMap = null;
+
+	private Map<String,Declaration> getDeclarationMap() {
+		if (declarations != null) {
+			synchronized (this) {
+				if (declarationMap == null) {
+					declarationMap = new TreeMap<>();
+					for (Declaration d : declarations)
+						if (context == Context.ELEMENT) { // context not set if caching is not allowed
+							if (!(d instanceof PropertyValue))
+								throw new IllegalStateException(); // coding error
+							declarationMap.put(d.getProperty(), new CachingDeclaration((PropertyValue)d));
+						} else
+							declarationMap.put(d.getProperty(), d);
+				}
+			}
+		}
+		return declarationMap;
+	}
+
+	/**
+	 * Get the declaration for the given property name.
+	 *
+	 * Caller must guarantee that the object will not be modified.
+	 */
+	public Declaration getDeclaration(String propertyName) {
+		if (declarations != null)
+			return getDeclarationMap().get(propertyName);
+		else
+			return null;
 	}
 
 	@Override
@@ -243,7 +322,7 @@ public final class BrailleCssStyle implements Cloneable {
 		 * Whether to validate declarations (not of nested styles)
 		 */
 		private Optional<SupportedBrailleCSS> validate;
-		private List<Declaration> declarations;
+		private Map<String,Declaration> declarations;
 		private Map<String,Object> nestedStyles; // values are instances of Builder or BrailleCssStyle
 
 		/**
@@ -272,11 +351,11 @@ public final class BrailleCssStyle implements Cloneable {
 		private Builder add(Declaration declaration, Optional<SupportedBrailleCSS> validate) {
 			if (declaration != null) {
 				if (this.declarations == null) {
-					this.declarations = new ArrayList<Declaration>();
+					this.declarations = new TreeMap<>();
 					this.validate = validate;
 				} else if (!this.validate.equals(validate))
 					throw new IllegalArgumentException();
-				declarations.add(declaration);
+				declarations.put(declaration.getProperty(), declaration);
 			}
 			return this;
 		}
@@ -323,7 +402,7 @@ public final class BrailleCssStyle implements Cloneable {
 
 		private Builder add(Builder style) {
 			if (style.declarations != null)
-				for (Declaration d : style.declarations)
+				for (Declaration d : style.declarations.values())
 					add(d, style.validate);
 			if (style.nestedStyles != null)
 				for (Map.Entry<String,Object> e : style.nestedStyles.entrySet()) {
@@ -355,6 +434,22 @@ public final class BrailleCssStyle implements Cloneable {
 			}
 			return map;
 		}
+	}
+
+	/**
+	 * @param declaration assumed to not change
+	 */
+	private static BrailleCssStyle of(Declaration declaration, Context context) {
+		Builder style = new Builder(context);
+		if (declaration instanceof PropertyValue)
+			style.add(declaration, ((PropertyValue)declaration).getSupportedBrailleCSS());
+		else
+			style.add(declaration,
+			          Optional.ofNullable(
+			              (context == Context.ELEMENT ||
+			               context == Context.PAGE ||
+			               context == Context.VOLUME) ? DEFAULT_VALIDATOR : null));
+		return style.build();
 	}
 
 	/**
@@ -565,7 +660,14 @@ public final class BrailleCssStyle implements Cloneable {
 			throw new IllegalArgumentException();
 		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle);
 		if (s == null) {
-			s = of(new InlineStyle(inlineStyle, context), context);
+			// try if a declaration was cached
+			if (context == Context.ELEMENT) {
+				Declaration d = BrailleCssParser.declCache.get(inlineStyle);
+				if (d != null)
+					s = of(d, context);
+			}
+			if (s == null)
+				s = of(new InlineStyle(inlineStyle, context), context);
 			BrailleCssParser.cache.put(context, inlineStyle, s);
 		}
 		return s;
