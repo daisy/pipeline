@@ -457,35 +457,9 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	public String toString(BrailleCssStyle relativeTo) {
 		if (relativeTo != null) {
-			if (declarations != null && !(declarations instanceof ValidatedDeclarations))
-				throw new IllegalArgumentException();
 			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof ValidatedDeclarations))
 				throw new IllegalArgumentException();
-			Builder relative = new Builder(this);
-			if (relativeTo.declarations != null)
-				for (Declaration d : relativeTo.getDeclarationMap().values()) {
-					PropertyValue p = (PropertyValue)d;
-					if (p.getCSSProperty().inherited()) {
-						PropertyValue pp = (PropertyValue)getDeclaration(p.getProperty());
-						if (pp != null) {
-							if (equal(p, pp))
-								relative.remove(p.getProperty());
-						} else {
-							PropertyValue def = p.getDefault();
-							if (def != null && !equalIgnoreSource(p, def))
-								relative.add(def, def.getSupportedBrailleCSS());
-						}
-					}
-				}
-			// omit properties that have the default value and are not inherited or don't exist in the parent style
-			if (declarations != null)
-				for (Declaration d : getDeclarationMap().values()) {
-					PropertyValue p = (PropertyValue)d;
-					PropertyValue def = p.getDefault();
-					if ((!p.getCSSProperty().inherited() || relativeTo.getDeclaration(p.getProperty()) == null) && equal(p, def))
-						relative.remove(p.getProperty());
-				}
-			String s = relative.build().toString();
+			String s = relativize((ValidatedDeclarations)relativeTo.declarations).build().toString();
 			if (context != null) // context not set if caching is not allowed
 				BrailleCssParser.cache.put(context,
 				                           s,
@@ -507,6 +481,58 @@ public final class BrailleCssStyle implements Cloneable {
 				BrailleCssParser.cache.get(context, serialized);
 		}
 		return serialized;
+	}
+
+	private Builder relativize(ValidatedDeclarations base) {
+		if (declarations != null && !(declarations instanceof ValidatedDeclarations))
+			throw new IllegalArgumentException();
+		Builder relative = new Builder(this);
+		if (base != null)
+			for (PropertyValue p : base) {
+				if (p.getCSSProperty().inherited()) {
+					PropertyValue pp = (PropertyValue)getDeclaration(p.getProperty());
+					if (pp != null) {
+						if (equal(p, pp))
+							relative.remove(p.getProperty());
+					} else {
+						PropertyValue def = p.getDefault();
+						if (def != null && !equalIgnoreSource(p, def))
+							relative.add(def, def.getSupportedBrailleCSS());
+					}
+				}
+			}
+		// omit properties that have the default value and are not inherited or don't exist in the parent style
+		if (declarations != null)
+			for (Declaration d : getDeclarationMap().values()) {
+				PropertyValue p = (PropertyValue)d;
+				PropertyValue def = p.getDefault();
+				if ((!p.getCSSProperty().inherited() || base == null || base.getProperty(p.getProperty()) == null) && equal(p, def))
+					relative.remove(p.getProperty());
+			}
+		// relativize nested styles
+		BrailleCssStyle main = null;
+		for (String sel : getSelectors()) {
+			if (sel.startsWith("@"))
+				// skip at-rules
+				continue;
+			BrailleCssStyle nested = getNestedStyle(sel);
+			if (sel.equals("&::before") ||
+			    sel.equals("&::after") ||
+			    (sel.startsWith("&:") && !sel.startsWith("&::"))) {
+				// pseudo-classes and ::before and ::after pseudo-elements inherit from main style
+				if (relative.declarations != null && !relative.declarations.isEmpty()) {
+					relative.remove(sel);
+					if (main == null) main = relative.build();
+					if (main.declarations != null && !(main.declarations instanceof ValidatedDeclarations))
+						throw new IllegalStateException();
+					relative.add(sel, nested.relativize((ValidatedDeclarations)main.declarations));
+				}
+			} else {
+				relative.remove(sel);
+				relative.add(sel, nested.relativize(base));
+			}
+		}
+		return relative;
 	}
 
 	private static String toString(BrailleCssStyle style, String base) {
@@ -1040,61 +1066,92 @@ public final class BrailleCssStyle implements Cloneable {
 		BrailleCssStyle s = BrailleCssParser.cache.get(context, inlineStyle, parentDecls, true);
 		if (s == null) {
 			s = of(inlineStyle, context);
-			ValidatedDeclarations decls = s.declarations != null
-				? (ValidatedDeclarations)s.declarations
-				: ValidatedDeclarations.EMPTY;
-			if (!parentDecls.isEmpty())
-				decls = (ValidatedDeclarations)decls.inheritFrom(parentDecls);
-			decls = (ValidatedDeclarations)decls.concretize();
-			if (!decls.isEmpty()) {
-				// Make sure that the resulting SimpleInlineStyle is not based on a parent and that
-				// it is not concretized because that would result in an exception when
-				// inheritFrom() is called on it. Note that concretize() does not have the same
-				// effect.
-				// Also perform special inheritance of text-transform.
-				List<PropertyValue> list = new ArrayList<>();
-				decls.forEach(list::add);
-				ListIterator<PropertyValue> i = list.listIterator();
-				while (i.hasNext()) {
-					PropertyValue v = i.next();
-					PropertyValue flat = null;
-					if (!parentDecls.isEmpty() && v.getCSSProperty() instanceof TextTransform)
-						for (PropertyValue vv : parentDecls)
-							if (vv.getCSSProperty() instanceof TextTransform) {
-								TextTransformList t = TextTransformList.of(v);
-								t.inheritFrom(TextTransformList.of(vv)); // this mutates the value
-								if (t != v.getValue())
-									flat = new PropertyValue(
-										v.getProperty(),
-										t.equalsAuto() ? TextTransform.AUTO
-										               : t.equalsInitial() ? TextTransform.INITIAL
-										                                   : t.equalsNone() ? TextTransform.NONE
-										                                                    : TextTransform.list_values,
-										t.equalsAuto() || t.equalsInitial() || t.equalsNone() ? null : t,
-										v.getSourceDeclaration(),
-										v.getSupportedBrailleCSS());
-								break;
-							}
-					if (flat == null)
-						flat = new PropertyValue(
-							v.getProperty(),
-							v.getCSSProperty(),
-							v.getValue(),
-							v.getSourceDeclaration(),
-							v.getSupportedBrailleCSS());
-					i.set(flat);
-				}
-				decls = new ValidatedDeclarations(list);
-			}
-			if (s.declarations != null || !decls.isEmpty()) {
-				s = s.clone();
-				s.declarations = decls.isEmpty() ? null : decls;
-				s.declarationMap = null;
-				s.serialized = null;
-			}
+			s = s.inheritFrom(parentDecls);
 			BrailleCssParser.cache.put(context, inlineStyle, parentDecls, true, s);
 		}
 		return s;
+	}
+
+	private BrailleCssStyle inheritFrom(ValidatedDeclarations base) {
+		if (declarations != null && !(declarations instanceof ValidatedDeclarations))
+			throw new IllegalStateException();
+		ValidatedDeclarations decls = declarations != null
+			? (ValidatedDeclarations)declarations
+			: ValidatedDeclarations.EMPTY;
+		if (!base.isEmpty())
+			decls = (ValidatedDeclarations)decls.inheritFrom(base);
+		decls = (ValidatedDeclarations)decls.concretize();
+		if (!decls.isEmpty()) {
+			// Make sure that the resulting SimpleInlineStyle is not based on a parent and that it
+			// is not concretized because that would result in an exception when inheritFrom() is
+			// called on it. Note that concretize() does not have the same effect.
+			// Also perform special inheritance of text-transform.
+			List<PropertyValue> list = new ArrayList<>();
+			decls.forEach(list::add);
+			ListIterator<PropertyValue> i = list.listIterator();
+			while (i.hasNext()) {
+				PropertyValue v = i.next();
+				PropertyValue flat = null;
+				if (!base.isEmpty() && v.getCSSProperty() instanceof TextTransform)
+					for (PropertyValue vv : base)
+						if (vv.getCSSProperty() instanceof TextTransform) {
+							TextTransformList t = TextTransformList.of(v);
+							t.inheritFrom(TextTransformList.of(vv)); // this mutates the value
+							if (t != v.getValue())
+								flat = new PropertyValue(
+									v.getProperty(),
+									t.equalsAuto() ? TextTransform.AUTO
+									               : t.equalsInitial() ? TextTransform.INITIAL
+									                                   : t.equalsNone() ? TextTransform.NONE
+									                                                    : TextTransform.list_values,
+									t.equalsAuto() || t.equalsInitial() || t.equalsNone() ? null : t,
+									v.getSourceDeclaration(),
+									v.getSupportedBrailleCSS());
+							break;
+						}
+				if (flat == null)
+					flat = new PropertyValue(
+						v.getProperty(),
+						v.getCSSProperty(),
+						v.getValue(),
+						v.getSourceDeclaration(),
+						v.getSupportedBrailleCSS());
+				i.set(flat);
+			}
+			decls = new ValidatedDeclarations(list);
+		}
+		SortedMap<String,BrailleCssStyle> nested = null;
+		if (nestedStyles != null)
+			for (String sel : nestedStyles.keySet())
+				if (!sel.startsWith("@")) {
+					BrailleCssStyle n = nestedStyles.get(sel);
+					BrailleCssStyle nn; {
+						if (sel.equals("&::before") ||
+						    sel.equals("&::after") ||
+						    (sel.startsWith("&:") && !sel.startsWith("&::")))
+							// pseudo-classes and ::before and ::after pseudo-elements inherit from main style
+							nn = n.inheritFrom(decls);
+						else
+							nn = n.inheritFrom(base);
+					}
+					if (n != nn) {
+						if (nested == null)
+							nested = new TreeMap<>(nestedStyles);
+						nested.put(sel, nn);
+					}
+				}
+		if (declarations != null || !decls.isEmpty() || nested != null) {
+			BrailleCssStyle copy = clone();
+			copy.declarations = decls.isEmpty() ? null : decls;
+			copy.declarationMap = null;
+			if (nested != null) {
+				copy.nestedStyles = nested;
+				copy.rules = null;
+			}
+			copy.serialized = null;
+			return copy;
+		}
+		return this;
 	}
 
 	// note that this BrailleCssStyle will never be cached because the context is unknown
