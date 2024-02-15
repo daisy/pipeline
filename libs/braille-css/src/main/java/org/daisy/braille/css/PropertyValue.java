@@ -9,7 +9,6 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.SourceLocator;
-import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.TermIdentImpl;
@@ -19,6 +18,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	
 	private final String propertyName;
 	protected Quadruple propertyValue; // not final for clone()
+	SupportedBrailleCSS css; // not final for clone()
 	private CSSProperty property; // not final for clone()
 	private Term<?> value; // not final for clone()
 	private Term<?> declaration; // not final for clone()
@@ -28,23 +28,24 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	                     final CSSProperty property,
 	                     final Term<?> value,
 	                     final Declaration sourceDeclaration,
-	                     SupportedCSS css) {
+	                     SupportedBrailleCSS css) {
 		this(propertyName, new Quadruple(css, propertyName) {{
 			curProp = property;
 			curValue = value;
 			curSource = sourceDeclaration;
-		}});
+		}}, css);
 	}
 	
 	public PropertyValue(PropertyValue propertyValue) {
-		this(propertyValue.propertyName, propertyValue.propertyValue);
+		this(propertyValue.propertyName, propertyValue.propertyValue, propertyValue.css);
 	}
 	
-	PropertyValue(String propertyName, Quadruple propertyValue) {
+	PropertyValue(String propertyName, Quadruple propertyValue, SupportedBrailleCSS css) {
 		if (propertyValue.isEmpty())
 			throw new IllegalArgumentException();
 		this.propertyName = propertyName;
 		this.propertyValue = propertyValue;
+		this.css = css;
 		init();
 	}
 
@@ -67,6 +68,13 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 				};
 	}
 	
+	/**
+	 * {@link SupportedBrailleCSS} instance that was used to create this {@link PropertyValue}
+	 */
+	public SupportedBrailleCSS getSupportedBrailleCSS() {
+		return css;
+	}
+
 	public CSSProperty getCSSProperty() {
 		return property;
 	}
@@ -96,7 +104,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 			// unknown property
 			return null;
 		else
-			return new PropertyValue(propertyName, q);
+			return new PropertyValue(propertyName, q, css);
 	}
 	
 	private boolean concretizedInherit = false;
@@ -111,7 +119,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 		else {
 			Quadruple q = (Quadruple)propertyValue.clone();
 			q.concretize(concretizeInherit, concretizeInitial);
-			PropertyValue concretized = new PropertyValue(propertyName, q);
+			PropertyValue concretized = new PropertyValue(propertyName, q, css);
 			concretized.concretizedInherit = concretizeInherit;
 			concretized.concretizedInitial = concretizeInitial;
 			return concretized;
@@ -131,7 +139,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 		Quadruple q = (Quadruple)propertyValue.clone();
 		q.inheritFrom(parent.concretize(true, false).propertyValue);
 		q.concretize(true, false);
-		PropertyValue inherited = new PropertyValue(propertyName, q);
+		PropertyValue inherited = new PropertyValue(propertyName, q, css);
 		inherited.inherited = inherited.concretizedInherit = true;
 		return inherited;
 	}

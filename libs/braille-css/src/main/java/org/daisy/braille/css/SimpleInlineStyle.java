@@ -2,8 +2,10 @@ package org.daisy.braille.css;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import cz.vutbr.web.css.CSSProperty;
@@ -18,6 +20,8 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
+
+	private SupportedBrailleCSS css;
 
 	public SimpleInlineStyle(String style) {
 		this(style, null);
@@ -42,33 +46,60 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	}
 	
 	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle) {
-		this(declarations, parentStyle, cssInstance);
+		this(declarations, parentStyle, null);
 	}
 	
 	/**
-	 * @param css {@link SupportedBrailleCSS} to be used for declarations that are not {@link
-	 *            PropertyValue} instances.
+	 * @param css {@link SupportedBrailleCSS} to be used to process declarations that are not {@link
+	 *            PropertyValue} instances. If non-{@code null}, assert that declarations that are
+	 *            {@link PropertyValue} were created using the given {@link SupportedBrailleCSS}. If
+	 *            {@code null}, assert that all {@link PropertyValue} declarations were created with
+	 *            the same {@link SupportedBrailleCSS}.
+	 * @throws IllegalArgumentException if a parent style or declaration is provided that is not
+	 *                                  compatible with the provided {@code SupportedBrailleCSS}
 	 */
 	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle, SupportedBrailleCSS css) {
-		super(css, css);
-		if (declarations != null)
+		super(css == null ? cssInstance : css,
+		      css == null ? cssInstance : css);
+		if (declarations != null) {
+			for (Declaration d : declarations) {
+				if (!(d instanceof PropertyValue)) {
+					if (css == null)
+						css = cssInstance;
+					super.push(d);
+				}
+			}
 			for (Declaration d : declarations) {
 				if (d instanceof PropertyValue) {
 					PropertyValue v = (PropertyValue)d;
-					map.put(v.getProperty(), v.propertyValue);
-				} else
-					super.push(d);
+					if (css == null)
+						css = v.css;
+					if (v.css.equals(css))
+						map.put(v.getProperty(), v.propertyValue);
+					else 
+						throw new IllegalArgumentException();
+				}
 			}
+		}
 		if (parentStyle != null) {
+			if (declarations != null)
+				for (Declaration d : declarations)
+					for (PropertyValue dd : parentStyle) {
+						if (!css.equals(dd.css))
+							throw new IllegalArgumentException();
+						break; }
 			super.inheritFrom(parentStyle.concretize());
 			super.concretize(true, true);
 			inherited = concretizedInherit = concretizedInitial = true;
+			if (css == null)
+				css = parentStyle.css;
 		} else {
 			super.concretize(false, true);
 			concretizedInitial = true;
 		}
+		this.css = css;
 	}
-	
+
 	public Term<?> getValue(String name) {
 		return getValue(name, true);
 	}
@@ -104,7 +135,9 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 		Quadruple q = map.get(property);
 		if (q == null)
 			return null;
-		return new PropertyValue(property, q);
+		if (css == null)
+			throw new IllegalStateException(); // can not happen
+		return new PropertyValue(property, q, css);
 	}
 
 	@Override
@@ -185,6 +218,8 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			SimpleInlineStyle copy = (SimpleInlineStyle)clone();
 			copy.noCopyInheritFrom(((SimpleInlineStyle)parent).concretize());
 			copy.noCopyConcretize(true, false);
+			if (copy.css == null)
+				copy.css = ((SimpleInlineStyle)parent).css;
 			return copy;
 		}
 	}
