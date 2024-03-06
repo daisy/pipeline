@@ -22,6 +22,7 @@ public class Medium {
 
 	public enum Type {
 		EMBOSSED,
+		BRAILLE,
 		SPEECH,
 		SCREEN,
 		PRINT;
@@ -56,14 +57,15 @@ public class Medium {
 			this.width = width;
 			this.height = height;
 			break;
+		case BRAILLE:
 		case SPEECH:
 		case SCREEN:
 		case PRINT:
 			if (width != null) {
-				throw new IllegalArgumentException("Unexpected 'width' argument for medium 'print'");
+				throw new IllegalArgumentException("Unexpected 'width' argument for medium '" + type + "'");
 			}
 			if (height != null) {
-				throw new IllegalArgumentException("Unexpected 'height' argument for medium 'print'");
+				throw new IllegalArgumentException("Unexpected 'height' argument for medium '" + type + "'");
 			}
 			this.type = type;
 			this.width = this.height = null;
@@ -77,7 +79,7 @@ public class Medium {
 	}
 
 	/**
-	 * The media type: "embossed" or "print".
+	 * The media type: "embossed", "braille", "speech", "screen" or "print".
 	 */
 	public Type getType() {
 		return type;
@@ -107,7 +109,7 @@ public class Medium {
 	}
 
 	public boolean matches(String mediaQuery) {
-		return asMediaSpec().matches(CSSParserFactory.getInstance().parseMediaQuery(mediaQuery));
+		return asMediaSpec().matches(CSSParserFactory.getInstance().parseMediaQuery(mediaQuery.trim()));
 	}
 
 	public String toString() {
@@ -140,7 +142,7 @@ public class Medium {
 		return result;
 	}
 
-	public static Medium parse(String medium) {
+	public static Medium parse(String medium) throws IllegalArgumentException {
 		List<MediaQuery> q = CSSParserFactory.getInstance().parseMediaQuery(medium);
 		if (q.size() != 1)
 			throw new IllegalArgumentException("Unexpected medium: " + medium);
@@ -174,7 +176,7 @@ public class Medium {
 				if (e.size() != 1)
 					throw new IllegalArgumentException("Unexpected value for medium feature: " + e);
 				Term<?> v = e.get(0);
-				if (!(v instanceof TermIdent))
+				if (!(v instanceof TermIdent || v instanceof TermInteger))
 					throw new IllegalArgumentException("Unexpected value for medium feature: " + e);
 				if (customFeatures == null)
 					customFeatures = new HashMap<>();
@@ -208,10 +210,15 @@ public class Medium {
 							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
 								return super.matches(e);
 							else {
+								if (e.size() != 1)
+									return false;
+								Term<?> v = e.get(0);
+								if (!(v instanceof TermIdent || v instanceof TermInteger))
+									return false;
 								if (!customFeatures.isEmpty())
 									for (String ff : customFeatures.keySet())
 										if (ff.equals(f))
-											return customFeatures.get(ff).equals(getExpressionIdentifier(e));
+											return customFeatures.get(ff).equals(v.toString());
 								return false;
 							}
 						}
@@ -229,10 +236,15 @@ public class Medium {
 							if (knownFeatures.contains(f) || knownFeatures.contains(f.replaceAll("^(min|max)-", "")))
 								return super.matches(e);
 							else {
+								if (e.size() != 1)
+									return false;
+								Term<?> v = e.get(0);
+								if (!(v instanceof TermIdent || v instanceof TermInteger))
+									return false;
 								if (!customFeatures.isEmpty())
 									for (String ff : customFeatures.keySet())
 										if (ff.equals(f))
-											return customFeatures.get(ff).equals(getExpressionIdentifier(e));
+											return customFeatures.get(ff).equals(v.toString());
 								return false;
 							}
 						}

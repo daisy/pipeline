@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.24-SNAPSHOT</version>
+    <version>1.14.26-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 

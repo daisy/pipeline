@@ -334,8 +334,15 @@
                 <xsl:next-match/>
             </xsl:when>
             <xsl:when
-                test="$property/@prefix='' and not($property/@name=('alternate-script','display-seq',
-                'file-as','group-position','identifier-type','meta-auth','role','title-type'))">
+                test="$property/@prefix='' and not($property/@name=('alternate-script',
+                                                                    'display-seq',
+                                                                    'file-as',
+                                                                    'group-position',
+                                                                    'identifier-type',
+                                                                    'meta-auth',
+                                                                    'role',
+                                                                    'title-type',
+                                                                    'pageBreakSource'))">
                 <xsl:call-template name="pf:warn">
                     <xsl:with-param name="msg">Discarding unknown property '<xsl:value-of select="@property"
                         />'.</xsl:with-param>

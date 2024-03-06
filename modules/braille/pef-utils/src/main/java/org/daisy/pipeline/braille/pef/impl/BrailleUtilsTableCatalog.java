@@ -9,11 +9,12 @@ import com.google.common.base.Optional;
 
 import org.daisy.dotify.api.factory.FactoryProperties;
 import org.daisy.dotify.api.table.Table;
+import org.daisy.dotify.api.table.TableProvider;
 
 import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-import org.daisy.pipeline.braille.pef.TableProvider;
+import org.daisy.pipeline.braille.pef.AbstractTableProvider;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -27,11 +28,12 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 // except that it's based on the query syntax instead of ID's.
 @Component(
 	name = "org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog",
-	service = { TableProvider.class }
+	service = { org.daisy.pipeline.braille.pef.TableProvider.class }
 )
-public class BrailleUtilsTableCatalog implements TableProvider {
-	
-	public Iterable<Table> get(Query query) {
+public class BrailleUtilsTableCatalog extends AbstractTableProvider {
+
+	@Override
+	protected Iterable<Table> _get(Query query) {
 		MutableQuery q = mutableQuery(query);
 		if (q.containsKey("id")) {
 			String id = q.removeOnly("id").getValue().get();
@@ -41,34 +43,34 @@ public class BrailleUtilsTableCatalog implements TableProvider {
 	}
 	
 	private Iterable<Table> get(String id) {
-		for (org.daisy.dotify.api.table.TableProvider p : providers)
+		for (TableProvider p : providers)
 			for (FactoryProperties fp : p.list())
 				if (fp.getIdentifier().equals(id))
 					return Optional.fromNullable(p.newFactory(id)).asSet();
 		return empty;
 	}
 
-	Collection<FactoryProperties> list() {
+	// list all available tables, not only those from the cache (for unit test)
+	Collection<FactoryProperties> listAll() {
 		return providers.stream().flatMap(p -> p.list().stream()).collect(Collectors.toList());
 	}
 
 	private final static Iterable<Table> empty = Optional.<Table>absent().asSet();
 	
-	private final List<org.daisy.dotify.api.table.TableProvider> providers
-	= new ArrayList<org.daisy.dotify.api.table.TableProvider>();
+	private final List<TableProvider> providers = new ArrayList<>();
 	
 	@Reference(
 		name = "TableProvider",
 		unbind = "-",
-		service = org.daisy.dotify.api.table.TableProvider.class,
+		service = TableProvider.class,
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.STATIC
 	)
-	public void addTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
+	public void addTableProvider(TableProvider provider) {
 		providers.add(provider);
 	}
 	
-	public void removeTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
+	public void removeTableProvider(TableProvider provider) {
 		providers.remove(provider);
 	}
 }

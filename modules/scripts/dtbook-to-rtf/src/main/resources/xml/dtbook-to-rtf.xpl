@@ -75,9 +75,26 @@
 		</p:documentation>
 	</p:option>
 
-	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl"/>
-	<p:import href="convert.xpl"/>
+	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+		<p:documentation>
+			px:normalize-uri
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+		<p:documentation>
+			px:fileset-add-entry
+		</p:documentation>
+	</p:import>
+	<p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
+		<p:documentation>
+			px:dtbook-load
+		</p:documentation>
+	</p:import>
+	<p:import href="convert.xpl">
+		<p:documentation>
+			px:dtbook-to-rtf
+		</p:documentation>
+	</p:import>
 
 	<px:normalize-uri name="output-dir-uri">
 		<p:with-option name="href" select="concat($result,'/')"/>
@@ -90,8 +107,17 @@
 		<p:variable name="output-dir-final" select="/c:result/string()">
 			<p:pipe step="output-dir-uri" port="normalized"/>
 		</p:variable>
-
-		<px:dtbook-load name="load"/>
+		<p:sink/>
+		<px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook">
+			<p:input port="entry">
+				<p:pipe step="main" port="source"/>
+			</p:input>
+		</px:fileset-add-entry>
+		<px:dtbook-load name="load">
+			<p:input port="source.in-memory">
+				<p:pipe step="dtbook" port="result.in-memory"/>
+			</p:input>
+		</px:dtbook-load>
 		
 		<px:dtbook-to-rtf>
 			<p:input port="source.in-memory">

@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
@@ -112,7 +113,12 @@
          levels (which would make them wrongly dispatched over
          multiple smils) -->
     <p:variable name="no-smilref"
-		select="' level level1 level2 level3 level4 level5 level6 dtbook frontmatter bodymatter rearmatter br head title meta style book bdo hr w '"/>
+		select="'dtb:level  | dtb:dtbook      | dtb:meta  |
+			 dtb:level1 | dtb:frontmatter | dtb:style |
+			 dtb:level2 | dtb:bodymatter  | dtb:book  |
+			 dtb:level3 | dtb:rearmatter  | dtb:bdo   |
+			 dtb:level4 | dtb:br          | dtb:hr    |
+			 dtb:level5 | dtb:head        | dtb:w     '"/>
 
     <p:identity>
       <p:input port="source">
@@ -121,12 +127,17 @@
     </p:identity>
     <p:delete match="@smilref"/>
 
+    <p:add-attribute attribute-name="pxi:no-smilref" attribute-value="">
+      <p:with-option name="match" select="$no-smilref"/>
+    </p:add-attribute>
+
     <p:xslt name="add-ids" px:progress="1/6">
       <p:input port="stylesheet">
 	<p:document href="add-ids.xsl"/>
       </p:input>
-      <p:with-param name="no-smilref" select="$no-smilref"/>
-      <p:with-param name="stop-recursion" select="' math '"/>
+      <p:input port="parameters">
+	<p:empty/>
+      </p:input>
     </p:xslt>
     <px:message severity="DEBUG" message="Smil-needed IDs generated"/>
 
@@ -147,7 +158,7 @@
       <p:variable name="dtbook-base-uri" select="pf:normalize-uri(base-uri(/*))">
 	<p:pipe step="main" port="source.in-memory"/>
       </p:variable>
-      <p:label-elements match="d:clip" attribute="src" px:message="dtbook-base-uri: {$dtbook-base-uri}">
+      <p:label-elements match="d:clip" attribute="src">
 	<p:input port="source">
 	  <p:pipe step="main" port="audio-map"/>
 	</p:input>
@@ -188,13 +199,13 @@
       <p:input port="stylesheet">
 	<p:pipe port="result" step="add-smilrefs-xsl"/>
       </p:input>
-      <p:with-param name="no-smilref" select="$no-smilref"/>
       <p:with-param name="mo-dir" select="$smil-dir"/>
     </p:xslt>
-    <px:message severity="DEBUG" message="Smilref generated"/>
+    <p:identity px:message-severity="DEBUG" px:message="Smilref generated"/>
     <p:sink/>
 
     <p:xslt name="copy-smilrefs" px:progress="1/6">
+      <p:documentation>Also removes "pxi" namespaces added by p:add-attribute step above.</p:documentation>
       <p:input port="source">
 	<p:pipe port="result" step="add-ids"/>
 	<p:pipe port="result" step="add-smilrefs"/>

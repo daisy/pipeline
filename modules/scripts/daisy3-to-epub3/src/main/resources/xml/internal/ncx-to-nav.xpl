@@ -116,6 +116,7 @@
             <p:input port="entry">
                 <p:pipe step="nav" port="result"/>
             </p:input>
+            <p:with-param port="file-attributes" name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
         </px:fileset-add-entry>
     </p:group>
 

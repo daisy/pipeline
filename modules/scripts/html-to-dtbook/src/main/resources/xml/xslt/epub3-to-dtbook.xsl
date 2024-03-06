@@ -431,7 +431,7 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="html:aside[f:types(.)='note'] | html:li[f:types(.)=('rearnote','footnote')]">
+    <xsl:template match="html:aside[f:types(.)='note'] | html:li[f:types(.)=('rearnote','endnote','footnote')]">
         <note>
             <xsl:call-template name="f:attlist.note"/>
             <xsl:choose>
@@ -1110,7 +1110,7 @@
                     </list>
                 </xsl:for-each>
             </xsl:when>
-            <xsl:when test="f:types(.)=('rearnotes','footnotes') or html:li/f:types(.)=('rearnote','footnote')">
+            <xsl:when test="f:types(.)=('rearnotes','footnotes','endnotes') or html:li/f:types(.)=('rearnote','footnote','endnote')">
                 <xsl:apply-templates select="$maybe-format-list/node()"/>
             </xsl:when>
             <xsl:otherwise>
@@ -1142,7 +1142,7 @@
                 <xsl:attribute name="enum" select="@type"/>
             </xsl:if>
         </xsl:if>
-        <xsl:attribute name="depth" select="count(ancestor::html:li[not(f:types(.)=('rearnote','footnote'))])+1"/>
+        <xsl:attribute name="depth" select="count(ancestor::html:li[not(f:types(.)=('rearnote','footnote','endnote'))])+1"/>
     </xsl:template>
 
     <xsl:template match="html:li">

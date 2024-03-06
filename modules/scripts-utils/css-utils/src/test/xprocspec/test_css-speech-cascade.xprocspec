@@ -126,4 +126,41 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="speech-rate">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <html>
+            <body>
+              <p style="speech-rate: 100"/>
+              <p style="speech-rate: 150%"/>
+              <p style="speech-rate: -50%"/>
+              <p style="speech-rate: slow"/>
+            </body>
+          </html>
+        </x:document>
+      </x:input>
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result.in-memory" select="//body"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+            <p style="speech-rate: 100" tts:speech-rate="100"/>
+            <p style="speech-rate: 150%" tts:speech-rate="150%"/>
+            <p style="speech-rate: -50%"/>
+            <p style="speech-rate: slow" tts:speech-rate="slow"/>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

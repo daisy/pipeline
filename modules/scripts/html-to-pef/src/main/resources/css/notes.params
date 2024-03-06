@@ -70,7 +70,7 @@ Special handling of notes is disabled. Notes are rendered as specified in custom
             </px:type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Placement of content: Notes placement</h2>
+            <h2 px:role="name">Notes placement</h2>
             <p px:role="desc" xml:space="preserve">Placement of notes
 
 Notes, i.e. elements that are referenced by an element with `epub:type` "noteref", can be rendered

@@ -1,34 +1,45 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+<link rev="dp2:doc" href="_generate-toc.scss"/>
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-    <p:option name="toc-depth" required="false" px:type="nonNegativeInteger" select="'0'">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Table of contents: Table of contents depth</h2>
-            <p px:role="desc" xml:space="preserve">The depth of the table of contents hierarchy to include. '0' means no table of contents.
+# _generate-toc.scss
+
+Style sheet module for the [HTML to PEF script](../../../../doc/) for generating a table of content.
+
+Use this style sheet by importing it in your custom SCSS style sheet:
+
+```scss
+@import "http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_generate-toc.scss";
+```
+
+The module provides a variable for setting the depth of the table of contents, and a variable for
+controlling which headings are included in the table of contents.
+
+## `$toc-depth` variable
+
+The depth of the table of contents hierarchy to include. '0' means no table of contents.
 
 A table of contents will be generated from the heading elements present in the document: from `h1`
 elements if the specified value for the depth is 1, from `h1` and `h2` elements if the specified
 value is 2, etc. The resulting table of contents has the following nested structure:
 
 ~~~xml
-&lt;ol id="generated-document-toc"&gt;
-  &lt;li&gt;
-      &lt;a href="#ch_1" title="Chapter 1"&gt;Chapter 1&lt;/a&gt;
-      &lt;ol&gt;
-          &lt;li&gt;
-              &lt;a href="#ch_1_1" title="1.1"&gt;1.1&lt;/a&gt;
+<ol id="generated-document-toc">
+  <li>
+      <a href="#ch_1" title="Chapter 1">Chapter 1</a>
+      <ol>
+          <li>
+              <a href="#ch_1_1" title="1.1">1.1</a>
               ...
-          &lt;/li&gt;
-          &lt;li&gt;
-              &lt;a href="#ch_1_2" title="1.2"&gt;1.2&lt;/a&gt;
+          </li>
+          <li>
+              <a href="#ch_1_2" title="1.2">1.2</a>
               ...
-          &lt;/li&gt;
+          </li>
           ...
-      &lt;/ol&gt;
-  &lt;/li&gt;
+      </ol>
+  </li>
   ...
-&lt;/ol&gt;
+</ol>
 ~~~
 
 Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
@@ -105,17 +116,9 @@ See the CSS specification for more info:
 - the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
 - the [`target-counter()`](http://braillespecs.github.io/braille-css/#h4_the-target-counter-function) function
 - the [`page`](http://braillespecs.github.io/braille-css/#h4_creating-and-inheriting-counters) counter
-</p>
-        </p:documentation>
-    </p:option>
 
-    <p:option name="toc-exclude-class" required="false" px:type="string" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Table of contents: Exclude headings</h2>
-            <p px:role="desc" xml:space="preserve">Class name for excluding headings from the table of contents.
+## `$toc-exclude-class` variable
 
-If specified, heading elements with this class name are excluded from the generated tables of contents.</p>
-        </p:documentation>
-    </p:option>
+Class name for excluding headings from the table of contents.
 
-</p:declare-step>
+If specified, heading elements with this class name are excluded from the generated tables of contents.

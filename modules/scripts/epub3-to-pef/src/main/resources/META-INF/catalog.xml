@@ -7,7 +7,6 @@
        px:extends="../../../../../common-options.xpl
                    ../../../../../html-to-pef/src/main/resources/css/default.params
                    ../../../../../html-to-pef/src/main/resources/css/page-layout.params
-                   ../../../../../html-to-pef/src/main/resources/css/generate-toc.params
                    ../../../../../html-to-pef/src/main/resources/css/page-breaking.params
                    ../../../../../html-to-pef/src/main/resources/css/volume-breaking.params
                    ../../../../../html-to-pef/src/main/resources/css/notes.params"/>

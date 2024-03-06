@@ -15,15 +15,18 @@ public class Sentence implements FormatSpecifications {
 
 	private final String id;
 	private int size;
-	private final Voice voice;
+	private final Iterable<Voice> voices;
 	private final XdmNode text;
 	private final TTSEngine ttsProc;
 
-	public Sentence(TTSEngine ttsProc, Voice voice, XdmNode text) {
+	/**
+	 * @param voices Assumed to contain at least one voice.
+	 */
+	public Sentence(TTSEngine ttsProc, Iterable<Voice> voices, XdmNode text) {
 		id = text.getAttributeValue(Sentence_attr_id);
 		if (id == null)
 			throw new IllegalArgumentException("id must not be null");
-		this.voice = voice;
+		this.voices = voices;
 		this.text = text;
 		this.ttsProc = ttsProc;
 		size = -1;
@@ -37,8 +40,18 @@ public class Sentence implements FormatSpecifications {
 		return size;
 	}
 
-	public Voice getVoice() {
-		return voice;
+	/**
+	 * Get the preferred voice
+	 */
+	public Voice getPreferredVoice() {
+		return voices.iterator().next();
+	}
+
+	/**
+	 * Get the complete ordered set of selected voices
+	 */
+	public Iterable<Voice> getVoices() {
+		return voices;
 	}
 
 	public XdmNode getText() {

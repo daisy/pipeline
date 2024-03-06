@@ -27,11 +27,8 @@
         </p:documentation>
     </p:input>
 
-    <p:option name="language" required="false" px:type="string" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Language code</h2>
-            <p px:role="desc">Language code of the input document.</p>
-        </p:documentation>
+    <p:option name="language" select="''">
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
     <p:option name="nimas" select="'false'">
@@ -74,6 +71,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
+            px:fileset-add-entries
             px:fileset-store
         </p:documentation>
     </p:import>
@@ -88,7 +86,16 @@
         </p:documentation>
     </cx:import>
 
+    <p:sink/>
+    <px:fileset-add-entries media-type="application/x-dtbook+xml" name="dtbook">
+        <p:input port="entries">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entries>
     <px:dtbook-load name="load" px:progress=".1" px:message="Loading DTBook">
+        <p:input port="source.in-memory">
+            <p:pipe step="dtbook" port="result.in-memory"/>
+        </p:input>
         <p:with-option name="validation" select="not($validation='off')"/>
         <p:with-option name="nimas" select="$nimas='true'"/>
         <!-- assume MathML 3.0 -->

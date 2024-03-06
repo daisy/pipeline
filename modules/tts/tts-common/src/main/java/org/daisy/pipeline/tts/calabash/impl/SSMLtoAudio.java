@@ -227,9 +227,10 @@ public class SSMLtoAudio implements FormatSpecifications {
 
 		TTSLog.Entry logEntry = mTTSlog.getOrCreateEntry(id);
 		logEntry.setSSML(ssml);
-		Voice voice = mVoiceManager.findAvailableVoice(voiceEngine, voiceName, lang, gender);
-		logEntry.setSelectedVoice(voice);
-		if (voice == null) {
+		Iterable<Voice> voices = mVoiceManager.findAvailableVoices(voiceEngine, voiceName, lang, gender);
+		Voice preferredVoice = Iterables.getFirst(voices, null);
+		logEntry.setSelectedVoice(preferredVoice);
+		if (preferredVoice == null) {
 			String err = "could not find any installed voice matching with "
 			                + new Voice(voiceEngine, voiceName)
 			                + " or providing the language '" + lang + "'";
@@ -237,7 +238,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 			return false;
 		}
 
-		TTSEngine newSynth = mVoiceManager.getTTS(voice);
+		TTSEngine newSynth = mVoiceManager.getTTS(preferredVoice);
 		if (newSynth == null) {
 			/*
 			 * Should not happen since findAvailableVoice() returns only a
@@ -249,7 +250,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 			return false;
 		}
 
-		if (!mVoiceManager.matches(voice, voiceEngine, voiceName, lang, gender)) {
+		if (!mVoiceManager.matches(preferredVoice, voiceEngine, voiceName, lang, gender)) {
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.UNEXPECTED_VOICE,
 			        "no voice matches exactly with the requested characteristics"));
 		}
@@ -283,7 +284,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 
 			listOfSections.add(mCurrentSection);
 		}
-		mCurrentSection.sentences.add(new Sentence(newSynth, voice, ssml));
+		mCurrentSection.sentences.add(new Sentence(newSynth, voices, ssml));
 		return true;
 	}
 

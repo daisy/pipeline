@@ -71,7 +71,7 @@
 					<!-- Not sure why this is needed. Omitted this could trigger a base URI error in
 					     list-pagebreaks-from-nav.xsl. Bug? -->
 				</p:add-xml-base>
-				<p:filter select="//html:nav[tokenize(@epub:type,'\s+')='page-list'][1]" name="nav"/>
+				<p:filter select="//html:nav[tokenize(@epub:type,'\s+')='page-list' or @role='doc-pagelist'][1]" name="nav"/>
 				<p:count/>
 				<p:choose>
 					<p:when test="/*=0">

@@ -51,9 +51,11 @@
                     <d:file href="result/epub/EPUB/Content/speechgen0004.mp3" original-href="../resources/input/book1/speechgen0004.mp3" media-type="audio/mpeg"/>
                     <d:file href="result/epub/EPUB/Content/speechgen0005.mp3" original-href="../resources/input/book1/speechgen0005.mp3" media-type="audio/mpeg"/>
                     <d:file href="result/epub/EPUB/Content/speechgen0006.mp3" original-href="../resources/input/book1/speechgen0006.mp3" media-type="audio/mpeg"/>
-                    <d:file href="result/epub/EPUB/Content/ncc.xhtml" original-href="../resources/input/book1/ncc.html" media-type="application/xhtml+xml"/>
+                    <d:file href="result/epub/EPUB/Content/ncc.xhtml" original-href="../resources/input/book1/ncc.html" media-type="application/xhtml+xml"
+                            doctype="&lt;!DOCTYPE html&gt;"/>
                     <d:file href="result/epub/EPUB/Content/ncx.xml" media-type="application/x-dtbncx+xml"/>
-                    <d:file href="result/epub/EPUB/Content/.xhtml" original-href="../resources/input/book1/content.html" media-type="application/xhtml+xml"/>
+                    <d:file href="result/epub/EPUB/Content/.xhtml" original-href="../resources/input/book1/content.html" media-type="application/xhtml+xml"
+                            doctype="&lt;!DOCTYPE html&gt;"/>
                     <d:file href="result/epub/EPUB/Content/.smil" original-href="result/epub/EPUB/Content/.smil" media-type="application/smil+xml"/>
                     <d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
                     <d:file href="result/epub/META-INF/container.xml" media-type="application/xml"/>

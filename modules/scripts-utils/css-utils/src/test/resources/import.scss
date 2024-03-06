@@ -1,0 +1,9 @@
+@import url("imports/1.css");
+//@import "imports/1.css";             // FIXME: imports the CSS rather than doing a plain CSS import
+//@import "imports/2";                 // FIXME: looks for 2.scss, does not find 2.css
+@import "imports/2.css";               // including this in order to test importing CSS because without
+                                       // the .css extension it does not work (see above), but note that
+                                       // this should actually result in a plain CSS import (see above)
+@import "imports/3.scss", "imports/4";
+//@import "imports/5";                 // FIXME: looks for 5.scss, does not find _5.scss
+//@import "import/6";                  // FIXME: looks for 6.scss, does not find 6/_index.scss

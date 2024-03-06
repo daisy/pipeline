@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -442,7 +443,7 @@ public class TextToPcmThread implements FormatSpecifications {
 		List<String> markNames = getMarkNames(sentence.getText());
 		
 		TTSEngine tts = sentence.getTTSproc();
-		Voice originalVoice = sentence.getVoice();
+		Voice originalVoice = sentence.getPreferredVoice();
 		List<Mark> marks = new ArrayList<Mark>();
 		Iterable<AudioInputStream> pcm;
 		try {
@@ -458,20 +459,22 @@ public class TextToPcmThread implements FormatSpecifications {
 			mResources.remove(tts);
 
 			//Find another voice for this sentence
-			Voice newVoice = mVoiceManager.findSecondaryVoice(sentence.getVoice());
-			if (newVoice == null) {
+			Iterator<Voice> fallbackVoices = sentence.getVoices().iterator();
+			fallbackVoices.next(); // this returns the original voice
+			if (!fallbackVoices.hasNext()) {
 				mTTSLog.getWritableEntry(sentence.getID()).addError(
 					new TTSLog.Error(
 						TTSLog.ErrorCode.AUDIO_MISSING,
 						"something went wrong but no fallback voice can be found for " + originalVoice));
 				return false;
 			}
-			tts = mVoiceManager.getTTS(newVoice); //cannot return null in this case
+			Voice fallbackVoice = fallbackVoices.next();
+			tts = mVoiceManager.getTTS(fallbackVoice); //cannot return null in this case
 
 			//Try with the new engine
 			marks.clear();
 			try {
-				pcm = speakWithVoice(sentence, newVoice, tts, marks, markNames, timeout);
+				pcm = speakWithVoice(sentence, fallbackVoice, tts, marks, markNames, timeout);
 			} catch (MemoryException e) {
 				flush(section, pcmOutput);
 				printMemError(sentence, e);
@@ -482,11 +485,11 @@ public class TextToPcmThread implements FormatSpecifications {
 					new TTSLog.Error(
 						TTSLog.ErrorCode.AUDIO_MISSING,
 						"something went wrong with " + originalVoice
-						+ " and fallback voice " + newVoice + " didn't work either"));
+						+ " and fallback voice " + fallbackVoice + " didn't work either"));
 				return false;
 			}
 
-			mLogger.info("something went wrong with " + originalVoice + ". Voice " + newVoice
+			mLogger.info("something went wrong with " + originalVoice + ". Voice " + fallbackVoice
 			        + " used instead to synthesize sentence");
 
 			if (mLastFormat != null && !pcm.iterator().next().getFormat().matches(mLastFormat))

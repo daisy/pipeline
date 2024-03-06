@@ -137,7 +137,10 @@
                                     </seq>
                                 </xsl:when>
                                 <xsl:otherwise>
-                                    <xsl:message terminate="yes">FIXME</xsl:message>
+                                    <xsl:message terminate="yes">
+                                        <xsl:text>Text/audio synchronization too coarse. SMIL references an ancestor of the heading with id </xsl:text>
+                                        <xsl:value-of select="@id"/>
+                                    </xsl:message>
                                 </xsl:otherwise>
                             </xsl:choose>
                         </xsl:when>

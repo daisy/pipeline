@@ -3,6 +3,8 @@
 		xmlns:p="http://www.w3.org/ns/xproc"
 		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 		xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+		xmlns:cx="http://xmlcalabash.com/ns/extensions"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		xmlns:ssml="http://www.w3.org/2001/10/synthesis"
 		xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
 		exclude-inline-prefixes="#all">
@@ -27,9 +29,9 @@
       <ssml:skippables/>
     </p:inline>
   </p:input>
-  <p:input port="user-lexicons">
-    <p:documentation>Lexicons from the config file</p:documentation>
-  </p:input>
+  <p:option name="user-lexicons" cx:as="xs:anyURI*" select="()">
+    <p:documentation>PLS lexicons</p:documentation>
+  </p:option>
   <p:input port="annotations" sequence="true">
     <p:documentation>XSLT Stylesheets to annotate the content</p:documentation>
     <p:empty/>
@@ -141,12 +143,10 @@
        translation. Requirements: (1) clean input with all words wrapped into SSML
        tokens. -->
   <pxi:apply-lexicons>
-    <p:input port="user-lexicons">
-      <p:pipe port="user-lexicons" step="main"/>
-    </p:input>
-    <p:input port="fileset">
+    <p:input port="doc-lexicons.fileset">
       <p:pipe port="fileset.in" step="main"/>
     </p:input>
+    <p:with-option name="user-lexicons" select="$user-lexicons"/>
     <p:with-option name="lang" select="$lang"/>
   </pxi:apply-lexicons>
 

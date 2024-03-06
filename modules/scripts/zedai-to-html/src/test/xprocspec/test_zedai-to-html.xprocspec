@@ -29,7 +29,7 @@
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
-						<d:file href="output-dir/alice.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>
@@ -62,10 +62,10 @@
 			          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 				<x:document type="inline">
 					<d:fileset>
-						<d:file href="output-dir/alice-1.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="output-dir/alice-2.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="output-dir/alice-3.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="output-dir/alice-4.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="output-dir/alice-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="output-dir/alice-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="output-dir/alice-3.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="output-dir/alice-4.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					</d:fileset>
 				</x:document>
 			</x:expect>

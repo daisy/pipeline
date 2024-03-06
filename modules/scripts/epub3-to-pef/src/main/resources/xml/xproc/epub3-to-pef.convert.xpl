@@ -81,7 +81,6 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
-            px:merge-parameters
             px:apply-stylesheets
             px:transform
             px:parse-query
@@ -109,14 +108,14 @@
             px:fileset-add-entry
         </p:documentation>
     </p:import>
-    
-    <!-- Ensure that there's exactly one c:param-set -->
-    <px:merge-parameters name="parameters" px:progress=".01">
-        <p:input port="source">
+
+    <!-- Ensure that there's exactly one c:param-set. (In case of multiple parameters with the same
+         name, only the last occurence is kept.) -->
+    <p:parameters name="parameters" px:progress=".01">
+        <p:input port="parameters">
             <p:pipe step="main" port="parameters"/>
         </p:input>
-    </px:merge-parameters>
-    <p:sink/>
+    </p:parameters>
 
     <!-- Parse transform query to a c:param-set -->
     <px:parse-query name="parsed-transform-query">
@@ -178,7 +177,10 @@
                                              (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
                                              ') AND (height: ',
                                              (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
-                                             ')')">
+                                             ')',
+                                             if (//c:param[@name='duplex' and not(@namespace[not(.='')])]/@value='true')
+                                               then ' AND (duplex: 1)'
+                                               else ())">
                         <p:pipe step="parameters" port="result"/>
                     </p:with-option>
                     <p:input port="parameters">
@@ -231,7 +233,11 @@
         </p:with-option>
     </p:add-attribute>
     
-    <p:group px:message="Inlining global CSS" px:progress=".11">
+    <p:group name="html-with-css" px:message="Inlining global CSS" px:progress=".11">
+        <p:output port="result" primary="true"/>
+        <p:output port="parameters">
+            <p:pipe step="apply-stylesheets" port="result.parameters"/>
+        </p:output>
         <p:variable name="abs-stylesheet"
                     select="for $s in tokenize($stylesheet,'\s+')[not(.='')]
                             return resolve-uri($s,$epub)"/>
@@ -252,7 +258,7 @@
             <p:inline><_/></p:inline>
         </p:variable>
         <p:identity px:message="stylesheets: {$stylesheets-to-be-inlined}"/>
-        <px:apply-stylesheets px:progress="1">
+        <px:apply-stylesheets name="apply-stylesheets" px:progress="1">
             <p:with-option name="stylesheets" select="$stylesheets-to-be-inlined"/>
             <p:input port="parameters">
                 <p:pipe port="result" step="parameters"/>
@@ -263,8 +269,11 @@
                                      (//c:param[@name='page-width' and not(@namespace[not(.='')])]/@value,40)[1],
                                      ') AND (height: ',
                                      (//c:param[@name='page-height' and not(@namespace[not(.='')])]/@value,25)[1],
-                                     ')')">
-                <p:pipe port="result" step="parameters"/>
+                                     ')',
+                                     if (//c:param[@name='duplex' and not(@namespace[not(.='')])]/@value='true')
+                                       then ' AND (duplex: 1)'
+                                       else ())">
+                <p:pipe step="parameters" port="result"/>
             </p:with-option>
         </px:apply-stylesheets>
     </p:group>
@@ -305,7 +314,7 @@
                     <p:with-option name="query" select="$transform-query"/>
                     <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                     <p:input port="parameters">
-                        <p:pipe port="result" step="parameters"/>
+                        <p:pipe step="html-with-css" port="parameters"/>
                     </p:input>
                 </px:transform>
             </p:group>
@@ -322,7 +331,7 @@
                         <p:with-option name="query" select="$transform-query"/>
                         <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                         <p:input port="parameters">
-                            <p:pipe port="result" step="parameters"/>
+                            <p:pipe step="html-with-css" port="parameters"/>
                         </p:input>
                     </px:transform>
                 </p:group>
@@ -366,7 +375,7 @@
                 <p:with-option name="query" select="$transform-query"/>
                 <p:with-param port="parameters" name="temp-dir" select="$temp-dir"/>
                 <p:input port="parameters">
-                    <p:pipe port="result" step="parameters"/>
+                    <p:pipe step="html-with-css" port="parameters"/>
                 </p:input>
             </px:transform>
         </p:otherwise>

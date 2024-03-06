@@ -52,6 +52,7 @@ public class LameEncoder implements AudioEncoder {
 		        : "--signed";
 		String endianness = audioFormat.isBigEndian() ? "--big-endian" : "--little-endian";
 		Consumer<OutputStream> lameInput;
+		int bufSize = 65536;
 
 		if (!(audioFormat.getEncoding() == AudioFormat.Encoding.PCM_UNSIGNED
 		      || audioFormat.getEncoding() == AudioFormat.Encoding.PCM_SIGNED
@@ -71,10 +72,11 @@ public class LameEncoder implements AudioEncoder {
 			bitwidth = "8";
 			lameInput = stream -> {
 				try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
-					byte[] frame = new byte[audioFormat.getFrameSize()];
-					while (pcm.read(frame) > 0)
-						for (int i = 0; i < frame.length; i += ratio)
-							out.write(frame[i + mse]);
+					byte[] buf = new byte[bufSize * audioFormat.getFrameSize()];
+					int len;
+					while ((len = pcm.read(buf)) > 0)
+						for (int i = 0; i < len; i += ratio)
+							out.write(buf[i + mse]);
 				}
 			};
 		} else if (audioFormat.getEncoding() == AudioFormat.Encoding.PCM_FLOAT) {
@@ -84,14 +86,16 @@ public class LameEncoder implements AudioEncoder {
 			case 32:
 				lameInput = stream -> {
 					try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
-						ByteBuffer frame = ByteBuffer.wrap(new byte[audioFormat.getFrameSize()]);
+						ByteBuffer buf = ByteBuffer.wrap(new byte[bufSize * audioFormat.getFrameSize()]);
 						ByteOrder byteOrder = audioFormat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN;
-						while (pcm.read(frame.array()) > 0) {
-							frame.order(byteOrder);
+						int len;
+						while ((len = pcm.read(buf.array())) > 0) {
+							buf.order(byteOrder);
 							// read floats and write ints (both 4 bytes)
-							for (int i = 0; i < frame.array().length; i += 4)
-								frame.putInt(0, (int)(frame.getFloat(i) * Integer.MAX_VALUE));
-							out.write(frame.array(), 0, 4);
+							for (int i = 0; i < len; i += 4) {
+								buf.putInt(0, (int)(buf.getFloat(i) * Integer.MAX_VALUE));
+								out.write(buf.array(), 0, 4);
+							}
 						}
 					}
 				};
@@ -101,14 +105,15 @@ public class LameEncoder implements AudioEncoder {
 				bitwidth = "32";
 				lameInput = stream -> {
 					try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
-						ByteBuffer frame = ByteBuffer.wrap(new byte[audioFormat.getFrameSize()]);
+						ByteBuffer buf = ByteBuffer.wrap(new byte[audioFormat.getFrameSize()]);
 						ByteOrder byteOrder = audioFormat.isBigEndian() ? ByteOrder.BIG_ENDIAN : ByteOrder.LITTLE_ENDIAN;
-						while (pcm.read(frame.array()) > 0) {
-							frame.order(byteOrder);
+						while (pcm.read(buf.array()) > 0) {
+							buf.order(byteOrder);
 							// read doubles (8 bytes) and write ints (4 bytes)
-							for (int i = 0; i < frame.array().length; i += 8)
-								frame.putInt(0, (int)(frame.getDouble(i) * Integer.MAX_VALUE));
-							out.write(frame.array(), 0, 4);
+							for (int i = 0; i < buf.array().length; i += 8) {
+								buf.putInt(0, (int)(buf.getDouble(i) * Integer.MAX_VALUE));
+								out.write(buf.array(), 0, 4);
+							}
 						}
 					}
 				};
@@ -119,9 +124,10 @@ public class LameEncoder implements AudioEncoder {
 		} else {
 			lameInput = stream -> {
 				try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
-					byte[] frame = new byte[audioFormat.getFrameSize()];
-					while (pcm.read(frame) > 0)
-						out.write(frame);
+					byte[] buf = new byte[bufSize * audioFormat.getFrameSize()];
+					int len;
+					while ((len = pcm.read(buf)) > 0)
+						out.write(buf, 0, len);
 				}
 			};
 		}

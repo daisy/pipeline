@@ -120,6 +120,11 @@ public class ConfigReader {
 						            + " inside TTS config file.\nPlease specify CSS style sheets"
 						            + " through the designated option or attach them to the input"
 						            + " document.");
+					} else if ("lexicon".equalsIgnoreCase(qname.getLocalName())) {
+						logger.warn("Ignoring 'lexicon' element " + node.toString()
+						            + " inside TTS config file.\nPlease specify PLS lexicons"
+						            + " through the designated option or attach them to the input"
+						            + " document.");
 					} else {
 						parsed = extensions[k].parseNode(node, docURI, this);
 					}

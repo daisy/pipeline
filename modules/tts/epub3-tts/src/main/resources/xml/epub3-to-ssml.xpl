@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step type="px:epub3-to-ssml" version="1.0"
 		xmlns:p="http://www.w3.org/ns/xproc"
-		xmlns:c="http://www.w3.org/ns/xproc-step"
 		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+		xmlns:cx="http://xmlcalabash.com/ns/extensions"
+		xmlns:c="http://www.w3.org/ns/xproc-step"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
 		exclude-inline-prefixes="#all"
 		name="main">
 
@@ -15,6 +17,7 @@
     <p:input port="sentence-ids" sequence="false"/>
     <p:input port="skippable-ids"/>
     <p:input port="config"/>
+    <p:option name="user-lexicons" cx:as="xs:anyURI*" select="()"/>
 
     <p:output port="result" primary="true" sequence="true">
       <p:pipe port="result" step="ssml-gen" />
@@ -22,7 +25,6 @@
 
     <p:import href="http://www.daisy.org/pipeline/modules/tts-common/library.xpl">
       <p:documentation>
-        px:get-tts-lexicons
         px:text-to-ssml
       </p:documentation>
     </p:import>
@@ -32,22 +34,12 @@
       </p:documentation>
     </p:import>
 
-    <px:get-tts-lexicons name="user-lexicons">
-      <p:input port="config">
-	<p:pipe port="config" step="main"/>
-      </p:input>
-    </px:get-tts-lexicons>
-    <p:sink/>
-
     <p:xslt>
       <p:documentation>
 	Prepare HTML document:
 	- create text nodes for page number
 	- handle inline SSML phonemes
       </p:documentation>
-      <p:input port="source">
-	<p:pipe step="main" port="content.in"/>
-      </p:input>
       <p:input port="stylesheet">
 	<p:document href="prepare-html.xsl"/>
       </p:input>
@@ -70,9 +62,7 @@
       <p:input port="skippable-ids">
 	<p:pipe port="skippable-ids" step="main"/>
       </p:input>
-      <p:input port="user-lexicons">
-	<p:pipe port="result" step="user-lexicons"/>
-      </p:input>
+      <p:with-option name="user-lexicons" select="$user-lexicons"/>
       <p:with-option name="word-element" select="'span'"/>
       <p:with-option name="word-attr" select="'role'"/>
       <p:with-option name="word-attr-val" select="'word'"/>

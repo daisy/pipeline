@@ -44,7 +44,12 @@
     <p:option name="braille-translator" select="''"/>
     <p:option name="stylesheet" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>CSS user style sheets as space separated list of absolute URIs.</p>
+            <p>CSS style sheets as space separated list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>PLS lexicons as list of absolute URIs.</p>
         </p:documentation>
     </p:option>
     <p:option name="apply-document-specific-stylesheets" select="'false'" cx:as="xs:string"/>
@@ -489,7 +494,7 @@
                             <!-- Not sure why this is needed. Omitted this triggers a base URI error
                                  in px:html-outline. Bug? -->
                         </p:add-xml-base>
-                        <p:filter select="//html:nav[tokenize(@epub:type,'\s+')='toc'][1]/html:ol"/>
+                        <p:filter select="//html:nav[tokenize(@epub:type,'\s+')='toc' or @role='doc-toc'][1]/html:ol"/>
                     </p:when>
                     <p:otherwise>
                         <p:identity>
@@ -564,7 +569,11 @@
                 Convert DPUB-ARIA role="doc-pagebreak" to epub:type="pagebreak"
             -->
             <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
-                              label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"
+                              label="string-join(
+                                       distinct-values((
+                                         @epub:type/tokenize(.,'\s+')[not(.='')],
+                                         replace(@role,'^doc-',''))),
+                                       ' ')"
                               px:progress="1/2"/>
             <!--
                 Generate text for empty page numbers
@@ -680,6 +689,7 @@
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
                         <p:with-option name="stylesheet" select="$stylesheet"/>
+                        <p:with-option name="lexicon" select="$lexicon"/>
                         <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
                         <p:with-option name="temp-dir" select="if ($temp-dir='') then $temp-dir else concat($temp-dir,'tts/')"/>
@@ -1355,5 +1365,11 @@
     -->
     <p:add-attribute match="d:file[@media-type='application/oebps-package+xml']"
                      attribute-name="indent" attribute-value="true"/>
+
+    <!--
+        Set correct HTML doctype just in case
+    -->
+    <p:add-attribute match="d:file[@media-type='application/xhtml+xml']"
+                     attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;"/>
 
 </p:declare-step>

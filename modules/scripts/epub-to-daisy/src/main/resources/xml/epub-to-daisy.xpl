@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:epub-to-daisy"
                 name="main">
@@ -18,7 +20,12 @@
 	</p:input>
 	<p:option name="stylesheet" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>CSS user style sheets as space separated list of absolute URIs.</p>
+			<p>CSS style sheets as space separated list of absolute URIs.</p>
+		</p:documentation>
+	</p:option>
+	<p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>PLS lexicons as list of absolute URIs.</p>
 		</p:documentation>
 	</p:option>
 	<p:option name="tts-audio-file-type" select="'audio/mpeg'">
@@ -157,6 +164,7 @@
 			<p:pipe step="main" port="tts-config"/>
 		</p:input>
 		<p:with-option name="stylesheet" select="$stylesheet"/>
+		<p:with-option name="lexicon" select="$lexicon"/>
 		<p:with-option name="temp-dir" select="$temp-dir"/>
 		<p:with-option name="result-base" select="if ($epub3-output-dir!='')
 		                                          then $epub3-output-dir

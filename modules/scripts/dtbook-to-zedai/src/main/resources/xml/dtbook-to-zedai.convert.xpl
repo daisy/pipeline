@@ -79,7 +79,7 @@
     </p:option>
     <p:option name="lang" required="false" cx:type="xs:string" select="''">
         <p:documentation>
-            Language code of the input document.
+            Language code of the input document. Only used when DTBook has no xml:lang attribute.
         </p:documentation>
     </p:option>
     <p:option name="validation" cx:type="off|report|abort" select="'abort'">

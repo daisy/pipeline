@@ -474,11 +474,12 @@
             </px:set-base-uri>
         </p:for-each>
         <p:sink/>
-        <p:wrap-sequence name="mapping" wrapper="d:fileset">
+        <p:wrap-sequence wrapper="d:fileset">
             <p:input port="source">
                 <p:pipe step="rearrange-smil" port="mapping"/>
             </p:input>
         </p:wrap-sequence>
+        <p:unwrap match="/d:fileset/d:fileset" name="mapping"/>
         <p:sink/>
         <!--
             Drop href attributes of noteref elements because

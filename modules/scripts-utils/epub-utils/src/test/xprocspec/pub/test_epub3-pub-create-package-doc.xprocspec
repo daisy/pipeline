@@ -255,6 +255,8 @@
 						<meta name="schema:accessMode" content="textual"/>
 						<meta property="schema:accessMode">auditory</meta>
 						<meta name="schema:accessMode" content="auditory"/>
+						<meta property="pageBreakSource">unknown</meta>
+						<meta name="pageBreakSource" content="unknown"/>
 						<meta property="schema:accessibilityHazard">unknown</meta>
 						<meta name="schema:accessibilityHazard" content="unknown"/>
 						<meta property="media:duration" refines="#item_12">0:00:08.585</meta>

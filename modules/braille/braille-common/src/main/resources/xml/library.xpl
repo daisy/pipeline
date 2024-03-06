@@ -6,8 +6,6 @@
     <p:import href="select-by-base.xpl"/>
     <p:import href="select-by-position.xpl"/>
     <p:import href="xslt-for-each.xpl"/>
-    <p:import href="add-parameters.xpl"/>
-    <p:import href="merge-parameters.xpl"/>
     <p:import href="delete-parameters.xpl"/>
     <p:import href="apply-stylesheets.xpl"/>
 

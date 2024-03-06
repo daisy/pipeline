@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.24-SNAPSHOT</version>
+    <version>1.14.26-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>pef-utils</artifactId>
-  <version>5.1.2-SNAPSHOT</version>
+  <version>6.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: pef-utils</name>
@@ -29,6 +29,10 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -87,6 +91,7 @@
       org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog,
       org.daisy.pipeline.braille.pef.impl.ConfigurableFileFormat$Provider,
       org.daisy.pipeline.braille.pef.impl.LocaleBasedTableProvider,
+      org.daisy.pipeline.braille.pef.impl.TableDatatypeService,
       org.daisy.pipeline.braille.pef.impl.PEFFileFormat$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.pdf.PEF2PDFStep$Provider,
       org.daisy.pipeline.braille.pef.calabash.impl.PEF2TextStep$Provider,

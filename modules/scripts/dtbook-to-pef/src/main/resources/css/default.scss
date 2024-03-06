@@ -91,19 +91,11 @@ br::before {
 
 /* ======= Implementation of script options =============== */
 
-$hyphenation: auto !default;
-$line-spacing: single !default;
-$capital-letters: true !default;
-$include-captions: true !default;
-$include-images: true !default;
-$include-line-groups: true !default;
-$include-production-notes: false !default;
+@import "_page-breaking.scss";
+@import "_volume-breaking.scss";
+@import "_notes.scss";
 
-@import "page-layout.scss";
-@import "generate-toc.scss";
-@import "page-breaking.scss";
-@import "volume-breaking.scss";
-@import "notes.scss";
+$hyphenation: auto !default;
 
 @if $hyphenation != manual {
 	:root {
@@ -111,32 +103,10 @@ $include-production-notes: false !default;
 	}
 }
 
+$line-spacing: single !default;
+
 @if $line-spacing == double {
 	:root {
 		line-height: 2;
 	}
-}
-
-@if $capital-letters != true {
-	:root {
-		text-transform: lowercase;
-	}
-}
-
-caption {
-	display: if($include-captions, block, none);
-}
-
-@if $include-images {
-	img::after {
-		content: attr(alt);
-	}
-}
-
-linegroup line {
-	display: if($include-line-groups, block, inline);
-}
-
-prodnote {
-	display: if($include-production-notes, block, none);
 }

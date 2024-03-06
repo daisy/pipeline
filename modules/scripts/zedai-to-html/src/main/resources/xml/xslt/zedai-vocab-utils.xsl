@@ -9,6 +9,11 @@
     <xsl:value-of select="$zedai-epub-map[@zedai=$term]/@epub"/>
   </xsl:function>
 
+  <!--
+      mapping from Z39.98-2012 Structural Semantics Vocabulary
+      (https://daisy.org/activities/standards/daisy/z39-98-2012/z39-98-2012-structural-semantics-vocabulary/)
+      to EPUB 3 Structural Semantics Vocabulary (https://www.w3.org/TR/epub-ssv-11/)
+  -->
   <xsl:variable name="zedai-epub-map" as="element()*">
     <term zedai="fiction"/>
     <term zedai="non-fiction"/>
@@ -125,8 +130,8 @@
     <term zedai="note" epub="note"/>
     <term zedai="footnotes" epub="footnotes"/>
     <term zedai="footnote" epub="footnote"/>
-    <term zedai="rearnote" epub="rearnote"/>
-    <term zedai="rearnotes" epub="rearnotes"/>
+    <term zedai="rearnote" epub="endnote"/>
+    <term zedai="rearnotes" epub="endnotes"/>
     <term zedai="verse"/>
     <term zedai="poem"/>
     <term zedai="song"/>
@@ -208,6 +213,6 @@
     <term zedai="primary"/>
     <term zedai="secondary"/>
     <term zedai="tertiary"/>
-
   </xsl:variable>
+
 </xsl:stylesheet>

@@ -83,6 +83,7 @@ public class BrailleCssCascader implements CssCascader {
 	public boolean supportsMedium(Medium medium) {
 		switch (medium.getType()) {
 		case EMBOSSED:
+		case BRAILLE:
 		case PRINT:
 			return true;
 		default:
@@ -103,6 +104,7 @@ public class BrailleCssCascader implements CssCascader {
 			throw new UnsupportedOperationException("A style attribute must be specified");
 		switch (medium.getType()) {
 		case EMBOSSED:
+		case BRAILLE:
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
 		case PRINT:
@@ -119,7 +121,7 @@ public class BrailleCssCascader implements CssCascader {
 	private static final RuleFactory printRuleFactory = RuleFactoryImpl.getInstance();
 	private static final CSSParserFactory printParserFactory = CSSParserFactory.getInstance();
 
-	// medium embossed
+	// medium braille/embossed
 	private static final SupportedCSS brailleCSS = new SupportedBrailleCSS(false, true);
 	private static final DeclarationTransformer brailleDeclarationTransformer
 		= new BrailleCSSDeclarationTransformer(brailleCSS);
@@ -138,7 +140,7 @@ public class BrailleCssCascader implements CssCascader {
 			super(resolver, preProcessor, xsltProcessor, userStyleSheet, medium, attributeName,
 			      parserFactory, ruleFactory, supportedCss, declarationTransformer);
 			this.attributeName = attributeName;
-			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED;
+			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED || medium.getType() == Medium.Type.BRAILLE;
 		}
 
 		private Map<String,Map<String,RulePage>> pageRules = null;

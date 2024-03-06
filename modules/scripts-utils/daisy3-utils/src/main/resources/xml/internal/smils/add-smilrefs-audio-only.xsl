@@ -8,7 +8,6 @@
 
   <xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
-  <xsl:param name="no-smilref"/>
   <xsl:param name="mo-dir"/>
 
   <xsl:variable name="mo-dir-rel" select="pf:relativize-uri($mo-dir, base-uri(/*))"/>

@@ -10,7 +10,6 @@ import org.daisy.dotify.api.table.TableProvider;
 import org.junit.Test;
 import org.junit.Assert;
 
-// only testing without OSGi because we need access to private package
 public class BrailleUtilsTableCatalogTest {
 	
 	@Test
@@ -19,7 +18,7 @@ public class BrailleUtilsTableCatalogTest {
 		Iterator<TableProvider> providers = ServiceLoader.load(TableProvider.class).iterator();
 		while (providers.hasNext()) catalog.addTableProvider(providers.next());
 		catalog.list();
-		Collection<FactoryProperties> allTables = catalog.list();
+		Collection<FactoryProperties> allTables = catalog.listAll();
 		// for (FactoryProperties t : allTables)
 		// 	System.err.println(t.getIdentifier() + ": " + t.getDisplayName());
 		Assert.assertEquals(25, allTables.size());

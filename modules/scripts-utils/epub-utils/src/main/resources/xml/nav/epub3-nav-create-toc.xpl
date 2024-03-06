@@ -13,7 +13,7 @@
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The generated table of contents as a <code>nav</code> document with
-            <code>epub:type="toc"</code>.</p>
+            <code>epub:type="toc"</code> and <code>role="doc-toc"</code>.</p>
         </p:documentation>
         <p:pipe port="result" step="result"/>
     </p:output>
@@ -89,7 +89,7 @@
         <!-- Prepare the table of content -->
         <p:input port="source">
             <p:inline exclude-inline-prefixes="#all">
-                <nav epub:type="toc" xmlns="http://www.w3.org/1999/xhtml">
+                <nav epub:type="toc" role="doc-toc" xmlns="http://www.w3.org/1999/xhtml">
                     <h1>Table of contents</h1>
                     <ol/>
                 </nav>

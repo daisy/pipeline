@@ -182,10 +182,10 @@
 					<d:file href="result.epub!/META-INF/container.xml" media-type="application/xml"/>
 					<d:file href="result.epub!/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="result.epub!/EPUB/toc.ncx" media-type="application/x-dtbncx+xml"/>
-					<d:file href="result.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result.epub!/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result.epub!/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result.epub!/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result.epub!/EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result.epub!/EPUB/cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result.epub!/EPUB/front.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result.epub!/EPUB/chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -209,6 +209,8 @@
 						<meta name="schema:accessibilityFeature" content="tableOfContents"/>
 						<meta property="schema:accessibilityFeature">pageNavigation</meta>
 						<meta name="schema:accessibilityFeature" content="pageNavigation"/>
+						<meta property="pageBreakSource">unknown</meta>
+						<meta name="pageBreakSource" content="unknown"/>
 					</metadata>
 					<manifest>
 						<item id="toc" href="toc.ncx" media-type="application/x-dtbncx+xml"/>
@@ -242,7 +244,7 @@
 						<title>Table of contents</title>
 					</head>
 					<body>
-						<nav epub:type="toc">
+						<nav epub:type="toc" role="doc-toc">
 							<h1>Table of contents</h1>
 							<ol>
 								<li>
@@ -261,7 +263,7 @@
 								</li>
 							</ol>
 						</nav>
-						<nav epub:type="page-list">
+						<nav epub:type="page-list" role="doc-pagelist">
 							<h1>List of Pages</h1>
 							<ol>
 								<li id="pageTarget-1">

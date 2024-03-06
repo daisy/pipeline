@@ -146,7 +146,7 @@
 	<p:choose>
 		<p:when test="empty(//d:file/@href[not(starts-with(.,'volume%201/'))])">
 			<!-- drop the 'volume 1' prefix if there is only one volume -->
-			<p:label-elements attribute="href" label="substring-after(@href,'volume%201/')"/>
+			<p:label-elements match="d:file" attribute="href" label="substring-after(@href,'volume%201/')"/>
 		</p:when>
 		<p:otherwise>
 			<p:identity/>

@@ -359,9 +359,35 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						Optional<AudioEncoder> encoder = audioServices.newEncoder(resultFileType, new HashMap<String,String>());
 						if (!encoder.isPresent())
 							throw new RuntimeException("No encoder found for file type " + resultFileType);
+
+						// optimization: combine AudioClip that follow each other immediately
+						{
+							SortedMap<AudioClip,AudioClip> map = new TreeMap<>(desired.comparator());
+							AudioClip sourceClip = null;
+							AudioClip destinationClip = null;
+							for (Map.Entry<AudioClip,AudioClip> entry : desired.entrySet()) {
+								AudioClip s = entry.getValue();
+								AudioClip d = entry.getKey();
+								if (sourceClip != null
+								    && s.src.equals(sourceClip.src) && s.clipBegin.equals(sourceClip.clipEnd)
+								    && d.src.equals(destinationClip.src) && d.clipBegin.equals(destinationClip.clipEnd)) {
+									sourceClip = new AudioClip(sourceClip.src, sourceClip.clipBegin, s.clipEnd);
+									destinationClip = new AudioClip(destinationClip.src, destinationClip.clipBegin, d.clipEnd);
+								} else {
+									if (sourceClip != null)
+										map.put(destinationClip, sourceClip);
+									sourceClip = s;
+									destinationClip = d;
+								}
+							}
+							if (sourceClip != null)
+								map.put(destinationClip, sourceClip);
+							desired = map;
+						}
 						AudioClip prevSourceClip = null;
 						Fileset.File currentSourceFile = null;
 						PCMAudioFormat audioFormat = null;
+						URI audioFormatFromFile = null;
 						AudioInputStream currentSourcePCM = null;
 						long currentSourceElapsed = 0; // in frames
 						URI currentDestinationFile = null;
@@ -369,8 +395,10 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						long currentDestinationElapsed = 0; // in frames
 						int fileCounter = 0;
 						MessageAppender progress = MessageAppender.getActiveBlock(); // px:audio-rearrange step
-						BigDecimal progressInc = BigDecimal.ONE.divide(new BigDecimal(desired.size()), MathContext.DECIMAL128);
+						int progressUnit = 1; // in clips
 						int clipCounter = 0;
+						BigDecimal progressInc = new BigDecimal(progressUnit).divide(new BigDecimal(desired.size()), MathContext.DECIMAL128)
+						                                                     .min(BigDecimal.ONE);
 						for (Map.Entry<AudioClip,AudioClip> entry : desired.entrySet()) {
 							AudioClip destinationClip = entry.getKey(); // destination clips are in order and don't overlap
 							AudioClip sourceClip = entry.getValue();
@@ -427,11 +455,17 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 										new IOException("Audio file could not be read: " + currentSourceFile.href, e));
 								}
 								currentSourceElapsed = 0;
-								if (audioFormat == null)
+								if (audioFormat == null) {
 									audioFormat = PCMAudioFormat.of(currentSourcePCM.getFormat());
+									audioFormatFromFile = currentSourceFile.href;
+								}
 								else if (!audioFormat.matches(currentSourcePCM.getFormat()))
 									throw new TransformerException(
-										new RuntimeException("All input audio must have the same format"));
+										new RuntimeException(
+											String.format("All input audio must have the same format, but got %s (%s) and %s (%s)",
+											              audioFormat, audioFormatFromFile,
+											              currentSourcePCM.getFormat(),
+											              currentSourceFile.href)));
 							}
 							// convert clip begin/end times to frames
 							long sourceClipBegin = AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipBegin);
@@ -476,7 +510,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 								currentDestinationElapsed += clipPCM.getFrameLength();
 							}
 							prevSourceClip = sourceClip;
-							if (++clipCounter == 10) {
+							if (++clipCounter == progressUnit) {
 								clipCounter = 0;
 								progress.append(new MessageBuilder().withProgress(progressInc)).close();
 							}
@@ -515,6 +549,8 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							throw new TransformerException(e);
 						}
 					});
+				// this step may have filled the heap memory with a lot of data that can be cleaned up
+				System.gc();
 			};
 		}
 	}

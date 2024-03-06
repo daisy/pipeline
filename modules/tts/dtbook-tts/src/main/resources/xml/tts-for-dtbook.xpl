@@ -79,7 +79,13 @@
 
   <p:option name="stylesheet" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <p>CSS user style sheets as space separated list of absolute URIs.</p>
+      <p>CSS style sheets as space separated list of absolute URIs.</p>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>PLS lexicons as list of absolute URIs.</p>
     </p:documentation>
   </p:option>
 
@@ -245,6 +251,7 @@
 	  <p:input port="config">
 	    <p:pipe port="config" step="main"/>
 	  </p:input>
+	  <p:with-option name="user-lexicons" select="$lexicon"/>
 	</px:dtbook-to-ssml>
 	<px:add-ids match="ssml:s" name="ssml">
 	  <p:documentation>px:ssml-to-audio requires that all sentences have an id attribute</p:documentation>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema"
-    xmlns:ssml="http://www.w3.org/2001/10/synthesis"
-    xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
-    exclude-result-prefixes="#all"
-    version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+                xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
+                exclude-result-prefixes="#all">
 
   <!--======================================================================= -->
   <!-- Convert the CSS properties into SSML elements and discard any node -->
@@ -13,7 +12,7 @@
 
   <xsl:function name="tts:normlist">
     <xsl:param name="li"/>
-    <xsl:value-of select="replace(translate($li, ' ',''), '[^-_0-9a-zA-Z]+', '|')"/>
+    <xsl:value-of select="replace(translate($li,' ',''), ',', '|')"/>
   </xsl:function>
 
   <xsl:template match="node()|@*">

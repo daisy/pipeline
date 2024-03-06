@@ -119,6 +119,7 @@
         <p:input port="entries">
             <p:pipe port="result" step="result.content"/>
         </p:input>
+        <p:with-param port="file-attributes" name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
     </px:fileset-add-entries>
     <px:fileset-join/>
     <p:identity name="result.fileset"/>

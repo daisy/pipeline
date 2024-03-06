@@ -52,10 +52,14 @@
 A number of [partials](https://sass-lang.com/documentation/at-rules/import#partials) (helper style
 sheet modules) are available for use in Sass style sheets:
 
+- [http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_generate-toc.scss](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/resources/css/generate-toc):
+  for generating a table of content
 - [http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_tables.scss](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/resources/css/tables):
   for styling tables
 - [http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_definition-lists.scss](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/resources/css/definition-lists):
   for styling definition lists
+- [http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_legacy.scss](http://daisy.github.io/pipeline/modules/braille/dtbook-to-pef/src/main/resources/css/_legacy.scss/):
+  collection of styles that used to be included by default
 </p>
         </p:documentation>
     </p:option>
@@ -67,33 +71,50 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="include-preview"/>
     <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
+    <p:option name="include-css" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Include DTBook with inline CSS</h2>
+            <p px:role="desc" xml:space="preserve">Whether or not the include the intermediary DTBook with all CSS styles inlined (for debugging).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
+
+    <!-- defined in ../../css/page-layout.params -->
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
-    <p:option name="levels-in-footer"/>
+
+    <!-- defined in ../../css/default.params -->
     <p:option name="hyphenation"/>
-    <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="line-spacing"/>
-    <p:option name="capital-letters"/>
-    <p:option name="include-captions"/>
-    <p:option name="include-images"/>
-    <p:option name="include-line-groups"/>
-    <p:option name="include-production-notes"/>
-    <p:option name="show-braille-page-numbers"/>
-    <p:option name="show-print-page-numbers"/>
+
+    <!-- defined in ../../css/dotify.params -->
+    <p:option name="hyphenation-at-page-breaks"/>
+    <p:option name="allow-text-overflow-trimming"/>
+
+    <!-- defined in ../../css/page-breaking.params -->
     <p:option name="force-braille-page-break"/>
-    <p:option name="toc-depth"/>
-    <p:option name="toc-exclude-class"/>
+
+    <!-- defined in ../../css/volume-breaking.params -->
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
+
+    <!-- defined in ../../css/notes.params -->
     <p:option name="notes-placement"/>
+
+    <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="result"/>
     <p:option name="pef"/>
     <p:option name="preview"/>
     <p:option name="obfl"/>
+    <p:option name="css" px:output="result" px:type="anyDirURI" px:media-type="application/x-dtbook+xml" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">DTBook with inline CSS</h2>
+            <p px:role="desc">The intermediary DTBook file with inline CSS.</p>
+        </p:documentation>
+    </p:option>
     
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <!-- directory used for temporary files -->
@@ -109,6 +130,11 @@ sheet modules) are available for use in Sass style sheets:
         <p:documentation>
             px:dtbook-to-pef
             px:dtbook-to-pef.store
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
@@ -139,10 +165,12 @@ sheet modules) are available for use in Sass style sheets:
                                            include-pef
                                            include-preview
                                            include-obfl
+                                           include-css
                                            result
                                            pef
                                            preview
                                            obfl
+                                           css
                                            temp-dir">
         <p:input port="source">
             <p:pipe port="result" step="in-scope-names"/>
@@ -157,9 +185,14 @@ sheet modules) are available for use in Sass style sheets:
     <!-- ======= -->
     <!-- LOAD -->
     <!-- ======= -->
-    <px:dtbook-load name="load" px:progress=".01">
-        <p:input port="source">
+    <px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook">
+        <p:input port="entry">
             <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entry>
+    <px:dtbook-load name="load" px:progress=".01">
+        <p:input port="source.in-memory">
+            <p:pipe step="dtbook" port="result.in-memory"/>
         </p:input>
     </px:dtbook-load>
     
@@ -184,21 +217,26 @@ sheet modules) are available for use in Sass style sheets:
     <!-- ===== -->
     <!-- STORE -->
     <!-- ===== -->
-    <px:dtbook-to-pef.store px:message="Storing results" px:progress=".06">
+    <px:dtbook-to-pef.store px:progress=".06">
         <p:input port="dtbook">
             <p:pipe step="main" port="source"/>
         </p:input>
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
+        <p:input port="css">
+            <p:pipe step="convert" port="css"/>
+        </p:input>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="include-css" select="$include-css"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$result"/>
         <p:with-option name="pef-output-dir" select="$pef"/>
         <p:with-option name="preview-output-dir" select="$preview"/>
         <p:with-option name="obfl-output-dir" select="$obfl"/>
+        <p:with-option name="css-output-dir" select="$css"/>
     </px:dtbook-to-pef.store>
     
 </p:declare-step>

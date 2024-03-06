@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               script="../../main/resources/xml/css-cascade.xpl">
+
+  <x:scenario label="Sass variables">
+    <x:call step="px:css-cascade">
+      <x:input port="source">
+        <x:document type="inline">
+          <dtbook>
+            <head>
+              <style type="text/x-scss">
+                $var1: val1;
+                $var2: val1 !default;
+                $var3: val1 !default;
+              </style>
+            </head>
+            <book/>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:option name="media" select="'print and (counter-support: none)'"/>
+      <x:param port="parameters" name="var1" select="'val2'"/>
+      <x:param port="parameters" name="var2" select="'val2'"/>
+      <x:param port="parameters" name="var4" select="'val2'"/>
+    </x:call>
+    <x:context label="result parameters">
+      <x:document type="port" port="result.parameters"/>
+    </x:context>
+    <x:expect label="result parameters" type="compare">
+      <x:document type="inline">
+        <c:param-set>
+            <c:param name="var1" value="val1"/>
+            <c:param name="var2" value="val2"/>
+            <c:param name="var4" value="val2"/>
+            <c:param name="var3" value="val1"/>
+        </c:param-set>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>

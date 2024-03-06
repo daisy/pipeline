@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css;
 
 import java.net.URI;
+import java.util.function.Function;
 import java.util.List;
 
 import cz.vutbr.web.css.Declaration;
@@ -21,6 +22,10 @@ public final class CssSerializer {
 	private CssSerializer() {}
 
 	public static String toString(Term<?> term) {
+		return toString(term, t -> toString(t));
+	}
+
+	public static String toString(Term<?> term, Function<Term<?>,String> toStringFunction) {
 		if (term instanceof TermInteger) {
 			TermInteger integer = (TermInteger)term;
 			return "" + integer.getIntValue(); }
@@ -40,7 +45,7 @@ public final class CssSerializer {
 				return "" + value + "%"; }
 		else if (term instanceof TermList
 		         || term instanceof Declaration) {
-			String s = serializeTermList((List<Term<?>>)term);
+			String s = serializeTermList((List<Term<?>>)term, toStringFunction);
 			if (term instanceof TermFunction) {
 				TermFunction function = (TermFunction)term;
 				s = function.getFunctionName() + "(" + s + ")"; }
@@ -48,7 +53,7 @@ public final class CssSerializer {
 		else if (term instanceof TermPair) {
 			TermPair<?,?> pair = (TermPair<?,?>)term;
 			Object val = pair.getValue();
-			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val) : val.toString()); }
+			return "" + pair.getKey() + " " + (val instanceof Term ? toString((Term<?>)val, toStringFunction) : val.toString()); }
 		else if (term instanceof TermURI) {
 			TermURI termURI = (TermURI)term;
 			URI uri = URLs.asURI(termURI.getValue());
@@ -63,6 +68,10 @@ public final class CssSerializer {
 	}
 
 	public static String serializeTermList(List<Term<?>> termList) {
+		return serializeTermList(termList, t -> toString(t));
+	}
+
+	public static String serializeTermList(List<Term<?>> termList, Function<Term<?>,String> toStringFunction) {
 		String s = "";
 		for (Term<?> t : termList) {
 			if (!s.isEmpty()) {
@@ -72,7 +81,7 @@ public final class CssSerializer {
 					case COMMA:
 						s += ","; }
 				s += " "; }
-			s += toString(t); }
+			s += toStringFunction.apply(t); }
 		return s;
 	}
 }

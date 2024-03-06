@@ -20,6 +20,8 @@
         e.g. prefix="foaf: http://xmlns.com/foaf/0.1/"
   -->
 
+  <xsl:param name="source-of-pagination" as="xs:string?" select="()"/>
+
   <xsl:template match="/z:document" priority="1">
     <xsl:call-template name="pf:next-match-with-generated-ids">
       <xsl:with-param name="prefix" select="'id_'"/>
@@ -100,6 +102,20 @@
           <xsl:value-of select="."/>
         </dc:language>
       </xsl:for-each>
+
+      <!--== Source of pagination
+          - http://kb.daisy.org/publishing/docs/navigation/pagesrc.html
+          - https://www.w3.org/publishing/a11y/page-source-id/
+          ==-->
+      <xsl:if test=".//z:pagebreak
+                    and exists($source-of-pagination)
+                    and not(//z:*[@property='pageBreakSource'
+                                  and not(@about)
+                                  and normalize-space(if (@content) then @content else .)])">
+        <meta property="pageBreakSource">
+          <xsl:value-of select="$source-of-pagination"/>
+        </meta>
+      </xsl:if>
 
       <!--== Other ==-->
       <xsl:apply-templates/>

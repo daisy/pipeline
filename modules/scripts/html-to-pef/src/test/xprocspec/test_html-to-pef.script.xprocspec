@@ -24,7 +24,6 @@
     <x:call step="px:html-to-pef.script">
       <x:option name="source" select="resolve-uri('../resources/reset-test.html')"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-      <x:option name="show-braille-page-numbers" select="false()"/>
       <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
       <x:option name="pef" select="concat($temp-dir,'alice_reset/output-dir/')"/>

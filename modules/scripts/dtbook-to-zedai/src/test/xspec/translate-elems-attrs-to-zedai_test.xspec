@@ -350,7 +350,7 @@
         </x:context>
         <x:expect label="">
             <z:note class="footnote" role="footnote"/>
-            <z:note class="endnote" role="endnote"/>
+            <z:note class="endnote" role="rearnote"/>
         </x:expect>
     </x:scenario>
     <x:scenario label="Translate-DTBook2ZedAI: Div">

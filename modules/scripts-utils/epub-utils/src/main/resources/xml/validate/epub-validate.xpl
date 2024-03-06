@@ -205,7 +205,7 @@
                                                 <px:location>
                                                     <px:file>
                                                         <xsl:attribute name="href" select="normalize-space(string(file))"/> <!-- relative path -->
-                                                        <xsl:sequence select="location/(@line|@column)"/>
+                                                        <xsl:sequence select="location/(@line|@column)[matches(.,'^[0-9]+$')]"/>
                                                     </px:file>
                                                 </px:location>
                                             </xsl:if>

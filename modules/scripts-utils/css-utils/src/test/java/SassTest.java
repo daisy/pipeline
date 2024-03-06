@@ -54,6 +54,11 @@ public class SassTest {
 	}
 	
 	@Test
+	public void testImport() throws Exception {
+		assertCssEquals("import.scss", "import.css");
+	}
+	
+	@Test
 	public void testSourceMap() throws Exception {
 		SassCompiler compiler = new SassCompiler(null, null);
 		File scssFile = getTestResource("nested_properties.scss");

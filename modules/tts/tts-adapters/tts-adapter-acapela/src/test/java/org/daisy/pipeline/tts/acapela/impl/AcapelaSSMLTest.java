@@ -7,14 +7,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import junit.framework.Assert;
+
 import net.sf.saxon.s9api.Axis;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
-import org.daisy.common.xslt.XslTransformCompiler;
+import org.daisy.common.saxon.xslt.ThreadUnsafeXslTransformer;
+import org.daisy.common.saxon.xslt.XslTransformCompiler;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

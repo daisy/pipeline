@@ -28,7 +28,6 @@
       <x:option name="pef" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'C00000_reset/temp-dir/')"/>
       <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
-      <x:option name="show-braille-page-numbers" select="false()"/>
     </x:call>
     
     <x:context label="the output directory contents">
@@ -120,7 +119,6 @@
           <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-enabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
-          <x:option name="show-braille-page-numbers" select="false()"/>
       </x:call>
       
       <x:context label="the output directory contents">
@@ -172,7 +170,6 @@
           <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-disabled/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="false()"/>
-          <x:option name="show-braille-page-numbers" select="false()"/>
       </x:call>
       
       <x:context label="the output directory contents">
@@ -225,7 +222,6 @@
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
           <x:option name="stylesheet" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets.override.css')"/>
-          <x:option name="show-braille-page-numbers" select="false()"/>
       </x:call>
       
       <x:context label="the output directory contents">

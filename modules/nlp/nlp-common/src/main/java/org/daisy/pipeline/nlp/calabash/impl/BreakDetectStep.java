@@ -123,8 +123,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 		try {
 			generic = mLexerRegistry.getFallbackToken(Collections.EMPTY_LIST);
 		} catch (LexerInitException e1) {
-			mRuntime.error(e1);
-			return;
+			throw XProcStep.raiseError(e1, step);
 		}
 		langToToken.put(null, generic);
 
@@ -138,7 +137,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 				processXSLTMatchPatternOption(sentenceBeforeOption),
 				processXSLTMatchPatternOption(sentenceAfterOption));
 		} catch (XPathException e) {
-			throw new XProcException(step, e);
+			throw XProcStep.raiseError(e, step);
 		}
 
 		XmlBreakRebuilder xmlRebuilder = new XmlBreakRebuilder();
@@ -170,8 +169,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 					}
 				}
 			} catch (LexerInitException e) {
-				mRuntime.error(e);
-				continue;
+				throw XProcStep.raiseError(e, step);
 			}
 
 			mLogger.debug("Total number of language(s): " + (langToToken.size() - 1));
@@ -189,7 +187,7 @@ public class BreakDetectStep extends DefaultStep implements TreeWriterFactory, I
 				        mLangDetector, false, parsingErrors);
 				mResult.write(tree);
 			} catch (LexerInitException e) {
-				mRuntime.error(e);
+				throw XProcStep.raiseError(e, step);
 			}
 			for (String error : parsingErrors) {
 				mRuntime.info(null, null, doc.getBaseURI() + ": " + error);

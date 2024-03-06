@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:c="http://www.w3.org/ns/xproc-step"
-               xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+               xmlns:d="http://www.daisy.org/ns/pipeline/data">
+  
+  <!-- wrap px:css-cascade because XProcSpec read all the outputs including the result.parameters
+       output which is not supported when source is a d:fileset -->
+  <x:script>
+    <p:declare-step type="x:test" name="main" version="1.0">
+      <p:input port="source" primary="true"/>
+      <p:input port="source.in-memory" sequence="true"/>
+      <p:option name="user-stylesheet"/>
+      <p:output port="result" primary="true"/>
+      <p:output port="result.in-memory" sequence="true">
+        <p:pipe step="cascade" port="result.in-memory"/>
+      </p:output>
+      <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl"/>
+      <px:css-cascade name="cascade">
+        <p:input port="source.in-memory">
+          <p:pipe step="main" port="source.in-memory"/>
+        </p:input>
+        <p:with-option name="user-stylesheet" select="$user-stylesheet"/>
+      </px:css-cascade>
+    </p:declare-step>
+  </x:script>
   
   <x:scenario label="test_01">
-    <x:call step="px:css-cascade">
+    <x:call step="x:test">
       <x:input port="source">
         <x:document type="inline">
           <d:fileset>

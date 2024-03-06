@@ -49,7 +49,7 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="result/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -63,7 +63,7 @@
 						<title>Minimal DTBook</title>
 					</head>
 					<body>
-						<nav epub:type="toc">
+						<nav epub:type="toc" role="doc-toc">
 							<h1>Table of Contents</h1>
 							<ol>
 								<li id="ncx-1">
@@ -71,7 +71,7 @@
 								</li>
 							</ol>
 						</nav>
-						<nav epub:type="page-list">
+						<nav epub:type="page-list" role="doc-pagelist">
 							<h1>List of Pages</h1>
 							<ol>
 								<li id="ncx-2">

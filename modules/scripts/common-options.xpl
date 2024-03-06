@@ -50,6 +50,18 @@
 	</p:output>
 
 	<!--
+		dtbook-to-epub3
+		dtbook-to-html
+		dtbook-to-zedai
+	-->
+	<p:option name="language" required="false" px:type="string" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Language code</h2>
+			<p px:role="desc">Language code of the input document.</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
 	    dtbook-validator
 	    nimas-fileset-validator
 	-->
@@ -251,7 +263,6 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 	    dtbook-to-epub3
 	    zedai-to-epub3
 	    epub-to-daisy
-	    epub3-to-epub3
 	-->
 	<p:option xmlns:_="tts" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
 	          px:media-type="text/css text/x-scss">
@@ -274,6 +285,28 @@ attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that app
 All style sheets are applied at once, but the order in which they are specified has an influence on
 the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
 precedence over user styles.
+			</p>
+		</p:documentation>
+	</p:option>
+
+	<!--
+	    dtbook-to-daisy3
+	    dtbook-to-epub3
+	    zedai-to-epub3
+	    epub-to-daisy
+	    epub3-to-epub3
+	-->
+	<p:option name="lexicon" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+	          px:media-type="application/pls+xml">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Lexicons</h2>
+			<p px:role="desc" xml:space="preserve">A list of PLS lexicons to take into account.
+
+Must be a space separated list of URIs, absolute or relative to the input.
+
+Style sheets can also be attached to the source document, using an ['xml-stylesheet' processing
+instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
 			</p>
 		</p:documentation>
 	</p:option>
@@ -316,8 +349,9 @@ you can control that variable with the following parameters list: `(foo:true)`.<
 			<p px:role="desc" xml:space="preserve">Braille code to be used for braille transcription.
 
 If set, [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) is
-done with the selected braille code. If left empty, the braille code is determined by the document
-language and the "Transformer features" option.</p>
+done using the selected braille code. If left empty, the braille code is determined by the document
+language. Note that braille transcription can also be controlled through CSS `@text-transform`
+rules.</p>
 		</p:documentation>
 	</p:option>
 
@@ -389,7 +423,7 @@ If left blank, the braille will be stored in PEF format.</p>
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
-	<p:option name="preview-table" required="false" px:type="transform-query" select="''">
+	<p:option name="preview-table" required="false" px:type="preview-table" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">ASCII braille table for HTML preview</h2>
 			<p px:role="desc" xml:space="preserve">The ASCII braille table used to render the HTML and PDF previews.

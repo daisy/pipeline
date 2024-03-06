@@ -12,9 +12,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -56,16 +58,24 @@ public class GoogleRestTTSEngine extends TTSEngine {
 	private final Scheduler<Schedulable> mRequestScheduler;
 	private final int mPriority;
 	private final GoogleRequestBuilder mRequestBuilder;
+	private final float speechRate;
 
 	private static final URL ssmlTransformer = URLs.getResourceFromJAR("/transform-ssml.xsl", GoogleRestTTSEngine.class);
 	private static final Logger logger = LoggerFactory.getLogger(GoogleRestTTSEngine.class);
 
-	public GoogleRestTTSEngine(GoogleTTSService googleService, String serverAddress, String apiKey, AudioFormat audioFormat, int priority) {
+	public GoogleRestTTSEngine(GoogleTTSService googleService, String serverAddress, String apiKey, AudioFormat audioFormat, int priority,
+	                           float speechRate) {
 		super(googleService);
 		mPriority = priority;
 		mAudioFormat = audioFormat;
+		this.speechRate = speechRate;
 		mRequestScheduler = new ExponentialBackoffScheduler<Schedulable>();
 		mRequestBuilder = new GoogleRequestBuilder(serverAddress, apiKey);
+	}
+
+	@Override
+	public boolean handlesSpeakingRate() {
+		return true;
 	}
 
 	@Override
@@ -74,7 +84,10 @@ public class GoogleRestTTSEngine extends TTSEngine {
 	
 		String sentence; {
 			try {
-				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, null);
+				Map<String,Object> params = new HashMap<>(); {
+					params.put("speech-rate", speechRate);
+				}
+				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, params);
 			} catch (IOException | SaxonApiException e) {
 				throw new SynthesisException(e);
 			}

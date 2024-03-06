@@ -231,7 +231,7 @@ public class SassCompiler implements CssPreProcessor {
 
 		@Override
 		public StreamSource resolve(String href, String base) throws TransformerException {
-			Source source = resolver.resolve(href, base);
+			Source source = resolver != null ? resolver.resolve(href, base) : null;
 			String systemId = null;
 			if (source != null)
 				systemId = source.getSystemId();

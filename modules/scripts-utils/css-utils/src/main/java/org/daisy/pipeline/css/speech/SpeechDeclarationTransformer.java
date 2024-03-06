@@ -1,13 +1,15 @@
-package org.daisy.pipeline.css.speech.impl;
+package org.daisy.pipeline.css.speech;
 
 import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.CSSProperty.Cue;
+import cz.vutbr.web.css.CSSProperty.SpeechRate;
 import cz.vutbr.web.css.CSSProperty.VoiceFamily;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.css.TermPercent;
 import cz.vutbr.web.css.TermTime;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.domassign.DeclarationTransformer;
@@ -38,7 +40,18 @@ public class SpeechDeclarationTransformer extends DeclarationTransformer {
 			properties.put(d.getProperty(), VoiceFamily.list_values);
 			values.put(d.getProperty(), list);
 			return true;
-
+		} else if ("speech-rate".equals(propertyName)) {
+			if (d.size() == 1 && d.get(0) instanceof TermPercent) {
+				TermPercent p = (TermPercent)d.get(0);
+				if (p.getValue() <= 0) {
+					return false; // must be non-negative percentage
+				} else {
+					properties.put(d.getProperty(), SpeechRate.number);
+					values.put(d.getProperty(), p);
+					return true;
+				}
+			}
+			return super.parseDeclaration(d, properties, values);
 		} else {
 			return super.parseDeclaration(d, properties, values);
 		}

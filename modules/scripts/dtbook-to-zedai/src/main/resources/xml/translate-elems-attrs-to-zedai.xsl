@@ -116,7 +116,8 @@
                                        $lang[normalize-space(.)])"/>
                 <xsl:if test="empty($inferred-lang)">
                     <xsl:call-template name="pf:warn">
-                        <xsl:with-param name="msg" select="'required xml:lang attribute not found, and no ''lang'' option was passed to the converter.'"/>
+                        <xsl:with-param name="msg" select="concat('Document language could not be determined. ',
+                                                                  'Please specify an xml:lang attribute on the DTBook.')"/>
                     </xsl:call-template>
                 </xsl:if>
                 <xsl:attribute name="xml:lang" select="($inferred-lang,'en')[1]"/>
@@ -489,11 +490,10 @@
     </xsl:template>
 
     <xsl:template match="dtb:note">
-
         <note>
             <xsl:call-template name="attrs"/>
             <xsl:if test="@class=('footnote','endnote')">
-                <xsl:attribute name="role" select="@class"/>
+                <xsl:attribute name="role" select="if (@class='endnote') then 'rearnote' else @class"/>
             </xsl:if>
             <xsl:apply-templates/>
         </note>

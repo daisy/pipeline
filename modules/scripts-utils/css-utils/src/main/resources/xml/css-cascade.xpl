@@ -4,6 +4,7 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 exclude-inline-prefixes="#all"
@@ -41,8 +42,7 @@
 			<p>Parameters that are passed to SCSS style sheets (as <a
 			href="https://sass-lang.com/documentation/variables#scope">global variables</a>). They
 			are also passed to XSLT transformations that are included from CSS through
-			<code>@xslt</code> rules.
-			</p>
+			<code>@xslt</code> rules.</p>
 		</p:documentation>
 	</p:input>
 	
@@ -75,6 +75,17 @@
 		<p:pipe step="result" port="in-memory"/>
 	</p:output>
 	
+	<p:output port="result.parameters">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>A <a href="https://www.w3.org/TR/xproc/#cv.param-set"><code>c:param-set</code></a>
+			document containing all the parameters on the <code>parameters</code> input port,
+			augmented with any <a href="https://sass-lang.com/documentation/variables#scope">global
+			variables</a> declared in SCSS style sheets. Variables that are declared later take
+			precedence, except if they are declared with <code>!default</code>.</p>
+		</p:documentation>
+		<p:pipe step="parameters" port="result"/>
+	</p:output>
+
 	<p:option name="content-type" required="false" select="'text/html application/xhtml+xml application/x-dtbook+xml'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The type of document to be processed. Other input documents will be left
@@ -150,9 +161,30 @@
 		-->
 	</p:declare-step>
 	
+	<p:declare-step type="pxi:css-analyze">
+		<p:input port="source" primary="true"/>
+		<p:input port="context" sequence="true">
+			<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+				<p>Style sheets that are linked to from the source document, or included via the
+				'user-stylesheet' option, must either exist on disk, or must be provided in
+				memory via this port. Style sheets on this port must be wrapped in &lt;c:result
+				content-type="text/plain"&gt; elements. Style sheet URIs are resolved by matching
+				against the context documents's base URIs.</p>
+			</p:documentation>
+		</p:input>
+		<p:input port="parameters" kind="parameter" primary="false"/>
+		<p:output port="result"/>
+		<p:option name="user-stylesheet"/>
+		<p:option name="media"/>
+		<!--
+		    Implemented in ../../java/org/daisy/pipeline/css/calabash/impl/CssAnalyzeStep.java
+		-->
+	</p:declare-step>
+	
 	<p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
 		<p:documentation>
 			px:parse-xml-stylesheet-instructions
+			px:assert
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -266,6 +298,79 @@
 	</p:for-each>
 	<p:sink/>
 	
+	<p:identity>
+		<p:input port="source">
+			<p:pipe step="main" port="source"/>
+		</p:input>
+	</p:identity>
+	<p:group name="parameters" cx:pure="true">
+		<p:output port="result"/>
+		<px:assert message="parameters output not supported when input is a d:fileset" error-code="XXXXX">
+			<p:with-option name="test" select="not($fileset-mode)"/>
+		</px:assert>
+		<!--
+		    Note that there is some duplication here with the code above. I haven't managed to
+		    remove this duplication while keeping the result.parameters output lazy.
+		-->
+		<px:parse-xml-stylesheet-instructions name="xml-stylesheet-instructions"/>
+		<p:group>
+			<p:variable name="stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
+			            select="/d:fileset/d:file
+			                       [not(@stylesheet-media) or pf:media-query-matches(@stylesheet-media,$media)]
+			                       [(@media-type=('text/css','text/x-scss') and @media-type=tokenize($type,'\s+'))]
+			                     /string(@href)">
+				<p:pipe step="xml-stylesheet-instructions" port="fileset"/>
+			</p:variable>
+			<p:sink/>
+			<p:identity>
+				<p:input port="source">
+					<p:pipe step="main" port="source"/>
+				</p:input>
+			</p:identity>
+			<p:choose>
+				<p:when test="$user-stylesheet!=''
+				              or exists($stylesheets-from-xml-stylesheet-instructions)
+				              or //*[local-name()='style']
+				                    [not(@media) or pf:media-query-matches(@media,$media)]
+				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+				                     or ('text/css'=tokenize($type,'\s+') and not(@type))]
+				              or //*[local-name()='link' and @rel='stylesheet']
+				                    [not(@media) or pf:media-query-matches($media,@media)]
+				                    [(@type=('text/css','text/x-scss') and @type=tokenize($type,'\s+'))
+				                     or ('text/css'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.css$'))
+				                     or ('text/x-scss'=tokenize($type,'\s+') and not(@type) and matches(@href,'\.scss$'))]">
+					<pxi:css-analyze>
+						<p:input port="context">
+							<p:pipe step="css" port="result"/>
+						</p:input>
+						<p:input port="parameters">
+							<p:pipe step="main" port="parameters"/>
+						</p:input>
+						<p:with-option name="user-stylesheet"
+						               select="string-join(($user-stylesheet[not(.='')],
+						                                    $stylesheets-from-xml-stylesheet-instructions),' ')"/>
+						<p:with-option name="media" select="$media"/>
+					</pxi:css-analyze>
+				</p:when>
+				<p:otherwise>
+					<p:sink/>
+					<!-- ensure that there's exactly one c:param-set -->
+					<p:parameters name="param-set">
+						<p:input port="parameters">
+							<p:pipe step="main" port="parameters"/>
+						</p:input>
+					</p:parameters>
+					<p:identity>
+						<p:input port="source">
+							<p:pipe step="param-set" port="result"/>
+						</p:input>
+					</p:identity>
+				</p:otherwise>
+			</p:choose>
+		</p:group>
+	</p:group>
+	<p:sink/>
+
 	<p:choose name="result">
 		<p:when test="$fileset-mode">
 			<p:output port="fileset-or-single-content-document" primary="true"/>

@@ -7,6 +7,7 @@ import javax.sound.sampled.AudioFormat;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.pipeline.tts.DefaultSpeechRate;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -43,6 +44,7 @@ public class GoogleTTSService implements TTSService {
 	                                                                       "Priority of Google cloud voices relative to voices of other engines",
 	                                                                       false,
 	                                                                       "15");
+	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
 
 	@Override
 	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
@@ -52,8 +54,9 @@ public class GoogleTTSService implements TTSService {
 			throw new SynthesisException("Property not set : " + GOOGLE_APIKEY.getName());
 		int sampleRate = getPropertyAsInt(properties, GOOGLE_SAMPLERATE).get();
 		int priority = getPropertyAsInt(properties, GOOGLE_PRIORITY).get();
+		float speechRate = SPEECH_RATE.getValue(properties);
 		AudioFormat audioFormat = new AudioFormat((float) sampleRate, 16, 1, true, false);
-		return new GoogleRestTTSEngine(this, serverAddress, apiKey, audioFormat, priority);
+		return new GoogleRestTTSEngine(this, serverAddress, apiKey, audioFormat, priority, speechRate);
 	}
 
 	@Override

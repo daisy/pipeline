@@ -112,14 +112,22 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	@Override
 	public void reset() {
 		sourcePipe.resetReader();
+		contextPipe.resetReader();
 		resultPipe.resetWriter();
+		sassVariables.clear();
 	}
 
 	@Override
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
+			Medium medium; {
+				try {
+					medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
+				} catch (Throwable e) {
+					throw new IllegalArgumentException("Could not parse media: " + getOption(_media, DEFAULT_MEDIUM), e);
+				}
+			}
 			List<String> types = Arrays.asList(getOption(_type, DEFAULT_TYPES).trim().split("\\s+"));
 			if (!types.contains("text/css"))
 				throw new XProcException(step, "'type' option must contain 'text/css'");

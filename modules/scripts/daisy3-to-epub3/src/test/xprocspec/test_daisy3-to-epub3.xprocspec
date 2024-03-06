@@ -32,10 +32,10 @@
 			<x:document type="inline">
 				<d:fileset>
 					<d:file href="result/epub/EPUB/audio/30sec.mp3" media-type="audio/mpeg" original-href="../resources/input/30sec.mp3"/>
-					<d:file href="result/epub/EPUB/book-1.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="result/epub/EPUB/book-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/epub/EPUB/book-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/epub/EPUB/book-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="result/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
-					<d:file href="result/epub/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="result/epub/EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="result/epub/EPUB/mo/book-1.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="result/epub/EPUB/mo/book-2.smil" media-type="application/smil+xml" indent="true"/>
 					<d:file href="result/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
@@ -53,7 +53,7 @@
 						<title>Minimal DTBook</title>
 					</head>
 					<body>
-						<nav epub:type="toc">
+						<nav epub:type="toc" role="doc-toc">
 							<h1>Table of Contents</h1>
 							<ol>
 								<li id="ncx-1">
@@ -61,7 +61,7 @@
 								</li>
 							</ol>
 						</nav>
-						<nav epub:type="page-list">
+						<nav epub:type="page-list" role="doc-pagelist">
 							<h1>List of Pages</h1>
 							<ol>
 								<li id="ncx-2">

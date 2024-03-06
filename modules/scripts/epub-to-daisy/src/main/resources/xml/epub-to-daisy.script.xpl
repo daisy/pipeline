@@ -57,6 +57,10 @@ This will remove any existing media overlays in the EPUB.</p>
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
+    <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
+		<!-- defined in ../../../../../common-options.xpl -->
+	</p:option>
+
 	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
 		<!-- directory used for temporary files -->
 	</p:option>
@@ -162,6 +166,8 @@ This will remove any existing media overlays in the EPUB.</p>
 				                                                         for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
 				                                                           resolve-uri($s,$source),
 				                                                         ' ')"/>
+				<p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
+				                                        resolve-uri($l,$source)"/>
 				<p:with-option name="temp-dir" select="$temp-dir"/>
 			</px:epub-to-daisy>
 

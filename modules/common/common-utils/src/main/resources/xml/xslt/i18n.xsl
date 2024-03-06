@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:NormalizeLang="org.daisy.pipeline.common.saxon.impl.NormalizeLangDefinition$NormalizeLang"
+                xmlns:NormalizeLang="org.daisy.pipeline.common.NormalizeLang"
                 exclude-result-prefixes="#all">
 
     <!-- Returns the string containing the translation, or an empty sequence if no translation was found. -->
@@ -54,11 +54,16 @@
     </doc>
     <xsl:function name="pf:normalize-lang" as="xs:string">
         <xsl:param name="language" as="xs:string"/>
-        <xsl:sequence select="NormalizeLang:normalize($language)">
-            <!--
-                Implemented in ../../../java/org/daisy/pipeline/common/saxon/impl/NormalizeLangDefinition.java
-            -->
-        </xsl:sequence>
+        <xsl:try>
+            <xsl:sequence select="NormalizeLang:normalize($language)">
+                <!--
+                    Implemented in ../../../java/org/daisy/pipeline/common/saxon/impl/NormalizeLangDefinition.java
+                -->
+            </xsl:sequence>
+            <xsl:catch>
+                <xsl:sequence select="$language"/>
+            </xsl:catch>
+        </xsl:try>
     </xsl:function>
 
 </xsl:stylesheet>

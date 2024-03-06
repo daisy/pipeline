@@ -9,7 +9,9 @@
 
     <xsl:param name="output-base-uri" required="yes"/>
 
-    <xsl:key name="original-href" match="d:file" use="string(@original-href)"/>
+    <xsl:key name="original-href" match="d:file[@original-href]" use="@original-href"/>
+    <xsl:key name="original-id" match="d:anchor" use="(@original-id,@id)[1]"/>
+    <xsl:key name="href" match="d:file[not(@original-href)]" use="@href"/>
 
     <xsl:variable name="mapping" as="document-node(element(d:fileset))">
         <xsl:document>
@@ -96,12 +98,12 @@
         <xsl:variable name="fragment" as="xs:string" select="$uri[5]"/>
         <xsl:variable name="file" as="xs:string" select="pf:recompose-uri($uri[position()&lt;5])"/>
         <xsl:variable name="new-file" as="element(d:file)*" select="key('original-href',$file,$mapping)"/>
-        <xsl:variable name="new-file" as="element(d:file)?" select="($new-file[d:anchor[(@original-id,@id)[1]=$fragment]],
+        <xsl:variable name="new-file" as="element(d:file)?" select="($new-file[exists(key('original-id',$fragment,.))],
                                                                      $new-file)[1]"/>
         <xsl:variable name="new-fragment" as="xs:string?" select="if (exists($new-file))
-                                                                  then $new-file/d:anchor[(@original-id,@id)[1]=$fragment]/@id
-                                                                  else $mapping/*/d:file[not(@original-href)][@href=$file][1]
-                                                                                 /d:anchor[(@original-id,@id)[1]=$fragment]/@id"/>
+                                                                  then key('original-id',$fragment,$new-file)/@id
+                                                                  else for $f in key('href',$file,$mapping)[1]
+                                                                       return key('original-id',$fragment,$f)/@id"/>
         <xsl:variable name="new-file" as="xs:string?" select="$new-file/@href"/>
         <xsl:variable name="new-uri" select="string-join((($new-file,$file)[1],($new-fragment,$fragment)[1]),'#')"/>
         <xsl:attribute name="textref" select="pf:relativize-uri($new-uri,$output-base-uri)"/>

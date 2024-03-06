@@ -39,6 +39,9 @@
 			</xsl:if>
 			<xsl:attribute name="epub:type"
 			               select="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"/>
+			<xsl:if test="not(@role)">
+				<xsl:attribute name="role" select="'doc-pagebreak'"/>
+			</xsl:if>
 			<xsl:apply-templates/>
 		</xsl:copy>
 	</xsl:template>

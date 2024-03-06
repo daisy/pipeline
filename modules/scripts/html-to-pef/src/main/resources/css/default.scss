@@ -74,19 +74,10 @@ br::before {
 
 $hyphenation: true !default;
 $line-spacing: single !default;
-$capital-letters: true !default;
-$include-captions: true !default;
-$include-images: true !default;
-$include-line-groups: true !default;
-$include-production-notes: false !default;
 
-@import "page-layout.scss";
-@import "generate-toc.scss";
-@import "page-breaking.scss";
-@import "volume-breaking.scss";
-@import "notes.scss";
-
-@namespace epub url(http://www.idpf.org/2007/ops);
+@import "_page-breaking.scss";
+@import "_volume-breaking.scss";
+@import "_notes.scss";
 
 @if $hyphenation != manual {
 	:root {
@@ -98,29 +89,4 @@ $include-production-notes: false !default;
 	:root {
 		line-height: 2;
 	}
-}
-
-@if $capital-letters != true {
-	:root {
-		text-transform: lowercase;
-	}
-}
-
-caption {
-	display: if($include-captions, block, none);
-}
-
-@if $include-images {
-	img::after {
-		content: attr(alt);
-	}
-}
-
-.linegroup .line {
-	display: if($include-line-groups, block, inline);
-}
-
-.prodnote,
-[epub|type~='z3998:production'] {
-	display: if($include-production-notes, block, none);
 }

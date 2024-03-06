@@ -188,7 +188,137 @@
                 </x:expect>
             </x:scenario>
         </x:scenario>
-    
+
+        <x:scenario label="An 'a' element">
+            <x:call/>
+            <x:scenario label="with no @href">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a id="x">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <a id="x"> text </a>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a relative resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a href="image.png">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <a href="image.png">text</a>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a non-existing resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a href="unkown.png">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is discarded (unwrapped)" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            text
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a relative resource with an unsafe URI">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a href="my%20image.png">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted with a safe URI" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <a href="my_image.png">text</a>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="pointing to a remote resource">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a href="http://www.example.com/image.png">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <a href="http://www.example.com/image.png">text</a>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+            <x:scenario label="with a mailto: link">
+                <x:call>
+                    <x:input port="source">
+                        <x:document type="inline" xml:base="file:/example/doc.html">
+                            <div>
+                                <a href="mailto:john@doe.com">text</a>
+                            </div>
+                        </x:document>
+                    </x:input>
+                </x:call>
+                <x:context label="result">
+                    <x:document type="port" port="result"/>
+                </x:context>
+                <x:expect label="is converted as-is" type="compare">
+                    <x:document type="inline">
+                        <div>
+                            <a href="mailto:john@doe.com">text</a>
+                        </div>
+                    </x:document>
+                </x:expect>
+            </x:scenario>
+        </x:scenario>
+
         <x:scenario label="An 'embed' element">
             <x:call/>
             <x:scenario label="representing an audio">
@@ -213,8 +343,8 @@
                 </x:expect>
             </x:scenario>
         </x:scenario>
-    
-        <x:scenario label="An 'video' element">
+
+        <x:scenario label="A 'video' element">
             <x:call/>
             <x:scenario label="with alternative child content">
                 <x:call>
@@ -244,7 +374,7 @@
                 </x:expect>
             </x:scenario>
         </x:scenario>
-    
+
         <x:scenario label="SVG">
             <x:call/>
             <x:scenario label="pointing to a relative image">
@@ -288,7 +418,7 @@
                 </x:expect>
             </x:scenario>
         </x:scenario>
-    
+
         <x:scenario label="longdesc">
             <x:call/>
             <x:scenario label="pointing to local element">
@@ -429,8 +559,7 @@
                           test="empty(//h:aside[@class='dp2-invisible'])"/>
             </x:scenario>
         </x:scenario>
-    
-    
+
         <x:scenario label="aria-describedat">
             <x:call/>
             <x:scenario label="pointing to local element">

@@ -1,0 +1,19 @@
+default namespace = "http://www.daisy.org/ns/pipeline/data"
+
+start =
+   element * {
+      element media {
+         attribute value { text }
+      }?
+      & element userStylesheets {
+         file*
+      }?
+      & element sourceDocument {
+         file
+      }?
+   }
+
+file =
+   element file {
+      attribute href { xsd:anyURI }
+   }

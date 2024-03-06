@@ -164,6 +164,7 @@
             <p:input port="entries">
                 <p:pipe step="zedai-to-html.html-chunks" port="result"/>
             </p:input>
+            <p:with-param port="file-attributes" name="doctype" select="'&lt;!DOCTYPE html&gt;'"/>
         </px:fileset-add-entries>
         <px:fileset-join name="zedai-to-html.fileset"/>
         <p:sink/>

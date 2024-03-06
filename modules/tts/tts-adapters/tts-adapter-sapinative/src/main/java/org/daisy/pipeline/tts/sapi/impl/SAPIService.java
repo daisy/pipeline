@@ -19,6 +19,7 @@ import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.onecore.OnecoreResult;
 import org.daisy.pipeline.tts.onecore.SAPI;
 import org.daisy.pipeline.tts.onecore.SAPIResult;
+import org.daisy.pipeline.tts.DefaultSpeechRate;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -51,6 +52,7 @@ public class SAPIService implements TTSService {
 	                                                                     "Priority of Windows voices relative to voices of other engines",
 	                                                                     false,
 	                                                                     "7");
+	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
 
 	private static boolean onecoreDLLIsLoaded = false;
 	private static boolean onecoreIsInitialized = false;
@@ -67,6 +69,7 @@ public class SAPIService implements TTSService {
 	@Override
 	public TTSEngine newEngine(Map<String,String> properties) throws Throwable {
 		int priority = getPropertyAsInt(properties, SAPI_PRIORITY).get();
+		float speechRate = SPEECH_RATE.getValue(properties);
 		synchronized (this) {
 			// try to load both sapi and onecore to keep using third party voices that could have
 			// been installed on sapi registry and not exposed to the onecore registry
@@ -92,7 +95,7 @@ public class SAPIService implements TTSService {
 				throw new SynthesisException("Neither SAPI or Onecore libraries could be loaded.");
 			}
 		}
-		return new SAPIEngine(this, priority, onecoreIsInitialized, sapiAudioFormat);
+		return new SAPIEngine(this, priority, onecoreIsInitialized, sapiAudioFormat, speechRate);
 	}
 
 	@Override

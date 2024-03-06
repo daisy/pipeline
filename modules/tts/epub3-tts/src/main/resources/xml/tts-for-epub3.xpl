@@ -81,30 +81,19 @@
 
   <p:option name="stylesheet" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <p>CSS user style sheets as space separated list of absolute URIs.</p>
+      <p>CSS style sheets as space separated list of absolute URIs.</p>
+    </p:documentation>
+  </p:option>
+
+  <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>PLS lexicons as list of absolute URIs.</p>
     </p:documentation>
   </p:option>
 
   <p:option name="sentence-class" required="false" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>Class attribute to mark sentences with.</p>
-    </p:documentation>
-  </p:option>
-
-  <!-- Might be useful some day: -->
-  <!-- <p:option name="segmentation" required="false" cx:type="xs:boolean" cx:as="xs:string" select="'true'"> -->
-  <!--   <p:documentation xmlns="http://www.w3.org/1999/xhtml"> -->
-  <!--     <h2>Enable segmentation</h2> -->
-  <!--     <p>Whether to segment the text or not, i.e. word and sentence boundary detection.</p> -->
-  <!--   </p:documentation> -->
-  <!-- </p:option> -->
-
-  <p:option name="ssml-of-lexicons-uris" required="false" cx:type="xs:anyURI" cx:as="xs:string" select="''">
-    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-      <h2>Lexicons SSML pointers</h2>
-      <p>URI of an SSML file which contains a list of
-      lexicon elements with their URI. The lexicons will be provided
-      to the Text-To-Speech processors.</p>
     </p:documentation>
   </p:option>
 
@@ -274,6 +263,7 @@
           <p:input port="config">
             <p:pipe port="config" step="main"/>
           </p:input>
+          <p:with-option name="user-lexicons" select="$lexicon"/>
         </px:epub3-to-ssml>
         <px:add-ids match="ssml:s" name="ssml">
           <p:documentation>px:ssml-to-audio requires that all sentences have an id attribute</p:documentation>

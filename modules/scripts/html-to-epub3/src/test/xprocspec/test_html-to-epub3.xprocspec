@@ -80,11 +80,11 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="output-dir/EPUB/desc.xhtml" media-type="application/xhtml+xml" kind="description"/>
-					<d:file href="output-dir/EPUB/foo.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/EPUB/desc.xhtml" media-type="application/xhtml+xml" kind="description" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="output-dir/EPUB/foo.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="output-dir/EPUB/image.svg" media-type="image/svg+xml"/>
 					<d:file href="output-dir/EPUB/style_1.css" media-type="text/css"/>
-					<d:file href="output-dir/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="output-dir/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="output-dir/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="output-dir/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>

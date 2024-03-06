@@ -1,30 +1,72 @@
-<p:declare-step type="pxi:apply-lexicons" version="1.0" name="main"
-		xmlns:p="http://www.w3.org/ns/xproc"
+<?xml version="1.0" encoding="UTF-8"?>
+<p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
 		xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
 		xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
 		xmlns:pls="http://www.w3.org/2005/01/pronunciation-lexicon"
+		xmlns:d="http://www.daisy.org/ns/pipeline/data"
+		xmlns:cx="http://xmlcalabash.com/ns/extensions"
+		xmlns:xs="http://www.w3.org/2001/XMLSchema"
+		type="pxi:apply-lexicons" name="main"
 		exclude-inline-prefixes="#all">
 
-  <p:input port="fileset" />
-  <p:input port="user-lexicons"/>
   <p:input port="source" primary="true"/>
+  <p:option name="user-lexicons" cx:as="xs:anyURI*" select="()">
+    <p:documentation>
+      All URIs in this sequence will be loaded and applied. The URIs can be absolute or relative to
+      the source. The files must exist on disk.
+    </p:documentation>
+  </p:option>
+  <p:input port="doc-lexicons.fileset">
+    <p:documentation>
+      All files in this fileset with media-type "application/pls+xml" will be loaded and
+      applied. These are the lexicons associated with the source document (detected by
+      px:dtbook-load and px:epub-load).
+    </p:documentation>
+    <p:inline><d:fileset/></p:inline>
+  </p:input>
+  <p:input port="doc-lexicons.in-memory" sequence="true">
+    <p:empty/>
+  </p:input>
+  
   <p:output port="result" primary="true"/>
 
   <p:option name="lang" required="true"/>
 
   <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
     <p:documentation>
+      px:fileset-create
+      px:fileset-add-entries
       px:fileset-load
     </p:documentation>
   </p:import>
 
-  <!-- load lexicons associated with the source document (detected by px:dtbook-load and
-       px:epub-load) -->
+  <p:sink/>
+  <p:group name="user-lexicons">
+    <p:output port="result" sequence="true"/>
+    <px:fileset-create>
+      <p:with-option name="base" select="base-uri(/*)">
+        <p:pipe step="main" port="source"/>
+      </p:with-option>
+    </px:fileset-create>
+    <px:fileset-add-entries>
+      <p:with-option name="href" select="$user-lexicons"/>
+    </px:fileset-add-entries>
+    <px:fileset-load/>
+    <p:for-each>
+      <p:variable name="base" select="base-uri(/*)"/>
+      <p:identity px:message="load lexicon {$base}"/>
+    </p:for-each>
+  </p:group>
+  <p:sink/>
+
   <p:group name="doc-lexicons">
     <p:output port="result" sequence="true"/>
     <px:fileset-load media-types="application/pls+xml">
       <p:input port="fileset">
-	<p:pipe step="main" port="fileset"/>
+	<p:pipe step="main" port="doc-lexicons.fileset"/>
+      </p:input>
+      <p:input port="in-memory">
+	<p:pipe step="main" port="doc-lexicons.in-memory"/>
       </p:input>
     </px:fileset-load>
     <p:for-each>
@@ -96,10 +138,10 @@
 
   <p:xslt name="separate-regex-lexicons">
     <p:input port="source">
-      <p:pipe port="user-lexicons" step="main"/>
-      <p:pipe port="result" step="doc-lexicons"/>
-      <p:pipe port="result" step="builtin-lexicons"/>
-      <p:pipe port="result" step="empty-lexicon"/>
+      <p:pipe step="user-lexicons" port="result"/>
+      <p:pipe step="doc-lexicons" port="result"/>
+      <p:pipe step="builtin-lexicons" port="result"/>
+      <p:pipe step="empty-lexicon" port="result"/>
     </p:input>
     <p:input port="stylesheet">
       <p:document href="reorganize-lexicons.xsl"/>

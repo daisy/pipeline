@@ -20,7 +20,7 @@
             </px:type>
         </p:pipeinfo>
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Translation/formatting of text: Hyphenation at page boundaries</h2>
+            <h2 px:role="name">Hyphenation at page boundaries</h2>
             <p px:role="desc" xml:space="preserve">Whether hyphenation of words at page boundaries is allowed or not.
 
 This option only determines whether hyphenation is allowed at page boundaries. The "Hyphenation"
@@ -31,7 +31,7 @@ option and the CSS determine how the hyphenation is done, when allowed.
 
     <p:option name="allow-text-overflow-trimming" px:type="boolean" required="false" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Translation/formatting of text: Trimming of overflowing text</h2>
+            <h2 px:role="name">Trimming of overflowing text</h2>
             <p px:role="desc" xml:space="preserve">Allow trimming of overflowing text.
 
 By default, text that overflows its containing box will result in an error. By selecting this

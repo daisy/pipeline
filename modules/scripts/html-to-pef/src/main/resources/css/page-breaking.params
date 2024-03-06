@@ -4,11 +4,12 @@
 
     <p:option name="force-braille-page-break" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Page numbers: Force braille page break</h2>
+            <h2 px:role="name">Force braille page break</h2>
             <p px:role="desc" xml:space="preserve">Force braille page breaks at print page breaks.
 
-Makes the variable `$force-braille-page-break` available in style sheets and includes the following
-rule by default:
+
+The following CSS rule is included by default (where `$force-braille-page-break` is the value of
+this option):
 
 ~~~sass
 @if $force-braille-page-break {

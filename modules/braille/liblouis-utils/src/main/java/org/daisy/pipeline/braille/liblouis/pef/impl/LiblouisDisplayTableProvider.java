@@ -17,6 +17,7 @@ import org.daisy.pipeline.braille.common.Query;
 import org.daisy.pipeline.braille.common.Query.Feature;
 import org.daisy.pipeline.braille.common.Query.MutableQuery;
 import static org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
 import org.daisy.pipeline.braille.liblouis.pef.LiblouisDisplayTableBrailleConverter;
@@ -25,6 +26,7 @@ import org.daisy.pipeline.braille.pef.TableProvider;
 
 import org.liblouis.Translator;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -57,9 +59,16 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 	protected void unbindLiblouisTableJnaImplProvider(LiblouisTableJnaImplProvider provider) {
 		tableProvider = null;
 	}
-	
+
+	@Activate
+	protected void init() {
+		// pre-load a selection of tables in order to expose them in preview-table dropdown list
+		for (Table t : get(query("(liblouis-table:'http://www.liblouis.org/tables/nl-print.dis')"))); // needed for include-pdf option
+	}
+
 	private static Set<String> supportedFeatures = ImmutableSet.of("liblouis-table", "locale", "id");
-	
+
+	@Override
 	protected Iterable<Table> _get(Query query) {
 		for (Feature feature : query)
 			if (!supportedFeatures.contains(feature.getKey())) {
@@ -78,7 +87,18 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 				tableProvider.get(q),
 				new Function<LiblouisTableJnaImpl,Table>() {
 					public Table apply(LiblouisTableJnaImpl table) {
-						return new LiblouisDisplayTable(table.getTranslator()); }}),
+						String displayName = table.getDisplayName();
+						if (displayName == null) {
+							String id = table.getTranslator().getTable();
+							if (id.startsWith("http://www.liblouis.org/tables/")) // default path
+								id = id.substring("http://www.liblouis.org/tables/".length());
+							displayName = "Liblouis table '" + id + "'";
+						}
+						String description = null;
+						if ("http://www.liblouis.org/tables/nl-print.dis".equals(table.getTranslator().getTable()))
+							// FIXME: move description to Liblouis
+							description = "Table for Dutch that maps dot patterns to their original meaning as much as possible.";
+						return new LiblouisDisplayTable(table.getTranslator(), displayName, description); }}),
 			notNull());
 	}
 	
@@ -89,8 +109,8 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 		
 		final Translator table;
 		
-		private LiblouisDisplayTable(Translator table) {
-			super("", "", table.getTable());
+		private LiblouisDisplayTable(Translator table, String displayName, String description) {
+			super(displayName, description, table.getTable());
 			this.table = table;
 		}
 		

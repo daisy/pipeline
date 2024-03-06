@@ -2,8 +2,39 @@
  * Definition lists
  */
 
+/**
+ * @var boolean $group-dt-dd
+ *
+ * @brief Group dt and dd elements
+ *
+ * Set this variable to group `dt` and `dd` elements, wrapping them
+ * inside `li` elements, so that every group starts with a `dt` and
+ * ends with a `dd` and does not contain a `dd` followed by a
+ * `dt`.
+ */
 $group-dt-dd: false !default;
+
+/**
+ * @var string $dt-suffix
+ *
+ * @brief Separator between dt and dd elements
+ *
+ * If grouping of `dt` and `dd` elements is enabled, this variable
+ * determines the text that is inserted in between a `dt` and a `dd`
+ * element. In order to make `dt` and `dd` block-level elements, set
+ * this variable to to `null`.
+ */
 $dt-suffix: ": " !default;
+
+/**
+ * @var string $dt-separator
+ *
+ * @brief Separator between dt elements
+ *
+ * If grouping of `dt` and `dd` elements is enabled, this variable
+ * determines the text that is inserted in between two `dt`
+ * elements.
+ */
 $dt-separator: " " !default;
 
 @if $group-dt-dd {

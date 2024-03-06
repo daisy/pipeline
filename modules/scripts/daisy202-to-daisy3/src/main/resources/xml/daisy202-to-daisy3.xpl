@@ -349,18 +349,15 @@
 		-->
 		<p:group name="unreferenced-resources">
 			<p:output port="result"/>
-			<px:fileset-load media-types="application/x-dtbook+xml">
-				<p:input port="fileset">
+			<px:dtbook-load>
+				<p:input port="source.fileset">
 					<p:pipe step="dtbook" port="fileset"/>
 				</p:input>
-				<p:input port="in-memory">
+				<p:input port="source.in-memory">
 					<p:pipe step="dtbook" port="in-memory"/>
 				</p:input>
-			</px:fileset-load>
-			<p:for-each>
-				<px:dtbook-load/>
-			</p:for-each>
-			<px:fileset-join name="dtbook-fileset"/>
+			</px:dtbook-load>
+			<p:identity name="dtbook-fileset"/>
 			<p:sink/>
 			<px:fileset-diff>
 				<p:input port="source">

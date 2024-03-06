@@ -11,18 +11,11 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import static java.nio.file.Files.createTempDirectory;
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import com.google.common.base.Function;
 import static com.google.common.base.Functions.toStringFunction;
@@ -51,13 +44,10 @@ import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.common.WithSideEffect;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
-import org.daisy.pipeline.datatypes.DatatypeService;
-import org.daisy.pipeline.datatypes.ValidationResult;
 
 import org.liblouis.CompilationException;
 import org.liblouis.DisplayTable;
 import org.liblouis.DisplayTable.Fallback;
-import org.liblouis.Logger.Level;
 import org.liblouis.Louis;
 import org.liblouis.Table;
 import org.liblouis.TableInfo;
@@ -74,19 +64,13 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMException;
-import org.w3c.dom.Element;
-
 @Component(
 	name = "org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider",
 	service = {
-		LiblouisTableJnaImplProvider.class,
-		DatatypeService.class
+		LiblouisTableJnaImplProvider.class
 	}
 )
-public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<LiblouisTableJnaImplProvider.LiblouisTableJnaImpl>
-                                          implements DatatypeService {
+public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<LiblouisTableJnaImplProvider.LiblouisTableJnaImpl> {
 
 	// FIXME: isn't really a Transform but implements it so that we can use TransformProvider
 	public class LiblouisTableJnaImpl extends LiblouisTable implements Transform {
@@ -114,6 +98,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			return toString();
 		}
 		
+		public String getDisplayName() {
+			return info != null ? info.get("display-name") : null;
+		}
+		
 		public Normalizer.Form getUnicodeNormalizationForm() {
 			if (info != null) {
 				String form = info.get("unicode-form");
@@ -123,7 +111,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 					} catch (IllegalArgumentException e) {}}
 			return null;
 		}
-		
+
 		@Override
 		public String toString() {
 			return MoreObjects.toStringHelper("LiblouisTableJnaImpl")
@@ -456,82 +444,6 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 		}
 	);
 	
-	/* --------------- */
-	/* DatatypeService */
-	/* --------------- */
-
-	private static final String id ="liblouis-table-query";
-	private Document xmlDefinition = null;
-	private List<String> enumerationValues = null;
-
-	public String getId() {
-		return id;
-	}
-
-	public Document asDocument() throws Exception {
-		if (xmlDefinition == null)
-			createDatatype();
-		return xmlDefinition;
-	}
-
-	public ValidationResult validate(String content) {
-		if (enumerationValues == null)
-			try {
-				createDatatype();
-			} catch (Exception e) {
-				return ValidationResult.notValid("Failed to determine allowed values");
-			}
-		if (enumerationValues.contains(content))
-			return ValidationResult.valid();
-		else
-			return ValidationResult.notValid("'" + content + "' is not in the list of allowed values.");
-	}
-
-	private void createDatatype() throws ParserConfigurationException, DOMException {
-		Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
-		                                     .getDOMImplementation().createDocument(null, "choice", null);
-		List<String> values = new ArrayList<>();
-		Element choice = doc.getDocumentElement();
-		String defaultValue = "";
-		values.add(defaultValue);
-		choice.appendChild(doc.createElement("value"))
-		      .appendChild(doc.createTextNode(defaultValue));
-		choice.appendChild(doc.createElementNS("http://relaxng.org/ns/compatibility/annotations/1.0", "documentation"))
-		      .appendChild(doc.createTextNode("-"));
-		List<Table> tables = new ArrayList<>();
-		tables.addAll(Louis.listTables());
-		Collections.sort(tables,
-		                 new Comparator<Table>() {
-				public int compare(Table o1, Table o2) {
-					String s1 = o1.getInfo().get("index-name");
-					String s2 = o2.getInfo().get("index-name");
-					if (s1 == null)
-						if (s2 == null)
-							return 0;
-						else
-							return -1;
-					else if (s2 == null)
-						return 1;
-					else
-						return s1.toLowerCase().compareTo(s2.toLowerCase()); }});
-		for (Table table : tables) {
-			// We can only do this because we know the identifier can be used to construct a new
-			// Translator, but this is not an official feature. A more correct solution would be to
-			// cache the Table objects and use Table.getTranslator() to get the Translator.
-			String value = "(liblouis-table:\"" + table.getIdentifier().replace("http://www.liblouis.org/tables/", "") + "\")";
-			values.add(value);
-			choice.appendChild(doc.createElement("value"))
-			      .appendChild(doc.createTextNode(value));
-			String indexName = table.getInfo().get("index-name");
-			if (indexName != null) {
-				choice.appendChild(doc.createElementNS("http://relaxng.org/ns/compatibility/annotations/1.0", "documentation"))
-				      .appendChild(doc.createTextNode(indexName));
-			}
-		}
-		xmlDefinition = doc;
-		enumerationValues = values;
-	}
-
 	private static final Logger logger = LoggerFactory.getLogger(LiblouisTableJnaImplProvider.class);
 	
 }

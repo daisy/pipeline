@@ -18,6 +18,13 @@
         <p>Paragraph</p>
         <pagenum id="page_2">2</pagenum>
         <p>Another paragraph</p>
+        <p>Paragraph with a <noteref class="endnote" idref="#endnote_1">noteref</noteref>.</p>
+      </level1>
+      <level1>
+        <h1>Endnotes</h1>
+        <note class="endnote" id="endnote_1">
+          <p>A note</p>
+        </note>
       </level1>
     </bodymatter>
   </book>

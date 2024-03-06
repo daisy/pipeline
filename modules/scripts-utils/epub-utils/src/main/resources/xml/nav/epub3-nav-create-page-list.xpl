@@ -13,14 +13,14 @@
     <p:output port="result" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>The generated page list as a <code>nav</code> document with
-            <code>epub:type="page-list"</code>.</p>
+            <code>epub:type="page-list"</code> and <code>role="doc-pagelist"</code>.</p>
         </p:documentation>
         <p:pipe port="result" step="result"/>
     </p:output>
     <p:output port="content-docs" sequence="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>The modified content documents. All <code>epub:type='pagebreak'</code> elements have
-            an <code>id</code> attribute.</p>
+            <p>The modified content documents. All <code>epub:type='pagebreak'</code> and
+            <code>role='doc-pagebreak'</code> elements have an <code>id</code> attribute.</p>
         </p:documentation>
         <p:pipe step="page-lists" port="content-docs"/>
     </p:output>
@@ -53,7 +53,7 @@
             <p:pipe step="add-ids" port="result"/>
         </p:output>
         <p:documentation>Add ID attributes</p:documentation>
-        <px:html-add-ids match="*[tokenize(@epub:type,'\s+')='pagebreak']" name="add-ids"/>
+        <px:html-add-ids match="*[tokenize(@epub:type,'\s+')='pagebreak' or @role='doc-pagebreak']" name="add-ids"/>
         <p:xslt>
             <p:input port="stylesheet">
                 <p:document href="html5-to-page-list.xsl"/>
@@ -67,7 +67,7 @@
     <p:insert match="/h:nav/h:ol" position="first-child">
         <p:input port="source">
             <p:inline exclude-inline-prefixes="#all">
-                <nav epub:type="page-list" xmlns="http://www.w3.org/1999/xhtml">
+                <nav epub:type="page-list" role="doc-pagelist" xmlns="http://www.w3.org/1999/xhtml">
                     <h1>List of pages</h1>
                     <ol/>
                 </nav>

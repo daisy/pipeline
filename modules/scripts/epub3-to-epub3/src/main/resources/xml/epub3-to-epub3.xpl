@@ -247,6 +247,10 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
         </p:documentation>
     </p:option>
     
+    <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
+        <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+    
     <p:option name="apply-document-specific-stylesheets" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Apply author CSS style sheets</h2>
@@ -343,6 +347,8 @@ elements that represent the sentences.</p>
                                                    for $s in tokenize($stylesheet,'\s+')[not(.='')] return
                                                      resolve-uri($s,$source),
                                                    ' ')"/>
+        <p:with-option name="lexicon" select="for $l in tokenize($stylesheet,'\s+')[not(.='')] return
+                                                resolve-uri($l,$source)"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
         <p:with-option name="braille" select="$braille"/>

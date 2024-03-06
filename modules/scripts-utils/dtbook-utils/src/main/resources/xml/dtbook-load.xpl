@@ -8,11 +8,17 @@
 
     <p:documentation> Loads the DTBook XML fileset. </p:documentation>
 
-    <p:input port="source" primary="true" sequence="true" px:media-type="application/x-dtbook+xml">
+    <p:input port="source.fileset" primary="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>One or more DTBook files to be loaded. Any auxilliary resources referenced from the
-            DTBook documents will be resolved based on these files.</p>
+            <p>The input fileset containing the DTBook files (marked with
+            <code>media-type="application/x-dtbook+xml"</code>.</p>
+            <p>Will also be used for loading other resources. If files are present in memory, they
+            are expected to be <code>c:data</code> documents. Only when files are not present in
+            this fileset, it will be attempted to load them from disk.</p>
         </p:documentation>
+    </p:input>
+    <p:input port="source.in-memory" sequence="true">
+        <p:empty/>
     </p:input>
 
     <p:option name="validation" cx:as="xs:boolean" select="false()">
@@ -77,7 +83,6 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
-            px:fileset-add-entries
             px:fileset-join
             px:fileset-load
             px:fileset-purge
@@ -103,16 +108,9 @@
     <!--
         fileset containing the input DTBooks (with normalized base URIs)
     -->
-    <p:sink/>
-    <px:fileset-add-entries media-type="application/x-dtbook+xml">
-        <p:input port="entries">
-            <p:pipe step="main" port="source"/>
-        </p:input>
-    </px:fileset-add-entries>
-    <px:fileset-join/>
-    <px:fileset-load name="dtbooks">
+    <px:fileset-load media-types="application/x-dtbook+xml" name="dtbooks">
         <p:input port="in-memory">
-            <p:pipe step="main" port="source"/>
+            <p:pipe step="main" port="source.in-memory"/>
         </p:input>
     </px:fileset-load>
 
@@ -121,9 +119,12 @@
             <p:input port="stylesheet">
                 <p:document href="dtbook-fileset.xsl"/>
             </p:input>
-            <p:input port="parameters">
-                <p:empty/>
-            </p:input>
+            <p:with-param port="parameters" name="context.fileset" select="/">
+                <p:pipe step="main" port="source.fileset"/>
+            </p:with-param>
+            <p:with-param port="parameters" name="context.in-memory" select="collection()">
+                <p:pipe step="main" port="source.in-memory"/>
+            </p:with-param>
         </p:xslt>
     </p:for-each>
     <px:fileset-join/>
@@ -134,7 +135,7 @@
     <!-- add any CSS stylesheets from xml-stylesheet instructions  -->
     <p:for-each>
         <p:iteration-source>
-            <p:pipe step="main" port="source"/>
+            <p:pipe step="dtbooks" port="result"/>
         </p:iteration-source>
         <px:parse-xml-stylesheet-instructions name="parse-pi"/>
         <p:sink/>

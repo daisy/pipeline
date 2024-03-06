@@ -6,14 +6,32 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 exclude-result-prefixes="#all">
 
+	<xsl:key name="ids" match="*[@id]" use="@id"/>
+
 	<xsl:template name="f:generate-ids" as="xs:string*">
 		<xsl:param name="amount" as="xs:integer" required="yes"/>
 		<xsl:param name="prefix" as="xs:string" required="yes"/>
-		<xsl:param name="in-use" as="xs:string*" select="()"/>
+		<xsl:param name="in-use" select="()"/> <!-- xs:string*|document-node() -->
 		<xsl:param name="_feed" as="xs:integer" select="1"/>
 		<xsl:variable name="ids" as="xs:string*"
 		              select="for $i in 1 to $amount return concat($prefix,$_feed + $i - 1)"/>
-		<xsl:variable name="ids" as="xs:string*" select="$ids[not(.=$in-use)]"/>
+		<xsl:variable name="in-use" as="document-node()">
+			<xsl:choose>
+				<xsl:when test="$in-use instance of document-node()">
+					<xsl:sequence select="$in-use"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:document>
+						<d:ids>
+							<xsl:for-each select="$in-use">
+								<d:id id="{.}"/>
+							</xsl:for-each>
+						</d:ids>
+					</xsl:document>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		<xsl:variable name="ids" as="xs:string*" select="$ids[empty(key('ids',.,$in-use))]"/>
 		<xsl:sequence select="$ids"/>
 		<xsl:if test="count($ids) &lt; $amount">
 			<xsl:call-template name="f:generate-ids">

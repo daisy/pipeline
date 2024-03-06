@@ -70,7 +70,7 @@
 						<title>Minimal DTBook</title>
 					</head>
 					<body>
-						<nav epub:type="toc">
+						<nav epub:type="toc" role="doc-toc">
 							<h1>Table of Contents</h1>
 							<ol>
 								<li id="ncx-1">
@@ -78,7 +78,7 @@
 								</li>
 							</ol>
 						</nav>
-						<nav epub:type="page-list">
+						<nav epub:type="page-list" role="doc-pagelist">
 							<h1>List of Pages</h1>
 							<ol>
 								<li id="ncx-2">

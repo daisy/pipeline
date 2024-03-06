@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:d="http://www.daisy.org/ns/pipeline/data"
-    xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
-    exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                exclude-result-prefixes="#all">
 
   <xsl:variable name="link-nodes" select="('noteref', 'annoref')"/>
   <xsl:variable name="target-nodes" select="('note', 'annotation')"/>
@@ -23,14 +23,14 @@
 
   <xsl:template match="*[@id or starts-with(local-name(), 'level')]" priority="2">
     <xsl:copy>
-      <xsl:copy-of select="@id"/>
+      <xsl:copy-of select="@id|@pxi:no-smilref"/>
       <xsl:apply-templates select="*"/>
     </xsl:copy>
   </xsl:template>
 
   <xsl:template match="*[$link-nodes = local-name()]" priority="3">
     <xsl:copy>
-      <xsl:copy-of select="@id|@idref"/>
+      <xsl:copy-of select="@id|@idref|@pxi:no-smilref"/>
       <xsl:apply-templates select="*"/>
     </xsl:copy>
 
@@ -42,7 +42,7 @@
       <!-- to the note/annotation. -->
       <xsl:variable name="target" select="key('targets', substring-after(@idref, '#'))"/>
       <xsl:element name="{local-name($target)}" namespace="{namespace-uri($target)}">
-	<xsl:copy-of select="$target/@id"/>
+	<xsl:copy-of select="$target/(@id|@pxi:no-smilref)"/>
 	<xsl:apply-templates select="$target/*"/>
       </xsl:element>
     </xsl:if>
@@ -52,7 +52,7 @@
     <!-- The note/annotation is added only if it is not associated to any noteref/annoref -->
     <xsl:if test="not(key('normalized-links', @id))">
       <xsl:copy>
-	<xsl:copy-of select="@id"/>
+	<xsl:copy-of select="@id|@pxi:no-smilref"/>
 	<xsl:apply-templates select="*"/>
       </xsl:copy>
     </xsl:if>

@@ -4,11 +4,11 @@
 
     <p:option name="maximum-number-of-sheets" required="false" px:type="integer" select="'70'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Volumes: Maximum number of sheets</h2>
+            <h2 px:role="name">Maximum number of sheets</h2>
             <p px:role="desc" xml:space="preserve">The maximum number of sheets in a volume.
 
-Makes the variable `$maximum-number-of-sheets` available in style sheets and includes the following
-rule by default:
+The following CSS rule is included by default (where `$maximum-number-of-sheets` is the value of
+this option):
 
 ~~~sass
 @volume {
@@ -26,7 +26,7 @@ See the CSS specification for more info:
 
     <p:option name="allow-volume-break-inside-leaf-section-factor" required="false" px:type="integer" select="'10'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Volumes: Allow breaks within sections.</h2>
+            <h2 px:role="name">Allow breaks within sections.</h2>
             <p px:role="desc" xml:space="preserve">Amount with which volume breaks are allowed within sections.
 
 The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
@@ -37,7 +37,7 @@ size.</p>
 
     <p:option name="prefer-volume-break-before-higher-level-factor" required="false" select="'0'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Volumes: Prefer breaks at higher level sections.</h2>
+            <h2 px:role="name">Prefer breaks at higher level sections.</h2>
             <p px:role="desc" xml:space="preserve">Amount with which preference is given to volume breaks before higher level sections.
 
 The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference

@@ -164,6 +164,8 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 				public CSSInputStream read(CSSSource source) throws IOException {
 					if (source.type == CSSSource.SourceType.URL && uriResolver != null) {
 						try {
+							// NetworkProcessor.fetch() also does resolve() but we need an additional resolve() to give
+							// CSSInputStream the correct base URL
 							Source resolved = uriResolver.resolve(URLs.asURI((URL)source.source).toASCIIString(), "");
 							if (resolved != null)
 								source = new CSSSource(new URL(resolved.getSystemId()), source.encoding, source.mediaType);

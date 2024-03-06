@@ -39,6 +39,7 @@ public class SAPIEngine extends TTSEngine {
 	private final int mOverallPriority;
 	private final boolean onecoreIsReady;
 	private final AudioFormat sapiAudioFormat;
+	private final float speechRate;
 
 	private Map<String, Voice> mVoiceFormatConverter = null;
 
@@ -50,10 +51,11 @@ public class SAPIEngine extends TTSEngine {
 	 * @param sapiAudioFormat should be the audio format set by the SAPI initialization.<br/>
 	 *                        It should be null if SAPI could not be loaded and/or initialized.
 	 */
-	public SAPIEngine(SAPIService service, int priority, boolean onecoreIsReady, AudioFormat sapiAudioFormat) {
+	public SAPIEngine(SAPIService service, int priority, boolean onecoreIsReady, AudioFormat sapiAudioFormat, float speechRate) {
 		super(service);
 		this.onecoreIsReady = onecoreIsReady;
 		this.sapiAudioFormat = sapiAudioFormat;
+		this.speechRate = speechRate;
 		mOverallPriority = priority;
 	}
 
@@ -63,11 +65,17 @@ public class SAPIEngine extends TTSEngine {
 	}
 
 	@Override
+	public boolean handlesSpeakingRate() {
+		return true;
+	}
+
+	@Override
 	public SynthesisResult synthesize(XdmNode ssml, Voice voice, TTSResource resource)
 			throws SynthesisException {
 
 		Map<String,Object> xsltParams = new HashMap<>(); {
 			xsltParams.put("voice", voice.getName());
+			xsltParams.put("speech-rate", speechRate);
 		}
 		try {
 			List<Integer> marks = new ArrayList<>();
@@ -82,10 +90,15 @@ public class SAPIEngine extends TTSEngine {
 	public AudioInputStream speak(String ssml, Voice voice, TTSResource resource, List<Integer> marks)
 			throws SynthesisException {
 
-		voice = mVoiceFormatConverter.get(voice.getName().toLowerCase());
+		String key = voice.getName().toLowerCase();
+		// To avoid using a SAPI voice when a OneCore voice is available, the "desktop" suffix is
+		// removed from keys in getAvailableVoices(), so need to do the same here.
+		if (key.endsWith(" desktop"))
+			key = key.substring(0, key.length() - " desktop".length());
+		voice = mVoiceFormatConverter.get(key); // mVoiceFormatConverter was initialized in getAvailableVoices()
 		NativeSynthesisResult res;
 		// Speak
-		if (voice.getEngine().equals("sapi") ){
+		if (voice.getEngine().equals("sapi")) {
 			try {
 				res = SAPI.speak(voice.getEngine(), voice.getName(), ssml, (int)sapiAudioFormat.getSampleRate(), (short)sapiAudioFormat.getSampleSizeInBits());
 			} catch (RuntimeException e){
@@ -151,27 +164,27 @@ public class SAPIEngine extends TTSEngine {
 		if (mVoiceFormatConverter == null) {
 			mVoiceFormatConverter = new HashMap<>();
 			ArrayList<Voice> nativeVoices = new ArrayList<>();
-			if (this.sapiAudioFormat != null){
-				try{
+			if (this.sapiAudioFormat != null) {
+				try {
 					// first load sapi voices
 					nativeVoices.addAll(Arrays.asList(SAPI.getVoices()));
 				} catch (Exception e){
 					Logger.debug("Could not retrieve SAPI voices : " + e.getMessage());
 				}
 			}
-			if (this.onecoreIsReady){
-				try{
+			if (this.onecoreIsReady) {
+				try {
 					nativeVoices.addAll(Arrays.asList(Onecore.getVoices()));
 				} catch (IOException e) {
 					Logger.debug("Could not retrieve onecore voices : " + e.getMessage());
 				}
 			}
-			for (Voice v: nativeVoices) {
+			for (Voice v : nativeVoices) {
 				String key = v.getName().toLowerCase();
-				// Remove SAPI voices if a onecore version exists
-				if (key.endsWith(" desktop")) {
-					key = key.substring(0,key.length() - " desktop".length());
-				}
+				// To avoid using a SAPI voice when a OneCore voice is available, the "desktop"
+				// suffix needs to be removed
+				if (key.endsWith(" desktop"))
+					key = key.substring(0, key.length() - " desktop".length());
 				mVoiceFormatConverter.put(key, v);
 			}
 		}

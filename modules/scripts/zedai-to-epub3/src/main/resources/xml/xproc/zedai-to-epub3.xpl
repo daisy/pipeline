@@ -59,6 +59,10 @@
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
+    <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+
     <p:option name="audio"  select="'false'">
       <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
@@ -119,6 +123,8 @@
                                                                      for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
                                                                        resolve-uri($s,$input-uri),
                                                                      ' ')"/>
+            <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
+                                                    resolve-uri($l,$input-uri)"/>
             <p:with-option name="output-dir" select="$temp-dir"/>
             <p:with-option name="audio" select="$audio"/>
             <p:with-option name="chunk-size" xmlns:_="zedai" select="$_:chunk-size"/>

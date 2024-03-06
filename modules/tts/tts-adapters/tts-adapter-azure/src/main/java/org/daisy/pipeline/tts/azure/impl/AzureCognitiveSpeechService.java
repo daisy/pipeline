@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.pipeline.tts.DefaultSpeechRate;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -36,6 +37,7 @@ public class AzureCognitiveSpeechService implements TTSService {
 	                                                                      "Priority of Azure voices relative to voices of other engines",
 	                                                                      false,
 	                                                                      "15");
+	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
 
 	@Override
 	public String getName() {
@@ -52,7 +54,8 @@ public class AzureCognitiveSpeechService implements TTSService {
 			throw new SynthesisException("Property not set: " + AZURE_REGION.getName());
 		int priority = getPropertyAsInt(properties, AZURE_PRIORITY).get();
 		int threads = getPropertyAsInt(properties, AZURE_THREADS).get();
-		return new AzureCognitiveSpeechEngine(this, key, region, threads, priority);
+		float speechRate = SPEECH_RATE.getValue(properties);
+		return new AzureCognitiveSpeechEngine(this, key, region, threads, priority, speechRate);
 	}
 
 	private static Optional<Integer> getPropertyAsInt(Map<String,String> properties, Property prop) throws SynthesisException {

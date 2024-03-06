@@ -70,11 +70,17 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 	private final int threads;
 	private final int priority;
 	private final SpeechConfig speechConfig;
+	private final float speechRate;
 
-	public AzureCognitiveSpeechEngine(AzureCognitiveSpeechService service, String key, String region, int threads, int priority) {
+	/**
+	 * @param speechRate speaking rate as a relative value, with 1.0 corresponding with the normal
+	 *                   speaking rate of 200 words per minute
+	 */
+	public AzureCognitiveSpeechEngine(AzureCognitiveSpeechService service, String key, String region, int threads, int priority, float speechRate) {
 		super(service);
 		this.threads = threads;
 		this.priority = priority;
+		this.speechRate = speechRate;
 		speechConfig = SpeechConfig.fromSubscription(key, region);
 		speechConfig.setSpeechSynthesisOutputFormat(synthOutputFormat);
 	}
@@ -87,6 +93,7 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 				Map<String,Object> params = new HashMap<>(); {
 					// for unit tests also allow voices that are not instances of AzureVoice
 					params.put("voice", (voice instanceof AzureVoice) ? ((AzureVoice)voice).info.getShortName() : voice.getName());
+					params.put("speech-rate", speechRate);
 				}
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, params);
 			} catch (IOException|SaxonApiException e) {
@@ -213,6 +220,11 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 
 	@Override
 	public boolean handlesMarks() {
+		return true;
+	}
+
+	@Override
+	public boolean handlesSpeakingRate() {
 		return true;
 	}
 

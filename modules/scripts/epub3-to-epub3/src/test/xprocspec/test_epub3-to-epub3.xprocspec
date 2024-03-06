@@ -220,10 +220,10 @@
 						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
 						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
-						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 						<d:file href="result/EPUB/mo/cover.smil" media-type="application/smil+xml" indent="true"/>
 						<d:file href="result/EPUB/mo/front.smil" media-type="application/smil+xml" indent="true"/>
@@ -356,7 +356,7 @@
 								<span id="id_3">List of contents</span>
 							</h2>
 							<table>...</table>
-							<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv">
+							<div id="page_front_4" class="page-front" epub:type="pagebreak" role="doc-pagebreak" title="iv">
 								<span id="id_4"/>
 							</div>
 						</section>
@@ -367,7 +367,7 @@
 							<p>
 								<span id="id_6">...</span>
 							</p>
-							<div id="page_front_5" class="page-front" epub:type="pagebreak" title="v">
+							<div id="page_front_5" class="page-front" epub:type="pagebreak" role="doc-pagebreak" title="v">
 								<span id="id_7"/>
 							</div>
 						</section>
@@ -387,7 +387,7 @@
 						<p>
 							<span id="id_2">
 								<span id="id_8">This paragraph contains</span>
-								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
+								<span epub:type="pagebreak" role="doc-pagebreak" title="5" id="page_5" class="page-normal"/>
 								<span id="id_9">a page break.</span>
 							</span>
 						</p>
@@ -554,7 +554,7 @@
 			</x:context>
 			<x:expect label="front.xhtml" type="compare">
 				<x:document type="inline" xmlns="http://www.w3.org/1999/xhtml">
-					<div id="page_front_4" class="page-front" epub:type="pagebreak" title="iv"
+					<div id="page_front_4" class="page-front" epub:type="pagebreak" role="doc-pagebreak" title="iv"
 					     style="visibility: hidden">
 						<span id="id_4">iv</span>
 					</div>
@@ -577,10 +577,10 @@
 						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
 						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
-						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
@@ -663,7 +663,7 @@
 						<p>
 							<span id="id_2" class="sentence">
 								<span id="id_8">This paragraph contains</span>
-								<span epub:type="pagebreak" title="5" id="page_5" class="page-normal"/>
+								<span epub:type="pagebreak" role="doc-pagebreak" title="5" id="page_5" class="page-normal"/>
 								<span id="id_9">a page break.</span>
 							</span>
 						</p>
@@ -723,10 +723,10 @@
 						<d:file href="result/mimetype" media-type="text/plain" compression-method="stored"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
 						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav"/>
-						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" role="nav" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/front.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/aural.css" media-type="text/css"/>
 					</d:fileset>
 				</x:document>
@@ -850,20 +850,20 @@
 					<d:fileset>
 						<d:file href="result/mimetype" compression-method="stored"
 						        original-href="../resources/valentin.epub!/mimetype"/>
-						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"
 						        original-href="../resources/valentin.epub!/EPUB/package.opf"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"
 						        original-href="../resources/valentin.epub!/EPUB/nav.ncx"/>
-						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/css/accessibility.css" media-type="text/css"
 						        original-href="../resources/valentin.epub!/EPUB/css/accessibility.css"/>
 						<d:file href="result/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"
@@ -881,16 +881,16 @@
 						<d:file href="result/EPUB/images/valentin.jpg" media-type="image/jpeg"
 						        original-href="../resources/valentin.epub!/EPUB/images/valentin.jpg"/>
 						<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
-						<d:file href="result/EPUB/C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/nav_braille.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-1-cover_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-2-frontmatter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-3-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-4-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-5-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-6-rearnotes_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-7-chapter_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-8-conclusion_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-9-footnotes_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/nav_braille.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/C00000-1-cover_braille.css" media-type="text/plain"/>
 						<d:file href="result/EPUB/C00000-2-frontmatter_braille.css" media-type="text/plain"/>
 						<d:file href="result/EPUB/C00000-3-chapter_braille.css" media-type="text/plain"/>
@@ -1106,19 +1106,19 @@
 					<d:fileset>
 						<d:file href="result/mimetype" compression-method="stored"
 						        original-href="../resources/valentin.epub!/mimetype"/>
-						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-1-cover.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml" indent="true"/>
-						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/nav.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/nav.ncx" media-type="application/x-dtbncx+xml"
 						        original-href="../resources/valentin.epub!/EPUB/nav.ncx"/>
-						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml"/>
-						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml"/>
+						<d:file href="result/EPUB/C00000-9-footnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-5-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-6-rearnotes.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-7-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-8-conclusion.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-4-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-2-frontmatter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+						<d:file href="result/EPUB/C00000-3-chapter.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 						<d:file href="result/EPUB/css/accessibility.css" media-type="text/css"
 						        original-href="../resources/valentin.epub!/EPUB/css/accessibility.css"/>
 						<d:file href="result/EPUB/css/fonts/opendyslexic/LICENSE.txt" media-type="text/plain"

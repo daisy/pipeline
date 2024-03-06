@@ -1,0 +1,145 @@
+/* ===========================
+ * Generated table of contents
+ * =========================== */
+
+/**
+ * @var nonNegativeInteger $toc-depth
+ *
+ * @brief Table of contents depth
+ *
+ * The depth of the table of contents hierarchy to include. '0' means no table of contents.
+ *
+ * A table of contents will be generated from the heading elements present in the document: from `h1`
+ * elements if the specified value for the depth is 1, from `h1` and `h2` elements if the specified
+ * value is 2, etc. The resulting table of contents has the following nested structure:
+ *
+ * ~~~xml
+ * <list id="generated-document-toc">
+ *   <li>
+ *       <a href="#ch_1" title="Chapter 1">Chapter 1</a>
+ *       <list>
+ *           <li>
+ *               <a href="#ch_1_1" title="1.1">1.1</a>
+ *               ...
+ *           </li>
+ *           <li>
+ *               <a href="#ch_1_2" title="1.2">1.2</a>
+ *               ...
+ *           </li>
+ *           ...
+ *       </list>
+ *   </li>
+ *   ...
+ * </list>
+ * ~~~
+ *
+ * Another one of these is generated but with ID `generated-volume-toc`. `ch_1`, `ch_1_2` etc. are the
+ * IDs of the heading elements from which the list was constructed, and the content of the links are
+ * exact copies of the content of the heading elements. By default the lists are not rendered. The
+ * lists should be styled and positioned with CSS. The following rules are included by default:
+ *
+ * ~~~css
+ * #generated-document-toc {
+ *   flow: document-toc;
+ *   display: -obfl-toc;
+ *   -obfl-toc-range: document;
+ * }
+ *
+ * #generated-volume-toc {
+ *   flow: volume-toc;
+ *   display: -obfl-toc;
+ *   -obfl-toc-range: volume;
+ * }
+ * ~~~
+ *
+ * This means that a document range table of contents is added to the named flow called "document-toc",
+ * and a volume range table of contents is added to the named flow called "volume-toc". In order to
+ * consume these named flows use the function `flow()`. For example, to position the document range
+ * table of contents at the beginning of the first volume, and to repeat the volume range table of
+ * content at the beginning of every other volume, include the following additional rules:
+ *
+ * ~~~css
+ * @volume {
+ *   @begin {
+ *     content: flow(volume-toc, document);
+ *   }
+ * }
+ *
+ * @volume:first {
+ *   @begin {
+ *     content: flow(document-toc, document);
+ *   }
+ * }
+ * ~~~
+ *
+ * By default, the table of contents is styled as a normal unordered list, only including the text of
+ * the headings. Including the braille page numbers of the headings can be done using the
+ * `target-counter` function. For example, to place the page number after the heading title, with a
+ * space in between:
+ *
+ * ~~~css
+ * #generated-document-toc li > a,
+ * #generated-volume-toc li > a {
+ *   content: ' ' target-counter(attr(href), page);
+ * }
+ * ~~~
+ *
+ * Note that there is only a single "depth" setting for both lists. If you wish to include less levels
+ * of headings in the document TOC, you have to achieve it through CSS styling. For example, to get
+ * only one level of headings in the document TOC, make all nested `list` elements invisible:
+ *
+ * ~~~css
+ * #generated-document-toc > li > list {
+ *   display: none;
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`display:
+ *   -obfl-toc`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-toc)
+ *   value
+ * - the [`flow`](http://braillespecs.github.io/braille-css/#the-flow-property) property
+ * - the [`flow()`](http://braillespecs.github.io/braille-css/#h4_the-flow-function) function
+ * - the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+ * - the [`@begin`](http://braillespecs.github.io/braille-css/#h3_the-begin-and-end-rules) rule
+ * - the [`target-counter()`](http://braillespecs.github.io/braille-css/#h4_the-target-counter-function) function
+ * - the [`page`](http://braillespecs.github.io/braille-css/#h4_creating-and-inheriting-counters) counter
+ */
+$toc-depth: 0 !default;
+
+/**
+ * @var string $toc-exclude-class
+ *
+ * @brief Exclude headings from table of contents
+ *
+ * Class name for excluding headings from the table of contents.
+ *
+ * If specified, heading elements with this class name are excluded from the generated tables of contents.
+ */
+$toc-exclude-class: '' !default;
+
+@if $toc-depth > 0 {
+	/*
+	 * Generate the TOC:
+	 */
+	@xslt "generate-toc.xsl" {
+		depth: $toc-depth;
+		exclude-class: $toc-exclude-class;
+		document-toc-id: "generated-document-toc";
+		volume-toc-id: "generated-volume-toc";
+	}
+	/*
+	 * ... and style it:
+	 */
+	#generated-document-toc {
+		flow: document-toc;
+		display: -obfl-toc;
+		-obfl-toc-range: document;
+	}
+	#generated-volume-toc {
+		flow: volume-toc;
+		display: -obfl-toc;
+		-obfl-toc-range: volume;
+	}
+}

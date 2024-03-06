@@ -117,6 +117,15 @@
 			<px:html-upgrade/>
 		</p:for-each>
 		<p:sink/>
+		<p:documentation>
+			Update doctype
+		</p:documentation>
+		<p:add-attribute match="d:file" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;" name="html5.fileset">
+			<p:input port="source">
+				<p:pipe step="load" port="result.fileset"/>
+			</p:input>
+		</p:add-attribute>
+		<p:sink/>
 		<px:fileset-update name="update">
 			<p:input port="source.fileset">
 				<p:pipe step="clean" port="result.fileset"/>
@@ -125,7 +134,7 @@
 				<p:pipe step="clean" port="result.in-memory"/>
 			</p:input>
 			<p:input port="update.fileset">
-				<p:pipe step="load" port="result.fileset"/>
+				<p:pipe step="html5.fileset" port="result"/>
 			</p:input>
 			<p:input port="update.in-memory">
 				<p:pipe step="docs" port="result"/>

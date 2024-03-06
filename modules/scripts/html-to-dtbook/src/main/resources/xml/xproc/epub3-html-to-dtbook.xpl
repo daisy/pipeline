@@ -122,10 +122,21 @@
     </p:group>
 
     <!--
-        Convert DPUB-ARIA roles to epub:type
+        Convert DPUB-ARIA roles to epub:type (see https://idpf.github.io/epub-guides/epub-aria-authoring/#sec-mappings)
     -->
-    <p:label-elements match="*[@role='doc-pagebreak']" attribute="epub:type" replace="true"
-                      label="string-join(distinct-values((@epub:type/tokenize(.,'\s+')[not(.='')],'pagebreak')),' ')"/>
+    <p:label-elements match="*[@role=('doc-pagebreak',
+                                      'doc-noteref',
+                                      'doc-footnote',
+                                      'doc-endnote',
+                                      'doc-endnotes',
+                                      'doc-epigraph')]"
+                      attribute="epub:type"
+                      replace="true"
+                      label="string-join(
+                               distinct-values((
+                                 @epub:type/tokenize(.,'\s+')[not(.='')],
+                                 replace(@role,'^doc-',''))),
+                               ' ')"/>
 
 
     <!--

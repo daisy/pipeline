@@ -1,0 +1,211 @@
+/* ========================================================
+ * Collection of styles that used to be included by default
+ * ======================================================== */
+
+/**
+ * @var boolean $capital-letters
+ *
+ * @brief Indicate capital letters
+ *
+ * When enabled, will indicate capital letters.
+ *
+ * The following CSS rule is included by default (where `$capital-letters` is the value of this
+ * option):
+ *
+ * ~~~sass
+ * @if $capital-letters != true {
+ *   :root {
+ *     text-transform: lowercase;
+ *   }
+ * }
+ * ~~~
+ */
+$capital-letters: true !default;
+
+@if $capital-letters != true {
+	:root {
+		text-transform: lowercase;
+	}
+}
+
+/**
+ * @var boolean $include-captions
+ *
+ * @brief Include captions
+ *
+ * When enabled, will include captions for images, tables, and so on.
+ *
+ * The following CSS rule is included by default (where `$include-captions` is the value of this
+ * option):
+ *
+ * ~~~sass
+ * caption {
+ *   display: if($include-captions, block, none);
+ * }
+ * ~~~
+ */
+$include-captions: true !default;
+
+caption {
+	display: if($include-captions, block, none);
+}
+
+/**
+ * @var boolean $include-images
+ *
+ * @brief Include images
+ *
+ * When enabled, will include the alt text of the images. When disabled, the images will be completely removed.
+ *
+ * The following CSS rule is included by default (where `$include-images` is the value of this option):
+ *
+ * ~~~sass
+ * @if $include-images {
+ *   img::after {
+ *     content: attr(alt);
+ *   }
+ * }
+ * ~~~
+ */
+$include-images: true !default;
+
+@if $include-images {
+	img::after {
+		content: attr(alt);
+	}
+}
+
+/**
+ * @var boolean $include-line-groups
+ *
+ * @brief Include line groups
+ *
+ * When disabled, lines in a linegroup are joined together to form one block.
+ *
+ * The following CSS rule is included by default (where `$include-line-groups` is the value of this
+ * option):
+ *
+ * ~~~sass
+ * linegroup line {
+ *   display: if($include-line-groups, block, inline);
+ * }
+ * ~~~
+ */
+$include-line-groups: true !default;
+
+linegroup line {
+	display: if($include-line-groups, block, inline);
+}
+
+/**
+ * @var boolean $include-production-notes
+ *
+ * @brief Include production notes
+ *
+ * When enabled, production notes are included in the content.
+ *
+ * The following CSS rule is included by default (where `$include-production-notes` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * prodnote {
+ *   display: if($include-production-notes, block, none);
+ * }
+ * ~~~
+ */
+$include-production-notes: false !default;
+
+prodnote {
+	display: if($include-production-notes, block, none);
+}
+
+/**
+ * @var boolean $show-print-page-numbers
+ *
+ * @brief Show print page numbers
+ *
+ * When enabled, will indicate original page numbers.
+ *
+ * The following CSS rule is included by default (where `$show-print-page-numbers` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * @if $show-print-page-numbers {
+ *   pagenum {
+ *     string-set: print-page content();
+ *   }
+ * }
+ * ~~~
+ *
+ * In order to use the `print-page` string include a rule like the following in your custom style
+ * sheet:
+ *
+ * ~~~css
+ * @page {
+ *   @bottom-right {
+ *     content: string(print-page);
+ *   }
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+ * - the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+ * - the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+ */
+$show-print-page-numbers: true !default;
+
+@if $show-print-page-numbers {
+	pagenum {
+		string-set: print-page content();
+	}
+}
+
+/**
+ * @var nonNegativeInteger $levels-in-footer
+ *
+ * @brief Levels in footer
+ *
+ * Specify which headings are rendered in the footer.
+ *
+ * The following CSS rule is included by default (where `$levels-in-footer` is the value of this
+ * option):
+ *
+ * ~~~sass
+ * @for $level from 1 through 6 {
+ *   @if $levels-in-footer >= $level {
+ *     h&#35;{$level} {
+ *       string-set: footer content();
+ *     }
+ *   }
+ * }
+ * ~~~
+ *
+ * In other words, the `footer` string is updated each time a heading with a level smaller than or
+ * equal to `levels-in-footer` is encountered. In order to use the `footer` string include a rule like
+ * the following in your custom style sheet:
+ *
+ * ~~~css
+ * @page {
+ *   @bottom-center {
+ *     content: string(footer);
+ *   }
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`string-set`](http://braillespecs.github.io/braille-css/#h4_the-string-set-property) property
+ * - the [`@page`](http://braillespecs.github.io/braille-css/#h4_the-page-rule) rule
+ * - the [`string()`](http://braillespecs.github.io/braille-css/#h4_the-string-function) function
+ */
+$levels-in-footer: 0 !default;
+
+@for $level from 1 through 6 {
+	@if $levels-in-footer >= $level {
+		h#{$level} {
+			string-set: footer content();
+		}
+	}
+}

@@ -113,6 +113,11 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
             px:dtbook-to-odt
         </p:documentation>
     </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
         <p:documentation>
             px:dtbook-load
@@ -128,9 +133,15 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
         <!-- LOAD DTBOOK -->
         <!-- =========== -->
         
-        <px:dtbook-load name="dtbook">
-            <p:input port="source">
+        <p:sink/>
+        <px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook">
+            <p:input port="entry">
                 <p:pipe step="main" port="source"/>
+            </p:input>
+        </px:fileset-add-entry>
+        <px:dtbook-load name="load">
+            <p:input port="source.in-memory">
+                <p:pipe step="dtbook" port="result.in-memory"/>
             </p:input>
         </px:dtbook-load>
         
@@ -143,10 +154,10 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
                 <p:document href="content.xsl"/>
             </p:input>
             <p:input port="fileset.in">
-                <p:pipe step="dtbook" port="result.fileset"/>
+                <p:pipe step="load" port="result.fileset"/>
             </p:input>
             <p:input port="in-memory.in">
-                <p:pipe step="dtbook" port="result.in-memory"/>
+                <p:pipe step="load" port="result.in-memory"/>
             </p:input>
             <p:input port="meta">
                 <p:inline>

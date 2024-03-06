@@ -35,7 +35,7 @@
 		<p:empty/>
 	</p:input>
 	
-	<p:output port="result">
+	<p:output port="result" primary="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Style sheets are applied to the document in the following way: XSLT style sheets are
 			applied before CSS/SCSS style sheets. XSLT style sheets are applied one by one, first
@@ -95,6 +95,17 @@
 			     an XSLT using an @xslt rule, the idents true and false become booleans. -->
 		</p:documentation>
 	</p:input>
+	
+	<p:output port="result.parameters">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>A <a href="https://www.w3.org/TR/xproc/#cv.param-set"><code>c:param-set</code></a>
+			document containing all the parameters on the <code>parameters</code> input port,
+			augmented with any <a href="https://sass-lang.com/documentation/variables#scope">global
+			variables</a> declared in SCSS style sheets. Variables that are declared later take
+			precedence, except if they are declared with <code>!default</code>.</p>
+		</p:documentation>
+		<p:pipe step="xslt-and-css" port="parameters"/>
+	</p:output>
 	
 	<p:declare-step type="pxi:recursive-xslt" name="recursive-xslt">
 		<p:input port="source"/>
@@ -162,7 +173,11 @@
 			<p:pipe step="main" port="source"/>
 		</p:input>
 	</p:identity>
-	<p:group px:progress=".95">
+	<p:group name="xslt-and-css" px:progress=".95">
+		<p:output port="result" primary="true"/>
+		<p:output port="parameters">
+			<p:pipe step="css" port="parameters"/>
+		</p:output>
 		<p:variable name="xslt-stylesheets-from-xml-stylesheet-instructions" cx:as="xs:string*"
 		            select="/d:fileset/d:file
 		                      [('text/xsl','application/xslt+xml')=tokenize($type,'\s+')
@@ -180,14 +195,18 @@
 				<p:identity/>
 			</p:otherwise>
 		</p:choose>
-		<pxi:recursive-xslt px:progress=".50">
+		<pxi:recursive-xslt name="xslt" px:progress=".50">
 			<p:with-option name="stylesheets" select="($xslt-user-stylesheets,$xslt-stylesheets-from-xml-stylesheet-instructions)"/>
 			<p:input port="parameters">
 				<p:pipe step="main" port="parameters"/>
 			</p:input>
 		</pxi:recursive-xslt>
-		<p:choose px:progress=".50">
+		<p:choose name="css" px:progress=".50">
 			<p:when test="tokenize($type,'\s')=('text/css','text/x-scss')">
+				<p:output port="result" primary="true"/>
+				<p:output port="parameters">
+					<p:pipe step="cascade" port="result.parameters"/>
+				</p:output>
 				<p:variable name="message" cx:as="xs:string"
 				            select="concat('Applying CSS',
 				                           if (exists($css-user-stylesheets))
@@ -195,7 +214,7 @@
 				                                           then concat(' ',$css-user-stylesheets[1])
 				                                           else string-join(('',$css-user-stylesheets),'&#x0A;- '))
 				                           else '')"/>
-				<px:css-cascade px:message="{$message}">
+				<px:css-cascade name="cascade" px:message="{$message}">
 					<p:with-option name="user-stylesheet" select="string-join($css-user-stylesheets,' ')"/>
 					<p:with-option name="type" select="string-join(tokenize($type,'\s')[.=('text/css','text/x-scss')],' ')"/>
 					<p:with-option name="media" select="$media"/>
@@ -208,7 +227,20 @@
 				</px:css-cascade>
 			</p:when>
 			<p:otherwise>
-				<p:identity/>
+				<p:output port="result" primary="true">
+					<p:pipe step="no-cascade" port="result"/>
+				</p:output>
+				<p:output port="parameters">
+					<p:pipe step="param-set" port="result"/>
+				</p:output>
+				<p:identity name="no-cascade"/>
+				<p:sink/>
+				<!-- ensure that there's exactly one c:param-set -->
+				<p:parameters name="param-set">
+					<p:input port="parameters">
+						<p:pipe step="main" port="parameters"/>
+					</p:input>
+				</p:parameters>
 			</p:otherwise>
 		</p:choose>
 	</p:group>

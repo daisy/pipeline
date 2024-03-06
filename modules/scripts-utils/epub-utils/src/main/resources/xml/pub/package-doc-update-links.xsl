@@ -11,12 +11,21 @@
 
     <xsl:param name="source-renamed" select="'false'"/>
 
+    <xsl:key name="original-href" match="d:file[@original-href]" use="@original-href"/>
+    <xsl:key name="original-id" match="d:anchor" use="(@original-id,@id)[1]"/>
+    <xsl:key name="href" match="d:file[not(@original-href)]" use="@href"/>
+
     <!--
         A fileset defines the relocation of resources.
         We know that it has been previously normalized.
     -->
     <xsl:variable name="mapping" as="element(d:fileset)">
-        <xsl:apply-templates mode="absolute-hrefs" select="collection()[/d:fileset][1]"/>
+        <xsl:variable name="mapping" as="document-node(element(d:fileset))">
+            <xsl:document>
+                <xsl:apply-templates mode="absolute-hrefs" select="collection()[/d:fileset][1]"/>
+            </xsl:document>
+        </xsl:variable>
+        <xsl:sequence select="$mapping/*"/>
     </xsl:variable>
 
     <xsl:variable name="original-doc-base" as="xs:string"
@@ -39,10 +48,10 @@
         <xsl:variable name="fragment" as="xs:string?" select="$uri[5]"/>
         <xsl:variable name="file" as="xs:string" select="pf:recompose-uri($uri[position()&lt;5])"/>
         <xsl:variable name="resolved-file" as="xs:anyURI" select="resolve-uri($file,$original-doc-base)"/>
-        <xsl:variable name="new-file" as="element(d:file)*" select="$mapping/d:file[@original-href=$resolved-file]"/>
+        <xsl:variable name="new-file" as="element(d:file)*" select="key('original-href',$resolved-file,$mapping)"/>
         <xsl:variable name="new-file" as="element(d:file)?" select="(if (exists($fragment))
-                                                                       then $new-file[d:anchor[@id=$fragment]]
-                                                                       else(),
+                                                                       then $new-file[exists(key('original-id',$fragment,.))]
+                                                                       else (),
                                                                      $new-file)[1]"/>
         <xsl:choose>
             <xsl:when test="exists($new-file)">

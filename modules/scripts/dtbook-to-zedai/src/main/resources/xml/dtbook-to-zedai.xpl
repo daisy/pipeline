@@ -6,6 +6,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:dtbook-to-zedai.script"
+                name="main"
                 px:input-filesets="dtbook"
                 px:output-filesets="zedai"
                 exclude-inline-prefixes="#all">
@@ -75,11 +76,8 @@
             <p px:role="desc">Filename for the generated CSS file</p>
         </p:documentation>
     </p:option>
-    <p:option name="lang" required="false" px:type="string" select="''">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Language code</h2>
-            <p px:role="desc">Language code of the input document.</p>
-        </p:documentation>
+    <p:option name="language" select="''">
+        <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
     <p:option name="copy-external-resources" required="false" px:type="boolean" select="'true'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -95,6 +93,7 @@
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
+            px:fileset-add-entries
             px:fileset-store
         </p:documentation>
     </p:import>
@@ -104,7 +103,16 @@
         </p:documentation>
     </p:import>
 
+    <p:sink/>
+    <px:fileset-add-entries media-type="application/x-dtbook+xml" name="dtbook">
+        <p:input port="entries">
+            <p:pipe step="main" port="source"/>
+        </p:input>
+    </px:fileset-add-entries>
     <px:dtbook-load name="load">
+        <p:input port="source.in-memory">
+            <p:pipe step="dtbook" port="result.in-memory"/>
+        </p:input>
         <p:with-option name="validation" select="not($validation='off')"/>
         <p:with-option name="nimas" select="$nimas='true'"/>
         <!-- assume MathML 3.0 -->
@@ -161,7 +169,7 @@
                 <p:with-option name="zedai-filename" select="$zedai-filename"/>
                 <p:with-option name="mods-filename" select="$mods-filename"/>
                 <p:with-option name="css-filename" select="$css-filename"/>
-                <p:with-option name="lang" select="$lang"/>
+                <p:with-option name="lang" select="$language"/>
                 <p:with-option name="validation" select="$validation"/>
                 <p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
                 <p:with-option name="output-validation" select="($validation[.='off'],'report')[1]"/>

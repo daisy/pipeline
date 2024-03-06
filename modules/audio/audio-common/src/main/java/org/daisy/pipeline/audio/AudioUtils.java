@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -123,9 +124,11 @@ public final class AudioUtils {
 			new InputStream() {
 				Iterator<AudioInputStream> nextStreams = streams.iterator();
 				AudioInputStream stream = null;
-				byte[] frame = new byte[frameSize];
+				byte[] frame = new byte[frameSize]; // always need to read an integral number of frames
+				                                    // from an AudioInputStream
 				long availableFrames = totalLength;
 				int availableInFrame = 0;
+				@Override
 				public int read() throws IOException {
 					if (availableFrames == 0 && availableInFrame == 0)
 						return -1;
@@ -147,6 +150,56 @@ public final class AudioUtils {
 					}
 					return read();
 				}
+				@Override
+				public int read(byte[] b, int off, int len) throws IOException {
+					if (off < 0 || len < 0 || b.length - off < len)
+						throw new IndexOutOfBoundsException();
+					if (len == 0)
+						return 0;
+					if (availableFrames == 0 && availableInFrame == 0)
+						return -1;
+					int read = 0;
+					while (true) {
+						if (availableInFrame > 0) {
+							System.arraycopy(frame, frameSize - availableInFrame, b, off, Math.min(len, availableInFrame));
+							if (availableInFrame >= len) {
+								availableInFrame -= len;
+								read += len;
+								len = 0;
+							} else {
+								len -= availableInFrame;
+								off += availableInFrame;
+								read += availableInFrame;
+								availableInFrame = 0;
+							}
+						}
+						if (len < frameSize)
+							return read; // note that it is possible that we have read a number of bytes smaller
+							             // than the initial value of `len'
+						if (stream != null) {
+							int l = stream.read(b, off, len); // this will read an integral number of frames, so it is
+							                                  // possible that l < len even if the stream has more bytes
+							                                  // available
+							if (l > 0) {
+								if (l % frameSize > 0)
+									throw new IllegalStateException(); // should not happen
+								len -= l;
+								off += l;
+								read += l;
+								availableFrames -= (l / frameSize);
+								continue;
+							}
+						}
+						try {
+							if (stream != null)
+								stream.close();
+							stream = nextStreams.next();
+						} catch (NoSuchElementException e) {
+							return read;
+						}
+					}
+				}
+				@Override
 				public int available() {
 					try {
 						return Math.toIntExact(Math.multiplyExact(availableFrames, frameSize)) + availableInFrame;
@@ -154,6 +207,7 @@ public final class AudioUtils {
 						return Integer.MAX_VALUE;
 					}
 				}
+				@Override
 				public void close() throws IOException {
 					if (stream != null)
 						stream.close();
@@ -202,7 +256,9 @@ public final class AudioUtils {
 			if (totalFrames < begin)
 				// could be a rounding error due to sampling: provide margin of one frame
 				if (totalFrames + 1 < begin)
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException(
+						"invalid split points: " + Arrays.toString(splitPoints)
+						+ " (total number of frames: " + totalFrames + ")");
 		}
 		int frameSize = format.getFrameSize();
 		return new Iterable<AudioInputStream>() {

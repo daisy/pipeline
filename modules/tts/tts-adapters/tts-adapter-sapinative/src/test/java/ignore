@@ -1,4 +1,5 @@
-# Tests are not run by default. It only makes sense to run them on Windows.
+# org/daisy/pipeline/tts/sapi/impl/SapiSSMLTest.java
+# other tests are not run by default. It only makes sense to run them on Windows.
 org/daisy/pipeline/tts/sapi/impl/OnecoreTest.java
 org/daisy/pipeline/tts/sapi/impl/SAPITest.java
 org/daisy/pipeline/tts/sapi/impl/SAPIServiceTest.java

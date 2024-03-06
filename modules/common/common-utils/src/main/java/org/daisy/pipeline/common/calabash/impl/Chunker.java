@@ -46,7 +46,7 @@ import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.saxon.SaxonInputValue;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
-import org.daisy.common.stax.DelegatingXMLStreamWriter;
+import org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamWriter;
 import static org.daisy.common.stax.XMLStreamWriterHelper.getAttributes;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
@@ -288,7 +288,7 @@ class Chunker extends SingleInSingleOutXMLTransformer {
 	}
 	
 	static BaseURIAwareXMLStreamWriter setBaseURI(BaseURIAwareXMLStreamWriter output, URI sourceBaseURI) {
-		return new DelegatingXMLStreamWriter() {
+		return new DelegatingBaseURIAwareXMLStreamWriter() {
 			int supplied = 0;
 			protected BaseURIAwareXMLStreamWriter delegate() {
 				return output;

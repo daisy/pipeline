@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-	       xmlns="http://www.w3.org/2001/10/synthesis"
 	       xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
 	       xmlns:tmp="http://www.daisy.org/ns/pipeline/tmp"
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
-               script="../../main/resources/xml/xproc/apply-lexicons.xpl">
+	       xmlns="http://www.w3.org/2001/10/synthesis"
+	       script="../../main/resources/xml/xproc/apply-lexicons.xpl">
 
   <x:scenario label="PLS Lexicon Tests">
     <x:call step="pxi:apply-lexicons">
-      <x:input port="fileset">
+      <x:input port="doc-lexicons.fileset">
 	<x:document type="inline">
 	  <d:fileset>
 	    <d:file href="../resources/lexicon-test-en.pls" media-type='application/pls+xml'/>
 	    <d:file href="../resources/lexicon-test-fr.pls" media-type='application/pls+xml'/>
-	    <d:file href="../resources/something-else.xxx"/>
-	    <d:file href="foo/bar/non-existing.xxx" media-type='application/foo'/>
 	  </d:fileset>
 	</x:document>
       </x:input>
-      <x:input port="user-lexicons">
-      </x:input>
-      <x:option name="lang" select="'en'"/>
     </x:call>
 
     <x:scenario label="User's Lexicons">
       <x:call step="pxi:apply-lexicons">
-	<x:input port="user-lexicons">
+        <x:input port="doc-lexicons.fileset">
 	  <x:document type="inline">
+	    <d:fileset>
+	      <d:file href="../resources/lexicon-test-en.pls" media-type='application/pls+xml'/>
+	      <d:file href="../resources/lexicon-test-fr.pls" media-type='application/pls+xml'/>
+              <d:file href="user-lexicon-1.pls" media-type='application/pls+xml'/>
+              <d:file href="user-lexicon-2.pls" media-type='application/pls+xml'/>
+	    </d:fileset>
+	  </x:document>
+	</x:input>
+        <x:input port="doc-lexicons.in-memory">
+	  <x:document type="inline" xml:base="user-lexicon-1.pls">
 	    <lexicon version="1.0"
 		     xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
 		     alphabet="ipa" xml:lang="en">
@@ -37,7 +42,7 @@
 	      </lexeme>
 	    </lexicon>
           </x:document>
-	  <x:document type="inline">
+	  <x:document type="inline" xml:base="user-lexicon-2.pls">
 	    <lexicon version="1.0"
 		     xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
 		     alphabet="ipa" xml:lang="en">
@@ -56,6 +61,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>
@@ -80,6 +86,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>
@@ -133,6 +140,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>
@@ -160,6 +168,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>
@@ -182,6 +191,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>
@@ -205,6 +215,7 @@
 	    </speak>
           </x:document>
 	</x:input>
+        <x:option name="lang" select="'en'"/>
       </x:call>
       <x:context label="result">
 	<x:document type="port" port="result"/>

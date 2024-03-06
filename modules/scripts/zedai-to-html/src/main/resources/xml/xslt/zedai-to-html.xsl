@@ -615,12 +615,22 @@
       <xsl:apply-templates/>
     </aside>
   </xsl:template>
+  <xsl:template match="note/@role">
+    <xsl:variable name="epub-type" select="pf:to-epub(.)"/>
+    <xsl:if test="$epub-type">
+      <xsl:attribute name="epub:type" select="$epub-type"/>
+      <xsl:if test="$epub-type=('footnote','endnote')">
+        <xsl:attribute name="role" select="concat('doc-',$epub-type)"/>
+      </xsl:if>
+    </xsl:if>
+  </xsl:template>
   <xsl:template match="noteref">
     <a rel="note" href="{concat('#',@ref)}">
       <xsl:call-template name="role">
         <xsl:with-param name="roles" select="('noteref',@role)"/>
       </xsl:call-template>
       <xsl:apply-templates select="@* except @role"/>
+      <xsl:attribute name="role" select="'doc-noteref'"/>
       <xsl:choose>
         <xsl:when test="@value">
           <sup>

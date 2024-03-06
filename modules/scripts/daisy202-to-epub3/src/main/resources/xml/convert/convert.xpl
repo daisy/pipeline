@@ -38,7 +38,15 @@
     <p:option name="mediaoverlay" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string"/>
     <p:option name="compatibility-mode" required="false" select="'true'" cx:type="xs:boolean" cx:as="xs:string"/>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-filter
+            px:fileset-load
+            px:fileset-diff
+            px:fileset-join
+            px:fileset-intersect
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
@@ -228,6 +236,7 @@
             <p:pipe port="result" step="ncc-navigation"/>
         </p:input>
     </pxi:daisy202-to-epub3-content>
+    <p:sink/>
 
     <!-- Improve the EPUB 3 Navigation Document based on all the Content Documents. -->
     <pxi:daisy202-to-epub3-navigation name="navigation">
@@ -421,6 +430,25 @@
             <p:pipe port="fileset" step="resources"/>
         </p:input>
     </px:fileset-join>
+    <!-- copy file attributes that pxi:daisy202-to-epub3-content and pxi:daisy202-to-epub3-navigation added -->
+    <p:group>
+        <p:identity name="fileset"/>
+        <p:sink/>
+        <px:fileset-join name="fileset-with-attributes">
+            <p:input port="source">
+                <p:pipe step="content-without-navigation" port="fileset"/>
+                <p:pipe step="navigation" port="fileset"/>
+                <p:pipe step="fileset" port="result"/>
+            </p:input>
+        </px:fileset-join>
+        <p:sink/>
+        <px:fileset-intersect>
+            <p:input port="source">
+                <p:pipe step="fileset-with-attributes" port="result"/>
+                <p:pipe step="fileset" port="result"/>
+            </p:input>
+        </px:fileset-intersect>
+    </p:group>
     <px:mediatype-detect>
         <p:input port="in-memory">
             <p:pipe port="in-memory" step="result.for-each"/>

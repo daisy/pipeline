@@ -26,6 +26,7 @@
         <!--TODO make the default heading configurable-->
         <xsl:call-template name="nav">
             <xsl:with-param name="type" select="'toc'"/>
+            <xsl:with-param name="role" select="'doc-toc'"/>
             <xsl:with-param name="heading" select="'Table of Contents'"/>
         </xsl:call-template>
     </xsl:template>
@@ -35,6 +36,7 @@
         <!--TODO make the default heading configurable-->
         <xsl:call-template name="nav">
             <xsl:with-param name="type" select="'page-list'"/>
+            <xsl:with-param name="role" select="'doc-pagelist'"/>
             <xsl:with-param name="heading" select="'List of Pages'"/>
         </xsl:call-template>
     </xsl:template>
@@ -50,11 +52,15 @@
 
     <xsl:template name="nav">
         <xsl:param name="type" as="xs:string?"/>
+        <xsl:param name="role" as="xs:string?"/>
         <xsl:param name="heading" as="xs:string?"/>
         <nav>
             <xsl:copy-of select="@id|@class"/>
             <xsl:if test="$type">
                 <xsl:attribute name="epub:type" select="$type"/>
+            </xsl:if>
+            <xsl:if test="$role">
+                <xsl:attribute name="role" select="$role"/>
             </xsl:if>
             <xsl:choose>
                 <xsl:when test="navLabel/text[string(.)]">

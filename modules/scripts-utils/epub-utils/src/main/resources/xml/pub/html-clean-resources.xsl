@@ -219,7 +219,16 @@
     </xsl:template>
 
     <xsl:template match="a[@href]">
-        <xsl:sequence select="f:copy-if-clean(@href,(),(@target|@rel|@media|@targetlang|@type))"/>
+        <xsl:choose>
+            <xsl:when test="pf:get-scheme(@href)='mailto' or pf:is-absolute(@href)">
+                <xsl:copy>
+                    <xsl:apply-templates select="@* except (@target|@rel|@media|@targetlang|@type) | node()"/>
+                </xsl:copy>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:sequence select="f:copy-if-clean(@href,(),(@target|@rel|@media|@targetlang|@type))"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="img[@src]">
@@ -479,7 +488,6 @@
         <xsl:param name="att" as="attribute()?"/>
         <xsl:param name="elm-name" as="xs:string?"/>
         <xsl:param name="skip-att" as="attribute()*"/>
-
         <xsl:variable name="elm" as="element()?" select="$att/.."/>
         <xsl:variable name="clean-uri" as="xs:string?" select="f:clean-uri($att)"/>
         <xsl:choose>
@@ -487,12 +495,13 @@
                 <xsl:element name="{if($elm-name) then $elm-name else $elm/local-name()}"
                              namespace="{if ($elm-name) then 'http://www.w3.org/1999/xhtml' else $elm/namespace-uri()}">
                     <xsl:attribute name="{$att/local-name()}" namespace="{$att/namespace-uri()}" select="$clean-uri"/>
-                    <xsl:apply-templates select="$elm/@* except ($att,$skip-att) | $elm/node()"/>
+                    <xsl:apply-templates select="$elm/@* except ($att,$skip-att)"/>
+                    <xsl:apply-templates select="$elm/node()"/>
                 </xsl:element>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message
-                    select="concat('[WARNING] Discarding missing ',$elm/name(),' ''',$att,'''.')"/>
+                <xsl:message select="concat('[WARNING] Discarding missing ',$elm/name(),' ''',$att,'''.')"/>
+                <xsl:apply-templates select="$elm/node()"/>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:function>

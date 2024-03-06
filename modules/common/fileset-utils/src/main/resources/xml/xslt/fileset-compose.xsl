@@ -52,11 +52,25 @@
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:for-each>
+                <xsl:variable name="b-anchors-grouped-by-original-href-id" as="map(xs:string,map(xs:string,map(*)*))">
+                    <xsl:map>
+                        <xsl:for-each-group select="$b-anchors" group-by=".('original-href')">
+                            <xsl:map-entry key="current-grouping-key()">
+                                <xsl:map>
+                                    <xsl:for-each-group select="current-group()" group-by=".('original-id')">
+                                        <xsl:map-entry key="current-grouping-key()" select="current-group()"/>
+                                    </xsl:for-each-group>
+                                </xsl:map>
+                            </xsl:map-entry>
+                        </xsl:for-each-group>
+                    </xsl:map>
+                </xsl:variable>
                 <xsl:for-each select="$a-anchors">
                     <xsl:variable name="a-anchor" as="map(*)" select="."/>
                     <xsl:variable name="b-anchor" as="map(*)*"
-                                  select="$b-anchors[.('original-id')=$a-anchor('id') and
-                                                     .('original-href')=$a-anchor('href')]"/>
+                                  select="for $m in $b-anchors-grouped-by-original-href-id($a-anchor('href'))
+                                          return $m($a-anchor('id'))"/>
+
                     <xsl:choose>
                         <xsl:when test="exists($b-anchor)">
                             <xsl:if test="count($b-anchor) &gt; 1">
@@ -114,12 +128,24 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
+                    <xsl:variable name="a-anchors-grouped-by-href-id" as="map(xs:string,map(xs:string,map(*)*))">
+                        <xsl:map>
+                            <xsl:for-each-group select="$a-anchors" group-by=".('href')">
+                                <xsl:map-entry key="current-grouping-key()">
+                                    <xsl:map>
+                                        <xsl:for-each-group select="current-group()" group-by=".('id')">
+                                            <xsl:map-entry key="current-grouping-key()" select="current-group()"/>
+                                        </xsl:for-each-group>
+                                    </xsl:map>
+                                </xsl:map-entry>
+                            </xsl:for-each-group>
+                        </xsl:map>
+                    </xsl:variable>
                     <xsl:for-each select="$b-anchors">
                         <xsl:variable name="b-anchor" as="map(*)" select="."/>
                         <xsl:choose>
-                            <xsl:when test="some $a-anchor in $a-anchors
-                                            satisfies $a-anchor('href')=$b-anchor('original-href') and
-                                                      $a-anchor('id')=$b-anchor('original-id')">
+                            <xsl:when test="some $m in $a-anchors-grouped-by-href-id($b-anchor('original-href'))
+                                            satisfies exists($m($b-anchor('original-id')))">
                                 <!-- A fragment in B originates from a fragment in A. This has already been handled. -->
                             </xsl:when>
                             <xsl:otherwise>

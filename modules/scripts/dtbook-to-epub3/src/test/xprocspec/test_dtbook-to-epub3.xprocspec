@@ -78,10 +78,10 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline" base-uri="temp-dir">
 				<d:fileset>
-					<d:file href="epub3/out/epub/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
-					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.wav" original-href="epub3/temp/tts/audio/part0000_00_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.wav" original-href="epub3/temp/tts/audio/part0001_00_000.wav" media-type="audio/x-wav"/>
 					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.wav" original-href="epub3/temp/tts/audio/part0002_00_000.wav" media-type="audio/x-wav"/>
@@ -105,7 +105,7 @@
 						<title>Table of contents</title>
 					</head>
 					<body>
-						<nav epub:type="toc">
+						<nav epub:type="toc" role="doc-toc">
 							<h1>
 								<span id="id_1">Table of contents</span>
 							</h1>
@@ -122,7 +122,7 @@
 								</li>
 							</ol>
 						</nav>
-						<nav epub:type="page-list" hidden="">
+						<nav epub:type="page-list" hidden="" role="doc-pagelist">
 							<h1>
 								<span id="id_4">List of pages</span>
 							</h1>
@@ -257,6 +257,10 @@
 			<x:input port="source.in-memory">
 				<x:document type="inline" xml:base="content.xml">
 					<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/" xml:lang="en" version="2005-3">
+						<head>
+							<meta name="dc:Source" content="foo"/>
+							<meta name="dc:Source" content="978-0-596-52068-7"/>
+						</head>
 						<book>
 							<bodymatter>
 								<level1>
@@ -284,10 +288,10 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline" base-uri="temp-dir">
 				<d:fileset>
-					<d:file href="epub3/out/epub/EPUB/content-1.xhtml" media-type="application/xhtml+xml"/>
-					<d:file href="epub3/out/epub/EPUB/content-2.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/content-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="epub3/out/epub/EPUB/content-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
-					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml"/>
+					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
 					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
 					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
@@ -314,6 +318,12 @@
 				</html>
 			</x:document>
 		</x:expect>
+		<x:context label="the package.opf document on the result.in-memort port">
+			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'/package.opf')]"/>
+		</x:context>
+		<x:expect label="the title of the package document" type="xpath"
+		          test="/opf:package/opf:metadata/opf:meta[@property='pageBreakSource']/string(.)"
+		          equals="'978-0-596-52068-7'"/>
 	</x:scenario>
 
 </x:description>

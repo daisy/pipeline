@@ -7,6 +7,10 @@
 
 	<xsl:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
 
+	<xsl:key name="original-href" match="d:file[@original-href]" use="@original-href"/>
+	<xsl:key name="original-id" match="d:anchor" use="(@original-id,@id)[1]"/>
+	<xsl:key name="href" match="d:file[not(@original-href)]" use="@href"/>
+
 	<xsl:template match="/d:fileset">
 		<!--
 		    normalize to sequence of d:anchor with absolute href and id
@@ -21,24 +25,29 @@
 		    update href and id
 		-->
 		<xsl:variable name="mapping" as="element(d:fileset)">
-			<xsl:for-each select="collection()[2]/*">
-				<xsl:apply-templates mode="normalize" select=".">
-					<xsl:with-param name="base" tunnel="yes" select="base-uri(.)"/>
-				</xsl:apply-templates>
-			</xsl:for-each>
+			<xsl:variable name="mapping" as="document-node(element(d:fileset))">
+				<xsl:document>
+					<xsl:for-each select="collection()[2]/*">
+						<xsl:apply-templates mode="normalize" select=".">
+							<xsl:with-param name="base" tunnel="yes" select="base-uri(.)"/>
+						</xsl:apply-templates>
+					</xsl:for-each>
+				</xsl:document>
+			</xsl:variable>
+			<xsl:sequence select="$mapping/*"/>
 		</xsl:variable>
 		<xsl:variable name="page-list" as="element(d:anchor)*">
 			<xsl:for-each select="$page-list">
 				<xsl:copy>
 					<xsl:variable name="file" as="xs:string" select="@href"/>
 					<xsl:variable name="fragment" as="xs:string" select="@id"/>
-					<xsl:variable name="new-file" as="element(d:file)*" select="$mapping/d:file[@original-href=$file]"/>
-					<xsl:variable name="new-file" as="element(d:file)?" select="($new-file[d:anchor[(@original-id,@id)[1]=$fragment]],
+					<xsl:variable name="new-file" as="element(d:file)*" select="key('original-href',$file,$mapping)"/>
+					<xsl:variable name="new-file" as="element(d:file)?" select="($new-file[exists(key('original-id',$fragment,.))],
 					                                                             $new-file)[1]"/>
 					<xsl:variable name="new-fragment" as="xs:string?" select="if (exists($new-file))
-					                                                          then $new-file/d:anchor[(@original-id,@id)[1]=$fragment]/@id
-					                                                          else $mapping/d:file[not(@original-href)][@href=$file][1]
-					                                                                       /d:anchor[(@original-id,@id)[1]=$fragment]/@id"/>
+					                                                          then key('original-id',$fragment,$new-file)/@id
+					                                                          else for $f in key('href',$file,$mapping)[1]
+					                                                               return key('original-id',$fragment,$f)/@id"/>
 					<xsl:variable name="new-file" as="xs:string?" select="$new-file/@href"/>
 					<xsl:attribute name="href" select="($new-file,$file)[1]"/>
 					<xsl:attribute name="id" select="($new-fragment,$fragment)[1]"/>

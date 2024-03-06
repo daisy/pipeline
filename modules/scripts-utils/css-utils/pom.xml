@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.14.24-SNAPSHOT</version>
+        <version>1.14.26-SNAPSHOT</version>
         <relativePath>../../parent/</relativePath>
     </parent>
 
     <artifactId>css-utils</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>5.2.1-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: CSS Utils</name>
@@ -19,8 +19,10 @@
     <properties>
         <expose-services>
             org.daisy.pipeline.modules.impl.Module_css_utils,
+            org.daisy.pipeline.css.calabash.impl.CssAnalyzeStep$Provider,
             org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
             org.daisy.pipeline.css.impl.DefaultCssCascader,
+            org.daisy.pipeline.css.impl.StylesheetParametersWebServiceExtension,
             org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition,
             org.daisy.pipeline.css.speech.impl.SpeechCssCascader,
             org.daisy.pipeline.css.StyleAccessor$Provider
@@ -54,6 +56,10 @@
             <artifactId>calabash-adapter</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>webservice</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
@@ -80,6 +86,10 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -131,18 +141,6 @@
                         </Import-Package>
                     </instructions>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.daisy.maven</groupId>
-                <artifactId>xproc-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>xprocspec</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

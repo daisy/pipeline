@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:zedai-to-epub3" name="main"
                 exclude-inline-prefixes="#all">
@@ -20,7 +21,17 @@
 
     <p:option name="stylesheet" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>CSS user style sheets as space separated list of absolute URIs.</p>
+            <p>CSS style sheets as space separated list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>PLS lexicons as list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="source-of-pagination" cx:as="xs:string?" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Identifier for the source of page breaks, to be included as metadata in the EPUB.</p>
         </p:documentation>
     </p:option>
 
@@ -187,7 +198,9 @@
     <!--=========================================================================-->
 
     <p:documentation>Extract metadata from ZedAI</p:documentation>
-    <px:zedai-to-opf-metadata name="metadata"/>
+    <px:zedai-to-opf-metadata name="metadata">
+        <p:with-option name="source-of-pagination" select="$source-of-pagination"/>
+    </px:zedai-to-opf-metadata>
     <p:sink/>
 
     <!--=========================================================================-->
@@ -240,6 +253,7 @@
         </p:input>
         <p:with-option name="audio" select="$audio"/>
         <p:with-option name="audio-file-type" select="$audio-file-type"/>
+        <p:with-option name="lexicon" select="$lexicon"/>
         <p:with-option name="include-tts-log" select="$include-tts-log"/>
         <p:with-option name="output-dir" select="concat($output-dir,'epub/')"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>

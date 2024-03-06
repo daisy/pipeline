@@ -193,7 +193,7 @@
     <p:documentation>
         Create head element from OPF
     </p:documentation>
-    <p:group name="html-with-head" px:message="Converting metadata" px:progress="1/10">
+    <p:group name="html-with-head" px:message="Converting metadata">
         <p:output port="result"/>
         <px:opf-to-html-metadata name="head">
             <p:input port="source">
@@ -281,7 +281,7 @@
     <p:documentation>
         Convert EPUB 3 SMILs to d:audio-clips document
     </p:documentation>
-    <p:group name="audio">
+    <p:group name="audio" px:progress="1/10">
         <p:output port="fileset" primary="true"/>
         <p:output port="clips">
             <p:pipe step="clips" port="result"/>
@@ -473,7 +473,10 @@
             that these files are not referenced elsewhere.)
         -->
         <px:dtbook-load name="dtbook-fileset">
-            <p:input port="source">
+            <p:input port="source.fileset">
+                <p:pipe step="dtbook-and-resources" port="result.fileset"/>
+            </p:input>
+            <p:input port="source.in-memory">
                 <p:pipe step="daisy3-dtbook" port="result.in-memory"/>
             </p:input>
         </px:dtbook-load>

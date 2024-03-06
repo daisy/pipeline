@@ -6,18 +6,13 @@
 	       xmlns:d="http://www.daisy.org/ns/pipeline/data"
 	       xmlns:m="http://www.w3.org/1998/Math/MathML"
 	       xmlns="http://www.w3.org/2001/10/synthesis"
-               script="../../main/resources/xml/xproc/text-to-ssml.xpl">
+	       script="../../main/resources/xml/xproc/text-to-ssml.xpl">
 
   <x:scenario label="Full workflow">
     <x:call step="px:text-to-ssml">
       <x:input port="fileset.in">
 	<x:document type="inline">
 	  <d:fileset/>
-	</x:document>
-      </x:input>
-      <x:input port="user-lexicons">
-	<x:document type="inline">
-	  <tmp:nothing/>
 	</x:document>
       </x:input>
       <x:input port="sentence-ids">

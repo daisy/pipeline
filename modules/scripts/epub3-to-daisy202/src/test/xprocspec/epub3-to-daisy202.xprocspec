@@ -547,7 +547,7 @@
                             <a href="content.smil#id_10">1</a>
                         </span>
                         <h1 id="h_2">
-                            <a href="notes.smil#id_3">Untitled section</a>
+                            <a href="content.smil#id_13">Untitled section</a>
                         </h1>
                     </body>
                 </html>
@@ -584,7 +584,7 @@
                             </a>
                         </div>
                         <div id="id_2" class="aside">
-                            <a href="notes.smil#id_3">
+                            <a href="content.smil#id_13">
                                 This is note 1.
                             </a>
                         </div>

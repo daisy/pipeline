@@ -18,14 +18,15 @@ import net.sf.saxon.s9api.XdmNode;
 
 import org.custommonkey.xmlunit.Diff;
 
-import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
-import org.daisy.common.xslt.XslTransformCompiler;
+import org.daisy.common.saxon.xslt.ThreadUnsafeXslTransformer;
+import org.daisy.common.saxon.xslt.XslTransformCompiler;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import org.slf4j.LoggerFactory;
+
 import org.xml.sax.SAXException;
 
 import javax.xml.transform.stream.StreamSource;

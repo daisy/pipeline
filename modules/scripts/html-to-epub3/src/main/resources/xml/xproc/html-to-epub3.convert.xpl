@@ -5,6 +5,7 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 type="px:html-to-epub3" name="main"
                 exclude-inline-prefixes="#all">
@@ -40,7 +41,12 @@
     </p:input>
     <p:option name="stylesheet" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>CSS user style sheets as space separated list of absolute URIs.</p>
+            <p>CSS style sheets as space separated list of absolute URIs.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>PLS lexicons as list of absolute URIs.</p>
         </p:documentation>
     </p:option>
     <p:output port="fileset.out" primary="true">
@@ -269,9 +275,7 @@
                 </px:fileset-load>
                 <px:assert message="No XHTML documents found." test-count-min="1" error-code="PEZE00"/>
 
-                <p:for-each name="cleaned">
-                    <p:output port="result" sequence="true"/>
-
+                <p:for-each>
                     <p:documentation>Upgrade to XHTML 5</p:documentation>
                     <px:html-upgrade/>
 
@@ -298,7 +302,17 @@
                     <!--TODO: try to add sections where missing -->
 
                 </p:for-each>
+                <p:identity name="xhtml5.in-memory"/>
                 <p:sink/>
+
+                <p:documentation>Fix doctype</p:documentation>
+                <p:add-attribute match="d:file" attribute-name="doctype" attribute-value="&lt;!DOCTYPE html&gt;" name="xhtml5.fileset">
+                    <p:input port="source">
+                        <p:pipe step="html" port="result.fileset"/>
+                    </p:input>
+                </p:add-attribute>
+                <p:sink/>
+
                 <px:fileset-update name="update">
                     <p:input port="source.fileset">
                         <p:pipe step="safe-uris" port="result.fileset"/>
@@ -307,10 +321,10 @@
                         <p:pipe step="safe-uris" port="result.in-memory"/>
                     </p:input>
                     <p:input port="update.fileset">
-                        <p:pipe step="html" port="result.fileset"/>
+                        <p:pipe step="xhtml5.fileset" port="result"/>
                     </p:input>
                     <p:input port="update.in-memory">
-                        <p:pipe step="cleaned" port="result"/>
+                        <p:pipe step="xhtml5.in-memory" port="result"/>
                     </p:input>
                 </px:fileset-update>
             </p:group>
@@ -369,6 +383,7 @@
           <p:pipe step="main" port="tts-config"/>
       </p:input>
       <p:with-option name="stylesheet" select="$stylesheet"/>
+      <p:with-option name="lexicon" select="$lexicon"/>
       <p:with-option name="audio" select="$audio"/>
       <p:with-option name="audio-file-type" select="$audio-file-type"/>
       <p:with-option name="process-css" select="$process-css"/>

@@ -23,10 +23,10 @@
 
     <xsl:template match="/*">
         <ol>
-            <xsl:apply-templates select="//*[@epub:type='pagebreak']"/>
+            <xsl:apply-templates mode="pagebreak" select="//*[tokenize(@epub:type,'\s+')='pagebreak' or @role='doc-pagebreak']"/>
         </ol>
     </xsl:template>
-    <xsl:template match="*[@epub:type='pagebreak']">
+    <xsl:template mode="pagebreak" match="*">
         <xsl:variable name="content">
             <xsl:choose>
                 <xsl:when test="@aria-label|@title">

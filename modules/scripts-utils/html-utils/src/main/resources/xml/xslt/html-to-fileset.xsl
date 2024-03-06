@@ -216,11 +216,18 @@
                 else
                     $href
                 "/>
+            <xsl:variable name="file-in-context" as="element(d:file)?"
+                          select="$context.fileset//d:file[resolve-uri(@href,base-uri(.))=$resolved][1]"/>
             <d:file href="{pf:relativize-uri($resolved,$doc-base)}">
-                <xsl:if test="not($context.fileset//d:file[resolve-uri(@href,base-uri(.))=$resolved]
-                                                          [1][not(@original-href)])">
-                    <xsl:attribute name="original-href" select="$resolved"/>
-                </xsl:if>
+                <xsl:choose>
+                    <xsl:when test="$file-in-context[@original-href]">
+                        <xsl:sequence select="$file-in-context/@original-href"/>
+                    </xsl:when>
+                    <xsl:when test="$file-in-context"/>
+                    <xsl:otherwise>
+                        <xsl:attribute name="original-href" select="$resolved"/>
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="$type">
                     <xsl:attribute name="media-type" select="$type"/>
                 </xsl:if>

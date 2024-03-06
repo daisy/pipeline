@@ -47,10 +47,14 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
 A number of [partials](https://sass-lang.com/documentation/at-rules/import#partials) (helper style
 sheet modules) are available for use in Sass style sheets:
 
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_generate-toc.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/_generate-toc.scss/):
+  for generating a table of content
 - [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_tables.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/tables):
   for styling tables
 - [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_definition-lists.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/definition-lists):
   for styling definition lists
+- [http://www.daisy.org/pipeline/modules/braille/html-to-pef/_legacy.scss](http://daisy.github.io/pipeline/modules/braille/html-to-pef/src/main/resources/css/_legacy.scss/):
+  collection of styles that used to be included by default
 </p>
         </p:documentation>
     </p:option>
@@ -80,27 +84,32 @@ even though the provided CSS is more specific.
     <p:option name="include-obfl"/>
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/page-layout.params -->
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
-    <p:option name="levels-in-footer"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/default.params -->
     <p:option name="hyphenation"/>
-    <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="line-spacing"/>
-    <p:option name="capital-letters"/>
-    <p:option name="include-captions"/>
-    <p:option name="include-images"/>
-    <p:option name="include-line-groups"/>
-    <p:option name="include-production-notes"/>
-    <p:option name="show-braille-page-numbers"/>
-    <p:option name="show-print-page-numbers"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/dotify.params -->
+    <p:option name="hyphenation-at-page-breaks"/>
+    <p:option name="allow-text-overflow-trimming"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/page-breaking.params -->
     <p:option name="force-braille-page-break"/>
-    <p:option name="toc-depth"/>
-    <p:option name="toc-exclude-class"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/volume-breaking.params -->
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
     <p:option name="prefer-volume-break-before-higher-level-factor"/>
+
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/notes.params -->
     <p:option name="notes-placement"/>
+
+    <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="result"/>
     <p:option name="pef"/>
     <p:option name="preview"/>

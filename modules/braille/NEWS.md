@@ -1,3 +1,51 @@
+v1.14.25
+========
+
+Changes
+-------
+- Bugfixes and further improvements to braille configuration.
+
+Components
+----------
+- liblouis ([3.27.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- braille-css ([1.24.1](https://github.com/daisy/braille-css/releases/tag/1.24.1))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
+v1.14.24
+========
+
+Changes
+-------
+- Major simplification of configuration in graphical user interface.
+  - Options that have no effect without custom user style sheet are only shown when the provided
+    user style sheet contains the corresponding Sass variable.
+  - The default style sheet has been simplified by moving several CSS rules to Sass partials.
+  - The "stylesheet-parameters" option is hidden from the GUI. Instead, any Sass variable contained
+    in the user style sheet is presented as an option.
+  - The "transform" option is hidden from the GUI as well.
+  - The "preview-table" option was made into a simple drop-down list.
+  - Added the possibility to set parameters of the braille translator and formatter, such as duplex,
+    from Sass.
+  - The descriptions of options were simplified.
+
+Components
+----------
+- liblouis ([3.27.0](https://github.com/liblouis/liblouis/releases/tag/v3.27.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- **braille-css** ([**1.24.1**](https://github.com/daisy/braille-css/releases/tag/1.24.1))
+- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.14.21
 ========
 
@@ -11,7 +59,7 @@ Components
   liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
-- **braille-css** ([**1.24.0**](https://github.com/daisy/braille-css/releases/tag/1.23.0))
+- **braille-css** ([**1.24.0**](https://github.com/daisy/braille-css/releases/tag/1.24.0))
 - jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
 - libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))

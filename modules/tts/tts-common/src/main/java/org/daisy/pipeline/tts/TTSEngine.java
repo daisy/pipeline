@@ -17,8 +17,8 @@ import net.sf.saxon.Configuration;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
-import org.daisy.common.xslt.ThreadUnsafeXslTransformer;
-import org.daisy.common.xslt.XslTransformCompiler;
+import org.daisy.common.saxon.xslt.ThreadUnsafeXslTransformer;
+import org.daisy.common.saxon.xslt.XslTransformCompiler;
 import org.daisy.pipeline.audio.AudioUtils;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
@@ -174,10 +174,33 @@ public abstract class TTSEngine {
 	}
 
 	/**
-	 * @return <code>true</code> if the TTS engine handles SSML marks,
-	 *         <code>false</code> otherwise. Must be thread-safe.
+	 * @return {@code true} if the TTS engine handles SSML marks, {@code false}
+	 *         otherwise. Must be thread-safe.
 	 */
 	public boolean handlesMarks() {
+		return false;
+	}
+
+	/**
+	 * Whether the TTS engine handles
+	 * <a href="https://www.w3.org/TR/speech-synthesis11/#S3.2.4"><code>prosody</code></a>
+	 * elements with a {@code rate} attribute. If this method returns {@code true}, the
+	 * engine is assumed to support all of the following values:
+	 *
+	 * <ul>
+	 *   <li>"x-slow", "slow", "medium", "fast", "x-fast", or "default". </li>
+	 *   <li>A non-negative percentage, which acts as a multiplier of the default
+	 *   rate.</li>
+	 *   <li>A number that represents speaking rate in words per minute. Note that this
+	 *   does not come from the SSML specification, but it is a value of the CSS
+	 *   <a href="https://www.w3.org/TR/CSS2/aural.html#propdef-speech-rate"><code>speech-rate</code></a>
+	 *   property.</li>
+	 * </ul>
+	 *
+	 * All values, except for absolute numbers, are relative to the default rate, which
+	 * is determined by the {@code org.daisy.pipeline.tts.speech-rate} property.
+	 */
+	public boolean handlesSpeakingRate() {
 		return false;
 	}
 
