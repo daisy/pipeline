@@ -16,26 +16,7 @@
             <p>The result DTBook document</p>
         </p:documentation>
     </p:output>
-    <p:option name="fixCharset" select="false()" cx:as="xs:boolean">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2>Fix Charset</h2>
-            <p>Fix the document charset (To be implemented)</p>
-        </p:documentation>
-    </p:option>
 
-    <p:choose>
-        <p:when test="$fixCharset">
-            <!--TODO : port the pipeline1 se_tpb_dtbookFix "CharsetExecutor" as a step and call it here -->
-            <p:identity>
-                <p:input port="source">
-                    <p:empty/>
-                </p:input>
-            </p:identity>
-        </p:when>
-        <p:otherwise>
-            <p:identity/>
-        </p:otherwise>
-    </p:choose>
     <!--Removes levelx if it has descendant headings of x-1 (this simplifies later steps).
         Note: Level normalizer cannot fix level1/level2/level1-->
     <p:xslt px:message="repair-levelnormalizer">

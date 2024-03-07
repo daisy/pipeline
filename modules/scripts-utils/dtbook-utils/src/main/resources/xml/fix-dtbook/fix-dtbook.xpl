@@ -30,12 +30,6 @@
             <p>Apply repair routines on the dtbook</p>
         </p:documentation>
     </p:option>
-    <p:option name="fixCharset" select="false()" cx:as="xs:boolean">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2>Repair - Fix Charset</h2>
-            <p>Fix the document charset (To be implemented)</p>
-        </p:documentation>
-    </p:option>
     <p:option name="tidy" select="false()" cx:as="xs:boolean">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2>Tidy up the dtbook</h2>
@@ -85,7 +79,6 @@
                 <p:input port="source">
                     <p:pipe step="main" port="source"/>
                 </p:input>
-                <p:with-option name="fixCharset" select="$fixCharset"/>
             </pxi:dtbook-repair>
         </p:when>
         <p:otherwise>
