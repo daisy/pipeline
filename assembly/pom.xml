@@ -9,15 +9,15 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.18-SNAPSHOT</version>
-  <packaging>pom</packaging>
+  <version>1.14.18</version>
+  <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
   <scm>
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v1.14.18</tag>
   </scm>
   <properties>
     <cli.version>2.1.8</cli.version>
@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.16</version>
+        <version>1.14.18</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.23</version>
+        <version>1.14.25</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1618,44 +1618,13 @@
           </dependency>
         </dependencies>
       </plugin>
+      <!-- don't include SimpleAPI class -->
       <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <executions>
           <execution>
-            <id>copy-resources</id>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>resources</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-jar-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>package-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!-- needed because with <packaging>pom</packaging> the jar is not automatically attached -->
-      <plugin>
-        <artifactId>maven-install-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>install-jar</id>
-            <phase>install</phase>
-            <goals>
-              <goal>install-file</goal>
-            </goals>
-            <configuration>
-              <file>${project.build.directory}/assembly-${project.version}.jar</file>
-              <packaging>jar</packaging>
-            </configuration>
+            <id>default-compile</id>
+            <phase>none</phase>
           </execution>
         </executions>
       </plugin>

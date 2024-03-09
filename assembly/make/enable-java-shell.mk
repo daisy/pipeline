@@ -3,9 +3,17 @@ $(error "GNU Make 3.82 is required to run this script")
 endif
 
 ifeq ($(OS),Windows_NT)
-SHELL := $(dir $(lastword $(MAKEFILE_LIST)))eval-java.exe
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/windows_amd64/eval-java.exe
 else
-SHELL := $(dir $(lastword $(MAKEFILE_LIST)))eval-java
+ifeq ($(shell uname -s),Darwin)
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/darwin_amd64/eval-java
+else
+ifeq ($(shell uname -s),Linux)
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/linux_amd64/eval-java
+else
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/windows_amd64/eval-java.exe
+endif
+endif
 endif
 .SHELLFLAGS :=
 

@@ -222,13 +222,26 @@ docker : mvn -Pwithout-osgi \
          target/maven-jlink/classifiers/linux \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 ifndef DUMP_PROFILES
-	mkdirs("target/docker");                                                                        \
+	mkdirs("target/docker");                                                                           \
 	exec("cp", "src/main/docker/Dockerfile", "target/docker/Dockerfile");
 	exec("cp", "src/main/docker/logback.xml", "target/docker/logback.xml");
 	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
 	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre");
-	exec(new File("target/docker"),                                                                 \
-	     "$(DOCKER)", "build", "-t", "daisyorg/pipeline:latest-snapshot", ".");
+	exec("$(DOCKER)", "buildx", "create", "--use", "--name=mybuilder",                                 \
+	                                      "--driver", "docker-container",                              \
+	                                      "--driver-opt", "image=moby/buildkit:buildx-stable-1");
+	List<String> cmd = new ArrayList<>();    \
+	Collections.addAll(cmd, "$(DOCKER)", "buildx", "build", "--platform", "linux/amd64,linux/arm64");  \
+	for (String repo : new String[]{"pipeline", "pipeline-assembly"})                                  \
+		if ("$(assembly/VERSION)".endsWith("-SNAPSHOT"))                                               \
+			Collections.addAll(cmd, "-t", "daisyorg/" + repo + ":latest-snapshot");                    \
+		else                                                                                           \
+			Collections.addAll(cmd, "-t", "daisyorg/" + repo + ":latest",                              \
+			                        "-t", "daisyorg/" + repo + ":$(assembly/VERSION)");                \
+	Collections.addAll(cmd, "--push", ".");                                                            \
+	int rv = captureOutput(err::println, new File("target/docker"), cmd);                              \
+	captureOutput(err::println, "$(DOCKER)", "buildx", "rm", "mybuilder");                             \
+	exit(rv);
 endif
 
 .PHONY : dev-launcher
