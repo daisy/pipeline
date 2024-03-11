@@ -589,6 +589,22 @@ public class XProcException extends RuntimeException {
             public int getColumnNumber() {
                 return col;
             }
+            @Override
+            public String toString() {
+                StringBuilder s = new StringBuilder();
+                String fileName = getSystemId();
+                if (fileName != null && !"".equals(fileName)) {
+                    if (fileName.lastIndexOf('/') >= 0)
+                        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+                    s.append(fileName);
+                    int line = getLineNumber();
+                    if (line > 0)
+                        s.append(":" + getLineNumber());
+                }
+                if (s.length() == 0)
+                    s.append("?");
+                return s.toString();
+            }
         };
     }
 
