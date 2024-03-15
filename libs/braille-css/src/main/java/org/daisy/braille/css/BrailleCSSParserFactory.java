@@ -68,7 +68,7 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 						parseAndImport(new CSSSource(url, source.encoding, (String)null),
 						               cssReader, sheet, preparator, imedia); }
 				catch (IOException e) {
-					log.warn("Couldn't read imported style sheet: {}", e.getMessage()); }}
+					log.warn("Couldn't read imported style sheet: {}", e.getMessage(), e); }}
 			else
 				log.trace("Skipping import {} (media not matching)", path); }
 		RuleList rules = parser.getRules();
