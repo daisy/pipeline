@@ -172,7 +172,8 @@
 		</xsl:call-template>
 	</xsl:template>
 	
-	<xsl:template mode="serialize" match="/*/p:option[@pxd:output='temp']">
+	<xsl:template mode="serialize" match="/*/p:option[@pxd:output='temp']|
+	                                      /*/p:option[@pxd:hidden='true']">
 		<!--
 		    ignore
 		-->
