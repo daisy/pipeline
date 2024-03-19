@@ -39,9 +39,9 @@ dist: test
 	@echo "Building for x-platform..."
 	@${GO} install github.com/mitchellh/gox
 	#@${GOX} -build-toolchain \
-		#-osarch="linux/amd64 linux/386 darwin/amd64 windows/386 windows/amd64"
+		#-osarch="linux/amd64 linux/386 linux/arm64 darwin/amd64 darwin/arm64 windows/386 windows/amd64"
 	@${GOX} -output="${GOPATH}/bin/{{.OS}}_{{.Arch}}/{{.Dir}}" \
-	        -osarch="linux/amd64 linux/386 darwin/amd64 windows/386 windows/amd64" \
+	        -osarch="linux/amd64 linux/386 linux/arm64 darwin/amd64 darwin/arm64 windows/386 windows/amd64" \
 	        ./dp2/ 
 
 test:
