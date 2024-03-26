@@ -2,8 +2,6 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-                xmlns:cx="http://xmlcalabash.com/ns/extensions"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="pxi:dtbook-narrator">
 
     <p:input port="source" px:media-type="application/x-dtbook+xml" sequence="false">
@@ -32,7 +30,7 @@
     * Removes dc:description and dc:subject if not valued
     * Removes dc:Format (will be added by the fileset generator)
     -->
-    <p:xslt px:message="narrator-metadata">
+    <p:xslt>
         <p:input port="stylesheet"><p:document href="xsl/narrator-metadata.xsl"/></p:input>
         <p:with-param name="publisherValue" select="$publisher"/>
     </p:xslt>
@@ -43,7 +41,7 @@
     This fix assumes headings are not empty (e.g. empty headings were
     removed by a previous fix)
     -->
-    <p:xslt px:message="narrator-headings-r14">
+    <p:xslt>
         <p:input port="stylesheet"><p:document href="xsl/narrator-headings-r14.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
@@ -53,7 +51,7 @@
     This fix assumes headings are not empty (e.g. empty headings were
     removed by a previous fix)
     -->
-    <p:xslt px:message="narrator-headings-r100">
+    <p:xslt>
         <p:input port="stylesheet"><p:document href="xsl/narrator-headings-r100.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
@@ -69,7 +67,7 @@
     - or else from the first 'doctitle' element in the bodymatter
     - or else from the first heading 1.
     -->
-    <p:xslt px:message="narrator-title">
+    <p:xslt>
         <p:input port="stylesheet"><p:document href="xsl/narrator-title.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
@@ -81,7 +79,7 @@
       - New paragraph IDs are created if necessary
       - The original paragraph ID is conserved for the first paragraph created
     -->
-    <p:xslt px:message="narrator-lists">
+    <p:xslt>
         <p:input port="stylesheet"><p:document href="xsl/narrator-lists.xsl"/></p:input>
         <p:input port="parameters"><p:empty/></p:input>
     </p:xslt>
