@@ -9,6 +9,66 @@
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1>Fix DTBook XML</h1>
         <p>Apply fixing routines on a given dtbook xml.</p>
+        <p>This script is a portage of DAISY Pipeline 1 se_tpb_dtbookFix transformer.</p>
+        <address>
+            Authors:
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Joel Håkansson</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:joel.hakansson@mtm.se">joel.hakansson@mtm.se</a></dd>
+                <dt>Organisation:</dt>
+                <dd px:role="organization">MTM</dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Markus Gylling</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:markus.gylling@gmail.com">markus.gylling@gmail.com</a></dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Linus Ericson</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:linus.ericson@tpb.se">linus.ericson@tpb.se</a></dd>
+                <dt>Organisation:</dt>
+                <dd px:role="organization">TPB</dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">James Pritchett</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:jpritchett@learningally.org">jpritchett@learningally.org</a></dd>
+                <dt>Organisation:</dt>
+                <dd px:role="organization">Learning Ally</dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Romain Deltour</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:rdeltour@gmail.com">rdeltour@gmail.com</a></dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Christian Egli</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:christian.egli@sbs.ch">christian.egli@sbs.ch</a></dd>
+                <dt>Organisation:</dt>
+                <dd px:role="organization">SBS</dd>
+            </dl>
+            <dl px:role="author">
+                <dt>Name:</dt>
+                <dd px:role="name">Nicolas Pavie</dd>
+                <dt>E-mail:</dt>
+                <dd><a px:role="contact" href="mailto:pavie.nicolas@gmail.com">pavie.nicolas@gmail.com</a></dd>
+            </dl>
+            <dl px:role="author">
+				<dt>Name:</dt>
+				<dd px:role="name">Bert Frees</dd>
+				<dt>E-mail:</dt>
+				<dd><a px:role="contact" href="mailto:bertfrees@gmail.com">bertfrees@gmail.com</a></dd>
+			</dl>
+        </address>
     </p:documentation>
 
     <!-- I/O -->
