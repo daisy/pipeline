@@ -39,7 +39,7 @@ the `pipeline.properties` file.
   running on the same machine as the server
 : **Allowed values**: "true" or "false"
 : **Required**: No
-: **Default**: "true"
+: **Default**: "false"
 : May be overwritten by the
   [`local`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("true")
   and [`remote`](Pipeline-as-Service#arguments-for-pipeline2-executable) ("false")
