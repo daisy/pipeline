@@ -45,3 +45,13 @@ include:
   - modules/braille/html-to-pef/src/main/resources/css/_tables.scss/index.md
   - modules/braille/dtbook-to-pef/src/main/resources/css/_definition-lists.scss/index.md
   - modules/braille/html-to-pef/src/main/resources/css/_definition-lists.scss/index.md
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_legacy.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_legacy.scss/index.md
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_generate-toc.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_generate-toc.scss/index.md
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_notes.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_notes.scss/index.md
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_page-breaking.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_page-breaking.scss/index.md
+  - modules/braille/dtbook-to-pef/src/main/resources/css/_volume-breaking.scss/index.md
+  - modules/braille/html-to-pef/src/main/resources/css/_volume-breaking.scss/index.md
