@@ -106,7 +106,7 @@ public interface DotifyCSSStyledDocumentTransform {
 								blockTransformQuery = mutableQuery(q).add("input", "css")
 								                                     .add("output", "css")
 								                                     .add("output", "braille");
-								if (!logSelect(blockTransformQuery, translatorRegistry).iterator().hasNext())
+								if (!logSelect(blockTransformQuery, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext())
 									return empty;
 							}
 						}
@@ -177,7 +177,7 @@ public interface DotifyCSSStyledDocumentTransform {
 														// set to this table. If not, ignore preview-table.
 														MutableQuery q = mutableQuery(textTransformQuery).add("braille-charset",
 														                                                      previewTable.getIdentifier());
-														if (logSelect(q, translatorRegistry).iterator().hasNext()) {
+														if (logSelect(q, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext()) {
 															q.removeAll("document-locale");
 															options = new HashMap<>(); {
 																options.putAll(TransformImpl.this.options);
