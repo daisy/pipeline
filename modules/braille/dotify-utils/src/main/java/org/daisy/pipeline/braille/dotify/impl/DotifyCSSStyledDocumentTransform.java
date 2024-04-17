@@ -49,6 +49,8 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 import static org.slf4j.helpers.NOPLogger.NOP_LOGGER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @see <a href="../../../../../../../../../doc/">User documentation</a>.
@@ -62,6 +64,8 @@ public interface DotifyCSSStyledDocumentTransform {
 		}
 	)
 	public class Provider extends AbstractTransformProvider<Transform> {
+		
+		private static final Logger logger = LoggerFactory.getLogger(DotifyCSSStyledDocumentTransform.class);
 		
 		private URI href;
 		
@@ -233,7 +237,7 @@ public interface DotifyCSSStyledDocumentTransform {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindBrailleTranslatorRegistry(BrailleTranslatorRegistry registry) {
-			translatorRegistry = registry;
+			translatorRegistry = registry.withContext(logger);
 		}
 		
 		private BrailleTranslatorRegistry translatorRegistry;

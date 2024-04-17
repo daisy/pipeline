@@ -85,7 +85,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>liblouis-utils</artifactId>
-        <version>6.1.0</version>
+        <version>6.1.1-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -611,7 +611,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>liblouis-java</artifactId>
-        <version>5.0.2</version>
+        <version>5.1.0</version>
       </dependency>
       <dependency>
         <groupId>net.java.dev.jna</groupId>
