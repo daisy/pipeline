@@ -19,6 +19,7 @@
                 com.xmlcalabash.runtime=OFF
                 com.xmlcalabash.library.XSLT=ERROR
                 com.xmlcalabash.io=ERROR
+                org.liblouis.Louis=OFF
             </loggerLevels>
         </filter>
     </appender>
