@@ -22,6 +22,14 @@ public interface Logger {
 		int value() {
 			return value;
 		}
+		boolean above(Level threshold) {
+		    if (threshold == OFF)
+			return false;
+		    else if (threshold == ALL)
+			return true;
+		    else
+			return value >= threshold.value;
+		}
 		private static Map<Integer,Level> levels;
 		static Level from(int value) {
 			if (levels == null) {
