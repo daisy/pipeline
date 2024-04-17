@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.18</version>
+  <version>1.14.19-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,7 +17,7 @@
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>v1.14.18</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
     <cli.version>2.1.8</cli.version>
@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.18</version>
+        <version>1.14.19-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.25</version>
+        <version>1.14.26-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1317,6 +1317,76 @@
       </exclusions>
     </dependency>
     <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-pdfbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-slf4j</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>de.rototor.pdfbox</groupId>
+      <artifactId>graphics2d</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>xmpbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>fontbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
       <groupId>org.w3c</groupId>
       <artifactId>epubcheck</artifactId>
       <exclusions>
@@ -2452,6 +2522,34 @@
                 <artifactItem>
                   <groupId>org.unbescape</groupId>
                   <artifactId>unbescape</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-pdfbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-slf4j</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>de.rototor.pdfbox</groupId>
+                  <artifactId>graphics2d</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>pdfbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>xmpbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>fontbox</artifactId>
                 </artifactItem>
                 <!--
                     for epubcheck-adapter

@@ -53,6 +53,6 @@
 	</profiles>
 	<activeProfiles>
 		<activeProfile>central-https</activeProfile>
-		<!-- <activeProfile>snapshots</activeProfile> -->
+		<activeProfile>snapshots</activeProfile>
 	</activeProfiles>
 </settings>
