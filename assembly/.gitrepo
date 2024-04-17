@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-assembly.git
 	branch = master
-	commit = 815c3e0c9f2dfe67abebc18b2100c77da188a433
-	parent = 6f0005f9a5af840bcc1df44f966658b8b7c8b532
+	commit = cac8f03f95d4ec82d2bbe935e5b2439840037301
+	parent = 1c57eb0ad21e2d1a790f185f1d4797edc9f41d52
 	cmdver = 0.3.1

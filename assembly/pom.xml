@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.18</version>
+  <version>1.14.20-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -17,10 +17,10 @@
     <connection>scm:git:git@github.com:daisy/pipeline-assembly.git</connection>
     <url>scm:git:git@github.com:daisy/pipeline-assembly.git</url>
     <developerConnection>scm:git:git@github.com:daisy/pipeline-assembly.git</developerConnection>
-    <tag>v1.14.18</tag>
+    <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.1.8</cli.version>
+    <cli.version>2.2.0</cli.version>
     <classifier />
     <classifier.dash /> <!-- classifier followed by "-" -->
     <!--
@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.18</version>
+        <version>1.14.19</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.25</version>
+        <version>1.14.26</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -1028,6 +1028,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>word-to-dtbook</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>zedai-to-epub3</artifactId>
       <exclusions>
         <exclusion>
@@ -1309,6 +1319,76 @@
     <dependency>
       <groupId>org.unbescape</groupId>
       <artifactId>unbescape</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-pdfbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.openhtmltopdf</groupId>
+      <artifactId>openhtmltopdf-slf4j</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>de.rototor.pdfbox</groupId>
+      <artifactId>graphics2d</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>xmpbox</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>fontbox</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -2331,6 +2411,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>word-to-dtbook</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>zedai-to-epub3</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2397,10 +2481,6 @@
                   <artifactId>jna</artifactId>
                 </artifactItem>
                 <artifactItem>
-                  <groupId>org.daisy.libs</groupId>
-                  <artifactId>jnaerator</artifactId>
-                </artifactItem>
-                <artifactItem>
                   <!-- required by jstyleparser -->
                   <!-- TODO build our own bundle ? -->
                   <groupId>org.apache.servicemix.bundles</groupId>
@@ -2453,6 +2533,34 @@
                   <groupId>org.unbescape</groupId>
                   <artifactId>unbescape</artifactId>
                 </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-pdfbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.openhtmltopdf</groupId>
+                  <artifactId>openhtmltopdf-slf4j</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>de.rototor.pdfbox</groupId>
+                  <artifactId>graphics2d</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>pdfbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>xmpbox</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.pdfbox</groupId>
+                  <artifactId>fontbox</artifactId>
+                </artifactItem>
                 <!--
                     for epubcheck-adapter
                 -->
@@ -2487,6 +2595,29 @@
                   <groupId>com.googlecode.soundlibs</groupId>
                   <artifactId>jlayer</artifactId>
                 </artifactItem>
+                <!--
+                    for word-to-dtbook
+                -->
+                <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi</artifactId>
+                </dependency>
+                <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi-ooxml</artifactId>
+                </dependency>
+                <dependency>
+                  <groupId>org.apache.poi</groupId>
+                  <artifactId>poi-scratchpad</artifactId>
+                </dependency>
+                <dependency>
+                  <groupId>org.libreoffice</groupId>
+                  <artifactId>libreoffice</artifactId>
+                </dependency>
+                <dependency>
+                  <groupId>org.libreoffice</groupId>
+                  <artifactId>unoloader</artifactId>
+                </dependency>
               </artifactItems>
             </configuration>
           </execution>
@@ -2517,6 +2648,14 @@
                 <artifactItem>
                   <groupId>org.codehaus.jackson</groupId>
                   <artifactId>jackson-mapper-asl</artifactId>
+                </artifactItem>
+                <!--
+                    JNAerator (including JNA 4.0.0)
+                    the version embedded in tts-adapter-acapela is not used in OSGi
+                -->
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jnaerator</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
