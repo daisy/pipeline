@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.liblouis</groupId>
   <artifactId>liblouis-java</artifactId>
-  <version>5.0.3-SNAPSHOT</version>
+  <version>5.1.0</version>
   <packaging>bundle</packaging>
   <name>liblouis-java</name>
   <description>JNA based Java bindings to liblouis, an open-source braille translator and back-translator.</description>
@@ -13,7 +13,7 @@
     <connection>scm:git:git@github.com:bertfrees/liblouis-java.git</connection>
     <developerConnection>scm:git:git@github.com:bertfrees/liblouis-java.git</developerConnection>
     <url>git@github.com:bertfrees/liblouis-java.git</url>
-    <tag>HEAD</tag>
+    <tag>5.1.0</tag>
   </scm>
   <licenses>
     <license>
@@ -38,7 +38,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louis</artifactId>
-        <version>3.27.0-p1</version>
+        <version>3.27.0-p2</version>
         <type>nar</type>
       </dependency>
     </dependencies>
@@ -47,7 +47,7 @@
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
-      <version>5.2.0</version>
+      <version>5.14.0</version>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
@@ -121,6 +121,12 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
+                  <classifier>aarch64-MacOSX-gpp-shared</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
                   <classifier>i686-w64-mingw32-gpp-executable</classifier>
                   <type>nar</type>
                 </artifactItem>
@@ -157,7 +163,14 @@
                   <includes>
                     <include>liblouis.dylib</include>
                   </includes>
-                  <targetPath>darwin</targetPath>
+                  <targetPath>darwin-x86-64</targetPath>
+                </resource>
+                <resource>
+                  <directory>target/dependency/lib/aarch64-MacOSX-gpp/shared</directory>
+                  <includes>
+                    <include>liblouis.dylib</include>
+                  </includes>
+                  <targetPath>darwin-aarch64</targetPath>
                 </resource>
                 <resource>
                   <directory>target/dependency/lib/i386-Linux-gpp/shared</directory>
@@ -232,7 +245,8 @@
                 <Export-Package />
                 <Include-Resource>
                   org/liblouis/resource-files/tables=target/dependency/share/liblouis/tables,
-                  darwin/liblouis.dylib=target/dependency/lib/x86_64-MacOSX-gpp/shared/liblouis.dylib,
+                  darwin-x86-64/liblouis.dylib=target/dependency/lib/x86_64-MacOSX-gpp/shared/liblouis.dylib,
+                  darwin-aarch64/liblouis.dylib=target/dependency/lib/aarch64-MacOSX-gpp/shared/liblouis.dylib,
                   linux-x86/liblouis.so=target/dependency/lib/i386-Linux-gpp/shared/liblouis.so,
                   linux-x86-64/liblouis.so=target/dependency/lib/amd64-Linux-gpp/shared/liblouis.so,
                   win32-x86/liblouis.dll=target/dependency/bin/i686-w64-mingw32-gpp/liblouis.dll,

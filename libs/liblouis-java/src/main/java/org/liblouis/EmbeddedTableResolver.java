@@ -42,7 +42,7 @@ class EmbeddedTableResolver implements TableResolver {
 	EmbeddedTableResolver(org.slf4j.Logger logger) {
 		tables = new HashMap<String,URL>();
 		File resourcesJarFile; {
-			URL knownResource = Louis.class.getClassLoader().getResource("darwin/liblouis.dylib");
+			URL knownResource = Louis.class.getClassLoader().getResource("darwin-aarch64/liblouis.dylib");
 			if (knownResource == null)
 				throw new RuntimeException("resources artifact not on classpath");
 			else if ("file".equals(knownResource.getProtocol()))

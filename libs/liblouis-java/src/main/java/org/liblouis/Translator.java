@@ -33,8 +33,11 @@ public class Translator {
 	 */
 	public Translator(String table) throws CompilationException {
 		Louis.log(Logger.Level.DEBUG, "Loading table %s", table);
-		if (Louis.getLibrary().lou_getTable(table) == Pointer.NULL)
-			throw new CompilationException("Unable to compile table '" + table + "'");
+		synchronized (Louis.errors) {
+			Louis.errors.clear();
+			if (Louis.getLibrary().lou_getTable(table) == Pointer.NULL)
+				throw new CompilationException("Unable to compile table '" + table + "'", Louis.errors);
+		}
 		this.table = table;
 	}
 	
@@ -45,8 +48,11 @@ public class Translator {
 	public Translator(URL table) throws CompilationException {
 		Louis.log(Logger.Level.DEBUG, "Loading table %s", table);
 		this.table = Louis.getTableNameForURL(table);
-		if (Louis.getLibrary().lou_getTable(this.table) == Pointer.NULL)
-			throw new CompilationException("Unable to compile table '" + table + "'");
+		synchronized (Louis.errors) {
+			Louis.errors.clear();
+			if (Louis.getLibrary().lou_getTable(this.table) == Pointer.NULL)
+				throw new CompilationException("Unable to compile table '" + table + "'", Louis.errors);
+		}
 	}
 	
 	/**
@@ -192,9 +198,12 @@ public class Translator {
 		if (characterAttributes != null || interCharacterAttributes != null)
 			inputPos = getIntegerBuffer("inputpos", textLength * OUTLEN_MULTIPLIER);
 		int mode = displayTable.getMode().value();
-		if (Louis.getLibrary().lou_translate(table, inbuf, inlen, outbuf, outlen, typeform,
-		                                     null, null, inputPos, null, mode) == 0)
-			throw new TranslationException("Unable to complete translation");
+		synchronized (Louis.errors) {
+			Louis.errors.clear();
+			if (Louis.getLibrary().lou_translate(table, inbuf, inlen, outbuf, outlen, typeform,
+			                                     null, null, inputPos, null, mode) == 0)
+				throw new TranslationException("Unable to complete translation", Louis.errors);
+		}
 		return new TranslationResult(outbuf, outlen, inputPos, characterAttributes, interCharacterAttributes, displayTable);
 	}
 	
@@ -210,10 +219,12 @@ public class Translator {
 		WideCharString outbuf = getWideCharBuffer("text-out", textLength * OUTLEN_MULTIPLIER);
 		IntByReference inlen = new IntByReference(textLength);
 		IntByReference outlen = new IntByReference(outbuf.length());
-		
-		if (Louis.getLibrary().lou_backTranslate(table, inbuf, inlen, outbuf, outlen,
-				null, null, null, null, null, 0) == 0)
-			throw new TranslationException("Unable to complete translation");
+		synchronized (Louis.errors) {
+			Louis.errors.clear();
+			if (Louis.getLibrary().lou_backTranslate(table, inbuf, inlen, outbuf, outlen,
+					null, null, null, null, null, 0) == 0)
+				throw new TranslationException("Unable to complete translation", Louis.errors);
+		}
 		try {
 			return outbuf.read(outlen.getValue()); }
 		catch (IOException e) {
@@ -251,8 +262,11 @@ public class Translator {
 		while (matcher.find()) {
 			int start = matcher.start();
 			int end = matcher.end();
-			if (louis.lou_hyphenate(table, inbuf.substring(start), end - start, wordHyphens, 0) == 0)
-				throw new TranslationException("Unable to complete hyphenation");
+			synchronized (Louis.errors) {
+				Louis.errors.clear();
+				if (louis.lou_hyphenate(table, inbuf.substring(start), end - start, wordHyphens, 0) == 0)
+					throw new TranslationException("Unable to complete hyphenation", Louis.errors);
+			}
 			for (int i = 0; i < end - start; i++) hyphens[start + i] = wordHyphens[i]; }
 		
 		byte[] hyphenPositions = readHyphens(new byte[inlen - 1], hyphens);
