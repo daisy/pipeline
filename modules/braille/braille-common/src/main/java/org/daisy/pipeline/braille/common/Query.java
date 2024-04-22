@@ -26,6 +26,8 @@ import static com.xmlcalabash.core.XProcConstants.NS_XPROC_STEP;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 
+import org.unbescape.css.CssEscape;
+
 public interface Query extends Iterable<Query.Feature> {
 	
 	@Override
@@ -82,7 +84,7 @@ public interface Query extends Iterable<Query.Feature> {
 						if (ident != null)
 							value = ident;
 						else if (string != null && !string.equals("")) {
-							value = string.substring(1,string.length()-1).replace("\\A", "\n").replace("\\22", "\"").replace("\\27", "'");
+							value = CssEscape.unescapeCss(string.substring(1, string.length() - 1));
 							isString = true; }
 						else if (integer != null && !integer.equals(""))
 							value = integer;
@@ -364,7 +366,7 @@ public interface Query extends Iterable<Query.Feature> {
 					if (!specifiedAsString && (v.matches(IDENT_RE) || v.matches(INTEGER_RE)))
 						this.literal = Optional.of(v);
 					else
-						this.literal = Optional.of("\"" + v.replace("\n", "\\A").replace("\"","\\22") + "\"");
+						this.literal = Optional.of("\"" + v.replace("\n", "\\A ").replace("\"","\\22 ") + "\"");
 				} else
 					this.literal = Optional.empty();
 			}
