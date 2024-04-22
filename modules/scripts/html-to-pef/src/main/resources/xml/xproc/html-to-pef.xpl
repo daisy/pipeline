@@ -202,8 +202,8 @@ sheet modules) are available for use in Sass style sheets:
                        select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
-            <p:pipe port="result" step="input-options"/>
             <p:pipe port="result" step="stylesheet-parameters"/>
+            <p:pipe port="result" step="input-options"/> <!-- last occurence of a parameter wins -->
         </p:input>
     </px:html-to-pef>
     

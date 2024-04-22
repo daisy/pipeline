@@ -334,7 +334,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dtbook-to-pef</artifactId>
-        <version>10.0.1</version>
+        <version>10.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -379,7 +379,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>epub3-to-pef</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -399,7 +399,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>html-to-pef</artifactId>
-        <version>7.0.1</version>
+        <version>7.0.2-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

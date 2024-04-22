@@ -213,8 +213,8 @@ even though the provided CSS is more specific.
                        select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
-            <p:pipe port="result" step="input-options"/>
             <p:pipe port="result" step="stylesheet-parameters"/>
+            <p:pipe port="result" step="input-options"/> <!-- last occurence of a parameter wins -->
         </p:input>
     </px:epub3-to-pef>
     <p:sink/>
