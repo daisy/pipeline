@@ -14,6 +14,8 @@
 
   
 
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"source-of-pagination"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string?"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"()"</span>/&gt;
+
   &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/z:document"</span> <span class="code-xml-attribute-local-name">priority</span>=<span class="code-xml-attribute-value">"1"</span>&gt;
     &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">call-template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pf:next-match-with-generated-ids"</span>&gt;
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"prefix"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'id_'"</span>/&gt;
@@ -80,6 +82,13 @@
           &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">dc:</span><span class="code-xml-element-local-name">language</span>&gt;
       &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">".//z:pagebreak                     and exists($source-of-pagination)                     and not(//z:*[@property='pageBreakSource'                                   and not(@about)                                   and normalize-space(if (@content) then @content else .)])"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">property</span>=<span class="code-xml-attribute-value">"pageBreakSource"</span>&gt;
+          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$source-of-pagination"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">meta</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
 
       
       &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">apply-templates</span>/&gt;

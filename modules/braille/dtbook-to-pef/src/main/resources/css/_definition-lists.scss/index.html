@@ -931,8 +931,39 @@ if (window.addEventListener) {
  * Definition lists
  */</span></span>
 
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var boolean $group-dt-dd
+ *
+ * @brief Group dt and dd elements
+ *
+ * Set this variable to group `dt` and `dd` elements, wrapping them
+ * inside `li` elements, so that every group starts with a `dt` and
+ * ends with a `dd` and does not contain a `dd` followed by a
+ * `dt`.
+ */</span></span>
 <span class="variable">$group-dt-dd</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var string $dt-suffix
+ *
+ * @brief Separator between dt and dd elements
+ *
+ * If grouping of `dt` and `dd` elements is enabled, this variable
+ * determines the text that is inserted in between a `dt` and a `dd`
+ * element. In order to make `dt` and `dd` block-level elements, set
+ * this variable to to `null`.
+ */</span></span>
 <span class="variable">$dt-suffix</span>: <span class="string"><span class="delimiter">"</span><span class="content">: </span><span class="delimiter">"</span></span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var string $dt-separator
+ *
+ * @brief Separator between dt elements
+ *
+ * If grouping of `dt` and `dd` elements is enabled, this variable
+ * determines the text that is inserted in between two `dt`
+ * elements.
+ */</span></span>
 <span class="variable">$dt-separator</span>: <span class="string"><span class="delimiter">"</span> <span class="delimiter">"</span></span> <span class="error">!</span><span class="value">default</span>;
 
 <span class="directive">@if</span> <span class="variable">$group-dt-dd</span> {

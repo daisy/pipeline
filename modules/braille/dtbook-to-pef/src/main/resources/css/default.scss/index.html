@@ -1020,19 +1020,11 @@ if (window.addEventListener) {
 
 <span class="comment"><span class="delimiter">/*</span><span class="content"> ======= Implementation of script options =============== */</span></span>
 
-<span class="variable">$hyphenation</span>: <span class="value">auto</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$capital-letters</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$include-captions</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$include-images</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$include-line-groups</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$include-production-notes</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_page-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
+<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
+<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_notes.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
 
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">page-layout.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">generate-toc.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">page-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">notes.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
+<span class="variable">$hyphenation</span>: <span class="value">auto</span> <span class="error">!</span><span class="value">default</span>;
 
 <span class="directive">@if</span> <span class="variable">$hyphenation</span> != <span class="value">manual</span> {
         :<span class="value">root</span> {
@@ -1040,34 +1032,12 @@ if (window.addEventListener) {
         }
 }
 
+<span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
+
 <span class="directive">@if</span> <span class="variable">$line-spacing</span> == <span class="value">double</span> {
         :<span class="value">root</span> {
                 <span class="key">line-height</span>: <span class="float">2</span>;
         }
-}
-
-<span class="directive">@if</span> <span class="variable">$capital-letters</span> != <span class="value">true</span> {
-        :<span class="value">root</span> {
-                <span class="key">text-transform</span>: <span class="value">lowercase</span>;
-        }
-}
-
-<span class="tag">caption</span> {
-        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-captions</span>, <span class="value">block</span>, <span class="value">none</span>);
-}
-
-<span class="directive">@if</span> <span class="variable">$include-images</span> {
-        <span class="key">img</span>::<span class="value">after</span> {
-                <span class="key">content</span>: <span class="function"><span class="delimiter">attr(</span><span class="content">alt</span><span class="delimiter">)</span></span>;
-        }
-}
-
-<span class="tag">linegroup</span> <span class="tag">line</span> {
-        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-line-groups</span>, <span class="value">block</span>, <span class="value">inline</span>);
-}
-
-<span class="tag">prodnote</span> {
-        <span class="key">display</span>: <span class="predefined">if</span>(<span class="variable">$include-production-notes</span>, <span class="value">block</span>, <span class="value">none</span>);
 }
 </pre></div>
 </div>

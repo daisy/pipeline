@@ -18,69 +18,71 @@
 <a class="jxr_linenumber" name="L9" href="#L9">9</a>   
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.factory.FactoryProperties;
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.Table;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query.MutableQuery;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.mutableQuery;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.pef.TableProvider;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <em class="jxr_comment">// Note that although the name suggests it, this class doesn't use instances</em>
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_comment">// of the TableCatalog interface. It uses instances of the more low-level</em>
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_comment">// org.daisy.dotify.api.table.TableProvider directly. The name was chosen</em>
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_comment">// because it more or less provides the same functionality as a TableCatalog,</em>
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_comment">// except that it's based on the query syntax instead of ID's.</em>
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  @Component(
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  	name = <span class="jxr_string">"org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog"</span>,
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	service = { TableProvider.<strong class="jxr_keyword">class</strong> }
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  )
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.html">BrailleUtilsTableCatalog</a> <strong class="jxr_keyword">implements</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableProvider.html">TableProvider</a> {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> Iterable&lt;Table&gt; get(Query query) {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  		MutableQuery q = mutableQuery(query);
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"id"</span>)) {
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			String id = q.removeOnly(<span class="jxr_string">"id"</span>).getValue().get();
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  			<strong class="jxr_keyword">if</strong> (q.isEmpty())
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  				<strong class="jxr_keyword">return</strong> get(id); }
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> empty;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  	
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	<strong class="jxr_keyword">private</strong> Iterable&lt;Table&gt; get(String id) {
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  		<strong class="jxr_keyword">for</strong> (org.daisy.dotify.api.table.TableProvider p : providers)
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			<strong class="jxr_keyword">for</strong> (FactoryProperties fp : p.list())
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  				<strong class="jxr_keyword">if</strong> (fp.getIdentifier().equals(id))
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  					<strong class="jxr_keyword">return</strong> Optional.fromNullable(p.newFactory(id)).asSet();
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">return</strong> empty;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	}
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	Collection&lt;FactoryProperties&gt; list() {
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  		<strong class="jxr_keyword">return</strong> providers.stream().flatMap(p -&gt; p.list().stream()).collect(Collectors.toList());
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	}
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;Table&gt; empty = Optional.&lt;Table&gt;absent().asSet();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;org.daisy.dotify.api.table.TableProvider&gt; providers
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	= <strong class="jxr_keyword">new</strong> ArrayList&lt;org.daisy.dotify.api.table.TableProvider&gt;();
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> org.daisy.dotify.api.table.TableProvider;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.common.Query.MutableQuery;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.pipeline.braille.common.Query.util.mutableQuery;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.braille.pef.AbstractTableProvider;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_comment">// Note that although the name suggests it, this class doesn't use instances</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_comment">// of the TableCatalog interface. It uses instances of the more low-level</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_comment">// org.daisy.dotify.api.table.TableProvider directly. The name was chosen</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <em class="jxr_comment">// because it more or less provides the same functionality as a TableCatalog,</em>
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <em class="jxr_comment">// except that it's based on the query syntax instead of ID's.</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  @Component(
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	name = <span class="jxr_string">"org.daisy.pipeline.braille.pef.impl.BrailleUtilsTableCatalog"</span>,
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	service = { org.daisy.pipeline.braille.pef.TableProvider.<strong class="jxr_keyword">class</strong> }
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  )
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/impl/BrailleUtilsTableCatalog.html">BrailleUtilsTableCatalog</a> <strong class="jxr_keyword">extends</strong> <a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/AbstractTableProvider.html">AbstractTableProvider</a> {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	@Override
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">protected</strong> Iterable&lt;Table&gt; _get(Query query) {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  		MutableQuery q = mutableQuery(query);
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">if</strong> (q.containsKey(<span class="jxr_string">"id"</span>)) {
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			String id = q.removeOnly(<span class="jxr_string">"id"</span>).getValue().get();
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			<strong class="jxr_keyword">if</strong> (q.isEmpty())
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  				<strong class="jxr_keyword">return</strong> get(id); }
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">return</strong> empty;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	}
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">private</strong> Iterable&lt;Table&gt; get(String id) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">for</strong> (TableProvider p : providers)
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			<strong class="jxr_keyword">for</strong> (FactoryProperties fp : p.list())
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  				<strong class="jxr_keyword">if</strong> (fp.getIdentifier().equals(id))
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  					<strong class="jxr_keyword">return</strong> Optional.fromNullable(p.newFactory(id)).asSet();
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  		<strong class="jxr_keyword">return</strong> empty;
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	}
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<em class="jxr_comment">// list all available tables, not only those from the cache (for unit test)</em>
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  	Collection&lt;FactoryProperties&gt; listAll() {
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">return</strong> providers.stream().flatMap(p -&gt; p.list().stream()).collect(Collectors.toList());
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  	}
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;Table&gt; empty = Optional.&lt;Table&gt;absent().asSet();
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  	
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	@Reference(
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		name = <span class="jxr_string">"TableProvider"</span>,
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  		unbind = <span class="jxr_string">"-"</span>,
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		service = org.daisy.dotify.api.table.TableProvider.<strong class="jxr_keyword">class</strong>,
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		cardinality = ReferenceCardinality.MULTIPLE,
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		policy = ReferencePolicy.STATIC
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	)
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		providers.add(provider);
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	}
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeTableProvider(org.daisy.dotify.api.table.TableProvider provider) {
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		providers.remove(provider);
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  }
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;TableProvider&gt; providers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	@Reference(
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		name = <span class="jxr_string">"TableProvider"</span>,
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  		unbind = <span class="jxr_string">"-"</span>,
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		service = TableProvider.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		cardinality = ReferenceCardinality.MULTIPLE,
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		policy = ReferencePolicy.STATIC
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	)
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> addTableProvider(<a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableProvider.html">TableProvider</a> provider) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		providers.add(provider);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  	}
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> removeTableProvider(<a href="/pipeline/modules/braille/pef-utils/src/main/java/org/daisy/pipeline/braille/pef/TableProvider.html">TableProvider</a> provider) {
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  		providers.remove(provider);
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	}
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

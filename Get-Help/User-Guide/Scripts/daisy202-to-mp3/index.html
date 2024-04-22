@@ -929,9 +929,9 @@ if (window.addEventListener) {
 
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
 
-<h1 id="daisy-202-to-megavoice-multi-level">DAISY 2.02 to MegaVoice multi-level</h1>
+<h1 id="daisy-202-to-navigable-mp3-file-set">DAISY 2.02 to navigable MP3 file-set</h1>
 
-<p>Transforms a DAISY 2.02 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices (all versions except the Envoy Connect).</p>
+<p>Transforms a DAISY 2.02 publication into a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices.</p>
 
 <h2 id="synopsis">Synopsis</h2>
 
@@ -981,39 +981,30 @@ The produced folder structure with MP3 files.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Book folder level</div>
+<div class="synopsis-option-name">Folder depth</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">The folder level corresponding with the book, expressed as a 0-based number.
+<div class="shortdesc">The number of folder levels in the produced folder structure.
 </div>
-<div class="longdesc">The folder level corresponding with the book, expressed as a 0-based number.
+<div class="longdesc">The number of folder levels in the produced folder structure.
 
-<p>Value <code>0</code> means that top-level folders correspond with top-level sections of the book. Value <code>1</code>
-means that the book is contained in a single top-level folder (if it is not too big) with
-sub-folders that correspond with top-level sections of the book.</p>
+<p>The book is always, if possible, contained in a single top-level folder with MP3 files or
+sub-folders (files for folder depth 1, sub-folders for folder depths greater than 1) that correspond
+with top-level sections of the book.</p>
 
-<p>Must be a non-negative integer value, less than or equal to 3 for type 1 players, and less than or
-equal to 1 for type 2 players.</p>
+<p>If there are more top-level sections than the maximum number of files/folders that a top-level
+folder can contain, the book is divided over multiple top-level folders. Similarly, if the number of
+level-two sections within a top-level section exceeds the maximum number of files/folders that a
+level-two folder can contain, the top-level section is divided over multiple level-two folders.</p>
 </div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>1</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Player type</div>
-<div class="synopsis-option-desc">
-The type of MegaVoice Envoy device.
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: One of the following:<dl class="choice">
 <dt><code>1</code></dt>
-<dd>Type 1: This produces a folder structure that is four levels deep. At the top level there can be up to 8 folders. Each of these folders can have up to 20 sub-folders. The sub-folders can have up to 999 sub-sub-folders, each of which can contain up to 999 MP3 files.</dd>
+<dd>Produces a folder structure that is one level deep. At the top level there is 1 folder, that contains entire book. This folder can have up to 999 MP3 files. Each MP3 file corresponds with a top-level section of the book. This setting is suited for simple devices of type Envoy Connect/Vine C2.</dd>
 <dt><code>2</code></dt>
-<dd>Type 2: This produces a folder structure that is two levels deep. On the top level there can be up to 999 folders, and each of these folders can have up to 999 MP3 files.</dd>
+<dd>Produces a folder structure that is two levels deep. At the top level there is 1 folder that contains entire book. This folder can have up to 999 sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file corresponds with a level-two section, a top-level section without sub-sections, or the content within a top-level section before the first sub-section.</dd>
+<dt><code>3</code></dt>
+<dd>Produces a folder structure that is three levels deep. At the top level there is 1 folder that contains entire book. This folder can have up to 999 sub-folders. The sub-folders can have up to 999 sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file corresponds with a level-three section, a top-level or level-two section without sub-sections, or the content within a top-level or level-two section before the first sub-section.</dd>
 </dl>
 </div>
 <div class="synopsis-option-default">
@@ -1069,12 +1060,8 @@ Options:</pre>
 <td>The NCC file of the input DAISY 2.02.</td>
 </tr>
 <tr>
-<td>--book-folder-level [<span style="text-transform: uppercase">book-folder-level</span>]</td>
-<td>Book folder level (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
-</tr>
-<tr>
-<td>--player-type [<span style="text-transform: uppercase">player-type</span>]</td>
-<td>Player type (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
+<td>--folder-depth [<span style="text-transform: uppercase">folder-depth</span>]</td>
+<td>Folder depth (default: <span class="synopsis-option-default"><code>1</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

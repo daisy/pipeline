@@ -931,34 +931,7 @@ if (window.addEventListener) {
 
 <h1 id="daisy-202-to-epub-3">DAISY 2.02 To EPUB 3</h1>
 
-<p>The “DAISY 2.02 to EPUB 3” script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB 3 publication.
-This page describes the steps, comments and issues related to this transformation.</p>
-
-<h2 id="table-of-contents">Table of contents</h2>
-
-<ul id="markdown-toc">
-  <li>
-<a href="#daisy-202-to-epub-3" id="markdown-toc-daisy-202-to-epub-3">DAISY 2.02 To EPUB 3</a>    <ul>
-      <li><a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a></li>
-      <li>
-<a href="#synopsis" id="markdown-toc-synopsis">Synopsis</a>        <ul>
-          <li><a href="#inputs" id="markdown-toc-inputs">Inputs</a></li>
-          <li><a href="#outputs" id="markdown-toc-outputs">Outputs</a></li>
-          <li><a href="#options" id="markdown-toc-options">Options</a></li>
-        </ul>
-      </li>
-      <li><a href="#example-running-from-command-line" id="markdown-toc-example-running-from-command-line">Example running from command line</a></li>
-      <li><a href="#outline" id="markdown-toc-outline">Outline</a></li>
-      <li><a href="#errors" id="markdown-toc-errors">Errors</a></li>
-      <li>
-<a href="#see-also" id="markdown-toc-see-also">See Also</a>        <ul>
-          <li><a href="#main-specifications" id="markdown-toc-main-specifications">Main Specifications</a></li>
-          <li><a href="#related-specifications" id="markdown-toc-related-specifications">Related Specifications</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
+<p>The “DAISY 2.02 to EPUB 3” script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB 3 publication.</p>
 
 <h2 id="synopsis">Synopsis</h2>
 
@@ -1002,6 +975,24 @@ This page describes the steps, comments and issues related to this transformatio
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">EPUB 3 file name</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+</div>
+<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
+
+<p>This option can be used to set a custom file name.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Include Media Overlay</div>
 <div class="synopsis-option-desc">
 Whether or not to include media overlays and associated audio files.
@@ -1024,24 +1015,6 @@ Whether or not to include NCX-file, OPF guide element and backwards-compatible m
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>true</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">EPUB 3 file name</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-</div>
-<div class="longdesc">By default, the file name is the dc:identifier with a ".epub" file extension.
-
-<p>This option can be used to set a custom file name.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
 </div>
 </li>
 </ul>
@@ -1093,16 +1066,16 @@ Options:</pre>
 <td></td>
 </tr>
 <tr>
+<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
+<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
 <td>--mediaoverlay [<span style="text-transform: uppercase">mediaoverlay</span>]</td>
 <td>Include Media Overlay (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--compatibility-mode [<span style="text-transform: uppercase">compatibility-mode</span>]</td>
 <td>Backwards compatible (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
-<td>--epub-filename [<span style="text-transform: uppercase">epub-filename</span>]</td>
-<td>EPUB 3 file name (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
@@ -1182,72 +1155,6 @@ if (window.addEventListener) {
   window.attachEvent('onload', onload);
 }
 </script>
-
-<h2 id="example-running-from-command-line">Example running from command line</h2>
-
-<p>On Linux and Mac OS X:</p>
-
-<div class="language-plaintext highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre>$ cli/dp2 daisy202-to-epub3
-          --x-href samples/daisy202/dontworrybehappy/ncc.html
-          --x-output ~/Desktop/out
-          --x-mediaoverlay false
-          --x-compatibility-mode false
-</pre></div>
-</div>
-</div>
-
-<p>On Windows:</p>
-
-<div class="language-plaintext highlighter-coderay">
-<div class="CodeRay">
-  <div class="code"><pre>$ cli\dp2.exe daisy202-to-epub3
-          --x-href samples\daisy202\dontworrybehappy\ncc.html
-          --x-output C:\Pipeline2-Output
-          --x-mediaoverlay false
-          --x-compatibility-mode false
-</pre></div>
-</div>
-</div>
-
-<p>This command will create two entries in the output directory. One is a folder called “epub”, which is a temporary directory created by the converter. The second is the resulting EPUB 3 file. The EPUB 3 file is given a name based on the dc:identifier and dc:title metadata elements from the original NCC; “dc:identifier - dc:title.epub”.</p>
-
-<h2 id="outline">Outline</h2>
-
-<p>The high-level conversion workflow is as follows:</p>
-
-<ul>
-  <li>Get the SMIL-based reading order from the NCC</li>
-  <li>Load all the SMILs and upgrade them to EPUB 3 Media Overlays</li>
-  <li>Extract content document references from each SMIL</li>
-  <li>Make a content-based reading order</li>
-  <li>Load all the content documents, upgrade them to EPUB 3 Content Documents</li>
-  <li>If mediaoverlay = ‘true’
-    <ul>
-      <li>Rearrange the Media Overlays to match the Content Documents</li>
-      <li>Get all referenced audio, images, etc.</li>
-    </ul>
-  </li>
-  <li>Make the EPUB 3 Navigation Document based on the NCC</li>
-  <li>Make the EPUB 3 Package Document</li>
-  <li>Store the EPUB 3 Publication in a OCF ZIP Container</li>
-</ul>
-
-<h2 id="errors">Errors</h2>
-
-<p>This is a list of defined errors for this script. Each error has a unique error code for easy identification.</p>
-
-<ul>
-  <li>
-<em><code>PDE01</code></em>: href must be a valid URI. In practice this simply means that the path must be prefixed with “file://”, and in Windows, all directory separators () must be replaced with forward slashes (/).</li>
-  <li>
-<em><code>PDE02</code></em>: output must be a valid URI. In practice this simply means that the path must be prefixed with “file://”, and in Windows, all directory separators () must be replaced with forward slashes (/).</li>
-  <li>
-<em><code>PDE03</code></em>: When given, mediaoverlay must be either “true” (default) or “false”.</li>
-  <li>
-<em><code>PDE04</code></em>: When given, compatibility-mode must be either “true” (default) or “false”.</li>
-</ul>
 
 <h2 id="see-also">See Also</h2>
 

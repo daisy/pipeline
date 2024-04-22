@@ -73,7 +73,7 @@
 				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-xml-base</span>&gt;
 					
 				&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-xml-base</span>&gt;
-				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">filter</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//html:nav[tokenize(@epub:type,'\s+')='page-list'][1]"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nav"</span>/&gt;
+				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">filter</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"//html:nav[tokenize(@epub:type,'\s+')='page-list' or @role='doc-pagelist'][1]"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"nav"</span>/&gt;
 				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">count</span>/&gt;
 				&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
 					&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"/*=0"</span>&gt;

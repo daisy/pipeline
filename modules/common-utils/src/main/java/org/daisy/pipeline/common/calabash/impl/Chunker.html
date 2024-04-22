@@ -55,7 +55,7 @@
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.saxon.SaxonInputValue;
 <a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 <a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.DelegatingXMLStreamWriter;
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamWriter;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.getAttributes;
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 <a class="jxr_linenumber" name="L52" href="#L52">52</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.stax.XMLStreamWriterHelper.writeAttributes;
@@ -297,7 +297,7 @@
 <a class="jxr_linenumber" name="L288" href="#L288">288</a> 	}
 <a class="jxr_linenumber" name="L289" href="#L289">289</a> 	
 <a class="jxr_linenumber" name="L290" href="#L290">290</a> 	<strong class="jxr_keyword">static</strong> BaseURIAwareXMLStreamWriter setBaseURI(BaseURIAwareXMLStreamWriter output, URI sourceBaseURI) {
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DelegatingXMLStreamWriter() {
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> DelegatingBaseURIAwareXMLStreamWriter() {
 <a class="jxr_linenumber" name="L292" href="#L292">292</a> 			<strong class="jxr_keyword">int</strong> supplied = 0;
 <a class="jxr_linenumber" name="L293" href="#L293">293</a> 			<strong class="jxr_keyword">protected</strong> BaseURIAwareXMLStreamWriter delegate() {
 <a class="jxr_linenumber" name="L294" href="#L294">294</a> 				<strong class="jxr_keyword">return</strong> output;

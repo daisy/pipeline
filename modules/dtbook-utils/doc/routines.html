@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="en" prefix="dc: http://purl.org/dc/elements/1.1/
+              dp2: http://www.daisy.org/ns/pipeline/">
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta charset="utf-8">
+    <meta http-equiv="content-language" content="en">
+    <title>DTBook cleaning routine details</title>
+    
+  <meta prefix="dc: http://purl.org/dc/elements/1.1/" property="dc:title" content="DTBook cleaning routine details">
+
+
+    <link rel="stylesheet" href="/pipeline/css/default.css">
+    <link rel="stylesheet" href="/pipeline/css/coderay.css">
+    <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+
+  </head>
+  <body>
+    <div id="body">
+      <nav id="nav-sitemap">
+  
+  <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline" tabindex="1">
+      
+      Home
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Download.html" tabindex="2">
+      
+      Download
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help" tabindex="3">
+      Help
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide" tabindex="6">
+      User Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Installation" tabindex="7">
+      Installation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Installation-and-configuation" tabindex="8">
+      
+      Web Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Quick-Start-Guide" tabindex="9">
+      
+      Desktop Application
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Web-Application/User-Guide" tabindex="10">
+      Web Application
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Templating" tabindex="11">
+      
+      Templating
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Administrator-settings" tabindex="12">
+      
+      Administrator Settings
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Web-Application/Branding" tabindex="13">
+      
+      Branding
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Pipeline-as-Service" tabindex="14">
+      Pipeline as a Service
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Configuration-Files" tabindex="15">
+      Configuration Files
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://daisy.github.io/pipeline/modules/tts-common/doc/tts-config.html" class="external-link" target="_blank" tabindex="16">
+      
+      Text-To-Speech Configuration
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Command-Line" tabindex="17">
+      
+      Command Line
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/User-Guide/Scripts" tabindex="18">
+      Scripts
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-unscrambler" tabindex="19">
+      
+      DAISY 2.02 Unscrambler
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-validator" tabindex="20">
+      
+      DAISY 2.02 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-daisy3" tabindex="21">
+      
+      DAISY 2.02 to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3" tabindex="22">
+      
+      DAISY 2.02 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-mp3" tabindex="23">
+      
+      DAISY 2.02 to MegaVoice multi-level
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-upgrader" tabindex="24">
+      
+      DAISY 3 Upgrader
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202" tabindex="25">
+      
+      DAISY 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3" tabindex="26">
+      
+      DAISY 3 to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3" tabindex="27">
+      
+      DAISY 3 to MegaVoice multi-level
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator" tabindex="28">
+      
+      DTBook Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3" tabindex="29">
+      
+      DTBook to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3" tabindex="30">
+      
+      DTBook to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html" tabindex="31">
+      
+      DTBook to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt" tabindex="32">
+      
+      DTBook to ODT
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-pef" tabindex="33">
+      
+      DTBook to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-rtf" tabindex="34">
+      
+      DTBook to RTF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai" tabindex="35">
+      
+      DTBook to ZedAI
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3" tabindex="36">
+      
+      EPUB Upgrader
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3" tabindex="37">
+      
+      EPUB 3 Enhancer
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-validator" tabindex="38">
+      
+      EPUB 3 Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy202" tabindex="39">
+      
+      EPUB 3 to DAISY 2.02
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3" tabindex="40">
+      
+      EPUB 3 to DAISY 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef" tabindex="41">
+      
+      EPUB 3 to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy" tabindex="42">
+      
+      EPUB to DAISY
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook" tabindex="43">
+      
+      HTML to DTBook
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3" tabindex="44">
+      
+      HTML to EPUB3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/html-to-pef" tabindex="45">
+      
+      HTML to PEF
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator" tabindex="46">
+      
+      NIMAS Fileset Validator
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3" tabindex="47">
+      
+      ZedAI to EPUB 3
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html" tabindex="48">
+      
+      ZedAI to HTML
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef" tabindex="49">
+      
+      ZedAI to PEF
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/API-Documentation" tabindex="50">
+      API Documentation
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/WebServiceAPI" tabindex="51">
+      
+      Web Service API
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/Issue-Tracker.html" tabindex="52">
+      
+      Issue Tracker
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Get-Help/Troubleshooting" tabindex="53">
+      Troubleshooting
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Get-Help/User-Guide/Desktop-Application/Troubleshooting" tabindex="54">
+      
+      Troubleshooting Desktop Application
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline/discussions" class="external-link" target="_blank" tabindex="55">
+      
+      Forum
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="mailto:daisy-pipeline@mail.daisy.org" tabindex="56">
+      
+      Contact
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute" tabindex="4">
+      Contribute​
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://github.com/daisy/pipeline" class="external-link" target="_blank" tabindex="57">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="https://groups.google.com/forum/#!forum/daisy-pipeline-dev" class="external-link" target="_blank" tabindex="58">
+      
+      Developers Mailing List
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide" tabindex="59">
+      Developer Guide
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Sources" tabindex="60">
+      
+      Source Code
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Building" tabindex="61">
+      
+      Build System
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Modules" tabindex="62">
+      
+      Writing Modules
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      <a href="/pipeline/Contribute/Developer-Guide/XProc" tabindex="63">
+      XProc
+      </a>
+      
+      <ul class="spine">
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/XProcExtensions" tabindex="64">
+      
+      XProc Extensions
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Testing" tabindex="65">
+      
+      Testing
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Debugging" tabindex="66">
+      
+      Debugging
+      </a>
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Developer-Guide/Releasing" tabindex="67">
+      
+      Release Management
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="/pipeline/Contribute/Easy-Hacks.html" tabindex="68">
+      
+      Easy Hacks
+      </a>
+    
+    </li>
+  
+</ul>
+
+    
+    </li>
+  
+    
+      
+        <li class="spine-item">
+      
+      
+        <a href="http://www.daisy.org" class="external-link" target="_blank" tabindex="5">
+      
+      DAISY Home
+      </a>
+    
+    </li>
+  
+</ul>
+
+</nav>
+
+
+
+<script type="text/javascript">
+var onload = function() {
+  var nav = document.getElementById('nav-sitemap');
+  var navTopBefore = nav.offsetTop;
+  var fixed = (navTopBefore < window.pageYOffset);
+  if (fixed) {
+    nav.classList.add('fixed');
+  }
+  // FIXME: this is a hack! styling should not be handled here!
+  var body = document.getElementsByTagName('body')[0];
+  var leftNav = document.getElementById('nav-sitemap-left');
+  var setLeftNavHeight = function() {
+    if (fixed) {
+      leftNav.style.height = (window.innerHeight - 34) + "px";
+    } else {
+      leftNav.style.height = Math.max(window.innerHeight - 219, body.offsetHeight - 175) + "px";
+	  // "height: auto" doesn't work if the auto height of leftNav is greater
+	  // than window.innerHeight and body.offsetHeight: it would mess up the
+	  // transition because the transition would influence the pageYOffset
+	  // and thereby canceling itself, making it impossible to scroll down.
+    }
+  }
+  setLeftNavHeight();
+  window.onscroll = function(e) {
+    if (fixed && window.pageYOffset < navTopBefore) {
+      nav.classList.remove('fixed');
+	  fixed = false;
+      setLeftNavHeight();
+    } else if (!fixed && window.pageYOffset > navTopBefore) {
+      nav.classList.add('fixed');
+	  fixed = true;
+      setLeftNavHeight();
+    }
+  }
+  window.onresize = setLeftNavHeight;
+};
+if (window.addEventListener) {
+  window.addEventListener('load', onload);
+} else {
+  window.attachEvent('onload', onload);
+}
+</script>
+
+
+      <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc">
+
+<meta property="dc:title" content="DTBook cleaning routine details">
+
+<h1 id="dtbook-cleaning-routine-details">DTBook cleaning routine details</h1>
+
+<p>This page details the cleaning process applied by the DTBook Cleaner
+script for each set of routines provided.</p>
+
+<h2 id="table-of-contents">Table of contents</h2>
+
+<ul id="markdown-toc">
+  <li>
+<a href="#dtbook-cleaning-routine-details" id="markdown-toc-dtbook-cleaning-routine-details">DTBook cleaning routine details</a>    <ul>
+      <li>
+<a href="#table-of-contents" id="markdown-toc-table-of-contents">Table of contents</a>        <ul>
+          <li><a href="#repair-routines" id="markdown-toc-repair-routines">Repair routines</a></li>
+          <li><a href="#tidy-routines" id="markdown-toc-tidy-routines">Tidy routines</a></li>
+          <li><a href="#narrator-routines" id="markdown-toc-narrator-routines">Narrator routines</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<hr>
+
+<h3 id="repair-routines">Repair routines</h3>
+
+<p>The “repair” set of routines repairs some structural errors when encountered :</p>
+<ul>
+  <li>Removes <code>levelx</code> if it has descendant headings of x-1 
+(this simplifies later steps). <br>
+Note: Level normalizer cannot fix <code>level1/level2/level1</code>
+</li>
+  <li>Splits a level into several levels on every additional heading on the same
+level</li>
+  <li>Add levels where needed.</li>
+  <li>Changes a <code>hx</code> into a <code>p</code> with <code>@class="hx"</code> if parent isn’t <code>levelx</code><br>
+Note: “Remove illegal headings” cannot handle <code>hx</code> in inline context.
+Support for this could be added.</li>
+  <li>Removes nested <code>p</code>
+</li>
+  <li>Adds an empty <code>p</code>-tag if <code>hx</code> is the last element</li>
+  <li>Apply fixes for lists:
+    <ul>
+      <li>wraps a list in <code>li</code> when the parent of the list is another list</li>
+      <li>adds <code>@type</code> if missing (default value is <code>"pl"</code>)</li>
+      <li>corrects <code>@depth</code> attribute</li>
+      <li>removes <code>@enum</code> attribute if the list is not ordered</li>
+      <li>removes <code>@start</code> attribute if the list is not ordered</li>
+    </ul>
+  </li>
+  <li>
+<code>idref</code> must be present on <code>noteref</code> and <code>annoref</code>. Add <code>idref</code> if missing or 
+change if empty.<br>
+The value of the <code>idref</code> must include a fragment identifier. Add a hash mark 
+in the beginning of all idref attributes that don’t contain a hash mark.</li>
+  <li>Removes
+    <ul>
+      <li>empty/whitespace <code>p</code> except when
+        <ul>
+          <li>receded by <code>hx</code> or no preceding element and parent is a level</li>
+          <li>and followed only by other empty <code>p</code>
+</li>
+        </ul>
+      </li>
+      <li>empty/whitespace <code>em</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>
+</li>
+      <li>empty/whitespace elements that must have children.</li>
+    </ul>
+  </li>
+  <li>Update the @page attribute to make it match the contents of the pagenum
+element.
+    <ul>
+      <li>If <code>@page="normal"</code> but the contents of the element doesn’t match “normal”
+content, the @page attribute is changed to:
+        <ul>
+          <li>
+<code>@page="front"</code> if the contents is roman numerals and the pagenum
+element is located in the frontmatter of the book</li>
+          <li>
+<code>@page="special"</code> otherwise</li>
+        </ul>
+      </li>
+      <li>If <code>@page="front"</code> but the contents of the element doesn’t match “front”
+content (neither roman nor arabic numerals), the @page attribute is
+changed to “special”</li>
+    </ul>
+  </li>
+  <li>Fix metadata case errors
+    <ul>
+      <li>remove unknown dc-metadata</li>
+      <li>add <code>dtb:uid</code> (if missing) from dc:Identifier</li>
+      <li>add <code>dc:Title</code> (if missing) from doctitle</li>
+      <li>add auto-generated <code>dtb:uid</code> if missing (or if it has empty contents)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="tidy-routines">Tidy routines</h3>
+
+<p>The “tidy” set of routines removes empty elements and reorganize misplaced
+elements:</p>
+<ul>
+  <li>Removes
+    <ul>
+      <li>empty/whitespace <code>p</code> except when
+        <ul>
+          <li>preceded by <code>hx</code> or no preceding element and parent is a level</li>
+          <li>and followed only by other empty <code>p</code>
+</li>
+        </ul>
+      </li>
+      <li>empty/whitespace <code>em</code>, <code>strong</code>, <code>sub</code>, <code>sup</code>
+</li>
+    </ul>
+  </li>
+  <li>Moves
+    <ul>
+      <li>
+<code>pagenum</code> inside <code>h[x]</code> before <code>h[x]</code>
+</li>
+      <li>
+<code>pagenum</code> inside a word after the word</li>
+    </ul>
+  </li>
+  <li>Update the <code>@page</code> attribute to make it match the contents of the <code>pagenum</code>
+element.
+    <ul>
+      <li>If <code>@page="front"</code> but the contents of the element is an arabic number,
+the <code>@page</code> attribute is changed to <code>"normal"</code><br>
+(Note: arabic numbers are theoretically allowed from <code>@page="front"</code>, but
+are not considered standard practice by many)</li>
+      <li>If <code>@page="special"</code> but the element has no content, adds a dummy content
+(“page break”).</li>
+    </ul>
+  </li>
+  <li>Removes otherwise empty <code>p</code> or <code>li</code> around <code>pagenum</code> (except <code>p</code> in <code>td</code>)</li>
+  <li>Inserts <code>docauthor</code> and <code>doctitle</code> if a <code>frontmatter</code> exists without those
+elements</li>
+  <li>Removes existing whitespace nodes and indents output to aid debugging.
+    <ul>
+      <li>Does not remove whitespace or apply indentation in inline context</li>
+      <li>Does not apply indentation when number of children is 1</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="narrator-routines">Narrator routines</h3>
+
+<p>the “narrator” set of routines tries to optimize the dtbook for text-to-speech
+processes:</p>
+<ul>
+  <li>Adds <code>dc:Language</code>, <code>dc:Date</code> and <code>dc:Publisher</code> to dtbook, if not present in
+input, or given but with null/whitespace only content values</li>
+  <li>Removes <code>dc:description</code> and <code>dc:subject</code> if not valued</li>
+  <li>Removes <code>dc:Format</code> (will be added by the fileset generator)</li>
+  <li>Prepare the DTBook for audio synthesis:
+    <ul>
+      <li>Don’t allow <code>h[x+1]</code> in <code>level[x+1]</code> unless <code>h[x]</code> in <code>li[x]</code> is present
+        <ul>
+          <li>This fix assumes headings are not empty (e.g. empty headings were
+removed by a previous fix)</li>
+        </ul>
+      </li>
+      <li>Every document needs at least one heading on <code>level1</code>
+        <ul>
+          <li>This fix assumes headings are not empty (e.g. empty headings were 
+removed by a previous fix)</li>
+        </ul>
+      </li>
+      <li>No <code>list</code> or <code>dl</code> inside <code>p</code> :
+        <ul>
+          <li>Breaks the parent paragraph into a sequence of paragraphs, list and dl</li>
+          <li>Each newly created paragraph has the same attributes as the original
+one</li>
+          <li>New paragraph IDs are created if necessary</li>
+          <li>The original paragraph ID is conserved for the first paragraph created</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Adds the <code>dc:Title</code> meta element and the <code>doctitle</code> frontmatter element, if
+not present in input, or given but with null/whitespace only content values.
+<br>Title value is taken:
+    <ul>
+      <li>from the <code>dc:Title</code> metadata if it is present</li>
+      <li>or else from the first <code>doctitle</code> element in the <code>frontmatter</code>
+</li>
+      <li>or else from the first heading 1.</li>
+    </ul>
+  </li>
+</ul>
+
+    </div>
+  </body>
+</html>

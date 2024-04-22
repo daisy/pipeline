@@ -1024,7 +1024,34 @@ if (window.addEventListener) {
     }
 }
 
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var string $duplicate-tables-with-class
+ *
+ * @brief Duplicate tables
+ *
+ * Set this variable to a value other than `null` to duplicate tables
+ * with the given class. If the value is the empty string, all tables
+ * without a class attribute are duplicated.
+ *
+ * This feature is useful for trying out different table layouts before
+ * deciding which layout to use for which table.
+ */</span></span>
 <span class="variable">$duplicate-tables-with-class</span>: <span class="value">null</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var string $classes-for-table-duplicates
+ *
+ * @brief Class names for table duplicates
+ *
+ * If table duplication is enabled, this variable determines how many
+ * copies are made and which classes are added. The value must be a
+ * space separated list of class names. As many copies are made as
+ * there are items in the list. The first class is added to the first
+ * copy, etc. At least two items are required. A `.` may be used to
+ * separate classes if multiple classes need to be added to a single
+ * copy.
+ */</span></span>
+<span class="variable">$classes-for-table-duplicates</span>: <span class="string"><span class="delimiter">"</span><span class="delimiter">"</span></span> <span class="error">!</span><span class="value">default</span>;
 
 <span class="directive">@if</span> <span class="variable">$duplicate-tables-with-class</span> != <span class="value">null</span> {
     <span class="directive">@xslt</span> <span class="string"><span class="delimiter">"</span><span class="content">tables.xsl</span><span class="delimiter">"</span></span> {

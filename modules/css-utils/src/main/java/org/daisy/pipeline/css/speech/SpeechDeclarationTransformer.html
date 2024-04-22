@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>SpeechDeclarationTransformer xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/css-utils/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.css.speech;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.CSSProperty;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.CSSProperty.Cue;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.CSSProperty.SpeechRate;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.CSSProperty.VoiceFamily;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Declaration;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Term;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermList;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermPercent;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermTime;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermURI;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.domassign.DeclarationTransformer;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/speech/SpeechDeclarationTransformer.html">SpeechDeclarationTransformer</a> <strong class="jxr_keyword">extends</strong> DeclarationTransformer {
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	@Override
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> parseDeclaration(Declaration d, Map&lt;String, CSSProperty&gt; properties, Map&lt;String, Term&lt;?&gt;&gt; values) {
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		String propertyName = d.getProperty().toLowerCase();
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"cue-before"</span>.equals(propertyName) || <span class="jxr_string">"cue-after"</span>.equals(propertyName)) {
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  			<strong class="jxr_keyword">return</strong> genericTerm(TermURI.<strong class="jxr_keyword">class</strong>, d.get(0), d.getProperty(), Cue.uri, false,
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  			                   properties, values);
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (propertyName.startsWith(<span class="jxr_string">"pause"</span>)) {
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  			<em class="jxr_comment">// jStyleParser doesn't accept pauses with "ms" or "s" at the end</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  			Term&lt;?&gt; term = d.get(0);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  			<strong class="jxr_keyword">if</strong> (!(term instanceof TermTime))
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parseDeclaration(d, properties, values);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  			properties.put(propertyName, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			values.put(propertyName, term);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"voice-family"</span>.equals(propertyName)) {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  			<strong class="jxr_keyword">if</strong> (d.size() == 0)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  				<strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			TermList list = tf.createList();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">for</strong> (Term&lt;?&gt; t : d) {
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  				list.add(t);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			}
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			properties.put(d.getProperty(), VoiceFamily.list_values);
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			values.put(d.getProperty(), list);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  		} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">"speech-rate"</span>.equals(propertyName)) {
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			<strong class="jxr_keyword">if</strong> (d.size() == 1 &amp;&amp; d.get(0) instanceof TermPercent) {
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  				TermPercent p = (TermPercent)d.get(0);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  				<strong class="jxr_keyword">if</strong> (p.getValue() &lt;= 0) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  					<strong class="jxr_keyword">return</strong> false; <em class="jxr_comment">// must be non-negative percentage</em>
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  				} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  					properties.put(d.getProperty(), SpeechRate.number);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  					values.put(d.getProperty(), p);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				}
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			}
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parseDeclaration(d, properties, values);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">super</strong>.parseDeclaration(d, properties, values);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		}
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  	}
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

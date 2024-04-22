@@ -1026,32 +1026,6 @@ The resulting EPUB 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Language code</div>
-<div class="synopsis-option-desc">
-Language code of the input document.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name"></div>
-<div class="synopsis-option-desc">
-
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>audio/mpeg</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">Style sheets</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">A list of CSS style sheets to take into account.
@@ -1084,41 +1058,15 @@ precedence over user styles.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-name">Language code</div>
 <div class="synopsis-option-desc">
-Whether to abort on validation issues.
+Language code of the input document.
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>off</code></dt>
-<dd>No validation</dd>
-<dt><code>report</code></dt>
-<dd>Report validation issues</dd>
-<dt><code>abort</code></dt>
-<dd>Abort on validation issues</dd>
-</dl>
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>abort</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Chunk size</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-</div>
-<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
-
-<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
-split up if they exceed the given maximum size.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>-1</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1145,6 +1093,67 @@ Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Chunk size</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+</div>
+<div class="longdesc">The maximum size of HTML files in kB. Specify "-1" for no maximum.
+
+<p>Top-level sections in the DTBook become separate HTML files in the resulting EPUB, and are further
+split up if they exceed the given maximum size.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;integer&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>-1</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Lexicons</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of PLS lexicons to take into account.
+</div>
+<div class="longdesc">A list of PLS lexicons to take into account.
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets can also be attached to the source document, using an <a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing
+instruction</a> or a <a href="http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07" class="external-link" target="_blank">‘link’
+element</a>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Validation</div>
+<div class="synopsis-option-desc">
+Whether to abort on validation issues.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>off</code></dt>
+<dd>No validation</dd>
+<dt><code>report</code></dt>
+<dd>Report validation issues</dd>
+<dt><code>abort</code></dt>
+<dd>Abort on validation issues</dd>
+</dl>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>abort</code>
 </div>
 </li>
 </ul>
@@ -1202,24 +1211,12 @@ Options:</pre>
 <td>One or more DTBook files to be transformed. In the case of multiple files, a merge will be performed.</td>
 </tr>
 <tr>
-<td>--language [<span style="text-transform: uppercase">language</span>]</td>
-<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--audio-file-type [<span style="text-transform: uppercase">audio-file-type</span>]</td>
-<td> (default: <span class="synopsis-option-default"><code>audio/mpeg</code></span>)</td>
-</tr>
-<tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
 <td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
-<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
-</tr>
-<tr>
-<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
-<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+<td>--language [<span style="text-transform: uppercase">language</span>]</td>
+<td>Language code (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
@@ -1228,6 +1225,18 @@ Options:</pre>
 <tr>
 <td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
 <td>NIMAS input (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--_:chunk-size [<span style="text-transform: uppercase">_:chunk-size</span>]</td>
+<td>Chunk size (default: <span class="synopsis-option-default"><code>-1</code></span>)</td>
+</tr>
+<tr>
+<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
+<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
+</tr>
+<tr>
+<td>--validation [<span style="text-transform: uppercase">validation</span>]</td>
+<td>Validation (default: <span class="synopsis-option-default"><code>abort</code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

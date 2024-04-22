@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">epub-to-daisy {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://daisy.github.io/pipeline/modules/epub-to-daisy/src/main/resources/xml/epub-to-daisy.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">epub-to-daisy</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<div>Defined in:
+          <span class="uri"><a href="/pipeline/api/org/daisy/pipeline/modules/epub-to-daisy/library.xpl.html">http://www.daisy.org/pipeline/modules/epub-to-daisy/library.xpl</a></span>
+</div>
+<h3>Input Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">source.fileset</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The EPUB fileset</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">source.in-memory</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">tts-config</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Output Ports</h3>
+<table border="1">
+<thead><tr>
+<td>Port</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="primary">status</span><span class="details"> primary</span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Whether or not the conversion was successful.</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">epub3.fileset</span><span class="details"></span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The intermediary EPUB 3 fileset</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">epub3.in-memory</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">daisy202.fileset</span><span class="details"></span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The DAISY 2.02 fileset</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">daisy202.in-memory</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">daisy3.fileset</span><span class="details"></span>
+</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The DAISY 3 fileset</p></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">daisy3.in-memory</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">temp-audio-files</span><span class="details"></span>
+</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name">
+<span class="">tts-log</span><span class="details"> sequence</span>
+</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">tts</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'default'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">stylesheet</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">CSS style sheets as space separated list of absolute URIs.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">lexicon</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">()</td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">PLS lexicons as list of absolute URIs.</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">tts-audio-file-type</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'audio/mpeg'</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The desired file type of the generated audio files, specified as a MIME type.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Examples:</p>
+<ul xmlns:xd="http://github.com/vojtechtoman/xprocdoc">
+				<li>"audio/mpeg"</li>
+				<li>"audio/x-wav"</li>
+			</ul>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">epub3-output-dir</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Base directory of the intermediary EPUB 3 with media-overlays</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Defaults to a temporary directory.</p>
+<p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">The conversion may fail but will still output a EPUB 3 document.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">daisy202-output-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Base directory of the DAISY 2.02</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">daisy3-output-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Base directory of the DAISY 3</p></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">temp-dir</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td><p xmlns:xd="http://github.com/vojtechtoman/xprocdoc">Empty directory dedicated to this step. The directory will be used to store audio
+			files.</p></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
