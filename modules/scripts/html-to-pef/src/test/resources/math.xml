@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+    <semantics>
+        <mfrac>
+            <mi>t</mi>
+            <mrow>
+                <msqrt>
+                    <msubsup>
+                        <mi>a</mi>
+                        <mi>p</mi>
+                        <mi>n</mi>
+                    </msubsup>
+                </msqrt>
+                <mo stretchy="false">+</mo>
+                <msqrt>
+                    <msubsup>
+                        <mi>a</mi>
+                        <mi>q</mi>
+                        <mi>n</mi>
+                    </msubsup>
+                </msqrt>
+            </mrow>
+        </mfrac>
+    </semantics>
+</math>

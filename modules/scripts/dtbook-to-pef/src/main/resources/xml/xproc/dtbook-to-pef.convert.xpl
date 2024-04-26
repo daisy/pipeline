@@ -170,15 +170,14 @@
     </p:group>
     
     <p:choose px:progress=".04">
-        <p:when test="//math:math">
-            <p:viewport px:message="Transforming MathML"
-                        match="math:math">
-                <p:variable name="lang" select="(/*/@xml:lang,'und')[1]">
-                    <p:pipe step="dtbook" port="result"/>
-                </p:variable>
-                <p:variable name="locale-query" select="concat('(locale:',(//c:param[@name='locale']/@value,$lang)[1],')')">
-                    <p:pipe step="parsed-transform-query" port="result"/>
-                </p:variable>
+        <p:when test="//math:math" px:message="Transforming MathML">
+            <p:variable name="lang" select="(/*/@xml:lang,'und')[1]">
+                <p:pipe step="dtbook" port="result"/>
+            </p:variable>
+            <p:variable name="locale-query" select="concat('(locale:',(//c:param[@name='locale']/@value,$lang)[1],')')">
+                <p:pipe step="parsed-transform-query" port="result"/>
+            </p:variable>
+            <p:viewport px:progress="1" match="math:math">
                 <px:transform px:progress="1">
                     <p:with-option name="query" select="concat('(input:mathml)',$locale-query)"/>
                     <p:input port="parameters">
