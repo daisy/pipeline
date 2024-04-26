@@ -307,8 +307,8 @@ task testSuite(dependsOn: [makeDist, testSuiteMessages], type: JavaExec) {
        'http://xmlcalabash.com/tests/test-suite.xml')
   // 'http://localhost:8130/tests/test-suite.xml')
 
-  standardOutput = new FileOutputStream(new File(testsReport))
-  errorOutput = new FileOutputStream(new File(testsErrors))
+  //standardOutput = new FileOutputStream(new File(testsReport))
+  //errorOutput = new FileOutputStream(new File(testsErrors))
 }
 
 task testSuiteClassPath {
@@ -402,6 +402,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 signing {
   required { isReleaseVersion && gradle.taskGraph.hasTask(":uploadArchives") }
+  useGpgCmd() // requires gpg2 to be installed
   sign configurations.archives
 }
 

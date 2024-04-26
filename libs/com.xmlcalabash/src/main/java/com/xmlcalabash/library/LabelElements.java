@@ -21,14 +21,19 @@ package com.xmlcalabash.library;
 
 import java.util.Map;
 import java.util.Iterator;
+import java.util.Vector;
 
 import com.xmlcalabash.core.XMLCalabash;
 import com.xmlcalabash.core.XProcRuntime;
 import com.xmlcalabash.util.ProcessMatchingNodes;
 import com.xmlcalabash.util.ProcessMatch;
+import com.xmlcalabash.util.XProcCollectionFinder;
 import com.xmlcalabash.io.ReadablePipe;
 import com.xmlcalabash.io.WritablePipe;
 import com.xmlcalabash.model.RuntimeValue;
+
+import net.sf.saxon.Configuration;
+import net.sf.saxon.lib.CollectionFinder;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
@@ -118,7 +123,25 @@ public class LabelElements extends DefaultStep implements ProcessMatchingNodes {
         replace = getOption(_replace).getBoolean();
 
         matcher = new ProcessMatch(runtime, this);
-        matcher.match(source.read(), getOption(_match));
+        XdmNode doc = source.read();
+
+        CollectionFinder resetCollectionFinder = null;
+        if (runtime.getAllowSequenceAsContext()) {
+            Vector<XdmNode> defaultCollection = new Vector<XdmNode>();
+            defaultCollection.add(doc);
+            Configuration config = runtime.getProcessor().getUnderlyingConfiguration();
+            CollectionFinder finder = config.getCollectionFinder();
+            config.setDefaultCollection(XProcCollectionFinder.DEFAULT);
+            config.setCollectionFinder(new XProcCollectionFinder(runtime, defaultCollection, finder));
+            resetCollectionFinder = finder;
+        }
+
+        try {
+            matcher.match(doc, getOption(_match));
+        } finally {
+            if (resetCollectionFinder != null)
+                runtime.getProcessor().getUnderlyingConfiguration().setCollectionFinder(resetCollectionFinder);
+        }
 
         result.write(matcher.getResult());
     }

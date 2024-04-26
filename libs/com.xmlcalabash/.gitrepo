@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/xmlcalabash1.git
 	branch = org.daisy.libs
-	commit = cfb318a6142df5cf495f2a8f611aefba9574bd9a
-	parent = bd0fcbdaa5c6c578d4d96afca13c29a7ee1b48bf
+	commit = 0da44d8273d6205a4b5da192abea87905e646bb9
+	parent = 3f3d524601ecd091066d765e24f8c15cad8bdd92
 	cmdver = 0.3.1
