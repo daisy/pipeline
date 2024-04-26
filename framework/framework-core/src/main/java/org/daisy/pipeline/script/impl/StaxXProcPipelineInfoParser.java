@@ -206,9 +206,11 @@ public class StaxXProcPipelineInfoParser {
 			QName name = null;
 			boolean required = false;
 			String select = null;
+			String type = null;
 			Attribute nameAttr = elem.getAttributeByName(Attributes.NAME);
 			Attribute requiredAttr = elem.getAttributeByName(Attributes.REQUIRED);
 			Attribute selectAttr = elem.getAttributeByName(Attributes.SELECT);
+			Attribute asAttr = elem.getAttributeByName(Attributes.CX_AS);
 			if (nameAttr != null) {
 				String nameVal = nameAttr.getValue();
 				if (nameVal.contains(":")) {
@@ -228,7 +230,10 @@ public class StaxXProcPipelineInfoParser {
 			if (selectAttr != null) {
 				select = selectAttr.getValue();
 			}
-			infoBuilder.withOption(XProcOptionInfo.newOption(name, elem.getNamespaceContext(), null, required, select));
+			if (asAttr != null) {
+				type = asAttr.getValue();
+			}
+			infoBuilder.withOption(XProcOptionInfo.newOption(name, elem.getNamespaceContext(), type, required, select));
 		}
 		// consume whole element
 		int depth = 1;

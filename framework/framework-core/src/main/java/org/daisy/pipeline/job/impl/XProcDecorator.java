@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import org.xml.sax.InputSource;
 
-import com.google.common.base.Joiner;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
@@ -192,7 +191,7 @@ public class XProcDecorator {
 				}
 				resolvedInput.withOption(
 					option.getXProcOptionName(),
-					Joiner.on(option.getSeparator()).skipNulls().join(value));
+					((XProcScriptOption)option).convertValue(value));
 			}
 		}
 
@@ -217,9 +216,9 @@ public class XProcDecorator {
 						}
 					);
 				}
-				// join sequence
-				String stringVal = Joiner.on(((XProcScriptOption)option).getSeparator()).skipNulls().join(val);
-				resolvedInput.withOption(((XProcScriptOption)option).getXProcOptionName(), stringVal);
+				resolvedInput.withOption(
+					((XProcScriptOption)option).getXProcOptionName(),
+					((XProcScriptOption)option).convertValue(val));
 			}
 		}
 	}

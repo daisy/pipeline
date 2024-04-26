@@ -129,6 +129,8 @@ public class DaisyPipeline2 implements org.daisy.maven.xproc.api.XProcEngine {
 							writer.close();
 						} catch (ClassNotFoundException e) {
 							// webservice is an optional dependency
+						} catch (Throwable e) {
+							// other errors could happen, but don't let these errors be fatal
 						}
 					} finally {
 						listener.close();

@@ -3,6 +3,7 @@ package org.daisy.pipeline.script;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import java.util.regex.Pattern;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
@@ -292,12 +294,14 @@ public final class XProcScript extends Script {
 	public static class XProcScriptOption implements ScriptOption {
 
 		private final String name;
-		// XProcDecorator requires access to info
 		private final XProcOptionInfo info;
 		private final XProcOptionMetadata metadata;
 		private final String defaultValue;
 		final boolean usesProperty; // whether the default value depends on a (possibly settable) propeprty
 		private final DatatypeService datatype;
+		private final boolean isSequence;
+		private final boolean typeIsString;
+		private final boolean typeIsSequence;
 
 		private static final Pattern SYSTEM_PROPERTY = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):system-property\\((?<arg>[^)]+)\\)$");
 		private static final Pattern QNAME = Pattern.compile("^(?<prefix>[a-zA-Z_][\\w.-]*):(?<localPart>[a-zA-Z_][\\w.-]*)");
@@ -311,85 +315,42 @@ public final class XProcScript extends Script {
 			this.name = name;
 			this.info = info;
 			this.metadata = metadata;
-			if (info.isRequired()) {
-				defaultValue = null;
-				usesProperty = false;
-			} else {
-				String select = info.getSelect();
-				boolean usesProperty = false;
-				if (select != null)
-					select = select.trim();
-				if (select == null || "".equals(select)) {
-					// script options must have a default value even if the XProc option does not have one
-					defaultValue = "";
-				} else {
-					// the default value of script options must be a string literal ...
-					char quote = select.charAt(0);
-					if (quote == '"' || quote == '\'') {
-						if (select.charAt(select.length() - 1) == quote)
-							defaultValue = select.substring(1, select.length() - 1);
-						else {
-							logger.debug("Select statement is not a valid string literal: " + select);
-							defaultValue = "";
-						}
+			String type = null; {
+				if (info.getType() != null) {
+					type = info.getType();
+					typeIsSequence = type.endsWith("*");
+					if (typeIsSequence) {
+						type = type.substring(0, type.length() - 1);
+						isSequence = true; // ignore metadata.isSequence()
 					} else {
-						// ... or a p:system-property() function (allows for setting a default value
-						// globally through a Pipeline property)
-						String defaultValue = null;
-						NamespaceContext nsContext = info.getNamespaceContext();
-						if (nsContext != null) {
-							Matcher m = SYSTEM_PROPERTY.matcher(select);
-							if (m.matches()) {
-								String prf = m.group("prefix");
-								String ns = nsContext.getNamespaceURI(prf);
-								if (NS_XPROC.equals(ns)) {
-									String arg = m.group("arg").trim();
-									quote = arg.charAt(0);
-									if ((quote == '"' || quote == '\'') && arg.charAt(arg.length() - 1) == quote) {
-										arg = arg.substring(1, arg.length() - 1);
-										m = QNAME.matcher(arg);
-										if (m.matches()) {
-											prf = m.group("prefix");
-											ns = nsContext.getNamespaceURI(prf);
-											String prop = m.group("localPart");
-											if (NS_PIPELINE_DATA.equals(ns)) {
-												usesProperty = true;
-												defaultValue = Properties.getSnapshot().get(prop);
-												if (defaultValue == null) // if property not settable
-													defaultValue = Properties.getProperty(prop);
-												if (defaultValue == null) {
-													logger.debug("Property does not have a value: " + prop);
-													defaultValue = "";
-												}
-											} else if (ns == null)
-												logger.debug("Unbound namespace prefix: " + prf);
-											else {
-												logger.debug("Property '" + prop + "'is in an unknown namespace: '" + ns + "'");
-												defaultValue = "";
-											}
-										} else
-											logger.debug("system-property() argument is not a qualified name: " + arg);
-									} else
-										logger.debug("system-property() argument is not a string: " + arg);
-								} else if (ns == null)
-									logger.debug("Unbound namespace prefix: " + prf);
-								else
-									logger.debug("system-property() function is not in the '" + NS_XPROC + "' namespace: " + select);
-							}
-						}
-						if (defaultValue == null) {
-							defaultValue = "";
-							if (select.contains("system-property"))
-								logger.debug("Select statement is not a valid system-property() function: " + select);
-							else
-								logger.debug("Select statement is not a string literal or a system-property() function: " + select);
-						}
-						this.defaultValue = defaultValue;
+						isSequence = metadata.isSequence();
 					}
+					if (type.contains(":")) {
+						String prefix = type.substring(0, type.indexOf(":"));
+						String ns = info.getNamespaceContext().getNamespaceURI(prefix);
+						if (ns == null)
+							throw new IllegalArgumentException(
+								"Unbound namespace prefix '" + prefix + "' in cx:as='" + info.getType() + "'");
+						else if ("http://www.w3.org/2001/XMLSchema".equals(ns)) {
+							type = type.substring(prefix.length() + 1);
+							if (type != null && !type.matches("string|integer|nonNegativeInteger|boolean"))
+								type = null;
+						} else
+							type = null;
+					} else
+						type = null;
+					if (type == null)
+						throw new IllegalArgumentException(
+							"cx:as='" + info.getType() + "' not supported on XProc script options");
+					typeIsString = "string".equals(type);
+				} else {
+					typeIsString = true;
+					typeIsSequence = false;
+					isSequence = metadata.isSequence();
 				}
-				this.usesProperty = usesProperty;
+				if (type == null || "string".equals(type)) // otherwise ignore metadata.getType()
+					type = metadata.getType();
 			}
-			String type = metadata.getType();
 			if (type == null || "".equals(type) || "xs:string".equals(type) || "string".equals(type))
 				datatype = DatatypeService.XS_STRING;
 			else if ("xs:integer".equals(type) || "integer".equals(type))
@@ -409,6 +370,132 @@ public final class XProcScript extends Script {
 				if (datatype == null)
 					throw new IllegalArgumentException(
 						"Invalid px:type '" + type + "': does not match a known data type");
+			}
+			if (info.isRequired()) {
+				defaultValue = null;
+				usesProperty = false;
+			} else {
+				String select = info.getSelect();
+				if (select != null)
+					select = select.trim();
+				if (select == null || "".equals(select)) {
+					// script options must have a default value even if the XProc option does not have one
+					defaultValue = "";
+					usesProperty = false;
+				} else if (typeIsSequence && select.matches("\\(.*\\)")) {
+					logger.debug("Select statement can not be a sequence: " + select); // currently not supported
+					defaultValue = "";
+					usesProperty = false;
+				} else {
+					String defaultValue = null;
+					String fallbackDefaultValue
+						= (datatype == DatatypeService.XS_INTEGER || datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
+							? "0"
+							: datatype == DatatypeService.XS_BOOLEAN
+								? "false"
+								// FIXME: what about URI types and custom types?
+								: "";
+					boolean usesProperty = false;
+					// check if select statement is a p:system-property() function (allows for setting a default
+					// value globally through a Pipeline property)
+					Matcher m = SYSTEM_PROPERTY.matcher(select);
+					if (m.matches()) {
+						NamespaceContext nsContext = info.getNamespaceContext();
+						if (nsContext != null) {
+							String prf = m.group("prefix");
+							String ns = nsContext.getNamespaceURI(prf);
+							if (NS_XPROC.equals(ns)) {
+								String arg = m.group("arg").trim();
+								char quote = arg.charAt(0);
+								if ((quote == '"' || quote == '\'') && arg.charAt(arg.length() - 1) == quote) {
+									arg = arg.substring(1, arg.length() - 1);
+									m = QNAME.matcher(arg);
+									if (m.matches()) {
+										prf = m.group("prefix");
+										ns = nsContext.getNamespaceURI(prf);
+										String prop = m.group("localPart");
+										if (NS_PIPELINE_DATA.equals(ns)) {
+											usesProperty = true;
+											defaultValue = Properties.getSnapshot().get(prop);
+											if (defaultValue == null) {// if property not settable
+												defaultValue = Properties.getProperty(prop);
+												if (defaultValue != null)
+													try {
+														defaultValue = "" + convertValue(defaultValue);
+													} catch (IllegalArgumentException e) {
+														logger.debug(select + " can not be evaluated to a " + datatype.getId() + ": " + defaultValue);
+														defaultValue = fallbackDefaultValue;
+													}
+											}
+											if (defaultValue == null) {
+												logger.debug("Property does not have a value: " + prop);
+												defaultValue = fallbackDefaultValue;
+											}
+										} else if (ns == null)
+											logger.debug("Unbound namespace prefix: " + prf);
+										else {
+											logger.debug("Property '" + prop + "'is in an unknown namespace: '" + ns + "'");
+											defaultValue = fallbackDefaultValue;
+										}
+									} else
+										logger.debug("system-property() argument is not a qualified name: " + arg);
+								} else
+									logger.debug("system-property() argument is not a string: " + arg);
+							} else if (ns == null)
+								logger.debug("Unbound namespace prefix: " + prf);
+							else
+								logger.debug("system-property() function is not in the '" + NS_XPROC + "' namespace: " + select);
+						}
+						if (defaultValue == null) {
+							logger.debug("Select statement is not a valid system-property() function: " + select);
+							defaultValue = fallbackDefaultValue;
+						}
+					} else if (typeIsString) {
+						char quote = select.charAt(0);
+						if (quote == '"' || quote == '\'') {
+							if (select.charAt(select.length() - 1) == quote) {
+								defaultValue = select.substring(1, select.length() - 1); // FIXME: unescape
+								try {
+									defaultValue = "" + convertValue(defaultValue);
+								} catch (IllegalArgumentException e) {
+									logger.debug(select + " can not be evaluated to a " + datatype.getId());
+									defaultValue = fallbackDefaultValue;
+								}
+							} else {
+								logger.debug("Select statement is not a valid string literal: " + select);
+								defaultValue = fallbackDefaultValue;
+							}
+						} else {
+							logger.debug("Select statement is not a string literal or a system-property() function: " + select);
+							defaultValue = fallbackDefaultValue;
+						}
+					} else if (datatype == DatatypeService.XS_INTEGER ||
+					           datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER) {
+						try {
+							int i = Integer.parseInt(select);
+							if (i < 0 && datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER) {
+								logger.debug("Select statement is not a valid " + datatype.getId() + ": " + select);
+								defaultValue = "0";
+							}
+							defaultValue = "" + i;
+						} catch (NumberFormatException e) {
+							logger.debug("Select statement is not a valid " + datatype.getId() + ": " + select);
+							defaultValue = "0";
+						}
+					} else if (datatype == DatatypeService.XS_BOOLEAN) {
+						if ("true".equals(select) || "1".equals(select))
+							defaultValue = "true";
+						else if ("false".equals(select) || "0".equals(select))
+							defaultValue = "false";
+						else {
+							logger.debug("Select statement is not a valid " + datatype.getId() + ": " + select);
+							defaultValue = "false";
+						}
+					} else
+						throw new RuntimeException("coding error");
+					this.defaultValue = defaultValue;
+					this.usesProperty = usesProperty;
+				}
 			}
 		}
 
@@ -458,7 +545,7 @@ public final class XProcScript extends Script {
 
 		@Override
 		public boolean isSequence() {
-			return metadata.isSequence();
+			return isSequence;
 		}
 
 		@Override
@@ -467,10 +554,47 @@ public final class XProcScript extends Script {
 		}
 
 		/**
-		 * Separator for serializing a sequence of values.
+		 * Convert a sequence of string values in order to pass it to
+		 * {@link org.daisy.common.xproc.XProcInput.Builder#withOption()}.
 		 */
-		public String getSeparator() {
-			return metadata.getSeparator();
+		public Object convertValue(Iterable<String> value) {
+			if (typeIsSequence)
+				return Iterables.transform(value, this::convertValue);
+			else if (typeIsString)
+				return Joiner.on(metadata.getSeparator()).skipNulls().join(value);
+			else {
+				Iterator<String> i = value.iterator();
+				if (i.hasNext()) {
+					String v = i.next();
+					if (i.hasNext())
+						throw new IllegalArgumentException(
+							"did not expect more than one value for option" + name + ": " + value);
+					return convertValue(v);
+				} else
+					throw new IllegalArgumentException("did not expect empty value for option " + name);
+			}
+		}
+
+		private Object convertValue(String value) {
+			if (!(datatype.validate(value).isValid()))
+				throw new IllegalArgumentException("not a valid " + datatype.getId()+ ": " + value);
+			if (typeIsString)
+				return value;
+			else if (datatype == DatatypeService.XS_INTEGER ||
+			         datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
+				try {
+					int i = Integer.parseInt(value);
+					if (i < 0 && datatype == DatatypeService.XS_NON_NEGATIVE_INTEGER)
+						throw new IllegalArgumentException(
+							"can not convert value to non-negative integer: " + value);
+					return i;
+				} catch (NumberFormatException e) {
+					throw new IllegalArgumentException("can not convert value to integer: " + value, e);
+				}
+			else if (datatype == DatatypeService.XS_BOOLEAN)
+				return "true".equals(value) || "1".equals(value);
+			else
+				throw new RuntimeException("coding error");
 		}
 	}
 
