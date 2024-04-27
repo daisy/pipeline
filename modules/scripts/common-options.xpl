@@ -539,26 +539,28 @@ level-two folder can contain, the top-level section is divided over multiple lev
 			<px:type>
 				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
 					<value>1</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is one level
-					deep. At the top level there is 1 folder, that contains entire book.  This
-					folder can have up to 999 MP3 files. Each MP3 file corresponds with a top-level
-					section of the book. This setting is suited for simple devices of type Envoy
-					Connect/Vine C2.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">1
+
+Produces a folder structure that is one level deep. At the top level there is 1 folder, that
+contains entire book.  This folder can have up to 999 MP3 files. Each MP3 file corresponds with a
+top-level section of the book. This setting is suited for simple devices of type Envoy Connect/Vine
+C2.</a:documentation>
 					<value>2</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is two levels
-					deep. At the top level there is 1 folder that contains entire book. This folder
-					can have up to 999 sub-folders, each of which can contain up to 999 MP3
-					files. Each MP3 file corresponds with a level-two section, a top-level section
-					without sub-sections, or the content within a top-level section before the first
-					sub-section.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">2
+
+Produces a folder structure that is two levels deep. At the top level there is 1 folder that
+contains entire book. This folder can have up to 999 sub-folders, each of which can contain up to
+999 MP3 files. Each MP3 file corresponds with a level-two section, a top-level section without
+sub-sections, or the content within a top-level section before the first
+sub-section.</a:documentation>
 					<value>3</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is three levels
-					deep. At the top level there is 1 folder that contains entire book. This folder
-					can have up to 999 sub-folders. The sub-folders can have up to 999
-					sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file
-					corresponds with a level-three section, a top-level or level-two section without
-					sub-sections, or the content within a top-level or level-two section before the
-					first sub-section.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">3
+
+Produces a folder structure that is three levels deep. At the top level there is 1 folder that
+contains entire book. This folder can have up to 999 sub-folders. The sub-folders can have up to 999
+sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file corresponds with a
+level-three section, a top-level or level-two section without sub-sections, or the content within a
+top-level or level-two section before the first sub-section.</a:documentation>
 				</choice>
 			</px:type>
 		</p:pipeinfo>
