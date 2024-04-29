@@ -118,6 +118,14 @@ sheet modules) are available for use in Sass style sheets:
         <!-- directory used for temporary files -->
     </p:option>
     
+    <!-- hidden options -->
+    <p:option name="handle-xinclude" px:type="boolean" select="'false'" px:hidden="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Apply XInclude processing on the source document.</p>
+            <p>If this option is set, it is assumed that the source document is XHTML.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
@@ -181,13 +189,18 @@ sheet modules) are available for use in Sass style sheets:
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:fileset-add-entry media-type="application/xhtml+xml">
+    <px:fileset-add-entry>
         <p:input port="source.fileset">
           <p:inline><d:fileset/></p:inline>
         </p:input>
         <p:with-option name="href" select="$source"/>
+        <p:with-option name="media-type" select="if ($handle-xinclude='true')
+                                                 then 'application/xhtml+xml'
+                                                 else 'text/html'"/>
     </px:fileset-add-entry>
-    <px:html-load name="html" px:message="Loading HTML" px:progress=".03"/>
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
+        <p:with-option name="handle-xinclude" select="$handle-xinclude='true'"/>
+    </px:html-load>
     
     <!-- ============ -->
     <!-- HTML TO PEF -->
