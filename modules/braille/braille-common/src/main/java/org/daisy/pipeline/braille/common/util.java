@@ -398,7 +398,10 @@ public abstract class util {
 		}
 		
 		public static boolean is64Bit() {
-			return getArch().equals("amd64") || getArch().equals("x86_64");
+			return getArch().equals("amd64")
+			    || getArch().equals("x86_64")
+			    || getArch().equals("aarch64")
+			    || getArch().equals("arm64");
 		}
 	}
 	

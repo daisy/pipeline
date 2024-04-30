@@ -1,8 +1,10 @@
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -65,7 +67,7 @@ public class SassTest {
 		PreProcessingResult sassCompilationResult = compiler.compile(
 			new PreProcessingSource(new InputStreamReader(new FileInputStream(scssFile), StandardCharsets.UTF_8),
 			                        URLs.asURI(scssFile)));
-		Assert.assertEquals(";AAAA,AAAA,IAAI,CAAC;EAEG,UAAG,EAAE,EAAE;EACP,aAAM,EAAE,EAAE;CAEjB",
+		Assert.assertEquals(";AAAA,AAAA,IAAI,CAAC;EAEG,UAAG,EAAE,CAAC;EACN,aAAM,EAAE,CAAC;CAEhB",
 		                    Json.read(sassCompilationResult.sourceMap).at("mappings").asString());
 		SourceMap sourceMap = SourceMapReader.read(sassCompilationResult.sourceMap, sassCompilationResult.base);
 		assertLineAndColumnEquals(0, 0,  sourceMap.floor(1, 0));  // #foo
@@ -73,8 +75,17 @@ public class SassTest {
 		assertLineAndColumnEquals(2, 13, sourceMap.floor(2, 14)); // ⠒
 		assertLineAndColumnEquals(3, 8,  sourceMap.floor(3, 2));  // border-bottom
 		assertLineAndColumnEquals(3, 16, sourceMap.floor(3, 17)); // ⠒
+		String css = CharStreams.toString(sassCompilationResult.stream);
+		BufferedReader stream = new BufferedReader(new StringReader(css));
+		Assert.assertEquals("@charset \"UTF-8\";",       stream.readLine());
+		Assert.assertEquals("#foo {",                    stream.readLine());
+		Assert.assertEquals("  border-top: ⠒;",          stream.readLine());
+		Assert.assertEquals("  border-bottom: ⠒;",       stream.readLine());
+		Assert.assertEquals("}",                         stream.readLine());
+		Assert.assertNull(stream.readLine());
+		stream = new BufferedReader(new StringReader(css));
 		CSSInputStream cssStream = CSSInputStream.newInstance(
-			sassCompilationResult.stream,
+			stream,
 			URLs.asURL(sassCompilationResult.base),
 			sourceMap);
 		CSSLexer lexer = new CSSLexer(cssStream);

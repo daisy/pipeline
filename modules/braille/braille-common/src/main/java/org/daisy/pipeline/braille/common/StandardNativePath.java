@@ -33,6 +33,8 @@ import static org.daisy.pipeline.braille.common.util.OS;
  * - macosx/x86/bar
  * - macosx/x86_64/foo.dylib
  * - macosx/x86_64/bar
+ * - macosx/aarch64/foo.dylib
+ * - macosx/aarch64/bar
  * - windows/x86/foo.dll
  * - windows/x86/bar.exe
  * - windows/x86_64/foo.dll
@@ -70,7 +72,10 @@ public abstract class StandardNativePath implements NativePath {
 	private URI getExecutable(String name) {
 		String fileName = OS.isWindows() ? name + ".exe" : name;
 		String os = OS.getFamily().toString().toLowerCase();
-		String arch = OS.is64Bit() ? "x86_64" : "x86";
+		String arch = OS.getArch();
+		if (!OS.is64Bit()) arch = "x86";
+		else if ("amd64".equals(arch)) arch = "x86_64";
+		else if ("arm64".equals(arch)) arch = "aarch64";
 		List<URI> possiblePaths = new ArrayList<URI>();
 		possiblePaths.add(asURI(arch + "/" + fileName));
 		possiblePaths.add(asURI(os + "/" + arch + "/" + fileName));
@@ -87,7 +92,10 @@ public abstract class StandardNativePath implements NativePath {
 	private URI getSharedLibrary(String name) {
 		String fileName = name + (OS.isWindows() ? ".dll" : OS.isMacOSX() ? ".dylib" : ".so");
 		String os = OS.getFamily().toString().toLowerCase();
-		String arch = OS.is64Bit() ? "x86_64" : "x86";
+		String arch = OS.getArch();
+		if (!OS.is64Bit()) arch = "x86";
+		else if ("amd64".equals(arch)) arch = "x86_64";
+		else if ("arm64".equals(arch)) arch = "aarch64";
 		List<URI> possiblePaths = new ArrayList<URI>();
 		possiblePaths.add(asURI(arch + "/" + fileName));
 		possiblePaths.add(asURI(os + "/" + arch + "/" + fileName));
