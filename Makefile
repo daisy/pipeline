@@ -98,7 +98,11 @@ dist-webui-rpm : assembly/.compile-dependencies
 
 dev_launcher := assembly/target/dev-launcher/pipeline2
 ifeq ($(shell uname), Darwin)
+ifeq ($(shell uname -m),arm64)
+dp2 := cli/build/bin/darwin_arm64/dp2
+else
 dp2 := cli/build/bin/darwin_amd64/dp2
+endif
 else
 dp2 := cli/build/bin/linux_386/dp2
 endif
@@ -250,7 +254,7 @@ clean-webui-deps :
 # 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-linux_386.zip \
 # 	$(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/cli/2.1.5/cli-2.1.5-windows_386.zip
 
-cli/build/bin/darwin_amd64/dp2 cli/build/bin/linux_386/dp2 : cli/.install
+cli/build/bin/darwin_amd64/dp2 cli/build/bin/darwin_arm64/dp2 cli/build/bin/linux_386/dp2 : cli/.install
 
 cli/.install : $(call rwildcard,cli/cli/,*.go) $(call rwildcard,cli/cli/,*.go.in) $(call rwildcard,cli/dp2/,*.go) $(call rwildcard,clientlib/go/,*.go)
 
