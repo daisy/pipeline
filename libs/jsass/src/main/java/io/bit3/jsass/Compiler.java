@@ -140,20 +140,17 @@ public class Compiler {
     if (null != sources && sources.isArray()) {
       final List<Json> list = sources.asJsonList();
 
-      list.removeIf(item -> item.isString() && (
-          item.asString().endsWith("JSASS_CUSTOM.scss")
-              || item.asString().endsWith("JSASS_PRE_IMPORT.scss")
-              || item.asString().endsWith("JSASS_POST_IMPORT.scss")
-      ));
-    }
+      list.replaceAll(item -> {
+          if (item.isString() && (
+                  item.asString().endsWith("JSASS_CUSTOM.scss")
+                  || item.asString().endsWith("JSASS_PRE_IMPORT.scss")
+                  || item.asString().endsWith("JSASS_POST_IMPORT.scss")
+          )) {
+            return Json.nil();
+          }
 
-    final Json sourcesContent = json.at("sourcesContent");
-    if (null != sourcesContent && sourcesContent.isArray()) {
-      final List<Json> list = sourcesContent.asJsonList();
-
-      list.removeIf(item -> item.isString() && (
-          item.asString().startsWith("$jsass")
-      ));
+          return item;
+      });
     }
 
     return new Output(output.getCss(), json.toString());
@@ -161,5 +158,9 @@ public class Compiler {
 
   public static String sass2scss(String source, int options) {
     return NativeAdapter.sass2scss(source, options);
+  }
+
+  public static String getLibsassVersion() {
+    return NativeAdapter.libsassVersion();
   }
 }

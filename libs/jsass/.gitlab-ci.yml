@@ -1,193 +1,108 @@
-image: openjdk:11
-
-stages:
-  - build
-  - test
-  - test Java 8
-  - test Java 11
-  - test Java 13
+image: docker.io/eclipse-temurin:11
 
 cache:
   paths:
     - .gradle
     - .gradle_home
 
-build:
+variables:
+  GRADLE_USER_HOME: ".gradle_home"
+
+before_script:
+  - mkdir -p .gradle_home
+  - cp gradle-ci.properties .gradle_home/gradle.properties
+
+Build:
   stage: build
   artifacts:
     expire_in: 30 days
     paths:
       - build
   script:
-    - mkdir -p .gradle_home
-    - ./gradlew --no-daemon --info --full-stacktrace --gradle-user-home "$PWD/.gradle_home" classes testClasses
+    - ./gradlew clean assemble
 
-Run Checks:
+.test:
   stage: test
-  needs: ["build"]
-  dependencies:
-    - build
+  needs: ["Build"]
+  dependencies: ["Build"]
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - build/test-results
+    reports:
+      junit: build/test-results/**/*.xml
   script:
-    - ./bin/run-ci-tests.sh check
+    - ./gradlew check
 
-CentOS 6 OpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos6-x64:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Eclipse Temurin OpenJDK:
+  extends: .test
+  image: docker.io/eclipse-temurin:11
 
-CentOS 6 OpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos6-x64:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+#Mac OS:
+#  extends: .test
+#  tags: ["saas-macos-medium-m1"]
+#  image: macos-13-xcode-14
+#  variables:
+#    HOMEBREW_NO_AUTO_UPDATE: 1
 
-CentOS 6 OpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos6-x64:openjdk13
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+CentOS 7:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-centos7-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-CentOS 7 OpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos7:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+CentOS 8:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-centos8-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-CentOS 7 OpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos7:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Debian 10 Buster:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-debian-10-buster-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-CentOS 7 OpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-centos7:openjdk13
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Debian 11 Bullseye:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-debian-11-bullseye-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 16.04 AdopOpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu16.04:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Debian 12 Bookworm:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-debian-12-bookworm-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 16.04 AdopOpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu16.04:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Ubuntu 16.04:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-ubuntu16.04-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 16.04 AdopOpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu16.04:openjdk13
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Ubuntu 18.04:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-ubuntu18.04-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 18.04 AdopOpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu18.04:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Ubuntu 20.04:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-ubuntu20.04-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 18.04 AdopOpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu18.04:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+Ubuntu 22.04:
+  extends: .test
+  image: registry.gitlab.com/jsass/docker/test-ubuntu22.04-amd64:latest
+  variables:
+    GRADLE_OPTS: '-Dorg.gradle.java.installations.auto-download=false'
 
-Ubuntu 18.04 AdopOpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-ubuntu18.04:openjdk13
-  dependencies:
-    - build
+Publish:
+  stage: deploy
+  needs: ["Build"]
+  dependencies: ["Build"]
   script:
-    - ./bin/run-ci-tests.sh
-
-Debian Stretch AdopOpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-stretch:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
-
-Debian Stretch AdopOpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-stretch:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
-
-Debian Stretch AdopOpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-stretch:openjdk13
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
-
-Debian Buster AdopOpenJDK 8:
-  stage: test Java 8
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-buster:openjdk8
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
-
-Debian Buster AdopOpenJDK 11:
-  stage: test Java 11
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-buster:openjdk11
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
-
-Debian Buster AdopOpenJDK 13:
-  stage: test Java 13
-  needs: ["build"]
-  image: registry.gitlab.com/jsass/docker/test-debian-buster:openjdk13
-  dependencies:
-    - build
-  script:
-    - ./bin/run-ci-tests.sh
+    - ./gradlew publishAllPublicationsToGitlabRepository

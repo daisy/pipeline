@@ -7,5 +7,5 @@
 	remote = git@github.com:snaekobbi/jsass.git
 	branch = org.daisy.libs
 	commit = 5bb6b01cbf090f892e6faf9b3a924e0937aa3bf8
-	parent = 66089a774e9cc5b841d848e733d0ac4ba40bfc98
+	parent = 2aff04b3e9ebde226001260fe41b9a80127fdb60
 	cmdver = 0.3.1
