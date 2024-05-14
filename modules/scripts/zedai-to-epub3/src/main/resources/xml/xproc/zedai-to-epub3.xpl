@@ -31,7 +31,7 @@
       <p:pipe step="load-convert-store" port="status"/>
     </p:output>
 
-    <p:option name="include-tts-log" select="'false'">
+    <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
       <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
     <p:output port="tts-log" sequence="true">

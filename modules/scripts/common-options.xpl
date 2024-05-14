@@ -124,6 +124,10 @@
 The TTS log contains a great deal of additional information that is not present in the main job log
 and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
 of the input document.
+
+The default can be changed using the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
 </p>
 		</p:documentation>
 	</p:option>
@@ -137,12 +141,7 @@ of the input document.
 	<p:output port="tts-log" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">TTS log</h2>
-			<p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
-
-Can be enabled with the "Include TTS log" option or the
-[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
-property.
-			</p>
+			<p px:role="desc">Log file with information about text-to-speech process.</p>
 		</p:documentation>
 	</p:output>
 

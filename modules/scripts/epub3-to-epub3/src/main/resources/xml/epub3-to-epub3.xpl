@@ -303,7 +303,7 @@ elements that represent the sentences.</p>
         <!-- directory used for temporary files -->
     </p:option>
     
-    <p:option name="include-tts-log" select="'false'">
+    <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
         <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
     <p:output port="tts-log" sequence="true">
