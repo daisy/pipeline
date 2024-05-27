@@ -124,9 +124,28 @@ public class GoogleRestTTSEngine extends TTSEngine {
 				Response response = doRequest(speechRequest);
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
-				else if (response.status != 200)
-					throw new FatalError("Response code " + response.status, response.exception);
-				else if (response.body == null)
+				else if (response.status != 200) {
+					String errorMessageFromJson = null; {
+						if (response.error != null) {
+							try {
+								String json = readStream(response.error);
+								logger.debug("Error stream:\n" + json);
+								JSONObject error = new JSONObject(json).getJSONObject("error");
+								if (error != null)
+									errorMessageFromJson = error.getString("message");
+							} catch (IOException e) {
+								logger.debug("Could not read error stream", e);
+							} catch (JSONException e) {
+								logger.debug("Could not parse error", e);
+							}
+						}
+					}
+					throw new FatalError(errorMessageFromJson != null
+					                         ? errorMessageFromJson
+					                         : "Response code " + response.status
+					                           + " from " + speechRequest.getConnection().getURL(),
+					                     response.exception);
+				} else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
 				String json; {
 					try {
@@ -172,9 +191,28 @@ public class GoogleRestTTSEngine extends TTSEngine {
 				Response response = doRequest(voicesRequest);
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
-				else if (response.status != 200)
-					throw new FatalError("Response code " + response.status, response.exception);
-				else if (response.body == null)
+				else if (response.status != 200) {
+					String errorMessageFromJson = null; {
+						if (response.error != null) {
+							try {
+								String json = readStream(response.error);
+								logger.debug("Error stream:\n" + json);
+								JSONObject error = new JSONObject(json).getJSONObject("error");
+								if (error != null)
+									errorMessageFromJson = error.getString("message");
+							} catch (IOException e) {
+								logger.debug("Could not read error stream", e);
+							} catch (JSONException e) {
+								logger.debug("Could not parse error", e);
+							}
+						}
+					}
+					throw new FatalError(errorMessageFromJson != null
+					                         ? errorMessageFromJson
+					                         : "Response code " + response.status
+					                           + " from " + voicesRequest.getConnection().getURL(),
+					                     response.exception);
+				} else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
 				String json; {
 					try {
@@ -247,6 +285,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		int status;
 		InputStream body;
 		IOException exception;
+		InputStream error;
 	}
 
 	/**
@@ -258,6 +297,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 	 */
 	private static Response doRequest(Request request) throws InterruptedException, FatalError {
 		Response r = new Response();
+		IOException ioe = null;
 		try {
 			r.body = request.send();
 		} catch (IOException e) {
@@ -268,6 +308,8 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		} catch (IOException responseCodeError) {
 			throw new FatalError("could not retrieve response code for request", responseCodeError);
 		}
+		if (r.exception != null || r.status > 299)
+		    r.error = request.getConnection().getErrorStream();
 		return r;
 	}
 

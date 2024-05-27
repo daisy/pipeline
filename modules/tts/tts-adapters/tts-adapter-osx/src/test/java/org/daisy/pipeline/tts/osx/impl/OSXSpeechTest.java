@@ -37,6 +37,7 @@ public class OSXSpeechTest {
 		Assume.assumeTrue("Test can not be run because say not present",
 		                  BinaryFinder.find("say").isPresent());
 		OSXSpeechService s = new OSXSpeechService();
+		s.activate();
 		return (OSXSpeechEngine) s.newEngine(new HashMap<String, String>());
 	}
 

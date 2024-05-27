@@ -77,7 +77,7 @@ public class TTSLog {
 		public void addError(Error err) {
 			errors.add(err);
 			String msg = err.getMessage();
-			if (err.getCause() != null)
+			if (err.getCause() != null && slf4jLogger != null)
 				msg += " (Please see detailed log and TTS log for more info.)";
 			else
 				msg += " (Please see TTS log for more info.)";

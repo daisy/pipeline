@@ -16,8 +16,9 @@ import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.DynamicPropertiesExtension;
 import org.daisy.pipeline.tts.TTSEngine;
-import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
+import org.daisy.pipeline.tts.TTSService;
+import org.daisy.pipeline.tts.TTSService.ServiceDisabledException;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
 
@@ -75,7 +76,8 @@ public class TTSEnginesResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
-		Collection<TTSEngine> availableEngines; {
+		Collection<TTSService> ttsServices = ttsRegistry.getServices();
+		Map<String,String> properties; {
 			DynamicPropertiesExtension propsExt = new DynamicPropertiesExtension();
 			XdmNode configXML = null; {
 				if (ttsConfig != null) {
@@ -92,26 +94,43 @@ public class TTSEnginesResource extends AuthenticatedResource {
 			new ConfigReader(saxonProcessor, configXML, propsExt);
 			if (configXML != null)
 				logger.debug("TTS configuration XML:\n" + configXML);
-			Map<String,String> properties = Properties.getSnapshot();
+			properties = Properties.getSnapshot();
 			Map<String,String> dynProperties = propsExt.getDynamicProperties();
 			if (dynProperties != null && !dynProperties.isEmpty()) {
 				properties = new HashMap<>(properties);
 				properties.putAll(dynProperties);
 			}
-			availableEngines = ttsRegistry.getWorkingEngines(properties, new TTSLog(logger), logger);
 		}
 		Document enginesDoc; {
 			enginesDoc = XmlUtils.createDom("tts-engines");
 			Element enginesElem = enginesDoc.getDocumentElement();
 			String baseURL = getRequest().getRootRef().toString();
 			enginesElem.setAttribute("href", baseURL + TTSEnginesWebServiceExtension.TTS_ENGINES_ROUTE);
-			for (TTSEngine e : availableEngines) {
+			for (TTSService s : ttsServices) {
 				Element engineElem = enginesDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "tts-engine");
-				String name = e.getProvider().getName();
+				String name = s.getName();
 				engineElem.setAttribute("name", name);
-				engineElem.setAttribute("voices", baseURL + VoicesWebServiceExtension.VOICES_ROUTE + "?engine=" + name);
-				if (e.handlesSpeakingRate())
-					engineElem.setAttribute("features", "speech-rate");
+				TTSEngine e = null;
+				Throwable error = null;
+				try {
+				    e = s.newEngine(properties);
+					engineElem.setAttribute("status", "available");
+				} catch (ServiceDisabledException ex) {
+					logger.debug(name + " is disabled", ex);
+					error = ex;
+					engineElem.setAttribute("status", "disabled");
+				} catch (Throwable ex) {
+					logger.debug(name + " could not be activated", ex);
+					error = ex;
+					engineElem.setAttribute("status", "error");
+				}
+				if (e != null) {
+					engineElem.setAttribute("voices", baseURL + VoicesWebServiceExtension.VOICES_ROUTE + "?engine=" + name);
+					if (e.handlesSpeakingRate())
+						engineElem.setAttribute("features", "speech-rate");
+				} else if (error != null) {
+					engineElem.setAttribute("message", error.getMessage());
+				}
 				enginesElem.appendChild(engineElem);
 			}
 		}

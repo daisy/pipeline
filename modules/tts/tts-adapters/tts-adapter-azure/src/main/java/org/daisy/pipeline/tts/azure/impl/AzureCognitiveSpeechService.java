@@ -45,13 +45,13 @@ public class AzureCognitiveSpeechService implements TTSService {
 	}
 
 	@Override
-	public AzureCognitiveSpeechEngine newEngine(Map<String,String> properties) throws Throwable {
+	public AzureCognitiveSpeechEngine newEngine(Map<String,String> properties) throws ServiceDisabledException, SynthesisException {
 		String key = AZURE_KEY.getValue(properties);
 		if (key == null)
-			throw new SynthesisException("Property not set: " + AZURE_KEY.getName());
+			throw new ServiceDisabledException("Property not set: " + AZURE_KEY.getName());
 		String region = AZURE_REGION.getValue(properties);
 		if (region == null)
-			throw new SynthesisException("Property not set: " + AZURE_REGION.getName());
+			throw new ServiceDisabledException("Property not set: " + AZURE_REGION.getName());
 		int priority = getPropertyAsInt(properties, AZURE_PRIORITY).get();
 		int threads = getPropertyAsInt(properties, AZURE_THREADS).get();
 		float speechRate = SPEECH_RATE.getValue(properties);

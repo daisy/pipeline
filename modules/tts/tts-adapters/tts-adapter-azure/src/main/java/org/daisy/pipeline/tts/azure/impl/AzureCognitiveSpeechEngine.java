@@ -129,20 +129,20 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 									case TooManyRequests:
 										throw new RecoverableError(
 											new SynthesisException(
-												"Synthesis failed: too many requests: " + cancellation.getErrorDetails()));
+												"Too many requests: " + cancellation.getErrorDetails()));
 									case BadRequest:
 										throw new SynthesisException(
-											"Synthesis failed: bad request: " + cancellation.getErrorDetails() + "\n"
+											"Bad request: " + cancellation.getErrorDetails() + "\n"
 											+ "Sentence was: " + sentence);
 									default:
 										throw new SynthesisException(
-											"Synthesis failed: " + cancellation.getErrorCode() + ": " + cancellation.getErrorDetails());
+											"Error code " + cancellation.getErrorCode() + ": " + cancellation.getErrorDetails());
 									}
 								default:
-									throw new SynthesisException("Synthesis failed: " + cancellation.getReason());
+									throw new SynthesisException("Request canceled: " + cancellation.getReason());
 								}
 							default:
-								throw new SynthesisException("Synthesis failed: " + result.getReason());
+								throw new SynthesisException("Request failed: " + result.getReason());
 							}
 						} catch (SynthesisException|ExecutionException e) {
 							throw new FatalError(e);
@@ -161,9 +161,9 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 			if (e.getCause() instanceof SynthesisException)
 				throw (SynthesisException)e.getCause();
 			else
-				throw new SynthesisException("Synthesis failed", e.getCause());
+				throw new SynthesisException(e.getCause());
 		} catch (Throwable e) {
-			throw new SynthesisException("Synthesis failed", e);
+			throw new SynthesisException(e);
 		}
 	}
 
@@ -183,8 +183,10 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 					}
 				}
 				return voices;
+			case Canceled:
+				throw new SynthesisException("Request canceled: " + result.getErrorDetails());
 			default:
-				throw new SynthesisException("Failed to retrieve voices list: " + result.getReason());
+				throw new SynthesisException("Request failed: " + result.getReason());
 			}
 		} catch (InterruptedException|SynthesisException e) {
 			throw e;
