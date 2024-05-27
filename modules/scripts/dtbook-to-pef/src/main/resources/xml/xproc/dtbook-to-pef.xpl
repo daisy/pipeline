@@ -93,9 +93,6 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="allow-text-overflow-trimming"/>
 
-    <!-- defined in ../../css/page-breaking.params -->
-    <p:option name="force-braille-page-break"/>
-
     <!-- defined in ../../css/volume-breaking.params -->
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>

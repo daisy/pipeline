@@ -7,7 +7,6 @@
        px:extends="../../../../../common-options.xpl
                    ../css/default.params
                    ../css/page-layout.params
-                   ../css/page-breaking.params
                    ../css/volume-breaking.params
                    ../css/notes.params
                    ../css/dotify.params"/>

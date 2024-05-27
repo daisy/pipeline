@@ -737,7 +737,7 @@
         Tests force-braille-page-break option.
       </x:documentation>
       <x:call>
-        <x:option name="force-braille-page-break" select="'true'"/>
+        <x:option name="stylesheet-parameters" select="'(force-braille-page-break:true)'"/>
         <x:option name="pef" select="concat($temp-dir,'force-braille-page-break/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'force-braille-page-break/temp-dir/')"/>
       </x:call>

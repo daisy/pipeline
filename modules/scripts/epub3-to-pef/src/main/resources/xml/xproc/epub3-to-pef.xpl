@@ -98,9 +98,6 @@ even though the provided CSS is more specific.
     <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="allow-text-overflow-trimming"/>
 
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/page-breaking.params -->
-    <p:option name="force-braille-page-break"/>
-
     <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/volume-breaking.params -->
     <p:option name="maximum-number-of-sheets"/>
     <p:option name="allow-volume-break-inside-leaf-section-factor"/>
