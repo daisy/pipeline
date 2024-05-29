@@ -45,7 +45,8 @@ elif [ $1 == "libs/jsass" ]; then
     echo "./gradlew clean release && \\"
     echo ": make sure you enter a SNAPSHOT version as the next version && \\"
     echo "git checkout \$(git describe --abbrev=0) && \\"
-    echo "./gradlew clean uploadArchives && \\"
+    echo ": edit ossrhUsername and ossrhPassword in gradle.properties && \\"
+    echo "./gradlew clean publish && \\"
     echo ": go to https://oss.sonatype.org, login and close and release stage"
 fi
 
