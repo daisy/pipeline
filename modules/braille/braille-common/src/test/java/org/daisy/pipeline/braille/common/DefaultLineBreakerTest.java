@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -263,7 +264,7 @@ public class DefaultLineBreakerTest {
 		}
 		
 		private final static Pattern WORD_SPLITTER = Pattern.compile("[\\x20\t\\n\\r\\u2800\\xA0]+");
-		private final static SimpleInlineStyle HYPHENS_AUTO = new SimpleInlineStyle("hyphens: auto");
+		private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
 		
 		private final LineBreakingFromStyledText lineBreaker = new AbstractBrailleTranslator.util.DefaultLineBreaker(' ', '-', null) {
 			protected BrailleStream translateAndHyphenate(final Iterable<CSSStyledText> styledText, int from, int to) {
@@ -361,7 +362,7 @@ public class DefaultLineBreakerTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, TextStyleParser.parse("")));
 		return styledText;
 	}
 	

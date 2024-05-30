@@ -47,6 +47,7 @@ import static org.daisy.pipeline.braille.common.util.Locales.parseLocale;
 import static org.daisy.pipeline.braille.common.util.Strings.extractHyphens;
 import static org.daisy.pipeline.braille.common.util.Strings.join;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 
 import org.osgi.framework.FrameworkUtil;
@@ -153,7 +154,7 @@ public class DotifyTranslatorImpl extends AbstractBrailleTranslator implements D
 		}
 	};
 	
-	private final static SimpleInlineStyle HYPHENS_AUTO = new CSSStyledText("x", "hyphens: auto").getStyle();
+	private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
 	
 	private String transform(String text, boolean hyphenate) {
 		if (hyphenate && !hyphenating)

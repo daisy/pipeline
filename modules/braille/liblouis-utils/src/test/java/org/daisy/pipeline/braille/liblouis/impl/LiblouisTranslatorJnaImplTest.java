@@ -20,6 +20,7 @@ import org.daisy.pipeline.braille.common.Hyphenator;
 import org.daisy.pipeline.braille.common.NativePath;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTranslatorJnaImplProvider.LiblouisTranslatorImpl;
 import org.daisy.pipeline.junit.OSGiLessRunner;
 
@@ -139,7 +140,7 @@ public class LiblouisTranslatorJnaImplTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, s));
+				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }

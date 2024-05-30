@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.daisy.pipeline.braille.common.Hyphenator.LineIterator;
 import org.daisy.pipeline.braille.common.util.Strings;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -123,7 +124,7 @@ public class HyphenatorWithExceptionsTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, TextStyleParser.parse("")));
 		return styledText;
 	}
 
@@ -133,7 +134,7 @@ public class HyphenatorWithExceptionsTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, s));
+				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
