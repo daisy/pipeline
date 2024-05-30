@@ -68,6 +68,7 @@ import static org.daisy.pipeline.braille.common.util.Strings.join;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import static org.daisy.pipeline.braille.common.util.Tuple2;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
 import org.daisy.pipeline.braille.liblouis.impl.LiblouisTableJnaImplProvider.LiblouisTableJnaImpl;
@@ -214,9 +215,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	}
 
 	private final static PropertyValue TEXT_TRANSFORM_NONE
-		= new CSSStyledText("x", "text-transform: none").getStyle().get("text-transform");
+		= TextStyleParser.parse("text-transform: none").get("text-transform");
 	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
-		= new CSSStyledText("x", "braille-charset: custom").getStyle().get("braille-charset");
+		= TextStyleParser.parse("braille-charset: custom").get("braille-charset");
 
 	class LiblouisTranslatorImpl extends AbstractBrailleTranslator implements LiblouisTranslator {
 		
@@ -1614,7 +1615,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return hyphenator.transform(text);
 		}
 		
-		private final static SimpleInlineStyle HYPHENS_AUTO = new CSSStyledText("x", "hyphens: auto").getStyle();
+		private final static SimpleInlineStyle HYPHENS_AUTO = TextStyleParser.parse("hyphens: auto");
 		
 		public byte[] hyphenate(String text, Locale language) {
 			return extractHyphens(

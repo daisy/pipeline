@@ -8,6 +8,7 @@ import org.daisy.braille.css.SimpleInlineStyle;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.dotify.DotifyTranslator;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.junit.AbstractTest;
 
 import org.junit.Test;
@@ -75,7 +76,7 @@ public class DotifyCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, new SimpleInlineStyle(s)));
+				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }

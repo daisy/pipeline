@@ -26,6 +26,7 @@ import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import static org.daisy.pipeline.braille.common.util.Files.asFile;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.liblouis.LiblouisTable;
 import org.daisy.pipeline.braille.liblouis.LiblouisTableResolver;
 import org.daisy.pipeline.braille.liblouis.LiblouisTranslator;
@@ -711,7 +712,7 @@ public class LiblouisCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, s));
+				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
@@ -723,7 +724,7 @@ public class LiblouisCoreTest extends AbstractTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, TextStyleParser.parse("")));
 		return styledText;
 	}
 	

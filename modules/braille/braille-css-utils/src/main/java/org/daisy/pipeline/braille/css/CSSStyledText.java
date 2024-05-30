@@ -5,7 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.daisy.braille.css.SimpleInlineStyle;
-import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
 
 /**
@@ -36,29 +35,6 @@ public class CSSStyledText implements Cloneable {
 	public CSSStyledText(String text, SimpleInlineStyle style, Locale language, Map<String,String> textAttributes) {
 		this.text = text;
 		this.style = style;
-		this.language = language;
-		this.textAttributes = textAttributes;
-	}
-	
-	public CSSStyledText(String text, String style) {
-		this(text, style, null, null);
-	}
-	
-	public CSSStyledText(String text, String style, Locale language) {
-		this(text, style, language, null);
-	}
-	
-	public CSSStyledText(String text, String style, Map<String,String> textAttributes) {
-		this(text, style, null, textAttributes);
-	}
-	
-	public CSSStyledText(String text, String style, Locale language, Map<String,String> textAttributes) {
-		this.text = text;
-		if (style == null)
-			this.style = null;
-		else
-			// clone because we make SimpleInlineStyle available and SimpleInlineStyle is mutable (and we want it to be)
-			this.style = BrailleCssParser.parseSimpleInlineStyle(style, null, true);
 		this.language = language;
 		this.textAttributes = textAttributes;
 	}

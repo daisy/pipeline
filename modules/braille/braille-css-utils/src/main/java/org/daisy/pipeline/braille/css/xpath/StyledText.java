@@ -10,6 +10,7 @@ import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.css.impl.BrailleCssStyle;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 import org.daisy.pipeline.braille.css.xpath.impl.Stylesheet;
 
 /* This interface is not meant to be implemented. It is merely a container of XPath function definitions. */
@@ -82,10 +83,10 @@ public interface StyledText {
 				return new CSSStyledText(text, s, l, textAttributes);
 			} else if (o instanceof String) {
 				String s = (String)o;
-				return new CSSStyledText(text, s, l, textAttributes);
+				return new CSSStyledText(text, TextStyleParser.parse(s), l, textAttributes);
 			} else
 				throw new IllegalArgumentException("Unexpected style argument: expected `Style` object or string");
 		} else
-			return new CSSStyledText(text, (SimpleInlineStyle)null, l, textAttributes);
+			return new CSSStyledText(text, null, l, textAttributes);
 	}
 }
