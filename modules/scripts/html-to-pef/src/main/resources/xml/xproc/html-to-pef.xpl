@@ -165,6 +165,7 @@ sheet modules) are available for use in Sass style sheets:
                                            output-file-format
                                            include-pef
                                            include-preview
+                                           include-pdf
                                            include-obfl
                                            include-css
                                            result

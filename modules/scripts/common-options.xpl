@@ -445,14 +445,13 @@ If left blank, the locale information in the input document will be used to sele
 	</p:option>
 
 	<!--
+	    dtbook-to-pef
 	    html-to-pef
 	-->
 	<p:option name="include-pdf" required="false" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include PDF</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not to include a PDF version of the braille result showing ASCII braille.
-
-The `wkhtmltopdf` tool must be installed on the system for the PDF export to work.</p>
+			<p px:role="desc" xml:space="preserve">Whether or not to include a PDF version of the braille result showing ASCII braille.</p>
 		</p:documentation>
 	</p:option>
 
