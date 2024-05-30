@@ -20,6 +20,7 @@ import org.daisy.braille.css.PropertyValue;
 import org.daisy.pipeline.braille.common.AbstractBrailleTranslator.util.DefaultLineBreaker;
 import static org.daisy.pipeline.braille.common.util.Strings.splitInclDelimiter;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,9 +58,9 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 	private FromStyledTextToBraille fromStyledTextToBraille = null;
 
 	private final static PropertyValue TEXT_TRANSFORM_NONE
-		= new CSSStyledText("x", "text-transform: none").getStyle().get("text-transform");
+		= TextStyleParser.parse("text-transform: none").get("text-transform");
 	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
-		= new CSSStyledText("x", "braille-charset: custom").getStyle().get("braille-charset");
+		= TextStyleParser.parse("braille-charset: custom").get("braille-charset");
 
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		if (fromStyledTextToBraille == null)

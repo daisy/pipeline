@@ -5,6 +5,7 @@ import javax.inject.Inject;
 import static org.daisy.pipeline.braille.common.Query.util.query;
 import org.daisy.pipeline.braille.common.HyphenatorRegistry;
 import org.daisy.pipeline.braille.css.CSSStyledText;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 import org.daisy.pipeline.junit.AbstractTest;
 
@@ -45,7 +46,7 @@ public class TexHyphenatorCoreTest extends AbstractTest {
 		boolean textSet = false;
 		for (String s : textAndStyle) {
 			if (textSet)
-				styledText.add(new CSSStyledText(text, s));
+				styledText.add(new CSSStyledText(text, TextStyleParser.parse(s)));
 			else
 				text = s;
 			textSet = !textSet; }
@@ -57,7 +58,7 @@ public class TexHyphenatorCoreTest extends AbstractTest {
 	private Iterable<CSSStyledText> text(String... text) {
 		List<CSSStyledText> styledText = new ArrayList<CSSStyledText>();
 		for (String t : text)
-			styledText.add(new CSSStyledText(t, ""));
+			styledText.add(new CSSStyledText(t, TextStyleParser.parse("")));
 		return styledText;
 	}
 

@@ -58,6 +58,7 @@ import static org.daisy.common.stax.XMLStreamWriterHelper.writeElement;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 import org.daisy.pipeline.braille.css.impl.BrailleCssSerializer;
+import org.daisy.pipeline.braille.css.TextStyleParser;
 
 public class TableAsList extends SingleInSingleOutXMLTransformer {
 
@@ -171,7 +172,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 							// FIXME: We assume that not both a tbody/thead/tfoot and a child tr have a text-transform property,
 							// because two text-transform properties can not always simply be replaced with a single one.
 							if (style == null) style = "";
-							SimpleInlineStyle s = new CSSStyledText("x", style).getStyle();
+							SimpleInlineStyle s = TextStyleParser.parse(style);
 							if (!inheritedStyle.isEmpty())
 								s = s.inheritFrom(inheritedStyle.peek()).concretize();
 							inheritedStyle.push(s);
@@ -202,7 +203,7 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 										style = reader.getAttributeValue(i);
 										break; }}}
 							if (style == null) style = "";
-							withinCell.style = new CSSStyledText("x", style).getStyle();
+							withinCell.style = TextStyleParser.parse(style);
 							if (!inheritedStyle.isEmpty())
 								withinCell.style = withinCell.style.inheritFrom(inheritedStyle.peek()).concretize();
 							withinCell.lang = inheritedLang.isEmpty() ? null : inheritedLang.peek();
