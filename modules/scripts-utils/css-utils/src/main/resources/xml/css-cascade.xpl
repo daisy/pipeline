@@ -98,15 +98,21 @@
 	<p:option name="user-stylesheet" required="false" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Space separated list of URIs, absolute or relative to source. Applied prior to all
-			other style sheets defined within the source.</p>
+			style sheets defined within the source, but after any user agent style sheets.</p>
+		</p:documentation>
+	</p:option>
+
+	<p:option name="include-user-agent-stylesheet" required="false" cx:as="xs:boolean" select="false()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether or not to include style sheets defined by the user agent for the given content
+			document type (<code>content-type</code> option) and output medium (<code>media</code> option).</p>
 		</p:documentation>
 	</p:option>
 	
 	<p:option name="type" required="false" select="'text/css text/x-scss'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-			<p>The type of associated style sheets to apply. May be a space separated list. Allowed
-			values are "text/css" and "text/x-scss". If omitted, all CSS and SCSS style sheets are
-			applied.</p>
+			<p>The type of associated style sheets to apply. May be a space separated list. Allowed values are
+			"text/css" and "text/x-scss". If omitted, all CSS and SCSS style sheets are applied.</p>
 		</p:documentation>
 	</p:option>
 	
@@ -152,6 +158,8 @@
 		<p:input port="parameters" kind="parameter" primary="false"/>
 		<p:output port="result"/>
 		<p:option name="user-stylesheet"/>
+		<p:option name="include-user-agent-stylesheet"/>
+		<p:option name="content-type"/>
 		<p:option name="media"/>
 		<p:option name="type"/>
 		<p:option name="attribute-name"/>
@@ -175,6 +183,8 @@
 		<p:input port="parameters" kind="parameter" primary="false"/>
 		<p:output port="result"/>
 		<p:option name="user-stylesheet"/>
+		<p:option name="include-user-agent-stylesheet"/>
+		<p:option name="content-type"/>
 		<p:option name="media"/>
 		<!--
 		    Implemented in ../../java/org/daisy/pipeline/css/calabash/impl/CssAnalyzeStep.java
@@ -264,6 +274,7 @@
 			</p:identity>
 			<p:choose px:progress="1">
 				<p:when test="$user-stylesheet!=''
+					      or $include-user-agent-stylesheet
 				              or exists($stylesheets-from-xml-stylesheet-instructions)
 				              or //*[local-name()='style']
 				                    [not(@media) or pf:media-query-matches(@media,$media)]
@@ -284,6 +295,8 @@
 						</p:input>
 						<p:with-option name="user-stylesheet"
 						               select="string-join(($user-stylesheet[not(.='')],$stylesheets-from-xml-stylesheet-instructions),' ')"/>
+						<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
+						<p:with-option name="content-type" select="$content-type"/>
 						<p:with-option name="media" select="$media"/>
 						<p:with-option name="type" select="$type"/>
 						<p:with-option name="attribute-name" select="$attribute-name"/>
@@ -329,6 +342,7 @@
 			</p:identity>
 			<p:choose>
 				<p:when test="$user-stylesheet!=''
+					      or $include-user-agent-stylesheet
 				              or exists($stylesheets-from-xml-stylesheet-instructions)
 				              or //*[local-name()='style']
 				                    [not(@media) or pf:media-query-matches(@media,$media)]
@@ -349,6 +363,8 @@
 						<p:with-option name="user-stylesheet"
 						               select="string-join(($user-stylesheet[not(.='')],
 						                                    $stylesheets-from-xml-stylesheet-instructions),' ')"/>
+						<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
+						<p:with-option name="content-type" select="$content-type"/>
 						<p:with-option name="media" select="$media"/>
 					</pxi:css-analyze>
 				</p:when>

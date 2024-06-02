@@ -27,14 +27,15 @@ public class SassAnalyzer {
 	}
 
 	/**
-	 * Get the variables declared within the given user style sheets and source document.
+	 * Get the variables declared within the given style sheets and source document.
 	 *
-	 * @param userStylesheets {@code Source} objects must have absolute hierarchical URI as system ID
+	 * @param userAndUserAgentStylesheets {@code Source} objects must have absolute hierarchical URI as
+	 *                                    system ID
 	 * @param sourceDocument {@code Source} object must have absolute hierarchical URI as system ID,
 	 *                       or object may be {@code null}.
 	 */
-	public Result analyze(Iterable<Source> userStylesheets, Source sourceDocument) throws IOException {
-		return new Result(analyzer.getVariableDeclarations(userStylesheets, sourceDocument));
+	public Result analyze(Iterable<Source> userAndUserAgentStylesheets, Source sourceDocument) throws IOException {
+		return new Result(analyzer.getVariableDeclarations(userAndUserAgentStylesheets, sourceDocument));
 	}
 
 	public interface SassVariable {

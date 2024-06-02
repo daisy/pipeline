@@ -1,6 +1,7 @@
 package org.daisy.pipeline.css.calabash.impl;
 
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,6 +41,7 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.css.CssCascader;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.sass.SassCompiler;
+import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.css.XsltProcessor;
 
 import org.osgi.service.component.annotations.Component;
@@ -59,9 +61,12 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private final InMemoryURIResolver inMemoryResolver;
 	private final URIResolver cssURIResolver;
 	private final Iterable<CssCascader> inliners;
+	private final UserAgentStylesheetRegistry userAgentStylesheets;
 
 	private static final QName _user_stylesheet = new QName("user-stylesheet");
+	private static final QName _include_user_agent_stylesheet = new QName("include-user-agent-stylesheet");
 	private static final QName _type = new QName("type");
+	private static final QName _content_type = new QName("content-type");
 	private static final QName _media = new QName("media");
 	private static final QName _attribute_name = new QName("attribute-name");
 	private static final QName _multiple_attributes = new QName("multiple-attributes");
@@ -70,9 +75,12 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	private static final String DEFAULT_TYPES = "text/css text/x-scss";
 	private static final QName DEFAULT_ATTRIBUTE_NAME = new QName("style");
 
-	private CssCascadeStep(XProcRuntime runtime, XAtomicStep step, Iterable<CssCascader> inliners, final URIResolver resolver) {
+	private CssCascadeStep(XProcRuntime runtime, XAtomicStep step,
+	                       Iterable<CssCascader> inliners, final URIResolver resolver,
+	                       UserAgentStylesheetRegistry userAgentStylesheets) {
 		super(runtime, step);
 		this.inliners = inliners;
+		this.userAgentStylesheets = userAgentStylesheets;
 		// URI resolver that can resolve in-memory documents
 		inMemoryResolver = new InMemoryURIResolver();
 		// URI resolver for CSS files
@@ -132,6 +140,15 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 			if (!types.contains("text/css"))
 				throw new XProcException(step, "'type' option must contain 'text/css'");
 			boolean enableSass = types.contains("text/x-scss");
+			List<String> stylesheets = new ArrayList<>();
+			if (getOption(_include_user_agent_stylesheet, false))
+				for (URL u : userAgentStylesheets.get(types,
+				                                      Arrays.asList(getOption(_content_type, "").trim().split("\\s+")),
+				                                      Collections.singleton(medium)))
+					stylesheets.add(u.toString());
+			for (String s : Arrays.asList(getOption(_user_stylesheet, "").trim().split("\\s+")))
+				stylesheets.add(s);
+			stylesheets.add(getOption(_user_stylesheet, ""));
 			for (CssCascader inliner : inliners)
 				if (inliner.supportsMedium(medium)) {
 					QName attributeName; {
@@ -151,7 +168,7 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 					inMemoryResolver.setContext(contextPipe);
 					inliner.newInstance(
 						medium,
-						getOption(_user_stylesheet, ""),
+						String.join(" ", stylesheets),
 						cssURIResolver,
 						enableSass
 							? new SassCompiler(cssURIResolver, Collections.unmodifiableMap(sassVariables))
@@ -219,11 +236,12 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 
 		private URIResolver resolver;
+		private UserAgentStylesheetRegistry userAgentStylesheets;
 		private final List<CssCascader> inliners = new ArrayList<>();
 
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-			return new CssCascadeStep(runtime, step, inliners, resolver);
+			return new CssCascadeStep(runtime, step, inliners, resolver, userAgentStylesheets);
 		}
 
 		@Reference(
@@ -248,8 +266,15 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 			this.inliners.add(inliner);
 		}
 
-		public void unbindCssCascader(CssCascader inliner) {
-			this.inliners.remove(inliner);
+		@Reference(
+			name = "UserAgentStylesheetRegistry",
+			unbind = "-",
+			service = UserAgentStylesheetRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
+		)
+		public void setUserAgentStylesheetRegistry(UserAgentStylesheetRegistry registry) {
+			this.userAgentStylesheets = registry;
 		}
 	}
 

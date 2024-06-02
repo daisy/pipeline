@@ -164,11 +164,12 @@ public class SassAnalyzer {
 		};
 	}
 
-	public Collection<SassVariable> getVariableDeclarations(Iterable<Source> userStylesheets, Source sourceDocument)
+	public Collection<SassVariable> getVariableDeclarations(Iterable<Source> userAndUserAgentStylesheets,
+	                                                        Source sourceDocument)
 			throws IOException {
 
 		List<CSSSource> stylesheets = new ArrayList<>();
-		for (Source s : userStylesheets) {
+		for (Source s : userAndUserAgentStylesheets) {
 			URL base; {
 				String systemId = s.getSystemId();
 				if (systemId == null || "".equals(systemId))
