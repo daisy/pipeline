@@ -1025,7 +1025,9 @@
 					<xsl:sequence select="$sequence"/>
 				</xsl:when>
 				<xsl:otherwise>
-					<xsl:apply-templates select="$apply-templates" mode="text:section"/>
+					<xsl:apply-templates select="$group-inline-nodes" mode="text:section">
+						<xsl:with-param name="select" select="$apply-templates"/>
+					</xsl:apply-templates>
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:element>
