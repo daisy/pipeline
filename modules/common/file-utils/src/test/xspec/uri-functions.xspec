@@ -379,16 +379,16 @@
         </x:scenario>
         
         <x:scenario label="uri with '..'">
-            <x:call><x:param name="uri" select="'file:/home/user/tmp/../file.xml'"/></x:call>
-            <x:expect label="'tmp/../' should be removed" select="'file:/home/user/file.xml'"/>
+            <x:call><x:param name="uri" select="'file:/home3/user/tmp/../file.xml'"/></x:call>
+            <x:expect label="'tmp/../' should be removed" select="'file:/home3/user/file.xml'"/>
         </x:scenario>
         <x:scenario label="uri with '../..'">
-            <x:call><x:param name="uri" select="'file:/home/user/tmp/../../file.xml'"/></x:call>
-            <x:expect label="'user/tmp/../../' should be removed" select="'file:/home/file.xml'"/>
+            <x:call><x:param name="uri" select="'file:/home3/user/tmp/../../file.xml'"/></x:call>
+            <x:expect label="'user/tmp/../../' should be removed" select="'file:/home3/file.xml'"/>
         </x:scenario>
         <x:scenario label="uri with both '..' and '.'">
-            <x:call><x:param name="uri" select="'file:/home/user/tmp/../../sub/./folder/file.xml'"/></x:call>
-            <x:expect label="'user/tmp/../../' and './' should be removed" select="'file:/home/sub/folder/file.xml'"/>
+            <x:call><x:param name="uri" select="'file:/home3/user/tmp/../../sub/./folder/file.xml'"/></x:call>
+            <x:expect label="'user/tmp/../../' and './' should be removed" select="'file:/home3/sub/folder/file.xml'"/>
         </x:scenario>
         <x:scenario label="uri with a bunch of '..' and '.'">
             <x:call><x:param name="uri" select="'file:/home3/user/a/b/c/d/e/f/.tmp/../../sub/././../.././../.././.folder/file.xml'"/></x:call>
