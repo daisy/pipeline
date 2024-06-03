@@ -50,7 +50,7 @@ public class GoogleTTSService implements TTSService {
 	public TTSEngine newEngine(Map<String,String> properties) throws ServiceDisabledException, SynthesisException {
 		String serverAddress = GOOGLE_ADDRESS.getValue(properties); // this is a hidden parameter, it is meant to be used in tests only
 		String apiKey = GOOGLE_APIKEY.getValue(properties);
-		if (apiKey == null)
+		if (apiKey == null || "".equals(apiKey))
 			throw new ServiceDisabledException("Property not set: " + GOOGLE_APIKEY.getName());
 		int sampleRate = getPropertyAsInt(properties, GOOGLE_SAMPLERATE).get();
 		int priority = getPropertyAsInt(properties, GOOGLE_PRIORITY).get();
