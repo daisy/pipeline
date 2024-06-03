@@ -260,7 +260,11 @@ public class TTSRegistry {
 				} catch (InterruptedException e) {
 					throw new Exception("Timeout while retrieving voices (exceeded " + timeoutSecs + " seconds)");
 				} catch (Exception e) {
-					throw new Exception("Failed to retreive voices: " + e.getMessage(), e);
+					// No need to include something like "Failed to retreive voices", because if
+					// there is something wrong with the connection with the engine, failing to
+					// retreive the voices is the first thing that will go wrong because that is the
+					// first thing that happens.
+					throw e;
 				} finally {
 					timeout.disable();
 				}
@@ -295,7 +299,9 @@ public class TTSRegistry {
 					    timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
 						engine, firstVoice, resource);
 				} catch (Exception e) {
-					throw new Exception("Test failed: " + e.getMessage(), e);
+					// No need to include something like "Test failed". Assume that the error has
+					// enough information to know that it happened during synthesis.
+					throw e;
 				} finally {
 					if (resource != null)
 						timeout.enableForCurrentThread(2);

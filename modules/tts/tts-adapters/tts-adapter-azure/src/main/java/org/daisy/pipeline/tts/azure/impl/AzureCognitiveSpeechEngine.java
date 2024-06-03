@@ -172,6 +172,7 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 		try (SpeechSynthesizer synth = new SpeechSynthesizer(speechConfig, null);
 		     SynthesisVoicesResult result = synth.getVoicesAsync("").get() // get() throws InterruptedException
 		) {
+			String errorDetails = null;
 			switch (result.getReason()) {
 			case VoicesListRetrieved:
 				Collection<Voice> voices = new ArrayList<Voice>();
@@ -184,10 +185,32 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 				}
 				return voices;
 			case Canceled:
-				throw new SynthesisException("Request canceled: " + result.getErrorDetails());
+				errorDetails = result.getErrorDetails();
+				break;
 			default:
-				throw new SynthesisException("Request failed: " + result.getReason());
+				errorDetails = "" + result.getReason();
+				break;
 			}
+			errorDetails = errorDetails.trim();
+			for (String skip : new String[]{"Error in sending a http request",
+											"Details",
+											"Failed with error"})
+				if (errorDetails.toLowerCase().startsWith(skip.toLowerCase())) {
+					errorDetails = errorDetails.substring(skip.length());
+					if (errorDetails.length() > 0)
+						if (errorDetails.substring(0, 1).matches("\\p{Punct}"))
+							errorDetails = errorDetails.substring(1);
+					errorDetails = errorDetails.trim();
+				}
+			for (String skip : new String[]{"Get voices list failed"})
+				if (errorDetails.toLowerCase().startsWith(skip.toLowerCase())) {
+					errorDetails = errorDetails.substring(skip.length());
+					if (errorDetails.length() > 0)
+						if (errorDetails.substring(0, 1).matches("\\p{Punct}"))
+							errorDetails = errorDetails.substring(1);
+					errorDetails = errorDetails.trim();
+				}
+			throw new SynthesisException(errorDetails);
 		} catch (InterruptedException|SynthesisException e) {
 			throw e;
 		} catch (Throwable e) {

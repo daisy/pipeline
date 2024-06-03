@@ -129,7 +129,39 @@ public class TTSEnginesResource extends AuthenticatedResource {
 					if (e.handlesSpeakingRate())
 						engineElem.setAttribute("features", "speech-rate");
 				} else if (error != null) {
-					engineElem.setAttribute("message", error.getMessage());
+					// Clients should use first line as the short message. The short message is
+					// followed by the full message after a blank line.
+					String shortMessage = error.getMessage();
+					error = error.getCause();
+					String detailedMessage = error != null ? error.getMessage() : null;
+					if (shortMessage.length() > 80) {
+						// Use the heuristic that if a message is longer than 80 characters, it is possible
+						// that it is too technical for the average user. It also becomes difficult to fit it
+						// in the UI. So provide this backup:
+						if (detailedMessage == null)
+							detailedMessage = shortMessage;
+						else {
+							detailedMessage = detailedMessage.trim();
+							shortMessage = shortMessage.trim();
+							if (detailedMessage.startsWith(shortMessage))
+								detailedMessage = detailedMessage.substring(shortMessage.length());
+							if (detailedMessage.startsWith(":")) {
+								detailedMessage = detailedMessage.substring(1);
+								detailedMessage = detailedMessage.trim();
+							}
+							if (detailedMessage.length() > 0) {
+								if (!shortMessage.matches(".*\\p{Punct}$"))
+									shortMessage += ":";
+								detailedMessage = shortMessage + " " + detailedMessage;
+							} else
+								detailedMessage = shortMessage;
+						}
+						shortMessage = "Could not connect to the service";
+					}
+					String message = shortMessage;
+					if (detailedMessage != null)
+						message += ("\n\n" + detailedMessage);
+					engineElem.setAttribute("message", message);
 				}
 				enginesElem.appendChild(engineElem);
 			}

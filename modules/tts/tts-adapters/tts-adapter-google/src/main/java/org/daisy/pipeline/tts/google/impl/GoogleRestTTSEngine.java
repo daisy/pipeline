@@ -124,28 +124,9 @@ public class GoogleRestTTSEngine extends TTSEngine {
 				Response response = doRequest(speechRequest);
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
-				else if (response.status != 200) {
-					String errorMessageFromJson = null; {
-						if (response.error != null) {
-							try {
-								String json = readStream(response.error);
-								logger.debug("Error stream:\n" + json);
-								JSONObject error = new JSONObject(json).getJSONObject("error");
-								if (error != null)
-									errorMessageFromJson = error.getString("message");
-							} catch (IOException e) {
-								logger.debug("Could not read error stream", e);
-							} catch (JSONException e) {
-								logger.debug("Could not parse error", e);
-							}
-						}
-					}
-					throw new FatalError(errorMessageFromJson != null
-					                         ? errorMessageFromJson
-					                         : "Response code " + response.status
-					                           + " from " + speechRequest.getConnection().getURL(),
-					                     response.exception);
-				} else if (response.body == null)
+				else if (response.status != 200)
+					raiseFatalError(response, speechRequest);
+				else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
 				String json; {
 					try {
@@ -191,28 +172,9 @@ public class GoogleRestTTSEngine extends TTSEngine {
 				Response response = doRequest(voicesRequest);
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
-				else if (response.status != 200) {
-					String errorMessageFromJson = null; {
-						if (response.error != null) {
-							try {
-								String json = readStream(response.error);
-								logger.debug("Error stream:\n" + json);
-								JSONObject error = new JSONObject(json).getJSONObject("error");
-								if (error != null)
-									errorMessageFromJson = error.getString("message");
-							} catch (IOException e) {
-								logger.debug("Could not read error stream", e);
-							} catch (JSONException e) {
-								logger.debug("Could not parse error", e);
-							}
-						}
-					}
-					throw new FatalError(errorMessageFromJson != null
-					                         ? errorMessageFromJson
-					                         : "Response code " + response.status
-					                           + " from " + voicesRequest.getConnection().getURL(),
-					                     response.exception);
-				} else if (response.body == null)
+				else if (response.status != 200)
+					raiseFatalError(response, voicesRequest);
+				else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
 				String json; {
 					try {
@@ -306,7 +268,8 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		try {
 			r.status = request.getConnection().getResponseCode();
 		} catch (IOException responseCodeError) {
-			throw new FatalError("could not retrieve response code for request", responseCodeError);
+			throw new FatalError("Could not retrieve response code for request. Do you have an internet connection?",
+			                     responseCodeError);
 		}
 		if (r.exception != null || r.status > 299)
 		    r.error = request.getConnection().getErrorStream();
@@ -325,5 +288,55 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		}
 		br.close();
 		return sb.toString();
+	}
+
+	private static void raiseFatalError(Response response, Request<JSONObject> request) throws FatalError {
+		String message = "Response code " + response.status + " from " + request.getConnection().getURL();
+		Throwable cause = response.exception;
+		try {
+			JSONObject errorJson = null; {
+				if (response.error != null) {
+					try {
+						String json = readStream(response.error);
+						logger.debug("Error stream:\n" + json);
+						errorJson = new JSONObject(json).getJSONObject("error");
+					} catch (IOException e) {
+						logger.debug("Could not read error stream", e);
+					}
+				}
+			}
+			if (errorJson != null) {
+				message = errorJson.getString("message");
+				cause = null;
+				if (message != null && message.length() > 80) {
+					// provide a simplified message
+					try {
+						JSONArray details = errorJson.getJSONArray("details");
+						if (details != null && details.length() > 0) {
+							String reason = details.getJSONObject(0).getString("reason");
+							if (reason != null) {
+								cause = new Exception(message, cause);
+								if ("API_KEY_INVALID".equals(reason))
+									message = "API key not valid";
+								else
+									message = reason.replaceAll("_", " ");
+							}
+						}
+					} catch (JSONException e) {
+						try {
+							String status = errorJson.getString("status");
+							if (status != null) {
+								cause = new Exception(message, cause);
+								message = status.replaceAll("_", " ");
+							}
+						} catch (JSONException ee) {
+						}
+					}
+				}
+			}
+		} catch (JSONException e) {
+			logger.debug("Could not parse error", e);
+		}
+		throw new FatalError(message, cause);
 	}
 }
