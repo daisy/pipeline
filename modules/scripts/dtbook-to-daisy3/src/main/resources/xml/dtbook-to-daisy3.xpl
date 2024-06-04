@@ -31,9 +31,6 @@
     <p:pipe step="convert" port="validation-status"/>
   </p:output>
 
-  <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
-    <!-- defined in ../../../../../common-options.xpl -->
-  </p:option>
   <p:output port="tts-log" sequence="true">
     <!-- defined in ../../../../../common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
@@ -55,6 +52,14 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="audio" select="'false'">
+    <!-- defined in ../../../../../common-options.xpl -->
+  </p:option>
+
+  <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
+    <!-- defined in ../../../../../common-options.xpl -->
+  </p:option>
+
   <p:input port="tts-config">
     <!-- defined in ../../../../../common-options.xpl -->
     <p:inline><d:config/></p:inline>
@@ -65,10 +70,6 @@
   </p:option>
 
   <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
-    <!-- defined in ../../../../../common-options.xpl -->
-  </p:option>
-
-  <p:option name="audio" select="'false'">
     <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
 
