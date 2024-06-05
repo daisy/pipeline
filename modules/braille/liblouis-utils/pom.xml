@@ -134,7 +134,7 @@
   </dependencies>
 
   <properties>
-    <liblouis.version>3.27.0-p2</liblouis.version>
+    <liblouis.version>3.30.0-p1</liblouis.version>
     <liblouisutdml.liblouis.version>3.21.0-p2</liblouisutdml.liblouis.version>
     <expose-services>
       org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_default_liblouis_tables,
