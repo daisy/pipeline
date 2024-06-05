@@ -117,6 +117,11 @@ public class SAPIService implements TTSService {
 		return "sapi";
 	}
 
+	@Override
+	public String getDisplayName() {
+		return "Windows";
+	}
+
 	@Deactivate
 	protected void deactivate() {
 		ReleaseOnecore();

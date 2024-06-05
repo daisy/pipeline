@@ -66,7 +66,7 @@ public class GoogleTTSService implements TTSService {
 
 	@Override
 	public String getDisplayName() {
-		return "Google cloud speech engine";
+		return "Google Cloud";
 	}
 
 	private static Optional<Integer> getPropertyAsInt(Map<String,String> properties, Property prop) throws SynthesisException {

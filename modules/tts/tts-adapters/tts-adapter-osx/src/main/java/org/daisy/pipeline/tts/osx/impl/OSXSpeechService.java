@@ -57,6 +57,11 @@ public class OSXSpeechService implements TTSService {
 		return "osx-speech";
 	}
 
+	@Override
+	public String getDisplayName() {
+		return "macOS";
+	}
+
 	private static void failToActivate(String message) throws RuntimeException {
 		failToActivate(message, null);
 	}

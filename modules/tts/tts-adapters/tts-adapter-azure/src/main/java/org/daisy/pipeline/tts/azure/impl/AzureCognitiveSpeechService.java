@@ -45,6 +45,11 @@ public class AzureCognitiveSpeechService implements TTSService {
 	}
 
 	@Override
+	public String getDisplayName() {
+		return "Microsoft Azure";
+	}
+
+	@Override
 	public AzureCognitiveSpeechEngine newEngine(Map<String,String> properties) throws ServiceDisabledException, SynthesisException {
 		String key = AZURE_KEY.getValue(properties);
 		if (key == null || "".equals(key))

@@ -72,6 +72,11 @@ public class ESpeakService implements TTSService {
 		return "espeak";
 	}
 
+	@Override
+	public String getDisplayName() {
+		return "eSpeak";
+	}
+
 	private static void failToActivate(String message) throws RuntimeException {
 		failToActivate(message, null);
 	}

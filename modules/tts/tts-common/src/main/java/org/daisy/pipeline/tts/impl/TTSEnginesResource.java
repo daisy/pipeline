@@ -110,6 +110,7 @@ public class TTSEnginesResource extends AuthenticatedResource {
 				Element engineElem = enginesDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "tts-engine");
 				String name = s.getName();
 				engineElem.setAttribute("name", name);
+				engineElem.setAttribute("nicename", s.getDisplayName());
 				TTSEngine e = null;
 				Throwable error = null;
 				try {
