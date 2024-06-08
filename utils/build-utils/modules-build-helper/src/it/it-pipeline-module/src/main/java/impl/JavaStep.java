@@ -1,9 +1,13 @@
 package impl;
 
+import java.util.Map;
+
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
+
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
+import org.daisy.common.xproc.XProcMonitor;
 
 import com.xmlcalabash.core.XProcException;
 import com.xmlcalabash.core.XProcRuntime;
@@ -30,7 +34,7 @@ public class JavaStep extends Identity implements XProcStep {
 		
 	)
 	public static class Provider implements XProcStepProvider {
-		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step) {
+		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
 			return new JavaStep(runtime, step);
 		}
 	}

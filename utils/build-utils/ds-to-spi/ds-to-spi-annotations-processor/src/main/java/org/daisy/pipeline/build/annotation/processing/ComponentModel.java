@@ -1,9 +1,12 @@
-package org.daisy.pipeline.build.annotations;
+package org.daisy.pipeline.build.annotation.processing;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.service.component.annotations.ReferencePolicy;
 
@@ -18,8 +21,11 @@ public class ComponentModel {
 	DeactivateModel deactivate;
 	boolean immediate;
 	final List<PropertyModel> properties = new ArrayList<PropertyModel>();
-	final List<String> services = new ArrayList<String>();
+	final List<ServiceModel> services = new ArrayList<ServiceModel>();
+	boolean proxy; // whether to generate proxy class or extend the class
+	final List<ServiceMethodModel> serviceMethods = new ArrayList<ServiceMethodModel>();
 	final List<ReferenceModel> references = new ArrayList<ReferenceModel>();
+	String classLoader;
 	
 	public String getName() {
 		return name;
@@ -43,6 +49,18 @@ public class ComponentModel {
 	
 	public List<PropertyModel> getProperties() {
 		return properties;
+	}
+	
+	public List<ServiceModel> getServices() {
+		return services;
+	}
+
+	public boolean getProxy() {
+		return proxy;
+	}
+	
+	public List<ServiceMethodModel> getServiceMethods() {
+		return serviceMethods;
 	}
 	
 	public ActivateModel getActivate() {
@@ -69,6 +87,48 @@ public class ComponentModel {
 			}
 		});
 		return references;
+	}
+
+	public String getClassLoader() {
+		return classLoader;
+	}
+	
+	public static class ServiceModel {
+		
+		String name; // fully qualified name, possibly parameterized
+		String flatName;
+		
+		public String getName() {
+			return name;
+		}
+
+		public String flatName() {
+			return flatName;
+		}
+	}
+
+	public static class ServiceMethodModel {
+		
+		String name;
+		String returnType;
+		List<String> argumentTypes = new ArrayList<String>();
+		List<String> thrownTypes = new ArrayList<String>();
+		
+		public String getName() {
+			return name;
+		}
+		
+		public String getReturnType() {
+			return returnType;
+		}
+		
+		public List<String> getArgumentTypes() {
+			return argumentTypes;
+		}
+		
+		public List<String> getThrownTypes() {
+			return thrownTypes;
+		}
 	}
 	
 	public static class ActivateModel {

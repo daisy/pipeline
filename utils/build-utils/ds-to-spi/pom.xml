@@ -16,6 +16,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>ds-to-spi-annotations</module>
     <module>ds-to-spi-annotations-processor</module>
     <module>ds-to-spi-runtime</module>
     <module>ds-to-spi-maven-plugin</module>

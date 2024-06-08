@@ -1,4 +1,4 @@
-package org.daisy.pipeline.build.annotations;
+package org.daisy.pipeline.build.annotation.processing;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -6,9 +6,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.function.Consumer;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -29,12 +32,19 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.TypeParameterElement;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.NoType;
+import javax.lang.model.type.PrimitiveType;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVariable;
 import javax.tools.Diagnostic;
 
 import aQute.bnd.header.OSGiHeader;
 import aQute.bnd.osgi.Instruction;
 import aQute.bnd.osgi.Instructions;
 
+import com.sun.tools.javac.code.Symbol.TypeVariableSymbol;
 import com.sun.tools.javac.code.Type.ClassType;
 
 import org.apache.velocity.Template;
@@ -43,10 +53,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
 
-import org.daisy.pipeline.build.annotations.ComponentModel.ActivateModel;
-import org.daisy.pipeline.build.annotations.ComponentModel.DeactivateModel;
-import org.daisy.pipeline.build.annotations.ComponentModel.PropertyModel;
-import org.daisy.pipeline.build.annotations.ComponentModel.ReferenceModel;
+import org.daisy.common.spi.annotations.LoadWith;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ConfigurationPolicy;
@@ -60,6 +67,7 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 // TODO: warnings for felix and bnd annotations?
 
 @SupportedAnnotationTypes({
+	"org.daisy.common.spi.annotations.LoadWith",
 	"org.osgi.service.component.annotations.Component",
 	"org.osgi.service.component.annotations.Activate",
 	"org.osgi.service.component.annotations.Deactivate",
@@ -110,6 +118,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 					TypeElement classElement = (TypeElement)e;
 					PackageElement packageElement = getPackageElement(classElement);
 					Component componentAnnotation = classElement.getAnnotation(Component.class);
+					LoadWith loadWithAnnotation = classElement.getAnnotation(LoadWith.class);
 					ComponentModel component = new ComponentModel(); {
 						component.name = componentAnnotation.name();
 						component.qualifiedClassName = classElement.getQualifiedName().toString();
@@ -135,7 +144,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 							for (String p : componentAnnotation.property()) {
 								Matcher m = PROPERTY_PATTERN.matcher(p);
 								if (m.matches()) {
-									PropertyModel property = new PropertyModel(); {
+									ComponentModel.PropertyModel property = new ComponentModel.PropertyModel(); {
 										property.key = m.group(1);
 										String type = m.group(2);
 										String value = m.group(3);
@@ -161,17 +170,86 @@ public class DsToSpiProcessor extends AbstractProcessor {
 								throw new RuntimeException();
 							}
 							AnnotationValue serviceList = getAnnotationValue(classElement, Component.class.getName(), "service");
+							boolean onlyInterfaces = true;
 							if (serviceList != null) {
+								Map<String,TypeElement> interfaces = new HashMap<String,TypeElement>();
 								for (AnnotationValue v : (List<? extends AnnotationValue>)serviceList.getValue()) {
-									String service = ((ClassType)v.getValue()).tsym.flatName().toString();
-									component.services.add(service);
-									services.add(service);
+									ClassType classType = (ClassType)v.getValue();
+									if (classType.isInterface()) {
+										TypeElement typeElement = (TypeElement)processingEnv.getTypeUtils().asElement(classType);
+										interfaces.put(typeElement.getQualifiedName().toString(), typeElement);
+									} else {
+										onlyInterfaces = false;
+										if (loadWithAnnotation != null) {
+											printError(
+												"@LoadWith only supported when all services are interfaces, but got " + classType.toString(),
+												e);
+											throw new RuntimeException();
+										}
+									}
+								}
+								if (onlyInterfaces) {
+									List<TypeElement> superInterfaces = new ArrayList<>();
+									BoundTypeParameters boundTypeParameters = new BoundTypeParameters();
+									getInterfacesRecursively(classElement, x -> {}, boundTypeParameters);
+									for (TypeElement i : interfaces.values()) {
+										for (TypeParameterElement p : i.getTypeParameters()) {
+											TypeMirror upper = null;
+											for (TypeMirror b : p.getBounds())
+												if (upper != null)
+													throw new IllegalArgumentException("multiple-bounded type parameters");
+												else
+													upper = b;
+											boundTypeParameters.put(p, upper);
+										}
+										getInterfacesRecursively(i, superInterfaces::add, boundTypeParameters);
+									}
+									for (AnnotationValue v : (List<? extends AnnotationValue>)serviceList.getValue()) {
+										ClassType classType = (ClassType)v.getValue();
+										ComponentModel.ServiceModel service = new ComponentModel.ServiceModel();
+										service.name = boundTypeParameters.resolveVariables(classType);
+										service.flatName = classType.tsym.flatName().toString();
+										component.services.add(service);
+										services.add(service.flatName);
+									}
+									for (TypeElement i : superInterfaces)
+										interfaces.put(i.getQualifiedName().toString(), i);
+									for (String k : interfaces.keySet()) {
+										TypeElement i = interfaces.get(k);
+										for (Element enclosedElement : i.getEnclosedElements()) {
+											if (enclosedElement instanceof ExecutableElement) {
+												ExecutableElement exeElement = (ExecutableElement)enclosedElement;
+												ComponentModel.ServiceMethodModel method = new ComponentModel.ServiceMethodModel();
+												method.name = exeElement.getSimpleName().toString();
+												method.returnType = boundTypeParameters.resolveVariables(exeElement.getReturnType());
+												for (VariableElement variableElement : exeElement.getParameters()) {
+													method.argumentTypes.add(boundTypeParameters.resolveVariables(variableElement.asType()));
+												}
+												for (TypeMirror thrown : exeElement.getThrownTypes()) {
+													method.thrownTypes.add(thrown.toString());
+												}
+												component.serviceMethods.add(method);
+											}
+										}
+									}
+								} else {
+									for (AnnotationValue v : (List<? extends AnnotationValue>)serviceList.getValue()) {
+										ClassType classType = (ClassType)v.getValue();
+										ComponentModel.ServiceModel service = new ComponentModel.ServiceModel();
+										service.flatName = classType.tsym.flatName().toString();
+										component.services.add(service);
+										services.add(service.flatName);
+									}
 								}
 							}
+							component.proxy = onlyInterfaces;
 							if (componentAnnotation.configurationPolicy() != ConfigurationPolicy.OPTIONAL) {
 								printError("@Component with configurationPolicy = " + componentAnnotation.configurationPolicy() + " not supported", e);
 								throw new RuntimeException();
 							}
+							component.classLoader = loadWithAnnotation != null
+								? getAnnotationValue(classElement, LoadWith.class.getName(), "value").getValue().toString()
+								: null;
 							components.put(classElement.getQualifiedName().toString(), component);
 						}
 					}
@@ -188,7 +266,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 					if (!includeClass(classElement, includes, includeClasses, excludeClasses)) {
 					} else if (component != null) {
 						Reference referenceAnnotation = exeElement.getAnnotation(Reference.class);
-						ReferenceModel reference = new ReferenceModel(); {
+						ComponentModel.ReferenceModel reference = new ComponentModel.ReferenceModel(); {
 							String bindMethod = exeElement.getSimpleName().toString();
 							reference.methodName = bindMethod;
 							reference.service = getAnnotationValue(exeElement, Reference.class.getName(), "service").getValue().toString();
@@ -268,7 +346,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 					ComponentModel component = components.get(classElement.getQualifiedName().toString());
 					if (!includeClass(classElement, includes, includeClasses, excludeClasses)) {
 					} else if (component != null) {
-						ActivateModel activate = new ActivateModel(); {
+						ComponentModel.ActivateModel activate = new ComponentModel.ActivateModel(); {
 							activate.methodName = exeElement.getSimpleName().toString();
 							if (exeElement.getParameters().size() == 0) {
 								activate.propertiesArgumentType = null;
@@ -314,7 +392,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 					ComponentModel component = components.get(classElement.getQualifiedName().toString());
 					if (!includeClass(classElement, includes, includeClasses, excludeClasses)) {
 					} else if (component != null) {
-						DeactivateModel deactivate = new DeactivateModel(); {
+						ComponentModel.DeactivateModel deactivate = new ComponentModel.DeactivateModel(); {
 							deactivate.methodName = exeElement.getSimpleName().toString();
 							if (exeElement.getParameters().size() != 0) {
 								printError("@Deactivate method with arguments not supported", e);
@@ -340,10 +418,12 @@ public class DsToSpiProcessor extends AbstractProcessor {
 				printWarning("creating META-INF/services file: " + dest);
 				BufferedWriter writer = new BufferedWriter(new FileWriter(dest));
 				for (ComponentModel component : components.values()) {
-					if (component.services.contains(service)) {
-						writer.write((component.packageName != null ? component.packageName + "." : "") + component.spiClassName);
-						writer.newLine();
-					}
+					for (ComponentModel.ServiceModel s : component.services)
+						if (service.equals(s.flatName)) {
+							writer.write((component.packageName != null ? component.packageName + "." : "") + component.spiClassName);
+							writer.newLine();
+							break;
+						}
 				}
 				writer.close();
 			}
@@ -398,7 +478,7 @@ public class DsToSpiProcessor extends AbstractProcessor {
 	}
 	
 	private boolean includeClass(TypeElement classElement, Instructions includes,
-	                                    Set<String> includeClasses, Set<String> excludeClasses) {
+	                             Set<String> includeClasses, Set<String> excludeClasses) {
 		String qualifiedClassName = classElement.getQualifiedName().toString();
 		if (includeClasses.contains(qualifiedClassName))
 			return true;
@@ -439,6 +519,49 @@ public class DsToSpiProcessor extends AbstractProcessor {
 		return (PackageElement)enclosingElement;
 	}
 	
+	private void getInterfacesRecursively(TypeElement element, Consumer<TypeElement> collect, BoundTypeParameters bindTypeParameters) {
+		TypeMirror s = element.getSuperclass();
+		if (s instanceof ClassType) {
+			TypeElement e = (TypeElement)processingEnv.getTypeUtils().asElement(s);
+			Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
+			for (TypeMirror arg : ((ClassType)s).getTypeArguments()) {
+				if (!typeParameters.hasNext())
+					throw new IllegalStateException();
+				bindTypeParameters.put(typeParameters.next(), arg);
+			}
+			while (typeParameters.hasNext()) {
+				TypeMirror upper = null;
+				for (TypeMirror b : typeParameters.next().getBounds())
+					if (upper != null)
+						throw new IllegalArgumentException("multiple-bounded type parameters");
+					else
+						upper = b;
+				bindTypeParameters.put(typeParameters.next(), upper);
+			}
+			getInterfacesRecursively(e, collect, bindTypeParameters);
+		}
+		for (TypeMirror i : element.getInterfaces()) {
+			TypeElement e = (TypeElement)processingEnv.getTypeUtils().asElement(i);
+			collect.accept(e);
+			Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
+			for (TypeMirror arg : ((ClassType)i).getTypeArguments()) {
+				if (!typeParameters.hasNext())
+					throw new IllegalStateException();
+				bindTypeParameters.put(typeParameters.next(), arg);
+			}
+			while (typeParameters.hasNext()) {
+				TypeMirror upper = null;
+				for (TypeMirror b : typeParameters.next().getBounds())
+					if (upper != null)
+						throw new IllegalArgumentException("multiple-bounded type parameters");
+					else
+						upper = b;
+				bindTypeParameters.put(typeParameters.next(), upper);
+			}
+			getInterfacesRecursively(e, collect, bindTypeParameters);
+		}
+	}
+	
 	private static AnnotationValue getAnnotationValue(Element element, String annotationName, String valueName) {
 		for (AnnotationMirror am : element.getAnnotationMirrors())
 			if (annotationName.equals(am.getAnnotationType().toString()))
@@ -467,5 +590,181 @@ public class DsToSpiProcessor extends AbstractProcessor {
 	
 	private void printNote(String message) {
 		processingEnv.getMessager().printMessage(Diagnostic.Kind.NOTE, message);
+	}
+	
+	/**
+	 * To keep track of which type parameters are bound to which types
+	 */
+	private class BoundTypeParameters {
+		
+		private final Map<String,BoundTypeParameter> map = new HashMap<>();
+		
+		public BoundTypeParameter put(TypeParameterElement parameter, TypeMirror typeArgument) {
+			BoundTypeParameter b = new BoundTypeParameter(parameter, typeArgument);
+			String k = parameterKey(parameter);
+			BoundTypeParameter prev = map.put(k, b);
+			if (prev != null) {
+				b = prev.combine(b);
+				map.put(k, b);
+			}
+			return b;
+		}
+		
+		public BoundTypeParameter get(TypeParameterElement parameter) {
+			return map.get(parameterKey(parameter));
+		}
+		
+		public BoundTypeParameter get(TypeVariable parameter) {
+			return map.get(parameterKey(parameter));
+		}
+		
+		/**
+		 * Key for looking up parameter in a map
+		 */
+		private String parameterKey(TypeParameterElement parameter) {
+			return parameter.getGenericElement() + ":" + parameter;
+		}
+		
+		private String parameterKey(TypeVariable parameter) {
+			return ((TypeVariableSymbol)parameter.asElement()).getGenericElement() + ":" + parameter;
+		}
+		
+		/**
+		 * Resolve variables in a type expression
+		 */
+		public String resolveVariables(TypeMirror type) {
+			if (type instanceof NoType // void
+			    || type instanceof PrimitiveType)
+				return type.toString();
+			else
+				return new BoundTypeParameter(null, type).toString();
+		}
+		
+		private class BoundTypeParameter implements Cloneable {
+			
+			/**
+			 * The parameter
+			 */
+			private final TypeParameterElement parameter;
+			/**
+			 * The type that {@code parameter} is bound to
+			 */
+			private TypeElement type;
+			/**
+			 * Bound parameters of {@code type}
+			 */
+			private List<BoundTypeParameter> boundTypeParameters;
+			
+			/**
+			 * @param typeArgument a specified type argument
+			 * @param boundTypeParameters to lookup type variable bindings of the enclosing type
+			 */
+			private BoundTypeParameter(TypeParameterElement parameter, TypeMirror typeArgument) {
+				this.parameter = parameter;
+				if (typeArgument == null) {
+					this.type = null; // represents Object
+					this.boundTypeParameters = null;
+				} else if (typeArgument instanceof ClassType) {
+					this.type = (TypeElement)processingEnv.getTypeUtils().asElement((ClassType)typeArgument);
+					Iterator<? extends TypeParameterElement> typeParameters = this.type.getTypeParameters().iterator();
+					this.boundTypeParameters = typeParameters.hasNext() ? new ArrayList<>() : null;
+					for (TypeMirror arg : ((ClassType)typeArgument).getTypeArguments()) {
+						if (!typeParameters.hasNext())
+							throw new IllegalStateException();
+						this.boundTypeParameters.add(BoundTypeParameters.this.put(typeParameters.next(), arg));
+					}
+					while (typeParameters.hasNext()) {
+						TypeParameterElement p = typeParameters.next();
+						TypeMirror upper = null;
+						for (TypeMirror b : p.getBounds())
+							if (upper != null)
+								throw new IllegalArgumentException("multiple-bounded type parameters");
+							else
+								upper = b;
+						this.boundTypeParameters.add(BoundTypeParameters.this.put(p, upper));
+					}
+				} else if (typeArgument instanceof TypeVariable) {
+					BoundTypeParameter type = BoundTypeParameters.this.get((TypeVariable)typeArgument);
+					if (type == null)
+						throw new IllegalStateException();
+					this.type = type.type;
+					this.boundTypeParameters = type.boundTypeParameters;
+				} else
+					throw new IllegalArgumentException();
+			}
+		
+			/**
+			 * Combine two types (which are assumed to be compatible) into
+			 * a new type that both types are assignable from.
+			 */
+			public BoundTypeParameter combine(BoundTypeParameter other) {
+				if (!this.parameter.equals(other.parameter))
+					throw new IllegalArgumentException();
+				BoundTypeParameter common = clone();
+				if (this.isAssignableFrom(other.type))
+					common.type = other.type;
+				else if (other.isAssignableFrom(this.type))
+					;
+				else
+					throw new IllegalStateException("incompatible types");
+				if (common.boundTypeParameters != null)
+					for (int i = 0; i < common.boundTypeParameters.size(); i++)
+						common.boundTypeParameters.set(
+							i,
+							common.boundTypeParameters.get(i).combine(other.boundTypeParameters.get(i)));
+				return common;
+			}
+
+			/**
+			 * Naive implementation of isAssignableFrom
+			 */
+			private boolean isAssignableFrom(TypeElement other) {
+				if (type.equals(other))
+					return true;
+				for (TypeMirror i : other.getInterfaces())
+					if (isAssignableFrom((TypeElement)processingEnv.getTypeUtils().asElement(i)))
+						return true;
+				TypeMirror s = other.getSuperclass();
+				if (!(s instanceof NoType))
+					if (isAssignableFrom((TypeElement)processingEnv.getTypeUtils().asElement(s)))
+						return true;
+				return false;
+			}
+			
+			@Override
+			public String toString() {
+				if (type == null)
+					return "java.lang.Object";
+				else {
+					String s = "";
+					s += type.getQualifiedName();
+					if (boundTypeParameters != null && boundTypeParameters.size() > 0) {
+						s += "<";
+						boolean first = true;
+						for (BoundTypeParameter p : boundTypeParameters) {
+							if (!first) s += ",";
+							first = false;
+							s += p;
+						}
+						s += ">";
+					}
+					return s;
+				}
+			}
+			
+			@Override
+			public BoundTypeParameter clone() {
+				BoundTypeParameter clone; {
+					try {
+						clone = (BoundTypeParameter)super.clone();
+					} catch (CloneNotSupportedException e) {
+						throw new InternalError("coding error");
+					}
+				}
+				if (clone.boundTypeParameters != null)
+					clone.boundTypeParameters = new ArrayList<>(clone.boundTypeParameters);
+				return clone;
+			}
+		}
 	}
 }
