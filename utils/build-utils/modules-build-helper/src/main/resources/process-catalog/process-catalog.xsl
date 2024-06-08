@@ -147,7 +147,10 @@ public class <xsl:value-of select="$className"/> extends Module {
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="cat:uri[@px:content-type=('script','data-type','xslt-package') or @px:export-functions]" priority="1">
+    <xsl:template match="cat:uri[@px:content-type=('script',
+                                                   'data-type',
+                                                   'xslt-package',
+                                                   'user-agent-stylesheet') or @px:export-functions]" priority="1">
         <xsl:if test="@name">
             <xsl:next-match/>
         </xsl:if>
@@ -203,11 +206,15 @@ public class <xsl:value-of select="$className"/> extends Module {
                                                      'xsl-package',
                                                      'data-type',
                                                      'params',
+                                                     'user-agent-stylesheet',
                                                      'calabash-config',
                                                      'liblouis-tables',
                                                      'libhyphen-tables')]|
                          cat:uri/@px:extends|
                          cat:uri[@px:content-type=('data-type','script')]/@px:id|
+                         cat:uri[@px:content-type='user-agent-stylesheet']/@px:stylesheet-type|
+                         cat:uri[@px:content-type='user-agent-stylesheet']/@px:stylesheet-for-content-type|
+                         cat:uri[@px:content-type='user-agent-stylesheet']/@px:stylesheet-for-media|
                          cat:nextCatalog"/>
     
     <xsl:template match="cat:uri[@px:content-type='script']" mode="java">
@@ -384,6 +391,81 @@ public class <xsl:value-of select="$className"/> extends UrlBasedDatatypeService
 	@Activate
 	public void activate(Map&lt;?,?&gt; properties) {
 		super.activate(properties, <xsl:value-of select="$className"/>.class);
+	}
+}</c:data></xsl:result-document>
+    </xsl:template>
+    
+    <xsl:template match="cat:uri[@px:content-type='user-agent-stylesheet']" mode="java">
+        <!--
+            assuming catalog.xml is placed in META-INF
+        -->
+        <xsl:variable name="path" select="pf:normalize-path(concat('/META-INF/',@uri))"/>
+        <xsl:call-template name="user-agent-stylesheet-class">
+            <xsl:with-param name="path" select="$path"/>
+            <xsl:with-param name="type" select="(@px:stylesheet-type,
+                                                 if (ends-with($path,'.scss')) then 'text/x-scss' else (),
+                                                 'text/css')[1]"/>
+            <xsl:with-param name="content-type" select="@px:stylesheet-for-content-type/tokenize(.,'\s+')[not(.='')]"/>
+            <xsl:with-param name="media" select="(@px:stylesheet-for-media,'all')[1]"/>
+        </xsl:call-template>
+        <xsl:next-match/>
+    </xsl:template>
+    
+    <xsl:template name="user-agent-stylesheet-class">
+        <xsl:param name="path" as="xs:string" required="yes"/>
+        <xsl:param name="type" as="xs:string" required="yes"/>
+        <xsl:param name="content-type" as="xs:string*" required="yes"/>
+        <xsl:param name="media" as="xs:string" required="yes"/>
+        <xsl:variable name="className" select="concat('UserAgentStylesheet_',
+                                                      string-join(for $t in $content-type return replace($t,'[^a-zA-Z]','_'),'_'),
+                                                      '_',replace($media,'[^a-zA-Z]','_'))"/>
+        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/css/impl/{$className}.java"
+                             method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.css.impl;
+
+import java.net.URL;
+import java.util.Arrays;
+<xsl:if test="exists($content-type)"
+>import java.util.Collection;
+import java.util.Collections;
+</xsl:if
+>
+import org.daisy.common.file.URLs;
+import org.daisy.pipeline.css.UserAgentStylesheet;
+import org.daisy.pipeline.css.Medium;
+
+import org.osgi.service.component.annotations.Component;
+
+@Component(
+	name = "<xsl:value-of select="$className"/>",
+	service = { UserAgentStylesheet.class }
+)
+public class <xsl:value-of select="$className"/> implements UserAgentStylesheet {
+
+	private final URL resource = URLs.getResourceFromJAR("<xsl:value-of select="$path"/>", <xsl:value-of select="$className"/>.class);
+	private final String type = "<xsl:value-of select="replace(replace($type,'\\','\\\\'),'&quot;','\\&quot;')"/>";
+	<xsl:if test="exists($content-type)"
+	>private final Collection&lt;String&gt; contentTypes = Collections.unmodifiableList(
+		Arrays.asList(<xsl:value-of select="string-join(for $t in $content-type return
+		                                                concat('&quot;',replace(replace($t,'\\','\\\\'),'&quot;','\\&quot;'),'&quot;'),', ')"/>));
+	</xsl:if
+	>private final String mediaQuery = "<xsl:value-of select="replace(replace($media,'\\','\\\\'),'&quot;','\\&quot;')"/>";
+
+	public URL getURL() {
+		return resource;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public boolean matchesContentType(String contentType) {
+		return <xsl:value-of select="if (empty($content-type))
+		                             then 'true'
+		                             else 'contentTypes.contains(contentType)'"/>;
+	}
+
+	public boolean matchesMedium(Medium medium) {
+		return medium.matches(mediaQuery);
 	}
 }</c:data></xsl:result-document>
     </xsl:template>
