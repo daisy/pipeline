@@ -118,7 +118,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
+			List<Medium> media = Medium.parseMultiple(getOption(_media, DEFAULT_MEDIUM));
 			inMemoryResolver.setContext(contextPipe);
 			Node doc = new XMLCalabashInputValue(sourcePipe).ensureSingleItem().asNodeIterator().next();
 			if (!(doc instanceof Document))
@@ -135,7 +135,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 								new InputSource(URLs.resolve(baseURI, URLs.asURI(t.nextToken())).toASCIIString())));
 				}
 			}
-			for (SassVariable v : new SassAnalyzer(medium, cssURIResolver, null)
+			for (SassVariable v : new SassAnalyzer(media, cssURIResolver, null)
 			                          .analyze(userStylesheets, sourceDocument)
 			                          .getVariables()) {
 				if (params.containsKey(v.getName()) && v.isDefault())

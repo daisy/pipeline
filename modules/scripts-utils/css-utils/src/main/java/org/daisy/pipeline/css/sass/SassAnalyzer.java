@@ -19,7 +19,11 @@ public class SassAnalyzer {
 	private final org.daisy.pipeline.css.sass.impl.SassAnalyzer analyzer;
 
 	public SassAnalyzer(Medium medium, URIResolver uriResolver, DatatypeRegistry datatypes) {
-		analyzer = new org.daisy.pipeline.css.sass.impl.SassAnalyzer(medium, uriResolver, datatypes);
+	    this(Collections.singleton(medium), uriResolver, datatypes);
+	}
+
+	public SassAnalyzer(Collection<Medium> media, URIResolver uriResolver, DatatypeRegistry datatypes) {
+		analyzer = new org.daisy.pipeline.css.sass.impl.SassAnalyzer(media, uriResolver, datatypes);
 	}
 
 	/**

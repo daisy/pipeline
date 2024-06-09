@@ -15,6 +15,7 @@ import java.net.URLStreamHandlerFactory;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -176,17 +177,17 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			}
 			inputs = builder.build();
 		}
-		Medium medium; {
-			medium = null;
-			NodeList media = request.getElementsByTagNameNS(NS_DAISY, "media");
-			if (media.getLength() > 0)
+		List<Medium> media; {
+			media = null;
+			NodeList node = request.getElementsByTagNameNS(NS_DAISY, "media");
+			if (node.getLength() > 0)
 				try {
-					medium = Medium.parse(((Element)media.item(0)).getAttribute("value"));
+					media = Medium.parseMultiple(((Element)node.item(0)).getAttribute("value"));
 				} catch (IllegalArgumentException e) {
 					return badRequest(e);
 				}
-			if (medium == null)
-				medium = Medium.parse("screen");
+			if (media == null)
+				media = Medium.parseMultiple("screen");
 		}
 		URI contextBase = URI.create("context:/");
 		uriResolver = fallback(uriResolver, simpleURIResolver);
@@ -262,7 +263,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				parametersDoc = XmlUtils.createDom("parameters");
 				Element parametersElem = parametersDoc.getDocumentElement();
 				try {
-					for (SassVariable v : new SassAnalyzer(medium, resolver, datatypeRegistry)
+					for (SassVariable v : new SassAnalyzer(media, resolver, datatypeRegistry)
 						                      .analyze(userStylesheets, sourceDocument)
 					                          .getVariables()) {
 						if (v.isDefault()) {
