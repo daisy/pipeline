@@ -46,6 +46,14 @@
 		</p:documentation>
 	</p:input>
 	
+	<p:option name="parameters" cx:as="xs:string" select="''">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>This option may contain additional style sheet parameters in serialized form. The
+			parameters specified through this option and the ones specified through the "parameters"
+			port are merged.</p>
+		</p:documentation>
+	</p:option>
+
 	<p:output port="result" primary="true"/>
 	<p:output port="result.in-memory" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -78,12 +86,13 @@
 	<p:output port="result.parameters">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>A <a href="https://www.w3.org/TR/xproc/#cv.param-set"><code>c:param-set</code></a>
-			document containing all the parameters on the <code>parameters</code> input port,
-			augmented with any <a href="https://sass-lang.com/documentation/variables#scope">global
-			variables</a> declared in SCSS style sheets. Variables that are declared later take
-			precedence, except if they are declared with <code>!default</code>.</p>
+			document containing all the parameters specified on the <code>parameters</code> input
+			port and <code>parameters</code> option, augmented with any <a
+			href="https://sass-lang.com/documentation/variables#scope">global variables</a> declared
+			in SCSS style sheets. Variables that are declared later take precedence, except if they
+			are declared with <code>!default</code>.</p>
 		</p:documentation>
-		<p:pipe step="parameters" port="result"/>
+		<p:pipe step="result-parameters" port="result"/>
 	</p:output>
 
 	<p:option name="content-type" required="false" select="'text/html application/xhtml+xml application/x-dtbook+xml'">
@@ -203,6 +212,11 @@
 			px:fileset-update
 		</p:documentation>
 	</p:import>
+	<p:import href="css-parse-param-set.xpl">
+		<p:documentation>
+			px:css-parse-param-set
+		</p:documentation>
+	</p:import>
 	
 	<p:variable name="fileset-mode" cx:as="xs:boolean" select="exists(/d:fileset)"/>
 	
@@ -291,7 +305,7 @@
 							<p:pipe step="css" port="result"/>
 						</p:input>
 						<p:input port="parameters">
-							<p:pipe step="main" port="parameters"/>
+							<p:pipe step="parameters" port="result"/>
 						</p:input>
 						<p:with-option name="user-stylesheet"
 						               select="string-join(($user-stylesheet[not(.='')],$stylesheets-from-xml-stylesheet-instructions),' ')"/>
@@ -311,12 +325,23 @@
 	</p:for-each>
 	<p:sink/>
 	
+	<px:css-parse-param-set name="parse-parameters">
+		<p:with-option name="parameters" select="$parameters"/>
+	</px:css-parse-param-set>
+	<p:sink/>
+	<p:parameters name="parameters">
+		<p:input port="parameters">
+			<p:pipe step="main" port="parameters"/>
+			<p:pipe step="parse-parameters" port="result"/> <!-- last occurence of a parameter wins -->
+		</p:input>
+	</p:parameters>
+
 	<p:identity>
 		<p:input port="source">
 			<p:pipe step="main" port="source"/>
 		</p:input>
 	</p:identity>
-	<p:group name="parameters" cx:pure="true">
+	<p:group name="result-parameters" cx:pure="true">
 		<p:output port="result"/>
 		<px:assert message="parameters output not supported when input is a d:fileset" error-code="XXXXX">
 			<p:with-option name="test" select="not($fileset-mode)"/>
@@ -358,7 +383,7 @@
 							<p:pipe step="css" port="result"/>
 						</p:input>
 						<p:input port="parameters">
-							<p:pipe step="main" port="parameters"/>
+							<p:pipe step="parameters" port="result"/>
 						</p:input>
 						<p:with-option name="user-stylesheet"
 						               select="string-join(($user-stylesheet[not(.='')],
@@ -373,7 +398,7 @@
 					<!-- ensure that there's exactly one c:param-set -->
 					<p:parameters name="param-set">
 						<p:input port="parameters">
-							<p:pipe step="main" port="parameters"/>
+							<p:pipe step="parameters" port="result"/>
 						</p:input>
 					</p:parameters>
 					<p:identity>

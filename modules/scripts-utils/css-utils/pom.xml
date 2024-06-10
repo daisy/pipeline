@@ -21,6 +21,7 @@
             org.daisy.pipeline.modules.impl.Module_css_utils,
             org.daisy.pipeline.css.calabash.impl.CssAnalyzeStep$Provider,
             org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
+            org.daisy.pipeline.css.calabash.impl.CssParseParamSetStep$Provider,
             org.daisy.pipeline.css.impl.DefaultCssCascader,
             org.daisy.pipeline.css.impl.StylesheetParametersWebServiceExtension,
             org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition,

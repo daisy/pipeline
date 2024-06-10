@@ -123,10 +123,14 @@ sheet modules) are available for use in Sass style sheets:
         </p:documentation>
     </p:option>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl">
+        <p:documentation>
+            px:css-parse-param-set
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
-            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
@@ -179,9 +183,9 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
     </px:delete-parameters>
     <p:sink/>
-    <px:parse-query name="stylesheet-parameters">
-        <p:with-option name="query" select="$stylesheet-parameters"/>
-    </px:parse-query>
+    <px:css-parse-param-set name="stylesheet-parameters">
+        <p:with-option name="parameters" select="$stylesheet-parameters"/>
+    </px:css-parse-param-set>
     <p:sink/>
     
     <!-- ========= -->

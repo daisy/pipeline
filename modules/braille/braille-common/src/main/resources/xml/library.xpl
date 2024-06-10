@@ -38,9 +38,10 @@
                 <p>A c:param-set document.</p>
             </p:documentation>
         </p:output>
-        <!--
-            Implemented in ../../java/org/daisy/pipeline/braille/common/calabash/impl/PxParseQueryStep.java
-        -->
+        <p:import href="http://www.daisy.org/pipeline/modules/css-utils/library.xpl"/>
+        <px:css-parse-param-set>
+            <p:with-option name="parameters" select="$query"/>
+        </px:css-parse-param-set>
     </p:declare-step>
 
 </p:library>
