@@ -21,6 +21,7 @@
 	</p:output>
 	<p:option name="content-type" required="false" select="'text/html application/xhtml+xml application/x-dtbook+xml'"/>
 	<p:option name="user-stylesheet" required="false" select="''"/>
+	<p:option name="parameters" cx:as="xs:string" select="''"/>
 	<p:option name="include-user-agent-stylesheet" required="false" cx:as="xs:boolean" select="false()"/>
 
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -50,6 +51,7 @@
 		<p:with-option name="content-type" select="$content-type"/>
 		<p:with-option name="user-stylesheet" select="$user-stylesheet"/>
 		<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
+		<p:with-option name="parameters" select="$parameters"/>
 		<p:with-option name="attribute-name" select="QName('http://www.daisy.org/ns/pipeline/tts','tts:_')"/>
 	</px:css-cascade>
 

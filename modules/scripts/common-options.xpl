@@ -338,6 +338,20 @@ you can control that variable with the following parameters list: `(foo:true)`.<
 	</p:option>
 
 	<!--
+	    dtbook-to-daisy3
+	    dtbook-to-epub3
+	    epub3-to-epub3
+	    epub-to-daisy
+	-->
+	<p:option name="speak-image-alt" px:type="boolean" select="'true'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Speak image alt text</h2>
+			<p px:role="desc">Speak the alt text of images.</p>
+			<!-- <p px:role="desc">Speak the alt text of images, unless a caption is present.</p> -->
+		</p:documentation>
+	</p:option>
+
+	<!--
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef

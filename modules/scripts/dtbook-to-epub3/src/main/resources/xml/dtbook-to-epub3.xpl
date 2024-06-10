@@ -35,6 +35,14 @@
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
+    <!-- <p:option name="stylesheet-parameters" select="''"> -->
+    <!--   <!-\- defined in ../../../../../common-options.xpl -\-> -->
+    <!-- </p:option> -->
+
+    <p:option name="speak-image-alt" select="'true'">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+
     <p:option name="language" select="''">
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
@@ -200,6 +208,8 @@
 	                                                             for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
 	                                                               resolve-uri($s,$dtbook-uri),
 	                                                             ' ')"/>
+	    <!-- <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/> -->
+	    <p:with-option name="stylesheet-parameters" select="concat('(speak-image-alt:',$speak-image-alt,')')"/>
 	    <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
 	                                            resolve-uri($l,$dtbook-uri)"/>
 	    <p:with-option name="audio" select="$audio"/>

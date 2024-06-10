@@ -47,6 +47,7 @@
             <p>CSS style sheets as space separated list of absolute URIs.</p>
         </p:documentation>
     </p:option>
+    <p:option name="stylesheet-parameters" cx:as="xs:string" select="''"/>
     <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>PLS lexicons as list of absolute URIs.</p>
@@ -689,6 +690,7 @@
                             <p:pipe step="main" port="tts-config"/>
                         </p:input>
                         <p:with-option name="stylesheet" select="$stylesheet"/>
+                        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
                         <p:with-option name="lexicon" select="$lexicon"/>
                         <p:with-option name="audio-file-type" select="$tts-audio-file-type"/>
                         <p:with-option name="include-log" select="$include-tts-log"/>
