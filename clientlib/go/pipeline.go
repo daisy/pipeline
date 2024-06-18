@@ -14,29 +14,30 @@ import (
 
 //Available api entry names
 const (
-	API_ALIVE        = "alive"
-	API_SCRIPT       = "script"
-	API_SCRIPTS      = "scripts"
-	API_DATATYPE     = "datatype"
-	API_JOBREQUEST   = "jobRequest"
-	API_JOB          = "job"
-	API_JOBS         = "jobs"
-	API_BATCH        = "batch"
-	API_DEL_JOB      = "del_job"
-	API_DEL_BATCH    = "del_batch"
-	API_RESULT       = "results"
-	API_LOG          = "log"
-	API_HALT         = "halt"
-	API_CLIENTS      = "clients"
-	API_NEWCLIENT    = "new_client"
-	API_CLIENT       = "client"
-	API_DELETECLIENT = "delete_client"
-	API_MODIFYCLIENT = "modify_client"
-	API_PROPERTIES   = "properties"
-	API_SIZE         = "size"
-	API_QUEUE        = "queue"
-	API_MOVE_UP      = "move_up"
-	API_MOVE_DOWN    = "move_down"
+	API_ALIVE                 = "alive"
+	API_SCRIPT                = "script"
+	API_SCRIPTS               = "scripts"
+	API_DATATYPE              = "datatype"
+	API_STYLESHEET_PARAMETERS = "stylesheet-parameters"
+	API_JOBREQUEST            = "jobRequest"
+	API_JOB                   = "job"
+	API_JOBS                  = "jobs"
+	API_BATCH                 = "batch"
+	API_DEL_JOB               = "del_job"
+	API_DEL_BATCH             = "del_batch"
+	API_RESULT                = "results"
+	API_LOG                   = "log"
+	API_HALT                  = "halt"
+	API_CLIENTS               = "clients"
+	API_NEWCLIENT             = "new_client"
+	API_CLIENT                = "client"
+	API_DELETECLIENT          = "delete_client"
+	API_MODIFYCLIENT          = "modify_client"
+	API_PROPERTIES            = "properties"
+	API_SIZE                  = "size"
+	API_QUEUE                 = "queue"
+	API_MOVE_UP               = "move_up"
+	API_MOVE_DOWN             = "move_down"
 )
 
 //Defines the information for an api entry
@@ -48,29 +49,30 @@ type apiEntry struct {
 
 //Available api entries
 var apiEntries = map[string]apiEntry{
-	API_ALIVE:        apiEntry{"alive", "GET", 200},
-	API_SCRIPTS:      apiEntry{"scripts", "GET", 200},
-	API_SCRIPT:       apiEntry{"scripts/%v", "GET", 200},
-	API_DATATYPE:     apiEntry{"datatypes/%v", "GET", 200},
-	API_JOBREQUEST:   apiEntry{"jobs", "POST", 201},
-	API_JOB:          apiEntry{"jobs/%v?msgSeq=%v", "GET", 200},
-	API_DEL_JOB:      apiEntry{"jobs/%v", "DELETE", 204},
-	API_RESULT:       apiEntry{"jobs/%v/result", "GET", 200},
-	API_JOBS:         apiEntry{"jobs", "GET", 200},
-	API_QUEUE:        apiEntry{"queue", "GET", 200},
-	API_MOVE_UP:      apiEntry{"queue/up/%v", "GET", 200},
-	API_MOVE_DOWN:    apiEntry{"queue/down/%v", "GET", 200},
-	API_LOG:          apiEntry{"jobs/%v/log", "GET", 200},
-	API_HALT:         apiEntry{"admin/halt/%v", "GET", 204},
-	API_CLIENTS:      apiEntry{"admin/clients", "GET", 200},
-	API_NEWCLIENT:    apiEntry{"admin/clients", "POST", 201},
-	API_CLIENT:       apiEntry{"admin/clients/%v", "GET", 200},
-	API_DELETECLIENT: apiEntry{"admin/clients/%v", "DELETE", 204},
-	API_MODIFYCLIENT: apiEntry{"admin/clients/%v", "PUT", 200},
-	API_PROPERTIES:   apiEntry{"admin/properties", "GET", 200},
-	API_SIZE:         apiEntry{"admin/sizes", "GET", 200},
-	API_BATCH:        apiEntry{"batch/%v", "GET", 200},
-	API_DEL_BATCH:    apiEntry{"batch/%v", "DELETE", 204},
+	API_ALIVE:                 apiEntry{"alive", "GET", 200},
+	API_SCRIPTS:               apiEntry{"scripts", "GET", 200},
+	API_SCRIPT:                apiEntry{"scripts/%v", "GET", 200},
+	API_DATATYPE:              apiEntry{"datatypes/%v", "GET", 200},
+	API_STYLESHEET_PARAMETERS: apiEntry{"stylesheet-parameters", "POST", 200},
+	API_JOBREQUEST:            apiEntry{"jobs", "POST", 201},
+	API_JOB:                   apiEntry{"jobs/%v?msgSeq=%v", "GET", 200},
+	API_DEL_JOB:               apiEntry{"jobs/%v", "DELETE", 204},
+	API_RESULT:                apiEntry{"jobs/%v/result", "GET", 200},
+	API_JOBS:                  apiEntry{"jobs", "GET", 200},
+	API_QUEUE:                 apiEntry{"queue", "GET", 200},
+	API_MOVE_UP:               apiEntry{"queue/up/%v", "GET", 200},
+	API_MOVE_DOWN:             apiEntry{"queue/down/%v", "GET", 200},
+	API_LOG:                   apiEntry{"jobs/%v/log", "GET", 200},
+	API_HALT:                  apiEntry{"admin/halt/%v", "GET", 204},
+	API_CLIENTS:               apiEntry{"admin/clients", "GET", 200},
+	API_NEWCLIENT:             apiEntry{"admin/clients", "POST", 201},
+	API_CLIENT:                apiEntry{"admin/clients/%v", "GET", 200},
+	API_DELETECLIENT:          apiEntry{"admin/clients/%v", "DELETE", 204},
+	API_MODIFYCLIENT:          apiEntry{"admin/clients/%v", "PUT", 200},
+	API_PROPERTIES:            apiEntry{"admin/properties", "GET", 200},
+	API_SIZE:                  apiEntry{"admin/sizes", "GET", 200},
+	API_BATCH:                 apiEntry{"batch/%v", "GET", 200},
+	API_DEL_BATCH:             apiEntry{"batch/%v", "DELETE", 204},
 }
 
 //Pipeline struct stores different configuration paramenters
@@ -167,35 +169,7 @@ func processInputsAndOptions(p Pipeline, script *Script) (err error) {
 		}
 		// get data type definition
 		var optionType DataType
-		if option.TypeAttr != "" {
-			if option.TypeAttr == "integer" || option.TypeAttr == "xs:integer" {
-				optionType = XsInteger{
-					XmlDefinition: "<data type=\"integer\"/>"}
-			} else if option.TypeAttr == "nonNegativeInteger" || option.TypeAttr == "xs:nonNegativeInteger" {
-				optionType = XsNonNegativeInteger{
-					XmlDefinition: "<data type=\"nonNegativeInteger\"/>"}
-			} else if option.TypeAttr == "boolean" || option.TypeAttr == "xs:boolean" {
-				optionType = XsBoolean{
-					XmlDefinition: "<data type=\"boolean\"/>"}
-			} else if option.TypeAttr == "anyURI" || option.TypeAttr == "xs:anyURI" {
-				optionType = XsAnyURI{
-					XmlDefinition: "<data type=\"anyURI\"/>"}
-			} else if option.TypeAttr == "anyFileURI" {
-				optionType = AnyFileURI{
-					XmlDefinition: "<data type=\"anyFileURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
-			} else if option.TypeAttr == "anyDirURI" {
-				optionType = AnyDirURI{
-					XmlDefinition: "<data type=\"anyDirURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
-			} else if option.TypeAttr == "string" || option.TypeAttr == "xs:string" {
-				optionType = XsString{
-					XmlDefinition: "<data type=\"string\"/>"}
-			} else {
-				optionType, err = p.dataType(option.TypeAttr)
-			}
-		} else {
-			optionType = XsString{
-				XmlDefinition: "<data type=\"string\"/>"}
-		}
+		optionType, err = p.dataType(option.TypeAttr)
 		script.Options[i].Type = optionType
 	}
 	return
@@ -216,7 +190,7 @@ type datatypeXmlElement struct {
 	XMLName      xml.Name
 	Attrs        []xml.Attr            `xml:",any,attr"`
 	ChildNodes   []datatypeXmlElement  `xml:",any"`
-	TextContent  string                `xml:",innerxml"`
+	TextContent  string                `xml:",chardata"`
 }
 
 func (e *datatypeXmlElement) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
@@ -240,13 +214,39 @@ func (e *datatypeXmlElement) UnmarshalXML(d *xml.Decoder, start xml.StartElement
 }
 
 func (p Pipeline) dataType(id string) (datatype DataType, err error) {
-	xmlDefinition := new(datatypeXmlElement)
-	req := p.newResquest(API_DATATYPE, &xmlDefinition, nil, id)
-	_, err = p.do(req, errorHandler(map[int]string{404: "Data type " + id + " not found"}))
-	if err != nil {
-		return
+	if id == "" {
+		datatype = XsString{
+			XmlDefinition: "<data type=\"string\"/>"}
+	} else if id == "integer" || id == "xs:integer" {
+		datatype = XsInteger{
+			XmlDefinition: "<data type=\"integer\"/>"}
+	} else if id == "nonNegativeInteger" || id == "xs:nonNegativeInteger" {
+		datatype = XsNonNegativeInteger{
+			XmlDefinition: "<data type=\"nonNegativeInteger\"/>"}
+	} else if id == "boolean" || id == "xs:boolean" {
+		datatype = XsBoolean{
+			XmlDefinition: "<data type=\"boolean\"/>"}
+	} else if id == "anyURI" || id == "xs:anyURI" {
+		datatype = XsAnyURI{
+			XmlDefinition: "<data type=\"anyURI\"/>"}
+	} else if id == "anyFileURI" {
+		datatype = AnyFileURI{
+			XmlDefinition: "<data type=\"anyFileURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
+	} else if id == "anyDirURI" {
+		datatype = AnyDirURI{
+			XmlDefinition: "<data type=\"anyDirURI\" datatypeLibrary=\"http://www.daisy.org/ns/pipeline/xproc\"/>"}
+	} else if id == "string" || id == "xs:string" {
+		datatype = XsString{
+			XmlDefinition: "<data type=\"string\"/>"}
+	} else {
+		xmlDefinition := new(datatypeXmlElement)
+		req := p.newResquest(API_DATATYPE, &xmlDefinition, nil, id)
+		_, err = p.do(req, errorHandler(map[int]string{404: "Data type " + id + " not found"}))
+		if err != nil {
+			return
+		}
+		datatype, err = parseDatatypeXmlDefinition(xmlDefinition, "")
 	}
-	datatype, err = parseDatatypeXmlDefinition(xmlDefinition, "")
 	return
 }
 
@@ -412,14 +412,6 @@ func multipartResultClientMaker(p Pipeline) func() doer {
 	}
 }
 
-//Specific multipart request
-func buildMultipartReq(jobReq JobRequest, data []byte) *MultipartData {
-	return &MultipartData{
-		data:    RawData{&data},
-		request: jobReq,
-	}
-}
-
 //Sends a JobRequest to the server
 func (p Pipeline) JobRequest(newJob JobRequest, data []byte) (job Job, err error) {
 	var reqData interface{} = &newJob
@@ -428,7 +420,10 @@ func (p Pipeline) JobRequest(newJob JobRequest, data []byte) (job Job, err error
 	if len(data) > 0 {
 		log.Println("Sending multipart job request")
 		p.clientMaker = multipartResultClientMaker(p)
-		reqData = buildMultipartReq(newJob, data)
+		reqData = &MultipartData{
+			data:    RawData{&data},
+			request: newJob,
+		}
 	}
 	log.Println("Sending job request")
 	log.Println(newJob.Script.Id)
@@ -436,6 +431,45 @@ func (p Pipeline) JobRequest(newJob JobRequest, data []byte) (job Job, err error
 	_, err = p.do(req, errorHandler(map[int]string{
 		400: "Job request is not valid",
 	}))
+	return
+}
+
+//Sends a StylesheetParametersRequest to the server
+func (p Pipeline) StylesheetParametersRequest(paramReq StylesheetParametersRequest, data []byte) (params StylesheetParameters, err error) {
+	var reqData interface{} = &paramReq
+	log.Println("data len request ", len(data))
+	//check if we have data
+	if len(data) > 0 {
+		log.Println("Sending multipart stylesheet-parameters request")
+		p.clientMaker = multipartResultClientMaker(p)
+		reqData = &MultipartData{
+			data:    RawData{&data},
+			request: paramReq,
+		}
+	}
+	log.Println("Sending stylesheet-parameters request")
+	req := p.newResquest(API_STYLESHEET_PARAMETERS, &params, reqData)
+	_, err = p.do(req, errorHandler(map[int]string{
+		400: "Stylesheet-parameters request is not valid",
+	}))
+	if err != nil {
+		return
+	}
+	for i, param := range params.Parameters {
+		desc := strings.Split(param.LongDesc, "\n")
+		params.Parameters[i].ShortDesc = desc[0]
+		// insert empty line after first line
+		if len(desc) > 1 {
+			if desc[1] != "" {
+				desc = append(desc[:1], append([]string{""}, desc[1:]...)...)
+			}
+			params.Parameters[i].LongDesc = strings.Join(desc, "\n")
+		}
+		// get data type definition
+		var paramType DataType
+		paramType, err = p.dataType(param.TypeAttr)
+		params.Parameters[i].Type = paramType
+	}
 	return
 }
 

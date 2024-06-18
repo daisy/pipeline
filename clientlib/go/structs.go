@@ -260,3 +260,45 @@ type QueueJob struct {
 	MoveDown         string   `xml:"moveDown,attr"`
 	ComputedPriority float64  `xml:"computedPriority,attr"`
 }
+
+type StylesheetParametersRequest struct {
+	XMLName             xml.Name            `xml:"http://www.daisy.org/ns/pipeline/data stylesheetParametersRequest"`
+	Media               Media               `xml:"http://www.daisy.org/ns/pipeline/data media,omitempty"`
+	UserAgentStylesheet UserAgentStylesheet `xml:"http://www.daisy.org/ns/pipeline/data userAgentStylesheet,omitempty"`
+	// FIXME: in order to omit when empty, change to pointers
+	// UserStylesheets     []File              `xml:"http://www.daisy.org/ns/pipeline/data userStylesheets>file"`
+	// SourceDocument      []File              `xml:"http://www.daisy.org/ns/pipeline/data sourceDocument>file"`
+}
+
+type Media struct {
+	XMLName    xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data media"`
+	Value      string    `xml:"value,attr"`
+}
+
+type UserAgentStylesheet struct {
+	XMLName    xml.Name  `xml:"http://www.daisy.org/ns/pipeline/data userAgentStylesheet"`
+	Mediatype  string    `xml:"mediaType,attr"`
+}
+
+type File struct {
+	XMLName   xml.Name   `xml:"http://www.daisy.org/ns/pipeline/data file"`
+	Href      string     `xml:"href,attr"`
+}
+
+type StylesheetParameters struct {
+	XMLName    xml.Name              `xml:"http://www.daisy.org/ns/pipeline/data parameters"`
+	Parameters []StylesheetParameter `xml:"http://www.daisy.org/ns/pipeline/data parameter"`
+}
+
+type StylesheetParameter struct {
+	XMLName     xml.Name   `xml:"http://www.daisy.org/ns/pipeline/data parameter"`
+	Name        string     `xml:"name,attr,omitempty"`
+	NiceName    string     `xml:"nicename,attr,omitempty"`
+	ShortDesc   string     `xml:"-"`
+	LongDesc    string     `xml:"description,attr,omitempty"`
+	Default     string     `xml:"default,attr,omitempty"`
+	TypeAttr    string     `xml:"type,attr,omitempty"`
+	Type        DataType   `xml:"-"`
+	Value       string     `xml:"-"`
+}
+
