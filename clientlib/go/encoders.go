@@ -12,7 +12,7 @@ import (
 )
 
 type MultipartData struct {
-	request JobRequest
+	request any
 	data    RawData
 }
 
