@@ -194,6 +194,10 @@ func (p *PipelineTest) JobRequest(newJob pipeline.JobRequest, data []byte) (job 
 	return
 }
 
+func (p *PipelineTest) StylesheetParametersRequest(newReq pipeline.StylesheetParametersRequest, data []byte) (params pipeline.StylesheetParameters, err error) {
+	return
+}
+
 func (p *PipelineTest) DeleteJob(id string) (ok bool, err error) {
 	if p.delete != nil {
 		return p.delete(id)
