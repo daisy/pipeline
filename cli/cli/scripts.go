@@ -24,21 +24,30 @@ var LastIdPath = getLastIdPath(runtime.GOOS)
 
 //Represents the job request
 type JobRequest struct {
-	Script     string               //Script id to call
-	Nicename   string               //Job's nicename
-	Priority   string               //Job's priority
-	Options    map[string][]string  //Options for the script
-	Inputs     map[string][]url.URL //Input ports for the script
-	Data       []byte               //Data to send with the job request
-	Background bool                 //Send the request and return
+	Script               string                  //Script id to call
+	Nicename             string                  //Job's nicename
+	Priority             string                  //Job's priority
+	Options              map[string][]string     //Options for the script
+	Inputs               map[string][]url.URL    //Input ports for the script
+	Data                 []byte                  //Data to send with the job request
+	Background           bool                    //Send the request and return
+	StylesheetParameters map[string]pipeline.StylesheetParameter
 }
 
 //Creates a new JobRequest
 func newJobRequest() *JobRequest {
 	return &JobRequest{
-		Options: make(map[string][]string),
-		Inputs:  make(map[string][]url.URL),
+		Options:              make(map[string][]string),
+		Inputs:               make(map[string][]url.URL),
+		StylesheetParameters: make(map[string]pipeline.StylesheetParameter),
 	}
+}
+
+//Represents the stylesheet-parameters request
+type StylesheetParametersRequest struct {
+	Medium      string
+	ContentType string
+	Data        []byte
 }
 
 //Convinience method to add several scripts to a client
@@ -180,6 +189,28 @@ func flagsToString(flags []subcommand.Flag) []string {
 	return res
 }
 
+// FIXME: don't hard code
+var mediumForScript = map[string]string {
+	"dtbook-to-daisy3": "speech",
+	"dtbook-to-epub3":  "speech",
+	"dtbook-to-pef":    "embossed",
+	"epub-to-daisy":    "speech",
+	"epub3-to-epub3":   "speech, embossed",
+	"epub3-to-pef":     "embossed",
+	"html-to-pef":      "embossed",
+	"zedai-to-epub3":   "speech",
+}
+var contentTypeForScript = map[string]string {
+	"dtbook-to-daisy3": "application/x-dtbook+xml",
+	"dtbook-to-epub3":  "application/x-dtbook+xml",
+	"dtbook-to-pef":    "application/x-dtbook+xml",
+	"epub-to-daisy":    "application/xhtml+xml",
+	"epub3-to-epub3":   "application/xhtml+xml",
+	"epub3-to-pef":     "application/xhtml+xml",
+	"html-to-pef":      "application/xhtml+xml",
+	"zedai-to-epub3":   "application/z3998-auth+xml",
+}
+
 //Adds the command and flags to be able to call the script to the cli
 func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req *JobRequest, err error) {
 	jobRequest := newJobRequest()
@@ -224,6 +255,7 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(input.Required)
 	}
 
+	var hasStylesheetParametersOption bool
 	for _, option := range script.Options {
 		//desc:=option.Desc+
 		name := getFlagName(option.Name, "x-", command.Flags())
@@ -254,7 +286,53 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		command.AddOption(
 			name, "", shortDesc, longDesc, optionTypeToString(option.Type, name, option.Default),
 			optionFunc(jobRequest, link, option.Type, option.Sequence)).Must(option.Required)
+		if option.Name == "stylesheet-parameters" {
+			hasStylesheetParametersOption = true
+		}
 	}
+
+	if hasStylesheetParametersOption {
+		medium := mediumForScript[script.Id]
+		contentType := contentTypeForScript[script.Id]
+		if medium != "" && contentType != "" {
+			params, err := link.StylesheetParameters(
+				StylesheetParametersRequest{
+					Medium:  medium,
+					ContentType: contentType,
+				})
+			if err != nil {
+				return jobRequest, err
+			}
+			for _, param := range params.Parameters {
+				name := getFlagName(param.Name, "x-", command.Flags())
+				shortDesc := param.ShortDesc
+				longDesc := param.LongDesc
+				possibleValues := optionTypeToDetailedHelp(param.Type)
+				if (possibleValues != "") {
+					longDesc += ("\n\nPossible values: " + possibleValues)
+				}
+				longDesc += "\n\nDefault value: "
+				if param.Default == "" {
+					longDesc += "(empty)"
+				} else {
+					longDesc += "`" + param.Default + "`"
+				}
+				if (shortDesc != "" && strings.HasPrefix(longDesc, shortDesc + "\n\n")) {
+					// don't interpret first line as markdown
+					longDesc = shortDesc + "\n\n" + blackterm.MarkdownString(longDesc[len(shortDesc)+2:])
+				} else {
+					longDesc = blackterm.MarkdownString(longDesc)
+				}
+				if (shortDesc == "") {
+					shortDesc = param.NiceName
+				}
+				command.AddOption(
+					name, "", shortDesc, longDesc, optionTypeToString(param.Type, name, param.Default),
+					paramFunc(jobRequest, link, param)).Must(false)
+			}
+		}
+	}
+
 	command.AddOption("output", "o", "Path where to store the results. This option is mandatory when the job is not executed in the background", "", italic("DIRECTORY"), func(name, folder string) error {
 		jExec.output = folder
 		return nil
@@ -491,6 +569,23 @@ func optionFunc(req *JobRequest, link *PipelineLink, optionType pipeline.DataTyp
 			}
 			req.Options[name] = append(req.Options[name], value)
 		}
+		return nil
+	}
+}
+
+//Returns a function that fills the stylesheet-parameters option with the subcommand option name
+//and value
+func paramFunc(req *JobRequest, link *PipelineLink, param pipeline.StylesheetParameter) func(string, string) error {
+	return func(name, value string) error {
+		if strings.HasPrefix("x-", name) {
+			name = name[2:]
+		}
+		value, err := validateOption(value, param.Type, link)
+		if err != nil {
+			return validationError(name, value, err)
+		}
+		param.Value = value;
+		req.StylesheetParameters[name] = param
 		return nil
 	}
 }

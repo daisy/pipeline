@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 	"regexp"
+	"strings"
 
 	"github.com/daisy/pipeline-clientlib-go"
 )
@@ -24,6 +25,7 @@ type PipelineApi interface {
 	Scripts() (scripts pipeline.Scripts, err error)
 	Script(id string) (script pipeline.Script, err error)
 	JobRequest(newJob pipeline.JobRequest, data []byte) (job pipeline.Job, err error)
+	StylesheetParametersRequest(newReq pipeline.StylesheetParametersRequest, data []byte) (params pipeline.StylesheetParameters, err error)
 	ScriptUrl(id string) string
 	Job(string, int) (pipeline.Job, error)
 	DeleteJob(id string) (bool, error)
@@ -248,6 +250,16 @@ func (p PipelineLink) Execute(jobReq JobRequest) (job pipeline.Job, messages cha
 	return
 }
 
+func (p PipelineLink) StylesheetParameters(paramReq StylesheetParametersRequest) (params pipeline.StylesheetParameters, err error) {
+	req := pipeline.StylesheetParametersRequest{
+		Media:               pipeline.Media{Value: paramReq.Medium},
+		UserAgentStylesheet: pipeline.UserAgentStylesheet{Mediatype: paramReq.ContentType},
+	}
+	log.Printf("data len exec %v", len(paramReq.Data))
+	params, err = p.pipeline.StylesheetParametersRequest(req, paramReq.Data)
+	return
+}
+
 //Feeds the channel with the messages describing the job's execution
 func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
 	msgNum := -1
@@ -306,6 +318,7 @@ func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequ
 		}
 		pReq.Inputs = append(pReq.Inputs, input)
 	}
+	var stylesheetParametersOption pipeline.Option
 	for name, values := range req.Options {
 		option := pipeline.Option{Name: name}
 		if len(values) > 1 {
@@ -315,8 +328,46 @@ func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequ
 		} else {
 			option.Value = values[0]
 		}
-		pReq.Options = append(pReq.Options, option)
-
+		if name == "stylesheet-parameters" {
+			stylesheetParametersOption = option
+		} else {
+			pReq.Options = append(pReq.Options, option)
+		}
+	}
+	var params []string
+	for name, param := range req.StylesheetParameters {
+		switch param.Type.(type) {
+		case pipeline.XsBoolean,
+		     pipeline.XsInteger,
+		     pipeline.XsNonNegativeInteger:
+			params = append(params, fmt.Sprintf("%s: %s", name, param.Value))
+		default:
+			params = append(params,
+			                fmt.Sprintf("%s: '%s'", name, strings.NewReplacer(
+			                                                  "\n", "\\A ",
+			                                                  "'", "\\27 ",
+			                                              ).Replace(param.Value)))
+		}
+	}
+	if (len(params) > 0) {
+		value := fmt.Sprintf("(%s)", strings.Join(params, ", "))
+		if stylesheetParametersOption.Name == "" {
+			stylesheetParametersOption = pipeline.Option{Name: "stylesheet-parameters"}
+			stylesheetParametersOption.Value = value
+		} else {
+			if stylesheetParametersOption.Value != "" {
+				stylesheetParametersOption.Items = append(
+					stylesheetParametersOption.Items,
+					pipeline.Item{Value: stylesheetParametersOption.Value})
+				stylesheetParametersOption.Value = ""
+			}
+			stylesheetParametersOption.Items = append(
+					stylesheetParametersOption.Items,
+					pipeline.Item{Value: value})
+		}
+	}
+	if stylesheetParametersOption.Name != "" {
+		pReq.Options = append(pReq.Options, stylesheetParametersOption)
 	}
 	return
 }
