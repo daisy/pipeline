@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.26-SNAPSHOT</version>
+    <version>1.14.26</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dtbook-to-pef</artifactId>
-  <version>10.0.2-SNAPSHOT</version>
+  <version>11.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to PEF</name>
@@ -22,6 +22,10 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
     </dependency>
     <!--
         runtime dependencies
@@ -102,6 +106,7 @@
   <properties>
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_dtbook_to_pef,
+      org.daisy.pipeline.css.impl.UserAgentStylesheet_application_x_dtbook_xml_embossed,
       org.daisy.pipeline.script.impl.XProcScript_dtbook_to_pef,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_line_spacing,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_notes_placement,

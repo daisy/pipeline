@@ -17,7 +17,7 @@ grammar SassDocumentation;
 
     private boolean isScss;
     private java.net.URI base;
-    private org.daisy.pipeline.css.Medium medium;
+    private java.util.Collection<org.daisy.pipeline.css.Medium> media;
     private SassAnalyzer analyzer;
 
     private org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(getClass());
@@ -26,12 +26,19 @@ grammar SassDocumentation;
      * @param base for resolving imports
      * @param analyzer for handling imports
      */
-    public SassDocumentationParser init(boolean isScss, java.net.URI base, org.daisy.pipeline.css.Medium medium, SassAnalyzer analyzer) {
+    public SassDocumentationParser init(boolean isScss,
+                                        java.net.URI base,
+                                        java.util.Collection<org.daisy.pipeline.css.Medium> media,
+                                        SassAnalyzer analyzer) {
         this.isScss = isScss;
         this.base = base;
-        this.medium = medium;
+        this.media = media;
         this.analyzer = analyzer;
         return this;
+    }
+
+    private boolean matchingMedia(String mediaQuery) {
+        return com.google.common.collect.Iterables.any(media, m -> m.matches(mediaQuery));
     }
 }
 
@@ -93,14 +100,14 @@ import_rule returns [java.util.Collection<SassVariable> vars]
 @init {
     vars = new java.util.ArrayList<>();
     java.util.List<java.net.URI> imports = new java.util.ArrayList<>();
-    String media = null;
+    String mediaQuery = null;
 }
     : (IMPORT
        S? u=import_uri { imports.add(u); }
        (S? COMMA S? u=import_uri { imports.add(u); })*
-       S? (m=media { media = m; })?
+       S? (q=media { mediaQuery = q; })?
        SEMICOLON) {
-           if (media == null || medium.matches(media))
+           if (matchingMedia(mediaQuery))
                for (java.net.URI i : imports)
                    try {
                        java.net.URL url; {
@@ -124,8 +131,8 @@ import_rule returns [java.util.Collection<SassVariable> vars]
     ;
 
 media_rule returns [java.util.Collection<SassVariable> vars]
-    : (MEDIA S? m=media LCURLY v=variables RCURLY) {
-          if (medium.matches(m))
+    : (MEDIA S? q=media LCURLY v=variables RCURLY) {
+          if (matchingMedia(q))
               $vars = v;
       }
     ;

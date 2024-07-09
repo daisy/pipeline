@@ -3,6 +3,7 @@
 <!--              name="http://www.daisy.org/pipeline/modules/css-utils/library.xsl" -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
              xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:map="http://www.w3.org/2005/xpath-functions/map"
              xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
              xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
              xmlns:d="http://www.daisy.org/ns/pipeline/data"
@@ -131,5 +132,63 @@
 		    Implemented in ../../java/org.daisy/pipeline/css/saxon/impl/MediaQueryMatchesDefinition.java
 		-->
 	</java:function>
+
+	<doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+		<desc>
+			<p>Parse a style sheet parameter set string and return it as a map.</p>
+			<p>The argument may also be an already parsed parameter set in the form of a
+			map or c:param-set document.</p>
+			<p>If a sequence of arguments is provided, a single map containing all the
+			parameters is returned. In case of duplicates, the first occurence wins.</p>
+		</desc>
+	</doc>
+	<xsl:function name="pf:css-parse-param-set" as="map(xs:string,item())"
+	              xmlns:StylesheetParametersParser="org.daisy.pipeline.css.impl.StylesheetParametersParser">
+		<xsl:param name="param-set" as="item()*"/> <!-- xs:string | map() | document-node() | element() -->
+		<xsl:map>
+			<xsl:for-each select="$param-set">
+				<xsl:choose>
+					<xsl:when test=". instance of map(*)">
+						<xsl:if test="map:size(.)&gt;0">
+							<xsl:sequence select="."/>
+						</xsl:if>
+					</xsl:when>
+					<xsl:when test=". instance of document-node() or . instance of element()">
+						<xsl:for-each select=".//c:param[not(@namespace[not(.='')])]">
+							<xsl:map-entry key="string(@name)">
+								<xsl:choose>
+									<xsl:when test="matches(@value,'^(0|-?[1-9][0-9]*)$')">
+										<xsl:sequence select="xs:integer(number(@value))"/>
+									</xsl:when>
+									<xsl:when test="@value='true'">
+										<xsl:sequence select="true()"/>
+									</xsl:when>
+									<xsl:when test="@value='false'">
+										<xsl:sequence select="false()"/>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:sequence select="string(@value)"/>
+									</xsl:otherwise>
+								</xsl:choose>
+							</xsl:map-entry>
+						</xsl:for-each>
+					</xsl:when>
+					<xsl:when test=". castable as xs:string">
+						<xsl:sequence select="StylesheetParametersParser:parse(string(.))">
+							<!--
+							    Implemented in ../../java/org/daisy/pipeline/css/saxon/impl/CssParseParamSetDefinition.java
+							-->
+						</xsl:sequence>
+					</xsl:when>
+					<xsl:otherwise>
+						<!--
+						    note that this does not trigger an error when the function is called from XProc
+						-->
+						<xsl:message terminate="yes">illegal argument</xsl:message>
+					</xsl:otherwise>
+				</xsl:choose>
+			</xsl:for-each>
+		</xsl:map>
+	</xsl:function>
 
 </xsl:stylesheet>

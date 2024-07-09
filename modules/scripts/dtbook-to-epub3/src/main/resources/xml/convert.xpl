@@ -30,6 +30,8 @@
 		</p:documentation>
 	</p:option>
 
+	<p:option name="stylesheet-parameters" cx:as="xs:string" select="''"/>
+
 	<p:option name="lexicon" cx:as="xs:anyURI*" select="()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>PLS lexicons as list of absolute URIs.</p>
@@ -139,11 +141,12 @@
 		<!-- CSS inlining -->
 		<p:choose px:progress=".1">
 			<p:when test="$audio = 'true'">
-				<px:css-speech-cascade content-type="application/x-dtbook+xml" name="cascade">
+				<px:css-speech-cascade include-user-agent-stylesheet="true" content-type="application/x-dtbook+xml" name="cascade">
 					<p:input port="source.in-memory">
 						<p:pipe step="load-dtbook" port="unfiltered.in-memory"/>
 					</p:input>
 					<p:with-option name="user-stylesheet" select="$stylesheet"/>
+					<p:with-option name="parameters" select="$stylesheet-parameters"/>
 				</px:css-speech-cascade>
 				<p:sink/>
 				<p:identity>

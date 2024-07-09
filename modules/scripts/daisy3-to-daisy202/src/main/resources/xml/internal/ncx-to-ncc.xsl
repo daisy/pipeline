@@ -31,8 +31,8 @@
                                                else format-date(current-date(),'[Y]-[M01]-[D01]')}"/>
                 <meta name="ncc:generator" content="DAISY Pipeline 2"/>
                 <meta name="ncc:depth"
-                    content="{for $depth in key('meta','dtb:depth') return
-                    if(number($depth)>6) then '6' else $depth}"/>
+                      content="{for $depth in key('meta','dtb:depth')/@content return
+                                if(number($depth)>6) then '6' else $depth}"/>
                 <meta name="ncc:pageFront" content="{count(key('pages','front'))}"/>
                 <meta name="ncc:pageNormal" content="{count(key('pages','normal'))}"/>
                 <meta name="ncc:pageSpecial" content="{count(key('pages','special'))}"/>
@@ -41,7 +41,7 @@
                 <meta name="ncc:footnotes" content="{count(key('nav-targets',('note','noteref')))}"/>
                 <meta name="ncc:sidebars" content="{count(key('nav-targets',('sidebar')))}"/>
                 <meta name="ncc:maxPageNormal"
-                    content="{max(key('pages','normal')/number(navLabel[1]))}"/>
+                      content="{max((key('pages','normal')/number(@value),0))}"/>
                 <meta name="ncc:producedDate"
                     content="{if ($date[.!='']) then $date
                               else format-date(current-date(),'[Y]-[M01]-[D01]')}"/>

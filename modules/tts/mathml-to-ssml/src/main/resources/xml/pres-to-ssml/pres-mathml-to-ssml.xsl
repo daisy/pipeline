@@ -67,6 +67,7 @@
     <!-- ==================== APPLY THE RULES ====================== -->
     <!-- =========================================================== -->
     <xsl:variable name="lang" select="string(@xml:lang)"/>
+    <xsl:variable name="lang" select="substring-before(concat($lang,'-'),'-')"/>
     <xsl:variable name="normalized">
       <xsl:apply-templates select="." mode="normalize"/>
     </xsl:variable>

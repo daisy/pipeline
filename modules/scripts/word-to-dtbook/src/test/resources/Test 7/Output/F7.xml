@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' >
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+        version="2005-3"
+        xml:lang="en-US">
+   <head>
+      <meta name="dtb:uid" content="7"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2 word-to-dtbook 1.0.0"/>
+      <meta name="dc:Title" content="Blog"/>
+      <meta name="dc:Creator" content="Balandin Vyacheslav"/>
+      <meta name="dc:Publisher" content="Pruchkovskaya"/>
+      <meta name="dc:Identifier" content="7"/>
+      <meta name="dc:Language" content="en-US"/>
+      <meta name="dc:Language" content="ru-RU"/>
+      <meta name="dc:Language" content="en-GB"/>
+   </head>
+   <book showin="blp">
+      <frontmatter>
+         <doctitle>Blog</doctitle>
+         <docauthor>Balandin Vyacheslav</docauthor>
+      </frontmatter>
+      <bodymatter id="bodymatter_0001"><level1><h1>  Blog Article Structure for authors
+</h1><p></p>
+<p xml:lang="ru-RU">История изменений:</p>
+<p></p>
+<table border="1">
+            <tbody>
+               <tr><td ><p xml:lang="ru-RU"><strong >Дата</strong></p>
+</td><td ><p xml:lang="ru-RU"><strong >Автор</strong></p>
+</td><td ><p xml:lang="ru-RU"><strong >Изменение / Состояние</strong></p>
+</td></tr>
+               <tr><td ><p xml:lang="ru-RU">2010-07-06</p>
+</td><td ><p>Shpileuskaya C.</p>
+</td><td ><p>Created</p>
+</td></tr>
+               <tr><td ><p></p>
+</td><td ><p></p>
+</td><td ><p></p>
+</td></tr>
+            </tbody>
+         </table><p></p>
+<p></p>
+</level1><level1><h1>1. The Title you offer
+</h1><p></p>
+<table border="1">
+            <tbody>
+               <tr><td ><p>Introduction</p>
+</td><td ><p>Interesting facts, examples or quotations that logically point to the subject.</p>
+<p>(Can be considered as argumentation for the article to be written and read)</p>
+</td></tr>
+               <tr><td ><p>Situation/ Problem described</p>
+</td><td ><p>Describe the situation when you faced the problem. And the problem itself.</p>
+<p>Talk about existing trends/problems in this or that area.</p>
+<p>You can ask a question (or two) that will be answered in the article.</p>
+</td></tr>
+               <tr><td ><p>Solution</p>
+</td><td ><p>Explain how to solve the problem/ answer the question/ avoid such problems. Give valuable advice. Provide with important/ interesting information</p>
+</td></tr>
+               <tr><td ><p>A few words about GS</p>
+</td><td ><p>How we at Gersis-Software solve the problem. </p>
+<p>When we face similar problems/situations.</p>
+<p>How we treat our customers in such situations.</p>
+</td></tr>
+               <tr><td ><p></p>
+</td><td ><p></p>
+</td></tr>
+               <tr><td ><p>Additional info sources</p>
+</td><td ><p xml:lang="en-GB">Articles, links, people etc.</p>
+<p></p>
+</td></tr>
+            </tbody>
+         </table><p></p>
+<p></p>
+<p></p>
+<p></p>
+</level1></bodymatter>
+   </book>
+</dtbook>

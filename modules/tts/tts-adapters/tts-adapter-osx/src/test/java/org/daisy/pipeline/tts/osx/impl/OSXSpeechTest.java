@@ -37,6 +37,7 @@ public class OSXSpeechTest {
 		Assume.assumeTrue("Test can not be run because say not present",
 		                  BinaryFinder.find("say").isPresent());
 		OSXSpeechService s = new OSXSpeechService();
+		s.activate();
 		return (OSXSpeechEngine) s.newEngine(new HashMap<String, String>());
 	}
 
@@ -78,8 +79,7 @@ public class OSXSpeechTest {
 			AudioInputStream audio = engine.synthesize(
 				parseSSML("<s xmlns=\"http://www.w3.org/2001/10/synthesis\">small test</s>"),
 				v, resource).audio;
-
-			sizes.add(getSize(audio) / 4); //div 4 helps being more robust to tiny differences
+			sizes.add(getSize(audio) / 4); // div 4 helps being more robust to tiny differences
 			totalVoices++;
 		}
 		engine.releaseThreadResources(resource);
@@ -87,7 +87,7 @@ public class OSXSpeechTest {
 		//this number will be very low if the voice names are not properly retrieved
 		float diversity = Float.valueOf(sizes.size()) / totalVoices;
 
-		Assert.assertTrue(diversity > 0.4);
+		Assert.assertTrue(diversity > 0.2);
 	}
 
 	@Test

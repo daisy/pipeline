@@ -21,10 +21,12 @@
     <p:option name="output-dir" select="''"/>
     <p:option name="pef-output-dir" select="''"/>
     <p:option name="preview-output-dir" select="''"/>
+    <p:option name="pdf-output-dir" select="''"/>
     <p:option name="obfl-output-dir" select="''"/>
     <p:option name="css-output-dir" select="''"/>
     
     <p:option name="include-preview" select="'false'"/>
+    <p:option name="include-pdf" select="'false'"/>
     <p:option name="include-pef" select="'false'"/>
     <p:option name="include-css" select="false()" cx:as="xs:boolean"/>
     <p:option name="output-file-format" select="''"/>
@@ -78,11 +80,13 @@
         </p:with-option>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="include-pdf" select="$include-pdf"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$output-dir"/>
         <p:with-option name="pef-output-dir" select="$pef-output-dir"/>
         <p:with-option name="preview-output-dir" select="$preview-output-dir"/>
+        <p:with-option name="pdf-output-dir" select="$pdf-output-dir"/>
         <p:with-option name="obfl-output-dir" select="$obfl-output-dir"/>
     </px:xml-to-pef.store>
     

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.26-SNAPSHOT</version>
+    <version>1.14.26</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-common</artifactId>
-  <version>4.0.1-SNAPSHOT</version>
+  <version>5.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: braille-common</name>
@@ -33,6 +33,10 @@
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>braille-css-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.unbescape</groupId>
+      <artifactId>unbescape</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.dotify</groupId>

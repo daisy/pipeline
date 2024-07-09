@@ -3,6 +3,8 @@ package org.daisy.pipeline.tts.calabash.impl;
 import java.util.concurrent.Semaphore;
 import java.util.Map;
 
+import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
@@ -28,6 +30,12 @@ public class SynthesizeProvider implements XProcStepProvider {
 	private AudioServices mAudioServices;
 	private Semaphore mStartSemaphore; //counter to limit the number of simultaneous text-to-speech steps
 	private AudioFootprintMonitor mAudioFootprintMonitor;
+
+	static final Property ENABLE_LOG = Properties.getProperty("org.daisy.pipeline.tts.log",
+	                                                          true,
+	                                                          "Whether or not to make the TTS log available",
+	                                                          false,
+	                                                          "false");
 
 	@Override
 	public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {

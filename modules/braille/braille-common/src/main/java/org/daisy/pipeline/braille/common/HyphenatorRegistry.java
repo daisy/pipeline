@@ -156,9 +156,14 @@ public class HyphenatorRegistry extends Memoize<Hyphenator> implements Hyphenato
 					= Maps.transformValues(
 						subQueries,
 						q -> () -> HyphenatorRegistry.this.get(q).iterator().next());
-				return Iterables.transform(
+				Iterable<Hyphenator> hyphenators = Iterables.transform(
 					get(query),
 					t -> logCreate(new CompoundHyphenator(subHyphenators, t), context));
+			    if (query.isEmpty())
+					hyphenators = Iterables.concat(
+					    hyphenators,
+						LazyValue.from(() -> logCreate(new CompoundHyphenator(subHyphenators, null), context)));
+				return hyphenators;
 			}
 		}
 		return get(query);

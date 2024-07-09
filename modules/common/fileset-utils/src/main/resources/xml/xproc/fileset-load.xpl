@@ -354,7 +354,6 @@
                 <p:variable name="file-not-found-message" select="concat('Could neither retrieve file from memory nor disk: ',$target)"/>
                 <p:choose>
                   <p:when test="$fail-on-not-found='true'">
-                    <p:in-scope-names name="vars"/>
                     <p:template>
                       <p:input port="template">
                         <p:inline>
@@ -364,9 +363,7 @@
                       <p:input port="source">
                         <p:empty/>
                       </p:input>
-                      <p:input port="parameters">
-                        <p:pipe step="vars" port="result"/>
-                      </p:input>
+                      <p:with-param port="parameters" name="file-not-found-message" select="$file-not-found-message"/>
                     </p:template>
                     <p:insert match="/*/c:cause" position="first-child" name="error">
                       <p:input port="insertion">
@@ -464,7 +461,6 @@
                       select="if (not($href=''))
                               then concat('File is not part of fileset: ',$href)
                               else 'Fileset empty or no files matched filter criteria. No files loaded.'"/>
-          <p:in-scope-names name="vars"/>
           <p:template name="error">
             <p:input port="template">
               <p:inline>
@@ -474,9 +470,7 @@
             <p:input port="source">
               <p:empty/>
             </p:input>
-            <p:input port="parameters">
-              <p:pipe step="vars" port="result"/>
-            </p:input>
+            <p:with-param port="parameters" name="file-not-found-message" select="$file-not-found-message"/>
           </p:template>
           <p:error code="PEZE00">
             <p:input port="source">

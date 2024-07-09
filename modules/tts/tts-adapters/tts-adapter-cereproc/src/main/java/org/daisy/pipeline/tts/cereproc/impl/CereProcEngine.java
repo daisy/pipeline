@@ -81,8 +81,6 @@ public class CereProcEngine extends TTSEngine {
 			throws SynthesisException {
 		super(service);
 		this.priority = priority;
-		if (!client.exists())
-			throw new SynthesisException("No CereProc client installed at " + client);
 		if (tmpDirectory == null) {
 			try {
 				tmpDirectory = Files.createTempDirectory("cereproc-").toFile();

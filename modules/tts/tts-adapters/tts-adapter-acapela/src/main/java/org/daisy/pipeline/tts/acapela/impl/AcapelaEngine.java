@@ -127,51 +127,6 @@ public class AcapelaEngine extends TTSEngine {
 		};
 	}
 
-	String findWorkingVoice(Host h) throws SynthesisException {
-		if (h == null)
-			h = mLoadBalancer.getMaster();
-
-		String workingVoice = null;
-
-		NscubeLibrary lib = NscubeLibrary.INSTANCE;
-		Pointer server = createServerContext(h);
-
-		PointerByReference phDispatch = new PointerByReference();
-		int ret = lib.nscCreateDispatcher(phDispatch);
-		if (ret != NscubeLibrary.NSC_OK) {
-			lib.nscReleaseServerContext(server);
-			throw new SynthesisException(
-			        "Could not create one Acapela's dispatcher (err code: " + ret + ")");
-		}
-		Pointer dispatcher = phDispatch.getValue();
-
-		PointerByReference voiceEnumerator = new PointerByReference();
-		NSC_FINDVOICE_DATA voiceData = new NSC_FINDVOICE_DATA();
-		ret = lib.nscFindFirstVoice(server, (String) null, (int) mAudioFormat.getSampleRate(),
-		        0, 0, voiceData, voiceEnumerator);
-		while (ret == NscubeLibrary.NSC_OK) {
-			if (voiceData.nInitialCoding == NscubeLibrary.NSC_VOICE_ENCODING_PCM) {
-				String voiceName = nullTerminatedString(voiceData.cVoiceName);
-				NativeLongByReference pChId = new NativeLongByReference();
-				ret = lib.nscInitChannel(server, voiceName,
-				        (int) mAudioFormat.getSampleRate(), 0, dispatcher, pChId);
-				if (ret == NscubeLibrary.NSC_OK) {
-					lib.nscCloseChannel(server, pChId.getValue());
-					workingVoice = voiceName;
-					break;
-				}
-
-			}
-			ret = lib.nscFindNextVoice(voiceEnumerator.getValue(), voiceData);
-		}
-
-		lib.nscCloseFindVoice(voiceEnumerator.getValue());
-		lib.nscDeleteDispatcher(dispatcher);
-		lib.nscReleaseServerContext(server);
-
-		return workingVoice;
-	}
-
 	@Override
 	public TTSResource allocateThreadResources() throws SynthesisException,
 	        InterruptedException {
@@ -304,7 +259,7 @@ public class AcapelaEngine extends TTSEngine {
 		}
 	}
 
-	AudioInputStream speak(String ssml, TTSResource tr, List<Integer> marks)
+	private AudioInputStream speak(String ssml, TTSResource tr, List<Integer> marks)
 			throws SynthesisException, IOException {
 
 		ThreadResources th = (ThreadResources) tr;

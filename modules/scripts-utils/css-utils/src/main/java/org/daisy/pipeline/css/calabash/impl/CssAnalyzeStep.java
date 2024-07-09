@@ -2,7 +2,10 @@ package org.daisy.pipeline.css.calabash.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,9 +31,11 @@ import com.xmlcalabash.library.DefaultStep;
 import com.xmlcalabash.model.RuntimeValue;
 import com.xmlcalabash.runtime.XAtomicStep;
 
+import net.sf.saxon.ma.map.MapItem;
 import net.sf.saxon.s9api.SaxonApiException;
 
 import org.daisy.common.file.URLs;
+import org.daisy.common.saxon.SaxonHelper;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeAttribute;
 import static org.daisy.common.stax.XMLStreamWriterHelper.writeStartElement;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
@@ -41,6 +46,7 @@ import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.sass.SassAnalyzer;
 import org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
+import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -62,21 +68,27 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 	private WritablePipe resultPipe = null;
 	private final InMemoryURIResolver inMemoryResolver;
 	private final URIResolver cssURIResolver;
-	private final Map<String,String> params = new LinkedHashMap<>(); // use LinkedHashMap to get same order as insertion order
+	private final UserAgentStylesheetRegistry userAgentStylesheets;
 
 	private final static QName c_param_set = new QName(XProcConstants.NS_XPROC_STEP, "param-set");
 	private final static QName c_param = new QName(XProcConstants.NS_XPROC_STEP, "param");
 	private final static QName _name = new QName("name");
 	private final static QName _value = new QName("value");
 	private static final net.sf.saxon.s9api.QName _user_stylesheet = new net.sf.saxon.s9api.QName("user-stylesheet");
+	private static final net.sf.saxon.s9api.QName _include_user_agent_stylesheet
+		= new net.sf.saxon.s9api.QName("include-user-agent-stylesheet");
+	private static final net.sf.saxon.s9api.QName _parameters = new net.sf.saxon.s9api.QName("parameters");
+	private static final net.sf.saxon.s9api.QName _content_type = new net.sf.saxon.s9api.QName("content-type");
 	private static final net.sf.saxon.s9api.QName _media = new net.sf.saxon.s9api.QName("media");
 
 	private static final String DEFAULT_MEDIUM = "embossed";
 
-	private CssAnalyzeStep(XProcRuntime runtime, XAtomicStep step, URIResolver resolver) {
+	private CssAnalyzeStep(XProcRuntime runtime, XAtomicStep step,
+	                       URIResolver resolver, UserAgentStylesheetRegistry userAgentStylesheets) {
 		super(runtime, step);
 		inMemoryResolver = new InMemoryURIResolver();
 		cssURIResolver = fallback(inMemoryResolver, resolver, simpleURIResolver);
+		this.userAgentStylesheets = userAgentStylesheets;
 	}
 
 	@Override
@@ -93,50 +105,50 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 	}
 
 	@Override
-	public void setParameter(String port, net.sf.saxon.s9api.QName name, RuntimeValue value) {
-		if ("parameters".equals(port))
-			if ("".equals(name.getNamespaceURI())) {
-				params.put(name.getLocalName(), value.getString());
-				return; }
-		super.setParameter(port, name, value);
-	}
-
-	@Override
-	public void setParameter(net.sf.saxon.s9api.QName name, RuntimeValue value) {
-		setParameter("parameters", name, value);
-	}
-
-	@Override
 	public void reset() {
 		sourcePipe.resetReader();
 		contextPipe.resetReader();
 		resultPipe.resetWriter();
-		params.clear();
 	}
 
 	@Override
 	public void run() throws SaxonApiException {
 		super.run();
 		try {
-			Medium medium = Medium.parse(getOption(_media, DEFAULT_MEDIUM));
+			Map<String,String> params = new LinkedHashMap<>(); // use LinkedHashMap to get same order as insertion order
+			RuntimeValue paramOption = getOption(_parameters);
+			if (paramOption != null)
+				for (Map.Entry<String,Object> e
+				         : SaxonHelper.mapFromMapItem(
+				               (MapItem)SaxonHelper.getSingleItem(paramOption.getValue().getUnderlyingValue()),
+				               Object.class
+				           ).entrySet())
+					params.put(e.getKey(), "" + e.getValue());
+			List<Medium> media = Medium.parseMultiple(getOption(_media, DEFAULT_MEDIUM));
 			inMemoryResolver.setContext(contextPipe);
 			Node doc = new XMLCalabashInputValue(sourcePipe).ensureSingleItem().asNodeIterator().next();
 			if (!(doc instanceof Document))
 				throw new IllegalArgumentException();
 			URI baseURI = new URI(doc.getBaseURI());
 			Source sourceDocument = new DOMSource(doc, baseURI.toASCIIString());
-			List<Source> userStylesheets = new ArrayList<>(); {
+			List<Source> stylesheets = new ArrayList<>(); {
+				if (getOption(_include_user_agent_stylesheet, false))
+					for (URL u : userAgentStylesheets.get(Collections.singleton("text/x-scss"),
+					                                      Arrays.asList(getOption(_content_type, "").trim().split("\\s+")),
+					                                      media))
+						stylesheets.add(
+							new SAXSource(new InputSource(u.toString())));
 				String s = getOption(_user_stylesheet, "");
 				if (s != null) {
 					StringTokenizer t = new StringTokenizer(s);
 					while (t.hasMoreTokens())
-						userStylesheets.add(
+						stylesheets.add(
 							new SAXSource(
 								new InputSource(URLs.resolve(baseURI, URLs.asURI(t.nextToken())).toASCIIString())));
 				}
 			}
-			for (SassVariable v : new SassAnalyzer(medium, cssURIResolver, null)
-			                          .analyze(userStylesheets, sourceDocument)
+			for (SassVariable v : new SassAnalyzer(media, cssURIResolver, null)
+			                          .analyze(stylesheets, sourceDocument)
 			                          .getVariables()) {
 				if (params.containsKey(v.getName()) && v.isDefault())
 					continue;
@@ -166,10 +178,11 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 	public static class Provider implements XProcStepProvider {
 
 		private URIResolver resolver;
+		private UserAgentStylesheetRegistry userAgentStylesheets;
 
 		@Override
 		public XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map<String,String> properties) {
-			return new CssAnalyzeStep(runtime, step, resolver);
+			return new CssAnalyzeStep(runtime, step, resolver, userAgentStylesheets);
 		}
 
 		@Reference(
@@ -181,6 +194,17 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 		)
 		public void setUriResolver(URIResolver resolver) {
 			this.resolver = resolver;
+		}
+
+		@Reference(
+			name = "UserAgentStylesheetRegistry",
+			unbind = "-",
+			service = UserAgentStylesheetRegistry.class,
+			cardinality = ReferenceCardinality.MANDATORY,
+			policy = ReferencePolicy.STATIC
+		)
+		public void setUserAgentStylesheetRegistry(UserAgentStylesheetRegistry registry) {
+			this.userAgentStylesheets = registry;
 		}
 	}
 

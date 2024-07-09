@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.14.26</version>
+    <relativePath>../../parent/</relativePath>
+  </parent>
+
+  <groupId>org.daisy.pipeline.modules</groupId>
+  <artifactId>word-to-dtbook</artifactId>
+  <version>1.0.0</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: Word to DTBook</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>com.xmlcalabash</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>calabash-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>saxon-he</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>saxon-adapter</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-scratchpad</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.libreoffice</groupId>
+      <artifactId>libreoffice</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.libreoffice</groupId>
+      <artifactId>unoloader</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.maven</groupId>
+      <artifactId>xproc-engine-daisy-pipeline</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_word_to_dtbook,
+      org.daisy.pipeline.script.impl.XProcScript_word_to_dtbook,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_pagination,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_image_size,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_numbering,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_word_to_dtbook_script_footnotes_position,
+      org.daisy.pipeline.word_to_dtbook.impl.DaisyClass$Provider
+    </expose-services>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.daisy.maven</groupId>
+        <artifactId>xproc-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>test</phase>
+            <goals>
+              <goal>xprocspec</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

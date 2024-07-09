@@ -26,6 +26,7 @@ import javax.xml.transform.URIResolver;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
+import com.google.common.collect.Iterables;
 import com.google.common.io.CharStreams;
 
 import cz.vutbr.web.css.NetworkProcessor;
@@ -65,12 +66,12 @@ public class SassAnalyzer {
 
 	private static final Logger logger = LoggerFactory.getLogger(SassAnalyzer.class.getName());
 
-	private final Medium medium;
+	private final Collection<Medium> media;
 	private final CSSSourceReader cssReader;
 	final DatatypeRegistry datatypes; // also used in SassDocumentationParser
 
-	public SassAnalyzer(Medium medium, URIResolver uriResolver, DatatypeRegistry datatypes) {
-		this.medium = medium;
+	public SassAnalyzer(Collection<Medium> media, URIResolver uriResolver, DatatypeRegistry datatypes) {
+		this.media = media;
 		this.datatypes = datatypes;
 		NetworkProcessor network = new DefaultNetworkProcessor() {
 				@Override
@@ -163,11 +164,12 @@ public class SassAnalyzer {
 		};
 	}
 
-	public Collection<SassVariable> getVariableDeclarations(Iterable<Source> userStylesheets, Source sourceDocument)
+	public Collection<SassVariable> getVariableDeclarations(Iterable<Source> userAndUserAgentStylesheets,
+	                                                        Source sourceDocument)
 			throws IOException {
 
 		List<CSSSource> stylesheets = new ArrayList<>();
-		for (Source s : userStylesheets) {
+		for (Source s : userAndUserAgentStylesheets) {
 			URL base; {
 				String systemId = s.getSystemId();
 				if (systemId == null || "".equals(systemId))
@@ -232,8 +234,8 @@ public class SassAnalyzer {
 					@Override
 					protected void processElement(Element e) {
 						if ("style".equalsIgnoreCase(e.getNodeName())) {
-							Attr media = e.getAttributeNode("media");
-							if (media != null ? medium.matches(media.getValue()) : medium.asMediaSpec().matchesEmpty()) {
+							Attr q = e.getAttributeNode("media");
+							if (Iterables.any(media, m -> m.matches(q != null ? q.getValue() : null))) {
 								Attr type = e.getAttributeNode("type");
 								String mediaType = type != null ? type.getValue().toLowerCase() : null;
 								if (cssReader.supportsMediaType(mediaType, null))
@@ -244,8 +246,8 @@ public class SassAnalyzer {
 							if (rel != null && rel.getValue().toLowerCase().contains("stylesheet")) {
 								Attr href = e.getAttributeNode("href");
 								if (href != null) {
-									Attr media = e.getAttributeNode("media");
-									if (media != null ? medium.matches(media.getValue()) : medium.asMediaSpec().matchesEmpty()) {
+									Attr q = e.getAttributeNode("media");
+									if (Iterables.any(media, m -> m.matches(q != null ? q.getValue() : null))) {
 										URL url; {
 											try {
 												URI uri = URLs.asURI(href.getValue());
@@ -286,7 +288,7 @@ public class SassAnalyzer {
 				SassDocumentationParser parser = new SassDocumentationParser(tokens).init(
 					"text/x-scss".equals(source.mediaType) || (s.base != null && s.base.toString().endsWith(".scss")),
 					s.base != null ? URLs.asURI(s.base) : null,
-					medium,
+					media,
 					this);
 				vars.addAll(parser.variables());
 			}

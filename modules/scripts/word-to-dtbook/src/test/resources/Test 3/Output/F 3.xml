@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' >
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+        version="2005-3"
+        xml:lang="en-US">
+   <head>
+      <meta name="dtb:uid" content="3"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2 word-to-dtbook 1.0.0"/>
+      <meta name="dc:Title" content="Testing"/>
+      <meta name="dc:Creator" content="Balandin Vyacheslav"/>
+      <meta name="dc:Publisher" content="Pruchkovskaya"/>
+      <meta name="dc:Identifier" content="3"/>
+      <meta name="dc:Language" content="en-US"/>
+      <meta name="dc:Language" content="ru-RU"/>
+      <meta name="dc:Language" content="en-GB"/>
+   </head>
+   <book showin="blp">
+      <frontmatter>
+         <doctitle>Testing</doctitle>
+         <docauthor>Balandin Vyacheslav</docauthor>
+      </frontmatter>
+      <bodymatter id="bodymatter_0001"><level1><h1>  Basic testing of Content Cue
+</h1><p xml:lang="ru-RU">Change history:</p>
+<table border="1">
+            <tbody>
+               <tr><td ><p>Date</p>
+</td><td ><p>Author</p>
+</td><td ><p>Change / State</p>
+</td></tr>
+               <tr><td ><p>2010-08-04</p>
+</td><td ><p>Pruchkovskaya T.</p>
+</td><td ><p>Created</p>
+</td></tr>
+            </tbody>
+         </table></level1><level1><h1>1. Scope
+</h1><p>The testing has been made for Product Content Cue. Some bugs were reported to developers. Here there is summary of work.</p>
+</level1><level1><h1>2. List of Testing Scenario
+</h1><p>List of description Testing Scenario</p>
+<level2><h2>2.1. Testing functionality of each tab
+</h2><level3><h3>2.1.1. Setting Tab
+</h3><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p>№</p>
+</td><td ><p>Database description</p>
+</td><td ><p>Precedent conditions</p>
+</td><td ><p>Operation</p>
+</td><td ><p>Expectation</p>
+</td><td ><p>Actual result</p>
+</td></tr>
+               <tr><td ><p>1</p>
+</td><td ><p>Select or type the source of the documents                                     </p>
+</td><td ><p>There are a lot of files and folders different types in definite directory</p>
+</td><td ><p>Necessary to show path to document and choose button keep or (and) include</p>
+</td><td ><p>User should be able to define if files from nested folder also should de available to be added into metadata file and to define if keeping folders hierarchy required. The application should first ask the user if they would like to do this. If the information is invalid, must be message about error</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>2</p>
+</td><td ><p>The number of files found in the source and size of all files</p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>The Gui should highlight to the user the number of files found in the source and size of all size. If the document source is empty or does not contain any files to be uploaded, must be message - warning.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>3</p>
+</td><td ><p>Select existing metadata file </p>
+</td><td ><p>User have metadata file</p>
+</td><td ><p>To select existing metadata file.</p>
+</td><td ><p>User should be able to select existing metadata file after that the data on Metadata tab should be reloaded. If metadata file XML is invalid or file specified does not exist - message about error. If metadata XML file is not defined - message "warning".</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>4</p>
+</td><td ><p>The log level (xml format)</p>
+</td><td ><p>The button with levels - low, medium, high</p>
+</td><td ><p>Choose level and press  a button</p>
+</td><td ><p>User should to choose level</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>5</p>
+</td><td ><p>Logon settings</p>
+</td><td ><p>Not logged in</p>
+</td><td ><p>To log in</p>
+</td><td ><p>Should be a message - logged in as domain_name/user_name. If not specified the Content Cue tools assumes the current logged on user</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>6</p>
+</td><td ><p>Sharepoint Destination Url, Document library and folder</p>
+</td><td ><p>User had some library and folders</p>
+</td><td ><p>To enter the Destination site URL and Document Library</p>
+</td><td ><p>User should not enable to type the name of the library manually and be able to type the name of destination folder manually too. If the information is invalid, must be message about error</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>7</p>
+</td><td ><p>Save changes into settings file</p>
+</td><td ><p>User entered changes.</p>
+</td><td ><p>The new settings file is being saved first time. The user tries to close the application. The user tries to launch upload. The user tries to open another settings file.</p>
+</td><td ><p>The application should reminder the user to save changes (and provide with "Save file" dialog box if required)</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>8</p>
+</td><td ><p>Open existing settings file</p>
+</td><td ><p>User had existing settings file.</p>
+</td><td ><p>Open existing settings file</p>
+</td><td ><p>The application should validate the settings file format and show the error message in case the file format is not valid.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+            </tbody>
+         </table></level3><level3><h3 xml:lang="ru-RU">2.1.2. Metadata Tab
+</h3><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p>№</p>
+</td><td ><p>Database description</p>
+</td><td ><p>Precedent conditions</p>
+</td><td ><p>Operation</p>
+</td><td ><p>Expectation</p>
+</td><td ><p>Actual result</p>
+</td></tr>
+               <tr><td ><p>1</p>
+</td><td ><p>The Mapping grid</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To verify a mechanism to apply missing metadata.</p>
+</td><td ><p>The Mapping grid should display documents from the source and provide a mechanism to apply missing metadata.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>2</p>
+</td><td ><p>Impossible to apply metadata </p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>Where is not possible to apply metadata this files should be marked and moved to an "UploadFailed" folder as described in Functional requirements above.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>3</p>
+</td><td ><p>No "MetadataMapping.xml"</p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>In the case that there is NO "MetadataMapping.xml" the default is existing properties such as DocumentTitle and Author.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>4</p>
+</td><td ><p>Upload of manage file</p>
+</td><td ><p>User had a manage file</p>
+</td><td ><p>Select files to be added into metadata from selected source folder. Remove files from metadata.</p>
+</td><td ><p>Manage files to be uploaded</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>5</p>
+</td><td ><p>Manage mapped fields</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To add a new mapping field. To remove the existing mapping field. To select the mapping field name from the pre-populated list.</p>
+</td><td ><p>This function should be to work.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>6</p>
+</td><td ><p>Import data from CSV file</p>
+</td><td ><p>The application should validate the CSV file format.</p>
+</td><td ><p>To press "import" in the main menu.</p>
+</td><td ><p>This function should be to work. Show the error message in case the file format is not valid.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>7</p>
+</td><td ><p>Clear metadata</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To press "clear" in the main menu.</p>
+</td><td ><p>The mapping grid should be empty.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>8</p>
+</td><td ><p>Save metadata file</p>
+</td><td ><p>User had metadata file.</p>
+</td><td ><p>The new metadata file is being saved first time. The user tries to launch upload. The user tries to close the application. The user tries to launch upload. The user tries to open another settings file.</p>
+</td><td ><p>The application should reminder the user to save changes (and provide with "Save file" dialog box if required)</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>9</p>
+</td><td ><p>Metadata - unavailable status</p>
+</td><td ><p>The Metadata consists of a field which is absent or is unavailable status</p>
+</td><td ><p>-</p>
+</td><td ><p>If the Metadata consists of a field which is absent or is unavailable status in the designated document library - Read only field, invalid column should be highlighted red.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>10</p>
+</td><td ><p>Document is absent </p>
+</td><td ><p>Document is absent in the defined source folder</p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>11</p>
+</td><td ><p>Document size &gt; 50MB</p>
+</td><td ><p>Document size is greater than max allowed (50 MB)</p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>12</p>
+</td><td ><p>Mandatory field is empty </p>
+</td><td ><p>Mandatory field is empty </p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column, the empty cell should be highlighted red.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>13</p>
+</td><td ><p>Upload documents</p>
+</td><td ><p>User had a documents where the minimum metadata requirements</p>
+</td><td ><p>To upload </p>
+</td><td ><p>The screen should allow the user to upload documents where the minimum metadata requirements have been met. (ie: All mandatory fields are provided).</p>
+</td><td ><p>Functions </p>
+</td></tr>
+            </tbody>
+         </table></level3><level3><h3 xml:lang="ru-RU">2.1.3. Log Tab
+</h3><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p>№</p>
+</td><td ><p>Database description</p>
+</td><td ><p>Precedent conditions</p>
+</td><td ><p>Operation</p>
+</td><td ><p>Expectation</p>
+</td><td ><p>Actual result</p>
+</td></tr>
+               <tr><td ><p>1</p>
+</td><td ><p>View application log file</p>
+</td><td ><p>User had completed application</p>
+</td><td ><p>User launches the application</p>
+</td><td ><p>The application creates a new log file for every work session. The log file name should have the following format: Date_And_Time_Of_Application_Launching. The information within log file should be grouped by upload attempts. The log file should include the following information depending on defined logging level (low, medium, high).</p>
+</td><td ><p>Functions </p>
+</td></tr>
+            </tbody>
+         </table></level3></level2><level2><h2>2.2. Testing of Main menu
+</h2><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p>№</p>
+</td><td ><p>Database description</p>
+</td><td ><p>Precedent conditions</p>
+</td><td ><p>Operation</p>
+</td><td ><p>Expectation</p>
+</td><td ><p>Actual result</p>
+</td></tr>
+               <tr><td ><p>1</p>
+</td><td ><p>[File]</p>
+</td><td ><p>[New], [Open], [Save], [Save as], [Launch Upload], [Exit]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Creates new setting file. Shows "Open file" dialog where user can select required settings file. Saves changes in currently open settings file. Launches upload process. Close the application.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>2</p>
+</td><td ><p>[Metadata]</p>
+</td><td ><p>[Import], [Add field], [Remove field], [Remove file], [Clear]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Imports metadata from CSV file. Adds new mapping field column. Removes selected row with uploading file name. Clear metadata mapping.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>3</p>
+</td><td ><p>[Help]</p>
+</td><td ><p>[View help], [About ContentCue]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Shows help system window (link to html.file). </p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>4</p>
+</td><td ><p>Tabs Section</p>
+</td><td ><p>[Settings], [Metadata], [Log]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>5</p>
+</td><td ><p>Buttons Section</p>
+</td><td ><p>[Save settings], [Upload]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>The "Save settings] button allows the user to save current configuration settings. The "Upload" button allows the user to upload to the destination.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+               <tr><td ><p>6</p>
+</td><td ><p>Status Bar</p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>The status bar should display full path to currently open settings file.</p>
+</td><td ><p>Functions </p>
+</td></tr>
+            </tbody>
+         </table></level2><level2><h2 xml:lang="ru-RU">2.3. Verifying Function scenarios requirement according to specification
+</h2><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p><em >Database description</em></p>
+</td><td ><p><em >Conformance specification</em></p>
+</td></tr>
+               <tr><td ><p>1. The tool will allow the user to select the source of the documents from a file share via the GUI.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>2. The tool will allow the user to map the file share source to a SharePoint document library via the GUI.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>3. The tool will allow the user to create a mapping XML file via the GUI on available metadata fields within a grid view (Schema Mapping Tab).</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>4. The tool should pick up existing document property mappings of the documents such as Title and Keywords where possible.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>5. The mapping should show which fields can be mapped and which fields can’t be mapped.<br/>a. Ex: The document title field and document author should be populated.<br/>b. Ex: The CSV file can be created beforehand in excel to populate the column names (By means of import functionality).</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>6. The tool will allow the user to save the current settings in XML format.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>7. The tool will allow the user to open a previous setting file and populate the settings.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>8. The tool should show progress for each upload.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>9. The tool should have configurable logging enabled – Low, Medium, High<br/>a. Low = Writes to the log number of successful uploads and number of unsuccessful uploads with the names of the files.<br/>b. Medium = Writes to the log number of successful uploads and number of unsuccessful uploads with the name of the files and the size of each file uploaded and if any schema errors are detected.                                                                                                     c. High = Writes to the log number of successful uploads and number of unsuccessful uploads with the name of the file and the size of each file uploaded and if any schema errors are detected and the error and which document failed with the schema error.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>10. The log file should be written to a folder in XML format.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>11. The tool will allow the user to upload multiple documents in batches via the GUI.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>12. The tool should continue uploading content when there are multiple upload errors and should write an error log on failed uploads.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>13. The tool should provide a view of the documents in the source folder and have the ability to select only a few documents for upload.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>14. The tool should allow the user to move the upload failure documents to a folder titled “Filed Upload”<br/>a. Optionally the tool should move these files automatically to this folder or provide a mechanism to easily move the failed documents.</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>15. The tool should have the following structure when deployed: ~:\ indicates a drive such as C:\<br/>a. ~:\ContentCue.exe (Main executable)<br/>b. ~:\ContentCue.Config (Configuration file)<br/>c. ~:\Configuration \(All supporting files for the programme)<br/>d. ~\Logs\(All Log files)<br/>e. ~\FailedUpload\ Upload_Date_And_Time\(All failed Conforms upload  files)<br/>f. ~\Help\ (All help  files)</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+            </tbody>
+         </table></level2><level2><h2>2.4. Verifying Non Function requirement according to specification
+</h2><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p><em >Database description</em></p>
+</td><td ><p><em >Conformance specification</em></p>
+</td></tr>
+               <tr><td ><p>• The tool must work on x64 (64bit) platforms</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>• The tool should work with SharePoint 2007 and SharePoint 2010* including SharePoint Foundation</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>• The tool should not require any pre-requisite software other than .Net Framework 3.5 to be present for the tool to function</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>• The tool should upload all document (electronic) formats including images</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>• The tool should warn when a single document size exceeds 50MB in size and reject uploading and provide the user with a warning</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+               <tr><td ><p>• The current .csv Metadata mapping should be converted to XML format</p>
+</td><td ><p>Conforms</p>
+</td></tr>
+            </tbody>
+         </table></level2></level1><level1><h1 xml:lang="ru-RU">3. Stress Tests
+</h1><p></p>
+<table border="1">
+            <col align="center"/>
+            <tbody>
+               <tr><td ><p><em >Database description</em></p>
+</td><td ><p><em >Conformance specification</em></p>
+</td></tr>
+               <tr><td ><p>Prepare library of 300 files for loading. They should be different types (user common types as .doc, .pdf, .jpg and so on. Prepare 10 files of different types with size greater than 50 MB.</p>
+</td><td ><p>The action of system conforms to specification</p>
+</td></tr>
+            </tbody>
+         </table></level1><level1><h1 xml:lang="ru-RU">4. Smoke/Acceptance Test
+</h1><p></p>
+<table border="1">
+            <col align="right"/>
+            <tbody>
+               <tr><td ><p><em >№</em></p>
+</td><td ><p><em >Database description</em></p>
+</td><td ><p><em >Precedent conditions</em></p>
+</td><td ><p><em >Operation</em></p>
+</td><td ><p><em >Expectation</em></p>
+</td><td ><p><em >Actual result</em></p>
+</td></tr>
+               <tr><td ><p>1</p>
+</td><td ><p>Select or type the source of the documents                                     </p>
+</td><td ><p>There are a lot of files and folders different types in definite directory</p>
+</td><td ><p>Necessary to show path to document and choose button keep or (and) include</p>
+</td><td ><p>User should be able to define if files from nested folder also should de available to be added into metadata file and to define if keeping folders hierarchy required. The application should first ask the user if they would like to do this. If the information is invalid, must be message about error</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>2</p>
+</td><td ><p>Logon settings</p>
+</td><td ><p>Not logged in</p>
+</td><td ><p>To log in</p>
+</td><td ><p>Should be a message - logged in as domain_name/user_name. If not specified the ContentCue tools assumes the current logged on user</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>3</p>
+</td><td ><p>SharePoint Destination Url, Document library and folder</p>
+</td><td ><p>User had some library and folders</p>
+</td><td ><p>To enter the Destination site URL and Document Library</p>
+</td><td ><p>User should not enable to type the name of the library manually and be able to type the name of destination folder manually too. If the information is invalid, must be message about error</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>4</p>
+</td><td ><p>Save changes into settings file</p>
+</td><td ><p>User entered changes.</p>
+</td><td ><p>The new settings file is being saved first time. The user tries to close the application. The user tries to launch upload. The user tries to open another settings file.</p>
+</td><td ><p>The application should reminder the user to save changes (and provide with "Save file" dialog box if required)</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>5</p>
+</td><td ><p>Open existing settings file</p>
+</td><td ><p>User had existing settings file.</p>
+</td><td ><p>Open existing settings file</p>
+</td><td ><p>The application should validate the settings file format and show the error message in case the file format is not valid.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>6</p>
+</td><td ><p>The Mapping grid</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To verify a mechanism to apply missing metadata.</p>
+</td><td ><p>The Mapping grid should display documents from the source and provide a mechanism to apply missing metadata.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>7</p>
+</td><td ><p>Impossible to apply metadata </p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>Where is not possible to apply metadata this files should be marked and moved to an "UploadFailed" folder as described in Functional requirements above.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>8</p>
+</td><td ><p>No "MetadataMapping.xml"</p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>In the case that there is NO "MetadataMapping.xml" the default is existing properties such as DocumentTitle and Author.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>9</p>
+</td><td ><p>Manage mapped fields</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To add a new mapping field. To remove the existing mapping field. To select the mapping field name from the pre-populated list.</p>
+</td><td ><p>This function should be to work.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>10</p>
+</td><td ><p>Clear metadata</p>
+</td><td ><p>User had information in the mapping grid.</p>
+</td><td ><p>To press "clear" in the main menu.</p>
+</td><td ><p>The mapping grid should be empty.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>11</p>
+</td><td ><p>Save metadata file</p>
+</td><td ><p>User had metadata file.</p>
+</td><td ><p>The new metadata file is being saved first time. The user tries to launch upload. The user tries to close the application. The user tries to launch upload. The user tries to open another settings file.</p>
+</td><td ><p>The application should reminder the user to save changes (and provide with "Save file" dialog box if required)</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>12</p>
+</td><td ><p>Save metadata file</p>
+</td><td ><p>User had metadata file.</p>
+</td><td ><p>The new metadata file is being saved first time. The user tries to launch upload. The user tries to close the application. The user tries to launch upload. The user tries to open another settings file.</p>
+</td><td ><p>The application should reminder the user to save changes (and provide with "Save file" dialog box if required)</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>13</p>
+</td><td ><p>Document is absent </p>
+</td><td ><p>Document is absent in the defined source folder</p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>14</p>
+</td><td ><p>Document size &gt; 50MB</p>
+</td><td ><p>Document size is greater than max allowed (50 MB)</p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>15</p>
+</td><td ><p>Mandatory field is empty </p>
+</td><td ><p>Mandatory field is empty </p>
+</td><td ><p>-</p>
+</td><td ><p>Should be shown corresponding icon in the status column, the empty cell should be highlighted red.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>16</p>
+</td><td ><p>Upload documents</p>
+</td><td ><p>User had a documents where the minimum metadata requirements</p>
+</td><td ><p>To upload </p>
+</td><td ><p>The screen should allow the user to upload documents where the minimum metadata requirements have been met. (ie: All mandatory fields are provided).</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>17</p>
+</td><td ><p>View application log file</p>
+</td><td ><p>User had completed application</p>
+</td><td ><p>User launches the application</p>
+</td><td ><p>The application creates a new log file for every work session. The log file name should have the following format: Date_And_Time_Of_Application_Launching. The information within log file should be grouped by upload attempts. The log file should include the following information depending on defined logging level (low, medium, high).</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>18</p>
+</td><td ><p>[File]</p>
+</td><td ><p>[New], [Open], [Save], [Save as], [Launch Upload], [Exit]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Creates new setting file. Shows "Open file" dialog where user can select required settings file. Saves changes in currently open settings file. Launches upload process. Close the application.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>19</p>
+</td><td ><p>[Metadata]</p>
+</td><td ><p>[Import], [Add field], [Remove field], [Remove file], [Clear]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Imports metadata from CSV file. Adds new mapping field column. Removes selected row with uploading file name. Clear metadata mapping.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>20</p>
+</td><td ><p>[Help]</p>
+</td><td ><p>[View help], [About ContentCue]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>Shows help system window (link to html.file).</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>21</p>
+</td><td ><p>Tabs Section</p>
+</td><td ><p>[Settings], [Metadata], [Log]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>22</p>
+</td><td ><p>Buttons Section</p>
+</td><td ><p>[Save settings], [Upload]</p>
+</td><td ><p>All function should to perform</p>
+</td><td ><p>The "Save settings] button allows the user to save current configuration settings. The "Upload" button allows the user to upload to the destination.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+               <tr><td ><p>23</p>
+</td><td ><p>Status Bar</p>
+</td><td ><p>-</p>
+</td><td ><p>-</p>
+</td><td ><p>The status bar should display full path to currently open settings file.</p>
+</td><td ><p> Should  conform to specification</p>
+</td></tr>
+            </tbody>
+         </table><p></p>
+<p></p>
+</level1><level1><h1>5. Conclusion
+</h1><p></p>
+<p>Consequently of testing a system was detected next mistakes: 1) the view of Main menu and Metadata are not correct; 2) the button ‘Save settings’ is not correct; 3) <span xml:lang="en-GB">not message about hierarchy of folder; 4) </span>not ‘warning’ in the Mapping grid when loaded files with size greater than 50 MB. All mistakes were removed. </p>
+<p>The Product Content Cue is ready for construction QA-analysis.</p>
+<p></p>
+<p></p>
+<p></p>
+</level1></bodymatter>
+   </book>
+</dtbook>

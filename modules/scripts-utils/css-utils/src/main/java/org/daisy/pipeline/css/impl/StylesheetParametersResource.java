@@ -14,7 +14,11 @@ import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,6 +38,7 @@ import org.daisy.common.file.URLs;
 import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.sass.SassAnalyzer;
 import org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
+import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.ZippedJobResources;
 import org.daisy.pipeline.script.ScriptInput;
@@ -63,6 +68,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 
 	static final String URI_RESOLVER_KEY = "uri-resolver";
 	static final String DATATYPE_REGISTRY_KEY = "datatype-registry";
+	static final String USER_AGENT_STYLESHEET_REGISTRY_KEY = "user-agent-stylesheet-registry";
 
 	private static final String STYLESHEET_PARAMETERS_DATA_FIELD = "stylesheet-parameters-data";
 	private static final String STYLESHEET_PARAMETERS_REQUEST_FIELD = "stylesheet-parameters-request";
@@ -73,6 +79,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 
 	private URIResolver uriResolver;
 	private DatatypeRegistry datatypeRegistry;
+	private UserAgentStylesheetRegistry userAgentStylesheetRegistry;
 
 	@Override
 	public void doInit() {
@@ -81,6 +88,8 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			return;
 		uriResolver = (URIResolver)getContext().getAttributes().get(URI_RESOLVER_KEY);
 		datatypeRegistry = (DatatypeRegistry)getContext().getAttributes().get(DATATYPE_REGISTRY_KEY);
+		userAgentStylesheetRegistry
+			= (UserAgentStylesheetRegistry)getContext().getAttributes().get(USER_AGENT_STYLESHEET_REGISTRY_KEY);
 	}
 
 	/**
@@ -176,17 +185,17 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			}
 			inputs = builder.build();
 		}
-		Medium medium; {
-			medium = null;
-			NodeList media = request.getElementsByTagNameNS(NS_DAISY, "media");
-			if (media.getLength() > 0)
+		List<Medium> media; {
+			media = null;
+			NodeList node = request.getElementsByTagNameNS(NS_DAISY, "media");
+			if (node.getLength() > 0)
 				try {
-					medium = Medium.parse(((Element)media.item(0)).getAttribute("value"));
+					media = Medium.parseMultiple(((Element)node.item(0)).getAttribute("value"));
 				} catch (IllegalArgumentException e) {
 					return badRequest(e);
 				}
-			if (medium == null)
-				medium = Medium.parse("screen");
+			if (media == null)
+				media = Medium.parseMultiple("screen");
 		}
 		URI contextBase = URI.create("context:/");
 		uriResolver = fallback(uriResolver, simpleURIResolver);
@@ -256,14 +265,29 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 					throw new RuntimeException(e);
 				}
 			};
-			Iterable<Source> userStylesheets = Iterables.transform(inputs.getInput("stylesheet"), handleZippedInput);
+			List<Source> userAndUserAgentStylesheets = new ArrayList<>(); {
+				NodeList userAgentStylesheet = request.getElementsByTagNameNS(NS_DAISY, "userAgentStylesheet");
+				if (userAgentStylesheet.getLength() > 0) {
+					for (URL u : userAgentStylesheetRegistry.get(
+					                 Collections.singleton("text/x-scss"),
+					                 Arrays.asList(((Element)userAgentStylesheet.item(0)).getAttribute("mediaType").trim().split("\\s+")),
+					                 media))
+						try {
+							userAndUserAgentStylesheets.add(simpleURIResolver.resolve(u.toString(), null));
+						} catch (TransformerException e) {
+							throw new RuntimeException(e);
+						}
+				}
+				for (Source s : Iterables.transform(inputs.getInput("stylesheet"), handleZippedInput))
+					userAndUserAgentStylesheets.add(s);
+			}
 			Source sourceDocument = Iterables.getFirst(Iterables.transform(inputs.getInput("source"), handleZippedInput), null);
 			Document parametersDoc; {
 				parametersDoc = XmlUtils.createDom("parameters");
 				Element parametersElem = parametersDoc.getDocumentElement();
 				try {
-					for (SassVariable v : new SassAnalyzer(medium, resolver, datatypeRegistry)
-						                      .analyze(userStylesheets, sourceDocument)
+					for (SassVariable v : new SassAnalyzer(media, resolver, datatypeRegistry)
+						                      .analyze(userAndUserAgentStylesheets, sourceDocument)
 					                          .getVariables()) {
 						if (v.isDefault()) {
 							Element parameterElem = parametersDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "parameter");

@@ -5,6 +5,38 @@
 @namespace epub url(http://www.idpf.org/2007/ops);
 
 /**
+ * @var boolean $force-braille-page-break
+ *
+ * @brief Force braille page break
+ *
+ * Force braille page breaks at print page breaks.
+ *
+ * The following CSS rule is included by default (where `$force-braille-page-break` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * @if $force-braille-page-break {
+ *   .page-front,
+ *   .page-normal,
+ *   .page-special,
+ *   [epub|type='pagebreak'] {
+ *     page-break-before: always;
+ *   }
+ * }
+ * ~~~
+ */
+$force-braille-page-break: false !default;
+
+@if $force-braille-page-break {
+	.page-front,
+	.page-normal,
+	.page-special,
+	[epub|type='pagebreak'] {
+		page-break-before: always;
+	}
+}
+
+/**
  * @var boolean $capital-letters
  *
  * @brief Indicate capital letters

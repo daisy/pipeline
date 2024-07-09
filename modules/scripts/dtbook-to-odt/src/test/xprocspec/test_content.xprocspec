@@ -786,7 +786,7 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="sidebar without paragraph" pending="true">
+  <x:scenario label="sidebar without paragraph">
     <x:call>
       <x:input port="source">
         <x:document type="inline">
@@ -803,7 +803,7 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <text:section text:name="dtb:sidebar#1" text:style-name="dtb_3a_sidebar">
-          <text:p text:style-name="dtb_3a_p">foo</text:p>
+          <text:p text:style-name="Standard">foo</text:p>
         </text:section>
       </x:document>
     </x:expect>

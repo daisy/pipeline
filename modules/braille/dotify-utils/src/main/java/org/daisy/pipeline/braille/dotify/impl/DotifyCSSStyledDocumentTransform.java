@@ -49,6 +49,8 @@ import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
 import static org.slf4j.helpers.NOPLogger.NOP_LOGGER;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @see <a href="../../../../../../../../../doc/">User documentation</a>.
@@ -62,6 +64,8 @@ public interface DotifyCSSStyledDocumentTransform {
 		}
 	)
 	public class Provider extends AbstractTransformProvider<Transform> {
+		
+		private static final Logger logger = LoggerFactory.getLogger(DotifyCSSStyledDocumentTransform.class);
 		
 		private URI href;
 		
@@ -106,7 +110,7 @@ public interface DotifyCSSStyledDocumentTransform {
 								blockTransformQuery = mutableQuery(q).add("input", "css")
 								                                     .add("output", "css")
 								                                     .add("output", "braille");
-								if (!logSelect(blockTransformQuery, translatorRegistry).iterator().hasNext())
+								if (!logSelect(blockTransformQuery, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext())
 									return empty;
 							}
 						}
@@ -177,7 +181,7 @@ public interface DotifyCSSStyledDocumentTransform {
 														// set to this table. If not, ignore preview-table.
 														MutableQuery q = mutableQuery(textTransformQuery).add("braille-charset",
 														                                                      previewTable.getIdentifier());
-														if (logSelect(q, translatorRegistry).iterator().hasNext()) {
+														if (logSelect(q, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext()) {
 															q.removeAll("document-locale");
 															options = new HashMap<>(); {
 																options.putAll(TransformImpl.this.options);
@@ -233,7 +237,7 @@ public interface DotifyCSSStyledDocumentTransform {
 			policy = ReferencePolicy.STATIC
 		)
 		protected void bindBrailleTranslatorRegistry(BrailleTranslatorRegistry registry) {
-			translatorRegistry = registry;
+			translatorRegistry = registry.withContext(logger);
 		}
 		
 		private BrailleTranslatorRegistry translatorRegistry;

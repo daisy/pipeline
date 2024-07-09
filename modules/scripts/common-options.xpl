@@ -124,6 +124,10 @@
 The TTS log contains a great deal of additional information that is not present in the main job log
 and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
 of the input document.
+
+The default can be changed using the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
 </p>
 		</p:documentation>
 	</p:option>
@@ -137,12 +141,7 @@ of the input document.
 	<p:output port="tts-log" sequence="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">TTS log</h2>
-			<p px:role="desc" xml:space="preserve">Log file with information about text-to-speech process.
-
-Can be enabled with the "Include TTS log" option or the
-[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
-property.
-			</p>
+			<p px:role="desc">Log file with information about text-to-speech process.</p>
 		</p:documentation>
 	</p:output>
 
@@ -227,9 +226,6 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 			<h2 px:role="name">Style sheets</h2>
 			<p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
 
-DEPRECATION WARNING: XSLT style sheets are also supported, but this feature might be removed in the
-future. It is recommended to apply any XSLT style sheets during pre-processing of the document.
-
 Must be a space separated list of URIs, absolute or relative to the input.
 
 Style sheets specified through this option are called "[user style
@@ -242,15 +238,11 @@ element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '
 attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that apply to "embossed"
 media are taken into account.
 
-Style sheets are applied to the document in the following way: XSLT style sheets are applied before
-CSS/Sass style sheets. XSLT style sheets are applied one by one, first the user style sheets, then
-the author style sheets, in the order in which they are specified.
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
+precedence over user styles.
 
-All CSS/Sass style sheets are applied at once, but the order in which they are specified has an
-influence on the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author
-styles take precedence over user styles.
-
-CSS/Sass style sheets are interpreted according to [braille
+Style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules.
 
 For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
@@ -304,10 +296,71 @@ precedence over user styles.
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
-Style sheets can also be attached to the source document, using an ['xml-stylesheet' processing
-instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
-			</p>
+
+PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon,
+the processor will use the provided pronunciation instead of the
+default rendering.
+
+The syntax of a PLS lexicon is defined in [Pronunciation Lexicon
+Specification (PLS) Version
+1.0](https://www.w3.org/TR/pronunciation-lexicon), extended with
+regular expression matching. To enable regular expression matching,
+add the "regex" attribute, as follows:
+
+~~~xml
+&lt;lexicon xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" version="1.0"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme regex="true"&gt;
+    &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
+    &lt;alias&gt;between $1 and $2&lt;/alias&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+The regex feature works only with alias-based substitutions. The regex
+syntax used is that from [XQuery 1.0 and XPath
+2.0](https://www.w3.org/TR/xpath-functions/#regex-syntax).
+
+Whether or not the regex attribute is set to "true", the grapheme
+matching can be made more accurate by specifying the
+"positive-lookahead" and "negative-lookahead" attributes:
+
+~~~xml
+&lt;lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme positive-lookahead="[ ]+is"&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;somebody&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;should be&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme xml:lang="fr"&gt;
+    &lt;grapheme positive-lookahead="[ ]+[cC]ity"&gt;boston&lt;/grapheme&gt;
+    &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+Graphemes with "positive-lookahead" will match if the beginning of
+what follows matches the "position-lookahead" pattern. Graphemes with
+"negative-lookahead" will match if the beginning of what follows does
+not match the "negative-lookahead" pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.
+
+The lexemes are matched in this order:
+
+1. Graphemes with regex="false" come first, no matter if there is a lookahead or not;
+2. then come graphemes with regex="true" and no lookahead;
+3. then graphemes with regex="true" and one or two lookaheads.
+
+Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.</p>
 		</p:documentation>
 	</p:option>
 
@@ -315,16 +368,20 @@ element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef
+	    dtbook-to-daisy3
+	    dtbook-to-epub3
+	    epub3-to-epub3
+	    epub-to-daisy
 	-->
-	<p:option name="stylesheet-parameters" required="false" px:type="transform-query" select="''">
+	<p:option name="stylesheet-parameters" required="false" px:type="stylesheet-parameters" select="'()'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheet parameters</h2>
 			<p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
 
 Style sheets, whether they're user style sheets (specified with the "stylesheet" option) or author
 style sheets (associated with the source), may have parameters (Sass variables). The
-"stylesheet-parameters" option, which takes a list of parenthesis enclosed key-value pairs, can be
-used to set these variables.
+"stylesheet-parameters" option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.
 
 For example, if a style sheet uses the Sass variable "foo":
 
@@ -446,14 +503,13 @@ If left blank, the locale information in the input document will be used to sele
 	</p:option>
 
 	<!--
+	    dtbook-to-pef
 	    html-to-pef
 	-->
 	<p:option name="include-pdf" required="false" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include PDF</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not to include a PDF version of the braille result showing ASCII braille.
-
-The `wkhtmltopdf` tool must be installed on the system for the PDF export to work.</p>
+			<p px:role="desc" xml:space="preserve">Whether or not to include a PDF version of the braille result showing ASCII braille.</p>
 		</p:documentation>
 	</p:option>
 
@@ -539,26 +595,28 @@ level-two folder can contain, the top-level section is divided over multiple lev
 			<px:type>
 				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
 					<value>1</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is one level
-					deep. At the top level there is 1 folder, that contains entire book.  This
-					folder can have up to 999 MP3 files. Each MP3 file corresponds with a top-level
-					section of the book. This setting is suited for simple devices of type Envoy
-					Connect/Vine C2.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">1
+
+Produces a folder structure that is one level deep. At the top level there is 1 folder, that
+contains entire book.  This folder can have up to 999 MP3 files. Each MP3 file corresponds with a
+top-level section of the book. This setting is suited for simple devices of type Envoy Connect/Vine
+C2.</a:documentation>
 					<value>2</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is two levels
-					deep. At the top level there is 1 folder that contains entire book. This folder
-					can have up to 999 sub-folders, each of which can contain up to 999 MP3
-					files. Each MP3 file corresponds with a level-two section, a top-level section
-					without sub-sections, or the content within a top-level section before the first
-					sub-section.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">2
+
+Produces a folder structure that is two levels deep. At the top level there is 1 folder that
+contains entire book. This folder can have up to 999 sub-folders, each of which can contain up to
+999 MP3 files. Each MP3 file corresponds with a level-two section, a top-level section without
+sub-sections, or the content within a top-level section before the first
+sub-section.</a:documentation>
 					<value>3</value>
-					<a:documentation xml:lang="en">Produces a folder structure that is three levels
-					deep. At the top level there is 1 folder that contains entire book. This folder
-					can have up to 999 sub-folders. The sub-folders can have up to 999
-					sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file
-					corresponds with a level-three section, a top-level or level-two section without
-					sub-sections, or the content within a top-level or level-two section before the
-					first sub-section.</a:documentation>
+					<a:documentation xml:lang="en" xml:space="preserve">3
+
+Produces a folder structure that is three levels deep. At the top level there is 1 folder that
+contains entire book. This folder can have up to 999 sub-folders. The sub-folders can have up to 999
+sub-sub-folders, each of which can contain up to 999 MP3 files. Each MP3 file corresponds with a
+level-three section, a top-level or level-two section without sub-sections, or the content within a
+top-level or level-two section before the first sub-section.</a:documentation>
 				</choice>
 			</px:type>
 		</p:pipeinfo>

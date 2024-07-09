@@ -4,6 +4,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
                 name="main">
@@ -60,7 +62,7 @@ sheet modules) are available for use in Sass style sheets:
     </p:option>
     
     <!-- defined in ../../../../../../common-options.xpl -->
-    <p:option name="stylesheet-parameters"/>
+    <p:option name="stylesheet-parameters" cx:as="xs:string*"/>
     <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
@@ -81,24 +83,9 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="page-height"/>
     <p:option name="duplex"/>
 
-    <!-- defined in ../../css/default.params -->
-    <p:option name="hyphenation"/>
-    <p:option name="line-spacing"/>
-
     <!-- defined in ../../css/dotify.params -->
     <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="allow-text-overflow-trimming"/>
-
-    <!-- defined in ../../css/page-breaking.params -->
-    <p:option name="force-braille-page-break"/>
-
-    <!-- defined in ../../css/volume-breaking.params -->
-    <p:option name="maximum-number-of-sheets"/>
-    <p:option name="allow-volume-break-inside-leaf-section-factor"/>
-    <p:option name="prefer-volume-break-before-higher-level-factor"/>
-
-    <!-- defined in ../../css/notes.params -->
-    <p:option name="notes-placement"/>
 
     <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="result"/>
@@ -118,10 +105,17 @@ sheet modules) are available for use in Sass style sheets:
         <!-- directory used for temporary files -->
     </p:option>
     
+    <!-- hidden options -->
+    <p:option name="handle-xinclude" px:type="boolean" select="'false'" px:hidden="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Apply XInclude processing on the source document.</p>
+            <p>If this option is set, it is assumed that the source document is XHTML.</p>
+        </p:documentation>
+    </p:option>
+
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
-            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/braille/html-to-pef/library.xpl">
@@ -160,6 +154,7 @@ sheet modules) are available for use in Sass style sheets:
                                            output-file-format
                                            include-pef
                                            include-preview
+                                           include-pdf
                                            include-obfl
                                            include-css
                                            result
@@ -173,21 +168,22 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
     </px:delete-parameters>
     <p:sink/>
-    <px:parse-query name="stylesheet-parameters">
-        <p:with-option name="query" select="$stylesheet-parameters"/>
-    </px:parse-query>
-    <p:sink/>
     
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:fileset-add-entry media-type="application/xhtml+xml">
+    <px:fileset-add-entry>
         <p:input port="source.fileset">
           <p:inline><d:fileset/></p:inline>
         </p:input>
         <p:with-option name="href" select="$source"/>
+        <p:with-option name="media-type" select="if ($handle-xinclude='true')
+                                                 then 'application/xhtml+xml'
+                                                 else 'text/html'"/>
     </px:fileset-add-entry>
-    <px:html-load name="html" px:message="Loading HTML" px:progress=".03"/>
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
+        <p:with-option name="handle-xinclude" select="$handle-xinclude='true'"/>
+    </px:html-load>
     
     <!-- ============ -->
     <!-- HTML TO PEF -->
@@ -198,12 +194,12 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
         <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
         <p:with-option name="stylesheet" select="$stylesheet"/>
+        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
         <p:with-option name="transform"
                        select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
-            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:html-to-pef>
     

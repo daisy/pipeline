@@ -2,37 +2,70 @@
  * Volume breaking
  */
 
+/**
+ * @var integer $maximum-number-of-sheets
+ *
+ * @brief Maximum number of sheets per volume
+ *
+ * The maximum number of sheets in a volume.
+ *
+ * The following CSS rule is included by default (where `$maximum-number-of-sheets` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * @volume {
+ *   max-length: $maximum-number-of-sheets;
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`@volume`](http://braillespecs.github.io/braille-css/#h3_the-volume-rule) rule
+ * - the [`max-length`](http://braillespecs.github.io/braille-css/#h3_the-length-properties) property
+ */
 $maximum-number-of-sheets: 70 !default;
 
 @volume {
 	max-length: $maximum-number-of-sheets;
 }
 
-/*
- * Amount with which volume breaks are allowed within "leaf sections", meaning that a
- * volume is not broken right before a heading.
+/**
+ * @var integer $allow-volume-break-inside-leaf-section-factor
  *
- * A leaf section is a block of adjacent content with the same sectioning depth.
- * Which means:
- * - either; a section element with no child sections
- * - or; the content in a section (<h1>, <p>, etc.), which may have section element siblings
+ * @brief Allow volume breaks within sections
  *
- * If a section contains other sections, then this style sheet wraps the normal content
- * (<h1>, <p>, etc.) in the section in a <div class="leaf-section"> element.
+ * Amount with which volume breaks are allowed within sections.
+ *
+ * The value can range from 1 to 10. The lower the value, the more preference is given to volume breaks
+ * right before `section` elements. The higher the value, the more equal the volumes will be in
+ * size.
  */
 $allow-volume-break-inside-leaf-section-factor: 10 !default;
+// Allowing volume breaks within "leaf sections" means allowing a volume to be broken not
+// right before a heading.
+//
+// A leaf section is a block of adjacent content with the same sectioning depth.
+// Which means:
+// - either; a section element with no child sections
+// - or; the content in a section (<h1>, <p>, etc.), which may have section element siblings
+//
+// If a section contains other sections, then this style sheet wraps the normal content
+// (<h1>, <p>, etc.) in the section in a <div class="leaf-section"> element.
 
 /**
- * Amount with which preference is given to volume breaks before higher level sections in
- * comparison to lower level sections.
+ * @var string $prefer-volume-break-before-higher-level-factor
  *
- * The value can range from 0 to ? and can be a non-integer. A value of 0 (the default) means
- * no preference is given. A higher value results in volumes that are less equal in
- * size. Depending on the value of $allow-volume-break-inside-leaf-section-factor,
- * increasing $prefer-volume-break-before-higher-level-factor beyond a certain value does
- * not have an effect anymore.
+ * @brief Prefer breaks at higher level sections
+ *
+ * Amount with which preference is given to volume breaks before higher level sections.
+ *
+ * The value must be greater or equal to 0. It can be a non-integer. A value of 0 means no preference
+ * is given. A higher value results in volumes that are less equal in size.
  */
 $prefer-volume-break-before-higher-level-factor: 0 !default;
+// Depending on the value of $allow-volume-break-inside-leaf-section-factor,
+// increasing $prefer-volume-break-before-higher-level-factor beyond a certain value does
+// not have an effect anymore.
 
 @if $allow-volume-break-inside-leaf-section-factor < 10 {
     
@@ -167,12 +200,10 @@ $prefer-volume-break-before-higher-level-factor: 0 !default;
         }
     }
     
-    /*
-     * Avoid orphaned headlines.
-     *
-     * volume-breaking.xsl adds the "keep-with-next-section" class is added on small leaf
-     * sections.
-     */
+    // Avoid orphaned headlines.
+    // 
+    // volume-breaking.xsl adds the "keep-with-next-section" class on small leaf
+    // sections.
     .keep-with-next-section {
         -obfl-keep-with-next-sheets: 1;
     }

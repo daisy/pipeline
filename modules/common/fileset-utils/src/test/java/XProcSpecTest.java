@@ -2,6 +2,9 @@ import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
 
 import org.junit.Test;
 
+import org.ops4j.pax.exam.ProbeBuilder;
+import org.ops4j.pax.exam.TestProbeBuilder;
+
 public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	
 	@Override
@@ -17,5 +20,12 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 	public void runXSpec() {
 		// already run with xspec-maven-plugin
 	}
-}
 
+	@ProbeBuilder
+	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
+		probe.setHeader("Bundle-Name", "test-module");
+		// needed because it can not be generated with maven-bundle-plugin
+		probe.setHeader("Service-Component", "OSGI-INF/module.xml");
+		return probe;
+	}
+}

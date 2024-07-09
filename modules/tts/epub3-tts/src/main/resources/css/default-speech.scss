@@ -1,0 +1,31 @@
+/* ----------------------------------------------
+ * Default style sheet for HTML for medium speech
+ * ---------------------------------------------- */
+
+/**
+ * @var boolean $speak-image-alt
+ * @brief Speak image alt text
+ *
+ * Speak the alt text of images, unless a caption is present.
+ *
+ * The following CSS rule is included when this option is set:
+ *
+ * ~~~sass
+ * img[alt]::before {
+ *   content: attr(alt);
+ *   figure:has(figcaption) & {
+ *     content: none;
+ *   }
+ * }
+ * ~~~
+ */
+$speak-image-alt: true !default;
+
+@if $speak-image-alt {
+	img[alt]::before {
+		content: attr(alt);
+		figure:has(figcaption) & {
+			content: none;
+		}
+	}
+}

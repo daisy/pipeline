@@ -282,7 +282,7 @@
     </x:call>
     <x:scenario label="enabled">
       <x:call>
-        <x:option name="hyphenation" select="'auto'"/>
+        <x:option name="stylesheet-parameters" select="'(hyphenation:auto)'"/>
         <x:option name="pef" select="concat($temp-dir,'hyphenation/enabled/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/enabled/temp-dir/')"/>
       </x:call>
@@ -314,7 +314,7 @@
     </x:scenario>
     <x:scenario label="disabled">
       <x:call>
-        <x:option name="hyphenation" select="'manual'"/>
+        <x:option name="stylesheet-parameters" select="'(hyphenation:manual)'"/>
         <x:option name="pef" select="concat($temp-dir,'hyphenation/disabled/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'hyphenation/disabled/temp-dir/')"/>
       </x:call>
@@ -370,7 +370,7 @@
           </dtbook>
         </x:document>
       </x:input>
-      <x:option name="line-spacing" select="'double'"/>
+      <x:option name="stylesheet-parameters" select="'(line-spacing:double)'"/>
       <x:option name="pef" select="concat($temp-dir,'line-spacing/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'line-spacing/temp-dir/')"/>
     </x:call>
@@ -737,7 +737,7 @@
         Tests force-braille-page-break option.
       </x:documentation>
       <x:call>
-        <x:option name="force-braille-page-break" select="'true'"/>
+        <x:option name="stylesheet-parameters" select="'(force-braille-page-break:true)'"/>
         <x:option name="pef" select="concat($temp-dir,'force-braille-page-break/output-dir/')"/>
         <x:option name="temp-dir" select="concat($temp-dir,'force-braille-page-break/temp-dir/')"/>
       </x:call>
@@ -815,7 +815,7 @@
       </x:input>
       <x:option name="page-width" select="'10'"/>
       <x:option name="page-height" select="'5'"/>
-      <x:option name="maximum-number-of-sheets" select="'2'"/>
+      <x:option name="stylesheet-parameters" select="'(maximum-number-of-sheets:2)'"/>
       <x:option name="pef" select="concat($temp-dir,'maximum-number-of-sheets/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'maximum-number-of-sheets/temp-dir/')"/>
     </x:call>
