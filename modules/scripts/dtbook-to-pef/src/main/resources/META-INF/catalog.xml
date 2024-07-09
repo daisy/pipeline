@@ -5,17 +5,16 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/dtbook-to-pef.xpl" uri="../xml/xproc/dtbook-to-pef.xpl"
        px:content-type="script" px:id="dtbook-to-pef"
        px:extends="../../../../../common-options.xpl
-                   ../css/default.params
                    ../css/page-layout.params
-                   ../css/page-breaking.params
-                   ../css/volume-breaking.params
-                   ../css/notes.params
                    ../css/dotify.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>
   
   <!-- style sheets -->
+  <uri uri="../css/default.scss" px:content-type="user-agent-stylesheet"
+                                 px:stylesheet-for-content-type="application/x-dtbook+xml"
+                                 px:stylesheet-for-media="embossed"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css" uri="../css/reset.css"/>
   
   <!-- partials -->
@@ -28,6 +27,7 @@
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:common"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:braille:pef-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:common-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:css-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>

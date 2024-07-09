@@ -4,7 +4,8 @@
                 xmlns:array="http://www.w3.org/2005/xpath-functions/array"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:html="http://www.w3.org/1999/xhtml">
+                xmlns:html="http://www.w3.org/1999/xhtml"
+				xmlns:f="f">
 
 	<xsl:param name="smils" as="document-node(element(smil))*" required="yes"/> <!-- in reading order -->
 	<xsl:param name="file-limit" as="array(xs:integer)" required="no" select="[-1,-1,-1]"/>
@@ -248,11 +249,19 @@
 		                            concat(
 		                              format-number($file-index,'000'),
 		                              ' ',
-		                              $label),
+		                              f:safe-file-name($label)),
 		                            1,
 		                            $max-file-name-length)),
 		                        '.',
 		                        $file-extension)"/>
 	</xsl:template>
+
+	<!--
+		Handle characters that are forbidden in file names on either Windows, Linux or macOS.
+	-->
+	<xsl:function name="f:safe-file-name" as="xs:string">
+		<xsl:param name="file-name" as="xs:string"/>
+		<xsl:sequence select="replace($file-name,'[/\\:\?\*&lt;&gt;&quot;]','_')"/>
+	</xsl:function>
 	
 </xsl:stylesheet>

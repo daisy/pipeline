@@ -170,7 +170,7 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 							}
 						}
 					}
-					logger.error("Table could not be resolved");
+					logger.debug("Table could not be resolved");
 					return null;
 				}
 				@Override
@@ -232,9 +232,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 						case DEBUG: logger.debug(message); break;
 						case INFO: logger.debug("INFO: " + message); break;
 						case WARN: logger.debug("WARN: " + message); break;
-						// FIXME: capture these and include them into CompilationException or TranslationException
-						case ERROR: logger.error(message); break;
-						case FATAL: logger.error(message); break; }}}); }
+						case ERROR:
+						case FATAL:
+							// ignore errors, they will be included in the exception
+							break; }}}); }
 		catch (Throwable e) {
 			logger.error("liblouis service could not be loaded", e);
 			throw e; }

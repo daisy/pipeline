@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE dtbook PUBLIC '-//NISO//DTD dtbook 2005-3//EN' 'http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd' >
+<dtbook xmlns="http://www.daisy.org/z3986/2005/dtbook/"
+        version="2005-3"
+        xml:lang="en-US">
+   <head>
+      <meta name="dtb:uid" content="9"/>
+      <meta name="dtb:generator" content="DAISY Pipeline 2 word-to-dtbook 1.0.0"/>
+      <meta name="dc:Title" content="Tool"/>
+      <meta name="dc:Creator" content="Balandin Vyacheslav"/>
+      <meta name="dc:Publisher" content="Pruchkovskaya"/>
+      <meta name="dc:Identifier" content="9"/>
+      <meta name="dc:Language" content="en-US"/>
+      <meta name="dc:Language" content="en-GB"/>
+      <meta name="dc:Language" content="ru-RU"/>
+   </head>
+   <book showin="blp">
+      <frontmatter>
+         <doctitle>Tool</doctitle>
+         <docauthor>Balandin Vyacheslav</docauthor>
+      </frontmatter>
+      <bodymatter id="bodymatter_0001"><level1><h1>  aures – a peerless tool for an International Holding management
+</h1><table border="1">
+            <tbody>
+               <tr><td ><p></p>
+</td><td ><p></p>
+</td></tr>
+            </tbody>
+         </table><p></p>
+<p>Imagine you are the president of an international holding with many subsidiary companies in different countries of the world. Every company requires constant attention to make sure that it runs according to the strategy plan and take measures if it doesn’t. How are you going to monitor the development process of your umpteenth companies? AuReS races to rescue!</p>
+<p></p>
+<p>AuReS is an automated reporting system developed by Gersis Software for an international holding company with a multilevel structure. The holding includes 25 subsidiary companies located in different regions and countries.</p>
+<p></p>
+<p>The system serves as a tool for comprehensive performance evaluation of each business unit of the holding.  </p>
+<p>It was created for efficient analysis and opportune adjustment of the holding’s strategy portfolio.</p>
+<p></p>
+<p>AuReS allows to:</p>
+<list type="ul"><li><p xml:lang="en-GB">create and implement a development strategy for each company of the holding;</p>
+</li><li><p xml:lang="en-GB">coordinate the strategies at company level with the general holding’s development strategy;</p>
+</li><li><p>track the strategy execution;</p>
+</li><li><p xml:lang="en-GB">use the aggregated data for analysis and holding’s motivation policy formation.</p>
+</li></list><p></p>
+<p>AuReS enabled the Customer to gather the latest data on every business unit and take necessary measures according to the changing conditions. Prompt access to precise information ensures timely risk prediction and avoidance. The system adoption resulted in considerable cost savings and optimization of holding management for the Customer.</p>
+<p></p>
+<level2><h2>  System concept
+</h2><p>AuReS makes the process of building a strategic development plan much easier and effective. Each plan is created for a period of one year for one business unit, namely a company. Development strategy, mission and Balanced Score Cards (BSC) are defined in the plan. </p>
+<p></p>
+<p>The structure of the BSC consists of four perspectives that illustrate the directions of a business unit development. The perspectives are the following Financial, Customer, Internal Business Processes and  Learning and Growth. Strategic goals, KPI (Key Performance Indicators) and programs of strategy implementation are also included into the BSC. The system’s set of predefined KPIs include revenue, profit, cash flow, etc and allows to configure any relevant KPIs without a need for programming. Such a variety of values ensures elaboration of a comprehensive development strategy.</p>
+<p></p>
+<p>The strategic plan built for one company of the holding reflects the planned and actual results and elaborates a detailed comparative analysis. The analysis is carried out for all management levels and can be further specified to a lower level. Based on the real time data AuReS reflects the plan execution dynamics.</p>
+<p></p>
+<p>Each plan is subject to endorsement which undergoes several stages: registration of remarks, correction and approval. The list of the reviewers can be edited by the administrator. </p>
+<p></p>
+</level2><level2><h2>  System usability
+</h2><p>Working with the system brings only positive feelings due to the attractive user interface, its thought-out logic and intuitive navigation. Data dynamics is reflected in graphic form: charts and diagrams. Pop-up windows with hints and explanations contribute to system digestibility and high performance. </p>
+<p></p>
+<p>AuReS is provided with a comprehensive support service including hot line, FAQ section, glossary, methodological assistance and operating help sections. So the user will never feel helpless. Numerous optional features are supported: text formatting, numerical value scaling, currency rate, etc. The system supports multicurrency calculation that is of great convenience for the international holding company. </p>
+<p></p>
+<p>AuReS is operated at different management levels (holding, region, company). It is possible because of individual login system and differentiated data access. It ensures data security and system stability. The system promptly reacts to all the changes and alterations; it is easily adopted and operated. Working with AuRes you feel it understands and anticipates your needs.</p>
+<p xml:lang="ru-RU"></p>
+<p xml:lang="en-GB">Technical details<br/><strong ><br/></strong>DBMS: <strong >MySQL<br/></strong>Programming language: <strong >Java<br/></strong>Application server: <strong >Tomcat Application Server 6.0.2.0</strong><br/></p>
+<p>Technologies used:</p>
+<list type="ul"><li><p><strong >J2EE</strong> – component model application,</p>
+</li><li><p xml:lang="en-GB"><strong >Hibernate</strong> – access to the data base,</p>
+</li><li><p xml:lang="en-GB"><strong >JSP, Struts 2, Tiles, JavaScript</strong> – implementation of user interface.</p>
+</li></list><p></p>
+<p></p>
+<p></p>
+</level2></level1></bodymatter>
+   </book>
+</dtbook>

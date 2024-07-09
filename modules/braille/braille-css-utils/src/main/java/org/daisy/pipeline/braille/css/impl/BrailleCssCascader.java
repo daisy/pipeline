@@ -92,7 +92,7 @@ public class BrailleCssCascader implements CssCascader {
 	}
 
 	public XMLTransformer newInstance(Medium medium,
-	                                  String userStylesheet,
+	                                  String userAndUserAgentStylesheets,
 	                                  URIResolver uriResolver,
 	                                  CssPreProcessor preProcessor,
 	                                  XsltProcessor xsltProcessor,
@@ -105,10 +105,10 @@ public class BrailleCssCascader implements CssCascader {
 		switch (medium.getType()) {
 		case EMBOSSED:
 		case BRAILLE:
-			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleDeclarationTransformer);
 		case PRINT:
-			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName,
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
 			                       printParserFactory, printRuleFactory, printCSS, printDeclarationTransformer);
 		default:
 			throw new IllegalArgumentException("medium not supported: " + medium);
@@ -134,10 +134,10 @@ public class BrailleCssCascader implements CssCascader {
 		private final boolean isBrailleCss;
 
 		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
-		                    String userStyleSheet, Medium medium, QName attributeName,
+		                    String userAndUserAgentStyleSheets, Medium medium, QName attributeName,
 		                    CSSParserFactory parserFactory, RuleFactory ruleFactory,
 		                    SupportedCSS supportedCss, DeclarationTransformer declarationTransformer) {
-			super(resolver, preProcessor, xsltProcessor, userStyleSheet, medium, attributeName,
+			super(resolver, preProcessor, xsltProcessor, userAndUserAgentStyleSheets, medium, attributeName,
 			      parserFactory, ruleFactory, supportedCss, declarationTransformer);
 			this.attributeName = attributeName;
 			this.isBrailleCss = medium.getType() == Medium.Type.EMBOSSED || medium.getType() == Medium.Type.BRAILLE;

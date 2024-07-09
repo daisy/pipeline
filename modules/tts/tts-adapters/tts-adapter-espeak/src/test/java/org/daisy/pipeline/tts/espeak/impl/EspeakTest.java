@@ -35,7 +35,8 @@ public class EspeakTest {
 	private static ESpeakEngine allocateEngine() throws Throwable {
 		Assume.assumeTrue("Test can not be run because espeak not present",
 		                  BinaryFinder.find("espeak").isPresent());
-ESpeakService s = new ESpeakService();
+		ESpeakService s = new ESpeakService();
+		s.activate();
 		return (ESpeakEngine) s.newEngine(new HashMap<String, String>());
 	}
 

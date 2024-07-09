@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+
 import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.MediaExpression;
 import cz.vutbr.web.css.MediaSpec;
@@ -109,7 +111,10 @@ public class Medium {
 	}
 
 	public boolean matches(String mediaQuery) {
-		return asMediaSpec().matches(CSSParserFactory.getInstance().parseMediaQuery(mediaQuery.trim()));
+		if (mediaQuery != null)
+			return asMediaSpec().matches(CSSParserFactory.getInstance().parseMediaQuery(mediaQuery.trim()));
+		else
+			return asMediaSpec().matchesEmpty();
 	}
 
 	public String toString() {
@@ -143,21 +148,34 @@ public class Medium {
 	}
 
 	public static Medium parse(String medium) throws IllegalArgumentException {
-		List<MediaQuery> q = CSSParserFactory.getInstance().parseMediaQuery(medium);
-		if (q.size() != 1)
+		List<MediaQuery> query = CSSParserFactory.getInstance().parseMediaQuery(medium);
+		if (query.size() != 1)
 			throw new IllegalArgumentException("Unexpected medium: " + medium);
+		return fromMediaQuery(query.get(0));
+	}
+
+	/**
+	 * Parse comma-separated list of media
+	 */
+	public static List<Medium> parseMultiple(String media) throws IllegalArgumentException {
+		return Lists.transform(
+			CSSParserFactory.getInstance().parseMediaQuery(media),
+			Medium::fromMediaQuery);
+	}
+
+	private static Medium fromMediaQuery(MediaQuery query) throws IllegalArgumentException {
 		Type type = null;
 		try {
-			type = Type.valueOf(q.get(0).getType().toUpperCase());
+			type = Type.valueOf(query.getType().toUpperCase());
 		} catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException("Unexpected medium type: " + q.get(0).getType());
+			throw new IllegalArgumentException("Unexpected medium type: " + query.getType());
 		}
-		if (q.get(0).isNegative())
-			throw new IllegalArgumentException("Unexpected medium: contains NOT: " + medium);
+		if (query.isNegative())
+			throw new IllegalArgumentException("Unexpected medium: contains NOT: " + query);
 		Integer width = null;
 		Integer height = null;
 		Map<String,String> customFeatures = null;
-		for (MediaExpression e : q.get(0)) {
+		for (MediaExpression e : query) {
 			String feature = e.getFeature();
 			if ("width".equals(feature) || "height".equals(feature)) {
 				if (e.size() != 1)

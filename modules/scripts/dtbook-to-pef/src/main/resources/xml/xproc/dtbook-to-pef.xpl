@@ -69,6 +69,7 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
+    <p:option name="include-pdf"/>
     <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
     <p:option name="include-css" px:type="boolean" select="'false'">
@@ -85,29 +86,15 @@ sheet modules) are available for use in Sass style sheets:
     <p:option name="page-height"/>
     <p:option name="duplex"/>
 
-    <!-- defined in ../../css/default.params -->
-    <p:option name="hyphenation"/>
-    <p:option name="line-spacing"/>
-
     <!-- defined in ../../css/dotify.params -->
     <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="allow-text-overflow-trimming"/>
-
-    <!-- defined in ../../css/page-breaking.params -->
-    <p:option name="force-braille-page-break"/>
-
-    <!-- defined in ../../css/volume-breaking.params -->
-    <p:option name="maximum-number-of-sheets"/>
-    <p:option name="allow-volume-break-inside-leaf-section-factor"/>
-    <p:option name="prefer-volume-break-before-higher-level-factor"/>
-
-    <!-- defined in ../../css/notes.params -->
-    <p:option name="notes-placement"/>
 
     <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="result"/>
     <p:option name="pef"/>
     <p:option name="preview"/>
+    <p:option name="pdf"/>
     <p:option name="obfl"/>
     <p:option name="css" px:output="result" px:type="anyDirURI" px:media-type="application/x-dtbook+xml" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -140,7 +127,6 @@ sheet modules) are available for use in Sass style sheets:
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
-            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-utils/library.xpl">
@@ -164,6 +150,7 @@ sheet modules) are available for use in Sass style sheets:
                                            output-file-format
                                            include-pef
                                            include-preview
+                                           include-pdf
                                            include-obfl
                                            include-css
                                            result
@@ -176,10 +163,6 @@ sheet modules) are available for use in Sass style sheets:
             <p:pipe port="result" step="in-scope-names"/>
         </p:input>
     </px:delete-parameters>
-    <p:sink/>
-    <px:parse-query name="stylesheet-parameters">
-        <p:with-option name="query" select="$stylesheet-parameters"/>
-    </px:parse-query>
     <p:sink/>
     
     <!-- ======= -->
@@ -205,12 +188,12 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
         <p:with-option name="temp-dir" select="$temp-dir"/>
         <p:with-option name="stylesheet" select="$stylesheet"/>
+        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
         <p:with-option name="transform"
                        select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
-            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:dtbook-to-pef>
     
@@ -229,12 +212,14 @@ sheet modules) are available for use in Sass style sheets:
         </p:input>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="include-pdf" select="$include-pdf"/>
         <p:with-option name="include-css" select="$include-css"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$result"/>
         <p:with-option name="pef-output-dir" select="$pef"/>
         <p:with-option name="preview-output-dir" select="$preview"/>
+        <p:with-option name="pdf-output-dir" select="$pdf"/>
         <p:with-option name="obfl-output-dir" select="$obfl"/>
         <p:with-option name="css-output-dir" select="$css"/>
     </px:dtbook-to-pef.store>

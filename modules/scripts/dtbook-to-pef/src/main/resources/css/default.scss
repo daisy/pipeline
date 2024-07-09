@@ -91,10 +91,40 @@ br::before {
 
 /* ======= Implementation of script options =============== */
 
-@import "_page-breaking.scss";
-@import "_volume-breaking.scss";
-@import "_notes.scss";
-
+/**
+ * @var $hyphenation
+ *
+ * @brief Hyphenation
+ *
+ * Hyphenation policy.
+ *
+ * The following CSS rule is included by default (where `$hyphenation` is the value of this option):
+ *
+ * ~~~sass
+ * :root {
+ *   hyphens: $hyphenation;
+ * }
+ * ~~~
+ *
+ * This means that words are hyphenated according to the specified policy, except where overridden by
+ * more specific CSS rules. See the CSS specification for more info:
+ *
+ * - the [`hyphens`](http://braillespecs.github.io/braille-css/#the-hyphens-property) property
+ * 
+ * In addition, special rules may apply at page boundaries, see the "Hyphenation at page boundaries"
+ * option.
+ *
+ * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+ *     <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+ *         <value>auto</value>
+ *         <a:documentation xml:lang="en">Hyphenate words</a:documentation>
+ *         <value>manual</value>
+ *         <a:documentation xml:lang="en">Only hyphenate words where there are soft hyphens (U+00AD)</a:documentation>
+ *         <value>none</value>
+ *         <a:documentation xml:lang="en">Never hyphenate words</a:documentation>
+ *     </choice>
+ * </px:type>
+ */
 $hyphenation: auto !default;
 
 @if $hyphenation != manual {
@@ -103,6 +133,37 @@ $hyphenation: auto !default;
 	}
 }
 
+/**
+ * @var $line-spacing
+ *
+ * @brief Line spacing
+ *
+ * Single or double line spacing.
+ *
+ * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
+ *
+ * ~~~sass
+ * @if $line-spacing == double {
+ *   :root {
+ *     line-height: 2;
+ *   }
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+ *   property
+ *
+ * <px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc">
+ *     <choice>
+ *         <value>single</value>
+ *         <documentation xml:lang="en">Single</documentation>
+ *         <value>double</value>
+ *         <documentation xml:lang="en">Double</documentation>
+ *     </choice>
+ * </px:type>
+ */
 $line-spacing: single !default;
 
 @if $line-spacing == double {
@@ -110,3 +171,6 @@ $line-spacing: single !default;
 		line-height: 2;
 	}
 }
+
+@import "_volume-breaking.scss";
+@import "_notes.scss";

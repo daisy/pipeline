@@ -39,6 +39,7 @@ import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService;
+import org.daisy.pipeline.tts.TTSService.ServiceDisabledException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
@@ -54,6 +55,9 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * This is a local HTTP server that mocks the Google Cloud TTS
  * service. It delegates to {@link TTSEngine} implementations to
@@ -64,6 +68,8 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 	immediate = true
 )
 public class MockGoogle {
+
+	private static Logger logger = LoggerFactory.getLogger(MockGoogle.class);
 
 	private HttpServer server;
 	private TTSRegistry ttsRegistry;
@@ -91,8 +97,11 @@ public class MockGoogle {
 						if (!v.getLocale().isEmpty() && v.getGender().isPresent()) {
 							voices.put(v.getName(), v);
 							engines.put(v.getName(), engine); }}
+				catch (ServiceDisabledException e) {
+					logger.debug(tts.getName() + " is disabled", e);
+					continue; }
 				catch (Throwable e) {
-					e.printStackTrace();
+					logger.debug(tts.getName() + " could not be activated", e);
 					continue; }
 		server.createContext(
 			"/v1/voices",

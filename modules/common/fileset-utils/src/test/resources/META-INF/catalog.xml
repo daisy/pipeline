@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
+	<public publicId="-//W3C//DTD SVG 1.1//EN" uri="../dtd/svg11.dtd"/>
+	<system systemId="http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" uri="../dtd/svg11.dtd"/>
+</catalog>
+

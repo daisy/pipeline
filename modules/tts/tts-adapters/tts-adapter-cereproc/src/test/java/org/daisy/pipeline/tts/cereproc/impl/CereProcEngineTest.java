@@ -31,7 +31,7 @@ public class CereProcEngineTest {
 	public void TestSSMLFormatter() throws Throwable {
 		CereProcService service = new CereProcService() {
 			@Override
-			protected CereProcEngine newEngine(String server, File client, int priority, Map<String,String> params)
+			protected CereProcEngine newEngine(String server, File client, Map<String,String> params)
 					throws Throwable {
 				return null;
 			}

@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.14.26-SNAPSHOT</version>
+        <version>1.14.26</version>
         <relativePath>../../parent/</relativePath>
     </parent>
 
     <artifactId>css-utils</artifactId>
-    <version>5.2.1-SNAPSHOT</version>
+    <version>5.3.0</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: CSS Utils</name>
@@ -23,9 +23,12 @@
             org.daisy.pipeline.css.calabash.impl.CssCascadeStep$Provider,
             org.daisy.pipeline.css.impl.DefaultCssCascader,
             org.daisy.pipeline.css.impl.StylesheetParametersWebServiceExtension,
+            org.daisy.pipeline.css.impl.StylesheetParametersDatatypeService,
+            org.daisy.pipeline.css.saxon.impl.CssParseParamSetFunctionProvider,
             org.daisy.pipeline.css.saxon.impl.MediaQueryMatchesDefinition,
             org.daisy.pipeline.css.speech.impl.SpeechCssCascader,
-            org.daisy.pipeline.css.StyleAccessor$Provider
+            org.daisy.pipeline.css.StyleAccessor$Provider,
+            org.daisy.pipeline.css.UserAgentStylesheetRegistry
             <!-- org.daisy.common.saxon.impl.PackageDetails_http___www_daisy_org_pipeline_modules_css_utils_library_xsl -->
         </expose-services>
     </properties>
@@ -50,6 +53,14 @@
         <dependency>
             <groupId>org.daisy.libs</groupId>
             <artifactId>com.xmlcalabash</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>framework-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.daisy.pipeline</groupId>
+            <artifactId>saxon-adapter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.daisy.pipeline</groupId>
@@ -118,6 +129,16 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.daisy.maven</groupId>
+                <artifactId>xspec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>xspecTest</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.antlr</groupId>
                 <artifactId>antlr3-maven-plugin</artifactId>
                 <executions>
@@ -126,6 +147,37 @@
                         <goals>
                             <goal>antlr</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.daisy.pipeline.build</groupId>
+                <artifactId>modules-build-helper</artifactId>
+                <executions>
+                    <execution>
+                        <id>process-test-catalog</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>process-test-catalog</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.daisy.pipeline.build</groupId>
+                <artifactId>ds-to-spi-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-spi-test-classes</id>
+                        <phase>process-test-sources</phase>
+                        <goals>
+                            <goal>generate-spi-test-classes</goal>
+                        </goals>
+                        <configuration>
+                            <includes>
+                                org.daisy.pipeline.css.impl.UserAgentStylesheet_application_x_dtbook_xml_speech
+                            </includes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

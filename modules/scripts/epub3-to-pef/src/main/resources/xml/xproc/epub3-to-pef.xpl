@@ -90,24 +90,9 @@ even though the provided CSS is more specific.
     <p:option name="page-height"/>
     <p:option name="duplex"/>
 
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/default.params -->
-    <p:option name="hyphenation"/>
-    <p:option name="line-spacing"/>
-
     <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/dotify.params -->
     <p:option name="hyphenation-at-page-breaks"/>
     <p:option name="allow-text-overflow-trimming"/>
-
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/page-breaking.params -->
-    <p:option name="force-braille-page-break"/>
-
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/volume-breaking.params -->
-    <p:option name="maximum-number-of-sheets"/>
-    <p:option name="allow-volume-break-inside-leaf-section-factor"/>
-    <p:option name="prefer-volume-break-before-higher-level-factor"/>
-
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/notes.params -->
-    <p:option name="notes-placement"/>
 
     <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="result"/>
@@ -135,7 +120,6 @@ even though the provided CSS is more specific.
     <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
         <p:documentation>
             px:delete-parameters
-            px:parse-query
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -173,10 +157,6 @@ even though the provided CSS is more specific.
         </p:input>
     </px:delete-parameters>
     <p:sink/>
-    <px:parse-query name="stylesheet-parameters">
-        <p:with-option name="query" select="$stylesheet-parameters"/>
-    </px:parse-query>
-    <p:sink/>
     
     <!-- ============================= -->
     <!-- LOAD EPUB 3 and PREAMBLE HTML -->
@@ -208,13 +188,13 @@ even though the provided CSS is more specific.
         </p:input>
         <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
         <p:with-option name="stylesheet" select="$stylesheet"/>
+        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="transform"
                        select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
         <p:with-option name="include-obfl" select="$include-obfl"/>
         <p:input port="parameters">
             <p:pipe port="result" step="input-options"/>
-            <p:pipe port="result" step="stylesheet-parameters"/>
         </p:input>
     </px:epub3-to-pef>
     <p:sink/>

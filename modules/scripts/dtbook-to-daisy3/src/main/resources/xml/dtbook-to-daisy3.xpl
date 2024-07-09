@@ -4,6 +4,7 @@
                 xmlns:dtbook="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 type="px:dtbook-to-daisy3.script" name="main"
                 px:input-filesets="dtbook"
@@ -31,9 +32,6 @@
     <p:pipe step="convert" port="validation-status"/>
   </p:output>
 
-  <p:option name="include-tts-log" select="'false'">
-    <!-- defined in ../../../../../common-options.xpl -->
-  </p:option>
   <p:output port="tts-log" sequence="true">
     <!-- defined in ../../../../../common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
@@ -55,6 +53,14 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="audio" select="'false'">
+    <!-- defined in ../../../../../common-options.xpl -->
+  </p:option>
+
+  <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
+    <!-- defined in ../../../../../common-options.xpl -->
+  </p:option>
+
   <p:input port="tts-config">
     <!-- defined in ../../../../../common-options.xpl -->
     <p:inline><d:config/></p:inline>
@@ -63,12 +69,12 @@
   <p:option xmlns:_="tts" name="_:stylesheet" select="''">
     <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
-
-  <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
-    <!-- defined in ../../../../../common-options.xpl -->
+  
+  <p:option name="stylesheet-parameters" cx:as="xs:string*" select="'()'">
+      <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
 
-  <p:option name="audio" select="'false'">
+  <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
     <!-- defined in ../../../../../common-options.xpl -->
   </p:option>
 
@@ -140,6 +146,7 @@ reading systems can't handle the word tags.</p>
                                                              ' ')">
       <p:pipe step="output-dir-uri" port="normalized"/>
     </p:with-option>
+    <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
     <p:with-option name="lexicon" select="for $output-fileset-base in string(/c:result) return
                                           for $l in tokenize($lexicon,'\s+')[not(.='')] return
                                             resolve-uri($l,$output-fileset-base)">

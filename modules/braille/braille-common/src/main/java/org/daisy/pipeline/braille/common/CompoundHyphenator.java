@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -41,7 +42,7 @@ public class CompoundHyphenator extends AbstractHyphenator {
 
 	/**
 	 * @param subHyphenators     ordered map of language ranges to {@link Hyphenator}s
-	 * @param fallbackHyphenator hyphenator to use when no sub-hyphenator matches
+	 * @param fallbackHyphenator hyphenator to use when no sub-hyphenator matches, or {@code null}
 	 */
 	public CompoundHyphenator(Map<LanguageRange,Supplier<Hyphenator>> subHyphenators, Hyphenator fallbackHyphenator) {
 		hyphenators = new LinkedHashMap<>();
@@ -51,7 +52,8 @@ public class CompoundHyphenator extends AbstractHyphenator {
 			} catch (NoSuchElementException e) {
 				logger.warn("No hyphenator found for handling language range '" + h.getKey() + "'");
 			}
-		hyphenators.put(ANY_LANGUAGE, fallbackHyphenator);
+		if (fallbackHyphenator != null)
+			hyphenators.put(ANY_LANGUAGE, fallbackHyphenator);
 		implementsFullHyphenator = Iterables.all(
 			hyphenators.values(),
 			h -> {
@@ -72,17 +74,18 @@ public class CompoundHyphenator extends AbstractHyphenator {
 
 	private final Map<Locale,Hyphenator> cache = new HashMap<>();
 
-	private Hyphenator getHyphenator(Locale language) {
+	private Optional<Hyphenator> getHyphenator(Locale language) {
 		Hyphenator h = cache.get(language);
 		if (h != null)
-			return h;
+			return Optional.of(h);
 		for (LanguageRange l : hyphenators.keySet())
 			if (l.matches(language)) {
 				h = hyphenators.get(l);
 				break;
 			}
-		cache.put(language, h); // h can not be null because fallbackHyphenator matches every language
-		return h;
+		if (h != null)
+			cache.put(language, h);
+		return Optional.ofNullable(h);
 	}
 
 	@Override
@@ -105,9 +108,10 @@ public class CompoundHyphenator extends AbstractHyphenator {
 					@Override
 					protected Iterable<CSSStyledText> transform(Iterable<CSSStyledText> text, Locale language)
 							throws NonStandardHyphenationException {
-						FullHyphenator h = (language == null || UND.equals(language))
-							? COMPOUND_WORD_HYPHENATOR
-							: getHyphenator(language).asFullHyphenator(); // can not be null
+						FullHyphenator h = ((language == null || UND.equals(language))
+							? Optional.<Hyphenator>empty()
+							: getHyphenator(language)
+						).map(Hyphenator::asFullHyphenator).orElse(COMPOUND_WORD_HYPHENATOR);
 						return h.transform(text);
 					}
 					@Override
@@ -130,11 +134,14 @@ public class CompoundHyphenator extends AbstractHyphenator {
 		if (lineBreaker == null)
 			lineBreaker = new DefaultLineBreaker() {
 					protected Break breakWord(String word, Locale language, int limit, boolean force) {
-						if (language == null || UND.equals(language))
+						Optional<LineBreaker> h = ((language == null || UND.equals(language))
+							? Optional.<Hyphenator>empty()
+							: getHyphenator(language)
+						).map(Hyphenator::asLineBreaker);
+						if (!h.isPresent())
 							return super.breakWord(word, language, limit, force);
 						else {
-							LineBreaker h = getHyphenator(language).asLineBreaker(); // can not be null
-							LineIterator lines = h.transform(word, language);
+							LineIterator lines = h.get().transform(word, language);
 							String next = lines.nextLine(limit, force);
 							boolean hyphen = lines.lineHasHyphen();
 							return new Break(next + lines.remainder(), next.length(), hyphen);

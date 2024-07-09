@@ -2,6 +2,7 @@ package org.daisy.pipeline.css.impl;
 
 import javax.xml.transform.URIResolver;
 
+import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.webservice.restlet.WebServiceExtension;
 
@@ -46,9 +47,23 @@ public class StylesheetParametersWebServiceExtension implements WebServiceExtens
 		datatypeRegistry = registry;
 	}
 
+	private UserAgentStylesheetRegistry userAgentStylesheetRegistry;
+
+	@Reference(
+		name = "UserAgentStylesheetRegistry",
+		unbind = "-",
+		service = UserAgentStylesheetRegistry.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void setUserAgentStylesheetRegistry(UserAgentStylesheetRegistry registry) {
+		userAgentStylesheetRegistry = registry;
+	}
+
 	public void attachTo(Router router) {
 		router.getContext().getAttributes().put(StylesheetParametersResource.URI_RESOLVER_KEY, uriResolver);
 		router.getContext().getAttributes().put(StylesheetParametersResource.DATATYPE_REGISTRY_KEY, datatypeRegistry);
+		router.getContext().getAttributes().put(StylesheetParametersResource.USER_AGENT_STYLESHEET_REGISTRY_KEY, userAgentStylesheetRegistry);
 		router.attach(STYLESHEET_PARAMETERS_ROUTE, StylesheetParametersResource.class);
 	}
 }

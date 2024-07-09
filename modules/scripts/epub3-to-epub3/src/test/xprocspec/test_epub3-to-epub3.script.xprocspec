@@ -15,6 +15,7 @@
 			<x:option name="braille" select="true()"/>
 			<x:option name="braille-translator" select="'(translator:liblouis)(contraction:full)'"/>
 			<x:option name="result" select="concat($temp-dir,'valentin/')"/>
+			<x:option name="include-tts-log" select="'false'"/>
 			<x:option name="temp-dir" select="concat($temp-dir,'tmp/valentin/')"/>
 		</x:call>
 		<x:context label="The output directory">

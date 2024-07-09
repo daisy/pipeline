@@ -5,11 +5,8 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/epub3-to-pef.xpl" uri="../xml/xproc/epub3-to-pef.xpl"
        px:content-type="script" px:id="epub3-to-pef"
        px:extends="../../../../../common-options.xpl
-                   ../../../../../html-to-pef/src/main/resources/css/default.params
                    ../../../../../html-to-pef/src/main/resources/css/page-layout.params
-                   ../../../../../html-to-pef/src/main/resources/css/page-breaking.params
-                   ../../../../../html-to-pef/src/main/resources/css/volume-breaking.params
-                   ../../../../../html-to-pef/src/main/resources/css/notes.params"/>
+                   ../../../../../html-to-pef/src/main/resources/css/dotify.params"/>
   
   <!-- xproc library -->
   <uri name="http://www.daisy.org/pipeline/modules/braille/epub3-to-pef/library.xpl" uri="../xml/xproc/library.xpl"/>

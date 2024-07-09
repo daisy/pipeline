@@ -163,7 +163,7 @@ public class BrailleTranslatorRegistry extends Memoize<BrailleTranslator>
 
 		// select translator and bind hyphenator
 		Iterable<BrailleTranslator> translators = translatorProvider.get(q);
-		return Iterables.concat(
+		Iterable<BrailleTranslator> translatorsWithHyphenator =
 			Iterables.concat(
 				Iterables.transform(
 					translators,
@@ -177,8 +177,10 @@ public class BrailleTranslatorRegistry extends Memoize<BrailleTranslator>
 									logger.debug("Could not set hyphenator: " + e.getMessage());
 									return null;
 								}}),
-						Predicates.notNull()))),
-			translators);
+						Predicates.notNull())));
+		return "auto".equals(hyphenator)
+			? Iterables.concat(translatorsWithHyphenator, translators)
+			: translatorsWithHyphenator;
 	}
 
 	/**

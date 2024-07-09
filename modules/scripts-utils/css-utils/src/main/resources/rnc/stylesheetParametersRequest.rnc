@@ -5,6 +5,9 @@ start =
       element media {
          attribute value { text }
       }?
+      & element userAgentStylesheet {
+         attribute mediaType { text }
+      }?
       & element userStylesheets {
          file*
       }?

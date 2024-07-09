@@ -6,7 +6,7 @@
 	
 	<x:scenario label="test">
 		<x:call step="px:parse-query">
-			<x:option name="query" select="'(foo:&quot;1\A2\A3&quot;)(bar)'"/>
+			<x:option name="query" select="'(foo:&quot;1\A 2\A 3&quot;)(bar)'"/>
 		</x:call>
 		<x:context label="result">
 			<x:document type="port" port="result"/>

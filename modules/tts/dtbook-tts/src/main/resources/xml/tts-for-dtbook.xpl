@@ -7,6 +7,7 @@
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:math="http://www.w3.org/1998/Math/MathML"
                 xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+                xmlns:tts="http://www.daisy.org/ns/pipeline/tts"
                 type="px:tts-for-dtbook" name="main"
                 exclude-inline-prefixes="#all">
 
@@ -83,6 +84,12 @@
     </p:documentation>
   </p:option>
 
+  <p:option name="stylesheet-parameters" cx:as="xs:string*" select="'()'">
+    <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+      <p>Parameters that are passed to SCSS style sheets.</p>
+    </p:documentation>
+  </p:option>
+
   <p:option name="lexicon" cx:as="xs:anyURI*" select="()">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <p>PLS lexicons as list of absolute URIs.</p>
@@ -143,11 +150,12 @@
       <p:output port="in-memory" sequence="true">
         <p:pipe step="cascade" port="result.in-memory"/>
       </p:output>
-      <px:css-speech-cascade content-type="application/x-dtbook+xml" name="cascade">
+      <px:css-speech-cascade include-user-agent-stylesheet="true" content-type="application/x-dtbook+xml" name="cascade">
         <p:input port="source.in-memory">
           <p:pipe step="main" port="source.in-memory"/>
         </p:input>
         <p:with-option name="user-stylesheet" select="$stylesheet"/>
+        <p:with-option name="parameters" select="$stylesheet-parameters"/>
       </px:css-speech-cascade>
     </p:when>
     <p:otherwise>
@@ -225,6 +233,27 @@
 	<p:output port="dtbook">
 	  <p:pipe step="clean-dtbook" port="result"/>
 	</p:output>
+	<p:group>
+          <p:documentation>
+            Insert "speech-only" spans from @tts:before and @tts:after attributes
+          </p:documentation>
+          <p:insert match="*[@tts:before]" position="first-child">
+            <p:input port="insertion">
+              <p:inline><tts:before>[CONTENT]</tts:before></p:inline>
+            </p:input>
+          </p:insert>
+          <p:string-replace match="tts:before/text()" replace="parent::*/parent::*/@tts:before"/>
+          <p:insert match="*[@tts:after]" position="last-child">
+            <p:input port="insertion">
+              <p:inline><tts:after>[CONTENT]</tts:after></p:inline>
+            </p:input>
+          </p:insert>
+          <p:string-replace match="tts:after/text()" replace="parent::*/parent::*/@tts:after"/>
+          <p:add-attribute match="tts:before|tts:after"
+                           attribute-name="tts:speech-only" attribute-value=""/>
+          <p:rename match="tts:before|tts:after"
+                    new-name="span" new-namespace="http://www.daisy.org/z3986/2005/dtbook/"/>
+        </p:group>
 	<!-- It is necessary to apply px:dtbook-break-detect and px:isolate-skippable to
 	     split the content around the skippable elements (pagenums and noterefs) so
 	     they can be attached to a smilref attribute that won't be the descendant of
@@ -257,11 +286,19 @@
 	  <p:documentation>px:ssml-to-audio requires that all sentences have an id attribute</p:documentation>
 	</px:add-ids>
 	<p:sink/>
-	<px:css-speech-clean px:progress="1/5">
-	  <p:input port="source">
-	    <p:pipe step="isolate-skippable" port="result"/>
-	  </p:input>
-	</px:css-speech-clean>
+	<p:group px:progress="1/5">
+          <p:documentation>
+            Unwrap elements with @tts:speech-only attribute and remove text content.
+          </p:documentation>
+          <p:delete match="*[@tts:speech-only]//text()">
+            <p:input port="source">
+              <p:pipe step="isolate-skippable" port="result"/>
+            </p:input>
+          </p:delete>
+          <p:unwrap match="*[@tts:speech-only][not(@id)]"/>
+          <p:documentation>Remove @tts:* attributes and tts namespace nodes</p:documentation>
+          <px:css-speech-clean px:progress="1"/>
+        </p:group>
 	<p:choose px:progress="1/5">
 	  <p:when test="$word-detection='false'">
 	    <px:dtbook-unwrap-words px:progress="1"/>

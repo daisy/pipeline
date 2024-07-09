@@ -16,8 +16,9 @@ import org.daisy.common.properties.Properties;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.DynamicPropertiesExtension;
 import org.daisy.pipeline.tts.TTSEngine;
-import org.daisy.pipeline.tts.TTSLog;
 import org.daisy.pipeline.tts.TTSRegistry;
+import org.daisy.pipeline.tts.TTSService;
+import org.daisy.pipeline.tts.TTSService.ServiceDisabledException;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
 
@@ -75,7 +76,8 @@ public class TTSEnginesResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
-		Collection<TTSEngine> availableEngines; {
+		Collection<TTSService> ttsServices = ttsRegistry.getServices();
+		Map<String,String> properties; {
 			DynamicPropertiesExtension propsExt = new DynamicPropertiesExtension();
 			XdmNode configXML = null; {
 				if (ttsConfig != null) {
@@ -92,26 +94,76 @@ public class TTSEnginesResource extends AuthenticatedResource {
 			new ConfigReader(saxonProcessor, configXML, propsExt);
 			if (configXML != null)
 				logger.debug("TTS configuration XML:\n" + configXML);
-			Map<String,String> properties = Properties.getSnapshot();
+			properties = Properties.getSnapshot();
 			Map<String,String> dynProperties = propsExt.getDynamicProperties();
 			if (dynProperties != null && !dynProperties.isEmpty()) {
 				properties = new HashMap<>(properties);
 				properties.putAll(dynProperties);
 			}
-			availableEngines = ttsRegistry.getWorkingEngines(properties, new TTSLog(logger), logger);
 		}
 		Document enginesDoc; {
 			enginesDoc = XmlUtils.createDom("tts-engines");
 			Element enginesElem = enginesDoc.getDocumentElement();
 			String baseURL = getRequest().getRootRef().toString();
 			enginesElem.setAttribute("href", baseURL + TTSEnginesWebServiceExtension.TTS_ENGINES_ROUTE);
-			for (TTSEngine e : availableEngines) {
+			for (TTSService s : ttsServices) {
 				Element engineElem = enginesDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "tts-engine");
-				String name = e.getProvider().getName();
+				String name = s.getName();
 				engineElem.setAttribute("name", name);
-				engineElem.setAttribute("voices", baseURL + VoicesWebServiceExtension.VOICES_ROUTE + "?engine=" + name);
-				if (e.handlesSpeakingRate())
-					engineElem.setAttribute("features", "speech-rate");
+				engineElem.setAttribute("nicename", s.getDisplayName());
+				TTSEngine e = null;
+				Throwable error = null;
+				try {
+				    e = s.newEngine(properties);
+					engineElem.setAttribute("status", "available");
+				} catch (ServiceDisabledException ex) {
+					logger.debug(name + " is disabled", ex);
+					error = ex;
+					engineElem.setAttribute("status", "disabled");
+				} catch (Throwable ex) {
+					logger.debug(name + " could not be activated", ex);
+					error = ex;
+					engineElem.setAttribute("status", "error");
+				}
+				if (e != null) {
+					engineElem.setAttribute("voices", baseURL + VoicesWebServiceExtension.VOICES_ROUTE + "?engine=" + name);
+					if (e.handlesSpeakingRate())
+						engineElem.setAttribute("features", "speech-rate");
+				} else if (error != null) {
+					// Clients should use first line as the short message. The short message is
+					// followed by the full message after a blank line.
+					String shortMessage = error.getMessage();
+					error = error.getCause();
+					String detailedMessage = error != null ? error.getMessage() : null;
+					if (shortMessage.length() > 80) {
+						// Use the heuristic that if a message is longer than 80 characters, it is possible
+						// that it is too technical for the average user. It also becomes difficult to fit it
+						// in the UI. So provide this backup:
+						if (detailedMessage == null)
+							detailedMessage = shortMessage;
+						else {
+							detailedMessage = detailedMessage.trim();
+							shortMessage = shortMessage.trim();
+							if (detailedMessage.startsWith(shortMessage))
+								detailedMessage = detailedMessage.substring(shortMessage.length());
+							if (detailedMessage.startsWith(":")) {
+								detailedMessage = detailedMessage.substring(1);
+								detailedMessage = detailedMessage.trim();
+							}
+							if (detailedMessage.length() > 0) {
+								if (!shortMessage.matches(".*\\p{Punct}$"))
+									shortMessage += ":";
+								detailedMessage = shortMessage + " " + detailedMessage;
+							} else
+								detailedMessage = shortMessage;
+						}
+						shortMessage = "Could not connect to the service";
+					}
+					String message = shortMessage;
+					if (detailedMessage != null)
+						message += ("\n\n" + detailedMessage);
+					engineElem.setAttribute("message", message);
+				}
 				enginesElem.appendChild(engineElem);
 			}
 		}

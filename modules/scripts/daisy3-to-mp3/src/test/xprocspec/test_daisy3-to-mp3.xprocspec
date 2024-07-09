@@ -135,7 +135,7 @@
 						<d:file href="test/output-dir/0/volume%201/015/001/001%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp15.mp3"/>
 						<d:file href="test/output-dir/0/volume%201/015/002/001%20All%20about%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp16.mp3"/>
 						<d:file href="test/output-dir/0/volume%201/015/003/001%20African%20Primates%20at%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp17.mp3"/>
-						<d:file href="test/output-dir/0/volume%201/015/004/001%20Animal%20Bytes:%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp18.mp3"/>
+						<d:file href="test/output-dir/0/volume%201/015/004/001%20Animal%20Bytes_%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp18.mp3"/>
 						<d:file href="test/output-dir/0/volume%202/001/001/001%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp19.mp3"/>
 						<d:file href="test/output-dir/0/volume%202/002/001/001%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/0/tmp20.mp3"/>
 					</d:fileset>
@@ -172,7 +172,7 @@
 						<d:file href="test/output-dir/1/001/015/001%20Web%20Sites.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp15.mp3"/>
 						<d:file href="test/output-dir/1/001/015/002%20All%20about%20Chimpanzees.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp16.mp3"/>
 						<d:file href="test/output-dir/1/001/015/003%20African%20Primates%20at%20Home.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp17.mp3"/>
-						<d:file href="test/output-dir/1/001/015/004%20Animal%20Bytes:%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp18.mp3"/>
+						<d:file href="test/output-dir/1/001/015/004%20Animal%20Bytes_%20Chimpanzee.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp18.mp3"/>
 						<d:file href="test/output-dir/1/001/016/001%20Index.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp19.mp3"/>
 						<d:file href="test/output-dir/1/001/017/001%20Questions.mp3" media-type="audio/mpeg" original-href="test/temp-dir/1/tmp20.mp3"/>
 					</d:fileset>

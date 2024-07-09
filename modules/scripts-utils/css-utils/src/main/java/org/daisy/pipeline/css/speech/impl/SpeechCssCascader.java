@@ -29,6 +29,7 @@ import cz.vutbr.web.csskit.RuleFactoryImpl;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 import cz.vutbr.web.domassign.SupportedCSS21;
 
+import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.common.file.URLs;
 import org.daisy.common.transform.XMLTransformer;
 import org.daisy.pipeline.css.CssCascader;
@@ -62,7 +63,7 @@ public class SpeechCssCascader implements CssCascader {
 	}
 
 	public XMLTransformer newInstance(Medium medium,
-	                                  String userStylesheet,
+	                                  String userAndUserAgentStylesheets,
 	                                  URIResolver uriResolver,
 	                                  CssPreProcessor preProcessor,
 	                                  XsltProcessor xsltProcessor,
@@ -72,16 +73,17 @@ public class SpeechCssCascader implements CssCascader {
 			throw new UnsupportedOperationException("Cascading to single attribute per element not supported");
 		switch (medium.getType()) {
 		case SPEECH:
-			return new Transformer(uriResolver, preProcessor, xsltProcessor, userStylesheet, medium, attributeName);
+			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName);
 		default:
 			throw new IllegalArgumentException("medium not supported: " + medium);
 		}
 	}
 
+	// using braille-css because :has() and :note() are not supported by jStyleParser
+	private static final CSSParserFactory parserFactory = new BrailleCSSParserFactory();
+	private static final RuleFactory ruleFactory = RuleFactoryImpl.getInstance();
 	private static final SupportedCSS speechCSS = SupportedCSS21.getInstance();
 	private static final DeclarationTransformer declarationTransformer = new SpeechDeclarationTransformer();
-	private static final RuleFactory ruleFactory = RuleFactoryImpl.getInstance();
-	private static final CSSParserFactory parserFactory = CSSParserFactory.getInstance();
 	private static final Set<String> speechCSSProperties = new HashSet<>(
 		Arrays.asList(
 			"voice-family", "stress", "richness", "cue", "cue-before", "cue-after", "pause",
@@ -95,8 +97,8 @@ public class SpeechCssCascader implements CssCascader {
 		private final String attributeNamespaceURI;
 
 		private Transformer(URIResolver resolver, CssPreProcessor preProcessor, XsltProcessor xsltProcessor,
-		                    String userStyleSheet, Medium medium, QName attributeNamespace) {
-			super(resolver, preProcessor, xsltProcessor, userStyleSheet, medium, null,
+		                    String userAndUserAgentStylesheets, Medium medium, QName attributeNamespace) {
+			super(resolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, null,
 			      parserFactory, ruleFactory, speechCSS, declarationTransformer);
 			this.attributePrefix = attributeNamespace.getPrefix();
 			this.attributeNamespaceURI = attributeNamespace.getNamespaceURI();

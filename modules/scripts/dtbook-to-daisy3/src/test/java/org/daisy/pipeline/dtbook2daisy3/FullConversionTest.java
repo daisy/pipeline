@@ -311,6 +311,7 @@ public class FullConversionTest extends AbstractTest implements DifferenceListen
 			xprocInput = xprocInput
 				.withOption(new QName("audio"), "true")
 				.withOption(new QName("audio-file-type"), "audio/x-wav")
+				.withOption(new QName("include-tts-log"), "false")
 				.withInput("tts-config", Suppliers.ofInstance(ttsConfig));
 		}
 

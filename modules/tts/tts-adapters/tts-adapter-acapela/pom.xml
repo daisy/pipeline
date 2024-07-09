@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.26-SNAPSHOT</version>
+    <version>1.14.26</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>3.1.4-SNAPSHOT</version>
+  <version>3.1.4</version>
   <artifactId>tts-adapter-acapela</artifactId>
   <packaging>bundle</packaging>
 
@@ -19,12 +19,21 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.daisy.libs</groupId>
       <artifactId>saxon-he</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>tts-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-annotations</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -37,6 +46,7 @@
       -->
       <groupId>org.daisy.libs</groupId>
       <artifactId>jnaerator</artifactId>
+      <scope>provided</scope> <!-- should ideally exclude test -->
     </dependency>
   </dependencies>
   
@@ -47,7 +57,39 @@
   </properties>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>META-INF/catalog.xml</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/dependency/jnaerator/</directory>
+      </resource>
+    </resources>
     <plugins>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-jna</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependency/jnaerator</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.libs</groupId>
+                  <artifactId>jnaerator</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
@@ -58,6 +100,10 @@
               !org.daisy.common.spi,
               *
             </Import-Package>
+            <Include-Resource>
+              src/main/resources/,
+              target/dependency/jnaerator/,
+            </Include-Resource>
           </instructions>
         </configuration>
       </plugin>

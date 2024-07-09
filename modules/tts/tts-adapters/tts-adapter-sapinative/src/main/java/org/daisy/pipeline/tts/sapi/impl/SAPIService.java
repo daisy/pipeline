@@ -15,6 +15,7 @@ import javax.sound.sampled.AudioFormat;
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.onecore.Onecore;
 import org.daisy.pipeline.tts.onecore.OnecoreResult;
 import org.daisy.pipeline.tts.onecore.SAPI;
@@ -23,6 +24,7 @@ import org.daisy.pipeline.tts.DefaultSpeechRate;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
+import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 
@@ -37,22 +39,34 @@ public class SAPIService implements TTSService {
 
 	private static final Logger logger = LoggerFactory.getLogger(SAPIEngine.class);
 
-	private static final Property SAPI_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.sapi.samplerate",
-	                                                                       true,
-	                                                                       "Audio sample rate of legacy Windows voices (in Hz)",
-	                                                                       false,
-	                                                                       "22050");
-	private static final Property SAPI_BYTESPERSAMPLE = Properties.getProperty("org.daisy.pipeline.tts.sapi.bytespersample",
-	                                                                           true,
-	                                                                           "Audio bit depth of legacy Windows voices (in bytes per sample)",
-	                                                                           false,
-	                                                                           "2");
-	private static final Property SAPI_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.sapi.priority",
-	                                                                     true,
-	                                                                     "Priority of Windows voices relative to voices of other engines",
-	                                                                     false,
-	                                                                     "7");
+	private static Property SAPI_SAMPLERATE = null;
+	private static Property SAPI_BYTESPERSAMPLE = null;
+	private static Property SAPI_PRIORITY = null;
 	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
+
+	@Activate
+	protected void activate() {
+		if (!System.getProperty("os.name").toLowerCase().startsWith("windows"))
+			failToActivate("SAPI only works on Windows");
+		if (SAPI_SAMPLERATE == null)
+			SAPI_SAMPLERATE = Properties.getProperty("org.daisy.pipeline.tts.sapi.samplerate",
+			                                         true,
+			                                         "Audio sample rate of legacy Windows voices (in Hz)",
+			                                         false,
+			                                         "22050");
+		if (SAPI_BYTESPERSAMPLE == null)
+			SAPI_BYTESPERSAMPLE = Properties.getProperty("org.daisy.pipeline.tts.sapi.bytespersample",
+			                                             true,
+			                                             "Audio bit depth of legacy Windows voices (in bytes per sample)",
+			                                             false,
+			                                             "2");
+		if (SAPI_PRIORITY == null)
+			SAPI_PRIORITY = Properties.getProperty("org.daisy.pipeline.tts.sapi.priority",
+			                                       true,
+			                                       "Priority of Windows voices relative to voices of other engines",
+			                                       false,
+			                                       "7");
+	}
 
 	private static boolean onecoreDLLIsLoaded = false;
 	private static boolean onecoreIsInitialized = false;
@@ -101,6 +115,11 @@ public class SAPIService implements TTSService {
 	@Override
 	public String getName() {
 		return "sapi";
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "Windows";
 	}
 
 	@Deactivate
@@ -253,5 +272,26 @@ public class SAPIService implements TTSService {
 			}
 		}
 		System.load(dllFile.getAbsolutePath());
+	}
+
+	private static void failToActivate(String message) throws RuntimeException {
+		failToActivate(message, null);
+	}
+
+	private static void failToActivate(String message, Throwable cause) throws RuntimeException {
+		try {
+			SPIHelper.failToActivate(message, cause);
+		} catch (NoClassDefFoundError e) {
+			// we are probably in OSGi context
+			throw new RuntimeException(message, cause);
+		}
+	}
+
+	// static nested class in order to delay class loading
+	private static class SPIHelper {
+		private SPIHelper() {}
+		public static void failToActivate(String message, Throwable cause) throws ActivationException {
+			throw new ActivationException(message, cause);
+		}
 	}
 }

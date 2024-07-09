@@ -35,6 +35,7 @@ import org.daisy.pipeline.audio.AudioFileTypes;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
+import static org.daisy.pipeline.tts.calabash.impl.SynthesizeProvider.ENABLE_LOG;
 import org.daisy.pipeline.tts.config.ConfigReader;
 import org.daisy.pipeline.tts.config.DynamicPropertiesExtension;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
@@ -49,11 +50,6 @@ import org.slf4j.LoggerFactory;
 public class SynthesizeStep extends DefaultStep implements FormatSpecifications, XProcStep {
 
 	private static final Logger logger = LoggerFactory.getLogger(SynthesizeStep.class);
-	private static final Property ENABLE_LOG = Properties.getProperty("org.daisy.pipeline.tts.log",
-	                                                                  true,
-	                                                                  "Whether or not to make the TTS log available (deprecated)",
-	                                                                  false,
-	                                                                  null);
 	private static final Property AUDIO_TMPDIR = Properties.getProperty("org.daisy.pipeline.tts.audio.tmpdir",
 	                                                                    false,
 	                                                                    "Temporary directory used during speech synthesis",
@@ -177,9 +173,9 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		boolean logEnabled = mIncludeLogOpt;
 		if (!logEnabled) {
 			String logEnabledProp = ENABLE_LOG.getValue(properties);
-			if (logEnabledProp != null)
-				logger.warn("'" + ENABLE_LOG.getName() + "' setting is deprecated. " +
-				            "It may become unavailable in future version of DAISY Pipeline.");;
+			//if (logEnabledProp != null)
+			//	logger.warn("'" + ENABLE_LOG.getName() + "' setting is deprecated. " +
+			//	            "It may become unavailable in future version of DAISY Pipeline.");;
 			logEnabled = "true".equalsIgnoreCase(logEnabledProp);
 		}
 		TTSLog log = new TTSLog(logger);
@@ -277,7 +273,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		tw.endDocument();
 		result.write(tw.getResult());
 
-		logger.info("Number of synthesized sound fragments: " + num);
+		logger.debug("Number of synthesized sound fragments: " + num);
 		logger.debug("audio encoding unreleased bytes : "
 		        + mAudioFootprintMonitor.getUnreleasedEncondingMem());
 		logger.debug("TTS unreleased bytes: " + mAudioFootprintMonitor.getUnreleasedTTSMem());

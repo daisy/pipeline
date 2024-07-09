@@ -547,5 +547,12 @@ public class VoiceManager {
 			this.language = language;
 			this.voice = voice;
 		}
+
+		@Override
+		public String toString() {
+			StringBuilder s = new StringBuilder();
+			s.append(language).append(": ").append(voice);
+			return s.toString();
+		}
 	}
 }

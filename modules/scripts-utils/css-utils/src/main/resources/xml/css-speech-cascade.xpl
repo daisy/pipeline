@@ -2,6 +2,8 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
+                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:css-speech-cascade" name="main"
                 exclude-inline-prefixes="#all">
 
@@ -19,6 +21,8 @@
 	</p:output>
 	<p:option name="content-type" required="false" select="'text/html application/xhtml+xml application/x-dtbook+xml'"/>
 	<p:option name="user-stylesheet" required="false" select="''"/>
+	<p:option name="parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string)* -->
+	<p:option name="include-user-agent-stylesheet" required="false" cx:as="xs:boolean" select="false()"/>
 
 	<p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
 		<p:documentation>
@@ -46,6 +50,8 @@
 		</p:input>
 		<p:with-option name="content-type" select="$content-type"/>
 		<p:with-option name="user-stylesheet" select="$user-stylesheet"/>
+		<p:with-option name="include-user-agent-stylesheet" select="$include-user-agent-stylesheet"/>
+		<p:with-option name="parameters" select="$parameters"/>
 		<p:with-option name="attribute-name" select="QName('http://www.daisy.org/ns/pipeline/tts','tts:_')"/>
 	</px:css-cascade>
 

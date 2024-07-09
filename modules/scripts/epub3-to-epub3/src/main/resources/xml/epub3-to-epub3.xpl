@@ -247,6 +247,10 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
         </p:documentation>
     </p:option>
     
+    <p:option name="stylesheet-parameters" select="''">
+        <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+    
     <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
         <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
@@ -303,7 +307,7 @@ elements that represent the sentences.</p>
         <!-- directory used for temporary files -->
     </p:option>
     
-    <p:option name="include-tts-log" select="'false'">
+    <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
         <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
     <p:output port="tts-log" sequence="true">
@@ -347,6 +351,7 @@ elements that represent the sentences.</p>
                                                    for $s in tokenize($stylesheet,'\s+')[not(.='')] return
                                                      resolve-uri($s,$source),
                                                    ' ')"/>
+        <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
         <p:with-option name="lexicon" select="for $l in tokenize($stylesheet,'\s+')[not(.='')] return
                                                 resolve-uri($l,$source)"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>

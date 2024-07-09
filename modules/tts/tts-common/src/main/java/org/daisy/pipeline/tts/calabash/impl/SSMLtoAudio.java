@@ -450,7 +450,7 @@ public class SSMLtoAudio implements FormatSpecifications {
 
 			sectionCount += sections.size();
 		}
-		mLogger.info("Number of synthesizable TTS sections: " + sectionCount);
+		mLogger.debug("Number of synthesizable TTS sections: " + sectionCount);
 	}
 
 	//we can dispense with this function as soon as we take into consideration the size of the SSML

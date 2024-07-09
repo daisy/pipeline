@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.26-SNAPSHOT</version>
+    <version>1.14.26</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-utils</artifactId>
-  <version>6.1.1-SNAPSHOT</version>
+  <version>6.2.0</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils</name>
@@ -28,7 +28,7 @@
       <dependency>
         <groupId>org.liblouis</groupId>
         <artifactId>louisutdml</artifactId>
-        <version>2.5.0</version>
+        <version>2.11.0-p1</version>
         <type>nar</type>
       </dependency>
       <dependency>
@@ -134,8 +134,8 @@
   </dependencies>
 
   <properties>
-    <liblouis.version>3.27.0-p1</liblouis.version>
-    <liblouisutdml.liblouis.version>2.6.3</liblouisutdml.liblouis.version>
+    <liblouis.version>3.30.0-p1</liblouis.version>
+    <liblouisutdml.liblouis.version>3.21.0-p2</liblouisutdml.liblouis.version>
     <expose-services>
       org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_default_liblouis_tables,
       org.daisy.pipeline.braille.liblouis.impl.LiblouisTableDatatypeService,
@@ -187,12 +187,16 @@
         <targetPath>native/macosx/x86_64/</targetPath>
       </resource>
       <resource>
-        <directory>${project.build.directory}/generated-resources/native/liblouisutdml/i386-MacOSX-gpp/</directory>
-        <targetPath>native/macosx/x86/liblouisutdml/</targetPath>
+        <directory>${project.build.directory}/generated-resources/native/liblouis/aarch64-MacOSX-gpp/</directory>
+        <targetPath>native/macosx/aarch64/</targetPath>
       </resource>
       <resource>
         <directory>${project.build.directory}/generated-resources/native/liblouisutdml/x86_64-MacOSX-gpp/</directory>
         <targetPath>native/macosx/x86_64/liblouisutdml/</targetPath>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources/native/liblouisutdml/aarch64-MacOSX-gpp/</directory>
+        <targetPath>native/macosx/aarch64/liblouisutdml/</targetPath>
       </resource>
       <resource>
         <directory>${project.build.directory}/generated-resources/native/liblouis/i686-w64-mingw32-gpp/</directory>
@@ -204,6 +208,10 @@
       </resource>
       <resource>
         <directory>${project.build.directory}/generated-resources/native/liblouisutdml/i586-mingw32msvc-gpp/</directory>
+        <targetPath>native/windows/x86/liblouisutdml/</targetPath>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources/native/liblouisutdml/i686-w64-mingw32-gpp/</directory>
         <targetPath>native/windows/x86/liblouisutdml/</targetPath>
       </resource>
     </resources>
@@ -232,18 +240,16 @@
                   <classifier>amd64-Linux-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
-                <!--
-                <artifactItem>
-                  <groupId>org.liblouis</groupId>
-                  <artifactId>louis</artifactId>
-                  <classifier>i386-MacOSX-gpp-shared</classifier>
-                  <type>nar</type>
-                </artifactItem>
-                -->
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
                   <classifier>x86_64-MacOSX-gpp-shared</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
+                  <classifier>aarch64-MacOSX-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
@@ -287,13 +293,6 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
-                  <classifier>i386-MacOSX-gpp-shared</classifier>
-                  <type>nar</type>
-                  <version>${liblouisutdml.liblouis.version}</version>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.liblouis</groupId>
-                  <artifactId>louis</artifactId>
                   <classifier>x86_64-MacOSX-gpp-shared</classifier>
                   <type>nar</type>
                   <version>${liblouisutdml.liblouis.version}</version>
@@ -301,7 +300,14 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louis</artifactId>
-                  <classifier>i586-mingw32msvc-gpp-executable</classifier>
+                  <classifier>aarch64-MacOSX-gpp-shared</classifier>
+                  <type>nar</type>
+                  <version>${liblouisutdml.liblouis.version}</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louis</artifactId>
+                  <classifier>i686-w64-mingw32-gpp-executable</classifier>
                   <type>nar</type>
                   <version>${liblouisutdml.liblouis.version}</version>
                 </artifactItem>
@@ -326,13 +332,13 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louisutdml</artifactId>
-                  <classifier>i386-MacOSX-gpp-shared</classifier>
+                  <classifier>x86_64-MacOSX-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louisutdml</artifactId>
-                  <classifier>x86_64-MacOSX-gpp-shared</classifier>
+                  <classifier>aarch64-MacOSX-gpp-shared</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
@@ -350,19 +356,19 @@
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louisutdml</artifactId>
-                  <classifier>i386-MacOSX-gpp-executable</classifier>
-                  <type>nar</type>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.liblouis</groupId>
-                  <artifactId>louisutdml</artifactId>
                   <classifier>x86_64-MacOSX-gpp-executable</classifier>
                   <type>nar</type>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.liblouis</groupId>
                   <artifactId>louisutdml</artifactId>
-                  <classifier>i586-mingw32msvc-gpp-executable</classifier>
+                  <classifier>aarch64-MacOSX-gpp-executable</classifier>
+                  <type>nar</type>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.liblouis</groupId>
+                  <artifactId>louisutdml</artifactId>
+                  <classifier>i686-w64-mingw32-gpp-executable</classifier>
                   <type>nar</type>
                 </artifactItem>
               </artifactItems>
@@ -537,8 +543,9 @@
                   META-INF/services/org.daisy.pipeline.braille.common.NativePath;literal
                    ='org.daisy.pipeline.braille.liblouis.impl.mac.LiblouisNativePathForMacOS_SPI',
                   native/macosx/x86_64=target/generated-resources/native/liblouis/x86_64-MacOSX-gpp,
-                  native/macosx/x86/liblouisutdml=target/generated-resources/native/liblouisutdml/i386-MacOSX-gpp,
-                  native/macosx/x86_64/liblouisutdml=target/generated-resources/native/liblouisutdml/x86_64-MacOSX-gpp
+                  native/macosx/aarch64=target/generated-resources/native/liblouis/aarch64-MacOSX-gpp,
+                  native/macosx/x86_64/liblouisutdml=target/generated-resources/native/liblouisutdml/x86_64-MacOSX-gpp,
+                  native/macosx/aarch64/liblouisutdml=target/generated-resources/native/liblouisutdml/aarch64-MacOSX-gpp
                 </Include-Resource>
               </instructions>
             </configuration>
@@ -564,7 +571,10 @@
                    ='org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows_SPI',
                   native/windows/x86=target/generated-resources/native/liblouis/i686-w64-mingw32-gpp,
                   native/windows/x86_64=target/generated-resources/native/liblouis/x86_64-w64-mingw32-gpp,
-                  native/windows/x86/liblouisutdml=target/generated-resources/native/liblouisutdml/i586-mingw32msvc-gpp
+                  native/windows/x86/liblouisutdml/file2brl.exe=target/generated-resources/native/liblouisutdml/i686-w64-mingw32-gpp/file2brl.exe,
+                  native/windows/x86/liblouisutdml/liblouisutdml.dll=target/generated-resources/native/liblouisutdml/i686-w64-mingw32-gpp/liblouisutdml.dll,
+                  native/windows/x86/liblouisutdml/liblouis.dll=target/generated-resources/native/liblouisutdml/i686-w64-mingw32-gpp/liblouis.dll,
+                  native/windows/x86/liblouisutdml/libxml2.dll=target/generated-resources/native/liblouisutdml/i586-mingw32msvc-gpp/libxml2.dll
                 </Include-Resource>
               </instructions>
             </configuration>
@@ -814,39 +824,30 @@
       <build>
         <plugins>
           <plugin>
-            <artifactId>maven-scm-plugin</artifactId>
+            <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>checkout-tables</id>
+                <id>unpack-liblouisutdml-files</id>
                 <phase>generate-sources</phase>
                 <goals>
-                  <goal>checkout</goal>
+                  <goal>unpack</goal>
                 </goals>
                 <configuration>
-                  <connectionUrl>scm:svn:http://liblouis.googlecode.com/svn/trunk/tables</connectionUrl>
-                  <scmVersion>895</scmVersion>
-                  <scmVersionType>revision</scmVersionType>
-                  <checkoutDirectory>target/checkout/liblouis/tables/</checkoutDirectory>
-                  <skipCheckoutIfExists>true</skipCheckoutIfExists>
-                </configuration>
-              </execution>
-              <execution>
-                <id>checkout-lbu_files</id>
-                <phase>generate-sources</phase>
-                <goals>
-                  <goal>checkout</goal>
-                </goals>
-                <configuration>
-                  <connectionUrl>scm:hg:https://code.google.com/p/liblouisutdml/</connectionUrl>
-                  <scmVersion>c94917dab530</scmVersion>
-                  <scmVersionType>tag</scmVersionType>
-                  <checkoutDirectory>target/checkout/liblouisutdml/</checkoutDirectory>
-                  <skipCheckoutIfExists>true</skipCheckoutIfExists>
-                  <includes>
-                    lbu_files/marburg.sem,
-                    lbu_files/nemeth.sem,
-                    lbu_files/ukmaths.sem
-                  </includes>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>org.liblouis</groupId>
+                      <artifactId>louis</artifactId>
+                      <classifier>noarch</classifier>
+                      <version>${liblouisutdml.liblouis.version}</version>
+                      <type>nar</type>
+                    </artifactItem>
+                    <artifactItem>
+                      <groupId>org.liblouis</groupId>
+                      <artifactId>louisutdml</artifactId>
+                      <classifier>noarch</classifier>
+                      <type>nar</type>
+                    </artifactItem>
+                  </artifactItems>
                 </configuration>
               </execution>
             </executions>

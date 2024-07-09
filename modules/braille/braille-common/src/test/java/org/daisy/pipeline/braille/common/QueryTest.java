@@ -13,7 +13,7 @@ public class QueryTest {
 		q.add("foo");
 		q.add("bar", "ds<:;'\"dsqf");
 		q.add("grade", "2");
-		assertEquals("(bar:\"ds<:;'\\22dsqf\")(foo)(grade:2)(locale:en-US)(locale:ar)",
+		assertEquals("(bar:\"ds<:;'\\22 dsqf\")(foo)(grade:2)(locale:en-US)(locale:ar)",
 		             q.toString());
 	}
 	
@@ -25,6 +25,6 @@ public class QueryTest {
 		q.add("foo");
 		q.add("bar", "ds<:;'\"dsqf");
 		q.add("locale", "fr");
-		assertEquals(q, Query.util.query(" (locale:en-US ) ( grade: 2)(foo)(bar:\"ds<:;'\\22dsqf\") (locale:fr)"));
+		assertEquals(q, Query.util.query(" (locale:en-US ) ( grade: 2)(foo)(bar:\"ds<:;'\\22 dsqf\") (locale:fr)"));
 	}
 }

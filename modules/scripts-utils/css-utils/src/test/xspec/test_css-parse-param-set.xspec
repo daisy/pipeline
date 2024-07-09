@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+               stylesheet="../../main/resources/xml/library.xsl">
+	
+	<x:scenario label="test">
+		<x:call function="snapshot">
+			<x:param select="pf:css-parse-param-set('(foo: true)')('foo')"/>
+		</x:call>
+		<x:expect label="result" select="true()"/>
+	</x:scenario>
+	
+</x:description>

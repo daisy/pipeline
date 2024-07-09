@@ -31,6 +31,14 @@
       <p:pipe step="result" port="tts-log"/>
     </p:output>
 
+    <p:option xmlns:_="tts" name="_:stylesheet" select="''">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+
+    <p:option name="stylesheet-parameters" select="''">
+      <!-- defined in ../../../../../common-options.xpl -->
+    </p:option>
+
     <p:option name="language" select="''">
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
@@ -69,11 +77,6 @@
       <!-- defined in ../../../../../common-options.xpl -->
       <p:inline><d:config/></p:inline>
     </p:input>
-
-    <p:option xmlns:_="tts" name="_:stylesheet" select="''">
-      <!-- defined in ../../../../../common-options.xpl -->
-    </p:option>
-
     <p:option name="lexicon" select="p:system-property('d:org.daisy.pipeline.tts.default-lexicon')">
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
@@ -201,6 +204,7 @@
 	                                                             for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
 	                                                               resolve-uri($s,$dtbook-uri),
 	                                                             ' ')"/>
+	    <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
 	    <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
 	                                            resolve-uri($l,$dtbook-uri)"/>
 	    <p:with-option name="audio" select="$audio"/>

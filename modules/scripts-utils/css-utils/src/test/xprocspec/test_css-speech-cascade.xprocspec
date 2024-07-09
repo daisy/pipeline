@@ -163,4 +163,40 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="default">
+    <x:call step="px:css-speech-cascade">
+      <x:input port="source.in-memory">
+        <x:document type="inline" xml:base="dtbook.xml">
+          <dtbook>
+            <book>
+              <div>
+                <img alt="Image alt text"/>
+              </div>
+            </book>
+          </dtbook>
+        </x:document>
+      </x:input>
+      <x:input port="source.fileset">
+        <x:document type="inline">
+          <d:fileset>
+            <d:file href="dtbook.xml" media-type="application/x-dtbook+xml"/>
+          </d:fileset>
+        </x:document>
+      </x:input>
+      <x:option name="include-user-agent-stylesheet" select="true()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result.in-memory" select="//book"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <book>
+          <div>
+            <img alt="Image alt text" tts:before="Image alt text"/>
+          </div>
+        </book>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
 </x:description>

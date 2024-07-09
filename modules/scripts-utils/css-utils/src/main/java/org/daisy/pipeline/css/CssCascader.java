@@ -26,7 +26,7 @@ public interface CssCascader {
 	 *                      are used for the attributes, the local part is ignored.
 	 */
 	public XMLTransformer newInstance(Medium medium,
-	                                  String userStylesheet,
+	                                  String userAndUserAgentStylesheets,
 	                                  URIResolver uriResolver,
 	                                  CssPreProcessor preProcessor,
 	                                  XsltProcessor xsltProcessor,

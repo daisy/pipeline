@@ -95,4 +95,81 @@
     </x:scenario>
   </x:scenario>
   
+  <x:scenario label="XInclude">
+    <x:call step="px:html-to-pef.script">
+      <x:option name="source" select="resolve-uri('../resources/xinclude-math.xhtml')"/>
+      <x:option name="page-width" select="'35'"/>
+      <x:option name="page-height" select="'20'"/>
+      <x:option name="handle-xinclude" select="'true'"/>
+      <x:option name="result" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
+      <x:option name="pef" select="concat($temp-dir,'xinclude/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'xinclude/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="xinclude/output-dir/xinclude-math.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:identifier>identifier?</dc:identifier>
+              <dc:title>xinclude-math</dc:title>
+              <dc:language>nl</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠐⠆⠞⠳⠩⠁⠡⠏⠱⠌⠝⠱⠱⠐⠖⠩⠁⠡⠟⠱⠌⠝⠱⠱⠱</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="external entity">
+    <x:call step="px:html-to-pef.script">
+      <x:option name="source" select="resolve-uri('../resources/external-entity.xhtml')"/>
+      <x:option name="page-width" select="'35'"/>
+      <x:option name="page-height" select="'20'"/>
+      <x:option name="result" select="''"/>
+      <x:option name="include-pef" select="'true'"/>
+      <x:option name="pef" select="concat($temp-dir,'external-entity/output-dir/')"/>
+      <x:option name="temp-dir" select="concat($temp-dir,'external-entity/temp-dir/')"/>
+    </x:call>
+    <x:context label="pef">
+      <x:document type="file" base-uri="temp-dir" href="external-entity/output-dir/external-entity.pef"/>
+    </x:context>
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head>
+            <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+              <dc:format>application/x-pef+xml</dc:format>
+              <dc:identifier>identifier?</dc:identifier>
+              <dc:title>external-entity</dc:title>
+              <dc:language>nl</dc:language>
+            </meta>
+          </head>
+          <body>
+            <volume cols="35" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠐⠆⠞⠳⠩⠁⠡⠏⠱⠌⠝⠱⠱⠐⠖⠩⠁⠡⠟⠱⠌⠝⠱⠱⠱</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

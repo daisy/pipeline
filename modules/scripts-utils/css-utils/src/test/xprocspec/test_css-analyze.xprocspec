@@ -31,9 +31,9 @@
     <x:expect label="result parameters" type="compare">
       <x:document type="inline">
         <c:param-set>
-            <c:param name="var1" value="val1"/>
-            <c:param name="var2" value="val2"/>
             <c:param name="var4" value="val2"/>
+            <c:param name="var2" value="val2"/>
+            <c:param name="var1" value="val1"/>
             <c:param name="var3" value="val1"/>
         </c:param-set>
       </x:document>
