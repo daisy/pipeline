@@ -312,7 +312,7 @@ echo "# pull into super project"
 echo
 echo "cd $ROOT_DIR && \\"
 echo "git fetch subrepo/$gitrepo_dir && \\"
-echo "git subrepo commit -f $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
+echo ".git-utils/git-subrepo/lib/git-subrepo -Ff commit $gitrepo_dir subrepo/$gitrepo_dir/$release_branch^ && \\"
 echo "git commit --amend -m \"git subrepo pull $gitrepo_dir ($tag)\" -m \"\$(git log -1 --pretty=format:%B HEAD | tail -n+2)\""
 
 if [ -e "$tmp_dir" ]; then
