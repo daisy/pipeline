@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	VERSION = "2.2.0-SNAPSHOT"
+	VERSION = "2.2.0"
 )
 
 const (
