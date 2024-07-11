@@ -82,6 +82,7 @@ else
     echo "&& \\"
     tag="\${TAG}"
 fi
+rm $pom
 release_branch=release/$tag
 echo -n "git checkout -b $release_branch $base_commit"
 
