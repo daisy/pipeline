@@ -1,9 +1,32 @@
+v1.14.26
+========
+
+Changes
+-------
+- Update to Liblouis [3.30.0](https://github.com/liblouis/liblouis/releases/tag/v3.30.0)
+- New "Include PDF" option is now also available for DTBook to braille
+- Default handling of `<wbr>` (word break opportunity) tag in HTML
+- Various other bugfixes and improvements
+
+Components
+----------
+- **liblouis** ([**3.30.0**](https://github.com/liblouis/liblouis/releases/tag/v3.30.0)),
+  liblouisutdml ([2.5.0](https://github.com/liblouis/liblouisutdml/releases/tag/v2.5.0)),
+  liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
+- dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
+- braille-css ([1.24.1](https://github.com/daisy/braille-css/releases/tag/1.24.1))
+- **jsass** ([**5.11.1-p1**](https://github.com/daisy/jsass/releases/tag/5.11.1-p1))
+- **libhyphen** ([**2.8.8-p1**](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8-p1)), jhyphen
+  ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
+- texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
+
 v1.14.25
 ========
 
 Changes
 -------
-- Bugfixes and further improvements to braille configuration.
+- Bugfixes and further improvements to braille configuration
+- Option to store intermediary DTBook with CSS styles inlined
 
 Components
 ----------
@@ -12,8 +35,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - braille-css ([1.24.1](https://github.com/daisy/braille-css/releases/tag/1.24.1))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -41,8 +64,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - **braille-css** ([**1.24.1**](https://github.com/daisy/braille-css/releases/tag/1.24.1))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -60,8 +83,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - **braille-css** ([**1.24.0**](https://github.com/daisy/braille-css/releases/tag/1.24.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -83,8 +106,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - **braille-css** ([**1.23.0**](https://github.com/daisy/braille-css/releases/tag/1.23.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -104,8 +127,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.7](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - braille-css ([1.22.1](https://github.com/daisy/braille-css/releases/tag/1.22.1))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -124,8 +147,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - **dotify** ([**1.0.7**](https://github.com/mtmse/dotify.library/releases/tag/1.0.7)
 - **braille-css** ([**1.22.1**](https://github.com/daisy/braille-css/releases/tag/1.22.1))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -151,8 +174,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.6](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
 - **braille-css** ([**1.22.0**](https://github.com/daisy/braille-css/releases/tag/1.22.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -170,8 +193,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - dotify ([1.0.6](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
 - braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -189,8 +212,8 @@ Components
   liblouis-java ([5.0.2](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - **dotify** ([**1.0.6**](https://github.com/mtmse/dotify.library/releases/tag/1.0.6)
 - braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -217,8 +240,8 @@ Components
   **liblouis-java** ([**5.0.2**](https://github.com/liblouis/liblouis-java/releases/tag/5.0.2))
 - **dotify** ([**1.0.5**](https://github.com/mtmse/dotify.library/releases/tag/1.0.5)
 - braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -252,8 +275,8 @@ Components
   liblouis-java ([5.0.1](https://github.com/liblouis/liblouis-java/releases/tag/5.0.1))
 - dotify ([1.0.3](https://github.com/mtmse/dotify.library/releases/tag/1.0.3)
 - braille-css ([1.21.0](https://github.com/daisy/braille-css/releases/tag/1.21.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -302,8 +325,8 @@ Components
   **liblouis-java** ([**5.0.1**](https://github.com/liblouis/liblouis-java/releases/tag/5.0.1))
 - **dotify** ([**1.0.3**](https://github.com/mtmse/dotify.library/releases/tag/1.0.3)
 - **braille-css** ([**1.21.0**](https://github.com/daisy/braille-css/releases/tag/1.21.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -332,8 +355,8 @@ Components
   liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
 - dotify ([1.0.1](https://github.com/mtmse/dotify.library/releases/tag/1.0.1)
 - braille-css ([1.19.0](https://github.com/daisy/braille-css/releases/tag/1.19.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -375,8 +398,8 @@ Components
   liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
 - **dotify** ([**1.0.1**](https://github.com/mtmse/dotify.library/releases/tag/1.0.1)
 - braille-css ([1.19.0](https://github.com/daisy/braille-css/releases/tag/1.19.0))
-- jsass ([5.10.4-p1](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([5.10.4-p1](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -423,8 +446,8 @@ Components
   liblouis-java ([4.3.1](https://github.com/liblouis/liblouis-java/releases/tag/4.3.1))
 - **dotify** ([**1.0.0**](https://github.com/mtmse/dotify.library/releases/tag/1.0.0)
 - **braille-css** ([**1.19.0**](https://github.com/daisy/braille-css/releases/tag/1.19.0))
-- **jsass** ([**5.10.4-p1**](https://github.com/snaekobbi/jsass/releases/tag/5.10.4-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- **jsass** ([**5.10.4-p1**](https://github.com/daisy/jsass/releases/tag/5.10.4-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -484,8 +507,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - **braille-css** ([**1.18.0**](https://github.com/daisy/braille-css/releases/tag/1.18.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -542,8 +565,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - **braille-css** ([**1.17.0**](https://github.com/daisy/braille-css/releases/tag/1.17.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -603,8 +626,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - **braille-css** ([**1.16.0**](https://github.com/daisy/braille-css/releases/tag/1.16.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -642,8 +665,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - braille-css ([1.15.0](https://github.com/daisy/braille-css/releases/tag/1.15.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.2](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -722,8 +745,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - **braille-css** ([**1.15.0**](https://github.com/daisy/braille-css/releases/tag/1.15.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), **jhyphen**
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), **jhyphen**
   ([**1.0.2**](https://github.com/daisy/jhyphen/releases/tag/1.0.2))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -773,8 +796,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - **braille-css** ([**1.14.0**](https://github.com/daisy/braille-css/releases/tag/1.14.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -811,8 +834,8 @@ Components
   [3.0.0](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), pef-tools
   [2.2.0](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - braille-css ([1.13.0](https://github.com/daisy/braille-css/releases/tag/1.13.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -869,8 +892,8 @@ Components
   [**3.0.0**](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0), **pef-tools**
   [**2.2.0**](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.2.0))
 - braille-css ([1.13.0](https://github.com/daisy/braille-css/releases/tag/1.13.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -986,8 +1009,8 @@ Components
   [3.0.0-beta](https://github.com/brailleapps/braille-utils.impl/releases/tag/releases%2Fv3.0.0-beta), pef-tools
   [2.0.0-alpha](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
 - **braille-css** ([**1.13.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.13.0))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1027,8 +1050,8 @@ Components
   [2.0.0-alpha](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
 - braille-css ([1.12.0](https://github.com/snaekobbi/braille-css/releases/tag/1.12.0))
 - jstyleparser ([1.20-p9](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p9))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.8.8](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.8.8](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1089,8 +1112,8 @@ Components
   [**2.0.0-alpha**](https://github.com/brailleapps/braille-utils.pef-tools/releases/tag/releases%2Fv2.0.0-alpha))
 - **braille-css** ([**1.11.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.11.0))
 - **jstyleparser** ([**1.20-p9**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p9))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- **libhyphen** ([**2.8.8**](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.8.8)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- **libhyphen** ([**2.8.8**](https://github.com/daisy/libhyphen-nar/releases/tag/2.8.8)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1124,8 +1147,8 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.10.1**](https://github.com/snaekobbi/braille-css/releases/tag/1.10.1))
 - **jstyleparser** ([**1.20-p8**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p8))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([1.0.0](https://github.com/daisy/jhyphen/releases/tag/v1.0.0))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1160,8 +1183,8 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.9.1**](https://github.com/snaekobbi/braille-css/releases/tag/1.9.1))
 - **jstyleparser** ([**1.20-p7**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p7))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1204,8 +1227,8 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.9.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.9.0))
 - **jstyleparser** ([**1.20-p6**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p6))
-- jsass ([4.1.0-p1](https://github.com/snaekobbi/jsass/releases/tag/))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- jsass ([4.1.0-p1](https://github.com/daisy/jsass/releases/tag/))
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1270,8 +1293,8 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.8.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.8.0))
 - jstyleparser ([1.20-p5](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p5))
-- **jsass** ([**4.1.0-p1**](https://github.com/snaekobbi/jsass/releases/tag/4.1.0-p1))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- **jsass** ([**4.1.0-p1**](https://github.com/daisy/jsass/releases/tag/4.1.0-p1))
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1314,7 +1337,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.7.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.7.0))
 - **jstyleparser** ([**1.20-p5**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p5))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1360,7 +1383,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.6.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.6.0))
 - **jstyleparser** ([**1.20-p4**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p4))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1396,7 +1419,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - braille-css ([1.4.0](https://github.com/snaekobbi/braille-css/releases/tag/1.4.0))
 - jstyleparser ([1.20-p3](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p3))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1436,7 +1459,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.4.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.4.0))
 - **jstyleparser** ([**1.20-p3**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p3))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1469,7 +1492,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.3.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.3.0))
 - jstyleparser ([1.20-p2](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p2))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1501,7 +1524,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - braille-css ([1.2.0](https://github.com/snaekobbi/braille-css/releases/tag/1.2.0))
 - jstyleparser ([1.20-p2](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p2))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1529,7 +1552,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.2.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.2.0))
 - jstyleparser ([1.20-p2](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p2))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1560,7 +1583,7 @@ Components
   [1.0.0](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.1.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.1.0))
 - **jstyleparser** ([**1.20-p2**](https://github.com/snaekobbi/jStyleParser/releases/tag/jStyleParser-1.20-p2))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1601,7 +1624,7 @@ Components
   [**1.0.0**](https://github.com/brailleapps/brailleutils/releases/tag/releases%2Fbraille-utils.pef-tools%2Fv1.0.0))
 - **braille-css** ([**1.0.0**](https://github.com/snaekobbi/braille-css/releases/tag/1.0.0))
 - **jstyleparser** ([**1.20-p1**](https://github.com/snaekobbi/jStyleParser/releases/tag/jstyleparser-1.20-p1))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
 
@@ -1616,6 +1639,6 @@ Components
 - brailleutils (core [1.2.0](https://github.com/daisy/osgi-libs/releases/tag/brailleutils-core-1.2.0), catalog
   [1.2.0](https://github.com/daisy/osgi-libs/releases/tag/brailleutils-catalog-1.2.0))
 - jstyleparser ([1.13](https://github.com/daisy/osgi-libs/releases/tag/jstyleparser-1.13.0-p1))
-- libhyphen ([2.6.0](https://github.com/snaekobbi/libhyphen-nar/releases/tag/2.6.0)), jhyphen
+- libhyphen ([2.6.0](https://github.com/daisy/libhyphen-nar/releases/tag/2.6.0)), jhyphen
   ([0.1.5](https://github.com/daisy/jhyphen/releases/tag/v0.1.5))
 - texhyphj ([1.2](https://github.com/joeha480/texhyphj/releases/tag/release-1.2))
