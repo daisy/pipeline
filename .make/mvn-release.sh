@@ -193,6 +193,10 @@ echo "java -cp $SAXON \\
      >pom.xml.fixed && \\"
 echo "mv pom.xml.fixed pom.xml && \\"
 
+if [ $release_dir == "assembly" ]; then
+	echo "rm .mvn/maven.config && \\"
+fi
+
 # skipping tests during perform: they were run during prepare step, no need to run them again
 echo "mvn release:perform -DlocalCheckout=true \\
                     -Dgoals=\"verify \\
@@ -204,7 +208,11 @@ echo "mvn release:perform -DlocalCheckout=true \\
                                  -DserverId=sonatype-nexus-staging \\
                                  -DstagingDescription='$release_dir $version' \\
                                  -DkeepStagingRepositoryOnCloseRuleFailure=true\" && \\"
-echo "git checkout HEAD -- pom.xml"
+echo -n "git checkout HEAD -- pom.xml"
+if [ $release_dir == "assembly" ]; then
+	echo -n " .mvn/maven.config"
+fi
+echo
 
 if [ ${#modules[@]} -gt 0 ]; then
     echo
@@ -285,28 +293,6 @@ if [ $github_owner == "daisy" ]; then
     fi
     echo -n "open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
 fi
-
-if [ $release_dir == "assembly" ]; then
-    echo " && \\"
-    echo -n "./update_rd.sh $tag"
-    if [ $github_owner == "daisy" ]; then
-        echo " && \\"
-        echo "pr_number=\$("
-        echo "    echo \"{\\\"title\\\": \\\"Release descriptor $version\\\", \\"
-        echo "           \\\"head\\\":  \\\"rd-$version\\\", \\"
-        echo "           \\\"base\\\":  \\\"gh-pages\\\"}\" \\"
-        echo "    | curl -u \"\$credentials\" -X POST --data @- \\"
-        echo "           https://api.github.com/repos/$github_owner/$github_repo/pulls \\"
-        echo "    | jq -r '.number' ) && \\"
-        if [[ -n ${milestone_nr+x} ]]; then
-            echo "echo \"{\\\"milestone\\\": \\\"${milestone_nr}\\\"}\" \\"
-            echo "| curl -u \"\$credentials\" -X PATCH --data @- \\"
-            echo "       https://api.github.com/repos/$github_owner/$github_repo/issues/\$pr_number"
-        fi
-        echo -n ": open \"https://github.com/$github_owner/$github_repo/pull/\$pr_number\""
-    fi
-fi
-echo
 
 echo
 echo "# pull into super project"
