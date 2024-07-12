@@ -5,11 +5,21 @@ endif
 ifeq ($(OS),Windows_NT)
 SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/windows_amd64/eval-java.exe
 else
-ifeq ($(shell uname -s),Darwin)
-SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/darwin_amd64/eval-java
+UNAME_S := $(shell uname -s)
+UNAME_P := $(shell uname -p)
+ifeq ($(UNAME_S),Darwin)
+ifneq ($(filter arm%,$(UNAME_P))$(filter aarch%,$(UNAME_P)),)
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/darwin_arm64/eval-java
 else
-ifeq ($(shell uname -s),Linux)
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/darwin_amd64/eval-java
+endif
+else
+ifeq ($(UNAME_S),Linux)
+ifneq ($(filter arm%,$(UNAME_P))$(filter aarch%,$(UNAME_P)),)
+SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/linux_arm64/eval-java
+else
 SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/linux_amd64/eval-java
+endif
 else
 SHELL := $(dir $(lastword $(MAKEFILE_LIST)))bin/windows_amd64/eval-java.exe
 endif

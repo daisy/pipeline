@@ -219,7 +219,7 @@ ifneq ($(OS), WINDOWS)
 .PHONY : docker
 # Note that when `docker' is enabled together with other targets, it is as if --without-osgi was also specified.
 docker : mvn -Pwithout-osgi \
-         target/maven-jlink/classifiers/linux \
+         jre/target/maven-jlink/classifiers/linux \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 ifndef DUMP_PROFILES
 	mkdirs("target/docker");                                                                           \
@@ -249,9 +249,9 @@ dev-launcher : target/dev-launcher/pipeline2
 target/dev-launcher/pipeline2 : pom.xml
 ifdef BUILD_JRE_FOR_DEV_LAUNCHER
 ifeq ($(OS), MACOSX)
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/mac target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : jre/target/maven-jlink/classifiers/mac target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2
 else
-target/dev-launcher/pipeline2 : target/maven-jlink/classifiers/linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
+target/dev-launcher/pipeline2 : jre/target/maven-jlink/classifiers/linux target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 endif
 ifndef DUMP_PROFILES
 	mkdirs("$(dir $@)");                                \
@@ -278,8 +278,8 @@ ifndef DUMP_PROFILES
 endif
 endif
 
-target/maven-jlink/classifiers/mac                                     : mvn -Pbuild-jre-mac
-target/maven-jlink/classifiers/linux                                   : mvn -Pbuild-jre-linux
+jre/target/maven-jlink/classifiers/mac                                 : mvn -Pbuild-jre-mac
+jre/target/maven-jlink/classifiers/linux                               : mvn -Pbuild-jre-linux
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
