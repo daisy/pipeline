@@ -202,6 +202,20 @@ respond with HTTP 405 "Method Not Allowed".
    * `HTTP 401 Unauthorized`: Client was not authorized to perform request.
    * `HTTP 404 Not Found`: Resource not found
 
+<!--
+
+## Text-to-speech
+
+### Get all TTS services
+
+### Get/filter available TTS voices
+
+## CSS/Sass style sheets
+
+### Get all style sheet parameters
+
+-->
+
 ## Admin
 
 In addition to managing scripts and jobs, the web service also
