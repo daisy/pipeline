@@ -6,7 +6,7 @@
                 type="px:word-to-dtbook.script" name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<h1 px:role="name">Word to dtbook</h1>
+		<h1 px:role="name">Word to DTBook</h1>
 		<p px:role="desc" xml:space="preserve">Transforms a Microsoft Office Word (.docx) document into a DTBook XML file.</p>
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/">
 			Online documentation
