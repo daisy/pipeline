@@ -972,7 +972,7 @@
            id="tspan9057">medium</tspan></text>
     </a>
     <a
-       xlink:href="modules/braille/braille-common/src/main/resources/xml/apply-stylesheets.xpl"
+       xlink:href="modules/css-utils/src/main/resources/xml/css-cascade.xpl"
        transform="translate(293.87612,150.22324)"
        id="a6175"
        class="apidoc">

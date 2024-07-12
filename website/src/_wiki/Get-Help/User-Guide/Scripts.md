@@ -31,6 +31,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [HTML to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/)
 * [HTML to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/)
 * [NIMAS Fileset Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/)
+<!-- * [Word to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/) -->
 * [ZedAI to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3/)
 * [ZedAI to HTML](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html/)
 * [ZedAI to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/)
