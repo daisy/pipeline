@@ -108,7 +108,7 @@
 			<p px:role="desc">Image resampling targeted resolution in dpi (dot-per-inch)</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="character-styles" select="false()" px:type="xs:boolean">
+	<p:option name="character-styles" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Translate character styles</h2>
 		</p:documentation>
