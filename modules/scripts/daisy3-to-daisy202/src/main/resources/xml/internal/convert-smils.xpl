@@ -115,7 +115,7 @@
     </p:add-attribute>
     <p:add-attribute match="d:file"
                      attribute-name="doctype-public"
-                     attribute-value="-//W3C//DTD SMIL 1.0//EN'"/>
+                     attribute-value="-//W3C//DTD SMIL 1.0//EN"/>
     <p:add-attribute match="d:file"
                      attribute-name="doctype-system"
                      attribute-value="http://www.w3.org/TR/REC-smil/SMIL10.dtd"/>
