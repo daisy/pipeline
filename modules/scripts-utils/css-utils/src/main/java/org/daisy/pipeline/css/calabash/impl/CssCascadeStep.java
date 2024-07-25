@@ -132,7 +132,6 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 					stylesheets.add(u.toString());
 			for (String s : Arrays.asList(getOption(_user_stylesheet, "").trim().split("\\s+")))
 				stylesheets.add(s);
-			stylesheets.add(getOption(_user_stylesheet, ""));
 			Map<String,String> sassVariables = new HashMap<>();
 			RuntimeValue paramOption = getOption(_parameters);
 			if (paramOption != null)
