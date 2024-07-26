@@ -30,6 +30,7 @@ import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.TypeParameterElement;
@@ -219,16 +220,18 @@ public class DsToSpiProcessor extends AbstractProcessor {
 										for (Element enclosedElement : i.getEnclosedElements()) {
 											if (enclosedElement instanceof ExecutableElement) {
 												ExecutableElement exeElement = (ExecutableElement)enclosedElement;
-												ComponentModel.ServiceMethodModel method = new ComponentModel.ServiceMethodModel();
-												method.name = exeElement.getSimpleName().toString();
-												method.returnType = boundTypeParameters.resolveVariables(exeElement.getReturnType());
-												for (VariableElement variableElement : exeElement.getParameters()) {
-													method.argumentTypes.add(boundTypeParameters.resolveVariables(variableElement.asType()));
+												if (!exeElement.getModifiers().contains(Modifier.STATIC)) {
+													ComponentModel.ServiceMethodModel method = new ComponentModel.ServiceMethodModel();
+													method.name = exeElement.getSimpleName().toString();
+													method.returnType = boundTypeParameters.resolveVariables(exeElement.getReturnType());
+													for (VariableElement variableElement : exeElement.getParameters()) {
+														method.argumentTypes.add(boundTypeParameters.resolveVariables(variableElement.asType()));
+													}
+													for (TypeMirror thrown : exeElement.getThrownTypes()) {
+														method.thrownTypes.add(thrown.toString());
+													}
+													component.serviceMethods.add(method);
 												}
-												for (TypeMirror thrown : exeElement.getThrownTypes()) {
-													method.thrownTypes.add(thrown.toString());
-												}
-												component.serviceMethods.add(method);
 											}
 										}
 									}
