@@ -739,7 +739,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	@SuppressWarnings("unused")
 	private boolean processSize(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
-		if (d.size() == 1 && genericOneIdent(StringSet.class, d, properties))
+		if (d.size() == 1 && genericOneIdent(Size.class, d, properties))
 			return true;
 		TermInteger width = null;
 		TermInteger height = null;
