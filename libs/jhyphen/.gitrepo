@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/jhyphen.git
 	branch = master
-	commit = e6628659c1c89e66f75995c287000fbf14f48567
-	parent = 124fb7e8ec180a40206f40c184b4498e86ad1455
+	commit = 5d460e206ed86118a0afe17442719c0b4994e16d
+	parent = f47e0cfe0fbaf2762dbd3d4ca7e76673e34e4daf
 	cmdver = 0.3.1

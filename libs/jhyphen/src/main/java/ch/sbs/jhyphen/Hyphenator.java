@@ -46,7 +46,29 @@ public class Hyphenator {
 	 * The encoding of the hyphenation dictionary, e.g. ISO-8859-1 for German
 	 */
 	private final Charset charset;
-	
+
+	/**
+	 * Memory is allocated at the object level to avoid memory issues
+	 * related to garbarge collection.
+	 */
+	private ThreadLocal<PointerByReference> repPointer = new ThreadLocal<PointerByReference>() {
+		@Override
+		protected PointerByReference initialValue() {
+			return new PointerByReference(Pointer.NULL);
+		}
+	};
+	private ThreadLocal<PointerByReference> posPointer = new ThreadLocal<PointerByReference>() {
+		@Override
+		protected PointerByReference initialValue() {
+			return new PointerByReference(Pointer.NULL);
+		}
+	};
+	private ThreadLocal<PointerByReference> cutPointer = new ThreadLocal<PointerByReference>() {
+		@Override
+		protected PointerByReference initialValue() {
+			return new PointerByReference(Pointer.NULL);
+		}
+	};
 	/**
 	 * Default constructor
 	 * @param dictionaryFile The path to the hyphenation dictionary file,
@@ -128,12 +150,14 @@ public class Hyphenator {
 			int wordSize = wordBytes.length;
 			if (wordSize > wordHyphens.capacity())
 				wordHyphens = ByteBuffer.allocate(wordSize * 2);
-			PointerByReference repPointer = new PointerByReference(Pointer.NULL);
-			PointerByReference posPointer = new PointerByReference(Pointer.NULL);
-			PointerByReference cutPointer = new PointerByReference(Pointer.NULL);
+			repPointer.get().setValue(Pointer.NULL);
+			posPointer.get().setValue(Pointer.NULL);
+			cutPointer.get().setValue(Pointer.NULL);;
 			Hyphen.getLibrary().hnj_hyphen_hyphenate2(dictionary, wordBytes, wordSize, wordHyphens, null,
-			                                          repPointer, posPointer, cutPointer);
-			if (repPointer.getValue() != Pointer.NULL)
+			                                          repPointer.get(), posPointer.get(), cutPointer.get());
+			if (repPointer.get().getValue() != Pointer.NULL
+			    || posPointer.get().getValue() != Pointer.NULL
+			    || cutPointer.get().getValue() != Pointer.NULL)
 				throw new StandardHyphenationException("Text contains non-standard hyphenation points.");
 				
 			// TODO: assert that last element of wordHyphens is not a hyphen
@@ -207,25 +231,25 @@ public class Hyphenator {
 				int wordSize = wordBytes.length;
 				if (wordSize > wordHyphens.capacity())
 					wordHyphens = ByteBuffer.allocate(wordSize * 2);
-				PointerByReference repPointer = new PointerByReference(Pointer.NULL);
-				PointerByReference posPointer = new PointerByReference(Pointer.NULL);
-				PointerByReference cutPointer = new PointerByReference(Pointer.NULL);
+				repPointer.get().setValue(Pointer.NULL);
+				posPointer.get().setValue(Pointer.NULL);
+				cutPointer.get().setValue(Pointer.NULL);
 				Hyphen.getLibrary().hnj_hyphen_hyphenate2(dictionary, wordBytes, wordSize, wordHyphens, null,
-				                                          repPointer, posPointer, cutPointer);
+				                                          repPointer.get(), posPointer.get(), cutPointer.get());
 			
 				// TODO: assert that last element of wordHyphens is not a hyphen
 				String hyphenString = new String(wordHyphens.array(), 0, word.length());
 				String[] rep;
 				int[] pos;
 				int[] cut;
-				if (repPointer.getValue() != Pointer.NULL
-				    && posPointer.getValue() != Pointer.NULL
-				    && cutPointer.getValue() != Pointer.NULL) {
+				if (repPointer.get().getValue() != Pointer.NULL
+				    && posPointer.get().getValue() != Pointer.NULL
+				    && cutPointer.get().getValue() != Pointer.NULL) {
 				
 					// will this also free the memory later or do I need to do this explicitly?
-					rep = repPointer.getValue().getStringArray(0L, wordSize, charset.name());
-					pos = posPointer.getValue().getIntArray(0, wordSize);
-					cut = cutPointer.getValue().getIntArray(0, wordSize); }
+					rep = repPointer.get().getValue().getStringArray(0L, wordSize, charset.name());
+					pos = posPointer.get().getValue().getIntArray(0, wordSize);
+					cut = cutPointer.get().getValue().getIntArray(0, wordSize); }
 				else {
 					rep = new String[wordSize];
 					pos = new int[wordSize];
