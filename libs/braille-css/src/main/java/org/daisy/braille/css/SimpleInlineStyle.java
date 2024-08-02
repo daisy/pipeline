@@ -158,7 +158,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	}
 	
 	@Override
-	public boolean equals(Object other) {
+	public final boolean equals(Object other) {
 		if (other instanceof SimpleInlineStyle) {
 			SimpleInlineStyle that = (SimpleInlineStyle)other;
 			Set<String> keys = map.keySet();
