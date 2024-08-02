@@ -164,6 +164,8 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			Set<String> keys = map.keySet();
 			if (!keys.equals(that.map.keySet()))
 				return false;
+			if (!isEmpty() && css != that.css)
+				return false;
 			for (String key : keys) {
 				Term<?> value = getValue(key);
 				if ((value == null && that.getValue(key) != null)
