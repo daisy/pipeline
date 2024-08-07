@@ -19,10 +19,10 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	private final String propertyName;
 	protected Quadruple propertyValue; // not final for clone()
 	final SupportedBrailleCSS css;
-	private final CSSProperty property;
+	private CSSProperty property; // not final for clone()
 	private Term<?> value; // not final for clone()
-	private final Term<?> declaration;
-	private final Declaration sourceDeclaration;
+	private Term<?> declaration; // not final for clone()
+	private Declaration sourceDeclaration; // not final for clone()
 	
 	public PropertyValue(String propertyName,
 	                     final CSSProperty property,
@@ -45,22 +45,27 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 			throw new IllegalArgumentException();
 		this.propertyName = propertyName;
 		this.propertyValue = propertyValue;
-		this.property = propertyValue.getProperty(true);
-		this.value = propertyValue.getValue(true);
-		this.sourceDeclaration = propertyValue.getSourceDeclaration(true);
-		if (this.value != null)
-			this.declaration = this.value;
-		else if (sourceDeclaration != null && this.sourceDeclaration.getProperty().equals(propertyName))
-			this.declaration = this.sourceDeclaration.get(0); // assuming sourceDeclaration is a single TermIdent
+		this.css = css;
+		init();
+	}
+
+	// called from constructor and from clone()
+	private void init() {
+		property = propertyValue.getProperty(true);
+		value = propertyValue.getValue(true);
+		sourceDeclaration = propertyValue.getSourceDeclaration(true);
+		if (value != null)
+			declaration = value;
+		else if (sourceDeclaration != null && sourceDeclaration.getProperty().equals(propertyName))
+			declaration = sourceDeclaration.get(0); // assuming sourceDeclaration is a single TermIdent
 		else
 			// repeater and/or variator was applied
-			this.declaration = new TermIdentImpl() {{
+			declaration = new TermIdentImpl() {{
 				value = property.toString();
 				operator = null; }
 					@Override public TermIdent setValue(String value) { throw new UnsupportedOperationException("Unmodifiable"); }
 					@Override public TermIdent setOperator(Operator operator) { throw new UnsupportedOperationException("Unmodifiable"); }
 				};
-		this.css = css;
 	}
 	
 	/**
@@ -210,8 +215,7 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 			catch (CloneNotSupportedException e) {
 				throw new InternalError("coding error"); }}
 		clone.propertyValue = (Quadruple)propertyValue.clone();
-		if (value != null)
-			clone.value = (Term<?>)value.clone();
+		clone.init();
 		return clone;
 	}
 	
