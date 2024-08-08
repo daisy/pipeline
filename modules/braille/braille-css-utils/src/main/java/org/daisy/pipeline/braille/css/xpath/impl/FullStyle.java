@@ -161,6 +161,28 @@ public class FullStyle extends Style {
 	}
 
 	@Override
+	protected void toAttributes(Style parent, XMLStreamWriter writer) throws XMLStreamException {
+		BrailleCssStyle style = this.style;
+		BrailleCssStyle relativeTo; {
+			if (parent != null) {
+				if (!(parent instanceof FullStyle))
+					throw new IllegalArgumentException("Unexpected type for second argument: " + parent);
+				relativeTo = ((FullStyle)parent).style;
+			} else
+				relativeTo = null;
+		}
+		if (style == null && relativeTo == null)
+			return;
+		else if (style == null)
+			// we may need to add declarations to cancel parent declarations
+			style = BrailleCssStyle.EMPTY;
+		else if (relativeTo == null && parent != null)
+			// we may want to remove unneeded declarations
+			relativeTo = BrailleCssStyle.EMPTY;
+		BrailleCssSerializer.toAttributes(style, relativeTo, writer);
+	}
+
+	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		if (style != null)
 			// <css:rule>
