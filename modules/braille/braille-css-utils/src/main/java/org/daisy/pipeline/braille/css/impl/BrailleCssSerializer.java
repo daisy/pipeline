@@ -40,6 +40,7 @@ import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser.ParsedDeclaration;
+import org.daisy.pipeline.braille.css.impl.BrailleCssParser.ParsedDeclarations;
 import org.daisy.pipeline.braille.css.impl.ContentList.AttrFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.ContentFunction;
 import org.daisy.pipeline.braille.css.impl.ContentList.CounterFunction;
@@ -135,7 +136,70 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String toString(BrailleCssStyle style) {
-		return style.toString();
+		if (style.serialized == null) {
+			style.serialized = toString(style, (String)null);
+			// cache
+			if (style.parser != null)
+				style.parser.cache.put(style.context, style.serialized, style);
+		} else {
+			// access cache to keep entry longer in it
+			if (style.parser != null)
+				style.parser.cache.get(style.context, style.serialized);
+		}
+		return style.serialized;
+	}
+
+	/**
+	 * @param relativeTo If not {@code null}, include only those declarations that are needed
+	 *                   to reconstruct {@code style} with {@code relativeTo} as the parent
+	 *                   style. Relativizes even if the parent style is empty.
+	 */
+	public static String toString(BrailleCssStyle style, BrailleCssStyle relativeTo) {
+		if (relativeTo == null)
+			return toString(style);
+		String s = toString(style.relativize(relativeTo));
+		// cache
+		if (style.parser != null)
+			style.parser.cache.put(style.context,
+			                       s,
+			                       relativeTo.declarations != null
+			                           ? (ParsedDeclarations)relativeTo.declarations
+			                           : ParsedDeclarations.EMPTY,
+			                       true,
+			                       style);
+		return s;
+	}
+
+	private static String toString(BrailleCssStyle style, String base) {
+		StringBuilder b = new StringBuilder();
+		StringBuilder rel = new StringBuilder();
+		if (style.declarations != null)
+			b.append(serializeDeclarationList(style.declarations));
+		if (style.nestedStyles != null)
+			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
+				if (base != null && e.getKey().startsWith("&")) {
+					if (rel.length() > 0) rel.append(" ");
+					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
+				} else {
+					if (b.length() > 0) {
+						if (b.charAt(b.length() - 1) != '}') b.append(";");
+						b.append(" ");
+					}
+					b.append(toString(e.getValue(), e.getKey()));
+				}
+			}
+		if (base != null && b.length() > 0) {
+			b.insert(0, base + " { ");
+			b.append(" }");
+		}
+		if (rel.length() > 0) {
+			if (b.length() > 0) {
+				if (b.charAt(b.length() - 1) != '}') b.append(";");
+				b.append(" ");
+			}
+			b.append(rel);
+		}
+		return b.toString();
 	}
 
 	public static String toString(NodeData style) {
