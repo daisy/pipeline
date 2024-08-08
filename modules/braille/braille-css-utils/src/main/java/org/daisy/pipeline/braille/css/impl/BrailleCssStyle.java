@@ -68,9 +68,10 @@ public final class BrailleCssStyle implements Cloneable {
 	// note that even though the declarations are assumed to not change, we don't assume they are unmodifiable
 	Iterable<? extends Declaration> declarations;
 	SortedMap<String,BrailleCssStyle> nestedStyles; // sorted by key
+	// used in BrailleCssSerializer
+	BrailleCssParser parser;
+	Context context;
 
-	private BrailleCssParser parser;
-	private Context context;
 	public final Object underlyingObject; // - CounterStyle
 	                                      // - null
 
@@ -467,45 +468,19 @@ public final class BrailleCssStyle implements Cloneable {
 		}
 	}
 
-	private String serialized = null;
+	// for BrailleCssSerializer
+	String serialized = null;
 
 	@Override
 	public String toString() {
-		return toString(null);
+		return BrailleCssSerializer.toString(this);
 	}
 
-	/**
-	 * @param relativeTo If not <code>null</code>, include only those declarations that are needed
-	 *                   to reconstruct the style with <code>relativeTo</code> as the parent
-	 *                   style. Relativizes even if the parent style is empty.
-	 */
-	public String toString(BrailleCssStyle relativeTo) {
-		if (relativeTo != null) {
-			if (relativeTo.declarations != null && !(relativeTo.declarations instanceof ParsedDeclarations))
-				throw new IllegalArgumentException();
-			String s = relativize((ParsedDeclarations)relativeTo.declarations).build().toString();
-			// cache
-			if (parser != null)
-				parser.cache.put(context,
-				                 s,
-				                 relativeTo.declarations != null
-				                     ? (ParsedDeclarations)relativeTo.declarations
-				                     : ParsedDeclarations.EMPTY,
-				                 true,
-				                 this);
-			return s;
-		}
-		if (serialized == null) {
-			serialized = toString(this, null);
-			// cache
-			if (parser != null)
-				parser.cache.put(context, serialized, this);
-		} else {
-			// access cache to keep entry longer in it
-			if (parser != null)
-				parser.cache.get(context, serialized);
-		}
-		return serialized;
+	// used in BrailleCssSerializer
+	BrailleCssStyle relativize(BrailleCssStyle base) {
+		if (base.declarations != null && !(base.declarations instanceof ParsedDeclarations))
+			throw new IllegalArgumentException();
+		return relativize((ParsedDeclarations)base.declarations).build();
 	}
 
 	private Builder relativize(ParsedDeclarations base) {
@@ -558,38 +533,6 @@ public final class BrailleCssStyle implements Cloneable {
 			}
 		}
 		return relative;
-	}
-
-	private static String toString(BrailleCssStyle style, String base) {
-		StringBuilder b = new StringBuilder();
-		StringBuilder rel = new StringBuilder();
-		if (style.declarations != null)
-			b.append(BrailleCssSerializer.serializeDeclarationList(style.declarations));
-		if (style.nestedStyles != null)
-			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
-				if (base != null && e.getKey().startsWith("&")) {
-					if (rel.length() > 0) rel.append(" ");
-					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
-				} else {
-					if (b.length() > 0) {
-						if (b.charAt(b.length() - 1) != '}') b.append(";");
-						b.append(" ");
-					}
-					b.append(toString(e.getValue(), e.getKey()));
-				}
-			}
-		if (base != null && b.length() > 0) {
-			b.insert(0, base + " { ");
-			b.append(" }");
-		}
-		if (rel.length() > 0) {
-			if (b.length() > 0) {
-				if (b.charAt(b.length() - 1) != '}') b.append(";");
-				b.append(" ");
-			}
-			b.append(rel);
-		}
-		return b.toString();
 	}
 
 	@Override

@@ -157,7 +157,7 @@ public class FullStyle extends Style {
 		else if (relativeTo == null && parent != null)
 			// we may want to remove unneeded declarations
 			relativeTo = BrailleCssStyle.EMPTY;
-		return style.toString(relativeTo);
+		return BrailleCssSerializer.toString(style, relativeTo);
 	}
 
 	@Override

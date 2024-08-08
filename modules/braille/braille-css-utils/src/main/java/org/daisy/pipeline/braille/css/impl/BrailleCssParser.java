@@ -452,6 +452,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 		}
 	}
 
+	// used in BrailleCssSerializer
 	final Cache cache = new Cache();
 
 	class Cache {
