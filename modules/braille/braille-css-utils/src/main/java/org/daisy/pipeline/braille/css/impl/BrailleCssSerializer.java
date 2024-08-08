@@ -351,6 +351,39 @@ public final class BrailleCssSerializer {
 	}
 
 	/* =================================================== */
+	/* toAttributes                                        */
+	/* =================================================== */
+
+	public static void toAttributes(BrailleCssStyle style, XMLStreamWriter writer) throws XMLStreamException {
+		if (style.nestedStyles != null)
+			throw new UnsupportedOperationException();
+		if (style.declarations != null)
+			for (Declaration d : style.declarations)
+				toAttribute(d, writer);
+	}
+
+	/**
+	 * @param relativeTo If not {@code null}, include only those declarations that are needed
+	 *                   to reconstruct {@code style} with {@code relativeTo} as the parent
+	 *                   style. Relativizes even if the parent style is empty.
+	 */
+	public static void toAttributes(BrailleCssStyle style, BrailleCssStyle relativeTo, XMLStreamWriter writer)
+			throws XMLStreamException {
+		if (relativeTo == null)
+			toAttributes(style, writer);
+		else
+			toAttributes(style.relativize(relativeTo), writer);
+	}
+
+	private static void toAttribute(Declaration declaration, XMLStreamWriter writer) throws XMLStreamException {
+		writeAttribute(writer,
+		               new QName(XMLNS_CSS, declaration.getProperty().replaceAll("^-", "_"), "css"),
+		               declaration instanceof PropertyValue
+		                   ? serializePropertyValue((PropertyValue)declaration)
+		                   : serializeTermList(declaration));
+	}
+
+	/* =================================================== */
 	/* toXml                                               */
 	/* =================================================== */
 

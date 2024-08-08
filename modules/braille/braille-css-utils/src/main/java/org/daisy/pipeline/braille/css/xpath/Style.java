@@ -57,6 +57,26 @@ public abstract class Style {
 		throw new UnsupportedOperationException();
 	}
 
+	public static void toAttributes(Optional<Style> style, XMLStreamWriter writer) throws XMLStreamException {
+		if (style.isPresent())
+			style.get().toAttributes(writer);
+	}
+
+	protected void toAttributes(XMLStreamWriter writer) throws XMLStreamException {
+		toAttributes((Style)null, writer);
+	}
+
+	public static void toAttributes(Optional<Style> style, Optional<Style> relativeTo, XMLStreamWriter writer) throws XMLStreamException {
+		if (style.isPresent())
+			style.get().toAttributes(relativeTo.orElse(Stylesheet.EMPTY), writer);
+		else if (relativeTo.isPresent())
+			Stylesheet.EMPTY.toAttributes(relativeTo.get(), writer);
+	}
+
+	protected void toAttributes(Style relativeTo, XMLStreamWriter writer) throws XMLStreamException {
+		throw new UnsupportedOperationException();
+	}
+
 	/**
 	 * Get property names of declarations and selectors of rules.
 	 */
