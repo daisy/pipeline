@@ -20,11 +20,9 @@ import cz.vutbr.web.css.CSSProperty.Border;
 import cz.vutbr.web.css.CSSProperty.CounterIncrement;
 import cz.vutbr.web.css.CSSProperty.CounterReset;
 import cz.vutbr.web.css.CSSProperty.CounterSet;
-import cz.vutbr.web.css.CSSProperty.Orphans;
 import cz.vutbr.web.css.CSSProperty.PageBreak;
 import cz.vutbr.web.css.CSSProperty.PageBreakInside;
 import cz.vutbr.web.css.CSSProperty.TextAlign;
-import cz.vutbr.web.css.CSSProperty.Widows;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
@@ -60,6 +58,7 @@ import org.daisy.braille.css.BrailleCSSProperty.Margin;
 import org.daisy.braille.css.BrailleCSSProperty.MaxHeight;
 import org.daisy.braille.css.BrailleCSSProperty.MaxLength;
 import org.daisy.braille.css.BrailleCSSProperty.MinLength;
+import org.daisy.braille.css.BrailleCSSProperty.Orphans;
 import org.daisy.braille.css.BrailleCSSProperty.Padding;
 import org.daisy.braille.css.BrailleCSSProperty.Page;
 import org.daisy.braille.css.BrailleCSSProperty.RenderTableBy;
@@ -71,6 +70,7 @@ import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
 import org.daisy.braille.css.BrailleCSSProperty.VolumeBreak;
 import org.daisy.braille.css.BrailleCSSProperty.VolumeBreakInside;
 import org.daisy.braille.css.BrailleCSSProperty.WhiteSpace;
+import org.daisy.braille.css.BrailleCSSProperty.Widows;
 import org.daisy.braille.css.BrailleCSSProperty.WordSpacing;
 
 import org.slf4j.Logger;
@@ -637,6 +637,13 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	}
 
 	@SuppressWarnings("unused")
+	private boolean processOrphans(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(Orphans.class, Orphans.integer, true,
+				d, properties, values);
+	}
+
+	@SuppressWarnings("unused")
 	private boolean processPaddingBottom(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		return genericOneIdentOrInteger(Padding.class, Padding.integer, true,
@@ -846,6 +853,13 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	private boolean processWhiteSpace(Declaration d,
 			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
 		return genericOneIdent(WhiteSpace.class, d, properties);
+	}
+
+	@SuppressWarnings("unused")
+	private boolean processWidows(Declaration d,
+			Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		return genericOneIdentOrInteger(Widows.class, Widows.integer, true, d,
+				properties, values);
 	}
 
 	@SuppressWarnings("unused")
