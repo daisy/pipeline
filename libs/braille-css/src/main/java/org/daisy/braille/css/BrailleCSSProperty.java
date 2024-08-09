@@ -502,6 +502,33 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 
+	public enum Orphans implements BrailleCSSProperty {
+		integer(""), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private Orphans(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+
 	public enum Padding implements BrailleCSSProperty {
 		integer(""), component_values(""), INHERIT("inherit"), INITIAL("initial");
 
@@ -804,7 +831,34 @@ public interface BrailleCSSProperty extends CSSProperty {
 			return text;
 		}
 	}
-	
+
+	public enum Widows implements BrailleCSSProperty {
+		integer(""), INHERIT("inherit"), INITIAL("initial");
+
+		private String text;
+
+		private Widows(String text) {
+			this.text = text;
+		}
+
+		public boolean inherited() {
+			return false;
+		}
+
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+
 	public enum WordSpacing implements BrailleCSSProperty {
 		length(""), INHERIT("inherit"), INITIAL("initial");
 		
