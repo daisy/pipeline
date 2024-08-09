@@ -104,6 +104,12 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 		this.allowUnknownVendorExtensions = allowUnknownVendorExtensions;
 	}
 
+	protected SupportedBrailleCSS(SupportedCSS css) {
+		super(css);
+		this.extensions = null;
+		this.allowUnknownVendorExtensions = false;
+	}
+
 	private final Collection<BrailleCSSExtension> extensions;
 	private final boolean allowUnknownVendorExtensions;
 
@@ -112,7 +118,7 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 	///////////////////////////////////////////////////////////////
 
 	@Override
-	protected Map<String, Method> parsingMethods() {
+	protected final Map<String, Method> parsingMethods() {
 		return null;
 	}
 
@@ -148,6 +154,8 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 
 	@Override
 	public boolean parseDeclaration(Declaration d, Map<String, CSSProperty> properties, Map<String, Term<?>> values) {
+		if (methods == null || extensions == null)
+			throw new IllegalStateException("parseDeclaration() method must be overridden");
 		String property = d.getProperty().toLowerCase();
 		if (property.startsWith("-")) {
 			for (BrailleCSSExtension e : extensions)
