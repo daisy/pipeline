@@ -932,6 +932,32 @@ if (window.addEventListener) {
  * ======================================================== */</span></span>
 
 <span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var boolean $force-braille-page-break
+ *
+ * @brief Force braille page break
+ *
+ * Force braille page breaks at print page breaks.
+ *
+ * The following CSS rule is included by default (where `$force-braille-page-break` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * @if $force-braille-page-break {
+ *   pagenum {
+ *     page-break-before: always;
+ *   }
+ * }
+ * ~~~
+ */</span></span>
+<span class="variable">$force-braille-page-break</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
+        <span class="key">pagenum</span> {
+                <span class="key">page-break-before</span>: <span class="value">always</span>;
+        }
+}
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
  * @var boolean $capital-letters
  *
  * @brief Indicate capital letters

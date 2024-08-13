@@ -927,8 +927,101 @@ if (window.addEventListener) {
 
 <div class="language-sass highlighter-coderay">
 <div class="CodeRay">
-  <div class="code"><pre><span class="variable">$notes-placement</span>: <span class="value">end-of-volume</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$chapter-selector</span>: <span class="string"><span class="delimiter">"</span><span class="content">section</span><span class="delimiter">"</span></span> <span class="error">!</span><span class="value">default</span>;
+  <div class="code"><pre><span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var $notes-placement
+ *
+ * @brief Notes placement
+ *
+ * Placement of notes
+ *
+ * Notes, i.e. elements that are referenced by an element with `epub:type` "noteref", can be rendered
+ * either at bottom of the page on which they occur (on which they are referenced), at the end of the
+ * block in which they occur, at the end of the volume in which they occur, or at the end of the
+ * book. Elements with `epub:type` "note", "footnote", "endnote" or "rearnote" that are not referenced
+ * by a noteref are not rendered.
+ *
+ * Note references can be styled using a `a[epub|type~='noteref']` rule. Notes that are placed at the
+ * end of the block can be styled with a `[epub|type~='notes'], [epub|type~='footnotes'],
+ * [epub|type~='endnotes'], [epub|type~='rearnotes']` rule. Notes that are placed at the bottom of the
+ * page or at the end of a chapter, volume or the end of the book can be styled with a
+ * `a[epub|type~='noteref']::alternate` rule. A title can be inserted at the beginning of an endnotes
+ * section using a `.endnotes-section::-obfl-on-collection-start` rule. Example:
+ *
+ * ~~~css
+ * .endnotes-section::-obfl-on-collection-start {
+ *    content: "Notes in this volume";
+ *    text-align: center;
+ *    margin-bottom: 1;
+ * }
+ * ~~~
+ *
+ * &lt;px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc"&gt;
+ *     &lt;choice&gt;
+ *         &lt;value&gt;bottom-of-page&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the bottom of the page
+ * 
+ * Notes are rendered in the [`@footnotes`](http://braillespecs.github.io/braille-css/#the-footnotes-area)
+ * area of the page on which they occur.
+ * 
+ * There is a built-in fallback mechanism: if a note does not fit on a page, e.g. because it is too
+ * big, or there are too many other notes on that page, all notes in the whole book will be rendered at
+ * the end of the volume in which they occur.
+ * 
+ * The footnotes area can be styled using a `@footnotes` rule. Example:
+ * 
+ * ~~~css
+ * @page {
+ *    @footnotes {
+ *       border-top: ⠤;
+ *       max-height: 20;
+ *    }
+ * }
+ * ~~~
+ * &lt;/documentation&gt;
+ *         &lt;value&gt;end-of-block&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the block
+ * 
+ * Notes are rendered after the block (e.g. paragraph) in which they occur.
+ * &lt;/documentation&gt;
+ *         &lt;value&gt;end-of-chapter&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the chapter
+ * 
+ * Notes are rendered at the end of the chapter (`section`) in which they occur.
+ * &lt;/documentation&gt;
+ *         &lt;value&gt;end-of-volume&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the volume
+ * 
+ * Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+ * the volume in which they occur.
+ * &lt;/documentation&gt;
+ *         &lt;value&gt;end-of-book&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;At the end of the book
+ * 
+ * Notes are rendered in the [`@end`](http://braillespecs.github.io/braille-css/#the-footnotes-area) area of
+ * the last volume.
+ * 
+ * Notes can be grouped by volume using a
+ * [`.endnotes-section::-obfl-on-volume-start`](http://braillespecs.github.io/braille-css/obfl#extending-the-display-property-with--obfl-list-of-references)
+ * rule. Example:
+ * 
+ * ~~~css
+ * .endnotes-section::-obfl-on-volume-start {
+ *    content: "Notes in volume " -obfl-evaluate("$started-volume-number");
+ *    margin: 1 0;
+ * }
+ * ~~~
+ * &lt;/documentation&gt;
+ *         &lt;value&gt;custom&lt;/value&gt;
+ *         &lt;documentation xml:lang="en" xml:space="preserve"&gt;Custom handling
+ * 
+ * Special handling of notes is disabled. Notes are rendered as specified in custom style sheets.
+ * &lt;/documentation&gt;
+ *     &lt;/choice&gt;
+ * &lt;/px:type&gt;
+ */</span></span>
+<span class="variable">$notes-placement</span>: <span class="value">end-of-book</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="variable">$chapter-selector</span>: <span class="string"><span class="delimiter">"</span><span class="content">section</span><span class="delimiter">"</span></span>;
 
 <span class="directive">@if</span> <span class="variable">$notes-placement</span> != <span class="value">custom</span> {
 

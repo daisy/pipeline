@@ -934,6 +934,38 @@ if (window.addEventListener) {
 <span class="directive">@namespace</span> <span class="value">epub</span> <span class="function"><span class="delimiter">url(</span><span class="content">http://www.idpf.org/2007/ops</span><span class="delimiter">)</span></span>;
 
 <span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var boolean $force-braille-page-break
+ *
+ * @brief Force braille page break
+ *
+ * Force braille page breaks at print page breaks.
+ *
+ * The following CSS rule is included by default (where `$force-braille-page-break` is the value of
+ * this option):
+ *
+ * ~~~sass
+ * @if $force-braille-page-break {
+ *   .page-front,
+ *   .page-normal,
+ *   .page-special,
+ *   [epub|type='pagebreak'] {
+ *     page-break-before: always;
+ *   }
+ * }
+ * ~~~
+ */</span></span>
+<span class="variable">$force-braille-page-break</span>: <span class="value">false</span> <span class="error">!</span><span class="value">default</span>;
+
+<span class="directive">@if</span> <span class="variable">$force-braille-page-break</span> {
+        .<span class="key">page-front</span>,
+        .<span class="key">page-normal</span>,
+        .<span class="key">page-special</span>,
+        <span class="error">[</span><span class="key">epub</span><span class="error">|</span><span class="key">type</span>=<span class="string"><span class="delimiter">'</span><span class="content">pagebreak</span><span class="delimiter">'</span></span><span class="error">]</span> {
+                <span class="key">page-break-before</span>: <span class="value">always</span>;
+        }
+}
+
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
  * @var boolean $capital-letters
  *
  * @brief Indicate capital letters

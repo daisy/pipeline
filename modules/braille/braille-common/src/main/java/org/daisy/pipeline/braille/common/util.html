@@ -407,316 +407,319 @@
 <a class="jxr_linenumber" name="L398" href="#L398">398</a> 		}
 <a class="jxr_linenumber" name="L399" href="#L399">399</a> 		
 <a class="jxr_linenumber" name="L400" href="#L400">400</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> is64Bit() {
-<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">return</strong> getArch().equals(<span class="jxr_string">"amd64"</span>) || getArch().equals(<span class="jxr_string">"x86_64"</span>);
-<a class="jxr_linenumber" name="L402" href="#L402">402</a> 		}
-<a class="jxr_linenumber" name="L403" href="#L403">403</a> 	}
-<a class="jxr_linenumber" name="L404" href="#L404">404</a> 	
-<a class="jxr_linenumber" name="L405" href="#L405">405</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Strings</a> {
-<a class="jxr_linenumber" name="L406" href="#L406">406</a> 		
-<a class="jxr_linenumber" name="L407" href="#L407">407</a> 		@SuppressWarnings(
-<a class="jxr_linenumber" name="L408" href="#L408">408</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// safe cast to Iterator&lt;Object&gt;</em>
-<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		)
-<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(Iterator&lt;? <strong class="jxr_keyword">extends</strong> T&gt; strings, <strong class="jxr_keyword">final</strong> Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
-<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<strong class="jxr_keyword">if</strong> (!strings.hasNext()) <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L412" href="#L412">412</a> 			String seed = toStringFunction.apply(strings.next());
-<a class="jxr_linenumber" name="L413" href="#L413">413</a> 			<strong class="jxr_keyword">return</strong> Iterators.&lt;String,T&gt;fold(
-<a class="jxr_linenumber" name="L414" href="#L414">414</a> 				(Iterator&lt;T&gt;)strings,
-<a class="jxr_linenumber" name="L415" href="#L415">415</a> 				<strong class="jxr_keyword">new</strong> Function2&lt;String,T,String&gt;() {
-<a class="jxr_linenumber" name="L416" href="#L416">416</a> 					<strong class="jxr_keyword">public</strong> String apply(String s1, T s2) {
-<a class="jxr_linenumber" name="L417" href="#L417">417</a> 						<strong class="jxr_keyword">return</strong> s1 + separator.toString() + toStringFunction.apply(s2); }},
-<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				seed);
-<a class="jxr_linenumber" name="L419" href="#L419">419</a> 		}
-<a class="jxr_linenumber" name="L420" href="#L420">420</a> 		
-<a class="jxr_linenumber" name="L421" href="#L421">421</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterator&lt;? <strong class="jxr_keyword">extends</strong> Object&gt; strings, <strong class="jxr_keyword">final</strong> Object separator) {
-<a class="jxr_linenumber" name="L422" href="#L422">422</a> 			<strong class="jxr_keyword">return</strong> join(strings, separator, toStringFunction());
-<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		}
-<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		
-<a class="jxr_linenumber" name="L425" href="#L425">425</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(Iterable&lt;? <strong class="jxr_keyword">extends</strong> T&gt; strings, <strong class="jxr_keyword">final</strong> Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
-<a class="jxr_linenumber" name="L426" href="#L426">426</a> 			<strong class="jxr_keyword">return</strong> join(strings.iterator(), separator, toStringFunction);
-<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		}
-<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		
-<a class="jxr_linenumber" name="L429" href="#L429">429</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterable&lt;?&gt; strings, <strong class="jxr_keyword">final</strong> Object separator) {
-<a class="jxr_linenumber" name="L430" href="#L430">430</a> 			<strong class="jxr_keyword">return</strong> join(strings.iterator(), separator);
-<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		}
-<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		
-<a class="jxr_linenumber" name="L433" href="#L433">433</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterable&lt;?&gt; strings) {
-<a class="jxr_linenumber" name="L434" href="#L434">434</a> 			<strong class="jxr_keyword">return</strong> join(strings, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		}
-<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		
-<a class="jxr_linenumber" name="L437" href="#L437">437</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(T[] strings, Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
-<a class="jxr_linenumber" name="L438" href="#L438">438</a> 			<strong class="jxr_keyword">return</strong> join(Arrays.asList(strings), separator, toStringFunction);
-<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		}
-<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		
-<a class="jxr_linenumber" name="L441" href="#L441">441</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Object[] strings, Object separator) {
-<a class="jxr_linenumber" name="L442" href="#L442">442</a> 			<strong class="jxr_keyword">return</strong> join(Arrays.asList(strings), separator);
-<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		}
-<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		
-<a class="jxr_linenumber" name="L445" href="#L445">445</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Object[] strings) {
-<a class="jxr_linenumber" name="L446" href="#L446">446</a> 			<strong class="jxr_keyword">return</strong> join(strings, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		}
-<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		
-<a class="jxr_linenumber" name="L449" href="#L449">449</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String normalizeSpace(Object object) {
-<a class="jxr_linenumber" name="L450" href="#L450">450</a> 			<strong class="jxr_keyword">return</strong> String.valueOf(object).replaceAll(<span class="jxr_string">"\\s+"</span>, <span class="jxr_string">" "</span>).trim();
-<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		}
-<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		
-<a class="jxr_linenumber" name="L453" href="#L453">453</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tuple2&lt;String,byte[]&gt; extractHyphens(String text, <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
-<a class="jxr_linenumber" name="L454" href="#L454">454</a> 			<strong class="jxr_keyword">return</strong> extractHyphens(<strong class="jxr_keyword">null</strong>, text, codePointBased, characters);
-<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		}
-<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		
-<a class="jxr_linenumber" name="L457" href="#L457">457</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L458" href="#L458">458</a> <em class="jxr_javadoccomment">		 * @param codePointBased Whether byte array index refers to code points or chars.</em>
-<a class="jxr_linenumber" name="L459" href="#L459">459</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tuple2&lt;String,byte[]&gt; extractHyphens(byte[] addTo, String text, <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
-<a class="jxr_linenumber" name="L461" href="#L461">461</a> 			StringBuilder unhyphenatedText = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L462" href="#L462">462</a> 			List&lt;Byte&gt; hyphens = <strong class="jxr_keyword">new</strong> ArrayList&lt;Byte&gt;();
-<a class="jxr_linenumber" name="L463" href="#L463">463</a> 			byte hyphen = 0;
-<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			<strong class="jxr_keyword">int</strong> j = -1;
-<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			<strong class="jxr_keyword">int</strong>[] charArray = codePointBased ? text.codePoints().toArray() : text.chars().toArray();
-<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			next_<strong class="jxr_keyword">char</strong>: <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> c : charArray) {
-<a class="jxr_linenumber" name="L467" href="#L467">467</a> 				j++;
-<a class="jxr_linenumber" name="L468" href="#L468">468</a> 				<strong class="jxr_keyword">if</strong> (addTo != <strong class="jxr_keyword">null</strong> &amp;&amp; j &gt; 0)
-<a class="jxr_linenumber" name="L469" href="#L469">469</a> 					hyphen |= addTo[j - 1];
-<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; characters.length; i++)
-<a class="jxr_linenumber" name="L471" href="#L471">471</a> 					<strong class="jxr_keyword">if</strong> (characters[i] != <strong class="jxr_keyword">null</strong> &amp;&amp; characters[i] == c) {
-<a class="jxr_linenumber" name="L472" href="#L472">472</a> 						hyphen |= (1 &lt;&lt; i);
-<a class="jxr_linenumber" name="L473" href="#L473">473</a> 						<strong class="jxr_keyword">continue</strong> next_<strong class="jxr_keyword">char</strong>; }
-<a class="jxr_linenumber" name="L474" href="#L474">474</a> 				unhyphenatedText.appendCodePoint(c);
-<a class="jxr_linenumber" name="L475" href="#L475">475</a> 				hyphens.add(hyphen);
-<a class="jxr_linenumber" name="L476" href="#L476">476</a> 				hyphen = 0; }
-<a class="jxr_linenumber" name="L477" href="#L477">477</a> 			<strong class="jxr_keyword">if</strong> (unhyphenatedText.length() &gt; 0) {
-<a class="jxr_linenumber" name="L478" href="#L478">478</a> 				hyphens.remove(0);
-<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tuple2&lt;String,byte[]&gt;(unhyphenatedText.toString(), Bytes.toArray(hyphens)); }
-<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tuple2&lt;String,byte[]&gt;(<span class="jxr_string">""</span>, <strong class="jxr_keyword">null</strong>);
-<a class="jxr_linenumber" name="L482" href="#L482">482</a> 		}
-<a class="jxr_linenumber" name="L483" href="#L483">483</a> 		
-<a class="jxr_linenumber" name="L484" href="#L484">484</a> 		<em class="jxr_javadoccomment">/**</em>
-<a class="jxr_linenumber" name="L485" href="#L485">485</a> <em class="jxr_javadoccomment">		 * @param codePointBased Whether byte array index refers to code points or chars.</em>
-<a class="jxr_linenumber" name="L486" href="#L486">486</a> <em class="jxr_javadoccomment">		 */</em>
-<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String insertHyphens(String text, byte hyphens[], <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
-<a class="jxr_linenumber" name="L488" href="#L488">488</a> 			<strong class="jxr_keyword">if</strong> (text.equals(<span class="jxr_string">""</span>)) <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L489" href="#L489">489</a> 			<strong class="jxr_keyword">if</strong> (hyphens == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> text;
-<a class="jxr_linenumber" name="L490" href="#L490">490</a> 			<strong class="jxr_keyword">int</strong> textLength = codePointBased ? text.codePoints().toArray().length : text.length();
-<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">if</strong> (hyphens.length != textLength - 1)
-<a class="jxr_linenumber" name="L492" href="#L492">492</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"hyphens.length must be equal to text.length() - 1"</span>);
-<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			StringBuilder hyphenatedText = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L495" href="#L495">495</a> 			<strong class="jxr_keyword">int</strong> j = 0;
-<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			<strong class="jxr_keyword">for</strong> (Character c : text.toCharArray()) {
-<a class="jxr_linenumber" name="L497" href="#L497">497</a> 				hyphenatedText.append(c);
-<a class="jxr_linenumber" name="L498" href="#L498">498</a> 				<strong class="jxr_keyword">if</strong> (j &lt; hyphens.length &amp;&amp; (!codePointBased || text.codePointAt(i) == c)) {
-<a class="jxr_linenumber" name="L499" href="#L499">499</a> 					<strong class="jxr_keyword">if</strong> (hyphens[j] != 0) {
-<a class="jxr_linenumber" name="L500" href="#L500">500</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 0; k &lt; characters.length; k++) {
-<a class="jxr_linenumber" name="L501" href="#L501">501</a> 							byte b = (byte)(1 &lt;&lt; k);
-<a class="jxr_linenumber" name="L502" href="#L502">502</a> 							Character h = characters[k];
-<a class="jxr_linenumber" name="L503" href="#L503">503</a> 							<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong> &amp;&amp; (hyphens[j] &amp; b) == b)
-<a class="jxr_linenumber" name="L504" href="#L504">504</a> 								hyphenatedText.append(h); }}
-<a class="jxr_linenumber" name="L505" href="#L505">505</a> 					j++; }
-<a class="jxr_linenumber" name="L506" href="#L506">506</a> 				i++; }
-<a class="jxr_linenumber" name="L507" href="#L507">507</a> 			<strong class="jxr_keyword">return</strong> hyphenatedText.toString();
-<a class="jxr_linenumber" name="L508" href="#L508">508</a> 		}
-<a class="jxr_linenumber" name="L509" href="#L509">509</a> 		
-<a class="jxr_linenumber" name="L510" href="#L510">510</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;String&gt; splitInclDelimiter(<strong class="jxr_keyword">final</strong> String text, <strong class="jxr_keyword">final</strong> Pattern delimiterPattern) {
-<a class="jxr_linenumber" name="L511" href="#L511">511</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;String&gt;() {
-<a class="jxr_linenumber" name="L512" href="#L512">512</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Iterator&lt;String&gt; iterator() {
-<a class="jxr_linenumber" name="L513" href="#L513">513</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;String&gt;() {
-<a class="jxr_linenumber" name="L514" href="#L514">514</a> 						Matcher m = delimiterPattern.matcher(text);
-<a class="jxr_linenumber" name="L515" href="#L515">515</a> 						<strong class="jxr_keyword">int</strong> i = 0;
-<a class="jxr_linenumber" name="L516" href="#L516">516</a> 						String nextNext = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L517" href="#L517">517</a> 						<strong class="jxr_keyword">protected</strong> String computeNext() {
-<a class="jxr_linenumber" name="L518" href="#L518">518</a> 							<strong class="jxr_keyword">if</strong> (nextNext != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L519" href="#L519">519</a> 								String next = nextNext;
-<a class="jxr_linenumber" name="L520" href="#L520">520</a> 								nextNext = <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L521" href="#L521">521</a> 								<strong class="jxr_keyword">return</strong> next; }
-<a class="jxr_linenumber" name="L522" href="#L522">522</a> 							<strong class="jxr_keyword">if</strong> (m.find()) {
-<a class="jxr_linenumber" name="L523" href="#L523">523</a> 								String next = text.substring(i, m.start());
-<a class="jxr_linenumber" name="L524" href="#L524">524</a> 								nextNext = m.group();
-<a class="jxr_linenumber" name="L525" href="#L525">525</a> 								i = m.end();
-<a class="jxr_linenumber" name="L526" href="#L526">526</a> 								<strong class="jxr_keyword">return</strong> next; }
-<a class="jxr_linenumber" name="L527" href="#L527">527</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (i &gt;= 0) {
-<a class="jxr_linenumber" name="L528" href="#L528">528</a> 								String next = text.substring(i);
-<a class="jxr_linenumber" name="L529" href="#L529">529</a> 								i = -1;
-<a class="jxr_linenumber" name="L530" href="#L530">530</a> 								<strong class="jxr_keyword">return</strong> next; }
-<a class="jxr_linenumber" name="L531" href="#L531">531</a> 							<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L532" href="#L532">532</a> 								<strong class="jxr_keyword">return</strong> endOfData();
-<a class="jxr_linenumber" name="L533" href="#L533">533</a> 						}
-<a class="jxr_linenumber" name="L534" href="#L534">534</a> 					};
-<a class="jxr_linenumber" name="L535" href="#L535">535</a> 				}
-<a class="jxr_linenumber" name="L536" href="#L536">536</a> 			};
-<a class="jxr_linenumber" name="L537" href="#L537">537</a> 		}
-<a class="jxr_linenumber" name="L538" href="#L538">538</a> 	}
-<a class="jxr_linenumber" name="L539" href="#L539">539</a> 	
-<a class="jxr_linenumber" name="L540" href="#L540">540</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Files</a> {
-<a class="jxr_linenumber" name="L541" href="#L541">541</a> 		
-<a class="jxr_linenumber" name="L542" href="#L542">542</a> 		<em class="jxr_comment">/* If object is a String, it is assumed to represent a URI */</em>
-<a class="jxr_linenumber" name="L543" href="#L543">543</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File asFile(Object o) {
-<a class="jxr_linenumber" name="L544" href="#L544">544</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L545" href="#L545">545</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
-<a class="jxr_linenumber" name="L546" href="#L546">546</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L547" href="#L547">547</a> 				<strong class="jxr_keyword">if</strong> (o instanceof String)
-<a class="jxr_linenumber" name="L548" href="#L548">548</a> 					<strong class="jxr_keyword">return</strong> asFile(URLs.asURI((String)o));
-<a class="jxr_linenumber" name="L549" href="#L549">549</a> 				<strong class="jxr_keyword">if</strong> (o instanceof File)
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 					<strong class="jxr_keyword">return</strong> (File)o;
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> 				<strong class="jxr_keyword">if</strong> (o instanceof URL)
-<a class="jxr_linenumber" name="L552" href="#L552">552</a> 					<strong class="jxr_keyword">return</strong> asFile(URLs.asURI((URL)o));
-<a class="jxr_linenumber" name="L553" href="#L553">553</a> 				<strong class="jxr_keyword">if</strong> (o instanceof URI)
-<a class="jxr_linenumber" name="L554" href="#L554">554</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File((URI)o); }
-<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {}
-<a class="jxr_linenumber" name="L556" href="#L556">556</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Object can not be converted to File: "</span> + o);
-<a class="jxr_linenumber" name="L557" href="#L557">557</a> 		}
-<a class="jxr_linenumber" name="L558" href="#L558">558</a> 		
-<a class="jxr_linenumber" name="L559" href="#L559">559</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isAbsoluteFile(Object o) {
-<a class="jxr_linenumber" name="L560" href="#L560">560</a> 			<strong class="jxr_keyword">if</strong> (o instanceof String)
-<a class="jxr_linenumber" name="L561" href="#L561">561</a> 				<strong class="jxr_keyword">return</strong> ((String)o).startsWith(<span class="jxr_string">"file:"</span>);
-<a class="jxr_linenumber" name="L562" href="#L562">562</a> 			<strong class="jxr_keyword">try</strong> { asFile(o); }
-<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) { <strong class="jxr_keyword">return</strong> false; }
-<a class="jxr_linenumber" name="L564" href="#L564">564</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L565" href="#L565">565</a> 		}
-<a class="jxr_linenumber" name="L566" href="#L566">566</a> 		
-<a class="jxr_linenumber" name="L567" href="#L567">567</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String fileName(File file) {
-<a class="jxr_linenumber" name="L568" href="#L568">568</a> 			<strong class="jxr_keyword">return</strong> file.getName();
-<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		}
-<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		
-<a class="jxr_linenumber" name="L571" href="#L571">571</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String fileName(URL url) {
-<a class="jxr_linenumber" name="L572" href="#L572">572</a> 			String file = url.getFile();
-<a class="jxr_linenumber" name="L573" href="#L573">573</a> 			<strong class="jxr_keyword">return</strong> file.substring(file.lastIndexOf('/')+1);
-<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		}
-<a class="jxr_linenumber" name="L575" href="#L575">575</a> 		
-<a class="jxr_linenumber" name="L576" href="#L576">576</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File normalize(File file) {
-<a class="jxr_linenumber" name="L577" href="#L577">577</a> 			<strong class="jxr_keyword">try</strong> { <strong class="jxr_keyword">return</strong> file.toPath().toRealPath().normalize().toFile(); }
-<a class="jxr_linenumber" name="L578" href="#L578">578</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e); }
-<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		}
-<a class="jxr_linenumber" name="L580" href="#L580">580</a> 		
-<a class="jxr_linenumber" name="L581" href="#L581">581</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> unpack(URL url, File file) {
-<a class="jxr_linenumber" name="L582" href="#L582">582</a> 			<strong class="jxr_keyword">if</strong> (file.exists()) <strong class="jxr_keyword">return</strong> false;
-<a class="jxr_linenumber" name="L583" href="#L583">583</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L584" href="#L584">584</a> 				file.getParentFile().mkdirs();
-<a class="jxr_linenumber" name="L585" href="#L585">585</a> 				file.createNewFile();
-<a class="jxr_linenumber" name="L586" href="#L586">586</a> 				FileOutputStream writer = <strong class="jxr_keyword">new</strong> FileOutputStream(file);
-<a class="jxr_linenumber" name="L587" href="#L587">587</a> 				url.openConnection();
-<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				InputStream reader = url.openStream();
-<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				byte[] buffer = <strong class="jxr_keyword">new</strong> byte[153600];
-<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				<strong class="jxr_keyword">int</strong> bytesRead = 0;
-<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				<strong class="jxr_keyword">while</strong> ((bytesRead = reader.read(buffer)) &gt; 0) {
-<a class="jxr_linenumber" name="L592" href="#L592">592</a> 					writer.write(buffer, 0, bytesRead);
-<a class="jxr_linenumber" name="L593" href="#L593">593</a> 					buffer = <strong class="jxr_keyword">new</strong> byte[153600]; }
-<a class="jxr_linenumber" name="L594" href="#L594">594</a> 				writer.close();
-<a class="jxr_linenumber" name="L595" href="#L595">595</a> 				reader.close();
-<a class="jxr_linenumber" name="L596" href="#L596">596</a> 				logger.debug(<span class="jxr_string">"Unpacking file {} ..."</span>, file.getName());
-<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L598" href="#L598">598</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L599" href="#L599">599</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(
-<a class="jxr_linenumber" name="L600" href="#L600">600</a> 						<span class="jxr_string">"Exception occured during unpacking of file '"</span> + file.getName() + <span class="jxr_string">"'"</span>, e); }
-<a class="jxr_linenumber" name="L601" href="#L601">601</a> 		}
-<a class="jxr_linenumber" name="L602" href="#L602">602</a> 		
-<a class="jxr_linenumber" name="L603" href="#L603">603</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;File&gt; unpack(Iterator&lt;URL&gt; urls, File directory) {
-<a class="jxr_linenumber" name="L604" href="#L604">604</a> 			<strong class="jxr_keyword">if</strong> (!directory.exists()) directory.mkdirs();
-<a class="jxr_linenumber" name="L605" href="#L605">605</a> 			Collection&lt;File&gt; files = <strong class="jxr_keyword">new</strong> ArrayList&lt;File&gt;();
-<a class="jxr_linenumber" name="L606" href="#L606">606</a> 			<strong class="jxr_keyword">while</strong>(urls.hasNext()) {
-<a class="jxr_linenumber" name="L607" href="#L607">607</a> 				URL url = urls.next();
-<a class="jxr_linenumber" name="L608" href="#L608">608</a> 				File file = <strong class="jxr_keyword">new</strong> File(directory.getAbsolutePath(), fileName(url));
-<a class="jxr_linenumber" name="L609" href="#L609">609</a> 				<strong class="jxr_keyword">if</strong> (unpack(url, file)) files.add(file); }
-<a class="jxr_linenumber" name="L610" href="#L610">610</a> 			<strong class="jxr_keyword">return</strong> files;
-<a class="jxr_linenumber" name="L611" href="#L611">611</a> 		}
-<a class="jxr_linenumber" name="L612" href="#L612">612</a> 		
-<a class="jxr_linenumber" name="L613" href="#L613">613</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> chmod775(File file) {
-<a class="jxr_linenumber" name="L614" href="#L614">614</a> 			<strong class="jxr_keyword">if</strong> (OS.isWindows()) <strong class="jxr_keyword">return</strong>;
-<a class="jxr_linenumber" name="L615" href="#L615">615</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L616" href="#L616">616</a> 				Runtime.getRuntime().exec(<strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"chmod"</span>, <span class="jxr_string">"775"</span>, file.getAbsolutePath() }).waitFor();
-<a class="jxr_linenumber" name="L617" href="#L617">617</a> 				logger.debug(<span class="jxr_string">"Chmodding file {} ..."</span>, file.getName());}
-<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {
-<a class="jxr_linenumber" name="L619" href="#L619">619</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(
-<a class="jxr_linenumber" name="L620" href="#L620">620</a> 						<span class="jxr_string">"Exception occured during chmodding of file '"</span> + file.getName() + <span class="jxr_string">"'"</span>, e); }
-<a class="jxr_linenumber" name="L621" href="#L621">621</a> 		}
-<a class="jxr_linenumber" name="L622" href="#L622">622</a> 	}
-<a class="jxr_linenumber" name="L623" href="#L623">623</a> 	
-<a class="jxr_linenumber" name="L624" href="#L624">624</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Locales</a> {
-<a class="jxr_linenumber" name="L625" href="#L625">625</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Locale parseLocale(String locale) {
-<a class="jxr_linenumber" name="L626" href="#L626">626</a> 			<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L627" href="#L627">627</a> 				<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">new</strong> Locale.Builder()).setLanguageTag(locale.replace('_','-')).build(); }
-<a class="jxr_linenumber" name="L628" href="#L628">628</a> 			<strong class="jxr_keyword">catch</strong> (IllformedLocaleException e) {
-<a class="jxr_linenumber" name="L629" href="#L629">629</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Locale '"</span> + locale + <span class="jxr_string">"' could not be parsed"</span>, e); }
-<a class="jxr_linenumber" name="L630" href="#L630">630</a> 		}
-<a class="jxr_linenumber" name="L631" href="#L631">631</a> 	}
-<a class="jxr_linenumber" name="L632" href="#L632">632</a> 	
-<a class="jxr_linenumber" name="L633" href="#L633">633</a> 	<em class="jxr_comment">/*</em>
-<a class="jxr_linenumber" name="L634" href="#L634">634</a> <em class="jxr_comment">	 * Naive implementation of glob syntax. Assumes the pattern is valid.</em>
-<a class="jxr_linenumber" name="L635" href="#L635">635</a> <em class="jxr_comment">	 * @see <a href="http://docs.oracle.com/javase/tutorial/essential/io/fileOps.html" class="external-link" target="_blank">http://docs.oracle.com/javase/tutorial/essential/io/fileOps.html</a>#glob</em>
-<a class="jxr_linenumber" name="L636" href="#L636">636</a> <em class="jxr_comment">	 */</em>
-<a class="jxr_linenumber" name="L637" href="#L637">637</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">GlobPattern</a> {
-<a class="jxr_linenumber" name="L638" href="#L638">638</a> 		
-<a class="jxr_linenumber" name="L639" href="#L639">639</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Pattern compile(String pattern) {
-<a class="jxr_linenumber" name="L640" href="#L640">640</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a>(pattern).build();
-<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		}
-<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		
-<a class="jxr_linenumber" name="L643" href="#L643">643</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a> {
-<a class="jxr_linenumber" name="L644" href="#L644">644</a> 			
-<a class="jxr_linenumber" name="L645" href="#L645">645</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringCharacterIterator glob;
-<a class="jxr_linenumber" name="L646" href="#L646">646</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> inClass;
-<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> inGroup;
-<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			
-<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a>(String globPattern) {
-<a class="jxr_linenumber" name="L650" href="#L650">650</a> 				glob = <strong class="jxr_keyword">new</strong> StringCharacterIterator(globPattern);
-<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			}
-<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			
-<a class="jxr_linenumber" name="L653" href="#L653">653</a> 			<strong class="jxr_keyword">private</strong> Pattern build() {
-<a class="jxr_linenumber" name="L654" href="#L654">654</a> 				StringBuilder regex = <strong class="jxr_keyword">new</strong> StringBuilder();
-<a class="jxr_linenumber" name="L655" href="#L655">655</a> 				regex.append('^');
-<a class="jxr_linenumber" name="L656" href="#L656">656</a> 				inClass = false;
-<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				inGroup = false;
-<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">char</strong> c = glob.first(); c != CharacterIterator.DONE; c = glob.next()) {
-<a class="jxr_linenumber" name="L659" href="#L659">659</a> 					<strong class="jxr_keyword">if</strong> (!inClass) {
-<a class="jxr_linenumber" name="L660" href="#L660">660</a> 						<strong class="jxr_keyword">if</strong> (c == '[') {
-<a class="jxr_linenumber" name="L661" href="#L661">661</a> 							regex.append(<span class="jxr_string">"[[^/]&amp;&amp;["</span>);
-<a class="jxr_linenumber" name="L662" href="#L662">662</a> 							<strong class="jxr_keyword">if</strong> (lookAhead() == '!')
-<a class="jxr_linenumber" name="L663" href="#L663">663</a> 								regex.append(glob.next());
-<a class="jxr_linenumber" name="L664" href="#L664">664</a> 							<strong class="jxr_keyword">if</strong> (lookAhead() == '^')
-<a class="jxr_linenumber" name="L665" href="#L665">665</a> 								regex.append(<span class="jxr_string">"\\"</span> + glob.next());
-<a class="jxr_linenumber" name="L666" href="#L666">666</a> 							inClass = <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L667" href="#L667">667</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '{' &amp;&amp; !inGroup) {
-<a class="jxr_linenumber" name="L668" href="#L668">668</a> 							regex.append(<span class="jxr_string">"(?:(?:"</span>);
-<a class="jxr_linenumber" name="L669" href="#L669">669</a> 							inGroup = <strong class="jxr_keyword">true</strong>; }
-<a class="jxr_linenumber" name="L670" href="#L670">670</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' &amp;&amp; inGroup) {
-<a class="jxr_linenumber" name="L671" href="#L671">671</a> 							regex.append(<span class="jxr_string">"))"</span>);
-<a class="jxr_linenumber" name="L672" href="#L672">672</a> 							inGroup = false; }
-<a class="jxr_linenumber" name="L673" href="#L673">673</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == ',' &amp;&amp; inGroup)
-<a class="jxr_linenumber" name="L674" href="#L674">674</a> 							regex.append(<span class="jxr_string">")|(?:"</span>);
-<a class="jxr_linenumber" name="L675" href="#L675">675</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '*' &amp;&amp; lookAhead() == '*') {
-<a class="jxr_linenumber" name="L676" href="#L676">676</a> 							regex.append(<span class="jxr_string">".*"</span>);
-<a class="jxr_linenumber" name="L677" href="#L677">677</a> 							glob.next(); }
-<a class="jxr_linenumber" name="L678" href="#L678">678</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '*')
-<a class="jxr_linenumber" name="L679" href="#L679">679</a> 							regex.append(<span class="jxr_string">"[^/]*"</span>);
-<a class="jxr_linenumber" name="L680" href="#L680">680</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '?')
-<a class="jxr_linenumber" name="L681" href="#L681">681</a> 							regex.append(<span class="jxr_string">"[^/]"</span>);
-<a class="jxr_linenumber" name="L682" href="#L682">682</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">".^$+]|()"</span>.indexOf(c) &gt; -1)
-<a class="jxr_linenumber" name="L683" href="#L683">683</a> 							regex.append(<span class="jxr_string">"\\"</span> + c);
-<a class="jxr_linenumber" name="L684" href="#L684">684</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L685" href="#L685">685</a> 							regex.append(c); }
-<a class="jxr_linenumber" name="L686" href="#L686">686</a> 					<strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L687" href="#L687">687</a> 						<strong class="jxr_keyword">if</strong> (c == ']') {
-<a class="jxr_linenumber" name="L688" href="#L688">688</a> 							regex.append(<span class="jxr_string">"]]"</span>);
-<a class="jxr_linenumber" name="L689" href="#L689">689</a> 							inClass = false; }
-<a class="jxr_linenumber" name="L690" href="#L690">690</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&amp;' &amp;&amp; lookAhead() == '&amp;')
-<a class="jxr_linenumber" name="L691" href="#L691">691</a> 							regex.append(<span class="jxr_string">"\\"</span> + c + glob.next());
-<a class="jxr_linenumber" name="L692" href="#L692">692</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\\')
-<a class="jxr_linenumber" name="L693" href="#L693">693</a> 							regex.append(<span class="jxr_string">"\\"</span> + c);
-<a class="jxr_linenumber" name="L694" href="#L694">694</a> 						<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L695" href="#L695">695</a> 							regex.append(c); }}
-<a class="jxr_linenumber" name="L696" href="#L696">696</a> 				regex.append('$');
-<a class="jxr_linenumber" name="L697" href="#L697">697</a> 				<strong class="jxr_keyword">return</strong> Pattern.compile(regex.toString());
-<a class="jxr_linenumber" name="L698" href="#L698">698</a> 			}
-<a class="jxr_linenumber" name="L699" href="#L699">699</a> 			
-<a class="jxr_linenumber" name="L700" href="#L700">700</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">char</strong> lookAhead() {
-<a class="jxr_linenumber" name="L701" href="#L701">701</a> 				<strong class="jxr_keyword">char</strong> la = glob.next();
-<a class="jxr_linenumber" name="L702" href="#L702">702</a> 				glob.previous();
-<a class="jxr_linenumber" name="L703" href="#L703">703</a> 				<strong class="jxr_keyword">return</strong> la;
-<a class="jxr_linenumber" name="L704" href="#L704">704</a> 			}
-<a class="jxr_linenumber" name="L705" href="#L705">705</a> 		}
-<a class="jxr_linenumber" name="L706" href="#L706">706</a> 	}
-<a class="jxr_linenumber" name="L707" href="#L707">707</a> 	
-<a class="jxr_linenumber" name="L708" href="#L708">708</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(util.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	
-<a class="jxr_linenumber" name="L710" href="#L710">710</a> }
+<a class="jxr_linenumber" name="L401" href="#L401">401</a> 			<strong class="jxr_keyword">return</strong> getArch().equals(<span class="jxr_string">"amd64"</span>)
+<a class="jxr_linenumber" name="L402" href="#L402">402</a> 			    || getArch().equals(<span class="jxr_string">"x86_64"</span>)
+<a class="jxr_linenumber" name="L403" href="#L403">403</a> 			    || getArch().equals(<span class="jxr_string">"aarch64"</span>)
+<a class="jxr_linenumber" name="L404" href="#L404">404</a> 			    || getArch().equals(<span class="jxr_string">"arm64"</span>);
+<a class="jxr_linenumber" name="L405" href="#L405">405</a> 		}
+<a class="jxr_linenumber" name="L406" href="#L406">406</a> 	}
+<a class="jxr_linenumber" name="L407" href="#L407">407</a> 	
+<a class="jxr_linenumber" name="L408" href="#L408">408</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Strings</a> {
+<a class="jxr_linenumber" name="L409" href="#L409">409</a> 		
+<a class="jxr_linenumber" name="L410" href="#L410">410</a> 		@SuppressWarnings(
+<a class="jxr_linenumber" name="L411" href="#L411">411</a> 			<span class="jxr_string">"unchecked"</span> <em class="jxr_comment">// safe cast to Iterator&lt;Object&gt;</em>
+<a class="jxr_linenumber" name="L412" href="#L412">412</a> 		)
+<a class="jxr_linenumber" name="L413" href="#L413">413</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(Iterator&lt;? <strong class="jxr_keyword">extends</strong> T&gt; strings, <strong class="jxr_keyword">final</strong> Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
+<a class="jxr_linenumber" name="L414" href="#L414">414</a> 			<strong class="jxr_keyword">if</strong> (!strings.hasNext()) <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L415" href="#L415">415</a> 			String seed = toStringFunction.apply(strings.next());
+<a class="jxr_linenumber" name="L416" href="#L416">416</a> 			<strong class="jxr_keyword">return</strong> Iterators.&lt;String,T&gt;fold(
+<a class="jxr_linenumber" name="L417" href="#L417">417</a> 				(Iterator&lt;T&gt;)strings,
+<a class="jxr_linenumber" name="L418" href="#L418">418</a> 				<strong class="jxr_keyword">new</strong> Function2&lt;String,T,String&gt;() {
+<a class="jxr_linenumber" name="L419" href="#L419">419</a> 					<strong class="jxr_keyword">public</strong> String apply(String s1, T s2) {
+<a class="jxr_linenumber" name="L420" href="#L420">420</a> 						<strong class="jxr_keyword">return</strong> s1 + separator.toString() + toStringFunction.apply(s2); }},
+<a class="jxr_linenumber" name="L421" href="#L421">421</a> 				seed);
+<a class="jxr_linenumber" name="L422" href="#L422">422</a> 		}
+<a class="jxr_linenumber" name="L423" href="#L423">423</a> 		
+<a class="jxr_linenumber" name="L424" href="#L424">424</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterator&lt;? <strong class="jxr_keyword">extends</strong> Object&gt; strings, <strong class="jxr_keyword">final</strong> Object separator) {
+<a class="jxr_linenumber" name="L425" href="#L425">425</a> 			<strong class="jxr_keyword">return</strong> join(strings, separator, toStringFunction());
+<a class="jxr_linenumber" name="L426" href="#L426">426</a> 		}
+<a class="jxr_linenumber" name="L427" href="#L427">427</a> 		
+<a class="jxr_linenumber" name="L428" href="#L428">428</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(Iterable&lt;? <strong class="jxr_keyword">extends</strong> T&gt; strings, <strong class="jxr_keyword">final</strong> Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
+<a class="jxr_linenumber" name="L429" href="#L429">429</a> 			<strong class="jxr_keyword">return</strong> join(strings.iterator(), separator, toStringFunction);
+<a class="jxr_linenumber" name="L430" href="#L430">430</a> 		}
+<a class="jxr_linenumber" name="L431" href="#L431">431</a> 		
+<a class="jxr_linenumber" name="L432" href="#L432">432</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterable&lt;?&gt; strings, <strong class="jxr_keyword">final</strong> Object separator) {
+<a class="jxr_linenumber" name="L433" href="#L433">433</a> 			<strong class="jxr_keyword">return</strong> join(strings.iterator(), separator);
+<a class="jxr_linenumber" name="L434" href="#L434">434</a> 		}
+<a class="jxr_linenumber" name="L435" href="#L435">435</a> 		
+<a class="jxr_linenumber" name="L436" href="#L436">436</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Iterable&lt;?&gt; strings) {
+<a class="jxr_linenumber" name="L437" href="#L437">437</a> 			<strong class="jxr_keyword">return</strong> join(strings, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L438" href="#L438">438</a> 		}
+<a class="jxr_linenumber" name="L439" href="#L439">439</a> 		
+<a class="jxr_linenumber" name="L440" href="#L440">440</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> &lt;T&gt; String join(T[] strings, Object separator, <strong class="jxr_keyword">final</strong> Function&lt;? <strong class="jxr_keyword">super</strong> T,String&gt; toStringFunction) {
+<a class="jxr_linenumber" name="L441" href="#L441">441</a> 			<strong class="jxr_keyword">return</strong> join(Arrays.asList(strings), separator, toStringFunction);
+<a class="jxr_linenumber" name="L442" href="#L442">442</a> 		}
+<a class="jxr_linenumber" name="L443" href="#L443">443</a> 		
+<a class="jxr_linenumber" name="L444" href="#L444">444</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Object[] strings, Object separator) {
+<a class="jxr_linenumber" name="L445" href="#L445">445</a> 			<strong class="jxr_keyword">return</strong> join(Arrays.asList(strings), separator);
+<a class="jxr_linenumber" name="L446" href="#L446">446</a> 		}
+<a class="jxr_linenumber" name="L447" href="#L447">447</a> 		
+<a class="jxr_linenumber" name="L448" href="#L448">448</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String join(Object[] strings) {
+<a class="jxr_linenumber" name="L449" href="#L449">449</a> 			<strong class="jxr_keyword">return</strong> join(strings, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L450" href="#L450">450</a> 		}
+<a class="jxr_linenumber" name="L451" href="#L451">451</a> 		
+<a class="jxr_linenumber" name="L452" href="#L452">452</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String normalizeSpace(Object object) {
+<a class="jxr_linenumber" name="L453" href="#L453">453</a> 			<strong class="jxr_keyword">return</strong> String.valueOf(object).replaceAll(<span class="jxr_string">"\\s+"</span>, <span class="jxr_string">" "</span>).trim();
+<a class="jxr_linenumber" name="L454" href="#L454">454</a> 		}
+<a class="jxr_linenumber" name="L455" href="#L455">455</a> 		
+<a class="jxr_linenumber" name="L456" href="#L456">456</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tuple2&lt;String,byte[]&gt; extractHyphens(String text, <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
+<a class="jxr_linenumber" name="L457" href="#L457">457</a> 			<strong class="jxr_keyword">return</strong> extractHyphens(<strong class="jxr_keyword">null</strong>, text, codePointBased, characters);
+<a class="jxr_linenumber" name="L458" href="#L458">458</a> 		}
+<a class="jxr_linenumber" name="L459" href="#L459">459</a> 		
+<a class="jxr_linenumber" name="L460" href="#L460">460</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L461" href="#L461">461</a> <em class="jxr_javadoccomment">		 * @param codePointBased Whether byte array index refers to code points or chars.</em>
+<a class="jxr_linenumber" name="L462" href="#L462">462</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L463" href="#L463">463</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Tuple2&lt;String,byte[]&gt; extractHyphens(byte[] addTo, String text, <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
+<a class="jxr_linenumber" name="L464" href="#L464">464</a> 			StringBuilder unhyphenatedText = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L465" href="#L465">465</a> 			List&lt;Byte&gt; hyphens = <strong class="jxr_keyword">new</strong> ArrayList&lt;Byte&gt;();
+<a class="jxr_linenumber" name="L466" href="#L466">466</a> 			byte hyphen = 0;
+<a class="jxr_linenumber" name="L467" href="#L467">467</a> 			<strong class="jxr_keyword">int</strong> j = -1;
+<a class="jxr_linenumber" name="L468" href="#L468">468</a> 			<strong class="jxr_keyword">int</strong>[] charArray = codePointBased ? text.codePoints().toArray() : text.chars().toArray();
+<a class="jxr_linenumber" name="L469" href="#L469">469</a> 			next_<strong class="jxr_keyword">char</strong>: <strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> c : charArray) {
+<a class="jxr_linenumber" name="L470" href="#L470">470</a> 				j++;
+<a class="jxr_linenumber" name="L471" href="#L471">471</a> 				<strong class="jxr_keyword">if</strong> (addTo != <strong class="jxr_keyword">null</strong> &amp;&amp; j &gt; 0)
+<a class="jxr_linenumber" name="L472" href="#L472">472</a> 					hyphen |= addTo[j - 1];
+<a class="jxr_linenumber" name="L473" href="#L473">473</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> i = 0; i &lt; characters.length; i++)
+<a class="jxr_linenumber" name="L474" href="#L474">474</a> 					<strong class="jxr_keyword">if</strong> (characters[i] != <strong class="jxr_keyword">null</strong> &amp;&amp; characters[i] == c) {
+<a class="jxr_linenumber" name="L475" href="#L475">475</a> 						hyphen |= (1 &lt;&lt; i);
+<a class="jxr_linenumber" name="L476" href="#L476">476</a> 						<strong class="jxr_keyword">continue</strong> next_<strong class="jxr_keyword">char</strong>; }
+<a class="jxr_linenumber" name="L477" href="#L477">477</a> 				unhyphenatedText.appendCodePoint(c);
+<a class="jxr_linenumber" name="L478" href="#L478">478</a> 				hyphens.add(hyphen);
+<a class="jxr_linenumber" name="L479" href="#L479">479</a> 				hyphen = 0; }
+<a class="jxr_linenumber" name="L480" href="#L480">480</a> 			<strong class="jxr_keyword">if</strong> (unhyphenatedText.length() &gt; 0) {
+<a class="jxr_linenumber" name="L481" href="#L481">481</a> 				hyphens.remove(0);
+<a class="jxr_linenumber" name="L482" href="#L482">482</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tuple2&lt;String,byte[]&gt;(unhyphenatedText.toString(), Bytes.toArray(hyphens)); }
+<a class="jxr_linenumber" name="L483" href="#L483">483</a> 			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L484" href="#L484">484</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Tuple2&lt;String,byte[]&gt;(<span class="jxr_string">""</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L485" href="#L485">485</a> 		}
+<a class="jxr_linenumber" name="L486" href="#L486">486</a> 		
+<a class="jxr_linenumber" name="L487" href="#L487">487</a> 		<em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L488" href="#L488">488</a> <em class="jxr_javadoccomment">		 * @param codePointBased Whether byte array index refers to code points or chars.</em>
+<a class="jxr_linenumber" name="L489" href="#L489">489</a> <em class="jxr_javadoccomment">		 */</em>
+<a class="jxr_linenumber" name="L490" href="#L490">490</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String insertHyphens(String text, byte hyphens[], <strong class="jxr_keyword">boolean</strong> codePointBased, Character... characters) {
+<a class="jxr_linenumber" name="L491" href="#L491">491</a> 			<strong class="jxr_keyword">if</strong> (text.equals(<span class="jxr_string">""</span>)) <strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L492" href="#L492">492</a> 			<strong class="jxr_keyword">if</strong> (hyphens == <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">return</strong> text;
+<a class="jxr_linenumber" name="L493" href="#L493">493</a> 			<strong class="jxr_keyword">int</strong> textLength = codePointBased ? text.codePoints().toArray().length : text.length();
+<a class="jxr_linenumber" name="L494" href="#L494">494</a> 			<strong class="jxr_keyword">if</strong> (hyphens.length != textLength - 1)
+<a class="jxr_linenumber" name="L495" href="#L495">495</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"hyphens.length must be equal to text.length() - 1"</span>);
+<a class="jxr_linenumber" name="L496" href="#L496">496</a> 			StringBuilder hyphenatedText = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L497" href="#L497">497</a> 			<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L498" href="#L498">498</a> 			<strong class="jxr_keyword">int</strong> j = 0;
+<a class="jxr_linenumber" name="L499" href="#L499">499</a> 			<strong class="jxr_keyword">for</strong> (Character c : text.toCharArray()) {
+<a class="jxr_linenumber" name="L500" href="#L500">500</a> 				hyphenatedText.append(c);
+<a class="jxr_linenumber" name="L501" href="#L501">501</a> 				<strong class="jxr_keyword">if</strong> (j &lt; hyphens.length &amp;&amp; (!codePointBased || text.codePointAt(i) == c)) {
+<a class="jxr_linenumber" name="L502" href="#L502">502</a> 					<strong class="jxr_keyword">if</strong> (hyphens[j] != 0) {
+<a class="jxr_linenumber" name="L503" href="#L503">503</a> 						<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">int</strong> k = 0; k &lt; characters.length; k++) {
+<a class="jxr_linenumber" name="L504" href="#L504">504</a> 							byte b = (byte)(1 &lt;&lt; k);
+<a class="jxr_linenumber" name="L505" href="#L505">505</a> 							Character h = characters[k];
+<a class="jxr_linenumber" name="L506" href="#L506">506</a> 							<strong class="jxr_keyword">if</strong> (h != <strong class="jxr_keyword">null</strong> &amp;&amp; (hyphens[j] &amp; b) == b)
+<a class="jxr_linenumber" name="L507" href="#L507">507</a> 								hyphenatedText.append(h); }}
+<a class="jxr_linenumber" name="L508" href="#L508">508</a> 					j++; }
+<a class="jxr_linenumber" name="L509" href="#L509">509</a> 				i++; }
+<a class="jxr_linenumber" name="L510" href="#L510">510</a> 			<strong class="jxr_keyword">return</strong> hyphenatedText.toString();
+<a class="jxr_linenumber" name="L511" href="#L511">511</a> 		}
+<a class="jxr_linenumber" name="L512" href="#L512">512</a> 		
+<a class="jxr_linenumber" name="L513" href="#L513">513</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;String&gt; splitInclDelimiter(<strong class="jxr_keyword">final</strong> String text, <strong class="jxr_keyword">final</strong> Pattern delimiterPattern) {
+<a class="jxr_linenumber" name="L514" href="#L514">514</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> Iterable&lt;String&gt;() {
+<a class="jxr_linenumber" name="L515" href="#L515">515</a> 				<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> Iterator&lt;String&gt; iterator() {
+<a class="jxr_linenumber" name="L516" href="#L516">516</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> AbstractIterator&lt;String&gt;() {
+<a class="jxr_linenumber" name="L517" href="#L517">517</a> 						Matcher m = delimiterPattern.matcher(text);
+<a class="jxr_linenumber" name="L518" href="#L518">518</a> 						<strong class="jxr_keyword">int</strong> i = 0;
+<a class="jxr_linenumber" name="L519" href="#L519">519</a> 						String nextNext = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L520" href="#L520">520</a> 						<strong class="jxr_keyword">protected</strong> String computeNext() {
+<a class="jxr_linenumber" name="L521" href="#L521">521</a> 							<strong class="jxr_keyword">if</strong> (nextNext != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L522" href="#L522">522</a> 								String next = nextNext;
+<a class="jxr_linenumber" name="L523" href="#L523">523</a> 								nextNext = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L524" href="#L524">524</a> 								<strong class="jxr_keyword">return</strong> next; }
+<a class="jxr_linenumber" name="L525" href="#L525">525</a> 							<strong class="jxr_keyword">if</strong> (m.find()) {
+<a class="jxr_linenumber" name="L526" href="#L526">526</a> 								String next = text.substring(i, m.start());
+<a class="jxr_linenumber" name="L527" href="#L527">527</a> 								nextNext = m.group();
+<a class="jxr_linenumber" name="L528" href="#L528">528</a> 								i = m.end();
+<a class="jxr_linenumber" name="L529" href="#L529">529</a> 								<strong class="jxr_keyword">return</strong> next; }
+<a class="jxr_linenumber" name="L530" href="#L530">530</a> 							<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (i &gt;= 0) {
+<a class="jxr_linenumber" name="L531" href="#L531">531</a> 								String next = text.substring(i);
+<a class="jxr_linenumber" name="L532" href="#L532">532</a> 								i = -1;
+<a class="jxr_linenumber" name="L533" href="#L533">533</a> 								<strong class="jxr_keyword">return</strong> next; }
+<a class="jxr_linenumber" name="L534" href="#L534">534</a> 							<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L535" href="#L535">535</a> 								<strong class="jxr_keyword">return</strong> endOfData();
+<a class="jxr_linenumber" name="L536" href="#L536">536</a> 						}
+<a class="jxr_linenumber" name="L537" href="#L537">537</a> 					};
+<a class="jxr_linenumber" name="L538" href="#L538">538</a> 				}
+<a class="jxr_linenumber" name="L539" href="#L539">539</a> 			};
+<a class="jxr_linenumber" name="L540" href="#L540">540</a> 		}
+<a class="jxr_linenumber" name="L541" href="#L541">541</a> 	}
+<a class="jxr_linenumber" name="L542" href="#L542">542</a> 	
+<a class="jxr_linenumber" name="L543" href="#L543">543</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Files</a> {
+<a class="jxr_linenumber" name="L544" href="#L544">544</a> 		
+<a class="jxr_linenumber" name="L545" href="#L545">545</a> 		<em class="jxr_comment">/* If object is a String, it is assumed to represent a URI */</em>
+<a class="jxr_linenumber" name="L546" href="#L546">546</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File asFile(Object o) {
+<a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">if</strong> (o == <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L548" href="#L548">548</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L549" href="#L549">549</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 				<strong class="jxr_keyword">if</strong> (o instanceof String)
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 					<strong class="jxr_keyword">return</strong> asFile(URLs.asURI((String)o));
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 				<strong class="jxr_keyword">if</strong> (o instanceof File)
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 					<strong class="jxr_keyword">return</strong> (File)o;
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 				<strong class="jxr_keyword">if</strong> (o instanceof URL)
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 					<strong class="jxr_keyword">return</strong> asFile(URLs.asURI((URL)o));
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 				<strong class="jxr_keyword">if</strong> (o instanceof URI)
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 					<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> File((URI)o); }
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {}
+<a class="jxr_linenumber" name="L559" href="#L559">559</a> 			<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(<span class="jxr_string">"Object can not be converted to File: "</span> + o);
+<a class="jxr_linenumber" name="L560" href="#L560">560</a> 		}
+<a class="jxr_linenumber" name="L561" href="#L561">561</a> 		
+<a class="jxr_linenumber" name="L562" href="#L562">562</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> isAbsoluteFile(Object o) {
+<a class="jxr_linenumber" name="L563" href="#L563">563</a> 			<strong class="jxr_keyword">if</strong> (o instanceof String)
+<a class="jxr_linenumber" name="L564" href="#L564">564</a> 				<strong class="jxr_keyword">return</strong> ((String)o).startsWith(<span class="jxr_string">"file:"</span>);
+<a class="jxr_linenumber" name="L565" href="#L565">565</a> 			<strong class="jxr_keyword">try</strong> { asFile(o); }
+<a class="jxr_linenumber" name="L566" href="#L566">566</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) { <strong class="jxr_keyword">return</strong> false; }
+<a class="jxr_linenumber" name="L567" href="#L567">567</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L568" href="#L568">568</a> 		}
+<a class="jxr_linenumber" name="L569" href="#L569">569</a> 		
+<a class="jxr_linenumber" name="L570" href="#L570">570</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String fileName(File file) {
+<a class="jxr_linenumber" name="L571" href="#L571">571</a> 			<strong class="jxr_keyword">return</strong> file.getName();
+<a class="jxr_linenumber" name="L572" href="#L572">572</a> 		}
+<a class="jxr_linenumber" name="L573" href="#L573">573</a> 		
+<a class="jxr_linenumber" name="L574" href="#L574">574</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String fileName(URL url) {
+<a class="jxr_linenumber" name="L575" href="#L575">575</a> 			String file = url.getFile();
+<a class="jxr_linenumber" name="L576" href="#L576">576</a> 			<strong class="jxr_keyword">return</strong> file.substring(file.lastIndexOf('/')+1);
+<a class="jxr_linenumber" name="L577" href="#L577">577</a> 		}
+<a class="jxr_linenumber" name="L578" href="#L578">578</a> 		
+<a class="jxr_linenumber" name="L579" href="#L579">579</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> File normalize(File file) {
+<a class="jxr_linenumber" name="L580" href="#L580">580</a> 			<strong class="jxr_keyword">try</strong> { <strong class="jxr_keyword">return</strong> file.toPath().toRealPath().normalize().toFile(); }
+<a class="jxr_linenumber" name="L581" href="#L581">581</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) { <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(e); }
+<a class="jxr_linenumber" name="L582" href="#L582">582</a> 		}
+<a class="jxr_linenumber" name="L583" href="#L583">583</a> 		
+<a class="jxr_linenumber" name="L584" href="#L584">584</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> unpack(URL url, File file) {
+<a class="jxr_linenumber" name="L585" href="#L585">585</a> 			<strong class="jxr_keyword">if</strong> (file.exists()) <strong class="jxr_keyword">return</strong> false;
+<a class="jxr_linenumber" name="L586" href="#L586">586</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L587" href="#L587">587</a> 				file.getParentFile().mkdirs();
+<a class="jxr_linenumber" name="L588" href="#L588">588</a> 				file.createNewFile();
+<a class="jxr_linenumber" name="L589" href="#L589">589</a> 				FileOutputStream writer = <strong class="jxr_keyword">new</strong> FileOutputStream(file);
+<a class="jxr_linenumber" name="L590" href="#L590">590</a> 				url.openConnection();
+<a class="jxr_linenumber" name="L591" href="#L591">591</a> 				InputStream reader = url.openStream();
+<a class="jxr_linenumber" name="L592" href="#L592">592</a> 				byte[] buffer = <strong class="jxr_keyword">new</strong> byte[153600];
+<a class="jxr_linenumber" name="L593" href="#L593">593</a> 				<strong class="jxr_keyword">int</strong> bytesRead = 0;
+<a class="jxr_linenumber" name="L594" href="#L594">594</a> 				<strong class="jxr_keyword">while</strong> ((bytesRead = reader.read(buffer)) &gt; 0) {
+<a class="jxr_linenumber" name="L595" href="#L595">595</a> 					writer.write(buffer, 0, bytesRead);
+<a class="jxr_linenumber" name="L596" href="#L596">596</a> 					buffer = <strong class="jxr_keyword">new</strong> byte[153600]; }
+<a class="jxr_linenumber" name="L597" href="#L597">597</a> 				writer.close();
+<a class="jxr_linenumber" name="L598" href="#L598">598</a> 				reader.close();
+<a class="jxr_linenumber" name="L599" href="#L599">599</a> 				logger.debug(<span class="jxr_string">"Unpacking file {} ..."</span>, file.getName());
+<a class="jxr_linenumber" name="L600" href="#L600">600</a> 				<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L601" href="#L601">601</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L602" href="#L602">602</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(
+<a class="jxr_linenumber" name="L603" href="#L603">603</a> 						<span class="jxr_string">"Exception occured during unpacking of file '"</span> + file.getName() + <span class="jxr_string">"'"</span>, e); }
+<a class="jxr_linenumber" name="L604" href="#L604">604</a> 		}
+<a class="jxr_linenumber" name="L605" href="#L605">605</a> 		
+<a class="jxr_linenumber" name="L606" href="#L606">606</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Iterable&lt;File&gt; unpack(Iterator&lt;URL&gt; urls, File directory) {
+<a class="jxr_linenumber" name="L607" href="#L607">607</a> 			<strong class="jxr_keyword">if</strong> (!directory.exists()) directory.mkdirs();
+<a class="jxr_linenumber" name="L608" href="#L608">608</a> 			Collection&lt;File&gt; files = <strong class="jxr_keyword">new</strong> ArrayList&lt;File&gt;();
+<a class="jxr_linenumber" name="L609" href="#L609">609</a> 			<strong class="jxr_keyword">while</strong>(urls.hasNext()) {
+<a class="jxr_linenumber" name="L610" href="#L610">610</a> 				URL url = urls.next();
+<a class="jxr_linenumber" name="L611" href="#L611">611</a> 				File file = <strong class="jxr_keyword">new</strong> File(directory.getAbsolutePath(), fileName(url));
+<a class="jxr_linenumber" name="L612" href="#L612">612</a> 				<strong class="jxr_keyword">if</strong> (unpack(url, file)) files.add(file); }
+<a class="jxr_linenumber" name="L613" href="#L613">613</a> 			<strong class="jxr_keyword">return</strong> files;
+<a class="jxr_linenumber" name="L614" href="#L614">614</a> 		}
+<a class="jxr_linenumber" name="L615" href="#L615">615</a> 		
+<a class="jxr_linenumber" name="L616" href="#L616">616</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">void</strong> chmod775(File file) {
+<a class="jxr_linenumber" name="L617" href="#L617">617</a> 			<strong class="jxr_keyword">if</strong> (OS.isWindows()) <strong class="jxr_keyword">return</strong>;
+<a class="jxr_linenumber" name="L618" href="#L618">618</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L619" href="#L619">619</a> 				Runtime.getRuntime().exec(<strong class="jxr_keyword">new</strong> String[] { <span class="jxr_string">"chmod"</span>, <span class="jxr_string">"775"</span>, file.getAbsolutePath() }).waitFor();
+<a class="jxr_linenumber" name="L620" href="#L620">620</a> 				logger.debug(<span class="jxr_string">"Chmodding file {} ..."</span>, file.getName());}
+<a class="jxr_linenumber" name="L621" href="#L621">621</a> 			<strong class="jxr_keyword">catch</strong> (Exception e) {
+<a class="jxr_linenumber" name="L622" href="#L622">622</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(
+<a class="jxr_linenumber" name="L623" href="#L623">623</a> 						<span class="jxr_string">"Exception occured during chmodding of file '"</span> + file.getName() + <span class="jxr_string">"'"</span>, e); }
+<a class="jxr_linenumber" name="L624" href="#L624">624</a> 		}
+<a class="jxr_linenumber" name="L625" href="#L625">625</a> 	}
+<a class="jxr_linenumber" name="L626" href="#L626">626</a> 	
+<a class="jxr_linenumber" name="L627" href="#L627">627</a> 	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">Locales</a> {
+<a class="jxr_linenumber" name="L628" href="#L628">628</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Locale parseLocale(String locale) {
+<a class="jxr_linenumber" name="L629" href="#L629">629</a> 			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L630" href="#L630">630</a> 				<strong class="jxr_keyword">return</strong> (<strong class="jxr_keyword">new</strong> Locale.Builder()).setLanguageTag(locale.replace('_','-')).build(); }
+<a class="jxr_linenumber" name="L631" href="#L631">631</a> 			<strong class="jxr_keyword">catch</strong> (IllformedLocaleException e) {
+<a class="jxr_linenumber" name="L632" href="#L632">632</a> 				<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Locale '"</span> + locale + <span class="jxr_string">"' could not be parsed"</span>, e); }
+<a class="jxr_linenumber" name="L633" href="#L633">633</a> 		}
+<a class="jxr_linenumber" name="L634" href="#L634">634</a> 	}
+<a class="jxr_linenumber" name="L635" href="#L635">635</a> 	
+<a class="jxr_linenumber" name="L636" href="#L636">636</a> 	<em class="jxr_comment">/*</em>
+<a class="jxr_linenumber" name="L637" href="#L637">637</a> <em class="jxr_comment">	 * Naive implementation of glob syntax. Assumes the pattern is valid.</em>
+<a class="jxr_linenumber" name="L638" href="#L638">638</a> <em class="jxr_comment">	 * @see <a href="http://docs.oracle.com/javase/tutorial/essential/io/fileOps.html" class="external-link" target="_blank">http://docs.oracle.com/javase/tutorial/essential/io/fileOps.html</a>#glob</em>
+<a class="jxr_linenumber" name="L639" href="#L639">639</a> <em class="jxr_comment">	 */</em>
+<a class="jxr_linenumber" name="L640" href="#L640">640</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">GlobPattern</a> {
+<a class="jxr_linenumber" name="L641" href="#L641">641</a> 		
+<a class="jxr_linenumber" name="L642" href="#L642">642</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> Pattern compile(String pattern) {
+<a class="jxr_linenumber" name="L643" href="#L643">643</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a>(pattern).build();
+<a class="jxr_linenumber" name="L644" href="#L644">644</a> 		}
+<a class="jxr_linenumber" name="L645" href="#L645">645</a> 		
+<a class="jxr_linenumber" name="L646" href="#L646">646</a> 		<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a> {
+<a class="jxr_linenumber" name="L647" href="#L647">647</a> 			
+<a class="jxr_linenumber" name="L648" href="#L648">648</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> StringCharacterIterator glob;
+<a class="jxr_linenumber" name="L649" href="#L649">649</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> inClass;
+<a class="jxr_linenumber" name="L650" href="#L650">650</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> inGroup;
+<a class="jxr_linenumber" name="L651" href="#L651">651</a> 			
+<a class="jxr_linenumber" name="L652" href="#L652">652</a> 			<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/util.html">RegexBuilder</a>(String globPattern) {
+<a class="jxr_linenumber" name="L653" href="#L653">653</a> 				glob = <strong class="jxr_keyword">new</strong> StringCharacterIterator(globPattern);
+<a class="jxr_linenumber" name="L654" href="#L654">654</a> 			}
+<a class="jxr_linenumber" name="L655" href="#L655">655</a> 			
+<a class="jxr_linenumber" name="L656" href="#L656">656</a> 			<strong class="jxr_keyword">private</strong> Pattern build() {
+<a class="jxr_linenumber" name="L657" href="#L657">657</a> 				StringBuilder regex = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L658" href="#L658">658</a> 				regex.append('^');
+<a class="jxr_linenumber" name="L659" href="#L659">659</a> 				inClass = false;
+<a class="jxr_linenumber" name="L660" href="#L660">660</a> 				inGroup = false;
+<a class="jxr_linenumber" name="L661" href="#L661">661</a> 				<strong class="jxr_keyword">for</strong> (<strong class="jxr_keyword">char</strong> c = glob.first(); c != CharacterIterator.DONE; c = glob.next()) {
+<a class="jxr_linenumber" name="L662" href="#L662">662</a> 					<strong class="jxr_keyword">if</strong> (!inClass) {
+<a class="jxr_linenumber" name="L663" href="#L663">663</a> 						<strong class="jxr_keyword">if</strong> (c == '[') {
+<a class="jxr_linenumber" name="L664" href="#L664">664</a> 							regex.append(<span class="jxr_string">"[[^/]&amp;&amp;["</span>);
+<a class="jxr_linenumber" name="L665" href="#L665">665</a> 							<strong class="jxr_keyword">if</strong> (lookAhead() == '!')
+<a class="jxr_linenumber" name="L666" href="#L666">666</a> 								regex.append(glob.next());
+<a class="jxr_linenumber" name="L667" href="#L667">667</a> 							<strong class="jxr_keyword">if</strong> (lookAhead() == '^')
+<a class="jxr_linenumber" name="L668" href="#L668">668</a> 								regex.append(<span class="jxr_string">"\\"</span> + glob.next());
+<a class="jxr_linenumber" name="L669" href="#L669">669</a> 							inClass = <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L670" href="#L670">670</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '{' &amp;&amp; !inGroup) {
+<a class="jxr_linenumber" name="L671" href="#L671">671</a> 							regex.append(<span class="jxr_string">"(?:(?:"</span>);
+<a class="jxr_linenumber" name="L672" href="#L672">672</a> 							inGroup = <strong class="jxr_keyword">true</strong>; }
+<a class="jxr_linenumber" name="L673" href="#L673">673</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '}' &amp;&amp; inGroup) {
+<a class="jxr_linenumber" name="L674" href="#L674">674</a> 							regex.append(<span class="jxr_string">"))"</span>);
+<a class="jxr_linenumber" name="L675" href="#L675">675</a> 							inGroup = false; }
+<a class="jxr_linenumber" name="L676" href="#L676">676</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == ',' &amp;&amp; inGroup)
+<a class="jxr_linenumber" name="L677" href="#L677">677</a> 							regex.append(<span class="jxr_string">")|(?:"</span>);
+<a class="jxr_linenumber" name="L678" href="#L678">678</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '*' &amp;&amp; lookAhead() == '*') {
+<a class="jxr_linenumber" name="L679" href="#L679">679</a> 							regex.append(<span class="jxr_string">".*"</span>);
+<a class="jxr_linenumber" name="L680" href="#L680">680</a> 							glob.next(); }
+<a class="jxr_linenumber" name="L681" href="#L681">681</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '*')
+<a class="jxr_linenumber" name="L682" href="#L682">682</a> 							regex.append(<span class="jxr_string">"[^/]*"</span>);
+<a class="jxr_linenumber" name="L683" href="#L683">683</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '?')
+<a class="jxr_linenumber" name="L684" href="#L684">684</a> 							regex.append(<span class="jxr_string">"[^/]"</span>);
+<a class="jxr_linenumber" name="L685" href="#L685">685</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (<span class="jxr_string">".^$+]|()"</span>.indexOf(c) &gt; -1)
+<a class="jxr_linenumber" name="L686" href="#L686">686</a> 							regex.append(<span class="jxr_string">"\\"</span> + c);
+<a class="jxr_linenumber" name="L687" href="#L687">687</a> 						<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L688" href="#L688">688</a> 							regex.append(c); }
+<a class="jxr_linenumber" name="L689" href="#L689">689</a> 					<strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L690" href="#L690">690</a> 						<strong class="jxr_keyword">if</strong> (c == ']') {
+<a class="jxr_linenumber" name="L691" href="#L691">691</a> 							regex.append(<span class="jxr_string">"]]"</span>);
+<a class="jxr_linenumber" name="L692" href="#L692">692</a> 							inClass = false; }
+<a class="jxr_linenumber" name="L693" href="#L693">693</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '&amp;' &amp;&amp; lookAhead() == '&amp;')
+<a class="jxr_linenumber" name="L694" href="#L694">694</a> 							regex.append(<span class="jxr_string">"\\"</span> + c + glob.next());
+<a class="jxr_linenumber" name="L695" href="#L695">695</a> 						<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (c == '\\')
+<a class="jxr_linenumber" name="L696" href="#L696">696</a> 							regex.append(<span class="jxr_string">"\\"</span> + c);
+<a class="jxr_linenumber" name="L697" href="#L697">697</a> 						<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L698" href="#L698">698</a> 							regex.append(c); }}
+<a class="jxr_linenumber" name="L699" href="#L699">699</a> 				regex.append('$');
+<a class="jxr_linenumber" name="L700" href="#L700">700</a> 				<strong class="jxr_keyword">return</strong> Pattern.compile(regex.toString());
+<a class="jxr_linenumber" name="L701" href="#L701">701</a> 			}
+<a class="jxr_linenumber" name="L702" href="#L702">702</a> 			
+<a class="jxr_linenumber" name="L703" href="#L703">703</a> 			<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">char</strong> lookAhead() {
+<a class="jxr_linenumber" name="L704" href="#L704">704</a> 				<strong class="jxr_keyword">char</strong> la = glob.next();
+<a class="jxr_linenumber" name="L705" href="#L705">705</a> 				glob.previous();
+<a class="jxr_linenumber" name="L706" href="#L706">706</a> 				<strong class="jxr_keyword">return</strong> la;
+<a class="jxr_linenumber" name="L707" href="#L707">707</a> 			}
+<a class="jxr_linenumber" name="L708" href="#L708">708</a> 		}
+<a class="jxr_linenumber" name="L709" href="#L709">709</a> 	}
+<a class="jxr_linenumber" name="L710" href="#L710">710</a> 	
+<a class="jxr_linenumber" name="L711" href="#L711">711</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(util.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L712" href="#L712">712</a> 	
+<a class="jxr_linenumber" name="L713" href="#L713">713</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

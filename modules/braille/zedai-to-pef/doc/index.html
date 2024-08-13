@@ -1001,19 +1001,6 @@ The ZedAI you want to convert to braille.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">Preview</div>
-<div class="synopsis-output-desc">
-An HTML preview of the braille result.
-</div>
-<div class="synopsis-output-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li>text/html</li>
-</ul>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">Output file</div>
 <div class="synopsis-output-desc">
 The output braille file.
@@ -1038,11 +1025,42 @@ The intermediary PEF file.
 </ul>
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Preview</div>
+<div class="synopsis-output-desc">
+An HTML preview of the braille result.
+</div>
+<div class="synopsis-output-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li>text/html</li>
+</ul>
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The ASCII braille table used to render the HTML and PDF previews.
+</div>
+<div class="longdesc">The ASCII braille table used to render the HTML and PDF previews.
+
+<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;preview-table&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Transformer features</div>
@@ -1074,6 +1092,42 @@ value
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>(translator:liblouis)(formatter:dotify)</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Output file format</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">The file format in which to store the braille result.
+</div>
+<div class="longdesc">The file format in which to store the braille result.
+
+<p>The file format must be expressed as a list of parenthesis enclosed key-value pairs. For example, to
+select a file format suited for the U.S., set the option to <code>(locale:en-US)</code>. To use the braille
+character set used in the Netherlands and store to a file with extension “.brl”, set the option to
+<code>(locale:nl)(file-extension:'.brl')</code>.</p>
+
+<p>If left blank, the braille will be stored in PEF format.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: A query
+
+<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
+
+<pre><code>query
+ : feature*
+ ;
+feature
+ : '(' S* IDENT S* [ ':' S* value ]? ')' S*
+ ;
+value
+ : string | integer | IDENT
+ ;
+</code></pre>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1116,60 +1170,6 @@ manual</a>.</p>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <var>&lt;anyURI&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Output file format</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The file format in which to store the braille result.
-</div>
-<div class="longdesc">The file format in which to store the braille result.
-
-<p>The file format must be expressed as a list of parenthesis enclosed key-value pairs. For example, to
-select a file format suited for the U.S., set the option to <code>(locale:en-US)</code>. To use the braille
-character set used in the Netherlands and store to a file with extension “.brl”, set the option to
-<code>(locale:nl)(file-extension:'.brl')</code>.</p>
-
-<p>If left blank, the braille will be stored in PEF format.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: A query
-
-<p>The syntax is as follows (described in terms of <a href="https://www.w3.org/TR/CSS21/grammar.html" class="external-link" target="_blank">CSS grammar</a>):</p>
-
-<pre><code>query
- : feature*
- ;
-feature
- : '(' S* IDENT S* [ ':' S* value ]? ')' S*
- ;
-value
- : string | integer | IDENT
- ;
-</code></pre>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">ASCII braille table for HTML preview</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">The ASCII braille table used to render the HTML and PDF previews.
-</div>
-<div class="longdesc">The ASCII braille table used to render the HTML and PDF previews.
-
-<p>If left blank, the locale information in the input document will be used to select a suitable table.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;preview-table&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
@@ -1250,20 +1250,20 @@ Options:</pre>
 <td>The ZedAI you want to convert to braille.</td>
 </tr>
 <tr>
-<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
-<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
+<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
+<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--transform [<span style="text-transform: uppercase">transform</span>]</td>
+<td>Transformer features (default: <span class="synopsis-option-default"><code>(translator:liblouis)(formatter:dotify)</code></span>)</td>
 </tr>
 <tr>
 <td>--output-file-format [<span style="text-transform: uppercase">output-file-format</span>]</td>
 <td>Output file format (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
-<td>--preview-table [<span style="text-transform: uppercase">preview-table</span>]</td>
-<td>ASCII braille table for HTML preview (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--stylesheet [<span style="text-transform: uppercase">stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>--include-preview [<span style="text-transform: uppercase">include-preview</span>]</td>

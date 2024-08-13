@@ -556,8 +556,15 @@
 <a class="jxr_linenumber" name="L547" href="#L547">547</a> 			<strong class="jxr_keyword">this</strong>.language = language;
 <a class="jxr_linenumber" name="L548" href="#L548">548</a> 			<strong class="jxr_keyword">this</strong>.voice = voice;
 <a class="jxr_linenumber" name="L549" href="#L549">549</a> 		}
-<a class="jxr_linenumber" name="L550" href="#L550">550</a> 	}
-<a class="jxr_linenumber" name="L551" href="#L551">551</a> }
+<a class="jxr_linenumber" name="L550" href="#L550">550</a> 
+<a class="jxr_linenumber" name="L551" href="#L551">551</a> 		@Override
+<a class="jxr_linenumber" name="L552" href="#L552">552</a> 		<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L553" href="#L553">553</a> 			StringBuilder s = <strong class="jxr_keyword">new</strong> StringBuilder();
+<a class="jxr_linenumber" name="L554" href="#L554">554</a> 			s.append(language).append(<span class="jxr_string">": "</span>).append(voice);
+<a class="jxr_linenumber" name="L555" href="#L555">555</a> 			<strong class="jxr_keyword">return</strong> s.toString();
+<a class="jxr_linenumber" name="L556" href="#L556">556</a> 		}
+<a class="jxr_linenumber" name="L557" href="#L557">557</a> 	}
+<a class="jxr_linenumber" name="L558" href="#L558">558</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

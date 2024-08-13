@@ -989,6 +989,10 @@ if (window.addEventListener) {
         <span class="key">white-space</span>: <span class="value">pre-line</span>;
 }
 
+<span class="key">wbr</span><span class="pseudo-class">::before</span> {
+        <span class="key">content</span>: <span class="string"><span class="delimiter">"</span><span class="content">\200B</span><span class="delimiter">"</span></span>;
+}
+
 <span class="comment"><span class="delimiter">/*</span><span class="content"> xml:space */</span></span>
 [<span class="attribute-name">xml|space=preserve</span>] {
         <span class="key">white-space</span>: <span class="value">pre-wrap</span>;
@@ -1001,12 +1005,41 @@ if (window.addEventListener) {
 
 <span class="comment"><span class="delimiter">/*</span><span class="content"> ======= Implementation of script options =============== */</span></span>
 
-<span class="variable">$hyphenation</span>: <span class="value">true</span> <span class="error">!</span><span class="value">default</span>;
-<span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
-
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_page-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
-<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_notes.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var $hyphenation
+ *
+ * @brief Hyphenation
+ *
+ * Hyphenation policy.
+ *
+ * The following CSS rule is included by default (where `$hyphenation` is the value of this option):
+ *
+ * ~~~sass
+ * :root {
+ *   hyphens: $hyphenation;
+ * }
+ * ~~~
+ *
+ * This means that words are hyphenated according to the specified policy, except where overridden by
+ * more specific CSS rules. See the CSS specification for more info:
+ *
+ * - the [`hyphens`](http://braillespecs.github.io/braille-css/#the-hyphens-property) property
+ *
+ * In addition, special rules may apply at page boundaries, see the "Hyphenation at page boundaries"
+ * option.
+ *
+ * &lt;px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc"&gt;
+ *     &lt;choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"&gt;
+ *         &lt;value&gt;auto&lt;/value&gt;
+ *         &lt;a:documentation xml:lang="en"&gt;Hyphenate words&lt;/a:documentation&gt;
+ *         &lt;value&gt;manual&lt;/value&gt;
+ *         &lt;a:documentation xml:lang="en"&gt;Only hyphenate words where there are soft hyphens (U+00AD)&lt;/a:documentation&gt;
+ *         &lt;value&gt;none&lt;/value&gt;
+ *         &lt;a:documentation xml:lang="en"&gt;Never hyphenate words&lt;/a:documentation&gt;
+ *     &lt;/choice&gt;
+ * &lt;/px:type&gt;
+ */</span></span>
+<span class="variable">$hyphenation</span>: <span class="value">auto</span> <span class="error">!</span><span class="value">default</span>;
 
 <span class="directive">@if</span> <span class="variable">$hyphenation</span> != <span class="value">manual</span> {
         :<span class="value">root</span> {
@@ -1014,11 +1047,47 @@ if (window.addEventListener) {
         }
 }
 
+<span class="comment"><span class="delimiter">/*</span><span class="content">*</span><span class="content">
+ * @var $line-spacing
+ *
+ * @brief Line spacing
+ *
+ * Single or double line spacing.
+ *
+ * The following CSS rule is included by default (where `$line-spacing` is the value of this option):
+ *
+ * ~~~sass
+ * @if $line-spacing == double {
+ *   :root {
+ *     line-height: 2;
+ *   }
+ * }
+ * ~~~
+ *
+ * See the CSS specification for more info:
+ *
+ * - the [`line-height`](http://braillespecs.github.io/braille-css/#h3_the-line-height-property)
+ *   property
+ *
+ * &lt;px:type xmlns:px="http://www.daisy.org/ns/pipeline/xproc"&gt;
+ *     &lt;choice&gt;
+ *         &lt;value&gt;single&lt;/value&gt;
+ *         &lt;documentation xml:lang="en"&gt;Single&lt;/documentation&gt;
+ *         &lt;value&gt;double&lt;/value&gt;
+ *         &lt;documentation xml:lang="en"&gt;Double&lt;/documentation&gt;
+ *     &lt;/choice&gt;
+ * &lt;/px:type&gt;
+ */</span></span>
+<span class="variable">$line-spacing</span>: <span class="value">single</span> <span class="error">!</span><span class="value">default</span>;
+
 <span class="directive">@if</span> <span class="variable">$line-spacing</span> == <span class="value">double</span> {
         :<span class="value">root</span> {
                 <span class="key">line-height</span>: <span class="float">2</span>;
         }
 }
+
+<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_volume-breaking.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
+<span class="directive">@import</span> <span class="string"><span class="delimiter">"</span><span class="content">_notes.scss</span><span class="delimiter">"</span></span><span class="include">;</span>
 </pre></div>
 </div>
 </div>

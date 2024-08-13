@@ -165,21 +165,26 @@
 <a class="jxr_linenumber" name="L156" href="#L156">156</a> 					= Maps.transformValues(
 <a class="jxr_linenumber" name="L157" href="#L157">157</a> 						subQueries,
 <a class="jxr_linenumber" name="L158" href="#L158">158</a> 						q -&gt; () -&gt; HyphenatorRegistry.<strong class="jxr_keyword">this</strong>.get(q).iterator().next());
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				<strong class="jxr_keyword">return</strong> Iterables.transform(
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				Iterable&lt;Hyphenator&gt; hyphenators = Iterables.transform(
 <a class="jxr_linenumber" name="L160" href="#L160">160</a> 					get(query),
 <a class="jxr_linenumber" name="L161" href="#L161">161</a> 					t -&gt; logCreate(<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/braille/braille-common/src/main/java/org/daisy/pipeline/braille/common/CompoundHyphenator.html">CompoundHyphenator</a>(subHyphenators, t), context));
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			}
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 		}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 		<strong class="jxr_keyword">return</strong> get(query);
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 	}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 	@Override
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 	<strong class="jxr_keyword">public</strong> String toString() {
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"memoize(dispatch( "</span> + Strings.join(providers, <span class="jxr_string">", "</span>) + <span class="jxr_string">" ))"</span>;
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 			    <strong class="jxr_keyword">if</strong> (query.isEmpty())
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					hyphenators = Iterables.concat(
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 					    hyphenators,
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 						LazyValue.from(() -&gt; logCreate(<strong class="jxr_keyword">new</strong> CompoundHyphenator(subHyphenators, <strong class="jxr_keyword">null</strong>), context)));
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">return</strong> hyphenators;
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			}
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		<strong class="jxr_keyword">return</strong> get(query);
 <a class="jxr_linenumber" name="L170" href="#L170">170</a> 	}
 <a class="jxr_linenumber" name="L171" href="#L171">171</a> 
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(HyphenatorRegistry.<strong class="jxr_keyword">class</strong>);
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> }
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 	@Override
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		<strong class="jxr_keyword">return</strong> <span class="jxr_string">"memoize(dispatch( "</span> + Strings.join(providers, <span class="jxr_string">", "</span>) + <span class="jxr_string">" ))"</span>;
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 	}
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> Logger logger = LoggerFactory.getLogger(HyphenatorRegistry.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>

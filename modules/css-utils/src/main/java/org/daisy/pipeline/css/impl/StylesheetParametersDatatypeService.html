@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>StylesheetParametersDatatypeService xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/css-utils/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.css.impl;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.util.regex.Pattern;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> javax.xml.parsers.DocumentBuilderFactory;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> javax.xml.XMLConstants;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.datatypes.DatatypeService;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.daisy.pipeline.datatypes.ValidationResult;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Attr;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Document;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Element;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  @Component(
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  	name = <span class="jxr_string">"org.daisy.pipeline.css.impl.StylesheetParametersDatatypeService"</span>,
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	service = {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		DatatypeService.<strong class="jxr_keyword">class</strong>
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  	}
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  )
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/impl/StylesheetParametersDatatypeService.html">StylesheetParametersDatatypeService</a> <strong class="jxr_keyword">extends</strong> DatatypeService {
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> Pattern pattern;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">private</strong> Document xmlDefinition = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">protected</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/impl/StylesheetParametersDatatypeService.html">StylesheetParametersDatatypeService</a>() {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">super</strong>(<span class="jxr_string">"stylesheet-parameters"</span>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		pattern = StylesheetParametersParser.asRegex();
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  	}
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	<strong class="jxr_keyword">public</strong> ValidationResult validate(String content) {
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">if</strong> (pattern.matcher(content).matches())
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			<strong class="jxr_keyword">return</strong> ValidationResult.valid();
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">return</strong> ValidationResult.notValid(
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  				<span class="jxr_string">"'"</span> + content + <span class="jxr_string">"' does not match the regular expression pattern /"</span> + pattern + <span class="jxr_string">"/"</span>);
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	<strong class="jxr_keyword">public</strong> Document asDocument() <strong class="jxr_keyword">throws</strong> Exception {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  		<strong class="jxr_keyword">if</strong> (xmlDefinition == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			                                     .getDOMImplementation().createDocument(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"data"</span>, <strong class="jxr_keyword">null</strong>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  			Element data = doc.getDocumentElement();
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			Attr type = doc.createAttribute(<span class="jxr_string">"type"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  			type.setValue(<span class="jxr_string">"string"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			data.setAttributeNode(type);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			Element documentation = (Element)data.appendChild(
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  				doc.createElementNS(<span class="jxr_string">"http://relaxng.org/ns/compatibility/annotations/1.0"</span>,
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  				                    <span class="jxr_string">"documentation"</span>));
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			Attr lang = doc.createAttributeNS(XMLConstants.XML_NS_URI, <span class="jxr_string">"lang"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  			lang.setValue(<span class="jxr_string">"en"</span>);
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			documentation.setAttributeNode(lang);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			Attr space = doc.createAttributeNS(XMLConstants.XML_NS_URI, <span class="jxr_string">"space"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			space.setValue(<span class="jxr_string">"preserve"</span>);
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			documentation.setAttributeNode(space);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			documentation.appendChild(doc.createTextNode(
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  				<span class="jxr_string">"A Sass map"</span>                                                                         + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  				                                                                                       <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				<span class="jxr_string">"A [Sass map](https://sass-lang.com/documentation/values/maps/) is a set of pairs"</span>   + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  				<span class="jxr_string">"of keys and values written as:"</span>                                                     + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  				                                                                                       <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  				<span class="jxr_string">"    (&lt;expression&gt;: &lt;expression&gt;, &lt;expression&gt;: &lt;expression&gt;, ...)"</span>                  + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  				                                                                                       <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  				<span class="jxr_string">"where the"</span>                                                                          + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  				<span class="jxr_string">"[expression](https://sass-lang.com/documentation/syntax/structure#expressions)"</span>     + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  				<span class="jxr_string">"before the `:` is the key, and the expression after is the value associated"</span>        + <span class="jxr_string">"\n"</span> +
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<span class="jxr_string">"with that key. The keys must be unique. An empty map is written `()`."</span>));
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			Element param = (Element)data.appendChild(doc.createElement(<span class="jxr_string">"param"</span>));
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			Attr name = doc.createAttribute(<span class="jxr_string">"name"</span>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			name.setValue(<span class="jxr_string">"pattern"</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  			param.setAttributeNode(name);
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  			param.appendChild(doc.createTextNode(<span class="jxr_string">"^("</span> + pattern.pattern().replaceAll(<span class="jxr_string">"\\(\\?&lt;[^&gt;]+&gt;"</span>, <span class="jxr_string">"("</span>) + <span class="jxr_string">")$"</span>));
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  			xmlDefinition = doc;
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		}
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> xmlDefinition;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

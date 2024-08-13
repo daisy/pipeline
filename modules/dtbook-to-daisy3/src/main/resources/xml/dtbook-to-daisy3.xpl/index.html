@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../dtbook-to-daisy3.xpl">
 </head>
-<body><div class="code" about="../dtbook-to-daisy3.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">dtbook</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">d</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/data"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cx</span>=<span class="code-xml-attribute-value">"http://xmlcalabash.com/ns/extensions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">c</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc-step"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:dtbook-to-daisy3.script"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">input-filesets</span>=<span class="code-xml-attribute-value">"dtbook"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output-filesets</span>=<span class="code-xml-attribute-value">"daisy3 mp3"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
+<body><div class="code" about="../dtbook-to-daisy3.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">dtbook</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">d</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/data"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cx</span>=<span class="code-xml-attribute-value">"http://xmlcalabash.com/ns/extensions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">c</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc-step"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:dtbook-to-daisy3.script"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"main"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">input-filesets</span>=<span class="code-xml-attribute-value">"dtbook"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">output-filesets</span>=<span class="code-xml-attribute-value">"daisy3 mp3"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"#all"</span>&gt;
 
   &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
     <span property="name" content="DTBook to DAISY 3">&lt;<span class="code-xml-element-local-name">h1</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;DTBook to DAISY 3&lt;/<span class="code-xml-element-local-name">h1</span>&gt;</span>
@@ -30,35 +30,9 @@
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"validation-status"</span>/&gt;
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;</span>
 
-  <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">include-tts-log</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			<span property="name" content="Enable TTS log">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Enable TTS log&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="Whether or not to make the TTS log available.
-
-The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.
-">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether or not to make the TTS log available.
-
-The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.
-&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
-		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
-    
-  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
   <span rel="output">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">tts-log</span>"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="TTS log">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;TTS log&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content='Log file with information about text-to-speech process.
-
-Can be enabled with the "Include TTS log" option or the
-[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
-property.
-			'>&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Log file with information about text-to-speech process.
-
-Can be enabled with the "Include TTS log" option or the
-[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
-property.
-			&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+			<span property="desc" content="Log file with information about text-to-speech process.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Log file with information about text-to-speech process.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"convert"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"tts-log"</span>/&gt;
@@ -78,6 +52,38 @@ property.
       <span property="name" content="DAISY 3">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;DAISY 3&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
       <span property="desc" content="The resulting DAISY 3 publication.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;The resulting DAISY 3 publication.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+  <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">audio</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			<span property="name" content="Enable text-to-speech">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Enable text-to-speech&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Whether to use a speech synthesizer to produce audio files.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Whether to use a speech synthesizer to produce audio files.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+    
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+
+  <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">include-tts-log</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">p:system-property('d:org.daisy.pipeline.tts.log')</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			<span property="name" content="Enable TTS log">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Enable TTS log&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="Whether or not to make the TTS log available.
+
+The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.
+
+The default can be changed using the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
+">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;Whether or not to make the TTS log available.
+
+The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.
+
+The default can be changed using the
+[`org.daisy.pipeline.tts.log`](http://daisy.github.io/pipeline/Get-Help/User-Guide/Text-To-Speech/#common-settings)
+property.
+&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+    
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
   <span rel="input">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"<span property="id">tts-config</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"<span property="media-type">application/vnd.pipeline.tts-config+xml</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
@@ -132,6 +138,43 @@ precedence over user styles.
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
     
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
+  
+  <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">stylesheet-parameters</span>"</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="()">'()'</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">stylesheet-parameters</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			<span property="name" content="Style sheet parameters">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Style sheet parameters&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
+			<span property="desc" content="A list of parameters passed to the style sheets.
+
+Style sheets, whether they're user style sheets (specified with the &quot;stylesheet&quot; option) or author
+style sheets (associated with the source), may have parameters (Sass variables). The
+&quot;stylesheet-parameters&quot; option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.
+
+For example, if a style sheet uses the Sass variable &quot;foo&quot;:
+
+~~~sass
+@if $foo {
+   /* some style that should only be enabled when &quot;foo&quot; is truthy */
+}
+~~~
+
+you can control that variable with the following parameters list: `(foo:true)`.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of parameters passed to the style sheets.
+
+Style sheets, whether they're user style sheets (specified with the "stylesheet" option) or author
+style sheets (associated with the source), may have parameters (Sass variables). The
+"stylesheet-parameters" option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.
+
+For example, if a style sheet uses the Sass variable "foo":
+
+~~~sass
+@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+~~~
+
+you can control that variable with the following parameters list: `(foo:true)`.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
+      
+  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
   <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">lexicon</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default">p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">anyURI</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"<span property="sequence" datatype="xsd:boolean">true</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">separator</span>=<span class="code-xml-attribute-value">" "</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">media-type</span>=<span class="code-xml-attribute-value">"application/pls+xml"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
 			<span property="name" content="Lexicons">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Lexicons&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
@@ -139,24 +182,139 @@ precedence over user styles.
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
-Style sheets can also be attached to the source document, using an ['xml-stylesheet' processing
-instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
-			">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of PLS lexicons to take into account.
+
+PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon,
+the processor will use the provided pronunciation instead of the
+default rendering.
+
+The syntax of a PLS lexicon is defined in [Pronunciation Lexicon
+Specification (PLS) Version
+1.0](https://www.w3.org/TR/pronunciation-lexicon), extended with
+regular expression matching. To enable regular expression matching,
+add the &quot;regex&quot; attribute, as follows:
+
+~~~xml
+&lt;lexicon xmlns=&quot;http://www.w3.org/2005/01/pronunciation-lexicon&quot; version=&quot;1.0&quot;
+         alphabet=&quot;ipa&quot; xml:lang=&quot;en&quot;&gt;
+  &lt;lexeme regex=&quot;true&quot;&gt;
+    &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
+    &lt;alias&gt;between $1 and $2&lt;/alias&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+The regex feature works only with alias-based substitutions. The regex
+syntax used is that from [XQuery 1.0 and XPath
+2.0](https://www.w3.org/TR/xpath-functions/#regex-syntax).
+
+Whether or not the regex attribute is set to &quot;true&quot;, the grapheme
+matching can be made more accurate by specifying the
+&quot;positive-lookahead&quot; and &quot;negative-lookahead&quot; attributes:
+
+~~~xml
+&lt;lexicon version=&quot;1.0&quot; xmlns=&quot;http://www.w3.org/2005/01/pronunciation-lexicon&quot;
+         alphabet=&quot;ipa&quot; xml:lang=&quot;en&quot;&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme positive-lookahead=&quot;[ ]+is&quot;&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;somebody&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;should be&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme xml:lang=&quot;fr&quot;&gt;
+    &lt;grapheme positive-lookahead=&quot;[ ]+[cC]ity&quot;&gt;boston&lt;/grapheme&gt;
+    &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+Graphemes with &quot;positive-lookahead&quot; will match if the beginning of
+what follows matches the &quot;position-lookahead&quot; pattern. Graphemes with
+&quot;negative-lookahead&quot; will match if the beginning of what follows does
+not match the &quot;negative-lookahead&quot; pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.
+
+The lexemes are matched in this order:
+
+1. Graphemes with regex=&quot;false&quot; come first, no matter if there is a lookahead or not;
+2. then come graphemes with regex=&quot;true&quot; and no lookahead;
+3. then graphemes with regex=&quot;true&quot; and one or two lookaheads.
+
+Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span> <span class="code-xml-attribute-prefix">xml:</span><span class="code-xml-attribute-local-name">space</span>=<span class="code-xml-attribute-value">"preserve"</span>&gt;A list of PLS lexicons to take into account.
 
 Must be a space separated list of URIs, absolute or relative to the input.
 
-Style sheets can also be attached to the source document, using an ['xml-stylesheet' processing
-instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+Lexicons can also be attached to the source document, using a ['link'
 element](http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07).
-			&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
-		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
-    
-  &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
 
-  <span rel="option">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"<span property="id">audio</span>"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"<span property="default" content="false">'false'</span>"</span><span class="script-inherited"> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"<span property="required" datatype="xsd:boolean">false</span>"</span></span><span class="script-inherited"> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"<span property="data-type">boolean</span>"</span></span>&gt;<span class="script-inherited">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
-			<span property="name" content="Enable text-to-speech">&lt;<span class="code-xml-element-local-name">h2</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"name"</span>&gt;Enable text-to-speech&lt;/<span class="code-xml-element-local-name">h2</span>&gt;</span>
-			<span property="desc" content="Whether to use a speech synthesizer to produce audio files.">&lt;<span class="code-xml-element-local-name">p</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">role</span>=<span class="code-xml-attribute-value">"desc"</span>&gt;Whether to use a speech synthesizer to produce audio files.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
+PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon,
+the processor will use the provided pronunciation instead of the
+default rendering.
+
+The syntax of a PLS lexicon is defined in [Pronunciation Lexicon
+Specification (PLS) Version
+1.0](https://www.w3.org/TR/pronunciation-lexicon), extended with
+regular expression matching. To enable regular expression matching,
+add the "regex" attribute, as follows:
+
+~~~xml
+&lt;lexicon xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" version="1.0"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme regex="true"&gt;
+    &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
+    &lt;alias&gt;between $1 and $2&lt;/alias&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+The regex feature works only with alias-based substitutions. The regex
+syntax used is that from [XQuery 1.0 and XPath
+2.0](https://www.w3.org/TR/xpath-functions/#regex-syntax).
+
+Whether or not the regex attribute is set to "true", the grapheme
+matching can be made more accurate by specifying the
+"positive-lookahead" and "negative-lookahead" attributes:
+
+~~~xml
+&lt;lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme positive-lookahead="[ ]+is"&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;somebody&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;should be&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme xml:lang="fr"&gt;
+    &lt;grapheme positive-lookahead="[ ]+[cC]ity"&gt;boston&lt;/grapheme&gt;
+    &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+~~~
+
+Graphemes with "positive-lookahead" will match if the beginning of
+what follows matches the "position-lookahead" pattern. Graphemes with
+"negative-lookahead" will match if the beginning of what follows does
+not match the "negative-lookahead" pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.
+
+The lexemes are matched in this order:
+
+1. Graphemes with regex="false" come first, no matter if there is a lookahead or not;
+2. then come graphemes with regex="true" and no lookahead;
+3. then graphemes with regex="true" and one or two lookaheads.
+
+Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.&lt;/<span class="code-xml-element-local-name">p</span>&gt;</span>
 		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;</span>
     
   &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;</span>
@@ -226,6 +384,7 @@ reading systems can't handle the word tags.&lt;/<span class="code-xml-element-lo
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">_</span>=<span class="code-xml-attribute-value">"tts"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(                                                              for $output-fileset-base in string(/c:result) return                                                              for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return                                                                resolve-uri($s,$output-fileset-base),                                                              ' ')"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"output-dir-uri"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"normalized"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"stylesheet-parameters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$stylesheet-parameters"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lexicon"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"for $output-fileset-base in string(/c:result) return                                           for $l in tokenize($lexicon,'\s+')[not(.='')] return                                             resolve-uri($l,$output-fileset-base)"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"output-dir-uri"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"normalized"</span>/&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;

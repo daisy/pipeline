@@ -942,21 +942,6 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file</div>
-<div class="synopsis-input-desc">
-The 2005-3 DTBook file to be transformed.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Configuration file for text-to-speech.
@@ -975,6 +960,21 @@ The 2005-3 DTBook file to be transformed.
 <div class="synopsis-input-sequence">
 <b>Sequence</b>: no</div>
 </li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook file</div>
+<div class="synopsis-input-desc">
+The 2005-3 DTBook file to be transformed.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
 </ul>
 
   <h3 id="outputs">Outputs</h3>
@@ -982,23 +982,16 @@ The 2005-3 DTBook file to be transformed.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">DAISY 3</div>
+<div class="synopsis-output-name">TTS log</div>
 <div class="synopsis-output-desc">
-The resulting DAISY 3 publication.
+Log file with information about text-to-speech process.
 </div>
 </li>
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">TTS log</div>
+<div class="synopsis-output-name">DAISY 3</div>
 <div class="synopsis-output-desc">
-<div class="shortdesc">Log file with information about text-to-speech process.
-</div>
-<div class="longdesc">Log file with information about text-to-speech process.
-
-<p>Can be enabled with the “Include TTS log” option or the
-<a href="/pipeline/Get-Help/User-Guide/Text-To-Speech#common-settings"><code>org.daisy.pipeline.tts.log</code></a>
-property.</p>
-</div>
+The resulting DAISY 3 publication.
 </div>
 </li>
 </ul>
@@ -1006,26 +999,6 @@ property.</p>
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable TTS log</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether or not to make the TTS log available.
-</div>
-<div class="longdesc">Whether or not to make the TTS log available.
-
-<p>The TTS log contains a great deal of additional information that is not present in the main job log
-and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
-of the input document.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Style sheets</div>
@@ -1073,15 +1046,56 @@ Includes DTBook in output, as opposed to audio only.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-name">Style sheet parameters</div>
 <div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “stylesheet” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). The
+“stylesheet-parameters” option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable TTS log</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">Whether or not to make the TTS log available.
+</div>
+<div class="longdesc">Whether or not to make the TTS log available.
+
+<p>The TTS log contains a great deal of additional information that is not present in the main job log
+and that is helpful for troubleshooting. Most of the log entries concern particular chunks of text
+of the input document.</p>
+
+<p>The default can be changed using the
+<a href="/pipeline/Get-Help/User-Guide/Text-To-Speech#common-settings"><code>org.daisy.pipeline.tts.log</code></a>
+property.</p>
+</div>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <code>true</code> or <code>false</code>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
+<b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.log')</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1118,6 +1132,19 @@ The agency responsible for making the Digital Talking Book available. If left bl
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-desc">
+Whether to use a speech synthesizer to produce audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-option-name">Lexicons</div>
 <div class="synopsis-option-desc">
 <div class="shortdesc">A list of PLS lexicons to take into account.
@@ -1126,9 +1153,71 @@ The agency responsible for making the Digital Talking Book available. If left bl
 
 <p>Must be a space separated list of URIs, absolute or relative to the input.</p>
 
-<p>Style sheets can also be attached to the source document, using an <a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing
-instruction</a> or a <a href="http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07" class="external-link" target="_blank">‘link’
+<p>Lexicons can also be attached to the source document, using a <a href="http://kb.daisy.org/publishing/docs/text-to-speech/pls.html#ex-07" class="external-link" target="_blank">‘link’
 element</a>.</p>
+
+<p>PLS lexicons allow you to define custom pronunciations of words. It is
+meant to help TTS processors deal with ambiguous abbreviations and
+pronunciation of proper names. When a word is defined in a lexicon,
+the processor will use the provided pronunciation instead of the
+default rendering.</p>
+
+<p>The syntax of a PLS lexicon is defined in <a href="https://www.w3.org/TR/pronunciation-lexicon" class="external-link" target="_blank">Pronunciation Lexicon
+Specification (PLS) Version
+1.0</a>, extended with
+regular expression matching. To enable regular expression matching,
+add the “regex” attribute, as follows:</p>
+
+<pre><code class="language-xml">&lt;lexicon xmlns="http://www.w3.org/2005/01/pronunciation-lexicon" version="1.0"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme regex="true"&gt;
+    &lt;grapheme&gt;([0-9]+)-([0-9]+)&lt;/grapheme&gt;
+    &lt;alias&gt;between $1 and $2&lt;/alias&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+</code></pre>
+
+<p>The regex feature works only with alias-based substitutions. The regex
+syntax used is that from <a href="https://www.w3.org/TR/xpath-functions/#regex-syntax" class="external-link" target="_blank">XQuery 1.0 and XPath
+2.0</a>.</p>
+
+<p>Whether or not the regex attribute is set to “true”, the grapheme
+matching can be made more accurate by specifying the
+“positive-lookahead” and “negative-lookahead” attributes:</p>
+
+<pre><code class="language-xml">&lt;lexicon version="1.0" xmlns="http://www.w3.org/2005/01/pronunciation-lexicon"
+         alphabet="ipa" xml:lang="en"&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme positive-lookahead="[ ]+is"&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;somebody&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme&gt;
+    &lt;grapheme&gt;SB&lt;/grapheme&gt;
+    &lt;alias&gt;should be&lt;/alias&gt;
+  &lt;/lexeme&gt;
+  &lt;lexeme xml:lang="fr"&gt;
+    &lt;grapheme positive-lookahead="[ ]+[cC]ity"&gt;boston&lt;/grapheme&gt;
+    &lt;phoneme&gt;bɔstøn&lt;/phoneme&gt;
+  &lt;/lexeme&gt;
+&lt;/lexicon&gt;
+</code></pre>
+
+<p>Graphemes with “positive-lookahead” will match if the beginning of
+what follows matches the “position-lookahead” pattern. Graphemes with
+“negative-lookahead” will match if the beginning of what follows does
+not match the “negative-lookahead” pattern. The lookaheads are
+case-sensitive while the grapheme contents are not.</p>
+
+<p>The lexemes are matched in this order:</p>
+
+<ol>
+  <li>Graphemes with regex=”false” come first, no matter if there is a lookahead or not;</li>
+  <li>then come graphemes with regex=”true” and no lookahead;</li>
+  <li>then graphemes with regex=”true” and one or two lookaheads.</li>
+</ol>
+
+<p>Within these categories, lexemes are matched in the same order as they
+appear in the lexicons.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
@@ -1184,19 +1273,15 @@ if (window.addEventListener) {
 Options:</pre>
 <table>
 <tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>The 2005-3 DTBook file to be transformed.</td>
-</tr>
-<tr>
 <td>--tts-config <span style="text-transform: uppercase">tts-config</span>
 </td>
 <td>Configuration file for text-to-speech.
 </td>
 </tr>
 <tr>
-<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
-<td>Enable TTS log (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>The 2005-3 DTBook file to be transformed.</td>
 </tr>
 <tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
@@ -1207,8 +1292,12 @@ Options:</pre>
 <td>With text (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
+<td>Enable TTS log (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.log')</code></span>)</td>
 </tr>
 <tr>
 <td>--word-detection [<span style="text-transform: uppercase">word-detection</span>]</td>
@@ -1217,6 +1306,10 @@ Options:</pre>
 <tr>
 <td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
 <td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>

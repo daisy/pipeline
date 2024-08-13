@@ -14,8 +14,8 @@
 <a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.braille.liblouis.impl.windows;
 <a class="jxr_linenumber" name="L6" href="#L6">6</a>   
 <a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/windows/LiblouisNativePathForWindows_SPI.html">LiblouisNativePathForWindows_SPI</a>
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>          <strong class="jxr_keyword">extends</strong> org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>          <strong class="jxr_keyword">implements</strong> org.daisy.common.spi.ServiceWithProperties
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>          <strong class="jxr_keyword">implements</strong> org.daisy.common.spi.ServiceWithProperties
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>                   , org.daisy.pipeline.braille.common.NativePath
 <a class="jxr_linenumber" name="L10" href="#L10">10</a>  {
 <a class="jxr_linenumber" name="L11" href="#L11">11</a>  	
 <a class="jxr_linenumber" name="L12" href="#L12">12</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> org.slf4j.Logger spi_log = org.slf4j.LoggerFactory.getLogger(LiblouisNativePathForWindows_SPI.<strong class="jxr_keyword">class</strong>);
@@ -23,30 +23,79 @@
 <a class="jxr_linenumber" name="L14" href="#L14">14</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> java.util.Map spi_props;
 <a class="jxr_linenumber" name="L15" href="#L15">15</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">boolean</strong> spi_deactivated = false;
 <a class="jxr_linenumber" name="L16" href="#L16">16</a>  	
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/windows/LiblouisNativePathForWindows_SPI.html">LiblouisNativePathForWindows_SPI</a>() {
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  		<strong class="jxr_keyword">super</strong>();
-<a class="jxr_linenumber" name="L19" href="#L19">19</a>  		spi_log.trace(<span class="jxr_string">"Creating LiblouisNativePathForWindows"</span>);
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		spi_props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
-<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		spi_props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows"</span>);
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		spi_props.put(<span class="jxr_string">"identifier"</span>, <span class="jxr_string">"http://www.liblouis.org/native/windows/"</span>);
-<a class="jxr_linenumber" name="L23" href="#L23">23</a>  		spi_props.put(<span class="jxr_string">"path"</span>, <span class="jxr_string">"/native/windows"</span>);
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		spi_props.put(<span class="jxr_string">"os.family"</span>, <span class="jxr_string">"windows"</span>);
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		spi_log.trace(<span class="jxr_string">"Activating LiblouisNativePathForWindows"</span>);
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		java.util.HashMap props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows"</span>);
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		props.put(<span class="jxr_string">"identifier"</span>, <span class="jxr_string">"http://www.liblouis.org/native/windows/"</span>);
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		props.put(<span class="jxr_string">"path"</span>, <span class="jxr_string">"/native/windows"</span>);
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		props.put(<span class="jxr_string">"os.family"</span>, <span class="jxr_string">"windows"</span>);
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		activate(props);
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  	}
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  	
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> spi_deactivate() {
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	}
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	<strong class="jxr_keyword">public</strong> java.util.Map spi_getProperties() {
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  		<strong class="jxr_keyword">return</strong> spi_props;
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	}
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  }
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows delegate;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  	<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/braille/liblouis-utils/src/main/java/org/daisy/pipeline/braille/liblouis/impl/windows/LiblouisNativePathForWindows_SPI.html">LiblouisNativePathForWindows_SPI</a>() {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  		delegate = <strong class="jxr_keyword">new</strong> org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows();
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  		spi_log.trace(<span class="jxr_string">"Creating LiblouisNativePathForWindows"</span>);
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  		spi_props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  		spi_props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows"</span>);
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  		spi_props.put(<span class="jxr_string">"identifier"</span>, <span class="jxr_string">"http://www.liblouis.org/native/windows/"</span>);
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		spi_props.put(<span class="jxr_string">"path"</span>, <span class="jxr_string">"/native/windows"</span>);
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  		spi_props.put(<span class="jxr_string">"os.family"</span>, <span class="jxr_string">"windows"</span>);
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		spi_log.trace(<span class="jxr_string">"Activating LiblouisNativePathForWindows"</span>);
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  		java.util.HashMap props = <strong class="jxr_keyword">new</strong> java.util.HashMap();
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		props.put(<span class="jxr_string">"component.name"</span>, <span class="jxr_string">"org.daisy.pipeline.braille.liblouis.impl.windows.LiblouisNativePathForWindows"</span>);
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  		props.put(<span class="jxr_string">"identifier"</span>, <span class="jxr_string">"http://www.liblouis.org/native/windows/"</span>);
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		props.put(<span class="jxr_string">"path"</span>, <span class="jxr_string">"/native/windows"</span>);
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		props.put(<span class="jxr_string">"os.family"</span>, <span class="jxr_string">"windows"</span>);
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  		delegate.activate(props);
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  	}
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  	
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> spi_deactivate() {
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  	}
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	<strong class="jxr_keyword">public</strong> java.util.Map spi_getProperties() {
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  		<strong class="jxr_keyword">return</strong> spi_props;
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  	}
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  	@Override
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	<strong class="jxr_keyword">public</strong> java.net.URL resolve(
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  		java.net.URI arg1
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  	) {
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		<strong class="jxr_keyword">return</strong> delegate.resolve(
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			arg1
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	}
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  	@Override
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> java.lang.Iterable&lt;java.net.URI&gt; get(
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  		java.lang.String arg1
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  	) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  		<strong class="jxr_keyword">return</strong> delegate.get(
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			arg1
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  		);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  	}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  	@Override
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  	<strong class="jxr_keyword">public</strong> java.net.URI getIdentifier() {
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">return</strong> delegate.getIdentifier();
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  	}
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  	@Override
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  	<strong class="jxr_keyword">public</strong> java.net.URI canonicalize(
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		java.net.URI arg1
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  	) {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  		<strong class="jxr_keyword">return</strong> delegate.canonicalize(
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			arg1
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  		);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	@Override
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  	<strong class="jxr_keyword">public</strong> String toString() {
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  		<strong class="jxr_keyword">return</strong> delegate.toString();
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  	}
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  	@Override
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">int</strong> hashCode() {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  		<strong class="jxr_keyword">return</strong> delegate.hashCode();
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  	}
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  	@Override
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">boolean</strong> equals(Object o) {
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  		<strong class="jxr_keyword">return</strong> delegate.equals(o);
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  	}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  }
 </pre>
 <hr>
 <div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
