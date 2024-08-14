@@ -6,7 +6,6 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
-                xmlns:re="regex-utils"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
@@ -258,7 +257,7 @@
                               select="s:getOrDefault($footnotes-style,'-obfl-fallback-collection')[not(.='normal')]"/>
                 <page-area align="bottom" max-height="{$footnotes-max-height}" collection="{@from}">
                     <xsl:if test="exists($footnotes-fallback-collection)
-                                  and matches($footnotes-fallback-collection, re:exact($css:IDENT_RE))
+                                  and matches($footnotes-fallback-collection, concat('^(',$css:IDENT_RE,')$'))
                                   and not($footnotes-fallback-collection='normal')">
                         <fallback>
                             <rename collection="{@from}" to="{$footnotes-fallback-collection}"/>
@@ -517,7 +516,7 @@
         </xsl:if>
         <xsl:variable name="text-transform" as="xs:string*">
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or matches(@style,concat('^(',$css:SYMBOLS_FN_RE,')$'))">
                 <xsl:sequence select="'-dotify-counter'"/>
             </xsl:if>
             <!-- Note that '-dotify-counter' does not replace 'none', as would be the case with a
@@ -532,7 +531,7 @@
                 <xsl:sequence select="concat('white-space: ',string($white-space))"/>
             </xsl:if>
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or matches(@style,concat('^(',$css:SYMBOLS_FN_RE,')$'))">
                 <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
             </xsl:if>
         </xsl:variable>

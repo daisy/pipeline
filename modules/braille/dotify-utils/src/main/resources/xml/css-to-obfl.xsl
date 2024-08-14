@@ -11,7 +11,6 @@
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0" >
     
@@ -2361,7 +2360,7 @@
         <xsl:variable name="style" as="xs:string*">
             <xsl:variable name="text-transform" as="xs:string*">
                 <xsl:if test="@style=$custom-counter-style-names
-                              or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                              or matches(@style,concat('^(',$css:SYMBOLS_FN_RE,')$'))">
                     <xsl:sequence select="'-dotify-counter'"/>
                 </xsl:if>
                 <!-- 'none' and 'auto' already handled -->
@@ -2385,7 +2384,7 @@
                 <xsl:sequence select="concat('white-space: ',$white-space)"/>
             </xsl:if>
             <xsl:if test="@style=$custom-counter-style-names
-                          or matches(@style,re:exact($css:SYMBOLS_FN_RE))">
+                          or matches(@style,concat('^(',$css:SYMBOLS_FN_RE,')$'))">
                 <xsl:sequence select="concat('-dotify-counter-style: ',@style)"/>
             </xsl:if>
         </xsl:variable>
@@ -2423,7 +2422,7 @@
     <xsl:template mode="block td toc-entry span"
                   match="css:leader">
         <xsl:param name="text-transform" as="xs:string" tunnel="yes"/>
-        <xsl:if test="@position[not(matches(.,re:exact($css:POSITIVE_NUMBER_RE)))]">
+        <xsl:if test="@position[not(matches(.,concat('^(',$css:POSITIVE_NUMBER_RE,')$')))]">
             <!--
                 Percentages not supported because they are relative to the box width, but
                 css:adjust-boxes changes the box dimensions

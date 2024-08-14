@@ -3,7 +3,6 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all">
     
     <xsl:import href="base.xsl"/>
@@ -38,7 +37,7 @@
             <xsl:for-each select="for $s in $stylesheet return s:keys($s)">
                 <xsl:variable name="selector" as="xs:string" select="."/>
                 <xsl:variable name="name" as="xs:string" select="replace($selector,'^&amp; ','')"/>
-                <xsl:if test="matches($name,re:exact($css:IDENT_RE))">
+                <xsl:if test="matches($name,concat('^(',$css:IDENT_RE,')$'))">
                     <xsl:map-entry key="$name">
                         <xsl:sequence select="s:get($stylesheet,$selector)"/>
                     </xsl:map-entry>

@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                xmlns:re="regex-utils"
                 xmlns:f="f"
                 exclude-result-prefixes="#all">
 
@@ -50,7 +49,7 @@
                 <xsl:apply-templates select="$all-docs/*[@css:flow=$flow]/*"/>
             </xsl:when>
             <xsl:when test="@scope=('volume','page')
-                            or matches(@scope,re:exact($css:VENDOR_PRF_IDENT_RE))">
+                            or matches(@scope,concat('^(',$css:VENDOR_PRF_IDENT_RE,')$'))">
                 <!-- evaluate later -->
                 <xsl:sequence select="."/>
             </xsl:when>
