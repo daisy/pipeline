@@ -42,9 +42,7 @@
             <!--
                 make attributes
             -->
-            <xsl:variable name="properties" as="element(css:property)*"
-                          select="for $p in $properties return s:toXml($p)"/>
-            <xsl:apply-templates mode="css:property-as-attribute" select="$properties"/>
+            <xsl:sequence select="s:toAttributes(s:merge($properties))"/>
             <xsl:apply-templates select="node()">
                 <xsl:with-param name="parent-style" tunnel="yes" select="$style"/>
                 <xsl:with-param name="parent-rest-style" tunnel="yes" select="$rest-style"/>
