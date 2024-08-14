@@ -6,7 +6,6 @@
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
-                xmlns:re="regex-utils"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"

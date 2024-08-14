@@ -11,7 +11,6 @@
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0" >
     

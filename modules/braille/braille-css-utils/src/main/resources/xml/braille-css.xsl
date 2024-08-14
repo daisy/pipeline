@@ -3,7 +3,6 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all">
     
     <xsl:import href="base.xsl"/>

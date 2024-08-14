@@ -3,11 +3,8 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
-                xmlns:re="regex-utils"
                 exclude-result-prefixes="#all"
                 version="2.0">
-    
-    <xsl:import href="regex-utils.xsl"/>
     
     <!-- ====== -->
     <!-- Syntax -->
@@ -89,7 +86,7 @@
     
     <xsl:function name="css:parse-string" as="element()?">
         <xsl:param name="string" as="xs:string"/>
-        <xsl:if test="matches($string,re:exact($css:STRING_RE))">
+        <xsl:if test="matches($string,concat('^(',$css:STRING_RE,')$'))">
             <css:string value="{replace(replace(replace(
                                   substring($string, 2, string-length($string)-2),
                                   '\\A\s?','&#xA;'),
