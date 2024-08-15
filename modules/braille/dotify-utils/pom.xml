@@ -118,7 +118,8 @@
       org.daisy.pipeline.braille.dotify.impl.DotifyOBFLTransform$Provider,
       org.daisy.pipeline.braille.dotify.impl.DotifyTranslatorImpl$Provider,
       org.daisy.pipeline.braille.dotify.impl.OBFLExtension,
-      org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider
+      org.daisy.pipeline.braille.dotify.impl.PreTranslatedBrailleTranslatorProvider,
+      org.daisy.pipeline.braille.dotify.saxon.impl.ObflStyle$ObflStyleFunctionProvider
     </expose-services>
   </properties>
   
