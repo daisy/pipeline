@@ -29,6 +29,27 @@ public interface OBFLProperty extends BrailleCSSProperty {
 		}
 	}
 
+	// not inherited in OBFL
+	public enum LineHeight implements OBFLProperty {
+		number(""), percentage(""), INHERIT("inherit"), INITIAL("initial");
+		private String text;
+		private LineHeight(String text) {
+			this.text = text;
+		}
+		@Override
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+		@Override
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+		@Override
+		public String toString() {
+			return text;
+		}
+	}
+
 	public enum Marker implements OBFLProperty {
 		list_values(""), NONE("none"), INHERIT("inherit"), INITIAL("initial");
 		private String text;
@@ -69,6 +90,48 @@ public interface OBFLProperty extends BrailleCSSProperty {
 		}
 	}
 
+	// not inherited in OBFL
+	public enum TextAlign implements OBFLProperty {
+	    LEFT("left"), RIGHT("right"), CENTER("center"), INHERIT("inherit"), INITIAL("initial");
+		private String text;
+		private TextAlign(String text) {
+			this.text = text;
+		}
+		@Override
+		public String toString() {
+			return text;
+		}
+		@Override
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+		@Override
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+	}
+
+	// not inherited in OBFL
+	public enum TextIndent implements OBFLProperty {
+		integer(""), INHERIT("inherit"), INITIAL("initial");
+		private String text;
+		private TextIndent(String text) {
+			this.text = text;
+		}
+		@Override
+		public String toString() {
+			return text;
+		}
+		@Override
+		public boolean equalsInherit() {
+			return this == INHERIT;
+		}
+		@Override
+		public boolean equalsInitial() {
+			return this == INITIAL;
+		}
+	}
+	
 	public enum TocRange implements OBFLProperty {
 		DOCUMENT("document"), VOLUME("volume"), INHERIT("inherit"), INITIAL("initial");
 		private String text;
