@@ -57,7 +57,6 @@
         css:make-boxes
         css:make-pseudo-elements
         css:make-table-grid
-        css:new-definition
         css:parse-content
         css:parse-properties
         css:parse-stylesheet
@@ -91,6 +90,11 @@
     <p:import href="deep-parse-page-and-volume-stylesheets.xpl">
       <p:documentation>
         pxi:deep-parse-page-and-volume-stylesheets
+      </p:documentation>
+    </p:import>
+    <p:import href="obfl-css-definition.xpl">
+      <p:documentation>
+        pxi:obfl-css-definition
       </p:documentation>
     </p:import>
     <cx:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" type="application/xslt+xml">
@@ -686,15 +690,12 @@
                 <!-- depends on make-anonymous-block-boxes -->
             </p:documentation>
         </css:adjust-boxes>
-        <css:new-definition px:progress=".40">
+        <pxi:obfl-css-definition px:progress=".40">
             <p:documentation>
-                Convert CSS properties to corresponding OBFL attributes.
+                Convert CSS styles to corresponding OBFL properties.
             </p:documentation>
-            <p:input port="definition">
-                <p:document href="obfl-css-definition.xsl"/>
-            </p:input>
             <p:with-param name="initial-braille-charset" select="if ($braille-charset='') then 'unicode' else 'custom'"/>
-        </css:new-definition>
+        </pxi:obfl-css-definition>
         <p:xslt px:progress=".03">
             <p:input port="parameters">
                 <p:empty/>
