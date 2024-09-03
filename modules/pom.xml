@@ -103,6 +103,7 @@
     <module>scripts/html-to-pef</module>
     <module>scripts/nimas-fileset-validator</module>
     <module>scripts/word-to-dtbook</module>
+    <module>scripts/word-to-epub3</module>
     <module>scripts/zedai-to-epub3</module>
     <module>scripts/zedai-to-html</module>
     <module>scripts/zedai-to-pef</module>

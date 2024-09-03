@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
+  <uri uri="../xml/word-to-epub3.script.xpl" px:content-type="script" px:id="word-to-epub3"
+       px:extends="../../../../../common-options.xpl"/>
+
+  <nextCatalog catalog="org:daisy:pipeline:modules:word-to-dtbook"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:epub-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-to-epub3"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:file-utils"/>
+
+</catalog>
