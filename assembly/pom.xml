@@ -1038,6 +1038,16 @@
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>word-to-epub3</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
       <artifactId>zedai-to-epub3</artifactId>
       <exclusions>
         <exclusion>
@@ -2462,6 +2472,10 @@
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>word-to-dtbook</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>word-to-epub3</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
