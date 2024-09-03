@@ -6,12 +6,8 @@
        px:content-type="script"
        px:id="word-to-dtbook"
   />
-  
-  <uri name="http://www.daisy.org/pipeline/modules/word-to-dtbook/dtd/dtbook-2005-3.dtd" uri="../dtd/dtbook-2005-3.dtd"/>
-  <uri name="http://www.daisy.org/z3986/2005/dtbook-2005-3.dtd" uri="../dtd/dtbook-2005-3.dtd"/>
-  
-  <uri name="http://www.daisy.org/pipeline/modules/word-to-dtbook/dtd/mathml2.dtd" uri="../dtd/mathml2.dtd"/>
-  <uri name="http://www.w3.org/Math/DTD/mathml2/mathml2.dtd" uri="../dtd/mathml2.dtd"/>
 
-  
+  <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
+  <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
+
 </catalog>
