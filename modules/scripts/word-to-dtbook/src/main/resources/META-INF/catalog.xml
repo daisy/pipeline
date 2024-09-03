@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" xmlns:px="http://www.daisy.org/ns/pipeline">
 
-  <uri name="http://www.daisy.org/pipeline/modules/word-to-dtbook/word-to-dtbook.xpl"
-       uri="../xml/word-to-dtbook.xpl"
-       px:content-type="script"
-       px:id="word-to-dtbook"
-  />
+  <uri name="http://www.daisy.org/pipeline/modules/word-to-dtbook/library.xpl" uri="../xml/library.xpl"/>
 
+  <uri uri="../xml/word-to-dtbook.script.xpl" px:content-type="script" px:id="word-to-dtbook"/>
+
+  <nextCatalog catalog="org:daisy:pipeline:modules:fileset-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:dtbook-utils"/>
   <nextCatalog catalog="org:daisy:pipeline:modules:mathml-utils"/>
 

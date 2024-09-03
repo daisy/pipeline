@@ -4,7 +4,7 @@
                script="../../main/resources/xml/word-to-dtbook.xpl">
 
   <x:scenario label="FromSingleDocx">
-    <x:call step="px:word-to-dtbook.script"/>
+    <x:call step="px:word-to-dtbook"/>
 
    <x:scenario label="Test 1">
       <x:call>
@@ -12,9 +12,9 @@
             name="source"
             select="resolve-uri('../resources/Test%201/Input/F1.docx')"/>
         <x:option name="uid" select="'1'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/1/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/1/Output/F1.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/1/Output/"/>
@@ -22,13 +22,11 @@
       <x:expect label="directory" type="compare">
         <x:document type="directory" href="../resources/Test%201/Output/"/>
       </x:expect>
-      <x:context label="result">
-        <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/1/Output/F1.xml"/>
+      <x:context label="result.in-memory">
+        <x:document type="port" port="result.in-memory"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%201/Output/F1.xml"/>
+        <x:document type="file" href="../resources/Test%201/Output/F1.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -41,9 +39,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'2'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/2/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/2/Output/F%202.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/2/Output/"/>
@@ -55,9 +53,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/2/Output/F%202.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%202/Output/F%202.xml"/>
+        <x:document type="file" href="../resources/Test%202/Output/F%202.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -70,9 +66,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'3'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/3/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/3/Output/F%203.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/3/Output/"/>
@@ -84,9 +80,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/3/Output/F%203.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%203/Output/F%203.xml"/>
+        <x:document type="file" href="../resources/Test%203/Output/F%203.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -99,9 +93,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'4'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/4/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/4/Output/F4.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/4/Output/"/>
@@ -113,9 +107,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/4/Output/F4.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%204/Output/F4.xml"/>
+        <x:document type="file" href="../resources/Test%204/Output/F4.xml"/>
       </x:expect>
     </x:scenario>
     
@@ -128,9 +120,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'5'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/5/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/5/Output/F5.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/5/Output/"/>
@@ -142,9 +134,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/5/Output/F5.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%205/Output/F5.xml"/>
+        <x:document type="file" href="../resources/Test%205/Output/F5.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -157,9 +147,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'6'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/6/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/6/Output/F6.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/6/Output/"/>
@@ -171,9 +161,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/6/Output/F6.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%206/Output/F6.xml"/>
+        <x:document type="file" href="../resources/Test%206/Output/F6.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -186,9 +174,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'7'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/7/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/7/Output/F7.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/7/Output/"/>
@@ -200,9 +188,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/7/Output/F7.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%207/Output/F7.xml"/>
+        <x:document type="file" href="../resources/Test%207/Output/F7.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -215,9 +201,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'8'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/8/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/8/Output/F8.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/8/Output/"/>
@@ -229,9 +215,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/8/Output/F8.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%208/Output/F8.xml"/>
+        <x:document type="file" href="../resources/Test%208/Output/F8.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -244,9 +228,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'9'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/9/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/9/Output/F9.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/9/Output/"/>
@@ -258,9 +242,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/9/Output/F9.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%209/Output/F9.xml"/>
+        <x:document type="file" href="../resources/Test%209/Output/F9.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -273,9 +255,9 @@
         <x:option name="creator" select="'Balandin Vyacheslav'"/>
         <x:option name="publisher" select="'Pruchkovskaya'"/>
         <x:option name="uid" select="'10'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/10/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/10/Output/F10.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
       </x:call>
       <x:context label="directory">
         <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/10/Output/"/>
@@ -287,9 +269,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/10/Output/F10.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-            type="file"
-            href="../resources/Test%2010/Output/F10.xml"/>
+        <x:document type="file" href="../resources/Test%2010/Output/F10.xml"/>
       </x:expect>
     </x:scenario>
 
@@ -302,9 +282,9 @@
         <x:option name="creator" select="'Nicolas Pavie'"/>
         <x:option name="publisher" select="'Association Valentin Haüy'"/>
         <x:option name="uid" select="'11'"/>
-        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/11/Output/')"/>
+        <x:option name="output-base-uri" select="concat($temp-dir,'FromSingleDocx/11/Output/default_sample_for_dtbook_conversion.xml')"/>
         <x:option name="accept-revisions" select="true()"/>
-        <x:option name="disableDateGeneration" select="true()" />
+        <x:option name="disable-date-generation" select="true()" />
         <x:option name="extract-shapes" select="false()" />
       </x:call>
       <x:context label="directory">
@@ -317,9 +297,7 @@
         <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/11/Output/default_sample_for_dtbook_conversion.xml"/>
       </x:context>
       <x:expect label="result" type="compare">
-        <x:document
-                type="file"
-                href="../resources/Test%2011/Output/default_sample_for_dtbook_conversion.xml"/>
+        <x:document type="file" href="../resources/Test%2011/Output/default_sample_for_dtbook_conversion.xml"/>
       </x:expect>
     </x:scenario>
   </x:scenario>
