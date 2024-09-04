@@ -39,6 +39,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.openxml4j.opc.TargetMode;
+import org.apache.poi.UnsupportedFileFormatException;
 
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
@@ -189,12 +190,12 @@ public class DaisyClass {
 	 *
 	 * @param input            Input .docx file
 	 * @param output           Destination folder of .xml file
-	 * @param extractShapes	   Try to export shapes from the daisyclass.
+	 * @param extractShapes    Try to export shapes from the daisyclass.
 	 *                         Needs to be set to false for plugins that could block word from opening
 	 */
 	public DaisyClass(String input,
 	                  String output,
-					  Boolean extractShapes
+	                  Boolean extractShapes
 	) throws InvalidFormatException {
 
 		this.inputName = GetFileNameWithoutExtension(new File(URI.create(input))).replace(" ", "_");
@@ -204,17 +205,14 @@ public class DaisyClass {
 
 		// first try to copy the current file in another location
 		// as the file might be opened by the user in word
-		OPCPackage copyOrOriginal;
-		try{
+		try {
 			File tmpDirectory = Files.createTempDirectory("pipeline-").toFile();
 			tmpDirectory.deleteOnExit();
-			File copied = new File(tmpDirectory,inputFile.getName());
+			File copy = new File(tmpDirectory, inputFile.getName());
 			try (
-					InputStream in = new BufferedInputStream(
-							new FileInputStream(inputFile));
-					OutputStream out = new BufferedOutputStream(
-							new FileOutputStream(copied))) {
-
+				InputStream in = new BufferedInputStream(new FileInputStream(inputFile));
+				OutputStream out = new BufferedOutputStream(new FileOutputStream(copy))
+			) {
 				byte[] buffer = new byte[4096];
 				int lengthRead;
 				while ((lengthRead = in.read(buffer)) > 0) {
@@ -222,26 +220,30 @@ public class DaisyClass {
 					out.flush();
 				}
 			}
-			if(extractShapes){
-				try{
+			if (extractShapes) {
+				try {
 					//throw new java.lang.Exception("Disabling WordShapesExporter for test");
-					WordShapesExporter.ProcessShapes(copied.toURI().toString(), outputFilename.toURI().toString());
-				} catch (java.lang.Exception e){
+					WordShapesExporter.ProcessShapes(copy.toURI().toString(), outputFilename.toURI().toString());
+				} catch (java.lang.Exception e) {
 					LOGGER.info(e.getMessage());
 					LOGGER.info("Trying openoffice shapes export...");
 					try {
-						OOShapesExporter.ProcessShapes(copied.toURI().toString(), outputFilename.toURI().toString());
+						OOShapesExporter.ProcessShapes(copy.toURI().toString(), outputFilename.toURI().toString());
 					} catch (Exception ex) {
 						LOGGER.info("Could not export shapes with openoffice, shapes will be ignored");
 					}
 				}
 			}
-			copyOrOriginal = OPCPackage.open(copied);
-		} catch (Exception e){
-			LOGGER.info("Could not copy the input for shapes treatment");
-			copyOrOriginal = OPCPackage.open(inputFile);
+			inputFile = copy;
+		} catch (Exception e) {
+			LOGGER.info("Could not copy the input");
 		}
-		pack = copyOrOriginal;
+		try {
+			pack = OPCPackage.open(inputFile);
+		} catch (UnsupportedFileFormatException e) {
+			throw new IllegalArgumentException(
+				"Input format not supported. Only Office Open XML format (docx) is supported.", e);
+		}
 		for (int i = 0; i < 9; i++) {
 			startItem.add("");
 		}
