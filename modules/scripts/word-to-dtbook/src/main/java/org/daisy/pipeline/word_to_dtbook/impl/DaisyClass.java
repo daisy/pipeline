@@ -42,9 +42,9 @@ import org.apache.poi.openxml4j.opc.TargetMode;
 
 import org.daisy.common.xpath.saxon.ExtensionFunctionProvider;
 import org.daisy.common.xpath.saxon.ReflexiveExtensionFunctionProvider;
+import org.daisy.pipeline.word_to_dtbook.impl.shapes.OOShapesExporter;
+import org.daisy.pipeline.word_to_dtbook.impl.shapes.WordShapesExporter;
 
-import org.daisy.pipeline.word_to_dtbook.shapes.OOShapesExporter;
-import org.daisy.pipeline.word_to_dtbook.shapes.WordShapesExporter;
 import org.osgi.service.component.annotations.Component;
 
 import org.w3c.dom.DOMException;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.word_to_dtbook.shapes;
+package org.daisy.pipeline.word_to_dtbook.impl.shapes;
 
 import com.sun.star.beans.Property;
 import com.sun.star.beans.PropertyValue;

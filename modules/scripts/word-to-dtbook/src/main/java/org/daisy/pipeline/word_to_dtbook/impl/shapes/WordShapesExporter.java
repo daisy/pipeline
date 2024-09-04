@@ -1,4 +1,4 @@
-package org.daisy.pipeline.word_to_dtbook.shapes;
+package org.daisy.pipeline.word_to_dtbook.impl.shapes;
 import org.daisy.common.file.URLs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
