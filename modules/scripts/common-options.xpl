@@ -632,7 +632,7 @@ top-level or level-two section before the first sub-section.</a:documentation>
 	    word-to-dtbook
 	    word-to-epub3
 	-->
-	<p:option name="accept-revisions" select="true()" cx:as="xs:boolean">
+	<p:option name="accept-revisions" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Accept revisions</h2>
 			<p px:role="desc">If the document has revisions that are not accepted, consider them as accepted for the conversion.</p>

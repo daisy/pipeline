@@ -75,7 +75,7 @@ if they exceed the given maximum size.</p>
 	</p:option>
 
 	<!-- defined in ../../../../../common-options.xpl -->
-	<p:option name="accept-revisions" select="true()"/>
+	<p:option name="accept-revisions" select="false()"/>
 	<!-- from settings  -->
 	<p:option name="pagination" select="'custom'"/>
 	<p:option name="image-size" select="'original'"/>
