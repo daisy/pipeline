@@ -56,7 +56,7 @@
 	<!-- defined in ../../../../../common-options.xpl -->
 	<p:option name="accept-revisions" select="true()"/>
 	<!-- from settings  -->
-	<p:option name="pagination" select="'Custom'"/>
+	<p:option name="pagination" select="'custom'"/>
 	<p:option name="image-size" select="'original'"/>
 	<p:option name="dpi" select="96" cx:as="xs:integer"/>
 	<p:option name="character-styles" select="false()"/>

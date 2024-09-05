@@ -13,7 +13,7 @@
 	<p:option name="uid" select="''"/>
 	<p:option name="subject" select="''"/>
 	<p:option name="accept-revisions" select="true()" cx:as="xs:boolean"/>
-	<p:option name="pagination" select="'Custom'"/>
+	<p:option name="pagination" select="'custom'"/>
 	<p:option name="image-size" select="'original'"/>
 	<p:option name="dpi" select="96" cx:as="xs:integer"/>
 	<p:option name="character-styles" select="false()" cx:as="xs:boolean"/>
@@ -60,7 +60,7 @@
 		<p:with-param name="subject" select="$subject"/>
 		<p:with-param name="acceptRevisions" select="$accept-revisions"/>
 		<p:with-param name="version" select="'14'"/>
-		<p:with-param name="pagination" select="$pagination"/>
+		<p:with-param name="pagination" select="if ($pagination='custom') then 'Custom' else 'Automatic'"/>
 		<p:with-param name="MasterSub" select="false()"/>
 		<p:with-param name="ImageSizeOption" select="$image-size"/>
 		<p:with-param name="DPI" select="$dpi"/>

@@ -651,9 +651,9 @@ top-level or level-two section before the first sub-section.</a:documentation>
 		<p:pipeinfo>
 			<px:type>
 				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-					<value>Custom</value>
+					<value>custom</value>
 					<a:documentation xml:lang="en">Use numbers tagged with the style 'PageNumberDAISY' in the document</a:documentation>
-					<value>Automatic</value>
+					<value>automatic</value>
 					<a:documentation xml:lang="en">Use Word page breaks to compute and insert page numbers in content</a:documentation>
 				</choice>
 			</px:type>
