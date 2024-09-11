@@ -14,6 +14,7 @@ ifneq ($(MAKECMDGOALS),)
 ifneq ($(MAKECMDGOALS), help)
 ifneq ($(MAKECMDGOALS), dump-maven-cmd)
 ifneq ($(MAKECMDGOALS), dump-gradle-cmd)
+ifneq ($(MAKECMDGOALS), cache)
 ifneq ($(MAKECMDGOALS), clean-website)
 include .make/main.mk
 assembly/BASEDIR := assembly
@@ -22,6 +23,9 @@ include assembly/deps.mk
 -include webui/.deps.mk
 else
 .SILENT: clean-website
+endif
+else
+.SILENT: cache
 endif
 else
 .SILENT: dump-gradle-cmd
