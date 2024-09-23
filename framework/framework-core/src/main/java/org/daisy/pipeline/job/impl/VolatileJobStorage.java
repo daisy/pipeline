@@ -49,7 +49,7 @@ public class VolatileJobStorage implements JobStorage {
         @Override
         public synchronized Optional<AbstractJob> add(AbstractJob job) {
                 if (!jobs.containsKey(job.getId())) {
-                        job = new VolatileJob(job.getContext(), job.getPriority(), job.xprocEngine, true);
+                        job = new VolatileJob(job);
                         jobs.put(job.getId(), job);
                         return Optional.of(job);
                 }

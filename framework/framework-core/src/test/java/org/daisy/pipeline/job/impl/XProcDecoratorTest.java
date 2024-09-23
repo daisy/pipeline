@@ -71,7 +71,7 @@ public class XProcDecoratorTest   {
 			.build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
+		XProcDecorator trans=XProcDecorator.from(mscript, mapper, null);
 		trans.decorateInputPorts(mscript,input,builder);
 
 		XProcInput newInput = builder.build();
@@ -97,7 +97,7 @@ public class XProcDecoratorTest   {
 			.build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
+		XProcDecorator trans=XProcDecorator.from(mscript, mapper, null);
 		trans.decorateInputPorts(mscript,input,builder);
 
 		XProcInput newInput = builder.build();
@@ -120,7 +120,7 @@ public class XProcDecoratorTest   {
 		QName optName=Mock.ScriptGenerator.getOptionInputName(0);
 		ScriptInput input = new ScriptInput.Builder(resources).withInput(optName.getLocalPart(), Mock.getSource(testFile)).build();
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
+		XProcDecorator trans=XProcDecorator.from(mscript, mapper, null);
 		trans.decorateInputOptions(mscript, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -141,7 +141,7 @@ public class XProcDecoratorTest   {
 			.build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(mscript,mapper);
+		XProcDecorator trans=XProcDecorator.from(mscript, mapper, null);
 		trans.decorateInputOptions(mscript, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -161,7 +161,7 @@ public class XProcDecoratorTest   {
 		ScriptInput input = new ScriptInput.Builder().build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateInputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -178,7 +178,7 @@ public class XProcDecoratorTest   {
 		ScriptInput input = new ScriptInput.Builder().withOption(optName.getLocalPart(), "cosa").build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateInputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -195,7 +195,7 @@ public class XProcDecoratorTest   {
 		ScriptInput input = new ScriptInput.Builder().withOption(optName.getLocalPart(), testFile).build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateOutputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -213,7 +213,7 @@ public class XProcDecoratorTest   {
 		// adding a value to the input does not have an effect
 		ScriptInput input = new ScriptInput.Builder().withOption(optName.getLocalPart(), testDir).build();
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateOutputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -232,7 +232,7 @@ public class XProcDecoratorTest   {
 		ScriptInput input = new ScriptInput.Builder().withOption(optName.getLocalPart(), "").build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateOutputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -250,7 +250,7 @@ public class XProcDecoratorTest   {
 		ScriptInput input = new ScriptInput.Builder().withOption(optName.getLocalPart(), "").build();
 
 		XProcInput.Builder builder = new XProcInput.Builder();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		trans.decorateOutputOptions(script, input, builder);
 
 		XProcInput newInput = builder.build();
@@ -280,7 +280,7 @@ public class XProcDecoratorTest   {
 			.withOption(optOutDir.getLocalPart(), "outs")            // no effect
 			.build();
 
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcInput iTrans=trans.decorate(input);
 
 		Assert.assertEquals(iTrans.getOptions().get(optIn), mapper.getInputBase() + testFile);
@@ -296,7 +296,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -313,7 +313,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/file.xml")).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -332,7 +332,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -347,7 +347,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,Mock.getResultProvider("dir/")).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -363,7 +363,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,null).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -378,7 +378,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -393,7 +393,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);
@@ -408,7 +408,7 @@ public class XProcDecoratorTest   {
 		String outName = Mock.ScriptGenerator.getOutputName(0);
 
 		XProcOutput outs = new XProcOutput.Builder().withOutput(outName,null).build();
-		XProcDecorator trans=XProcDecorator.from(script,mapper);
+		XProcDecorator trans=XProcDecorator.from(script, mapper, null);
 		XProcOutput decorated=trans.decorate(outs);
 		
 		Supplier<Result> res=decorated.getResultProvider(outName);

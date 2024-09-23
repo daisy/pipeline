@@ -83,9 +83,12 @@ public abstract class DatatypeService {
 				return DocumentBuilderFactory.newInstance().newDocumentBuilder().parse("<data type=\"boolean\"/>");
 			}
 			public ValidationResult validate(String content) {
-				return "true".equals(content) || "false".equals(content) || "1".equals(content) || "0".equals(content)
-					? valid()
-					: notValid("Not a boolean: " + content);
+				if (content != null) {
+					String lower = content.toLowerCase();
+					if ("true".equals(lower) || "false".equals(lower) || "1".equals(lower) || "0".equals(lower))
+						return valid();
+				}
+				return notValid("Not a boolean: " + content);
 			}
 		};
 

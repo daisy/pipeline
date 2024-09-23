@@ -67,21 +67,22 @@ public abstract class GenericResource extends ServerResource {
 		return (PipelineWebService)getApplication();
 	}
 
-	protected Representation getErrorRepresentation(Throwable error){
-		logger.debug(null, error);
-		ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(error).withUri(this.getStatus().getUri());
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				builder.build().getXmlDocument());
+	protected Representation getErrorRepresentation(Throwable error) {
+		logger.debug("Error in fulfilling request:", error);
+		ErrorWriter.ErrorWriterBuilder builder = new ErrorWriter.ErrorWriterBuilder()
+		                                                        .withError(error)
+		                                                        .withUri(this.getStatus().getUri());
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, builder.build().getXmlDocument());
 		logResponse(dom);
 		return dom;
 	}
 
-	protected Representation getErrorRepresentation(String error){
-		logger.debug(error);
-		ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder().withError(new Throwable(error)).withUri(this.getStatus().getUri());
-		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML,
-				builder.build()
-				.getXmlDocument());
+	protected Representation getErrorRepresentation(String error) {
+		logger.debug("Error in fulfilling request: " + error);
+		ErrorWriter.ErrorWriterBuilder builder=new ErrorWriter.ErrorWriterBuilder()
+		                                                        .withError(new Throwable(error))
+		                                                        .withUri(this.getStatus().getUri());
+		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, builder.build().getXmlDocument());
 		logResponse(dom);
 		return dom;
 	}

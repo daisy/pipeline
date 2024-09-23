@@ -8,15 +8,24 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.Result;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.Source;
 
+import com.google.common.base.Supplier;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.google.common.io.CharStreams;
+
+import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
 import org.daisy.pipeline.job.URIMapper;
@@ -30,12 +39,9 @@ import org.daisy.pipeline.script.XProcOptionMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
-
-import com.google.common.base.Supplier;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
-import com.google.common.io.CharStreams;
+import org.xml.sax.SAXException;
 
 public class XProcDecorator {
 	
@@ -43,19 +49,21 @@ public class XProcDecorator {
 
 	private final XProcScript script;
 	private final URIMapper mapper;
+	private List<DocumentBuilder> inputParsers;
 
 	/**
 	 * Constructs a new instance.
 	 *
 	 * @param contextDir The contextDir for this instance.
 	 */
-	private XProcDecorator(URIMapper mapper, XProcScript script) {
-		this.script=script;
-		this.mapper=mapper;
+	private XProcDecorator(XProcScript script, URIMapper mapper, List<DocumentBuilder> inputParsers) {
+		this.script = script;
+		this.mapper = mapper;
+		this.inputParsers = inputParsers;
 	}
 
-	public static XProcDecorator from(XProcScript script, URIMapper mapper) throws IOException {
-		return new XProcDecorator(mapper,script);
+	public static XProcDecorator from(XProcScript script, URIMapper mapper, List<DocumentBuilder> inputParsers) throws IOException {
+		return new XProcDecorator(script, mapper, inputParsers);
 	}
 
 	public XProcInput decorate(ScriptInput input) {
@@ -121,8 +129,8 @@ public class XProcDecorator {
 				// number of inputs for this port
 				int inputCnt = 0;
 				for (Source src : input.getInput(port.getName())) {
+					InputSource is = SAXSource.sourceToInputSource(src);
 					URI relUri = null; {
-						InputSource is = SAXSource.sourceToInputSource(src);
 						if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null))
 							// this is the case when no zip context was provided (all comes from the xml)
 							relUri = URI.create(port.getName() + '-' + inputCnt + ".xml");
@@ -131,13 +139,44 @@ public class XProcDecorator {
 								relUri = URI.create(src.getSystemId());
 							} catch (Exception e) {
 								throw new RuntimeException(
-									"Error parsing uri when building the input port"
-									+ port.getName(), e);
+									"Error parsing uri when building the input port" + port.getName(), e);
 							}
 						}
 					}
 					URI uri = mapper.mapInput(relUri);
 					src.setSystemId(uri.toString());
+					String mediaType = port.getMediaType();
+					if (mediaType != null && !(src instanceof DOMSource)) {
+						mediaType = mediaType.trim();
+						if (!mediaType.isEmpty()) {
+							List<String> types = Lists.newArrayList(mediaType.split("\\s+"));
+							if (!Iterables.all(types, t -> t.matches("[^ ]*(/|\\+)xml"))) {
+								// input might be non-XML: transform to XML
+								if (is == null)
+									throw new IOException("Error reading input on port " + port.getName() + ": " + src.getClass());
+								Document doc = null; {
+									if (inputParsers != null)
+										for (DocumentBuilder p : inputParsers)
+											if (types.isEmpty())
+												break;
+											else if (types.removeIf(p::supportsContentType))
+												try {
+													doc = p.parse(is);
+													break;
+												} catch (SAXException|IllegalArgumentException e) {
+													// ignore: if non of the parsers can handle the input, throw new error (see below)
+												}
+								}
+								if (doc == null)
+									throw new IOException(
+										"Input on port " + port.getName() + " (media-type: " + mediaType + ") could not be parsed");
+								Source domSrc = new DOMSource(doc);
+								builder.withInput(port.getName(), () -> domSrc);
+								inputCnt++;
+								continue;
+							}
+						}
+					}
 					builder.withInput(port.getName(), () -> src);
 					inputCnt++;
 				}

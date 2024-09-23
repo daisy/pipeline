@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 
@@ -16,6 +16,7 @@ import com.google.common.base.Supplier;
 import org.daisy.common.messaging.Message.Level;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.priority.Priority;
+import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcErrorException;
 import org.daisy.common.xproc.XProcInput;
@@ -49,23 +50,33 @@ public abstract class AbstractJob implements Job {
 
         protected static final Logger logger = LoggerFactory.getLogger(Job.class);
 
-        protected volatile Status status = Status.IDLE;
-        protected Priority priority;
-        protected AbstractJobContext ctxt;
-        public final XProcEngine xprocEngine;
+        private volatile Status status = Status.IDLE;
+        protected Priority priority; // used in PersistentJob
+        protected AbstractJobContext ctxt; // used in PersistentJob
+        private final XProcEngine xprocEngine;
+        private final List<DocumentBuilder> inputParsers;
         private final boolean managed;
         private boolean closed = false;
 
         /**
          * @param managed Whether the Job will be managed by a {@link JobManager}.
          */
-        protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine, boolean managed) {
+        protected AbstractJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine, List<DocumentBuilder> inputParsers, boolean managed) {
                 this.ctxt = ctxt;
                 this.priority = priority != null ? priority : Priority.MEDIUM;
                 this.xprocEngine = xprocEngine;
+                this.inputParsers = inputParsers;
                 this.managed = managed;
-                if (!managed)
-                        changeStatus(Status.IDLE);
+        }
+
+        // for use in VolatileJob
+        protected AbstractJob(AbstractJob job) {
+                this(job.ctxt, job);
+        }
+
+        // for use in PersistentJob
+        protected AbstractJob(AbstractJobContext ctxt, AbstractJob job) {
+                this(ctxt, job.priority, job.xprocEngine, job.inputParsers, job.managed);
         }
 
         @Override
@@ -183,7 +194,7 @@ public abstract class AbstractJob implements Job {
                         throw new IllegalStateException();
                 try {
                         pipeline = xprocEngine.load(((XProcScript)script).getURI());
-                        XProcDecorator decorator = XProcDecorator.from((XProcScript)script, ctxt.uriMapper);
+                        XProcDecorator decorator = XProcDecorator.from((XProcScript)script, ctxt.uriMapper, inputParsers);
                         XProcInput input = decorator.decorate(ctxt.input);
                         XProcResult result = pipeline.run(input, () -> ctxt.messageBus, ctxt.properties);
                         XProcOutput output = decorator.decorate(new XProcOutput.Builder().build());
@@ -366,7 +377,7 @@ public abstract class AbstractJob implements Job {
                 try {
                         DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
                         docBuilderFactory.setNamespaceAware(true);
-                        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+                        javax.xml.parsers.DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
                         Document doc = docBuilder.parse(status);
                         String result = doc.getDocumentElement().getAttribute("result");
                         if (result == null || result.isEmpty()) {

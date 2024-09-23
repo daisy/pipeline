@@ -12,7 +12,10 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 
 @Component(
 	name = "saxon-processor",
-	service = { Processor.class }
+	service = {
+		Processor.class,
+		ProcessorImpl.class
+	}
 )
 public class ProcessorImpl extends Processor {
 

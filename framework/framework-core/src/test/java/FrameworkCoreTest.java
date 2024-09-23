@@ -19,6 +19,7 @@ public class FrameworkCoreTest extends AbstractTest {
 			"com.google.guava:guava:?",
 			"org.slf4j:slf4j-api:?",
 			"org.daisy.libs:jing:?",
+			"org.daisy.libs:saxon-he:?",
 			"org.daisy.pipeline:common-utils:?",
 			"org.daisy.pipeline:xproc-api:?",
 			"org.daisy.pipeline:woodstox-osgi-adapter:?",

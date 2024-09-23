@@ -4,10 +4,7 @@ import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.daisy.common.priority.Priority;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.job.AbstractJob;
-import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobManager;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
@@ -25,8 +22,8 @@ public class VolatileJob extends AbstractJob {
 	/**
 	 * @param managed Whether the Job will be managed by a {@link JobManager}.
 	 */
-	public VolatileJob(AbstractJobContext ctxt, Priority priority, XProcEngine xprocEngine, boolean managed) {
-		super(ctxt, priority, xprocEngine, managed);
+	public VolatileJob(AbstractJob job) {
+		super(job);
 		autoCleanUp = new AtomicBoolean(true);
 		resultCount = new AtomicInteger(0);
 
@@ -97,7 +94,7 @@ public class VolatileJob extends AbstractJob {
 			if (resultCount.get() == 0)
 				// no JobResult objects were created
 				tryDeleteOutputDir();
-			if (status == Status.IDLE)
+			if (getStatus() == Status.IDLE)
 				// run() was not executed yet so context directory is still there
 				tryDeleteContextDir();
 		}

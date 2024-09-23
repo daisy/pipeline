@@ -30,7 +30,7 @@ public class StatusPortTest {
                 script= new Mock.ScriptGenerator.Builder()
                         .withOutputPort("status", MEDIA_TYPE_STATUS_XML, true, false)
                         .build().generate();
-                outputs = XProcDecorator.from(script, null).decorate(new XProcOutput.Builder().build());
+                outputs = XProcDecorator.from(script, null, null).decorate(new XProcOutput.Builder().build());
         }
 
         void writeStatus(String statusXml) throws IOException, UnsupportedEncodingException {

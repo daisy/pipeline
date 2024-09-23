@@ -51,7 +51,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	Database db=null;
 
 	PersistentJob(Database db, AbstractJob job, PersistentClientStorage clientStorage) {
-		super(new PersistentJobContext(job.getContext(), clientStorage), job.getPriority(), job.xprocEngine, true);
+		super(new PersistentJobContext(job.getContext(), clientStorage), job);
 		this.db=db;
 		this.sJobId=ctxt.getId().toString();
 		this.db.addObject(this);
@@ -61,7 +61,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	 * Constructs a new instance.
 	 */
 	private PersistentJob() {
-		super(null, null, null, true);
+		super(null, null, null, null, true);
 	}
 
 	@Enumerated(EnumType.ORDINAL)
@@ -114,7 +114,7 @@ public class PersistentJob  extends AbstractJob implements Serializable {
 	//this will watch for changes in the status and update the db
 	@Override
 	protected synchronized void onStatusChanged() {
-		logger.info("Changing Status:"+status);
+		logger.info("Changing Status: " + getStatus());
 		if(this.db!=null){
 			logger.debug("Updating object");	
 			db.updateObject(this);

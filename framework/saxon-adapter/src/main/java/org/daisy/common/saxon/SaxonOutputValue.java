@@ -4,12 +4,16 @@ import java.net.URI;
 import java.util.function.Consumer;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.transform.dom.DOMSource;
 
 import net.sf.saxon.Configuration;
+import net.sf.saxon.dom.NodeOverNodeInfo;
 import net.sf.saxon.event.NamespaceReducer;
 import net.sf.saxon.event.Receiver;
 import net.sf.saxon.event.StreamWriterToReceiver;
+import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmDestination;
 import net.sf.saxon.s9api.XdmItem;
@@ -21,20 +25,25 @@ import org.daisy.common.stax.DelegatingBaseURIAwareXMLStreamWriter;
 import org.daisy.common.transform.TransformerException;
 import org.daisy.common.transform.XMLOutputValue;
 
+import org.w3c.dom.Node;
+
 public class SaxonOutputValue extends XMLOutputValue<Void> {
 
 	private SaxonOutputValue backingValue = null;
 	private final Consumer<XdmItem> xdmItemConsumer;
+	private final Configuration configuration;
 
 	public SaxonOutputValue(Consumer<XdmItem> value, Configuration configuration) {
 		super(createXMLStreamWriter(value, configuration));
 		xdmItemConsumer = value;
+		this.configuration = configuration;
 	}
 
 	public SaxonOutputValue(SaxonOutputValue value) {
 		super(value);
 		backingValue = value;
 		xdmItemConsumer = null; // will not be accessed
+		configuration = null; // will not be accessed
 	}
 
 	public Consumer<XdmItem> asXdmItemConsumer() {
@@ -44,9 +53,29 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 			return xdmItemConsumer;
 	}
 
+	public Consumer<Node> asNodeConsumer() {
+		if (backingValue != null)
+			return backingValue.asNodeConsumer();
+		else
+			return n -> xdmItemConsumer.accept(domToXdmNode(n));
+	}
+
 	@Override
 	public BaseURIAwareXMLStreamWriter asXMLStreamWriter() {
 		return super.asXMLStreamWriter();
+	}
+
+	private XdmNode domToXdmNode(Node node) {
+		if (node instanceof NodeOverNodeInfo) {
+			NodeInfo nodeInfo = ((NodeOverNodeInfo)node).getUnderlyingNodeInfo();
+			if (configuration.equals(nodeInfo.getConfiguration()))
+				return new XdmNode(nodeInfo);
+		}
+		try {
+			return new Processor(configuration).newDocumentBuilder().build(new DOMSource(node));
+		} catch (SaxonApiException e) {
+			throw new TransformerException(e);
+		}
 	}
 
 	private static BaseURIAwareXMLStreamWriter createXMLStreamWriter(Consumer<XdmItem> itemConsumer, Configuration config) {

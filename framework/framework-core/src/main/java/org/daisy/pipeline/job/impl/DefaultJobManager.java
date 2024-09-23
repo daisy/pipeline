@@ -3,6 +3,7 @@ package org.daisy.pipeline.job.impl;
 import java.util.List;
 
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJob;
@@ -33,6 +34,7 @@ public class DefaultJobManager implements JobManager {
         private final Client client;
         private final JobMonitorFactory monitorFactory;
         private final XProcEngine xprocEngine;
+        private final List<DocumentBuilder> inputParsers;
         private final JobStorage storage;
         private final JobExecutionService executionService;
         private final Property logLevelProperty;
@@ -44,12 +46,14 @@ public class DefaultJobManager implements JobManager {
         public DefaultJobManager(Client client,
                                  JobMonitorFactory monitorFactory,
                                  XProcEngine xprocEngine,
+                                 List<DocumentBuilder> inputParsers,
                                  JobStorage storage,
                                  JobExecutionService executionService,
                                  Property logLevelProperty) {
                 this.client = client;
                 this.monitorFactory = monitorFactory;
                 this.xprocEngine = xprocEngine;
+                this.inputParsers = inputParsers;
                 this.storage = storage;
                 this.executionService = executionService;
                 this.logLevelProperty = logLevelProperty;
@@ -106,6 +110,7 @@ public class DefaultJobManager implements JobManager {
         public JobManager.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(monitorFactory,
                                              xprocEngine,
+                                             inputParsers,
                                              client,
                                              boundScript,
                                              true,
@@ -116,7 +121,7 @@ public class DefaultJobManager implements JobManager {
                         public Optional<Job> build() {
                                 // store it
                                 Optional<AbstractJob> job = storage.add(
-                                        (AbstractJob)super.build().get() // DefaultJobBuilder.build() creates VolatileJob
+                                        (AbstractJob)super.build().get()
                                 );
                                 if (job.isPresent()) {
                                         // broadcast status

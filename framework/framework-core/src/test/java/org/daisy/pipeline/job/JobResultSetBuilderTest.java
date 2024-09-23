@@ -49,7 +49,7 @@ public class JobResultSetBuilderTest {
                 mapper = new URIMapper(tmp.resolve("inputs/"),tmp.resolve("outputs/"));
                 QName optDir=Mock.ScriptGenerator.getOptionOutputDirName(0);
                 QName optName=Mock.ScriptGenerator.getOptionOutputFileName(0);
-                XProcDecorator trans = XProcDecorator.from(script,mapper);
+                XProcDecorator trans = XProcDecorator.from(script, mapper, null);
                 output = trans.decorate(new XProcOutput.Builder().build());
                 input = trans.decorate(new ScriptInput.Builder().build());
                 // create result files

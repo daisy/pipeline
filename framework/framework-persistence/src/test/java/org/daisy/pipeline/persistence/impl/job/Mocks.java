@@ -138,31 +138,31 @@ public class Mocks   {
 	}
 
 	public static AbstractJob buildJob(File contextDir) {
-		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, null, true) {};
+		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority) {
-		return new AbstractJob(buildContext(), priority, null, true) {};
+		return new AbstractJob(buildContext(), priority, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority, File contextDir) {
-		return new AbstractJob(buildContext(contextDir), priority, null, true) {};
+		return new AbstractJob(buildContext(contextDir), priority, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client) {
-		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, true) {};
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, File contextDir) {
-		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, null, true) {};
+		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
-		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, true) {};
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, null, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId, File contextDir) {
-		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, null, true) {};
+		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, null, null, true) {};
 	}
 
 	public static AbstractJobContext buildContext() {

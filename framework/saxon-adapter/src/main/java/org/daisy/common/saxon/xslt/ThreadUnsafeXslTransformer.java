@@ -1,6 +1,7 @@
 package org.daisy.common.saxon.xslt;
 
 import java.io.StringWriter;
+import java.net.URI;
 import java.util.Map;
 
 import javax.xml.transform.URIResolver;
@@ -32,7 +33,7 @@ public class ThreadUnsafeXslTransformer {
 	}
 
 	public XdmNode transform(XdmNode xml) throws SaxonApiException {
-		return transform(xml, null);
+		return transform(xml, null, null);
 	}
 
 	/**
@@ -44,15 +45,30 @@ public class ThreadUnsafeXslTransformer {
 		return transformToString(xml, null);
 	}
 
-	public XdmNode transform(XdmNode xml, Map<String, Object> parameters)
+	public XdmNode transform(XdmNode xml, URI outputBaseURI) throws SaxonApiException {
+		return transform(xml, null, outputBaseURI);
+	}
+
+	public XdmNode transform(XdmNode xml, Map<String,Object> parameters)
+	        throws SaxonApiException {
+		return transform(xml, parameters, null);
+	}
+
+	/**
+	 * Note that when {@code outputBaseURI} is not set, the output does not automatically
+	 * inherit the base URI of the input, as one might expect.
+	 */
+	public XdmNode transform(XdmNode xml, Map<String,Object> parameters, URI outputBaseURI)
 	        throws SaxonApiException {
 
 		XdmDestination dest = new XdmDestination();
+		if (outputBaseURI != null)
+			dest.setBaseURI(outputBaseURI);
 		genericTransform(xml, parameters, dest);
 		return dest.getXdmNode();
 	}
 
-	public String transformToString(XdmNode xml, Map<String, Object> parameters)
+	public String transformToString(XdmNode xml, Map<String,Object> parameters)
 	        throws SaxonApiException {
 		Serializer dest = processor.newSerializer();
 		StringWriter sw = new StringWriter();
@@ -62,12 +78,12 @@ public class ThreadUnsafeXslTransformer {
 		return sw.toString();
 	}
 
-	public void genericTransform(XdmNode input, Map<String, Object> parameters, Destination dest)
+	public void genericTransform(XdmNode input, Map<String,Object> parameters, Destination dest)
 			throws SaxonApiException {
 
 		try {
 			if (parameters != null)
-				for (Map.Entry<String, Object> param : parameters.entrySet())
+				for (Map.Entry<String,Object> param : parameters.entrySet())
 					this.transformer.setParameter(new QName(null, param.getKey()),
 					                              XdmValue.wrap(SaxonHelper.sequenceFromObject(param.getValue())));
 			transformer.setSource(input.asSource());
@@ -76,7 +92,7 @@ public class ThreadUnsafeXslTransformer {
 		} finally {
 			if (parameters != null)
 				//cancel the parameters
-				for (Map.Entry<String, Object> param : parameters.entrySet())
+				for (Map.Entry<String,Object> param : parameters.entrySet())
 					transformer.setParameter(new QName(null, param.getKey()), null);
 		}
 	}

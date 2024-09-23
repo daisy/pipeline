@@ -3,6 +3,7 @@ package org.daisy.pipeline.job.impl;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import java.util.List;
 
 import com.google.common.base.Optional;
 
@@ -11,6 +12,7 @@ import org.daisy.common.messaging.MessageBus;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.priority.Priority;
+import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.Job;
@@ -32,6 +34,7 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 
 	private final JobMonitorFactory monitorFactory;
 	private final XProcEngine xprocEngine;
+	private final List<DocumentBuilder> inputParsers;
 	private final Client client;
 	private final BoundScript boundScript;
 	private final boolean managed;
@@ -46,12 +49,14 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 	 */
 	public DefaultJobBuilder(JobMonitorFactory monitorFactory,
 	                         XProcEngine xprocEngine,
+	                         List<DocumentBuilder> inputParsers,
 	                         Client client,
 	                         BoundScript boundScript,
 	                         boolean managed,
 	                         Property logLevelProperty) {
 		this.monitorFactory = monitorFactory;
 		this.xprocEngine = xprocEngine;
+		this.inputParsers = inputParsers;
 		this.client = client;
 		this.boundScript = boundScript;
 		this.managed = managed;
@@ -131,9 +136,12 @@ public class DefaultJobBuilder implements JobManager.JobBuilder {
 								statusListeners.remove(listener); }}};
 				monitor = monitorFactory.newJobMonitor(id, messageBus, statusNotifier);
 			}};
-			return Optional.of(
-				(managed || !closeOnExit) ? new AbstractJob(ctxt, priority, xprocEngine, managed) {}
-				                          : new VolatileJob(ctxt, priority, xprocEngine, false));
+			AbstractJob job = new AbstractJob(ctxt, priority, xprocEngine, inputParsers, managed) {};
+			if (!managed && closeOnExit)
+				job = new VolatileJob(job);
+			if (!managed)
+				job.changeStatus(Job.Status.IDLE);
+			return Optional.of(job);
 		} catch (IOException e) {
 			throw new RuntimeException("Error while creating job context", e);
 		}

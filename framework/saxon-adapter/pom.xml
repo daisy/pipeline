@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.19</version>
+    <version>1.14.21-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
   
   <artifactId>saxon-adapter</artifactId>
-  <version>4.4.0</version>
+  <version>5.0.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
   
   <name>DAISY Pipeline 2 :: Adapter for Saxon</name>
@@ -101,6 +101,7 @@
             </Import-Package>
             <_dsannotations>
               org.daisy.common.saxon.SaxonConfigurator,
+              org.daisy.common.saxon.impl.DocumentBuilderImpl,
               org.daisy.common.saxon.impl.ProcessorImpl,
               org.daisy.common.saxon.impl.TransformerFactoryImpl,
               org.daisy.common.xpath.saxon.impl.XPathFactoryImpl,
@@ -126,6 +127,7 @@
             <configuration>
               <includes>
                 org.daisy.common.saxon.SaxonConfigurator,
+                org.daisy.common.saxon.impl.DocumentBuilderImpl,
                 org.daisy.common.saxon.impl.ProcessorImpl,
                 org.daisy.common.saxon.impl.TransformerFactoryImpl,
                 org.daisy.common.xpath.saxon.impl.XPathFactoryImpl,

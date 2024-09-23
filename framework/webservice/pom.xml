@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.19-SNAPSHOT</version>
+    <version>1.14.21-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
   <artifactId>webservice</artifactId>
-  <version>3.4.1-SNAPSHOT</version>
+  <version>3.5.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Web Service</name>
@@ -49,6 +49,10 @@
     <dependency>
       <groupId>org.restlet.osgi</groupId>
       <artifactId>org.restlet.ext.xml</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.libs</groupId>
+      <artifactId>servlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

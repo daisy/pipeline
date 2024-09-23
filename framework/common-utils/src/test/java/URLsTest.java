@@ -32,9 +32,6 @@ public class URLsTest extends AbstractTest {
 	protected String[] testDependencies() {
 		return new String[] {
 			"com.google.guava:guava:?",
-			"org.daisy.libs:saxon-he:?",
-			"org.daisy.libs:com.xmlcalabash:?",
-			"org.daisy.libs:jing:?",
 			"org.slf4j:jul-to-slf4j:?",
 		};
 	}

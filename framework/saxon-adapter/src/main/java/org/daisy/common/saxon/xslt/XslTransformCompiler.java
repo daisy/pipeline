@@ -10,8 +10,6 @@ import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XsltCompiler;
 
-import com.xmlcalabash.core.XProcConfiguration;
-
 /**
  * Immutable XSLT compiler with an optional URIResolver.
  */
@@ -24,16 +22,7 @@ public class XslTransformCompiler {
 		setConfiguration(config);
 	}
 
-	public XslTransformCompiler(XProcConfiguration config) {
-		setConfiguration(config);
-	}
-
 	public XslTransformCompiler(Configuration config, URIResolver uriResolver) {
-		this.uriResolver = uriResolver;
-		setConfiguration(config);
-	}
-
-	public XslTransformCompiler(XProcConfiguration config, URIResolver uriResolver) {
 		this.uriResolver = uriResolver;
 		setConfiguration(config);
 	}
@@ -52,10 +41,6 @@ public class XslTransformCompiler {
 
 	private void setConfiguration(Configuration config) {
 		initCompiler(config);
-	}
-
-	private void setConfiguration(XProcConfiguration config) {
-		initCompiler(config.getProcessor().getUnderlyingConfiguration());
 	}
 
 	private void initCompiler(Configuration config) {

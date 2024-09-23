@@ -11,7 +11,10 @@ import org.w3c.dom.Element;
 
 public class ErrorWriter {
 
+	private static final Logger logger = LoggerFactory.getLogger(ErrorWriter.class.getName());
+
 	public static class ErrorWriterBuilder {
+
 		private Throwable error;
 		private String uri;
 
@@ -30,9 +33,8 @@ public class ErrorWriter {
 		}
 	}
 
-	Throwable error;
-	String uri;
-	private static Logger logger = LoggerFactory.getLogger(ErrorWriter.class.getName());
+	private final Throwable error;
+	private final String uri;
 
 	private ErrorWriter(Throwable error, String uri) {
 		this.error = error;
@@ -42,22 +44,21 @@ public class ErrorWriter {
 	public Document getXmlDocument() {
 		Document doc = XmlUtils.createDom("error");
 		Element root = doc.getDocumentElement();
-		root.setAttribute("query", this.uri);
+		root.setAttribute("query", uri);
 		if (error != null) {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			this.error.printStackTrace(new PrintStream(os));
-
-			Element desc = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA,
-					"description");
-			desc.setTextContent(this.error.getMessage());
-			Element trace = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA,
-					"trace");
+			Element desc = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "description");
+			desc.setTextContent(error.getMessage());
 			root.appendChild(desc);
-			root.appendChild(trace);
+
+			// error stack trace is not relevant for user of API (server log can be inspected by whom is interested)
+			/*Element trace = doc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "trace");
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			error.printStackTrace(new PrintStream(os));
 			trace.setTextContent(os.toString());
+			root.appendChild(trace);*/
 		}
 		if (!XmlValidator.validate(doc, XmlValidator.ERROR_SCHEMA_URL)) {
-			logger.error("INVALID XML:\n" + XmlUtils.nodeToString(doc));
+			logger.debug("INVALID XML:\n" + XmlUtils.nodeToString(doc));
 		}
 		return doc;
 	}

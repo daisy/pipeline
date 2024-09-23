@@ -66,6 +66,9 @@ public class DynamicXProcConfigurationFactory implements XProcConfigurationFacto
 	@Override
 	public XProcConfiguration newConfiguration(XProcMonitor monitor, Map<String,String> properties) {
 		System.setProperty("com.xmlcalabash.config.user", ""); // skip loading configuration from ~/.calabash
+		// Note that we create a new Processor for every now XProcConfigration, rather than using a singleton
+		// Processor instance. We do this because XProcConfiguration mutates he Processor (registers XPath
+		// extension functions) and this can't be undone.
 		Processor processor = new Processor(false);
 		saxonConfigurator.configure(processor);
 		XProcConfiguration config = new DynamicXProcConfiguration(processor, this, monitor, properties);

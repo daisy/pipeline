@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 import javax.xml.namespace.QName;
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 
 import com.google.common.base.Supplier;
@@ -27,6 +28,8 @@ import com.xmlcalabash.model.SequenceType;
 import com.xmlcalabash.runtime.XPipeline;
 import com.xmlcalabash.util.XProcSystemPropertySet;
 
+import net.sf.saxon.dom.NodeOverNodeInfo;
+import net.sf.saxon.om.NodeInfo;
 import net.sf.saxon.s9api.DocumentBuilder;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.SaxonApiException;
@@ -56,6 +59,8 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.w3c.dom.Node;
 
 /**
  * Calabash piplines allow to define and run xproc pipelines using calabash. The
@@ -310,9 +315,18 @@ public class CalabashXProcPipeline implements XProcPipeline {
 	 * @return the xdm node
 	 */
 	private static XdmNode asXdmNode(Processor processor, Source source) {
+		if (source instanceof DOMSource) {
+			Node dom = ((DOMSource)source).getNode();
+			if (dom instanceof NodeOverNodeInfo) {
+				NodeInfo nodeInfo = ((NodeOverNodeInfo)dom).getUnderlyingNodeInfo();
+				if (processor.getUnderlyingConfiguration().equals(nodeInfo.getConfiguration()))
+					return new XdmNode(nodeInfo);
+			}
+		}
 		DocumentBuilder builder = processor.newDocumentBuilder();
 		builder.setDTDValidation(false);
-		builder.setLineNumbering(true);
+		builder.setLineNumbering(true); // line-numbering is enabled by default in SaxonConfigurator
+		                                // so could probably be dropped here
 		try {
 			return builder.build(source);
 		} catch (SaxonApiException sae) {
