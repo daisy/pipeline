@@ -1,7 +1,83 @@
+Changes in release v1.14.20
+===========================
+
+## Framework
+
+- **NEW** API for voice previews
+- **NEW** Allow setting `org.daisy.pipeline.tts.config` property through settings API
+- **FIX** Remove error stack traces from webservice responses
+- **FIX** Java API: Make job input parser more relaxed about boolean option values
+
+## Modules
+
+- **NEW** Support for Microsoft natural voices over [NaturalVoicesSAPIAdapter](https://github.com/gexgd0419/NaturalVoiceSAPIAdapter)
+- **FIX** Support standard CSS's `voice-family` property (backward compatibility with the old behavior is ensured)
+- **FIX** Compatibility with espeak-ng
+- **FIX** Wrong doctype declaration of SMIL files in output of DAISY 3 to DAISY 2.02
+- **FIX** Indent TTS log output
+- Various other bugfixes and improvements
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/6). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 6`
+
+Changes in release v1.14.19
+===========================
+
+## Framework
+
+- **NEW** API to list TTS services and their status (available, disabled or error)
+- **NEW** Access to Sass variables defined in user agent style sheets via `/stylesheet-parameters` API
+
+## Modules
+
+- **NEW** DOCX (MS Word) to DTBook script: this brings some of the functionality of the Word Save-as-DAISY addin to Pipeline
+- **NEW** Option for speaking image alt text
+- **NEW** "Style sheet parameters" option supported on more scripts (DTBook to DAISY 3, DTBook to EPUB 3, EPUB 3 Enhancer and EPUB to DAISY)
+- **NEW** New syntax for "Style sheet parameters" option
+- **FIX** Improved error diagnostics for Google and Azure TTS services
+- **FIX** Improved logging of the status of TTS services in general (only show relevant services, shorten error messages)
+- **FIX** Handle text in `sidebar` not within `p` in DTBook to ODT
+- **FIX** DAISY 3 and DAISY 2.02 MegaVoice multi-level scripts do not try to produce files with forbidden characters in their name anymore
+- **FIX** Fix NCC metadata in output of DAISY 3 to DAISY 2.02
+- **FIX** Support for `rel="pronunciation"` links in DTBook to DAISY 3
+- **FIX** Support for Apple Silicon processors
+- Changes to braille production scripts, see release notes of braille modules [v1.14.26](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11426)
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/5). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 5`
+
+Changes in release v1.14.18
+===========================
+
+## Framework
+
+- **NEW** API for analyzing CSS style sheets and exposing Sass variables.
+
+## Modules
+
+- **NEW** Script options to specify user lexicons
+- **NEW** Global setting for default user lexicon
+- **NEW** Global setting for default speaking rate
+- **FIX** Major simplification of configuration of braille scripts, see release notes of braille modules [v1.14.24](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11424) and [v1.14.25](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11425)
+- **FIX** Fix bugs in handling of language during voice selection.
+- **FIX** Fix bugs in processing of aural CSS.
+- **FIX** Improved usability of the DAISY 3 and DAISY 2.02 MegaVoice multi-level scripts.
+- **FIX** Improve support for DPUB ARIA
+- **FIX** Preserve external hyperlinks in EPUB
+- **FIX** Include page source identification metadata in EPUB created from DTBook
+- Other bugfixes and optimizations
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/4). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 4`
+
 Changes in release v1.14.17
 ===========================
 
 ## Framework
+
 - **NEW** API for getting and setting TTS and other properties globally
 
 ## Modules

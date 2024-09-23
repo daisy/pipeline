@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.20-SNAPSHOT</version>
+  <version>1.14.21-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -69,16 +69,22 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.20-SNAPSHOT</version>
+        <version>1.14.20</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.27</version>
+        <version>1.14.29</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+      <!-- temporary until updated to modules 1.14.29 -->
+      <dependency>
+        <groupId>com.microsoft.cognitiveservices.speech</groupId>
+        <artifactId>client-sdk</artifactId>
+        <version>1.37.0</version>
       </dependency>
       <!-- missing from framework-bom -->
       <dependency>
