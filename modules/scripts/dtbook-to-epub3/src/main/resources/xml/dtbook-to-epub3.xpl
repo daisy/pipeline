@@ -30,6 +30,7 @@
       <!-- defined in ../../../../../common-options.xpl -->
       <p:pipe step="result" port="tts-log"/>
     </p:output>
+    <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
     <p:option xmlns:_="tts" name="_:stylesheet" select="''">
       <!-- defined in ../../../../../common-options.xpl -->

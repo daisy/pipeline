@@ -6,7 +6,7 @@
                 type="px:word-to-dtbook.script" name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
-		<h1 px:role="name">Word to dtbook</h1>
+		<h1 px:role="name">Word to DTBook</h1>
 		<p px:role="desc" xml:space="preserve">Transforms a Microsoft Office Word (.docx) document into a DTBook XML file.</p>
 		<a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/">
 			Online documentation
@@ -53,7 +53,7 @@
 			<p px:role="desc">Subject(s) to be added as dc:Subject metadata</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="accept-revisions" select="true()" cx:as="xs:boolean">
+	<p:option name="accept-revisions" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Accept revisions</h2>
 			<p px:role="desc">If the document has revisions that are not accepted, consider them as accepted for the conversion.</p>
@@ -69,7 +69,7 @@
 	<!-- cx:as="map(xs:string,xs:string*)" -->
 	<p:option name="MasterSub" px:hidden="true" select="false()" cx:as="xs:boolean" />
 	<!-- from settings  -->
-	<p:option name="pagination" select="'Custom'">
+	<p:option name="pagination" select="'custom'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Pagination mode</h2>
 			<p px:role="desc">Define how page numbers are computed and inserted in the result</p>
@@ -77,9 +77,9 @@
 		<p:pipeinfo>
 			<px:type>
 				<choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
-					<value>Custom</value>
+					<value>custom</value>
 					<a:documentation xml:lang="en">Use numbers tagged with the style 'PageNumberDAISY' in the document</a:documentation>
-					<value>Automatic</value>
+					<value>automatic</value>
 					<a:documentation xml:lang="en">Use Word page breaks to compute and insert page numbers in content</a:documentation>
 				</choice>
 			</px:type>
@@ -108,7 +108,7 @@
 			<p px:role="desc">Image resampling targeted resolution in dpi (dot-per-inch)</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="character-styles" select="false()" px:type="xs:boolean">
+	<p:option name="character-styles" select="false()" cx:as="xs:boolean">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Translate character styles</h2>
 		</p:documentation>

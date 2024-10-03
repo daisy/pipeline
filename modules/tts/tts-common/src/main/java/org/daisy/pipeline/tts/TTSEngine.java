@@ -204,6 +204,17 @@ public abstract class TTSEngine {
 		return false;
 	}
 
+	/**
+	 * Whether the TTS engine handles <a
+	 * href="https://www.w3.org/TR/speech-synthesis11/#S3.2.4"><code>phoneme</code></a> elements,
+	 * which is required for prununciation lexicons to have an effect. This method does not say
+	 * anyhing about which pronunciation alphabets are supported, which phonemes, and for which
+	 * languages.
+	 */
+	public boolean handlesPronunciation() {
+		return false;
+	}
+
 	/* -------------------------------------------- */
 	/*               HELPER FUNCTIONS               */
 	/* -------------------------------------------- */

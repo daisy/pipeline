@@ -36,6 +36,7 @@
     <!-- defined in ../../../../../common-options.xpl -->
     <p:pipe step="convert" port="tts-log"/>
   </p:output>
+  <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
   <p:option name="publisher" required="false" px:type="string" select="''">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">

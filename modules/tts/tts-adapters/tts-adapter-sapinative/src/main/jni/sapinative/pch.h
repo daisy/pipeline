@@ -14,8 +14,8 @@
 #include "framework.h"
 #include "queue_stream.h"
 
-#include "org_daisy_pipeline_tts_onecore_SAPI.h"
-#include "org_daisy_pipeline_tts_onecore_SAPIResult.h"
+#include "org_daisy_pipeline_tts_sapinative_SAPI.h"
+#include "org_daisy_pipeline_tts_sapinative_SAPIResult.h"
 
 // shared includes
 #include "../jni_helper.h"

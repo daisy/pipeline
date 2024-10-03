@@ -59,9 +59,11 @@ public class Voice {
 
 	public Voice(String engine, String name, Collection<LanguageRange> locale, Gender gender, MarkSupport markSupport)
 			throws IllegalArgumentException {
+		if (engine == null || engine.isEmpty() || name == null || name.isEmpty())
+			throw new IllegalArgumentException();
 		// we keep the strings in their full case form because some engines might be case sensitive
-		this.engine = engine == null ? "" : engine;
-		this.name = name == null ? "" : name;
+		this.engine = engine;
+		this.name = name;
 		this.locale = Collections.unmodifiableCollection(locale);
 		this.gender = Optional.ofNullable(gender);
 		this.markSupport = markSupport;
@@ -113,28 +115,17 @@ public class Voice {
 
 	public String toString() {
 		StringBuilder s = new StringBuilder();
-		boolean first = true;
 		s.append("{");
-		if (!engine.isEmpty()) {
-			s.append("engine: ").append(engine);
-			first = false;
-		}
-		if (!name.isEmpty()) {
-			if (!first) s.append(", ");
-			s.append("name: ").append(name);
-			first = false;
-		}
+		s.append("engine: ").append(engine);
+		s.append(", ").append("name: ").append(name);
 		if (!locale.isEmpty()) {
-			if (!first) s.append(", ");
-			s.append("locale: ");
+			s.append(", ").append("locale: ");
 			if (locale.size() > 1) s.append("\"");
 			s.append(LanguageRange.toString(locale));
 			if (locale.size() > 1) s.append("\"");
-			first = false;
 		}
 		if (gender.isPresent()) {
-			if (!first) s.append(", ");
-			s.append("gender:").append(gender.get());
+			s.append(", ").append("gender:").append(gender.get());
 		}
 		s.append("}");
 		return s.toString();

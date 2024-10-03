@@ -37,6 +37,14 @@
 
 using UniqueLock = std::unique_lock<std::shared_timed_mutex>;
 
+// From chromium repo on how to use onecore with SAPI
+// https://source.chromium.org/chromium/chromium/src/+/5411d7bd073a64b5f6b7c98d038744b7a1061d19:content/browser/speech/tts_win.cc
+// Original blog detailing how to use this registry.
+// https://social.msdn.microsoft.com/Forums/en-US/8bbe761c-69c7-401c-8261-1442935c57c8/why-isnt-my-program-detecting-all-tts-voices
+// Microsoft docs on how to view system registry keys.
+// https://docs.microsoft.com/en-us/troubleshoot/windows-client/deployment/view-system-registry-with-64-bit-windows
+const wchar_t* kSPCategoryOnecoreVoices = L"HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices";
+
 #pragma region Utilities
 
 /// <summary>
@@ -60,7 +68,7 @@ inline void exitCom(std::stack<IUnknown*>& refsStack) {
 /// </summary>
 /// <param name="env"></param>
 /// <returns></returns>
-inline Voice<ISpObjectToken*>::List getVoices(JNIEnv* env, std::stack<IUnknown*>& currentRefStack) {
+inline Voice<ISpObjectToken*>::List getVoices(JNIEnv* env, std::stack<IUnknown*>& currentRefStack, const wchar_t* VoicesKey = SPCAT_VOICES) {
     auto voicesList = Voice<ISpObjectToken*>::List();
 
     //get the voice information  
@@ -71,7 +79,7 @@ inline Voice<ISpObjectToken*>::List getVoices(JNIEnv* env, std::stack<IUnknown*>
         return voicesList;
     }
     category->AddRef();
-    category->SetId(SPCAT_VOICES, false);
+    category->SetId(VoicesKey, false);
 
     IEnumSpObjectTokens* cpEnum;
     if (FAILED(category->EnumTokens(NULL, NULL, &cpEnum))) {
@@ -220,7 +228,7 @@ inline WAVEFORMATEX* getWaveFormat(JNIEnv* env, int sampleRate, short bitsPerSam
 /// <param name="sampleRate"></param>
 /// <param name="bitsPerSample"></param>
 /// <returns></returns>
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEnv* env, jclass, jint sampleRate, jshort bitsPerSample) {
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_initialize(JNIEnv* env, jclass, jint sampleRate, jshort bitsPerSample) {
     std::stack<IUnknown*> refsStack = std::stack<IUnknown*>();
     HRESULT hr;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -233,11 +241,13 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
     // Checking if the format provided is correct
     getWaveFormat(env, sampleRate, bitsPerSample);
 
-    // try to get the list of voices, and return an error if cannot be done
-    Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
-    if (voices.size() == 0) {
+    // try to get the list of default voices, and return an error if cannot be done
+    Voice<ISpObjectToken*>::List sapiVoices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List onecoreVoices = getVoices(env, refsStack, kSPCategoryOnecoreVoices);
+    if (sapiVoices.size() == 0 && onecoreVoices.size() == 0) {
         return COULD_NOT_SET_VOICE;
     }
+
     exitCom(refsStack);
     return SAPI_OK;
 }
@@ -248,7 +258,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize(JNIEn
 /// <param name="env"></param>
 /// <param name=""></param>
 /// <returns></returns>
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoices(JNIEnv* env, jclass) {
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_getVoices(JNIEnv* env, jclass) {
     std::stack<IUnknown*> refsStack = std::stack<IUnknown*>();
     HRESULT hr;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -257,6 +267,10 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoice
         return NULL;
     }
     Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List onecoreVoices = getVoices(env, refsStack, kSPCategoryOnecoreVoices);
+    for (auto& voice : onecoreVoices) {
+        voices.push_back(voice);
+    };
     if (voices.size() == 0) {
         exitCom(refsStack);
         raiseException(env, COULD_NOT_SET_VOICE, L"No voice returned by SAPI");
@@ -269,8 +283,8 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoice
 // Taken from NVDA connector to onecore, apply also to sapi on windows 11 :
 // Using mutex and lock on the synthesis calls to prevent fast fail crash
 std::shared_timed_mutex SPEECH_MUTEX{};
-// setting timeout to 10 seconds as first unlock can be quite long
-std::chrono::duration MAX_WAIT(std::chrono::seconds(10));
+// setting timeout to 60 seconds as first unlock can be quite long
+std::chrono::duration MAX_WAIT(std::chrono::seconds(60));
 
 /// <summary>
 /// New speak functions with data isolation
@@ -283,7 +297,7 @@ std::chrono::duration MAX_WAIT(std::chrono::seconds(10));
 /// <param name="sampleRate"></param>
 /// <param name="bitsPerSample"></param>
 /// <returns></returns>
-JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv* env, jclass, jstring voiceVendor, jstring voiceName, jstring text, jint sampleRate, jshort bitsPerSample) {
+JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIEnv* env, jclass, jstring voiceVendor, jstring voiceName, jstring text, jint sampleRate, jshort bitsPerSample) {
     std::stack<IUnknown*> refsStack = std::stack<IUnknown*>();
     HRESULT hr;
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
@@ -297,6 +311,11 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
     std::wstring vendor = jstringToWstring(env, voiceVendor);
     std::wstring name = jstringToWstring(env, voiceName);
     Voice<ISpObjectToken*>::List voices = getVoices(env, refsStack);
+    Voice<ISpObjectToken*>::List oneCorevoices = getVoices(env, refsStack, kSPCategoryOnecoreVoices);
+    for (auto& voice : oneCorevoices) {
+        voices.push_back(voice);
+    };
+
     Voice<ISpObjectToken*>::List::iterator it = voices.begin();
     while (it != voices.end()
         && (it->vendor.compare(vendor) != 0
@@ -356,12 +375,14 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
         return NULL;
     }
 
-    HANDLE hSpeechNotifyEvent = talker->GetNotifyEventHandle();
-    if (INVALID_HANDLE_VALUE == hSpeechNotifyEvent) {
+    ISpEventSource2* eventSource;
+    hr = talker->QueryInterface(IID_ISpEventSource2, (void**)&eventSource);
+    if (!SUCCEEDED(hr)) {
         exitCom(refsStack);
         raiseException(env, COULD_NOT_LISTEN_TO_EVENTS, L"Could not listen to SAPI events");
         return NULL;
     }
+
     ISpStream* speakingStream;
     // Create a new speak stream
     hr = CoCreateInstance(CLSID_SpStream, NULL, CLSCTX_ALL, IID_ISpStream, (void**)(&speakingStream));
@@ -399,7 +420,6 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
     // initialize creates a ref in COM, so keep the real Istream object in refstack for disposal when exiting
     refsStack.push(dataStream.getBaseStream());
     WAVEFORMATEX* format = getWaveFormat(env, sampleRate, bitsPerSample);
-    
     // Bind speak and memory stream
     hr = speakingStream->SetBaseStream(dataStream.getBaseStream(), SPDFID_WaveFormatEx, format);
     if (FAILED(hr)) {
@@ -467,6 +487,15 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
         sentence = std::regex_replace(sentence, speakTagSearch, newTagStream.str());
 
     }
+    // Marks that are preceded by quotes are ignored by natural voices
+    // it works if the ones that are right before marks are removed
+    std::basic_regex<wchar_t> quoteSearch(
+        L"(\"|\')\\s*<mark",
+        std::regex_constants::ECMAScript
+    );
+    std::wostringstream newTagStream;
+    newTagStream << L"<mark";
+    sentence = std::regex_replace(sentence, quoteSearch, newTagStream.str());
 
     int 						currentBookmarkIndex = 0;
     std::vector<std::wstring>	bookmarkNames;
@@ -476,10 +505,14 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
     if (!owned) {
         owned = lock.try_lock_for(MAX_WAIT);
     }
+    
+    ULONGLONG endTimeOffset = 0;
     if (owned) {
         dataStream.startWritingPhase();
         try {
+            
             hr = talker->Speak(sentence.c_str(), CLIENT_SPEAK_FLAGS, 0);
+            
             if (hr == E_INVALIDARG) {
                 format = NULL;
                 exitCom(refsStack);
@@ -530,36 +563,45 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
                 return NULL;
             }
 
-
-            jlong duration = 0; //in milliseconds
+            
+            //jlong duration = 0; //in milliseconds
             bool end = false;
             HRESULT eventFound = S_FALSE;
+            
             do {
                 // wait for a possible last event after end
                 talker->WaitForNotifyEvent(INFINITE);
-                SPEVENT event;
+                
+                SPEVENTEX event;
                 eventFound = S_FALSE;
                 do {
-                    memset(&event, 0, sizeof(SPEVENT));
-                    eventFound = talker->GetEvents(1, &event, NULL);
+                    memset(&event, 0, sizeof(SPEVENTEX));
+                    eventFound = eventSource->GetEventsEx(1, &event, NULL);
                     if (eventFound == S_OK) {
                         switch (event.eEventId) {
                         case SPEI_VISEME:
-                            duration += HIWORD(event.wParam);
+                            //duration += HIWORD(event.wParam);
                             break;
                         case SPEI_END_INPUT_STREAM:
+                            endTimeOffset = event.ullAudioTimeOffset;
                             end = true;
                             break;
                         case SPEI_TTS_BOOKMARK:
-                            if (currentBookmarkIndex == bookmarkNames.size()) {
-                                int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
-                                bookmarkNames.resize(newsize);
-                                bookmarkPositions.resize(newsize);
+                            const wchar_t* name = (const wchar_t*)(event.lParam);
+
+                            // got the case where a mark raised 2 events with the same name
+                            if (std::find(bookmarkNames.begin(), bookmarkNames.end(), name) == bookmarkNames.end()) {
+                                if (currentBookmarkIndex == bookmarkNames.size()) {
+                                    int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
+                                    bookmarkNames.resize(newsize);
+                                    bookmarkPositions.resize(newsize);
+                                }
+                                //bookmarks are not pushed_back to prevent allocating/releasing all over the place
+                                bookmarkNames[currentBookmarkIndex] = (const wchar_t*)(event.lParam);
+                                bookmarkPositions[currentBookmarkIndex] = (jlong)event.ullAudioTimeOffset;
+                                ++(currentBookmarkIndex);
+
                             }
-                            //bookmarks are not pushed_back to prevent allocating/releasing all over the place
-                            bookmarkNames[currentBookmarkIndex] = (const wchar_t*)(event.lParam);
-                            bookmarkPositions[currentBookmarkIndex] = duration;
-                            ++(currentBookmarkIndex);
                             break;
                         }
                     }
@@ -575,15 +617,15 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
             return NULL;
         }
         dataStream.endWritingPhase();
-        lock.unlock();
     } else {
         raiseException(env, COULD_NOT_SPEAK, L"Could not speak : speech mutex lock has timedout");
         return NULL;
     }
+    lock.unlock();
     
 
     const int dataSize = dataStream.in_avail();
-    uint8_t* fullAudio = new uint8_t[dataStream.in_avail()];
+    uint8_t* fullAudio = new uint8_t[dataSize];
     memset((void*)fullAudio, 0, dataSize);
 
     const signed char* audio;
@@ -598,14 +640,28 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak(JNIEnv*
         }
         offset += size;
     }
+    // NP 2024/08/02 : recompute marks positions in bytes using the time offset, 
+    // needed for natural voices that seems to have a different underlying memory layout
+    // when evaluating byte offset
+    // Recompute the real byte offset by doing (timeOffset/Timetotal) * dataSize 
+    if (endTimeOffset > 0) {
+        
+        for (int i = 0; i < currentBookmarkIndex; ++i) {
+            // Using min for the case where end punctuation is ignored by the voice
+            // like for natural voices (meaning the mark event is raised after the end of the stream)
+            bookmarkPositions[i] = (jlong)min(bookmarkPositions[i] * dataSize / endTimeOffset, dataSize);
+        }
+    }
+    
 
     format = NULL;
     exitCom(refsStack);
+    dataStream.dispose();
     return newSynthesisResult<std::vector<std::wstring>, std::vector<std::wstring>::iterator>(env, dataSize, fullAudio, bookmarkNames, bookmarkPositions.data());
     
 }
 
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_dispose(JNIEnv*, jclass)
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_dispose(JNIEnv*, jclass)
 {
     return SAPI_OK;
 }

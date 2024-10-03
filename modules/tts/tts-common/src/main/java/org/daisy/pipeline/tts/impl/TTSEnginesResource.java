@@ -2,8 +2,10 @@ package org.daisy.pipeline.tts.impl;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
@@ -127,8 +129,13 @@ public class TTSEnginesResource extends AuthenticatedResource {
 				}
 				if (e != null) {
 					engineElem.setAttribute("voices", baseURL + VoicesWebServiceExtension.VOICES_ROUTE + "?engine=" + name);
+					List<String> features = new ArrayList<>();
 					if (e.handlesSpeakingRate())
-						engineElem.setAttribute("features", "speech-rate");
+						features.add("speech-rate");
+					if (e.handlesPronunciation())
+						features.add("phoneme");
+					if (!features.isEmpty())
+						engineElem.setAttribute("features", String.join(" ", features));
 				} else if (error != null) {
 					// Clients should use first line as the short message. The short message is
 					// followed by the full message after a blank line.

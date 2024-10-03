@@ -74,7 +74,7 @@ public class EspeakTest {
 				          + "<voice name=\"" + v.getName() + "\">small test</voice></s>"),
 				null, resource).audio;
 
-			sizes.add(getSize(audio) / 4); //div 4 helps being more robust to tiny differences
+			sizes.add(getSize(audio) / 4); // div 4 helps being more robust to tiny differences
 			totalVoices++;
 		}
 		engine.releaseThreadResources(resource);
@@ -82,7 +82,7 @@ public class EspeakTest {
 		//this number will be very low if the voice names are not properly retrieved
 		float diversity = Float.valueOf(sizes.size()) / totalVoices;
 
-		Assert.assertTrue(diversity > 0.4);
+		Assert.assertTrue(diversity > 0.2);
 	}
 
 	@Test

@@ -13,6 +13,4 @@
 
 # DLLs are committed
 !/src/main/resources/x64/sapinative.dll
-!/src/main/resources/x64/onecorenative.dll
 !/src/main/resources/x86/sapinative.dll
-!/src/main/resources/x86/onecorenative.dll

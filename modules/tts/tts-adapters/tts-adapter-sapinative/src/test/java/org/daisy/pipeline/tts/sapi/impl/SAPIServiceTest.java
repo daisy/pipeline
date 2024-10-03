@@ -15,23 +15,20 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.pipeline.tts.TTSEngine;
-import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSService;
 import org.daisy.pipeline.tts.Voice;
-import org.daisy.pipeline.tts.sapi.impl.SAPIEngine;
 
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.xml.sax.SAXException;
 
 /**
- * Testing the unified SAPI/OneCore engine initialisation and methods
+ * Testing the unified SAPI engine initialisation and methods
  */
 public class SAPIServiceTest {
 
@@ -48,6 +45,7 @@ public class SAPIServiceTest {
         params.put("org.daisy.pipeline.tts.sapi.samplerate", "22050");
         params.put("org.daisy.pipeline.tts.sapi.bytespersample", "2");
         try{
+            service.activate();
             engine = (SAPIEngine) service.newEngine(params);
         } catch (Throwable e){
             throw new TTSService.SynthesisException(e);
@@ -79,33 +77,6 @@ public class SAPIServiceTest {
         tw.addText(text);
         tw.addEndElement();
         return tw.getResult();
-    }
-
-    @Test
-    public void synthesizeOnecoreTest()
-            throws URISyntaxException, SaxonApiException, SAXException, IOException, TTSService.SynthesisException, InterruptedException {
-
-        Collection<Voice> voices = engine.getAvailableVoices();
-        Voice selectedVoice = null;
-        for (Voice v: voices ) {
-            if (v.getEngine().equals("onecore")){
-                selectedVoice = v;
-                break;
-            } else {
-                System.out.println(v.getEngine());
-            }
-        }
-        if (selectedVoice == null){
-            Logger.info("No onecore voice available for test");
-        } else {
-            TTSEngine.SynthesisResult result = engine.synthesize(
-                    simpleTestSSML("this a simple text"),
-                    selectedVoice,
-                    engine.allocateThreadResources()
-            );
-            Assert.assertTrue(result.audio.getFrameLength() > 5000);
-        }
-
     }
 
     @Test

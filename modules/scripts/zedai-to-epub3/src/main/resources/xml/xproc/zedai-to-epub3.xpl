@@ -38,6 +38,7 @@
       <!-- defined in ../../../../../../common-options.xpl -->
       <p:pipe step="load-convert-store" port="tts-log"/>
     </p:output>
+    <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
     <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">

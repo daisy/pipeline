@@ -16,10 +16,8 @@ import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.spi.ActivationException;
-import org.daisy.pipeline.tts.onecore.Onecore;
-import org.daisy.pipeline.tts.onecore.OnecoreResult;
-import org.daisy.pipeline.tts.onecore.SAPI;
-import org.daisy.pipeline.tts.onecore.SAPIResult;
+import org.daisy.pipeline.tts.sapinative.SAPI;
+import org.daisy.pipeline.tts.sapinative.SAPIResult;
 import org.daisy.pipeline.tts.DefaultSpeechRate;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
@@ -32,7 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Component(
-	name = "sapi-onecore-tts-service",
+	name = "sapi-tts-service",
 	service = { TTSService.class }
 )
 public class SAPIService implements TTSService {
@@ -68,8 +66,6 @@ public class SAPIService implements TTSService {
 			                                       "7");
 	}
 
-	private static boolean onecoreDLLIsLoaded = false;
-	private static boolean onecoreIsInitialized = false;
 	private static boolean sapiDLLIsLoaded = false;
 
 	/**
@@ -85,13 +81,6 @@ public class SAPIService implements TTSService {
 		int priority = getPropertyAsInt(properties, SAPI_PRIORITY).get();
 		float speechRate = SPEECH_RATE.getValue(properties);
 		synchronized (this) {
-			// try to load both sapi and onecore to keep using third party voices that could have
-			// been installed on sapi registry and not exposed to the onecore registry
-			try {
-				loadAndInitializeOnecore();
-			} catch (Exception e) {
-				logger.warn(e.getMessage());
-			}
 			try {
 				int sapiSampleRate = getPropertyAsInt(properties, SAPI_SAMPLERATE).get();
 				int sapiBytesPerSample = getPropertyAsInt(properties, SAPI_BYTESPERSAMPLE).get();
@@ -101,15 +90,14 @@ public class SAPIService implements TTSService {
 						"SAPI's audio properties cannot change at runtime.");
 				}
 				loadAndInitializeSAPI(sapiSampleRate,sapiBytesPerSample);
-
 			} catch (Exception e){
 				logger.warn(e.getMessage());
 			}
-			if (!onecoreIsInitialized && sapiAudioFormat == null){
-				throw new SynthesisException("Neither SAPI or Onecore libraries could be loaded.");
+			if (sapiAudioFormat == null){
+				throw new SynthesisException("SAPI native connector could not be loaded.");
 			}
 		}
-		return new SAPIEngine(this, priority, onecoreIsInitialized, sapiAudioFormat, speechRate);
+		return new SAPIEngine(this, priority, sapiAudioFormat, speechRate);
 	}
 
 	@Override
@@ -124,7 +112,6 @@ public class SAPIService implements TTSService {
 
 	@Deactivate
 	protected void deactivate() {
-		ReleaseOnecore();
 		ReleaseSAPI();
 	}
 
@@ -138,46 +125,6 @@ public class SAPIService implements TTSService {
 			}
 		}
 		return Optional.empty();
-	}
-
-	/**
-	 * Counter of times the loading of Onecore was requested (to avoid early disposal of the library)
-	 */
-	private static int onecoreRequestCounter = 0;
-	/**
-	 * Unpack and load onecorenative.dll and initialize the Onecore API.
-	 * <br/>
-	 * The dll is not reloaded and the API is not initialized if it has already been done before
-	 * @throws SynthesisException if the initialization of the Onecore API fails
-	 */
-	synchronized static void loadAndInitializeOnecore() throws SynthesisException {
-		// Load and initialize Onecore if not loaded a
-		if (!onecoreDLLIsLoaded) {
-			SAPIService.loadDLL("onecorenative.dll");
-			onecoreDLLIsLoaded = true;
-		}
-		if(!onecoreIsInitialized){
-			int res = Onecore.initialize();
-			if (res != OnecoreResult.SAPINATIVE_OK.value()) {
-				Onecore.dispose();
-				throw new SynthesisException(
-						"Onecore initialization failed with error code '" + res + "': " + OnecoreResult.valueOfCode(res));
-			}
-			onecoreIsInitialized = true;
-		}
-		onecoreRequestCounter += 1;
-	}
-
-	/**
-	 * Dispose of the Onecore library if it is not used anymore.
-	 */
-	synchronized static void ReleaseOnecore(){
-		onecoreRequestCounter--;
-		// no more code requesting onecore access, allow the dispose method to run
-		if(onecoreRequestCounter <= 0 && onecoreIsInitialized){
-			Onecore.dispose();
-			onecoreIsInitialized = false;
-		}
 	}
 
 

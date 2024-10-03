@@ -14,7 +14,7 @@ extern "C" {
  * Method:    getVoices
  * Signature: ()[Lorg/daisy/pipeline/tts/Voice;
  */
-JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoices
+JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_getVoices
 (JNIEnv*, jclass);
 
 /*
@@ -22,7 +22,7 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_getVoice
  * Method:    speak
  * Signature: (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;IJ)Lorg/daisy/pipeline/tts/onecore/NativeSynthesisResult;
  */
-JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak
+JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak
 (JNIEnv*, jclass, jstring, jstring, jstring, jint, jshort);
 
 
@@ -31,7 +31,7 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_speak
  * Method:    initialize
  * Signature: (IS)I
  */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_initialize
   (JNIEnv *, jclass, jint, jshort);
 
 /*
@@ -39,7 +39,7 @@ JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_initialize
  * Method:    dispose
  * Signature: ()I
  */
-JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_onecore_SAPI_dispose
+JNIEXPORT jint JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_dispose
   (JNIEnv *, jclass);
 
 #ifdef __cplusplus

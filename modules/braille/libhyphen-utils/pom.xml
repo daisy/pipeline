@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.27-SNAPSHOT</version>
+    <version>1.14.28-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
@@ -265,7 +265,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.linux.LibhyphenNativePathForLinux</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-linux</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.linux
                 </Private-Package>
@@ -289,7 +289,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.mac.LibhyphenNativePathForMacOS</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-mac</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.mac
                 </Private-Package>
@@ -313,7 +313,7 @@
               <instructions>
                 <_dsannotations>org.daisy.pipeline.braille.libhyphen.impl.windows.LibhyphenNativePathForWindows</_dsannotations>
                 <Bundle-SymbolicName>org.daisy.pipeline.modules.braille.libhyphen-utils-windows</Bundle-SymbolicName>
-                <Export-Package />
+                <Export-Package/>
                 <Private-Package>
                   org.daisy.pipeline.braille.libhyphen.impl.windows
                 </Private-Package>
@@ -485,16 +485,16 @@
                 </goals>
                 <configuration>
                   <tasks>
-                    <mkdir dir="target/checkout" />
-                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true" />
+                    <mkdir dir="target/checkout"/>
+                    <get dest="target/checkout/dictionaries.zip" src="http://cgit.freedesktop.org/libreoffice/dictionaries/snapshot/libreoffice-4.0.0.1.zip" usetimestamp="true" skipexisting="true"/>
                     <unzip dest="target/generated-resources/tables" src="target/checkout/dictionaries.zip">
                       <patternset>
-                        <include name="**/hyph_*.dic" />
-                        <exclude name="**/hyph_de.dic" />
-                        <exclude name="**/hyph_nb_NO.dic" />
-                        <exclude name="**/hyph_nn_NO.dic" />
+                        <include name="**/hyph_*.dic"/>
+                        <exclude name="**/hyph_de.dic"/>
+                        <exclude name="**/hyph_nb_NO.dic"/>
+                        <exclude name="**/hyph_nn_NO.dic"/>
                       </patternset>
-                      <mapper type="flatten" />
+                      <mapper type="flatten"/>
                     </unzip>
                   </tasks>
                 </configuration>

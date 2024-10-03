@@ -28,7 +28,7 @@
 	<xsl:param name="subject" as="xs:string" select="''"/> <!--Holds Documents Subject value-->
 	<xsl:param name="acceptRevisions" as="xs:boolean" select="true()"/>
 	<xsl:param name="version" as="xs:string" select="'14'"/> <!--Holds Documents version value-->
-	<xsl:param name="pagination" as="xs:string" select="'Custom'"/> <!-- Automatic|Custom -->
+	<xsl:param name="pagination" as="xs:string" select="'custom'"/> <!-- Automatic|Custom -->
 	<xsl:param name="MasterSub" as="xs:boolean" select="false()"/>
 	<xsl:param name="ImageSizeOption" as="xs:string" select="'original'"/> <!-- resize|resample|original -->
 	<xsl:param name="DPI" as="xs:integer" select="96"/>
@@ -485,7 +485,7 @@
 		</xsl:if>
 
 		<!--Initializing section Information if page number style is automatic-->
-		<xsl:if test="(w:pPr/w:sectPr) and not($flag='2') and ($pagination='Automatic')">
+		<xsl:if test="(w:pPr/w:sectPr) and not($flag='2') and ($pagination='automatic')">
 			<!-- <xsl:call-template name="SectionInfo"/> -->
 			<xsl:for-each select="following-sibling::*">
 				<xsl:choose>
@@ -599,7 +599,7 @@
 						<xsl:value-of select="concat(' xml:lang=&quot;',$paragraphLanguage,'&quot;')"/>
 					</xsl:if>
 				</xsl:variable>
-				<xsl:if test="($pagination='Custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='Custom'))">
+				<xsl:if test="($pagination='custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='custom'))">
 					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','p',$LangAttribute,'&gt;')"/>
 				</xsl:if>
 			</xsl:if>
@@ -1066,7 +1066,7 @@
 		<!--closing paragraph tag-->
 		<xsl:if test="not($flag='0') and not(d:AbbrAcrFlag($myObj)=1) and not($flagNote='hyper')">
 			<xsl:if test="not(d:GetTestRun($myObj)&gt;='1') and (d:GetCodeFlag($myObj)='0') and (not(d:Getlinenumflag($myObj)=0))">
-				<xsl:if test="($pagination='Custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='Custom'))">
+				<xsl:if test="($pagination='custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='custom'))">
 					<xsl:call-template name="CloseLevel">
 						<xsl:with-param name="CurrentLevel" select="-1"/>
 						<xsl:with-param name="verfoot" select="$version"/>
@@ -1136,7 +1136,7 @@
 		<xsl:if test="(
 				(w:lastRenderedPageBreak) or (w:br/@w:type='page')
 			) and not($flag='0')
-			and ($pagination='Automatic')
+			and ($pagination='automatic')
 			and not(
 				(
 					(../w:pPr/w:numPr/w:ilvl)
@@ -1812,7 +1812,7 @@
 				</kbd>
 			</xsl:when>
 			<!--Checking for Page number custom style-->
-			<xsl:when test="($customTag='PageNumberDAISY') and ($pagination='Custom')">
+			<xsl:when test="($customTag='PageNumberDAISY') and ($pagination='custom')">
 				<xsl:if test="count(preceding-sibling::w:r[1]/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])=0">
 					<xsl:variable name="page" as="xs:string">
 						<xsl:choose>

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.onecore;
+package org.daisy.pipeline.tts.sapinative;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -24,7 +24,7 @@
 	<xsl:param name="subject" as="xs:string" select="''"/> <!--Holds Documents Subject value-->
 	<xsl:param name="acceptRevisions" as="xs:boolean" select="true()"/>
 	<xsl:param name="version" as="xs:string" select="'14'"/> <!--Holds Documents version value-->
-	<xsl:param name="pagination" as="xs:string" select="'Custom'"/> <!-- Automatic|Custom -->
+	<xsl:param name="pagination" as="xs:string" select="'custom'"/> <!-- Automatic|Custom -->
 	<xsl:param name="MasterSub" as="xs:boolean" select="false()"/>
 	<xsl:param name="ImageSizeOption" as="xs:string" select="'original'"/> <!-- resize|resample|original -->
 	<xsl:param name="DPI" as="xs:integer" select="96"/>
@@ -69,7 +69,7 @@
 				<!--Levels upto 6-->
 				<!--Creating level element-->
 				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;level',$level,'&gt;')"/>
-				<xsl:if test="(d:GetPageNum($myObj)=0) and (d:CheckTocOccur($myObj)=1) and ($pagination='Automatic')">
+				<xsl:if test="(d:GetPageNum($myObj)=0) and (d:CheckTocOccur($myObj)=1) and ($pagination='automatic')">
 					<xsl:if test="preceding-sibling::w:sdt[1]/w:sdtPr/w:docPartObj/w:docPartGallery/@w:val='Cover Pages'">
 						<xsl:sequence select="d:sink(d:IncrementPage($myObj))"/> <!-- empty -->
 					</xsl:if>
@@ -79,7 +79,7 @@
 				</xsl:if>
 				<!--Checking whether heading is present in the document-->
 				<xsl:if test="$check">
-					<xsl:if test="$pagination='Automatic'
+					<xsl:if test="$pagination='automatic'
 						and (
 							(w:r/w:lastRenderedPageBreak)
 							or (
@@ -497,7 +497,7 @@
 		<xsl:for-each select ="./node()">
 			<xsl:if test="self::w:r">
 				<xsl:if test="((w:lastRenderedPageBreak) or (w:br/@w:type='page'))
-					and ($pagination='Automatic') ">
+					and ($pagination='automatic') ">
 					<xsl:choose>
 						<xsl:when test="not(w:t) and (w:lastRenderedPageBreak) and (w:br/@w:type='page')">
 							<xsl:if test="not(../following-sibling::w:sdt[1]/w:sdtPr/w:docPartObj/w:docPartGallery/@w:val='Table of Contents')">
@@ -872,7 +872,7 @@
 		<xsl:param name="pagination" as="xs:string"/>
 		<xsl:param name="mastersubtbl" as="xs:boolean"/>
 		<xsl:param name="characterStyle" as="xs:boolean"/>
-		<xsl:if test="$pagination='Automatic'">
+		<xsl:if test="$pagination='automatic'">
 			<xsl:for-each select="w:tr/w:tc">
 				<xsl:if test="(
 						(w:p/w:r/w:lastRenderedPageBreak) 

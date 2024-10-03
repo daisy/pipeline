@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -118,7 +119,9 @@ public class ESpeakEngine extends TTSEngine {
 			// Second: get the list of the voices for the found languages.
 			// White spaces are not allowed in voice names
 			result = new ArrayList<Voice>();
-			Matcher mr = Pattern.compile("^\\s*[0-9]+\\s+(?<locale>[-a-z]+)\\s+(?<gender>[FfMm-]\\s+)?(?<name>[^ ]+)").matcher("");
+			Matcher mr = Pattern.compile(
+				"^\\s*[0-9]+\\s+(?<locale>[-a-zA-Z0-9]+)\\s+((--/)?(?<gender>[FfMm-])\\s+)?(?<name>[^ ]+)"
+			).matcher("");
 			for (String lang : languages) {
 				new CommandRunner(mESpeakPath, "--voices=" + lang)
 					.consumeOutput(stream -> {
@@ -131,7 +134,7 @@ public class ESpeakEngine extends TTSEngine {
 										String name = mr.group("name");
 										try {
 											Locale locale = (new Locale.Builder()).setLanguageTag(mr.group("locale").replace("_", "-")).build();
-											Gender gender = "f".equals(mr.group("gender").trim().toLowerCase())
+											Gender gender = "f".equals(Optional.ofNullable(mr.group("gender")).orElse("m").toLowerCase())
 												? Gender.FEMALE_ADULT
 												: Gender.MALE_ADULT;
 											result.add(new Voice(getProvider().getName(), name, locale, gender));

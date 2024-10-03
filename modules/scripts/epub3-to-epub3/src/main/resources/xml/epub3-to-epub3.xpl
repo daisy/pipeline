@@ -314,6 +314,7 @@ elements that represent the sentences.</p>
         <!-- defined in ../../../../../common-options.xpl -->
         <p:pipe step="convert" port="tts-log"/>
     </p:output>
+    <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
     
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
         <p:documentation>

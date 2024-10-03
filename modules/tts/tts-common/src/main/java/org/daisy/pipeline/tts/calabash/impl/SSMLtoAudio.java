@@ -232,7 +232,9 @@ public class SSMLtoAudio implements FormatSpecifications {
 		logEntry.setSelectedVoice(preferredVoice);
 		if (preferredVoice == null) {
 			String err = "could not find any installed voice matching with "
-			                + new Voice(voiceEngine, voiceName)
+			                + "{" + (voiceEngine != null ? ("engine: " + voiceEngine) : "")
+			                +       (voiceName != null ? ((voiceEngine != null ? ", " : "") + "name: " + voiceName): "")
+			                + "}"
 			                + " or providing the language '" + lang + "'";
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			return false;

@@ -10,8 +10,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "onecorenative", "src\main\jni\onecorenative\onecorenative.vcxproj", "{88754889-B2B2-44BE-9BE9-4DD21808206E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -36,22 +34,6 @@ Global
 		{161FEC8C-CF12-4F78-A869-A26A98EB2640}.Release|x64.Build.0 = Release|x64
 		{161FEC8C-CF12-4F78-A869-A26A98EB2640}.Release|x86.ActiveCfg = Release|Win32
 		{161FEC8C-CF12-4F78-A869-A26A98EB2640}.Release|x86.Build.0 = Release|Win32
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|ARM.ActiveCfg = Debug|ARM
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|ARM.Build.0 = Debug|ARM
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|ARM64.ActiveCfg = Debug|ARM64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|ARM64.Build.0 = Debug|ARM64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|x64.ActiveCfg = Debug|x64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|x64.Build.0 = Debug|x64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|x86.ActiveCfg = Debug|Win32
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Debug|x86.Build.0 = Debug|Win32
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|ARM.ActiveCfg = Release|ARM
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|ARM.Build.0 = Release|ARM
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|ARM64.ActiveCfg = Release|ARM64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|ARM64.Build.0 = Release|ARM64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|x64.ActiveCfg = Release|x64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|x64.Build.0 = Release|x64
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|x86.ActiveCfg = Release|Win32
-		{88754889-B2B2-44BE-9BE9-4DD21808206E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

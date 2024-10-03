@@ -62,7 +62,7 @@ inline void raiseIOException(JNIEnv* env, const jchar* message, size_t len) {
 /// <param name="message"></param>
 inline void raiseException(JNIEnv* env, int errorCode, std::wstring message) {
     std::wostringstream excep;
-    excep << L"Error code (0x" << std::hex << errorCode << L") raised when trying to speak with OneCore or SAPI" << std::endl;
+    excep << L"Error code (0x" << std::hex << errorCode << L") raised when trying to speak with SAPI" << std::endl;
     excep << message << std::endl;
     // Use exception instead of return result to get error code in java
     raiseIOException(env, (const jchar*)excep.str().c_str(), excep.str().size());
@@ -257,7 +257,7 @@ jobject newSynthesisResult(JNIEnv* env,
         "java/lang/String"
     );
 
-    jclass resClass = env->FindClass("org/daisy/pipeline/tts/onecore/NativeSynthesisResult");
+    jclass resClass = env->FindClass("org/daisy/pipeline/tts/sapinative/NativeSynthesisResult");
     if (resClass == NULL) {
         raiseException(env, -1, L"Class NativeSynthesisResult was not found in runtime");
         return NULL;

@@ -1,4 +1,4 @@
-package org.daisy.pipeline.tts.onecore;
+package org.daisy.pipeline.tts.sapinative;
 
 import org.daisy.pipeline.tts.Voice;
 

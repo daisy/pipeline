@@ -26,8 +26,8 @@ public class DynamicPropertiesExtension implements ConfigReader.Extension {
 		String key = node.getAttributeValue(new QName(null, "key"));
 		if ("property".equalsIgnoreCase(name)) {
 			if (HOST_PROTECTION_PROPERTY.equalsIgnoreCase("false")) {
-				//	logger.warn("'" + HOST_PROTECTION_PROPERTY + "' setting is deprecated. " +
-				//	            "It may become unavailable in future version of DAISY Pipeline.");
+					logger.warn("'" + HOST_PROTECTION_PROPERTY + "' setting is deprecated. " +
+					            "It may become unavailable in future version of DAISY Pipeline.");
 				if (key == null) {
 					logger.warn("Missing key for config's property " + node.toString());
 				} else {

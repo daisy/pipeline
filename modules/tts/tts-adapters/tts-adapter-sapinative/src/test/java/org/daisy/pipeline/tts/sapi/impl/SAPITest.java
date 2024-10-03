@@ -1,8 +1,7 @@
 package org.daisy.pipeline.tts.sapi.impl;
 
-import org.daisy.pipeline.tts.onecore.NativeSynthesisResult;
-import org.daisy.pipeline.tts.onecore.Onecore;
-import org.daisy.pipeline.tts.onecore.SAPI;
+import org.daisy.pipeline.tts.sapinative.NativeSynthesisResult;
+import org.daisy.pipeline.tts.sapinative.SAPI;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 
@@ -92,6 +91,7 @@ public class SAPITest {
 
 	private static SAPIEngine allocateEngine() throws Throwable {
 		SAPIService s = new SAPIService();
+		s.activate();
 		return (SAPIEngine) s.newEngine(new HashMap<String, String>());
 	}
 
