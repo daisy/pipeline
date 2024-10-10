@@ -1,5 +1,6 @@
 # SassTest.java
 # XProcSpecTest.java
 # org/daisy/pipeline/css/CounterStyleTest.java
-# org/daisy/pipeline/css/sass/SassAnalyzerTest.java
+# org/daisy/pipeline/css/CssAnalyzerTest.java
 # org/daisy/pipeline/css/speech/impl/SpeechCssCascaderTest.java
+# org/daisy/pipeline/css/speech/VoiceFamilyListTest.java

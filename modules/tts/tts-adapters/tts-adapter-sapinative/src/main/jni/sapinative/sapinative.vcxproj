@@ -29,7 +29,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="org_daisy_pipeline_tts_sapinative_SAPI.cpp" />
     <ClCompile Include="win_queue_stream.cpp" />
   </ItemGroup>
@@ -38,7 +37,7 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{161fec8c-cf12-4f78-a869-a26a98eb2640}</ProjectGuid>
     <RootNamespace>sapinative</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.22000.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -206,6 +205,7 @@
       <AdditionalIncludeDirectories>%JAVA_HOME%\include;%JAVA_HOME%\include\win32;%JAVA_HOME%\include\win32\bridge;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <OmitFramePointers>false</OmitFramePointers>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

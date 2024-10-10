@@ -23,12 +23,12 @@ pronunciations, speech pitch, speech rates, speech levels, etc.) is
 controlled with TTS configuration files, CSS style sheets and PLS
 lexicons.
 
-TTS configuration files may either be specified "statically", through
-the `org.daisy.pipeline.tts.config` user property, or "dynamically"
-through an optional script input.
+TTS configuration files may either be specified through the
+`org.daisy.pipeline.tts.config` user property, or through an optional
+script input.
 
 `org.daisy.pipeline.tts.config`
-: File to load TTS configurations from at start-up
+: File to load TTS configuration from
 : Defaults to the file "tts-default-config.xml" located in the "etc/"
   directory in the base directory of the Pipeline installation, or
   "/etc/opt/daisy-pipeline2/tts-default-config.xml" on Debian/Ubuntu.
@@ -345,9 +345,7 @@ The CSS properties that are supported by DAISY Pipeline are a subset
 of [Aural CSS 2.1](https://www.w3.org/TR/CSS2/aural.html) (and partly
 inspired by [CSS 3 Speech](https://www.w3.org/TR/css3-speech)):
 
-<!-- TODO: update completely to CSS 3 -->
-
-[`voice-family`](https://www.w3.org/TR/CSS2/aural.html#propdef-voice-family)
+[`voice-family`](https://www.w3.org/TR/css-speech-1/#voice-props-voice-famil)
 : Used for selecting a voice based on gender, age, name and/or vendor.
 : See text below.
 <!-- see also <ssml:voice> -->
@@ -412,26 +410,26 @@ inspired by [CSS 3 Speech](https://www.w3.org/TR/css3-speech)):
 - [`speak-header`](https://www.w3.org/TR/CSS2/aural.html#propdef-speak-header)
 -->
 
-`voice-family` is a comma-separated list of voice characteristics that
-place conditions on the voice selection. It is inspired by (but not
-the same as) the specification of the
-[voice-family property in CSS 3](https://www.w3.org/TR/css3-speech#voice-family).
+[`voice-family`](https://www.w3.org/TR/css-speech-1/#voice-props-voice-family)
+specifies voice characteristics that place conditions on the voice
+selection. A prioritized list of component values, separated by
+commas, can be specified to indicate that they are alternatives.
 
-If a full voice name is provided, e.g. "acapela, alice", this voice
-will be selected regardless of the document language. If this voice is
-not available, a fallback voice will be chosen such that it will match
+If a full voice name is provided, e.g. `'Alice'`, this voice will be
+selected regardless of the document language. If this voice is not
+available, a fallback voice will be chosen such that it will match
 with the same characteristics as those of the requested voice: same
-language, same engine, same gender. If none is available, the pipeline
+language, same engine, same gender. If none is available, Pipeline
 broadens its search by relaxing the criteria: first the gender is
-relaxed and then the engine.
+relaxed, then the engine.
 
-If no voice name is provided, e.g. "acapela", "female" or "female,
-old", the selection algorithm will take into consideration only the
-voices that match the current language. It starts by looking for a
-voice with the specified gender and supplied by the specified engine,
-and will broaden to any gender if the first search yielded no
-results. If neither the gender nor the engine match, language will be
-the only criterion.
+If no voice name is provided, e.g. `female 'Acapela'` or `old female`,
+the selection algorithm will take into consideration only the voices
+that match the current language. It starts by looking for a voice with
+the specified gender and supplied by the specified engine, and will
+broaden to any gender if the first search yielded no results. If
+neither the gender nor the engine match, language will be the only
+criterion.
 
 When multiple voices match the criteria, the algorithm chooses the
 voice with the highest priority. Each voice has a default priority,
@@ -450,6 +448,7 @@ audio synchronization, which may compromise SAPI’s
 initialization. Microsoft’s built-in voices do handle SSML and marks.
 -->
 
+-->
 Notice that it is also a convenient way to add voices that are not
 natively supported by the Pipeline. In the example above, Todd is now
 a registered voice and, as such, can be selected automatically by the
@@ -476,6 +475,7 @@ the server’s log in which all the voices are enumerated:
     Available voices:
     * {engine:'sapi', name:'NTMNTTS Voice (Male)'} by sapi-native
     * {engine:'acapela', name:'alice'} by acapela-jna
+-->
 
 ## PLS
 

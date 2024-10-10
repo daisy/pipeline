@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns="http://www.w3.org/1999/xhtml"
+               script="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+
+	<x:scenario label="Test px:load with HTML files">
+		<x:call step="px:load">
+			<x:option name="content-type" select="'text/html'"/>
+		</x:call>
+
+		<x:scenario label="HTML file that does not use XML syntax">
+			<x:call>
+				<x:option name="href" select="'../resources/non-xml.html'"/>
+			</x:call>
+			<x:context label="result port">
+				<x:document type="port" port="result"/>
+			</x:context>
+			<x:expect type="compare" label="result">
+				<x:document type="inline">
+					<html>
+						<head>
+							<meta content="text/html; charset=ISO-8859-1" http-equiv="Content-Type"/>
+							<title>This is a test basic html file</title>
+						</head>
+						<body>
+							<h1>My First Heading</h1>
+							<p>My first <br/> paragraph.</p>
+						</body>
+					</html>
+				</x:document>
+			</x:expect>
+		</x:scenario>
+	</x:scenario>
+
+</x:description>

@@ -6,7 +6,6 @@
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:d="http://www.daisy.org/ns/pipeline/data"
                xmlns:epub="http://www.idpf.org/2007/ops"
-               xmlns:html="http://www.w3.org/1999/xhtml"
                xmlns:opf="http://www.idpf.org/2007/opf"
                script="../../main/resources/xml/xproc/fileset-load.xpl">
 
@@ -241,36 +240,6 @@
         </x:expect>
     </x:scenario>
 
-    <x:scenario label="test-method-html">
-        <x:call step="px:fileset-load">
-            <x:input port="fileset">
-                <x:document type="inline">
-                    <d:fileset>
-                        <d:file href="samples/fileset2/wrong-extensions/html.bin" method="html"/>
-                    </d:fileset>
-                </x:document>
-            </x:input>
-            <x:input port="in-memory"/>
-        </x:call>
-        <x:context label="the result.fileset port">
-            <x:document type="port" port="result.fileset"/>
-        </x:context>
-        <x:expect label="should be as expected" type="custom"
-                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
-            <x:document type="inline">
-                <d:fileset>
-                    <d:file href="samples/fileset2/wrong-extensions/html.bin" method="html"/>
-                </d:fileset>
-            </x:document>
-        </x:expect>
-        <x:context label="the result port">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect type="compare" label="should be as expected">
-            <x:document type="file" method="html" href="samples/fileset2/wrong-extensions/html.bin"/>
-        </x:expect>
-    </x:scenario>
-
     <x:scenario label="test-method-text">
         <x:call step="px:fileset-load">
             <x:input port="fileset">
@@ -400,36 +369,6 @@
         </x:context>
         <x:expect type="xpath" label="should be as expected"
                   test="/c:data[@content-type='text/plain; charset=utf-8']"/>
-    </x:scenario>
-
-    <x:scenario label="test-method-html-from-zip">
-        <x:call step="px:fileset-load">
-            <x:input port="fileset">
-                <x:document type="inline">
-                    <d:fileset>
-                        <d:file href="samples/fileset2/a.zip!/a.html" method="html"/>
-                    </d:fileset>
-                </x:document>
-            </x:input>
-            <x:input port="in-memory"/>
-        </x:call>
-        <x:context label="the result.fileset port">
-            <x:document type="port" port="result.fileset"/>
-        </x:context>
-        <x:expect label="should be as expected" type="custom"
-                  href="../../main/resources/xml/xproc/xprocspec-fileset-compare.xpl" step="x:fileset-compare">
-            <x:document type="inline">
-                <d:fileset>
-                    <d:file href="samples/fileset2/a.zip!/a.html" method="html"/>
-                </d:fileset>
-            </x:document>
-        </x:expect>
-        <x:context label="result">
-            <x:document type="port" port="result"/>
-        </x:context>
-        <x:expect type="compare" label="should be as expected">
-            <x:document type="file" method="html" href="samples/fileset2/a.html"/>
-        </x:expect>
     </x:scenario>
 
     <x:scenario label="test-method-binary-from-zip">

@@ -109,6 +109,14 @@ if MathML is present in the document.</p>
         </p:documentation>
     </p:option>
 
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+        <p:documentation>
+            px:fileset-add-entry
+            px:fileset-copy
+            px:fileset-filter
+            px:fileset-store
+        </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/dtbook-break-detection/library.xpl">
         <p:documentation>
             px:dtbook-break-detect
@@ -118,6 +126,11 @@ if MathML is present in the document.</p>
     <p:import href="../upgrade-dtbook/upgrade-dtbook.xpl">
         <p:documentation>
             px:dtbook-upgrade
+        </p:documentation>
+    </p:import>
+    <p:import href="../dtbook-load.xpl">
+        <p:documentation>
+            px:dtbook-load
         </p:documentation>
     </p:import>
     <p:import href="fix-dtbook.xpl">
@@ -133,45 +146,61 @@ if MathML is present in the document.</p>
 
     <p:for-each px:message="Cleaning DTBook(s)">
         <p:variable name="output-name" select="concat(replace(replace(base-uri(.),'^.*/([^/]+)$','$1'),'\.[^\.]*$',''),'.xml')"/>
-        <!-- Update the DTBook -->
-        <px:dtbook-upgrade/>
-        <!-- Apply routines -->
-        <pxi:dtbook-fix>
-            <p:with-option name="repair" select="$repair='true'"/>
-            <p:with-option name="tidy" select="$tidy='true'"/>
-            <p:with-option name="simplifyHeadingLayout" select="$simplifyHeadingLayout='true'"/>
-            <p:with-option name="externalizeWhitespace" select="$externalizeWhitespace='true'"/>
-            <p:with-option name="documentLanguage" select="$documentLanguage='true'"/>
-            <p:with-option name="narrator" select="$narrator='true'"/>
-            <p:with-option name="publisher" select="$publisher='true'"/>
-        </pxi:dtbook-fix>
-
-        <p:choose>
-            <p:when test="$ApplySentenceDetection='true'">
-                <px:dtbook-break-detect/>
-                <px:dtbook-unwrap-words/>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-
-        <!--
-            FIXME: this should be handled with px:fileset-store
-        -->
-        <p:choose>
-            <p:when test="$WithDoctype='true'">
-                <!-- DTBook with doctype (result is serialized) -->
-                <pxi:dtbook-doctyping/>
-            </p:when>
-            <p:otherwise>
-                <p:identity/>
-            </p:otherwise>
-        </p:choose>
-        <!-- Store on disk -->
-        <p:store>
+        <p:group name="cleaned" px:message="Cleaning '{$output-name}' ...">
+            <p:output port="result" />
+            <!-- Update the DTBook -->
+            <px:dtbook-upgrade/>
+            <!-- Apply routines -->
+            <pxi:dtbook-fix>
+                <p:with-option name="repair" select="$repair='true'"/>
+                <p:with-option name="tidy" select="$tidy='true'"/>
+                <p:with-option name="simplifyHeadingLayout" select="$simplifyHeadingLayout='true'"/>
+                <p:with-option name="externalizeWhitespace" select="$externalizeWhitespace='true'"/>
+                <p:with-option name="documentLanguage" select="$documentLanguage='true'"/>
+                <p:with-option name="narrator" select="$narrator='true'"/>
+                <p:with-option name="publisher" select="$publisher='true'"/>
+            </pxi:dtbook-fix>
+            <p:choose>
+                <p:when test="$ApplySentenceDetection='true'">
+                    <px:dtbook-break-detect/>
+                    <px:dtbook-unwrap-words/>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+            <p:choose>
+                <p:when test="$WithDoctype='true'">
+                    <!-- DTBook with doctype (result is serialized) -->
+                    <!--
+                        FIXME: this should be handled with px:fileset-store
+                    -->
+                    <pxi:dtbook-doctyping/>
+                </p:when>
+                <p:otherwise>
+                    <p:identity/>
+                </p:otherwise>
+            </p:choose>
+        </p:group>
+        <p:store px:message="Storing the cleaned DTBook and its resources ...">
             <p:with-option name="href" select="concat(resolve-uri($result),$output-name)"/>
         </p:store>
+        <!-- Copying dtbook side resources -->
+        <px:fileset-add-entry media-type="application/x-dtbook+xml" name="dtbook">
+            <p:input port="entry">
+                <p:pipe step="cleaned" port="result"/>
+            </p:input>
+        </px:fileset-add-entry>
+        <px:dtbook-load name="load" />
+        <px:fileset-filter not-media-types="application/x-dtbook+xml"/>
+        <px:fileset-copy name="copy">
+            <p:with-option name="target" select="resolve-uri($result)"/>
+        </px:fileset-copy>
+        <px:fileset-store>
+            <p:input port="in-memory.in">
+                <p:pipe step="copy" port="result.in-memory"/>
+            </p:input>
+        </px:fileset-store>
     </p:for-each>
 
 </p:declare-step>

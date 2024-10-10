@@ -3,8 +3,10 @@ package org.daisy.pipeline.tts;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 
 import com.google.common.collect.Collections2;
@@ -24,6 +26,7 @@ public class Voice {
 	private final MarkSupport markSupport;
 	private final Collection<LanguageRange> locale;
 	private final Optional<Gender> gender;
+	private final String id;
 
 	public enum MarkSupport {
 		DEFAULT,
@@ -67,7 +70,24 @@ public class Voice {
 		this.locale = Collections.unmodifiableCollection(locale);
 		this.gender = Optional.ofNullable(gender);
 		this.markSupport = markSupport;
+		synchronized (ids) {
+			if (ids.containsKey(this))
+				id = ids.get(this);
+			else {
+				Integer i = voiceCounter.get(engine.toLowerCase());
+				if (i == null)
+					i = 1;
+				else
+					i++;
+				id = engine.toLowerCase() + "-" + i;
+				ids.put(this, id);
+				voiceCounter.put(engine.toLowerCase(), i);
+			}
+		}
 	}
+
+	private final static Map<Voice,String> ids = new HashMap<>();
+	private final static Map<String,Integer> voiceCounter = new HashMap<>();
 
 	// see List.of() method in Java 9
 	private static <E> List<E> listOf(E element) {
@@ -100,6 +120,16 @@ public class Voice {
 	 */
 	public Optional<Gender> getGender() {
 		return gender;
+	}
+
+	/**
+	 * A unique ID.
+	 *
+	 * This method is consistent with {@link #equals}: it returns the same ID for equal voices,
+	 * and returns distinct IDs for distinct voices.
+	 */
+	public String getID() {
+		return id;
 	}
 
 	public int hashCode() {

@@ -4,6 +4,7 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.CaseFormat;
 
+import org.daisy.pipeline.css.CssAnalyzer;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.datatypes.XMLBasedDatatypeService;
@@ -16,7 +17,7 @@ import org.unbescape.css.CssEscape;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-class SassVariable implements org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable {
+class SassVariable implements CssAnalyzer.SassVariable {
 
 	private final static Logger logger = LoggerFactory.getLogger(SassVariable.class.getName());
 

@@ -15,10 +15,11 @@
       <x:document type="directory" base-uri="temp-dir" href="test_01/" recursive="true"/>
     </x:context>
     <x:expect type="count" label="The output directory should exist" min="1" max="1"/>
-    <x:expect type="xpath" label="The number of files stored should be 5" test="count(//c:file)=5"/>
+    <x:expect type="xpath" label="The number of files stored should be 6" test="count(//c:file)=6"/>
     <x:expect type="xpath" label="The file pef_4.pef should be stored" test="/*/c:file[@name='pef_4.pef']"/>
     <x:expect type="xpath" label="The file pef_4.pef.html should be stored" test="/*/c:file[@name='pef_4.pef.html']"/>
     <x:expect type="xpath" label="The file odt2braille8.ttf should be stored" test="/*/c:file[@name='odt2braille8.ttf']"/>
+    <x:expect type="xpath" label="The file NotCourierSans-Bold.ttf should be stored" test="/*/c:file[@name='NotCourierSans-Bold.ttf']"/>
     <x:expect type="xpath" label="The file pef-preview.css should be stored" test="/*/c:file[@name='pef-preview.css']"/>
     <x:expect type="xpath" label="The file pef-preview.js should be stored" test="/*/c:file[@name='pef-preview.js']"/>
   </x:scenario>

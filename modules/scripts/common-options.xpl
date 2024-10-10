@@ -516,7 +516,7 @@ If left blank, the locale information in the input document will be used to sele
 	<!--
 	    html-to-pef
 	-->
-	<p:option name="pdf" required="false" px:output="result" px:type="anyDirURI" px:media-type="text/html" select="''">
+	<p:option name="pdf" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/pdf" select="''">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">PDF</h2>
 			<p px:role="desc">A PDF version of the braille showing ASCII braille.</p>

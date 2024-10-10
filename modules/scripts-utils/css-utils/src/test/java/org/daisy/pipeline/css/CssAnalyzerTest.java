@@ -1,4 +1,4 @@
-package org.daisy.pipeline.css.sass;
+package org.daisy.pipeline.css;
 
 import java.io.StringReader;
 import java.util.Collections;
@@ -6,19 +6,19 @@ import java.util.Iterator;
 
 import javax.xml.transform.stream.StreamSource;
 
+import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
 import org.daisy.pipeline.css.Medium;
-import org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
 import org.daisy.pipeline.datatypes.DatatypeService;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SassAnalyzerTest {
+public class CssAnalyzerTest {
 
 	private final static Medium SCREEN = Medium.parse("screen");
 	@Test
 	public void testVariableNameHyphen() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $my-var: true !default;"))),
 			null
 		).getVariables().iterator();
@@ -29,7 +29,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testVariableNameUnderscore() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $my_var: true !default;"))),
 			null
 		).getVariables().iterator();
@@ -40,7 +40,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testVariableNameCamelCase() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $myVar: true !default;"))),
 			null
 		).getVariables().iterator();
@@ -51,7 +51,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testVariableNameUpperCamelCase() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $MyVar: true !default;"))),
 			null
 		).getVariables().iterator();
@@ -62,7 +62,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDefaultValue() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $my-var: true !default;"))),
 			null
 		).getVariables().iterator();
@@ -73,7 +73,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testFixedVariable() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $my-var: true;"))),
 			null
 		).getVariables().iterator();
@@ -85,7 +85,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testMapVariable() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   $my-var: (foo: 1, bar: 2);"))),
 			null
 		).getVariables().iterator();
@@ -98,7 +98,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testRegularComment() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /*"                    + "\n" +
 			                                                            "    * a comment"          + "\n" +
 			                                                            "    */"                   + "\n" +
@@ -112,7 +112,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenComment() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                   + "\n" +
 			                                                            "    * a comment"          + "\n" +
 			                                                            "    */"                   + "\n" +
@@ -126,7 +126,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenLongDescription() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                      + "\n" +
 			                                                            "    * a comment"             + "\n" +
 			                                                            "    *"                       + "\n" +
@@ -146,7 +146,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenFencedCodeBlock() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("/**"                      + "\n" +
 			                                                            " * a comment"             + "\n" +
 			                                                            " *"                       + "\n" +
@@ -166,7 +166,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenBrief() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                   + "\n" +
 			                                                            "    * @brief My variable" + "\n" +
 			                                                            "    *"                    + "\n" +
@@ -183,7 +183,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenVar() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                   + "\n" +
 			                                                            "    * @var $my-var"       + "\n" +
 			                                                            "    *"                    + "\n" +
@@ -199,7 +199,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenVarType() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                      + "\n" +
 			                                                            "    * @var string $my-var"   + "\n" +
 			                                                            "    *"                       + "\n" +
@@ -215,7 +215,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenVarTypeInferred() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                      + "\n" +
 			                                                            "    * a comment"             + "\n" +
 			                                                            "    */"                      + "\n" +
@@ -229,7 +229,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testDoxygenXMLCommand() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("   /**"                                                              + "\n" +
 			                                                            "    * a comment"                                                     + "\n" +
 			                                                            "    *"                                                               + "\n" +
@@ -254,7 +254,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testVariableInExpression() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(SCREEN, null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(SCREEN, null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("@if $my-var {" + "\n" +
 			                                                            "	..."        + "\n" +
 			                                                            "}"))),
@@ -265,7 +265,7 @@ public class SassAnalyzerTest {
 
 	@Test
 	public void testVariableInsideMediaRule() throws Exception {
-		Iterator<SassVariable> variables = new SassAnalyzer(Medium.parse("embossed AND (duplex:1)"), null, null).analyze(
+		Iterator<SassVariable> variables = new CssAnalyzer(Medium.parse("embossed AND (duplex:1)"), null, null).analyze(
 			Collections.singletonList(new StreamSource(new StringReader("@media embossed {"                   + "\n" +
 			                                                            "    @media (duplex:1) {"             + "\n" +
 			                                                            "        $my-var: true !default;"     + "\n" +

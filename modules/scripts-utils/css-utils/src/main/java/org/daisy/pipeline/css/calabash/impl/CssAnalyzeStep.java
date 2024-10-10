@@ -44,8 +44,8 @@ import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.css.Medium;
-import org.daisy.pipeline.css.sass.SassAnalyzer;
-import org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
+import org.daisy.pipeline.css.CssAnalyzer;
+import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
 import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 
 import org.osgi.service.component.annotations.Component;
@@ -147,7 +147,7 @@ public class CssAnalyzeStep extends DefaultStep implements XProcStep {
 								new InputSource(URLs.resolve(baseURI, URLs.asURI(t.nextToken())).toASCIIString())));
 				}
 			}
-			for (SassVariable v : new SassAnalyzer(media, cssURIResolver, null)
+			for (SassVariable v : new CssAnalyzer(media, cssURIResolver, null)
 			                          .analyze(stylesheets, sourceDocument)
 			                          .getVariables()) {
 				if (params.containsKey(v.getName()) && v.isDefault())

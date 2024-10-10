@@ -6,7 +6,9 @@
   
   <x:scenario label="alice.xhtml with default.css">
     <x:call step="px:html-to-pef.script">
-      <x:option name="source" select="resolve-uri('../resources/alice.xhtml')"/>
+      <x:input port="source">
+        <x:document type="file" href="../resources/alice.xhtml"/>
+      </x:input>
       <x:option name="include-preview" select="'true'"/>
       <x:option name="include-pef" select="'true'"/>
       <x:option name="result" select="''"/>
@@ -22,7 +24,9 @@
   
   <x:scenario label="reset.css">
     <x:call step="px:html-to-pef.script">
-      <x:option name="source" select="resolve-uri('../resources/reset-test.html')"/>
+      <x:input port="source">
+        <x:document type="file" href="../resources/reset-test.html"/>
+      </x:input>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
@@ -60,7 +64,9 @@
     <x:call step="px:html-to-pef.script"/>
     <x:scenario label="output-file-format has priority over dc:language / xml:lang">
       <x:call step="px:html-to-pef.script">
-        <x:option name="source" select="resolve-uri('../resources/test_ascii-table_1.xhtml')"/>
+        <x:input port="source">
+        <x:document type="file" href="../resources/test_ascii-table_1.xhtml"/>
+      </x:input>
         <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
         <x:option name="output-file-format" select="'(table:&quot;com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_031_01&quot;)
                                                      (line-breaks:DOS)
@@ -78,7 +84,9 @@
     </x:scenario>
     <x:scenario label="Table can be found by locale">
       <x:call step="px:html-to-pef.script">
-        <x:option name="source" select="resolve-uri('../resources/test_ascii-table_2.xhtml')"/>
+        <x:input port="source">
+        <x:document type="file" href="../resources/test_ascii-table_2.xhtml"/>
+      </x:input>
         <x:option name="output-file-format" select="'(line-breaks:DOS)
                                                      (page-breaks:&quot;---&quot;)
                                                      (pad:BOTH)'"/>
@@ -97,7 +105,9 @@
   
   <x:scenario label="XInclude">
     <x:call step="px:html-to-pef.script">
-      <x:option name="source" select="resolve-uri('../resources/xinclude-math.xhtml')"/>
+      <x:input port="source">
+        <x:document type="file" href="../resources/xinclude-math.xhtml"/>
+      </x:input>
       <x:option name="page-width" select="'35'"/>
       <x:option name="page-height" select="'20'"/>
       <x:option name="handle-xinclude" select="'true'"/>
@@ -136,7 +146,9 @@
   
   <x:scenario label="external entity">
     <x:call step="px:html-to-pef.script">
-      <x:option name="source" select="resolve-uri('../resources/external-entity.xhtml')"/>
+      <x:input port="source">
+        <x:document type="file" href="../resources/external-entity.xhtml"/>
+      </x:input>
       <x:option name="page-width" select="'35'"/>
       <x:option name="page-height" select="'20'"/>
       <x:option name="result" select="''"/>

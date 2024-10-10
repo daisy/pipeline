@@ -1,3 +1,10 @@
+v1.14.28
+========
+
+Changes
+-------
+- Add fallback font for HTML and PDF previews
+
 v1.14.26
 ========
 

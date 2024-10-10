@@ -76,6 +76,20 @@ public class PEF2PDFStep extends DefaultStep implements XProcStep {
 	private static final String DEFAULT_TABLE = "org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US";
 
 	private static final URL font = URLs.getResourceFromJAR("odt2braille8.ttf", PEF2PDFStep.class);
+	/*
+	 * pdfbox does not support OpenType fonts, nor does it support the font-face properties
+	 * ascent-override, descent-override and size-adjust. NotCourierSans-Bold.ttf was created from
+	 * NotCourierSans-Bold.otf using the Font Squirrel Webfont Generator tool
+	 * (https://www.fontsquirrel.com/tools/webfont-generator). I used these settings:
+	 *
+	 * - Upload Fonts: NotCourierSans-Bold.otf
+	 * - Font Formats: TrueType
+	 * - Vertical Metrics: Custom Adjustment:
+	 *   - Ascent: 70%
+	 *   - Descent: 30%
+	 * - X-height Matching: 83%
+	 */
+	private static final URL fallbackFont = URLs.getResourceFromJAR("NotCourierSans-Bold.ttf", PEF2PDFStep.class);
 
 	private final TableRegistry tableRegistry;
 	private ReadablePipe source = null;
@@ -251,6 +265,12 @@ public class PEF2PDFStep extends DefaultStep implements XProcStep {
 											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(font.openStream())) + ")\n" +
 											"	     format(\"truetype\");\n" +
 											"}\n" +
+											"@font-face {\n" +
+											"	font-family: NotCourierSans;\n" +
+											"	src: url(data:font/truetype;charset=utf8;base64,"
+											         + Base64.getEncoder().encodeToString(ByteStreams.toByteArray(fallbackFont.openStream())) + ")\n" +
+											"	     format(\"truetype\");\n" +
+											"}\n" +
 											"@page {\n" +
 											String.format("	margin-left: %dmm;\n", marginLeft) +
 											String.format("	margin-top: %dmm;\n", marginTop) +
@@ -271,7 +291,7 @@ public class PEF2PDFStep extends DefaultStep implements XProcStep {
 											"	page-break-before: always;\n" +
 											"}\n" +
 											".row {\n" +
-											"    font-family: odt2braille;\n" +
+											"    font-family: odt2braille, NotCourierSans;\n" +
 											"    letter-spacing: 0px;\n" +
 											"    white-space: pre;\n" +
 											"    letter-spacing: 0px;\n" +

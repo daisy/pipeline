@@ -6,14 +6,9 @@
                 exclude-result-prefixes="#all">
 
   <!--======================================================================= -->
-  <!-- Convert the CSS properties into SSML elements and discard any node -->
-  <!-- which is not SSML. -->
+  <!-- Convert the CSS properties into SSML elements and discard any node     -->
+  <!-- which is not SSML.                                                     -->
   <!--======================================================================= -->
-
-  <xsl:function name="tts:normlist">
-    <xsl:param name="li"/>
-    <xsl:value-of select="replace(translate($li,' ',''), ',', '|')"/>
-  </xsl:function>
 
   <xsl:template match="node()|@*">
     <xsl:copy>
@@ -24,64 +19,18 @@
   <xsl:template match="ssml:s">
     <xsl:copy>
       <xsl:copy-of select="@xml:lang|@id"/>
-      <xsl:if test="@tts:voice-family">
-	<!-- voice-family has the format: attr1|attr2|attr3 where attr
-	     is either age, gender, voice's vendor or voice's name. If
-	     a voice-name is given, it should come after the mandatory
-	     voice-vendor.-->
-	<!-- Should we use the wildcard '*' to mean 'any vendor'? -->
-	<xsl:variable name="voice-selectors">
-	  <tts:selectors>
-	    <xsl:analyze-string select="tts:normlist(@tts:voice-family)" regex="(\||^)([0-9]+)(\||$)">
-	      <xsl:matching-substring>
-		<tts:sel age="{regex-group(2)}"/>
-	      </xsl:matching-substring>
-	      <xsl:non-matching-substring>
-		<xsl:analyze-string select="." regex="(\||^)((male)|(female)|(neutral))(\||$)">
-		  <xsl:matching-substring>
-		    <tts:sel gender="{regex-group(2)}"/>
-		  </xsl:matching-substring>
-		  <xsl:non-matching-substring>
-		    <tts:sel other="{.}"/>
-		  </xsl:non-matching-substring>
-		</xsl:analyze-string>
-	      </xsl:non-matching-substring>
-	    </xsl:analyze-string>
-	  </tts:selectors>
-	</xsl:variable>
-	<xsl:if test="$voice-selectors//@age">
-	  <xsl:attribute name="voice-age">
-	    <xsl:value-of select="$voice-selectors//@age"/>
-	  </xsl:attribute>
-	</xsl:if>
-	<xsl:if test="$voice-selectors//@gender">
-	  <xsl:attribute name="voice-gender">
-	    <xsl:value-of select="$voice-selectors//@gender"/>
-	  </xsl:attribute>
-	</xsl:if>
-	<xsl:for-each select="tokenize($voice-selectors//@other, '\|+')">
-	  <xsl:attribute name="{concat('voice-selector', position())}">
-	    <xsl:value-of select="."/>
-	  </xsl:attribute>
-	</xsl:for-each>
-      </xsl:if>
-      <xsl:apply-templates select="." mode="css1"/>
+      <xsl:apply-templates select="." mode="css0"/>
     </xsl:copy>
   </xsl:template>
 
-  <xsl:template match="*" mode="css-child">
+  <xsl:template match="*" mode="css0">
     <xsl:apply-templates select="." mode="css1"/>
   </xsl:template>
-
-  <xsl:template match="text()" mode="css-child">
-    <xsl:value-of select="."/>
-  </xsl:template>
-
-  <xsl:template match="ssml:*" mode="css-child">
-    <xsl:copy>
-      <xsl:copy-of select="@*"/>
-      <xsl:apply-templates mode="#current"/>
-    </xsl:copy>
+  <xsl:template match="*[@tts:voice-family]" mode="css0">
+    <xsl:attribute name="voice-family">
+      <xsl:value-of select="@tts:voice-family"/>
+    </xsl:attribute>
+    <xsl:apply-templates select="." mode="css1"/>
   </xsl:template>
 
   <xsl:template match="*" mode="css1">
@@ -151,6 +100,21 @@
     <ssml:say-as interpret-as="cardinal">
       <xsl:apply-templates select="node()" mode="css-child"/>
     </ssml:say-as>
+  </xsl:template>
+
+  <xsl:template match="*" mode="css-child">
+    <xsl:apply-templates select="." mode="css1"/>
+  </xsl:template>
+
+  <xsl:template match="text()" mode="css-child">
+    <xsl:value-of select="."/>
+  </xsl:template>
+
+  <xsl:template match="ssml:*" mode="css-child">
+    <xsl:copy>
+      <xsl:copy-of select="@*"/>
+      <xsl:apply-templates mode="#current"/>
+    </xsl:copy>
   </xsl:template>
 
 </xsl:stylesheet>

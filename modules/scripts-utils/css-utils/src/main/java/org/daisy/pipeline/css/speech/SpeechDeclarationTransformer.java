@@ -37,6 +37,11 @@ public class SpeechDeclarationTransformer extends DeclarationTransformer {
 			for (Term<?> t : d) {
 				list.add(t);
 			}
+			try {
+				list = VoiceFamilyList.of(list);
+			} catch (IllegalArgumentException e) {
+				return false;
+			}
 			properties.put(d.getProperty(), VoiceFamily.list_values);
 			values.put(d.getProperty(), list);
 			return true;

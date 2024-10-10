@@ -161,6 +161,14 @@
                 <p:with-option name="href" select="resolve-uri('../odt2braille8.ttf')"/>
                 <p:with-option name="target" select="resolve-uri('odt2braille8.ttf', $preview-href)"/>
             </px:copy-resource>
+            <!--<px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
+                <p:with-option name="href" select="resolve-uri('../NotCourierSans-Bold.otf')"/>
+                <p:with-option name="target" select="resolve-uri('NotCourierSans-Bold.otf', $preview-href)"/>
+            </px:copy-resource>-->
+            <px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
+                <p:with-option name="href" select="resolve-uri('../NotCourierSans-Bold.ttf')"/>
+                <p:with-option name="target" select="resolve-uri('NotCourierSans-Bold.ttf', $preview-href)"/>
+            </px:copy-resource>
             <px:copy-resource fail-on-error="true" cx:depends-on="mkdir">
                 <p:with-option name="href" select="resolve-uri('pef-preview.css')"/>
                 <p:with-option name="target" select="resolve-uri('pef-preview.css', $preview-href)"/>

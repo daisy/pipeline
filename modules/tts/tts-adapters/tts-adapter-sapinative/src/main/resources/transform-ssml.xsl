@@ -54,9 +54,6 @@
   <xsl:template mode="copy" match="token">
     <!-- tokens are unwrapped because they are not SSML1.0-compliant and not SAPI-compliant-->
     <xsl:apply-templates select="node()" mode="copy"/>
-    <xsl:if test="following-sibling::*">
-      <xsl:text> </xsl:text>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template mode="copy" match="prosody[@rate]">

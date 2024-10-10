@@ -173,7 +173,7 @@ public class SpeechCssCascaderTest {
 	public void voiceFamily() throws SaxonApiException, URISyntaxException, IOException,
 	        CSSException {
 		check("<root><simple>test</simple></root>", "speech.css", "<root", "<simple",
-		      "tts:voice-family=\"[a-z0-9]+ *, *[a-z0-9]+\"", "test", "</simple>", "</root>");
+		      "tts:voice-family=\"'att', 'alain16'", "test", "</simple>", "</root>");
 	}
 
 	@Test

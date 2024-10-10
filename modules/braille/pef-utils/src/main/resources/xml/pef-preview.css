@@ -2,7 +2,14 @@
     font-family: odt2braille;
     src: url(odt2braille8.ttf);
 }
-
+@font-face {
+    font-family: NotCourierSans;
+    src: url(NotCourierSans-Bold.ttf);
+    /* src: url(NotCourierSans-Bold.otf); */
+    /* ascent-override: 70%; */
+    /* ascent-override: 30%; */
+    /* size-adjust: 83%; */
+}
 body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -168,7 +175,7 @@ div.text-page {
     display: none;
 }
 div.row {
-    font-family: "odt2braille 8 dot", odt2braille;;
+    font-family: odt2braille, NotCourierSans;
     letter-spacing: 0px;
     white-space: pre;
     letter-spacing: 0px;

@@ -29,12 +29,12 @@
         </address>
     </p:documentation>
     
-    <p:option name="source" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/xhtml+xml text/html">
+    <p:input port="source" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Input HTML</h2>
             <p px:role="desc" xml:space="preserve">The HTML you want to convert to braille.</p>
         </p:documentation>
-    </p:option>
+    </p:input>
     
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <!-- when `include-obfl` is set to true, the conversion may fail but still output a document
@@ -172,16 +172,18 @@ sheet modules) are available for use in Sass style sheets:
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
-    <px:fileset-add-entry>
+    <px:fileset-add-entry media-type="application/xhtml+xml" name="source">
         <p:input port="source.fileset">
-          <p:inline><d:fileset/></p:inline>
+            <p:inline><d:fileset/></p:inline>
         </p:input>
-        <p:with-option name="href" select="$source"/>
-        <p:with-option name="media-type" select="if ($handle-xinclude='true')
-                                                 then 'application/xhtml+xml'
-                                                 else 'text/html'"/>
+        <p:input port="entry">
+            <p:pipe step="main" port="source"/>
+        </p:input>
     </px:fileset-add-entry>
     <px:html-load name="html" px:message="Loading HTML" px:progress=".03">
+        <p:input port="source.in-memory">
+            <p:pipe step="source" port="result.in-memory"/>
+        </p:input>
         <p:with-option name="handle-xinclude" select="$handle-xinclude='true'"/>
     </px:html-load>
     

@@ -66,7 +66,7 @@ public class GetAnnotationsProvider implements XProcStepProvider {
 			public void run() throws SaxonApiException {
 
 				AnnotationsConfigExtension annoExt = new AnnotationsConfigExtension();
-				new ConfigReader(runtime.getProcessor(), mConfig.read(), annoExt);
+				new ConfigReader(runtime.getProcessor(), mConfig.read(), properties, annoExt);
 
 				for (XdmNode annotations : annoExt.getAnnotations(mContentType)) {
 					mResult.write(annotations);

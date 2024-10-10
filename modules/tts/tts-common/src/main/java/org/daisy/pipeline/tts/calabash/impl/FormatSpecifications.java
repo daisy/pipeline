@@ -21,12 +21,8 @@ public interface FormatSpecifications {
 	public static final QName SentenceTag = new QName(SSMLNS, "s");
 	public static final QName TokenTag = new QName(SSMLNS, "token");
 	public static final QName Sentence_attr_id = new QName("", "id");
-	public static final QName Sentence_attr_select1 = new QName("voice-selector1");
-	public static final QName Sentence_attr_select2 = new QName("voice-selector2");
-	public static final QName Sentence_attr_gender = new QName("voice-gender");
-	public static final QName Sentence_attr_age = new QName("voice-age");
-	public static final QName Sentence_attr_lang = new QName(
-	        "http://www.w3.org/XML/1998/namespace", "lang");
+	public static final QName Sentence_attr_lang = new QName("http://www.w3.org/XML/1998/namespace", "lang");
+	public static final QName Sentence_attr_voice_family = new QName("voice-family");
 
 	public static final QName LogRootTag = new QName(LogNS, "log");
 	public static final QName LogErrorTag = new QName(LogNS, "error");

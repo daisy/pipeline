@@ -1,4 +1,4 @@
-package org.daisy.pipeline.css.sass;
+package org.daisy.pipeline.css;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -8,22 +8,23 @@ import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
 
 import org.daisy.pipeline.css.Medium;
+import org.daisy.pipeline.css.sass.impl.SassAnalyzer;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.datatypes.DatatypeService;
 
 /**
  * Analyzes a style sheet and extracts information about global variables.
  */
-public class SassAnalyzer {
+public class CssAnalyzer {
 
 	private final org.daisy.pipeline.css.sass.impl.SassAnalyzer analyzer;
 
-	public SassAnalyzer(Medium medium, URIResolver uriResolver, DatatypeRegistry datatypes) {
+	public CssAnalyzer(Medium medium, URIResolver uriResolver, DatatypeRegistry datatypes) {
 	    this(Collections.singleton(medium), uriResolver, datatypes);
 	}
 
-	public SassAnalyzer(Collection<Medium> media, URIResolver uriResolver, DatatypeRegistry datatypes) {
-		analyzer = new org.daisy.pipeline.css.sass.impl.SassAnalyzer(media, uriResolver, datatypes);
+	public CssAnalyzer(Collection<Medium> media, URIResolver uriResolver, DatatypeRegistry datatypes) {
+		analyzer = new SassAnalyzer(media, uriResolver, datatypes);
 	}
 
 	/**

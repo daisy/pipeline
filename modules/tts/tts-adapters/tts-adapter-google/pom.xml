@@ -6,11 +6,11 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.28-SNAPSHOT</version>
+    <version>1.14.30-SNAPSHOT</version>
     <relativePath>../../../parent</relativePath>
   </parent>
 
-  <version>1.2.2-SNAPSHOT</version>
+  <version>1.2.3-SNAPSHOT</version>
   <artifactId>tts-adapter-google</artifactId>
   <packaging>bundle</packaging>
 

@@ -7,11 +7,14 @@ import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+
+import org.daisy.pipeline.css.speech.VoiceFamilyList;
 
 public class VoiceInfo {
 
@@ -58,6 +61,30 @@ public class VoiceInfo {
 
 		public static Gender of(String gender) {
 			return gender == null ? null : lookup.get(gender.toLowerCase().replace("_", "-"));
+		}
+
+		public static Gender of(VoiceFamilyList.Gender gender) {
+			return Gender.of(gender.toString());
+		}
+
+		public static Gender of(VoiceFamilyList.Gender gender, Optional<VoiceFamilyList.Age> age) {
+			switch (gender) {
+			case NEUTRAL:
+				return Gender.ANY;
+			case MALE:
+			case FEMALE:
+			default:
+				if (age.isPresent())
+					switch (age.get()) {
+					case CHILD:
+						return Gender.of("" + gender + "-child");
+					case OLD:
+						return Gender.of("" + gender + "-eldery");
+					case YOUNG:
+					default:
+					}
+			}
+			return Gender.of(gender);
 		}
 
 		@Override

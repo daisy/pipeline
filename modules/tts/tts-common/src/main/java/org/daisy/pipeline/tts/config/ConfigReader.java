@@ -3,6 +3,7 @@ package org.daisy.pipeline.tts.config;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
+import java.util.Map;
 
 import javax.xml.transform.sax.SAXSource;
 
@@ -15,6 +16,7 @@ import net.sf.saxon.s9api.XdmSequenceIterator;
 
 import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
+import org.daisy.common.properties.Properties.Property;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,11 @@ import org.xml.sax.InputSource;
 public class ConfigReader {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
-	private static final String staticConfigPath = Properties.getProperty("org.daisy.pipeline.tts.config");
+	private static final Property CONFIG_PATH = Properties.getProperty("org.daisy.pipeline.tts.config",
+	                                                                   true,
+	                                                                   "File to load TTS configuration from",
+	                                                                   false,
+	                                                                   null);
 
 	public interface Extension {
 		/**
@@ -42,9 +48,14 @@ public class ConfigReader {
 	}
 
 	public ConfigReader(Processor saxonproc, XdmNode doc, Extension... extensions) {
+		this(saxonproc, doc, null, extensions);
+	}
+
+	public ConfigReader(Processor saxonproc, XdmNode doc, Map<String,String> properties, Extension... extensions) {
 		this.saxonproc = saxonproc;
-		if (staticConfigPath != null) {
-			XdmNode content = parseXML(staticConfigPath);
+		String configPath = properties != null ? CONFIG_PATH.getValue(properties) : CONFIG_PATH.getValue();
+		if (configPath != null && !"".equals(configPath)) {
+			XdmNode content = parseXML(configPath);
 			if (content != null)
 				read(content, extensions);
 		}

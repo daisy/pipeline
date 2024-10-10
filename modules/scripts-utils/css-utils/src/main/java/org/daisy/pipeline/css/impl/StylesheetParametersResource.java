@@ -35,9 +35,9 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.css.CssAnalyzer;
+import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
 import org.daisy.pipeline.css.Medium;
-import org.daisy.pipeline.css.sass.SassAnalyzer;
-import org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
 import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.job.ZippedJobResources;
@@ -286,7 +286,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				parametersDoc = XmlUtils.createDom("parameters");
 				Element parametersElem = parametersDoc.getDocumentElement();
 				try {
-					for (SassVariable v : new SassAnalyzer(media, resolver, datatypeRegistry)
+					for (SassVariable v : new CssAnalyzer(media, resolver, datatypeRegistry)
 						                      .analyze(userAndUserAgentStylesheets, sourceDocument)
 					                          .getVariables()) {
 						if (v.isDefault()) {

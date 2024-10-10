@@ -162,7 +162,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 
 		VoiceConfigExtension configExt = new VoiceConfigExtension();
 		DynamicPropertiesExtension propsExt = new DynamicPropertiesExtension();
-		new ConfigReader(mRuntime.getProcessor(), config.read(), configExt, propsExt);
+		new ConfigReader(mRuntime.getProcessor(), config.read(), this.properties, configExt, propsExt);
 		Map<String,String> properties = this.properties;
 		Map<String,String> dynProperties = propsExt.getDynamicProperties();
 		if (dynProperties != null && !dynProperties.isEmpty()) {

@@ -283,8 +283,10 @@ JNIEXPORT jobjectArray JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_getVo
 // Taken from NVDA connector to onecore, apply also to sapi on windows 11 :
 // Using mutex and lock on the synthesis calls to prevent fast fail crash
 std::shared_timed_mutex SPEECH_MUTEX{};
-// setting timeout to 60 seconds as first unlock can be quite long
-std::chrono::duration MAX_WAIT(std::chrono::seconds(60));
+// setting timeout to 240 seconds as 
+// - first unlock can be quite long
+// - local neural voices can be quite slow to do audio synthesis
+std::chrono::duration MAX_WAIT(std::chrono::seconds(240));
 
 /// <summary>
 /// New speak functions with data isolation
@@ -366,8 +368,7 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIE
     }
 
     ULONGLONG ullEventInterest = CROSS_PLATFORM_SPFEI(SPEI_END_INPUT_STREAM) |
-        CROSS_PLATFORM_SPFEI(SPEI_TTS_BOOKMARK) |
-        CROSS_PLATFORM_SPFEI(SPEI_VISEME);
+        CROSS_PLATFORM_SPFEI(SPEI_WORD_BOUNDARY);
 
     if (FAILED(talker->SetInterest(ullEventInterest, ullEventInterest))) {
         exitCom(refsStack);
@@ -487,25 +488,31 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIE
         sentence = std::regex_replace(sentence, speakTagSearch, newTagStream.str());
 
     }
-    // Marks that are preceded by quotes are ignored by natural voices
-    // it works if the ones that are right before marks are removed
-    std::basic_regex<wchar_t> quoteSearch(
-        L"(\"|\')\\s*<mark",
-        std::regex_constants::ECMAScript
+    
+    // Marks regex search: 
+    std::basic_regex<wchar_t> markSearch(
+		L"<mark\\s+name=\"([^\"]*)\"\\s*/>",
+		std::regex_constants::ECMAScript
+	);
+   
+    // count number of marks in the text to preallocate the array
+    std::wsregex_iterator check_begin, check_end;
+    check_begin = std::wsregex_iterator(
+        sentence.begin(),
+        sentence.end(),
+        markSearch
     );
-    std::wostringstream newTagStream;
-    newTagStream << L"<mark";
-    sentence = std::regex_replace(sentence, quoteSearch, newTagStream.str());
-
+    check_end = std::wsregex_iterator();
+    
     int 						currentBookmarkIndex = 0;
-    std::vector<std::wstring>	bookmarkNames;
-    std::vector<jlong>			bookmarkPositions;
+    std::vector<std::wstring>	bookmarkNames = std::vector<std::wstring>(std::distance(check_begin, check_end));
+    std::vector<jlong>			bookmarkPositions = std::vector<jlong>(std::distance(check_begin, check_end));
     UniqueLock lock(SPEECH_MUTEX, std::defer_lock);
+    //bool owned = true;
     bool owned = lock.try_lock();
     if (!owned) {
         owned = lock.try_lock_for(MAX_WAIT);
     }
-    
     ULONGLONG endTimeOffset = 0;
     if (owned) {
         dataStream.startWritingPhase();
@@ -562,12 +569,11 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIE
                 raiseException(env, hr, L"Could not speak : Unknown error code");
                 return NULL;
             }
-
-            
             //jlong duration = 0; //in milliseconds
             bool end = false;
             HRESULT eventFound = S_FALSE;
-            
+            long previousBoundary = 0, currentBoundary = 0;
+            std::wstring extract;
             do {
                 // wait for a possible last event after end
                 talker->WaitForNotifyEvent(INFINITE);
@@ -579,29 +585,76 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIE
                     eventFound = eventSource->GetEventsEx(1, &event, NULL);
                     if (eventFound == S_OK) {
                         switch (event.eEventId) {
-                        case SPEI_VISEME:
-                            //duration += HIWORD(event.wParam);
+                        case SPEI_WORD_BOUNDARY:
+                            // replacing marks events by text check between word boundaries
+                            // This is because Natural Voices do not always raise the mark event depending on 
+                            // the presence of quotations characters in the text
+                            currentBoundary = event.lParam;
+                            extract = sentence.substr(previousBoundary, currentBoundary - previousBoundary);
+                            check_begin = std::wsregex_iterator(
+                                extract.begin(),
+                                extract.end(),
+                                markSearch
+                            );
+                            check_end = std::wsregex_iterator();
+                            for (std::wsregex_iterator i = check_begin; i != check_end; ++i)
+                            {
+                                std::wsmatch match = *i;
+                                std::wstring name = match[1].str();
+                                // avoid duplicates bookmarks (not possible in theory but keeping it for safety)
+                                if (std::find(bookmarkNames.begin(), bookmarkNames.end(), name) == bookmarkNames.end()) {
+                                    // also kept reallocation for safety, but should not be needed
+                                    // as the number of marks is now evaluated first to allocate
+                                    // the bookmarkNames andbookmarkPositions arrays
+                                    if (currentBookmarkIndex == bookmarkNames.size()) {
+                                        int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
+                                        bookmarkNames.resize(newsize);
+                                        bookmarkPositions.resize(newsize);
+                                    }
+                                    //bookmarks are not pushed_back to prevent allocating/releasing all over the place
+                                    bookmarkNames[currentBookmarkIndex] = name;
+                                    bookmarkPositions[currentBookmarkIndex] = (jlong)event.ullAudioTimeOffset;
+                                    ++(currentBookmarkIndex);
+                                }
+                            }
+
+                            // if text between current and previous boundary is not empty and contains marks
+                            // for each mark between the two boundaries, get their names and set the marks position to 
+                            // event.ullAudioTimeOffset
+                            previousBoundary = currentBoundary + event.wParam;
                             break;
                         case SPEI_END_INPUT_STREAM:
+                            // Also checks for marks at the end of the audio stream
                             endTimeOffset = event.ullAudioTimeOffset;
-                            end = true;
-                            break;
-                        case SPEI_TTS_BOOKMARK:
-                            const wchar_t* name = (const wchar_t*)(event.lParam);
-
-                            // got the case where a mark raised 2 events with the same name
-                            if (std::find(bookmarkNames.begin(), bookmarkNames.end(), name) == bookmarkNames.end()) {
-                                if (currentBookmarkIndex == bookmarkNames.size()) {
-                                    int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
-                                    bookmarkNames.resize(newsize);
-                                    bookmarkPositions.resize(newsize);
+                            currentBoundary = sentence.length();
+                            extract = sentence.substr(previousBoundary, currentBoundary - previousBoundary);
+                            check_begin = std::wsregex_iterator(
+                                extract.begin(),
+                                extract.end(),
+                                markSearch
+                            );
+                            check_end = std::wsregex_iterator();
+                            for (std::wsregex_iterator i = check_begin; i != check_end; ++i)
+                            {
+                                std::wsmatch match = *i;
+                                std::wstring name = match[1].str();
+                                // avoid duplicates bookmarks (not possible in theory but keeping it for safety)
+                                if (std::find(bookmarkNames.begin(), bookmarkNames.end(), name) == bookmarkNames.end()) {
+                                    // also kept reallocation for safety, but should not be needed
+                                    // as the number of marks is now evaluated first to allocate
+                                    // the bookmarkNames andbookmarkPositions arrays
+                                    if (currentBookmarkIndex == bookmarkNames.size()) {
+                                        int newsize = 1 + (3 * static_cast<int>(bookmarkNames.size())) / 2;
+                                        bookmarkNames.resize(newsize);
+                                        bookmarkPositions.resize(newsize);
+                                    }
+                                    //bookmarks are not pushed_back to prevent allocating/releasing all over the place
+                                    bookmarkNames[currentBookmarkIndex] = name;
+                                    bookmarkPositions[currentBookmarkIndex] = (jlong)event.ullAudioTimeOffset;
+                                    ++(currentBookmarkIndex);
                                 }
-                                //bookmarks are not pushed_back to prevent allocating/releasing all over the place
-                                bookmarkNames[currentBookmarkIndex] = (const wchar_t*)(event.lParam);
-                                bookmarkPositions[currentBookmarkIndex] = (jlong)event.ullAudioTimeOffset;
-                                ++(currentBookmarkIndex);
-
                             }
+                            end = true;
                             break;
                         }
                     }
@@ -622,7 +675,6 @@ JNIEXPORT jobject JNICALL Java_org_daisy_pipeline_tts_sapinative_SAPI_speak(JNIE
         return NULL;
     }
     lock.unlock();
-    
 
     const int dataSize = dataStream.in_avail();
     uint8_t* fullAudio = new uint8_t[dataSize];

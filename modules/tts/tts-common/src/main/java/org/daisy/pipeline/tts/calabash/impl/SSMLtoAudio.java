@@ -27,6 +27,7 @@ import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.audio.AudioServices;
+import org.daisy.pipeline.css.speech.VoiceFamilyList;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
 import org.daisy.pipeline.tts.calabash.impl.EncodingThread.EncodingException;
 import org.daisy.pipeline.tts.config.VoiceConfigExtension;
@@ -191,27 +192,16 @@ public class SSMLtoAudio implements FormatSpecifications {
 	 **/
 	// package private for tests
 	boolean dispatchSSML(XdmNode ssml, Locale lang) throws SynthesisException {
-		String voiceEngine = ssml.getAttributeValue(Sentence_attr_select1);
-		String voiceName = ssml.getAttributeValue(Sentence_attr_select2);
-		Gender gender; {
-			String attr = ssml.getAttributeValue(Sentence_attr_gender);
-			String ageAttr = ssml.getAttributeValue(Sentence_attr_age);
-			if (attr != null && ageAttr != null) {
+		VoiceFamilyList voiceFamily; {
+			String attr = ssml.getAttributeValue(Sentence_attr_voice_family);
+			if (attr != null && !"".equals(attr))
 				try {
-					int age = Integer.parseInt(ageAttr);
-					if (age <= 16) {
-						gender = Gender.of(attr + "-child");
-					} else if (age >= 70) {
-						gender = Gender.of(attr + "-eldery");
-					} else {
-						gender = Gender.of(attr);
-					}
-				} catch (NumberFormatException e) {
-					gender = Gender.of(attr);
+					voiceFamily = VoiceFamilyList.of(attr);
+				} catch (IllegalArgumentException e) {
+					throw new SynthesisException("invalid voice-family attribute: " + attr, e); // should not happen
 				}
-			} else {
-				gender = Gender.of(attr);
-			}
+			else
+				voiceFamily = null;
 		}
 		{
 			String langAttr = ssml.getAttributeValue(Sentence_attr_lang);
@@ -224,18 +214,15 @@ public class SSMLtoAudio implements FormatSpecifications {
 			}
 		}
 		String id = ssml.getAttributeValue(Sentence_attr_id);
-
 		TTSLog.Entry logEntry = mTTSlog.getOrCreateEntry(id);
 		logEntry.setSSML(ssml);
-		Iterable<Voice> voices = mVoiceManager.findAvailableVoices(voiceEngine, voiceName, lang, gender);
+		Iterable<Voice> voices = mVoiceManager.findAvailableVoices(lang, voiceFamily);
 		Voice preferredVoice = Iterables.getFirst(voices, null);
 		logEntry.setSelectedVoice(preferredVoice);
 		if (preferredVoice == null) {
-			String err = "could not find any installed voice matching with "
-			                + "{" + (voiceEngine != null ? ("engine: " + voiceEngine) : "")
-			                +       (voiceName != null ? ((voiceEngine != null ? ", " : "") + "name: " + voiceName): "")
-			                + "}"
-			                + " or providing the language '" + lang + "'";
+			String err = "could not find any installed voice "
+			                + (voiceFamily != null ? ("matching with `voice-family: " + voiceFamily + "` and ") : "")
+			                + "providing the language '" + lang + "'";
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			return false;
 		}
@@ -247,12 +234,13 @@ public class SSMLtoAudio implements FormatSpecifications {
 			 * non-null voice if a TTSService can provide it
 			 */
 			String err = "could not find any TTS engine for the voice "
-				+ new Voice(voiceEngine, voiceName);
+			                + "{engine: " + preferredVoice.getEngine()
+			                +  ", name: " + preferredVoice.getName() + "}";
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.AUDIO_MISSING, err));
 			return false;
 		}
 
-		if (!mVoiceManager.matches(preferredVoice, voiceEngine, voiceName, lang, gender)) {
+		if (!mVoiceManager.matches(preferredVoice, lang, voiceFamily)) {
 			logEntry.addError(new TTSLog.Error(TTSLog.ErrorCode.UNEXPECTED_VOICE,
 			        "no voice matches exactly with the requested characteristics"));
 		}

@@ -283,7 +283,7 @@
       <x:call step="px:text-to-ssml">
 	<x:input port="content.in">
   	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-  	  <dtbook xml:lang="en" tmp:voice-family="engine,name">
+  	  <dtbook xml:lang="en" tmp:voice-family="'name'">
   	    <ssml:s id="s1"><span tmp:volume="2"><pagenum id="sk1">1</pagenum></span></ssml:s>
   	  </dtbook>
         </x:document>
@@ -295,7 +295,7 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <speak version="1.1">
-	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s id="sk1" xml:lang="en" voice-family="'name'">
               <prosody volume="2">1</prosody>
 	    </s>
 	  </speak>
@@ -308,7 +308,7 @@
 	<x:input port="content.in">
   	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
   	  <dtbook xml:lang="en" tmp:volume="2">
-  	    <ssml:s id="s1"><span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span></ssml:s>
+  	    <ssml:s id="s1"><span tmp:voice-family="'name'"><pagenum id="sk1">1</pagenum></span></ssml:s>
   	  </dtbook>
         </x:document>
 	</x:input>
@@ -319,7 +319,7 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <speak version="1.1">
-	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s id="sk1" xml:lang="en" voice-family="'name'">
               <prosody volume="2">1</prosody>
 	    </s>
 	  </speak>
@@ -331,7 +331,7 @@
       <x:call step="px:text-to-ssml">
 	<x:input port="content.in">
   	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-  	  <dtbook xml:lang="en" tmp:voice-family="engine,name">
+  	  <dtbook xml:lang="en" tmp:voice-family="'name'">
   	    <ssml:s id="s1">
 	      <span id="left"><w>left</w></span>
 	      <span tmp:volume="2"><pagenum id="sk1">1</pagenum></span>
@@ -347,12 +347,12 @@
       <x:expect label="result" type="compare">
 	<x:document type="inline">
 	  <speak version="1.1">
-	    <s id="s1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s id="s1" xml:lang="en" voice-family="'name'">
               <token>left</token>
               <mark name="left___right"/>
               <token>right</token>
 	    </s>
-	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s id="sk1" xml:lang="en" voice-family="'name'">
               <prosody volume="2">1</prosody>
 	    </s>
 	  </speak>
@@ -367,7 +367,7 @@
   	  <dtbook xml:lang="en" tmp:volume="2">
   	    <ssml:s id="s1">
 	      <span id="left"><w>left</w></span>
-	      <span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span>
+	      <span tmp:voice-family="'name'"><pagenum id="sk1">1</pagenum></span>
 	      <span id="right"><w>right</w></span>
 	    </ssml:s>
   	  </dtbook>
@@ -387,7 +387,7 @@
 		<token>right</token>
 	      </prosody>
 	    </s>
-	    <s id="sk1" xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s id="sk1" xml:lang="en" voice-family="'name'">
               <prosody volume="2">1</prosody>
 	    </s>
 	  </speak>
@@ -402,9 +402,9 @@
   	  <dtbook xml:lang="en">
   	    <ssml:s id="s1">
 	      <span id="left"><w>left</w></span>
-	      <span tmp:voice-family="engine,name"><pagenum id="sk1">1</pagenum></span>
+	      <span tmp:voice-family="'name'"><pagenum id="sk1">1</pagenum></span>
 	      <span id="middle"><w>middle</w></span>
-	      <span tmp:voice-family="engine,name"><pagenum id="sk2">2</pagenum></span>
+	      <span tmp:voice-family="'name'"><pagenum id="sk2">2</pagenum></span>
 	      <span id="right"><w>right</w></span>
 	    </ssml:s>
   	  </dtbook>
@@ -424,7 +424,7 @@
 	      <mark name="middle___right"/>
 	      <token>right</token>
 	    </s>
-	    <s xml:lang="en" voice-selector1="engine" voice-selector2="name">
+	    <s xml:lang="en" voice-family="'name'">
 	      1, <mark name="sk1___sk2"/> . 2,
 	    </s>
 	  </speak>
@@ -507,39 +507,6 @@
 	</x:document>
       </x:expect>
     </x:scenario>
-
-    <x:scenario label="Voice family">
-      <x:call step="px:text-to-ssml">
-	<x:input port="content.in">
-  	<x:document type="inline" xmlns="http://www.daisy.org/z3986/2005/dtbook/">
-  	  <dtbook xml:lang="en">
-  	    <level>
-  	      <ssml:s tmp:voice-family="espeak" id="s1"><w>sentence1</w></ssml:s>
-  	      <ssml:s tmp:voice-family="att,alain16" id="s2"><w>sentence2</w></ssml:s>
-  	      <ssml:s tmp:voice-family="att,16" id="s3"><w>sentence3</w></ssml:s>
-  	      <ssml:s tmp:voice-family="16,male,att" id="s4"><w>sentence4</w></ssml:s>
-  	      <ssml:s tmp:voice-family="female,15" id="s5"><w>sentence5</w></ssml:s>
-  	    </level>
-  	  </dtbook>
-        </x:document>
-	</x:input>
-      </x:call>
-      <x:context label="result">
-	<x:document type="port" port="result"/>
-      </x:context>
-      <x:expect label="result" type="compare">
-	<x:document type="inline">
-  	  <speak version="1.1">
-  	    <s id="s1" xml:lang="en" voice-selector1="espeak"><token>sentence1</token></s>
-  	    <s id="s2" xml:lang="en" voice-selector1="att" voice-selector2="alain16"><token>sentence2</token></s>
-  	    <s id="s3" xml:lang="en" voice-selector1="att" voice-age="16"><token>sentence3</token></s>
-  	    <s id="s4" xml:lang="en" voice-selector1="att" voice-age="16" voice-gender="male"><token>sentence4</token></s>
-  	    <s id="s5" xml:lang="en" voice-age="15" voice-gender="female"><token>sentence5</token></s>
-  	  </speak>
-	</x:document>
-      </x:expect>
-    </x:scenario>
-
 
     <x:scenario label="SSML say-as">
       <x:call step="px:text-to-ssml">

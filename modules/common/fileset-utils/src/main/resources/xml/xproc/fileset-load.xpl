@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
@@ -72,16 +71,12 @@
       px:fileset-update
     </p:documentation>
   </p:import>
-  <p:import href="load-html.xpl">
-    <p:documentation>
-      pxi:load-html
-    </p:documentation>
-  </p:import>
   <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
     <p:documentation>
       px:info
       px:set-base-uri
       px:normalize-uri
+      px:load
       px:data
       px:read-doctype
     </p:documentation>
@@ -267,9 +262,9 @@
 
                   <!-- Force HTML -->
                   <p:when test="$method='html'">
-                    <pxi:load-html>
+                    <px:load content-type="text/html">
                       <p:with-option name="href" select="$href-maybe-in-zip"/>
-                    </pxi:load-html>
+                    </px:load>
                   </p:when>
 
                   <!-- Force XML -->
@@ -295,9 +290,9 @@
 
                   <!-- HTML -->
                   <p:when test="$media-type='text/html' or $media-type='application/xhtml+xml'">
-                    <pxi:load-html>
+                    <px:load content-type="text/html">
                       <p:with-option name="href" select="$href-maybe-in-zip"/>
-                    </pxi:load-html>
+                    </px:load>
                   </p:when>
 
                   <!-- XML -->
