@@ -26,6 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -106,11 +109,45 @@ public class PropertyResource extends AdminResource {
 			return getErrorRepresentation("Invalid property XML provided");
 		}
 		Attr val = doc.getDocumentElement().getAttributeNode("value");
-		if (val == null) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return this.getErrorRepresentation("Invalid property XML provided: 'property' element missing 'value' attribute");
+		if (val != null)
+			property.get().setValue(val.getValue());
+		else {
+			Element xmlContent = null; {
+				NodeList children = doc.getDocumentElement().getChildNodes();
+				for (int i = 0; i < children.getLength(); i++) {
+					Node n = children.item(i);
+					switch (n.getNodeType()) {
+					case Node.ELEMENT_NODE:
+						if (xmlContent != null) {
+							setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+							return this.getErrorRepresentation(
+								"Invalid property XML provided: 'property' element has more than one child element");
+						}
+						xmlContent = (Element)n;
+						break;
+					case Node.TEXT_NODE:
+						if (!n.getTextContent().trim().isEmpty()) {
+							setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+							return this.getErrorRepresentation(
+								"Invalid property XML provided: 'property' element contains text");
+						}
+						break;
+					case Node.COMMENT_NODE:
+						break;
+					default:
+						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+						return this.getErrorRepresentation(
+							"Invalid property XML provided: 'property' contains unexpected nodes");
+					}
+				}
+			}
+			if (xmlContent == null) {
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+				return this.getErrorRepresentation(
+					"Invalid property XML provided: 'property' element missing 'value' attribute or child element");
+			}
+			property.get().setValue(XmlUtils.nodeToString(xmlContent));
 		}
-		property.get().setValue(val.getValue());
 		PropertyXmlWriter writer = new PropertyXmlWriter(property.get(), getRequest().getRootRef().toString(), false);
 		DomRepresentation dom = new DomRepresentation(MediaType.APPLICATION_XML, writer.getXmlDocument());
 		setStatus(Status.SUCCESS_OK);

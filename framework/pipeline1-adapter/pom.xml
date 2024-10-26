@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline</groupId>
+    <artifactId>framework-parent</artifactId>
+    <version>1.15.1-SNAPSHOT</version>
+    <relativePath>../parent/</relativePath>
+  </parent>
+
+  <groupId>org.daisy.pipeline</groupId>
+  <artifactId>pipeline1-adapter</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 :: Pipeline 1 backend</name>
+
+  <properties>
+    <pipeline1.version>20250106</pipeline1.version>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.github.bmuskalla</groupId>
+      <artifactId>scoped-system-properties</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-runtime</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>ds-to-spi-annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy</groupId>
+      <artifactId>pipeline</artifactId>
+      <version>${pipeline1.version}</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/resources/pipeline-${pipeline1.version}.jar</systemPath>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy</groupId>
+      <artifactId>org.daisy.util</artifactId>
+      <version>${pipeline1.version}</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/src/main/resources/org.daisy.util-${pipeline1.version}.jar</systemPath>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <excludes>
+          <exclude>maven.properties</exclude>
+          <exclude>pipeline-*.zip</exclude>
+          <exclude>pipeline-*.jar</exclude>
+          <exclude>org.daisy.util-*.jar</exclude>
+        </excludes>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+        <includes>
+          <include>maven.properties</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${project.build.directory}/generated-resources/pipeline1</directory>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>generate-resources</phase>
+            <configuration>
+              <tasks>
+                <exec executable="make" failonerror="true">
+                  <arg value="src/main/resources/pipeline-${pipeline1.version}.zip" />
+                </exec>
+                <unzip src="src/main/resources/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/generated-resources/pipeline1">
+                  <patternset>
+                    <exclude name="pipeline-${pipeline1.version}/pipeline.sh" />
+                    <exclude name="pipeline-${pipeline1.version}/pipeline.bat" />
+                    <exclude name="pipeline-${pipeline1.version}/pipeline.user.properties" />
+                    <exclude name="pipeline-${pipeline1.version}/licenses/**" />
+                    <exclude name="pipeline-${pipeline1.version}/rmi/**" />
+                    <exclude name="pipeline-${pipeline1.version}/transformers/**" />
+                  </patternset>
+                  <cutdirsmapper dirs="1" />
+                </unzip>
+                <unzip src="src/main/resources/pipeline-${pipeline1.version}.zip" dest="${project.build.directory}/tmp/unzip-pipeline-${pipeline1.version}/">
+                  <patternset>
+                    <include name="pipeline-${pipeline1.version}/transformers/**" />
+                  </patternset>
+                  <cutdirsmapper dirs="1" />
+                </unzip>
+                <jar destfile="${project.build.directory}/generated-resources/pipeline1/transformers.jar" basedir="${project.build.directory}/tmp/unzip-pipeline-${pipeline1.version}/transformers" />
+                <delete dir="${project.build.directory}/tmp/unzip-pipeline-${pipeline1.version}" />
+              </tasks>
+            </configuration>
+            <goals>
+              <goal>run</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.daisy.pipeline.build</groupId>
+        <artifactId>ds-to-spi-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>generate-spi-classes</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>generate-spi-classes</goal>
+            </goals>
+            <configuration>
+              <includes>
+                org.daisy.pipeline.pipeline1.impl.Pipeline1ScriptProvider
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <configuration>
+          <instructions>
+            <_dsannotations>
+              org.daisy.pipeline.pipeline1.impl.Pipeline1ScriptProvider
+            </_dsannotations>
+            <Import-Package>
+              !org.daisy.common.spi,
+              !org.daisy.common.spi.annotations,
+              *
+            </Import-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

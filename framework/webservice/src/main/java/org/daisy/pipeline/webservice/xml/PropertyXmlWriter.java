@@ -1,5 +1,7 @@
 package org.daisy.pipeline.webservice.xml;
 
+import java.io.IOException;
+
 import org.daisy.common.properties.Properties.SettableProperty;
 import org.daisy.pipeline.webservice.Routes;
 
@@ -8,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import org.xml.sax.SAXException;
 
 public class PropertyXmlWriter {
 
@@ -53,10 +57,16 @@ public class PropertyXmlWriter {
 		element.setAttribute("href", baseUrl + Routes.PROPERTY_ROUTE.replaceFirst("\\{name\\}", property.getName()));
 		element.setAttribute("name", property.getName());
 		String val = property.getValue();
-		if (val != null)
-			element.setAttribute("value", scrub && property.isSensitive() ? "***" : val);
 		String description = property.getDescription();
 		if (description != null)
 			element.setAttribute("desc", description);
+		if (val != null) {
+			try {
+				Element xmlContent = XmlUtils.parseXml(val, element.getOwnerDocument());
+				element.appendChild(xmlContent);
+			} catch (IOException|SAXException e) {
+				element.setAttribute("value", scrub && property.isSensitive() ? "***" : val);
+			}
+		}
 	}
 }

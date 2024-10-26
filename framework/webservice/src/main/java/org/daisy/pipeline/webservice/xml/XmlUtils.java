@@ -1,6 +1,9 @@
 package org.daisy.pipeline.webservice.xml;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,22 +19,19 @@ import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
+import org.xml.sax.SAXException;
+
 public class XmlUtils {
-	/** The Constant NS_PIPELINE_DATA. */
+
 	public static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
+
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtils.class);
 	
-	/**
-	 * Node to string.
-	 *
-	 * @param node
-	 *            the node
-	 * @return the string
-	 */
 	public static String nodeToString(Node node) {
 		Document doc = node instanceof Document ? (Document)node : node.getOwnerDocument();
 		DOMImplementationLS domImplLS = (DOMImplementationLS)doc.getImplementation();
@@ -41,32 +41,33 @@ public class XmlUtils {
 		return string.trim();
 	}
 
-	/**
-	 * Creates the dom.
-	 *
-	 * @param documentElementName
-	 *            the document element name
-	 * @return the document
-	 */
 	public static Document createDom(String documentElementName) {
 		try {
-			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory
-					.newInstance();
-			DocumentBuilder documentBuilder = documentBuilderFactory
-					.newDocumentBuilder();
+			DocumentBuilderFactory documentBuilderFactory
+				= DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder
+				= documentBuilderFactory.newDocumentBuilder();
 			DOMImplementation domImpl = documentBuilder.getDOMImplementation();
-			Document document = domImpl.createDocument(NS_PIPELINE_DATA,
-					documentElementName, null);
-
+			Document document = domImpl.createDocument(
+				NS_PIPELINE_DATA, documentElementName, null);
 			return document;
-
 		} catch (ParserConfigurationException e) {
-			logger.warn("creating dom document",e);		
-			//e.printStackTrace();
+			logger.warn("creating dom document",e);
 			return null;
 		}
-
 	}
 
-	
+	public static Element parseXml(String xml, Document ownerDoc) throws IOException, SAXException {
+		try {
+			DocumentBuilderFactory documentBuilderFactory
+				= DocumentBuilderFactory.newInstance();
+			DocumentBuilder documentBuilder
+				= documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.parse(
+				new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+			return (Element)ownerDoc.adoptNode(document.getDocumentElement());
+		} catch (ParserConfigurationException e) {
+			throw new IllegalStateException(e); // should not happen
+		}
+	}
 }

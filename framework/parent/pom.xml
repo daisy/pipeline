@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.14.22-SNAPSHOT</version>
+  <version>1.15.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.22-SNAPSHOT</version>
+        <version>1.15.1-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -159,6 +159,11 @@
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
         <version>1.2.1</version>
+      </dependency>
+      <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>ds-to-spi-annotations</artifactId>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
