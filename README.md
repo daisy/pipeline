@@ -29,9 +29,6 @@ The tree below shows the structure of the project:
   - [liblouis-java](https://github.com/liblouis/liblouis-java)
   - [osgi-libs](https://github.com/daisy/osgi-libs)
 - [modules](https://github.com/daisy/pipeline-modules)
-- updater
-  - [cli](https://github.com/daisy/pipeline-updater)
-  - [gui](https://github.com/daisy/pipeline-updater-gui)
 - [ui](https://github.com/daisy/pipeline-ui)
 - utils
   - [build-utils](https://github.com/daisy/pipeline-build-utils)
