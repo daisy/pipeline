@@ -687,6 +687,9 @@
                                     and negative values are not handled (css:adjust-boxes)
                                 -->
                                 <css:box type="block">
+                                    <xsl:for-each select="$style">
+                                        <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
+                                    </xsl:for-each>
                                     <xsl:apply-templates mode="css:property-as-attribute" select="$style"/>
                                     <xsl:sequence select="$sequence-interrupted-resumed-content"/>
                                 </css:box>
