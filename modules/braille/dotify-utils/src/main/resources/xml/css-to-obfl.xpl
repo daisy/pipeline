@@ -46,7 +46,6 @@
       <p:documentation>
         css:adjust-boxes
         css:eval-counter
-        css:eval-string-set
         css:eval-target-content
         css:eval-target-text
         css:flow-from
@@ -302,11 +301,6 @@
                 css:counter-increment and css:_obfl-marker attributes.
             </p:documentation>
         </css:parse-properties>
-        <css:eval-string-set px:progress=".50">
-            <p:documentation>
-                Evaluate css:string-set attributes.
-            </p:documentation>
-        </css:eval-string-set>
         <css:parse-content px:progress=".015">
             <p:documentation>
                 Make css:string, css:text, css:content, css:counter and css:custom-func elements and

@@ -146,7 +146,7 @@
       <doc css:counter-style="&amp; dice {{ additive-symbols: 6 ⚅, 5 ⚄, 4 ⚃, 3 ⚂, 2 ⚁, 1 ⚀; system: additive }} &amp; trinary {{ symbols: '0' '1' '2'; system: numeric }}"/>
     </x:expect>
   </x:scenario>
-  
+
   <x:scenario label="test_14">
     <x:context>
       <doc>
