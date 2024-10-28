@@ -17,38 +17,6 @@
     <!-- Parsing -->
     <!-- ======= -->
     
-    <xsl:template match="css:property[@value]" mode="css:property-as-attribute" as="attribute()">
-        <xsl:attribute name="css:{replace(@name,'^-','_')}" select="@value"/>
-    </xsl:template>
-
-    <xsl:template match="css:property[@name='content' and not(@value)]|
-                         css:property[@name=('counter-set','counter-reset','counter-increment') and not(@value)]"
-                  mode="css:property-as-attribute" as="attribute()">
-        <xsl:variable name="value" as="xs:string*">
-            <xsl:apply-templates mode="css:serialize" select="*"/>
-        </xsl:variable>
-        <xsl:variable name="property" as="element(css:property)">
-            <xsl:copy>
-                <xsl:sequence select="@*"/>
-                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,' ') else 'none'"/>
-            </xsl:copy>
-        </xsl:variable>
-        <xsl:apply-templates mode="#current" select="$property"/>
-    </xsl:template>
-    
-    <xsl:template match="css:property[@name='string-set' and not(@value)]" mode="css:property-as-attribute" as="attribute()">
-        <xsl:variable name="value" as="xs:string*">
-            <xsl:apply-templates mode="css:serialize" select="*"/>
-        </xsl:variable>
-        <xsl:variable name="property" as="element(css:property)">
-            <xsl:copy>
-                <xsl:sequence select="@*"/>
-                <xsl:attribute name="value" select="if (exists($value)) then string-join($value,', ') else 'none'"/>
-            </xsl:copy>
-        </xsl:variable>
-        <xsl:apply-templates mode="#current" select="$property"/>
-    </xsl:template>
-    
     <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
         <desc>
             <p>Parse a style sheet.</p>
