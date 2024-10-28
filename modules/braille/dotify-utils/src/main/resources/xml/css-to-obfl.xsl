@@ -2647,6 +2647,23 @@
         <xsl:sequence select="string(@value)"/>
     </xsl:template>
     
+    <xsl:template mode="css:eval-string-set"
+                  match="css:attr|
+                         css:text[@target-attribute]|
+                         css:string[@name][@target-attribute]|
+                         css:counter[@target-attribute]|
+                         css:content[@target-attribute]">
+        <xsl:message terminate="yes">Coding error: evaluation of attr() should already have been done</xsl:message>
+    </xsl:template>
+    
+    <xsl:template mode="css:eval-string-set" match="css:content[not(@target|@target-attribute)]" as="xs:string">
+        <xsl:message terminate="yes">Coding error: evaluation of content() should already have been done</xsl:message>
+    </xsl:template>
+    
+    <xsl:template mode="css:eval-string-set" match="*">
+        <xsl:message terminate="yes">Coding error</xsl:message>
+    </xsl:template>    
+    
     <xsl:template mode="marker"
                   match="css:box/@css:_obfl-marker|
                          css:box/css:_/@css:_obfl-marker|
