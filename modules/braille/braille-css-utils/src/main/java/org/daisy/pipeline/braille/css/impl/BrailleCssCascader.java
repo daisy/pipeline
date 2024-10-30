@@ -136,9 +136,9 @@ public class BrailleCssCascader implements CssCascader {
 	// medium braille/embossed
 	private final List<BrailleCSSExtension> brailleCSSExtensions = new ArrayList<>();
 	private SupportedBrailleCSS brailleCSS = null;
+	private BrailleCSSRuleFactory brailleRuleFactory = null;
+	private BrailleCSSParserFactory brailleParserFactory = null;
 	private BrailleCssParser brailleCSSParser = null;
-	private static final RuleFactory brailleRuleFactory = new BrailleCSSRuleFactory();
-	private static final CSSParserFactory brailleParserFactory = new BrailleCSSParserFactory();
 
 
 	@Reference(
@@ -155,8 +155,17 @@ public class BrailleCssCascader implements CssCascader {
 
 	@Activate
 	protected void init() {
-		brailleCSS = new SupportedBrailleCSS(false, true, brailleCSSExtensions, true);
+		// allowUnknownVendorExtensions could be set to false, but it is currently set to true for unit tests
+		boolean allowUnknownVendorExtensions = true;
+		brailleCSS = new SupportedBrailleCSS(false, true, brailleCSSExtensions, allowUnknownVendorExtensions);
+		brailleRuleFactory = new BrailleCSSRuleFactory(brailleCSSExtensions, allowUnknownVendorExtensions);
+		brailleParserFactory = new BrailleCSSParserFactory(brailleRuleFactory);
 		brailleCSSParser = new BrailleCssParser() {
+				@Override
+				public BrailleCSSParserFactory getBrailleCSSParserFactory() {
+					return brailleParserFactory;
+				}
+				@Override
 				public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
 					switch (context) {
 					case ELEMENT:
@@ -350,7 +359,7 @@ public class BrailleCssCascader implements CssCascader {
 		builder.append(BrailleCssSerializer.toString(pageRule, brailleCSSParser)).append(" ");
 	}
 
-	private static Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
+	private Map<String,RulePage> getPageRule(NodeData nodeData, Map<String,Map<String,RulePage>> pageRules) {
 		BrailleCSSProperty.Page pageProperty; {
 			if (nodeData != null)
 				pageProperty = nodeData.<BrailleCSSProperty.Page>getProperty("page", false);
@@ -372,7 +381,7 @@ public class BrailleCssCascader implements CssCascader {
 			return null;
 	}
 
-	private static Map<String,RulePage> getPageRule(String name, Map<String,Map<String,RulePage>> pageRules) {
+	private Map<String,RulePage> getPageRule(String name, Map<String,Map<String,RulePage>> pageRules) {
 		Map<String,RulePage> auto = pageRules == null ? null : pageRules.get("auto");
 		Map<String,RulePage> named = null;
 		if (!name.equals("auto"))
@@ -404,7 +413,7 @@ public class BrailleCssCascader implements CssCascader {
 		return result;
 	}
 
-	private static RulePage makePageRule(String name, String pseudo, List<RulePage> from) {
+	private RulePage makePageRule(String name, String pseudo, List<RulePage> from) {
 		RulePage pageRule = brailleRuleFactory.createPage().setName(name).setPseudo(pseudo);
 		for (RulePage f : from)
 			for (Rule<?> r : f)
