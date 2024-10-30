@@ -230,13 +230,13 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 	/* ============================= */
 	
 	public static PropertyValue parse(String property, String value) {
-		return parse(SimpleInlineStyle.parserFactory.parseDeclaration(property + ":" + value));
+		return parse(SimpleInlineStyle.defaultParserFactory.parseDeclaration(property + ":" + value));
 	}
 	
 	public static PropertyValue parse(final Declaration declaration) {
 		final Map<String,CSSProperty> properties = new HashMap<String,CSSProperty>();
 		final Map<String,Term<?>> terms = new HashMap<String,Term<?>>();
-		if (!SimpleInlineStyle.cssInstance.parseDeclaration(declaration, properties, terms))
+		if (!SimpleInlineStyle.defaultCSS.parseDeclaration(declaration, properties, terms))
 			return null;
 		final String propertyName = declaration.getProperty();
 		return new PropertyValue(
@@ -244,6 +244,6 @@ public class PropertyValue extends AbstractList<Term<?>> implements Cloneable, D
 			properties.get(propertyName),
 			terms.get(propertyName),
 			declaration,
-			SimpleInlineStyle.cssInstance);
+			SimpleInlineStyle.defaultCSS);
 	}
 }

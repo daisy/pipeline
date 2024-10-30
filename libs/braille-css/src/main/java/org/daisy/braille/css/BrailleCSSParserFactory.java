@@ -36,7 +36,16 @@ import org.slf4j.LoggerFactory;
 
 public class BrailleCSSParserFactory extends CSSParserFactory {
 	
-	private static final BrailleCSSRuleFactory ruleFactory = new BrailleCSSRuleFactory();
+	private static final BrailleCSSRuleFactory defaultRuleFactory = new BrailleCSSRuleFactory();
+	private final BrailleCSSRuleFactory ruleFactory;
+	
+	public BrailleCSSParserFactory() {
+		this(defaultRuleFactory);
+	}
+	
+	public BrailleCSSParserFactory(BrailleCSSRuleFactory ruleFactory) {
+		this.ruleFactory = ruleFactory;
+	}
 	
 	@Override
 	public StyleSheet parse(CSSSource source, CSSSourceReader cssReader, boolean inlinePriority)
@@ -218,8 +227,8 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 			return null; }
 	}
 	
-	private static BrailleCSSTreeParser createTreeParser(CSSSource source, CSSSourceReader cssReader,
-	                                                     Preparator preparator)
+	private BrailleCSSTreeParser createTreeParser(CSSSource source, CSSSourceReader cssReader,
+	                                              Preparator preparator)
 			throws IOException, CSSException {
 		CSSInputStream input = getInput(source, cssReader);
 		CommonTokenStream tokens = feedLexer(input);
@@ -246,8 +255,8 @@ public class BrailleCSSParserFactory extends CSSParserFactory {
 		return getAST(parser, type, context);
 	}
 	
-	private static BrailleCSSTreeParser feedAST(CommonTokenStream source, CommonTree ast,
-	                                            Preparator preparator, Map<String,String> namespaces) {
+	private BrailleCSSTreeParser feedAST(CommonTokenStream source, CommonTree ast,
+	                                     Preparator preparator, Map<String,String> namespaces) {
 		if (log.isTraceEnabled())
 			log.trace("Feeding tree parser with AST:\n{}", TreeUtil.toStringTree(ast));
 		CommonTreeNodeStream nodes = new CommonTreeNodeStream(ast);

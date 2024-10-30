@@ -16,8 +16,8 @@ import cz.vutbr.web.domassign.SingleMapNodeData;
 
 public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cloneable, Iterable<PropertyValue> {
 	
-	final static SupportedBrailleCSS cssInstance = new SupportedBrailleCSS(true, false);
-	final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
+	final static SupportedBrailleCSS defaultCSS = new SupportedBrailleCSS(true, false);
+	final static BrailleCSSParserFactory defaultParserFactory = new BrailleCSSParserFactory();
 	
 	public static final SimpleInlineStyle EMPTY = new SimpleInlineStyle((List<Declaration>)null);
 
@@ -37,7 +37,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	 */
 	public SimpleInlineStyle(String style, SimpleInlineStyle parentStyle) {
 		this(
-			(style != null && !"".equals(style)) ? parserFactory.parseSimpleInlineStyle(style) : (List<Declaration>)null,
+			(style != null && !"".equals(style)) ? defaultParserFactory.parseSimpleInlineStyle(style) : (List<Declaration>)null,
 			parentStyle);
 	}
 	
@@ -59,13 +59,13 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 	 *                                  compatible with the provided {@code SupportedBrailleCSS}
 	 */
 	public SimpleInlineStyle(Iterable<? extends Declaration> declarations, SimpleInlineStyle parentStyle, SupportedBrailleCSS css) {
-		super(css == null ? cssInstance : css,
-		      css == null ? cssInstance : css);
+		super(css == null ? defaultCSS : css,
+		      css == null ? defaultCSS : css);
 		if (declarations != null) {
 			for (Declaration d : declarations) {
 				if (!(d instanceof PropertyValue)) {
 					if (css == null)
-						css = cssInstance;
+						css = defaultCSS;
 					super.push(d);
 				}
 			}

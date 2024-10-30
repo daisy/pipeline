@@ -69,7 +69,7 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 		private final String name;
 		private final String[] args;
 		
-		public PseudoClassImpl(String name, String... args) {
+		public PseudoClassImpl(String name, String... args) throws IllegalArgumentException {
 			super(name, args);
 			this.name = name;
 			this.args = args;

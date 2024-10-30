@@ -12,7 +12,6 @@ import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.RuleFactory;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
@@ -30,11 +29,12 @@ import cz.vutbr.web.csskit.AbstractRuleBlock;
  */
 public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
-	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
+	private static final BrailleCSSParserFactory defaultParserFactory;
 	private static final SelectorPart dummyElementSelectorPart;
 	static {
-		RuleFactory ruleFactory = new BrailleCSSRuleFactory();
-		dummyElementSelectorPart = ruleFactory.createElementDOM(null, true);
+		BrailleCSSRuleFactory defaultRuleFactory = new BrailleCSSRuleFactory();
+		defaultParserFactory = new BrailleCSSParserFactory(defaultRuleFactory);
+		dummyElementSelectorPart = defaultRuleFactory.createElementDOM(null, true);
 	}
 	
 	private final static RuleMainBlock emptyBlock = new RuleMainBlock();
@@ -50,7 +50,14 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 		this(style, context, null);
 	}
 	
+	// FIXME: could also pass SourceMap instead of SourceLocator
+	// => source map can also be included in serialized form within special comment in CSS and parsed
 	public InlineStyle(String style, BrailleCSSParserFactory.Context context, SourceLocator location) {
+		this(style, context, location, defaultParserFactory);
+	}
+
+	public InlineStyle(String style, BrailleCSSParserFactory.Context context, SourceLocator location,
+	                   BrailleCSSParserFactory parserFactory) {
 		nestedStyles = new ArrayList<RuleBlock<?>>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
 		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style, context, location)) {

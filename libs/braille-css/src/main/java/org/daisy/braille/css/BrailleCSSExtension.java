@@ -1,14 +1,18 @@
 package org.daisy.braille.css;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Selector.PseudoClass;
+import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermList;
+import cz.vutbr.web.csskit.OutputUtil;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
 public abstract class BrailleCSSExtension extends DeclarationTransformer implements SupportedCSS {
@@ -31,16 +35,39 @@ public abstract class BrailleCSSExtension extends DeclarationTransformer impleme
 		return null;
 	}
 
-	/**
-	 * This method should be overridden.
-	 */
 	@Override
 	public boolean parseDeclaration(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
-		throw new IllegalStateException("parseDeclaration() method must be overridden");
+		return false;
 	}
 
 	public boolean parseContentTerm(Term<?> term, TermList list) {
 		return false;
+	}
+
+	public PseudoClass createPseudoClass(String name) {
+		throw new IllegalArgumentException("Unknown pseudo-class :" + name);
+	}
+
+	public PseudoClass createPseudoClassFunction(String name, String... args) {
+		StringBuilder msg = new StringBuilder();
+		msg.append(":").append(name).append("(");
+		if (args.length > 0)
+			OutputUtil.appendList(msg, Arrays.asList(args), ", ");
+		msg.append(")");
+		throw new IllegalArgumentException("Unknown pseudo-class " + msg.toString());
+	}
+
+	public PseudoElement createPseudoElement(String name) {
+		throw new IllegalArgumentException("Unknown pseudo-element ::" + name);
+	}
+
+	public PseudoElement createPseudoElementFunction(String name, String... args) {
+		StringBuilder msg = new StringBuilder();
+		msg.append("::").append(name).append("(");
+		if (args.length > 0)
+			OutputUtil.appendList(msg, Arrays.asList(args), ", ");
+		msg.append(")");
+		throw new IllegalArgumentException("Unknown pseudo-element " + msg.toString());
 	}
 
 	///////////////////////////////////////////////////////////////
