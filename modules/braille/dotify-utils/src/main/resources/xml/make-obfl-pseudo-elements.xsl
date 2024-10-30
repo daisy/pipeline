@@ -65,7 +65,7 @@
         </css:_obfl-on-resumed>
     </xsl:template>
     
-    <xsl:template match="*[@css:*[matches(local-name(),'^_obfl-alternate-scenario(-[1-9][0-9]*)?$')]]">
+    <xsl:template match="*[@css:*[matches(local-name(),'^_obfl-alternate-scenario')]]">
         <xsl:if test="@css:flow[not(.='normal')]">
             <xsl:message terminate="yes">Elements with a :-obfl-alternate-scenario pseudo-class must participate in the normal flow.</xsl:message>
         </xsl:if>
@@ -78,8 +78,7 @@
         <xsl:variable name="this" as="element()" select="."/>
         <css:_ css:_obfl-scenarios="_" css:display="block">
             <xsl:variable name="scenario-attributes" as="attribute()*"
-                          select="@css:obfl-alternate-scenario|
-                                  @css:*[matches(local-name(),'^_obfl-alternate-scenario-[1-9][0-9]*$')]"/>
+                          select="@css:*[matches(local-name(),'^_obfl-alternate-scenario')]"/>
             <xsl:copy>
                 <xsl:attribute name="css:_obfl-scenario" select="'_'"/>
                 <xsl:sequence select="@* except $scenario-attributes"/>

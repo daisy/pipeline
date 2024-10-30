@@ -996,7 +996,8 @@ public final class BrailleCssStyle implements Cloneable {
 	static BrailleCssStyle of(BrailleCssParser parser, Context context, String inlineStyle) {
 		if (context == null)
 			throw new IllegalArgumentException();
-		return of(parser, context, new InlineStyle(inlineStyle, context));
+		return of(parser, context, new InlineStyle(inlineStyle, context, null,
+		                                           parser.getBrailleCSSParserFactory()));
 	}
 
 	// used in BrailleCssParser

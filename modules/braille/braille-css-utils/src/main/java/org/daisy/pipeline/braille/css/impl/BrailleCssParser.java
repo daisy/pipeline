@@ -22,10 +22,12 @@ import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermList;
 
 import org.daisy.braille.css.BrailleCSSExtension;
+import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.BrailleCSSProperty.Content;
 import org.daisy.braille.css.BrailleCSSProperty.StringSet;
 import org.daisy.braille.css.BrailleCSSProperty.TextTransform;
+import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.SupportedBrailleCSS;
@@ -66,14 +68,21 @@ public abstract class BrailleCssParser implements TextStyleParser {
 			} catch (Throwable e) {
 				logger.error("Error while binding BrailleCSSExtension services", e);
 			}
+			// allowUnknownVendorExtensions could be set to false, but it is currently set to true for unit tests
+			boolean allowUnknownVendorExtensions = true;
+			BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory(
+				new BrailleCSSRuleFactory(extensions, allowUnknownVendorExtensions));
 			Map<Context,SupportedBrailleCSS> supportedBrailleCSS = new HashMap<>();
 			INSTANCE_WITH_EXTENSIONS = new BrailleCssParser() {{
 				for (Context context : new Context[]{Context.ELEMENT, Context.PAGE, Context.VOLUME})
 					supportedBrailleCSS.put(
 						context,
-						// allowUnknownVendorExtensions could be set to false, but it is currently set to true for unit tests
-						new DeepDeclarationTransformer(context, true, false, extensions, true));
+						new DeepDeclarationTransformer(
+							context, true, false, extensions, allowUnknownVendorExtensions));
 			}
+					public BrailleCSSParserFactory getBrailleCSSParserFactory() {
+						return parserFactory;
+					}
 					public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
 						return Optional.ofNullable(supportedBrailleCSS.get(context));
 					}
@@ -81,6 +90,8 @@ public abstract class BrailleCssParser implements TextStyleParser {
 		}
 		return INSTANCE_WITH_EXTENSIONS;
 	}
+
+	abstract BrailleCSSParserFactory getBrailleCSSParserFactory();
 
 	abstract Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context);
 

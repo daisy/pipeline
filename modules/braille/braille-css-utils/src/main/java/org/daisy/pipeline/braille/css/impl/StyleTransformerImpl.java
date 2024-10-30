@@ -13,6 +13,7 @@ import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Term;
 
+import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
@@ -40,6 +41,10 @@ public class StyleTransformerImpl implements StyleTransformer {
 		this.fromSupportedBrailleCSS = fromSupportedBrailleCSS;
 		this.toSupportedBrailleCSS = toSupportedBrailleCSS;
 		this.parser = new BrailleCssParser() {
+				@Override
+				public BrailleCSSParserFactory getBrailleCSSParserFactory() {
+					return null; }; // should be fine to return null (assuming parseInlineStyle() will not
+					                // be called on this parser object)
 				@Override
 				public Optional<SupportedBrailleCSS> getSupportedBrailleCSS(Context context) {
 					return Optional.of(toSupportedBrailleCSS); }};

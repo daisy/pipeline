@@ -5,6 +5,8 @@ import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Selector.PseudoClass;
+import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
@@ -13,6 +15,7 @@ import cz.vutbr.web.css.TermString;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import org.daisy.braille.css.BrailleCSSExtension;
+import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -81,6 +84,134 @@ public class OBFLExtension extends BrailleCSSExtension {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public PseudoClass createPseudoClass(String name) throws IllegalArgumentException {
+		return createPseudoClassFunction(name);
+	}
+
+	@Override
+	public PseudoClass createPseudoClassFunction(String name, String... args) throws IllegalArgumentException {
+		if (name.startsWith(":"))
+			name = name.substring(1); // should not happen
+		if (name.startsWith(prefix))
+			name = name.substring(prefix.length()); // should not happen
+		OBFLPseudoClass.Type type = null; {
+			try {
+				type = OBFLPseudoClass.Type.valueOf(name.replaceAll("-", "_").toUpperCase());
+			} catch (IllegalArgumentException e) {
+			}
+		}
+		if (type != null)
+			return new OBFLPseudoClass(type, args);
+		throw new IllegalArgumentException("Unknown pseudo-class :" + name);
+	}
+
+	@Override
+	public PseudoElement createPseudoElement(String name) throws IllegalArgumentException {
+		if (name.startsWith(":"))
+			// maybe a single colon was used for a pseudo element
+			name = name.substring(1);
+		if (name.startsWith(prefix))
+			name = name.substring(prefix.length());
+		try {
+			OBFLPseudoElement.Type type = OBFLPseudoElement.Type.valueOf(name.replaceAll("-", "_").toUpperCase());
+			return new OBFLPseudoElement(type);
+		} catch (IllegalArgumentException e) {
+		}
+		// when pseuo class is prefixed with -obfl-, BrailleCSSTreeParser calls RuleFactory.createPseudoElement()
+		// without first trying RuleFactory.createPseudoClass()
+		OBFLPseudoClass.Type type = null; {
+			try {
+				type = OBFLPseudoClass.Type.valueOf(name.replaceAll("-", "_").toUpperCase());
+			} catch (IllegalArgumentException e) {
+			}
+		}
+		if (type != null)
+			return new OBFLPseudoClass(type);
+		throw new IllegalArgumentException("Unknown pseudo-element ::" + name);
+	}
+
+	@Override
+	public PseudoElement createPseudoElementFunction(String name, String... args) throws IllegalArgumentException {
+		if (name.startsWith(":"))
+			// maybe a single colon was used for a pseudo element, or it is a prefixed pseudo class
+			name = name.substring(1);
+		if (name.startsWith(prefix))
+			name = name.substring(prefix.length());
+		// when pseuo class is prefixed with -obfl-, BrailleCSSTreeParser calls RuleFactory.createPseudoElementFunction()
+		// without first trying RuleFactory.createPseudoClassFunction()
+		OBFLPseudoClass.Type type = null; {
+			try {
+				type = OBFLPseudoClass.Type.valueOf(name.replaceAll("-", "_").toUpperCase());
+			} catch (IllegalArgumentException e) {
+			}
+		}
+		if (type != null)
+			return new OBFLPseudoClass(type, args);
+		throw new IllegalArgumentException("Unknown pseudo-element ::" + name);
+	}
+
+	// extends PseudoElementImpl to make it stackable (see SelectorImpl)
+	private static class OBFLPseudoClass extends PseudoElementImpl implements PseudoClass {
+
+		private enum Type {
+			ALTERNATE_SCENARIO("alternate-scenario");
+
+			private final String name;
+
+			private Type(String name) {
+				this.name = name;
+			}
+		}
+
+		private OBFLPseudoClass(Type type, String... args) {
+			// pass ":" to indicate to PseudoElementImpl that it is a custom pseudo class
+			super(":" + prefix + type.name, args);
+			switch (type) {
+			case ALTERNATE_SCENARIO:
+				switch (args.length) {
+				case 0:
+					break; // :-obfl-alternate-scenario is equivalent to :-obfl-alternate-scenario(1)
+				case 1:
+					try {
+						Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						throw new IllegalArgumentException(
+							"Argument of :" + prefix + type.name + " pseudo-class must be an integer", e);
+					}
+					break;
+				default:
+					throw new IllegalArgumentException(":" + prefix + type.name + " pseudo-class accepts at most 1 argument");
+				}
+				break;
+			default: // can not happen
+			}
+		}
+	}
+
+	private static class OBFLPseudoElement extends PseudoElementImpl {
+
+		private enum Type {
+			ON_COLLECTION_START("on-collection-start"),
+			ON_COLLECTION_END("on-collection-end"),
+			ON_TOC_START("on-toc-start"),
+			ON_TOC_END("on-toc-end"),
+			ON_VOLUME_START("on-volume-start"),
+			ON_VOLUME_END("on-volume-end"),
+			ON_RESUMED("on-resumed");
+
+			private final String name;
+
+			private Type(String name) {
+				this.name = name;
+			}
+		}
+
+		private OBFLPseudoElement(Type type) {
+			super(prefix + type.name);
+		}
 	}
 
 	///////////////////////////////////////////////////////////////

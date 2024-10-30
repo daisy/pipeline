@@ -138,7 +138,7 @@
                           //*/@css:_obfl-on-collection-end|
                           //*/@css:_obfl-on-toc-end|
                           //*/@css:_obfl-on-resumed[not(.='_')]|
-                          //*/@css:*[matches(local-name(),'^_obfl-alternate-scenario(-[1-9][0-9]*)?$')]
+                          //*/@css:*[matches(local-name(),'^_obfl-alternate-scenario')]
                           ">
                 <css:make-pseudo-elements>
                     <p:documentation>
