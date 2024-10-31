@@ -620,7 +620,7 @@
             <xsl:for-each select="$volume-transition-rule/self::css:rule[@selector='@-obfl-volume-transition']">
                 <xsl:copy>
                     <xsl:sequence select="@*"/>
-                    <xsl:for-each select="css:rule[matches(@selector,'@(sequence|any)-(interrupted|resumed)')]">
+                    <xsl:for-each select="css:rule">
                         <xsl:copy>
                             <xsl:sequence select="@*"/>
                             <!--
