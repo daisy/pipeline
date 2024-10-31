@@ -55,15 +55,14 @@ import cz.vutbr.web.csskit.antlr.SimplePreparator;
 }
 
 // @Override
-// Added volume, text_transform_def, hyphenation_resource_def and counter_style_def
+// Added volume, text_transform_def, hyphenation_resource_def, counter_style_def and vendor_atrule
 unknown_atrule returns [RuleBlock<?> stmnt]
 @init { $stmnt = null; }
     : (v=volume) { $stmnt = v; }
     | (tt=text_transform_def) { $stmnt = tt; }
     | (hr=hyphenation_resource_def) { $stmnt = hr; }
     | (cs=counter_style_def) { $stmnt = cs; }
-    | (aar=any_atrule) { $stmnt = aar; }
-    | INVALID_ATSTATEMENT { gCSSTreeParser.debug("Skipping invalid at statement"); }
+    | (var=vendor_atrule) { $stmnt = var; }
     ;
 
 volume returns [RuleVolume stmnt]
@@ -172,23 +171,28 @@ counter_style_def returns [RuleCounterStyle def]
       }
     ;
 
-any_atrule returns [AnyAtRule stmnt]
+vendor_atrule returns [RuleBlock<? extends Rule<?>> stmnt]
 @init {
-    List<AnyAtRule> childrules = new ArrayList<AnyAtRule>();
+    List<RuleBlock<? extends Rule<?>>> childrules = new ArrayList<RuleBlock<? extends Rule<?>>>();
 }
-    : ^(  at=(VENDOR_ATRULE|ATKEYWORD)
+    : ^(  at=(VENDOR_ATRULE|UNPREFIXED_VENDOR_ATRULE|ATKEYWORD)
           decl=declarations
-          ^( SET ( r=any_atrule { childrules.add(r); } )* )
+          ^( SET ( r=vendor_atrule { childrules.add(r); } )* )
         ) {
           String name = at.getText().substring(1);
-          AnyAtRule aar = new AnyAtRule(name);
-          if (decl != null) aar.addAll(decl);
-          if (childrules != null) aar.addAll(childrules);
-          if (aar.isEmpty())
-              gCSSTreeParser.debug("Empty AnyAtRule was omited");
-          else {
-              gCSSTreeParser.debug("Create @" + name + " as with:\n{}", aar);
-              $stmnt = aar;
+          List<Rule<?>> content = new ArrayList<Rule<?>>();
+          if (decl != null) content.addAll(decl);
+          if (childrules != null) content.addAll(childrules);
+          try {
+              RuleBlock<? extends Rule<?>> var = ((BrailleCSSRuleFactory)gCSSTreeParser.rf).createRuleVendor(name, content);
+              if (var.isEmpty())
+                  gCSSTreeParser.debug("Empty @" + name + " rule was omited");
+              else {
+                  gCSSTreeParser.debug("Create @" + name + " as with:\n{}", var);
+                  $stmnt = var;
+              }
+          } catch (Exception e) {
+              gCSSTreeParser.error(at, e.getMessage());
           }
         }
     ;
@@ -481,7 +485,7 @@ inlineblock returns [RuleBlock<?> b]
     | v=volume { $b = v; }
     | pm=margin { $b = pm; }
     | va=volume_area { $b = va; }
-    | aa=any_atrule { $b = aa; }
+    | var=vendor_atrule { $b = var; }
     | ^(AMPERSAND
          (rr=relative_rule { $b = rr; }
          |p=page { $b = new InlineStyle.RuleRelativePage(p); } // relative @page pseudo rule

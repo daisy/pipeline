@@ -29,7 +29,6 @@ unknown_atrule
     | hyphenation_resource_def
     | counter_style_def
     | vendor_atrule
-    | ATKEYWORD S* LCURLY any* RCURLY -> INVALID_ATSTATEMENT
     ;
 
 volume
@@ -62,14 +61,10 @@ counter_style_def
     ;
 
 vendor_atrule
-    : VENDOR_ATRULE S* LCURLY S* declarations any_atrule* RCURLY
-      -> ^(VENDOR_ATRULE declarations ^(SET any_atrule*))
-    ;
-
-// not using atstatement because that does not include as much
-any_atrule
-    : ATKEYWORD S* LCURLY S* declarations any_atrule* RCURLY S*
-      -> ^(ATKEYWORD declarations ^(SET any_atrule*))
+    : VENDOR_ATRULE S* LCURLY S* declarations (vendor_atrule S*)* RCURLY
+      -> ^(VENDOR_ATRULE declarations ^(SET vendor_atrule*))
+    | ATKEYWORD S* LCURLY S* declarations (vendor_atrule S*)* RCURLY
+      -> ^(ATKEYWORD declarations ^(SET vendor_atrule*))
     ;
 
 // @Override
@@ -178,10 +173,10 @@ inline_hyphenation_resourcestyle
     ;
 
 inline_vendor_atrulestyle
-    : S* declarations any_atrule*
+    : S* declarations (vendor_atrule S*)*
       -> ^(INLINESTYLE
             ^(RULE declarations)
-            any_atrule*
+            vendor_atrule*
          )
     ;
 

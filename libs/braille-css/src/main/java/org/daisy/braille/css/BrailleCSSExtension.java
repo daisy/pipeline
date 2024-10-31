@@ -2,11 +2,14 @@ package org.daisy.braille.css;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.Rule;
+import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.SupportedCSS;
@@ -68,6 +71,10 @@ public abstract class BrailleCSSExtension extends DeclarationTransformer impleme
 			OutputUtil.appendList(msg, Arrays.asList(args), ", ");
 		msg.append(")");
 		throw new IllegalArgumentException("Unknown pseudo-element " + msg.toString());
+	}
+
+	public VendorAtRule<? extends Rule<?>> createAtRule(String name, List<Rule<?>> content) {
+		throw new IllegalArgumentException("Unknown at-rule @" + name);
 	}
 
 	///////////////////////////////////////////////////////////////

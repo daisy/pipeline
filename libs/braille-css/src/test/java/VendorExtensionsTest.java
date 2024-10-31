@@ -15,10 +15,10 @@ import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
-import org.daisy.braille.css.AnyAtRule;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.SimpleInlineStyle;
+import org.daisy.braille.css.VendorAtRule;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -75,10 +75,10 @@ public class VendorExtensionsTest {
 			              0, 0),
 			new DefaultCSSSourceReader());
 		Assert.assertEquals(1, sheet.size());
-		AnyAtRule rule = (AnyAtRule)sheet.get(0);
+		VendorAtRule rule = (VendorAtRule)sheet.get(0);
 		Assert.assertEquals("-obfl-volume-transition", rule.getName());
 		Assert.assertEquals(1, rule.size());
-		rule = (AnyAtRule)rule.get(0);
+		rule = (VendorAtRule)rule.get(0);
 		Assert.assertEquals("any-interrupted", rule.getName());
 		Assert.assertEquals(1, rule.size());
 		Declaration decl = (Declaration)rule.get(0);

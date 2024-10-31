@@ -12,7 +12,6 @@ import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
@@ -81,22 +80,8 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					relativeSelector.addAll(combinedSelector.subList(1, combinedSelector.size()));
 					nestedStyles.add(new RuleRelativeBlock(relativeSelector, set));
 				}
-			} else if (block instanceof RuleTextTransform
-			           || block instanceof RuleHyphenationResource
-			           || block instanceof RuleCounterStyle
-			           || block instanceof RulePage
-			           || block instanceof RuleVolume
-			           || block instanceof RuleMargin
-			           || block instanceof RuleVolumeArea
-			           || block instanceof RuleRelativeBlock
-			           || block instanceof RuleRelativePage
-			           || block instanceof RuleRelativeVolume
-			           || block instanceof RuleRelativeHyphenationResource
-			           || block instanceof AnyAtRule
-			           ) {
-				nestedStyles.add(block);
 			} else {
-				throw new RuntimeException("coding error");
+				nestedStyles.add(block);
 			}
 		}
 		mainStyle = new Optional<RuleMainBlock>(new RuleMainBlock(mainDeclarations));

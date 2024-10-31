@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import cz.vutbr.web.css.CombinedSelector;
+import cz.vutbr.web.css.Rule;
+import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.PseudoClass;
@@ -150,6 +152,26 @@ public class BrailleCSSRuleFactory extends RuleFactoryImpl {
 					}
 			throw e;
 		}
+	}
+
+	public VendorAtRule<? extends Rule<?>> createRuleVendor(String name, List<Rule<?>> content)
+			throws IllegalArgumentException {
+		if (name.startsWith("-")) {
+			for (BrailleCSSExtension x : extensions)
+				if (name.startsWith(x.getPrefix()))
+					return x.createAtRule(name, content);
+			if (!allowUnknownVendorExtensions)
+				throw new IllegalArgumentException(name + " is not a valid at-rule name");
+		}
+		if (!name.startsWith("-"))
+			// might be an unprefixed extension pseudo-element (which the extension's parser may or may not support)
+			for (BrailleCSSExtension x : extensions)
+				try {
+					return x.createAtRule(name, content);
+				} catch (IllegalArgumentException ee) {
+					// ignore
+				}
+		return new VendorAtRule<Rule<?>>(name, content);
 	}
 
 	private static final Logger log = LoggerFactory.getLogger(BrailleCSSRuleFactory.class);
