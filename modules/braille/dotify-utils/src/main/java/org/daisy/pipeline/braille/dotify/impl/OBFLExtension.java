@@ -1,10 +1,14 @@
 package org.daisy.pipeline.braille.dotify.impl;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import cz.vutbr.web.css.CSSProperty;
 import cz.vutbr.web.css.Declaration;
+import cz.vutbr.web.css.PrettyOutput;
+import cz.vutbr.web.css.Rule;
+import cz.vutbr.web.css.RuleBlock;
 import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.Term;
@@ -12,10 +16,12 @@ import cz.vutbr.web.css.TermFunction;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermString;
+import cz.vutbr.web.csskit.OutputUtil;
 import cz.vutbr.web.domassign.DeclarationTransformer;
 
 import org.daisy.braille.css.BrailleCSSExtension;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
+import org.daisy.braille.css.VendorAtRule;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -211,6 +217,90 @@ public class OBFLExtension extends BrailleCSSExtension {
 
 		private OBFLPseudoElement(Type type) {
 			super(prefix + type.name);
+		}
+	}
+
+	@Override
+	public VendorAtRule<? extends Rule<?>> createAtRule(String name, List<Rule<?>> content) throws IllegalArgumentException {
+		if (name.startsWith(prefix))
+			name = name.substring(prefix.length());
+		if ("volume-transition".equals(name)) {
+			for (Rule<?> r : content)
+				if (!(r instanceof OBFLRuleVolumeTransition))
+					throw new IllegalArgumentException("Not allowed inside @" + prefix + "volume-transition rule: " + r);
+			return new OBFLRuleVolumeTransitions((List<OBFLRuleVolumeTransition>)(List)content);
+		}
+		OBFLRuleVolumeTransition.Type type = null; {
+			try {
+				type = OBFLRuleVolumeTransition.Type.valueOf(name.replaceAll("-", "_").toUpperCase());
+			} catch (IllegalArgumentException e) {
+			}
+		}
+		if (type != null) {
+			for (Rule<?> r : content)
+				if (!(r instanceof Declaration))
+					throw new IllegalArgumentException("Not allowed inside @" + type.name + ": " + r);
+			return new OBFLRuleVolumeTransition(type, (List<Declaration>)(List)content);
+		}
+		throw new IllegalArgumentException("Unknown at-rule @" + name);
+	}
+
+	public static class OBFLRuleVolumeTransitions extends VendorAtRule<OBFLRuleVolumeTransition> implements PrettyOutput {
+
+		private OBFLRuleVolumeTransitions(List<OBFLRuleVolumeTransition> transitions) throws IllegalArgumentException {
+			super(prefix + "volume-transition", transitions);
+		}
+
+		@Override
+		public String toString(int depth) {
+			StringBuilder s = new StringBuilder();
+			s.append("@" + getName());
+			s.append(" ");
+			s.append(OutputUtil.RULE_OPENING);
+			s = OutputUtil.appendList(s, list, OutputUtil.EMPTY_DELIM, depth + 1);
+			s.append(OutputUtil.RULE_CLOSING);
+			return s.toString();
+		}
+
+		@Override
+		public String toString() {
+			return toString(0);
+		}
+	}
+
+	public static class OBFLRuleVolumeTransition extends VendorAtRule<Declaration> implements PrettyOutput {
+
+		public enum Type {
+			SEQUENCE_INTERRUPTED("sequence-interrupted"),
+			SEQUENCE_RESUMED("sequence-resumed"),
+			ANY_INTERRUPTED("any-interrupted"),
+			ANY_RESUMED("any-resumed");
+
+			private final String name;
+
+			private Type(String name) {
+				this.name = name;
+			}
+		}
+
+		private OBFLRuleVolumeTransition(Type type, List<Declaration> declarations) {
+			super(type.name, declarations);
+		}
+
+		@Override
+		public String toString(int depth) {
+			StringBuilder s = new StringBuilder();
+			s.append("@" + prefix + getName());
+			s.append(" ");
+			s.append(OutputUtil.RULE_OPENING);
+			s = OutputUtil.appendList(s, list, OutputUtil.RULE_DELIM, depth + 1);
+			s.append(OutputUtil.RULE_CLOSING);
+			return s.toString();
+		}
+
+		@Override
+		public String toString() {
+			return toString(0);
 		}
 	}
 
