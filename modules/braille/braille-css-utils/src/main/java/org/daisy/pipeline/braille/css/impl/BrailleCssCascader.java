@@ -155,8 +155,7 @@ public class BrailleCssCascader implements CssCascader {
 
 	@Activate
 	protected void init() {
-		// allowUnknownVendorExtensions could be set to false, but it is currently set to true for unit tests
-		boolean allowUnknownVendorExtensions = true;
+		boolean allowUnknownVendorExtensions = false;
 		brailleCSS = new SupportedBrailleCSS(false, true, brailleCSSExtensions, allowUnknownVendorExtensions);
 		brailleRuleFactory = new BrailleCSSRuleFactory(brailleCSSExtensions, allowUnknownVendorExtensions);
 		brailleParserFactory = new BrailleCSSParserFactory(brailleRuleFactory);

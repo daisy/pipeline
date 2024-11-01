@@ -102,7 +102,7 @@
 			<x:param select="css:parse-stylesheet(//bar/@style,s:merge(/foo/@css:*/css:parse-stylesheet(.)))">
 				<foo css:orphans="3" css:_foo-right-text-indent="2">
 					<bar num="1"
-					     style="display: -bar-something;                           /* valid */
+					     style="display: -foo-bar;                                 /* valid */
 					            left: foo;                                         /* invalid */
 					            right: -1;                                         /* invalid */
 					            margin-right: -1;                                  /* valid */
@@ -113,7 +113,7 @@
 					            page-break-inside: avoid;                          /* valid */
 					            volume-break-before: always;                       /* valid */
 					            volume-break-after: foo;                           /* invalid */
-					            volume-break-inside: -obfl-keep(1);                /* valid */
+					            volume-break-inside: avoid;                        /* valid */
 					            string-set: print-page attr(num);                  /* valid */
 					            counter-reset: foo bar;                            /* valid */
 					            counter-set: foo 2;                                /* valid */
@@ -134,7 +134,7 @@
 					            text-align: foo;                                   /* invalid */
 					            widows: -1;                                        /* invalid */
 					            page: -foo;                                        /* invalid */
-					            content: foo;                                      /* invalid */
+					            content: -foo-marker-indicator(bar, '⠿');          /* valid */
 					            white-space: foo;                                  /* invalid */
 					            hyphens: foo;                                      /* invalid */
 					            hyphenate-character: '⠈';                          /* valid */
@@ -147,19 +147,21 @@
 					            render-table-by: 123;                              /* invalid */
 					            table-header-policy: foo;                          /* invalid */
 					            someprop: someval;                                 /* invalid */
-					            -bar-someprop: someval;                            /* valid */
+					            -bar-someprop: someval;                            /* invalid */
 					            "/>
 				</foo>
 			</x:param>
 		</x:call>
 		<x:expect label="result">
 			<css:rule>
-			<css:property name="-bar-someprop" value="someval"/>
 			<css:property name="-foo-right-text-indent" value="2"/>
 			<css:property name="border-top-align" value="outer"/>
 			<css:property name="border-top-pattern" value="⠒"/>
 			<css:property name="border-top-style" value="solid"/>
 			<css:property name="border-top-width" value="2"/>
+			<css:property name="content">
+				<css:custom-func name="-foo-marker-indicator" arg1="bar" arg2="'⠿'"/>
+			</css:property>
 			<css:property name="counter-reset">
 				<css:counter-set name="foo" value="0"/>
 				<css:counter-set name="bar" value="0" />
@@ -167,7 +169,7 @@
 			<css:property name="counter-set">
 				<css:counter-set name="foo" value="2"/>
 			</css:property>
-			<css:property name="display" value="-bar-something"/>
+			<css:property name="display" value="-foo-bar"/>
 			<css:property name="hyphenate-character" value="'⠈'"/>
 			<css:property name="line-height" value="150%"/>
 			<css:property name="list-style-type" value="symbols(cyclic '*' '†' '‡' '§')"/>
@@ -187,7 +189,7 @@
 			</css:property>
 			<css:property name="text-transform" value="foo -bar"/>
 			<css:property name="volume-break-before" value="always"/>
-			<css:property name="volume-break-inside" value="-obfl-keep(1)"/>
+			<css:property name="volume-break-inside" value="avoid"/>
 			<css:property name="widows" value="0"/>
 			<css:property name="word-spacing" value="0"/>
 			</css:rule>
@@ -244,11 +246,11 @@
 		<x:call function="s:toXml">
 			<x:param select="css:parse-stylesheet('
 			                   display:block
-			                   &amp;::before { content: &quot; } &quot; -obfl-evaluate(&quot;''\A''&quot;) }
+			                   &amp;::before { content: &quot; } &quot; -foo-marker-indicator(bar, &quot;''\A''&quot;) }
 			                   @page { size: 40 25 @top-right { content: &quot; } &quot; }}
 			                   @volume { @begin { content: flow(titlepage); @page { size: 15 5; } @page:left { size: 15 5; @top-right { content: none; }}}}
-			                   &amp;:-obfl-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; }
-			                   &amp;:-obfl-alternate-scenario(2) { display: table }
+			                   &amp;:-foo-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; }
+			                   &amp;:-foo-alternate-scenario(2) { display: table }
 			                   @text-transform  foo  { system: foo } @text-transform  bar  { system: bar }
 			                   @hyphenation-resource:lang(foo) { system: foo } @hyphenation-resource:lang(bar) { system: bar }
 			                   @counter-style trinary { system: numeric; symbols: 0 1 2; }
@@ -317,7 +319,7 @@
 					</css:rule>
 				</css:rule>
 			</css:rule>
-			<css:rule selector="&amp;:-obfl-alternate-scenario(1)">
+			<css:rule selector="&amp;:-foo-alternate-scenario(1)">
 				<css:rule selector="&amp; tr">
 					<css:rule selector="&amp;:blank">
 						<css:rule selector="&amp;::after">
@@ -328,13 +330,13 @@
 					</css:rule>
 				</css:rule>
 			</css:rule>
-			<css:rule selector="&amp;:-obfl-alternate-scenario(2)">
+			<css:rule selector="&amp;:-foo-alternate-scenario(2)">
 				<css:property name="display" value="table"/>
 			</css:rule>
 			<css:rule selector="&amp;::before">
 				<css:property name="content">
 					<css:string value=" }} "/>
-					<css:custom-func name="-obfl-evaluate" arg1="'\27 \A \27 '"/>
+					<css:custom-func name="-foo-marker-indicator" arg1="bar" arg2="'\27 \A \27 '"/>
 				</css:property>
 			</css:rule>
 		</x:expect>
@@ -398,7 +400,7 @@
 			<x:param select="css:parse-stylesheet(//a/@css:content)">
 				<doc>
 					<a ref="#foo"
-					   css:content="target-string(attr(ref url), print-page) target-counter(attr(ref url), braille-page, lower-roman) -x-foo(bar, baz) string(print-page, start) flow(foo, volume) counter(list-item, symbols(cyclic &quot;*&quot; &quot;†&quot; &quot;‡&quot; &quot;§&quot;))"
+					   css:content="target-string(attr(ref url), print-page) target-counter(attr(ref url), braille-page, lower-roman) -foo-marker-indicator(bar, '⠿') string(print-page, start) flow(foo, volume) counter(list-item, symbols(cyclic &quot;*&quot; &quot;†&quot; &quot;‡&quot; &quot;§&quot;))"
 					   >foo</a>
 				</doc>
 			</x:param>
@@ -407,7 +409,7 @@
 			<css:property name="content">
 				<css:string target="#foo" name="print-page"/>
 				<css:counter target="#foo" name="braille-page" style="lower-roman"/>
-				<css:custom-func name="-x-foo" arg1="bar" arg2="baz"/>
+				<css:custom-func name="-foo-marker-indicator" arg1="bar" arg2="'⠿'"/>
 				<css:string name="print-page" scope="start"/>
 				<css:flow from="foo" scope="volume"/>
 				<css:counter name="list-item" style="symbols(cyclic '*' '†' '‡' '§')"/>
@@ -501,12 +503,12 @@
 						</css:rule>
 					</css:rule>
 				</css:rule>
-				<css:rule selector="@-obfl-volume-transition">
+				<css:rule selector="@-foo-volume-transition">
 					<css:rule selector="@any-interrupted">
-						<css:property name="content" value="-obfl-evaluate('$volume')"/>
+						<css:property name="content" value="flow(volume-end)"/>
 					</css:rule>
 				</css:rule>
-				<css:rule selector="&amp;:-obfl-alternate-scenario(1)">
+				<css:rule selector="&amp;:-foo-alternate-scenario(1)">
 					<css:rule selector="&amp; tr">
 						<css:rule selector="&amp;:blank">
 							<css:rule selector="&amp;::after">
@@ -515,7 +517,7 @@
 						</css:rule>
 					</css:rule>
 				</css:rule>
-				<css:rule selector="&amp;:-obfl-alternate-scenario(2)">
+				<css:rule selector="&amp;:-foo-alternate-scenario(2)">
 					<css:property name="display" value="table"/>
 				</css:rule>
 				<css:rule selector="@text-transform">
@@ -536,7 +538,7 @@
 				</css:rule>
 			</x:param>
 		</x:call>
-		<x:expect label="result" select="'display: block; @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { max-length: 100; min-length: 20 } @volume:nth(2) { max-length: 50 } @-obfl-volume-transition { @any-interrupted { content: -obfl-evaluate(''$volume'') } } @text-transform bar { system: bar } @text-transform foo { system: foo } @hyphenation-resource:lang(bar) { system: bar } @hyphenation-resource:lang(foo) { system: foo } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none } &amp;:-obfl-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; } &amp;:-obfl-alternate-scenario(2) { display: table }'"/>
+		<x:expect label="result" select="'display: block; @page { size: 40 25; @bottom-center { content: &quot;foo&quot; } } @page:left { @bottom-left { content: counter(page) } } @volume { max-length: 100; min-length: 20 } @volume:nth(2) { max-length: 50 } @-foo-volume-transition { @any-interrupted { content: flow(volume-end) } } @text-transform bar { system: bar } @text-transform foo { system: foo } @hyphenation-resource:lang(bar) { system: bar } @hyphenation-resource:lang(foo) { system: foo } &amp;::before { content: &quot;foo&quot; } &amp;::before::after { content: &quot;foo&quot; } &amp;::table-by(foo)::list-item::after { content: &quot;, &quot; } &amp;::table-by(foo)::list-item:last-child::after { content: none } &amp;:-foo-alternate-scenario(1) tr:blank::after { content: &quot;(empty)&quot; } &amp;:-foo-alternate-scenario(2) { display: table }'"/>
 	</x:scenario>
 	
 	<x:scenario label="test_15">
