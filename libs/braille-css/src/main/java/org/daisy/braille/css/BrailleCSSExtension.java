@@ -52,6 +52,10 @@ public abstract class BrailleCSSExtension extends DeclarationTransformer impleme
 		throw new IllegalArgumentException("Unknown counter name " + term);
 	}
 
+	public TermIdent parseTextTransform(Term<?> term) {
+		throw new IllegalArgumentException("Unknown text-transform value " + term);
+	}
+
 	public PseudoClass createPseudoClass(String name) {
 		throw new IllegalArgumentException("Unknown pseudo-class :" + name);
 	}
