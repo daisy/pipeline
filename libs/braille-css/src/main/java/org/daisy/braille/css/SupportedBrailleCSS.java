@@ -840,13 +840,32 @@ public class SupportedBrailleCSS extends DeclarationTransformer implements Suppo
 			return true;
 		TermList list = tf.createList();
 		for (Term<?> t : d.asList()) {
-			if (t instanceof TermIdent) {
-				String value = ((TermIdent)t).getValue().toLowerCase();
-				if (!value.equals("auto"))
-					list.add(t);
-			}
-			else
+			TermIdent textTransform = null;
+			if (t instanceof TermIdent && ((TermIdent)t).getValue().startsWith("-")) {
+				// if the counter name starts with an extension prefix, let the extension parse it
+				for (BrailleCSSExtension x : extensions)
+					if (((TermIdent)t).getValue().startsWith(x.getPrefix()))
+						try {
+							textTransform = x.parseTextTransform(t);
+							break;
+						} catch (IllegalArgumentException e) {
+							return false;
+						}
+			} else 
+				// other, give extensions the chance to normalize names
+				for (BrailleCSSExtension x : extensions)
+					try {
+						textTransform = x.parseTextTransform(t);
+						break;
+					} catch (IllegalArgumentException e) {
+						// continue
+					}
+			if (textTransform == null && t instanceof TermIdent)
+				textTransform = (TermIdent)t;
+			if (textTransform == null)
 				return false;
+			if (!"auto".equalsIgnoreCase(textTransform.getValue()))
+				list.add(textTransform);
 		}
 		if (list.isEmpty())
 			return false;
