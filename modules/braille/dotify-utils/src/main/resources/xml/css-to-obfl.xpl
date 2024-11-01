@@ -487,8 +487,6 @@
         </p:documentation>
         <p:with-option name="exclude-counters" select="string-join(($page-counters,
                                                                     'volume',
-                                                                    '-obfl-page',
-                                                                    '-obfl-volume',
                                                                     '-obfl-volumes',
                                                                     '-obfl-sheets-in-document',
                                                                     '-obfl-sheets-in-volume',
