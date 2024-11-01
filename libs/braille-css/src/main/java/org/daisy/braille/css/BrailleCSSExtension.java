@@ -14,6 +14,7 @@ import cz.vutbr.web.css.Selector.PseudoClass;
 import cz.vutbr.web.css.Selector.PseudoElement;
 import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.csskit.OutputUtil;
 import cz.vutbr.web.domassign.DeclarationTransformer;
@@ -45,6 +46,10 @@ public abstract class BrailleCSSExtension extends DeclarationTransformer impleme
 
 	public boolean parseContentTerm(Term<?> term, TermList list) {
 		return false;
+	}
+
+	public TermIdent parseCounterName(Term<?> term) {
+		throw new IllegalArgumentException("Unknown counter name " + term);
 	}
 
 	public PseudoClass createPseudoClass(String name) {
