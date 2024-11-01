@@ -159,57 +159,6 @@
               equals="'@volume:first { max-length: 75 }'"/>
   </x:scenario>
   
-  <x:scenario label="test_06">
-    <x:call step="px:css-cascade">
-      <x:input port="source">
-        <x:document type="inline">
-          <document>
-            <head>
-              <style media="embossed" type="text/css">
-                bodymatter, rearmatter {
-                  volume-break-before: always;
-                }
-                bodymatter > section {
-                  volume-break-inside: -obfl-keep(2);
-                }
-                bodymatter > section > section {
-                  volume-break-inside: avoid;
-                }
-              </style>
-            </head>
-            <body>
-              <frontmatter/>
-              <bodymatter>
-                <section>
-                  <section/>
-                </section>
-                <section/>
-              </bodymatter>
-              <rearmatter/>
-            </body>
-          </document>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="result">
-      <x:document type="port" port="result" select="//body"/>
-    </x:context>
-    <x:expect label="result" type="compare">
-      <x:document type="inline">
-        <body>
-          <frontmatter/>
-          <bodymatter style="volume-break-before: always">
-            <section style="volume-break-inside: -obfl-keep(2)">
-              <section style="volume-break-inside: avoid"/>
-            </section>
-            <section style="volume-break-inside: -obfl-keep(2)"/>
-          </bodymatter>
-          <rearmatter style="volume-break-before: always"/>
-        </body>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-  
   <x:scenario label="test_07">
     <x:call step="px:css-cascade">
       <x:input port="source">
@@ -217,7 +166,7 @@
           <document>
             <head>
               <style media="embossed" type="text/css">
-                @-obfl-volume-transition {
+                @-foo-volume-transition {
                   @any-interrupted {
                     content: flow(volume-end);
                   }
@@ -232,7 +181,7 @@
       <x:document type="port" port="result" select="//document"/>
     </x:context>
     <x:expect label="root-style" type="xpath" test="/*/@style"
-              equals="'@-obfl-volume-transition { @any-interrupted { content: flow(volume-end) } }'"/>
+              equals="'@-foo-volume-transition { @any-interrupted { content: flow(volume-end) } }'"/>
   </x:scenario>
   
 </x:description>

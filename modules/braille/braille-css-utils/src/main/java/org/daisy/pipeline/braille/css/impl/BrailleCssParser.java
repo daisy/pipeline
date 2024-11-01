@@ -68,8 +68,7 @@ public abstract class BrailleCssParser implements TextStyleParser {
 			} catch (Throwable e) {
 				logger.error("Error while binding BrailleCSSExtension services", e);
 			}
-			// allowUnknownVendorExtensions could be set to false, but it is currently set to true for unit tests
-			boolean allowUnknownVendorExtensions = true;
+			boolean allowUnknownVendorExtensions = false;
 			BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory(
 				new BrailleCSSRuleFactory(extensions, allowUnknownVendorExtensions));
 			Map<Context,SupportedBrailleCSS> supportedBrailleCSS = new HashMap<>();

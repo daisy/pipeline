@@ -53,10 +53,10 @@
   
   <x:scenario label="test_04">
     <x:context>
-      <doc style="&amp;::-x-foo::before {{ display: block }}"/>
+      <doc style="&amp;::-foo-on-volume-start::before {{ display: block }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:_x-foo="&amp;::before {{ display: block }}"/>
+      <doc css:_foo-on-volume-start="&amp;::before {{ display: block }}"/>
     </x:expect>
   </x:scenario>
   
@@ -71,20 +71,20 @@
   
   <x:scenario label="test_06">
     <x:context>
-      <doc style="&amp;::list-item {{ -my-prop:foo }} &amp;::table-by(row) {{ -my-prop:foo }} &amp;::table-by(row)::list-item {{ -my-prop:foo }} &amp;::after::table-by(row) {{ -my-prop:foo }}"/>
+      <doc style="&amp;::list-item {{ display:block }} &amp;::table-by(row) {{ display:block }} &amp;::table-by(row)::list-item {{ display:block }} &amp;::after::table-by(row) {{ display:block }}"/>
     </x:context>
     <x:expect label="result">
-      <doc style="&amp;::list-item {{ -my-prop: foo }} &amp;::table-by(row) {{ -my-prop: foo }} &amp;::table-by(row)::list-item {{ -my-prop: foo }}"
-           css:after="&amp;::table-by(row) {{ -my-prop: foo }}"/>
+      <doc style="&amp;::list-item {{ display: block }} &amp;::table-by(row) {{ display: block }} &amp;::table-by(row)::list-item {{ display: block }}"
+           css:after="&amp;::table-by(row) {{ display: block }}"/>
     </x:expect>
   </x:scenario>
   
   <x:scenario label="test_07">
     <x:context>
-      <table style="&amp;:-obfl-alternate-scenario {{ -my-prop: foo }} &amp;:-obfl-alternate-scenario::table-by(row) {{ -my-prop:foo }} &amp;:-obfl-alternate-scenario::table-by(row)::list-item {{ -my-prop:foo }}"/>
+      <table style="&amp;:-foo-alternate-scenario {{ display: block }} &amp;:-foo-alternate-scenario::table-by(row) {{ display:block }} &amp;:-foo-alternate-scenario::table-by(row)::list-item {{ display:block }}"/>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="-my-prop: foo; &amp;::table-by(row) {{ -my-prop: foo }} &amp;::table-by(row)::list-item {{ -my-prop: foo }}" />
+      <table css:_foo-alternate-scenario="display: block; &amp;::table-by(row) {{ display: block }} &amp;::table-by(row)::list-item {{ display: block }}" />
     </x:expect>
   </x:scenario>
   
@@ -99,12 +99,12 @@
   
   <x:scenario label="test_09">
     <x:context>
-      <table style="&amp;:-obfl-alternate-scenario tr:blank::after {{ content: '(empty)'; }}">
+      <table style="&amp;:-foo-alternate-scenario tr:blank::after {{ content: '(empty)'; }}">
         <tr/>
       </table>
     </x:context>
     <x:expect label="result">
-      <table css:_obfl-alternate-scenario="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}">
+      <table css:_foo-alternate-scenario="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}">
         <tr/>
       </table>
     </x:expect>
@@ -121,10 +121,10 @@
   
   <x:scenario label="test_11">
     <x:context>
-      <doc style="@-obfl-volume-transition {{ @any-interrupted {{ content: flow(volume-end); }} }}"/>
+      <doc style="@-foo-volume-transition {{ @any-interrupted {{ content: flow(volume-end); }} }}"/>
     </x:context>
     <x:expect label="result">
-      <doc css:_obfl-volume-transition="@any-interrupted {{ content: flow(volume-end) }}"/>
+      <doc css:_foo-volume-transition="@any-interrupted {{ content: flow(volume-end) }}"/>
     </x:expect>
   </x:scenario>
   
