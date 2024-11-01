@@ -93,6 +93,36 @@ public class OBFLExtension extends BrailleCSSExtension {
 	}
 
 	@Override
+	public TermIdent parseCounterName(Term<?> term) {
+		TermIdent counterName = null;
+		if (term instanceof TermIdent) {
+			TermIdent ident = (TermIdent)term;
+			String name = ident.getValue();
+			if (name.startsWith(prefix))
+				name = name.substring(prefix.length());
+			if ("page".equals(name) ||
+			    "volume".equals(name))
+				counterName = ident;
+			else if ("volumes".equals(name) ||
+			         "sheets-in-document".equals(name) ||
+			         "sheets-in-volume".equals(name) ||
+			         "started-volume-number".equals(name) ||
+			         "started-page-number".equals(name) ||
+			         "started-volume-first-content-page".equals(name)) {
+				counterName = ident;
+				name = prefix + name;
+			}
+			if (counterName != null && !counterName.getValue().equals(name))
+				// normalize
+				counterName.setValue(name);
+		}
+		if (counterName != null)
+			return counterName;
+		else
+			throw new IllegalArgumentException("Unknown counter name " + term);
+	}
+
+	@Override
 	public PseudoClass createPseudoClass(String name) throws IllegalArgumentException {
 		return createPseudoClassFunction(name);
 	}

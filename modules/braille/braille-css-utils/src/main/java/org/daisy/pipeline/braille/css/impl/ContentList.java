@@ -2,6 +2,7 @@ package org.daisy.pipeline.braille.css.impl;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +20,7 @@ import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.TermStringImpl;
 import cz.vutbr.web.csskit.TermURIImpl;
 
+import org.daisy.braille.css.BrailleCSSExtension;
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.braille.css.SupportedBrailleCSS;
 import org.daisy.common.file.URLs;
@@ -46,6 +48,13 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 	 * @param list assumed to not change
 	 */
 	public static ContentList of(BrailleCssParser parser, Context context, List<Term<?>> list) {
+		return of(parser, null, context, list);
+	}
+
+	public static ContentList of(BrailleCssParser parser,
+	                             Collection<BrailleCSSExtension> extensions,
+	                             Context context,
+	                             List<Term<?>> list) {
 		List<Term<?>> items = new ArrayList<>();
 		for (Term<?> t : list) {
 			if (t instanceof UnmodifiableTermString ||
@@ -72,7 +81,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 					StringFunction f = StringFunction.of(func);
 					if (f != null) items.add(f); }
 				else if ("counter".equals(funcname) || "target-counter".equals(funcname)) {
-					CounterFunction f = CounterFunction.of(func);
+					CounterFunction f = CounterFunction.of(func, extensions);
 					if (f != null) items.add(f); }
 				else if ("target-text".equals(funcname)) {
 					TextFunction f = TextFunction.of(func);
@@ -545,7 +554,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		/**
 		 * @param fn assumed to not change
 		 */
-		private static CounterFunction of(TermFunction fn) {
+		private static CounterFunction of(TermFunction fn, Collection<BrailleCSSExtension> extensions) {
 			boolean needTarget = false;
 			if ("target-counter".equals(fn.getFunctionName()))
 				needTarget = true;
@@ -559,12 +568,33 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 					target = URL.of(arg);
 					if (target == null)
 						return null; }
-				else if (name == null)
-					if (arg instanceof TermIdent)
+				else if (name == null) {
+					if (extensions != null)
+						if (arg instanceof TermIdent && ((TermIdent)arg).getValue().startsWith("-")) {
+							// if the counter name starts with an extension prefix, let the extension parse it
+							String n = ((TermIdent)arg).getValue();
+							for (BrailleCSSExtension x : extensions)
+								if (n.startsWith(x.getPrefix()))
+									try {
+										name = x.parseCounterName(arg);
+										break;
+									} catch (IllegalArgumentException e) {
+										return null;
+									}
+						} else 
+							// other, give extensions the chance to normalize names
+							for (BrailleCSSExtension x : extensions)
+								try {
+									name = x.parseCounterName(arg);
+									break;
+								} catch (IllegalArgumentException e) {
+									// continue
+								}
+					if (name == null && arg instanceof TermIdent)
 						name = (TermIdent)arg;
-					else
+					if (name == null)
 						return null;
-				else if (style == null) {
+				} else if (style == null) {
 					style = CounterStyle.of(arg);
 					if (style == null)
 						return null; }
