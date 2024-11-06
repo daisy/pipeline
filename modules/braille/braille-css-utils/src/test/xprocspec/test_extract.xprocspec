@@ -68,17 +68,17 @@
 		</x:context>
 		<x:expect label="stylesheet" type="compare" normalize-space="false">
 			<x:document type="inline">
-				<c:result content-type="text/plain">@page page-1 {
+				<c:result content-type="text/plain">@page page-2 {
 	@top-left {
 		content: "foo"
 	}
 }
-@page page-2 {
+@page page-1 {
 	@top-left {
 		content: "foo"
 	}
 }
-@page page-2:left {
+@page page-1:left {
 	@top-left {
 		content: "foo"
 	}
@@ -87,11 +87,11 @@
 	}
 }
 #a {
-	page: page-1
+	page: page-2
 }
 #b {
 	display: block;
-	page: page-2
+	page: page-1
 }
 #c {
 	border-bottom-align: center;

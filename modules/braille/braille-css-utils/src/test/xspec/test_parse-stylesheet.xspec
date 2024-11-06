@@ -34,7 +34,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <p style="display: block" css:before="content: &quot;bar&quot;; display: block; margin-left: 2">
+          <p style="display: block" css:before="content: 'bar'; display: block; margin-left: 2">
             foo
           </p>
         </body>
@@ -104,7 +104,7 @@
       </table>
     </x:context>
     <x:expect label="result">
-      <table css:_foo-alternate-scenario="&amp; tr:blank::after {{ content: &quot;(empty)&quot; }}">
+      <table css:_foo-alternate-scenario="&amp; tr:blank::after {{ content: '(empty)' }}">
         <tr/>
       </table>
     </x:expect>
@@ -158,7 +158,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <pagenum num="1" style="string-set: print-page &quot;1&quot;"/>
+          <pagenum num="1" style="string-set: print-page '1'"/>
         </body>
       </doc>
     </x:expect>
@@ -177,7 +177,7 @@
     <x:expect label="result">
       <doc>
         <body>
-          <h style="display: block; string-set: running-header &quot;\A             foo\A           &quot;">
+          <h style="display: block; string-set: running-header '\A             foo\A           '">
             foo
           </h>
         </body>

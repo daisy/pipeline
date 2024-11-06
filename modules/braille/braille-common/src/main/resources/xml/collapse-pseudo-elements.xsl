@@ -24,25 +24,21 @@
 			<xsl:if test="self::css:before|self::css:after">
 				<xsl:for-each-group select="text()|* except (css:before|css:after)"
 				                    group-adjacent="(@style/string(s:remove(css:parse-stylesheet(.),'content')),'')[1]">
-					<xsl:variable name="content" as="element(css:property)">
-						<css:property name="content">
-							<xsl:for-each-group select="current-group()"
-							                    group-adjacent="boolean(exists(@style/s:get(css:parse-stylesheet(.),'content')))">
-								<xsl:choose>
-									<xsl:when test="current-grouping-key()">
-										<xsl:sequence select="current-group()/s:toXml(css:parse-stylesheet(@style))
-										                                     /css:property[@name='content']/*"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<css:string value="{string-join(current-group()/string(.),'')}"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:for-each-group>
-						</css:property>
+					<xsl:variable name="content" as="item()*">
+						<xsl:for-each-group select="current-group()"
+						                    group-adjacent="boolean(exists(@style/s:get(css:parse-stylesheet(.),'content')))">
+							<xsl:choose>
+								<xsl:when test="current-grouping-key()">
+									<xsl:sequence select="current-group()/s:get(css:parse-stylesheet(@style),'content')"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:sequence select="string-join(current-group()/string(.),'')"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:for-each-group>
 					</xsl:variable>
-					<xsl:variable name="content" as="item()?" select="css:parse-stylesheet(css:serialize-stylesheet($content))"/>
-					<xsl:variable name="style" as="item()?" select="@style/s:remove(css:parse-stylesheet(.),'content')"/>
-					<xsl:sequence select="s:merge(($style,$content))"/>
+					<xsl:variable name="content" as="item()?" select="s:merge($content)"/>
+					<xsl:sequence select="s:put(@style/s:remove(css:parse-stylesheet(.),'content'),'content',$content)"/>
 				</xsl:for-each-group>
 			</xsl:if>
 		</xsl:variable>

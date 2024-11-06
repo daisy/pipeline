@@ -3,11 +3,13 @@
                 xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-inline-prefixes="pxi xsl"
                 version="1.0">
     
@@ -86,11 +88,6 @@
         pxi:extract-obfl-pseudo-elements
       </p:documentation>
     </p:import>
-    <p:import href="deep-parse-page-and-volume-stylesheets.xpl">
-      <p:documentation>
-        pxi:deep-parse-page-and-volume-stylesheets
-      </p:documentation>
-    </p:import>
     <p:import href="obfl-css-definition.xpl">
       <p:documentation>
         pxi:obfl-css-definition
@@ -99,6 +96,11 @@
     <cx:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl" type="application/xslt+xml">
       <p:documentation>
         css:parse-counter-styles
+      </p:documentation>
+    </cx:import>
+    <cx:import href="deep-parse-page-and-volume-stylesheets.xsl" type="application/xslt+xml">
+      <p:documentation>
+        f:deep-parse-page-and-volume-stylesheets
       </p:documentation>
     </cx:import>
     
@@ -268,22 +270,12 @@
         </pxi:recursive-parse-stylesheet-and-make-pseudo-elements>
     </p:viewport>
     
-    <p:group px:progress=".02"
-             name="extract-page-and-volume-styles">
-        <p:output port="result" primary="true">
-            <p:pipe step="_1" port="result"/>
-        </p:output>
-        <p:output port="styles" sequence="true">
-            <p:pipe step="page-and-volume-styles" port="result"/>
-        </p:output>
-        <p:identity name="_1"/>
-        <pxi:deep-parse-page-and-volume-stylesheets name="page-and-volume-styles"/>
-        <p:sink/>
-    </p:group>
+    <p:group px:progress=".88">
+    <p:variable name="page-and-volume-styles" select="f:deep-parse-page-and-volume-stylesheets(/)"/>
     
     <p:filter select="/_/*"/>
 
-    <p:for-each px:progress=".02">
+    <p:for-each px:progress=".03">
         <pxi:extract-obfl-pseudo-elements>
             <p:documentation>
                 Extract css:_obfl-on-toc-start, css:_obfl-on-collection-start,
@@ -293,7 +285,7 @@
         </pxi:extract-obfl-pseudo-elements>
     </p:for-each>
     
-    <p:for-each px:progress=".04">
+    <p:for-each px:progress=".05">
         <css:parse-properties px:progress=".50"
                               properties="content string-set counter-reset counter-set counter-increment -obfl-marker">
             <p:documentation>
@@ -311,7 +303,7 @@
         </css:parse-content>
     </p:for-each>
     
-    <p:group px:progress=".04">
+    <p:group px:progress=".05">
         <p:documentation>
             Split into a sequence of flows.
         </p:documentation>
@@ -341,7 +333,7 @@
         </p:identity>
     </p:group>
     
-    <css:label-targets name="label-targets" px:progress=".005">
+    <css:label-targets name="label-targets" px:progress=".01">
         <p:documentation>
             Make css:id attributes. <!-- depends on parse-content -->
         </p:documentation>
@@ -351,13 +343,13 @@
       <p:delete match="@xml:base"/> <!-- this sets the base URI to the empty string -->
     </p:for-each>
     
-    <css:eval-target-content px:progress=".005">
+    <css:eval-target-content px:progress=".01">
         <p:documentation>
             Evaluate css:content elements. <!-- depends on parse-content and label-targets -->
         </p:documentation>
     </css:eval-target-content>
     
-    <p:for-each px:progress=".20">
+    <p:for-each px:progress=".24">
         <css:parse-properties px:progress=".20"
                               properties="white-space display">
             <p:documentation>
@@ -442,42 +434,35 @@
         </p:group>
     </p:for-each>
     
-    <p:group px:progress=".55">
+    <p:group px:progress=".61">
     <p:variable name="page-counters"
                 cx:as="xs:string*"
-                select="distinct-values((
-                          if (not(/*/*[@selector='@page']))
-                          then 'page'
-                          else for $r in /*/*[@selector='@page'] return
-                               for $rr in (if ($r/*[matches(@selector,'^:')])
-                                           then $r/*[not(@selector)]
-                                           else $r) return
-                                 ((if ($rr/css:property) then $rr/css:property
-                                   else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/string(@value),'page')[1]
+                select="let $page-styles := for $s in $page-and-volume-styles return s:get($s,'@page'),
+                            $volume-styles := for $s in $page-and-volume-styles return s:get($s,'@volume'),
+                            $volume-styles := for $s in $volume-styles return ($s,for $k in s:keys($s)[matches(.,'^&amp;:')] return s:get($s,$k)),
+                            $volume-begin-styles := for $s in $volume-styles return s:get($s,'@begin'),
+                            $volume-begin-page-styles := for $s in $volume-begin-styles return s:get($s,'@page'),
+                            $volume-end-styles := for $s in $volume-styles return s:get($s,'@end'),
+                            $volume-end-page-styles := for $s in $volume-end-styles return s:get($s,'@page')
+                        return distinct-values((
+                          if (empty($page-styles)) then
+                            'page'
+                          else
+                            for $s in $page-styles return
+                              (for $p in s:get($s,'counter-increment') return string($p),'page')[1]
                           ,
-                          if (not(//*[@selector='@begin']/*[@selector='@page']))
-                          then 'pre-page'
-                          else for $r in //*[@selector='@begin']/*[@selector='@page'] return
-                               for $rr in (if ($r/*[matches(@selector,'^:')])
-                                           then $r/*[not(@selector)]
-                                           else $r) return
-                                 ((if ($rr/css:property) then $rr/css:property
-                                   else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/string(@value),'pre-page')[1]
+                          if (empty($volume-begin-page-styles)) then
+                            'pre-page'
+                          else
+                            for $s in $volume-begin-page-styles return
+                              (for $p in s:get($s,'counter-increment') return string($p),'pre-page')[1]
                           ,
-                          if (not(//*[@selector='@end']/*[@selector='@page']))
-                          then 'post-page'
-                          else for $r in //*[@selector='@end']/*[@selector='@page'] return
-                               for $rr in (if ($r/*[matches(@selector,'^:')])
-                                           then $r/*[not(@selector)]
-                                           else $r) return
-                                 ((if ($rr/css:property) then $rr/css:property
-                                   else $rr/*[not(@selector)]/css:property)
-                                  [@name='counter-increment']/string(@value),'post-page')[1]
-                          ))">
-        <p:pipe step="extract-page-and-volume-styles" port="styles"/>
-    </p:variable>
+                          if (empty($volume-end-page-styles)) then
+                            'post-page'
+                          else
+                            for $s in $volume-end-page-styles return
+                              (for $p in s:get($s,'counter-increment') return string($p),'post-page')[1]
+                        ))"/>
     
     <css:eval-counter px:progress=".17">
         <p:documentation>
@@ -896,26 +881,29 @@
         <p:with-param name="braille-charset-table" select="$braille-charset">
             <p:empty/>
         </p:with-param>
+        <p:with-param name="page-and-volume-styles" select="$page-and-volume-styles">
+            <p:empty/>
+        </p:with-param>
         <p:with-param name="page-counters" select="$page-counters">
             <p:empty/>
         </p:with-param>
-        <p:with-param name="volume-transition" select="/_/*/@css:_obfl-volume-transition">
+        <p:with-param name="volume-transition"
+                      select="for $s in /_/*/@css:_obfl-volume-transition
+                                            /css:parse-stylesheet(concat('@-obfl-volume-transition { ',string(.),' }'))
+                              return s:get($s,'@-obfl-volume-transition')">
             <p:pipe step="assert-volume-transition-only-on-root" port="result"/>
         </p:with-param>
         <p:with-param name="default-text-transform" select="$text-transform">
             <p:empty/>
         </p:with-param>
-        <p:with-param name="text-transforms" select="/_/*/@css:text-transform">
+        <p:with-param name="text-transforms" select="/_/*/@css:text-transform/css:parse-stylesheet(.)">
             <p:pipe step="assert-text-transform-only-on-root" port="result"/>
         </p:with-param>
-        <p:with-param name="hyphenation-resources" select="/_/*/@css:hyphenation-resource">
+        <p:with-param name="hyphenation-resources" select="/_/*/@css:hyphenation-resource/css:parse-stylesheet(.)">
             <p:pipe step="assert-hyphenation-resource-only-on-root" port="result"/>
         </p:with-param>
-        <p:with-param name="counter-styles" select="/_/*/@css:counter-style">
+        <p:with-param name="counter-styles" select="/_/*/@css:counter-style/css:parse-stylesheet(.)">
             <p:pipe step="assert-counter-style-only-on-root" port="result"/>
-        </p:with-param>
-        <p:with-param name="page-and-volume-styles" select="/*/*">
-            <p:pipe step="extract-page-and-volume-styles" port="styles"/>
         </p:with-param>
     </p:xslt>
     
@@ -938,11 +926,15 @@
         <p:with-param name="braille-charset-table" select="$braille-charset">
             <p:empty/>
         </p:with-param>
-        <p:with-param name="counter-styles" select="/_/*/@css:counter-style">
+        <p:with-param name="page-and-volume-styles" select="$page-and-volume-styles">
+            <p:empty/>
+        </p:with-param>
+        <p:with-param name="counter-styles" select="/_/*/@css:counter-style/css:parse-stylesheet(.)">
             <p:pipe step="assert-counter-style-only-on-root" port="result"/>
         </p:with-param>
     </p:xslt>
     
+    </p:group>
     </p:group>
     
     <!--
@@ -976,7 +968,7 @@
     <!--
         fill in <marker class="foo/prev"/> values
     -->
-    <p:label-elements px:progress=".005"
+    <p:label-elements px:progress=".01"
                       match="obfl:marker[not(@value)]
                                         [some $class in @class satisfies
                                          preceding::obfl:marker[concat(@class,'/prev')=$class]]"
@@ -996,13 +988,13 @@
         FIXME: because otherwise empty marker values would be regarded as absent in Dotify
         (FieldResolver.resolveCompoundMarkerReferenceField)
     -->
-    <p:add-attribute px:progress=".005"
+    <p:add-attribute px:progress=".01"
                      match="obfl:marker[@value='']" attribute-name="value" attribute-value="&#x200B;"/>
 
     <!--
         move table-of-contents elements to the right place
     -->
-    <p:xslt px:progress=".005">
+    <p:xslt px:progress=".01">
         <p:input port="stylesheet">
             <p:document href="move-table-of-contents.xsl"/>
         </p:input>

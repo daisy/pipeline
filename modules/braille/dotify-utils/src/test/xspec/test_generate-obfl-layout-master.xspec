@@ -12,7 +12,7 @@
   
   <x:scenario label="test_01">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="()"/>
+      <x:param name="page-style" select="()"/>
       <x:param name="name" select="'x'"/>
       <x:param name="default-page-counter-name" select="'page'"/>
     </x:call>
@@ -28,7 +28,7 @@
   
   <x:scenario label="test_02">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 15
@@ -72,7 +72,7 @@
   
   <x:scenario label="test_03">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 15
@@ -135,7 +135,7 @@
   
   <x:scenario label="test_04">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -164,7 +164,7 @@
   
   <x:scenario label="test_05">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -201,7 +201,7 @@
   
   <x:scenario label="test_06">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -233,7 +233,7 @@
   
   <x:scenario label="test_07">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -273,7 +273,7 @@
   
   <x:scenario label="test_08">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -314,7 +314,7 @@
   
   <x:scenario label="test_09">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 5;
@@ -355,7 +355,7 @@
   
   <x:scenario label="test_10">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 28 28
@@ -420,7 +420,7 @@
   
   <x:scenario label="test_11">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 15
@@ -449,7 +449,7 @@
 
   <x:scenario label="test_12">
     <x:call template="obfl:generate-layout-master">
-      <x:param name="page-stylesheet" select="s:get(
+      <x:param name="page-style" select="s:get(
                                                 css:parse-stylesheet('
                                                   @page {
                                                     size: 15 15
