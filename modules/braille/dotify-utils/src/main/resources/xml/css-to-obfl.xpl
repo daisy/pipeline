@@ -504,26 +504,23 @@
         <p:for-each>
             <p:group>
                 <p:documentation>
-                    Rename -obfl-collection() to flow() so that css:flow-from will process them.
+                    Rename -obfl-collection() to flow() so that css:flow-from will process them,
+                    except if ::-obfl-on-volume-start or ::-obfl-on-volume-end pseudo-elements are
+                    present and the scope is 'document'.
                 </p:documentation>
-                <p:label-elements match="*[@css:_obfl-list-of-references]
-                                          //css:custom-func[@name='-obfl-collection']"
+                <p:label-elements match="*[@css:_obfl-list-of-references
+                                           and not(@css:_obfl-on-volume-start or @css:_obfl-on-volume-start)]
+                                          //css:custom-func[@name='-obfl-collection']|
+                                         *[@css:_obfl-list-of-references
+                                           and (@css:_obfl-on-volume-start or @css:_obfl-on-volume-start)]
+                                          //css:custom-func[@name='-obfl-collection']
+                                                           [not(@arg2='document')]"
                                   attribute="from" label="@arg1"/>
                 <p:rename match="css:custom-func[@name='-obfl-collection'][@from]" new-name="css:flow"/>
                 <p:label-elements match="css:flow[@name='-obfl-collection'][@arg2]" attribute="scope" label="@arg2"/>
                 <p:delete match="css:flow[@name='-obfl-collection']/@name|
                                  css:flow[@name='-obfl-collection']/@arg1|
                                  css:flow[@name='-obfl-collection']/@arg2"/>
-            </p:group>
-            <p:group>
-                <p:documentation>
-                    Change scope 'document' to '-obfl-document' when ::-obfl-on-volume-start or
-                    ::-obfl-on-volume-end pseudo-elements are present.
-                </p:documentation>
-                <p:label-elements match="*[@css:_obfl-list-of-references]
-                                          [@css:_obfl-on-volume-start or @css:_obfl-on-volume-start]
-                                          //css:flow[@from][@scope='document']"
-                                  attribute="scope" label="'-obfl-document'"/>
             </p:group>
             <px:assert error-code="XXX"
                        message="An element with 'display: -obfl-list-of-references' must consist of exactly one
@@ -535,7 +532,8 @@
                 <p:with-option name="test" select="every $e in //*[@css:_obfl-list-of-references] satisfies
                                                    not($e//node()[not(self::css:box[@type='inline']|
                                                                       self::css:_|
-                                                                      self::css:flow)])"/>
+                                                                      self::css:flow|
+                                                                      self::css:custom-func[@name='-obfl-collection'])])"/>
             </px:assert>
         </p:for-each>
         <css:flow-from px:progress=".03">
@@ -544,6 +542,19 @@
             </p:documentation>
         </css:flow-from>
         <p:for-each>
+            <p:group>
+                <p:documentation>
+                    Rename -obfl-collection() that were previously skipped to flow().
+                </p:documentation>
+                <p:label-elements match="*[@css:_obfl-list-of-references]
+                                          //css:custom-func[@name='-obfl-collection']"
+                                  attribute="from" label="@arg1"/>
+                <p:rename match="css:custom-func[@name='-obfl-collection'][@from]" new-name="css:flow"/>
+                <p:label-elements match="css:flow[@name='-obfl-collection'][@arg2]" attribute="scope" label="@arg2"/>
+                <p:delete match="css:flow[@name='-obfl-collection']/@name|
+                                 css:flow[@name='-obfl-collection']/@arg1|
+                                 css:flow[@name='-obfl-collection']/@arg2"/>
+            </p:group>
             <p:documentation>
                 Wrap unevaluated css:flow in block box so that we can be sure that when evaluated
                 later inline boxes have no descendant block boxes (see also

@@ -48,13 +48,12 @@
             <xsl:when test="@scope=('document')">
                 <xsl:apply-templates select="$all-docs/*[@css:flow=$flow]/*"/>
             </xsl:when>
-            <xsl:when test="@scope=('volume','page')
-                            or matches(@scope,concat('^(',$css:VENDOR_PRF_IDENT_RE,')$'))">
+            <xsl:when test="@scope=('volume','page')">
                 <!-- evaluate later -->
                 <xsl:sequence select="."/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:message>flow() function argument '<xsl:value-of select="@scope"/>' not supported</xsl:message>
+                <xsl:message terminate="yes">coding error</xsl:message>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>

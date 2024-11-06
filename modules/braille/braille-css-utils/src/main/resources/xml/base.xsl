@@ -11,8 +11,7 @@
     <!-- ====== -->
     
     <xsl:variable name="css:STRING_RE">'[^']*'|"[^"]*"</xsl:variable>
-    <xsl:variable name="css:VENDOR_PRF_IDENT_RE" select="'-(\p{L}|_)+-(\p{L}|[0-9]|_)(\p{L}|[0-9]|_|-)*'"/>
-
+    
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->

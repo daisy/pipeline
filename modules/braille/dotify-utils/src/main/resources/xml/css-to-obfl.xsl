@@ -161,7 +161,7 @@
                     <xsl:variable name="flow" as="xs:string" select="."/>
                     <xsl:sequence select="$sections/*[@css:flow=$flow]
                                           /css:box[@type='block' and @css:_obfl-list-of-references]
-                                          //css:flow[@from][@scope=('volume','-obfl-document')]/@from"/>
+                                          //css:flow[@from][@scope=('volume','document')]/@from"/>
                 </xsl:for-each>
             </xsl:for-each>
         </xsl:for-each>
@@ -890,9 +890,7 @@
                                                 <xsl:text>exactly one -obfl-collection() or flow() and nothing more.</xsl:text>
                                             </xsl:message>
                                         </xsl:if>
-                                        <xsl:variable name="range" as="xs:string?" select="if ($flow/@scope='-obfl-document')
-                                                                                           then 'document'
-                                                                                           else $flow/@scope"/>
+                                        <xsl:variable name="range" as="xs:string?" select="$flow/@scope"/>
                                         <xsl:if test="not($range=('volume','document'))">
                                             <!-- should not happen -->
                                             <xsl:message terminate="yes">
@@ -1047,7 +1045,7 @@
     </xsl:template>
     
     <xsl:template mode="display-obfl-list-of-references"
-                  match="css:flow[@from][@scope=('volume','-obfl-document')]">
+                  match="css:flow[@from][@scope=('volume','document')]">
         <xsl:sequence select="."/>
     </xsl:template>
     
