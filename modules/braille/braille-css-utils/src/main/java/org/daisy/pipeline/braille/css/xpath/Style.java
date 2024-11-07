@@ -10,6 +10,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import cz.vutbr.web.css.Term;
+import cz.vutbr.web.csskit.TermStringImpl;
 
 import org.daisy.braille.css.BrailleCSSParserFactory.Context;
 import org.daisy.pipeline.braille.css.impl.BrailleCssParser;
@@ -195,26 +196,46 @@ public abstract class Style {
 	 * Merge a sequence of styles. Properties are overwritten by properties declared in following
 	 * style items.
 	 */
-	public static Optional<Style> merge(Iterator<Style> styles) {
+	public static Optional<Style> merge(Iterator<Object> styles) {
 		Style head = null;
 		if (styles.hasNext()) {
-			Style s = styles.next();
-			if (s instanceof Stylesheet)
-				head = s;
+			Object s = styles.next();
+			if (s instanceof String)
+				head = new Value(ContentList.of(BrailleCssParser.getInstance(),
+				                                Context.ELEMENT,
+				                                Collections.singletonList(stringTerm((String)s))));
+			else if (!(s instanceof Style))
+				throw new IllegalArgumentException();
+			else if (s instanceof Stylesheet)
+				head = (Stylesheet)s;
 			else if (s instanceof Declaration)
 				head = new Stylesheet(BrailleCssStyle.of(((Declaration)s).declaration));
-			else { // s instanceof Value
-				if (!(((Value)s).value instanceof ContentList))
-					throw new IllegalArgumentException();
-				head = s;
-			}
+			else if (!(s instanceof Value))
+				throw new IllegalStateException(); // coding error
+			else if (!(((Value)s).value instanceof ContentList))
+				throw new IllegalArgumentException();
+			else
+				head = (Value)s;
 		}
 		if (!styles.hasNext())
 			return Optional.ofNullable(head);
 		List<Style> list = new ArrayList<>();
 		list.add(head);
-		while (styles.hasNext())
-			list.add(styles.next());
+		while (styles.hasNext()) {
+			Object s = styles.next();
+			if (s instanceof String)
+				list.add(new Value(ContentList.of(BrailleCssParser.getInstance(),
+				                                  Context.ELEMENT,
+				                                  Collections.singletonList(stringTerm((String)s)))));
+			else if (!(s instanceof Style))
+				throw new IllegalArgumentException();
+			else if (!(s instanceof Stylesheet ||
+			           s instanceof Declaration ||
+			           s instanceof Value))
+				throw new IllegalStateException(); // coding error
+			else
+				list.add((Style)s);
+		}
 		if (list.size() == 1)
 			return Optional.of(list.get(0));
 		if (head instanceof Stylesheet) {
@@ -251,5 +272,9 @@ public abstract class Style {
 			}
 			return Optional.of(new Value(ContentList.of(parser, context, content)));
 		}
+	}
+
+	private static Term<?> stringTerm(String s) {
+		return new TermStringImpl() {}.setValue(s);
 	}
 }
