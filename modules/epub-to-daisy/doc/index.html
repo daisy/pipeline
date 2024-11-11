@@ -1000,13 +1000,6 @@ if (window.addEventListener) {
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">DAISY 2.02</div>
-<div class="synopsis-output-desc">
-
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">DAISY 3</div>
 <div class="synopsis-output-desc">
 
@@ -1019,36 +1012,18 @@ if (window.addEventListener) {
 
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">DAISY 2.02</div>
+<div class="synopsis-output-desc">
+
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Perform text-to-speech</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
-</div>
-<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
-
-<p>This will remove any existing media overlays in the EPUB.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: One of the following:<dl class="choice">
-<dt><code>true</code></dt>
-<dd>Yes</dd>
-<dt><code>false</code></dt>
-<dd>No</dd>
-<dt><code>default</code></dt>
-<dd>If publication has no media overlays yet</dd>
-</dl>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>default</code>
-</div>
-</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Lexicons</div>
@@ -1155,34 +1130,27 @@ Whether to abort on validation issues.
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-name">Perform text-to-speech</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS style sheets to take into account.
+<div class="shortdesc">Whether to use a speech synthesizer to produce media overlays.
 </div>
-<div class="longdesc">A list of CSS style sheets to take into account.
+<div class="longdesc">Whether to use a speech synthesizer to produce media overlays.
 
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>”. Style sheets can also be attached to the
-source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>”. They can be linked (using an
-<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
-element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
-element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
-attributes</a>). Only author styles that apply to
-“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media are taken into account.</p>
-
-<p>All style sheets are applied at once, but the order in which they are specified has an influence on
-the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>. Author styles take
-precedence over user styles.</p>
+<p>This will remove any existing media overlays in the EPUB.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
+<b>Possible values</b>: One of the following:<dl class="choice">
+<dt><code>true</code></dt>
+<dd>Yes</dd>
+<dt><code>false</code></dt>
+<dd>No</dd>
+<dt><code>default</code></dt>
+<dd>If publication has no media overlays yet</dd>
+</dl>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
+<b>Default value</b>: <code>default</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1210,6 +1178,38 @@ parenthesis, can be used to set these variables.</p>
 </div>
 <div class="synopsis-option-data-type">
 <b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS style sheets to take into account.
+</div>
+<div class="longdesc">A list of CSS style sheets to take into account.
+
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
+
+<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>”. Style sheets can also be attached to the
+source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a>”. They can be linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>). Only author styles that apply to
+“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media are taken into account.</p>
+
+<p>All style sheets are applied at once, but the order in which they are specified has an influence on
+the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>. Author styles take
+precedence over user styles.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code></code>
@@ -1271,10 +1271,6 @@ Options:</pre>
 </td>
 </tr>
 <tr>
-<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
-<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
-</tr>
-<tr>
 <td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
 <td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
 </tr>
@@ -1283,12 +1279,16 @@ Options:</pre>
 <td>Validation (default: <span class="synopsis-option-default"><code>off</code></span>)</td>
 </tr>
 <tr>
-<td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
-<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
+<td>--tts [<span style="text-transform: uppercase">tts</span>]</td>
+<td>Perform text-to-speech (default: <span class="synopsis-option-default"><code>default</code></span>)</td>
 </tr>
 <tr>
 <td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
 <td>Style sheet parameters (default: <span class="synopsis-option-default"><code></code></span>)</td>
+</tr>
+<tr>
+<td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
+<td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>

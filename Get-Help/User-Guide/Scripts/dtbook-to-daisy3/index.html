@@ -942,6 +942,21 @@ if (window.addEventListener) {
   <ul class="synopsis-inputs">
 <li class="synopsis-input details-on">
 <div class="toggle-details"></div>
+<div class="synopsis-input-name">DTBook file</div>
+<div class="synopsis-input-desc">
+The 2005-3 DTBook file to be transformed.
+</div>
+<div class="synopsis-input-media-type">
+<b>Media-type</b>:
+<ul class="media-types">
+<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
+</ul>
+</div>
+<div class="synopsis-input-sequence">
+<b>Sequence</b>: no</div>
+</li>
+<li class="synopsis-input details-on">
+<div class="toggle-details"></div>
 <div class="synopsis-input-name">Text-to-speech configuration file</div>
 <div class="synopsis-input-desc">
 <div class="shortdesc">Configuration file for text-to-speech.
@@ -955,21 +970,6 @@ if (window.addEventListener) {
 <b>Media-type</b>:
 <ul class="media-types">
 <li>application/vnd.pipeline.tts-config+xml</li>
-</ul>
-</div>
-<div class="synopsis-input-sequence">
-<b>Sequence</b>: no</div>
-</li>
-<li class="synopsis-input details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-input-name">DTBook file</div>
-<div class="synopsis-input-desc">
-The 2005-3 DTBook file to be transformed.
-</div>
-<div class="synopsis-input-media-type">
-<b>Media-type</b>:
-<ul class="media-types">
-<li><a href="http://www.niso.org/workrooms/daisy/Z39-86-2005.html" class="media-type external-link" target="_blank">application/x-dtbook+xml</a></li>
 </ul>
 </div>
 <div class="synopsis-input-sequence">
@@ -1001,32 +1001,53 @@ The resulting DAISY 3 publication.
   <ul class="synopsis-options">
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-name">Detect words</div>
 <div class="synopsis-option-desc">
-<div class="shortdesc">A list of parameters passed to the style sheets.
+<div class="shortdesc">Whether to detect and mark up words with `&lt;w&gt;` tags.
 </div>
-<div class="longdesc">A list of parameters passed to the style sheets.
+<div class="longdesc">Whether to detect and mark up words with `<w>` tags.
 
-<p>Style sheets, whether they’re user style sheets (specified with the “stylesheet” option) or author
-style sheets (associated with the source), may have parameters (Sass variables). The
-“stylesheet-parameters” option, which takes a comma-separated list of key-value pairs enclosed in
-parenthesis, can be used to set these variables.</p>
+<p>By default word detection is performed but an option is provided to disable it because some DAISY 3
+reading systems can’t handle the word tags.</p>
+&lt;/div&gt;
+&lt;/div&gt;
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>true</code>
+</div>
+&lt;/li&gt;
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheets</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of CSS style sheets to take into account.
+</div>
+<div class="longdesc">A list of CSS style sheets to take into account.
 
-<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
 
-<pre><code class="language-sass">@if $foo {
-   /* some style that should only be enabled when "foo" is truthy */
-}
-</code></pre>
+<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
+sheets</a>”. Style sheets can also be attached to the
+source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
+sheets</a>”. They can be linked (using an
+<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
+element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
+element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
+attributes</a>). Only author styles that apply to
+“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media are taken into account.</p>
 
-<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+<p>All style sheets are applied at once, but the order in which they are specified has an influence on
+the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>. Author styles take
+precedence over user styles.</p>
 </div>
 </div>
 <div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
 </div>
 <div class="synopsis-option-default">
-<b>Default value</b>: <code>()</code>
+<b>Default value</b>: <code></code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1115,51 +1136,6 @@ appear in the lexicons.</p>
 </li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-option-name">Enable text-to-speech</div>
-<div class="synopsis-option-desc">
-Whether to use a speech synthesizer to produce audio files.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Style sheets</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">A list of CSS style sheets to take into account.
-</div>
-<div class="longdesc">A list of CSS style sheets to take into account.
-
-<p>Must be a space separated list of URIs, absolute or relative to the input.</p>
-
-<p>Style sheets specified through this option are called “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">user style
-sheets</a>”. Style sheets can also be attached to the
-source document. These are referred to as “<a href="https://www.w3.org/TR/CSS2/cascade.html#cascade" class="external-link" target="_blank">author style
-sheets</a>”. They can be linked (using an
-<a href="https://www.w3.org/TR/xml-stylesheet" class="external-link" target="_blank">‘xml-stylesheet’ processing instruction</a> or a <a href="https://www.w3.org/Style/styling-XML#External" class="external-link" target="_blank">‘link’
-element</a>), embedded (using a <a href="https://www.w3.org/Style/styling-XML#Embedded" class="external-link" target="_blank">‘style’
-element</a>) and/or inlined (using ‘<a href="https://www.w3.org/TR/css-style-attr/" class="external-link" target="_blank">style’
-attributes</a>). Only author styles that apply to
-“<a href="https://www.w3.org/TR/CSS2/aural.html" class="external-link" target="_blank">speech</a>” media are taken into account.</p>
-
-<p>All style sheets are applied at once, but the order in which they are specified has an influence on
-the <a href="https://www.w3.org/TR/CSS2/cascade.html#cascading-order" class="external-link" target="_blank">cascading order</a>. Author styles take
-precedence over user styles.</p>
-</div>
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <var>&lt;anyURI&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-option-name">With text</div>
 <div class="synopsis-option-desc">
 Includes DTBook in output, as opposed to audio only.
@@ -1171,38 +1147,6 @@ Includes DTBook in output, as opposed to audio only.
 <b>Default value</b>: <code>true</code>
 </div>
 </li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Publisher</div>
-<div class="synopsis-option-desc">
-The agency responsible for making the Digital Talking Book available. If left blank, it will be retrieved from the DTBook meta-data.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: Any <var>&lt;string&gt;</var>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code></code>
-</div>
-</li>
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Detect words</div>
-<div class="synopsis-option-desc">
-<div class="shortdesc">Whether to detect and mark up words with `&lt;w&gt;` tags.
-</div>
-<div class="longdesc">Whether to detect and mark up words with `<w>` tags.
-
-<p>By default word detection is performed but an option is provided to disable it because some DAISY 3
-reading systems can’t handle the word tags.</p>
-&lt;/div&gt;
-&lt;/div&gt;
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>true</code>
-</div>
-&lt;/li&gt;
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">Enable TTS log</div>
@@ -1225,6 +1169,62 @@ property.</p>
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>p:system-property('d:org.daisy.pipeline.tts.log')</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Style sheet parameters</div>
+<div class="synopsis-option-desc">
+<div class="shortdesc">A list of parameters passed to the style sheets.
+</div>
+<div class="longdesc">A list of parameters passed to the style sheets.
+
+<p>Style sheets, whether they’re user style sheets (specified with the “stylesheet” option) or author
+style sheets (associated with the source), may have parameters (Sass variables). The
+“stylesheet-parameters” option, which takes a comma-separated list of key-value pairs enclosed in
+parenthesis, can be used to set these variables.</p>
+
+<p>For example, if a style sheet uses the Sass variable “foo”:</p>
+
+<pre><code class="language-sass">@if $foo {
+   /* some style that should only be enabled when "foo" is truthy */
+}
+</code></pre>
+
+<p>you can control that variable with the following parameters list: <code>(foo:true)</code>.</p>
+</div>
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <var>&lt;stylesheet-parameters&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>()</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Enable text-to-speech</div>
+<div class="synopsis-option-desc">
+Whether to use a speech synthesizer to produce audio files.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Publisher</div>
+<div class="synopsis-option-desc">
+The agency responsible for making the Digital Talking Book available. If left blank, it will be retrieved from the DTBook meta-data.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: Any <var>&lt;string&gt;</var>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code></code>
 </div>
 </li>
 &lt;/ul&gt;
@@ -1273,47 +1273,47 @@ if (window.addEventListener) {
 Options:</pre>
 <table>
 <tr>
+<td>--source <span style="text-transform: uppercase">source</span>
+</td>
+<td>The 2005-3 DTBook file to be transformed.</td>
+</tr>
+<tr>
 <td>--tts-config <span style="text-transform: uppercase">tts-config</span>
 </td>
 <td>Configuration file for text-to-speech.
 </td>
 </tr>
 <tr>
-<td>--source <span style="text-transform: uppercase">source</span>
-</td>
-<td>The 2005-3 DTBook file to be transformed.</td>
-</tr>
-<tr>
-<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
-<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
-</tr>
-<tr>
-<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
-<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
-</tr>
-<tr>
-<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
-<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+<td>--word-detection [<span style="text-transform: uppercase">word-detection</span>]</td>
+<td>Detect words (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
 <td>--_:stylesheet [<span style="text-transform: uppercase">_:stylesheet</span>]</td>
 <td>Style sheets (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
+<td>--lexicon [<span style="text-transform: uppercase">lexicon</span>]</td>
+<td>Lexicons (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.default-lexicon')</code></span>)</td>
+</tr>
+<tr>
 <td>--with-text [<span style="text-transform: uppercase">with-text</span>]</td>
 <td>With text (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
 </tr>
 <tr>
-<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
-<td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
-</tr>
-<tr>
-<td>--word-detection [<span style="text-transform: uppercase">word-detection</span>]</td>
-<td>Detect words (default: <span class="synopsis-option-default"><code>true</code></span>)</td>
-</tr>
-<tr>
 <td>--include-tts-log [<span style="text-transform: uppercase">include-tts-log</span>]</td>
 <td>Enable TTS log (default: <span class="synopsis-option-default"><code>p:system-property('d:org.daisy.pipeline.tts.log')</code></span>)</td>
+</tr>
+<tr>
+<td>--stylesheet-parameters [<span style="text-transform: uppercase">stylesheet-parameters</span>]</td>
+<td>Style sheet parameters (default: <span class="synopsis-option-default"><code>()</code></span>)</td>
+</tr>
+<tr>
+<td>--audio [<span style="text-transform: uppercase">audio</span>]</td>
+<td>Enable text-to-speech (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
+</tr>
+<tr>
+<td>--publisher [<span style="text-transform: uppercase">publisher</span>]</td>
+<td>Publisher (default: <span class="synopsis-option-default"><code></code></span>)</td>
 </tr>
 <tr>
 <td>-o,--output [OUTPUT]</td>
