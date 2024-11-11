@@ -4,11 +4,11 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 import java.util.Iterator;
 
 import javax.xml.stream.XMLInputFactory;
 
-import org.daisy.pipeline.modules.Component;
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ResourceLoader;
 import org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser;
@@ -22,7 +22,7 @@ import org.junit.Test;
 public class ModuleTest {
 	
 	@Test
-	public void testBuildModule() {
+	public void testBuildModule() throws NoSuchFileException {
 		StaxXmlCatalogParser catalogParser = new StaxXmlCatalogParser();
 		catalogParser.setFactory(XMLInputFactory.newInstance());
 		catalogParser.activate();
@@ -42,12 +42,15 @@ public class ModuleTest {
 				throw new UnsupportedOperationException("not implemented");
 			}
 		};
-		Module module = new Module("name", "version", "title") {};
-		module.parseCatalog(catalog, resourceLoader);
-		Iterator<Component> components = module.getComponents().iterator();
+		Module module = new Module("name", "version", "title", resourceLoader) {
+			@Override
+			public void resolveDependencies() {}
+		};
+		Module.parseCatalog(module, catalog);
+		Iterator<URI> components = module.getComponents().iterator();
 		assertTrue(components.hasNext());
-		Component c = components.next();
-		assertEquals("http://example-module/hello.xml", c.getURI().toString());
+		URI c = components.next();
+		assertEquals("http://example-module/hello.xml", c.toString());
 		assertFalse(components.hasNext());
 	}
 }

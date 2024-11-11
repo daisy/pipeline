@@ -1,9 +1,10 @@
-package org.daisy.pipeline.modules.impl.resolver;
+package org.daisy.pipeline.modules.impl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URI;
+import java.util.NoSuchElementException;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.URIResolver;
@@ -11,8 +12,11 @@ import javax.xml.transform.sax.SAXSource;
 
 import org.daisy.pipeline.modules.Module;
 import org.daisy.pipeline.modules.ModuleRegistry;
+import org.daisy.pipeline.modules.ResolutionException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -97,13 +101,16 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	private Source resolveFromModules(URI href) {
 		Module mod = mRegistry.getModuleByComponent(href);
 		if (mod == null) {
-			mLogger.trace("No module found for uri:" + href);
+			mLogger.trace("No module found for URI: " + href);
 			return null;
 		}
-		URI resource = mod.getComponent(href).getResource();
-		if (resource == null) {
-			mLogger.trace("No resource found in module " + mod.getName() + " for uri :" + href);
-			return null;
+		mLogger.trace(href.toString() + " found in module " + mod.getName());
+		URI resource; {
+			try {
+				resource = mod.getComponent(href).getResource();
+			} catch (NoSuchElementException|ResolutionException e) {
+				throw new IllegalStateException("coding error");
+			}
 		}
 		SAXSource source = new SAXSource(new InputSource(resource.toString()));
 		return source;
@@ -116,26 +123,30 @@ public class ModuleUriResolver implements URIResolver, EntityResolver {
 	 * java.lang.String)
 	 */
 	@Override
-	public InputSource resolveEntity(String publicId, String systemId)
-			throws SAXException, IOException {
-		InputSource src=null;
+	public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
 		Module mod = mRegistry.getModuleByEntity(publicId);
-		//by public id
-		if (mod != null &&mod.getEntity(publicId)!=null && mod.getEntity(publicId).getResource()!=null) {
-			src=new InputSource(mod.getEntity(publicId).getResource().toString());
-
-		}else{
-			//by systemId
-			mLogger.trace("No module found for publicId:" + publicId);
-			URI uriSystem=URI.create(systemId);
-			mod = mRegistry.getModuleByComponent(uriSystem);
-			if (mod != null) {
-				src=new InputSource(mod.getComponent(uriSystem).getResource().toString());
-			}else{
-				mLogger.trace("No module found for uri:" + systemId);
+		// by public id
+		if (mod != null) {
+			mLogger.trace("Entity " + publicId + " found in module " + mod.getName());
+			URI resource; {
+				try {
+					resource = mod.getEntity(publicId).getResource();
+				} catch (NoSuchElementException|ResolutionException e) {
+					throw new IllegalStateException("coding error");
+				}
 			}
+			return new InputSource(resource.toString());
 		}
-		return src;
+		// by systemId
+		mLogger.trace("No module found for publicId:" + publicId);
+		URI uriSystem=URI.create(systemId);
+		mod = mRegistry.getModuleByComponent(uriSystem);
+		if (mod != null) {
+			return new InputSource(mod.getComponent(uriSystem).getResource().toString());
+		} else {
+			mLogger.trace("No module found for publicId: " + systemId);
+			return null;
+		}
 	}
 
 }

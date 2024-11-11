@@ -11,7 +11,7 @@
   </parent>
 
   <artifactId>modules-registry</artifactId>
-  <version>4.1.3-SNAPSHOT</version>
+  <version>5.0.0-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 :: Module Registry</name>
@@ -30,10 +30,10 @@
       <artifactId>slf4j-api</artifactId>
     </dependency>
     <dependency>
-      <!-- for OSGIModuleBuilder -->
+      <!-- needed by DefaultModuleRegistry (VersionRange) regardless of whether we're in a OSGi
+           runtime or not, so scope needs to be 'compile', not 'provided' -->
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
@@ -71,8 +71,8 @@
         <configuration>
           <instructions>
             <_dsannotations>
-              org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-              org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+              org.daisy.pipeline.modules.impl.ModuleUriResolver,
+              org.daisy.pipeline.modules.impl.DefaultModuleRegistry,
               org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
             </_dsannotations>
             <Import-Package>!org.daisy.common.spi,*</Import-Package>
@@ -97,8 +97,8 @@
             </goals>
             <configuration>
               <includes>
-                org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver,
-                org.daisy.pipeline.modules.impl.tracker.DefaultModuleRegistry,
+                org.daisy.pipeline.modules.impl.ModuleUriResolver,
+                org.daisy.pipeline.modules.impl.DefaultModuleRegistry,
                 org.daisy.pipeline.xmlcatalog.impl.StaxXmlCatalogParser
               </includes>
             </configuration>

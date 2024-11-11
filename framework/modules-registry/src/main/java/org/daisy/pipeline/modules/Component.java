@@ -2,48 +2,35 @@ package org.daisy.pipeline.modules;
 
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 
 import org.daisy.common.file.URLs;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Module component now based on expath package components.
  */
-public class Component {
+public class Component implements Dependency {
 
-
-
-	/** The uri. */
+	private final Module module;
 	private final URI uri;
-
-	/** The path. */
-	private final String path;
-	// private Space space;
-	/** The loader. */
-	private final ResourceLoader loader;
-
-	/** The module. */
-	private Module module;
-
-	/** The m logger. */
-	Logger mLogger = LoggerFactory.getLogger(getClass().getName());
+	private final URL resource;
+	private final String version;
 
 	/**
 	 * Instantiates a new component.
-	 *
-	 * @param uri
-	 *            the uri
-	 * @param path
-	 *            the path
-	 * @param loader
-	 *            the loader which actually able to load the resource.
 	 */
-	public Component(URI uri, String path, ResourceLoader loader) {
+	public Component(Module module, URI uri, String path) throws NoSuchFileException {
+		this.module = module;
 		this.uri = uri;
-		this.path = path;
-		this.loader = loader;
+		resource = module.getResource(path);
+		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
+	}
+
+	public Component(Module module, URI uri, URL resource) {
+		this.module = module;
+		this.uri = uri;
+		this.resource = resource;
+		version = module.getVersion().replaceAll("-SNAPSHOT$", "");
 	}
 
 	/**
@@ -55,30 +42,30 @@ public class Component {
 		return uri;
 	}
 
-	/*
-	 * public Space getSpace() { return space; }
-	 */
-
 	/**
 	 * Gets the resource's real uri.
 	 *
 	 * @return the resource
 	 */
 	public URI getResource() {
-		try {
+		return URLs.asURI(resource);
+	}
 
-			mLogger.trace("Getting resource from component " + this + ": " + path);
-			URL url= loader.loadResource(path);
-			if(url!=null) {
-				return URLs.asURI(url);
-			} else {
-				return null;
-			}
+	/**
+	 * Get the version of this component.
+	 *
+	 * Defaults to the version number of the module. Method should be overridden by components that
+	 * have their own versioning.
+	 */
+	public String getVersion() {
+		return version;
+	}
 
-		} catch (Exception e) {
-			mLogger.debug("Resource " + path + " does not exist", e);
-			return null;
-		}
+	/**
+	 * Gets the module owner of this component.
+	 */
+	public Module getModule() {
+		return module;
 	}
 
 	/*
@@ -91,22 +78,28 @@ public class Component {
 		return "[" + uri + "]";
 	}
 
-	/**
-	 * Gets the module owner of this component.
-	 *
-	 * @return the module
-	 */
-	public Module getModule() {
-		return module;
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof Component))
+			return false;
+		Component that = (Component)o;
+		if (!module.equals(that.module))
+			return false;
+		if (!uri.equals(that.uri))
+			return false;
+		return true;
 	}
 
-	/**
-	 * Sets the module.
-	 *
-	 * @param module
-	 *            the new module
-	 */
-	public void setModule(Module module) {
-		this.module = module;
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + module.hashCode();
+		result = prime * result + uri.hashCode();
+		return result;
 	}
 }
