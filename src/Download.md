@@ -100,7 +100,7 @@ downloads for this update.
 
 {% for item in previous %}
 
-### Version {{ item.version }}
+### Version {{ item.version }}  {% if item.app_version != nil %} (App version {{ item.app_version }}) {% endif %}
 
 {{ item.description }}
 
