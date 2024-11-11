@@ -5,8 +5,10 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +33,19 @@ import org.xml.sax.InputSource;
 
 abstract class utils {
 	
+	static ClassLoader getClassLoader(Collection<String> classPath) {
+		try {
+			URL[] classPathURLs = new URL[classPath.size()]; {
+				int i = 0;
+				for (String path : classPath)
+					classPathURLs[i++] = new File(path).toURI().toURL();
+			}
+			return new URLClassLoader(classPathURLs, Thread.currentThread().getContextClassLoader());
+		} catch (MalformedURLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	static abstract class URLs {
 		
 		static URI asURI(File file) {

@@ -32,11 +32,12 @@ import org.codehaus.plexus.util.DirectoryScanner;
 import org.daisy.maven.xproc.api.XProcEngine;
 import org.daisy.maven.xproc.api.XProcExecutionException;
 
+import static org.daisy.pipeline.maven.plugin.utils.getClassLoader;
 import static org.daisy.pipeline.maven.plugin.utils.URLs.asURI;
 import static org.daisy.pipeline.maven.plugin.utils.URLs.relativize;
 import static org.daisy.pipeline.maven.plugin.utils.XML.evaluateXPath;
 import static org.daisy.pipeline.maven.plugin.utils.XML.transform;
-import org.daisy.pipeline.modules.impl.resolver.ModuleUriResolver;
+import org.daisy.pipeline.modules.impl.ModuleUriResolver;
 
 /**
  * @goal htmlize-sources
@@ -78,7 +79,7 @@ public class HtmlizeSourcesMojo extends AbstractMojo {
 	
 	public void execute() throws MojoFailureException {
 		try {
-			final List<String> compileClassPath = mavenProject.getCompileClasspathElements();
+			final ClassLoader compileClassPath = getClassLoader(mavenProject.getCompileClasspathElements());
 			final XProcEngine engine = new CalabashWithPipelineModules(compileClassPath);
 			List<File> sources = new ArrayList<File>();
 			if (includes == null)

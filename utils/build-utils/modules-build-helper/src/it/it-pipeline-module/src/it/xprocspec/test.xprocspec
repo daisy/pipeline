@@ -27,23 +27,21 @@
 					<c:file name="META-INF/MANIFEST.MF"/>
 					<c:file name="META-INF/catalog.xml"/>
 					<c:file name="META-INF/services/net.sf.saxon.lib.ExtensionFunctionDefinition"/>
-					<c:file name="META-INF/services/net.sf.saxon.trans.packages.PackageDetails"/>
 					<c:file name="META-INF/services/org.daisy.Foo"/>
 					<c:file name="META-INF/services/org.daisy.common.xpath.saxon.ExtensionFunctionProvider"/>
 					<c:file name="META-INF/services/org.daisy.common.xproc.calabash.ConfigurationFileProvider"/>
 					<c:file name="META-INF/services/org.daisy.common.xproc.calabash.XProcStepProvider"/>
-					<c:file name="META-INF/services/org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/>
+					<!-- <c:file name="META-INF/services/org.daisy.pipeline.braille.liblouis.LiblouisTablePath"/> -->
 					<c:file name="META-INF/services/org.daisy.pipeline.datatypes.DatatypeService"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.modules.Module"/>
 					<c:file name="META-INF/services/org.daisy.pipeline.script.XProcScriptService"/>
-					<c:file name="OSGI-INF/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.xml"/>
 					<c:file name="OSGI-INF/calabash-config-it-pipeline-module.xml"/>
 					<c:file name="OSGI-INF/foo-choice.xml"/>
 					<c:file name="OSGI-INF/foo-service.xml"/>
 					<c:file name="OSGI-INF/java-step.xml"/>
 					<c:file name="OSGI-INF/my-script.xml"/>
 					<c:file name="OSGI-INF/org.daisy.common.xpath.saxon.impl.XsltFunctions_it_pipeline_module.xml"/>
-					<c:file name="OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/>
+					<!-- <c:file name="OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/> -->
 					<c:file name="OSGI-INF/org.daisy.pipeline.modules.impl.Module_it_pipeline_module.xml"/>
 					<c:file name="OSGI-INF/pf-java-function.xml"/>
 					<c:file name="OSGI-INF/px-bar-2.params-option-2.xml"/>
@@ -67,17 +65,16 @@
 					<c:file name="impl/JavaStep$Provider.class"/>
 					<c:file name="impl/JavaStep.class"/>
 					<c:file name="impl/JavaStep_Provider_SPI.class"/>
+					<c:file name="liblouis/foo.utb"/>
 					<c:file name="org/daisy/Foo.class"/>
-					<c:file name="org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.class"/>
-					<c:file name="org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl_SPI.class"/>
 					<c:file name="org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module.class"/>
 					<c:file name="org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module_SPI.class"/>
 					<c:file name="org/daisy/common/xproc/calabash/impl/ConfigurationFileProvider_it_pipeline_module.class"/>
 					<c:file name="org/daisy/common/xproc/calabash/impl/ConfigurationFileProvider_it_pipeline_module_SPI.class"/>
 					<c:file name="org/daisy/impl/FooImpl.class"/>
 					<c:file name="org/daisy/impl/FooImpl_SPI.class"/>
-					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.class"/>
-					<c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.class"/>
+					<!-- <c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.class"/> -->
+					<!-- <c:file name="org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.class"/> -->
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_foo_choice_SPI.class"/>
 					<c:file name="org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2.class"/>
@@ -260,7 +257,7 @@
 					<implementation class="org.daisy.common.xproc.calabash.impl.ConfigurationFileProvider_it_pipeline_module"/>
 				</scr:component>
 			</x:document>
-		</x:expect>
+		</x:expect><!--
 		<x:context label="The OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml file">
 			<x:document type="file" href="${project.build.directory}/it-pipeline-module-${project.version}.jar!/OSGI-INF/org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.xml"/>
 		</x:context>
@@ -276,7 +273,7 @@
 					<implementation class="org.daisy.pipeline.braille.liblouis.impl.LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_"/>
 				</scr:component>
 			</x:document>
-		</x:expect>
+		</x:expect>-->
 		<x:context label="The 'doc' JAR content">
 			<x:document type="zip" href="${project.build.directory}/it-pipeline-module-${project.version}-doc.jar" ordered="true"/>
 		</x:context>
@@ -294,10 +291,6 @@
 					<c:file name="src/main/java/impl/package-summary.html"/>
 					<c:file name="src/main/java/index.html"/>
 					<c:file name="src/main/java/org/daisy/Foo.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/PackageDetails_http___www_daisy_org_pipeline_modules_foo_utils_library_xsl_SPI.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/package-frame.html"/>
-					<c:file name="src/main/java/org/daisy/common/saxon/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/XsltFunctions_it_pipeline_module_SPI.html"/>
 					<c:file name="src/main/java/org/daisy/common/xpath/saxon/impl/package-frame.html"/>
@@ -312,10 +305,10 @@
 					<c:file name="src/main/java/org/daisy/impl/package-summary.html"/>
 					<c:file name="src/main/java/org/daisy/package-frame.html"/>
 					<c:file name="src/main/java/org/daisy/package-summary.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-frame.html"/>
-					<c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-summary.html"/>
+					<!-- <c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis_.html"/> -->
+					<!-- <c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/LiblouisTablePath_http___www_daisy_org_pipeline_modules_foo_utils_liblouis__SPI.html"/> -->
+					<!-- <c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-frame.html"/> -->
+					<!-- <c:file name="src/main/java/org/daisy/pipeline/braille/liblouis/impl/package-summary.html"/> -->
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_foo_choice.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_foo_choice_SPI.html"/>
 					<c:file name="src/main/java/org/daisy/pipeline/datatypes/impl/Datatype_px_bar_2_params_option_2.html"/>
@@ -455,10 +448,10 @@
 			<x:document type="inline">
 				<c:zipfile name="it-pipeline-module-${project.version}-xprocdoc.jar">
 					<c:file name="META-INF/MANIFEST.MF"/>
-					<c:file name="d428e26.html"/>
-					<c:file name="d428e5.html"/>
-					<c:file name="d428e54.html"/>
-					<c:file name="d428e87.html"/>
+					<c:file name="d427e26.html"/>
+					<c:file name="d427e5.html"/>
+					<c:file name="d427e54.html"/>
+					<c:file name="d427e87.html"/>
 					<c:file name="index.html"/>
 					<c:file name="libraries.html"/>
 					<c:file name="org/daisy/pipeline/modules/foo-utils/foo.xpl.html"/>

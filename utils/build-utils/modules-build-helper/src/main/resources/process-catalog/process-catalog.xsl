@@ -10,6 +10,7 @@
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:GenerateModuleClass="org.daisy.pipeline.maven.plugin.GenerateModuleClassFunctionProvider$GenerateModuleClass"
                 exclude-result-prefixes="#all" version="2.0">
     
     <xsl:param name="generatedSourcesDirectory" required="yes" as="xs:string"/>
@@ -59,16 +60,6 @@
             </xsl:if>
         </xsl:for-each>
         <!--
-            generate bnd file
-        -->
-        <xsl:result-document href="{$generatedResourcesDirectory}/bnd.bnd" method="text"><c:data>
-            <xsl:if test="cat:nextCatalog">
-                <xsl:text>Require-Bundle: </xsl:text>
-                <xsl:value-of select="string-join(//cat:nextCatalog/translate(@catalog,':','.'),',')"/>
-                <xsl:text>&#xa;</xsl:text>
-            </xsl:if>
-        </c:data></xsl:result-document>
-        <!--
             process XProc files
         -->
         <xsl:apply-templates mode="process-xproc"/>
@@ -89,56 +80,23 @@
         <!--
             generate Java files
         -->
-        <xsl:if test="$catalog/self::*">
-            <xsl:call-template name="module-class"/>
+        <xsl:if test="./child::*">
+            <xsl:call-template name="module-class">
+                <xsl:with-param name="catalog-xml" select="."/>
+            </xsl:call-template>
         </xsl:if>
         <xsl:apply-templates mode="java"/>
     </xsl:template>
     
     <xsl:template name="module-class">
+        <xsl:param name="catalog-xml" as="element(cat:catalog)" required="yes"/>
         <xsl:variable name="className" select="concat('Module_',replace($moduleName,'-','_'))"/>
-        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data>package org.daisy.pipeline.modules.impl;
-
-import org.daisy.pipeline.modules.Module;
-import org.daisy.pipeline.xmlcatalog.XmlCatalogParser;
-
-import org.osgi.service.component.annotations.Activate;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
-
-@Component(
-    name = "org.daisy.pipeline.modules.impl.<xsl:value-of select="$className"/>",
-    service = { Module.class }
-)
-public class <xsl:value-of select="$className"/> extends Module {
-
-    private XmlCatalogParser catalogParser;
-
-    public <xsl:value-of select="$className"/>() {
-        super("<xsl:value-of select="$moduleName"/>",
-              "<xsl:value-of select="$moduleVersion"/>",
-              "<xsl:value-of select="replace(replace($moduleTitle,'&quot;','\\&quot;'),'\\','\\\\')"/>");
-    }
-
-    @Activate
-    public void activate() {
-        super.init(catalogParser);
-    }
-
-    @Reference(
-        name = "XmlCatalogParser",
-        unbind = "-",
-        service = XmlCatalogParser.class,
-        cardinality = ReferenceCardinality.MANDATORY,
-        policy = ReferencePolicy.STATIC
-    )
-    public void setParser(XmlCatalogParser parser) {
-        catalogParser = parser;
-    }
-}
-</c:data></xsl:result-document>
+        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/pipeline/modules/impl/{$className}.java" method="text" xml:space="preserve"><c:data><xsl:value-of select="GenerateModuleClass:apply(GenerateModuleClass:new(),
+                                                                         $className,
+                                                                         $moduleName,
+                                                                         $moduleVersion,
+                                                                         $moduleTitle,
+                                                                         $catalog-xml)"/></c:data></xsl:result-document>
     </xsl:template>
     
     <xsl:template match="@*|node()">
@@ -147,12 +105,11 @@ public class <xsl:value-of select="$className"/> extends Module {
         </xsl:copy>
     </xsl:template>
     
-    <xsl:template match="cat:uri[@px:content-type=('script',
-                                                   'data-type',
-                                                   'xslt-package',
-                                                   'user-agent-stylesheet') or @px:export-functions]" priority="1">
+    <xsl:template match="cat:uri">
         <xsl:if test="@name">
-            <xsl:next-match/>
+            <xsl:copy>
+                <xsl:apply-templates select="@*|node()" mode="#current"/>
+            </xsl:copy>
         </xsl:if>
     </xsl:template>
     
@@ -203,7 +160,7 @@ public class <xsl:value-of select="$className"/> extends Module {
                                                    'liblouis-tables',
                                                    'libhyphen-tables')]|
                          cat:uri/@px:content-type[.=('script',
-                                                     'xsl-package',
+                                                     'xslt-package',
                                                      'data-type',
                                                      'params',
                                                      'user-agent-stylesheet',
@@ -284,65 +241,6 @@ public class <xsl:value-of select="$className"/> extends XProcScriptService {
 	@Activate
 	public void activate(Map&lt;?,?&gt; properties) {
 		super.activate(properties, <xsl:value-of select="$className"/>.class);
-	}
-}</c:data></xsl:result-document>
-    </xsl:template>
-    
-    <xsl:template match="cat:uri[@px:content-type='xslt-package']" mode="java">
-        <xsl:variable name="doc" select="document(@uri,.)"/>
-        <xsl:if test="not($doc/xsl:package)">
-            <xsl:message terminate="yes">not a xsl:package: <xsl:sequence select="@uri"/></xsl:message>
-        </xsl:if>
-        <xsl:if test="not($doc/*/@name)">
-            <xsl:message terminate="yes">missing @name: <xsl:sequence select="@uri"/></xsl:message>
-        </xsl:if>
-        <xsl:call-template name="package-details-class">
-            <xsl:with-param name="name" select="$doc/*/@name"/>
-            <xsl:with-param name="version" select="($doc/*/@package-version,$moduleVersion)[1]"/>
-            <!--
-                assuming catalog.xml is placed in META-INF
-            -->
-            <xsl:with-param name="path" select="pf:normalize-path(concat('/META-INF/',@uri))"/>
-        </xsl:call-template>
-        <xsl:next-match/>
-    </xsl:template>
-    
-    <xsl:template name="package-details-class">
-        <xsl:param name="name" as="xs:string" required="yes"/>
-        <xsl:param name="version" as="xs:string" required="yes"/>
-        <xsl:param name="path" as="xs:string" required="yes"/>
-        <xsl:variable name="className" select="concat('PackageDetails_',replace($name,'[^a-zA-Z]','_'))"/>
-        <xsl:result-document href="{$generatedSourcesDirectory}/org/daisy/common/saxon/impl/{$className}.java"
-                             method="text" xml:space="preserve"><c:data>package org.daisy.common.saxon.impl;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
-import javax.xml.transform.stream.StreamSource;
-
-import net.sf.saxon.trans.packages.PackageDetails;
-import net.sf.saxon.trans.packages.VersionedPackageName;
-import net.sf.saxon.trans.XPathException;
-
-import org.daisy.common.file.URLs;
-
-import org.osgi.service.component.annotations.Component;
-
-@Component(
-	name = "<xsl:value-of select="$className"/>",
-	service = { PackageDetails.class }
-)
-public class <xsl:value-of select="$className"/> extends PackageDetails {
-	public <xsl:value-of select="$className"/>() {
-		try {
-			nameAndVersion = new VersionedPackageName("<xsl:value-of select="$name"/>", "<xsl:value-of select="$version"/>");
-			URL url = URLs.getResourceFromJAR("<xsl:value-of select="$path"/>",
-			                                  <xsl:value-of select="$className"/>.class);
-			sourceLocation = new StreamSource(url.openStream(), url.toURI().toASCIIString());
-		} catch (XPathException|IOException|URISyntaxException e) {
-			throw new IllegalStateException(
-				"Failed to create PackageDetails object for package '<xsl:value-of select="$name"/>'", e);
-		}
 	}
 }</c:data></xsl:result-document>
     </xsl:template>
