@@ -12,7 +12,7 @@
   
   <groupId>org.daisy.maven</groupId>
   <artifactId>xproc-maven-plugin</artifactId>
-  <version>1.0.3</version>
+  <version>1.0.4-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>xproc-maven-plugin</name>
   
@@ -125,6 +125,7 @@
             -Dorg.slf4j.simpleLogger.log.com.xmlcalabash=debug
             -Dorg.slf4j.simpleLogger.log.org.daisy.xprocspec=debug
           </mavenOpts>
+          <!-- <debug>true</debug> -->
           <goals>
             <goal>surefire-report:report</goal>
           </goals>
@@ -146,8 +147,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <scm>
-    <tag>v1.0.3</tag>
-  </scm>
 </project>
