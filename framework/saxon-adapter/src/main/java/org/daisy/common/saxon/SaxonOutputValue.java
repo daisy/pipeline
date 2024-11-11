@@ -142,6 +142,60 @@ public class SaxonOutputValue extends XMLOutputValue<Void> {
 				elementDepth++;
 			}
 			@Override
+			public void writeAttribute(String localName, String value) throws XMLStreamException {
+				if (elementDepth == 0) {
+					try {
+						super.writeStartElement("_");
+						super.writeAttribute(localName, value);
+						super.writeEndElement();
+						receiver.close();
+						XdmNode doc = destination.getXdmNode();
+						itemConsumer.accept(((XdmNode)doc.axisIterator(Axis.CHILD).next()).axisIterator(Axis.ATTRIBUTE).next());
+					} catch (XPathException e) {
+						throw new XMLStreamException(e);
+					}
+					seenStartDocument = false;
+					writer = null;
+				} else
+					super.writeAttribute(localName, value);
+			}
+			@Override
+			public void writeAttribute(String namespaceURI, String localName, String value) throws XMLStreamException {
+				if (elementDepth == 0) {
+					try {
+						super.writeStartElement("_");
+						super.writeAttribute(namespaceURI, localName, value);
+						super.writeEndElement();
+						receiver.close();
+						XdmNode doc = destination.getXdmNode();
+						itemConsumer.accept(((XdmNode)doc.axisIterator(Axis.CHILD).next()).axisIterator(Axis.ATTRIBUTE).next());
+					} catch (XPathException e) {
+						throw new XMLStreamException(e);
+					}
+					seenStartDocument = false;
+					writer = null;
+				} else
+					super.writeAttribute(namespaceURI, localName, value);
+			}
+			@Override
+			public void writeAttribute(String prefix, String namespaceURI, String localName, String value) throws XMLStreamException {
+				if (elementDepth == 0) {
+					try {
+						super.writeStartElement("_");
+						super.writeAttribute(prefix, namespaceURI, localName, value);
+						super.writeEndElement();
+						receiver.close();
+						XdmNode doc = destination.getXdmNode();
+						itemConsumer.accept(((XdmNode)doc.axisIterator(Axis.CHILD).next()).axisIterator(Axis.ATTRIBUTE).next());
+					} catch (XPathException e) {
+						throw new XMLStreamException(e);
+					}
+					seenStartDocument = false;
+					writer = null;
+				} else
+					super.writeAttribute(prefix, namespaceURI, localName, value);
+			}
+			@Override
 			public void writeEndElement() throws XMLStreamException {
 				if (elementDepth == 0)
 					throw new XMLStreamException();

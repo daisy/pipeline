@@ -2,63 +2,34 @@ package org.daisy.pipeline.modules;
 
 import java.net.URI;
 import java.net.URL;
+import java.nio.file.NoSuchFileException;
 
 import org.daisy.common.file.URLs;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
-// TODO: Auto-generated Javadoc
 /**
  * Entity represents a public id and its path inside the module. Only handles
  * publicId as the privates one will be loaded as components.
  */
 public class Entity {
 
-	/** The Public id. */
-	private final String mPublicId;
+	private final Module module;
+	private final String publicId;
+	private final URL resource;
 
-	/** The Path. */
-	private final String mPath;
-
-		/** The loader. */
-	private final ResourceLoader mLoader;
-
-	/** The module. */
-	private Module mModule;
-
-	private static Logger mLogger = LoggerFactory.getLogger(Entity.class);
 	/**
 	 * Instantiates a new entity.
-	 *
-	 * @param publicId the public id
-	 * @param path the path
-	 * @param loader the loader
 	 */
-	public Entity(String publicId, String path, ResourceLoader loader) {
-		super();
-		mPublicId = publicId;
-		mPath = path;
-		mLoader = loader;
+	public Entity(Module module, String publicId, String path) throws NoSuchFileException {
+		this.module = module;
+		this.publicId = publicId;
+		resource = module.getResource(path);
 	}
 
 	/**
-	 * Gets the module.
-	 *
-	 * @return the module
+	 * Gets the module owner of this entity.
 	 */
 	public Module getModule() {
-		return mModule;
-	}
-
-	/**
-	 * Sets the module.
-	 *
-	 * @param module the new module
-	 */
-	public void setModule(Module module) {
-		mModule = module;
+		return module;
 	}
 
 	/**
@@ -67,7 +38,7 @@ public class Entity {
 	 * @return the public id
 	 */
 	public String getPublicId() {
-		return mPublicId;
+		return publicId;
 	}
 
 	/**
@@ -76,30 +47,6 @@ public class Entity {
 	 * @return the path
 	 */
 	public URI getResource() {
-try {
-
-			mLogger.trace("Getting resource from entity " + this + ": " + mPath);
-			URL url= mLoader.loadResource(mPath);
-			if(url!=null) {
-				return URLs.asURI(url);
-			} else {
-				return null;
-			}
-
-		} catch (Exception e) {
-			mLogger.debug("Resource " + mPath + " does not exist", e);
-			return null;
-		}
+		return URLs.asURI(resource);
 	}
-
-	/**
-	 * Gets the loader.
-	 *
-	 * @return the loader
-	 */
-	public ResourceLoader getLoader() {
-		return mLoader;
-	}
-
-
 }

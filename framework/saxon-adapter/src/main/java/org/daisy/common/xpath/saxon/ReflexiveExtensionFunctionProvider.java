@@ -55,6 +55,33 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	}
 
 	protected ReflexiveExtensionFunctionProvider(Class<?> definition) {
+		this(new Class<?>[]{definition});
+	}
+
+	/**
+	 * @param object When non-null, use this instance of the {@code definition} class to invoke all instance methods
+	 *               on. In other words, it is used as the implicit first argument of all functions that correspond to
+	 *               instance methods.
+	 */
+	protected <T> ReflexiveExtensionFunctionProvider(Class<T> definition, T object) {
+		this.definitions = new ArrayList<>();
+		addExtensionFunctionDefinitionsFromClass(definition, object);
+	}
+
+	protected ReflexiveExtensionFunctionProvider(Class<?>... definitions) {
+		this.definitions = new ArrayList<>();
+		for (Class<?> definition : definitions)
+			addExtensionFunctionDefinitionsFromClass(definition, null);
+	}
+
+	/**
+	 * This method can be used to add function definitions if for some reason it can not be done at construction time.
+	 */
+	protected <T> void addExtensionFunctionDefinitionsFromClass(Class<T> definition, T object) {
+		definitions.addAll(extensionFunctionDefinitionsFromClass(definition, object));
+	}
+
+	private Collection<ExtensionFunctionDefinition> extensionFunctionDefinitionsFromClass(Class<?> definition, Object object) {
 		Map<String,List<Executable>> methods = new HashMap<>();
 		for (Constructor<?> constructor : definition.getConstructors()) {
 			if (Modifier.isPublic(constructor.getModifiers())) {
@@ -85,11 +112,12 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 				methods.put(method.getName(), list);
 			}
 		}
-		definitions = new ArrayList<>();
+		Collection<ExtensionFunctionDefinition> definitions = new ArrayList<>();
 		for (List<Executable> m : methods.values()) {
 			Collections.sort(m, (a, b) -> new Integer(a.getParameterCount()).compareTo(b.getParameterCount()));
-			definitions.add(extensionFunctionDefinitionFromMethods(m));
+			definitions.add(extensionFunctionDefinitionFromMethods(m, object));
 		}
+		return definitions;
 	}
 
 	/**
@@ -97,11 +125,11 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 	 *                with the same name. Assumed to be sorted by number of parameters (from least
 	 *                to most number of parameters).
 	 */
-	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethods(Collection<Executable> methods)
+	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethods(Collection<Executable> methods, Object object)
 			throws IllegalArgumentException {
 		ExtensionFunctionDefinition ret = null;
 		for (Executable m : methods) {
-			ExtensionFunctionDefinition def = extensionFunctionDefinitionFromMethod(m);
+			ExtensionFunctionDefinition def = extensionFunctionDefinitionFromMethod(m, object);
 			if (ret == null)
 				ret = def;
 			else {
@@ -176,7 +204,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 		return ret;
 	}
 
-	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethod(Executable method)
+	private ExtensionFunctionDefinition extensionFunctionDefinitionFromMethod(Executable method, Object object)
 			throws IllegalArgumentException {
 		assert method instanceof Constructor || method instanceof Method;
 		if (method.isVarArgs())
@@ -215,13 +243,13 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 			}
 			SequenceType[] argumentTypes = new SequenceType[ // arguments of XPath function
 				javaArgumentTypes.length
-				+ (isStatic ? 0 : 1)
+				+ ((isStatic || object != null) ? 0 : 1)
 				- (requiresXMLStreamWriter ? 1 : 0)
 				- (requiresXPath ? 1 : 0)
 				- (requiresDocumentBuilder ? 1 : 0)
 			];
 			int i = 0;
-			if (!isStatic)
+			if (!isStatic && object == null)
 				argumentTypes[i++] = SequenceType.SINGLE_ITEM; // must be special wrapper item
 			for (Type t : javaArgumentTypes)
 				if (!t.equals(XMLStreamWriter.class) &&
@@ -269,12 +297,16 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 								int i = 0;
 								Object instance = null;
 								if (!isStatic) {
-									Item item = SaxonHelper.getSingleItem(args[i++]);
-									try {
-										instance = SaxonHelper.objectFromItem(item, declaringClass);
-									} catch (IllegalArgumentException e) {
-										throw new IllegalArgumentException(
-											"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item, e);
+									if (object != null)
+										instance = object;
+									else {
+										Item item = SaxonHelper.getSingleItem(args[i++]);
+										try {
+											instance = SaxonHelper.objectFromItem(item, declaringClass);
+										} catch (IllegalArgumentException e) {
+											throw new IllegalArgumentException(
+												"Expected ObjectValue<" + declaringClass.getSimpleName() + ">" + ", but got: " + item, e);
+										}
 									}
 								}
 								List<NodeInfo> nodeListFromXMLStreamWriter = null;
