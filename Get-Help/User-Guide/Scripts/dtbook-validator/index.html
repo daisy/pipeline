@@ -983,18 +983,6 @@ The input DTBook document.
   <ul class="synopsis-outputs">
 <li class="synopsis-output details-on">
 <div class="toggle-details"></div>
-<div class="synopsis-output-name">Raw validation report</div>
-<div class="synopsis-output-desc">
-<div class="shortdesc">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
-</div>
-<div class="longdesc">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
-
-<p><a href="/pipeline/ValidationReportXML">More details on the file format</a>.</p>
-</div>
-</div>
-</li>
-<li class="synopsis-output details-on">
-<div class="toggle-details"></div>
 <div class="synopsis-output-name">Validation report in XML and HTML</div>
 <div class="synopsis-output-desc">
 <div class="shortdesc">Validation report in two formats: the raw XML-formatted report, which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom), and the HTML-formatted version.
@@ -1011,24 +999,23 @@ The input DTBook document.
 </ul>
 </div>
 </li>
+<li class="synopsis-output details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-output-name">Raw validation report</div>
+<div class="synopsis-output-desc">
+<div class="shortdesc">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
+</div>
+<div class="longdesc">Raw XML-formatted report which is a concatenation of the reports from all types of validation used (RelaxNG, Schematron and custom).
+
+<p><a href="/pipeline/ValidationReportXML">More details on the file format</a>.</p>
+</div>
+</div>
+</li>
 </ul>
 
   <h3 id="options">Options</h3>
 
   <ul class="synopsis-options">
-<li class="synopsis-option details-on">
-<div class="toggle-details"></div>
-<div class="synopsis-option-name">Validate against NIMAS 1.1</div>
-<div class="synopsis-option-desc">
-Validate using NIMAS 1.1 rules for DTBook.
-</div>
-<div class="synopsis-option-data-type">
-<b>Possible values</b>: <code>true</code> or <code>false</code>
-</div>
-<div class="synopsis-option-default">
-<b>Default value</b>: <code>false</code>
-</div>
-</li>
 <li class="synopsis-option details-on">
 <div class="toggle-details"></div>
 <div class="synopsis-option-name">MathML version</div>
@@ -1043,6 +1030,19 @@ Version of MathML in the DTBook file(s).
 </div>
 <div class="synopsis-option-default">
 <b>Default value</b>: <code>3.0</code>
+</div>
+</li>
+<li class="synopsis-option details-on">
+<div class="toggle-details"></div>
+<div class="synopsis-option-name">Validate against NIMAS 1.1</div>
+<div class="synopsis-option-desc">
+Validate using NIMAS 1.1 rules for DTBook.
+</div>
+<div class="synopsis-option-data-type">
+<b>Possible values</b>: <code>true</code> or <code>false</code>
+</div>
+<div class="synopsis-option-default">
+<b>Default value</b>: <code>false</code>
 </div>
 </li>
 <li class="synopsis-option details-on">
@@ -1107,12 +1107,12 @@ Options:</pre>
 <td>The input DTBook document.</td>
 </tr>
 <tr>
-<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
-<td>Validate against NIMAS 1.1 (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
-</tr>
-<tr>
 <td>--mathml-version [<span style="text-transform: uppercase">mathml-version</span>]</td>
 <td>MathML version (default: <span class="synopsis-option-default"><code>3.0</code></span>)</td>
+</tr>
+<tr>
+<td>--nimas [<span style="text-transform: uppercase">nimas</span>]</td>
+<td>Validate against NIMAS 1.1 (default: <span class="synopsis-option-default"><code>false</code></span>)</td>
 </tr>
 <tr>
 <td>--check-images [<span style="text-transform: uppercase">check-images</span>]</td>
