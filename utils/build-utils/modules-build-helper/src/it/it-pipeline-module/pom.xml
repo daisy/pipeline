@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.20</version>
+    <version>1.14.26</version>
     <relativePath/>
   </parent>
   <groupId>org.daisy.pipeline.build.modules-build-helper</groupId>
@@ -29,17 +29,16 @@
         <scope>import</scope>
       </dependency>
       <dependency>
+        <groupId>org.daisy.pipeline</groupId>
+        <artifactId>logging-activator</artifactId>
+        <version>2.1.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
         <version>${modules.version}</version>
         <type>pom</type>
         <scope>import</scope>
-      </dependency>
-      <!-- FIXME: drop when modules updated to 1.14.26 -->
-      <dependency>
-        <groupId>net.java.dev.jna</groupId>
-        <artifactId>jna</artifactId>
-        <version>5.14.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -59,15 +58,21 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>framework-core</artifactId>
-    </dependency>
+    </dependency><!--
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>liblouis-utils</artifactId>
     </dependency>
     <dependency>
       <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <classifier>mac</classifier>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
       <artifactId>libhyphen-utils</artifactId>
     </dependency>
+    -->
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>ds-to-spi-runtime</artifactId>
@@ -79,11 +84,6 @@
       <artifactId>org.osgi.compendium</artifactId>
       <version>4.3.1</version>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.daisy.pipeline</groupId>
-      <artifactId>logging-appender</artifactId>
-      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -276,7 +276,8 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <systemPropertyVariables>
-            <org.daisy.pipeline.junit.runners>PaxExam,OSGiLessRunner</org.daisy.pipeline.junit.runners>
+            <!-- PaxExam disabled because of error "Importing java.* packages not allowed: java.io" -->
+            <org.daisy.pipeline.junit.runners>OSGiLessRunner</org.daisy.pipeline.junit.runners>
           </systemPropertyVariables>
         </configuration>
       </plugin>

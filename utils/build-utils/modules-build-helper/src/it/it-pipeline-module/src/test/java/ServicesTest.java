@@ -7,16 +7,10 @@ import org.daisy.pipeline.datatypes.DatatypeService;
 import org.daisy.pipeline.script.XProcScriptService;
 
 import org.daisy.pipeline.junit.AbstractXSpecAndXProcSpecTest;
-import static org.daisy.pipeline.pax.exam.Options.mavenBundle;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
-import org.ops4j.pax.exam.Configuration;
-import static org.ops4j.pax.exam.CoreOptions.composite;
-import static org.ops4j.pax.exam.CoreOptions.options;
-import org.ops4j.pax.exam.Option;
 
 public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 	
@@ -39,8 +33,11 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 		assertTrue(ids.remove("foo:choice"));
 		assertTrue(ids.remove("px:bar-2.params-option-2"));
 		assertTrue(ids.remove("px:script-option-1"));
-		assertTrue(ids.remove("transform-query")); // because o.d.p.modules.braille:common-utils on class path
-		assertTrue(ids.isEmpty());
+		// assertTrue(ids.remove("transform-query"));       // because braille-common on class path
+		// assertTrue(ids.remove("stylesheet-parameters")); // because css-utils on class path
+		// assertTrue(ids.remove("preview-table"));         // because pef-utils on class path
+		//assertTrue(ids.remove("liblouis-table-query"));  // because liblouis-utils on class path
+		assertTrue("ids not empty: " + ids, ids.isEmpty());
 	}
 	
 	@Inject
@@ -60,15 +57,7 @@ public class ServicesTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[]{
 			"org.daisy.pipeline:framework-core:?",
 			"org.daisy.pipeline:calabash-adapter:?",
-			"org.daisy.pipeline.modules.braille:liblouis-utils:?"
+			// "org.daisy.pipeline.modules.braille:liblouis-utils:?"
 		};
-	}
-
-	@Override @Configuration
-	public Option[] config() {
-		return options(
-			// FIXME: BrailleUtils (dependency of liblouis-utils) needs older version of jing
-			mavenBundle("org.daisy.libs:jing:20120724.0.0"),
-			composite(super.config()));
 	}
 }
