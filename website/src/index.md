@@ -4,55 +4,61 @@ title: Home
 ---
 # DAISY Pipeline 2
 
-The DAISY Pipeline 2 is an open-source, cross-platform framework for
-the automated processing of digital content in and between various
-file formats. It intends to facilitate the production and maintenance
-of accessible content for people with print disabilities.
+The DAISY Pipeline 2 is an open-source, cross-platform framework and
+user interface for the automated processing of digital content in and
+between various file formats. It intends to facilitate the production
+and maintenance of accessible content for people with print
+disabilities.
 
 ## Accessibility
 
-The Pipeline was developed by and for the
-[DAISY community](http://www.daisy.org/), a group of organizations
-committed to making content accessible. It goes without saying that
-accessiblity is the main interest of the tool. There are Pipeline
-transformation for migrating from one accessible format to another,
-enriching an input format with certain accessible features, and
-producing formats targeting a specific disability.
+The Pipeline was developed by and for the [DAISY
+community](http://www.daisy.org/), a group of organizations committed
+to making content accessible. It goes without saying that accessiblity
+is the main interest of the tool. There are Pipeline transformation
+for migrating from one accessible format to another, enriching an
+input format with certain accessible features, and producing formats
+targeting a specific disability.
 
 ## Standards
 
-Accessibility goes hand in hand with standards. The file formats that
-the Pipeline primarily focuses on are [EPUB 3](http://idpf.org/epub/301),
-[DAISY](http://www.daisy.org/specifications) and
-[PEF](http://pef-format.org/?page_id=15).
+Accessibility goes hand in hand with standards. Notable file formats
+that DAISY Pipeline evolves around are
+[EPUB](https://www.w3.org/TR/epub-33/),
+[DAISY](https://daisy.org/activities/standards/),
+[PEF](https://braillespecs.github.io/pef/pef-specification.html) and
+[eBraille](https://daisy.github.io/ebraille/).
 
 Standards are also important under the hood. The system is based on
 standard XML processing technologies, notably W3C recommendations like
-XProc and XSLT 2.0, but also XPath 2.0, OASIS XML Catalogs, etc. These
+XProc and XSLT 3.0, but also XPath 3.1, OASIS XML Catalogs, etc. These
 technologies are platform neutral, supported by active communities,
 and easy to maintain.
 
 ## Cross-platform
 
-The application can be run on most common operating systems. It must
-be run in a Java runtime environment, but its platform neutral RESTful
-API (web service) allows it to be called from any programming language
-and makes it interoperable with heterogenous production workflows.
+The application can be run in some form on all common operating
+systems. A desktop application is provided for Windows and macOS. In
+addition, for Windows users, there is the [Save As DAISY addin for MS
+Word](https://daisy.org/activities/software/save-as-daisy-ms-word-add-in/),
+which is becoming a DAISY Pipeline user interface specifically for
+processing Word documents.
 
-In addition to the programming interface there is also a command-line
-interface and there are graphical user interfaces.
+DAISY Pipeline also has programming interfaces. When run as a daemon
+(web server), there are no restrictions. The server can be run on any
+OS, and its platform neutral RESTful API allows it to be called from
+any programming language and makes it interoperable with heterogenous
+production workflows. A command-line interface is available too. When
+used as a Java library, there are no OS restictions either.
 
 ## Modular
 
 The system was designed with a modular architecture. Modularity is the
-key to a better scalability and extensibility. Processing
-functionality is provided by cohesive and reusable software
-components, called "modules". The runtime framework is backed by a
-service-oriented and dynamic module system (OSGi).
+key to a better scalability and extensibility.
 
 ## Collaborative
 
-The project is led and maintained by the DAISY Consortium but involves
+The project is led and maintained by the DAISY Consortium and involves
 several member organizations. This reduces the duplication of effort
 and ensures maximum sharing of best practices among the user
 community.
@@ -64,10 +70,6 @@ under a business-friendly licence
 ([LGPL](https://www.gnu.org/licenses/lgpl.html)). This in order to
 stimulate collaboration between organizations and to maximize reuse
 and integration in other contexts, including commercial software.
-
-<!--
-Free software (free as in freedom)?
--->
 
 Find out how you can [join the community](Contribute).
 
@@ -86,11 +88,12 @@ Pipeline 2 and find out [how it works](Get-Help).
 
 ## Background
 
-The DAISY Pipeline is a collaborative project maintained by the
-[DAISY Consortium](http://www.daisy.org/), with numerous organizations
+The DAISY Pipeline is a collaborative project maintained by the [DAISY
+Consortium](http://www.daisy.org/), with numerous organizations
 participating and contributing to the development. The DAISY Pipeline
-2 project is the follow-up of the
-[DAISY Pipeline 1](http://www.daisy.org/pipeline) project.
+2 project is the follow-up of the original [DAISY
+Pipeline](https://daisy.org/info-help/document-archive/archived-projects/pipeline-1/)
+(now referred to as "Pipeline 1") project.
 
 The initial DAISY Pipeline project was started in 2006. Since then,
 new standards and technologies have emerged and have been embraced in
@@ -115,9 +118,11 @@ those standards), version 2 of the project aims to
 - increase interoperability with the heterogeneous production workflows
 - increase the likelihood of re-use in both open source and commercial applications.
 
-
-<!-- [Learn more](...) -->
-
+Because a lot of organisations still rely on some Pipeline 1
+converters in their production today, we are currently working on
+making these legacy converters available through the DAISY Pipeline 2
+user and programming interfaces, in order to make the transition to
+Pipeline 2 smoother and to retire the Pipeline 1 user interface.
 
 <!-- The project page on http://www.daisy.org/pipeline2 contains a shorter version of this page plus some administrative stuff:
 

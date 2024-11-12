@@ -3,6 +3,8 @@ layout: default
 ---
 # Download
 
+<script src="{{site.baseurl}}/js/post-download-donate-message.js"></script>
+
 For installation instructions see
 [Installation]({{site.baseurl}}/Get-Help/User-Guide/Installation/).
 

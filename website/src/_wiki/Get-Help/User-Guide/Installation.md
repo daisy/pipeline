@@ -13,22 +13,12 @@ These are the installation instructions for each package. Before
 starting with the installation make sure the
 [system requirements](#system-requirements) are fulfilled.
 
-### Windows
+### Windows and macOS
 
-For Windows users there is the Windows installer. It installs the
-desktop application. Launch the installer and follow the instructions
-on the screen. The desktop application can also be used to run a
-server.
-
-### Mac OS
-
-For Mac OS users there is the disk image. It contains the desktop
-application. To install, open the image and drag the application file
-to the "Applications" folder, or any other destination you want.
-
-<img src="Get-Help/User-Guide/Installation/disk-image.png" alt="Contents of the disc image" width="600px"/>
-
-The desktop application can also be used to run a server.
+For Windows and macOS users we provide easy to use installers for
+installing the desktop application. Launch the installer and follow
+the instructions on the screen. The desktop application can also be
+used to run a server.
 
 ### Debian
 
@@ -178,5 +168,5 @@ To learn more about Docker see [https://docs.docker.com](https://docs.docker.com
 The standalone server requires a Java runtime environment. The minimum
 required version of Java is 11. We recommend installing Java from
 https://adoptium.net/. Users of the desktop application (Windows and
-MacOS) do not have to worry about Java because it is included in the
+macOS) do not have to worry about Java because it is included in the
 application.

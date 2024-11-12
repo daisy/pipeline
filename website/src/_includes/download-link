@@ -1,4 +1,4 @@
-<a href="{{include.file.url}}">
+<a href="{{include.file.url}}" class="download">
 For
 {% case include.file.platform %}
 {% when 'windows' %}    Windows
