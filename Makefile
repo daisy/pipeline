@@ -1,8 +1,16 @@
 MVN ?= mvn
 JEKYLL_SRC_DIR := src
 SHELL := bash
+# to use ruby 2.7 on macOS:
+# - brew tap homebrew/core --force
+# - brew edit ruby@2
+# - comment out the line starting with "disable!"
+# - HOMEBREW_NO_INSTALL_FROM_API=1 brew install ruby@2
+# - /opt/homebrew/opt/ruby@2.7/bin/bundle config build.nokogiri --use-system-libraries
+# - run this Makefile with `BUNDLE=/opt/homebrew/opt/ruby@2.7/bin/bundle make'
+BUNDLE ?= bundle
 # RUBYOPT='-W:no-deprecated' does not work for some reason (https://stackoverflow.com/questions/60350374/cannot-suppress-ruby-2-7-0-warnings)
-RUBY := RUBYOPT=-W0 bundle exec
+RUBY := RUBYOPT=-W0 $(BUNDLE) exec
 JEKYLL := $(RUBY) jekyll
 JEKYLL_SRC_FILES_CONTENT := $(shell find $(JEKYLL_SRC_DIR)/{_wiki,_wiki_ui,_wiki_webui} -type f -not -name '_*' -not -name '*.png' -not -name '*.jpg' )
 JEKYLL_SRC_FILES_MUSTACHE := $(shell find $(JEKYLL_SRC_DIR)/ -type f -name '_Sidebar.md')
@@ -30,10 +38,10 @@ baseurl := $(call yaml_get,$(CONFIG_FILE),baseurl)
 .PHONY : all
 all : $(JEKYLL_DIR)/_site
 
-ifneq (,$(findstring bundle exec,$(RUBY)))
+ifneq (,$(findstring $(BUNDLE) exec,$(RUBY)))
 .SECONDARY : gems
 gems : Gemfile.lock
-	bundle install --path gems
+	$(BUNDLE) install --path gems
 else
 .PHONY : gems
 gems :
