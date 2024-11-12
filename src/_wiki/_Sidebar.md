@@ -54,7 +54,6 @@
   * [[Contact|mailto:daisy-pipeline@mail.daisy.org]]
 * [[Contribute​|Contribute]]
   * [[Source Code|https://github.com/daisy/pipeline]]
-  * [[Developers Mailing List|https://groups.google.com/forum/#!forum/daisy-pipeline-dev]]
   * [[Developer Guide|Developer-Guide]]
     * [[Source Code|Sources]]
     * [[Build System|Building]]
