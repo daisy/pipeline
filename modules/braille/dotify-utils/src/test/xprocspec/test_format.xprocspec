@@ -16374,7 +16374,7 @@
             <dp2:css-text-transform-definitions>
               @text-transform number {
                 number-translator: true;
-                system: braille-translator
+                system: braille-translator;
               }
             </dp2:css-text-transform-definitions>
           </meta>
@@ -16466,7 +16466,7 @@
                 additive-symbols: 6 '⠿', 5 '⠻', 4 '⠛', 3 '⠙', 2 '⠉', 1 '⠈';
                 suffix: ' ';
                 system: additive;
-                text-transform: none
+                text-transform: none;
               }
             </dp2:css-counter-style-definitions>
           </meta>
@@ -16910,7 +16910,7 @@
             <dp2:css-hyphenation-resource-definitions>
               @hyphenation-resource:lang(foo) {
                 system: libhyphen;
-                table: url("../resources/foo.dic")
+                table: url("../resources/foo.dic");
               }
             </dp2:css-hyphenation-resource-definitions>
           </meta>

@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="3.0">
     
@@ -42,7 +41,7 @@
                 </xsl:next-iteration>
             </xsl:iterate>
         </xsl:param>
-        <xsl:variable name="style" as="attribute()?" select="css:style-attribute(s:toString($style,$parent-style))"/>
+        <xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($style,$parent-style))"/>
         <xsl:choose>
             <xsl:when test="self::*">
                 <xsl:copy>

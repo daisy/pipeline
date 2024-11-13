@@ -49,6 +49,15 @@ public abstract class Style {
 	
 	protected abstract String toString(Style relativeTo);
 
+	public static String toPrettyString(Optional<Style> style, String indentation) {
+		if (style.isPresent())
+			return style.get().toPrettyString(indentation);
+		else
+			return "";
+	}
+
+	protected abstract String toPrettyString(String indentation);
+
 	public static void toXml(Optional<Style> style, XMLStreamWriter writer) throws XMLStreamException {
 		if (style.isPresent())
 			style.get().toXml(writer);

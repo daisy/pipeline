@@ -137,7 +137,7 @@ public final class BrailleCssSerializer {
 
 	public static String toString(BrailleCssStyle style) {
 		if (style.serialized == null) {
-			style.serialized = toString(style, (String)null);
+			style.serialized = toString(style, null, null);
 			// cache
 			if (style.parser != null)
 				style.parser.cache.put(style.context, style.serialized, style);
@@ -170,32 +170,49 @@ public final class BrailleCssSerializer {
 		return s;
 	}
 
-	private static String toString(BrailleCssStyle style, String base) {
+	public static String toString(BrailleCssStyle style, String indentation) {
+		// this function does update the cache, nor does it store the string in the style object, as
+		// it's meant to pretty print a style (for the purpose of showing in temporary files or log
+		//messages)
+		return toString(style, null, indentation);
+	}
+
+	private static String toString(BrailleCssStyle style, String base, String indent) {
 		StringBuilder b = new StringBuilder();
 		StringBuilder rel = new StringBuilder();
-		if (style.declarations != null)
-			b.append(serializeDeclarationList(style.declarations));
+		if ("".equals(indent)) indent = null;
+		String newline = indent != null ? "\n" : " ";
+		if (style.declarations != null) {
+			b.append(serializeDeclarationList(style.declarations, ";" + newline));
+			if (indent != null && b.length() > 0) b.append(";");
+		}
 		if (style.nestedStyles != null)
 			for (Map.Entry<String,BrailleCssStyle> e : style.nestedStyles.entrySet()) {
 				if (base != null && e.getKey().startsWith("&")) {
-					if (rel.length() > 0) rel.append(" ");
-					rel.append(toString(e.getValue(), base + e.getKey().substring(1)));
+					if (rel.length() > 0) rel.append(newline);
+					rel.append(toString(e.getValue(), base + e.getKey().substring(1), indent));
 				} else {
 					if (b.length() > 0) {
-						if (b.charAt(b.length() - 1) != '}') b.append(";");
-						b.append(" ");
+						if (indent == null && b.charAt(b.length() - 1) != '}') b.append(";");
+						b.append(newline);
 					}
-					b.append(toString(e.getValue(), e.getKey()));
+					b.append(toString(e.getValue(), e.getKey(), indent));
 				}
 			}
 		if (base != null && b.length() > 0) {
-			b.insert(0, base + " { ");
-			b.append(" }");
+			if (indent != null) {
+				String s = b.toString();
+				s = indent + s.trim().replaceAll("\n", "\n" + indent);
+				b.setLength(0);
+				b.append(s);
+			}
+			b.insert(0, base + " {" + newline);
+			b.append(newline + "}");
 		}
 		if (rel.length() > 0) {
 			if (b.length() > 0) {
-				if (b.charAt(b.length() - 1) != '}') b.append(";");
-				b.append(" ");
+				if (indent == null && b.charAt(b.length() - 1) != '}') b.append(";");
+				b.append(newline);
 			}
 			b.append(rel);
 		}
@@ -317,6 +334,10 @@ public final class BrailleCssSerializer {
 	}
 
 	public static String serializeDeclarationList(Iterable<? extends Declaration> declarations) {
+		return serializeDeclarationList(declarations, "; ");
+	}
+
+	private static String serializeDeclarationList(Iterable<? extends Declaration> declarations, String separator) {
 		List<String> sortedDeclarations = new ArrayList<>();
 		for (Declaration d : declarations)
 			sortedDeclarations.add(BrailleCssSerializer.toString(d));
@@ -325,7 +346,7 @@ public final class BrailleCssSerializer {
 		Iterator<String> it = sortedDeclarations.iterator();
 		while (it.hasNext()) {
 			s.append(it.next());
-			if (it.hasNext()) s.append("; ");
+			if (it.hasNext()) s.append(separator);
 		}
 		return s.toString();
 	}

@@ -86,7 +86,7 @@
 				</xsl:choose>
 			</xsl:for-each>
 		</xsl:variable>
-		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(s:toString($translated-style,$result-style))"/>
+		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($translated-style,$result-style))"/>
 		<xsl:variable name="lang" as="attribute()?">
 			<xsl:for-each select="$translated-language[not(.=$result-language)]">
 				<xsl:attribute name="xml:lang" select="."/>
@@ -244,7 +244,7 @@
 				</xsl:choose>
 			</xsl:for-each>
 		</xsl:variable>
-		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(s:toString($translated-style,$result-style))"/>
+		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($translated-style,$result-style))"/>
 		<xsl:variable name="lang" as="attribute()?">
 			<xsl:for-each select="$translated-language[not(.=$result-language)]">
 				<xsl:attribute name="xml:lang" select="."/>
@@ -277,7 +277,7 @@
 		<xsl:variable name="text" as="xs:string" select="t:getText($new-text-nodes[1])"/>
 		<xsl:variable name="translated-style" as="item()?" select="t:getStyle($new-text-nodes[1])"/>
 		<xsl:variable name="translated-language" as="xs:string?" select="t:getLanguage($new-text-nodes[1])"/>
-		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(s:toString($translated-style,$result-style))"/>
+		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($translated-style,$result-style))"/>
 		<xsl:variable name="lang" as="attribute()?">
 			<xsl:for-each select="$translated-language[not(.=$result-language)]">
 				<xsl:attribute name="xml:lang" select="."/>

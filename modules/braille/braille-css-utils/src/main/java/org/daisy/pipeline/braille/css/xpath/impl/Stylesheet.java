@@ -159,6 +159,14 @@ public class Stylesheet extends Style {
 	}
 
 	@Override
+	protected String toPrettyString(String indentation) {
+		if (style != null)
+			return BrailleCssSerializer.toString(style, indentation);
+		else
+			return "";
+	}
+
+	@Override
 	protected void toAttributes(Style parent, XMLStreamWriter writer) throws XMLStreamException {
 		BrailleCssStyle style = this.style;
 		BrailleCssStyle relativeTo; {

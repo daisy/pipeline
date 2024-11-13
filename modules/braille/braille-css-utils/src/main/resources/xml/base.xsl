@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
@@ -66,6 +67,37 @@
     <!-- Serializing -->
     <!-- =========== -->
     
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Serialize a style sheet to a string.</p>
+            <p>The style sheet must be specified as a `Style` item.</p>
+            <p>An optional parent style may be specified as a `Style` item().</p>
+        </desc>
+    </doc>
+    <xsl:function name="css:serialize-stylesheet" as="xs:string">
+        <xsl:param name="stylesheet" as="item()?"/>
+        <xsl:sequence select="string($stylesheet)"/>
+    </xsl:function>
+    <xsl:function name="css:serialize-stylesheet" as="xs:string">
+        <xsl:param name="stylesheet" as="item()?"/>
+        <xsl:param name="parent" as="item()?"/>
+        <xsl:sequence select="s:toString($stylesheet,$parent)"/>
+    </xsl:function>
+
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Serialize a style sheet to a pretty, indented, string.</p>
+            <p>The style sheet must be specified as a `Style` item.</p>
+            <p>The unit that is used for indenting lines, must be specified as a string. Each line is prefixed with
+            this string a number of times that corresponds with the nesting level.</p>
+        </desc>
+    </doc>
+    <xsl:function name="css:serialize-stylesheet-pretty" as="xs:string">
+        <xsl:param name="stylesheet" as="item()*"/>
+        <xsl:param name="indent" as="xs:string"/>
+        <xsl:sequence select="s:toPrettyString(s:merge($stylesheet),$indent)"/>
+    </xsl:function>
+    
     <xsl:template match="css:rule" mode="css:serialize" as="xs:string">
         <xsl:param name="base" as="xs:string*" select="()"/>
         <xsl:param name="level" as="xs:integer" select="1"/>
@@ -75,29 +107,39 @@
                               else ' '"/>
         <xsl:choose>
             <xsl:when test="not(@selector)">
-                <xsl:sequence select="css:serialize-stylesheet(*,$base,$level,$indent)"/>
+                <xsl:call-template name="f:serialize">
+                    <xsl:with-param name="rules" select="*"/>
+                    <xsl:with-param name="base" select="$base"/>
+                    <xsl:with-param name="level" select="$level"/>
+                    <xsl:with-param name="indent" select="$indent"/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:when test="exists($base) and not(matches(@selector,'^&amp;'))">
+                <xsl:variable name="rule-content" as="xs:string">
+                    <xsl:call-template name="f:serialize">
+                        <xsl:with-param name="rules" select="*"/>
+                        <xsl:with-param name="base" select="@selector"/>
+                        <xsl:with-param name="level" select="$level+1"/>
+                        <xsl:with-param name="indent" select="$indent"/>
+                    </xsl:call-template>
+                </xsl:variable>
                 <xsl:sequence select="string-join((
                                         string-join($base,', '),' {',$newline,$indent,
-                                        css:serialize-stylesheet(
-                                          *,
-                                          @selector,
-                                          $level+1,
-                                          $indent),
+                                        $rule-content,
                                         $newline,'}'),'')"/>
             </xsl:when>
             <xsl:otherwise> <!-- matches(@selector,'^&amp;') -->
-                <xsl:sequence select="css:serialize-stylesheet(
-                                        *,
-                                        if (exists($base))
-                                          then for $s in @selector return
-                                               for $b in $base return
-                                                 for $bb in tokenize($b,'\s*,\s*') return
-                                                   concat($bb,substring($s,2))
-                                          else @selector,
-                                        $level,
-                                        $indent)"/>
+                <xsl:call-template name="f:serialize">
+                    <xsl:with-param name="rules" select="*"/>
+                    <xsl:with-param name="base" select="if (exists($base))
+                                                          then for $s in @selector return
+                                                               for $b in $base return
+                                                                 for $bb in tokenize($b,'\s*,\s*') return
+                                                                   concat($bb,substring($s,2))
+                                                          else @selector"/>
+                    <xsl:with-param name="level" select="$level"/>
+                    <xsl:with-param name="indent" select="$indent"/>
+                </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -219,29 +261,11 @@
                                 ')')"/>
     </xsl:template>
     
-    <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
-        <xsl:sequence select="css:serialize-stylesheet($rules,())"/>
-    </xsl:function>
-    
-    <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
-        <xsl:param name="base" as="xs:string*"/>
-        <xsl:sequence select="css:serialize-stylesheet($rules,$base,1)"/>
-    </xsl:function>
-    
-    <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
-        <xsl:param name="base" as="xs:string*"/>
-        <xsl:param name="level" as="xs:integer"/>
-        <xsl:sequence select="css:serialize-stylesheet($rules,$base,$level,())"/>
-    </xsl:function>
-    
-    <xsl:function name="css:serialize-stylesheet" as="xs:string">
-        <xsl:param name="rules" as="element()*"/> <!-- css:rule*|css:property* -->
-        <xsl:param name="base" as="xs:string*"/>
-        <xsl:param name="level" as="xs:integer"/>
-        <xsl:param name="indent" as="xs:string?"/>
+    <xsl:template name="f:serialize" as="xs:string">
+        <xsl:param name="rules" as="element()*" required="yes"/> <!-- css:rule*|css:property* -->
+        <xsl:param name="base" as="xs:string*" select="()"/>
+        <xsl:param name="level" as="xs:integer" select="1"/>
+        <xsl:param name="indent" as="xs:string?" select="()"/>
         <xsl:variable name="newline" as="xs:string"
                       select="if (exists($indent)) then string-join(('&#xa;',for $i in 2 to $level return $indent),'') else ' '"/>
         <xsl:variable name="serialized-pseudo-rules" as="xs:string*">
@@ -299,7 +323,7 @@
             <xsl:sequence select="$serialized-pseudo-rules"/>
         </xsl:variable>
         <xsl:sequence select="string-join($serialized-rules,$newline)"/>
-    </xsl:function>
+    </xsl:template>
     
     <xsl:function name="css:style-attribute" as="attribute(style)?">
         <xsl:param name="style" as="item()?"/>

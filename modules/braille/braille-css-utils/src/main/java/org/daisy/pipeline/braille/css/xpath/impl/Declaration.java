@@ -56,6 +56,11 @@ public class Declaration extends Style {
 	}
 
 	@Override
+	protected String toPrettyString(String indentation) {
+		return toString();
+	}
+
+	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		// <css:property>
 		BrailleCssSerializer.toXml(declaration, writer);

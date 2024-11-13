@@ -87,11 +87,11 @@
 					</xsl:map>
 				</xsl:variable>
 				<xsl:variable name="style" as="item()*">
-					<xsl:for-each select="sort(map:keys($page-styles))">
+					<xsl:for-each select="map:keys($page-styles)">
 						<xsl:sequence select="s:of(concat('@page ',map:get($page-style-names,.)),
 						                           map:get($page-styles,.))"/>
 					</xsl:for-each>
-					<xsl:for-each select="sort(map:keys($selector-to-style))">
+					<xsl:for-each select="map:keys($selector-to-style)">
 						<xsl:variable name="style" as="item()">
 							<xsl:call-template name="substitute-named-pages">
 								<xsl:with-param name="style" select="map:get($selector-to-style,.)"/>
@@ -101,8 +101,7 @@
 						<xsl:sequence select="s:of(.,$style)"/>
 					</xsl:for-each>
 				</xsl:variable>
-				<xsl:value-of select="css:serialize-stylesheet(
-				                        for $s in $style return s:toXml($s),(),1,'&#x9;')"/>
+				<xsl:value-of select="css:serialize-stylesheet-pretty($style,'&#x9;')"/>
 				<xsl:text>&#xa;</xsl:text>
 			</c:result>
 		</xsl:result-document>

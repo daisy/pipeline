@@ -286,21 +286,21 @@
                 <xsl:if test="exists($text-transforms) and not(string($text-transforms)='')">
                     <dp2:css-text-transform-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet(s:toXml($text-transforms),(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet-pretty($text-transforms,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-text-transform-definitions>
                 </xsl:if>
                 <xsl:if test="exists($hyphenation-resources) and not(string($hyphenation-resources)='')">
                      <dp2:css-hyphenation-resource-definitions>
                          <xsl:text>&#xa;</xsl:text>
-                         <xsl:value-of select="css:serialize-stylesheet(s:toXml($hyphenation-resources),(),1,'    ')"/>
+                         <xsl:value-of select="css:serialize-stylesheet-pretty($hyphenation-resources,'    ')"/>
                          <xsl:text>&#xa;</xsl:text>
                      </dp2:css-hyphenation-resource-definitions>
                  </xsl:if>
                 <xsl:if test="exists($counter-styles) and not(string($counter-styles)='')">
                     <dp2:css-counter-style-definitions>
                         <xsl:text>&#xa;</xsl:text>
-                        <xsl:value-of select="css:serialize-stylesheet(s:toXml($counter-styles),(),1,'    ')"/>
+                        <xsl:value-of select="css:serialize-stylesheet-pretty($counter-styles,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
                     </dp2:css-counter-style-definitions>
                 </xsl:if>

@@ -2,7 +2,6 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
                 exclude-result-prefixes="#all"
                 version="2.0">
     
@@ -20,7 +19,7 @@
         <xsl:variable name="source-style" as="item()?" select="css:parse-stylesheet(string(@style),$source-style)"/>
         <xsl:copy>
             <xsl:sequence select="@* except @style"/>
-            <xsl:sequence select="css:style-attribute(s:toString($source-style,$result-style))"/>
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($source-style,$result-style))"/>
             <xsl:apply-templates>
                 <xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
                 <xsl:with-param name="result-style" tunnel="yes" select="$source-style"/>
@@ -42,7 +41,7 @@
         <xsl:variable name="source-style" as="item()?" select="css:parse-stylesheet(string(@style),$source-style)"/>
         <xsl:copy>
             <xsl:apply-templates select="@* except @style"/>
-            <xsl:sequence select="css:style-attribute(s:toString($source-style,$result-style))"/>
+            <xsl:sequence select="css:style-attribute(css:serialize-stylesheet($source-style,$result-style))"/>
             <xsl:element name="css:box">
                 <xsl:attribute name="type" select="'block'"/>
                 <xsl:attribute name="css:collapsing-margins" select="'no'"/>

@@ -96,6 +96,11 @@ public class Value extends Style {
 	}
 
 	@Override
+	protected String toPrettyString(String indentation) {
+		return toString();
+	}
+
+	@Override
 	protected void toXml(XMLStreamWriter writer) throws XMLStreamException {
 		if (value instanceof ContentList)
 			BrailleCssSerializer.toXml((ContentList)value, writer);
