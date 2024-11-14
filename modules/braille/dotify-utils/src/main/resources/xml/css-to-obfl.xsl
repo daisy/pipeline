@@ -2230,7 +2230,12 @@
                 <!-- can happen -->
                 <xsl:message>
                     <xsl:text>Ignoring '</xsl:text>
-                    <xsl:apply-templates mode="css:serialize" select="."/>
+                    <xsl:value-of select="concat('target-counter(url(&quot;',
+                                                 (@original-target,@target)[1],
+                                                 '&quot;), ',
+                                                 @name,
+                                                 if (@style) then concat(', ', @style) else '',
+                                                 ')')"/>
                     <xsl:text>': there are multiple elements with the ID '</xsl:text>
                     <xsl:value-of select="(@original-target,@target)[1]"/>
                     <xsl:text>'.</xsl:text>
@@ -2246,7 +2251,12 @@
                     <xsl:when test="$target/ancestor::*/@css:flow[not(.='normal')]">
                         <xsl:message>
                             <xsl:text>Ignoring '</xsl:text>
-                            <xsl:apply-templates mode="css:serialize" select="."/>
+                            <xsl:value-of select="concat('target-counter(url(&quot;',
+                                                         (@original-target,@target)[1],
+                                                         '&quot;), ',
+                                                         @name,
+                                                         if (@style) then concat(', ', @style) else '',
+                                                         ')')"/>
                             <xsl:text>': referencing element in named flow.</xsl:text>
                         </xsl:message>
                     </xsl:when>
@@ -2362,7 +2372,7 @@
                 css:adjust-boxes changes the box dimensions
             -->
             <xsl:message terminate="yes">
-                <xsl:apply-templates mode="css:serialize" select="."/>
+                <xsl:value-of select="concat('leader(',string-join((concat('&quot;',@pattern,'&quot;'),@position,@alignment),', '),')')"/>
                 <xsl:text>: percentage not supported</xsl:text>
             </xsl:message>
         </xsl:if>
