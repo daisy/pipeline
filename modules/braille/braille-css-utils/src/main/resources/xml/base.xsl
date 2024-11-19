@@ -6,12 +6,6 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
-    <!-- ====== -->
-    <!-- Syntax -->
-    <!-- ====== -->
-    
-    <xsl:variable name="css:STRING_RE">'[^']*'|"[^"]*"</xsl:variable>
-    
     <!-- ======= -->
     <!-- Parsing -->
     <!-- ======= -->
@@ -49,17 +43,6 @@
                 Implemented in ../../java/org/daisy/pipeline/braille/css/saxon/impl/ParseStylesheetDefinition.java
             -->
         </xsl:sequence>
-    </xsl:function>
-    
-    <xsl:function name="css:parse-string" as="element()?">
-        <xsl:param name="string" as="xs:string"/>
-        <xsl:if test="matches($string,concat('^(',$css:STRING_RE,')$'))">
-            <css:string value="{replace(replace(replace(
-                                  substring($string, 2, string-length($string)-2),
-                                  '\\A\s?','&#xA;'),
-                                  '\\27\s?',''''),
-                                  '\\22\s?','&quot;')}"/>
-        </xsl:if>
     </xsl:function>
     
     <!-- =========== -->

@@ -2447,7 +2447,11 @@
                 <xsl:sequence select="concat('white-space: ',$white-space)"/>
             </xsl:if>
         </xsl:variable>
-        <xsl:variable name="expression" as="xs:string" select="css:parse-string(@arg1)/@value"/>
+        <xsl:variable name="expression" as="xs:string" select="replace(replace(replace(
+                                                                 substring(@arg1, 2, string-length(@arg1)-2),
+                                                                 '\\A\s?','&#xA;'),
+                                                                 '\\27\s?',''''),
+                                                                 '\\22\s?','&quot;')"/>
         <xsl:choose>
             <xsl:when test="exists($style) or $inside-span">
                 <style name="{string-join($style,'; ')}">
