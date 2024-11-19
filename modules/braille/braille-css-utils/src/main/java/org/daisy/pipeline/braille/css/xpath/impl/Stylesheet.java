@@ -26,7 +26,14 @@ public class Stylesheet extends Style {
 
 	public final BrailleCssStyle style;
 
-	public Stylesheet(BrailleCssStyle style) {
+	public static Stylesheet of(BrailleCssStyle style) {
+		if (style != null && style.underlyingObject instanceof org.daisy.pipeline.css.CounterStyle)
+			return new CounterStyle(style);
+		else
+			return new Stylesheet(style);
+	}
+
+	protected Stylesheet(BrailleCssStyle style) {
 		if (style == null || style.isEmpty())
 			throw new IllegalArgumentException();
 		this.style = style;
@@ -81,7 +88,7 @@ public class Stylesheet extends Style {
 				return Optional.of(new Value(d));
 			BrailleCssStyle s = style.getNestedStyle(key);
 			if (s != null)
-				return Optional.of(new Stylesheet(s));
+				return Optional.of(Stylesheet.of(s));
 		}
 		return Optional.empty();
 	}
@@ -104,7 +111,7 @@ public class Stylesheet extends Style {
 		if (s.isEmpty())
 			return Optional.empty();
 		else if (s != style)
-			return Optional.of(new Stylesheet(s));
+			return Optional.of(Stylesheet.of(s));
 		else
 			return Optional.of(this);
 	}
@@ -125,13 +132,13 @@ public class Stylesheet extends Style {
 			return this.style != null ? Optional.of(this) : Optional.empty();
 		Style s = style.get();
 		if (s instanceof Stylesheet)
-			return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.EMPTY)
-			                                  .add(key, ((Stylesheet)s).style)));
+			return Optional.of(Stylesheet.of((this.style != null ? this.style : BrailleCssStyle.EMPTY)
+			                                 .add(key, ((Stylesheet)s).style)));
 		else if (s instanceof Value) {
 			Value v = (Value)s;
 			if (v.value instanceof ContentList)
-				return Optional.of(new Stylesheet((this.style != null ? this.style : BrailleCssStyle.EMPTY)
-				                                  .add(key, (ContentList)v.value)));
+				return Optional.of(Stylesheet.of((this.style != null ? this.style : BrailleCssStyle.EMPTY)
+				                                 .add(key, (ContentList)v.value)));
 		}
 		throw new IllegalArgumentException();
 	}

@@ -59,6 +59,10 @@ public class StringSetList extends AbstractList<Term<?>> implements Term<StringS
 		public TermPair<String,ContentList> setKey(String key) {
 			throw new UnsupportedOperationException("Unmodifiable");
 		}
+		@Override
+		public String toString() {
+			return BrailleCssSerializer.toString(this);
+		}
 		/**
 		 * Evaluate <code>attr()</code> and <code>content()</code> values.
 		 */

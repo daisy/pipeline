@@ -72,9 +72,6 @@
     <expose-services>
       org.daisy.pipeline.modules.impl.Module_braille_css_utils,
       org.daisy.pipeline.braille.css.impl.BrailleCssCascader,
-      org.daisy.pipeline.braille.css.calabash.impl.CssShiftIdStep$Provider,
-      org.daisy.pipeline.braille.css.calabash.impl.CssShiftStringSetStep$Provider,
-      org.daisy.pipeline.braille.css.calabash.impl.PxiEvalCounterStep$Provider,
       org.daisy.pipeline.braille.css.saxon.impl.StyleFunctionProvider,
       org.daisy.pipeline.braille.css.saxon.impl.StyledTextFunctionProvider,
       org.daisy.pipeline.braille.css.saxon.impl.ParseStylesheetDefinition,

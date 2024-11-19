@@ -97,7 +97,7 @@ public class ParseStylesheetDefinition extends ReflexiveExtensionFunctionProvide
 					s = s.evaluate(element);
 				else
 					s = BrailleCssStyle.of("@" + attr.getLocalName(), s);
-			return Optional.of(new Stylesheet(s));
+			return Optional.of(Stylesheet.of(s));
 		}
 	}
 }

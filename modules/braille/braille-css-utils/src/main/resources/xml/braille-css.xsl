@@ -42,24 +42,4 @@
         </xsl:map>
     </xsl:function>
     
-    <!--
-        round to next .25
-    -->
-    <xsl:function name="css:round-line-height" as="xs:string">
-        <xsl:param name="line-height" as="xs:string"/>
-        <xsl:variable name="value" as="xs:double">
-            <xsl:choose>
-                <xsl:when test="ends-with($line-height,'%')">
-                    <xsl:sequence select="number(substring($line-height,1,string-length($line-height)-1))
-                                          div 100"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:sequence select="number($line-height)"/>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="value" as="xs:double" select="round($value * 4) div 4"/>
-        <xsl:sequence select="format-number($value, '0.##')"/>
-    </xsl:function>
-    
 </xsl:stylesheet>

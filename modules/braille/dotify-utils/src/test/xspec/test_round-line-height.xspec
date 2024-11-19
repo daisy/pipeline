@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.jenitennison.com/xslt/xspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               stylesheet="../../main/resources/xml/css-to-obfl.xsl">
+
+	<x:param name="document-locale"></x:param>
+	<x:param name="page-counters">page</x:param>
+	<x:param name="braille-charset-table" select="''"/>
+	<x:param name="default-text-transform" select="''"/>
+
+	<x:scenario label="test_1">
+		<x:call function="pxi:round-css-line-height">
+			<x:param select="'0.9'"/>
+		</x:call>
+		<x:expect label="result" select="'1'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_2">
+		<x:call function="pxi:round-css-line-height">
+			<x:param select="'1.7'"/>
+		</x:call>
+		<x:expect label="result" select="'1.75'"/>
+	</x:scenario>
+	
+	<x:scenario label="test_3">
+		<x:call function="pxi:round-css-line-height">
+			<x:param select="'240%'"/>
+		</x:call>
+		<x:expect label="result" select="'2.5'"/>
+	</x:scenario>
+
+</x:description>

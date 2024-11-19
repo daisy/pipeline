@@ -124,6 +124,6 @@ public class StyleTransformerImpl implements StyleTransformer {
 			? fs.style.asSimpleInlineStyle(false)
 			: SimpleInlineStyle.EMPTY;
 		s = transform(s);
-		return new Stylesheet(BrailleCssStyle.of(s));
+		return Stylesheet.of(BrailleCssStyle.of(s));
 	}
 }

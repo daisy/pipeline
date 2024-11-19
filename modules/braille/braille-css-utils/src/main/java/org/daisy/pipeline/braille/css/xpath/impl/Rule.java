@@ -45,7 +45,7 @@ public class Rule extends Stylesheet {
 	@Override
 	protected Optional<Style> get(String key) {
 		if (selector.equals(key))
-			return Optional.of(new Stylesheet(style.getNestedStyle(key)));
+			return Optional.of(Stylesheet.of(style.getNestedStyle(key)));
 		else
 			return Optional.empty();
 	}

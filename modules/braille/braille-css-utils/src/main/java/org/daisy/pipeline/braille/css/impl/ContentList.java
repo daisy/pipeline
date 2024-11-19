@@ -485,7 +485,7 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 		final String name;
 		final TermString symbol;
 		final TermFunction symbols;
-		public final org.daisy.pipeline.css.CounterStyle style;
+		final org.daisy.pipeline.css.CounterStyle style;
 
 		private CounterStyle(TermIdent name) {
 			if ("none".equals(name.getValue()))
@@ -532,12 +532,23 @@ public class ContentList extends AbstractList<Term<?>> implements Term<ContentLi
 	/**
 	 * This class is immutable
 	 */
-	public static class CounterFunction extends UnmodifiableTerm<CounterFunction> {
+	public static class CounterFunction extends UnmodifiableTerm<org.daisy.pipeline.braille.css.CounterFunction>
+		                                implements org.daisy.pipeline.braille.css.CounterFunction {
 
 		// these fields need to be package private because they are used in BrailleCssSerializer
 		final Optional<URL> target;
 		final TermIdent name;
-		public final Optional<CounterStyle> style;
+		final Optional<CounterStyle> style;
+
+		@Override
+		public String getCounter() {
+			return name.getValue();
+		}
+
+		@Override
+		public Optional<org.daisy.pipeline.css.CounterStyle> getStyle() {
+			return style.map(x -> x.style);
+		}
 
 		private CounterFunction(TermIdent name, Optional<CounterStyle> style) {
 			this.target = Optional.empty();

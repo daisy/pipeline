@@ -1854,7 +1854,7 @@
     
     <xsl:template mode="block-attr table-attr"
                   match="css:box[@type=('block','table')]/@css:line-height">
-        <xsl:variable name="rounded" as="xs:double" select="number(css:round-line-height(.))"/>
+        <xsl:variable name="rounded" as="xs:double" select="number(pxi:round-css-line-height(.))"/>
         <xsl:choose>
             <xsl:when test="$rounded=1"/>
             <xsl:when test="$rounded &lt; 1">
@@ -1865,6 +1865,26 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <!--
+        round to next .25
+    -->
+    <xsl:function name="pxi:round-css-line-height" as="xs:string">
+        <xsl:param name="line-height" as="xs:string"/>
+        <xsl:variable name="value" as="xs:double">
+            <xsl:choose>
+                <xsl:when test="ends-with($line-height,'%')">
+                    <xsl:sequence select="number(substring($line-height,1,string-length($line-height)-1))
+                                          div 100"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:sequence select="number($line-height)"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="value" as="xs:double" select="round($value * 4) div 4"/>
+        <xsl:sequence select="format-number($value, '0.##')"/>
+    </xsl:function>
     
     <!--
         handle negative text-indent
@@ -2183,7 +2203,7 @@
                                                                          /(descendant-or-self::css:box|following::css:box)[@type='inline'][1]
                                                                     else ."/>
                 <xsl:if test="$target">
-                    <xsl:apply-templates mode="css:eval-string" select="css:string(@name, $target)"/>
+                    <xsl:apply-templates mode="css:eval-string" select="pxi:resolve-css-string(@name, $target)"/>
                 </xsl:if>
             </xsl:when>
             <xsl:otherwise>
@@ -2202,6 +2222,63 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+    
+    <xsl:function name="pxi:resolve-css-string" as="element()*">
+        <xsl:param name="name" as="xs:string"/>
+        <xsl:param name="context" as="element()"/>
+        <xsl:variable name="last-set" as="element()?"
+                      select="$context/(self::*|preceding::*|ancestor::*)
+                              [contains(@css:string-set,$name)]
+                              [last()]"/>
+        <xsl:choose>
+            <xsl:when test="$context/ancestor::*/@css:flow[not(.='normal')]">
+                <xsl:choose>
+                    <xsl:when test="$last-set
+                                    intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*">
+                        <xsl:variable name="value" as="element(css:string-set)?"
+                                      select="s:toXml(css:parse-stylesheet($last-set/@css:string-set))/css:string-set
+                                              [@name=$name][last()]"/>
+                        <xsl:choose>
+                            <xsl:when test="exists($value)">
+                                <xsl:sequence select="$value/*"/>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:variable name="context" as="element()?"
+                                              select="$last-set/(preceding::*|ancestor::*)[last()]
+                                                      intersect $context/ancestor::*[@css:anchor][1]/descendant-or-self::*"/>
+                                <xsl:if test="$context">
+                                    <xsl:sequence select="pxi:resolve-css-string($name, $context)"/>
+                                </xsl:if>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="anchor" as="xs:string" select="$context/ancestor::*/@css:anchor"/>
+                        <xsl:variable name="context" as="element()?" select="collection()//*[@css:id=$anchor][1]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="pxi:resolve-css-string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            <xsl:when test="$last-set">
+                <xsl:variable name="value" as="element(css:string-set)?"
+                              select="s:toXml(css:parse-stylesheet($last-set/@css:string-set))/css:string-set
+                                      [@name=$name][last()]"/>
+                <xsl:choose>
+                    <xsl:when test="exists($value)">
+                        <xsl:sequence select="$value/*"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:variable name="context" as="element()?" select="$last-set/(preceding::*|ancestor::*)[last()]"/>
+                        <xsl:if test="$context">
+                            <xsl:sequence select="pxi:resolve-css-string($name, $context)"/>
+                        </xsl:if>
+                    </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:function>
     
     <xsl:template mode="css:eval-string"
                   match="css:string[@value]">

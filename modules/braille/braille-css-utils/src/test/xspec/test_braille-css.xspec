@@ -550,25 +550,6 @@
 string-set: print-page attr(value);</x:expect>
 	</x:scenario>
 	
-	<x:scenario label="test_28">
-		<x:call function="css:string">
-			<x:param select="'print-page'"/>
-			<x:param select="//p[last()]">
-				<body>
-					<pagenum css:string-set="print-page '1'"/>
-					<p/>
-					<pagenum css:string-set="print-page '2'"/>
-					<p/>
-					<pagenum css:string-set="print-page '3'"/>
-					<p/>
-				</body>
-			</x:param>
-		</x:call>
-		<x:expect label="result">
-			<css:string value="3"/>
-		</x:expect>
-	</x:scenario>
-	
 	<x:scenario label="test_29">
 		<x:call function="s:toXml">
 			<x:param select="css:parse-stylesheet(//foo/@style,css:parse-stylesheet(/_/@style))">
@@ -812,25 +793,4 @@ string-set: print-page attr(value);</x:expect>
 		</x:expect>
 	</x:scenario>
 
-	<x:scenario label="test_38">
-		<x:call function="css:round-line-height">
-			<x:param select="'0.9'"/>
-		</x:call>
-		<x:expect label="result" select="'1'"/>
-	</x:scenario>
-	
-	<x:scenario label="test_39">
-		<x:call function="css:round-line-height">
-			<x:param select="'1.7'"/>
-		</x:call>
-		<x:expect label="result" select="'1.75'"/>
-	</x:scenario>
-	
-	<x:scenario label="test_40">
-		<x:call function="css:round-line-height">
-			<x:param select="'240%'"/>
-		</x:call>
-		<x:expect label="result" select="'2.5'"/>
-	</x:scenario>
-	
 </x:description>

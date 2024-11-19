@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
-                type="css:parse-properties"
+                type="px:css-parse-properties"
                 exclude-inline-prefixes="#all"
                 version="1.0">
     

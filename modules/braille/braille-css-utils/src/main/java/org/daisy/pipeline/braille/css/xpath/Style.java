@@ -218,7 +218,7 @@ public abstract class Style {
 			else if (s instanceof Stylesheet)
 				head = (Stylesheet)s;
 			else if (s instanceof Declaration)
-				head = new Stylesheet(BrailleCssStyle.of(((Declaration)s).declaration));
+				head = Stylesheet.of(BrailleCssStyle.of(((Declaration)s).declaration));
 			else if (!(s instanceof Value))
 				throw new IllegalStateException(); // coding error
 			else if (!(((Value)s).value instanceof ContentList))
@@ -258,7 +258,7 @@ public abstract class Style {
 					objects.add(((Value)s).value);
 			}
 			Iterator<Object> it = objects.iterator();
-			return Optional.of(new Stylesheet(((BrailleCssStyle)it.next()).add(it)));
+			return Optional.of(Stylesheet.of(((BrailleCssStyle)it.next()).add(it)));
 		} else { // head instanceof Value
 			List<Term<?>> content = new ArrayList<>();
 			BrailleCssParser parser = null;

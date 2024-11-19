@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:pipeline xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
             xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
-            xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
             exclude-inline-prefixes="#all"
             type="px:block-translate">
 	
@@ -10,7 +9,7 @@
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
 		<p:documentation>
-			css:parse-properties
+			px:css-parse-properties
 		</p:documentation>
 	</p:import>
 	
@@ -23,8 +22,8 @@
 		</p:input>
 	</p:xslt>
 	
-	<css:parse-properties px:message="Parsing CSS properties" px:message-severity="DEBUG" px:progress=".05"
-	                      properties="display"/>
+	<px:css-parse-properties px:message="Parsing CSS properties" px:message-severity="DEBUG" px:progress=".05"
+	                         properties="display"/>
 	
 	<p:xslt px:message="Translating CSS blocks" px:message-severity="DEBUG" px:progress=".85">
 		<p:input port="stylesheet">

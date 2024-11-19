@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
+               script="../../main/resources/xml/eval-counter.xpl">
+  
+  <x:scenario label="test_01">
+    <x:call step="pxi:eval-counter">
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <ul>
+              <li css:counter-increment="list-item foo 2 bar">
+                <css:marker>
+                  <css:counter name="list-item"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"/>
+                </css:marker>
+                <ul css:counter-reset="list-item">
+                  <li css:counter-increment="list-item">
+                    <css:marker>
+                      <css:counter name="list-item"/>
+                    </css:marker>
+                  </li>
+                  <li css:counter-increment="list-item">
+                    <css:marker>
+                      <css:counter name="list-item"/>
+                    </css:marker>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            <ul>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"
+                               style="symbols(cyclic '*' '†' '‡' '§')"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item"
+                               style="symbols(cyclic '*' '†' '‡' '§')"/>
+                </css:marker>
+              </li>
+            </ul>
+          </body>
+        </x:document>
+      </x:input>
+      <x:option name="counters" select="'list-item'"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <ul>
+            <li css:counter-increment="foo 2 bar 1">
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang=""> 1. </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang=""> 2. </css:box>
+              </css:marker>
+              <ul>
+                <li>
+                  <css:marker>
+                    <css:box type="inline" style="text-transform: auto" xml:lang=""> 1. </css:box>
+                  </css:marker>
+                </li>
+                <li>
+                  <css:marker>
+                    <css:box type="inline" style="text-transform: auto" xml:lang=""> 2. </css:box>
+                  </css:marker>
+                </li>
+              </ul>
+            </li>
+          </ul>
+          <ul>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang=""> * </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang=""> † </css:box>
+              </css:marker>
+            </li>
+          </ul>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+  <x:scenario label="test_02">
+    <x:call step="pxi:eval-counter">
+      <x:option name="counter-styles" select="'@counter-style written-out {
+                                                 system: fixed;
+                                                 symbols: ''one'' ''two'' ''three'';
+                                                 fallback: upper-roman;
+                                                 suffix: '' ''; }'"/>
+      <x:input port="source">
+        <x:document type="inline">
+          <body>
+            <ul>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+              <li css:counter-increment="list-item">
+                <css:marker>
+                  <css:counter name="list-item" style="written-out"/>
+                </css:marker>
+              </li>
+            </ul>
+          </body>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="compare">
+      <x:document type="inline">
+        <body>
+          <ul>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang="">one </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang="">two </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang="">three </css:box>
+              </css:marker>
+            </li>
+            <li>
+              <css:marker>
+                <css:box type="inline" style="text-transform: auto" xml:lang="">IV </css:box>
+              </css:marker>
+            </li>
+          </ul>
+        </body>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
+</x:description>

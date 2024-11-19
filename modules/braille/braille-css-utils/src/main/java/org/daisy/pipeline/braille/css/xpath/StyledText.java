@@ -32,7 +32,7 @@ public class StyledText {
 		SimpleInlineStyle s = t.getStyle();
 		if (s == null || s.isEmpty())
 			return Optional.empty();
-		return Optional.of(new Stylesheet(BrailleCssStyle.of(s)));
+		return Optional.of(Stylesheet.of(BrailleCssStyle.of(s)));
 	}
 
 	public static Optional<String> getLanguage(CSSStyledText t) {

@@ -6,7 +6,7 @@
                 exclude-result-prefixes="#all"
                 version="3.0">
     
-    <xsl:include href="library.xsl"/>
+    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
     
     <xsl:param name="property-names" as="xs:string*"/>
     

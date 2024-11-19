@@ -17,7 +17,7 @@ public class CounterSetList extends AbstractList<Term<?>> implements Term<Counte
 	/**
 	 * This class is immutable
 	 */
-	public static class CounterSet extends UnmodifiableTerm<Integer> implements TermPair<String,Integer> {
+	public static class CounterSet extends UnmodifiableTerm<Integer> implements org.daisy.pipeline.braille.css.CounterSet {
 		private final String name;
 		private final Integer value;
 		private CounterSet(String name, Integer value) {
