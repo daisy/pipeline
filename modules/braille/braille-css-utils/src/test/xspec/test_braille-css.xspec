@@ -3,7 +3,7 @@
                xmlns:xs="http://www.w3.org/2001/XMLSchema"
                xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
-               stylesheet="../../main/resources/xml/braille-css.xsl">
+               stylesheet="../../main/resources/xml/library.xsl">
 	
 	<x:scenario label="test_02">
 		<x:call function="s:toXml">
