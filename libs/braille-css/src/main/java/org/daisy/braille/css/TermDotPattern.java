@@ -1,11 +1,15 @@
 package org.daisy.braille.css;
 
+import java.util.regex.Pattern;
+
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.csskit.TermImpl;
 
 import java.io.UnsupportedEncodingException;
 
 public class TermDotPattern extends TermImpl<Character> {
+
+	private static final Pattern DOT_PATTERN_RE = Pattern.compile("[\u2800-\u28ff]");
 
 	private TermDotPattern() {}
 
@@ -15,7 +19,9 @@ public class TermDotPattern extends TermImpl<Character> {
 			throw new IllegalArgumentException(
 					"Invalid value for TermDotPattern(null)");
 		}
-		//if (value != braille) { throw new IllegalArgumentException("Invalid value for TermDotPattern(" + value + ")"); }
+		if (!DOT_PATTERN_RE.matcher("" + value).matches()) {
+			throw new IllegalArgumentException("Invalid value for TermDotPattern(" + value + ")");
+		}
 		this.value = value;
 		return this;
 	}

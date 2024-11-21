@@ -12,12 +12,11 @@ import cz.vutbr.web.css.CombinedSelector;
 import cz.vutbr.web.css.Declaration;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.RuleBlock;
-import cz.vutbr.web.css.RuleFactory;
-import cz.vutbr.web.css.RuleMargin;
 import cz.vutbr.web.css.RulePage;
 import cz.vutbr.web.css.RuleSet;
 import cz.vutbr.web.css.Selector;
 import cz.vutbr.web.css.Selector.SelectorPart;
+import cz.vutbr.web.css.SourceLocator;
 import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.AbstractRuleBlock;
 
@@ -29,11 +28,12 @@ import cz.vutbr.web.csskit.AbstractRuleBlock;
  */
 public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	
-	private final static BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
+	private static final BrailleCSSParserFactory defaultParserFactory;
 	private static final SelectorPart dummyElementSelectorPart;
 	static {
-		RuleFactory ruleFactory = new BrailleCSSRuleFactory();
-		dummyElementSelectorPart = ruleFactory.createElementDOM(null, true);
+		BrailleCSSRuleFactory defaultRuleFactory = new BrailleCSSRuleFactory();
+		defaultParserFactory = new BrailleCSSParserFactory(defaultRuleFactory);
+		dummyElementSelectorPart = defaultRuleFactory.createElementDOM(null, true);
 	}
 	
 	private final static RuleMainBlock emptyBlock = new RuleMainBlock();
@@ -46,9 +46,20 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 	}
 	
 	public InlineStyle(String style, BrailleCSSParserFactory.Context context) {
+		this(style, context, null);
+	}
+	
+	// FIXME: could also pass SourceMap instead of SourceLocator
+	// => source map can also be included in serialized form within special comment in CSS and parsed
+	public InlineStyle(String style, BrailleCSSParserFactory.Context context, SourceLocator location) {
+		this(style, context, location, defaultParserFactory);
+	}
+
+	public InlineStyle(String style, BrailleCSSParserFactory.Context context, SourceLocator location,
+	                   BrailleCSSParserFactory parserFactory) {
 		nestedStyles = new ArrayList<RuleBlock<?>>();
 		List<Declaration> mainDeclarations = new ArrayList<Declaration>();
-		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style, context)) {
+		for (RuleBlock<?> block : parserFactory.parseInlineStyle(style, context, location)) {
 			if (block == null) {}
 			else if (block instanceof RuleSet) {
 				RuleSet set = (RuleSet)block;
@@ -69,22 +80,8 @@ public class InlineStyle implements Cloneable, Iterable<RuleBlock<?>> {
 					relativeSelector.addAll(combinedSelector.subList(1, combinedSelector.size()));
 					nestedStyles.add(new RuleRelativeBlock(relativeSelector, set));
 				}
-			} else if (block instanceof RuleTextTransform
-			           || block instanceof RuleHyphenationResource
-			           || block instanceof RuleCounterStyle
-			           || block instanceof RulePage
-			           || block instanceof RuleVolume
-			           || block instanceof RuleMargin
-			           || block instanceof RuleVolumeArea
-			           || block instanceof RuleRelativeBlock
-			           || block instanceof RuleRelativePage
-			           || block instanceof RuleRelativeVolume
-			           || block instanceof RuleRelativeHyphenationResource
-			           || block instanceof AnyAtRule
-			           ) {
-				nestedStyles.add(block);
 			} else {
-				throw new RuntimeException("coding error");
+				nestedStyles.add(block);
 			}
 		}
 		mainStyle = new Optional<RuleMainBlock>(new RuleMainBlock(mainDeclarations));

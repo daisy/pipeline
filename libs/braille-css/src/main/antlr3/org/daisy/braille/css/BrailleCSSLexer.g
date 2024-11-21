@@ -15,6 +15,11 @@ import CSSLexer;
         emit(t);
         return t;
     }
+
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e) {
+        gCSSLexer.displayRecognitionError(tokenNames, e);
+    }
 }
 
 VOLUME : '@volume' ;

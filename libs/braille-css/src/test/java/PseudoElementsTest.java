@@ -15,7 +15,6 @@ import cz.vutbr.web.css.StyleSheet;
 import cz.vutbr.web.csskit.antlr.CSSSource;
 import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
-import org.daisy.braille.css.BrailleCSSDeclarationTransformer;
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.SelectorImpl.PseudoElementImpl;
@@ -30,8 +29,9 @@ public class PseudoElementsTest {
 	private static final RuleFactory rf = new BrailleCSSRuleFactory();
 	
 	public PseudoElementsTest() {
-		CSSFactory.registerSupportedCSS(new SupportedBrailleCSS());
-		CSSFactory.registerDeclarationTransformer(new BrailleCSSDeclarationTransformer());
+		SupportedBrailleCSS css = new SupportedBrailleCSS();
+		CSSFactory.registerSupportedCSS(css);
+		CSSFactory.registerDeclarationTransformer(css);
 	}
 	
 	@Test
