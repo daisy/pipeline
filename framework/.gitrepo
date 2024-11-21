@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-framework.git
 	branch = master
-	commit = f64694e84ec3196f980bbc1737e0b11ef169d3ce
-	parent = 4fa2144e11e847611b27c8c10afce83e2e447574
+	commit = e9a0e7138b6a1e508fe0734413ab6b6136a0a3da
+	parent = e52f855d7828c342e9458f26249669969fc828a5
 	cmdver = 0.3.1
