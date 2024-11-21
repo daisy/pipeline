@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 	public SingleMapNodeData(DeclarationTransformer transformer, SupportedCSS css) {
 		this.transformer = transformer;
 		this.css = css;
-		this.map = new HashMap<String, Quadruple>(css.getTotalProperties(), 1.0f);
+		this.map = new HashMap<String, Quadruple>(css != null ? css.getTotalProperties() : 16, 1.0f);
 	}
 	
 	public <T extends CSSProperty> T getProperty(String name) {
@@ -52,39 +53,14 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 		
 		Quadruple q = map.get(name);
 		if(q==null) return null;
-		
-		CSSProperty tmp;
-		
-		if(includeInherited) {
-			if(q.curProp!=null) tmp = q.curProp;
-			else tmp = q.inhProp;
-		}
-		else {
-			tmp = q.curProp;
-		}
-		
-		// this will cast to inferred type
-		// if there is no inferred type, cast to CSSProperty is safe
-		// otherwise the possibility having wrong left side of assignment
-		// is roughly the same as use wrong dynamic class cast 
-		@SuppressWarnings("unchecked")
-		T retval = (T) tmp;
-		return retval;
-		
+		return q.getProperty(includeInherited);
 	}
 
     public Term<?> getValue(String name, boolean includeInherited) {
         
         Quadruple q = map.get(name);
-        if(q==null) return null;
-        
-        if(includeInherited) {
-            if(q.curValue!=null) return q.curValue;
-            if(q.curProp!=null) return null;
-            return q.inhValue;
-        }
-        
-        return q.curValue;
+        if (q==null) return null;
+        else return q.getValue(includeInherited);
     }
     
 	public <T extends Term<?>> T getValue(Class<T> clazz, String name) {
@@ -119,7 +95,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 		
 		for(String key: properties.keySet()) {
 			Quadruple q = map.get(key);
-			if(q==null) q = new Quadruple();
+			if(q==null) q = new Quadruple(css, key);
 			q.curProp = properties.get(key);
 			q.curValue = terms.get(key);
 			q.curSource = d;
@@ -134,22 +110,19 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 	}
 	
 	public NodeData concretize() {
-		
-		for(String key: map.keySet()) {
-			Quadruple q = map.get(key);
-			
-			// replace current with inherited or defaults
-			if(q.curProp!=null && q.curProp.equalsInherit()) {
-				if(q.inhProp==null) q.curProp = css.getDefaultProperty(key);
-				else {
-				    q.curProp = q.inhProp;
-				    q.curSource = q.inhSource;
-				}
-				
-				if(q.inhValue==null) q.curValue = css.getDefaultValue(key);
-				else q.curValue = q.inhValue;
+		return concretize(true, false);
+	}
+	
+	public NodeData concretize(boolean concretizeInherit, boolean concretizeInitial) {
+		if (concretizeInherit || concretizeInitial) {
+			Iterator<Map.Entry<String,Quadruple>> entries = map.entrySet().iterator();
+			while (entries.hasNext()) {
+				Quadruple q = entries.next().getValue();
+				q.concretize(concretizeInherit, concretizeInitial);
+				if (q.isEmpty())
+					// default unknown
+					entries.remove();
 			}
-			map.put(key, q);
 		}
 		return this;
 	}
@@ -173,23 +146,10 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 			
 			// create new quadruple if this do not contain one
 			// for this property
-			if(q==null) q = new Quadruple();
+			if(q==null) q = new Quadruple(qp.getDefault());
 			
-			boolean forceInherit = (q.curProp != null && q.curProp.equalsInherit());
+			q.inheritFrom(qp);
 			
-			//try the inherited value of the parent
-			if(qp.inhProp!=null && (qp.inhProp.inherited() || forceInherit)) {
-				q.inhProp = qp.inhProp;
-				q.inhValue = qp.inhValue;
-				q.inhSource = qp.inhSource;
-			}
-			
-			//try the declared property of the parent
-			if(qp.curProp!=null && (qp.curProp.inherited() || forceInherit)) {
-				q.inhProp = qp.curProp;
-				q.inhValue = qp.curValue;
-                q.inhSource = qp.curSource;
-			}
 			// insert/replace only if contains inherited/original 
 			// value			
 			if(!q.isEmpty())
@@ -249,14 +209,7 @@ public class SingleMapNodeData implements NodeData, Cloneable {
         if (q == null)
             return null;
         else
-        {
-            if(includeInherited) {
-                if(q.curSource!=null) return q.curSource;
-                return q.inhSource;
-            }
-            else
-                return q.curSource;
-        }
+            return q.getSourceDeclaration(includeInherited);
     }
 
 	@Override
@@ -268,21 +221,153 @@ public class SingleMapNodeData implements NodeData, Cloneable {
 				throw new InternalError("coding error");
 			}
 		}
-		clone.map = new HashMap<String,Quadruple>(css.getTotalProperties(), 1.0f);
+		clone.map = new HashMap<String,Quadruple>(css != null ? css.getTotalProperties() : 16, 1.0f);
 		for (String key : map.keySet())
 			clone.map.put(key, (Quadruple)map.get(key).clone());
 		return clone;
 	}
 	
-	static class Quadruple implements Cloneable {
-		CSSProperty inhProp = null;
-		CSSProperty curProp = null;
-		Term<?> inhValue = null;
-		Term<?> curValue = null;
-		Declaration inhSource = null;
-        Declaration curSource = null;
+	public static class Quadruple implements Cloneable {
+		protected CSSProperty inhProp = null;
+		protected CSSProperty curProp = null;
+		protected Term<?> inhValue = null;
+		protected Term<?> curValue = null;
+		protected Declaration inhSource = null;
+        protected Declaration curSource = null;
+		private Quadruple defaultValue = null;
+		private final SupportedCSS css;
+		private final String key;
 		
-		public Quadruple() {			
+		public Quadruple() {
+			this.css = null;
+			this.key = null;
+		}
+		
+		public Quadruple(SupportedCSS css, String key) {
+			if (css == null || key == null)
+				throw new IllegalArgumentException();
+			this.css = css;
+			this.key = key;
+		}
+		
+		/**
+		 * @param defaultValue assumed to be immutable
+		 */
+		public Quadruple(Quadruple defaultValue) {
+			if (defaultValue == null)
+				throw new IllegalArgumentException();
+			this.defaultValue = defaultValue;
+			// these variables will not be used
+			this.css = null;
+			this.key = null;
+		}
+		
+		public <T extends CSSProperty> T getProperty(boolean includeInherited) {
+			CSSProperty prop; {
+				if (curProp != null)
+					prop = curProp;
+				else if (includeInherited)
+					prop = inhProp;
+				else
+					prop = null;
+			}
+			// this will cast to inferred type
+			// if there is no inferred type, cast to CSSProperty is safe
+			// otherwise the possibility having wrong left side of assignment
+			// is roughly the same as use wrong dynamic class cast
+			@SuppressWarnings("unchecked")
+			T retval = (T)prop;
+			return retval;
+		}
+		
+		public Term<?> getValue(boolean includeInherited) {
+			if (curValue != null)
+				return curValue;
+			else if (curProp != null)
+				return null;
+			else if (includeInherited)
+				return inhValue;
+			else
+				return null;
+		}
+		
+		public Declaration getSourceDeclaration(boolean includeInherited) {
+			if (curSource != null)
+				return curSource;
+			else if (includeInherited)
+				return inhSource;
+			else
+				return null;
+		}
+		
+		public void concretize() {
+			concretize(true, false);
+		}
+		
+		public void concretize(boolean concretizeInherit, boolean concretizeInitial) {
+			if (curProp != null) {
+				if (concretizeInherit && curProp.equalsInherit()) {
+					// replace current with inherited or defaults
+					if (inhProp != null) {
+						curProp = inhProp;
+						curValue = inhValue;
+						curSource = inhSource;
+					} else if (defaultValue != null) {
+						curProp = defaultValue.curProp;
+						curValue = defaultValue.curValue;
+					} else if (css != null) {
+						curProp = css.getDefaultProperty(key);
+						curValue = css.getDefaultValue(key);
+						defaultValue = this;
+					} else {
+						// default not known
+						curProp = null;
+						defaultValue = this;
+					}
+				} else if (concretizeInitial && curProp.equalsInitial()) {
+					// replace current with defaults
+					if (css != null) {
+						curProp = css.getDefaultProperty(key);
+						curValue = css.getDefaultValue(key);
+						defaultValue = this;
+					} else {
+						// default not known
+						curProp = null;
+						defaultValue = this;
+					}
+				}
+			}
+		}
+		
+		public void inheritFrom(Quadruple parent) {
+			boolean forceInherit = curProp != null && curProp.equalsInherit();
+			// try the inherited value of the parent
+			if (parent.inhProp != null && (parent.inhProp.inherited() || forceInherit)) {
+				inhProp = parent.inhProp;
+				inhValue = parent.inhValue;
+				inhSource = parent.inhSource;
+			}
+			// try the declared property of the parent
+			if (parent.curProp != null && (parent.curProp.inherited() || forceInherit)) {
+				inhProp = parent.curProp;
+				inhValue = parent.curValue;
+				inhSource = parent.curSource;
+			}
+		}
+		
+		public Quadruple getDefault() {
+			if (defaultValue == null) {
+				if (css != null) {
+					defaultValue = new Quadruple(css, key);
+					defaultValue.curProp = css.getDefaultProperty(key);
+					defaultValue.curValue = css.getDefaultValue(key);
+				} else {
+					defaultValue = new Quadruple();
+				}
+				defaultValue.curSource = null;
+				defaultValue.defaultValue = defaultValue;
+			}
+			return defaultValue;
 		}
 		
 		public boolean isEmpty() {
