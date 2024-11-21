@@ -3,6 +3,8 @@ package cz.vutbr.web.csskit.antlr;
 import java.net.URL;
 import java.nio.charset.Charset;
 
+import cz.vutbr.web.css.SourceLocator;
+
 import org.w3c.dom.Element;
 
 /**
@@ -45,14 +47,14 @@ public class CSSSource {
 	public URL base;
 
 	/**
-	 * Line number of the first character.
+	 * Line number (0-based) of the first character, or {@code -1} if unknown.
 	 */
-	public int lineOffset = 0;
+	public int lineOffset = -1; // unknown
 
 	/**
-	 * Column number of the first character.
+	 * Column number (0-based) of the first character, or {@code -1} if unknown.
 	 */
-	public int columnOffset = 0;
+	public int columnOffset = -1; // unknown
 
 	/**
 	 * The media type as specified on the <code>style</code> or <code>link</code> element
@@ -60,11 +62,31 @@ public class CSSSource {
 	 */
 	public String mediaType;
 
-	public CSSSource(String source, Element inlineElement, URL base) {
+	public CSSSource(String source, Element inlineElement, SourceLocator location) {
+		this(source,
+		     inlineElement,
+		     location != null ? location.getURL() : null,
+		     location != null ? location.getLineNumber() : -1,
+		     location != null ? location.getColumnNumber() : -1);
+	}
+	
+	public CSSSource(String source, Element inlineElement, URL base, int lineOffset, int columnOffset) {
 		this.type = SourceType.INLINE;
 		this.source = source;
 		this.inlineElement = inlineElement;
 		this.base = base;
+		if (lineOffset >= 0)
+			this.lineOffset = lineOffset;
+		if (columnOffset >= 0)
+			this.columnOffset = columnOffset;
+	}
+
+	public CSSSource(String source, String mediaType, SourceLocator location) {
+		this(source,
+		     mediaType,
+		     location != null ? location.getURL() : null,
+		     location != null ? location.getLineNumber() : -1,
+		     location != null ? location.getColumnNumber() : -1);
 	}
 
 	public CSSSource(String source, String mediaType, URL base, int lineOffset, int columnOffset) {
@@ -72,9 +94,9 @@ public class CSSSource {
 		this.source = source;
 		this.mediaType = mediaType;
 		this.base = base;
-		if (lineOffset > 0)
+		if (lineOffset >= 0)
 			this.lineOffset = lineOffset;
-		if (columnOffset > 0)
+		if (columnOffset >= 0)
 			this.columnOffset = columnOffset;
 	}
 

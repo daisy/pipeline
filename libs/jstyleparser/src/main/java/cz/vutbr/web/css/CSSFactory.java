@@ -764,14 +764,17 @@ public final class CSSFactory {
 			try {
 				// embedded style-sheet
 				if (isEmbeddedStyleSheet(elem, media)) {
-					SourceLocator loc = nodeLocator.apply(elem);
-					String mediaType = getMediaType(elem);
-					if (cssReader.supportsMediaType(mediaType, null)) {
-						result = pf.append(
-							new CSSSource(extractElementText(elem), mediaType, base, loc.getLineNumber(), loc.getColumnNumber()),
-							cssReader,
-							result);
-						log.debug("Matched embedded CSS style");
+					Node firstChild = elem.getFirstChild();
+					if (firstChild != null) {
+						SourceLocator loc = nodeLocator.apply(firstChild);
+						String mediaType = getMediaType(elem);
+						if (cssReader.supportsMediaType(mediaType, null)) {
+							result = pf.append(
+								new CSSSource(extractElementText(elem), mediaType, base, loc.getLineNumber(), loc.getColumnNumber()),
+								cssReader,
+								result);
+							log.debug("Matched embedded CSS style");
+						}
 					}
 				}
 				// linked style-sheet
@@ -790,8 +793,9 @@ public final class CSSFactory {
 				else {
 					if (cssReader.supportsMediaType(null, null)) {
     				    if (elem.getAttribute("style") != null && elem.getAttribute("style").length() > 0) {
+        					SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("style"));
         					result = pf.append(
-        						new CSSSource(elem.getAttribute("style"), elem, base),
+        						new CSSSource(elem.getAttribute("style"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
         						cssReader,
         						true,
         						result);
@@ -799,8 +803,9 @@ public final class CSSFactory {
     				    }
 					}
                         if (elem.getAttribute("XDefaultStyle") != null && elem.getAttribute("XDefaultStyle").length() > 0) {
+                            SourceLocator loc = nodeLocator.apply(elem.getAttributeNode("XDefaultStyle"));
                             result = pf.append(
-                            		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base),
+                            		new CSSSource(elem.getAttribute("XDefaultStyle"), elem, base, loc.getLineNumber(), loc.getColumnNumber()),
                                  cssReader,
                                  false,
                                  result);
