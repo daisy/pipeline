@@ -1,7 +1,7 @@
-[braille-css][]
-===============
+[braille-css-java][]
+====================
 
-Implementation of [Braille CSS][braille-css-spec] in Java/ANTLR.
+Implementation of [Braille CSS][braille-css] in Java/ANTLR.
 
 Release procedure
 -----------------
@@ -52,5 +52,5 @@ Release procedure
   ```
   
 
-[braille-css-spec]: http://snaekobbi.github.io/braille-css-spec
-[braille-css]: http://snaekobbi.github.io/braille-css
+[braille-css]: http://braillespecs.github.io/braille-css
+[braille-css-java]: http://github.com/daisy/braille-css-java
