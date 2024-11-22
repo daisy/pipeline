@@ -43,10 +43,11 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 
 	private final XMLInputFactory xmlParser;
 	private final Set<File> sourceRoots;
+	private final ClassLoader compileClassPath;
 	private final ModuleRegistry moduleRegistry;
 	private final Log logger;
 
-	public GenerateModuleClassFunctionProvider(ClassLoader classPath, Collection<String> sourceRoots, Log logger) {
+	public GenerateModuleClassFunctionProvider(ClassLoader compileClassPath, Collection<String> sourceRoots, Log logger) {
 		super(GenerateModuleClass.class);
 		xmlParser = XMLInputFactory.newInstance();
 		this.sourceRoots = new HashSet<>(); {
@@ -54,7 +55,8 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 				File f = new File(dir);
 				if (f.exists())
 					this.sourceRoots.add(f); }}
-		moduleRegistry = getModuleRegistry(classPath);
+		this.compileClassPath = compileClassPath;
+		moduleRegistry = getModuleRegistry(compileClassPath);
 		this.logger = logger;
 	}
 
@@ -129,10 +131,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 					try {
 						if (entry.uri.toString().endsWith(".xpl"))
 							dependencies = new XProcResource(moduleUnderCompilation, entry.uri.toString())
-							                   .listDependencies(moduleRegistry, sourceRoots, xmlParser);
+							                   .listDependencies(moduleRegistry, sourceRoots, compileClassPath, xmlParser);
 						else if (entry.uri.toString().endsWith(".xsl"))
 							dependencies = new XSLTResource(moduleUnderCompilation, entry.uri.toString())
-							                   .listDependencies(moduleRegistry, sourceRoots, xmlParser);
+							                   .listDependencies(moduleRegistry, sourceRoots, compileClassPath, xmlParser);
 						else if (entry.uri.toString().endsWith(".rng"))
 							dependencies = new RelaxNGResource(moduleUnderCompilation, entry.uri.toString())
 							                   .listDependencies(moduleRegistry, xmlParser);
@@ -204,10 +206,6 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			if (!xsltPackageDependencyChecks.isEmpty()) {
 				imports.add("javax.xml.stream.XMLInputFactory");
 				result.append("    private XMLInputFactory xmlParser;\n");
-			}
-			if (extensionFunctionChecks) {
-				imports.add("org.daisy.common.xpath.saxon.XPathFunctionRegistry");
-				result.append("    private XPathFunctionRegistry xpathFunctions;\n");
 			}
 			if (xsltPackageChecks) {
 				imports.add("java.util.List");
@@ -454,35 +452,22 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			}
 			if (extensionFunctionChecks) {
 				imports.add("java.nio.file.NoSuchFileException");
-				imports.add("net.sf.saxon.lib.ExtensionFunctionDefinition");
-				imports.add("org.daisy.common.xpath.saxon.XPathFunctionRegistry");
 				imports.add("org.daisy.pipeline.modules.ResolutionException");
 				result.append("\n");
-				result.append("    @Reference(\n");
-				result.append("        name = \"XPathFunctionRegistry\",\n");
-				result.append("        unbind = \"-\",\n");
-				result.append("        service = XPathFunctionRegistry.class,\n");
-				result.append("        cardinality = ReferenceCardinality.MANDATORY,\n");
-				result.append("        policy = ReferencePolicy.STATIC\n");
-				result.append("    )\n");
-				result.append("    public void setXPathFunctionRegistry(XPathFunctionRegistry registry) {\n");
-				result.append("        xpathFunctions = registry;\n");
-				result.append("    }\n");
-				result.append("\n");
 				result.append("    private void tryResolveXPathExtensionFunction(String className) throws ResolutionException {\n");
-				result.append("        for (ExtensionFunctionDefinition d : xpathFunctions.getFunctions()) {\n");
-				result.append("            if (className.equals(d.getFunctionQName().getURI())) {\n");
-				result.append("                try {\n");
-				result.append("                    getResource(\"../\" + className.replace('.', '/') + \".class\");\n");
-				result.append("                    return;\n");
-				result.append("                } catch (NoSuchFileException e) {\n");
-				result.append("                    logger.debug(\n");
-				result.append("                        \"Class \" + className + \" expected to be in the same module (\" + getName() + \").\");\n");
-				result.append("                }\n");
-				result.append("            }\n");
+				result.append("        try {\n");
+				result.append("            getResource(\"../\" + className.replace('.', '/') + \".class\");\n");
+				result.append("            return;\n");
+				result.append("        } catch (NoSuchFileException e) {\n");
+				result.append("        }\n");
+				result.append("        // if the function is not implemented in the same module, the class must be on the class path\n");
+				result.append("        try {\n");
+				result.append("            Class.forName(className);\n");
+				result.append("            return;\n");
+				result.append("        } catch (Throwable e) {\n");
 				result.append("        }\n");
 				result.append("        throw new ResolutionException(\n");
-				result.append("            \"Unresolved Java dependency: no class \" + className + \" found in module \" + getName());\n");
+				result.append("            \"Unresolved Java dependency: no class \" + className + \" found on the class path\");\n");
 				result.append("    }\n");
 			}
 			if (xsltPackageChecks) {
@@ -654,6 +639,10 @@ public class GenerateModuleClassFunctionProvider extends ReflexiveExtensionFunct
 			this.name = name;
 			this.uri = uri;
 			this.contentType = contentType;
+		}
+		@Override
+		public String toString() {
+			return "" + uri;
 		}
 	}
 
