@@ -8,7 +8,7 @@
                 exclude-result-prefixes="#all">
 
 	<xsl:import href="abstract-block-translator.xsl"/>
-	<xsl:include href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xsl"/>
+	<xsl:include href="library.xsl"/>
 
 	<xsl:param name="text-transform"/>
 

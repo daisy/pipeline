@@ -208,8 +208,12 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			String s = attributes != null ? attributes.getDictionaryIdentifier() : null;
 			if (s != null || parentStyle != null)
 				style = cssParser.parse(s != null ? s : "", parentStyle);
-			if (hyphenating && (style == null || style.getProperty("hyphens") == null))
-				style = HYPHENS_AUTO.inheritFrom(style);
+			if (hyphenating) {
+				if (style == null)
+					style = HYPHENS_AUTO;
+				else if (style.getProperty("hyphens") == null)
+					style = HYPHENS_AUTO.inheritFrom(style);
+			}
 		}
 		if (attributes != null && attributes.hasChildren())
 			return cssStyledTextFromTranslatable(text, attributes.iterator(), language, false, style);
@@ -306,28 +310,29 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 		List<CSSStyledText> styledText = new ArrayList<>();
 		for (Object t : precedingOrFollowingText) {
 			String text;
-			String locale;
+			String lang;
 			boolean hyphenate; {
 				if (t instanceof PrecedingText) {
 					text = ((PrecedingText)t).resolve();
-					locale = ((PrecedingText)t).getLocale().orElse(null);
+					lang = ((PrecedingText)t).getLocale().orElse(null);
 					hyphenate = ((PrecedingText)t).shouldHyphenate(); }
 				else if (t instanceof FollowingText) {
 					text = ((FollowingText)t).peek();
-					locale = ((FollowingText)t).getLocale().orElse(null);
+					lang = ((FollowingText)t).getLocale().orElse(null);
 					hyphenate = ((FollowingText)t).shouldHyphenate(); }
 				else
 					throw new RuntimeException();
 			}
-			SimpleInlineStyle style; {
-				if (hyphenate && (parentStyle == null || parentStyle.getProperty("hyphens") == null))
-					style = new SimpleInlineStyle("hyphens: auto", parentStyle);
-				else if (parentStyle == null)
-					style = null;
+			Locale locale = lang != null ? parseLocale(lang) : null;
+			SimpleInlineStyle style = null; {
+				if (hyphenate && parentStyle == null)
+					style = HYPHENS_AUTO;
+				else if (hyphenate &&  parentStyle.getProperty("hyphens") == null)
+					style = HYPHENS_AUTO.inheritFrom(parentStyle);
 				else
-					style = new SimpleInlineStyle("", parentStyle);
+					style = parentStyle;
 			}
-			styledText.add(new CSSStyledText(text, style, locale != null ? parseLocale(locale) : null));
+			styledText.add(new CSSStyledText(text, style, locale));
 		}
 		return styledText;
 	}

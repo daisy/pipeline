@@ -6,7 +6,7 @@
                 exclude-result-prefixes="#all"
                 version="2.0">
     
-    <xsl:include href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"/>
+    <xsl:include href="library.xsl"/>
     
     <xsl:template match="@*|node()">
         <xsl:copy>
