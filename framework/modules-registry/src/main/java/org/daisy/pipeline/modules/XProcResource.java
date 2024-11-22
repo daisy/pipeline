@@ -67,8 +67,9 @@ public class XProcResource {
 	 * (internal) {@link JavaDependency}. XSLT/XProc/RelaxNG resources from the same module are
 	 * handled recursively.
 	 */
-	public Set<Dependency> listDependencies(ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser) {
-		return listDependencies(resource, true, false, module, resolver, sourceRoots, parser, new LinkedList<>());
+	public Set<Dependency> listDependencies(ModuleRegistry resolver, Set<File> sourceRoots, ClassLoader compileClassPath,
+	                                        XMLInputFactory parser) {
+		return listDependencies(resource, true, false, module, resolver, sourceRoots, compileClassPath, parser, new LinkedList<>());
 	}
 
 	/**
@@ -83,8 +84,8 @@ public class XProcResource {
 	 * @param parser      The StAX input factory for parsing the XML.
 	 */
 	private static Set<Dependency> listDependencies(URL file, boolean ensureXProc, boolean ensureXSLT, Module module,
-	                                                ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser,
-	                                                Deque<URL> stack) {
+	                                                ModuleRegistry resolver, Set<File> sourceRoots, ClassLoader compileClassPath,
+	                                                XMLInputFactory parser,  Deque<URL> stack) {
 		if (cache.containsKey(file)) {
 			return cache.get(file);
 		} else {
@@ -108,7 +109,8 @@ public class XProcResource {
 										throw new IllegalArgumentException(
 											"File is not XProc: " + file + ": found root element " + name);
 									else if (XSLTResource.XSL_STYLESHEET.equals(name) || XSLTResource.XSL_PACKAGE.equals(name))
-										return XSLTResource.listDependencies(file, module, resolver, sourceRoots, parser);
+										return XSLTResource.listDependencies(file, module, resolver, sourceRoots,
+										                                     compileClassPath, parser);
 									else if (ensureXSLT)
 										throw new IllegalArgumentException(
 											"File is not XSLT: " + file + ": found root element " + name);
@@ -144,7 +146,8 @@ public class XProcResource {
 									stack.push(file);
 									dependencies.addAll(
 										listDependencies(URLs.resolve(URLs.asURI(file), uri).toURL(), P_IMPORT.equals(name),
-										                 CX_IMPORT.equals(name), module, resolver, sourceRoots, parser, stack));
+										                 CX_IMPORT.equals(name), module, resolver, sourceRoots, compileClassPath,
+										                 parser, stack));
 									stack.pop();
 								}
 							}

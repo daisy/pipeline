@@ -24,4 +24,29 @@ public class UseXSLTPackage implements Dependency {
 	public String getVersion() {
 		return version;
 	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof UseXSLTPackage))
+			return false;
+		UseXSLTPackage that = (UseXSLTPackage)o;
+		if (!name.equals(that.name))
+			return false;
+		if (!version.equals(that.version))
+			return false;
+		return true;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + name.hashCode();
+		result = prime * result + version.hashCode();
+		return result;
+	}
 }

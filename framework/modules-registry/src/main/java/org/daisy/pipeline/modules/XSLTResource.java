@@ -75,8 +75,9 @@ public class XSLTResource {
 	 * (internal) {@link JavaDependency}. Imported/included resources from the same module are
 	 * handled recursively.
 	 */
-	public Set<Dependency> listDependencies(ModuleRegistry resolver, Set<File> sourceRoots, XMLInputFactory parser) {
-		return listDependencies(resource, module, resolver, sourceRoots, parser);
+	public Set<Dependency> listDependencies(ModuleRegistry resolver, Set<File> sourceRoots, ClassLoader compileClassPath,
+	                                        XMLInputFactory parser) {
+		return listDependencies(resource, module, resolver, sourceRoots, compileClassPath, parser);
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class XSLTResource {
 	 * @param parser      The StAX input factory for parsing the XML.
 	 */
 	static Set<Dependency> listDependencies(URL xsltFile, Module module, ModuleRegistry resolver, Set<File> sourceRoots,
-	                                        XMLInputFactory parser) {
+	                                        ClassLoader compileClassPath, XMLInputFactory parser) {
 		if (cache.containsKey(xsltFile)) {
 			return cache.get(xsltFile);
 		} else {
@@ -126,7 +127,7 @@ public class XSLTResource {
 									// resolve relative path
 									dependencies.addAll(
 										listDependencies(URLs.resolve(URLs.asURI(xsltFile), uri).toURL(), module,
-										                 resolver, sourceRoots, parser));
+										                 resolver, sourceRoots, compileClassPath, parser));
 								}
 							} else if (depth == 1 && XSL_USE_PACKAGE.equals(elemName)) {
 								Attribute name = elem.getAttributeByName(_NAME);
@@ -146,9 +147,10 @@ public class XSLTResource {
 								// fully qualified Java class name, use the heuristic that
 								// ExtensionFunctionProvider classes are not in the default package.
 								if (FQCN.matcher(nsUri).matches() && nsUri.contains(".")) {
-									String className = nsUri;
 									// assuming it is the namespace of a XPath extension function, and the function
 									// is used within this element
+									String className = nsUri;
+									// try to resolve the class
 									String javaSourceFile = className.split("\\$")[0].replace('.', '/') + ".java";
 									boolean internal = false; {
 										if (sourceRoots != null)
@@ -158,11 +160,24 @@ public class XSLTResource {
 													internal = true;
 													break; }}
 									if (!internal) {
-										// require that the function is implemented in the same module (and exposed
-										// through a public XSLT to other modules)
-										throw new RuntimeException(
-											"" + xsltFile + ": Java dependency could not be resolved: " + className
-											+ " (expected to be in the same module)");
+										// if the function is not implemented in the same module, the class must be
+										// on the class path and resolvable through ModuleRegistry
+										Class c; {
+											try {
+												c = Class.forName(className, true, compileClassPath);
+											} catch (Throwable e) {
+												throw new RuntimeException(
+													"" + xsltFile
+													+ ": Java dependency could not be resolved: class not on class path: "
+													+ className);
+											}
+										}
+										if (resolver.getModuleByClass(c) == null)
+											throw new RuntimeException(
+												"" + xsltFile
+												+ ": Java dependency could not be resolved: no module provides class: "
+												+ className);
+
 									}
 									dependencies.add(new JavaDependency(module, className));
 								}
