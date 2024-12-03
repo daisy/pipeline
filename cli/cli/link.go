@@ -262,20 +262,20 @@ func (p PipelineLink) StylesheetParameters(paramReq StylesheetParametersRequest)
 
 //Feeds the channel with the messages describing the job's execution
 func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
-	msgNum := -1
+	msgSeq := -1
 	for {
-		job, err := p.pipeline.Job(jobId, msgNum)
+		job, err := p.pipeline.Job(jobId, msgSeq)
 		if err != nil {
 			messages <- Message{Error: err}
 			close(messages)
 			return
 		}
-		n := msgNum
+		n := msgSeq
 		if len(job.Messages.Message) > 0 {
-			n = flattenMessages(job.Messages.Message, messages, job.Status, job.Messages.Progress, msgNum + 1, 0)
+			n = flattenMessages(job.Messages.Message, messages, job.Status, job.Messages.Progress, msgSeq + 1, 0)
 		}
-		if (n > msgNum) {
-			msgNum = n
+		if (n > msgSeq) {
+			msgSeq = n
 		} else {
 			messages <- Message{Progress: job.Messages.Progress}
 		}
@@ -290,18 +290,25 @@ func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
 }
 
 //Flatten message coming from the Pipeline job and feed them into the channel
-//Return the sequence number of the last inner message
-func flattenMessages(from []pipeline.Message, to chan Message, status string, progress float64, firstNum int, depth int) (lastNum int) {
+//Return the sequence number of the inner message with the highest sequence number
+func flattenMessages(from []pipeline.Message, to chan Message, status string, progress float64, firstSeq int, depth int) (lastSeq int) {
+	lastSeq = -1
 	for _, msg := range from {
-		lastNum = msg.Sequence
-		if lastNum >= firstNum {
+		seq := msg.Sequence
+		if seq >= firstSeq {
 			to <- Message{Message: msg.Content, Level: msg.Level, Depth: depth, Status: status, Progress: progress}
+			if seq > lastSeq {
+				lastSeq = seq
+			}
 		}
 		if len(msg.Message) > 0 {
-			lastNum = flattenMessages(msg.Message, to, status, progress, firstNum, depth + 1)
+			seq := flattenMessages(msg.Message, to, status, progress, firstSeq, depth + 1)
+			if seq > lastSeq {
+				lastSeq = seq
+			}
 		}
 	}
-	return lastNum
+	return lastSeq
 }
 
 func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequest, err error) {
