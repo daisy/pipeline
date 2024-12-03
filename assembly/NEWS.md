@@ -1,3 +1,20 @@
+Changes in release v1.14.21
+===========================
+
+## Modules
+
+- **FIX** Support master SMIL in DAISY 2.02 validator script
+- **FIX** Timeout errors in speech synthesis
+- Major refactoring and other changes to braille production scripts, see release notes of braille modules [v1.14.30](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v11430)
+- Added "espeak-" prefix to eSpeak voice names
+- Other bugfixes and improvements
+
+Backwards incompatibility note: renamed "tts" option to "audio" in EPUB 3 enhancer script
+
+## Details
+
+See [all the closed issues of this release](https://github.com/orgs/daisy/projects/7). To view using the [Github CLI](https://cli.github.com/): `gh project --owner daisy item-list 7`
+
 Changes in release v1.14.20
 ===========================
 
