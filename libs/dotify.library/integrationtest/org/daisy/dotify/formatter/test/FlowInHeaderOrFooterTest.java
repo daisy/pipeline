@@ -42,6 +42,18 @@ public class FlowInHeaderOrFooterTest extends AbstractFormatterEngineTest {
     }
 
     @Test
+    public void testFlowInFooterWithCollapsingMargins() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/flow-in/flow-in-footer-collapsing-margins-input.obfl",
+            "resource-files/flow-in/flow-in-footer-collapsing-margins-expected.pef",
+            false
+        );
+    }
+
+    @Test
     public void testFlowInHeader() throws
             LayoutEngineException,
             IOException,

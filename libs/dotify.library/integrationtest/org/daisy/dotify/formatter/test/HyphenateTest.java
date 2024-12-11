@@ -80,4 +80,15 @@ public class HyphenateTest extends AbstractFormatterEngineTest {
         );
     }
 
+    @Test
+    public void testHyphenateLastLineWidows() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            "resource-files/hyphenate/hyphenate-last-line-widows-input.obfl",
+            "resource-files/hyphenate/hyphenate-last-line-widows-expected.pef",
+            false
+        );
+    }
 }

@@ -21,6 +21,7 @@ import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
 import org.daisy.dotify.formatter.impl.core.TransitionContent;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
@@ -32,11 +33,12 @@ import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * <p>Given a {@link BlockSequence}, produces {@link org.daisy.dotify.formatter.impl.common.Page}
@@ -356,10 +358,9 @@ public class PageSequenceBuilder2 {
         prevCbl = cbl;
 
         // The purpose of this is to prevent supplements from combining with header/footer
-        cd.setExtraOverhead(
-            current.getPageTemplate().validateAndAnalyzeHeader() +
-            current.getPageTemplate().validateAndAnalyzeFooter()
-        );
+        int combinableHeaderAndFooterLines = current.getPageTemplate().validateAndAnalyzeHeader()
+            + current.getPageTemplate().validateAndAnalyzeFooter();
+        cd.setExtraOverhead(combinableHeaderAndFooterLines);
 
         // At the beginning here before we start printing the page for this iteration we will set
         // the value topOfPage. This value will be changed later on when we aren't at the top of the
@@ -413,13 +414,21 @@ public class PageSequenceBuilder2 {
                     );
                 }
             );
-            // This function returns the space that header or footer fields take up in a row at a
-            // certain position on the page. RowGroupDataSource needs this information in order to
-            // know where to break the line.
-            Function<Integer, Integer> reservedWidths = x -> {
-                return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), x);
-            };
-            data.setReservedWidths(reservedWidths);
+            data.setReservedWidths(
+                // This function returns the space that header or footer fields take up in the next row
+                // of a given RowGroupSequence when all the rows of the sequence would be added to the
+                // page. (RowGroupDataSource needs this information in order to know where to break the
+                // line.)
+                seq -> {
+                    // This is an approximation of the vertical position of the next row measured from
+                    // the top of the sequence, in terms of rows with normal row spacing. Note that it
+                    // is not accurate if the sequence contains collapsing margins. It is also not
+                    // totally accurate if non-integer row spacings are used.
+                    int pos = seq.getGroup() == null ? 0 : (int) Math.floor(
+                        seq.getGroup().stream().mapToDouble(v -> (int) v.getUnitSize()).sum());
+                    return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), pos);
+                }
+            );
             Optional<Boolean> blockBoundary = Optional.empty();
             if (!data.isEmpty()) {
                 RowGroupDataSource copy = new RowGroupDataSource(data);
@@ -515,17 +524,17 @@ public class PageSequenceBuilder2 {
                     }
                 } else {
                     SplitPointCost<RowGroup> cost = (SplitPointDataSource<RowGroup, ?> units, int in, int limit) -> {
-                        // variableWidthCost > 0 means that there is space on the row taken up
-                        // by header or footer fields and the RowGroup can not be fit into the
-                        // available space (does not support variable width).
-                        // We know that if this is the case the row is blank (RowGroupProvider
-                        // inserts them) so it is fine to break here, but we give it a big
-                        // penalty so that it might become preferable to break before the block.
-                        double variableWidthCost =
-                            (reservedWidths.apply(in) > 0 && !units.get(in).isMergeable()) ? 10 : 0;
-                        return (
-                            (units.get(in).isBreakable() ? 1 : 2) + variableWidthCost
-                        ) * limit - in;
+                        // This cost function used to take into account a "variableWidthCost"
+                        // related to whether space is taken up on the row by header or footer
+                        // fields and the RowGroup can not be fit into the available space
+                        // (does not support variable width). We know that if this is the case
+                        // the row is blank (RowGroupProvider inserts them) so it is fine to
+                        // break there, but through the "variableWidthCost" penalty we gave the
+                        // algorithm the opportunity to break before the block
+                        //
+                        // However, because reservedWidths is not accurate yet at this point, it
+                        // shouldn't be used to make decisions about break points.
+                        return (units.get(in).isBreakable() ? 1 : 2) * limit - in;
                     };
                     float seqHeight = 0;
                     if (wasSplitInSequence) {
@@ -538,6 +547,51 @@ public class PageSequenceBuilder2 {
                 // The optimal break point is found. Now we do the actual split.
                 // Now apply the information to the live data
                 data.setAllowHyphenateLastLine(hyphenateLastLine);
+                if (combinableHeaderAndFooterLines > 0) {
+                    // Make yet another copy to determine which rows are discarded, in order
+                    // to provide accurate `reservedWidth' information for the final split.
+                    // Note that this accurate information should ideally be made available
+                    // for the find() call. The found split point may not be optimal because
+                    // it is based on wrong information.
+                    copy = new RowGroupDataSource(data);
+                    Set<BlockLineLocation> discarded = new HashSet<>(); {
+                        for (RowGroup r : sph.split(spec, copy).getDiscarded()) {
+                            LineProperties p = r.getLineProperties();
+                            if (p != null) {
+                                BlockLineLocation l = p.getBlockLineLocation();
+                                if (l != null) {
+                                    discarded.add(l);
+                                }
+                            }
+                        }
+                    }
+                    if (!discarded.isEmpty()) {
+                        data.setReservedWidths(
+                            seq -> {
+                                int pos = seq.getGroup() == null ? 0 : (int) Math.floor(
+                                    seq.getGroup().stream().mapToDouble(r -> {
+                                            // filter out rows that will be discarded by the SplitPointHandler
+                                            // (FIX ME: Note that changes in line breaking could in theory
+                                            // change the number of rows that a block spans, resulting in
+                                            // BlockLineLocation that are off. For now we ignore this fact or
+                                            // assume it will not have an effect on the outcome of the
+                                            // reservedWidths function.)
+                                            LineProperties p = r.getLineProperties();
+                                            if (p != null) {
+                                                BlockLineLocation l = p.getBlockLineLocation();
+                                                if (l != null && discarded.contains(l)) {
+                                                    return 0;
+                                                }
+                                            }
+                                            return (int) r.getUnitSize();
+                                        }
+                                    ).sum()
+                                );
+                                return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), pos);
+                            }
+                        );
+                    }
+                }
                 SplitPoint<RowGroup, RowGroupDataSource> res = sph.split(spec, data);
                 data.setAllowHyphenateLastLine(true);
                 if (res.getHead().size() == 0 && force) {

@@ -1,0 +1,32 @@
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="en">
+	<meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+		<dc:title>Avoid last line hyphenation and widows</dc:title>
+		<dc:description>Tests avoid last line hyphenation in combination with widows. This should not result in endless iterations.</dc:description>
+	</meta>
+	<layout-master name="a" duplex="false" page-width="10" page-height="6">
+		<default-template>
+			<header/>
+			<footer/>
+		</default-template>
+	</layout-master>
+	<sequence master="a">
+		<block>
+			<page-number ref-id="foo" number-format="default"/><br/>
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+		</block>
+		<block widows="2">
+			⠸⠸⠸⠸⠸⠸
+			⠿&#x00ad;⠿&#x00ad;⠿&#x00ad;⠿&#x00ad;⠿
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+		</block>
+		<block id="foo" keep="page">
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+			⠸⠸⠸⠸⠸⠸
+		</block>
+	</sequence>
+</obfl>

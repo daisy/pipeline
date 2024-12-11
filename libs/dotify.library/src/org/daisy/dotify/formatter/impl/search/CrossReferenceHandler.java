@@ -176,6 +176,16 @@ public class CrossReferenceHandler {
         if (readOnly) {
             return;
         }
+        // The row count is used by the page break algorithm in the next iteration to
+        // determine/estimate how many widow lines a block will have. The actual row count can
+        // differ however, for instance due to changes in hyphenation (hyphenation may be suppressed
+        // on the last line of the page). This could lead to an endless alternation between two
+        // renderings. This is why we're storing the *minimum* value. Note that it could result in
+        // page breaks that happen one row too early because the row count was underestimated.
+        Integer prevValue = rowCount.get(blockId, null, true);
+        if (prevValue != null) {
+            value = Math.min(prevValue, value);
+        }
         rowCount.put(blockId, value);
     }
 
