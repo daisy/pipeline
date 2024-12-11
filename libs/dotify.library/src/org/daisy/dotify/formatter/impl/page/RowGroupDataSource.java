@@ -45,8 +45,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
     private final Supplements<RowGroup> supplements;
     private final RowGroupSequence data;
     private BlockContext bc;
-    private Function<Integer, Integer> reservedWidths = x -> 0;
-    private static final Function<Integer, Boolean> topOfPage = x -> x == 0;
+    private Function<RowGroupSequence, Integer> reservedWidths = x -> 0;
     private int blockIndex;
     private boolean allowHyphenateLastLine;
     private int offsetInBlock;
@@ -151,7 +150,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
         bc = b.build();
     }
 
-    void setReservedWidths(Function<Integer, Integer> func) {
+    void setReservedWidths(Function<RowGroupSequence, Integer> func) {
         this.reservedWidths = func;
     }
 
@@ -185,7 +184,8 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
                 Block b = data.getBlocks().get(blockIndex);
                 blockIndex++;
                 offsetInBlock = 0;
-                modifyContext(c -> c.topOfPage(topOfPage.apply(position())));
+                modifyContext(c -> c.topOfPage(data.getGroup() == null ||
+                                               data.getGroup().stream().allMatch(v -> v.getUnitSize() == 0)));
                 blockProcessor.loadBlock(master, b, getContext(), hasSequence(), hasResult(),
                                          this::newRowGroupSequence, v -> { });
             }
@@ -195,7 +195,7 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
             // if the line produced below is the last line or not, until after the call has already been made.
             Optional<RowGroup> added = blockProcessor.getNextRowGroup(getContext(), new LineProperties.Builder()
                     .suppressHyphenation(!allowHyphenateLastLine && index > -1 && groupSize() >= index - 1)
-                    .reservedWidth(reservedWidths.apply(position()))
+                    .reservedWidth(reservedWidths.apply(data))
                     .lineBlockLocation(new BlockLineLocation(blockProcessor.getBlockAddress(), offsetInBlock))
                     .build());
             added.ifPresent(rg -> data.getGroup().add(rg));
@@ -262,15 +262,5 @@ class RowGroupDataSource implements SplitPointDataSource<RowGroup, RowGroupDataS
 
     private int groupSize() {
         return data.getGroup() == null ? 0 : data.getGroup().size();
-    }
-
-    /**
-     * Vertical position of the next row measured from the top of the data source in terms of
-     * rows with normal row spacing.
-     */
-    private int position() {
-        // FIX ME: this is not totally accurate if non-integer row spacings are used
-        return data.getGroup() == null ? 0 : (int) Math.floor(
-            data.getGroup().stream().mapToDouble(v -> (int) v.getUnitSize()).sum());
     }
 }

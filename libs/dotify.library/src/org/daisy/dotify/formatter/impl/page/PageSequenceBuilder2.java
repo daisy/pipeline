@@ -413,13 +413,21 @@ public class PageSequenceBuilder2 {
                     );
                 }
             );
-            // This function returns the space that header or footer fields take up in a row at a
-            // certain position on the page. RowGroupDataSource needs this information in order to
-            // know where to break the line.
-            Function<Integer, Integer> reservedWidths = x -> {
-                return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), x);
-            };
-            data.setReservedWidths(reservedWidths);
+            data.setReservedWidths(
+                // This function returns the space that header or footer fields take up in the next row
+                // of a given RowGroupSequence when all the rows of the sequence would be added to the
+                // page. (RowGroupDataSource needs this information in order to know where to break the
+                // line.)
+                seq -> {
+                    // This is an approximation of the vertical position of the next row measured from
+                    // the top of the sequence, in terms of rows with normal row spacing. Note that it
+                    // is not accurate if the sequence contains collapsing margins. It is also not
+                    // totally accurate if non-integer row spacings are used.
+                    int pos = seq.getGroup() == null ? 0 : (int) Math.floor(
+                        seq.getGroup().stream().mapToDouble(v -> (int) v.getUnitSize()).sum());
+                    return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), pos);
+                }
+            );
             Optional<Boolean> blockBoundary = Optional.empty();
             if (!data.isEmpty()) {
                 RowGroupDataSource copy = new RowGroupDataSource(data);
@@ -515,17 +523,17 @@ public class PageSequenceBuilder2 {
                     }
                 } else {
                     SplitPointCost<RowGroup> cost = (SplitPointDataSource<RowGroup, ?> units, int in, int limit) -> {
-                        // variableWidthCost > 0 means that there is space on the row taken up
-                        // by header or footer fields and the RowGroup can not be fit into the
-                        // available space (does not support variable width).
-                        // We know that if this is the case the row is blank (RowGroupProvider
-                        // inserts them) so it is fine to break here, but we give it a big
-                        // penalty so that it might become preferable to break before the block.
-                        double variableWidthCost =
-                            (reservedWidths.apply(in) > 0 && !units.get(in).isMergeable()) ? 10 : 0;
-                        return (
-                            (units.get(in).isBreakable() ? 1 : 2) + variableWidthCost
-                        ) * limit - in;
+                        // This cost function used to take into account a "variableWidthCost"
+                        // related to whether space is taken up on the row by header or footer
+                        // fields and the RowGroup can not be fit into the available space
+                        // (does not support variable width). We know that if this is the case
+                        // the row is blank (RowGroupProvider inserts them) so it is fine to
+                        // break there, but through the "variableWidthCost" penalty we gave the
+                        // algorithm the opportunity to break before the block
+                        //
+                        // However, because reservedWidths is not accurate yet at this point, it
+                        // shouldn't be used to make decisions about break points.
+                        return (units.get(in).isBreakable() ? 1 : 2) * limit - in;
                     };
                     float seqHeight = 0;
                     if (wasSplitInSequence) {
