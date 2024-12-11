@@ -21,6 +21,7 @@ import org.daisy.dotify.formatter.impl.core.LayoutMaster;
 import org.daisy.dotify.formatter.impl.core.PaginatorException;
 import org.daisy.dotify.formatter.impl.core.TransitionContent;
 import org.daisy.dotify.formatter.impl.row.AbstractBlockContentManager;
+import org.daisy.dotify.formatter.impl.row.LineProperties;
 import org.daisy.dotify.formatter.impl.row.RowImpl;
 import org.daisy.dotify.formatter.impl.search.BlockLineLocation;
 import org.daisy.dotify.formatter.impl.search.DefaultContext;
@@ -32,9 +33,11 @@ import org.daisy.dotify.formatter.impl.search.VolumeKeepPriority;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -356,10 +359,9 @@ public class PageSequenceBuilder2 {
         prevCbl = cbl;
 
         // The purpose of this is to prevent supplements from combining with header/footer
-        cd.setExtraOverhead(
-            current.getPageTemplate().validateAndAnalyzeHeader() +
-            current.getPageTemplate().validateAndAnalyzeFooter()
-        );
+        int combinableHeaderAndFooterLines = current.getPageTemplate().validateAndAnalyzeHeader()
+            + current.getPageTemplate().validateAndAnalyzeFooter();
+        cd.setExtraOverhead(combinableHeaderAndFooterLines);
 
         // At the beginning here before we start printing the page for this iteration we will set
         // the value topOfPage. This value will be changed later on when we aren't at the top of the
@@ -546,6 +548,51 @@ public class PageSequenceBuilder2 {
                 // The optimal break point is found. Now we do the actual split.
                 // Now apply the information to the live data
                 data.setAllowHyphenateLastLine(hyphenateLastLine);
+                if (combinableHeaderAndFooterLines > 0) {
+                    // Make yet another copy to determine which rows are discarded, in order
+                    // to provide accurate `reservedWidth' information for the final split.
+                    // Note that this accurate information should ideally be made available
+                    // for the find() call. The found split point may not be optimal because
+                    // it is based on wrong information.
+                    copy = new RowGroupDataSource(data);
+                    Set<BlockLineLocation> discarded = new HashSet<>(); {
+                        for (RowGroup r : sph.split(spec, copy).getDiscarded()) {
+                            LineProperties p = r.getLineProperties();
+                            if (p != null) {
+                                BlockLineLocation l = p.getBlockLineLocation();
+                                if (l != null) {
+                                    discarded.add(l);
+                                }
+                            }
+                        }
+                    }
+                    if (!discarded.isEmpty()) {
+                        data.setReservedWidths(
+                            seq -> {
+                                int pos = seq.getGroup() == null ? 0 : (int) Math.floor(
+                                    seq.getGroup().stream().mapToDouble(r -> {
+                                            // filter out rows that will be discarded by the SplitPointHandler
+                                            // (FIXME: Note that changes in line breaking could in theory change
+                                            // the number of rows that a  block spans, resulting in
+                                            // BlockLineLocation that are off. For now we ignore this fact or
+                                            // assume it will not have an effect on the outcome of the
+                                            // reservedWidths function.)
+                                            LineProperties p = r.getLineProperties();
+                                            if (p != null) {
+                                                BlockLineLocation l = p.getBlockLineLocation();
+                                                if (l != null && discarded.contains(l)) {
+                                                    return 0;
+                                                }
+                                            }
+                                            return (int) r.getUnitSize();
+                                        }
+                                    ).sum()
+                                );
+                                return master.getFlowWidth() - fieldResolver.getWidth(current.getPageNumber(), pos);
+                            }
+                        );
+                    }
+                }
                 SplitPoint<RowGroup, RowGroupDataSource> res = sph.split(spec, data);
                 data.setAllowHyphenateLastLine(true);
                 if (res.getHead().size() == 0 && force) {
