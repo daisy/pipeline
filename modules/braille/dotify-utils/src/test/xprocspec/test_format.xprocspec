@@ -16147,13 +16147,11 @@
   <x:scenario label="test_132">
     <x:documentation>
       Tests keeping a leader together with the preceding word.
-
-      Broken: see https://github.com/mtmse/dotify.formatter.impl/issues/41.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform: none; @page { size: 10 5 }">
+          <doc style="text-transform: none; @page { size: 10 10 }">
             <p style="display: block">
               ⠤⠤⠤ ⠤⠤⠤⠤<span style="&amp;::before { content: leader('⠁') }">⠿⠿⠿</span>
             </p>
@@ -16179,7 +16177,7 @@
           <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
             <daisy:style-type>text/css</daisy:style-type>
           </meta>
-          <layout-master name="body" page-width="10" page-height="5" duplex="true">
+          <layout-master name="body" page-width="10" page-height="10" duplex="true">
             <default-template>
               <header/>
               <footer/>
@@ -16205,8 +16203,7 @@
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare"
-              xfail="https://github.com/mtmse/dotify.formatter.impl/issues/41">
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
         <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">
@@ -16215,7 +16212,7 @@
             </meta>
           </head>
           <body>
-            <volume rows="5" cols="10" rowgap="0" duplex="true">
+            <volume rows="10" cols="10" rowgap="0" duplex="true">
               <section>
                 <page>
                   <row>⠤⠤⠤</row>
@@ -16243,6 +16240,9 @@
       <x:input port="source">
         <x:document type="inline">
           <doc style="text-transform: none; @page { size: 10 5 }">
+            <p style="display: block; page-break-before: always">
+              ⠤⠤⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁', 7, left) }">⠿⠿</span>
+            </p>
             <p style="display: block; -obfl-right-text-indent: 3; page-break-before: always">
               ⠤⠤⠤⠤⠤⠤⠤ <span style="&amp;::before { content: leader('⠁', 7, left) }">⠿⠿</span>
             </p>
@@ -16272,6 +16272,9 @@
             </default-template>
           </layout-master>
           <sequence master="body">
+            <block break-before="page">
+              ⠤⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="7" align="left"/>⠿⠿
+            </block>
             <block break-before="page" right-text-indent="3">
               ⠤⠤⠤⠤⠤⠤⠤ <leader pattern="⠁" position="7" align="left"/>⠿⠿
             </block>
@@ -16299,6 +16302,10 @@
           <body>
             <volume rows="5" cols="10" rowgap="0" duplex="true">
               <section>
+                <page>
+                  <row>⠤⠤⠤⠤⠤⠤⠤⠀</row>
+                  <row>⠁⠁⠁⠁⠁⠁⠁⠿⠿</row>
+                </page>
                 <page>
                   <row>⠤⠤⠤⠤⠤⠤⠤</row>
                   <row>⠁⠁⠁⠁⠁⠁⠁⠿⠿</row>
