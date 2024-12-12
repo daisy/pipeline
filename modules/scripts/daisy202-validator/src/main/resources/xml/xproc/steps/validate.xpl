@@ -34,10 +34,29 @@
         <p:pipe step="validation-status" port="result"/>
     </p:output>
     
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl">
+       <p:documentation>
+           px:message
+       </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
+       <p:documentation>
+           px:fileset-load
+       </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/mediatype-utils/library.xpl">
+       <p:documentation>
+           px:mediatype-detect
+       </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/validation-utils/library.xpl">
+       <p:documentation>
+           px:relax-ng-to-schematron
+           px:combine-validation-reports
+           px:validation-report-to-html
+           px:validation-status
+       </p:documentation>
+    </p:import>
 
     <p:variable name="start" select="current-dateTime()"/>
     <p:variable name="timeToleranceMsValid" cx:as="xs:integer"

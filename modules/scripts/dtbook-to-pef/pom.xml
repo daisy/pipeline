@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.4-SNAPSHOT</version>
+    <version>1.15.4</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>dtbook-to-pef</artifactId>
-  <version>12.0.1-SNAPSHOT</version>
+  <version>13.0.0</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: DTBook to PEF</name>
@@ -101,7 +101,12 @@
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_line_spacing,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_notes_placement,
       org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_hyphenation,
-      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_hyphenation_at_page_breaks
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_hyphenation_at_page_breaks,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_pdf_offset_x,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_pdf_offset_y,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_pdf_scale_font,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_pdf_font_color,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_pef_script_formatting_standard
     </expose-services>
   </properties>
   

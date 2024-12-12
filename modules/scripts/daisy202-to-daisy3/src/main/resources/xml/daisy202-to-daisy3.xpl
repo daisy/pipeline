@@ -234,10 +234,10 @@
 		</p:documentation>
 		<p:group name="smil" px:progress="0.2" px:message="Converting SMIL">
 			<p:output port="fileset" primary="true">
-				<p:pipe step="load" port="result.fileset"/>
+				<p:pipe step="fileset" port="result"/>
 			</p:output>
 			<p:output port="in-memory" sequence="true">
-				<p:pipe step="result" port="result"/>
+				<p:pipe step="in-memory" port="result"/>
 			</p:output>
 			<p:output port="daisy202-smils" sequence="true">
 				<p:pipe step="load" port="result"/>
@@ -284,7 +284,23 @@
 				</px:smil-update-links>
 			</p:for-each>
 			<px:daisy3-smil-add-elapsed-time/>
-			<p:identity name="result"/>
+			<p:identity name="in-memory"/>
+			<p:sink/>
+			<!--
+				set DOCTYPE on SMIL files
+			-->
+			<p:identity>
+				<p:input port="source">
+					<p:pipe step="load" port="result.fileset"/>
+				</p:input>
+			</p:identity>
+			<p:add-attribute match="d:file[@media-type='application/smil+xml']"
+			                 attribute-name="doctype-public"
+			                 attribute-value="-//NISO//DTD dtbsmil 2005-2//EN"/>
+			<p:add-attribute match="d:file[@media-type='application/smil+xml']"
+			                 attribute-name="doctype-system"
+			                 attribute-value="http://www.daisy.org/z3986/2005/dtbsmil-2005-2.dtd"/>
+			<p:identity name="fileset"/>
 		</p:group>
 		<p:sink/>
 

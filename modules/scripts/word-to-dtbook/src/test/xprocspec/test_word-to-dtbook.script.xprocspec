@@ -362,5 +362,36 @@
             href="../resources/Test%2012/Output/Untitled.xml"/>
       </x:expect>
     </x:scenario>
+
+    <x:scenario label="Test 13 - MathML core tests">
+      <x:call>
+        <x:option
+            name="source"
+            select="resolve-uri('../resources/Test%2013/Input/mathml-core-tests.docx')"/>
+        <x:option name="title" select="'Date issue'"/>
+        <x:option name="creator" select="'Nicolas Pavie'"/>
+        <x:option name="publisher" select="'Association Valentin Haüy'"/>
+        <x:option name="uid" select="'13'"/>
+        <x:option name="result" select="concat($temp-dir,'FromSingleDocx/13/Output/')"/>
+        <x:option name="temp-dir" select="concat($temp-dir,'FromSingleDocx/13/Temp/')"/>
+        <x:option name="accept-revisions" select="true()"/>
+        <x:option name="disableDateGeneration" select="true()"/>
+        <x:option name="extract-shapes" select="false()" />
+      </x:call>
+      <x:context label="directory">
+        <x:document type="directory" base-uri="temp-dir" href="FromSingleDocx/13/Output/"/>
+      </x:context>
+      <x:expect label="directory" type="compare">
+        <x:document type="directory" href="../resources/Test%2013/Output/"/>
+      </x:expect>
+      <x:context label="result">
+        <x:document type="file" base-uri="temp-dir" href="FromSingleDocx/13/Output/mathml-core-tests.xml"/>
+      </x:context>
+      <x:expect label="result" type="compare">
+        <x:document
+            type="file"
+            href="../resources/Test%2013/Output/mathml-core-tests.xml"/>
+      </x:expect>
+    </x:scenario>
   </x:scenario>
 </x:description>

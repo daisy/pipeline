@@ -2,9 +2,9 @@
 <link rev="dp2:doc" href="../src/main/resources/xml/xproc/dtbook-to-pef.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-# DTBook to PEF
+# DTBook to braille
 
-Transforms a DTBook (DAISY 3 XML) document into a PEF.
+Transforms a DTBook (DAISY 3 XML) document into an embosser ready braille document.
 
 ## Synopsis
 

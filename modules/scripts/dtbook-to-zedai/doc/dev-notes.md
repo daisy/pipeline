@@ -8,7 +8,7 @@ summary: DTBook to ZedAI development notes
 
 The DTBook2ZedAI module will convert one or more DTBook XML files to a single ZedAI file.
 
-This module is written in XProc and XSLT. It relies on the DTBookUtils and MetadataUtils modules within the Pipeline 2.
+This module is written in XProc and XSLT. It relies on the DTBookUtils and MetadataUtils modules within the Pipeline.
 
 ## Steps
 

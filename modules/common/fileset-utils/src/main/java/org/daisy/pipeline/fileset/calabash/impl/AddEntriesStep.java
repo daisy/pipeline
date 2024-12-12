@@ -26,6 +26,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.saxon.SaxonHelper;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
 import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
@@ -38,7 +39,6 @@ import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.calabash.XMLCalabashInputValue;
 import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.XProcMonitor;
-import org.daisy.pipeline.file.FileUtils;
 import org.daisy.pipeline.fileset.Fileset;
 
 import org.osgi.service.component.annotations.Component;
@@ -209,15 +209,15 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 								filesetBase = filesetBase.resolve(source.getAttributeValue(i));
 								break;
 							}
-						filesetBase = FileUtils.normalizeURI(filesetBase);
+						filesetBase = URLs.normalize(filesetBase);
 						for (File f : added) {
-							f.base = FileUtils.normalizeURI(filesetBase.resolve(f.href));
+							f.base = URLs.normalize(filesetBase.resolve(f.href));
 							if (hasXmlBase)
-								f.href = FileUtils.relativizeURI(f.base, filesetBase);
+								f.href = URLs.relativize(filesetBase, f.base);
 							else if (!f.href.isAbsolute())
 								logger.warn("Adding a relative resource to a file set with no base directory");
 							if (f.originalHref != null)
-								f.originalHref = FileUtils.normalizeURI(filesetBase.resolve(f.originalHref));
+								f.originalHref = URLs.normalize(filesetBase.resolve(f.originalHref));
 						}
 						XMLStreamWriterHelper.writeStartElement(result, source.getName());
 						XMLStreamWriterHelper.writeAttributes(result, source);
@@ -230,7 +230,7 @@ public class AddEntriesStep extends DefaultStep implements XProcStep {
 						File match = null; {
 							for (int i = 0; i < source.getAttributeCount(); i++)
 								if (Fileset.XMLConstants._HREF.equals(source.getAttributeName(i))) {
-									URI base = FileUtils.normalizeURI(filesetBase.resolve(source.getAttributeValue(i)));
+									URI base = URLs.normalize(filesetBase.resolve(source.getAttributeValue(i)));
 									for (File f : entries)
 										if (f.base.equals(base)) {
 											match = f;

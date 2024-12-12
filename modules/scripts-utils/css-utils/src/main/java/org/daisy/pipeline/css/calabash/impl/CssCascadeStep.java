@@ -134,15 +134,13 @@ public class CssCascadeStep extends DefaultStep implements XProcStep {
 					stylesheets.add(u.toString());
 			for (String s : Arrays.asList(getOption(_user_stylesheet, "").trim().split("\\s+")))
 				stylesheets.add(s);
-			Map<String,String> sassVariables = new HashMap<>();
+			Map<String,Object> sassVariables = new HashMap<>();
 			RuntimeValue paramOption = getOption(_parameters);
 			if (paramOption != null)
-				for (Map.Entry<String,Object> e
-				         : SaxonHelper.mapFromMapItem(
-				               (MapItem)SaxonHelper.getSingleItem(paramOption.getValue().getUnderlyingValue()),
-				               Object.class
-				           ).entrySet())
-					sassVariables.put(e.getKey(), "" + e.getValue());
+				sassVariables = SaxonHelper.mapFromMapItem(
+					(MapItem)SaxonHelper.getSingleItem(paramOption.getValue().getUnderlyingValue()),
+					Object.class
+				);
 			for (CssCascader inliner : inliners)
 				if (inliner.supportsMedium(medium)) {
 					QName attributeName; {

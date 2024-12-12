@@ -23,11 +23,11 @@ import com.xmlcalabash.util.TreeWriter;
 import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.file.URLs;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
 import org.daisy.pipeline.file.calabash.impl.PeekProvider.Peek;
-import org.daisy.pipeline.file.FileUtils;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -84,7 +84,7 @@ public class XMLPeekProvider implements XProcStepProvider {
 			URI sourceUri = href.getBaseURI().resolve(href.getString());
 			Path file; {
 				try {
-					file = FileUtils.asPath(sourceUri);
+					file = URLs.asPath(sourceUri);
 				} catch (IllegalArgumentException|URISyntaxException e) {
 					throw XProcStep.raiseError(new IllegalArgumentException("Illegal value for href option: " + href.getString(), e), step);
 				}

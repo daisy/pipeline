@@ -165,7 +165,9 @@ public class Dimension implements Comparable<Dimension> {
 				fromUnit = fromDimension.unit;
 			}
 		}
-		if (fromUnit == null)
+		if (BigDecimal.ZERO.compareTo(value) == 0)
+			return new Dimension(value, toUnit, fromDimension, round);
+		else if (fromUnit == null)
 			throw new UnsupportedOperationException("Can not convert from no unit to " + toUnit);
 		else if (toUnit == null)
 			throw new UnsupportedOperationException("Can not convert from " + fromUnit + " to no unit");
@@ -270,14 +272,16 @@ public class Dimension implements Comparable<Dimension> {
 		};
 	}
 
-	private static final Pattern DIMENSION_REGEX = Pattern.compile("(?<value>[+-]?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?)(?<unit>[a-zA-Z]+)");
+	private static final Pattern DIMENSION_REGEX = Pattern.compile("(?<value>[+-]?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?)(?<unit>[a-zA-Z]+)?");
 
 	public static Dimension parse(String s) throws IllegalArgumentException {
 		Matcher m = DIMENSION_REGEX.matcher(s);
-		if (m.matches())
-			return new Dimension(new BigDecimal(m.group("value")),
-			                     Unit.parse(m.group("unit")));
-		else
+		if (m.matches()) {
+			String value = m.group("value");
+			String unit = m.group("unit");
+			return new Dimension(new BigDecimal(value),
+			                     unit != null ? Unit.parse(unit) : null);
+		} else
 			throw new IllegalArgumentException("Not a valid dimension: " + s);
 	}
 }

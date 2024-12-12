@@ -22,42 +22,10 @@
       </x:input>
       <x:input port="in-memory.in"/>
       <x:option name="medium" select="'(width: 35) AND (height: 20) AND (-daisy-duplex)'"/>
-      <x:param port="parameters" name="allow-volume-break-inside-leaf-section-factor" select="3"/>
-      <x:param port="parameters" name="prefer-volume-break-before-higher-level-factor" select="1"/>
-      <!--
-      <x:param port="parameters" name="include-line-groups" select="true()"/>
-      <x:param port="parameters" name="include-captions" select="true()"/>
-      <x:param port="parameters" name="accented-letters" select="true()"/>
-      <x:param port="parameters" name="tab-width" select="4"/>
-      <x:param port="parameters" name="line-spacing" select="'single'"/>
-      <x:param port="parameters" name="left-margin" select="0"/>
-      <x:param port="parameters" name="footnotes-placement" select="''"/>
-      -->
-      <x:param port="parameters" name="toc-depth" select="1"/>
-      <x:param port="parameters" name="toc-exclude-class" select="''"/>
-      <!--
-      <x:param port="parameters" name="maximum-number-of-sheets" select="70"/>
-      <x:param port="parameters" name="rear-cover-placement" select="''"/>
-      <x:param port="parameters" name="duplex" select="true()"/>
-      <x:param port="parameters" name="include-note-references" select="true()"/>
-      <x:param port="parameters" name="number-of-sheets" select="50"/>
-      <x:param port="parameters" name="main-document-language" select="''"/>
-      <x:param port="parameters" name="minimum-number-of-sheets" select="30"/>
-      <x:param port="parameters" name="page-width" select="35"/>
-      <x:param port="parameters" name="show-print-page-numbers" select="true()"/>
-      <x:param port="parameters" name="colophon-metadata-placement" select="''"/>
-      <x:param port="parameters" name="force-braille-page-break" select="false()"/>
-      <x:param port="parameters" name="levels-in-footer" select="6"/>
-      <x:param port="parameters" name="include-image-groups" select="true()"/>
-      <x:param port="parameters" name="downshift-ordinal-numbers" select="false()"/>
-      <x:param port="parameters" name="polite-forms" select="false()"/>
-      <x:param port="parameters" name="include-production-notes" select="false()"/>
-      <x:param port="parameters" name="show-braille-page-numbers" select="true()"/>
-      <x:param port="parameters" name="hyphenation" select="true()"/>
-      <x:param port="parameters" name="text-level-formatting" select="true()"/>
-      <x:param port="parameters" name="capital-letters" select="true()"/>
-      <x:param port="parameters" name="include-images" select="true()"/>
-      -->
+      <x:option name="parameters" select="'(allow-volume-break-inside-leaf-section-factor: 3,
+										    prefer-volume-break-before-higher-level-factor: 1,
+											toc-depth: 1,
+											toc-exclude-class: &quot;&quot;)'"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
       <x:option name="include-obfl" select="true()"/>
       <x:option name="temp-dir" select="$temp-dir"/>

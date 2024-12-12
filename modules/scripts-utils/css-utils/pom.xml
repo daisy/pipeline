@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-parent</artifactId>
-        <version>1.15.4-SNAPSHOT</version>
+        <version>1.15.4</version>
         <relativePath>../../parent/</relativePath>
     </parent>
 
     <artifactId>css-utils</artifactId>
-    <version>7.0.1-SNAPSHOT</version>
+    <version>8.0.0</version>
     <packaging>bundle</packaging>
 
     <name>DAISY Pipeline 2 module :: CSS Utils</name>
@@ -25,6 +25,7 @@
             org.daisy.pipeline.css.impl.MediumDatatypeService,
             org.daisy.pipeline.css.impl.StylesheetParametersWebServiceExtension,
             org.daisy.pipeline.css.impl.StylesheetParametersDatatypeService,
+            org.daisy.pipeline.css.sass.impl.SassMapDatatypeService,
             org.daisy.pipeline.css.saxon.impl.CssMediaFunctionProvider,
             org.daisy.pipeline.css.saxon.impl.CssParseParamSetFunctionProvider,
             org.daisy.pipeline.css.speech.impl.SpeechCssCascader,

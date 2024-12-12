@@ -322,7 +322,7 @@
 					<xsl:choose>
 						<!--Taking Document Title value from core.xml-->
 						<xsl:when test="string-length($title) = 0">
-							<meta name="dc:Title" content="{$docPropsCoreXml//cp:coreProperties/dc:title/text()}"/>
+							<meta name="dc:Title" content="{($docPropsCoreXml//cp:coreProperties/dc:title/text()[not(.='')],'Unknown')[1]}"/>
 						</xsl:when>
 						<!--Taking the Title value entered by the user-->
 						<xsl:otherwise>

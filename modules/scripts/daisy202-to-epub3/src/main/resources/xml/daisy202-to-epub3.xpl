@@ -30,12 +30,14 @@
 
     <p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/xhtml+xml text/html">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">NCC</h2>
+            <h2 px:role="name">DAISY 2.02</h2>
+            <p px:role="desc">NCC of the input DAISY 2.02.</p>
         </p:documentation>
     </p:option>
     <p:option name="result" required="true" px:output="result" px:type="anyDirURI">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB 3</h2>
+            <p px:role="desc">The resulting EPUB 3.</p>
         </p:documentation>
     </p:option>
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
@@ -54,7 +56,7 @@
             <!-- TODO: if true, should convert filenames to simple ASCII filenames -->
         </p:documentation>
     </p:option>
-    <p:option name="epub-filename" required="false" select="''" px:type="string">
+    <p:option name="epub-filename" required="false" select="''" px:type="string" px:reusable="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">EPUB 3 file name</h2>
             <p px:role="desc" xml:space="preserve">By default, the file name is the dc:identifier with a ".epub" file extension.

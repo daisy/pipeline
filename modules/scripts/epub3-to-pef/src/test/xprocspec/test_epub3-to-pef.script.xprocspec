@@ -27,7 +27,7 @@
       <x:option name="include-pef" select="'true'"/>
       <x:option name="pef" select="concat($temp-dir,'C00000_reset/output-dir/')"/>
       <x:option name="temp-dir" select="concat($temp-dir,'C00000_reset/temp-dir/')"/>
-      <x:option name="stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')"/>
+      <x:option name="_:stylesheet" select="string-join((resolve-uri('../resources/reset.css'), resolve-uri('../resources/style.css')), ' ')" xmlns:_="embossed"/>
     </x:call>
     
     <x:context label="the output directory contents">
@@ -70,7 +70,7 @@
     <x:call step="px:epub3-to-pef.script">
       <x:option name="source" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets/package.opf')"/>
       <x:option name="transform" select="'(translator:liblouis)(formatter:dotify)(grade:2)'"/>
-      <x:option name="stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'"/>
+      <x:option name="_:stylesheet" select="'../test-option_apply-document-specific-stylesheets.override.css'" xmlns:_="embossed"/>
       <x:option name="result" select="''"/>
       <x:option name="include-pef" select="'true'"/>
       <x:option name="pef" select="concat($temp-dir,'stylesheet-relative/output-dir/')"/>
@@ -221,7 +221,7 @@
           <x:option name="pef" select="concat($temp-dir,'apply-document-specific-stylesheets-override/output-dir/')"/>
           <x:option name="temp-dir" select="concat($temp-dir,'apply-document-specific-stylesheets-override/temp-dir/')"/>
           <x:option name="apply-document-specific-stylesheets" select="true()"/>
-          <x:option name="stylesheet" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets.override.css')"/>
+          <x:option name="_:stylesheet" select="resolve-uri('../resources/test-option_apply-document-specific-stylesheets.override.css')" xmlns:_="embossed"/>
       </x:call>
       
       <x:context label="the output directory contents">

@@ -35,11 +35,11 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.tts.scheduler.ExponentialBackoffScheduler;
-import org.daisy.pipeline.tts.scheduler.FatalError;
-import org.daisy.pipeline.tts.scheduler.RecoverableError;
-import org.daisy.pipeline.tts.scheduler.Schedulable;
-import org.daisy.pipeline.tts.scheduler.Scheduler;
+import org.daisy.pipeline.common.rest.scheduler.ExponentialBackoffScheduler;
+import org.daisy.pipeline.common.rest.scheduler.FatalError;
+import org.daisy.pipeline.common.rest.scheduler.RecoverableError;
+import org.daisy.pipeline.common.rest.scheduler.Schedulable;
+import org.daisy.pipeline.common.rest.scheduler.Scheduler;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
@@ -65,7 +65,7 @@ public class AzureCognitiveSpeechEngine extends TTSEngine {
 	private static final SpeechSynthesisOutputFormat synthOutputFormat = SpeechSynthesisOutputFormat.Raw22050Hz16BitMonoPcm;
 	private static final float sampleRate = audioFormat.getSampleRate();
 	private static final int bytesPerSample = audioFormat.getSampleSizeInBits() / 8;
-	private static final Scheduler<Schedulable> retry = new ExponentialBackoffScheduler<Schedulable>();
+	private static final Scheduler<Schedulable> retry = new ExponentialBackoffScheduler<>();
 
 	private final int threads;
 	private final int priority;

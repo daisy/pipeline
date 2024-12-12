@@ -60,8 +60,9 @@ public abstract class AbstractResourcePath implements ResourcePath {
 				relativePath = getIdentifier().relativize(resource);
 				if (relativePath.isAbsolute()) {
 					relativePath = URLs.relativize(URLs.asURI(getBasePath()), resource);
-					if (relativePath.isAbsolute() && unpackDir != null) {
-						relativePath = URLs.relativize(URLs.asURI(unpackDir), resource); }}}
+					if (relativePath.isAbsolute() || relativePath.toString().startsWith(".."))
+						if (unpackDir != null)
+							relativePath = URLs.relativize(URLs.asURI(unpackDir), resource); }}
 			if (containsResource(relativePath))
 				if (isUnpacking())
 					return URLs.asURL(maybeUnpack(relativePath));

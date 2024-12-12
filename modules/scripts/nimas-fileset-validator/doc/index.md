@@ -12,7 +12,7 @@ Validate a NIMAS Fileset. Supports inclusion of MathML.
 
 ## Sample usage
 
-This section shows how to use the NIMAS Fileset Validator via the Pipeline 2 command line interface.
+This section shows how to use the NIMAS Fileset Validator via the command line interface.
 
 Run the script like this: 
     

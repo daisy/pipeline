@@ -21,6 +21,8 @@ import cz.vutbr.web.css.CSSFactory;
 import cz.vutbr.web.css.MediaExpression;
 import cz.vutbr.web.css.MediaSpec;
 import cz.vutbr.web.css.MediaQuery;
+import cz.vutbr.web.css.MediaQueryList;
+import cz.vutbr.web.css.StyleSheet.Origin;
 import cz.vutbr.web.css.Rule;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
@@ -756,6 +758,16 @@ public class Medium implements Dimension.RelativeDimensionBase {
 		}
 
 		@Override
+		public Origin getOrigin() {
+			return null;
+		}
+
+		@Override
+		public MediaQueryList getMediaQueries() {
+			return null;
+		}
+
+		@Override
 		public void setType(String type) {
 			throw new UnsupportedOperationException("immutable object");
 		}
@@ -767,6 +779,16 @@ public class Medium implements Dimension.RelativeDimensionBase {
 
 		@Override
 		public void setNegative(boolean negative) {
+			throw new UnsupportedOperationException("immutable object");
+		}
+
+		@Override
+		public void setOrigin(Origin origin) {
+			throw new UnsupportedOperationException("immutable object");
+		}
+
+		@Override
+		public void setMediaQueries(MediaQueryList media) {
 			throw new UnsupportedOperationException("immutable object");
 		}
 
@@ -830,6 +852,16 @@ public class Medium implements Dimension.RelativeDimensionBase {
 		}
 
 		@Override
+		public Origin getOrigin() {
+			return null;
+		}
+
+		@Override
+		public MediaQueryList getMediaQueries() {
+			return null;
+		}
+
+		@Override
 		public List<Term<?>> asList() {
 			return this;
 		}
@@ -846,6 +878,16 @@ public class Medium implements Dimension.RelativeDimensionBase {
 
 		@Override
 		public void setNegative(boolean negative) {
+			throw new UnsupportedOperationException("immutable object");
+		}
+
+		@Override
+		public void setOrigin(Origin origin) {
+			throw new UnsupportedOperationException("immutable object");
+		}
+
+		@Override
+		public void setMediaQueries(MediaQueryList media) {
 			throw new UnsupportedOperationException("immutable object");
 		}
 

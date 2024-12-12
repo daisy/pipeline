@@ -2,6 +2,7 @@
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:odt="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
                 xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
@@ -32,14 +33,14 @@
             OpenOffice template file (.ott) that contains the style definitions.
         </p:documentation>
     </p:option>
-    <p:option name="asciimath" required="true">
+    <p:option name="asciimath" required="true" cx:type="ASCIIMATH|MATHML|BOTH">
         <p:documentation>
-            How to render ASCIIMath-encoded formulas? `ASCIIMATH` or `MATHML`.
+            How to render ASCIIMath-encoded formulas?
         </p:documentation>
     </p:option>
-    <p:option name="images" required="true">
+    <p:option name="images" required="true" cx:type="EMBED|LINK">
         <p:documentation>
-            How to render images? `EMBED` or `LINK`.
+            How to render images?
         </p:documentation>
     </p:option>
     

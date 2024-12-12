@@ -234,7 +234,7 @@
     <p:with-option name="test" select="(//dtbook:dtbook)[1]/@version/starts-with(., '2005')"/>
   </px:assert>
 
-  <p:group name="convert">
+  <p:group name="convert" px:progress="1">
     <p:output port="fileset" primary="true"/>
     <p:output port="in-memory" sequence="true">
       <p:pipe step="daisy3.in-memory" port="result"/>

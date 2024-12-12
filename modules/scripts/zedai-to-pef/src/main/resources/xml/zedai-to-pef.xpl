@@ -40,7 +40,7 @@
     </p:input>
     
     <!-- defined in ../../../../../common-options.xpl -->
-    <p:option name="stylesheet"/>
+    <p:option name="_:stylesheet" xmlns:_="braille"/>
     <p:option name="transform"/>
     <p:option name="result"/>
     <p:option name="output-file-format"/>
@@ -103,7 +103,7 @@
             <p:input port="source.in-memory">
                 <p:pipe step="load" port="in-memory.out"/>
             </p:input>
-            <p:with-option name="stylesheet" select="$stylesheet"/>
+            <p:with-option name="stylesheet" select="$_:stylesheet" xmlns:_="braille"/>
             <p:with-option name="transform" select="$transform"/>
             <p:with-option name="medium" select="$medium"/>
             <p:with-option name="temp-dir" select="$temp-dir"/>

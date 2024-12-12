@@ -33,7 +33,7 @@
         </p:documentation>
     </p:import>
     
-    <px:epub-load name="epub" version="3" px:progress="1">
+    <px:epub-load name="epub" px:progress="1">
         <p:with-option name="href" select="$epub"/>
         <p:with-option name="temp-dir" select="$temp-dir"/>
     </px:epub-load>

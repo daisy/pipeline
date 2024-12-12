@@ -15,7 +15,6 @@ import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.SequenceType;
 
 import org.daisy.common.file.URLs;
-import org.daisy.pipeline.file.FileUtils;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -67,7 +66,7 @@ public class FileExists extends ExtensionFunctionDefinition {
 	 */
 	private static boolean exists(URI uri) throws URISyntaxException {
 		try {
-			return Files.exists(FileUtils.asPath(uri));
+			return Files.exists(URLs.asPath(uri));
 		} catch (IllegalArgumentException e) {
 			return false;
 		}

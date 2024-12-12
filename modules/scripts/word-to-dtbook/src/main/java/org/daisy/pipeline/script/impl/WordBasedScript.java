@@ -5,12 +5,11 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.net.URI;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import javax.xml.transform.Source;
 
 import org.daisy.common.file.URLs;
 import org.daisy.common.messaging.Message;
@@ -155,17 +154,12 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			builder = builder
 				.withInputFileset("docx")
 				.withOutputFileset(formatId)
-				.withShortName("Word to " + formatName + " (experimental)")
+				.withShortName("Word to " + formatName)
 				.withDescription(
 					"Transforms a Microsoft Office Word (.docx) document into "
 					+ (formatId.equals("mp3")
 					      ? "a folder structure with MP3 files suitable for playback on MegaVoice Envoy devices"
-					      : (formatName + " format")) + ".")
-				// FIXME: home page has yet to be created
-				.withHomepage(
-					"http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-"
-					+ formatId + "/")
-				;
+					      : (formatName + " format")) + ".\n\n");
 			for (ScriptPort p : wordToDTBook.getInputPorts())
 				builder = builder.withInputPort(p.getName(), p);
 			for (ScriptOption o : wordToDTBook.getOptions()) {
@@ -245,7 +239,7 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 		                  MessageAppender messages, JobResultSet.Builder resultBuilder,
 		                  File resultDir) throws IOException {
 			ScriptInput.Builder stepInput = new ScriptInput.Builder(input.getResources());
-			for (Source s : input.getInput("source"))
+			for (URI s : input.getInput("source"))
 				stepInput = stepInput.withInput("source", s);
 			stepInput = pickOptions(wordToDTBook, stepInput, input);
 			JobResultSet.Builder stepResultBuilder = new JobResultSet.Builder(wordToDTBook);
@@ -263,7 +257,6 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 			                              stepResultBuilder,
 			                              stepResultDir);
 			}
-			Script prevStep = wordToDTBook;
 			String prevStepResultFormat = "dtbook";
 			int i = 0;
 			for (Script step : scriptChain) {
@@ -277,8 +270,8 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 				JobResultSet stepResult = stepResultBuilder.build();
 				stepInput = new ScriptInput.Builder();
 				for (JobResult r : stepResult.getResults("result"))
-					if (isPrimaryFile(r.getPath().getName(), prevStepResultFormat))
-						stepInput = stepInput.withInput("source", r.getPath());
+					if (isPrimaryFile(r.getFile().getName(), prevStepResultFormat))
+						stepInput = stepInput.withInput("source", r.getFile());
 				stepInput = pickOptions(step, stepInput, input);
 				if ("mp3".equals(formatId))
 					// certain options must have a fixed value for mp3 output
@@ -295,7 +288,9 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 				stepResultBuilder = formatId.equals(stepResultFormat)
 					? resultBuilder // this is the last step
 					: new JobResultSet.Builder(step);
-				stepResultDir = new File(resultDir, step.getId());
+				stepResultDir = stepResultBuilder == resultBuilder
+					? resultDir
+					: new File(resultDir, step.getId());
 				mkdirs(stepResultDir);
 				try (MessageAppender stepMessages = messages != null
 				         ? messages.append(
@@ -310,11 +305,32 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 					                  stepResultBuilder,
 					                  stepResultDir);
 				}
-				prevStep = step;
 				prevStepResultFormat = stepResultFormat;
 				i++;
 			}
 			return status;
+		}
+
+		private ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
+			for (ScriptOption o : script.getOptions()) {
+				String name = o.getName();
+				boolean set = false;
+				for (String s : fromInput.getOption(name)) {
+					toInput = toInput.withOption(name, s);
+					set = true;
+				}
+				if (!set) {
+					// if no value was set, set the option to the default value, because it may happen that
+					// several steps have the option but with different defaults
+					ScriptOption globalOption = getOption(name);
+					if (globalOption != null) {
+						String globalDefault = globalOption.getDefault();
+						if (globalDefault != null)
+							toInput = toInput.withOption(name, globalDefault);
+					}
+				}
+			}
+			return toInput;
 		}
 	}
 
@@ -353,14 +369,5 @@ public abstract class WordBasedScript implements ScriptService<Script>, ScriptSe
 	private static void mkdirs(File dir) throws IOException {
 		if (!dir.exists() && !dir.mkdirs())
 			throw new IOException("Could not create directory:" + dir.getAbsolutePath());
-	}
-
-	private static ScriptInput.Builder pickOptions(Script script, ScriptInput.Builder toInput, ScriptInput fromInput) {
-		for (ScriptOption o : script.getOptions()) {
-			String name = o.getName();
-			for (String s : fromInput.getOption(name))
-				toInput = toInput.withOption(name, s);
-		}
-		return toInput;
 	}
 }

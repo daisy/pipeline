@@ -54,10 +54,12 @@
 		dtbook-to-html
 		dtbook-to-zedai
 	-->
-	<p:option name="language" required="false" px:type="string" select="''">
+	<p:option name="language" required="false" px:type="string" select="''" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Language code</h2>
-			<p px:role="desc">Language code of the input document.</p>
+			<p px:role="desc" xml:space="preserve">Language code of the input document.
+
+Must be an [RFC 5646](https://tools.ietf.org/html/rfc5646) language tag such as "zh" or "fr-CA".</p>
 		</p:documentation>
 	</p:option>
 
@@ -71,14 +73,15 @@
 				<choice>
 					<value>3.0</value>
 					<value>2.0</value>
-					<!-- <value>1.01</value> -->
-					<!-- <value>1.0</value> -->
 				</choice>
 			</px:type>
 		</p:pipeinfo>
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">MathML version</h2>
-			<p px:role="desc">Version of MathML in the DTBook file(s).</p>
+			<p px:role="desc" xml:space="preserve">Version of MathML in the DTBook file(s).
+
+If the DTBook files have mathematical content, indicate with this option which version of
+[MathML](https://en.wikipedia.org/wiki/MathML) is used to mark it up.</p>
 		</p:documentation>
 	</p:option>
 
@@ -89,10 +92,14 @@
 		dtbook-to-html
 		dtbook-to-zedai
 	-->
-	<p:option name="nimas" required="false" px:type="boolean" select="'false'">
+	<p:option name="nimas" required="false" px:type="boolean" select="'false'" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">NIMAS input</h2>
-			<p px:role="desc">Whether the input DTBook is a NIMAS 1.1-conformant XML content file.</p>
+			<p px:role="desc" xml:space="preserve">Whether the input DTBook is a NIMAS 1.1-conformant XML content file.
+
+A [NIMAS 1.1](https://aem.cast.org/nimas-nimac/nimas-technical-specification)-conformant XML file is
+a valid DTBook (DAISY/NISO Z39.86 2005) file, with the exception that the `head` element is required
+to be empty.</p>
 		</p:documentation>
 	</p:option>
 
@@ -103,7 +110,7 @@
 	    dtbook-to-epub3
 	    zedai-to-epub3
 	-->
-	<p:input port="tts-config" px:media-type="application/vnd.pipeline.tts-config+xml">
+	<p:input port="tts-config" px:media-type="application/vnd.pipeline.tts-config+xml" px:reusable="true">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Text-to-speech configuration file</h2>
 			<p px:role="desc" xml:space="preserve">Configuration file for text-to-speech.
@@ -219,11 +226,67 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef
-	    zedai-to-pef
-	    epub3-to-epub3
 	-->
-	<p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-	          px:media-type="text/css text/x-scss">
+	<p:option name="formatting-standard" select="''" px:reusable="false">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Formatting standard</h2>
+            <p px:role="desc" xml:space="preserve">Standard to be used for braille formatting.
+
+If set, [braille formatting](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/) is done
+using the selected formatting standard. If left empty, the formatting of the document is determined
+entirely by custom styles.
+
+It is important to understand that when no formatting standard or custom style sheets are specified,
+the output will not be formatted (meaning everything will be aligned to the left, without blank
+lines, pages will be filled completely, and there will be no page numbering).
+
+Custom formatting rules may be specified using the "Custom style sheets" option, or in style sheets
+attached to the source document.</p>
+        </p:documentation>
+    </p:option>
+
+    <!--
+	    dtbook-to-pef
+	    html-to-pef
+	    epub3-to-pef
+	-->
+	<p:option xmlns:_="embossed" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+	          px:reusable="true" px:media-type="text/css text/x-scss">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">Style sheets</h2>
+			<p px:role="desc" xml:space="preserve">CSS/Sass style sheets to take into account.
+
+Each style sheet must be specified as a URI, absolute or relative to the input.
+
+Style sheets specified through this option or through the "Formatting standard" option are called
+"[user style sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". Style sheets can also be
+attached to the source document. These are referred to as "[author style
+sheets](https://www.w3.org/TR/CSS2/cascade.html#cascade)". They can be linked (using an
+['xml-stylesheet' processing instruction](https://www.w3.org/TR/xml-stylesheet) or a ['link'
+element](https://www.w3.org/Style/styling-XML#External)), embedded (using a ['style'
+element](https://www.w3.org/Style/styling-XML#Embedded)) and/or inlined (using '[style'
+attributes](https://www.w3.org/TR/css-style-attr/)). Only author styles that apply to "embossed"
+media are taken into account.
+
+All style sheets are applied at once, but the order in which they are specified has an influence on
+the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
+precedence over user styles, and user style sheets specified through this option take precedence
+over the selected formatting standard.
+
+Style sheets are interpreted according to [braille
+CSS](http://braillespecs.github.io/braille-css) rules.
+
+For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
+manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
+		</p:documentation>
+	</p:option>
+	
+	<!--
+	    epub3-to-epub3
+	    zedai-to-pef
+	-->
+	<p:option xmlns:_="braille" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
+	          px:reusable="true" px:media-type="text/css text/x-scss">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
 			<p px:role="desc" xml:space="preserve">CSS/Sass style sheets to take into account.
@@ -242,7 +305,8 @@ media are taken into account.
 
 All style sheets are applied at once, but the order in which they are specified has an influence on
 the [cascading order](https://www.w3.org/TR/CSS2/cascade.html#cascading-order). Author styles take
-precedence over user styles.
+precedence over user styles, and user style sheets specified through this option take precedence
+over the selected formatting standard.
 
 Style sheets are interpreted according to [braille
 CSS](http://braillespecs.github.io/braille-css) rules.
@@ -251,7 +315,7 @@ For info on how to use Sass (Syntactically Awesome StyleSheets) see the [Sass
 manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 		</p:documentation>
 	</p:option>
-
+	
 	<!--
 	    dtbook-to-daisy3
 	    dtbook-to-epub3
@@ -259,7 +323,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).</p>
 	    epub-to-daisy
 	-->
 	<p:option xmlns:_="tts" name="_:stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-	          px:media-type="text/css text/x-scss">
+	          px:reusable="true" px:media-type="text/css text/x-scss">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
 			<p px:role="desc" xml:space="preserve">CSS style sheets to take into account.
@@ -291,7 +355,7 @@ precedence over user styles.
 	    epub3-to-epub3
 	-->
 	<p:option name="lexicon" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-	          px:media-type="application/pls+xml">
+	          px:reusable="false" px:media-type="application/pls+xml">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Lexicons</h2>
 			<p px:role="desc" xml:space="preserve">PLS lexicons to take into account.
@@ -380,10 +444,9 @@ appear in the lexicons.</p>
 			<h2 px:role="name">Style sheet parameters</h2>
 			<p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
 
-Style sheets, whether they're user style sheets (specified with the "Style sheets" option) or author
-style sheets (associated with the source), may have parameters (Sass variables). This option, which
-takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
-variables.
+Style sheets, whether they're user style sheets (specified through options) or author style sheets
+(associated with the source), may have parameters (Sass variables). This option, which takes a
+comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these variables.
 
 For example, if a style sheet uses the Sass variable "foo":
 
@@ -402,8 +465,9 @@ you can control that variable with the following parameters list: `(foo:true)`.<
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef
+	    epub3-to-epub3
 	-->
-	<p:option name="braille-code" px:type="liblouis-table-query" required="false" select="''">
+	<p:option name="braille-code" px:type="liblouis-table-query" required="false" select="''" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Braille code</h2>
 			<p px:role="desc" xml:space="preserve">Braille code to be used for braille transcription.
@@ -460,7 +524,8 @@ suited for the U.S., set the option to `(-daisy-locale: en-US)`. To use the brai
 used in the Netherlands and store to a file with extension ".brl", set the option to
 `(-daisy-locale: nl) AND (-daisy-file-extension: \.brl)`.
 
-If left blank, the braille will be stored in PEF format.</p>
+If left blank, the braille will be stored in
+[PEF](https://braillespecs.github.io/pef/pef-specification.html) (Portable Embosser Format).</p>
 		</p:documentation>
 	</p:option>
 
@@ -517,6 +582,7 @@ If left blank, the locale information in the input document will be used to sele
 	</p:option>
 
 	<!--
+	    dtbook-to-pef
 	    html-to-pef
 	-->
 	<p:option name="pdf" required="false" px:output="result" px:type="anyDirURI" px:media-type="application/pdf" select="''">
@@ -529,13 +595,121 @@ If left blank, the locale information in the input document will be used to sele
 	<!--
 	    dtbook-to-pef
 	    html-to-pef
+	-->
+	<p:option name="pdf-offset-x" required="false" select="'0'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PDF: horizontal offset</h2>
+			<p px:role="desc" xml:space="preserve">Tweak the position of content on the page horizontally.
+
+A positive offset results in a shift to the right, a negative offset results in a shift to the left.</p>
+		</p:documentation>
+		<p:pipeinfo>
+			<px:type>
+				<data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+					<a:documentation xml:lang="en" xml:space="preserve">A positive or negative length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : '0' | unary_operator number unit
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px'
+     ;
+</a:documentation>
+					<param name="pattern">^0|[+-]?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px)?$</param>
+				</data>
+			</px:type>
+		</p:pipeinfo>
+	</p:option>
+	
+	<!--
+	    dtbook-to-pef
+	    html-to-pef
+	-->
+	<p:option name="pdf-offset-y" required="false" select="'0'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PDF: vertical offset</h2>
+			<p px:role="desc" xml:space="preserve">Tweak the position of content on the page vertically.
+
+A positive offset results in a shift downwards, a negative offset results in a shift upwards.</p>
+		</p:documentation>
+		<p:pipeinfo>
+			<px:type>
+				<data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+					<a:documentation xml:lang="en" xml:space="preserve">A positive or negative length
+
+The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org/TR/CSS21/grammar.html)):
+
+    length
+     : '0' | unary_operator number unit
+     ;
+    unit
+     : 'mm' | 'cm' | 'in' | 'px'
+     ;
+</a:documentation>
+					<param name="pattern">^0|[+-]?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px)?$</param>
+				</data>
+			</px:type>
+		</p:pipeinfo>
+	</p:option>
+	
+	<!--
+	    dtbook-to-pef
+	    html-to-pef
+	-->
+	<p:option name="pdf-scale-font" required="false" select="'100%'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PDF: scale font</h2>
+			<p px:role="desc" xml:space="preserve">Tweak the size of the font.
+
+Increase or decrease the font of the PDF by providing a scaling factor higher or lower than 100%.</p>
+		</p:documentation>
+		<p:pipeinfo>
+			<px:type>
+				<data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+					<a:documentation xml:lang="en" xml:space="preserve">A percentage</a:documentation>
+					<param name="pattern">^[+]?([0-9]*\.)?[0-9]+%?$</param>
+				</data>
+			</px:type>
+		</p:pipeinfo>
+	</p:option>
+	
+	<!--
+	    dtbook-to-pef
+	    html-to-pef
+	-->
+	<p:option name="pdf-font-color" required="false" select="'#000000'">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<h2 px:role="name">PDF: font color</h2>
+			<p px:role="desc" xml:space="preserve">The font color of the PDF.
+
+Defaults to black.</p>
+		</p:documentation>
+		<p:pipeinfo>
+			<px:type>
+				<data type="string" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+					<a:documentation xml:lang="en" xml:space="preserve">An RGB hex color code</a:documentation>
+					<param name="pattern">^#([0-9a-f]{6}|[0-9A-F]{6}|[0-9a-f]{3}|[0-9A-F]{3})$</param>
+				</data>
+			</px:type>
+		</p:pipeinfo>
+	</p:option>
+	
+	<!--
+	    dtbook-to-pef
+	    html-to-pef
 	    epub3-to-pef
 	    zedai-to-pef
 	-->
 	<p:option name="include-pef" required="false" px:type="boolean" select="'false'">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Include PEF</h2>
-			<p px:role="desc" xml:space="preserve">Whether or not to keep the intermediary PEF file (for debugging).</p>
+			<p px:role="desc" xml:space="preserve">Whether or not to keep the intermediary PEF file (for debugging).
+
+[PEF (Portable Embosser Format)](https://braillespecs.github.io/pef/pef-specification.html) is an
+internal data format used by DAISY Pipeline to represent the final formatted braille document,
+before it is converted to another embosser-ready format.</p>
 		</p:documentation>
 	</p:option>
 
@@ -562,7 +736,12 @@ If left blank, the locale information in the input document will be used to sele
 			<h2 px:role="name">Include OBFL</h2>
 			<p px:role="desc" xml:space="preserve">Whether or not the keep the intermediary OBFL file (for debugging).
 
-The OBFL may also be edited and transformed to the final braille document using the "OBFL to braille" script.</p>
+[OBFL (Open Braille Formatting Language)](https://mtmse.github.io/obfl/obfl-specification.html) is
+an internal data format used by DAISY Pipeline to represent an intermediary stage of the document
+being transformed (before it is formatted).
+
+The OBFL file may be used for debugging, or it may also be edited and re-transformed to the final
+braille document using the "OBFL to braille" script.</p>
 		</p:documentation>
 	</p:option>
 

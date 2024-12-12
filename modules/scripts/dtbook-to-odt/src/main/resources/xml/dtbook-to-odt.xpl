@@ -11,7 +11,7 @@
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to ODT</h1>
-        <p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an ODT (Open Document Text).</p>
+        <p px:role="desc">Transforms a DTBook (DAISY 3 XML) document into an ODT (OpenDocument Text).</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/">
             Online documentation
         </a>
@@ -46,7 +46,8 @@
         <!-- directory used for temporary files -->
     </p:option>
     
-    <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template">
+    <p:option name="template" required="false" px:type="anyFileURI" select="''" px:media-type="application/vnd.oasis.opendocument.text-template"
+              px:reusable="true">
         <p:documentation>
             <h2 px:role="name">Template</h2>
             <p px:role="desc" xml:space="preserve">OpenOffice template file (.ott) that contains the style definitions.
@@ -60,24 +61,36 @@ See [Templating](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtb
     <p:option name="asciimath" required="false" select="'ASCIIMATH'">
         <p:pipeinfo>
             <px:type>
-                <choice>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
                     <value>ASCIIMATH</value>
+                    <a:documentation xml:lang="en">Keep (as plain text)</a:documentation>
                     <value>MATHML</value>
+                    <a:documentation xml:lang="en" xml:space="preserve">Convert to MathML
+
+Convert ASCIIMath elements to MathML elements. The ASCIIMath encoding is used as the name of the
+frame that contains the formula object.</a:documentation>
                 </choice>
             </px:type>
         </p:pipeinfo>
         <p:documentation>
             <h2 px:role="name">ASCIIMath handling</h2>
-            <p px:role="desc">How to render ASCIIMath-encoded formulas.</p>
+            <p px:role="desc" xml:space="preserve">How to render ASCIIMath-encoded formulas.
+
+Mathematical content in the DTBook may be encoded as [MathML](https://en.wikipedia.org/wiki/MathML)
+elements, or as plain [ASCIIMath](https://asciimath.org/) text enclosed in `span` elements with a
+"asciimath" class. MathML elements are converted to formula objects. ASCIIMath can either be treated
+the same as MathML, or included as-is.</p>
         </p:documentation>
     </p:option>
     
     <p:option name="images" required="false" select="'EMBED'">
         <p:pipeinfo>
             <px:type>
-                <choice>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
                     <value>EMBED</value>
+                    <a:documentation xml:lang="en">Embed images in the OpenDocument package</a:documentation>
                     <value>LINK</value>
+                    <a:documentation xml:lang="en">Link to external image files</a:documentation>
                 </choice>
             </px:type>
         </p:pipeinfo>

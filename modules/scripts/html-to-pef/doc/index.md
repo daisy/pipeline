@@ -2,9 +2,9 @@
 <link rev="dp2:doc" href="../src/main/resources/xml/xproc/html-to-pef.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-# HTML to PEF
+# HTML to braille
 
-Transforms a HTML document into a PEF.
+Transforms a HTML document into an embosser ready braille document.
 
 ## Synopsis
 

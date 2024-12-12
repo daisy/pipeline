@@ -43,7 +43,7 @@
             <p px:role="desc">The resulting ZedAI XML file.</p>
         </p:documentation>
     </p:option>
-    <p:option name="zedai-filename" required="false" px:type="string" select="'zedai.xml'">
+    <p:option name="zedai-filename" required="false" px:type="string" select="'zedai.xml'" px:reusable="false">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">ZedAI filename</h2>
             <p px:role="desc">Filename for the generated ZedAI file</p>

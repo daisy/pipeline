@@ -73,34 +73,13 @@ public class LoadProvider implements XProcStepProvider {
 				URI absoluteHref = href.getBaseURI().resolve(href.getString());
 				InputSource source = new InputSource(absoluteHref.toString());
 				String contentType = getOption(_content_type, "");
-				boolean isXml = "".equals(contentType) || contentType.matches("[^ ]*(/|\\+)xml");
 				Document doc = null;
-				DocumentBuilder xmlParser = null;
 				try {
-					for (DocumentBuilder p : parsers) {
-						if (xmlParser == null && p.supportsContentType("text/xml")) {
-							xmlParser = p;
-							if (isXml) break;
-						}
-						if (!isXml && p.supportsContentType(contentType)) {
-							doc = p.parse(source);
-							break;
-						}
-					}
-					if (doc == null && xmlParser != null) {
-						// content-type is either XML, not specified, or not recognized
-						// in all cases we use (fallback to) the XML parser
-						doc = xmlParser.parse(source);
-					}
+					doc = DocumentBuilder.parse(source, contentType, parsers);
 				} catch (SAXException|IOException e) {
 					throw new TransformerException(
 						jaxpQName(err_XD0011),
 						new IllegalArgumentException("Error parsing " + absoluteHref + " (content-type: " + contentType + ")", e));
-				}
-				if (doc == null) {
-					// this means no XML parser was found
-					if (xmlParser != null) throw new RuntimeException(); // coding error
-					throw new TransformerException(new IllegalStateException("No XML parser found"));
 				}
 				XMLCalabashOutputValue.of(result, runtime).asNodeConsumer().accept(doc);
 			} catch (Throwable e) {

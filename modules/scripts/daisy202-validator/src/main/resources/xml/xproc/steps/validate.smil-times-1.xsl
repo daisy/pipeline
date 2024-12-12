@@ -37,7 +37,7 @@
                         <xsl:for-each select=".//ref">
                             <xsl:variable name="src" as="xs:string" select="pf:normalize-uri(@src)"/>
                             <xsl:variable name="src" as="xs:string*" select="pf:tokenize-uri($src)"/>
-                            <xsl:variable name="fragment" as="xs:string?" select="$src[5]"/>
+                            <xsl:variable name="fragment" as="xs:string?" select="$src[5][not(.='')]"/>
                             <xsl:variable name="file" as="xs:string" select="pf:recompose-uri($src[position()&lt;5])"/>
                             <!-- base URIs where normalized by px:fileset-load -->
                             <xsl:variable name="file" as="xs:anyURI" select="resolve-uri($file,$base)"/>
@@ -46,7 +46,7 @@
                                 <xsl:when test="exists($file)">
                                     <xsl:choose>
                                         <xsl:when test="exists($fragment)">
-                                            <xsl:variable name="fragment" as="element()" select="$file//*[@id=$fragment]"/>
+                                            <xsl:variable name="fragment" as="element()?" select="$file//*[@id=$fragment]"/>
                                             <xsl:choose>
                                                 <xsl:when test="exists($fragment)">
                                                     <!--

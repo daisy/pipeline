@@ -78,10 +78,10 @@ class InMemoryURIResolver implements URIResolver {
 
 		// A URI that contains "!/" is a ZIP URI
 		if (s.startsWith("file:") && s.contains("!/"))
-			s = "zip:" + s;
+			s = "jar:" + s;
 
 		// The part of a ZIP URI after the "!" must start with "/"
-		if (s.startsWith("zip:file:") && !s.contains("!/"))
+		if (s.startsWith("jar:file:") && !s.contains("!/"))
 			s = s.replaceFirst("!", "!/");
 		try {
 			return new URI(s); }

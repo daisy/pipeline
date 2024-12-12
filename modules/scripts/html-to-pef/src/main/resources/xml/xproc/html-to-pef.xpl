@@ -46,7 +46,34 @@
         <p:pipe step="convert-and-store" port="status"/>
     </p:output>
     
-    <p:option name="stylesheet">
+    <!-- defined in ../../../../../../common-options.xpl -->
+    <p:option name="braille-code"/>
+
+    <p:option name="formatting-standard">
+        <p:pipeinfo>
+            <px:type>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <value></value>
+                    <a:documentation xml:lang="en">-</a:documentation>
+                    <value>https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss</value>
+                    <a:documentation xml:lang="en" xml:space="preserve">United States and Canada (BANA)
+
+The document is formatted according to the rules of the [Braille Authority of North America
+(BANA)](https://www.brailleauthority.org/). [UEB](https://iceb.org/) is used as the braille code for
+all text.
+
+Equivalent to specifying the value
+`https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss` for the
+"Custom style sheets" option.
+
+See the [online documentation](https://daisy.github.io/braille-stylesheets/bana/) for more information.
+</a:documentation>
+                </choice>
+            </px:type>
+        </p:pipeinfo>
+    </p:option>
+    
+    <p:option name="_:stylesheet" xmlns:_="embossed">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
           <p px:role="desc" xml:space="preserve" px:inherit="prepend">
 
@@ -67,7 +94,6 @@ sheet modules) are available for use in Sass style sheets:
     
     <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="stylesheet-parameters" cx:as="xs:string*"/>
-    <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-pdf"/>
@@ -81,11 +107,16 @@ sheet modules) are available for use in Sass style sheets:
     </p:option>
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
+    <p:option name="pdf-offset-x"/>
+    <p:option name="pdf-offset-y"/>
+    <p:option name="pdf-scale-font"/>
+    <p:option name="pdf-font-color"/>
 
-    <!-- defined in ../../css/page-layout.params -->
+    <!-- defined in ../../css/medium.params -->
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
+    <p:option name="saddle-stitch"/>
 
     <!-- defined in ../../css/dotify.params -->
     <p:option name="hyphenation-at-page-breaks"/>
@@ -117,11 +148,6 @@ sheet modules) are available for use in Sass style sheets:
         </p:documentation>
     </p:option>
 
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
-        <p:documentation>
-            px:delete-parameters
-        </p:documentation>
-    </p:import>
     <p:import href="library.xpl">
         <p:documentation>
             px:html-to-pef
@@ -149,41 +175,10 @@ sheet modules) are available for use in Sass style sheets:
         </p:documentation>
     </cx:import>
     
-    <!-- ================================================= -->
-    <!-- Create a <c:param-set/> of the options            -->
-    <!-- ================================================= -->
-    <!-- ...for easy piping so we won't have to explicitly -->
-    <!-- pass all the variables all the time.              -->
-    <!-- ================================================= -->
-    <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:message-severity="DEBUG"
-                          parameter-names="html
-                                           stylesheet
-                                           stylesheet-parameters
-                                           transform
-                                           braille-code
-                                           output-file-format
-                                           include-pef
-                                           include-preview
-                                           include-pdf
-                                           include-obfl
-                                           include-css
-                                           result
-                                           pef
-                                           preview
-                                           pdf
-                                           obfl
-                                           html-with-css
-                                           temp-dir">
-        <p:input port="source">
-            <p:pipe port="result" step="in-scope-names"/>
-        </p:input>
-    </px:delete-parameters>
-    <p:sink/>
-    
     <!-- ========= -->
     <!-- LOAD HTML -->
     <!-- ========= -->
+	<p:sink/>
     <px:fileset-add-entry media-type="application/xhtml+xml" name="source">
         <p:input port="source.fileset">
             <p:inline><d:fileset/></p:inline>
@@ -192,7 +187,7 @@ sheet modules) are available for use in Sass style sheets:
             <p:pipe step="main" port="source"/>
         </p:input>
     </px:fileset-add-entry>
-    <px:html-load name="html" px:message="Loading HTML" px:progress=".04">
+    <px:html-load name="html" px:message="Loading HTML" px:progress=".04" warn-on-missing-files="false">
         <p:input port="source.in-memory">
             <p:pipe step="source" port="result.in-memory"/>
         </p:input>
@@ -209,9 +204,10 @@ sheet modules) are available for use in Sass style sheets:
                               pf:css-parse-medium((
                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
                                 map:merge((
-                                  map:entry('width',$page-width),
-                                  map:entry('height',$page-height),
-                                  map:entry('-daisy-duplex',$duplex),
+                                  for $page-width in $page-width return map:entry('device-width',$page-width),
+                                  for $page-height in $page-height return map:entry('device-height',$page-height),
+                                  for $duplex in $duplex return map:entry('duplex',$duplex),
+                                  for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),
                                   map:entry('-daisy-document-locale',(/*/@xml:lang,/*/@lang,'und')[1]))))))">
             <p:pipe step="main" port="source"/>
         </p:variable>
@@ -224,15 +220,19 @@ sheet modules) are available for use in Sass style sheets:
                 <p:pipe step="html" port="result.in-memory"/>
             </p:input>
             <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
-            <p:with-option name="stylesheet" select="$stylesheet"/>
-            <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+            <p:with-option name="stylesheet" select="string-join(($formatting-standard,$_:stylesheet),' ')" xmlns:_="embossed"/>
+            <p:with-option name="parameters" select="($stylesheet-parameters,
+                                                      map:merge((
+                                                        for $page-width in $page-width return map:entry('page-width',$page-width),
+                                                        for $page-height in $page-width return map:entry('page-height',$page-height),
+                                                        for $duplex in $duplex return map:entry('duplex',$duplex),
+                                                        for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),
+                                                        map:entry('hyphenation-at-page-breaks',$hyphenation-at-page-breaks),
+                                                        map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming))))"/>
             <p:with-option name="transform"
                            select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
             <p:with-option name="medium" select="$medium"/>
             <p:with-option name="include-obfl" select="$include-obfl"/>
-            <p:input port="parameters">
-                <p:pipe port="result" step="input-options"/>
-            </p:input>
         </px:html-to-pef>
         
         <!-- ========= -->
@@ -254,6 +254,10 @@ sheet modules) are available for use in Sass style sheets:
             <p:with-option name="include-css" select="$include-css"/>
             <p:with-option name="medium" select="$medium"/>
             <p:with-option name="preview-table" select="$preview-table"/>
+            <p:with-option name="pdf-offset-x" select="$pdf-offset-x"/>
+            <p:with-option name="pdf-offset-y" select="$pdf-offset-y"/>
+            <p:with-option name="pdf-scale-font" select="$pdf-scale-font"/>
+            <p:with-option name="pdf-font-color" select="$pdf-font-color"/>
             <p:with-option name="output-dir" select="$result"/>
             <p:with-option name="pef-output-dir" select="$pef"/>
             <p:with-option name="preview-output-dir" select="$preview"/>

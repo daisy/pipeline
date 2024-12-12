@@ -47,14 +47,8 @@
         <p:pipe step="transform" port="status"/>
     </p:output>
     
-    <p:input kind="parameter" port="parameters" sequence="true">
-        <p:inline>
-            <c:param-set/>
-        </p:inline>
-    </p:input>
-    
     <p:option name="stylesheet" select="''"/>
-    <p:option name="stylesheet-parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string)* -->
+    <p:option name="parameters" select="map{}"/> <!-- (map(xs:string,item()) | xs:string | document-node() | element())* -->
     <p:option name="transform" select="'(translator:liblouis)(formatter:dotify)'"/>
     <p:option name="medium" select="'embossed'"> <!-- (xs:string | map(xs:string,item()) | item())* -->
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -165,9 +159,8 @@
     </p:declare-step>
 
     <p:variable name="ERR_DOTIFY_002" cx:as="xs:QName" select="QName('http://www.daisy.org/ns/pipeline/errors','pe:DOTIFY002')"/>
-    <p:variable name="parameter-map" select="pf:css-parse-param-set(($stylesheet-parameters,collection()))"> <!-- cx:as="map(xs:string,item())" -->
+    <p:variable name="parameter-map" select="pf:css-parse-param-set($parameters)"> <!-- cx:as="map(xs:string,item())" -->
         <!-- pf:css-parse-param-set takes first in case of duplicates -->
-        <p:pipe step="main" port="parameters"/>
     </p:variable>
 
     <!-- Parse transform query to a c:param-set -->

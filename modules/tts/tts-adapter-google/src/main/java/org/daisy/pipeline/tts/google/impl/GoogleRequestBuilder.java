@@ -2,7 +2,8 @@ package org.daisy.pipeline.tts.google.impl;
 
 import java.util.HashMap;
 
-import org.daisy.pipeline.tts.rest.Request;
+import org.daisy.pipeline.common.rest.Request;
+
 import org.json.JSONObject;
 
 /**
@@ -118,7 +119,7 @@ public class GoogleRequestBuilder {
 	 *
 	 * @throws Exception
 	 */
-	public Request<JSONObject> build() throws Exception {
+	public Request build() throws Exception {
 
 		HashMap<String, String> headers = new HashMap<String, String>();
 		JSONObject parameters = null;
@@ -157,10 +158,10 @@ public class GoogleRequestBuilder {
 			break;
 		}
 
-		return new Request<JSONObject>(
+		return new Request(
 			action.method,
 			serverAddress + action.domain + "?key=" + apiKey,
 			headers,
-			parameters);
+			parameters != null ? parameters.toString() : null);
 	}
 }

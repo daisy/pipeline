@@ -6,7 +6,7 @@
                 name="main">
 
   <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-    <p>Transform a single MathML documnt to SSML</p>
+    <p>Transform a single MathML document to SSML</p>
   </p:documentation>
 
   <p:input port="source" px:media-type="application/mathml+xml">

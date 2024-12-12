@@ -45,7 +45,7 @@
       <x:option name="pef" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="preview" select="resolve-uri('hauy_reset/output-dir',$temp-dir)"/>
       <x:option name="temp-dir" select="resolve-uri('hauy_reset/temp-dir',$temp-dir)"/>
-      <x:option name="stylesheet" select="'../resources/reset.css ../resources/style.css'"/>
+      <x:option name="_:stylesheet" select="'../resources/reset.css ../resources/style.css'" xmlns:_="embossed"/>
     </x:call>
     <x:context label="pef">
       <x:document type="file" base-uri="temp-dir" href="hauy_reset/output-dir/test_dtbook-to-pef.script.pef"/>

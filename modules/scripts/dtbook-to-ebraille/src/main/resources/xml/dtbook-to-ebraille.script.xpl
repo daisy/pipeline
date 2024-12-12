@@ -49,7 +49,7 @@ contained in a directory.</p>
     </p:input>
 
     <p:option name="attach-stylesheet" required="false" px:type="anyFileURI" select="''" px:sequence="true" px:separator=" "
-              px:media-type="text/css text/x-scss">
+              px:reusable="false" px:media-type="text/css text/x-scss">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Attach CSS style sheets</h2>
             <p px:role="desc" xml:space="preserve">CSS style sheet(s) to be attached with the HTML documents of the eBraille publication.
@@ -71,7 +71,7 @@ HTML, not DTBook.</p>
     <!--<p:option name="braille-translator" required="false" px:type="transform-query" select="''"/>-->
 
     <p:option name="braille-translator-stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-              px:media-type="text/css text/x-scss">
+              px:reusable="true" px:media-type="text/css text/x-scss">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Braille transcription style sheets</h2>
             <p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account for braille transcription.

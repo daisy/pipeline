@@ -30,11 +30,12 @@
             <h2 px:role="name">Input OBFL</h2>
             <p px:role="desc" xml:space="preserve">The OBFL document to convert.
 
-The OBFL document describes how the text is to be formatted and
-transcribed to braille. The text may also have been transcribed to
-braille already.
+An [OBFL (Open Braille Formatting
+Language)](https://mtmse.github.io/obfl/obfl-specification.html)
+document describes how text is to be formatted and transcribed to
+braille. The text may also have been transcribed to braille already.
 
-A typical use case is when the "OBFL" output of one of the braille
+The typical use case is when the "OBFL" output of one of the braille
 production scripts has been edited, and needs to be transformed to a
 formatted braille document.
 

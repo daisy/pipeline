@@ -15,7 +15,7 @@ import net.sf.saxon.value.BooleanValue;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
-import static org.daisy.pipeline.file.FileUtils.normalizeURI;
+import org.daisy.common.file.URLs;
 
 import org.osgi.service.component.annotations.Component;
 
@@ -75,7 +75,7 @@ public class NormalizeURI extends ExtensionFunctionDefinition {
 						}
 					}
 					boolean fragment = arguments.length > 1 ? ((BooleanValue)arguments[1]).getBooleanValue() : true;
-					return new StringValue(normalizeURI(uri, !fragment).toASCIIString(), BuiltInAtomicType.STRING);
+					return new StringValue(URLs.normalize(uri, !fragment).toASCIIString(), BuiltInAtomicType.STRING);
 				} catch (XPathException e) {
 					throw e;
 				} catch (Throwable e) {

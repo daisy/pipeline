@@ -16,8 +16,15 @@ public abstract class SassMapParser {
 	private static final String IDENT_RE = "[_a-zA-Z][_a-zA-Z0-9-]*";
 	private static final String STRING_RE = "'[^']*'|\"[^\"]*\"";
 	private static final String INTEGER_RE = "0|-?[1-9][0-9]*";
+	private static final Pattern NESTED_MAP_KEY_VALUE_RE = Pattern.compile(
+		"(?:" + IDENT_RE + ")\\s*:\\s*(?:(?:" + IDENT_RE + ")|(?:" + STRING_RE + ")|(?:" + INTEGER_RE + "))"
+	);
+	private static final Pattern NESTED_MAP_RE = Pattern.compile(
+		("\\s*\\(\\s*(?:" + NESTED_MAP_KEY_VALUE_RE.pattern()
+		 + "\\s*(?:,\\s*" + NESTED_MAP_KEY_VALUE_RE.pattern()  + "\\s*)*)?\\)\\s*")
+	);
 	private static final Pattern VALUE_RE = Pattern.compile(
-		"(?<ident>" + IDENT_RE + ")|(?<string>" + STRING_RE + ")|(?<integer>" + INTEGER_RE + ")"
+		"(?<ident>" + IDENT_RE + ")|(?<string>" + STRING_RE + ")|(?<integer>" + INTEGER_RE + ")|(?<map>" + NESTED_MAP_RE + ")"
 	);
 	private static final Pattern KEY_VALUE_RE = Pattern.compile(
 		"(?<key>" + IDENT_RE + ")\\s*:\\s*(?<value>" + VALUE_RE.pattern() + ")"
@@ -44,6 +51,7 @@ public abstract class SassMapParser {
 			String ident = m2.group("ident");
 			String string = m2.group("string");
 			String integer = m2.group("integer");
+			String nestedMap = m2.group("map");
 			if (ident != null) {
 				if ("true".equals(ident))
 					map.put(key, Boolean.TRUE);
@@ -55,6 +63,8 @@ public abstract class SassMapParser {
 				map.put(key, CssEscape.unescapeCss(string.substring(1, string.length() - 1)));
 			else if (integer != null && !integer.equals(""))
 				map.put(key, Integer.parseInt(integer));
+			else if (nestedMap != null && !nestedMap.equals(""))
+				map.put(key, SassMapParser.parse(nestedMap));
 			else
 				throw new RuntimeException("Coding error");
 		}

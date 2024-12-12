@@ -217,8 +217,8 @@ public class StylesheetParametersRequest extends Request {
 		public UserStylesheets deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
 				throws JsonParseException {
 
-			if (!json.isJsonObject())
-				throw new JsonParseException("invalid user stylesheets: not an object");
+			if (!json.isJsonArray())
+				throw new JsonParseException("invalid user stylesheets: not an array");
 			return new UserStylesheets(
 				Lists.transform(
 					json.getAsJsonArray().asList(),

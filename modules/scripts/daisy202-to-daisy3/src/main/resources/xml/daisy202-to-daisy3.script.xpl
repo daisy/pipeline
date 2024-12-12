@@ -48,10 +48,13 @@
 		</p:documentation>
 	</p:option>
 
-	<p:option name="identifier" required="false" select="''">
+	<p:option name="identifier" required="false" select="''" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Identifier</h2>
-			<p px:role="desc" xml:space="preserve">A string that uniquely identifies the DAISY 3 DTB to be generated.
+			<p px:role="desc" xml:space="preserve">A string to use as primary identifier of the DAISY 3.
+
+The identifier can be any string, as long as it uniquely identifies the DAISY 3. An example is
+"uk-rnib-db02006".
 
 If no value is supplied, a value is extracted from the input NCC.</p>
 		</p:documentation>
@@ -88,6 +91,7 @@ If no value is supplied, a value is extracted from the input NCC.</p>
 			<p:pipe step="load" port="in-memory.out"/>
 		</p:input>
 		<p:with-option name="output-dir" select="pf:normalize-uri(concat($result,'/'))"/>
+		<p:with-option name="identifier" select="$identifier"/>
 	</px:daisy202-to-daisy3>
 
 	<px:fileset-store px:progress="0.1" px:message="Storing DAISY 3">

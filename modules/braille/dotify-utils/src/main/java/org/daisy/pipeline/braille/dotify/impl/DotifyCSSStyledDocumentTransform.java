@@ -103,7 +103,9 @@ public interface DotifyCSSStyledDocumentTransform {
 						q.removeOnly("force-pre-translation");
 					}
 					Query textTransformQuery = mutableQuery(q).add("input", "text-css").add("output", "braille");
-					if (logSelect(textTransformQuery, translatorRegistry).apply(NOP_LOGGER).iterator().hasNext()) {
+					if (logSelect(textTransformQuery, translatorRegistry.getWithHyphenator(textTransformQuery)).apply(NOP_LOGGER)
+					                                                                                           .iterator()
+					                                                                                           .hasNext()) {
 						MutableQuery blockTransformQuery = null; {
 							// only pre-translate if an intermediary OBFL with braille content is requested
 							if (obfl && braille || forcePretranslation) {

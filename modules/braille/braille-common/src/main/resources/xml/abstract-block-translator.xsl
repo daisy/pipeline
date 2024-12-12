@@ -353,7 +353,7 @@
 				                              '$1-Brai$2')"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:sequence select="$source-language"/>"/>
+				<xsl:sequence select="$source-language"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>

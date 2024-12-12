@@ -81,7 +81,7 @@ The syntax is as follows (described in terms of [CSS grammar](https://www.w3.org
      : 'mm' | 'cm' | 'in' | 'px' | 'em'
      ;
 </a:documentation>
-                    <param name="pattern">^+?([0-9]*\\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$</param>
+                    <param name="pattern">^+?([0-9]*\.)?[0-9]+([eE][+-]?[0-9]+)?(mm|cm|in|px|em)?$</param>
                 </data>
             </px:type>
         </p:pipeinfo>

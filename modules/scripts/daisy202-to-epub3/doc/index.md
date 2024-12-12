@@ -2,9 +2,9 @@
 <link rev="dp2:doc" href="../src/main/resources/xml/daisy202-to-epub3.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-# DAISY 2.02 To EPUB 3
+# DAISY 2.02 to EPUB 3
 
-The "DAISY 2.02 to EPUB 3" script will convert a DAISY 2.02 DTB (Digital Talking Book) into an EPUB 3 publication.
+Transforms a DAISY 2.02 publication into an EPUB 3 publication.
 
 ## Synopsis
 

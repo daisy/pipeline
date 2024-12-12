@@ -19,7 +19,7 @@ The input document is validated against RelaxNG schema and additional schematron
 
 ## Sample usage
 
-This section shows how to use the DTBook Validator via the Pipeline 2 command line interface.
+This section shows how to use the DTBook Validator via the command line interface.
 
 Run the script like this:
 

@@ -222,6 +222,12 @@
     <p:group>
         <p:add-attribute match="d:file[@media-type='application/smil+xml']
                                       [not(@media-version)]
+                                      [@doctype-public='-//W3C//DTD SMIL 1.0//EN']"
+                         attribute-name="media-version">
+            <p:with-option name="attribute-value" select="'1.0'"/>
+        </p:add-attribute>
+        <p:add-attribute match="d:file[@media-type='application/smil+xml']
+                                      [not(@media-version)]
                                       [@doctype-public='-//NISO//DTD dtbsmil v1.1.0//EN']"
                          attribute-name="media-version">
             <p:with-option name="attribute-value" select="'dtb-1.1.0'"/>

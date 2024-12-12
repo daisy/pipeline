@@ -4,6 +4,7 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:epub="http://www.idpf.org/2007/ops"
+                xmlns:math="http://www.w3.org/1998/Math/MathML"
                 xmlns="http://www.w3.org/ns/SMIL"
                 exclude-result-prefixes="#all">
 
@@ -54,7 +55,8 @@
         </body>
     </xsl:template>
 
-    <xsl:template match="html:*[@id]" priority="1">
+    <xsl:template match="html:*[@id]|
+                         math:math[@id]" priority="1">
         <xsl:variable name="textref" select="concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id)"/>
         <xsl:variable name="clip" as="element(d:clip)?" select="key('audio-clips',$textref,$audio-map)"/>
         <xsl:choose>

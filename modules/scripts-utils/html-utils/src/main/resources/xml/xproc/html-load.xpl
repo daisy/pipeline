@@ -51,6 +51,11 @@
 		<p:pipe step="htmls" port="result"/>
 	</p:output>
 
+	<p:option name="warn-on-missing-files" select="true()" cx:as="xs:boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether to raise warnings for files that exist neither on disk or in memory.</p>
+        </p:documentation>
+    </p:option>
 	<p:option name="handle-xinclude" cx:as="xs:boolean" select="false()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>Apply <a href="https://www.w3.org/TR/xinclude/">XInclude</a> processing on XHTML
@@ -140,6 +145,20 @@
 				<p:pipe step="main" port="source.in-memory"/>
 			</p:with-param>
 		</p:xslt>
+		<p:choose>
+			<p:when test="not($warn-on-missing-files)">
+				<px:fileset-purge warn-on-missing="false">
+					<p:input port="source.in-memory">
+						<p:pipe step="htmls" port="result"/>
+						<p:pipe step="main" port="source.in-memory"/>
+					</p:input>
+				</px:fileset-purge>
+			</p:when>
+			<p:otherwise>
+				<p:identity/>
+			</p:otherwise>
+		</p:choose>
+
 		<!-- copy detected serialization properties -->
 		<p:group>
 			<p:identity name="fileset"/>

@@ -1,11 +1,8 @@
 package org.daisy.pipeline.tts.google.impl;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URL;
@@ -25,20 +22,20 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmNode;
 
 import org.daisy.common.file.URLs;
+import org.daisy.pipeline.common.rest.Request;
+import org.daisy.pipeline.common.rest.Response;
+import org.daisy.pipeline.common.rest.scheduler.ExponentialBackoffScheduler;
+import org.daisy.pipeline.common.rest.scheduler.FatalError;
+import org.daisy.pipeline.common.rest.scheduler.RecoverableError;
+import org.daisy.pipeline.common.rest.scheduler.Schedulable;
+import org.daisy.pipeline.common.rest.scheduler.Scheduler;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSRegistry.TTSResource;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.Voice;
 import org.daisy.pipeline.tts.Voice.MarkSupport;
-import org.daisy.pipeline.tts.VoiceInfo;
 import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.VoiceInfo.LanguageRange;
-import org.daisy.pipeline.tts.rest.Request;
-import org.daisy.pipeline.tts.scheduler.ExponentialBackoffScheduler;
-import org.daisy.pipeline.tts.scheduler.FatalError;
-import org.daisy.pipeline.tts.scheduler.RecoverableError;
-import org.daisy.pipeline.tts.scheduler.Schedulable;
-import org.daisy.pipeline.tts.scheduler.Scheduler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +47,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Connector class to synthesize audio using the google cloud tts engine.
  *
- * <p>This connector is based on their REST Api.</p>
+ * <p>This connector is based on their REST API.</p>
  *
  * @author Louis Caille @ braillenet.org
  */
@@ -117,7 +114,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		}
 
 		try {
-			Request<JSONObject> speechRequest; {
+			Request speechRequest; {
 				GoogleRequestBuilder b = mRequestBuilder.newRequest()
 					.withSampleRate((int)mAudioFormat.getSampleRate())
 					.withAction(GoogleRestAction.SPEECH)
@@ -128,28 +125,26 @@ public class GoogleRestTTSEngine extends TTSEngine {
 			}
 			ArrayList<byte[]> result = new ArrayList<>();
 			mRequestScheduler.launch(() -> {
-				Response response = doRequest(speechRequest);
+				Response response;
+				try {
+					response = speechRequest.send();
+				} catch (IOException e) {
+					throw new FatalError(e);
+				}
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
 				else if (response.status != 200)
 					raiseFatalError(response, speechRequest);
 				else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
-				String json; {
-					try {
-						json = readStream(response.body);
-					} catch (IOException  e) {
-						throw new FatalError(e);
-					}
-				}
 				try {
 					// assume response is JSON object with single "audioContent" string
-					String audioContent = new JSONObject(json).getString("audioContent");
+					String audioContent = new JSONObject(response.body).getString("audioContent");
 					// the answer is encoded in base 64
 					byte[] decodedBytes = Base64.getDecoder().decode(audioContent);
 					result.add(decodedBytes);
 				} catch (JSONException e) {
-					throw new FatalError("JSON could not be parsed:\n" + json, e);
+					throw new FatalError("JSON could not be parsed:\n" + response.body, e);
 				}
 			});
 			AudioInputStream audio = createAudioStream(new BufferedInputStream(new ByteArrayInputStream(result.get(0))));
@@ -172,27 +167,25 @@ public class GoogleRestTTSEngine extends TTSEngine {
 	public Collection<Voice> getAvailableVoices() throws SynthesisException, InterruptedException {
 		Collection<Voice> result = new ArrayList<Voice>();
 		try {
-			Request<JSONObject> voicesRequest = mRequestBuilder.newRequest()
+			Request voicesRequest = mRequestBuilder.newRequest()
 				.withAction(GoogleRestAction.VOICES)
 				.build();
 			mRequestScheduler.launch(() -> {
-				Response response = doRequest(voicesRequest);
+				Response response;
+				try {
+					response = voicesRequest.send();
+				} catch (IOException e) {
+					throw new FatalError(e);
+				}
 				if (response.status == 429)
 					throw new RecoverableError("Exceeded quotas", response.exception);
 				else if (response.status != 200)
 					raiseFatalError(response, voicesRequest);
 				else if (response.body == null)
 					throw new FatalError("Response body is null", response.exception);
-				String json; {
-					try {
-						json = readStream(response.body);
-					} catch (IOException  e) {
-						throw new FatalError(e);
-					}
-				}
 				try {
 					// assume response is JSON object with single "voices" array
-					JSONArray voices = new JSONObject(json).getJSONArray("voices");
+					JSONArray voices = new JSONObject(response.body).getJSONArray("voices");
 					for (int i = 0; i < voices.length(); i++) {
 						// assume elements are objects
 						JSONObject voice = voices.getJSONObject(i);
@@ -235,7 +228,7 @@ public class GoogleRestTTSEngine extends TTSEngine {
 						}
 					}
 				} catch (JSONException e) {
-					throw new FatalError("Voices list could not be parsed:\n" + json, e);
+					throw new FatalError("Voices list could not be parsed:\n" + response.body, e);
 				}
 			});
 		} catch (InterruptedException e) {
@@ -263,66 +256,14 @@ public class GoogleRestTTSEngine extends TTSEngine {
 		return new TTSResource();
 	}
 
-	private static class Response {
-		int status;
-		InputStream body;
-		IOException exception;
-		InputStream error;
-	}
-
-	/**
-	 * Send request and get response status code and body.
-	 *
-	 * <p><code>body</code> is null if <code>exception</code> is non-null and visa-versa.</p>
-	 *
-	 * @throws FatalError if <code>status</code> can not be retrieved.
-	 */
-	private static Response doRequest(Request request) throws InterruptedException, FatalError {
-		Response r = new Response();
-		IOException ioe = null;
-		try {
-			r.body = request.send();
-		} catch (IOException e) {
-			r.exception = e;
-		}
-		try {
-			r.status = request.getConnection().getResponseCode();
-		} catch (IOException responseCodeError) {
-			throw new FatalError("Could not retrieve response code for request. Do you have an internet connection?",
-			                     responseCodeError);
-		}
-		if (r.exception != null || r.status > 299)
-		    r.error = request.getConnection().getErrorStream();
-		return r;
-	}
-
-	/**
-	 * Read InputStream as a UTF-8 encoded string.
-	 */
-	private static String readStream(InputStream is) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
-		StringBuilder sb = new StringBuilder();
-		String line;
-		while ((line = br.readLine()) != null) {
-			sb.append(line.trim());
-		}
-		br.close();
-		return sb.toString();
-	}
-
-	private static void raiseFatalError(Response response, Request<JSONObject> request) throws FatalError {
+	private static void raiseFatalError(Response response, Request request) throws FatalError {
 		String message = "Response code " + response.status + " from " + request.getConnection().getURL();
 		Throwable cause = response.exception;
 		try {
 			JSONObject errorJson = null; {
 				if (response.error != null) {
-					try {
-						String json = readStream(response.error);
-						logger.debug("Error stream:\n" + json);
-						errorJson = new JSONObject(json).getJSONObject("error");
-					} catch (IOException e) {
-						logger.debug("Could not read error stream", e);
-					}
+					logger.debug("Error stream:\n" + response.error);
+					errorJson = new JSONObject(response.error).getJSONObject("error");
 				}
 			}
 			if (errorJson != null) {

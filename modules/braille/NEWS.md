@@ -1,3 +1,26 @@
+v1.15.4
+==========
+
+Changes
+-------
+- Update to Liblouis [3.36.0](https://github.com/liblouis/liblouis/releases/tag/v3.36.0)
+- Option to choose braille formatting standard
+- Perfectly align PDF output with braille
+- Allow tweaking margins of PDF
+- Allow specifying media features `cell-width` and `cell-height`
+- Setting for font size of PDF
+- Setting for font color of PDF
+- Include bookmarks for braille volumes in PDF output
+- Optimize volume breaking in saddle stitch mode
+- Make `orphans` and `widows` work as expected on blocks that have child blocks
+- Keep a leader together with the last word before it if there is no space in between
+  (https://github.com/mtmse/dotify.library/issues/24)
+- Suppress warnings about known properties in standard CSS unless media query `embossed` or
+ `braille` is specified (https://github.com/daisy/pipeline-modules/issues/143)
+- Allow optional `-daisy-` prefix before more rules (`@left`, `@right` and `@footnotes`)
+- Fix support for length units in braille CSS
+- Various other bugfixes
+
 v1.15.3
 ==========
 

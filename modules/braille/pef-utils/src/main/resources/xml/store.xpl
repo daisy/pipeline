@@ -49,6 +49,27 @@
     <p:option name="preview-href" required="false" select="''"/> <!-- URI -->
     <p:option name="preview-table" required="false" select="''"/> <!-- query -->
     <p:option name="pdf-href" required="false" select="''"/> <!-- URI -->
+    <p:option name="pdf-offset-x" required="false" select="'0'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Horizontal offset for the position of the content on the PDF page.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="pdf-offset-y" required="false" select="'0'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Vertical offset for the position of the content on the PDF page.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="pdf-scale-font" required="false" select="'100%'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Scaling factor for the font size of the PDF.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="pdf-font-color" required="false" select="'#000000'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Font color of the PDF.</p>
+            <p>Must be a RGB hex color code.</p>
+        </p:documentation>
+    </p:option>
     
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
@@ -71,7 +92,7 @@
     <p:declare-step type="pxi:pef2text">
         <p:input port="source" sequence="false" primary="true"/>
         <p:option name="output-dir"/>
-        <p:option name="medium"/>
+        <p:option name="medium" required="true"/>
         <p:option name="name-pattern"/>
         <p:option name="number-width"/>
         <p:option name="single-volume-name"/>
@@ -85,10 +106,17 @@
         <p:output port="result" primary="false"/>
         <p:option name="href" required="true"/>
         <p:option name="table" required="true"/>
+        <p:option name="medium" required="true"/>
+        <p:option name="offset-x" required="true"/>
+        <p:option name="offset-y" required="true"/>
+        <p:option name="scale-font" required="true"/>
+        <p:option name="font-color" required="true"/>
         <!--
             Implemented in ../../java/org/daisy/pipeline/braille/pef/calabash/impl/pdf/PEF2PDFStep.java
         -->
     </p:declare-step>
+    
+    <p:variable name="parsed-medium" select="pf:css-parse-medium($medium)"/>
     
     <!-- ============ -->
     <!-- STORE AS PEF -->
@@ -124,7 +152,6 @@
             <p:documentation>
                 Convert PEF document into a textual (ASCII-based) format.
             </p:documentation>
-            <p:variable name="parsed-medium" select="pf:css-parse-medium($medium)"/>
             <p:identity>
                 <p:input port="source">
                     <p:pipe step="store" port="source"/>
@@ -303,6 +330,11 @@
                             <pxi:pef2pdf px:message="Storing PDF to '{$pdf-href}' using table '{$preview-table}'" px:message-severity="DEBUG">
                                 <p:with-option name="href" select="$pdf-href"/>
                                 <p:with-option name="table" select="$preview-table"/>
+                                <p:with-option name="medium" select="$parsed-medium"/>
+                                <p:with-option name="offset-x" select="$pdf-offset-x"/>
+                                <p:with-option name="offset-y" select="$pdf-offset-y"/>
+                                <p:with-option name="scale-font" select="$pdf-scale-font"/>
+                                <p:with-option name="font-color" select="$pdf-font-color"/>
                             </pxi:pef2pdf>
                         </p:when>
                         <p:otherwise>

@@ -21,25 +21,29 @@
         <p:empty/>
     </p:input>
 
-    <p:option name="validation" cx:as="xs:boolean" select="false()">
-        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>Whether to perform validation of the input.</p>
-        </p:documentation>
-    </p:option>
-
     <p:option name="mathml-version" select="'3.0'" cx:type="3.0|2.0">
         <p:documentation>
             <p>Version of MathML in the DTBook file</p>
         </p:documentation>
     </p:option>
-    <p:option name="check-images" select="false()" cx:as="xs:boolean">
-        <p:documentation>
-            <p>Check to see that referenced images exist on disk</p>
-        </p:documentation>
-    </p:option>
     <p:option name="nimas" cx:as="xs:boolean" select="false()">
         <p:documentation>
             <p>Validate against NIMAS 1.1</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="warn-on-missing-files" select="true()" cx:as="xs:boolean">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether to raise warnings for files that exist neither on disk or in memory.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="validation" cx:as="xs:boolean" select="false()">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Whether to perform validation of the input.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="check-images" select="false()" cx:as="xs:boolean">
+        <p:documentation>
+            <p>Check to see that referenced images exist on disk</p>
         </p:documentation>
     </p:option>
 
@@ -128,6 +132,18 @@
         </p:xslt>
     </p:for-each>
     <px:fileset-join/>
+    <p:choose>
+	    <p:when test="not($warn-on-missing-files)">
+		    <px:fileset-purge warn-on-missing="false">
+			    <p:input port="source.in-memory">
+				    <p:pipe step="dtbooks" port="result"/>
+			    </p:input>
+		    </px:fileset-purge>
+	    </p:when>
+	    <p:otherwise>
+		    <p:identity/>
+	    </p:otherwise>
+    </p:choose>
     <px:mediatype-detect/>
     <p:identity name="resources-mathml"/>
     <p:sink/>

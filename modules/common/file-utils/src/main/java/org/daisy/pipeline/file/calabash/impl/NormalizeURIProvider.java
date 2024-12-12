@@ -11,7 +11,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
-import static org.daisy.pipeline.file.FileUtils.normalizeURI;
+import org.daisy.common.file.URLs;
 import static org.daisy.pipeline.file.FileUtils.cResultDocument;
 
 import com.xmlcalabash.core.XProcRuntime;
@@ -56,7 +56,7 @@ public class NormalizeURIProvider implements XProcStepProvider {
 			URI uri = URI.create(getOption(_URI, ""));
 			result.write(
 				runtime.getProcessor().newDocumentBuilder().build(
-					new StreamSource(cResultDocument(normalizeURI(uri).toASCIIString()))));
+					new StreamSource(cResultDocument(URLs.normalize(uri).toASCIIString()))));
 		}
 	}
 }

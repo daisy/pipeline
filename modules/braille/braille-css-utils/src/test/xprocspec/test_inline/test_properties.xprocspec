@@ -205,10 +205,12 @@
           <document>
             <head>
               <style media="embossed" type="text/css">
+                h { margin-bottom: 1in }
                 p { line-height: 1in }
               </style>
             </head>
             <body>
+              <h/>
               <p/>
             </body>
           </document>
@@ -221,7 +223,8 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p style="line-height: 3"/>
+          <h style="margin-bottom: 3"/>
+          <p style="line-height: 2.54"/>
         </body>
       </x:document>
     </x:expect>

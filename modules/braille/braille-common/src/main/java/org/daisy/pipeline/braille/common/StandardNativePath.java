@@ -29,6 +29,8 @@ import static org.daisy.pipeline.braille.common.util.OS;
  * - linux/x86/bar
  * - linux/x86_64/foo.so
  * - linux/x86_64/bar
+ * - linux/aarch64/foo.so
+ * - linux/aarch64/bar
  * - macosx/x86/foo.dylib
  * - macosx/x86/bar
  * - macosx/x86_64/foo.dylib

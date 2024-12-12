@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.charset.UnsupportedCharsetException;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -66,13 +67,13 @@ public class SassCompiler implements CssPreProcessor {
 
 	private final Importer importer;
 	private final StreamSourceURIResolver resolver;
-	private final Map<String,String> env;
+	private final Map<String,Object> env;
 
 	/**
 	 * @param env SASS variables. The map is allowed to be mutated by the caller after the
 	 *            SassCompiler is created.
 	 */
-	public SassCompiler(final URIResolver resolver, Map<String,String> env) {
+	public SassCompiler(final URIResolver resolver, Map<String,Object> env) {
 		this.resolver = new StreamSourceURIResolver(resolver);
 		this.env = env;
 		importer = new Importer() {
@@ -146,14 +147,14 @@ public class SassCompiler implements CssPreProcessor {
 		StringBuilder scss = new StringBuilder();
 		if (env != null) {
 			for (String var : env.keySet()) {
-				String value = env.get(var);
-				if (!value.matches(scssNumberColorString)) {
+				String value = "" + env.get(var);
+				if (value.startsWith("(") && value.endsWith(")"))
+					; // assume this is a map; don't quote anything
+				else if (!value.matches(scssNumberColorString)) {
 					// if value contains spaces or special characters that can mess up parsing; wrap it in single quotes
 					logger.debug("scss variable '"+var+"' contains special characters: "+value);
 					value = "'"+value.replace("\n", "\\A").replace("'","\\27")+"'";
 					logger.debug("scss variable '"+var+"' was quoted                 : "+value);
-				} else {
-					logger.debug("scss variable '"+var+"' contains no special characters: "+value);
 				}
 				scss.append("$").append(var).append(": ").append(value).append(";\n");
 			}

@@ -276,11 +276,12 @@ public class TextToPcmThread implements FormatSpecifications {
 			Sentence sentence, TTSEngine tts, Voice voice, TTSResource threadResources,
 			List<Mark> marks, List<String> markNames
 	) throws SynthesisException, TimeoutException, MemoryException {
+		XdmNode ssml = sentence.getText();
 		if (tts.handlesMarks()
 		        && voice.getMarkSupport() != MarkSupport.MARK_NOT_SUPPORTED){
 			logEntry.setActualVoice(voice);
 			SynthesisResult result = mExecutor.synthesizeWithTimeout(
-				timeout, interrupter, logEntry, sentence.getText(), sentence.getSize(), tts, voice,
+				timeout, interrupter, logEntry, ssml, sentence.getSize(), tts, voice,
 				threadResources);
 			if (!AudioUtils.isPCM(result.audio.getFormat()))
 				throw new IllegalArgumentException();
@@ -299,7 +300,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			mAudioFootprintMonitor.acquireTTSMemory(result.audio);
 			return Collections.singletonList(result.audio);
 		} else {
-			Collection<Chunk> chunks = mSSMLSplitter.split(sentence.getText());
+			Collection<Chunk> chunks = mSSMLSplitter.split(ssml);
 			List<AudioInputStream> result = new ArrayList<>();
 			int offset = 0;
 			AudioFormat format = null;

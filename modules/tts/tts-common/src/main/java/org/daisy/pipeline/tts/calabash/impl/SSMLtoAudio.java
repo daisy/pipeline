@@ -14,18 +14,33 @@ import java.util.IllformedLocaleException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.xml.namespace.QName;
+import static javax.xml.stream.XMLStreamConstants.END_DOCUMENT;
+import static javax.xml.stream.XMLStreamConstants.START_DOCUMENT;
+import static javax.xml.stream.XMLStreamConstants.START_ELEMENT;
+import javax.xml.stream.XMLStreamException;
 
 import net.sf.saxon.s9api.Axis;
+import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.Processor;
 import net.sf.saxon.s9api.XdmNode;
 import net.sf.saxon.s9api.XdmSequenceIterator;
+import net.sf.saxon.sxpath.XPathExpression;
+import net.sf.saxon.trans.XPathException;
 
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
+import org.daisy.common.saxon.SaxonHelper;
+import org.daisy.common.saxon.SaxonInputValue;
+import org.daisy.common.saxon.SaxonOutputValue;
+import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
+import org.daisy.common.stax.BaseURIAwareXMLStreamWriter;
+import org.daisy.common.stax.XMLStreamWriterHelper;
 import org.daisy.pipeline.audio.AudioServices;
 import org.daisy.pipeline.css.speech.VoiceFamilyList;
 import org.daisy.pipeline.tts.AudioFootprintMonitor;
@@ -41,11 +56,9 @@ import org.daisy.pipeline.tts.TTSRegistry;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.TimedTTSExecutor;
 import org.daisy.pipeline.tts.Voice;
-import org.daisy.pipeline.tts.VoiceInfo.Gender;
 import org.daisy.pipeline.tts.VoiceManager;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterables;
 
@@ -192,16 +205,21 @@ public class SSMLtoAudio implements FormatSpecifications {
 	 **/
 	// package private for tests
 	boolean dispatchSSML(XdmNode ssml, Locale lang) throws SynthesisException {
-		VoiceFamilyList voiceFamily; {
+		String id = ssml.getAttributeValue(Sentence_attr_id);
+		TTSLog.Entry logEntry = mTTSlog.getOrCreateEntry(id);
+		logEntry.setSSML(ssml); // log SSML with xml:lang AND voice-family attribute
+		                        // alternative is to log voice-family separately
+		VoiceFamilyList voiceFamily = null; {
 			String attr = ssml.getAttributeValue(Sentence_attr_voice_family);
-			if (attr != null && !"".equals(attr))
-				try {
-					voiceFamily = VoiceFamilyList.of(attr);
-				} catch (IllegalArgumentException e) {
-					throw new SynthesisException("invalid voice-family attribute: " + attr, e); // should not happen
-				}
-			else
-				voiceFamily = null;
+			if (attr != null) {
+				if (!"".equals(attr))
+					try {
+						voiceFamily = VoiceFamilyList.of(attr);
+					} catch (IllegalArgumentException e) {
+						throw new SynthesisException("invalid voice-family attribute: " + attr, e); // should not happen
+					}
+				ssml = cleanSsmlNoCheck(ssml);
+			}
 		}
 		{
 			String langAttr = ssml.getAttributeValue(Sentence_attr_lang);
@@ -213,9 +231,6 @@ public class SSMLtoAudio implements FormatSpecifications {
 				}
 			}
 		}
-		String id = ssml.getAttributeValue(Sentence_attr_id);
-		TTSLog.Entry logEntry = mTTSlog.getOrCreateEntry(id);
-		logEntry.setSSML(ssml);
 		Iterable<Voice> voices = mVoiceManager.findAvailableVoices(lang, voiceFamily);
 		Voice preferredVoice = Iterables.getFirst(voices, null);
 		logEntry.setSelectedVoice(preferredVoice);
@@ -276,6 +291,61 @@ public class SSMLtoAudio implements FormatSpecifications {
 		}
 		mCurrentSection.sentences.add(new Sentence(newSynth, voices, ssml));
 		return true;
+	}
+
+	private static XdmNode cleanSsml(XdmNode ssml) throws SynthesisException {
+		try {
+			XPathExpression containsVoiceFamilyAttr = SaxonHelper.compileExpression(
+				"@voice-family", null, ssml.getUnderlyingNode().getConfiguration());
+			if (SaxonHelper.evaluateBoolean(containsVoiceFamilyAttr, ssml))
+				return cleanSsml(ssml);
+			else
+				return ssml;
+		} catch (XPathException e) {
+			throw new SynthesisException(e);
+		}
+	}
+
+	/**
+	 * Remove invalid attributes
+	 */
+	private static XdmNode cleanSsmlNoCheck(XdmNode ssml) throws SynthesisException {
+		try {
+			BaseURIAwareXMLStreamReader reader = new SaxonInputValue(ssml).asXMLStreamReader();
+			List<XdmItem> result = new ArrayList<>();
+			BaseURIAwareXMLStreamWriter writer = new SaxonOutputValue(
+				result::add, ssml.getUnderlyingNode().getConfiguration()
+			).asXMLStreamWriter();
+			writer.setBaseURI(reader.getBaseURI());
+			while (true)
+				try {
+					int event = reader.getEventType();
+					switch (event) {
+					case START_DOCUMENT:
+					case END_DOCUMENT:
+						break;
+					case START_ELEMENT:
+						XMLStreamWriterHelper.writeStartElement(writer, reader.getName());
+						for (int i = 0; i < reader.getAttributeCount(); i++) {
+							QName attr = reader.getAttributeName(i);
+							if (!new QName("voice-family").equals(attr))
+								XMLStreamWriterHelper.writeAttribute(writer, attr, reader.getAttributeValue(i));
+						}
+						break;
+					default:
+						XMLStreamWriterHelper.writeEvent(writer, reader);
+					}
+					event = reader.next();
+				} catch (NoSuchElementException e) {
+					break;
+				}
+			if (result.size() != 1 || !(result.get(0) instanceof XdmNode))
+				throw new IllegalStateException("coding error");
+			else
+				return (XdmNode)result.get(0);
+		} catch (XMLStreamException e) {
+			throw new SynthesisException(e);
+		}
 	}
 
 	private void endSection() {

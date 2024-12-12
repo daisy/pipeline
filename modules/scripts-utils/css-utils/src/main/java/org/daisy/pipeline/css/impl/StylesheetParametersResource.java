@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URL;
@@ -32,12 +33,12 @@ import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamSource;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 
 import cz.vutbr.web.css.MediaQuery;
 
+import org.daisy.common.file.Resource;
 import org.daisy.common.file.URLs;
 import org.daisy.pipeline.css.CssAnalyzer;
 import org.daisy.pipeline.css.CssAnalyzer.SassVariable;
@@ -45,6 +46,7 @@ import org.daisy.pipeline.css.Medium;
 import org.daisy.pipeline.css.MediumProvider;
 import org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
+import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.ZippedJobResources;
 import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
@@ -255,10 +257,10 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 										}
 										@Override
 										public InputStream getInputStream() throws IOException {
-											Supplier<InputStream> s = data.getResource(URLs.relativize(contextBase, URLs.asURI(u)).getPath());
-											if (s == null)
+											Resource r = data.getResource(URLs.relativize(contextBase, URLs.asURI(u)));
+											if (r == null)
 												throw new FileNotFoundException();
-											return s.get();
+											return r.read();
 										}
 									};
 								}
@@ -269,18 +271,11 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				}
 			);
 		try {
-			Function<Source,Source> handleZippedInput = s -> {
-				if (s.getSystemId() == null)
-					// this means we used a InputStream
-					return s;
-				URI u = URLs.asURI(s.getSystemId());
-				if (u.getScheme() == null)
-					// we know that u is a relative URI and that data contains the file
-					u = URLs.resolve(contextBase, u);
+			Function<URI,Source> handleZippedInput = s -> {
 				try {
-					return resolver.resolve(u.toString(), "");
-				} catch (TransformerException e) {
-					throw new RuntimeException(e);
+					return resolveResource(s, inputs).readAsSource();
+				} catch (IOException e) {
+					throw new UncheckedIOException(e);
 				}
 			};
 			List<Source> userAndUserAgentStylesheets = new ArrayList<>(); {
@@ -341,6 +336,19 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 		logger.error("bad request:", e);
 		setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		return getErrorRepresentation(e.getMessage());
+	}
+
+	private static Resource resolveResource(URI uri, ScriptInput input) {
+		JobResources resources = input.getResources();
+		if (resources != null) {
+			Resource r = resources.getResource(uri);
+			if (r != null)
+				return r;
+		}
+		// otherwise must be a file URI
+		if (!"file".equals(uri.getScheme()) || uri.isOpaque())
+			throw new IllegalStateException(); // should not happen: ScriptInput does not allow this
+		return Resource.load(uri, Resource.MEDIA_TYPE_UNKNOWN);
 	}
 
 	private static URIResolver simpleURIResolver = new URIResolver() {

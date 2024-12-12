@@ -27,6 +27,7 @@
     <xsl:apply-templates select="." mode="css1"/>
   </xsl:template>
   <xsl:template match="*[@tts:voice-family]" mode="css0">
+    <!-- this is not an SSML attribute: will be removed by px:ssml-to-audio before sending it to the TTS engines -->
     <xsl:attribute name="voice-family">
       <xsl:value-of select="@tts:voice-family"/>
     </xsl:attribute>

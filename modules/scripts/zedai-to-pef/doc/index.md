@@ -2,9 +2,9 @@
 <link rev="dp2:doc" href="../src/main/resources/xml/zedai-to-pef.xpl"/>
 <link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/userdoc"/>
 
-# ZedAI to PEF
+# ZedAI to braille
 
-The "ZedAI to PEF" script will convert a ZedAI document (NISO Z39.98-2012 - Authoring and Interchange Framework for Adaptive XML Publishing) into a PEF (Portable Embosser Format) file. PEF is a format for representing paged braille documents in an unambiguous way. It builds on XML, Unicode and Dublin Core. Tools are available for embossing PEF files or converting them into other braille formats. See also [the PEF Format website](http://pef-format.org/).
+Transforms a ZedAI (DAISY 4 XML) document into an embosser ready braille document
 
 ## Table of contents
 
@@ -14,33 +14,9 @@ The "ZedAI to PEF" script will convert a ZedAI document (NISO Z39.98-2012 - Auth
 
 {{>synopsis}}
 
-## Example running from command line
-
-    $ ./dp2 zedai-to-pef \
-    	--i-source samples/zedai/alice.xml \
-    	--x-include-preview true \
-    	--x-include-brf true \
-    	--x-output ~/Desktop/out
-
-output:
-
-    $ ls ~/Desktop/out
-    alice.pef
-    alice.pef.html
-    alice.brf
-
-More advanded example:
-
-    $ ./dp2 zedai-to-pef \
-            --i-source samples/zedai/alice.xml \
-            --x-include-preview true \
-            --x-default-stylesheet bana.css \
-            --x-transform "(formatter:dotify)" \
-            --x-output ~/Desktop/out
-
 ## Getting a preview
 
-To emboss a PEF file or display it on screen you need special software (such as the [Easy Embosser Utility](http://code.google.com/p/e2u/) developed at TPB). Opening a PEF with an XML editor is not very useful because you only get to see Unicode braille (dot patterns). If you don't have access to a special PEF tool, or you just want to quickly review the document first, you should set the `include-preview` option to `true`. In addition to the actual PEF file, an HTML page will then be generated that you can open in your browser. You will be able to quickly navigate pages, and switch between a 'dot patterns' view and a more readable ASCII view. To properly render this HTML page, you need the [odt2braille font](http://sourceforge.net/projects/odt2braille/files/ttf/odt2braille-6dot-v1.1.ttf).
+To get a preview of the braille document before embossing it, you should set the `include-preview` option to `true`. In addition to the embosser file, an HTML page will then be generated that you can open in your browser. You will be able to quickly navigate pages, and switch between a 'dot patterns' view and a more readable ASCII view.
 
 ## Advanced Configuration
 
@@ -48,19 +24,19 @@ To emboss a PEF file or display it on screen you need special software (such as 
 
 By default, text is translated to braille with a simple generic [liblouis](http://liblouis.org) based translator. All the translation tables distributed by liblouis (about 80 languages) are included in the DAISY Pipeline. The translator will automatically look for the table that matches the `xml:lang` attribute best. The `transform` option gives you more control over translator selection. For example:
 
-    --x-transform "(locale:fr)"
+    --transform "(locale:fr)"
 
 will force the document to be translated to French braille. Or, you might want to select a specific liblouis table, for example US English Grade 1:
 
-    --x-transform "(liblouis-table:'en-us-g1.ctb')"
+    --transform "(liblouis-table:'en-us-g1.ctb')"
 
-If you are running DAISY Pipeline 2 in local mode, and you have your own liblouis tables installed somewhere, you can use them by specifying the full path:
+If you are running DAISY Pipeline in local mode, and you have your own liblouis tables installed somewhere, you can use them by specifying the full path:
 
-    --x-transform "(liblouis-table:'file:/home/me/liblouis-tables/my_en-us.ctb')"
+    --transform "(liblouis-table:'file:/home/me/liblouis-tables/my_en-us.ctb')"
 
-Liblouis is the main translation engine used in DAISY Pipeline 2, but other libraries are available. The following translator is backed by [Dotify](https://code.google.com/p/dotify/), the braille translation library developed at MTM:
+Liblouis is the main translation engine used in DAISY Pipeline, but other libraries are available. The following translator is backed by [Dotify](https://code.google.com/p/dotify/), the braille translation library developed at MTM:
 
-    --x-transform "(translator:dotify)"
+    --transform "(translator:dotify)"
 
 More examples are provided below. If your use case requires non-trivial features and the supplied generic translators won't do, you can write your own translator, which might be a combination of existing and new components. If you have idea's about features that should be supported by default, please share them with us.
 
@@ -68,11 +44,11 @@ More examples are provided below. If your use case requires non-trivial features
 
 The default transformer automatically hyphenates text with CSS property “hyphens:auto” (see [Styling with Braille CSS](#styling-with-braille-css) below). A hyphenator will be selected based on the `xml:lang` attribute. If liblouis isn't able to hyphenate the text itself, then [Hyphen](http://hunspell.sourceforge.net/), the hyphenation engine from [OpenOffice](http://www.openoffice.org/) and [LibreOffice](http://www.libreoffice.org/), is used. To force the use of Hyphen, specify:
 
-    --x-transform "(hyphenator:hyphen)"
+    --transform "(hyphenator:hyphen)"
 
 and to select a specific Hyphen table, specify:
 
-    --x-transform "(libhyphen-table:'hyph_en_US.dic')"
+    --transform "(libhyphen-table:'hyph_en_US.dic')"
 
 ### Text Emphasis
 

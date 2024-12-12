@@ -15,9 +15,9 @@
         <xsl:sequence select="if ($ssml instance of document-node()) then $ssml/* else $ssml"/>
     </xsl:function>
 
-    <xsl:template match="*[@xml:lang]" priority="1">
+    <xsl:template match="*[@xml:lang|@lang]" priority="1">
         <xsl:next-match>
-            <xsl:with-param name="lang" tunnel="yes" select="string(@xml:lang)"/>
+            <xsl:with-param name="lang" tunnel="yes" select="string((@xml:lang,@lang)[1])"/>
         </xsl:next-match>
     </xsl:template>
 

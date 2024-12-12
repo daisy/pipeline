@@ -81,7 +81,7 @@ class SassVariable implements CssAnalyzer.SassVariable {
 							if (type == null)
 								try {
 									throw new IllegalArgumentException(
-										"Invalid type in variable declaration '" + type + "': does not match a known data type");
+										"Invalid type '" + type + "' in variable declaration: does not match a known data type");
 								} catch (IllegalArgumentException e) {
 									logger.warn("Invalid type in Doxygen comment: " + precedingComment, e);
 								}
@@ -123,7 +123,16 @@ class SassVariable implements CssAnalyzer.SassVariable {
 			// infer from default value
 			if ("true".equals(defaultValue) || "false".equals(defaultValue))
 				type = DatatypeService.XS_BOOLEAN;
-			else {
+			else if (defaultValue.startsWith("(") && defaultValue.endsWith(")")) {
+				if (datatypes != null) {
+					type = datatypes.getDatatype("sass-map").orNull();
+					if (type == null)
+						throw new IllegalArgumentException(
+							"Invalid value in variable declaration: maps not supported: " + defaultValue);
+				} else
+					// assume type output is irrelevant when datatypes argument was not passed
+					type = DatatypeService.XS_STRING;
+			} else {
 				try {
 					Integer.parseInt(defaultValue);
 					type = DatatypeService.XS_INTEGER;

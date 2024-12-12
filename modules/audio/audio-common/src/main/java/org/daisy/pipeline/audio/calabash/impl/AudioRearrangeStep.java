@@ -41,6 +41,8 @@ import com.xmlcalabash.runtime.XAtomicStep;
 
 import net.sf.saxon.s9api.SaxonApiException;
 
+import org.daisy.common.file.Resource;
+import org.daisy.common.file.URLs;
 import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.messaging.MessageBuilder;
 import org.daisy.common.stax.BaseURIAwareXMLStreamReader;
@@ -55,7 +57,6 @@ import org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
 import org.daisy.common.xproc.calabash.XProcStep;
 import org.daisy.common.xproc.calabash.XProcStepProvider;
 import org.daisy.common.xproc.XProcMonitor;
-import static org.daisy.pipeline.file.FileUtils.normalizeURI;
 import org.daisy.pipeline.fileset.Fileset;
 import org.daisy.pipeline.audio.AudioClip;
 import org.daisy.pipeline.audio.AudioDecoder;
@@ -198,16 +199,16 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 				}
 			}
 			return () -> {
-				Map<URI,Fileset.File> source;
+				Map<URI,Resource> source;
 				SortedMap<AudioClip,AudioClip> desired;
 				String resultMediaType;
 				URI resultBaseURI;
 				URI resultXmlBase; {
 					try {
 						source = new HashMap<>();
-						for (Fileset.File f : Fileset.unmarshall(sourceXML.asXMLStreamReader()))
-							if (!source.containsKey(f.href))
-								source.put(f.href, f);
+						for (Resource f : Fileset.unmarshall(sourceXML.asXMLStreamReader()))
+							if (!source.containsKey(f.getPath()))
+								source.put(f.getPath(), f);
 						desired = new TreeMap<>(new Comparator<AudioClip>() {
 								public int compare(AudioClip c1, AudioClip c2) {
 									int r = c1.src.compareTo(c2.src);
@@ -255,7 +256,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 											else if (Fileset.XMLConstants._MEDIA_TYPE.equals(xml.getAttributeName(i)))
 												originalMediaType = xml.getAttributeValue(i);
 										if (mediaType != null && href != null && originalHref != null) {
-											originalHref = normalizeURI(originalHref);
+											originalHref = URLs.normalize(originalHref);
 											if (source.containsKey(originalHref)) {
 												if (resultMediaType == null) {
 													resultMediaType = mediaType;
@@ -270,7 +271,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 												    && AudioFileTypes.fromMediaType(originalMediaType) == null)
 													throw new TransformerException(
 														new RuntimeException("media-type is not a recognized mime type: " + originalMediaType));
-												href = normalizeURI(href);
+												href = URLs.normalize(href);
 												try {
 													new File(href);
 													depth++;
@@ -352,8 +353,8 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 						}
 					}
 				}
-				List<Fileset.File> tempFiles = new ArrayList<>();
-				List<Fileset.File> result = new ArrayList<>(); {
+				List<Resource> tempFiles = new ArrayList<>();
+				List<Resource> result = new ArrayList<>(); {
 					if (!desired.isEmpty()) {
 						AudioFileFormat.Type resultFileType = AudioFileTypes.fromMediaType(resultMediaType);
 						Optional<AudioEncoder> encoder = audioServices.newEncoder(resultFileType, new HashMap<String,String>());
@@ -385,7 +386,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							desired = map;
 						}
 						AudioClip prevSourceClip = null;
-						Fileset.File currentSourceFile = null;
+						Resource currentSourceFile = null;
 						PCMAudioFormat audioFormat = null;
 						URI audioFormatFromFile = null;
 						AudioInputStream currentSourcePCM = null;
@@ -416,7 +417,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 									throw new TransformerException(
 										new IOException("Audio could not be written to file type: " + resultFileType, e));
 								}
-								Fileset.File f = Fileset.File.load(tempFile, Optional.of(resultMediaType));
+								Resource f = Resource.load(tempFile, resultMediaType);
 								tempFiles.add(f);
 								result.add(f.copy(resultFile.toURI()));
 								currentDestinationFile = destinationClip.src;
@@ -424,12 +425,12 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 								currentDestinationElapsed = 0;
 							}
 							if (currentSourceFile == null                                     // first clip
-							    || !currentSourceFile.href.equals(sourceClip.src)             // new file
+							    || !currentSourceFile.getPath().equals(sourceClip.src)             // new file
 							    || sourceClip.clipBegin.compareTo(prevSourceClip.clipEnd) < 0 // clips in same audio file overlap or are not in order
 							) {
 								currentSourceFile = source.get(sourceClip.src);
 								Optional<AudioFileFormat.Type> sourceFileType; {
-									Optional<String> sourceMediaType = currentSourceFile.mediaType;
+									Optional<String> sourceMediaType = currentSourceFile.getMediaType();
 									if (sourceMediaType.isPresent())
 										sourceFileType = Optional.of(AudioFileTypes.fromMediaType(sourceMediaType.get()));
 									else
@@ -449,15 +450,15 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 								} catch (UnsupportedAudioFileException e) {
 									throw new TransformerException(
 										new IOException("Audio file could not be read (unsupported file type): "
-										                + currentSourceFile.href, e));
+										                + currentSourceFile.getPath(), e));
 								} catch (Throwable e) {
 									throw new TransformerException(
-										new IOException("Audio file could not be read: " + currentSourceFile.href, e));
+										new IOException("Audio file could not be read: " + currentSourceFile.getPath(), e));
 								}
 								currentSourceElapsed = 0;
 								if (audioFormat == null) {
 									audioFormat = PCMAudioFormat.of(currentSourcePCM.getFormat());
-									audioFormatFromFile = currentSourceFile.href;
+									audioFormatFromFile = currentSourceFile.getPath();
 								}
 								else if (!audioFormat.matches(currentSourcePCM.getFormat()))
 									throw new TransformerException(
@@ -465,7 +466,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 											String.format("All input audio must have the same format, but got %s (%s) and %s (%s)",
 											              audioFormat, audioFormatFromFile,
 											              currentSourcePCM.getFormat(),
-											              currentSourceFile.href)));
+											              currentSourceFile.getPath())));
 							}
 							// convert clip begin/end times to frames
 							long sourceClipBegin = AudioUtils.getLengthInFrames(audioFormat, sourceClip.clipBegin);
@@ -527,7 +528,7 @@ public class AudioRearrangeStep extends DefaultStep implements XProcStep {
 							throw new TransformerException(
 								new IOException("Audio could not be written to file (type " + resultFileType + "): " + tempFile, e));
 						}
-						Fileset.File f = Fileset.File.load(tempFile, Optional.of(resultMediaType));
+						Resource f = Resource.load(tempFile, resultMediaType);
 						tempFiles.add(f);
 						result.add(f.copy(resultFile.toURI()));
 					}

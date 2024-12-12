@@ -48,8 +48,16 @@
         <p:pipe step="validate" port="validation-status"/>
     </p:output>
 
-    <p:import href="steps/validate.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"/>
+    <p:import href="steps/validate.xpl">
+       <p:documentation>
+           px:daisy202-validator
+       </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl">
+       <p:documentation>
+           px:daisy202-load
+       </p:documentation>
+    </p:import>
 
     <!-- the SMIL files in the fileset are ordered according the the "flow" (reading order) -->
     <px:daisy202-load name="load">

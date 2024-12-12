@@ -38,7 +38,7 @@
   </p:output>
   <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
-  <p:option name="publisher" required="false" px:type="string" select="''">
+  <p:option name="publisher" required="false" px:type="string" select="''" px:reusable="false">
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
       <h2 px:role="name">Publisher</h2>
       <p px:role="desc">The agency responsible for making the Digital

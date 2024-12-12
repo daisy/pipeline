@@ -41,9 +41,9 @@ You may alternatively use the "mimetype" document if your input is a unzipped/"e
             <p px:role="desc" xml:space="preserve">Metadata to be included in the EPUB.
 
 If specified, the document must be a single
-[`metadata`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-metadata-elem) or
-[`package`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-package-elem) element. A
-[`prefix`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-prefix-attr) attribute is
+[`metadata`](https://www.w3.org/TR/epub-33/#sec-metadata-elem) or
+[`package`](https://www.w3.org/TR/epub-33/#sec-package-elem) element. A
+[`prefix`](https://www.w3.org/TR/epub-33/#sec-prefix-attr) attribute is
 allowed on the root element. The metadata will be injected in the EPUB's package document, possibly
 overwriting existing metadata. This works as follows:
 
@@ -61,24 +61,24 @@ There are a number of fields that result in addional changes in the EPUB (apart 
 `metadata` section in the package document):
 
 - If the provided metadata document contains one or more
-  [`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+  [`dc:identifier`](https://www.w3.org/TR/epub-33/#dfn-dc-identifier)
   fields, the first one without a `refines` attribute will be used to update the
-  [`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+  [`unique-identifier`](https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier)
   attribute on the package document. The `dc:identifier` metadata in the content documents can also be
   aligned with it. This behavior can be enabled or disabled with the "Update &lt;meta
   name='dc:identifier'&gt; elements based on EPUB metadata" option.
 - If the provided metadata document contains one or more
-  [`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) fields, the
+  [`dc:title`](https://www.w3.org/TR/epub-33/#dfn-dc-title) fields, the
   first one can also be used as the `title` element in the content documents. This behavior can be
   enabled or disabled with the "Update &lt;title&gt; elements based on EPUB metadata" option.
 - If the provided metadata document contains exactly one
-  [`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) field,
+  [`dc:language`](https://www.w3.org/TR/epub-33/#dfn-dc-language) field,
   it can be used to update the `xml:lang` and `lang` attributes of the content documents. This
   behavior can be enabled or disabled with the "Update 'lang' attributes based on metadata" option.
 
 Some fields are ignored:
 
-- The [`dcterms:modified`](https://www.w3.org/publishing/epub3/epub-packages.html#last-modified-date)
+- The [`dcterms:modified`](https://www.w3.org/TR/epub-33/#dfn-dcterms-modified)
   field gets updated whenever Pipeline produces an EPUB. As a consequence, any `dcterms:modified`
   fields in the provided metadata document are ignored.</p>
         </p:documentation>
@@ -91,7 +91,7 @@ Some fields are ignored:
             <p px:role="desc" xml:space="preserve">Whether to update 'lang' and 'xml:lang' attributes of content documents based on metadata in the package document.
 
 If there is exactly one
-[`dc:language`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dclanguage) element,
+[`dc:language`](https://www.w3.org/TR/epub-33/#dfn-dc-language) element,
 use its value to create `xml:lang` and `lang` attributes on the root elements of all content
 documents (overwriting any existing attributes)
 
@@ -106,9 +106,9 @@ used to generate the attributes.</p>
             <p px:role="desc" xml:space="preserve">Whether to update &lt;meta name='dc:identifier'&gt; elements of content documents based on metadata in the package document.
 
 Use the primary identifier (provided by the
-[`dc:identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dcidentifier)
+[`dc:identifier`](https://www.w3.org/TR/epub-33/#dfn-dc-identifier)
 element identified by the
-[`unique-identifier`](https://www.w3.org/publishing/epub3/epub-packages.html#attrdef-package-unique-identifier)
+[`unique-identifier`](https://www.w3.org/TR/epub-33/#attrdef-package-unique-identifier)
 attribute) to create a `&lt;meta name='dc:identifier'&gt;` element in all content documents
 (overwriting any existing elements with the same name).
 
@@ -123,7 +123,7 @@ used to generate the attributes.</p>
             <p px:role="desc" xml:space="preserve">Whether to update &lt;title&gt; elements of content documents based on metadata in the package document.
 
 If there is one or more
-[`dc:title`](https://www.w3.org/publishing/epub3/epub-packages.html#sec-opf-dctitle) element, use
+[`dc:title`](https://www.w3.org/TR/epub-33/#dfn-dc-title) element, use
 the value of the first one to create a `&lt;title&gt;` element in all content documents (overwriting
 any existing elements with the same name).
 
@@ -179,7 +179,10 @@ the navigation document.</p>
     <p:option name="braille" required="false" px:type="boolean" select="'false'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Translate to braille</h2>
-            <p px:role="desc">Whether to produce a braille rendition.</p>
+            <p px:role="desc" xml:space="preserve">Whether to produce a braille rendition.
+
+When this option is selected, a secondary rendition, containing the braille transcription of the text,
+will be added to the EPUB 3 publication.</p>
         </p:documentation>
     </p:option>
     
@@ -214,9 +217,16 @@ marked up.</p>
         </p:documentation>
     </p:option>
 
+    <!-- defined in ../../../../../../common-options.xpl -->
+    <p:option name="braille-code" select="''"/>
+
     <p:option name="braille-translator" required="false" px:type="transform-query" select="'(translator:liblouis)'">
         <p:documentation>
-            <h2 px:role="name">Braille translator query</h2>
+            <p px:role="desc" xml:space="preserve">Features of the braille transformer.
+
+Features of the [braille transcription](http://daisy.github.io/pipeline/Get-Help/User-Guide/Braille/)
+for creating the braille rendition. Together with the "Braille code" option this determines the
+translator that is selected.</p>
         </p:documentation>
     </p:option>
     
@@ -349,7 +359,8 @@ elements that represent the sentences.</p>
         <p:input port="metadata">
             <p:pipe port="metadata" step="main"/>
         </p:input>
-        <p:with-option name="braille-translator" select="$braille-translator"/>
+        <p:with-option name="braille-translator"
+                       select="concat($braille-code,($braille-translator,'(translator:liblouis)')[not(.='')][1])"/>
         <p:with-option name="stylesheet" select="string-join(
                                                    for $s in tokenize($stylesheet,'\s+')[not(.='')] return
                                                      resolve-uri($s,$source),

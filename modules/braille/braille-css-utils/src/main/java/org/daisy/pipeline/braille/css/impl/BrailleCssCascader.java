@@ -38,6 +38,7 @@ import cz.vutbr.web.css.SupportedCSS;
 import cz.vutbr.web.css.Term;
 import cz.vutbr.web.css.TermIdent;
 import cz.vutbr.web.css.TermLength;
+import cz.vutbr.web.css.TermList;
 import cz.vutbr.web.css.TermNumeric;
 import cz.vutbr.web.css.TermURI;
 import cz.vutbr.web.csskit.antlr.CSSParserFactory;
@@ -328,7 +329,15 @@ public class BrailleCssCascader implements CssCascader {
 		 * steps to process the styles.
 		 */
 		public String serializePropertyValue(Term<?> value, String property) {
-			if (value instanceof TermLength) {
+			if ("size".equals(property) && value instanceof TermList) {
+				String s = "";
+				for (Term<?> t : (TermList)value)
+					if (s.isEmpty())
+						s += serializePropertyValue(t, "width");
+					else
+						s += (" " + serializePropertyValue(t, "height"));
+				return s;
+			} else if (value instanceof TermLength) {
 				TermLength length = (TermLength)value;
 				TermNumeric.Unit unit = length.getUnit();
 				if (unit != null && unit != TermNumeric.Unit.none) {
@@ -365,7 +374,7 @@ public class BrailleCssCascader implements CssCascader {
 								.toUnit(newUnit, medium)
 								.getValue()
 								.doubleValue();
-							boolean round = property.equals("line-height");
+							boolean round = !property.equals("line-height");
 							if (!round)
 								return "" + doubleValue;
 							else

@@ -12,12 +12,12 @@
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 exclude-inline-prefixes="#all"
                 name="main"
-                px:input-filesets="epub3"
+                px:input-filesets="epub2 epub3"
                 px:output-filesets="pef">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-	    <h1 px:role="name">EPUB 3 to braille</h1>
-        <p px:role="desc" xml:space="preserve">Transforms a EPUB 3 publication into an embosser ready braille document.</p>
+	    <h1 px:role="name">EPUB to braille</h1>
+        <p px:role="desc" xml:space="preserve">Transforms a EPUB publication into an embosser ready braille document.</p>
         <a px:role="homepage" href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-pef/">
             Online documentation
         </a>
@@ -25,14 +25,15 @@
 
     <p:option name="source" required="true" px:type="anyFileURI" px:sequence="false" px:media-type="application/epub+zip application/oebps-package+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <h2 px:role="name">Input EPUB 3</h2>
+            <h2 px:role="name">Input EPUB</h2>
             <p px:role="desc" xml:space="preserve">The EPUB you want to convert to braille.
 
 You may alternatively use the EPUB package document (the OPF-file) if your input is a unzipped/"exploded" version of an EPUB.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="preamble" required="false" select="''" px:type="anyFileURI" px:sequence="false" px:media-type="application/xhtml+xml text/html">
+    <p:option name="preamble" required="false" select="''" px:type="anyFileURI" px:sequence="false" px:media-type="application/xhtml+xml text/html"
+              px:reusable="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <h2 px:role="name">Preamble HTML</h2>
             <p px:role="desc">An HTML file to be prepended to the EPUB spine.</p>
@@ -45,7 +46,34 @@ You may alternatively use the EPUB package document (the OPF-file) if your input
         <p:pipe step="convert-and-store" port="status"/>
     </p:output>
 
-    <p:option name="stylesheet">
+    <!-- defined in ../../../../../../common-options.xpl -->
+    <p:option name="braille-code"/>
+
+    <p:option name="formatting-standard">
+        <p:pipeinfo>
+            <px:type>
+                <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+                    <value></value>
+                    <a:documentation xml:lang="en">-</a:documentation>
+                    <value>https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss</value>
+                    <a:documentation xml:lang="en" xml:space="preserve">United States and Canada (BANA)
+
+The document is formatted according to the rules of the [Braille Authority of North America
+(BANA)](https://www.brailleauthority.org/). [UEB](https://iceb.org/) is used as the braille code for
+all text.
+
+Equivalent to specifying the value
+`https://raw.githubusercontent.com/daisy/braille-stylesheets/refs/heads/main/bana/bana.scss` for the
+"Custom style sheets" option.
+
+See the [online documentation](https://daisy.github.io/braille-stylesheets/bana/) for more information.
+</a:documentation>
+                </choice>
+            </px:type>
+        </p:pipeinfo>
+    </p:option>
+    
+    <p:option name="_:stylesheet" xmlns:_="embossed">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
           <p px:role="desc" xml:space="preserve" px:inherit="prepend">
 
@@ -82,7 +110,6 @@ even though the provided CSS is more specific.
     
     <!-- defined in ../../../../../../common-options.xpl -->
     <p:option name="stylesheet-parameters"/>
-    <p:option name="braille-code"/>
     <p:option name="transform"/>
     <p:option name="include-preview"/>
     <p:option name="include-pef"/>
@@ -96,10 +123,11 @@ even though the provided CSS is more specific.
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
 
-    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/page-layout.params -->
+    <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/medium.params -->
     <p:option name="page-width"/>
     <p:option name="page-height"/>
     <p:option name="duplex"/>
+    <p:option name="saddle-stitch"/>
 
     <!-- defined in ../../../../../../html-to-pef/src/main/resources/css/dotify.params -->
     <p:option name="hyphenation-at-page-breaks"/>
@@ -132,11 +160,6 @@ even though the provided CSS is more specific.
             px:epub3-to-pef.store
         </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/braille/common-utils/library.xpl">
-        <p:documentation>
-            px:delete-parameters
-        </p:documentation>
-    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
         <p:documentation>
             px:fileset-load
@@ -153,40 +176,9 @@ even though the provided CSS is more specific.
         </p:documentation>
     </cx:import>
     
-    <!-- ================================================= -->
-    <!-- Create a <c:param-set/> of the options            -->
-    <!-- ================================================= -->
-    <!-- ...for easy piping so we won't have to explicitly -->
-    <!-- pass all the variables all the time.              -->
-    <!-- ================================================= -->
-    <p:in-scope-names name="in-scope-names"/>
-    <px:delete-parameters name="input-options" px:message="Collecting parameters" px:progress=".01"
-                          parameter-names="epub
-                                           preamble
-                                           stylesheet
-                                           stylesheet-parameters
-                                           apply-document-specific-stylesheets
-                                           transform
-                                           braille-code
-                                           output-file-format
-                                           include-pef
-                                           include-preview
-                                           include-obfl
-                                           result
-                                           pef
-                                           pdf
-                                           preview
-                                           obfl
-                                           temp-dir">
-        <p:input port="source">
-            <p:pipe port="result" step="in-scope-names"/>
-        </p:input>
-    </px:delete-parameters>
-    <p:sink/>
-    
-    <!-- ============================= -->
-    <!-- LOAD EPUB 3 and PREAMBLE HTML -->
-    <!-- ============================= -->
+    <!-- =========================== -->
+    <!-- LOAD EPUB and PREAMBLE HTML -->
+    <!-- =========================== -->
     <px:epub3-to-pef.load name="load" px:message="Loading EPUB" px:progress=".04">
         <p:with-option name="epub" select="$source"/>
         <p:with-option name="preamble" select="$preamble"/>
@@ -199,7 +191,7 @@ even though the provided CSS is more specific.
     </px:fileset-load>
     <p:sink/>
     
-    <p:group name="convert-and-store" px:progress=".95">
+    <p:group name="convert-and-store" px:progress=".96">
         <p:output port="status">
             <p:pipe step="convert" port="status"/>
         </p:output>
@@ -209,16 +201,17 @@ even though the provided CSS is more specific.
                               pf:css-parse-medium((
                                 ($output-file-format,'embossed AND (-daisy-format:pef)')[not(.='')][1],
                                 map:merge((
-                                  map:entry('width',$page-width),
-                                  map:entry('height',$page-height),
-                                  map:entry('-daisy-duplex',$duplex),
+                                  for $page-width in $page-width return map:entry('device-width',$page-width),
+                                  for $page-height in $page-height return map:entry('device-height',$page-height),
+                                  for $duplex in $duplex return map:entry('duplex',$duplex),
+                                  for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),
                                   map:entry('-daisy-document-locale',(/*/opf:metadata/dc:language[not(@refines)])[1]/string(text())))))))">
             <p:pipe port="result" step="opf"/>
         </p:variable>
         
-        <!-- ============= -->
-        <!-- EPUB 3 TO PEF -->
-        <!-- ============= -->
+        <!-- =========== -->
+        <!-- EPUB TO PEF -->
+        <!-- =========== -->
         <p:identity>
             <p:input port="source">
                 <p:pipe port="fileset.out" step="load"/>
@@ -230,16 +223,20 @@ even though the provided CSS is more specific.
                 <p:pipe port="in-memory.out" step="load"/>
             </p:input>
             <p:with-option name="temp-dir" select="concat($temp-dir,'convert/')"/>
-            <p:with-option name="stylesheet" select="$stylesheet"/>
-            <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
+            <p:with-option name="stylesheet" select="string-join(($formatting-standard,$_:stylesheet),' ')" xmlns:_="embossed"/>
+            <p:with-option name="parameters" select="($stylesheet-parameters,
+                                                      map:merge((
+                                                        for $page-width in $page-width return map:entry('page-width',$page-width),
+                                                        for $page-height in $page-width return map:entry('page-height',$page-height),
+                                                        for $duplex in $duplex return map:entry('duplex',$duplex),
+                                                        for $saddle-stitch in $saddle-stitch return map:entry('saddle-stitch',$saddle-stitch),
+                                                        map:entry('hyphenation-at-page-breaks',$hyphenation-at-page-breaks),
+                                                        map:entry('allow-text-overflow-trimming',$allow-text-overflow-trimming))))"/>
             <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
             <p:with-option name="transform"
                            select="concat($braille-code,($transform,'(translator:liblouis)(formatter:dotify)')[not(.='')][1])"/>
             <p:with-option name="medium" select="$medium"/>
             <p:with-option name="include-obfl" select="$include-obfl"/>
-            <p:input port="parameters">
-                <p:pipe port="result" step="input-options"/>
-            </p:input>
         </px:epub3-to-pef>
         <p:sink/>
         

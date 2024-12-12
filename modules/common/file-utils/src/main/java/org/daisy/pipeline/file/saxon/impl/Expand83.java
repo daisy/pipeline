@@ -11,7 +11,7 @@ import net.sf.saxon.type.BuiltInAtomicType;
 import net.sf.saxon.value.SequenceType;
 import net.sf.saxon.value.StringValue;
 
-import static org.daisy.pipeline.file.FileUtils.expand83;
+import static org.daisy.common.file.URLs.expand83;
 
 import org.osgi.service.component.annotations.Component;
 

@@ -20,6 +20,7 @@
     <p:option name="user-lexicons" cx:as="xs:anyURI*" select="()"/>
 
     <p:output port="result" primary="true" sequence="true">
+	<p:documentation>The SSML output.</p:documentation>
       <p:pipe port="result" step="ssml-gen" />
     </p:output>
 

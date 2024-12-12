@@ -2,7 +2,8 @@
 <p:library xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
            xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
            xmlns:html="http://www.w3.org/1999/xhtml"
-           xmlns:ssml="http://www.w3.org/2001/10/synthesis">
+           xmlns:ssml="http://www.w3.org/2001/10/synthesis"
+           xmlns:math="http://www.w3.org/1998/Math/MathML">
 
   <p:declare-step type="px:html-break-detect">
 
@@ -70,7 +71,7 @@
         exclusive-word-tag="false">
       <p:with-option name="sentence-attr" select="$sentence-attr"/>
       <p:with-option name="sentence-attr-val" select="$sentence-attr-val"/>
-      <p:with-option name="special-sentences" select="$existing-sentence-match-pattern"/>
+      <p:with-option name="special-sentences" select="string-join(($existing-sentence-match-pattern,'math:math')[not(.='')],'|')"/>
       <p:with-option name="cannot-be-sentence-child"
                      select="if ($existing-sentence-match-pattern!='')
                              then concat('*[descendant-or-self::',$existing-sentence-match-pattern,']')

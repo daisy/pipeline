@@ -38,29 +38,29 @@
 		</p:documentation>
 	</p:option>
 
-	<p:option name="title" select="''" required="false">
+	<p:option name="title" select="''" required="false" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Document title</h2>
 		</p:documentation>
 	</p:option>
-	<p:option name="creator" select="''" required="false">
+	<p:option name="creator" select="''" required="false" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Document author</h2>
 		</p:documentation>
 	</p:option>
-	<p:option name="publisher" select="''" required="false">
+	<p:option name="publisher" select="''" required="false" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Document publisher</h2>
 			<p px:role="desc">Publisher metadata (dc:Publisher) to be added</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="uid" select="''">
+	<p:option name="uid" select="''" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Document identifier</h2>
 			<p px:role="desc">Identifier to be added as dtb:uid metadata</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="subject" select="''">
+	<p:option name="subject" select="''" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Subject(s)</h2>
 			<p px:role="desc">Subject(s) to be added as dc:Subject metadata</p>
@@ -169,7 +169,7 @@
 			</px:type>
 		</p:pipeinfo>
 	</p:option>
-	<p:option name="footnotes-start-value" cx:as="xs:integer" select="1">
+	<p:option name="footnotes-start-value" cx:as="xs:integer" select="1" px:reusable="false">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Footnotes starting value</h2>
 			<p px:role="desc">If footnotes numbering is required, start the notes numbering process from this value</p>

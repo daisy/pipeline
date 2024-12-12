@@ -552,16 +552,16 @@ public class EmbossedMediumFunctions {
 	}
 
 	private static Dimension parseDimension(String dimension, boolean horizontal) throws IllegalArgumentException {
-		try {
-			return Dimension.parse(dimension);
-		} catch (IllegalArgumentException e) {
+		Dimension parsed = Dimension.parse(dimension);
+		if (parsed.getUnit() != null)
+			return parsed;
+		else
 			try {
 				int i = Integer.parseInt(dimension);
 				return new Dimension(i, horizontal ? Unit.CH : Unit.EM);
-			} catch (NumberFormatException ee) {
-				throw e;
+			} catch (NumberFormatException e) {
+				throw new IllegalStateException("coding error", e);
 			}
-		}
 	}
 
 	private static Optional<Style> parseStyle(String style) {
