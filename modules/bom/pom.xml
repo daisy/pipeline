@@ -608,7 +608,7 @@
       <dependency>
         <groupId>org.daisy.dotify</groupId>
         <artifactId>dotify.library</artifactId>
-        <version>1.0.7</version>
+        <version>1.0.8-SNAPSHOT</version>
         <exclusions>
           <exclusion>
             <!--
