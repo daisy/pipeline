@@ -22,11 +22,11 @@ import CSSLexer;
     }
 }
 
-VOLUME : '@volume' ;
+VOLUME : '@' PREFIX? 'volume' ;
 
 VOLUME_AREA
-    : '@begin'
-    | '@end'
+    : '@' PREFIX? 'begin'
+    | '@' PREFIX? 'end'
     ;
 
 MARGIN_AREA
@@ -36,9 +36,9 @@ MARGIN_AREA
   | '@bottom-left'
   | '@bottom-center'
   | '@bottom-right'
-  | '@left'
-  | '@right'
-  | '@footnotes'
+  | '@' PREFIX? 'left'
+  | '@' PREFIX? 'right'
+  | '@' PREFIX? 'footnotes'
   ;
 
 NOT : 'not(' ;
@@ -50,13 +50,16 @@ LANG
   : 'lang(' S* LANGUAGE_RANGE S* (COMMA S* LANGUAGE_RANGE S*)* RPAREN
   ;
 
-TEXT_TRANSFORM : '@text-transform' ;
+TEXT_TRANSFORM : '@' PREFIX? 'text-transform' ;
 
-HYPHENATION_RESOURCE : '@hyphenation-resource' ;
+HYPHENATION_RESOURCE : '@' PREFIX? 'hyphenation-resource' ;
 
 COUNTER_STYLE : '@counter-style' ;
 
 VENDOR_ATRULE : '@' MINUS IDENT_MACR ;
+
+fragment
+PREFIX : '-daisy-' ;
 
 fragment
 LANGUAGE_RANGE : LANGUAGE_RANGE_IDENT | LANGUAGE_RANGE_STRING ;

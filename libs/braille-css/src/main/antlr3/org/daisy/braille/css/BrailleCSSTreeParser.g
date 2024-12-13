@@ -106,7 +106,7 @@ volume_areas returns [List<RuleVolumeArea> list]
       )
     ;
 
-volume_area returns [RuleVolumeArea area]
+volume_area returns [RuleVolumeArea rule]
 @init {
     List<RulePage> pages = null;
 }
@@ -118,7 +118,14 @@ volume_area returns [RuleVolumeArea area]
              pages.add(p);
          })*)
       {
-        $area = preparator.prepareRuleVolumeArea(a.getText().substring(1), decl, pages);
+        String area = a.getText().substring(1);
+        String prf = "-daisy-";
+        if (area.startsWith(prf)) {
+            area = area.substring(prf.length());
+            gCSSTreeParser.warn("Unexpected prefix '{}' in rule '@{}{}', assuming '@{}' was meant",
+                                prf, prf, area, area);
+        }
+        $rule = preparator.prepareRuleVolumeArea(area, decl, pages);
       }
     ;
 

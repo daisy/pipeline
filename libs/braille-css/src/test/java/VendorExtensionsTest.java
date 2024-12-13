@@ -17,6 +17,7 @@ import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
+import org.daisy.braille.css.RuleVolume;
 import org.daisy.braille.css.SimpleInlineStyle;
 import org.daisy.braille.css.VendorAtRule;
 
@@ -64,6 +65,21 @@ public class VendorExtensionsTest {
 		Assert.assertEquals(1, decl.size());
 		TermFunction fn = (TermFunction)decl.get(0);
 		Assert.assertEquals("-obfl-evaluate", fn.getFunctionName());
+	}
+
+	@Test
+	public void testPrefixedAtRule() throws IOException, CSSException {
+		StyleSheet sheet = new BrailleCSSParserFactory().parse(
+			new CSSSource("@-daisy-volume { max-length: 20 }",
+			              (String)null,
+			              new URL("file:///base/url/is/not/specified"),
+			              0, 0),
+			new DefaultCSSSourceReader());
+		Assert.assertEquals(1, sheet.size());
+		RuleVolume rule = (RuleVolume)sheet.get(0);
+		Assert.assertEquals(1, rule.size());
+		Declaration decl = (Declaration)rule.get(0);
+		Assert.assertEquals("max-length", decl.getProperty());
 	}
 	
 	@Test
