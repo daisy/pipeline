@@ -1,5 +1,8 @@
 package org.daisy.pipeline.script;
 
+import java.io.File;
+import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,12 +12,28 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
+import org.daisy.common.messaging.MessageAppender;
+import org.daisy.pipeline.job.Job.Status;
+import org.daisy.pipeline.job.JobResultSet;
+
 /**
  * Script description.
  *
  * Contains scripts metadata and descriptions of inputs, outputs and options.
  */
 public abstract class Script {
+
+	/**
+	 * Run the script with an input
+	 *
+	 * @param propertiess Properties that may influence the behavior of the script
+	 * @param resultBuilder For storing the results
+	 */
+	public abstract Status run(ScriptInput input,
+	                           Map<String,String> properties,
+	                           MessageAppender messages,
+	                           JobResultSet.Builder resultBuilder,
+	                           File resultDir) throws IOException;
 
 	/**
 	 * Builder for {@link Script} objects.

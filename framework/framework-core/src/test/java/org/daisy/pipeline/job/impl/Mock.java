@@ -278,7 +278,7 @@ public class Mock   {
 
 
                 public XProcScript generate() {
-                        XProcScript.Builder builder = new XProcScript.Builder("", "", null, null);
+                        XProcScript.Builder builder = new XProcScript.Builder("", "", null, null, null, null);
 
                         // inputs
                         for (int i = 0; i < inputs; i++) {

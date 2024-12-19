@@ -1,12 +1,16 @@
 package org.daisy.pipeline.script;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.io.Reader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,9 +22,12 @@ import java.util.Set;
 import javax.xml.transform.Source;
 import javax.xml.transform.sax.SAXSource;
 
+import com.google.common.io.CharStreams;
+
 import org.daisy.common.transform.LazySaxSourceProvider;
 import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResourcesDir;
+import org.daisy.pipeline.job.impl.IOHelper;
 
 import org.xml.sax.InputSource;
 
@@ -83,7 +90,7 @@ public class ScriptInput {
 			InputSource is = SAXSource.sourceToInputSource(source);
 			if (is == null || (is.getByteStream() == null && is.getCharacterStream() == null)) {
 				String sysId = source.getSystemId();
-				if (sysId == null) {
+				if (sysId == null || "".equals(sysId)) {
 					throw new IllegalArgumentException(
 						"Input is expected to either be a stream or have non empty system ID");
 				}
@@ -236,6 +243,7 @@ public class ScriptInput {
 	private final JobResources resources;
 	private final Map<String,SourceSequence> inputs;
 	private final Map<String,List<String>> options;
+	private boolean storedToDisk = false;
 	private final static List<Source> emptySources = ImmutableList.of();
 	private final static List<String> emptyValues = ImmutableList.of();
 
@@ -270,6 +278,97 @@ public class ScriptInput {
 	 */
 	public JobResources getResources() {
 		return resources;
+	}
+
+	/**
+	 * Ensure all documents on input ports are stored to disk
+	 *
+	 * @param baseDir The directory does not have to exist yet, and may be
+	 *                {@code null}, in which case a temporary directory will be
+	 *                created.
+	 */
+	public ScriptInput storeToDisk(File baseDir) throws IOException {
+		if (storedToDisk)
+			return this;
+		boolean everythingStored = true;
+		if (this.resources != null)
+			everythingStored = false;
+		else
+			ports: for (String port : this.inputs.keySet())
+				for (Source src : this.inputs.get(port))
+					if (!isStoredOnDisk(src)) {
+						everythingStored = false;
+						break ports; }
+		if (everythingStored) {
+			storedToDisk = true;
+			return this;
+		}
+		JobResources resources = this.resources;
+		Map<String,SourceSequence> inputs = Maps.newHashMap();
+		if (this.resources != null) {
+			if (baseDir == null)
+				baseDir = Files.createTempDirectory(null).toFile();
+			baseDir.mkdirs();
+			IOHelper.dump(this.resources, baseDir.toURI());
+			resources = new JobResourcesDir(baseDir);
+			// just to be sure we don't use the same directory for files that come from the ZIP context
+			// and inline documents from the job request XML
+			baseDir = null;
+		}
+		inputs = Maps.newHashMap();
+		for (String port : this.inputs.keySet()) {
+			SourceSequence sources = new SourceSequence();
+			inputs.put(port, sources);
+			int inputCnt = 0; // number of inputs for this port
+			for (Source src : this.inputs.get(port)) {
+				InputSource is = SAXSource.sourceToInputSource(src);
+				if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)) {
+					// this is the case when the document comes from the job request XML for instance
+					if (baseDir == null)
+						baseDir = Files.createTempDirectory(null).toFile();
+					// give the file a name that resembles the original name if possible
+					String fileName; {
+						try {
+							fileName = new File(is.getSystemId()).getName();
+						} catch (Throwable e) {
+							fileName = "";
+						}
+						if ("".equals(fileName))
+							fileName = port + '-' + inputCnt + ".xml";
+					}
+					File f = new File(baseDir, fileName);
+					InputStream s = is.getByteStream();
+					if (s == null)  {
+						Reader reader = is.getCharacterStream();
+						String encoding = is.getEncoding();
+						if (encoding == null)
+							encoding = "UTF-8";
+						s = new ByteArrayInputStream(CharStreams.toString(reader).getBytes(encoding));
+					}
+					f.getParentFile().mkdirs();
+					f.deleteOnExit();
+					IOHelper.dump(s, new FileOutputStream(f));
+					sources.add(new LazySaxSourceProvider(f.toURI().toASCIIString()));
+				} else
+					sources.add(src);
+				inputCnt++;
+			}
+		}
+		ScriptInput i = new ScriptInput(resources, inputs, options);
+		i.storedToDisk = true;
+		return i;
+	}
+
+	private static boolean isStoredOnDisk(Source src) {
+		InputSource is = SAXSource.sourceToInputSource(src);
+		if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null))
+			return false;
+		else
+			return true;
+	}
+
+	public ScriptInput storeToDisk() throws IOException {
+		return storeToDisk(null);
 	}
 
 	private static class SourceSequence implements Iterable<Source> {

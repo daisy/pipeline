@@ -27,7 +27,6 @@ import org.daisy.pipeline.job.AbstractJobContext;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobMonitorFactory;
 import org.daisy.pipeline.job.JobResultSet;
-import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClientStorage;
 import org.daisy.pipeline.script.ScriptInput;
@@ -55,7 +54,6 @@ public final class PersistentJobContext extends AbstractJobContext {
 
         private String scriptId = null;
 
-        //embedded mapper
         @Embedded
         private PersistentMapper pMapper;
         @ManyToOne
@@ -96,7 +94,7 @@ public final class PersistentJobContext extends AbstractJobContext {
                 super(ctxt);
                 // Map complex objects to their Persistent representation
                 logger.debug("coping the objects to the model ");
-                this.pMapper = new PersistentMapper(this.uriMapper);
+                this.pMapper = new PersistentMapper(this.resultDir, this.input.getResources());
                 this.inputPorts = ContextHydrator.dehydrateInputPorts(this.getId(), this.getScript(), this.input);
                 this.options = ContextHydrator.dehydrateOptions(this.getId(), this.getScript(), this.input);
                 if (this.getClient() instanceof PersistentClient)
@@ -130,9 +128,9 @@ public final class PersistentJobContext extends AbstractJobContext {
         private void postLoad(){
                 logger.debug("Post loading jobcontext");
                 //we have all the model but we have to hidrate the actual objects
-                this.uriMapper = this.pMapper.getMapper();
+                this.resultDir = new File(URI.create(this.pMapper.outputBase));
                 File contextDir = null; {
-                        URI u = uriMapper.getInputBase();
+                        URI u = URI.create(this.pMapper.inputBase);
                         if (u != null && !"".equals(u.toString())) {
                                 try {
                                         contextDir = new File(u);
@@ -251,7 +249,11 @@ public final class PersistentJobContext extends AbstractJobContext {
                 return input;
         }
 
-        URIMapper getResultMapper() {
-                return uriMapper;
+        File getResultDir() {
+                return resultDir;
+        }
+
+        File getContextDir() {
+                return new File(URI.create(pMapper.inputBase));
         }
 }

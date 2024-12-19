@@ -1,5 +1,6 @@
 package org.daisy.pipeline.job;
 
+import java.io.File;
 import java.net.URI;
 import java.util.function.Consumer;
 import java.util.List;
@@ -23,7 +24,7 @@ public abstract class AbstractJobContext {
 
         // accessed in DefaultJobBuilder, PersistentJobContext and AbstractJob
         protected ScriptInput input;
-        protected URIMapper uriMapper;
+        protected File resultDir;
         protected JobResultSet results;
 
         // accessed in DefaultJobBuilder and AbstractJob
@@ -46,7 +47,7 @@ public abstract class AbstractJobContext {
                 this.results = from.results;
                 this.script = from.script;
                 this.input = from.input;
-                this.uriMapper = from.uriMapper;
+                this.resultDir = from.resultDir;
                 this.monitor = from.monitor;
                 this.messageBus = from.messageBus;
                 this.statusListeners = from.statusListeners;

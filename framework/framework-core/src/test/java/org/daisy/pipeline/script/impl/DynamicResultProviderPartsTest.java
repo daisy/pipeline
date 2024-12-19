@@ -1,7 +1,8 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
 import javax.xml.namespace.QName;
 
+import org.daisy.pipeline.job.impl.Mock;
 import org.daisy.pipeline.script.Script;
 
 import org.junit.Assert;

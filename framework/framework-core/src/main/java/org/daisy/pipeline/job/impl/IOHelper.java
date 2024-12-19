@@ -11,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.daisy.pipeline.job.JobResources;
-import org.daisy.pipeline.job.URIMapper;
 
 /**
  * IO related utities.
@@ -71,11 +70,11 @@ public class IOHelper {
 	 * @param context the context
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public static void dump(JobResources resources,URIMapper mapper) throws IOException {
+	public static void dump(JobResources resources, URI base) throws IOException {
 		for (String path : resources.getNames()) {
 			try {
-				IOHelper.dump(resources.getResource(path).get(),mapper.getInputBase() 
-						, new URI(null, null, path.replace("\\", "/"), null, null));
+				IOHelper.dump(resources.getResource(path).get(), base,
+				              new URI(null, null, path.replace("\\", "/"), null, null));
 			} catch (URISyntaxException e) {
 				throw new RuntimeException("Resource path could not be converted to URI: " + path, e);
 			}

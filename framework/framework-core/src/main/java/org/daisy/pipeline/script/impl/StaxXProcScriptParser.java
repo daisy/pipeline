@@ -3,8 +3,10 @@ package org.daisy.pipeline.script.impl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.function.Predicate;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
@@ -17,6 +19,8 @@ import javax.xml.stream.events.XMLEvent;
 import org.daisy.common.stax.EventProcessor;
 import org.daisy.common.stax.StaxEventHelper;
 import org.daisy.common.stax.StaxEventHelper.EventPredicates;
+import org.daisy.common.xml.DocumentBuilder;
+import org.daisy.common.xproc.XProcEngine;
 import org.daisy.common.xproc.XProcPipelineInfo;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.script.Script;
@@ -48,6 +52,8 @@ public class StaxXProcScriptParser {
 
 	private static final Logger logger = LoggerFactory.getLogger(StaxXProcScriptParser.class);
 	private XMLInputFactory xmlInputFactory;
+	private XProcEngine xprocEngine;
+	private final List<DocumentBuilder> inputParsers = new ArrayList<>();
 	private DatatypeRegistry datatypeRegistry;
 
 	@Reference(
@@ -59,6 +65,28 @@ public class StaxXProcScriptParser {
 	)
 	protected void setFactory(XMLInputFactory factory) {
 		xmlInputFactory = factory;
+	}
+
+	@Reference(
+		name = "xproc-engine",
+		unbind = "-",
+		service = XProcEngine.class,
+		cardinality = ReferenceCardinality.MANDATORY,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void setXProcEngine(XProcEngine xprocEngine) {
+		this.xprocEngine = xprocEngine;
+	}
+
+	@Reference(
+		name = "input-parser",
+		unbind = "-",
+		service = DocumentBuilder.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void addInputParser(DocumentBuilder parser) {
+		inputParsers.add(parser);
 	}
 
 	@Reference(
@@ -109,7 +137,7 @@ public class StaxXProcScriptParser {
 			infoParser.setFactory(xmlInputFactory);
 			try {
 				XProcPipelineInfo info = infoParser.parse(descriptor.getURL());
-				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), datatypeRegistry);
+				scriptBuilder = new XProcScript.Builder(descriptor, info.getURI(), xprocEngine, inputParsers, datatypeRegistry);
 				URL descUrl = descriptor.getURL();
 				is = descUrl.openConnection().getInputStream();
 				reader = xmlInputFactory.createXMLEventReader(is);

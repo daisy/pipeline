@@ -6,7 +6,6 @@ import java.net.URI;
 import java.nio.file.Files;
 
 import org.daisy.common.properties.Properties;
-import org.daisy.pipeline.job.URIMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,24 +16,6 @@ public class JobURIUtils {
         final static String IO_OUTPUT_SUBDIR = "output";
 
         private final static Logger logger = LoggerFactory.getLogger(JobURIUtils.class);
-
-        /**
-         * Returns an idle URI mapping, in case we are expecting absolute URIs all the time.
-         */
-        static URIMapper newOutputURIMapper(String jobId) throws IOException {
-                File outputDir = IOHelper.makeDirs(getJobOutputDir(jobId));
-                return new URIMapper(URI.create(""),outputDir.toURI());
-        }
-
-        /**
-         * Returns a URI mapper which builds a directory structure based on the job ID.
-         */
-        static URIMapper newURIMapper(String jobId) throws IOException {
-                //based on the the id
-                File contextDir = IOHelper.makeDirs(getJobContextDir(jobId));
-                File outputDir = IOHelper.makeDirs(getJobOutputDir(jobId));
-                return new URIMapper(contextDir.toURI(),outputDir.toURI());
-        }
 
         public static File getLogFile(String jobId) {
                 return getLogFile(jobId, true);

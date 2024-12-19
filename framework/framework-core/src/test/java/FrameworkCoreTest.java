@@ -30,7 +30,8 @@ public class FrameworkCoreTest extends AbstractTest {
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
 		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
 		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
-		                                   + "OSGI-INF/datatype.xml");
+		                                   + "OSGI-INF/datatype.xml,"
+		                                   + "OSGI-INF/xproc-engine.xml");
 		return probe;
 	}
 	

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy.pipeline</groupId>
     <artifactId>framework-parent</artifactId>
-    <version>1.14.21-SNAPSHOT</version>
+    <version>1.14.22-SNAPSHOT</version>
     <relativePath>../parent</relativePath>
   </parent>
 
@@ -209,6 +209,7 @@
             </goals>
             <configuration>
               <includes>
+                MockXProcEngine,
                 org.daisy.pipeline.script.impl.XProcScript_my_script
               </includes>
             </configuration>

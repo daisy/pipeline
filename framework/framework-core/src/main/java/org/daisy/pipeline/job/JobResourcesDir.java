@@ -16,9 +16,11 @@ import com.google.common.collect.ImmutableMap;
  */
 public final class JobResourcesDir implements JobResources {
 
+	private final File baseDir;
 	private final Map<String,Supplier<InputStream>> resources;
 
 	public JobResourcesDir(File baseDir) {
+		this.baseDir = baseDir;
 		ImmutableMap.Builder<String,Supplier<InputStream>> mapBuilder = ImmutableMap.builder();
 		try {
 			int baselen = baseDir.getCanonicalPath().length();
@@ -48,5 +50,9 @@ public final class JobResourcesDir implements JobResources {
 	@Override
 	public Iterable<String> getNames() {
 		return resources.keySet();
+	}
+
+	public File getBaseDir() {
+		return baseDir;
 	}
 }

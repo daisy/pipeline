@@ -3,8 +3,6 @@ package org.daisy.pipeline.job.impl;
 import java.util.List;
 
 import org.daisy.common.properties.Properties.Property;
-import org.daisy.common.xml.DocumentBuilder;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.AbstractJob;
 import org.daisy.pipeline.job.Job;
@@ -16,12 +14,12 @@ import org.daisy.pipeline.job.JobQueue;
 import org.daisy.pipeline.job.JobStorage;
 import org.daisy.pipeline.script.BoundScript;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.base.Optional;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * DefaultJobManager allows to manage the jobs submitted to the daisy pipeline 2
@@ -33,8 +31,6 @@ public class DefaultJobManager implements JobManager {
 
         private final Client client;
         private final JobMonitorFactory monitorFactory;
-        private final XProcEngine xprocEngine;
-        private final List<DocumentBuilder> inputParsers;
         private final JobStorage storage;
         private final JobExecutionService executionService;
         private final Property logLevelProperty;
@@ -45,15 +41,11 @@ public class DefaultJobManager implements JobManager {
          */
         public DefaultJobManager(Client client,
                                  JobMonitorFactory monitorFactory,
-                                 XProcEngine xprocEngine,
-                                 List<DocumentBuilder> inputParsers,
                                  JobStorage storage,
                                  JobExecutionService executionService,
                                  Property logLevelProperty) {
                 this.client = client;
                 this.monitorFactory = monitorFactory;
-                this.xprocEngine = xprocEngine;
-                this.inputParsers = inputParsers;
                 this.storage = storage;
                 this.executionService = executionService;
                 this.logLevelProperty = logLevelProperty;
@@ -109,8 +101,6 @@ public class DefaultJobManager implements JobManager {
         @Override
         public JobManager.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(monitorFactory,
-                                             xprocEngine,
-                                             inputParsers,
                                              client,
                                              boundScript,
                                              true,

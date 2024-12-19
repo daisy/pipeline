@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component xmlns="http://www.osgi.org/xmlns/scr/v1.1.0" name="mock-xproc-engine">
+  <implementation class="MockXProcEngine"/>
+  <service>
+    <provide interface="org.daisy.common.xproc.XProcEngine"/>
+  </service>
+</component>

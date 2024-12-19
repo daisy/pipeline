@@ -1,11 +1,7 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
-import java.io.Reader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,12 +19,12 @@ import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.google.common.io.CharStreams;
 
 import org.daisy.common.xml.DocumentBuilder;
 import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOutput;
-import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.JobResources;
+import org.daisy.pipeline.job.JobResourcesDir;
 import org.daisy.pipeline.script.XProcScript;
 import org.daisy.pipeline.script.XProcScript.XProcScriptOption;
 import org.daisy.pipeline.script.ScriptInput;
@@ -48,7 +44,7 @@ public class XProcDecorator {
 	private static final Logger logger = LoggerFactory.getLogger(XProcDecorator.class);
 
 	private final XProcScript script;
-	private final URIMapper mapper;
+	private final File resultDir;
 	private List<DocumentBuilder> inputParsers;
 
 	/**
@@ -56,24 +52,29 @@ public class XProcDecorator {
 	 *
 	 * @param contextDir The contextDir for this instance.
 	 */
-	private XProcDecorator(XProcScript script, URIMapper mapper, List<DocumentBuilder> inputParsers) {
+	private XProcDecorator(XProcScript script, File resultDir, List<DocumentBuilder> inputParsers) {
 		this.script = script;
-		this.mapper = mapper;
+		this.resultDir = resultDir;
 		this.inputParsers = inputParsers;
 	}
 
-	public static XProcDecorator from(XProcScript script, URIMapper mapper, List<DocumentBuilder> inputParsers) throws IOException {
-		return new XProcDecorator(script, mapper, inputParsers);
+	public static XProcDecorator from(XProcScript script, File resultDir, List<DocumentBuilder> inputParsers) throws IOException {
+		return new XProcDecorator(script, resultDir, inputParsers);
 	}
 
 	public XProcInput decorate(ScriptInput input) {
 		logger.debug(String.format("Translating inputs for script :%s",script));
 		XProcInput.Builder decorated = new XProcInput.Builder();
-		try{
+		try {
+			// Store everything to disk just in case it hasn't been done before.
+			// We need this for two reasons:
+			// - to make sure documents on input ports have a non-empty system ID (they don't need to be stored on disk per se though)
+			// - to make sure documents can be passed as a file path to XProc options
+			input = input.storeToDisk();
 			decorateInputPorts(script, input, decorated);
 			decorateOptions(script, input, decorated);
-		}catch(IOException ex){
-			throw new RuntimeException("Error translating inputs",ex);
+		} catch(IOException e) {
+			throw new RuntimeException("Error translating inputs", e);
 		}
 		return decorated.build();
 	}
@@ -105,7 +106,7 @@ public class XProcDecorator {
 				                   new DynamicResultProvider(prov,
 				                                             port.getName(),
 				                                             port.getMediaType(),
-				                                             mapper));
+				                                             resultDir));
 			}
 		}
 		Optional<ScriptPort> statusPort = script.getStatusPort();
@@ -126,25 +127,22 @@ public class XProcDecorator {
 	void decorateInputPorts(final XProcScript script, final ScriptInput input, XProcInput.Builder builder) throws IOException {
 		for (ScriptPort port : script.getInputPorts()) {
 			if (script.getInputOption(port.getName()) == null) {
-				// number of inputs for this port
-				int inputCnt = 0;
 				for (Source src : input.getInput(port.getName())) {
 					InputSource is = SAXSource.sourceToInputSource(src);
-					URI relUri = null; {
-						if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null))
-							// this is the case when no zip context was provided (all comes from the xml)
-							relUri = URI.create(port.getName() + '-' + inputCnt + ".xml");
-						else {
-							try {
-								relUri = URI.create(src.getSystemId());
-							} catch (Exception e) {
-								throw new RuntimeException(
-									"Error parsing uri when building the input port" + port.getName(), e);
-							}
-						}
+					// make sure documents on input ports have a non-empty base URI
+					if (src.getSystemId() == null
+					    || "".equals(src.getSystemId())
+					    || (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)))
+						throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
+					// make relative file paths absolute
+					try {
+						URI baseURI = URI.create(src.getSystemId());
+						baseURI = resolveRelativePath(baseURI, input);
+						src.setSystemId(baseURI.toString());
+					} catch (Exception e) {
+						throw new RuntimeException(
+							"Error parsing URI when building the input port" + port.getName(), e);
 					}
-					URI uri = mapper.mapInput(relUri);
-					src.setSystemId(uri.toString());
 					String mediaType = port.getMediaType();
 					if (mediaType != null && !(src instanceof DOMSource)) {
 						mediaType = mediaType.trim();
@@ -172,13 +170,11 @@ public class XProcDecorator {
 										"Input on port " + port.getName() + " (media-type: " + mediaType + ") could not be parsed");
 								Source domSrc = new DOMSource(doc);
 								builder.withInput(port.getName(), () -> domSrc);
-								inputCnt++;
 								continue;
 							}
 						}
 					}
 					builder.withInput(port.getName(), () -> src);
-					inputCnt++;
 				}
 			}
 		}
@@ -199,34 +195,23 @@ public class XProcDecorator {
 			XProcScriptOption option = script.getInputOption(port.getName());
 			if (option != null) {
 				List<String> value = new ArrayList<>();
-				for (Source source : input.getInput(port.getName())) {
-					InputSource is = SAXSource.sourceToInputSource(source);
-					if (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)) {
-						// document is not stored on disk so we can't pass a file path to the XProc option
-						// store it to a temporary location
-						String sysId = is.getSystemId();
-						// give the file a name that resembles the original name
-						File f = File.createTempFile("input", sysId != null ? new File(sysId).getName() : null);
-						f.deleteOnExit();
-						InputStream stream = is.getByteStream();
-						if (stream == null)  {
-							Reader reader = is.getCharacterStream();
-							String encoding = is.getEncoding();
-							if (encoding == null)
-								encoding = "UTF-8";
-							stream = new ByteArrayInputStream(CharStreams.toString(reader).getBytes(encoding));
-						}
-						IOHelper.dump(is.getByteStream(), new FileOutputStream(f));
-						value.add(f.toURI().toString());
-					} else {
-						String sysId = source.getSystemId();
-						try {
-							value.add(mapper.mapInput(URI.create(sysId)).toString());
-						} catch (IllegalArgumentException e) {
-							throw new RuntimeException(
-								String.format("Error parsing URI for option %s: %s", option.getName(), sysId));
-						}
+				for (Source src : input.getInput(port.getName())) {
+					InputSource is = SAXSource.sourceToInputSource(src);
+					// make sure documents are stored on disk so we can pass a file path to the XProc option
+					if (src.getSystemId() == null
+					    || "".equals(src.getSystemId())
+					    || (is != null && (is.getByteStream() != null || is.getCharacterStream() != null)))
+						throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
+					// make relative file paths absolute
+					try {
+						URI baseURI = URI.create(src.getSystemId());
+						baseURI = resolveRelativePath(baseURI, input);
+						src.setSystemId(baseURI.toString());
+					} catch (Exception e) {
+						throw new RuntimeException(
+							"Error parsing URI for option %s: %s" + option.getName(), e);
 					}
+					value.add(src.getSystemId());
 				}
 				resolvedInput.withOption(
 					option.getXProcOptionName(),
@@ -247,7 +232,11 @@ public class XProcDecorator {
 							XProcDecorator::notEmpty),
 						v -> {
 							try {
-								return mapper.mapInput(URI.create(v)).toString();
+								URI u = URI.create(v);
+								u = resolveRelativePath(u, input); // ScriptInput does not check "anyDirURI" options,
+								                                   // so this will fail if it is a relative path but
+								                                   // no context ZIP was provided!
+								return u.toString();
 							} catch (IllegalArgumentException e) {
 								throw new RuntimeException(
 									String.format("Error parsing URI for option %s: %s", option.getName(), v));
@@ -280,6 +269,25 @@ public class XProcDecorator {
 		}
 	}
 
+	/**
+	 * @param uri The base URI of a document on an input port of the provided {@link ScriptInput}.
+	 */
+	private static URI resolveRelativePath(URI uri, ScriptInput input) {
+		if (uri.isAbsolute()) { // absolute means URI has scheme component
+			if (!"file".equals(uri.getScheme()) || uri.isOpaque())
+				throw new IllegalStateException(); // should not happen if the URI comes from a document on an input
+				                                   // port: ScripInput does not allow this
+			// URI is a file URI with an absolute file path
+			return uri;
+		} else {
+			// URI is a relative path
+			JobResources resources = input.getResources();
+			if (!(resources instanceof JobResourcesDir))
+				throw new IllegalStateException(); // should not happen because ScripInput.storeToDisk() was called
+			return ((JobResourcesDir)resources).getBaseDir().toURI().resolve(uri);
+		}
+	}
+
 	private final HashSet<String> generatedOutputs = Sets.newHashSet();
 
 	private URI decorateOutputOption(XProcScriptOption option) {
@@ -300,7 +308,7 @@ public class XProcDecorator {
 			generatedOutputs.add(uri);
 		}
 		try {
-			return mapper.mapOutput(URI.create(uri));
+			return resultDir.toURI().resolve(URI.create(uri));
 		} catch (IllegalArgumentException e) {
 			throw new RuntimeException(String.format("Error parsing URI for option %s: %s", option.getName(), uri), e);
 		}

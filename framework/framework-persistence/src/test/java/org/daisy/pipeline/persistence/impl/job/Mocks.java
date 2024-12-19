@@ -26,7 +26,6 @@ import org.daisy.pipeline.job.JobResources;
 import org.daisy.pipeline.job.JobResult;
 import org.daisy.pipeline.job.JobResultSet;
 import org.daisy.pipeline.job.StatusNotifier;
-import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.job.impl.IOHelper;
 import org.daisy.pipeline.persistence.impl.webservice.PersistentClient;
 import org.daisy.pipeline.script.Script;
@@ -53,7 +52,7 @@ public class Mocks   {
 	public static final String value1 = "value1";
 	public static final File result1;
 	public static final File result2;
-	public static final URI out = URI.create("file:/tmp/out/");
+	public static final File out = new File("/tmp/out/");
 	public static final String portResult="res"; 
 
 	static {
@@ -121,7 +120,8 @@ public class Mocks   {
 	}
 
 	public static XProcScript buildScript(){
-		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri), null);
+		XProcScript.Builder builder = new XProcScript.Builder(Mocks.scriptId, "", URI.create(Mocks.scriptUri),
+		                                                      null, null, null);
 		builder = builder.withInputPort(XProcPortInfo.newInputPort("source", true, false, true),
 		                                new XProcPortMetadata("", "", ""));
 		builder = builder.withOutputPort(XProcPortInfo.newOutputPort(portResult, true, true),
@@ -138,31 +138,31 @@ public class Mocks   {
 	}
 
 	public static AbstractJob buildJob(File contextDir) {
-		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority) {
-		return new AbstractJob(buildContext(), priority, null, null, true) {};
+		return new AbstractJob(buildContext(), priority, true) {};
 	}
 
 	public static AbstractJob buildJob(Priority priority, File contextDir) {
-		return new AbstractJob(buildContext(contextDir), priority, null, null, true) {};
+		return new AbstractJob(buildContext(contextDir), priority, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client) {
-		return new AbstractJob(buildContext(client), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, File contextDir) {
-		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, null, contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId) {
-		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, batchId), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJob buildJob(Client client, JobBatchId batchId, File contextDir) {
-		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, null, null, true) {};
+		return new AbstractJob(buildContext(client, batchId, contextDir), Priority.MEDIUM, true) {};
 	}
 
 	public static AbstractJobContext buildContext() {
@@ -191,7 +191,7 @@ public class Mocks   {
 					return () -> new ByteArrayInputStream("foo".getBytes());
 				}
 			};
-		final ScriptInput input;
+		ScriptInput input;
 		try {
 			input = new ScriptInput.Builder(resources).withInput("source", new Mocks.SimpleSourceProvider(file1))
 		                                              .withInput("source", new Mocks.SimpleSourceProvider(file2))
@@ -201,10 +201,9 @@ public class Mocks   {
 			throw new RuntimeException(e);
 		}
 		final JobId id = JobIdFactory.newId();
-		final URIMapper mapper= new URIMapper(contextDir != null ? contextDir.toURI() : URI.create(""), out);
 		if (contextDir != null)
 			try {
-				IOHelper.dump(resources, mapper);
+				input = input.storeToDisk(contextDir);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -218,11 +217,11 @@ public class Mocks   {
                         DatabaseProvider.getDatabase().addObject(client);
                 }
 		//inception!
-		return new MyHiddenContext(rSet,script,input,mapper,client,id,batchId);
+		return new MyHiddenContext(rSet,script,input,out,client,id,batchId);
 	}
 
 	static class MyHiddenContext extends AbstractJobContext{
-			public MyHiddenContext(JobResultSet set, Script script, ScriptInput input, URIMapper mapper, Client client, JobId id, JobBatchId batchId){
+			public MyHiddenContext(JobResultSet set, Script script, ScriptInput input, File resultDir, Client client, JobId id, JobBatchId batchId){
 				super();
 				this.client = client;
 				this.id = id;
@@ -231,7 +230,7 @@ public class Mocks   {
 				this.niceName = "hidden";
 				this.script = script;
 				this.input = input;
-				this.uriMapper = mapper;
+				this.resultDir = resultDir;
 				this.results = set;
 				this.monitor = new JobMonitor() {
 						@Override

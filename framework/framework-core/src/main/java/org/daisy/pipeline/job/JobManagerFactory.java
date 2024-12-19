@@ -6,7 +6,6 @@ import java.util.List;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.xml.DocumentBuilder;
-import org.daisy.common.xproc.XProcEngine;
 import org.daisy.pipeline.clients.Client;
 import org.daisy.pipeline.job.impl.DefaultJobBuilder;
 import org.daisy.pipeline.job.impl.DefaultJobExecutionService;
@@ -49,8 +48,6 @@ public class JobManagerFactory implements JobFactory {
         @Override
         public JobFactory.JobBuilder newJob(BoundScript boundScript) {
                 return new DefaultJobBuilder(JobMonitorFactory.LIVE_MONITOR_FACTORY,
-                                             xprocEngine,
-                                             inputParsers,
                                              null,
                                              boundScript,
                                              false,
@@ -81,8 +78,6 @@ public class JobManagerFactory implements JobFactory {
         public JobManager createFor(Client client) {
                 return new DefaultJobManager(client,
                                              monitorFactory,
-                                             xprocEngine,
-                                             inputParsers,
                                              storage.filterBy(client),
                                              executionService.filterBy(client),
                                              logLevelProperty);
@@ -99,8 +94,6 @@ public class JobManagerFactory implements JobFactory {
         public JobManager createFor(Client client, JobBatchId batchId) {
                 return new DefaultJobManager(client,
                                              monitorFactory,
-                                             xprocEngine,
-                                             inputParsers,
                                              storage.filterBy(client).filterBy(batchId),
                                              executionService.filterBy(client),
                                              logLevelProperty);
@@ -108,8 +101,6 @@ public class JobManagerFactory implements JobFactory {
 
         private JobStorage storage;
         private JobMonitorFactory monitorFactory;
-        private XProcEngine xprocEngine;
-        private final List<DocumentBuilder> inputParsers = new ArrayList<>();
         private JobExecutionService executionService;
 
         @Activate
@@ -137,27 +128,5 @@ public class JobManagerFactory implements JobFactory {
         )
         protected void setJobStorage(JobStorage storage) {
                 this.storage = storage;
-        }
-
-        @Reference(
-           name = "xproc-engine",
-           unbind = "-",
-           service = XProcEngine.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        protected void setXProcEngine(XProcEngine xprocEngine) {
-                this.xprocEngine = xprocEngine;
-        }
-
-        @Reference(
-           name = "input-parser",
-           unbind = "-",
-           service = DocumentBuilder.class,
-           cardinality = ReferenceCardinality.MANDATORY,
-           policy = ReferencePolicy.STATIC
-        )
-        protected void addInputParser(DocumentBuilder parser) {
-                inputParsers.add(parser);
         }
 }

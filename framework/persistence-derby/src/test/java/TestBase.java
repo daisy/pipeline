@@ -69,7 +69,8 @@ public abstract class TestBase extends AbstractTest {
 	@ProbeBuilder
 	public TestProbeBuilder probeConfiguration(TestProbeBuilder probe) {
 		// FIXME: can not delete this yet because it can not be generated with maven-bundle-plugin
-		probe.setHeader("Service-Component", "OSGI-INF/script.xml");
+		probe.setHeader("Service-Component", "OSGI-INF/script.xml,"
+		                                   + "OSGI-INF/xproc-engine.xml");
 		return probe;
 	}
 }

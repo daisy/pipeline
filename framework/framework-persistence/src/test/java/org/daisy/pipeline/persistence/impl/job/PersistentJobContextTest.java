@@ -18,7 +18,6 @@ import org.daisy.pipeline.job.JobBatchId;
 import org.daisy.pipeline.job.JobId;
 import org.daisy.pipeline.job.JobIdFactory;
 import org.daisy.pipeline.job.JobResult;
-import org.daisy.pipeline.job.URIMapper;
 import org.daisy.pipeline.persistence.impl.Database;
 import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.script.ScriptRegistry;
@@ -101,7 +100,8 @@ public class PersistentJobContextTest  {
 	@Test
 	public void mapperTest(){
 		PersistentJobContext jCtxt= db.getEntityManager().find(PersistentJobContext.class, id.toString());
-		Assert.assertEquals(jCtxt.getResultMapper(), new URIMapper(tempDir.toURI(), Mocks.out));
+		Assert.assertEquals(jCtxt.getResultDir(), Mocks.out);
+		Assert.assertEquals(jCtxt.getContextDir(), tempDir);
 	}
 	
 	@Test

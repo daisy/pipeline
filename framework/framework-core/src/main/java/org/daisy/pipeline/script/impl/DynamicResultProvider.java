@@ -1,5 +1,6 @@
-package org.daisy.pipeline.job.impl;
+package org.daisy.pipeline.script.impl;
 
+import java.io.File;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,8 +12,6 @@ import javax.xml.transform.stream.StreamResult;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
 
-import org.daisy.pipeline.job.URIMapper;
-
 /**
  * This class is not thread-safe if several threads are generating results at the same time.
  * not that likely use case
@@ -23,17 +22,17 @@ public final class DynamicResultProvider implements Supplier<Result>{
 	private final Supplier<Result> backingProvider;
 	private final String portName;
 	private final String portMimetype;
-	private final URIMapper mapper;
+	private final URI resultDir;
 	
 	private String constantSystemId = null;
 	private String prefix = null;
 	private String suffix = null;
 	
-	public DynamicResultProvider(Supplier<Result> backingProvider, String portName, String portMimetype, URIMapper mapper) {
+	public DynamicResultProvider(Supplier<Result> backingProvider, String portName, String portMimetype, File resultDir) {
 		this.backingProvider = backingProvider;
 		this.portName = portName;
 		this.portMimetype = portMimetype;
-		this.mapper = mapper;
+		this.resultDir = resultDir.toURI();
 	};
 
 	/**
@@ -69,7 +68,7 @@ public final class DynamicResultProvider implements Supplier<Result>{
 		if (res == null) {
 			if (prefix == null) {
 				String parts[] = getDynamicResultProviderParts(portName, constantSystemId, portMimetype);
-				prefix = mapper.mapOutput(URI.create(parts[0])).toString();
+				prefix = resultDir.resolve(URI.create(parts[0])).toString();
 				suffix = parts[1];
 			}
 			String sysId = count == 0 ?

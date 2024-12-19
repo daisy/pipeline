@@ -1,10 +1,11 @@
 package org.daisy.pipeline.persistence.impl.job;
 
-import java.net.URI;
+import java.io.File;
 
 import javax.persistence.Embeddable;
 
-import org.daisy.pipeline.job.URIMapper;
+import org.daisy.pipeline.job.JobResources;
+import org.daisy.pipeline.job.JobResourcesDir;
 
 @Embeddable
 public class PersistentMapper {
@@ -12,22 +13,17 @@ public class PersistentMapper {
 	String inputBase;
 	String outputBase;
 
-	/**
-	 * Constructs a new instance.
-	 */
 	public PersistentMapper() {
-	}	
-
-	public PersistentMapper(URIMapper mapper){
-		setMapper(mapper);
 	}
 
-	public URIMapper getMapper(){
-		return new URIMapper(URI.create(this.inputBase),URI.create(this.outputBase));
-	}
-
-	public void setMapper(URIMapper mapper){
-		this.inputBase=mapper.getInputBase().toString();	
-		this.outputBase=mapper.getOutputBase().toString();	
+	public PersistentMapper(File resultDir, JobResources resources) {
+		this.outputBase = resultDir.toURI().toString();
+		if (resources == null)
+			this.inputBase = "";
+		else {
+			if (!(resources instanceof JobResourcesDir))
+				throw new IllegalArgumentException(); // could happen if ScriptInput.storeToDisk was not called
+			this.inputBase = ((JobResourcesDir)resources).getBaseDir().toURI().toString();
+		}
 	}
 }

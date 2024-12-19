@@ -16,10 +16,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import org.junit.Assert;
 import org.junit.Test;
 
 import org.ops4j.pax.exam.util.PathUtils;
@@ -55,34 +52,34 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = URLsTest.class;
 			try {
 				URLs.getResourceFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.getResourceFromJAR("/dir/file1/", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/dir/file1", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/dir/file1$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/file1$"));
 				else
-					assertEquals(testClassesDir + "dir/file1", actual);
+					Assert.assertEquals(testClassesDir + "dir/file1", actual);
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/dir/file 2", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/dir/file%202$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/file%202$"));
 				else
-					assertEquals(testClassesDir + "dir/file%202", actual);
+					Assert.assertEquals(testClassesDir + "dir/file%202", actual);
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/dir/subdir", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/dir/subdir/$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/dir/subdir/$"));
 				else
-					assertEquals(testClassesDir + "dir/subdir/", actual);
+					Assert.assertEquals(testClassesDir + "dir/subdir/", actual);
 			}
 		}
 		{
@@ -90,33 +87,33 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = URLs.class;
 			try {
 				URLs.getResourceFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.getResourceFromJAR("/org/daisy/common/file/URLs.class/", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/org/daisy/common/file/URLs.class", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/URLs\\.class$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/URLs\\.class$"));
 				else
 					try {
-						assertEquals(classesDir + "org/daisy/common/file/URLs.class", actual); }
+						Assert.assertEquals(classesDir + "org/daisy/common/file/URLs.class", actual); }
 					catch (AssertionError e) {
-						assertEquals("jar:" + jarFile + "!/org/daisy/common/file/URLs.class", actual); }
+						Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/URLs.class", actual); }
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/org/daisy/common/file", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/org/daisy/common/file/$"));
 				else
 					try {
-						assertEquals(classesDir + "org/daisy/common/file/", actual); }
+						Assert.assertEquals(classesDir + "org/daisy/common/file/", actual); }
 					catch (AssertionError e) {
-						assertEquals("jar:" + jarFile + "!/org/daisy/common/file/", actual); }
+						Assert.assertEquals("jar:" + jarFile + "!/org/daisy/common/file/", actual); }
 			}
 		}
 		{
@@ -124,27 +121,27 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = com.google.common.base.Function.class;
 			try {
 				URLs.getResourceFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.getResourceFromJAR("/com/google/common/base/Function.class/", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("not a directory:")); }
 			{
 				String actual = URLs.getResourceFromJAR("/com/google/common/base/Function.class", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/Function\\.class$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/Function\\.class$"));
 				else
-					assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/Function\\.class$"));
+					Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/Function\\.class$"));
 			}
 			{
 				String actual = URLs.getResourceFromJAR("/com/google/common/base", context).toString();
 				if (OSGiHelper.inOSGiContext())
-					assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/$"));
+					Assert.assertThat(actual, matchesPattern("^bundle://.*/com/google/common/base/$"));
 				else
-					assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/$"));
+					Assert.assertThat(actual, matchesPattern("^jar:file:.*!/com/google/common/base/$"));
 			}
 		}
 	}
@@ -156,20 +153,20 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = URLsTest.class;
 			try {
 				URLs.listResourcesFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.listResourcesFromJAR("/dir/file1", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue( e.getMessage().startsWith("not a directory:")); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/dir", context));
-				assertEquals("dir/file 2", i.next());
-				assertEquals("dir/file1", i.next());
-				assertEquals("dir/subdir/", i.next());
-				assertFalse(i.hasNext());
+				Assert.assertEquals("dir/file 2", i.next());
+				Assert.assertEquals("dir/file1", i.next());
+				Assert.assertEquals("dir/subdir/", i.next());
+				Assert.assertFalse(i.hasNext());
 			}
 		}
 		{
@@ -177,20 +174,20 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = URLs.class;
 			try {
 				URLs.listResourcesFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.listResourcesFromJAR("/org/daisy/common/file/URLs.class", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue( e.getMessage().startsWith("not a directory:")); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/org/daisy/common/file", context));
-				assertEquals("org/daisy/common/file/URLs$1.class", i.next());
-				assertEquals("org/daisy/common/file/URLs$OSGiHelper.class", i.next());
-				assertEquals("org/daisy/common/file/URLs.class", i.next());
-				assertFalse(i.hasNext());
+				Assert.assertEquals("org/daisy/common/file/URLs$1.class", i.next());
+				Assert.assertEquals("org/daisy/common/file/URLs$OSGiHelper.class", i.next());
+				Assert.assertEquals("org/daisy/common/file/URLs.class", i.next());
+				Assert.assertFalse(i.hasNext());
 			}
 		}
 		{
@@ -198,33 +195,33 @@ public class URLsTest extends AbstractTest {
 			Class<?> context = com.google.common.base.Function.class;
 			try {
 				URLs.listResourcesFromJAR("/unexisting", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("file does not exist", e.getMessage()); }
+				Assert.assertTrue(e.getMessage().startsWith("file does not exist:")); }
 			try {
 				URLs.listResourcesFromJAR("/com/google/common/base/Function.class", context);
-				fail("expected RuntimeException"); }
+				Assert.fail("expected RuntimeException"); }
 			catch (RuntimeException e) {
-				assertEquals("is not a directory", e.getMessage()); }
+				Assert.assertTrue( e.getMessage().startsWith("not a directory:")); }
 			{
 				Iterator<String> i = sort(URLs.listResourcesFromJAR("/com/google/common", context));
-				assertEquals("com/google/common/annotations/", i.next());
-				assertEquals("com/google/common/base/", i.next());
-				assertEquals("com/google/common/cache/", i.next());
-				assertEquals("com/google/common/collect/", i.next());
-				assertEquals("com/google/common/escape/", i.next());
-				assertEquals("com/google/common/eventbus/", i.next());
-				assertEquals("com/google/common/graph/", i.next());
-				assertEquals("com/google/common/hash/", i.next());
-				assertEquals("com/google/common/html/", i.next());
-				assertEquals("com/google/common/io/", i.next());
-				assertEquals("com/google/common/math/", i.next());
-				assertEquals("com/google/common/net/", i.next());
-				assertEquals("com/google/common/primitives/", i.next());
-				assertEquals("com/google/common/reflect/", i.next());
-				assertEquals("com/google/common/util/", i.next());
-				assertEquals("com/google/common/xml/", i.next());
-				assertFalse(i.hasNext());
+				Assert.assertEquals("com/google/common/annotations/", i.next());
+				Assert.assertEquals("com/google/common/base/", i.next());
+				Assert.assertEquals("com/google/common/cache/", i.next());
+				Assert.assertEquals("com/google/common/collect/", i.next());
+				Assert.assertEquals("com/google/common/escape/", i.next());
+				Assert.assertEquals("com/google/common/eventbus/", i.next());
+				Assert.assertEquals("com/google/common/graph/", i.next());
+				Assert.assertEquals("com/google/common/hash/", i.next());
+				Assert.assertEquals("com/google/common/html/", i.next());
+				Assert.assertEquals("com/google/common/io/", i.next());
+				Assert.assertEquals("com/google/common/math/", i.next());
+				Assert.assertEquals("com/google/common/net/", i.next());
+				Assert.assertEquals("com/google/common/primitives/", i.next());
+				Assert.assertEquals("com/google/common/reflect/", i.next());
+				Assert.assertEquals("com/google/common/util/", i.next());
+				Assert.assertEquals("com/google/common/xml/", i.next());
+				Assert.assertFalse(i.hasNext());
 			}
 		}
 	}

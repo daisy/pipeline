@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>framework-parent</artifactId>
-  <version>1.14.21-SNAPSHOT</version>
+  <version>1.14.22-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Framework Parent POM</name>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.21-SNAPSHOT</version>
+        <version>1.14.22-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -158,7 +158,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>ds-to-spi-runtime</artifactId>
-        <version>1.2.1-SNAPSHOT</version>
+        <version>1.2.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.build</groupId>
@@ -246,7 +246,7 @@
         <plugin>
           <groupId>org.daisy.pipeline.build</groupId>
           <artifactId>ds-to-spi-maven-plugin</artifactId>
-          <version>1.1.2</version>
+          <version>1.1.5</version>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>

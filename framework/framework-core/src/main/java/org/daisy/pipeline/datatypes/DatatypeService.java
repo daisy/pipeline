@@ -70,7 +70,9 @@ public abstract class DatatypeService {
 			}
 			public ValidationResult validate(String content) {
 				try {
-					Integer.parseInt(content);
+					int i = Integer.parseInt(content);
+					if (i < 0)
+						return notValid("Negative integer: " + content);
 					return valid();
 				} catch (NumberFormatException e) {
 					return notValid("Not an integer: " + content);

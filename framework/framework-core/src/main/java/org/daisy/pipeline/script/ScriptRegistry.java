@@ -62,14 +62,33 @@ public class ScriptRegistry {
 		cardinality = ReferenceCardinality.MULTIPLE,
 		policy = ReferencePolicy.STATIC
 	)
-	protected void register(XProcScriptService script) {
+	protected void register(ScriptService script) {
 		logger.debug("Registering script {}", script.getId());
 		descriptors.put(script.getId(), script);
 	}
 
-	protected void unregister(XProcScriptService script) {
+	protected void unregister(ScriptService script) {
 		logger.debug("Unregistering script {}", script.getId());
 		descriptors.remove(script.getId());
+	}
+
+	@Reference(
+		name = "script-service-provider",
+		unbind = "-",
+		service = ScriptServiceProvider.class,
+		cardinality = ReferenceCardinality.MULTIPLE,
+		policy = ReferencePolicy.STATIC
+	)
+	protected void register(ScriptServiceProvider scripts) {
+		logger.debug("Registering scripts from {}", scripts);
+		for (ScriptService<?> s : scripts.getScripts())
+			register(s);
+	}
+
+	protected void unregister(ScriptServiceProvider scripts) {
+		logger.debug("Unregistering scripts from {}", scripts);
+		for (ScriptService<?> s : scripts.getScripts())
+			unregister(s);
 	}
 
 	/**

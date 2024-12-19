@@ -1,5 +1,8 @@
 package org.daisy.pipeline.script;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,20 +15,38 @@ import java.util.regex.Pattern;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Result;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 
+import org.daisy.common.messaging.MessageAppender;
 import org.daisy.common.properties.Properties;
+import org.daisy.common.xml.DocumentBuilder;
+import org.daisy.common.xproc.XProcEngine;
+import org.daisy.common.xproc.XProcInput;
 import org.daisy.common.xproc.XProcOptionInfo;
+import org.daisy.common.xproc.XProcOutput;
+import org.daisy.common.xproc.XProcPipeline;
 import org.daisy.common.xproc.XProcPortInfo;
+import org.daisy.common.xproc.XProcResult;
 import org.daisy.pipeline.datatypes.DatatypeRegistry;
 import org.daisy.pipeline.datatypes.DatatypeService;
+import org.daisy.pipeline.job.impl.IOHelper;
+import org.daisy.pipeline.job.Job.Status;
+import org.daisy.pipeline.job.JobResultSet;
+import org.daisy.pipeline.script.impl.DynamicResultProvider;
+import org.daisy.pipeline.script.impl.StatusResultProvider;
+import org.daisy.pipeline.script.impl.XProcDecorator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.w3c.dom.Document;
 
 /**
  * XProc based implementation of {@link Script}
@@ -41,13 +62,8 @@ public final class XProcScript extends Script {
 	private final Optional<ScriptPort> statusPort;
 	final boolean someOptionsUseProperty; // whether one or more options have a default value that depends
 	                                      // on a (possibly settable) property
-
-	/**
-	 * The URI of the XProc pipeline.
-	 */
-	public URI getURI() {
-		return uri;
-	}
+	private final XProcEngine xprocEngine;
+	private final List<DocumentBuilder> inputParsers;
 
 	public XProcScriptOption getInputOption(String name) {
 		return inputOptions.get(name);
@@ -70,6 +86,25 @@ public final class XProcScript extends Script {
 		return String.format("XProcScript[name=%s]", this.getName());
 	}
 
+	@Override
+	public Status run(ScriptInput input,
+	                  Map<String,String> properties,
+	                  MessageAppender messages,
+	                  JobResultSet.Builder resultBuilder,
+	                  File resultDir) throws IOException {
+		XProcPipeline pipeline = xprocEngine.load(uri);
+		XProcDecorator decorator = XProcDecorator.from(this, resultDir, inputParsers);
+		XProcInput xprocInput = decorator.decorate(input);
+		XProcResult xprocResult = pipeline.run(xprocInput, () -> messages, properties);
+		XProcOutput xprocOutput = decorator.decorate(new XProcOutput.Builder().build());
+		xprocResult.writeTo(xprocOutput); // writes to files and/or streams specified in output
+		buildResultSet(xprocInput, xprocOutput, resultDir, resultBuilder);
+		if (checkStatusPort(xprocOutput))
+			return Status.SUCCESS;
+		else
+			return Status.FAIL;
+	}
+
 	/**
 	 * Builder for {@link XProcScript} objects.
 	 */
@@ -80,17 +115,23 @@ public final class XProcScript extends Script {
 		private final List<XProcScriptOption> tempOptions = new ArrayList<>();
 		private final Map<String,XProcScriptOption> resultOptions = new HashMap<>();
 		private ScriptPort statusPort;
+		private final XProcEngine xprocEngine;
+		private final List<DocumentBuilder> inputParsers;
 		private final DatatypeRegistry datatypes;
 
-		public Builder(XProcScriptService descriptor, URI uri, DatatypeRegistry datatypes) {
+		public Builder(XProcScriptService descriptor, URI uri, XProcEngine xprocEngine, List<DocumentBuilder> inputParsers, DatatypeRegistry datatypes) {
 			super(descriptor);
 			this.uri = uri;
+			this.xprocEngine = xprocEngine;
+			this.inputParsers = inputParsers;
 			this.datatypes = datatypes;
 		}
 
-		public Builder(String id, String version, URI uri, DatatypeRegistry datatypes) {
+		public Builder(String id, String version, URI uri, XProcEngine xprocEngine, List<DocumentBuilder> inputParsers, DatatypeRegistry datatypes) {
 			super(id, version);
 			this.uri = uri;
+			this.xprocEngine = xprocEngine;
+			this.inputParsers = inputParsers;
 			this.datatypes = datatypes;
 		}
 
@@ -208,7 +249,7 @@ public final class XProcScript extends Script {
 		 */
 		@Override
 		public XProcScript build() {
-			return new XProcScript(uri, id, version, shortName, description, homepage,
+			return new XProcScript(xprocEngine, inputParsers, uri, id, version, shortName, description, homepage,
 			                       inputPorts, outputPorts, options, inputFilesets, outputFilesets,
 			                       inputOptions, tempOptions, resultOptions, statusPort);
 		}
@@ -269,7 +310,8 @@ public final class XProcScript extends Script {
 		}
 	}
 
-	private XProcScript(URI uri, String id, String version, String name, String description, String homepage,
+	private XProcScript(XProcEngine xprocEngine, List<DocumentBuilder> inputParsers,
+	                    URI uri, String id, String version, String name, String description, String homepage,
 	                    Map<String,ScriptPort> inputPorts, Map<String,ScriptPort> outputPorts, Map<String,ScriptOption> options,
 	                    List<String> inputFilesets, List<String> outputFilesets,
 	                    Map<String,XProcScriptOption> inputOptions, List<XProcScriptOption> tempOptions,
@@ -284,6 +326,8 @@ public final class XProcScript extends Script {
 			|| Iterables.any(inputOptions.values(), o -> o.usesProperty)
 			|| Iterables.any(tempOptions, o -> o.usesProperty)
 			|| Iterables.any(resultOptions.values(), o -> o.usesProperty);
+		this.xprocEngine = xprocEngine;
+		this.inputParsers = inputParsers;
 	}
 
 	@Override
@@ -592,7 +636,7 @@ public final class XProcScript extends Script {
 					throw new IllegalArgumentException("can not convert value to integer: " + value, e);
 				}
 			else if (datatype == DatatypeService.XS_BOOLEAN)
-				return "true".equals(value.toLowerCase()) || "1".equals(value);
+				return datatype.validate(value).isValid();
 			else
 				throw new RuntimeException("coding error");
 		}
@@ -642,6 +686,130 @@ public final class XProcScript extends Script {
 		@Override
 		public String getMediaType() {
 			return metadata.getMediaType();
+		}
+	}
+
+	private void buildResultSet(XProcInput inputs, XProcOutput outputs,
+	                            File resultDir, JobResultSet.Builder builder) throws IOException {
+
+		// iterate over output ports
+		for (ScriptPort port : getOutputPorts()) {
+			String mediaType = port.getMediaType();
+
+			// check if it is implemented as an output option
+			XProcScriptOption option = getResultOption(port.getName());
+			if (option != null) {
+				if (inputs.getOptions().get(option.getXProcOptionName()) == null)
+					// option was not set
+					continue;
+				if (XProcOptionMetadata.ANY_FILE_URI.equals(option.getType().getId())) {
+					URI path; {
+						Object val = inputs.getOptions().get(option.getXProcOptionName());
+						try {
+							path = URI.create((String)val);
+						} catch (ClassCastException e) {
+							throw new RuntimeException(
+								"Expected string value for option " + option.getName()
+								+ " but got: " + val.getClass());
+						}
+					}
+					File f = new File(path);
+					if (f.exists()) {
+						builder = builder.addResult(port.getName(),
+						                            resultDir.toURI().relativize(path).toString(),
+						                            f,
+						                            mediaType);
+					}
+				} else if (XProcOptionMetadata.ANY_DIR_URI.equals(option.getType().getId())) {
+					String dir; {
+						Object val = inputs.getOptions().get(option.getXProcOptionName());
+						try {
+							dir = (String)val;
+						} catch (ClassCastException e) {
+							throw new RuntimeException(
+								"Expected string value for option " + option.getName()
+								+ " but got: " + val.getClass());
+						}
+					}
+					// scan the directory to get all files inside and write them to the XProcOutput
+					for (File f : IOHelper.treeFileList(new File(URI.create(dir)))) {
+						URI path = f.toURI();
+						builder = builder.addResult(port.getName(),
+						                            resultDir.toURI().relativize(path).toString(),
+						                            f,
+						                            mediaType);
+					}
+				}
+			} else {
+				Supplier<Result> resultProvider = outputs.getResultProvider(port.getName());
+				if (resultProvider == null)
+					// XProcDecorator makes sure this can not happen
+					continue;
+				if (!(resultProvider instanceof DynamicResultProvider))
+					// XProcDecorator makes sure this can not happen
+					throw new RuntimeException(
+						"Result supplier is expected to be a DynamicResultProvider but got: " + resultProvider);
+				for (Result result : ((DynamicResultProvider)resultProvider).providedResults()) {
+					String sysId = result.getSystemId();
+					if (sysId == null)
+						// XProcDecorator makes sure this can not happen
+						throw new RuntimeException(
+							"Result is expected to be a DynamicResult but got: " + result);
+					URI path = URI.create(sysId);
+					builder = builder.addResult(port.getName(),
+					                            resultDir.toURI().relativize(path).toString(),
+					                            new File(path),
+					                            mediaType);
+				}
+			}
+		}
+	}
+
+	// for unit tests
+	JobResultSet buildResultSet(XProcInput inputs, XProcOutput outputs, File resultDir) throws IOException {
+		JobResultSet.Builder builder = new JobResultSet.Builder(this);
+		buildResultSet(inputs, outputs, resultDir, builder);
+		return builder.build();
+	}
+
+	/**
+	 * Check the validation status from the status port and get it's value.
+	 */
+	// package private for unit tests
+	boolean checkStatusPort(XProcOutput outputs) {
+		Optional<ScriptPort> statusPort = getStatusPort();
+		if (statusPort.isPresent()) {
+			Supplier<Result> provider = outputs.getResultProvider(statusPort.get().getName());
+			if (provider != null && provider instanceof StatusResultProvider) { // should always be true
+				boolean ok = true;
+				for (InputStream status : ((StatusResultProvider)provider).read()) {
+					ok &= processStatus(status);
+				}
+				return ok;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Read the XML file to check that validation status is equal to "ok".
+	 */
+	// package private for unit tests
+	static boolean processStatus(InputStream status) {
+		// check the contents of the xml and check if result is "ok"
+		// <d:status xmlns:d="http://www.daisy.org/ns/pipeline/data" result="error"/>
+		try {
+			DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+			docBuilderFactory.setNamespaceAware(true);
+			javax.xml.parsers.DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			Document doc = docBuilder.parse(status);
+			String result = doc.getDocumentElement().getAttribute("result");
+			if (result == null || result.isEmpty()) {
+				throw new RuntimeException("No result attribute was found in the status port");
+			}
+			return result.equalsIgnoreCase("ok");
+		} catch (Exception e) {
+			throw new RuntimeException("Error processing status file", e);
 		}
 	}
 }
