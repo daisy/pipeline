@@ -178,6 +178,8 @@ public class ${component.spiClassName}
 		} catch (java.lang.reflect.InvocationTargetException e) {
 			if (e.getCause() instanceof org.daisy.common.spi.ActivationException)
 				throw (org.daisy.common.spi.ActivationException)e.getCause();
+			else
+				throw new RuntimeException(e);
 		}
 #end
 #end

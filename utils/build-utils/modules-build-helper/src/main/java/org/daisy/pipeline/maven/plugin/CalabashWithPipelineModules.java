@@ -44,7 +44,7 @@ class CalabashWithPipelineModules extends Calabash {
 		try {
 			Thread.currentThread().setContextClassLoader(classLoader);
 			for (URIResolver r : ServiceLoader.load(URIResolver.class))
-				if (r instanceof ModuleUriResolver)
+				if (r.getClass().toString().startsWith(ModuleUriResolver.class.toString()))
 					return r;
 			throw new RuntimeException("No ModuleUriResolver found");
 		} finally {

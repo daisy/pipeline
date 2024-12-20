@@ -39,6 +39,7 @@ import javax.lang.model.type.NoType;
 import javax.lang.model.type.PrimitiveType;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.type.TypeVariable;
+import javax.lang.model.type.WildcardType;
 import javax.tools.Diagnostic;
 
 import aQute.bnd.header.OSGiHeader;
@@ -173,13 +174,9 @@ public class DsToSpiProcessor extends AbstractProcessor {
 							AnnotationValue serviceList = getAnnotationValue(classElement, Component.class.getName(), "service");
 							boolean onlyInterfaces = true;
 							if (serviceList != null) {
-								Map<String,TypeElement> interfaces = new HashMap<String,TypeElement>();
 								for (AnnotationValue v : (List<? extends AnnotationValue>)serviceList.getValue()) {
 									ClassType classType = (ClassType)v.getValue();
-									if (classType.isInterface()) {
-										TypeElement typeElement = (TypeElement)processingEnv.getTypeUtils().asElement(classType);
-										interfaces.put(typeElement.getQualifiedName().toString(), typeElement);
-									} else {
+									if (!classType.isInterface()) {
 										onlyInterfaces = false;
 										if (loadWithAnnotation != null) {
 											printError(
@@ -187,45 +184,54 @@ public class DsToSpiProcessor extends AbstractProcessor {
 												e);
 											throw new RuntimeException();
 										}
+										break;
 									}
 								}
 								if (onlyInterfaces) {
-									List<TypeElement> superInterfaces = new ArrayList<>();
+									Map<String,ClassType> interfaces = new HashMap<>(); // all implemented interfaces and superinterfaces
+									Map<String,ClassType> serviceInterfaces = new HashMap<>(); // all implemented interfaces (with superinterfaces) listed in service list 
 									BoundTypeParameters boundTypeParameters = new BoundTypeParameters();
-									getInterfacesRecursively(classElement, x -> {}, boundTypeParameters);
-									for (TypeElement i : interfaces.values()) {
-										for (TypeParameterElement p : i.getTypeParameters()) {
-											TypeMirror upper = null;
-											for (TypeMirror b : p.getBounds())
-												if (upper != null)
-													throw new IllegalArgumentException("multiple-bounded type parameters");
-												else
-													upper = b;
-											boundTypeParameters.put(p, upper);
-										}
-										getInterfacesRecursively(i, superInterfaces::add, boundTypeParameters);
-									}
+									getInterfacesRecursively(
+										classElement,
+										x -> { interfaces.put(x.tsym.flatName().toString(), x); },
+										boundTypeParameters);
 									for (AnnotationValue v : (List<? extends AnnotationValue>)serviceList.getValue()) {
 										ClassType classType = (ClassType)v.getValue();
 										ComponentModel.ServiceModel service = new ComponentModel.ServiceModel();
-										service.name = boundTypeParameters.resolveVariables(classType);
 										service.flatName = classType.tsym.flatName().toString();
+										// get actual interface with parameters list
+										classType = interfaces.get(service.flatName);
+										if (classType == null)
+											throw new IllegalStateException(); // should not happen (unless class lists a service
+										                                       // that it doesn't actually implement)
+										service.name = boundTypeParameters.resolveVariables(classType);
 										component.services.add(service);
 										services.add(service.flatName);
+										serviceInterfaces.put(service.flatName, classType);
+										getInterfacesRecursively(
+											(TypeElement)processingEnv.getTypeUtils().asElement(classType),
+											x -> { serviceInterfaces.put(x.tsym.flatName().toString(), x); },
+											null);
 									}
-									for (TypeElement i : superInterfaces)
-										interfaces.put(i.getQualifiedName().toString(), i);
-									for (String k : interfaces.keySet()) {
-										TypeElement i = interfaces.get(k);
+
+									// FIXME: don't define methods twice
+									// => why wasn't this an issue before?
+
+									// get method signatures
+									for (ClassType c : serviceInterfaces.values()) {
+										TypeElement i = (TypeElement)processingEnv.getTypeUtils().asElement(c);
+										BoundTypeParameters boundInterfaceParameters = new BoundTypeParameters(); {
+											for (TypeParameterElement p : i.getTypeParameters())
+												boundInterfaceParameters.put(boundTypeParameters.get(p)); }
 										for (Element enclosedElement : i.getEnclosedElements()) {
 											if (enclosedElement instanceof ExecutableElement) {
 												ExecutableElement exeElement = (ExecutableElement)enclosedElement;
 												if (!exeElement.getModifiers().contains(Modifier.STATIC)) {
 													ComponentModel.ServiceMethodModel method = new ComponentModel.ServiceMethodModel();
 													method.name = exeElement.getSimpleName().toString();
-													method.returnType = boundTypeParameters.resolveVariables(exeElement.getReturnType());
+													method.returnType = boundInterfaceParameters.resolveVariables(exeElement.getReturnType());
 													for (VariableElement variableElement : exeElement.getParameters()) {
-														method.argumentTypes.add(boundTypeParameters.resolveVariables(variableElement.asType()));
+														method.argumentTypes.add(boundInterfaceParameters.resolveVariables(variableElement.asType()));
 													}
 													for (TypeMirror thrown : exeElement.getThrownTypes()) {
 														method.thrownTypes.add(thrown.toString());
@@ -522,44 +528,48 @@ public class DsToSpiProcessor extends AbstractProcessor {
 		return (PackageElement)enclosingElement;
 	}
 	
-	private void getInterfacesRecursively(TypeElement element, Consumer<TypeElement> collect, BoundTypeParameters bindTypeParameters) {
+	private void getInterfacesRecursively(TypeElement element, Consumer<ClassType> collect, BoundTypeParameters bindTypeParameters) {
 		TypeMirror s = element.getSuperclass();
 		if (s instanceof ClassType) {
 			TypeElement e = (TypeElement)processingEnv.getTypeUtils().asElement(s);
-			Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
-			for (TypeMirror arg : ((ClassType)s).getTypeArguments()) {
-				if (!typeParameters.hasNext())
-					throw new IllegalStateException();
-				bindTypeParameters.put(typeParameters.next(), arg);
-			}
-			while (typeParameters.hasNext()) {
-				TypeMirror upper = null;
-				for (TypeMirror b : typeParameters.next().getBounds())
-					if (upper != null)
-						throw new IllegalArgumentException("multiple-bounded type parameters");
-					else
-						upper = b;
-				bindTypeParameters.put(typeParameters.next(), upper);
+			if (bindTypeParameters != null) {
+				Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
+				for (TypeMirror arg : ((ClassType)s).getTypeArguments()) {
+					if (!typeParameters.hasNext())
+						throw new IllegalStateException();
+					bindTypeParameters.put(typeParameters.next(), arg);
+				}
+				while (typeParameters.hasNext()) {
+					TypeMirror upper = null;
+					for (TypeMirror b : typeParameters.next().getBounds())
+						if (upper != null)
+							throw new IllegalArgumentException("multiple-bounded type parameters");
+						else
+							upper = b;
+					bindTypeParameters.put(typeParameters.next(), upper);
+				}
 			}
 			getInterfacesRecursively(e, collect, bindTypeParameters);
 		}
 		for (TypeMirror i : element.getInterfaces()) {
+			collect.accept(((ClassType)i));
 			TypeElement e = (TypeElement)processingEnv.getTypeUtils().asElement(i);
-			collect.accept(e);
-			Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
-			for (TypeMirror arg : ((ClassType)i).getTypeArguments()) {
-				if (!typeParameters.hasNext())
-					throw new IllegalStateException();
-				bindTypeParameters.put(typeParameters.next(), arg);
-			}
-			while (typeParameters.hasNext()) {
-				TypeMirror upper = null;
-				for (TypeMirror b : typeParameters.next().getBounds())
-					if (upper != null)
-						throw new IllegalArgumentException("multiple-bounded type parameters");
-					else
-						upper = b;
-				bindTypeParameters.put(typeParameters.next(), upper);
+			if (bindTypeParameters != null) {
+				Iterator<? extends TypeParameterElement> typeParameters = e.getTypeParameters().iterator();
+				for (TypeMirror arg : ((ClassType)i).getTypeArguments()) {
+					if (!typeParameters.hasNext())
+						throw new IllegalStateException();
+					bindTypeParameters.put(typeParameters.next(), arg);
+				}
+				while (typeParameters.hasNext()) {
+					TypeMirror upper = null;
+					for (TypeMirror b : typeParameters.next().getBounds())
+						if (upper != null)
+							throw new IllegalArgumentException("multiple-bounded type parameters");
+						else
+							upper = b;
+					bindTypeParameters.put(typeParameters.next(), upper);
+				}
 			}
 			getInterfacesRecursively(e, collect, bindTypeParameters);
 		}
@@ -603,16 +613,16 @@ public class DsToSpiProcessor extends AbstractProcessor {
 		private final Map<String,BoundTypeParameter> map = new HashMap<>();
 		
 		public BoundTypeParameter put(TypeParameterElement parameter, TypeMirror typeArgument) {
-			BoundTypeParameter b = new BoundTypeParameter(parameter, typeArgument);
-			String k = parameterKey(parameter);
-			BoundTypeParameter prev = map.put(k, b);
-			if (prev != null) {
-				b = prev.combine(b);
-				map.put(k, b);
-			}
-			return b;
+			return put(new BoundTypeParameter(parameter, typeArgument, this));
 		}
-		
+
+		public BoundTypeParameter put(BoundTypeParameter parameter) {
+			String k = parameterKey(parameter.parameter);
+			parameter = BoundTypeParameters.this.combine(map.get(k), parameter);
+			map.put(k, parameter);
+			return parameter;
+		}
+
 		public BoundTypeParameter get(TypeParameterElement parameter) {
 			return map.get(parameterKey(parameter));
 		}
@@ -640,9 +650,23 @@ public class DsToSpiProcessor extends AbstractProcessor {
 			    || type instanceof PrimitiveType)
 				return type.toString();
 			else
-				return new BoundTypeParameter(null, type).toString();
+				return new BoundTypeParameter(null, type, null).toString();
 		}
-		
+
+		@Override
+		public String toString() {
+			return map.toString();
+		}
+
+		public BoundTypeParameter combine(BoundTypeParameter first, BoundTypeParameter second) {
+			if (first == null)
+				return second;
+			else if (second == null)
+				return first;
+			else
+				return first.combine(second);
+		}
+
 		private class BoundTypeParameter implements Cloneable {
 			
 			/**
@@ -650,41 +674,94 @@ public class DsToSpiProcessor extends AbstractProcessor {
 			 */
 			private final TypeParameterElement parameter;
 			/**
-			 * The type that {@code parameter} is bound to
+			 * The type that {@code parameter} is bound to, or {@code null} for no binding
 			 */
 			private TypeElement type;
 			/**
 			 * Bound parameters of {@code type}
 			 */
 			private List<BoundTypeParameter> boundTypeParameters;
+			/**
+			 * Whether this is the upper bound of a wildcard (? extends x)
+			 */
+			private boolean isUpperBound;
+			/**
+			 * Whether this is the lower bound of a wildcard (? super x)
+			 */
+			private boolean isLowerBound;
 			
 			/**
 			 * @param typeArgument a specified type argument
-			 * @param boundTypeParameters to lookup type variable bindings of the enclosing type
+			 * @param bindTypeParameters if not {@code null}, add new parameter bindings to this object (recursively).
+			 *
+			 * The enclosing {@link BoundTypeParameters} is used to to lookup type variable bindings of the enclosing type.
 			 */
-			private BoundTypeParameter(TypeParameterElement parameter, TypeMirror typeArgument) {
+			private BoundTypeParameter(TypeParameterElement parameter, TypeMirror typeArgument, BoundTypeParameters bindTypeParameters) {
 				this.parameter = parameter;
 				if (typeArgument == null) {
-					this.type = null; // represents Object
+					this.type = null;
 					this.boundTypeParameters = null;
+					this.isUpperBound = false;
+					this.isLowerBound = false;
+				} else if (typeArgument instanceof WildcardType) {
+					TypeMirror upper = ((WildcardType)typeArgument).getExtendsBound();
+					TypeMirror lower = ((WildcardType)typeArgument).getSuperBound();
+					this.isUpperBound = (upper != null);
+					this.isLowerBound = (lower != null);
+					if (isUpperBound && isLowerBound)
+						throw new IllegalStateException();
+					else if (isUpperBound || isLowerBound) {
+						BoundTypeParameter type = new BoundTypeParameter(parameter, upper != null ? upper : lower, bindTypeParameters);
+						if (type == null)
+							throw new IllegalStateException();
+						this.type = type.type;
+						this.boundTypeParameters = type.boundTypeParameters;
+					} else {
+						this.type = null;
+						this.boundTypeParameters = null;
+					}
 				} else if (typeArgument instanceof ClassType) {
 					this.type = (TypeElement)processingEnv.getTypeUtils().asElement((ClassType)typeArgument);
+					this.isUpperBound = false;
+					this.isLowerBound = false;
 					Iterator<? extends TypeParameterElement> typeParameters = this.type.getTypeParameters().iterator();
 					this.boundTypeParameters = typeParameters.hasNext() ? new ArrayList<>() : null;
 					for (TypeMirror arg : ((ClassType)typeArgument).getTypeArguments()) {
 						if (!typeParameters.hasNext())
 							throw new IllegalStateException();
-						this.boundTypeParameters.add(BoundTypeParameters.this.put(typeParameters.next(), arg));
-					}
-					while (typeParameters.hasNext()) {
 						TypeParameterElement p = typeParameters.next();
-						TypeMirror upper = null;
-						for (TypeMirror b : p.getBounds())
-							if (upper != null)
-								throw new IllegalArgumentException("multiple-bounded type parameters");
-							else
-								upper = b;
-						this.boundTypeParameters.add(BoundTypeParameters.this.put(p, upper));
+						if (bindTypeParameters != null
+						    && arg instanceof WildcardType
+						    && ((WildcardType)arg).getExtendsBound() == null
+						    && ((WildcardType)arg).getSuperBound() == null) {
+							TypeMirror upper = null;
+							for (TypeMirror b : p.getBounds())
+								if (upper != null)
+									throw new IllegalArgumentException("multiple-bounded type parameters");
+								else
+									upper = b;
+							arg = upper;
+						}
+						this.boundTypeParameters.add(bindTypeParameters != null
+						                                 ? bindTypeParameters.put(p, arg)
+						                                 : BoundTypeParameters.this.combine(BoundTypeParameters.this.get(p),
+						                                                                    new BoundTypeParameter(p, arg, null)));
+					}
+					if (typeParameters.hasNext()) {
+						if (!boundTypeParameters.isEmpty())
+							throw new IllegalStateException();
+						if (bindTypeParameters != null) {
+							while (typeParameters.hasNext()) {
+								TypeParameterElement p = typeParameters.next();
+								TypeMirror upper = null;
+								for (TypeMirror b : p.getBounds())
+									if (upper != null)
+										throw new IllegalArgumentException("multiple-bounded type parameters");
+									else
+										upper = b;
+								this.boundTypeParameters.add(bindTypeParameters.put(p, upper));
+							}
+						}
 					}
 				} else if (typeArgument instanceof TypeVariable) {
 					BoundTypeParameter type = BoundTypeParameters.this.get((TypeVariable)typeArgument);
@@ -692,6 +769,8 @@ public class DsToSpiProcessor extends AbstractProcessor {
 						throw new IllegalStateException();
 					this.type = type.type;
 					this.boundTypeParameters = type.boundTypeParameters;
+					this.isUpperBound = false;
+					this.isLowerBound = false;
 				} else
 					throw new IllegalArgumentException();
 			}
@@ -709,7 +788,9 @@ public class DsToSpiProcessor extends AbstractProcessor {
 				else if (other.isAssignableFrom(this.type))
 					;
 				else
-					throw new IllegalStateException("incompatible types");
+					throw new IllegalStateException(
+						"incompatible types for parameter " + parameter + " (" + parameter.getEnclosingElement() + "): "
+						+ this + ", " + other);
 				if (common.boundTypeParameters != null)
 					for (int i = 0; i < common.boundTypeParameters.size(); i++)
 						common.boundTypeParameters.set(
@@ -722,7 +803,11 @@ public class DsToSpiProcessor extends AbstractProcessor {
 			 * Naive implementation of isAssignableFrom
 			 */
 			private boolean isAssignableFrom(TypeElement other) {
-				if (type.equals(other))
+				if (isLowerBound || isUpperBound)
+					throw new IllegalStateException("not implemented");
+				if (type == null)
+					return true;
+				else if (type.equals(other))
 					return true;
 				for (TypeMirror i : other.getInterfaces())
 					if (isAssignableFrom((TypeElement)processingEnv.getTypeUtils().asElement(i)))
@@ -736,10 +821,10 @@ public class DsToSpiProcessor extends AbstractProcessor {
 			
 			@Override
 			public String toString() {
+				String s = "";
 				if (type == null)
-					return "java.lang.Object";
+					s += "?";
 				else {
-					String s = "";
 					s += type.getQualifiedName();
 					if (boundTypeParameters != null && boundTypeParameters.size() > 0) {
 						s += "<";
@@ -751,8 +836,12 @@ public class DsToSpiProcessor extends AbstractProcessor {
 						}
 						s += ">";
 					}
-					return s;
+					if (isUpperBound)
+						s = "? extends " + s;
+					else if (isLowerBound)
+						s = "? super " + s;
 				}
+				return s;
 			}
 			
 			@Override

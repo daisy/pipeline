@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/pipeline-build-utils.git
 	branch = master
-	commit = 7111f4b73a29a34798d175b7c0998c722e02e6f8
-	parent = 9076f9cda755ab91f3960e5a45fc5827793d62e4
+	commit = 0f186df64adb92e86e2abb691238fbe57a9de8b9
+	parent = 007b30e7398b1f695a09dc74a36742e9a3791fff
 	cmdver = 0.3.1

@@ -26,11 +26,6 @@ public class ServiceLoader<S> implements Iterable<S> {
 		if (classLoader != lastContextClassLoader) {
 			cache.clear();
 			synchronized (Memoize.singletons) {
-				for (Object o : Memoize.singletons.values())
-					if (o instanceof ServiceWithProperties)
-						try {
-							((ServiceWithProperties)o).spi_deactivate();
-						} catch (AbstractMethodError e) {}
 				Memoize.singletons.clear();
 			}
 		}
