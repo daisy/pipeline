@@ -166,7 +166,7 @@ To learn more about Docker see [https://docs.docker.com](https://docs.docker.com
 ### Java
 
 The standalone server requires a Java runtime environment. The minimum
-required version of Java is 11. We recommend installing Java from
-https://adoptium.net/. Users of the desktop application (Windows and
-macOS) do not have to worry about Java because it is included in the
-application.
+required version of Java is 11. We recommend installing [Java from
+Adopt Open JDK](https://adoptium.net/). Users of the desktop
+application (Windows and MacOS) do not have to worry about Java
+because it is included in the application.

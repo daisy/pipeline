@@ -18,7 +18,7 @@ to making content accessible. It goes without saying that accessiblity
 is the main interest of the tool. There are Pipeline transformation
 for migrating from one accessible format to another, enriching an
 input format with certain accessible features, and producing formats
-targeting a specific disability.
+targeting specific disability reading systems.
 
 ## Standards
 
