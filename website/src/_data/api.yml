@@ -91,8 +91,6 @@ xprocdoc:
 - group: org.daisy.pipeline.modules
   artifact: word-to-dtbook
 - group: org.daisy.pipeline.modules
-  artifact: word-to-epub3
-- group: org.daisy.pipeline.modules
   artifact: zedai-to-epub3
 - group: org.daisy.pipeline.modules
   artifact: zedai-to-html

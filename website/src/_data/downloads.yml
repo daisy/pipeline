@@ -1,7 +1,85 @@
 ## Generate with:
-## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.14.20 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
-## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.6.0 '.[] | select(.tag_name == $version)|{app_version:$version,app_github_tag:$version,app_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
-## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-cli-go/releases | jq --arg version 2.1.8 '.[] | select(.tag_name == ("v"+$version))|{group:"cli",version:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+/cli-\\Q"+$version+"\\E-(?<platform>[^\\.]+)\\.zip$")["platform"]|(if .=="windows_amd64" then "windows-64" elif .=="windows_386" then "windows-32" elif .=="linux_amd64" then "linux-64" elif .=="linux_386" then "linux-32" elif .=="darwin_amd64" then "macosx" else "?" end),package:"zip",content: "cli", url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-assembly/releases | jq --arg version 1.15.0 '.[] | select(.tag_name == ("v"+$version))|{group:"main",version:$version,sort:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,description:"FIXME",files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="zip" then "linux" elif .=="deb" then "debian" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:(if .browser_download_url|endswith(".zip") then ["server", "cli"] else ["server"] end),url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-ui/releases | jq --arg version 1.7.0 '.[] | select(.tag_name == $version)|{app_version:$version,app_github_tag:$version,app_github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|(if .=="exe" then "windows" elif.=="dmg" then "macosx" else "?" end),package:.browser_download_url|capture("^.+\\.(?<ext>[^\\.]+)$")["ext"]|sub("exe";"installer"),content:["gui","server"],url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+## curl -u bertfrees:$(pass github-tokens/curl | head -1) https://api.github.com/repos/daisy/pipeline-cli-go/releases | jq --arg version 2.2.1 '.[] | select(.tag_name == ("v"+$version))|{group:"cli",version:$version,state:"stable",github_tag:("v"+$version),github_url:.html_url,files:.assets|map({platform:.browser_download_url|capture("^.+/cli-\\Q"+$version+"\\E-(?<platform>[^\\.]+)\\.zip$")["platform"]|(if .=="windows_amd64" then "windows-64" elif .=="windows_386" then "windows-32" elif .=="linux_amd64" then "linux-64" elif .=="linux_386" then "linux-32" elif .=="darwin_amd64" then "macosx" else "?" end),package:"zip",content: "cli", url:.browser_download_url,size:.size})}' | ruby -ryaml -rjson -e 'puts YAML.dump(JSON.load(ARGF))'
+
+- group: main
+  version: "1.15.0"
+  sort: "1.15.0"
+  state: stable
+  github_tag: "v1.15.0"
+  github_url: "https://github.com/daisy/pipeline-assembly/releases/tag/v1.15.0"
+  app_version: "1.7.0"
+  app_github_tag: "1.7.0"
+  app_github_url: "https://github.com/daisy/pipeline-ui/releases/tag/1.7.0"
+  description: >
+    Includes the standalone desktop application and the web server. Versions available for
+    Windows (an installer EXE) and Mac OS (an installer PKG). The Linux packages (ZIP and
+    DEB files) include only the web server. The ZIP package also includes the command line
+    interface.
+  files:
+  - platform: macosx
+    package: pkg
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.7.0/daisy-pipeline-1.7.0-mac.pkg"
+    size: 245052291
+  - platform: windows
+    package: installer
+    content: [gui, server]
+    url: "https://github.com/daisy/pipeline-ui/releases/download/1.7.0/daisy-pipeline-setup-1.7.0.exe"
+    size: 197124832
+  - platform: debian
+    package: deb
+    content: [server]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.15.0/pipeline2-1.15.0_debian.deb"
+    size: 130661312
+  - platform: linux
+    package: zip
+    content: [server, cli]
+    url: "https://github.com/daisy/pipeline-assembly/releases/download/v1.15.0/pipeline2-1.15.0_linux.zip"
+    size: 138762802
+
+- group: cli
+  version: "2.2.1"
+  state: stable
+  github_tag: "v2.2.1"
+  github_url: "https://github.com/daisy/pipeline-cli-go/releases/tag/v2.2.1"
+  files:
+  - platform: macosx
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-darwin_amd64.zip"
+    size: 6171469
+  - platform: macosx-arm64
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-darwin_arm64.zip"
+    size: 5851516
+  - platform: linux-32
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-linux_386.zip"
+    size: 5947892
+  - platform: linux-64
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-linux_amd64.zip"
+    size: 6193573
+  - platform: linux-arm64
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-linux_arm64.zip"
+    size: 5764683
+  - platform: windows-32
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-windows_386.zip"
+    size: 6061036
+  - platform: windows-64
+    package: zip
+    content: cli
+    url: "https://github.com/daisy/pipeline-cli-go/releases/download/v2.2.1/cli-2.2.1-windows_amd64.zip"
+    size: 6289665
 
 - group: main
   version: "1.14.20"

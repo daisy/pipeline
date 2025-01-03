@@ -31,7 +31,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [HTML to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3/)
 * [HTML to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-pef/)
 * [NIMAS Fileset Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/nimas-fileset-validator/)
-<!-- * [Word to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/) -->
+* [Word to DTBook](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook/)
 * [ZedAI to EPUB 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-epub3/)
 * [ZedAI to HTML](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-html/)
 * [ZedAI to PEF](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/zedai-to-pef/)
@@ -42,7 +42,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 <table id="scripts-matrix">
   <tr>
     <th colspan="2" rowspan="3">Inputs</th>
-    <th colspan="8">Outputs</th>
+    <th colspan="9">Outputs</th>
   </tr>
   <tr>
     <th colspan="2">DAISY</th>
@@ -96,6 +96,18 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt">DTBook to ODT</a></td>
   </tr>
   <tr>
+    <th colspan="2">DOCX (MS Word)</th>
+    <td></td>
+    <td></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook">Word to DTBook</a></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <tr>
     <th rowspan="2">EPUB</th>
     <th>2</th>
     <td colspan="2"><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
@@ -125,7 +137,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <th colspan="2">HTML</th>
     <td></td>
     <td></td>
-    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook">HTML to DTBook</td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook">HTML to DTBook</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3">HTML to EPUB 3</a></td>
     <td></td>
     <td></td>
