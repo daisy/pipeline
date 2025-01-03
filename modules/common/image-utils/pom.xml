@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.30-SNAPSHOT</version>
+    <version>1.14.31-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <artifactId>image-utils</artifactId>
-  <version>1.0.8-SNAPSHOT</version>
+  <version>1.0.9-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DAISY Pipeline 2 module :: Image Utilities</name>

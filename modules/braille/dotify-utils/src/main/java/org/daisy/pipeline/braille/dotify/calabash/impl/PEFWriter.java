@@ -13,7 +13,7 @@ import org.daisy.dotify.api.writer.Row;
  */
 class PEFWriter extends PEFMediaWriter implements PagedMediaWriter {
 
-	private static final QName DP2_ASCII = new QName("http://www.daisy.org/ns/pipeline/", "ascii", "dp2");
+	private static final QName DAISY_ASCII = new QName("http://www.daisy.org/ns/pipeline/", "ascii", "daisy");
 
 	private final BrailleConverter brailleCharset;
 	private final Character space;
@@ -28,8 +28,8 @@ class PEFWriter extends PEFMediaWriter implements PagedMediaWriter {
 			this.brailleCharset = brailleCharset.newBrailleConverter();
 			this.space = this.brailleCharset.toText("\u2800").toCharArray()[0];
 			// trick to add namespace nodes to "pef" element
-			metadata.add(new MetaDataItem(new QName("http://www.w3.org/2000/xmlns/", DP2_ASCII.getPrefix(), "xmlns"),
-			                              DP2_ASCII.getNamespaceURI()));
+			metadata.add(new MetaDataItem(new QName("http://www.w3.org/2000/xmlns/", DAISY_ASCII.getPrefix(), "xmlns"),
+			                              DAISY_ASCII.getNamespaceURI()));
 		} else {
 			this.brailleCharset = null;
 			this.space = '\u2800';
@@ -53,11 +53,11 @@ class PEFWriter extends PEFMediaWriter implements PagedMediaWriter {
 			if (space != '\u2800')
 				chars = chars.replace('\u2800', space);
 			if (brailleCharset != null) {
-				pst.print(" " + DP2_ASCII.getPrefix() + ":" + DP2_ASCII.getLocalPart() + "=\"" + chars.replace("&", "&amp;")
-				                                                                                      .replace("\"", "&quot;")
-				                                                                                      .replace("<", "&lt;")
-				                                                                                      .replace(">", "&gt;")
-				                                                                                      + "\"");
+				pst.print(" " + DAISY_ASCII.getPrefix() + ":" + DAISY_ASCII.getLocalPart() + "=\"" + chars.replace("&", "&amp;")
+				                                                                                          .replace("\"", "&quot;")
+				                                                                                          .replace("<", "&lt;")
+				                                                                                          .replace(">", "&gt;")
+				                                                                                          + "\"");
 				try {
 					chars = brailleCharset.toBraille(chars);
 				} catch (RuntimeException e) {

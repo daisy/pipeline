@@ -51,9 +51,9 @@ public class TTSRegistry {
 	private static Logger logger = LoggerFactory.getLogger(TTSRegistry.class);
 	// for parsing test SSML
 	private static DocumentBuilder xmlParser = new Processor(false).newDocumentBuilder();
-	private Map<String,TTSServiceWrapper> mServices = new ConcurrentHashMap<>();
+	private Map<String,TTSServiceWrapper> ttsServices = new ConcurrentHashMap<>();
 	//Services and resources used by the current running steps (some of them may not be active anymore):
-	private Map<String,List<TTSResource>> mTTSResources = new HashMap<>();
+	private Map<String,List<TTSResource>> ttsResources = new ConcurrentHashMap<>();
 	private static XdmNode testSSMLWithMark = null;
 	private static XdmNode testSSMLWithoutMark = null;
 
@@ -71,10 +71,8 @@ public class TTSRegistry {
 		String name = tts.getName();
 		logger.info("Adding TTSService " + name);
 		// wrap in a TTSService that tests the allocated TTSEngine before making it available
-		mServices.put(name, new TTSServiceWrapper(tts));
-		synchronized (mTTSResources) {
-			mTTSResources.put(name, new ArrayList<TTSResource>());
-		}
+		ttsServices.put(name, new TTSServiceWrapper(tts));
+		ttsResources.put(name, new ArrayList<TTSResource>());
 	}
 
 	/**
@@ -85,7 +83,7 @@ public class TTSRegistry {
 	 * can not be retrieved, because the engine failed a test, etc.).
 	 */
 	public Collection<TTSService> getServices() {
-		return Collections.unmodifiableCollection(mServices.values());
+		return Collections.unmodifiableCollection(ttsServices.values());
 	}
 
 	/**
@@ -102,7 +100,7 @@ public class TTSRegistry {
 		List<String> workingEngineNames = log != null ? new ArrayList<>() : null;
 		List<String> disabledEngines = log != null ? new ArrayList<>() : null;
 		List<String> enginesWithError = log != null ? new ArrayList<>() : null;
-		for (TTSServiceWrapper service : mServices.values()) {
+		for (TTSServiceWrapper service : ttsServices.values()) {
 			try {
 				workingEngines.add(service.newEngine(properties, ttsLog));
 				if (log != null)
@@ -147,18 +145,15 @@ public class TTSRegistry {
 	public TTSResource allocateResourceFor(TTSEngine tts) throws SynthesisException,
 	        InterruptedException {
 		List<TTSResource> resources = null;
-		synchronized (mTTSResources) {
-			resources = mTTSResources.get(tts.getProvider().getName());
+		synchronized (ttsResources) {
+			resources = ttsResources.get(tts.getProvider().getName());
 		}
-
 		if (resources == null)
-			return null; //mTTSResources has been clear because the OSGi component has been stopped
-
+			return null;
 		TTSResource r = tts.allocateThreadResources();
 		if (r == null)
 			r = new TTSResource();
 		resources.add(r);
-
 		return r;
 	}
 

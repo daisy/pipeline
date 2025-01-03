@@ -1,3 +1,16 @@
+v1.14.30
+========
+
+Changes
+-------
+- Major code refactoring
+- `-obfl-` prefix for CSS rules, properties and values is now optional
+- Allow optional `-daisy-` prefix before certain rules, properties and values
+- Support `border-pattern` shorthand
+- Support dot pattern values in `border-style` and `border` declarations
+- Changed default value for `hyphenation` option to `manual`
+- Various bugfixes and improvements
+
 v1.14.28
 ========
 

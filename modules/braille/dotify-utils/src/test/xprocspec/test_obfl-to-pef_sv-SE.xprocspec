@@ -12,8 +12,8 @@
       <x:input port="source">
         <x:document type="inline">
           <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" hyphenate="true" xml:lang="sv-SE">
-            <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
-              <dp2:default-mode>uncontracted</dp2:default-mode>
+            <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
+              <daisy:default-mode>uncontracted</daisy:default-mode>
             </meta>
             <layout-master name="main" page-width="32" page-height="29" duplex="true">
               <default-template>

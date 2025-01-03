@@ -12,12 +12,13 @@
     <xsl:template match="/*">
         <xsl:copy>
             <xsl:copy-of select="@*"/>
-            <xsl:attribute name="calculated-totalTime" select="sum(*/number(@calculated-duration))"/>
+            <xsl:attribute name="calculated-totalTime" select="sum(*[not(@is-master)]/number(@calculated-duration))"/>
             <xsl:attribute name="ncc-meta-totalTime" select="pf:smil-clock-value-to-seconds($ncc-totalTime)"/>
             <xsl:for-each select="*">
                 <xsl:copy>
                     <xsl:copy-of select="@*"/>
-                    <xsl:attribute name="calculated-totalTime" select="sum(preceding::*/number(@calculated-duration))"/>
+                    <xsl:attribute name="calculated-totalTime"
+                                   select="sum(preceding-sibling::*[not(@is-master)]/number(@calculated-duration))"/>
                     <xsl:copy-of select="node()"/>
                 </xsl:copy>
             </xsl:for-each>

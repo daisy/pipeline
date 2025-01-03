@@ -59,7 +59,11 @@ public class ESpeakEngine extends TTSEngine {
 
 		String sentence; {
 			Map<String,Object> xsltParams = new HashMap<>(); {
-				if (voice != null) xsltParams.put("voice", voice.getName());
+				if (voice != null) {
+					String name = voice.getName();
+					name = name.substring(7); // drop "espeak-" prefix
+					xsltParams.put("voice", name);
+				}
 			}
 			try {
 				sentence = transformSsmlNodeToString(ssml, ssmlTransformer, xsltParams);
@@ -80,10 +84,12 @@ public class ESpeakEngine extends TTSEngine {
 				.run();
 			return new SynthesisResult(result.get(0));
 		} catch (InterruptedException e) {
+			mLogger.debug("stdin:\n" + sentence);
 			throw e;
 		} catch (Throwable e) {
 			StringWriter sw = new StringWriter();
 			e.printStackTrace(new PrintWriter(sw));
+			mLogger.debug("stdin:\n" + sentence);
 			throw new SynthesisException(e);
 		}
 	}
@@ -131,7 +137,7 @@ public class ESpeakEngine extends TTSEngine {
 									String line = scanner.nextLine();
 									mr.reset(line);
 									if (mr.find()) {
-										String name = mr.group("name");
+										String name = "espeak-" + mr.group("name");
 										try {
 											Locale locale = (new Locale.Builder()).setLanguageTag(mr.group("locale").replace("_", "-")).build();
 											Gender gender = "f".equals(Optional.ofNullable(mr.group("gender")).orElse("m").toLowerCase())

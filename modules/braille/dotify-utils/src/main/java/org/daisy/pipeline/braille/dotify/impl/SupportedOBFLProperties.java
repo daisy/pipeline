@@ -300,8 +300,9 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 	@SuppressWarnings("unused")
 	private boolean processRightTextIndent(Declaration d, Map<String,CSSProperty> properties, Map<String,Term<?>> values) {
 		if (forTransformer)
-			return copyPropertyValue(d, properties, values);
-		return genericOneIdentOrInteger(TextIndent.class, TextIndent.integer, false, d, properties, values);
+			return processTextIndent(d, properties, values);
+		return genericOneIdentOrInteger(
+			BrailleCSSProperty.TextIndent.class, BrailleCSSProperty.TextIndent.integer, false, d, properties, values);
 	}
 
 	@SuppressWarnings("unused")
@@ -386,20 +387,27 @@ public class SupportedOBFLProperties extends SupportedBrailleCSS {
 			if (!(d instanceof PropertyValue))
 				throw new RuntimeException("coding error");
 			String p = d.getProperty();
-			switch ((BrailleCSSProperty.TextIndent)((PropertyValue)d).getCSSProperty()) {
-			case INHERIT:
-				properties.put(p, TextIndent.INHERIT);
+			PropertyValue pv = (PropertyValue)d;
+			if (pv.getCSSProperty() instanceof TextIndent) {
+				properties.put(p, pv.getCSSProperty());
+				if (pv.getValue() != null)
+					values.put(p, pv.getValue());
 				return true;
-			case INITIAL:
-				properties.put(p, TextIndent.INITIAL);
-				return true;
-			case integer:
-				properties.put(p, TextIndent.integer);
-				values.put(p, ((PropertyValue)d).getValue());
-				return true;
-			default:
-				return false;
-			}
+			} else
+				switch ((BrailleCSSProperty.TextIndent)pv.getCSSProperty()) {
+				case INHERIT:
+					properties.put(p, TextIndent.INHERIT);
+					return true;
+				case INITIAL:
+					properties.put(p, TextIndent.INITIAL);
+					return true;
+				case integer:
+					properties.put(p, TextIndent.integer);
+					values.put(p, pv.getValue());
+					return true;
+				default:
+					return false;
+				}
 		}
 		return false;
 	}

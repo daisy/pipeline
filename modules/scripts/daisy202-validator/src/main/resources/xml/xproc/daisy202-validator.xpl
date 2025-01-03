@@ -51,6 +51,7 @@
     <p:import href="steps/validate.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/daisy202-utils/library.xpl"/>
 
+    <!-- the SMIL files in the fileset are ordered according the the "flow" (reading order) -->
     <px:daisy202-load name="load">
         <p:with-option name="ncc" select="$source"/>
     </px:daisy202-load>

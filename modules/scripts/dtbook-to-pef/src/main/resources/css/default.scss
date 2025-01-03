@@ -125,7 +125,7 @@ br::before {
  *     </choice>
  * </px:type>
  */
-$hyphenation: auto !default;
+$hyphenation: manual !default;
 
 @if $hyphenation != manual {
 	:root {

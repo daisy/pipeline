@@ -21,7 +21,7 @@ public class TimedTTSExecutor {
 	private Map<TTSEngine,Integer> maxMillisecOfShortSentence = new HashMap<>(); // shorter than 25 characters
 
 	/**
-	 * The maximum number of milliseconds the TTS engine is allowed to spend on a single word. This
+	 * The maximum number of milliseconds the TTS engine is allowed to spend on a sentence. This
 	 * takes into account {@link TTSEngine#expectedMillisecPerWord()}, the number of words processed
 	 * so far, and the time the engine has spent on previous sentences. A large enough safety factor
 	 * is taken into account for long words and other deviations.
@@ -70,6 +70,8 @@ public class TimedTTSExecutor {
 	) throws SynthesisException, TimeoutException {
 		long startTime = System.currentTimeMillis();
 		int timeoutSec = maximumMillisec(engine, sentenceSize) / 1000;
+		// add 1 so it can never be 0 seconds
+		timeoutSec += 1;
 		if (log != null)
 			log.setTimeout(timeoutSec);
 		timeout.enableForCurrentThread(interrupter, timeoutSec);

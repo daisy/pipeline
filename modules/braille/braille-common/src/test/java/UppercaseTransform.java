@@ -108,16 +108,10 @@ public class UppercaseTransform extends AbstractBrailleTranslator implements Bra
 		protected void activate(final Map<?,?> properties) throws RuntimeException {
 			try {
 				Module m = moduleRegistry.getModuleByClass(UppercaseTransform.class);
-
-				System.err.println(">> " + URLs.asURI(m.getResource("../uppercase-block-translator.xsl")));
-
 				stepProvider = new CxEvalBasedTransformer(
 					URLs.asURI(m.getResource("../uppercase.xpl")),
 					null,
 					null);
-
-				System.err.println(stepProvider);
-
 			} catch (NoSuchFileException e) {
 				String errorMessage = e.getMessage();
 				try {

@@ -317,18 +317,20 @@
 
     <p:for-each>
         <p:iteration-source>
-            <p:pipe port="result" step="smil"/>
+            <!-- ordered according the the "flow" (reading order) -->
+            <!-- if there is a master.smil, it is the first file -->
+            <p:pipe step="smil" port="result"/>
         </p:iteration-source>
         <p:add-xml-base/>
     </p:for-each>
     <p:wrap-sequence wrapper="c:result"/>
     <p:xslt>
-        <p:input port="parameters">
-            <p:empty/>
-        </p:input>
         <p:input port="stylesheet">
             <p:document href="validate.smil-times-1.xsl"/>
         </p:input>
+        <p:with-param port="parameters" name="context" select="collection()">
+            <p:pipe step="smil" port="result"/>
+        </p:with-param>
     </p:xslt>
     <p:xslt>
         <p:with-param name="ncc-totalTime" select="/*/*[local-name()='head']/*[local-name()='meta' and @name='ncc:totalTime']/@content">

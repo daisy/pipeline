@@ -24,11 +24,11 @@
 
   See [XProc documentation](resources/xml/library.xpl)
 
-- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-id`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftIdStep.java)
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-id`](java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftIdStep.java)
 
   Move css:id attributes to inline boxes, see [XProc documentation](resources/xml/shift-id.xpl)
 
-- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set`](java/org/daisy/pipeline/braille/css/calabash/impl/CssShiftStringSetStep.java)
+- [`{http://www.daisy.org/ns/pipeline/braille-css}shift-string-set`](java/org/daisy/pipeline/braille/dotify/calabash/impl/ShiftStringSetStep.java)
 
   Move 'string-set' declarations to inline boxes, see [XProc documentation](resources/xml/shift-string-set.xpl)
 

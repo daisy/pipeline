@@ -3,7 +3,7 @@
                xmlns:p="http://www.w3.org/ns/xproc"
                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-               xmlns:dp2="http://www.daisy.org/ns/pipeline/"
+               xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                xmlns:obfl="http://www.daisy.org/ns/2011/obfl"
                xmlns:pef="http://www.daisy.org/ns/2008/pef">
   
@@ -35,11 +35,11 @@
           <p:insert match="/obfl:obfl/obfl:meta" position="last-child">
             <p:input port="insertion">
               <p:inline>
-                <dp2:braille-charset>{}</dp2:braille-charset>
+                <daisy:braille-charset>{}</daisy:braille-charset>
               </p:inline>
             </p:input>
           </p:insert>
-          <p:string-replace match="/obfl:obfl/obfl:meta/dp2:braille-charset/text()">
+          <p:string-replace match="/obfl:obfl/obfl:meta/daisy:braille-charset/text()">
             <p:with-option name="replace" select="concat('&quot;',$braille-charset,'&quot;')"/>
           </p:string-replace>
         </p:when>
@@ -51,11 +51,11 @@
         <p:insert match="/obfl:obfl/obfl:meta" position="last-child">
           <p:input port="insertion">
             <p:inline>
-              <dp2:default-mode>{}</dp2:default-mode>
+              <daisy:default-mode>{}</daisy:default-mode>
             </p:inline>
           </p:input>
         </p:insert>
-        <p:string-replace match="/obfl:obfl/obfl:meta/dp2:default-mode/text()">
+        <p:string-replace match="/obfl:obfl/obfl:meta/daisy:default-mode/text()">
           <p:with-option name="replace" select='concat("&apos;",$text-transform,"&apos;")'/>
         </p:string-replace>
       </p:group>
@@ -65,7 +65,7 @@
           <p:pipe step="main" port="parameters"/>
         </p:input>
       </px:obfl-to-pef>
-      <p:delete match="/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset"/>
+      <p:delete match="/pef:pef/pef:head/pef:meta/daisy:ascii-braille-charset"/>
     </p:declare-step>
   </x:script>
   
@@ -10278,8 +10278,8 @@
             <volume cols="40" rows="25" rowgap="0" duplex="false">
               <section>
                 <page>
-                  <row dp2:ascii="___">⠤⠤⠤</row>
-                  <row dp2:ascii="---">⠒⠒⠒</row>
+                  <row daisy:ascii="___">⠤⠤⠤</row>
+                  <row daisy:ascii="---">⠒⠒⠒</row>
                 </page>
               </section>
             </volume>

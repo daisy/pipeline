@@ -22,7 +22,17 @@
         </title>
     </xsl:template>
 
-    <xsl:template match="*[not(self::opf:*) and not(self::dc:title)]">
+    <xsl:template match="dc:creator[not(@refines) and not(dc:creator[not(@refines)])]">
+        <creator>
+            <xsl:copy-of select="@scheme|@http-equiv|@lang|@dir"/>
+            <xsl:if test="@xml:lang">
+                <xsl:attribute name="lang" select="@xml:lang"/>
+            </xsl:if>
+            <xsl:copy-of select="normalize-space(.)"/>
+        </creator>
+    </xsl:template>
+
+    <xsl:template match="*[not(self::opf:*) and not(self::dc:title) and not(self::dc:creator)]">
         <meta name="{name()}" content="{normalize-space(.)}">
             <xsl:copy-of select="@scheme|@http-equiv|@lang|@dir"/>
             <xsl:if test="@xml:lang">

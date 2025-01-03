@@ -65,8 +65,8 @@
                             
                             properties apply if their corresponding CSS property applies, except:
                             
-                            - the (inherited) properties line-height, text-align and text-indent only apply on
-                              block boxes that have no child block boxes
+                            - the (inherited) properties line-height, text-align, text-indent and
+                              -obfl-right-text-indent only apply on block boxes that have no child block boxes
                             - text-align, text-indent, page-break-after, page-break-before, page-break-inside,
                               volume-break-after, volume-break-before and volume-break-inside do not apply on
                               table boxes
@@ -82,7 +82,7 @@
                                         then $context/@type=('block','table','table-cell')
                                         else if ($property-name='line-height')
                                         then $context[@type=('block','table') and not(descendant::css:box[@type='block'])]
-                                        else if ($property-name=('text-indent','text-align'))
+                                        else if ($property-name=('text-indent','-obfl-right-text-indent','text-align'))
                                         then $context[@type=('block','table-cell') and not(descendant::css:box[@type='block'])]
                                         else if ($property-name=('-obfl-table-col-spacing',
                                                                  '-obfl-table-row-spacing',
@@ -93,7 +93,7 @@
                                         else $context/@type='block'">
                             <xsl:sequence select="."/>
                         </xsl:when>
-                        <xsl:when test="$property-name=('text-align','text-indent')">
+                        <xsl:when test="$property-name=('text-align','text-indent','-obfl-right-text-indent')">
                             <!-- don't show a warning if the property is inherited on child boxes -->
                         </xsl:when>
                         <xsl:when test="not(matches($property-name,'^(page|volume)-break-')

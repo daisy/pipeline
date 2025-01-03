@@ -8,7 +8,7 @@ Style sheet module for the [HTML to PEF script](../../../../doc/) for generating
 Use this style sheet by importing it in your custom SCSS style sheet:
 
 ```scss
-@import "http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/_generate-toc.scss";
+@import "http://www.daisy.org/pipeline/modules/braille/html-to-pef/_generate-toc.scss";
 ```
 
 The module provides a variable for setting the depth of the table of contents, and a variable for

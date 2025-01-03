@@ -275,34 +275,34 @@
             <xsl:if test="$translate!=''">
                 <xsl:attribute name="translate" select="$translate"/>
             </xsl:if>
-            <meta xmlns:dp2="http://www.daisy.org/ns/pipeline/">
-                <dp2:style-type>text/css</dp2:style-type>
+            <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
+                <daisy:style-type>text/css</daisy:style-type>
                 <xsl:if test="$braille-charset-table!=''">
-                    <dp2:braille-charset><xsl:value-of select="$braille-charset-table"/></dp2:braille-charset>
+                    <daisy:braille-charset><xsl:value-of select="$braille-charset-table"/></daisy:braille-charset>
                 </xsl:if>
                 <xsl:if test="$default-text-transform!=''">
-                    <dp2:default-mode><xsl:value-of select="$default-text-transform"/></dp2:default-mode>
+                    <daisy:default-mode><xsl:value-of select="$default-text-transform"/></daisy:default-mode>
                 </xsl:if>
                 <xsl:if test="exists($text-transforms) and not(string($text-transforms)='')">
-                    <dp2:css-text-transform-definitions>
+                    <daisy:css-text-transform-definitions>
                         <xsl:text>&#xa;</xsl:text>
                         <xsl:value-of select="css:serialize-stylesheet-pretty($text-transforms,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
-                    </dp2:css-text-transform-definitions>
+                    </daisy:css-text-transform-definitions>
                 </xsl:if>
                 <xsl:if test="exists($hyphenation-resources) and not(string($hyphenation-resources)='')">
-                     <dp2:css-hyphenation-resource-definitions>
+                     <daisy:css-hyphenation-resource-definitions>
                          <xsl:text>&#xa;</xsl:text>
                          <xsl:value-of select="css:serialize-stylesheet-pretty($hyphenation-resources,'    ')"/>
                          <xsl:text>&#xa;</xsl:text>
-                     </dp2:css-hyphenation-resource-definitions>
+                     </daisy:css-hyphenation-resource-definitions>
                  </xsl:if>
                 <xsl:if test="exists($counter-styles) and not(string($counter-styles)='')">
-                    <dp2:css-counter-style-definitions>
+                    <daisy:css-counter-style-definitions>
                         <xsl:text>&#xa;</xsl:text>
                         <xsl:value-of select="css:serialize-stylesheet-pretty($counter-styles,'    ')"/>
                         <xsl:text>&#xa;</xsl:text>
-                    </dp2:css-counter-style-definitions>
+                    </daisy:css-counter-style-definitions>
                 </xsl:if>
             </meta>
             <xsl:call-template name="_start">

@@ -7,6 +7,7 @@ public class XProcSpecTest extends AbstractXSpecAndXProcSpecTest {
 		return new String[] {
 			pipelineModule("common-utils"),
 			pipelineModule("daisy202-utils"),
+			pipelineModule("file-utils"),
 			pipelineModule("fileset-utils"),
 			pipelineModule("smil-utils"),
 			pipelineModule("mediatype-utils"),

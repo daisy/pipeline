@@ -332,7 +332,7 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 		if (brailleCharset != null)
 			meta.add(new MetaDataItem(new javax.xml.namespace.QName("http://www.daisy.org/ns/pipeline/",
 			                                                        "ascii-braille-charset",
-			                                                        "dp2"),
+			                                                        "daisy"),
 			                          brailleCharset.getIdentifier()));
 		if (!"".equals(identifier))
 			meta.add(new MetaDataItem(new javax.xml.namespace.QName("http://purl.org/dc/elements/1.1/", "identifier", "dc"),

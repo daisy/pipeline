@@ -53,8 +53,10 @@
                 p#2 { border-left: none }
                 p#3 { border-left: ⠸ }
                 p#4 { border-left: solid inner 1 }
-                p#5 { border: ⠒ none; }
-                p#6 { border-style: solid none; }
+                p#5 { border-pattern: ⠒ none; }
+                p#6 { border-style: ⠒ none; }
+                p#7 { border: ⠒ none; }
+                p#8 { border-style: solid none; }
               </style>
             </head>
             <body>
@@ -64,6 +66,8 @@
               <p id="4"/>
               <p id="5"/>
               <p id="6"/>
+              <p id="7"/>
+              <p id="8"/>
             </body>
           </document>
         </x:document>
@@ -75,12 +79,14 @@
     <x:expect label="result" type="compare">
       <x:document type="inline">
         <body>
-          <p id="1" style="border-bottom-align: center; border-bottom-style: none; border-bottom-width: 1; border-left-align: center; border-left-style: none; border-left-width: 1; border-right-align: center; border-right-style: none; border-right-width: 1; border-top-align: center; border-top-style: none; border-top-width: 1"/>
+          <p id="1" style="border-bottom-align: center; border-bottom-pattern: none; border-bottom-style: none; border-bottom-width: 1; border-left-align: center; border-left-pattern: none; border-left-style: none; border-left-width: 1; border-right-align: center; border-right-pattern: none; border-right-style: none; border-right-width: 1; border-top-align: center; border-top-pattern: none; border-top-style: none; border-top-width: 1"/>
           <p id="2" style="border-left-align: center; border-left-pattern: none; border-left-style: none; border-left-width: 1"/>
           <p id="3" style="border-left-align: center; border-left-pattern: ⠸; border-left-style: none; border-left-width: 1"/>
           <p id="4" style="border-left-align: inner; border-left-pattern: none; border-left-style: solid; border-left-width: 1"/>
-          <p id="5"/>
-          <p id="6" style="border-bottom-style: solid; border-left-style: none; border-right-style: none; border-top-style: solid"/>
+          <p id="5" style="border-bottom-pattern: ⠒; border-left-pattern: none; border-right-pattern: none; border-top-pattern: ⠒"/>
+          <p id="6" style="border-bottom-pattern: ⠒; border-left-pattern: none; border-left-style: none; border-right-pattern: none; border-right-style: none; border-top-pattern: ⠒"/>
+          <p id="7" style="border-bottom-align: center; border-bottom-pattern: ⠒; border-bottom-style: none; border-bottom-width: 1; border-left-align: center; border-left-pattern: none; border-left-style: none; border-left-width: 1; border-right-align: center; border-right-pattern: none; border-right-style: none; border-right-width: 1; border-top-align: center; border-top-pattern: ⠒; border-top-style: none; border-top-width: 1"/>
+          <p id="8" style="border-bottom-style: solid; border-left-pattern: none; border-left-style: none; border-right-pattern: none; border-right-style: none; border-top-style: solid"/>
         </body>
       </x:document>
     </x:expect>

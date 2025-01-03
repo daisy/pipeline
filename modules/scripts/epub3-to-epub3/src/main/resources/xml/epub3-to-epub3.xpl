@@ -181,7 +181,7 @@ the navigation document.</p>
         </p:documentation>
     </p:option>
     
-    <p:option name="tts" required="false" px:type="boolean" select="'default'">
+    <p:option name="audio" required="false" select="'default'">
         <p:pipeinfo>
             <px:type>
                 <choice xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
@@ -247,7 +247,7 @@ manual](http://sass-lang.com/documentation/file.SASS_REFERENCE.html).
         </p:documentation>
     </p:option>
     
-    <p:option name="stylesheet-parameters" select="''">
+    <p:option name="stylesheet-parameters" select="'()'">
         <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
     
@@ -358,7 +358,7 @@ elements that represent the sentences.</p>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
         <p:with-option name="braille" select="$braille"/>
-        <p:with-option name="tts" select="$tts"/>
+        <p:with-option name="tts" select="$audio"/>
         <p:with-option name="sentence-detection" select="$sentence-detection"/>
         <p:with-option name="update-lang-attributes" select="$update-lang-attributes"/>
         <p:with-option name="update-identifier-in-content-docs" select="$update-identifier-in-content-docs"/>
