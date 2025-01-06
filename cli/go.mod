@@ -9,8 +9,8 @@ require (
 	github.com/bertfrees/go-subcommand v0.0.0-20230119135135-b5e2f5321a24
 	github.com/capitancambio/chalk v0.0.0-20160127153406-9dc2af224a17
 	github.com/capitancambio/restclient v0.0.0-20150219172137-547c7b5e0857
-	// go get github.com/daisy/pipeline-clientlib-go@3aeed200be
-	github.com/daisy/pipeline-clientlib-go v0.0.0-20240710161849-3aeed200be9b
+	// go get github.com/daisy/pipeline-clientlib-go@afd664c2c8
+	github.com/daisy/pipeline-clientlib-go v0.0.0-20240813132445-afd664c2c897
 	github.com/hashicorp/go-version v1.0.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/mattn/goveralls v0.0.11
