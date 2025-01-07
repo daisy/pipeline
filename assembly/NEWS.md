@@ -1,3 +1,18 @@
+Changes in release v1.15.0
+===========================
+
+## Framework
+
+- **NEW** Experimental Pipeline 1 backend with selected Pipeline 1 scripts
+
+## Modules
+
+- **NEW** Pipeline 1 scripts (proof-of-concept for now; more scripts will be made available in upcoming releases)
+  - DTBook to Latex
+- **NEW** `org.daisy.pipeline.tts.config` setting now supports either a file path or an XML string
+- Changes to braille production scripts, see release notes of braille modules [v1.15.0](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1150)
+- Various bugfixes and improvements
+
 Changes in release v1.14.21
 ===========================
 

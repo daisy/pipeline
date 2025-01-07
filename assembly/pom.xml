@@ -9,7 +9,7 @@
   </parent>
   <groupId>org.daisy.pipeline</groupId>
   <artifactId>assembly</artifactId>
-  <version>1.14.22-SNAPSHOT</version>
+  <version>1.15.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>DAISY Pipeline 2 :: Assembly</name>
   <description>Builds the main distribution of the DAISY Pipeline 2.</description>
@@ -69,14 +69,14 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.14.21</version>
+        <version>1.15.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>modules-bom</artifactId>
-        <version>1.14.30</version>
+        <version>1.15.0</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -150,6 +150,16 @@
     <dependency>
       <groupId>org.daisy.pipeline</groupId>
       <artifactId>modules-registry</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>pipeline1-adapter</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -300,6 +310,16 @@
     <dependency>
       <groupId>org.codehaus.woodstox</groupId>
       <artifactId>stax2-api</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.github.bmuskalla</groupId>
+      <artifactId>scoped-system-properties</artifactId>
       <exclusions>
         <exclusion>
           <groupId>*</groupId>
@@ -1963,6 +1983,14 @@
             <configuration>
               <outputDirectory>${project.build.directory}/jars/no-osgi</outputDirectory>
               <artifactItems>
+                <artifactItem>
+                  <groupId>org.daisy.pipeline</groupId>
+                  <artifactId>pipeline1-adapter</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>io.github.bmuskalla</groupId>
+                  <artifactId>scoped-system-properties</artifactId>
+                </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline</groupId>
                   <artifactId>ds-to-spi-runtime</artifactId>

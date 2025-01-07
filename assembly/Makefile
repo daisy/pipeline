@@ -125,7 +125,7 @@ ifeq ($(OS), MACOSX)
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouis.dylib",                                    \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/file2brl",                            \
 	        "mac/*.liblouis-utils-*-mac.jar/native/macosx/*/liblouisutdml/*.dylib",                             \
-	        "*.tts-adapter-acapela-3.1.5.jar/jnaerator-0.11-p1.jar/com/sun/jna/darwin/libjnidispatch.jnilib"    \
+	        "*.tts-adapter-acapela-*.jar/jnaerator-*.jar/com/sun/jna/darwin/libjnidispatch.jnilib"              \
 	    })                                                                                                      \
 	        paths.add("target/jars/common/" + p);                                                               \
 	    while (!paths.isEmpty()) {                                                                              \
@@ -250,13 +250,15 @@ ifneq ($(OS), WINDOWS)
 # Note that when `docker' is enabled together with other targets, it is as if --without-osgi was also specified.
 docker : mvn -Pwithout-osgi \
          jre/target/maven-jlink/classifiers/linux \
+         jre/target/maven-jlink/classifiers/linux-arm64 \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
 ifndef DUMP_PROFILES
-	mkdirs("target/docker");                                                                           \
+	mkdirs("target/docker/jre");                                                                       \
 	exec("cp", "src/main/docker/Dockerfile", "target/docker/Dockerfile");
 	exec("cp", "src/main/docker/logback.xml", "target/docker/logback.xml");
 	exec("cp", "-r", "target/assembly-$(assembly/VERSION)-linux/daisy-pipeline", "target/docker/");
-	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre");
+	exec("cp", "-r", "$(word 3,$^)", "target/docker/jre/amd64");
+	exec("cp", "-r", "$(word 4,$^)", "target/docker/jre/arm64");
 	exec("$(DOCKER)", "buildx", "create", "--use", "--name=mybuilder",                                 \
 	                                      "--driver", "docker-container",                              \
 	                                      "--driver-opt", "image=moby/buildkit:buildx-stable-1");
@@ -310,6 +312,7 @@ endif
 
 jre/target/maven-jlink/classifiers/mac                                 : mvn -Pbuild-jre-mac
 jre/target/maven-jlink/classifiers/linux                               : mvn -Pbuild-jre-linux
+jre/target/maven-jlink/classifiers/linux-arm64                         : mvn -Pbuild-jre-linux-arm64
 
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
@@ -368,6 +371,7 @@ clean :
 # generate-release-descriptor                  generate-effective-pom
 #                                              generate-release-descriptor
 # build-jre-linux                                                                                                   jlink-linux
+# build-jre-linux-arm64                                                                                             jlink-linux-arm64
 # build-jre-win32                                                                                                   jlink-win32
 # build-jre-win64                                                                                                   jlink-win64
 # build-jre-mac                                                                                                     jlink-mac
@@ -502,23 +506,23 @@ endif
 # profiles that are run separately because need to be run with specific JDKs, because they should not be
 # installed, and because they require a pom without dependencies
 
-.PHONY : -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64
--Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 : mvn # to make sure they are run after other profiles
+.PHONY : -Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64
+-Pbuild-jre-mac -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64 : mvn # to make sure they are run after other profiles
 
 ifeq ($(OS), MACOSX)
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64 -Pbuild-jre-mac : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64 -Pbuild-jre-mac : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
 	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else ifeq ($(OS), WINDOWS)
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
 	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else
--Pbuild-jre-linux -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux -Pbuild-jre-linux-arm64-Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
 	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
@@ -526,10 +530,11 @@ endif
 endif
 
 # for dependencies to jmods
--Pbuild-jre-mac   : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
--Pbuild-jre-linux : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
--Pbuild-jre-win64 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
--Pbuild-jre-win32 : src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-mac         : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux       : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-linux-arm64 : src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-win64       : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
+-Pbuild-jre-win32       : src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 
 # JDKs
 
@@ -542,6 +547,9 @@ ifneq ($(OS), WINDOWS)
 src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7 : %/jdk-17.0.7+7 : | %.tar.gz
 	mkdirs("$(dir $@)"); \
 	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz", "-C", "$(dir $@)/");
+src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7/jdk-17.0.7+7 : %/jdk-17.0.7+7 : | %.tar.gz
+	mkdirs("$(dir $@)"); \
+	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz", "-C", "$(dir $@)/");
 src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7   : %/jdk-17.0.7+7 : | %.tar.gz
 	mkdirs("$(dir $@)"); \
 	exec("tar", "-zxvf", "src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz", "-C", "$(dir $@)/");
@@ -549,11 +557,13 @@ endif
 
 .INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz
 .INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz
+.INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz
 .INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7.zip
 .INTERMEDIATE : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip
 
 src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7.tar.gz \
 src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7.tar.gz \
+src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7.tar.gz \
 src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7.zip \
 src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7.zip :
 	mkdirs("$(dir $@)");                                                                                          \
@@ -565,5 +575,6 @@ clean : clean-jdk
 clean-jdk :
 	rm("src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7");        \
 	rm("src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7");      \
+	rm("src/main/jre/OpenJDK17U-jdk_aarch64_linux_hotspot_17.0.7_7/jdk-17.0.7+7");  \
 	rm("src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7");    \
 	rm("src/main/jre/OpenJDK17U-jdk_x86-32_windows_hotspot_17.0.7_7/jdk-17.0.7+7");
