@@ -3,7 +3,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                type="px:word-to-dtbook.script" name="main">
+                type="px:word-to-dtbook.script" name="main"
+                px:input-filesets="docx"
+                px:output-filesets="dtbook">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">Word to DTBook</h1>
@@ -13,7 +15,7 @@
 		</a>
 	</p:documentation>
 
-	<p:option name="source" required="true" px:type="anyFileURI">
+	<p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
 		<p:documentation>
 			<h2 px:role="name">Input Docx file</h2>
 			<p px:role="desc" xml:space="preserve">The document you want to convert.</p>

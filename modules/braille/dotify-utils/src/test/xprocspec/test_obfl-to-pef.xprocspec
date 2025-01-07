@@ -14,7 +14,6 @@
       <p:option name="text-transform" select="'(input:braille)'"/>
       <p:option name="braille-charset" select="''"/>
       <p:input port="parameters" kind="parameter" primary="false"/>
-      <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:choose>
         <p:when test="not(exists(/obfl:obfl/meta))">
@@ -59,7 +58,6 @@
           <p:with-option name="replace" select='concat("&apos;",$text-transform,"&apos;")'/>
         </p:string-replace>
       </p:group>
-      <pxi:obfl-normalize-space/>
       <px:obfl-to-pef>
         <p:input port="parameters">
           <p:pipe step="main" port="parameters"/>
@@ -634,8 +632,13 @@
               </default-template>
             </layout-master>
             <xml-processor name="take-nth">
+              <!--
+                  FIXME: without the "bogus" attributes, pxi:obfl-normalize-space currently does not preserve the
+                  in scope namespace declarations
+              -->
               <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                              xs:bogus=""
                               xpath-default-namespace="http://www.daisy.org/ns/pipeline/data">
                 <xsl:param name="n" as="xs:integer" required="yes"/>
                 <xsl:template match="/">
@@ -3297,10 +3300,7 @@
   
   <x:scenario label="white-space-normalization-in-span">
     <x:documentation>
-      Tests that white space at the beginning and end of a span is not stripped. Dotify would
-      normally strip it if DP2 wouldn't inhibit it by adding ZWSP characters. This is done because
-      Dotify strips white space too aggressively in some cases. The current solution is not ideal
-      either but it is better to strip too little than too much.
+      Tests that white space at the beginning and end of a span is not stripped.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -3355,7 +3355,7 @@
     <x:documentation>
       Tests that white space at the beginning of a block is stripped, also when it is preceded
       directly by an empty span element. Empty span elements are inserted in order to place IDs on
-      them. This is an issue in Dotify but a normalisation step in DP2 fixes it.
+      them. This is an issue in Dotify but Pipeline fixes it.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -3407,7 +3407,7 @@
   <x:scenario label="comment-in-white-space">
     <x:documentation>
       Tests presence of a comment surrounded by white space. Dotify would normally drop the white
-      space but pxi:obfl-normalize-space prevents this.
+      space but Pipeline prevents this.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -10360,4 +10360,106 @@
     </x:expect>
   </x:scenario>
 
+  <x:scenario label="line-breaking-with-white-space-segments">
+    <x:documentation>
+      Tests that white space only segments are normalized correctly
+      and do not create unneeded empty lines or blank cells.
+    </x:documentation>
+    <x:call step="pxi:test">
+      <x:input port="source">
+        <x:document type="inline">
+          <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+            <layout-master name="master" page-width="20" page-height="20" duplex="true">
+              <default-template>
+                <header/>
+                <footer/>
+              </default-template>
+            </layout-master>
+            <sequence master="master">
+              <block>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+              </block>
+              <block>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
+              </block>
+              <block>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
+              </block>
+              <block>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+              </block>
+              <block>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+              </block>
+              <block>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+              </block>
+              <block>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+              </block>
+              <block>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+                <style name="hyphens: none">⠿⠿⠿⠿⠿⠿⠿</style>
+                <style name="hyphens: none"></style>
+              </block>
+              <block>
+                <style name="hyphens: none">⠒⠒⠒</style>
+              </block>
+            </sequence>
+          </obfl>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="result" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
+      <x:document type="inline">
+        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
+          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <meta>
+              <dc:format>application/x-pef+xml</dc:format>
+            </meta>
+          </head>
+          <body>
+            <volume cols="20" rows="20" rowgap="0" duplex="true">
+              <section>
+                <page>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠀</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀</row>
+                  <row>⠿⠿⠿⠿⠿⠿⠿⠀</row>
+                  <row>⠒⠒⠒</row>
+                </page>
+              </section>
+            </volume>
+          </body>
+        </pef>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+  
 </x:description>

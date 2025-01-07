@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.15.1-SNAPSHOT</version>
+    <version>1.15.2-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>braille-common</artifactId>
-  <version>5.0.3-SNAPSHOT</version>
+  <version>5.1.1-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: braille-common</name>
@@ -87,6 +87,7 @@
       org.daisy.pipeline.datatypes.impl.Datatype_transform_query,
       org.daisy.pipeline.braille.common.BrailleTranslatorRegistry,
       org.daisy.pipeline.braille.common.HyphenatorRegistry,
+      org.daisy.pipeline.braille.common.saxon.impl.BrailleCodeFunctionProvider,
       org.daisy.pipeline.braille.common.saxon.impl.TextTransformDefinition,
       org.daisy.pipeline.braille.common.calabash.impl.PxParseQueryStep$StepProvider,
       org.daisy.pipeline.braille.common.calabash.impl.PxTransformStep$StepProvider,

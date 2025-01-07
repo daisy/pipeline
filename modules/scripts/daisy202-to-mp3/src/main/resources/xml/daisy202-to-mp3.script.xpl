@@ -3,6 +3,8 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 type="px:daisy202-to-mp3.script"
+                px:input-filesets="daisy202"
+                px:output-filesets="mp3"
                 name="main">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">

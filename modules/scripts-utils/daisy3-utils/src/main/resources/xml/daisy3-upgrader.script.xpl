@@ -3,7 +3,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 exclude-inline-prefixes="#all"
-                type="px:daisy3-upgrader.script" name="main">
+                type="px:daisy3-upgrader.script" name="main"
+                px:input-filesets="daisy3"
+                px:output-filesets="daisy3">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">DAISY 3 Upgrader</h1>

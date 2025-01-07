@@ -130,10 +130,11 @@
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<p>The target medium type as a <a href="https://www.w3.org/TR/mediaqueries-4/">media
 			query</a>. All rules that are contained in a style sheet that matches the specified
-			medium are included. Supported media types are "embossed", "speech" and "print". When
-			the target medium is "embossed", CSS is interpreted according to the rules of <a
-			href="http://braillespecs.github.io/braille-css">braille CSS</a>. Supported media
-			features are '<a href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
+			medium are included. Supported media types are "braille", "embossed", "speech" and
+			"print". When the target medium is "braille" or "embossed", CSS is interpreted according
+			to the rules of <a href="http://braillespecs.github.io/braille-css">braille
+			CSS</a>. Supported media features are '<a
+			href="https://www.w3.org/TR/mediaqueries-4/#width">width</a>' and '<a
 			href="https://www.w3.org/TR/mediaqueries-4/#height">height</a>' In addition,
 			'<code>(counter-support: none)</code>' can be used to transform lists to preformatted
 			lists.</p>

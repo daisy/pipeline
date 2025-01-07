@@ -26,15 +26,9 @@
         </p:documentation>
     </p:import>
 
-    <p:wrap-sequence wrapper="wrapper">
-        <p:input port="source">
-            <p:pipe port="source" step="main"/>
-        </p:input>
-    </p:wrap-sequence>
-
-    <p:group>
-        <p:output port="result"/>
-        <p:variable name="content-lang" select="( /*/html:html/@lang , /*/html:html/@xml:lang , /*/html:html/html:head/html:meta[matches(lower-case(@name),'^(.*[:\.])?language$')]/@content , 'en' )[1]"/>
+    <p:variable name="content-lang" select="(collection()/html:nav/@lang,
+                                             collection()/html:nav/@xml:lang,
+                                             'und')[1]"/>
 
         <px:i18n-translate name="toc-string" string="Table of contents">
             <p:with-option name="language" select="$content-lang"/>
@@ -110,6 +104,10 @@
             </p:input>
         </p:insert>
 
+        <!-- remove redundant lang attributes -->
+        <p:delete match="@lang[some $lang in string(.) satisfies parent::*/ancestor::*[@lang=$lang]]|
+                         @xml:lang[some $lang in string(.) satisfies parent::*/ancestor::*[@xml:lang=$lang]]"/>
+
         <px:set-base-uri>
             <p:with-option name="base-uri" select="$output-base-uri"/>
         </px:set-base-uri>
@@ -118,6 +116,5 @@
                 otherwise the base URI of some elements would be empty (Calabash bug?)
             -->
         </px:add-xml-base>
-    </p:group>
 
 </p:declare-step>

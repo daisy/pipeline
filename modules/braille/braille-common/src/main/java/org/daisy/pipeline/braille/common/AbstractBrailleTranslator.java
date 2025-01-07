@@ -84,6 +84,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 
 	private Map<Hyphenator,BrailleTranslator> withHyphenatorCache;
 
+	@Override
 	public final BrailleTranslator withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException {
 		BrailleTranslator t = null;
 		if (withHyphenatorCache == null)
@@ -97,12 +98,14 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 		return t;
 	}
 
+	@Override
 	public FromStyledTextToBraille fromStyledTextToBraille() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
 	
 	private LineBreakingFromStyledText lineBreakingFromStyledText = null;
 	
+	@Override
 	public LineBreakingFromStyledText lineBreakingFromStyledText() throws UnsupportedOperationException {
 		// default implementation based on fromStyledTextToBraille()
 		if (lineBreakingFromStyledText == null) {
@@ -701,7 +704,9 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 						int cut = bufSize;
 						while (cut > 0 && rv.charAt(cut - 1) == blankChar) cut--;
 						
-						// preserve if at beginning of stream or end of stream
+						// preserve if at beginning of stream (because we can not assume that we are at the beginning of
+						// a line) or end of stream (because we can not know for sure whether more segments will follow
+						// on the same line)
 						if (cut > 0 && cut < bufSize && hasNext())
 							rv = rv.substring(0, cut);
 						return rv; }

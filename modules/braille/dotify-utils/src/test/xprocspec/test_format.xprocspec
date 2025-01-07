@@ -26,14 +26,16 @@
       <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-      <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
+      <pxi:css-to-obfl px:message="css-to-obfl" px:progress=".89"
                        duplex="true">
         <p:with-option name="document-locale" select="$document-locale"/>
         <p:with-option name="text-transform" select="$text-transform"/>
         <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
       </pxi:css-to-obfl>
-      <pxi:obfl-normalize-space px:progress=".01"/>
+      <pxi:obfl-normalize-space name="obfl" px:progress=".01">
+          <!-- normalize the OBFL even though it is done again in px:obfl-to-pef -->
+      </pxi:obfl-normalize-space>
       <p:try px:progress=".10">
         <p:group>
           <px:set-base-uri>
@@ -165,40 +167,58 @@
   
   <x:scenario label="test_02">
     <x:documentation>
-      Tests rendering print page, running header and running footer in page margin. The strings are
+      Tests string() function in page margin as well as page body. The strings are
       set, and sometimes emptied, individually at various places in the document.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none">
+          <doc style="text-transform: none">
             <body style="@page {
-                         size: 20 5;
-                         @top-center { content: string(running-header) }
-                         @bottom-right { content: string(print-page) }
-                         @bottom-center { content: string(running-footer) }}">
+                           size: 20 5;
+                           @top-center { content: string(running-header) }
+                           @bottom-right { content: string(print-page) }
+                           @bottom-center { content: string(running-footer) }}
+                         &amp;::alternate {
+                           flow: print-page;
+                           display: block;
+                           content: string(print-page) }">
               <section style="display: block;">
-                ⠤⠤⠤
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: string(print-page) }"/>
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '⠤'">
-                ⠤⠤⠤
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: flow(print-page, document) }"/>
               </section>
               <section style="display: block;
-                              page-break-before: always;
-                              string-set: print-page '⠤⠤', running-footer '⠤⠤'">
-                ⠤⠤⠤
+                              string-set: print-page '⠤⠤', running-footer '⠤⠤';
+                              @page {
+                                size: 20 10;
+                                @top-center { content: string(running-header) }
+                                @bottom-right { content: string(print-page) }
+                                @bottom-center { content: string(running-footer) }}">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block">
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: string(print-page) }"/>
+
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '', running-header '⠤⠤'">
-                ⠤⠤⠤
+                ⠿⠿⠿
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '⠤⠤⠤', running-footer ''">
-                ⠤⠤⠤
+                ⠿⠿⠿
               </section>
             </body>
           </doc>
@@ -249,36 +269,85 @@
               </footer>
             </default-template>
           </layout-master>
+          <layout-master name="b" page-width="20" page-height="10" duplex="true">
+            <default-template>
+              <header>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-header" direction="forward" scope="page"/>
+                    <marker-reference marker="running-header" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+              </header>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-footer" direction="forward" scope="page"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="forward" scope="page"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <sequence master="a">
             <block>
-              ⠤⠤⠤
+              <block> ⠿⠿⠿ </block>
+              <block/>
             </block>
             <block break-before="page">
               <block>
-                <marker class="print-page" value="⠤"/>
+                <block>
+                  <marker class="print-page" value="⠤"/>
+                </block>
+                ⠿⠿⠿
               </block>
-              ⠤⠤⠤
+              <block>
+                <block>⠤</block>
+              </block>
             </block>
-            <block break-before="page">
+          </sequence>
+          <sequence master="b">
+            <block break-before="sheet">
               <block>
                 <marker class="print-page" value="⠤⠤"/>
                 <marker class="running-footer" value="⠤⠤"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
+            </block>
+          </sequence>
+          <sequence master="a">
+            <block break-before="sheet">
+              <block> ⠿⠿⠿ </block>
+              <block>⠤⠤</block>
             </block>
             <block break-before="page">
               <block>
                 <marker class="print-page" value="​"/>
                 <marker class="running-header" value="⠤⠤"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
             </block>
             <block break-before="page">
               <block>
                 <marker class="print-page" value="⠤⠤⠤"/>
                 <marker class="running-footer" value="​"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
             </block>
           </sequence>
         </obfl>
@@ -300,32 +369,48 @@
               <section>
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                 </page>
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
-                  <row/>
+                  <row>⠿⠿⠿</row>
+                  <row>⠤</row>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤</row>
                 </page>
+              </section>
+              <section rows="10">
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row/>
+                  <row>⠿⠿⠿</row>
+                  <row>⠤⠤</row>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
                 </page>
                 <page>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                 </page>
                 <page>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤</row>
@@ -2102,13 +2187,13 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block><span translate="" xml:lang="">1. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">2. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">i. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">ii. </span>⠤⠤⠤ </block>
-            <block><span xml:lang="">⠶ </span>⠤⠤⠤ </block>
-            <block><span xml:lang="">⠶ </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">3. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">1.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">2.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">i.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">ii.</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠶</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠶</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">3.</span> ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -4028,7 +4113,7 @@
               ⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿
             </block>
             <block>
-              <style name="hyphens: none">⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿</style>
+              ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿
             </block>
             <block>
               <span translate="">1</span> ⠿⠿⠿
@@ -6150,8 +6235,7 @@
           <sequence master="b">
             <block break-before="sheet">
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <marker class="indicator/pagenum" value="x"/>
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/>
             </block>
           </sequence>
         </obfl>
@@ -8386,7 +8470,7 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-block break-before="page">
+            <toc-block>
               <toc-block> <toc-entry ref-id="a">⠿⠿⠿ 1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
               <page-number ref-id="a" number-format="default"/></toc-entry>
               </toc-block>
@@ -9992,11 +10076,9 @@
           </layout-master>
           <sequence master="master_1">
             <block>
-              <span translate="">
-                1 2 3
-              </span>⠿⠿⠿<span translate="">
-                4 5 6
-              </span>
+              <span translate="">1 2 3</span>
+              ⠿⠿⠿
+              <span translate="">4 5 6</span>
             </block>
           </sequence>
         </obfl>
@@ -12401,14 +12483,28 @@
                            @bottom-right { content: counter(page); }}
                          @volume:first {
                            @begin {
-                             counter-set: custom-page 11;
-                             content: flow(begin, document);
+                             counter-set: custom-page 11
+                                          custom-page-2 21;
+                             content: flow(begin-1, document)
+                                      flow(begin-2, document)
+                                      flow(begin-3, document);
                              @page {
                                counter-increment: custom-page;
                                size: 15 5;
                                margin-bottom: 1;
                                @bottom-right { content: counter(custom-page); }}}}">
-              <section style="display: block; flow: begin">
+              <section style="display: block; flow: begin-1">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block; flow: begin-2;
+                              @page {
+                                counter-increment: custom-page-2;
+                                size: 15 5;
+                                margin-bottom: 1;
+                                @bottom-right { content: counter(custom-page-2) }}">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block; flow: begin-3">
                 ⠿⠿⠿
               </section>
               <section style="display: block">
@@ -12446,6 +12542,19 @@
           <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
             <daisy:style-type>text/css</daisy:style-type>
           </meta>
+          <layout-master name="a" duplex="true" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <layout-master name="b" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
@@ -12459,7 +12568,7 @@
               </footer>
             </default-template>
           </layout-master>
-          <layout-master name="a" duplex="true" page-width="15" page-height="5">
+          <layout-master name="c" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
               <footer>
@@ -12475,14 +12584,24 @@
           <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume 1))"/>
           <volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
             <pre-content>
-              <sequence master="b" page-number-counter="custom-page" initial-page-number="11">
+              <sequence master="a" page-number-counter="custom-page" initial-page-number="11">
+                <block>
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+              <sequence master="b" page-number-counter="custom-page-2" initial-page-number="21">
+                <block>
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+              <sequence master="a" page-number-counter="custom-page">
                 <block>
                   ⠿⠿⠿
                 </block>
               </sequence>
             </pre-content>
           </volume-template>
-          <sequence master="a">
+          <sequence master="c">
             <block>
               ⠤⠤⠤
             </block>
@@ -12493,12 +12612,12 @@
               ⠤⠤⠤
             </block>
           </sequence>
-          <sequence master="b" page-number-counter="custom-page">
+          <sequence master="a" page-number-counter="custom-page">
             <block break-before="sheet">
               ⠉⠉⠉
             </block>
           </sequence>
-          <sequence master="a">
+          <sequence master="c">
             <block break-before="sheet">
               ⠤⠤⠤
             </block>
@@ -12530,6 +12649,24 @@
               </section>
               <section>
                 <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠤⠤⠤</row>
                   <row/>
                   <row/>
@@ -12557,7 +12694,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠑</row>
                 </page>
               </section>
               <section>
@@ -16384,7 +16521,7 @@
           </layout-master>
           <sequence master="body">
             <block>
-              <span translate="pre-translated-text-css">⠤⠤⠤ </span><style name="text-transform: downshift number">1</style>
+              <span translate="pre-translated-text-css">⠤⠤⠤</span> <style name="text-transform: downshift number">1</style>
             </block>
           </sequence>
         </obfl>
@@ -16920,7 +17057,7 @@
           </layout-master>
           <sequence master="a">
             <block>
-              <style name="hyphens: none">xxxxxx foo-bar xxxxxx</style>
+              xxxxxx foo-bar xxxxxx
             </block>
             <block>
               xxxxxx foo-bar xxxxxx
@@ -16935,7 +17072,7 @@
               xxxxxx foo-bar xxxxxx
             </block>
             <block>
-              <style name="hyphens: none">xxxxxx foo­bar xxxxxx</style>
+              xxxxxx foobar xxxxxx
             </block>
             <block>
               xxxxxx foo­bar xxxxxx
@@ -16950,7 +17087,7 @@
               xxxxxx foo­bar xxxxxx
             </block>
             <block>
-              <style name="hyphens: none">xxxxxx foobar xxxxxx</style>
+              xxxxxx foobar xxxxxx
             </block>
             <block>
               xxxxxx foobar xxxxxx

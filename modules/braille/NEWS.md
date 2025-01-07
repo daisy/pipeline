@@ -1,10 +1,23 @@
+v1.15.1
+=======
+
+Changes
+-------
+- Option to store intermediary HTML with CSS styles inlined also available in EPUB 3 to PEF
+- Generalized `$toc-exclude-class` variable to `$toc-exclude`
+- Support for multiple `counter-set` in a `@begin`/`@end` volume area
+- Fix crashes during hyphenation due to memory errors on Window (https://github.com/daisy/pipeline-modules/issues/102)
+- Update to Liblouis [3.33.0](https://github.com/liblouis/liblouis/releases/tag/v3.33.0)
+- New preview table for 8-dot English braille
+- Various bugfixes and improvements
+
 v1.15.0
 =======
 
 Changes
 -------
 - Support for Finnish hyphenation (https://github.com/celiafi/pipeline-mod-celia/issues/48)
-- Various bugfixes and improvements
+- Bugfixes
 
 v1.14.30
 ========

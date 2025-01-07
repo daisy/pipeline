@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-aggregator</artifactId>
-  <version>1.15.1-SNAPSHOT</version>
+  <version>1.15.2-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Aggregator POM for all the modules</name>
@@ -84,6 +84,7 @@
     <module>scripts/daisy3-to-epub3</module>
     <module>scripts/daisy3-to-mp3</module>
     <module>scripts/dtbook-to-daisy3</module>
+    <module>scripts/dtbook-to-ebraille</module>
     <module>scripts/dtbook-to-epub3</module>
     <module>scripts/dtbook-to-html</module>
     <module>scripts/dtbook-to-odt</module>

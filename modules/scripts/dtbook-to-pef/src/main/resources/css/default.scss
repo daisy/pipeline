@@ -69,7 +69,7 @@ list[type="ol"][enum="i"] { list-style-type: lower-roman; }
 list[type="ol"][enum="X"] { list-style-type: upper-roman; }
 
 /* handle list[start] */
-@xslt "lists.xsl";
+@-daisy-xslt "lists.xsl";
 
 head {
 	display: none;
@@ -84,7 +84,7 @@ br::before {
 	white-space: pre-wrap;
 }
 
-@text-transform uncontracted {
+@-daisy-text-transform uncontracted {
 	system: braille;
 	contraction: no;
 }
@@ -172,5 +172,5 @@ $line-spacing: single !default;
 	}
 }
 
-@import "_volume-breaking.scss";
-@import "_notes.scss";
+@import "_volume-breaking.scss" embossed;
+@import "_notes.scss" embossed;

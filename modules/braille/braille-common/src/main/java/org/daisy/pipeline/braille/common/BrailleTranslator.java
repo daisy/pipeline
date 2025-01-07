@@ -1,9 +1,20 @@
 package org.daisy.pipeline.braille.common;
 
+import java.util.Collections;
+import java.util.Map;
+
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.pipeline.braille.css.CSSStyledText;
 
 public interface BrailleTranslator extends Transform {
+
+	/**
+	 * Get info about the braille translator. E.g. for a Liblouis implementation, this will contain
+	 * table metadata.
+	 */
+	public default Map<String,String> getInfo() {
+		return Collections.emptyMap();
+	}
 
 	/**
 	 * Return a new {@link BrailleTranslator} that uses the given {@link Hyphenator} to perform

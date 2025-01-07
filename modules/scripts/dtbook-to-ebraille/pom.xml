@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.daisy.pipeline.modules</groupId>
+    <artifactId>modules-parent</artifactId>
+    <version>1.15.2-SNAPSHOT</version>
+    <relativePath>../../parent/</relativePath>
+  </parent>
+
+  <artifactId>dtbook-to-ebraille</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>DAISY Pipeline 2 module :: DTBook to eBraille</name>
+  
+  <dependencies>
+    <dependency>
+      <groupId>org.daisy.pipeline</groupId>
+      <artifactId>framework-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>common-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>file-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>fileset-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>epub-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>css-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>braille-css-utils</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.daisy.pipeline.modules</groupId>
+      <artifactId>dtbook-to-epub3</artifactId>
+    </dependency>
+    <!--
+        runtime dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>liblouis-utils</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!-- for default CSS -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>dtbook-to-pef</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <!--
+        test dependencies
+    -->
+    <dependency>
+      <groupId>org.daisy.pipeline.modules.braille</groupId>
+      <artifactId>libhyphen-utils</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <properties>
+    <expose-services>
+      org.daisy.pipeline.modules.impl.Module_dtbook_to_ebraille,
+      org.daisy.pipeline.script.impl.XProcScript_dtbook_to_ebraille,
+      org.daisy.pipeline.datatypes.impl.Datatype_px_dtbook_to_ebraille_script_validation
+    </expose-services>
+  </properties>
+
+  <profiles>
+    <profile>
+      <id>mac</id>
+      <activation>
+        <os>
+          <family>mac</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>mac</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os>
+          <name>linux</name>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>linux</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>win</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>liblouis-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+        <dependency>
+          <groupId>org.daisy.pipeline.modules.braille</groupId>
+          <artifactId>libhyphen-utils</artifactId>
+          <classifier>windows</classifier>
+          <scope>test</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
+
+</project>

@@ -48,7 +48,7 @@
         <p:pipe step="main" port="source"/>
       </p:with-option>
     </px:fileset-create>
-    <px:fileset-add-entries>
+    <px:fileset-add-entries media-type="application/pls+xml">
       <p:with-option name="href" select="$user-lexicons"/>
     </px:fileset-add-entries>
     <px:fileset-load/>

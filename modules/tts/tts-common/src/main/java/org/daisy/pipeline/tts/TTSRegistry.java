@@ -115,7 +115,7 @@ public class TTSRegistry {
 				// in the engine status summary. An engine that could not be activated is not an error
 				// unless no engines could be activated at all. This is to not confuse users because it
 				// is normal that only a part of the engines work.
-				String msg = service.getName() + " could not be activated: " + e.getMessage();
+				String msg = service.getDisplayName() + " could not be activated: " + e.getMessage();
 				if (ttsLog != null)
 					ttsLog.addGeneralError(ErrorCode.WARNING, msg, e);
 				else if (log != null) {
@@ -291,12 +291,10 @@ public class TTSRegistry {
 							}
 						};
 					result = new TimedTTSExecutor().synthesizeWithTimeout(
-					    timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
+						timeout, interrupter, null, ssml, Sentence.computeSize(ssml),
 						engine, firstVoice, resource);
 				} catch (Exception e) {
-					// No need to include something like "Test failed". Assume that the error has
-					// enough information to know that it happened during synthesis.
-					throw e;
+					throw new Exception("Test with voice " + firstVoice.getName() + " failed: " + e.getMessage(), e);
 				} finally {
 					if (resource != null)
 						timeout.enableForCurrentThread(2);

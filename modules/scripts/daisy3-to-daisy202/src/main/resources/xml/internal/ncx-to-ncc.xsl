@@ -40,8 +40,10 @@
                     content="{count(key('nav-targets',('prodnote','optional-prodnote')))}"/>
                 <meta name="ncc:footnotes" content="{count(key('nav-targets',('note','noteref')))}"/>
                 <meta name="ncc:sidebars" content="{count(key('nav-targets',('sidebar')))}"/>
-                <meta name="ncc:maxPageNormal"
-                      content="{max((key('pages','normal')/number(@value),0))}"/>
+                <xsl:if test="exists(key('pages','normal'))">
+                    <meta name="ncc:maxPageNormal"
+                          content="{max(key('pages','normal')/number(@value))}"/>
+                </xsl:if>
                 <meta name="ncc:producedDate"
                     content="{if ($date[.!='']) then $date
                               else format-date(current-date(),'[Y]-[M01]-[D01]')}"/>

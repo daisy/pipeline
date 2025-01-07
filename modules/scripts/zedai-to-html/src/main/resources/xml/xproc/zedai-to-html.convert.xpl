@@ -32,6 +32,12 @@
     <p:option name="output-dir" required="true"/>
     <p:option name="chunk" select="'false'" cx:as="xs:string"/>
     <p:option name="chunk-size" required="false" select="'-1'"/>
+    <p:option name="xhtml-file-extension" required="false" select="'.xhtml'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File name extension to use for XHTML documents.</p>
+            <p><code>.xhtml</code> or <code>.html</code>.</p>
+        </p:documentation>
+    </p:option>
 
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
@@ -100,7 +106,7 @@
         <p:variable name="result-basename" select="concat(
                                                      $output-dir,
                                                      replace(replace($zedai-basename,'^.+/([^/]+)$','$1'),'^(.+)\.[^\.]+$','$1'),
-                                                     '.xhtml')">
+                                                     $xhtml-file-extension)">
             <p:empty/>
         </p:variable>
         <p:group name="zedai-to-html.html-single">

@@ -599,9 +599,7 @@
 						<xsl:value-of select="concat(' xml:lang=&quot;',$paragraphLanguage,'&quot;')"/>
 					</xsl:if>
 				</xsl:variable>
-				<xsl:if test="($pagination='custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='custom'))">
-					<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','p',$LangAttribute,'&gt;')"/>
-				</xsl:if>
+				<xsl:value-of disable-output-escaping="yes" select="concat('&lt;','p',$LangAttribute,'&gt;')"/>
 			</xsl:if>
 
 			<!--Adding Note index-->
@@ -1066,17 +1064,15 @@
 		<!--closing paragraph tag-->
 		<xsl:if test="not($flag='0') and not(d:AbbrAcrFlag($myObj)=1) and not($flagNote='hyper')">
 			<xsl:if test="not(d:GetTestRun($myObj)&gt;='1') and (d:GetCodeFlag($myObj)='0') and (not(d:Getlinenumflag($myObj)=0))">
-				<xsl:if test="($pagination='custom' and not(w:r/w:rPr/w:rStyle[@w:val='PageNumberDAISY'])) or (not($pagination='custom'))">
-					<xsl:call-template name="CloseLevel">
-						<xsl:with-param name="CurrentLevel" select="-1"/>
-						<xsl:with-param name="verfoot" select="$version"/>
-						<xsl:with-param name="characterStyle" select="$charparahandlerStyle"/>
-						<xsl:with-param name="sOperators" select="$sOperators"/>
-						<xsl:with-param name="sMinuses" select="$sMinuses"/>
-						<xsl:with-param name="sNumbers" select="$sNumbers"/>
-						<xsl:with-param name="sZeros" select="$sZeros"/>
-					</xsl:call-template>
-				</xsl:if>
+				<xsl:call-template name="CloseLevel">
+					<xsl:with-param name="CurrentLevel" select="-1"/>
+					<xsl:with-param name="verfoot" select="$version"/>
+					<xsl:with-param name="characterStyle" select="$charparahandlerStyle"/>
+					<xsl:with-param name="sOperators" select="$sOperators"/>
+					<xsl:with-param name="sMinuses" select="$sMinuses"/>
+					<xsl:with-param name="sNumbers" select="$sNumbers"/>
+					<xsl:with-param name="sZeros" select="$sZeros"/>
+				</xsl:call-template>
 				<xsl:if test="(d:ListMasterSubFlag($myObj)=1) and $mastersubpara">
 					<xsl:variable name="curLevel" as="xs:integer" select="d:PeekLevel($myObj)"/>
 					<xsl:value-of disable-output-escaping="yes" select="d:ClosingMasterSub($myObj,$curLevel)"/>
@@ -1123,7 +1119,7 @@
 		<xsl:param name="sZeros" as="xs:string"/>
 
 		<!--Checking for line breaks-->
-		<xsl:if test="((w:br/@w:type='textWrapping') or (w:br)) and (not(w:br/@w:type='page'))">
+		<xsl:if test="((w:br/@w:type='textWrapping') or (w:br)) and (not(w:br/@w:type='page')) and not(w:rPr/w:rStyle/@w:val='PageNumberDAISY')">
 			<br/>
 		</xsl:if>
 		<!--Checking for tabs-->
@@ -2764,9 +2760,9 @@
 					<xsl:when test="( w:rPr/w:u and(not(w:rPr/w:u[@w:val='none']))) and w:rPr/w:strike and w:rPr/w:color and w:rPr/w:sz and w:rPr/w:spacing">
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<xsl:variable name="valspace" as="xs:integer" select="w:rPr/w:spacing/@w:val"/>
-						<xsl:variable name="val_spacing" as="xs:integer" select="($valspace*0.1)div 2"/>
+						<xsl:variable name="val_spacing" as="xs:integer" select="xs:integer(round(($valspace*0.1) div 2))"/>
 						<span class="{concat('text-decoration:Underline line-through;color:#',$val_color ,';letter-spacing:',$val_spacing ,';font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2777,7 +2773,7 @@
 					<xsl:when test="( w:rPr/w:u and(not(w:rPr/w:u[@w:val='none']))) and w:rPr/w:strike and w:rPr/w:color and w:rPr/w:sz">
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('text-decoration:Underline line-through;color:#',$val_color ,';font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2797,7 +2793,7 @@
 					<xsl:when test="( w:rPr/w:u and(not(w:rPr/w:u[@w:val='none']))) and w:rPr/w:color and w:rPr/w:sz">
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('text-decoration:Underline;color:#',$val_color,';font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2808,7 +2804,7 @@
 					<xsl:when test="w:rPr/w:strike and w:rPr/w:color and w:rPr/w:sz">
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('text-decoration:line-through;color:#',$val_color,';font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2826,7 +2822,7 @@
 					</xsl:when>
 					<xsl:when test="( w:rPr/w:u and(not(w:rPr/w:u[@w:val='none']))) and w:rPr/w:sz">
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('text-decoration:Underline;font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2836,7 +2832,7 @@
 					</xsl:when>
 					<xsl:when test="w:rPr/w:strike and w:rPr/w:sz">
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('text-decoration:line-through;font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2865,7 +2861,7 @@
 					<xsl:when test="w:rPr/w:color and w:rPr/w:sz">
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('color:#',$val_color,';font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2950,7 +2946,7 @@
 					</xsl:when>
 					<xsl:when test="w:rPr/w:spacing">
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:spacing/@w:val"/>
-						<xsl:variable name="val_spacing" as="xs:integer" select="($val*0.1)div 2"/>
+						<xsl:variable name="val_spacing" as="xs:integer" select="xs:integer(round(($val*0.1) div 2))"/>
 						<span class="{concat('letter-spacing:',$val_spacing,'pt')}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -2977,7 +2973,7 @@
 					</xsl:when>
 					<xsl:when test="w:rPr/w:sz">
 						<xsl:variable name="val" as="xs:integer" select="w:rPr/w:sz/@w:val"/>
-						<xsl:variable name="val_sz" as="xs:integer" select="($val)div 2"/>
+						<xsl:variable name="val_sz" as="xs:integer" select="xs:integer(round(($val) div 2))"/>
 						<span class="{concat('font-size:',$val_sz)}">
 							<xsl:if test="not($txt='')">
 								<xsl:value-of select="$txt"/>
@@ -3415,9 +3411,9 @@
 					<xsl:when test="w:pPr/w:ind[@w:left] and w:pPr/w:ind[@w:right]">
 						<p>
 							<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-							<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+							<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 							<xsl:variable name="valright" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-							<xsl:variable name="val_right" as="xs:integer" select="($valright div 1440)"/>
+							<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($valright div 1440))"/>
 							<span class="{concat('text-indent:', 'right=',$val_right,'in',';left=',$val_left,'in')}">
 								<xsl:call-template name="ParaHandler">
 									<xsl:with-param name="flag" select="'0'"/>
@@ -3432,7 +3428,7 @@
 					<xsl:when test="w:pPr/w:ind[@w:left] and    w:pPr/w:jc">
 						<p>
 							<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-							<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+							<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 							<xsl:variable name="val1" as="xs:string" select="w:pPr/w:jc/@w:val"/>
 							<span class="{concat('text-indent:',';left=',$val_left,'in',';text-align:',$val1)}">
 								<xsl:call-template name="ParaHandler">
@@ -3448,7 +3444,7 @@
 					<xsl:when test="w:pPr/w:ind[@w:left]">
 						<p>
 							<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-							<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+							<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 							<span class="{concat('text-indent:',$val_left,'in')}">
 								<xsl:call-template name="ParaHandler">
 									<xsl:with-param name="flag" select="'0'"/>
@@ -3462,7 +3458,7 @@
 					<xsl:when test="w:pPr/w:ind[@w:right]">
 						<p>
 							<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-							<xsl:variable name="val_right" as="xs:integer" select="($val div 1440)"/>
+							<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 							<span class="{concat('text-indent:',$val_right,'in')}">
 								<xsl:call-template name="ParaHandler">
 									<xsl:with-param name="flag" select="'0'"/>
@@ -3602,9 +3598,9 @@
 				<xsl:choose>
 					<xsl:when test="w:pPr/w:ind[@w:left] and w:pPr/w:ind[@w:right]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="valright" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($valright div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($valright div 1440))"/>
 						<span class="{concat('text-indent:', 'right=',$val_right,'in',';left=',$val_left,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>
@@ -3617,7 +3613,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:left] and    w:pPr/w:jc">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val1" as="xs:string" select="w:pPr/w:jc/@w:val"/>
 						<span class="{concat('text-indent:',';left=',$val_left,'in',';text-align:',$val1)}">
 							<xsl:call-template name="ParaHandler">
@@ -3631,7 +3627,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:left]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<span class="{concat('text-indent:',$val_left,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>
@@ -3644,7 +3640,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:right]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<span class="{concat('text-indent:',$val_right,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>

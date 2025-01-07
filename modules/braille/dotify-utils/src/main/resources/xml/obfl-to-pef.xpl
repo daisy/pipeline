@@ -29,6 +29,14 @@
 		-->
 	</p:declare-step>
 
+	<p:import href="obfl-normalize-space.xpl">
+		<p:documentation>
+			pxi:obfl-normalize-space
+		</p:documentation>
+	</p:import>
+
+	<pxi:obfl-normalize-space px:progress=".10"/>
+
 	<p:add-attribute match="*[@translate='pre-translated-text-css']"
 	                 attribute-name="translate"
 	                 attribute-value="(input:braille)(input:text-css)(output:braille)"/>
@@ -66,7 +74,7 @@
 		     will be added through the "braille-charset" option. -->
 	</p:delete>
 
-	<pxi:obfl-to-pef>
+	<pxi:obfl-to-pef px:progress=".90">
 		<p:with-option name="locale" select="(/obfl:obfl/@xml:lang,'und')[1]"/>
 		<p:with-option name="mode" select="/obfl:obfl/obfl:meta/daisy:default-mode">
 			<p:pipe step="main" port="source"/>

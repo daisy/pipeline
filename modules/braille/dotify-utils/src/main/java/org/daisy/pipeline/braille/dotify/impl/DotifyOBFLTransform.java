@@ -42,7 +42,7 @@ public interface DotifyOBFLTransform {
 		
 		@Activate
 		protected void activate(final Map<?,?> properties) {
-			href = URLs.asURI(URLs.getResourceFromJAR("xml/transform/obfl-to-pef.xpl", DotifyOBFLTransform.class));
+			href = URLs.asURI(URLs.getResourceFromJAR("xml/obfl-to-pef.xpl", DotifyOBFLTransform.class));
 		}
 		
 		private final static Iterable<Transform> empty = Iterables.<Transform>empty();

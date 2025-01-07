@@ -18,7 +18,7 @@ import org.daisy.common.properties.Properties.Property;
 import org.daisy.common.spi.ActivationException;
 import org.daisy.pipeline.tts.sapinative.SAPI;
 import org.daisy.pipeline.tts.sapinative.SAPIResult;
-import org.daisy.pipeline.tts.DefaultSpeechRate;
+import org.daisy.pipeline.tts.SpeechRateProperty;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -40,7 +40,7 @@ public class SAPIService implements TTSService {
 	private static Property SAPI_SAMPLERATE = null;
 	private static Property SAPI_BYTESPERSAMPLE = null;
 	private static Property SAPI_PRIORITY = null;
-	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
+	private static final SpeechRateProperty SPEECH_RATE = new SpeechRateProperty();
 
 	@Activate
 	protected void activate() {

@@ -14,7 +14,7 @@ import org.osgi.service.component.annotations.Component;
 )
 public class StyledTextFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
-	protected StyledTextFunctionProvider() {
+	public StyledTextFunctionProvider() {
 		addExtensionFunctionDefinitionsFromClass(StyledText.class, new StyledText(TextStyleParser.getInstance()));
 	}
 }

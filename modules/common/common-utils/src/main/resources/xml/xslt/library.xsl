@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:DateTimeParser="org.daisy.pipeline.common.saxon.impl.DateTimeParser"
                 xmlns:java="implemented-in-java">
 
     <xsl:template name="pf:error">
@@ -134,5 +135,11 @@
         <xsl:param name="progress" as="xs:string" required="yes"/>
         <xsl:sequence select="pf:progress($progress)"/>
     </xsl:template>
+
+    <xsl:function name="pf:parse-dateTime" as="xs:dateTime">
+        <xsl:param name="input" as="xs:string"/>
+        <xsl:param name="format" as="xs:string"/>
+        <xsl:sequence select="DateTimeParser:parse($input,$format)"/>
+    </xsl:function>
 
 </xsl:stylesheet>

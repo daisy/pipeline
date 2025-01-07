@@ -211,9 +211,9 @@
 				<xsl:choose>
 					<xsl:when test="w:pPr/w:ind[@w:left] and w:pPr/w:ind[@w:right]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="valright" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($valright div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($valright div 1440))"/>
 						<span class="{concat('text-indent:', 'right=',$val_right,'in',';left=',$val_left,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>
@@ -232,7 +232,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:left] and  w:pPr/w:jc">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val1" as="xs:string" select="w:pPr/w:jc/@w:val"/>
 						<span class="{concat('text-indent:',';left=',$val_left,'in',';text-align:',$val1)}">
 							<xsl:call-template name="ParaHandler">
@@ -252,7 +252,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:left]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<span class="{concat('text-indent:',$val_left,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>
@@ -272,7 +272,7 @@
 					</xsl:when>
 					<xsl:when test="w:pPr/w:ind[@w:right]">
 						<xsl:variable name="val" as="xs:integer" select="w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<span class="{concat('text-indent:',$val_right,'in')}">
 							<xsl:call-template name="ParaHandler">
 								<xsl:with-param name="flag" select="'0'"/>

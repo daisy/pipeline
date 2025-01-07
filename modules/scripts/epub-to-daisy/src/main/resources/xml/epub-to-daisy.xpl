@@ -23,7 +23,7 @@
 			<p>CSS style sheets as space separated list of absolute URIs.</p>
 		</p:documentation>
 	</p:option>
-	<p:option name="stylesheet-parameters" cx:as="xs:string" select="''"/>
+	<p:option name="stylesheet-parameters" cx:as="xs:string" select="'()'"/>
 
 	<p:option name="lexicon" cx:as="xs:anyURI*" select="()">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -96,6 +96,11 @@
 		</p:documentation>
 		<p:pipe step="tts" port="temp-audio-files"/>
 	</p:output>
+	<p:option name="include-tts-log" select="false()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Whether or not to make the TTS log available on the "tts-log" port.</p>
+		</p:documentation>
+	</p:option>
 	<p:output port="tts-log" sequence="true">
 		<p:pipe step="tts" port="tts-log"/>
 	</p:output>
@@ -165,6 +170,7 @@
 		<p:input port="tts-config">
 			<p:pipe step="main" port="tts-config"/>
 		</p:input>
+		<p:with-option name="include-tts-log" select="if ($include-tts-log) then 'true' else 'false'"/>
 		<p:with-option name="stylesheet" select="$stylesheet"/>
 		<p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
 		<p:with-option name="lexicon" select="$lexicon"/>
