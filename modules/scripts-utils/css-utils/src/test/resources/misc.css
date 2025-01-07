@@ -56,3 +56,11 @@ h2 {
 #foo:has(> #bar)::before {
   content: 'foo';
 }
+
+.italic {
+  text-transform: italic;
+}
+
+.bold {
+  text-transform: bold;
+}

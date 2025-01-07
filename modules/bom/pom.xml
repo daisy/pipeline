@@ -12,7 +12,7 @@
 
   <groupId>org.daisy.pipeline.modules</groupId>
   <artifactId>modules-bom</artifactId>
-  <version>1.14.31-SNAPSHOT</version>
+  <version>1.15.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>DAISY Pipeline 2 :: Modules BoM</name>
@@ -52,18 +52,18 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>braille-css-utils</artifactId>
-        <version>4.0.0</version>
+        <version>4.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dotify-utils</artifactId>
-        <version>6.2.4</version>
+        <version>6.2.5</version>
       </dependency>
       <!-- list main libhyphen-utils first because this determines the version of the 'doc' artifact picked for the website -->
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>libhyphen-utils</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -87,7 +87,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>liblouis-utils</artifactId>
-        <version>6.2.2</version>
+        <version>6.2.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -110,7 +110,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>pef-utils</artifactId>
-        <version>6.0.2</version>
+        <version>6.0.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
@@ -124,12 +124,12 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>common-utils</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.3</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>file-utils</artifactId>
-        <version>4.3.1</version>
+        <version>4.3.2</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -222,7 +222,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>css-utils</artifactId>
-        <version>6.0.0</version>
+        <version>6.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -485,7 +485,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>tts-common</artifactId>
-        <version>7.2.1</version>
+        <version>7.3.0</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

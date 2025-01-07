@@ -30,7 +30,7 @@ public class ObflStyle {
 	public static class ObflStyleFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
 		private static final SupportedBrailleCSS brailleCSS
-			// using a hack to get hold of SupportedBrailleCSS because BrailleCssParser is not visiblej
+			// using a hack to get hold of SupportedBrailleCSS because BrailleCssParser is not visible
 			= TextStyleParser.getInstance().parse("display: block").iterator().next().getSupportedBrailleCSS();
 
 		public ObflStyleFunctionProvider() {

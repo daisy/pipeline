@@ -1,6 +1,7 @@
 package org.daisy.pipeline.tts.config;
 
 import java.io.File;
+import java.io.StringReader;
 import java.net.URI;
 import java.net.URL;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.daisy.common.file.URLs;
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 
+import org.osgi.service.component.annotations.Component;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +29,6 @@ import org.xml.sax.InputSource;
 public class ConfigReader {
 
 	private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
-	private static final Property CONFIG_PATH = Properties.getProperty("org.daisy.pipeline.tts.config",
-	                                                                   true,
-	                                                                   "File to load TTS configuration from",
-	                                                                   false,
-	                                                                   null);
 
 	public interface Extension {
 		/**
@@ -53,11 +51,25 @@ public class ConfigReader {
 
 	public ConfigReader(Processor saxonproc, XdmNode doc, Map<String,String> properties, Extension... extensions) {
 		this.saxonproc = saxonproc;
-		String configPath = properties != null ? CONFIG_PATH.getValue(properties) : CONFIG_PATH.getValue();
-		if (configPath != null && !"".equals(configPath)) {
-			XdmNode content = parseXML(configPath);
-			if (content != null)
-				read(content, extensions);
+		String config = properties != null ? TTSConfigProperty.getValue(properties) : TTSConfigProperty.getValue();
+		if (config != null && !"".equals(config)) {
+			XdmNode content = null; {
+				// check if it is a file path
+				if (config.startsWith("file:") || new File(config).exists())
+					content = parseXML(config);
+				else
+					// check if it is XML
+					try {
+						content = saxonproc.newDocumentBuilder().build(
+							new SAXSource(new InputSource(new StringReader(config))));
+					} catch (Exception e) {
+						logger.debug(
+							"failed to read TTS configuration: not a file path and not valid XML: "
+							+ config);
+					}
+				if (content != null)
+					read(content, extensions);
+			}
 		}
 		if (doc != null) {
 			read(doc, extensions);
@@ -142,5 +154,31 @@ public class ConfigReader {
 				}
 			}
 		}
+	}
+
+	// this is to make sure that the "org.daisy.pipeline.tts.config" property is
+	// exposed from the start, before the first ConfigReader object is created
+	@Component(
+		name = "tts-config-property",
+		immediate = true
+	)
+	protected static class TTSConfigProperty {
+
+		private static final Property PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.config",
+		                                                                true,
+		                                                                "TTS configuration (XML or file path)",
+		                                                                false,
+		                                                                null);
+
+		protected TTSConfigProperty() {}
+
+		public static String getValue() {
+			return PROPERTY.getValue();
+		}
+
+		public static String getValue(Map<String,String> snapshot) {
+			return PROPERTY.getValue(snapshot);
+		}
+
 	}
 }

@@ -1,3 +1,11 @@
+v1.15.0
+=======
+
+Changes
+-------
+- Support for Finnish hyphenation (https://github.com/celiafi/pipeline-mod-celia/issues/48)
+- Various bugfixes and improvements
+
 v1.14.30
 ========
 

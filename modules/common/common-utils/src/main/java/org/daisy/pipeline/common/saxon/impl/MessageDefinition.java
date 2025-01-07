@@ -75,7 +75,7 @@ public class MessageDefinition extends ExtensionFunctionDefinition {
 					String msg = CharMatcher.WHITESPACE.trimAndCollapseFrom(
 						arguments[1].head().getStringValue(), ' ');
 					String[] args = arguments.length > 1
-						? MessageDefinition.sequenceToArray(arguments[1])
+						? MessageDefinition.sequenceToArray(arguments[2])
 						: new String[]{};
 					log(level, msg, args);
 					return VOID; }

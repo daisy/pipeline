@@ -437,7 +437,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 								s.removeProperty("text-transform");
 							s.removeProperty("braille-charset");
 							for (String prop : s.getPropertyNames())
-								logger.warn("{}: {} not supported", prop, s.get(prop));
+								logger.warn("{} not supported", s.get(prop));
 						}
 						brailleWithPreservedWS.add(t);
 					}
@@ -588,12 +588,12 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 									if (val == LetterSpacing.length) {
 										letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
 										if (letterSpacing[i] < 0) {
-											logger.warn("letter-spacing: {} not supported, must be non-negative", val);
+											logger.warn("{} not supported, must be non-negative", val);
 											letterSpacing[i] = 0; }}
 									style.removeProperty("letter-spacing"); }
 								typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));
 								for (String prop : style.getPropertyNames())
-									logger.warn("{}: {} not supported", prop, style.get(prop)); }}
+									logger.warn("{} not supported", style.get(prop)); }}
 					}
 					{ // compute preserved white space segments (textWithWs, textWithWsMapping, pre)
 						List<String> l1 = new ArrayList<String>();
@@ -1197,7 +1197,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						if (val == LetterSpacing.length) {
 							letterSpacing[i] = style.getValue(TermInteger.class, "letter-spacing").getIntValue();
 							if (letterSpacing[i] < 0) {
-								logger.warn("letter-spacing: {} not supported, must be non-negative", val);
+								logger.warn("{} not supported, must be non-negative", val);
 								letterSpacing[i] = 0; }}
 						style.removeProperty("letter-spacing"); }
 					typeform[i] = typeform[i].add(typeformFromInlineCSS(style, translator, supportedTypeforms));}}
@@ -1640,8 +1640,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("{}: {} not supported: emphclass 'italic' not defined in table {}",
-						            prop, style.get(prop),
+						logger.warn("{} not supported: emphclass 'italic' not defined in table {}",
+						            style.get(prop),
 						            table.getTable());
 					style.removeProperty(prop);
 					continue; }}
@@ -1652,8 +1652,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("{}: {} not supported: emphclass 'bold' not defined in table {}",
-						            prop, style.get(prop),
+						logger.warn("{} not supported: emphclass 'bold' not defined in table {}",
+						            style.get(prop),
 						            table.getTable());
 					style.removeProperty(prop);
 					continue; }}
@@ -1664,8 +1664,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 					if (t != null)
 						typeform = typeform.add(t);
 					else
-						logger.warn("{}: {} not supported: emphclass 'underline' not defined in table {}",
-						            prop, style.get(prop),
+						logger.warn("{} not supported: emphclass 'underline' not defined in table {}",
+						            style.get(prop),
 						            table.getTable());
 					style.removeProperty(prop);
 					continue; }}}

@@ -15,4 +15,9 @@ class UnmodifiableTermString extends UnmodifiableTerm<String> implements TermStr
 	public String getValue() {
 		return string.getValue();
 	}
+
+	@Override
+	public String toString() {
+		return string.toString();
+	}
 }

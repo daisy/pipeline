@@ -4,7 +4,7 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
-                xmlns:dp2="http://www.daisy.org/ns/pipeline/"
+                xmlns:daisy="http://www.daisy.org/ns/pipeline/"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 exclude-inline-prefixes="#all"
@@ -92,12 +92,34 @@
                 </p:input>
             </p:identity>
             <!--
-                delete dp2:ascii-braille-charset metadata and dp2:ascii attributes because we don't
+                delete daisy:ascii-braille-charset metadata and daisy:ascii attributes because we don't
                 want it to end up in the output if the format is PEF (in which case pef:pef2text
                 simply serializes the input PEF).
             -->
-            <p:delete match="/pef:pef/pef:head/pef:meta/dp2:ascii-braille-charset|
-                             pef:row/@dp2:ascii"/>
+            <p:delete match="/pef:pef/pef:head/pef:meta/daisy:ascii-braille-charset|
+                             pef:row/@daisy:ascii"/>
+            <p:xslt>
+                <p:input port="stylesheet">
+                    <p:inline xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+                        <xsl:stylesheet version="2.0">
+                            <xsl:template match="@*|*">
+                                <xsl:copy copy-namespaces="no">
+                                    <xsl:for-each select="namespace::*[not(.='http://www.daisy.org/ns/pipeline/')]">
+                                        <xsl:sequence select="."/>
+                                    </xsl:for-each>
+                                    <xsl:apply-templates select="@*|node()"/>
+                                </xsl:copy>
+                            </xsl:template>
+                            <xsl:template match="text()|processing-instruction()|comment()">
+                                <xsl:sequence select="."/>
+                            </xsl:template>
+                        </xsl:stylesheet>
+                    </p:inline>
+                </p:input>
+                <p:input port="parameters">
+                    <p:empty/>
+                </p:input>
+            </p:xslt>
             <pef:pef2text px:progress="1" px:message="Storing braille file to '{$output-dir}' in format '{$format}'" px:message-severity="DEBUG">
                 <p:with-option name="output-dir" select="$output-dir"/>
                 <p:with-option name="name-pattern" select="$name-pattern"/>

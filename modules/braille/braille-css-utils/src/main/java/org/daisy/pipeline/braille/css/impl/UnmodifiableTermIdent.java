@@ -15,4 +15,9 @@ class UnmodifiableTermIdent extends UnmodifiableTerm<String> implements TermIden
 	public String getValue() {
 		return ident.getValue();
 	}
+
+	@Override
+	public String toString() {
+		return ident.toString();
+	}
 }

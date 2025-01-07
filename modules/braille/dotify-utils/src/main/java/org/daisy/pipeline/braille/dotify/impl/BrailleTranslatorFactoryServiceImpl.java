@@ -7,12 +7,15 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
+import java.util.Set;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import static com.google.common.collect.Iterables.concat;
 
+import org.daisy.braille.css.PropertyValue;
 import org.daisy.braille.css.SimpleInlineStyle;
 
 import org.daisy.dotify.api.translator.AttributeWithContext;
@@ -164,7 +167,34 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			return translate(styledText, from, to);
 		}
 		
+		private static final Set<String> obflStyleProperties = ImmutableSet.of(
+			"text-transform",
+			"braille-charset",
+			"hyphens",
+			"hyphenate-character",
+			"white-space",
+			"word-spacing",
+			"letter-spacing",
+			"-dotify-counter-style"
+		);
+		
 		private BrailleTranslatorResult translate(Iterable<CSSStyledText> styledText, int from, int to) throws TranslationException {
+			// Because of caching in cssParser, styledText might contain non-inline properties
+			// (which should always have the initial value). Omit these properties from the argument
+			// that is passed to translator.
+			for (Iterator<CSSStyledText> i = styledText.iterator(); i.hasNext();) {
+				SimpleInlineStyle s = i.next().getStyle();
+				if (s != null)
+					for (Iterator<PropertyValue> j = s.iterator(); j.hasNext();) {
+						PropertyValue d = j.next();
+						if ("braille-charset".equals(d.getProperty()))
+							; // initial value of braille-charset depends on translator
+						else if (equal(d, d.getDefault()))
+							j.remove();
+						else if (!obflStyleProperties.contains(d.getProperty()))
+							throw new IllegalStateException("coding error");
+					}
+			}
 			return translator.transform(styledText, from, to);
 		}
 		
@@ -178,6 +208,20 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 	/* ========= */
 	/* UTILITIES */
 	/* ========= */
+
+	private static boolean equal(PropertyValue a, PropertyValue b) {
+		if (a == null)
+			return b == null;
+		else if (b == null)
+			return false;
+		else {
+			if (a.getCSSProperty() != b.getCSSProperty())
+				return false;
+			if (!a.toString().equals(b.toString()))
+				return false;
+		}
+		return true;
+	}
 
 	/**
 	 * Convert Translatable specification to text + CSS style. Text attributes are assumed to
@@ -194,6 +238,10 @@ public class BrailleTranslatorFactoryServiceImpl implements BrailleTranslatorFac
 			null);
 	}
 
+	// FIXME: Ideally, this should be a parser based on SupportedOBFLProperties. Note that such a
+	// parser is created by ObflStyleFunctionProvider (through StyleTransformerImpl), however we can
+	// not get hold of that parser, and moreover in StyleTransformerImpl the assumption is made that
+	// parseInlineStyle() will not be called on it.
 	private final static TextStyleParser cssParser = TextStyleParser.getInstance();
 	private final static SimpleInlineStyle HYPHENS_AUTO = cssParser.parse("hyphens: auto");
 

@@ -22,4 +22,9 @@ class UnmodifiableTermURI extends UnmodifiableTerm<String> implements TermURI {
 	public TermURI setBase(java.net.URL base) {
 		throw new UnsupportedOperationException("Unmodifiable");
 	}
+
+	@Override
+	public String toString() {
+		return uri.toString();
+	}
 }

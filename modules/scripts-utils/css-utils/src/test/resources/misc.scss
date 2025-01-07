@@ -4,9 +4,13 @@ $page-sizes : (
 );
 $page-format: fa44;
 $page-size: map-get($page-sizes, $page-format);
+// list-nth does not work
+$page-width: nth($page-size, 1);
+$page-height: nth($page-size, 2);
 $footer-level: 2;
 $braille-pages: true;
 $prf: 'page ';
+$text-transform-classes: italic bold;
 
 @mixin top-left-braille-page {
 	@top-left {
@@ -15,7 +19,7 @@ $prf: 'page ';
 }
 
 @page {
-	size: $page-size;
+	size: $page-width $page-height;
 	@include top-left-braille-page;
 	@left {
 		content: -obfl-marker-position(pagenum, '⠿');
@@ -73,7 +77,13 @@ $prf: 'page ';
 		content: 'foo';
 	}
 	border: {
-        top: ⠒;
-        bottom: ⠒;
-    };
+		top: ⠒;
+		bottom: ⠒;
+	};
+}
+
+@each $x in $text-transform-classes {
+	.#{$x} {
+		text-transform: $x;
+	}
 }

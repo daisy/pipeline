@@ -398,6 +398,11 @@ public abstract class BrailleCssParser implements TextStyleParser {
 			}
 			return r;
 		}
+
+		@Override
+		public String toString() {
+			return BrailleCssSerializer.toString(this);
+		}
 	}
 
 	/**

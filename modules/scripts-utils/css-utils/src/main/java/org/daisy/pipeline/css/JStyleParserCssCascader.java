@@ -301,7 +301,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							try {
 								s = parserFactory.append(new CSSSource(u, (Charset)null, (String)null), cssReader, s);
 							} catch (IOException e) {
-								logger.warn("Style sheet could not be parsed: " + u);
+								logger.warn("Style sheet could not be parsed: " + u, e);
 							}
 					}
 				}

@@ -6,13 +6,13 @@
   <parent>
     <groupId>org.daisy.pipeline.modules</groupId>
     <artifactId>modules-parent</artifactId>
-    <version>1.14.31-SNAPSHOT</version>
+    <version>1.15.1-SNAPSHOT</version>
     <relativePath>../../parent/</relativePath>
   </parent>
 
   <groupId>org.daisy.pipeline.modules.braille</groupId>
   <artifactId>liblouis-utils</artifactId>
-  <version>6.2.3-SNAPSHOT</version>
+  <version>6.2.4-SNAPSHOT</version>
   <packaging>bundle</packaging>
 
   <name>DP2 Braille Modules :: liblouis-utils</name>
