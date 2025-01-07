@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="3.0"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:css="http://www.daisy.org/ns/pipeline/braille-css"
                 xmlns:s="org.daisy.pipeline.braille.css.xpath.Style"
@@ -11,6 +11,11 @@
 	<xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
 	
 	<xsl:param name="braille-charset"/>
+	<xsl:param name="translate-attributes" select="''" static="yes">
+		<!-- XSLT match pattern -->
+		<!-- FIXME: does not support namespaces! -->
+	</xsl:param>
+	<xsl:param name="include-braille-code-in-language" as="xs:boolean" select="false()"/>
 	
 	<!--
 	    API: implement xsl:template match="css:block"
@@ -75,16 +80,11 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="translated-language" as="xs:string?">
-			<xsl:for-each select="$source-language">
-				<xsl:choose>
-					<xsl:when test="s:get($translated-style,'text-transform')[string(.)='none']">
-						<xsl:sequence select="replace($source-language,'^([a-zA-Z]{2,8})(-.+)?$','$1-Brai$2')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:sequence select="$source-language"/>"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:for-each>
+			<xsl:call-template name="translated-language">
+				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+				<xsl:with-param name="source-language" tunnel="yes" select="$source-language"/>
+				<xsl:with-param name="translated-style" select="$translated-style"/>
+			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($translated-style,$result-style))"/>
 		<xsl:variable name="lang" as="attribute()?">
@@ -93,9 +93,12 @@
 			</xsl:for-each>
 		</xsl:variable>
 		<xsl:element name="{name(.)}" namespace="{namespace-uri(.)}">
-			<xsl:sequence select="@* except (@style|@css:*|@xml:lang)"/>
 			<xsl:sequence select="$style"/>
 			<xsl:sequence select="$lang"/>
+			<xsl:apply-templates mode="#current" select="@* except (@style|@css:*|@xml:lang)">
+				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+				<xsl:with-param name="source-language" tunnel="yes" select="$source-language"/>
+			</xsl:apply-templates>
 			<xsl:variable name="is-block" as="xs:boolean"
 			              select="$is-block and descendant-or-self::*[@css:display[not(.='inline')]]"/>
 			<xsl:for-each-group select="*|text()"
@@ -147,7 +150,7 @@
 		</xsl:element>
 	</xsl:template>
 	
-	<xsl:template mode="identify-blocks" match="text()">
+	<xsl:template mode="identify-blocks" match="text()|@*">
 		<xsl:sequence select="."/>
 	</xsl:template>
 	
@@ -233,16 +236,11 @@
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:variable name="translated-language" as="xs:string?">
-			<xsl:for-each select="$source-language">
-				<xsl:choose>
-					<xsl:when test="s:get($translated-style,'text-transform')[string(.)='none']">
-						<xsl:sequence select="replace($source-language,'^([a-zA-Z]{2,8})(-.+)?$','$1-Brai$2')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:sequence select="$source-language"/>"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:for-each>
+			<xsl:call-template name="translated-language">
+				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+				<xsl:with-param name="source-language" tunnel="yes" select="$source-language"/>
+				<xsl:with-param name="translated-style" select="$translated-style"/>
+			</xsl:call-template>
 		</xsl:variable>
 		<xsl:variable name="style" as="attribute()?" select="css:style-attribute(css:serialize-stylesheet($translated-style,$result-style))"/>
 		<xsl:variable name="lang" as="attribute()?">
@@ -251,9 +249,12 @@
 			</xsl:for-each>
 		</xsl:variable>
 		<xsl:element name="{name(.)}" namespace="{namespace-uri(.)}">
-			<xsl:sequence select="@* except (@style|@css:*|@xml:lang)"/>
 			<xsl:sequence select="$style"/>
 			<xsl:sequence select="$lang"/>
+			<xsl:apply-templates mode="#current" select="@* except (@style|@css:*|@xml:lang)">
+				<xsl:with-param name="source-style" tunnel="yes" select="$source-style"/>
+				<xsl:with-param name="source-language" tunnel="yes" select="$source-language"/>
+			</xsl:apply-templates>
 			<!-- ignore child nodes if 'content' property present -->
 			<xsl:if test="empty(s:get($translated-style,'content'))">
 				<xsl:apply-templates mode="#current" select="child::node()[1]">
@@ -303,4 +304,58 @@
 		</xsl:apply-templates>
 	</xsl:template>
 	
+	<xsl:template mode="treewalk" match="@*">
+		<xsl:sequence select="."/>
+	</xsl:template>
+
+	<xsl:template mode="identify-blocks treewalk" _match="{$translate-attributes}" use-when="$translate-attributes!=''">
+		<xsl:param name="source-style" as="item()?" tunnel="yes"/>
+		<xsl:param name="source-language" as="xs:string?" tunnel="yes"/>
+		<xsl:choose>
+			<xsl:when test="self::attribute()">
+				<xsl:variable name="block">
+					<xsl:element name="css:block">
+						<xsl:value-of select="string(.)"/>
+					</xsl:element>
+				</xsl:variable>
+				<xsl:variable name="translated-block">
+					<xsl:apply-templates select="$block/css:block"/>
+				</xsl:variable>
+				<xsl:attribute name="{name()}" select="string($translated-block)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:next-match/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
+	<xsl:template name="translated-language" as="xs:string?">
+		<xsl:param name="source-language" as="xs:string?" tunnel="yes"/>
+		<xsl:param name="result-language" as="xs:string?" tunnel="yes"/>
+		<xsl:param name="translated-style" as="item()?"/>
+		<xsl:choose>
+			<xsl:when test="$include-braille-code-in-language">
+				<xsl:variable name="block">
+					<xsl:element name="css:block">
+						<xsl:text>xxx</xsl:text>
+					</xsl:element>
+				</xsl:variable>
+				<xsl:variable name="translated-block" as="node()*">
+					<xsl:apply-templates select="$block/css:block"/>
+				</xsl:variable>
+				<xsl:sequence select="($translated-block/self::*[1]/@xml:lang/string(.),
+				                       $result-language)[1]"/>
+			</xsl:when>
+			<xsl:when test="empty($source-language)"/>
+			<xsl:when test="s:get($translated-style,'text-transform')[string(.)='none']">
+				<xsl:sequence select="replace($source-language,
+				                              '^([a-zA-Z]{2,8})(?:-[A-Z][a-z]{3})?(-.+)?$',
+				                              '$1-Brai$2')"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:sequence select="$source-language"/>"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:template>
+
 </xsl:stylesheet>

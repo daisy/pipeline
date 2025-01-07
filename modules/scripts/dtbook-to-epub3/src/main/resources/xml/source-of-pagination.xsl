@@ -15,8 +15,8 @@
 	<xsl:function name="pf:dtbook-source-of-pagination" as="xs:string?">
 		<xsl:param name="dtbook" as="document-node(element(dtb:dtbook))"/>
 		<xsl:choose>
-			<xsl:when test="$dtbook//dtb:head/dtb:meta[@name='pageBreakSource']">
-				<xsl:sequence select="$dtbook//dtb:head/dtb:meta[@name='pageBreakSource'][1]"/>
+			<xsl:when test="$dtbook//dtb:head/dtb:meta[@name=('a11y:pageBreakSource','pageBreakSource')]">
+				<xsl:sequence select="$dtbook//dtb:head/dtb:meta[@name=('a11y:pageBreakSource','pageBreakSource')][1]"/>
 			</xsl:when>
 			<xsl:otherwise>
 				<xsl:variable name="source" as="element()*"

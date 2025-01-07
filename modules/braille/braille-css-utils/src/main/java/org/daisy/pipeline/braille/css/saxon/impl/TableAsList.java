@@ -308,7 +308,11 @@ public class TableAsList extends SingleInSingleOutXMLTransformer {
 														// and for other parts (classes or attributes) it does not makes sense to come after
 														// a pseudo element
 														PseudoElementImpl pseudo = (PseudoElementImpl)selector.get(0).get(0);
-														if ("list-header".equals(pseudo.getName())) {
+														if ("list-item".equals(pseudo.getName()))
+															// could be present in old style sheets that are still based on the old meaning of ::table-by
+															// ignore it
+															;
+														else if ("list-header".equals(pseudo.getName())) {
 															if (pseudo.getPseudoClasses().isEmpty())
 																addListHeaderStyle(
 																	new ListItemStyle(rest(ruleblock))); }

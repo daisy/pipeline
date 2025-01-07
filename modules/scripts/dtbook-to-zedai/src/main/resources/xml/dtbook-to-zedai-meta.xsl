@@ -10,56 +10,56 @@
         <xsl:for-each select="dtb:meta">
             <xsl:choose>
                 <xsl:when test="@name = 'dc:Title'">
-                    <meta property="dcterms:title" content="{@content}"/>
+                    <meta property="dc:title" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Creator'">
-                    <meta property="dcterms:creator" content="{@content}"/>
+                    <meta property="dc:creator" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Date'">
-                    <meta property="dcterms:date" content="{@content}" xml:id="meta-dcdate"/>
+                    <meta property="dc:date" content="{@content}" xml:id="meta-dcdate"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Publisher'">
-                    <meta property="dcterms:publisher" content="{@content}"/>
+                    <meta property="dc:publisher" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Language'">
-                    <meta property="dcterms:language" content="{@content}"/>
+                    <meta property="dc:language" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Subject'">
-                    <meta property="dcterms:subject" content="{@content}"/>
+                    <meta property="dc:subject" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Description'">
-                    <meta property="dcterms:description" content="{@content}"/>
+                    <meta property="dc:description" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Contributor'">
-                    <meta property="dcterms:contributor" content="{@content}"/>
+                    <meta property="dc:contributor" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Type'">
-                    <meta property="dcterms:type" content="{@content}"/>
+                    <meta property="dc:type" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Format'">
-                    <meta property="dcterms:format" content="{@content}"/>
+                    <meta property="dc:format" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Source'">
-                    <meta property="dcterms:source" content="{@content}"/>
+                    <meta property="dc:source" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Relation'">
-                    <meta property="dcterms:relation" content="{@content}"/>
+                    <meta property="dc:relation" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Coverage'">
-                    <meta property="dcterms:coverage" content="{@content}"/>
+                    <meta property="dc:coverage" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dc:Rights'">
-                    <meta property="dcterms:rights" content="{@content}"/>
+                    <meta property="dc:rights" content="{@content}"/>
                 </xsl:when>
                 <xsl:when test="@name = 'dtb:revisionDescription'">
-                    <meta property="dcterms:description" content="{@content}"
+                    <meta property="dc:description" content="{@content}"
                           about="#meta-dcdate"/>
                 </xsl:when>
             </xsl:choose>
         </xsl:for-each>
     </xsl:template>
 
-    <!-- identity template which discards everything -->
+    <!-- discard everything else -->
     <xsl:template match="@*|node()">
         <xsl:apply-templates select="@*|node()"/>
     </xsl:template>

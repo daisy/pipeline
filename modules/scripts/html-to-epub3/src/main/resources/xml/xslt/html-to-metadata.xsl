@@ -52,7 +52,9 @@
                         <xsl:message select="'Dropping empty meta element with http-equiv'"/>
                     </xsl:when>
                     <xsl:when test="string-length(normalize-space(@content)) = 0">
-                        <xsl:message select="concat('Dropping empty meta element: ',@name)"/>
+                        <xsl:if test="not(@charset)">
+                            <xsl:message select="concat('Dropping empty meta element: ',@name)"/>
+                        </xsl:if>
                     </xsl:when>
                     <xsl:when test="$lcname=('dc:identifier','dct:identifier','dcterms:identifier','dtb:uid')"/>
                     <xsl:when test="$lcname=('dcterms:modified','dc:format')">

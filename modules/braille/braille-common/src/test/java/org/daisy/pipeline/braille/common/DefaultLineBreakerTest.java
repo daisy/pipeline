@@ -69,7 +69,7 @@ public class DefaultLineBreakerTest {
 	}
 	
 	@Test
-	public void testEmpty() {
+	public void testWhiteSpace() {
 		TestHyphenator hyphenator = new TestHyphenator();
 		TestTranslator translator = new TestTranslator(hyphenator);
 		assertEquals(
@@ -78,34 +78,68 @@ public class DefaultLineBreakerTest {
 		assertEquals(
 			"",
 			fillLines(translator.lineBreakingFromStyledText().transform(text("\u200B")), 10));
+		BrailleTranslator t = new AbstractBrailleTranslator() {
+				public BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille() {
+					return new BrailleTranslator.FromStyledTextToBraille() {
+						public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to) {
+							if (from < 0 || (to >= 0 && from > to))
+								throw new IndexOutOfBoundsException();
+							List<CSSStyledText> transformed = new ArrayList<>();
+							int i = 0;
+							for (CSSStyledText t : styledText) {
+								if (to >= 0 && i >= to)
+									break;
+								if (i >= from)
+									transformed.add(new CSSStyledText(t.getText().toUpperCase()));
+								i++;
+							}
+							return transformed;
+						}
+					};
+				}
+			};
 		assertEquals(
 			"XXX⠀XXX",
 			fillLines(
-				new AbstractBrailleTranslator() {
-					public BrailleTranslator.FromStyledTextToBraille fromStyledTextToBraille() {
-						return new BrailleTranslator.FromStyledTextToBraille() {
-							public Iterable<CSSStyledText> transform(Iterable<CSSStyledText> styledText, int from, int to) {
-								if (from < 0 || (to >= 0 && from > to))
-									throw new IndexOutOfBoundsException();
-								List<CSSStyledText> transformed = new ArrayList<>();
-								int i = 0;
-								for (CSSStyledText t : styledText) {
-									if (to >= 0 && i >= to)
-										break;
-									if (i >= from)
-										transformed.add(new CSSStyledText(t.getText().toUpperCase()));
-									i++;
-								}
-								return transformed;
-							}
-						};
-					}
-				}.lineBreakingFromStyledText().transform(
+				t.lineBreakingFromStyledText().transform(
 					text("xxx",
 					     " ",
 					     " ",
 					     " ",
 					     "xxx")),
+				10));
+		// The following tests show that leading white-space of a segment is not stripped, even if it happens at the
+		// beginning of the line (because DefaultLineBreaker currently has no way of knowing this), and that this can
+		// cause undesired blank spaces or blank lines. The solution (workaround) is to make sure that there are no
+		// segments with leading white space (or white space only): white space should be appended to the previous
+		// segment, or dropped if it occurs at the beginning of a block.
+		assertEquals(
+			"XXXXX⠀XXXX\n" +
+			"⠀",
+			fillLines(
+				t.lineBreakingFromStyledText().transform(
+					text("xxxxx xxxx",
+					     " ")),
+				10));
+		assertEquals(
+			"⠀XX",
+			fillLines(
+				t.lineBreakingFromStyledText().transform(
+					text(" xx")),
+				10));
+		assertEquals(
+			"XXXXX⠀XXXX\n" +
+			"⠀XX",
+			fillLines(
+				t.lineBreakingFromStyledText().transform(
+					text("xxxxx xxxx",
+					     " xx")),
+				10));
+		assertEquals(
+			"XXXXX⠀XXXX",
+			fillLines(
+				t.lineBreakingFromStyledText().transform(
+					text("xxxxx xxxx ")),
 				10));
 	}
 	

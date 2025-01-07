@@ -76,6 +76,7 @@ public class BrailleTranslatorRegistry extends Memoize<BrailleTranslator>
 		providers.add(p);
 	}
 
+	@Override
 	public Iterable<BrailleTranslator> _get(Query q) {
 		return dispatch.get(q);
 	}

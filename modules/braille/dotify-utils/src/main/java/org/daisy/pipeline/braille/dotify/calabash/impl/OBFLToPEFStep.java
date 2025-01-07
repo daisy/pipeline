@@ -36,6 +36,7 @@ import org.daisy.dotify.api.engine.FormatterEngine;
 import org.daisy.dotify.api.engine.FormatterEngineFactoryService;
 import org.daisy.dotify.api.formatter.FormatterConfiguration;
 import org.daisy.dotify.api.formatter.FormatterFactory;
+import org.daisy.dotify.api.obfl.ObflParser;
 import org.daisy.dotify.api.obfl.ObflParserFactoryService;
 import org.daisy.dotify.api.table.BrailleConverter;
 import org.daisy.dotify.api.table.Table;
@@ -71,7 +72,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of the <code>{http://code.google.com/p/dotify/}obfl-to-pef</code> step.
+ * Implementation of the <code>{http://www.daisy.org/ns/pipeline/xproc/internal}obfl-to-pef</code> step.
  *
  * @see <a href="../../../../../../../../resources/xml/library.xpl">The XProc library
  *      <code>http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl</code></a>.
@@ -434,10 +435,36 @@ public class OBFLToPEFStep extends DefaultStep implements XProcStep {
 					throw new RuntimeException(e);
 				}
 			}
+			// disable Dotify's OBFL white space normalization because we have our own normalization step
 			try {
 				formatterEngineFactoryService.getClass()
 					.getMethod("setObflParserFactory", ObflParserFactoryService.class)
-					.invoke(formatterEngineFactoryService, obflParserFactoryService);
+					.invoke(
+						formatterEngineFactoryService,
+						new ObflParserFactoryService() {
+							@Override
+							public ObflParser newObflParser() {
+								ObflParser parser = obflParserFactoryService.newObflParser();
+								try {
+									parser.getClass().getMethod("setNormalizeSpace", boolean.class)
+									                 .invoke(parser, false);
+								} catch (NoSuchMethodException |
+								         SecurityException |
+								         IllegalAccessException |
+								         IllegalArgumentException |
+								         InvocationTargetException e) {
+									if (!parser.getClass().getCanonicalName().equals(
+										    "org.daisy.dotify.formatter.impl.obfl.ObflParserImpl"))
+										throw new IllegalStateException("Expected ObflParserImpl", e);
+									else
+										throw new IllegalStateException("methods are: " + java.util.Arrays.toString(parser.getClass().getMethods()), e);
+								}
+								return parser;
+							}
+							@Override
+							public void setCreatedWithSPI() {}
+						}
+					);
 			} catch (NoSuchMethodException |
 			         SecurityException |
 			         IllegalAccessException |

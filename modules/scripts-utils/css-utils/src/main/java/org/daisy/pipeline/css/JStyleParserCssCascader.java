@@ -353,6 +353,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 					new InputValue<>(
 						new StyleAccessor() {
 							StyleMap style = null;
+							@Override
 							public Optional<String> get(Element element, String property) {
 								if (style == null) {
 									StyleSheet s = (StyleSheet)ruleFactory.createStyleSheet().unlock();
@@ -378,6 +379,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 							}
 
 							Map<String,List<CombinedSelector>> selectorCache = null; // cache of compiled selectors
+							@Override
 							public boolean matches(Element element, String selector) {
 								List<CombinedSelector> compiledSelector;
 								if (selectorCache == null)
@@ -415,7 +417,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 										else if (combinator == Combinator.DESCENDANT) {
 											match = false;
 											Node ancestor = element.getParentNode();
-											while (!match && ancestor != null) {
+											while (!match && ancestor != null && !(ancestor instanceof Document)) {
 												match = s.matches((Element)ancestor);
 												ancestor = ancestor.getParentNode(); }}
 										else if (combinator == Combinator.CHILD) {
@@ -423,7 +425,7 @@ public abstract class JStyleParserCssCascader extends SingleInSingleOutXMLTransf
 											match = parent != null && s.matches(parent); }
 										combinator = s.getCombinator();
 										if (!match)
-											return false;
+											break;
 									}
 									if (match == true)
 										return true;

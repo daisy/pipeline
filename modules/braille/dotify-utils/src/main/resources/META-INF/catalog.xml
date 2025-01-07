@@ -3,5 +3,4 @@
   <uri name="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl" uri="../xml/library.xpl"/>
   <!-- internal dependencies of Java code -->
   <uri uri="../xml/transform/dotify-transform.xpl"/> <!-- DotifyCSSStyledDocumentTransform -->
-  <uri uri="../xml/transform/obfl-to-pef.xpl"/> <!-- DotifyOBFLTransform -->
 </catalog>

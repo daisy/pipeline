@@ -301,11 +301,11 @@ public final class BrailleCssStyle implements Cloneable {
 	 */
 	public SimpleInlineStyle asSimpleInlineStyle(boolean mutable) {
 		if (nestedStyles != null)
-			throw new UnsupportedOperationException("not a simple inline style");
+			throw new UnsupportedOperationException("not a simple inline style: " + toString());
 		else if (declarations == null)
 			return SimpleInlineStyle.EMPTY;
 		else if (context != Context.ELEMENT)
-			throw new UnsupportedOperationException("not a simple inline style");
+			throw new UnsupportedOperationException("not a simple inline style: " + toString());
 		else if (!(declarations instanceof ParsedDeclarations))
 			throw new IllegalStateException(); // coding error
 		ParsedDeclarations s = (ParsedDeclarations)declarations;

@@ -116,7 +116,7 @@ public class BrailleCssCascader implements CssCascader {
 			throw new UnsupportedOperationException("A style attribute must be specified");
 		switch (medium.getType()) {
 		case EMBOSSED:
-		case BRAILLE:
+		case BRAILLE: // treat braille as embossed, even though only a subset of the properties should be supported
 			return new Transformer(uriResolver, preProcessor, xsltProcessor, userAndUserAgentStylesheets, medium, attributeName,
 			                       brailleParserFactory, brailleRuleFactory, brailleCSS, brailleCSS);
 		case PRINT:

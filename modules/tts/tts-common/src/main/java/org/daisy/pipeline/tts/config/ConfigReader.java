@@ -162,7 +162,7 @@ public class ConfigReader {
 		name = "tts-config-property",
 		immediate = true
 	)
-	protected static class TTSConfigProperty {
+	public static class TTSConfigProperty {
 
 		private static final Property PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.config",
 		                                                                true,
@@ -170,7 +170,7 @@ public class ConfigReader {
 		                                                                false,
 		                                                                null);
 
-		protected TTSConfigProperty() {}
+		public TTSConfigProperty() {}
 
 		public static String getValue() {
 			return PROPERTY.getValue();

@@ -8,7 +8,9 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="html"
+                px:output-filesets="pef">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">HTML to braille</h1>

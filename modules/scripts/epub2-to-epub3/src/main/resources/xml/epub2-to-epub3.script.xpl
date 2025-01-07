@@ -3,7 +3,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
-                type="px:epub2-to-epub3.script">
+                type="px:epub2-to-epub3.script"
+                px:input-filesets="epub2"
+                px:output-filesets="epub3">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">EPUB Upgrader</h1>

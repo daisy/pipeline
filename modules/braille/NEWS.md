@@ -1,9 +1,19 @@
+v1.15.1
+=======
+
+Changes
+-------
+- Update to Liblouis [3.33.0](https://github.com/liblouis/liblouis/releases/tag/v3.33.0)
+
 v1.15.0
 =======
 
 Changes
 -------
 - Support for Finnish hyphenation (https://github.com/celiafi/pipeline-mod-celia/issues/48)
+- Option to store intermediary HTML with CSS styles inlined also available in EPUB 3 to PEF
+- Generalized `$toc-exclude-class` variable to `$toc-exclude`
+- Support for multiple `counter-set` in a `@begin`/`@end` volume area
 - Various bugfixes and improvements
 
 v1.14.30

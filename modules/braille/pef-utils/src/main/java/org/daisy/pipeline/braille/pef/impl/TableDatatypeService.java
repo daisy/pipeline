@@ -31,7 +31,7 @@ import org.w3c.dom.Element;
 )
 public class TableDatatypeService extends DatatypeService {
 
-	protected TableDatatypeService() {
+	public TableDatatypeService() {
 		super("preview-table");
 	}
 

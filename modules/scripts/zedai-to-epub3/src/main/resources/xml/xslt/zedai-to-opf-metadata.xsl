@@ -11,22 +11,25 @@
                 exclude-result-prefixes="xs z f pf rdfa">
 
   <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
+  <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
 
   <!--TODO resolve metadata prefixes from @profile and @prefix
      * default prefixes declared in @profile
-        e.g. @profile="http://www.daisy.org/z3998/2011/vocab/profiles/default/"
-             declares "dcterms" and "z3998"
+        e.g. @profile="http://www.daisy.org/z3998/2012/vocab/profiles/default/"
+             declares "dc", "dcterms", "z3998" and "diagram"
      * other prefixes are explicitly declared in @prefix
         e.g. prefix="foaf: http://xmlns.com/foaf/0.1/"
   -->
 
   <xsl:param name="source-of-pagination" as="xs:string?" select="()"/>
+  <xsl:param name="output-base-uri" as="xs:string"/>
 
   <xsl:template match="/z:document" priority="1">
     <xsl:call-template name="pf:next-match-with-generated-ids">
       <xsl:with-param name="prefix" select="'id_'"/>
       <xsl:with-param name="for-elements" select="f:get-title-from-content(/)|
-                                                  //z:*[f:hasProp(.,'dcterms:title')]|
+                                                  //z:*[f:hasProp(.,('dc:title',
+                                                                     'dcterms:title'))]|
                                                   //z:*[f:hasPropOrRole(.,('fulltitle',
                                                                            'title',
                                                                            'covertitle',
@@ -37,14 +40,18 @@
 
   <xsl:template match="/z:document">
     <!-- TODO dynamically generate @prefix -->
-    <metadata prefix="dc: http://purl.org/dc/elements/1.1/">
+    <metadata>
+      <xsl:if test=".//z:pagebreak">
+          <xsl:attribute name="prefix" select="'a11y: http://www.idpf.org/epub/vocab/package/a11y/#'"/>
+      </xsl:if>
+      <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
       <!--== Identifier ==-->
       <xsl:for-each select="f:get-identifiers(/)">
         <dc:identifier id="{if(position()=1) then 'pub-id' else concat('pub-id-',position())}">
           <xsl:value-of select="."/>
         </dc:identifier>
-        <!--TODO add dcterms:identifier's @property="identifier-type"-->
-        <!--TODO add dcterms:identifier's @scheme-->
+        <!--TODO add dc:identifier's @property="identifier-type"-->
+        <!--TODO add dc:identifier's @scheme-->
       </xsl:for-each>
 
       <!--== Title ==-->
@@ -109,10 +116,10 @@
           ==-->
       <xsl:if test=".//z:pagebreak
                     and exists($source-of-pagination)
-                    and not(//z:*[@property='pageBreakSource'
+                    and not(//z:*[@property='a11y:pageBreakSource'
                                   and not(@about)
                                   and normalize-space(if (@content) then @content else .)])">
-        <meta property="pageBreakSource">
+        <meta property="a11y:pageBreakSource">
           <xsl:value-of select="$source-of-pagination"/>
         </meta>
       </xsl:if>
@@ -129,15 +136,17 @@
                   select="ancestor::z:head//z:meta[@property='z3998:meta-record-type']
                                                   [rdfa:context(.)=$this/@resource]
                                                   [1]/@content"/>
+    <xsl:variable name="resource" select="resolve-uri(@resource,base-uri(.))"/>
+    <xsl:variable name="resource" select="pf:relativize-uri($resource,$output-base-uri)"/>
     <xsl:choose>
       <xsl:when test="$record-type='z3998:mods'">
-        <link rel="record" href="{@resource}" media-type="application/mods+xml"/>
+        <link rel="record" href="{$resource}" media-type="application/mods+xml"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:onix-books'">
-        <link rel="record" href="{@resource}" media-type="application/xml" properties="onix"/>
+        <link rel="record" href="{$resource}" media-type="application/xml" properties="onix"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:marc21-xml'">
-        <link rel="record" href="{@resource}" media-type="application/marcxml+xml"/>
+        <link rel="record" href="{$resource}" media-type="application/marcxml+xml"/>
       </xsl:when>
       <xsl:when test="$record-type=('z3998:dcterms-rdf','z3998:dctersm-rdfa')">
         <!--TODO translate external DCTERMS records ?-->
@@ -167,22 +176,31 @@
       <meta about="#role" property="scheme" datatype="xsd:anyURI">http://id.loc.gov/vocabulary/relators</meta>
     -->
     <xsl:choose>
-      <!--<xsl:when test="@property=('dcterms:contributor','dcterms:coverage','...')">
-        <!-\- DCMES optional elements: 
-          contributor | coverage | creator | date | description | format 
-          | publisher | relation | rights | source | subject | type
-        -\->
-        <!-\-TODO translate dcterms:* into dc:*-\->
-        <!-\-TODO pick content from meta/@content or string-value(.)-\->
-        <xsl:element name="{@property}">
-          <xsl:value-of select="."/>
+      <xsl:when test="empty(normalize-space(if (@content) then @content else .))"/>
+      <!-- DCMES optional elements -->
+      <xsl:when
+        test="@property=('dc:contributor', 'dcterms:contributor',
+                         'dc:coverage',    'dcterms:coverage',
+                         'dc:creator',     'dcterms:creator',
+                         'dc:date',        'dcterms:date',
+                         'dc:description', 'dcterms:description',
+                         'dc:format',      'dcterms:format',
+                         'dc:publisher',   'dcterms:publisher',
+                         'dc:relation',    'dcterms:relation',
+                         'dc:rights',      'dcterms:rights',
+                         'dc:source',      'dcterms:source',
+                         'dc:subject',     'dcterms:subject',
+                         'dc:type',        'dcterms:type')">
+        <xsl:element name="dc:{replace(@property,'^dc(terms)?:','')}">
+          <xsl:value-of select="if (@content) then @content else ."/>
         </xsl:element>
-      </xsl:when>-->
+      </xsl:when>
       <xsl:when
         test="not(
            starts-with(@property,'z3998:')
-        or @property=('dc:identifier','dc:title','dc:language'))
-        and normalize-space(if (@content) then @content else .) ">
+        or @property=('dc:identifier', 'dcterms:identifier',
+                      'dc:title',      'dcterms:title',
+                      'dc:language',   'dcterms:language'))">
         <!--TODO declare custom vocabularies-->
         <!--TODO refine RDFa attributes parsing-->
         <meta property="{@property}">
@@ -198,7 +216,7 @@
   <!-- Mode: title                                              -->
   <!--==========================================================-->
 
-  <xsl:template match="z:*[f:hasProp(.,'dcterms:title')]" mode="title">
+  <xsl:template match="z:*[f:hasProp(.,('dc:title','dcterms:title'))]" mode="title">
     <xsl:call-template name="create-title"/>
     <xsl:variable name="id" as="xs:string">
       <xsl:call-template name="pf:generate-id"/>
@@ -265,7 +283,7 @@
     <xsl:param name="doc" as="document-node()"/>
     <xsl:sequence
       select="distinct-values((
-      $doc/z:document/z:head/z:meta[@property='dcterms:language']/@content,
+      $doc/z:document/z:head/z:meta[@property=('dc:language','dcterms:language')]/@content,
       $doc/z:document/@xml:lang,
       $doc/z:document/z:body/@xml:lang))"
     />

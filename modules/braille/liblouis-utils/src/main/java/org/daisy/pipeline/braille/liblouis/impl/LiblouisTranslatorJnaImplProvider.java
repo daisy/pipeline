@@ -4,7 +4,6 @@ import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-
 import static java.util.Collections.singleton;
 import java.util.List;
 import java.util.Locale;
@@ -50,6 +49,7 @@ import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.I
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.Iterables.transform;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logCreate;
 import static org.daisy.pipeline.braille.common.AbstractTransformProvider.util.logSelect;
+import org.daisy.pipeline.braille.common.BrailleCode;
 import org.daisy.pipeline.braille.common.BrailleTranslator;
 import org.daisy.pipeline.braille.common.BrailleTranslatorProvider;
 import org.daisy.pipeline.braille.common.CompoundBrailleTranslator;
@@ -76,6 +76,7 @@ import org.daisy.pipeline.braille.liblouis.pef.LiblouisDisplayTableBrailleConver
 
 import org.liblouis.DisplayException;
 import org.liblouis.DisplayTable;
+import org.liblouis.TableInfo;
 import org.liblouis.TranslationException;
 import org.liblouis.TranslationResult;
 import org.liblouis.Translator;
@@ -138,8 +139,21 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 	
 	private final static List<String> supportedInput = ImmutableList.of("text-css");
 	
+	@Override
 	protected final Iterable<LiblouisTranslator> _get(Query query) {
 		MutableQuery q = mutableQuery(query);
+		if (q.containsKey("braille-code")) {
+			// FIXME: for now not supported in combination with other features
+			// FIXME: implement this in Liblouis table metadata
+			String code = q.removeOnly("braille-code").getValue().get();
+			if (!q.isEmpty())
+				return empty;
+			try {
+				return get(BrailleCode.parse(code));
+			} catch (IllegalArgumentException e) {
+				return empty;
+			}
+		}
 		for (Feature f : q.removeAll("input"))
 			if (!supportedInput.contains(f.getValue().get()))
 				return empty;
@@ -169,13 +183,19 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL : v.equalsIgnoreCase("defer") ?
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_DEFER :
 			LiblouisTranslatorImpl.NON_STANDARD_HYPH_IGNORE;
+		if (q.containsKey("include-braille-code-in-language"))
+			v = q.removeOnly("include-braille-code-in-language").getValue().orElse("true");
+		else
+			v = "false";
+		boolean includeBrailleCodeInLanguage = v.equalsIgnoreCase("true");
 		if (table != null)
 			q.add("table", table);
 		q.add("white-space");
 		Iterable<LiblouisTranslator> translators = memoize(
 			getSimpleTranslator(
 				q.asImmutable(),
-				handleNonStandardHyphenation));
+				handleNonStandardHyphenation,
+				includeBrailleCodeInLanguage));
 		if (translators.apply(NOP_LOGGER).iterator().hasNext()) {
 			// all translators use the same display table
 			// FIXME: table has already been computed in the getSimpleTranslator() call above
@@ -194,7 +214,9 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			return translators;
 	}
 
-	private Iterable<LiblouisTranslator> getSimpleTranslator(Query query, int handleNonStandardHyphenation) {
+	private Iterable<LiblouisTranslator> getSimpleTranslator(Query query,
+	                                                         int handleNonStandardHyphenation,
+	                                                         boolean includeBrailleCodeInLanguage) {
 		return transform(
 			logSelect(query, tableProvider),
 			new Function<LiblouisTableJnaImpl,LiblouisTranslator>() {
@@ -203,10 +225,25 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 						logCreate((LiblouisTranslator)new LiblouisTranslatorImpl(
 									table,
 									null,
-									handleNonStandardHyphenation)));
+									handleNonStandardHyphenation,
+									includeBrailleCodeInLanguage)));
 				}
 			}
 		);
+	}
+	
+	// HACK!
+	// For now, because the BrailleCode feature is only used in the context of dtbook-to-ebraille to
+	// pass braille code information from LiblouisTranslatorImpl through language tags, we don't
+	// need to parse the codes, but we can rather cache them when they are returned from
+	// LiblouisTranslatorImpl.getBrailleCode().
+	private final Map<BrailleCode,String> brailleCodeCache = new HashMap<>();
+	
+	private Iterable<LiblouisTranslator> get(BrailleCode code) {
+		String id = brailleCodeCache.get(code);
+		if (id == null)
+			throw new IllegalStateException();
+		return Iterables.of(fromId(id));
 	}
 	
 	@Override
@@ -229,6 +266,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		protected FullHyphenator fullHyphenator;
 		private Hyphenator.LineBreaker lineBreaker;
 		private final Map<String,Typeform> supportedTypeforms;
+		private Map<String,String> infoMap = null; // computed lazily
+		private BrailleCode brailleCode = null; // computed lazily
 		
 		// how to handle non-standard hyphenation in pre-translation mode
 
@@ -239,6 +278,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		// contains non-braille characters, the result is an exact copy of the input with no styles
 		// applied.
 		private final int handleNonStandardHyphenation;
+		private final boolean includeBrailleCodeInLanguage;
 		private final Normalizer.Form unicodeNormalization;
 		
 		public final static int NON_STANDARD_HYPH_IGNORE = 0;
@@ -258,12 +298,14 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		 */
 		LiblouisTranslatorImpl(LiblouisTableJnaImpl table,
 		                       Hyphenator hyphenator,
-		                       int handleNonStandardHyphenation) {
+		                       int handleNonStandardHyphenation,
+		                       boolean includeBrailleCodeInLanguage) {
 			super(hyphenator, null);
 			this.table = table;
 			this.translator = table.getTranslator();
 			this.displayTable = table.getDisplayTable();
 			this.handleNonStandardHyphenation = handleNonStandardHyphenation;
+			this.includeBrailleCodeInLanguage = includeBrailleCodeInLanguage;
 			this.supportedTypeforms
 				= translator.getSupportedTypeforms().stream().collect(Collectors.toMap(Typeform::getName, e -> e));
 			this.unicodeNormalization = table.getUnicodeNormalizationForm();
@@ -285,6 +327,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			this.translator = from.translator;
 			this.displayTable = from.displayTable;
 			this.handleNonStandardHyphenation = from.handleNonStandardHyphenation;
+			this.includeBrailleCodeInLanguage = from.includeBrailleCodeInLanguage;
 			this.supportedTypeforms = from.supportedTypeforms;
 			this.unicodeNormalization = from.unicodeNormalization;
 			this.hyphenator = hyphenator;
@@ -300,8 +343,111 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 		
 		// FIXME: not if (input:text-css)
+		@Override
 		public LiblouisTable asLiblouisTable() {
 			return table;
+		}
+		
+		private BrailleCode getBrailleCode() {
+			if (brailleCode == null) {
+				// For now, there are no registered braille codes yet, so we can use whatever we
+				// want for the "system" part of the braille code identifier. For ease of
+				// implementation, we start from the index-name metadata field, and drop any grade
+				// and specialization info from it.
+				Map<String,String> info = getInfo();
+				String indexName = info.get("index-name");
+				if (indexName == null)
+					throw new IllegalStateException();
+				// some special cases (for Liblouis v3.33)
+				if ("International Phonetic Alphabet".equals(indexName))
+					brailleCode = new BrailleCode("IPA", BrailleCode.Grade.NO_GRADE, BrailleCode.Specialization.PHONETIC);
+				else if ("Russian, for program sources".equals(indexName))
+					// metadata should be fixed, see https://github.com/liblouis/liblouis/pull/1746
+					brailleCode = new BrailleCode("Russian", BrailleCode.Grade.GRADE0, BrailleCode.Specialization.COMP6);
+				else {
+					if (indexName.startsWith("English, unified"))
+						indexName = indexName.replace("English, unified", "UEB");
+					else if ("Serbian, Cyrillic".equals(indexName))
+						// "Cyrillic" is only about the table, not about the braille code
+						indexName = "Serbian";
+					else if ("Mandarin, Taiwan".equals(indexName))
+						indexName = "Taiwanese";
+					else if (indexName.startsWith("Mandarin, mainland China"))
+						indexName = indexName.replace("Mandarin, mainland China", "Chinese");
+					BrailleCode.Grade grade = BrailleCode.Grade.NO_GRADE; {
+						String g = info.get("grade");
+						if (g != null)
+							try {
+								grade = BrailleCode.Grade.valueOf("GRADE" + g);
+							} catch (IllegalArgumentException e) {
+								throw new IllegalStateException(
+									"grade not supported by eBraille braille code identifier: " + g, e);
+							}
+					}
+					BrailleCode.Specialization specialization = null; {
+						String t = info.get("type");
+						if (t == null);
+						else if ("computer".equals(t)) {
+							String d = info.get("dots");
+							if ("8".equals(d))
+								specialization = BrailleCode.Specialization.COMP8;
+							else if ("6".equals(d))
+								specialization = BrailleCode.Specialization.COMP6;
+							else
+								throw new IllegalStateException();
+						}
+					}
+					List<String> system = new ArrayList<>();
+					for (String part : indexName.split(", ")) {
+						if (grade != BrailleCode.Grade.NO_GRADE
+						    && ("uncontracted".equals(part) || "contracted".equals(part) || "partially contracted".equals(part)
+						        || part.startsWith("grade ")))
+							continue;
+						if ((specialization == BrailleCode.Specialization.COMP6
+						    || specialization == BrailleCode.Specialization.COMP8)
+						    && "computer".equals(part))
+							continue;
+						if (specialization == BrailleCode.Specialization.COMP6 && "6-dot".equals(part))
+							continue;
+						if (specialization == BrailleCode.Specialization.COMP8 && "8-dot".equals(part))
+							continue;
+						system.add(part.replace(" ", "-"));
+					}
+					brailleCode = new BrailleCode(join(system, "-"), grade, specialization);
+				}
+				LiblouisTranslatorJnaImplProvider.this.rememberId(this); // otherwise only HandleTextTransformNone
+				                                                         // wrapper may be remembered
+				brailleCodeCache.put(brailleCode, getIdentifier());
+			}
+			return brailleCode;
+		}
+		
+		@Override
+		public Map<String,String> getInfo() {
+			if (infoMap == null) {
+				TableInfo info = table.getInfo();
+				ImmutableMap.Builder<String,String> m = new ImmutableMap.Builder<>();
+				if (info != null) {
+					String type = info.get("type");
+					if (type == null)
+						type = "literary";
+					m.put("type", type);
+					String dots = info.get("dots");
+					if (dots == null)
+						dots = type.equals("computer") ? "8" : "6";
+					m.put("dots", dots);
+					for (String k : new String[]{"display-name",
+					                             "index-name",
+					                             "contraction",
+					                             "grade"}) {
+						String v = info.get(k);
+						if (v != null)
+							m.put(k, v);
+					}
+				}
+				infoMap = m.build();
+			}
+			return infoMap;
 		}
 		
 		@Override
@@ -314,7 +460,8 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 		}
 		
 		private FromTypeformedTextToBraille fromTypeformedTextToBraille;
-		
+
+		@Override
 		public FromTypeformedTextToBraille fromTypeformedTextToBraille() {
 			if (fromTypeformedTextToBraille == null)
 				fromTypeformedTextToBraille = new FromTypeformedTextToBraille() {
@@ -1143,7 +1290,15 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 				Map<String,String> a = t.getTextAttributes();
 				if (a != null)
 					a = new HashMap<>(a);
-				result.add(new CSSStyledText(braille[i], style[i], a));
+				Locale lang = t.getLanguage();
+				if (lang != null)
+					if (includeBrailleCodeInLanguage)
+						lang = getBrailleCode().toLanguageTag(lang);
+					else
+						lang = new Locale.Builder().setLocale(lang)
+						                           .setScript("Brai")
+						                           .build();
+				result.add(new CSSStyledText(braille[i], style[i], lang, a));
 				i++;
 			}
 			return result;
@@ -1522,6 +1677,7 @@ public class LiblouisTranslatorJnaImplProvider extends AbstractTransformProvider
 			hash = prime * hash + translator.hashCode();
 			hash = prime * hash + ((hyphenator == null) ? 0 : hyphenator.hashCode());
 			hash = prime * hash + handleNonStandardHyphenation;
+			hash = prime * hash + (includeBrailleCodeInLanguage ? 1 : 0);
 			return hash;
 		}
 	

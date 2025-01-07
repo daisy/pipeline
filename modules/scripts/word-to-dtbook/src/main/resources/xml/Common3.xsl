@@ -2422,9 +2422,9 @@
 				<xsl:choose>
 					<xsl:when test="../w:pPr/w:ind[@w:left] and ../w:pPr/w:ind[@w:right] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:caps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="valright" as="xs:integer" select="../w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($valright div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($valright div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';text-transform:uppercase',';text-indent:','right=',$val_right,'in',';left=',$val_left,'in')}">
 							<xsl:value-of select="w:t"/>
@@ -2433,7 +2433,7 @@
 					
 					<xsl:when test="../w:pPr/w:ind[@w:left] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:caps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';text-transform:uppercase',';text-indent:',$val_left,'in')}">
 							<xsl:value-of select="w:t"/>
@@ -2442,7 +2442,7 @@
 					
 					<xsl:when test="../w:pPr/w:ind[@w:right] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:caps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';text-transform:uppercase',';text-indent:',$val_right,'in')}">
 							<xsl:value-of select="w:t"/>
@@ -2467,9 +2467,9 @@
 					
 					<xsl:when test="../w:pPr/w:ind[@w:left] and ../w:pPr/w:ind[@w:right] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:smallCaps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="valright" as="xs:integer" select="../w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($valright div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($valright div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';font-variant:small-caps',';text-indent:','right=',$val_right,'in',';left=',$val_left,'in')}">
 							<xsl:value-of select="w:t"/>
@@ -2478,7 +2478,7 @@
 					
 					<xsl:when test="../w:pPr/w:ind[@w:left] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:smallCaps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:left"/>
-						<xsl:variable name="val_left" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_left" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';font-variant:small-caps',';text-indent:',$val_left,'in')}">
 							<xsl:value-of select="w:t"/>
@@ -2487,7 +2487,7 @@
 					
 					<xsl:when test="../w:pPr/w:ind[@w:right] and w:rPr/w:u and w:rPr/w:strike and w:rPr/w:smallCaps and w:rPr/w:color and w:t">
 						<xsl:variable name="val" as="xs:integer" select="../w:pPr/w:ind/@w:right"/>
-						<xsl:variable name="val_right" as="xs:integer" select="($val div 1440)"/>
+						<xsl:variable name="val_right" as="xs:integer" select="xs:integer(round($val div 1440))"/>
 						<xsl:variable name="val_color" as="xs:string" select="w:rPr/w:color/@w:val"/>
 						<span class="{concat('text:Underline line-through;color:#',$val_color,';font-variant:small-caps',';text-indent:',$val_right,'in')}">
 							<xsl:value-of select="w:t"/>

@@ -5,7 +5,9 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="epub3"
+                px:output-filesets="epub3">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Enhancer</h1>
@@ -353,7 +355,7 @@ elements that represent the sentences.</p>
                                                      resolve-uri($s,$source),
                                                    ' ')"/>
         <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
-        <p:with-option name="lexicon" select="for $l in tokenize($stylesheet,'\s+')[not(.='')] return
+        <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
                                                 resolve-uri($l,$source)"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>

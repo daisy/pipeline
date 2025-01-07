@@ -90,6 +90,24 @@
             <p>Root directory of the (expanded) EPUB 3.</p>
         </p:documentation>
     </p:option>
+    <p:option name="package-doc-path" required="false" select="'EPUB/package.opf'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the root directory of the package document.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="navigation-doc-path" required="false" select="'EPUB/toc.xhtml'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the root directory, of the navigation document, if it is
+            generated.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="content-path" required="false" select="'EPUB/'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the root directory, of the directory that will contain all
+            files except <code>mimetype</code>, the files that need to be in <code>META-INF</code>,
+            and the package and navigation documents which have their own setting.</p>
+        </p:documentation>
+    </p:option>
     <p:option name="temp-dir" select="''">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Empty directory dedicated to this conversion. May be left empty in which
@@ -184,11 +202,12 @@
     </p:import>
     <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl" type="application/xslt+xml">
         <p:documentation>
+            pf:normalize-uri
             pf:longest-common-uri
         </p:documentation>
     </cx:import>
 
-    <p:variable name="content-dir" select="concat($output-dir,'EPUB/')">
+    <p:variable name="content-dir" select="pf:normalize-uri(concat($output-dir,$content-path,'/'))">
         <p:empty/>
     </p:variable>
 
@@ -366,7 +385,7 @@
         <p:input port="content">
             <p:pipe step="content-docs-except-nav-and-diagram" port="result.fileset"/>
         </p:input>
-        <p:with-option name="output-base-uri" select="concat($content-dir,'toc.xhtml')"/>
+        <p:with-option name="output-base-uri" select="concat($output-dir,$navigation-doc-path)"/>
     </px:epub3-add-navigation-doc>
     <p:identity px:message="Navigation Document Created."/>
 
@@ -464,7 +483,7 @@
                 <p:pipe step="main" port="metadata"/>
                 <p:pipe step="metadata" port="result"/>
             </p:input>
-            <p:with-option name="output-base-uri" select="concat($content-dir,'package.opf')"/>
+            <p:with-option name="output-base-uri" select="concat($output-dir,$package-doc-path)"/>
         </px:epub3-create-package-doc>
         <p:identity name="package-doc" px:message="Package Document Created."/>
         <p:sink/>
@@ -547,7 +566,7 @@
                     <p:input port="source">
                         <p:inline><c:data content-type="text/plain">application/epub+zip</c:data></p:inline>
                     </p:input>
-                    <p:with-option name="base-uri" select="resolve-uri('../mimetype',$content-dir)"/>
+                    <p:with-option name="base-uri" select="resolve-uri('mimetype',$output-dir)"/>
                 </px:set-base-uri>
                 <p:sink/>
                 <px:fileset-add-entry first="true" media-type="text/plain" name="add-mimetype">
@@ -569,7 +588,7 @@
                     </p:input>
                 </px:fileset-store>
                 <px:epub-validate name="validate" version="3" cx:depends-on="store">
-                    <p:with-option name="epub" select="concat($content-dir,'package.opf')"/>
+                    <p:with-option name="epub" select="concat($output-dir,$package-doc-path)"/>
                     <p:with-option name="temp-dir" select="if ($temp-dir='') then '' else concat($temp-dir,'validate-epub/')"/>
                     <p:with-option name="report-method" select="if ($output-validation='report') then 'log' else 'error'"/>
                 </px:epub-validate>

@@ -39,7 +39,7 @@
       <head>
         <meta charset="UTF-8"/>
         <title><xsl:value-of
-          select="$nodes[1]/ancestor::document/head/meta[@property='dcterms:title']/@content"/></title>
+          select="$nodes[1]/ancestor::document/head/meta[@property=('dc:title','dcterms:title')]/@content"/></title>
         <!--<meta name="dcterms:identifier" content="com.googlecode.zednext.alice"/>-->
         <!--<meta name="dcterms:publisher" content="CSU"/>-->
         <!--<meta name="dcterms:date" content="2010-03-27T13:50:05-02:00"/>-->
@@ -700,7 +700,7 @@
     </xsl:choose>
   </xsl:template>
   <xsl:template match="object" mode="#all">
-    <xsl:message select="'object: unsuported media type'"/>
+    <xsl:message select="'object: unsupported media type'"/>
   </xsl:template>
 
   <!--====== Paragraph module ===================================-->
@@ -740,7 +740,7 @@
          to either accessible description or accessible name -->
     <!-- <xsl:attribute name="title" select="."/> -->
     <xsl:attribute name="aria-label" select="concat(' ',.,'. ')"/> <!-- append period and surround with extra
-                                                                        spaces to help AT speaking the page
+                                                                        spaces to help AT speak the page
                                                                         number correctly -->
   </xsl:template>
 
@@ -1225,7 +1225,9 @@
   <xsl:function name="f:is-image" as="xs:boolean">
     <xsl:param name="node" as="node()"/>
     <xsl:sequence
-      select="starts-with($node/@srctype,'image/') or matches($node/@src,'\.(jpg|png|gif|svg)$')"/>
+      select="starts-with($node/@srctype,'image/')
+              or matches($node/@src,'\.(jpg|png|gif|svg)$')
+              or matches($node/@src,'^data:image/')"/>
   </xsl:function>
   <xsl:function name="f:is-captioning" as="xs:boolean">
     <xsl:param name="elem" as="element()"/>

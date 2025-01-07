@@ -64,6 +64,7 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 	protected void init() {
 		// pre-load a selection of tables in order to expose them in preview-table dropdown list
 		for (Table t : get(query("(liblouis-table:'http://www.liblouis.org/tables/nl-print.dis')"))); // needed for include-pdf option
+		for (Table t : get(query("(liblouis-table:'http://www.liblouis.org/tables/text_nabcc.dis')")));
 	}
 
 	private static Set<String> supportedFeatures = ImmutableSet.of("liblouis-table", "locale", "id");
@@ -95,9 +96,12 @@ public class LiblouisDisplayTableProvider extends AbstractTableProvider {
 							displayName = "Liblouis table '" + id + "'";
 						}
 						String description = null;
-						if ("http://www.liblouis.org/tables/nl-print.dis".equals(table.getTranslator().getTable()))
+						if ("http://www.liblouis.org/tables/nl-print.dis".equals(table.getTranslator().getTable())) {
 							// FIXME: move description to Liblouis
-							description = "Table for Dutch that maps dot patterns to their original meaning as much as possible.";
+							description = "Table for Dutch that maps dot patterns to their original meaning as much as possible."; }
+						else if ("http://www.liblouis.org/tables/text_nabcc.dis".equals(table.getTranslator().getTable())) {
+							displayName = "North American Braille Computer Code";
+							description = "Table for English that supports 8-dot braille"; }
 						return new LiblouisDisplayTable(table.getTranslator(), displayName, description); }}),
 			notNull());
 	}

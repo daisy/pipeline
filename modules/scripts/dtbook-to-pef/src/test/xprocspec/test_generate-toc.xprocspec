@@ -12,7 +12,7 @@
                             <style media="embossed" type="text/x-scss">
                                 @xslt "../../main/resources/css/generate-toc.xsl" {
                                     depth: 2;
-                                    exclude-class: 'exclude';
+                                    exclude: ".exclude";
                                     document-toc-id: 'generated-document-toc';
                                 }
                             </style>
@@ -60,7 +60,7 @@
                         <style media="embossed" type="text/x-scss">
                                 @xslt "../../main/resources/css/generate-toc.xsl" {
                                     depth: 2;
-                                    exclude-class: 'exclude';
+                                    exclude: ".exclude";
                                     document-toc-id: 'generated-document-toc';
                                 }
                             </style>

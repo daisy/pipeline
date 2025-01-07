@@ -8,6 +8,7 @@
 		<x:call step="px:html-to-epub3.script">
 			<x:option name="source" select="resolve-uri('../resources/minimal.xhtml')"/>
 			<x:option name="result" select="resolve-uri('minimal/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('minimal/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output EPUB">
 			<x:document type="zip" base-uri="temp-dir" href="minimal/output-dir/minimal.epub" ordered="true"/>
@@ -33,6 +34,7 @@
 		<x:call step="px:html-to-epub3.script">
 			<x:option name="source" select="resolve-uri('../resources/minimal.xhtml')"/>
 			<x:option name="result" select="resolve-uri('path%20with%20special%20characters/output-dir/',$temp-dir)"/>
+            <x:option name="temp-dir" select="resolve-uri('path%20with%20special%20characters/temp-dir/',$temp-dir)"/>
 		</x:call>
 		<x:context label="the output EPUB">
 			<x:document type="zip" base-uri="temp-dir" href="path%20with%20special%20characters/output-dir/minimal.epub" ordered="true"/>

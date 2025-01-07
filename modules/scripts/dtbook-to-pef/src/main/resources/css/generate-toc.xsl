@@ -9,16 +9,20 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:f="http://www.daisy.org/ns/pipeline/internal-functions"
+                xmlns:css="org.daisy.pipeline.css.StyleAccessor"
                 version="2.0"
                 exclude-result-prefixes="#all">
 
   <!-- stylesheet defaults to names used in HTML if no other grammar is detected -->
   
   <xsl:param name="depth" as="xs:integer" select="0"/>
-  <xsl:param name="exclude-class" as="xs:string" select="''"/>
+  <xsl:param name="exclude" as="xs:string?" select="()"/>
+  <xsl:param name="exclude-class" as="xs:string*" select="()"/>
   <xsl:param name="document-toc-id" as="xs:string" select="''"/>
   <xsl:param name="volume-toc-id" as="xs:string" select="''"/>
   <xsl:param name="heading-names" select="''"/>
+  
+  <xsl:param name="style"/>
   
   <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
   <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl"/>
@@ -29,7 +33,10 @@
                 select="if ($heading-names) then tokenize($heading-names,' ') else f:html-headers()"/>
   <xsl:variable name="included-headings" as="element()*"
                 select="//*[local-name()=$included-heading-names]
-                           [$exclude-class='' or not(@class[tokenize(.,'\s+')[not(.='')]=$exclude-class])]"/>
+                           [not((exists($exclude-class[not(.='')]) and
+                                 @class[tokenize(.,'\s+')[not(.='')]=$exclude-class])
+                                or (exists($exclude[not(.='')]) and
+                                    css:matches($style,.,$exclude)))]"/>
   
   <xsl:template match="/*" priority="1">
     <xsl:call-template name="pf:next-match-with-generated-ids">

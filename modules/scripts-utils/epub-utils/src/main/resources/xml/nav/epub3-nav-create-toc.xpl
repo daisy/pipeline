@@ -60,7 +60,12 @@
             px:set-base-uri
         </p:documentation>
     </p:import>
-    
+
+    <p:variable name="content-lang" select="(collection()/h:html/@lang,
+                                             collection()/h:html/@xml:lang,
+                                             collection()/h:html/h:head/h:meta[matches(lower-case(@name),'^(.*[:\.])?language$')]/@content,
+                                             'und')[1]"/>
+
     <p:for-each name="tocs">
         <p:output port="result" sequence="true" primary="true"/>
         <p:output port="content-doc" sequence="true">
@@ -101,6 +106,11 @@
         </p:input>
     </p:insert>
 
+    <!-- Add lang -->
+    <p:add-attribute match="/*" attribute-name="lang">
+        <p:with-option name="attribute-value" select="$content-lang"/>
+    </p:add-attribute>
+
     <!-- Translate "Table of contents" -->
     <p:replace match="//h:nav[@epub:type='toc']/h:h1/text()">
         <p:input port="replacement">
@@ -119,13 +129,8 @@
     <p:identity name="result"/>
     <p:sink/>
 
-    <p:wrap-sequence wrapper="wrapper">
-        <p:input port="source">
-            <p:pipe port="source" step="main"/>
-        </p:input>
-    </p:wrap-sequence>
     <px:i18n-translate name="toc-string" string="Table of contents">
-        <p:with-option name="language" select="( /*/h:html/@lang , /*/h:html/@xml:lang , /*/h:html/h:head/h:meta[matches(lower-case(@name),'^(.*[:\.])?language$')]/@content , 'en' )[1]"/>
+        <p:with-option name="language" select="$content-lang"/>
         <p:input port="maps">
             <p:document href="i18n.xml"/>
         </p:input>

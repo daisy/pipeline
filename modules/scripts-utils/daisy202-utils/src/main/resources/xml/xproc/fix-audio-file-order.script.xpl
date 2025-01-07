@@ -4,7 +4,9 @@
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
-                type="px:daisy202-fix-audio-file-order.script" name="main">
+                type="px:daisy202-fix-audio-file-order.script" name="main"
+                px:input-filesets="daisy202"
+                px:output-filesets="daisy202">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">DAISY 2.02 Unscrambler</h1>

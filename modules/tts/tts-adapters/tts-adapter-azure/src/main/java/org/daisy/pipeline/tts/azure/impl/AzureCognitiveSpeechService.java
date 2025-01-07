@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
-import org.daisy.pipeline.tts.DefaultSpeechRate;
+import org.daisy.pipeline.tts.SpeechRateProperty;
 import org.daisy.pipeline.tts.TTSEngine;
 import org.daisy.pipeline.tts.TTSService;
 
@@ -37,7 +37,7 @@ public class AzureCognitiveSpeechService implements TTSService {
 	                                                                      "Priority of Azure voices relative to voices of other engines",
 	                                                                      false,
 	                                                                      "15");
-	private static final DefaultSpeechRate SPEECH_RATE = new DefaultSpeechRate();
+	private static final SpeechRateProperty SPEECH_RATE = new SpeechRateProperty();
 
 	@Override
 	public String getName() {

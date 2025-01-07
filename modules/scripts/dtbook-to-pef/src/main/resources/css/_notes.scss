@@ -101,7 +101,7 @@ $chapter-selector: "level1, level2, level3, level4, level5, level6";
 	 * - Move note elements if notes-placement is "end-of-block",
 	 * - otherwise generate a div element to contain all the notes and to attach a title.
 	 */
-	@xslt "notes.xsl" {
+	@-daisy-xslt "notes.xsl" {
 		notes-placement: $notes-placement;
 		endnotes-section-class: "endnotes-section";
 		chapter-selector: $chapter-selector;
@@ -111,9 +111,9 @@ $chapter-selector: "level1, level2, level3, level4, level5, level6";
 
 	} @else {
 
-		noteref::alternate {
+		noteref::-daisy-alternate {
 			display: block;
-			content: target-content(attr(idref));
+			content: -daisy-target-content(attr(idref));
 		}
 
 		// notes that are not referenced are not rendered
@@ -124,46 +124,46 @@ $chapter-selector: "level1, level2, level3, level4, level5, level6";
 		.endnotes-section {
 			display: -obfl-list-of-references;
 			@if $notes-placement != end-of-chapter {
-				flow: endnotes-container;
+				-daisy-flow: endnotes-container;
 			}
 			&::after {
 				@if $notes-placement == end-of-chapter {
-					content: flow(endnotes);
+					content: -daisy-flow(endnotes);
 				} @else if $notes-placement == end-of-book {
-					content: flow(endnotes, document);
+					content: -daisy-flow(endnotes, document);
 				} @else {
-					content: flow(endnotes, volume);
+					content: -daisy-flow(endnotes, volume);
 				}
 			}
 		}
 
 		@if $notes-placement == bottom-of-page {
-			noteref::alternate {
-				flow: footnotes;
+			noteref::-daisy-alternate {
+				-daisy-flow: footnotes;
 			}
 			@page {
-				@footnotes {
-					content: flow(footnotes, page);
+				@-daisy-footnotes {
+					content: -daisy-flow(footnotes, page);
 					-obfl-fallback-collection: endnotes;
 				}
 			}
 
 		} @else {
-			noteref::alternate {
-				flow: endnotes;
+			noteref::-daisy-alternate {
+				-daisy-flow: endnotes;
 			}
 		}
 
 		@if $notes-placement == end-of-book {
-			@volume:last {
+			@-daisy-volume:last {
 				@end {
-					content: flow(endnotes-container, document);
+					content: -daisy-flow(endnotes-container, document);
 				}
 			}
 		} @else if $notes-placement != end-of-chapter {
-			@volume {
+			@-daisy-volume {
 				@end {
-					content: flow(endnotes-container, document);
+					content: -daisy-flow(endnotes-container, document);
 				}
 			}
 		}

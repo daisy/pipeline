@@ -4,7 +4,9 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:epub-to-daisy.script"
-                name="main">
+                name="main"
+                px:input-filesets="epub2 epub3"
+                px:output-filesets="daisy202 daisy3">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">EPUB to DAISY</h1>
@@ -57,7 +59,7 @@ This will remove any existing media overlays in the EPUB.</p>
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
-	<p:option name="stylesheet-parameters" select="''">
+	<p:option name="stylesheet-parameters" select="'()'">
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
@@ -68,6 +70,15 @@ This will remove any existing media overlays in the EPUB.</p>
 	<p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
 		<!-- directory used for temporary files -->
 	</p:option>
+
+	<p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
+		<!-- defined in ../../../../../common-options.xpl -->
+	</p:option>
+	<p:output port="tts-log" sequence="true">
+		<!-- defined in ../../../../../common-options.xpl -->
+		<p:pipe step="status" port="tts-log"/>
+	</p:output>
+	<p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
 	<p:option name="epub3" required="true" px:output="result" px:type="anyDirURI">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
@@ -146,11 +157,17 @@ This will remove any existing media overlays in the EPUB.</p>
 	</p:choose>
 	<p:choose name="status" px:progress="19/20">
 		<p:when test="/d:validation-status[@result='error'] and $validation='abort'">
-			<p:output port="result"/>
+			<p:output port="result" primary="true"/>
+			<p:output port="tts-log" sequence="true">
+				<p:empty/>
+			</p:output>
 			<p:identity/>
 		</p:when>
 		<p:otherwise>
-			<p:output port="result"/>
+			<p:output port="result" primary="true"/>
+			<p:output port="tts-log" sequence="true">
+				<p:pipe step="convert" port="tts-log"/>
+			</p:output>
 
 			<px:epub-to-daisy name="convert" px:message="Converting to DAISY" px:progress="15/19">
 				<p:input port="source.fileset">
@@ -166,6 +183,7 @@ This will remove any existing media overlays in the EPUB.</p>
 				<p:input port="tts-config">
 					<p:pipe step="main" port="tts-config"/>
 				</p:input>
+				<p:with-option name="include-tts-log" select="$include-tts-log='true'"/>
 				<p:with-option name="stylesheet" xmlns:_="tts" select="string-join(
 				                                                         for $s in tokenize($_:stylesheet,'\s+')[not(.='')] return
 				                                                           resolve-uri($s,$source),

@@ -4,7 +4,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="daisy202"
+                px:output-filesets="pef">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">DTBook to braille</h1>

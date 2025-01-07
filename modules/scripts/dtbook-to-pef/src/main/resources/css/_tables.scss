@@ -9,20 +9,20 @@
         display: none;
         &:-obfl-alternate-scenario(1) {
             display: table;
-            render-table-by: row, column;
+            -daisy-render-table-by: row, column;
             -obfl-scenario-cost: -obfl-evaluate("$total-height");
         }
         &:-obfl-alternate-scenario(2) {
             display: table;
-            render-table-by: column, row;
+            -daisy-render-table-by: column, row;
             -obfl-scenario-cost: -obfl-evaluate("(+ 0.01 $total-height)");
         }
     } @else if $transpose {
         display: table;
-        render-table-by: column, row;
+        -daisy-render-table-by: column, row;
     } @else {
         display: table;
-        render-table-by: row, column;
+        -daisy-render-table-by: row, column;
     }
     -obfl-table-col-spacing: 2;
     -obfl-preferred-empty-space: 0;
@@ -30,16 +30,16 @@
 
 @mixin _table-nested-list($axis1, $axis2) {
     display: block;
-    render-table-by: $axis1, $axis2;
-    &::table-by(#{$axis1}) {
+    -daisy-render-table-by: $axis1, $axis2;
+    &::-daisy-table-by(#{$axis1}) {
         @extend %outer-list !optional;
-        &::list-item {
+        &::-daisy-list-item {
             @extend %outer-list-item !optional;
         }
     }
-    &::table-by(#{$axis2}) {
+    &::-daisy-table-by(#{$axis2}) {
         @extend %inner-list !optional;
-        &::list-item {
+        &::-daisy-list-item {
             @extend %inner-list-item !optional;
         }
     }
@@ -125,7 +125,7 @@ $duplicate-tables-with-class: null !default;
 $classes-for-table-duplicates: "" !default;
 
 @if $duplicate-tables-with-class != null {
-    @xslt "tables.xsl" {
+    @-daisy-xslt "tables.xsl" {
         duplicate-tables-with-class: $duplicate-tables-with-class;
         classes-for-table-duplicates: $classes-for-table-duplicates;
     }

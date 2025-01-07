@@ -113,7 +113,16 @@ See the CSS specification for more info:
 - the [`target-counter()`](http://braillespecs.github.io/braille-css/#h4_the-target-counter-function) function
 - the [`page`](http://braillespecs.github.io/braille-css/#h4_creating-and-inheriting-counters) counter
 
-## `$toc-exclude-class` variable
+## `$toc-exclude` variable
+
+Selector for excluding headings from the table of contents.
+
+If specified, heading elements that match this selector are excluded from the generated tables of contents.
+
+
+## `$toc-exclude-class` variable (deprecated)
+
+**Deprecated**: please use the more general `$toc-exclude` instead.
 
 Class name for excluding headings from the table of contents.
 

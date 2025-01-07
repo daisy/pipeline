@@ -19,19 +19,19 @@ import org.daisy.common.properties.Properties;
 import org.daisy.common.properties.Properties.Property;
 import org.daisy.pipeline.css.speech.SpeechDeclarationTransformer;
 
-public class DefaultSpeechRate {
+public class SpeechRateProperty {
 
-	private static final Property SPEECH_RATE = Properties.getProperty("org.daisy.pipeline.tts.speech-rate",
-	                                                                   true,
-	                                                                   "Default speaking rate",
-	                                                                   false,
-	                                                                   "100%");
+	private static final Property PROPERTY = Properties.getProperty("org.daisy.pipeline.tts.speech-rate",
+	                                                                true,
+	                                                                "Speaking rate",
+	                                                                false,
+	                                                                "100%");
 
 	private static final SupportedCSS speechCSS = SupportedCSS21.getInstance();
 	private static final DeclarationTransformer declarationTransformer = new SpeechDeclarationTransformer();
 	private static final BrailleCSSParserFactory parserFactory = new BrailleCSSParserFactory();
 
-	public DefaultSpeechRate() {}
+	public SpeechRateProperty() {}
 
 	/**
 	 * Get current value of {@code org.daisy.pipeline.tts.speech-rate} property as a relative value,
@@ -39,7 +39,7 @@ public class DefaultSpeechRate {
 	 */
 	public float getValue(Map<String,String> properties) {
 		Iterable<? extends Declaration> declarations
-			= parserFactory.parseSimpleInlineStyle("speech-rate: " + SPEECH_RATE.getValue(properties));
+			= parserFactory.parseSimpleInlineStyle("speech-rate: " + PROPERTY.getValue(properties));
 		if (declarations != null)
 			for (Declaration d : declarations) {
 				Map<String,CSSProperty> props = new HashMap<>();

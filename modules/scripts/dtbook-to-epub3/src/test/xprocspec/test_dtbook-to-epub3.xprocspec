@@ -68,7 +68,7 @@
 			<x:option name="audio" select="true()"/>
 			<x:option name="audio-file-type" select="'audio/x-wav'"/>
 			<x:option name="output-name" select="'minimal'"/>
-			<x:option name="output-dir" select="resolve-uri('result/')"/>
+			<x:option name="output-dir" select="resolve-uri('result/',$temp-dir)"/>
 			<x:option name="temp-dir" select="$temp-dir"/>
 		</x:call>
 		<x:context label="the result.fileset port">
@@ -78,18 +78,21 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline" base-uri="temp-dir">
 				<d:fileset>
-					<d:file href="epub3/out/epub/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
-					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0000_00_000.wav" original-href="epub3/temp/tts/audio/part0000_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0001_00_000.wav" original-href="epub3/temp/tts/audio/part0001_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/audio/part0002_00_000.wav" original-href="epub3/temp/tts/audio/part0002_00_000.wav" media-type="audio/x-wav"/>
-					<d:file href="epub3/out/epub/EPUB/mo/toc.smil" media-type="application/smil+xml" indent="true"/>
-					<d:file href="epub3/out/epub/EPUB/mo/minimal-1.smil" media-type="application/smil+xml" indent="true"/>
-					<d:file href="epub3/out/epub/EPUB/mo/minimal-2.smil" media-type="application/smil+xml" indent="true"/>
-					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="result/EPUB/minimal-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/minimal-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
+					<d:file href="result/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/audio/part0000_00_000.wav" media-type="audio/x-wav"
+							original-href="zedai-to-epub3/html-to-epub3/tts/audio/part0000_00_000.wav"/>
+					<d:file href="result/EPUB/audio/part0001_00_000.wav" media-type="audio/x-wav"
+							original-href="zedai-to-epub3/html-to-epub3/tts/audio/part0001_00_000.wav"/>
+					<d:file href="result/EPUB/audio/part0002_00_000.wav" media-type="audio/x-wav"
+							original-href="zedai-to-epub3/html-to-epub3/tts/audio/part0002_00_000.wav"/>
+					<d:file href="result/EPUB/mo/toc.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="result/EPUB/mo/minimal-1.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="result/EPUB/mo/minimal-2.smil" media-type="application/smil+xml" indent="true"/>
+					<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -240,7 +243,7 @@
 			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'package.opf')]"/>
 		</x:context>
 		<x:expect label="the base uri of the package document" type="xpath" test="base-uri(/)"
-		          equals="resolve-uri('epub3/out/epub/EPUB/package.opf',$temp-dir)"/>
+		          equals="resolve-uri('result/EPUB/package.opf',$temp-dir)"/>
 		<x:expect label="the title of the package document" type="xpath"
 		          test="/opf:package/opf:metadata/dc:title/string(.)" equals="'Minimal DTBook'"/>
 	</x:scenario>
@@ -286,14 +289,14 @@
 		</x:context>
 		<x:expect label="the result.fileset port"
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
-			<x:document type="inline" base-uri="temp-dir">
+			<x:document type="inline">
 				<d:fileset>
-					<d:file href="epub3/out/epub/EPUB/content-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/content-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
-					<d:file href="epub3/out/epub/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="epub3/out/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="epub3/out/epub/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="result/EPUB/content-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/content-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/zedai-mods.xml" media-type="application/mods+xml"/>
+					<d:file href="result/EPUB/toc.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="result/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="result/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
@@ -322,7 +325,7 @@
 			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'/package.opf')]"/>
 		</x:context>
 		<x:expect label="the title of the package document" type="xpath"
-		          test="/opf:package/opf:metadata/opf:meta[@property='pageBreakSource']/string(.)"
+		          test="/opf:package/opf:metadata/opf:meta[@property='a11y:pageBreakSource']/string(.)"
 		          equals="'978-0-596-52068-7'"/>
 	</x:scenario>
 

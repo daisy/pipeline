@@ -96,9 +96,11 @@ public abstract class AbstractTransformProvider<T extends Transform> implements 
 		private DerivativeProvider(final Logger context) {
 			this.context = context;
 		}
+		@Override
 		public java.lang.Iterable<T> get(Query query) {
 			return AbstractTransformProvider.this.get(query, context);
 		}
+		@Override
 		public TransformProvider<T> withContext(Logger context) {
 			return AbstractTransformProvider.this.withContext(context);
 		}

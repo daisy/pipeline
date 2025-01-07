@@ -31,7 +31,7 @@ import org.w3c.dom.Element;
 )
 public class LiblouisTableDatatypeService extends DatatypeService {
 
-	protected LiblouisTableDatatypeService() {
+	public LiblouisTableDatatypeService() {
 		super("liblouis-table-query");
 	}
 

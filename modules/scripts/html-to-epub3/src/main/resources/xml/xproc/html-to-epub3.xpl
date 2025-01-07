@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+                xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 px:input-filesets="html"
                 px:output-filesets="epub3"
@@ -42,6 +44,8 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         </p:documentation>
     </p:option>
 
+    <p:option name="temp-dir" required="true"/>
+
     <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
         <p:documentation>
             px:normalize-uri
@@ -69,18 +73,11 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
             px:html-to-epub3
         </p:documentation>
     </p:import>
-
-    <px:normalize-uri name="output-dir-uri">
-        <p:with-option name="href" select="concat($result,'/')"/>
-    </px:normalize-uri>
-    <p:sink/>
-
-    <p:group>
-        <p:variable name="output-dir-uri"  select="/c:result/string()">
-            <p:pipe step="output-dir-uri" port="normalized"/>
-        </p:variable>
-        <p:variable name="epub-file-uri"
-            select="concat($output-dir-uri,if (ends-with($source,'/')) then 'result' else replace($source,'^.*/([^/]*)\.[^/\.]*$','$1'),'.epub')"/>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+        <p:documentation>
+            pf:normalize-uri
+        </p:documentation>
+    </cx:import>
 
         <p:group name="load">
             <p:output port="fileset" primary="true"/>
@@ -101,7 +98,7 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
             <p:input port="input.in-memory">
                 <p:pipe step="load" port="in-memory"/>
             </p:input>
-            <p:with-option name="output-dir" select="concat($output-dir-uri,'epub/')">
+            <p:with-option name="output-dir" select="concat($temp-dir,'epub-unzipped/')">
                 <p:empty/>
             </p:with-option>
             <p:input port="metadata">
@@ -110,14 +107,17 @@ element in the OPF namespace. If not specified, metadata is extracted from the H
         </px:html-to-epub3>
 
         <px:epub3-store>
-            <p:with-option name="href" select="$epub-file-uri">
+            <p:with-option name="href"
+                           select="concat(
+                                     pf:normalize-uri(concat($result,'/')),
+                                     if (ends-with($source,'/'))
+                                       then 'result'
+                                       else replace($source,'^.*/([^/]*)\.[^/\.]*$','$1'),'.epub')">
                 <p:empty/>
             </p:with-option>
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory.out" step="convert"/>
             </p:input>
         </px:epub3-store>
-
-    </p:group>
 
 </p:declare-step>

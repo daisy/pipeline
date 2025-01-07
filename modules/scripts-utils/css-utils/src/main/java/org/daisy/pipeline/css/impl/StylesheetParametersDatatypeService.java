@@ -25,7 +25,7 @@ public class StylesheetParametersDatatypeService extends DatatypeService {
 	private final Pattern pattern;
 	private Document xmlDefinition = null;
 
-	protected StylesheetParametersDatatypeService() {
+	public StylesheetParametersDatatypeService() {
 		super("stylesheet-parameters");
 		pattern = StylesheetParametersParser.asRegex();
 	}

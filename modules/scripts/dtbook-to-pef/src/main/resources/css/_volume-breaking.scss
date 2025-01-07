@@ -25,7 +25,7 @@
  */
 $maximum-number-of-sheets: 70 !default;
 
-@volume {
+@-daisy-volume {
 	max-length: $maximum-number-of-sheets;
 }
 
@@ -73,7 +73,7 @@ $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-
 @if $min-volume-keep-priority < 10 {
     
     $duplex: true !default;
-    @xslt "volume-breaking.xsl" {
+    @-daisy-xslt "volume-breaking.xsl" {
         duplex: $duplex;
         maximum-number-of-sheets: $maximum-number-of-sheets;
         allow-volume-break-inside-leaf-section-factor: $allow-volume-break-inside-leaf-section-factor;
@@ -85,7 +85,7 @@ $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-
             $volume-keep-priority: min(10, max($min-volume-keep-priority, round(10 - $level * $prefer-volume-break-before-higher-level-factor)));
             @if $volume-keep-priority < 10 {
                 level#{$level} {
-                    volume-break-inside: -obfl-keep($volume-keep-priority);
+                    -daisy-volume-break-inside: -obfl-keep($volume-keep-priority);
                 }
             }
         }
@@ -98,6 +98,6 @@ $min-volume-keep-priority: min(10, max(1, round($allow-volume-break-inside-leaf-
     level5:not(:has(> level6, div.leaf-section)),
     level6:not(:has(div.leaf-section)),
     div.leaf-section {
-        volume-break-inside: -obfl-keep($min-volume-keep-priority);
+        -daisy-volume-break-inside: -obfl-keep($min-volume-keep-priority);
     }
 }

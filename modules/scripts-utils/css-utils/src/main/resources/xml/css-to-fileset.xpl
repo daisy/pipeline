@@ -78,6 +78,15 @@
 		</p:input>
 	</px:fileset-join>
 
+	<!--
+	    drop missing (including remote) files, and raise warnings
+	-->
+	<px:fileset-purge>
+		<p:input port="source.in-memory">
+			<p:pipe step="main" port="source.in-memory"/>
+		</p:input>
+	</px:fileset-purge>
+
 	<px:mediatype-detect/>
 
 </p:declare-step>

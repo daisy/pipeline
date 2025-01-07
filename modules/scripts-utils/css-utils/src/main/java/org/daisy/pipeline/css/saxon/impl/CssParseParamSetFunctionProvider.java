@@ -12,7 +12,7 @@ import org.osgi.service.component.annotations.Component;
 )
 public class CssParseParamSetFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
-	protected CssParseParamSetFunctionProvider() {
+	public CssParseParamSetFunctionProvider() {
 		super(StylesheetParametersParser.class);
 	}
 }

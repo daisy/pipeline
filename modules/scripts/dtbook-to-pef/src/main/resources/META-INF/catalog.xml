@@ -14,7 +14,7 @@
   <!-- style sheets -->
   <uri uri="../css/default.scss" px:content-type="user-agent-stylesheet"
                                  px:stylesheet-for-content-type="application/x-dtbook+xml"
-                                 px:stylesheet-for-media="embossed"/>
+                                 px:stylesheet-for-media="embossed, braille"/>
   <uri name="http://www.daisy.org/pipeline/modules/braille/dtbook-to-pef/reset.css" uri="../css/reset.css"/>
   
   <!-- partials -->

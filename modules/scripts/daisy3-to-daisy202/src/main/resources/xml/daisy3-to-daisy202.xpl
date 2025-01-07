@@ -4,6 +4,8 @@
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal/daisy3-to-daisy202"
                 type="px:daisy3-to-daisy202.script"
+                px:input-filesets="daisy3"
+                px:output-filesets="daisy202"
                 name="main">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">

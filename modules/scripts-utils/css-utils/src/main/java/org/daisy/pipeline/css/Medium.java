@@ -36,7 +36,7 @@ public class Medium {
 	private final Type type;
 	private final Integer width;
 	private final Integer height;
-	private final Map<String,String> customFeatures;
+	private final Map<String,String> nonStandardFeatures;
 
 	// see https://drafts.csswg.org/mediaqueries/#media-descriptor-table
 	private final static Set<String> knownFeatures = new HashSet<>(
@@ -47,12 +47,13 @@ public class Medium {
 			"scan", "update", "width"));
 
 	/**
-	 * @param customFeatures can be used to pass additional properties of the target medium. Must
-	 *                       not include any <a
-	 *                       href="https://drafts.csswg.org/mediaqueries/#media-descriptor-table">known
-	 *                       features</a>
+	 * @param otherFeatures can be used to pass additional properties of the target medium. Must not
+	 *                      include any <a
+	 *                      href="https://drafts.csswg.org/mediaqueries/#media-descriptor-table">known
+	 *                      features</a>. It is recommended that non-standard features are vendor
+	 *                      prefixed.
 	 */
-	private Medium(Type type, Integer width, Integer height, Map<String,String> customFeatures) {
+	private Medium(Type type, Integer width, Integer height, Map<String,String> otherFeatures) {
 		switch (type) {
 		case EMBOSSED:
 			this.type = type;
@@ -75,8 +76,8 @@ public class Medium {
 		default:
 			throw new IllegalArgumentException("Unexpected medium: " + type);
 		}
-		this.customFeatures = customFeatures != null
-			? Collections.unmodifiableMap(customFeatures)
+		this.nonStandardFeatures = otherFeatures != null
+			? Collections.unmodifiableMap(otherFeatures)
 			: Collections.emptyMap();
 	}
 
@@ -106,9 +107,22 @@ public class Medium {
 	/**
 	 * Additional properties of the target medium.
 	 */
-	public Map<String,String> getCustomFeatures() {
-		return customFeatures;
+	public Map<String,String> getNonStandardFeatures() {
+		return nonStandardFeatures;
 	}
+
+	/**
+	 * Additional properties of the target medium.
+	 *
+	 * @deprecated Use the {@link #getNonStandardFeatures()} method instead. "Custom" is terminology
+	 * that is used in <a href="https://www.w3.org/TR/mediaqueries-5/#custom-mq">Media Queries Level
+	 * 5</a> for something different.
+	 */
+	@Deprecated
+	public Map<String,String> getCustomFeatures() {
+		return getNonStandardFeatures();
+	}
+
 
 	public boolean matches(String mediaQuery) {
 		if (mediaQuery != null)
@@ -124,8 +138,8 @@ public class Medium {
 			s.append(" AND (width: ").append(width).append(")");
 		if (height != null)
 			s.append(" AND (height: ").append(height).append(")");
-		for (String f : customFeatures.keySet())
-			s.append(" AND (").append(f).append(": ").append(customFeatures.get(f)).append(")");
+		for (String f : nonStandardFeatures.keySet())
+			s.append(" AND (").append(f).append(": ").append(nonStandardFeatures.get(f)).append(")");
 		return s.toString();
 	}
 
@@ -174,7 +188,7 @@ public class Medium {
 			throw new IllegalArgumentException("Unexpected medium: contains NOT: " + query);
 		Integer width = null;
 		Integer height = null;
-		Map<String,String> customFeatures = null;
+		Map<String,String> nonStandardFeatures = null;
 		for (MediaExpression e : query) {
 			String feature = e.getFeature();
 			if ("width".equals(feature) || "height".equals(feature)) {
@@ -196,12 +210,12 @@ public class Medium {
 				Term<?> v = e.get(0);
 				if (!(v instanceof TermIdent || v instanceof TermInteger))
 					throw new IllegalArgumentException("Unexpected value for medium feature: " + e);
-				if (customFeatures == null)
-					customFeatures = new HashMap<>();
-				customFeatures.put(feature, v.toString());
+				if (nonStandardFeatures == null)
+					nonStandardFeatures = new HashMap<>();
+				nonStandardFeatures.put(feature, v.toString());
 			}
 		}
-		return new Medium(type, width, height, customFeatures);
+		return new Medium(type, width, height, nonStandardFeatures);
 	}
 
 	private MediaSpec mediaSpec;
@@ -233,10 +247,10 @@ public class Medium {
 								Term<?> v = e.get(0);
 								if (!(v instanceof TermIdent || v instanceof TermInteger))
 									return false;
-								if (!customFeatures.isEmpty())
-									for (String ff : customFeatures.keySet())
+								if (!nonStandardFeatures.isEmpty())
+									for (String ff : nonStandardFeatures.keySet())
 										if (ff.equals(f))
-											return customFeatures.get(ff).equals(v.toString());
+											return nonStandardFeatures.get(ff).equals(v.toString());
 								return false;
 							}
 						}
@@ -259,10 +273,10 @@ public class Medium {
 								Term<?> v = e.get(0);
 								if (!(v instanceof TermIdent || v instanceof TermInteger))
 									return false;
-								if (!customFeatures.isEmpty())
-									for (String ff : customFeatures.keySet())
+								if (!nonStandardFeatures.isEmpty())
+									for (String ff : nonStandardFeatures.keySet())
 										if (ff.equals(f))
-											return customFeatures.get(ff).equals(v.toString());
+											return nonStandardFeatures.get(ff).equals(v.toString());
 								return false;
 							}
 						}

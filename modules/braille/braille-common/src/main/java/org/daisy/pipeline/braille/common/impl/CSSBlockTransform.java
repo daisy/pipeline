@@ -81,6 +81,7 @@ public interface CSSBlockTransform {
 		
 		private final static Iterable<BrailleTranslator> empty = Iterables.<BrailleTranslator>empty();
 		
+		@Override
 		protected Iterable<BrailleTranslator> _get(Query query) {
 			final MutableQuery q = mutableQuery(query);
 			for (Feature f : q.removeAll("input"))
@@ -96,7 +97,12 @@ public interface CSSBlockTransform {
 					else
 						return empty;
 			}
-			final String brailleCharset = q.containsKey("braille-charset") ? q.getOnly("braille-charset").getValue().get() : null;
+			final String brailleCharset = q.containsKey("braille-charset")
+				? q.getOnly("braille-charset").getValue().get()
+				: null;
+			final boolean includeBrailleCodeInLanguage = q.containsKey("include-braille-code-in-language")
+				? q.getOnly("include-braille-code-in-language").getValue().orElse("true").equalsIgnoreCase("true")
+				: false;
 			q.add("input", "text-css");
 			if (braille)
 				q.add("output", "braille");
@@ -105,7 +111,8 @@ public interface CSSBlockTransform {
 				new Function<BrailleTranslator,BrailleTranslator>() {
 					public BrailleTranslator _apply(BrailleTranslator translator) {
 						return __apply(
-							logCreate(new TransformImpl(translator, false, brailleCharset, q))
+							logCreate(new TransformImpl(translator, false, brailleCharset,
+							                            includeBrailleCodeInLanguage, q))
 						);
 					}
 				}
@@ -133,8 +140,9 @@ public interface CSSBlockTransform {
 			 */
 			// FIXME: mainTranslator is optional if default translator has been defined in CSS (which we can not know in advance)
 			private TransformImpl(BrailleTranslator mainTranslator, boolean forceMainTranslator,
-			                      String brailleCharset, Query query) {
-				options = ImmutableMap.of("braille-charset", brailleCharset != null ? brailleCharset : "");
+			                      String brailleCharset, boolean includeBrailleCodeInLanguage, Query query) {
+				options = ImmutableMap.of("braille-charset", brailleCharset != null ? brailleCharset : "",
+				                          "include-braille-code-in-language", "" + includeBrailleCodeInLanguage);
 				this.mainTranslator = mainTranslator;
 				this.forceMainTranslator = forceMainTranslator;
 				mainQuery = query;
@@ -156,6 +164,7 @@ public interface CSSBlockTransform {
 			 * @throws UnsupportedOperationException if {@code mainTranslator.withHyphenator()} throws
 			 *                                       UnsupportedOperationException
 			 */
+			@Override
 			public TransformImpl _withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException {
 				TransformImpl t = new TransformImpl(this, mainTranslator.withHyphenator(hyphenator));
 				Provider.this.rememberId(t);

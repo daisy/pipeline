@@ -54,7 +54,7 @@ import org.w3c.dom.Node;
 
 /**
  * For now this cascader handles only 'print' and 'screen' media without support for counters
- * ({@code (-counter-support: none)}). It will generate marker contents by <a
+ * ({@code (counter-support: none)}). It will generate marker contents by <a
  * href="https://www.w3.org/TR/css-lists-3/#content-property">evaluating marker contents</a>, based
  * on {@code ::marker} pseudo-element rules, 'list-style-type', 'counter-reset', 'counter-set' and
  * 'counter-increment' properties and {@code @counter-style} rules, according to <a

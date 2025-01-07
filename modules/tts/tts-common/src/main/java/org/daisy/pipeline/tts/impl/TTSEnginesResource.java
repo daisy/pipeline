@@ -142,6 +142,8 @@ public class TTSEnginesResource extends AuthenticatedResource {
 					String shortMessage = error.getMessage();
 					error = error.getCause();
 					String detailedMessage = error != null ? error.getMessage() : null;
+					if (shortMessage.endsWith(detailedMessage))
+						detailedMessage = null;
 					if (shortMessage.length() > 80) {
 						// Use the heuristic that if a message is longer than 80 characters, it is possible
 						// that it is too technical for the average user. It also becomes difficult to fit it

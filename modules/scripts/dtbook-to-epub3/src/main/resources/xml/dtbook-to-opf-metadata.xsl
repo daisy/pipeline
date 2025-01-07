@@ -25,7 +25,10 @@
     </xsl:template>
     
     <xsl:template match="//dtb:head">
-        <metadata prefix="dc: http://purl.org/dc/elements/1.1/">
+        <metadata>
+            <xsl:if test="//dtb:pagenum">
+                <xsl:attribute name="prefix" select="'a11y: http://www.idpf.org/epub/vocab/package/a11y/#'"/>
+            </xsl:if>
             <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
             <xsl:for-each select="dtb:meta">
                 <xsl:choose>
@@ -54,10 +57,10 @@
                  - http://kb.daisy.org/publishing/docs/navigation/pagesrc.html
                  - https://www.w3.org/publishing/a11y/page-source-id/
             -->
-            <xsl:if test="//dtb:pagenum and not(dtb:meta[lower-case(@name)='pageBreakSource'])">
+            <xsl:if test="//dtb:pagenum and not(dtb:meta[lower-case(@name)=('a11y:pageBreakSource','pageBreakSource')])">
                 <xsl:variable name="source-of-pagination" as="xs:string?" select="pf:dtbook-source-of-pagination(/)"/>
                 <xsl:if test="exists($source-of-pagination)">
-                    <meta property="pageBreakSource">
+                    <meta property="a11y:pageBreakSource">
                         <xsl:value-of select="$source-of-pagination"/>
                     </meta>
                 </xsl:if>

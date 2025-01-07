@@ -101,6 +101,7 @@
     <entry key="acx"       value="application/internet-property-stream"/>
     <entry key="hqx"       value="application/mac-binhex40"/>
     <entry key="doc"       value="application/msword"/>
+    <entry key="docx"      value="application/vnd.openxmlformats-officedocument.wordprocessingml.document"/>
     <entry key="dot"       value="application/msword"/>
     <entry key="*"         value="application/octet-stream"/>
     <entry key="bin"       value="application/octet-stream"/>

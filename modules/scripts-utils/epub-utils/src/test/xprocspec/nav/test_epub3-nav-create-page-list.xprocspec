@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:h="http://www.w3.org/1999/xhtml"
+               xmlns:epub="http://www.idpf.org/2007/ops"
+               xmlns="http://www.w3.org/1999/xhtml"
+               script="../../../main/resources/xml/nav/epub3-nav-create-page-list.xpl">
+
+    <x:scenario label="a simple page break">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak">1</span>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result" select="//h:ol"/>
+      </x:context>
+      <x:expect label="is converted to a link in an ordered list item" type="compare">
+        <x:document type="inline">
+            <ol>
+                <li>
+                    <a href="test.xhtml#page1">1</a>
+                </li>
+            </ol>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+    <x:scenario label="when a page break has both a title attribute and text content">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1">some text</span>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="the title attribute is used as the page value" type="xpath" test="string(//h:a)='1'"/>
+    </x:scenario>
+
+    <x:scenario label="when a page break is empty and has a title attribute">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1"/>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="the title attribute is used as the page value" type="xpath" test="string(//h:a)='1'"/>
+    </x:scenario>
+
+    <x:scenario label="when a page break is empty and has no title attribute">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak"/>
+                <div>
+                    <span id="page2" epub:type="pagebreak"/>
+                </div>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result"/>
+      </x:context>
+      <x:expect label="the page is empty and will be represented in the navdoc using a hyphen"
+                type="xpath" test="string((//h:a)[1])='-' and string((//h:a)[2])='-'"/>
+    </x:scenario>
+
+    <x:scenario label="when the document has several page breaks">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak" title="1"/>
+                <div>
+                    <span id="page2" epub:type="pagebreak" title="2"/>
+                </div>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result" select="//h:ol"/>
+      </x:context>
+      <x:expect label="the list contains as many items as page breaks"
+                type="xpath" test="count(/h:ol/h:li)=2"/>
+      <x:expect label="all pages values are present"
+                type="xpath" test="string((//h:a)[1])='1' and string((//h:a)[2])='2'"/>
+    </x:scenario>
+
+    <x:scenario label="when a page is nested within another (unlikely)">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <div id="page1" epub:type="pagebreak" title="1">
+                    <span id="page2" epub:type="pagebreak" title="2"/>
+                </div>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result" select="//h:ol"/>
+      </x:context>
+      <x:expect label="the nested page is not ignored" type="xpath" test="count(/h:ol/h:li)=2"/>
+    </x:scenario>
+
+    <x:scenario label="when a page break's text contains rich content">
+      <x:call step="px:epub3-create-page-list">
+        <x:input port="source">
+          <x:document type="inline" xml:base="test.xhtml">
+            <body>
+                <span id="page1" epub:type="pagebreak">page <em>1</em>
+                </span>
+            </body>
+          </x:document>
+        </x:input>
+        <x:option name="output-base-uri" select="base-uri(.)"/>
+      </x:call>
+      <x:context label="the result port">
+        <x:document type="port" port="result" select="//h:a"/>
+      </x:context>
+      <x:expect label="the rich content is used the page link's content" type="compare">
+        <x:document type="inline">
+            <a href="test.xhtml#page1">page <em>1</em></a>
+        </x:document>
+      </x:expect>
+    </x:scenario>
+
+</x:description>

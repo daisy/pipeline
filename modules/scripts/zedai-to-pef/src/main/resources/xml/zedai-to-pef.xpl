@@ -6,7 +6,9 @@
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="zedai"
+                px:output-filesets="pef">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">ZedAI to braille</h1>

@@ -70,13 +70,30 @@
   
     <p:option name="output-dir" required="true">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Root directory of the (expanded) EPUB 3.</p>
             <p>Empty directory dedicated to this conversion.</p>
         </p:documentation>
     </p:option>
-    <p:option name="temp-dir" select="''">
+    <p:option name="package-doc-path" required="false" select="'EPUB/package.opf'">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
-            <p>Empty directory dedicated to this conversion. May be left empty in which case a
-            temporary directory will be automaticall created.</p>
+            <p>File path, relative to the root directory of the package document.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="navigation-doc-path" required="false" select="'EPUB/toc.xhtml'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the root directory, of the navigation document.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="content-path" required="false" select="'EPUB/'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File path, relative to the root directory, of the directory that will contain all
+            files except <code>mimetype</code>, the files that need to be in <code>META-INF</code>,
+            and the package and navigation documents which have their own setting.</p>
+        </p:documentation>
+    </p:option>
+    <p:option name="temp-dir" required="true">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>Empty directory dedicated to this conversion.</p>
         </p:documentation>
     </p:option>
     <p:option name="output-validation" cx:type="off|report|abort" select="'off'">
@@ -107,6 +124,12 @@
             <p>Set to false to bypass aural CSS processing.</p>
         </p:documentation>
     </p:option>
+    <p:option name="xhtml-file-extension" required="false" select="'.xhtml'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <p>File name extension to use for XHTML documents.</p>
+            <p><code>.xhtml</code> or <code>.html</code>.</p>
+        </p:documentation>
+    </p:option>
 
     <p:import href="zedai-to-opf-metadata.xpl">
         <p:documentation>
@@ -121,6 +144,11 @@
     <p:import href="http://www.daisy.org/pipeline/modules/html-to-epub3/library.xpl">
         <p:documentation>
             px:html-to-epub3
+        </p:documentation>
+    </p:import>
+    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
+        <p:documentation>
+            px:set-base-uri
         </p:documentation>
     </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
@@ -144,9 +172,6 @@
             px:css-speech-cascade
         </p:documentation>
     </p:import>
-
-    <p:variable name="epub-dir" select="concat($output-dir,'epub/')"/>
-    <p:variable name="content-dir" select="concat($epub-dir,'EPUB/')"/>
 
     <!--=========================================================================-->
     <!-- GET ZEDAI FROM FILESET                                                  -->
@@ -198,7 +223,12 @@
     <!--=========================================================================-->
 
     <p:documentation>Extract metadata from ZedAI</p:documentation>
+    <px:set-base-uri>
+        <!-- in case there are <meta rel="z3998:meta-record" resource="..."> in the ZedAI -->
+        <p:with-option name="base-uri" select="concat($output-dir,$content-path,'/')"/>
+    </px:set-base-uri>
     <px:zedai-to-opf-metadata name="metadata">
+        <p:with-option name="output-base-uri" select="concat($output-dir,$package-doc-path)"/>
         <p:with-option name="source-of-pagination" select="$source-of-pagination"/>
     </px:zedai-to-opf-metadata>
     <p:sink/>
@@ -226,8 +256,9 @@
         <p:input port="in-memory.in">
             <p:pipe step="fileset-with-css" port="result.in-memory"/>
         </p:input>
-        <p:with-option name="output-dir" select="$content-dir"/>
+        <p:with-option name="output-dir" select="concat($temp-dir,'zedai-to-html/')"/>
         <p:with-option name="chunk-size" select="$chunk-size"/>
+        <p:with-option name="xhtml-file-extension" select="$xhtml-file-extension"/>
     </px:zedai-to-html>
 
     <!--=========================================================================-->
@@ -255,9 +286,12 @@
         <p:with-option name="audio-file-type" select="$audio-file-type"/>
         <p:with-option name="lexicon" select="$lexicon"/>
         <p:with-option name="include-tts-log" select="$include-tts-log"/>
-        <p:with-option name="output-dir" select="concat($output-dir,'epub/')"/>
-        <p:with-option name="temp-dir" select="$temp-dir"/>
+        <p:with-option name="output-dir" select="$output-dir"/>
+        <p:with-option name="temp-dir" select="concat($temp-dir,'html-to-epub3/')"/>
         <p:with-option name="output-validation" select="$output-validation"/>
+        <p:with-option name="content-path" select="$content-path"/>
+        <p:with-option name="package-doc-path" select="$package-doc-path"/>
+        <p:with-option name="navigation-doc-path" select="$navigation-doc-path"/>
     </px:html-to-epub3>
     <p:sink/>
 

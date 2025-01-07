@@ -27,9 +27,29 @@
         </xsl:sequence>
     </xsl:function>
 
-    <!--
-        FIXME: delete when major version is updated
-    -->
-    <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/library.xsl"/>
+    <doc xmlns="http://www.oxygenxml.com/ns/doc/xsl">
+        <desc>
+            <p>Get braille code from language tag.</p>
+        </desc>
+    </doc>
+    <xsl:function name="pf:braille-code-from-language-tag" as="item()">
+        <xsl:param name="language" as="xs:string"/>
+        <xsl:sequence select="BrailleCode:fromLanguageTag($language)"
+                      xmlns:BrailleCode="org.daisy.pipeline.braille.common.saxon.impl.BrailleCodeFunctionProvider$BrailleCodeFunctions">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/BrailleCodeFunctionProvider.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
+
+    <xsl:function name="pf:get-braille-code-info" as="map(xs:string,xs:string)">
+        <xsl:param name="code" as="item()"/> <!-- xs:string | item() -->
+        <xsl:sequence select="BrailleCode:getImplementationInfo($code)"
+                      xmlns:BrailleCode="org.daisy.pipeline.braille.common.saxon.impl.BrailleCodeFunctionProvider$BrailleCodeFunctions">
+            <!--
+                Implemented in ../../java/org/daisy/pipeline/braille/common/saxon/impl/BrailleCodeFunctionProvider.java
+            -->
+        </xsl:sequence>
+    </xsl:function>
 
 </xsl:stylesheet>

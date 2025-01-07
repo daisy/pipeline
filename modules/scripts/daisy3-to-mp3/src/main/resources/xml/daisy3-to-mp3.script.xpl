@@ -4,7 +4,9 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 type="px:daisy3-to-mp3.script"
-                name="main">
+                name="main"
+                px:input-filesets="daisy3"
+                px:output-filesets="mp3">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">DAISY 3 to navigable MP3 file-set</h1>
