@@ -228,7 +228,7 @@ public interface BrailleCSSProperty extends CSSProperty {
 		}
 	}
 	
-	public enum Flow implements CSSProperty {
+	public enum Flow implements BrailleCSSProperty {
 		identifier(""), NORMAL("normal"), INHERIT("inherit"), INITIAL("initial");
 
 		private String text;
