@@ -136,7 +136,7 @@ $toc-exclude-class: () !default;
 	/*
 	 * Generate the TOC:
 	 */
-	@xslt "generate-toc.xsl" {
+	@-daisy-xslt "generate-toc.xsl" {
 		depth: $toc-depth;
 		exclude: "#{$toc-exclude}";
 		exclude-class: #{$toc-exclude-class};
@@ -147,12 +147,12 @@ $toc-exclude-class: () !default;
 	 * ... and style it:
 	 */
 	#generated-document-toc {
-		flow: document-toc;
+		-daisy-flow: document-toc;
 		display: -obfl-toc;
 		-obfl-toc-range: document;
 	}
 	#generated-volume-toc {
-		flow: volume-toc;
+		-daisy-flow: volume-toc;
 		display: -obfl-toc;
 		-obfl-toc-range: volume;
 	}

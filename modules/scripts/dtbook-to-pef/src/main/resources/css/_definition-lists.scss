@@ -38,7 +38,7 @@ $dt-suffix: ": " !default;
 $dt-separator: " " !default;
 
 @if $group-dt-dd {
-    @xslt "definition-lists.xsl";
+    @-daisy-xslt "definition-lists.xsl";
 }
 
 @if $dt-suffix {

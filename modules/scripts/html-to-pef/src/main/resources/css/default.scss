@@ -49,7 +49,7 @@ ol[type="i"] { list-style-type: lower-roman; }
 ol[type="I"] { list-style-type: upper-roman; }
 
 /* handle ol[start] and li[value] */
-@xslt "lists.xsl";
+@-daisy-xslt "lists.xsl";
 
 head {
 	display: none
@@ -69,7 +69,7 @@ wbr::before {
 	white-space: pre-wrap;
 }
 
-@text-transform uncontracted {
+@-daisy-text-transform uncontracted {
 	system: braille;
 	contraction: no;
 }
