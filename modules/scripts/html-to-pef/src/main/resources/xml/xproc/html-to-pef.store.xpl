@@ -38,15 +38,16 @@
         </p:documentation>
     </p:import>
     
+    <p:variable name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
+        <p:pipe step="main" port="html"/>
+    </p:variable>
+
     <p:sink/>
     <!-- store HTML with CSS first in case something goes wrong in px:xml-to-pef.store -->
     <p:group px:progress=".1">
         <p:documentation>
             Store HTML with inline CSS
         </p:documentation>
-        <p:variable name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
-            <p:pipe step="main" port="html"/>
-        </p:variable>
         <p:count>
             <p:input port="source">
                 <p:pipe step="main" port="css"/>
@@ -75,8 +76,8 @@
         <p:input port="obfl">
             <p:pipe step="main" port="obfl"/>
         </p:input>
-        <p:with-option name="name" select="replace(p:base-uri(/),'^.*/([^/]*)\.[^/\.]*$','$1')">
-            <p:pipe step="main" port="html"/>
+        <p:with-option name="name" select="$name">
+            <p:empty/>
         </p:with-option>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>

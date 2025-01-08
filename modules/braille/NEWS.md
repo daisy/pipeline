@@ -4,6 +4,7 @@ v1.15.0
 Changes
 -------
 - Support for Finnish hyphenation (https://github.com/celiafi/pipeline-mod-celia/issues/48)
+- Option to store intermediary HTML with CSS styles inlined also available in EPUB 3 to PEF
 - Various bugfixes and improvements
 
 v1.14.30

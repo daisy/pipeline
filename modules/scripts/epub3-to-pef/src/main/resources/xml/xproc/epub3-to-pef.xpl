@@ -82,6 +82,12 @@ even though the provided CSS is more specific.
     <p:option name="include-preview"/>
     <p:option name="include-pef"/>
     <p:option name="include-obfl"/>
+    <p:option name="include-css" px:type="boolean" select="'false'">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">Include HTML with inline CSS</h2>
+            <p px:role="desc" xml:space="preserve">Whether or not the include the intermediary HTML with all CSS styles inlined (for debugging).</p>
+        </p:documentation>
+    </p:option>
     <p:option name="output-file-format"/>
     <p:option name="preview-table"/>
 
@@ -100,6 +106,13 @@ even though the provided CSS is more specific.
     <p:option name="preview"/>
     <p:option name="obfl"/>
     
+    <p:option name="html-with-css" px:output="result" px:type="anyDirURI" px:media-type="application/xhtml+xml" select="''">
+        <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+            <h2 px:role="name">HTML with inline CSS</h2>
+            <p px:role="desc">The intermediary HTML file with inline CSS.</p>
+        </p:documentation>
+    </p:option>
+
     <p:option name="temp-dir" required="true" px:output="temp" px:type="anyDirURI">
         <!-- directory used for temporary files -->
     </p:option>
@@ -215,14 +228,19 @@ even though the provided CSS is more specific.
         <p:input port="obfl">
             <p:pipe step="convert" port="obfl"/>
         </p:input>
+        <p:input port="css">
+            <p:pipe step="convert" port="css"/>
+        </p:input>
         <p:with-option name="include-pef" select="$include-pef"/>
         <p:with-option name="include-preview" select="$include-preview"/>
+        <p:with-option name="include-css" select="$include-css"/>
         <p:with-option name="output-file-format" select="$output-file-format"/>
         <p:with-option name="preview-table" select="$preview-table"/>
         <p:with-option name="output-dir" select="$result"/>
         <p:with-option name="pef-output-dir" select="$pef"/>
         <p:with-option name="preview-output-dir" select="$preview"/>
         <p:with-option name="obfl-output-dir" select="$obfl"/>
+        <p:with-option name="css-output-dir" select="$html-with-css"/>
     </px:epub3-to-pef.store>
     
 </p:declare-step>

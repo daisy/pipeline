@@ -34,6 +34,9 @@
     <p:output port="obfl" sequence="true"> <!-- sequence=false when include-obfl=true -->
         <p:pipe step="transform" port="obfl"/>
     </p:output>
+    <p:output port="css" sequence="false">
+        <p:pipe step="html-with-css" port="result"/>
+    </p:output>
     <p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
         <p:documentation xmlns="http://www.w3.org/1999/xhtml">
             <p>Whether or not the conversion was successful. When include-obfl is true, the
