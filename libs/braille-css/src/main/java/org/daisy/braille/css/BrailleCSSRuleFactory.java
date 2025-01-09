@@ -105,7 +105,7 @@ public class BrailleCSSRuleFactory extends RuleFactoryImpl {
 		String n = name;
 		if (n.startsWith(":"))
 			n = n.substring(1);
-		if (n.startsWith("-")) {
+		if (n.startsWith("-") && !n.startsWith("-daisy-")) {
 			for (BrailleCSSExtension x : extensions)
 				if (n.startsWith(x.getPrefix()))
 					return x.createPseudoElement(name);
@@ -132,7 +132,7 @@ public class BrailleCSSRuleFactory extends RuleFactoryImpl {
 		String n = name;
 		if (n.startsWith(":"))
 			n = n.substring(1);
-		if (n.startsWith("-")) {
+		if (n.startsWith("-") && !n.startsWith("-daisy-")) {
 			for (BrailleCSSExtension x : extensions)
 				if (n.startsWith(x.getPrefix()))
 					return x.createPseudoElementFunction(name, args);

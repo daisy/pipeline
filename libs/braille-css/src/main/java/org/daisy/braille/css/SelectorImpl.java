@@ -312,7 +312,14 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 				else
 					specifiedAsClass = true;
 			}
-			this.name = name = name.toLowerCase(); // Pseudo-element names are case-insensitive
+			name = name.toLowerCase(); // pseudo-element names are case-insensitive
+			String prefix = "-daisy-"; // optional prefix for pseudo-elements that are not standard CSS and not extensions
+			boolean normalized = false;
+			if (name.startsWith(prefix)) {
+				name = name.substring(prefix.length());
+				normalized = true;
+			}
+			this.name = name;
 			this.args = new ArrayList<String>();
 			if ("top-of-page".equals(name) || name.startsWith("-"))
 				for (String a : args)
@@ -323,6 +330,28 @@ public class SelectorImpl extends cz.vutbr.web.csskit.SelectorImpl {
 					def = PSEUDO_ELEMENT_DEFS.get(name);
 				else
 					throw new IllegalArgumentException(name + " is not a valid pseudo-element name");
+				if (normalized) {
+					switch (def) {
+					case DUPLICATE:
+					case ALTERNATE:
+					case LIST_ITEM:
+					case LIST_HEADER:
+					case TABLE_BY:
+						// (non-standard) pseudo-elements that are allowed to have a prefix
+						break;
+					case FOOTNOTE_CALL:
+						// pseudo-element from official WD spec that is not implemented in browsers
+						log.warn("Unexpected prefix '{}' in '::{}{}', assuming '{}' was meant",
+						         prefix, prefix, name, name);
+						break;
+					case BEFORE:
+					case AFTER:
+					case MARKER:
+					default:
+						throw new IllegalArgumentException(
+							String.format("Unexpected prefix '%s' in '::%s%s'", prefix, prefix, name));
+					}
+				}
 				if (args.length > 0 && def.maxArgs == 0)
 					throw new IllegalArgumentException(name + " must not be a function");
 				if (args.length == 0 && def.minArgs > 0)
