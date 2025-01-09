@@ -5,6 +5,7 @@ Changes
 -------
 - Support for Finnish hyphenation (https://github.com/celiafi/pipeline-mod-celia/issues/48)
 - Option to store intermediary HTML with CSS styles inlined also available in EPUB 3 to PEF
+- Generalized `$toc-exclude-class` variable to `$toc-exclude`
 - Various bugfixes and improvements
 
 v1.14.30

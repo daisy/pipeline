@@ -109,15 +109,28 @@
 $toc-depth: 0 !default;
 
 /**
- * @var string $toc-exclude-class
+ * @var string $toc-exclude
  *
  * @brief Exclude headings from table of contents
+ *
+ * Selector for excluding headings from the table of contents.
+ *
+ * If specified, heading elements that match this selector are excluded from the generated tables of contents.
+ */
+$toc-exclude: () !default;
+
+/**
+ * @var string $toc-exclude-class
+ *
+ * @brief Exclude headings from table of contents (deprecated)
+ *
+ * **Deprecated**: please use the more general `$toc-exclude` instead.
  *
  * Class name for excluding headings from the table of contents.
  *
  * If specified, heading elements with this class name are excluded from the generated tables of contents.
  */
-$toc-exclude-class: '' !default;
+$toc-exclude-class: () !default;
 
 @if $toc-depth > 0 {
 	/*
@@ -125,7 +138,8 @@ $toc-exclude-class: '' !default;
 	 */
 	@xslt "generate-toc.xsl" {
 		depth: $toc-depth;
-		exclude-class: $toc-exclude-class;
+		exclude: "#{$toc-exclude}";
+		exclude-class: #{$toc-exclude-class};
 		document-toc-id: "generated-document-toc";
 		volume-toc-id: "generated-volume-toc";
 	}

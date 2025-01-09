@@ -336,7 +336,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dtbook-to-pef</artifactId>
-        <version>11.1.0</version>
+        <version>11.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
@@ -401,7 +401,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>html-to-pef</artifactId>
-        <version>8.1.0</version>
+        <version>8.2.0-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
