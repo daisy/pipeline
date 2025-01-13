@@ -371,12 +371,12 @@
                                 <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
                                 <xsl:if test="s:get($volume-area-style,'counter-increment') or
                                               s:get($volume-area-style,'counter-reset')">
-                                    <xsl:message terminate="yes">
-                                        <xsl:value-of select="string((s:get($volume-area-style,'counter-increment'),
-                                                                      s:get($volume-area-style,'counter-reset'))[1])"/>
-                                        <xsl:text>: counter-reset and counter-increment not supported in </xsl:text>
-                                        <xsl:value-of select="$volume-area"/>
-                                    </xsl:message>
+                                    <xsl:call-template name="pf:warn">
+                                        <xsl:with-param name="msg">{}: counter-reset and counter-increment not supported in {}</xsl:with-param>
+                                        <xsl:with-param name="args" select="(string((s:get($volume-area-style,'counter-increment'),
+                                                                                     s:get($volume-area-style,'counter-reset'))[1]),
+                                                                             $volume-area)"/>
+                                    </xsl:call-template>
                                 </xsl:if>
                                 <xsl:variable name="volume-area-counter-set" as="item()?" select="s:get($volume-area-style,'counter-set')"/>
                                 <xsl:if test="$volume-area-content">
@@ -407,27 +407,29 @@
                                                               select="for $s in ($volume-area-counter-set,
                                                                                  current-group()[1]/s:get(css:parse-stylesheet(@css:counter-set),'counter-set'))
                                                                       return s:iterate($s)"/>
-                                                <xsl:if test="$counter-set[not(s:toXml(.)/@name=$page-counter-name)]">
-                                                    <xsl:message terminate="yes">
-                                                        <xsl:text>counter-set: </xsl:text>
-                                                        <xsl:value-of select="string($counter-set[not(s:toXml(.)/@name=$page-counter-name)])"/>
-                                                        <xsl:text>: only the active page counter (</xsl:text>
-                                                        <xsl:value-of select="$page-counter-name"/>
-                                                        <xsl:text>) may be manipulated</xsl:text>
-                                                    </xsl:message>
+                                                <xsl:if test="exists($counter-set[not(s:toXml(.)/@name=$page-counter-name)])">
+                                                    <xsl:call-template name="pf:warn">
+                                                        <xsl:with-param name="msg">
+                                                            counter-set: {}: only the active page counter ({}) may be manipulated.
+                                                        </xsl:with-param>
+                                                        <xsl:with-param name="args" select="(string($counter-set[not(s:toXml(.)/@name=$page-counter-name)][1]),
+                                                                                             $page-counter-name)"/>
+                                                    </xsl:call-template>
                                                 </xsl:if>
+                                                <xsl:variable name="counter-set" as="item()*" select="$counter-set[s:toXml(.)/@name=$page-counter-name]"/>
                                                 <xsl:variable name="initial-page-number" as="attribute()?">
-                                                    <xsl:if test="$counter-set">
-	                                                    <xsl:variable name="value" as="xs:integer" select="xs:integer(s:toXml($counter-set[last()])/@value)"/>
+                                                    <xsl:if test="exists($counter-set)">
+                                                        <xsl:variable name="value" as="xs:integer" select="xs:integer(s:toXml($counter-set[last()])/@value)"/>
                                                         <xsl:if test="($value mod 2)=0">
                                                             <!--
                                                                 FIXME: see https://github.com/mtmse/obfl/issues/22
                                                             -->
-                                                            <xsl:message terminate="yes">
-                                                                <xsl:text>counter-set: </xsl:text>
-                                                                <xsl:value-of select="$counter-set"/>
-                                                                <xsl:text>: page counter may not be set to an even value</xsl:text>
-                                                            </xsl:message>
+                                                            <xsl:call-template name="pf:error">
+                                                                <xsl:with-param name="msg">
+                                                                    counter-set: {}: page counter may not be set to an even value
+                                                                </xsl:with-param>
+                                                                <xsl:with-param name="args" select="$counter-set"/>
+                                                            </xsl:call-template>
                                                         </xsl:if>
                                                         <xsl:attribute name="initial-page-number" select="string($value)"/>
                                                     </xsl:if>
