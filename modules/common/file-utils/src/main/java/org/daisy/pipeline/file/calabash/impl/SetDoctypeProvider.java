@@ -135,6 +135,12 @@ public class SetDoctypeProvider implements XProcStepProvider {
 				} catch (IOException e) {
 					logger.error("SetDoctype: unable to close OutputStreamWriter", e);
 				}
+
+				try {
+					reader.close();
+				} catch (IOException e) {
+					logger.error("SetDoctype: unable to close InputStreamReader", e);
+				}
 				
 				if (success) {
 				    Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
