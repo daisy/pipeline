@@ -384,6 +384,7 @@
                                         <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
                                         <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
                                             <xsl:for-each-group select="current-group()" group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
+                                                <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
                                                 <xsl:variable name="page-style" select="current-grouping-key()"/>
                                                 <xsl:variable name="page-properties" as="item()" select="map:get($page-styles,$page-style)"/>
                                                 <xsl:variable name="page-counter-name" as="xs:string">
@@ -438,7 +439,7 @@
                                                                      select="current-group()/self::css:_/(@* except (@css:flow|@css:page|@css:counter-set))"/>
                                                 <xsl:for-each-group select="for $e in current-group() return if ($e/self::css:_) then $e/* else $e"
                                                                     group-starting-with="css:box[@type='block' and @css:_obfl-toc]">
-                                                    <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
+                                                    <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
                                                     <xsl:for-each-group select="current-group()"
                                                                         group-ending-with="css:box[@type='block' and @css:_obfl-toc]">
                                                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>

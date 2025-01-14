@@ -12402,13 +12402,26 @@
                          @volume:first {
                            @begin {
                              counter-set: custom-page 11;
-                             content: flow(begin, document);
+                             content: flow(begin-1, document)
+                                      flow(begin-2, document)
+                                      flow(begin-3, document);
                              @page {
                                counter-increment: custom-page;
                                size: 15 5;
                                margin-bottom: 1;
                                @bottom-right { content: counter(custom-page); }}}}">
-              <section style="display: block; flow: begin">
+              <section style="display: block; flow: begin-1">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block; flow: begin-2;
+                              @page {
+                                counter-increment: custom-page-2;
+                                size: 15 5;
+                                margin-bottom: 1;
+                                @bottom-right { content: counter(custom-page-2) }}">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block; flow: begin-3">
                 ⠿⠿⠿
               </section>
               <section style="display: block">
@@ -12446,6 +12459,19 @@
           <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
             <daisy:style-type>text/css</daisy:style-type>
           </meta>
+          <layout-master name="a" duplex="true" page-width="15" page-height="5">
+            <default-template>
+              <header/>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <current-page number-format="default"/>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <layout-master name="b" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
@@ -12459,7 +12485,7 @@
               </footer>
             </default-template>
           </layout-master>
-          <layout-master name="a" duplex="true" page-width="15" page-height="5">
+          <layout-master name="c" duplex="true" page-width="15" page-height="5">
             <default-template>
               <header/>
               <footer>
@@ -12475,14 +12501,24 @@
           <volume-template sheets-in-volume-max="1000" use-when="(! (= $volume 1))"/>
           <volume-template sheets-in-volume-max="1000" use-when="(= $volume 1)">
             <pre-content>
-              <sequence master="b" page-number-counter="custom-page" initial-page-number="11">
+              <sequence master="a" page-number-counter="custom-page" initial-page-number="11">
+                <block>
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+              <sequence master="b" page-number-counter="custom-page-2">
+                <block>
+                  ⠿⠿⠿
+                </block>
+              </sequence>
+              <sequence master="a" page-number-counter="custom-page">
                 <block>
                   ⠿⠿⠿
                 </block>
               </sequence>
             </pre-content>
           </volume-template>
-          <sequence master="a">
+          <sequence master="c">
             <block>
               ⠤⠤⠤
             </block>
@@ -12493,12 +12529,12 @@
               ⠤⠤⠤
             </block>
           </sequence>
-          <sequence master="b" page-number-counter="custom-page">
+          <sequence master="a" page-number-counter="custom-page">
             <block break-before="sheet">
               ⠉⠉⠉
             </block>
           </sequence>
-          <sequence master="a">
+          <sequence master="c">
             <block break-before="sheet">
               ⠤⠤⠤
             </block>
@@ -12530,6 +12566,24 @@
               </section>
               <section>
                 <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row>⠿⠿⠿</row>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
+                </page>
+              </section>
+              <section>
+                <page>
                   <row>⠤⠤⠤</row>
                   <row/>
                   <row/>
@@ -12557,7 +12611,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠉</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁⠑</row>
                 </page>
               </section>
               <section>
