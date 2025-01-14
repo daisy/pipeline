@@ -8,6 +8,7 @@ Changes
 - Generalized `$toc-exclude-class` variable to `$toc-exclude`
 - Keep a leader together with the last word before it if there is no space in between
   (https://github.com/mtmse/dotify.library/issues/24)
+- Support for multiple `counter-set` in a `@begin`/`@end` volume area
 - Various bugfixes and improvements
 
 v1.14.30

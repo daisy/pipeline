@@ -12401,7 +12401,8 @@
                            @bottom-right { content: counter(page); }}
                          @volume:first {
                            @begin {
-                             counter-set: custom-page 11;
+                             counter-set: custom-page 11
+                                          custom-page-2 21;
                              content: flow(begin-1, document)
                                       flow(begin-2, document)
                                       flow(begin-3, document);
@@ -12506,7 +12507,7 @@
                   ⠿⠿⠿
                 </block>
               </sequence>
-              <sequence master="b" page-number-counter="custom-page-2">
+              <sequence master="b" page-number-counter="custom-page-2" initial-page-number="21">
                 <block>
                   ⠿⠿⠿
                 </block>
@@ -12570,7 +12571,7 @@
                   <row/>
                   <row/>
                   <row/>
-                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠁</row>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠼⠃⠁</row>
                 </page>
               </section>
               <section>

@@ -57,7 +57,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules.braille</groupId>
         <artifactId>dotify-utils</artifactId>
-        <version>6.2.5</version>
+        <version>6.3.0-SNAPSHOT</version>
       </dependency>
       <!-- list main libhyphen-utils first because this determines the version of the 'doc' artifact picked for the website -->
       <dependency>

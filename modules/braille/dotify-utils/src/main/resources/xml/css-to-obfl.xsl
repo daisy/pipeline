@@ -4,6 +4,7 @@
                 xmlns:_xsl="http://www.w3.org/1999/XSL/TransformAlias"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
+                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
@@ -355,7 +356,6 @@
                             <xsl:for-each select="('@begin','@end')">
                                 <xsl:variable name="volume-area" select="."/>
                                 <xsl:variable name="volume-area-style" as="item()?" select="s:get($style,$volume-area)"/>
-                                <xsl:variable name="volume-area-page-style" as="xs:string?" select="s:get($volume-area-style,'@page')"/>
                                 <xsl:variable name="pending-text-transform" as="xs:string?" select="s:get($volume-area-style,'text-transform')"/>
                                 <xsl:variable name="pending-braille-charset" as="xs:string?" select="s:get($volume-area-style,'braille-charset')"/>
                                 <xsl:variable name="pending-hyphens" as="xs:string?" select="s:get($volume-area-style,'hyphens')"/>
@@ -368,7 +368,6 @@
                                                          select="s:toXml(s:get($volume-area-style,'content'))"/>
                                 </xsl:variable>
                                 <xsl:variable name="space" as="xs:string" select="('pre','post')[index-of(('@begin','@end'),$volume-area)]"/>
-                                <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
                                 <xsl:if test="s:get($volume-area-style,'counter-increment') or
                                               s:get($volume-area-style,'counter-reset')">
                                     <xsl:call-template name="pf:warn">
@@ -378,68 +377,126 @@
                                                                              $volume-area)"/>
                                     </xsl:call-template>
                                 </xsl:if>
-                                <xsl:variable name="volume-area-counter-set" as="item()?" select="s:get($volume-area-style,'counter-set')"/>
                                 <xsl:if test="$volume-area-content">
                                     <xsl:element name="{$space}-content">
+                                        <xsl:variable name="volume-area-counter-set" as="item()?" select="s:get($volume-area-style,'counter-set')"/>
+                                        <xsl:variable name="volume-area-counter-set" as="item()*"
+                                                      select="for $s in $volume-area-counter-set return s:iterate($s)"/>
+                                        <xsl:variable name="volume-area-counter-set" as="map(xs:string,xs:integer)">
+                                            <xsl:map>
+                                                <xsl:for-each select="$volume-area-counter-set">
+                                                    <xsl:variable name="counter-set" as="element(css:counter-set)" select="s:toXml(.)"/>
+                                                    <xsl:map-entry key="string($counter-set/@name)" select="xs:integer($counter-set/@value)"/>
+                                                </xsl:for-each>
+                                            </xsl:map>
+                                        </xsl:variable>
+                                        <xsl:variable name="volume-area-page-style" as="xs:string?" select="s:get($volume-area-style,'@page')"/>
                                         <xsl:variable name="default-page-style" as="xs:string" select="($volume-area-page-style,$default-page-style)[1]"/>
-                                        <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
-                                            <xsl:for-each-group select="current-group()" group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
-                                                <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
-                                                <xsl:variable name="page-style" select="current-grouping-key()"/>
-                                                <xsl:variable name="page-properties" as="item()" select="map:get($page-styles,$page-style)"/>
-                                                <xsl:variable name="page-counter-name" as="xs:string">
-                                                    <xsl:variable name="counter-increment" as="element(css:counter-set)*"
-                                                                  select="s:toXml(s:get($page-properties,'counter-increment'))"/>
-                                                    <xsl:choose>
-                                                        <xsl:when test="exists($counter-increment)">
-                                                            <xsl:sequence select="$counter-increment[last()]/@name"/>
-                                                        </xsl:when>
-                                                        <xsl:otherwise>
-                                                            <xsl:sequence select="$default-page-counter-name"/>
-                                                        </xsl:otherwise>
-                                                    </xsl:choose>
-                                                </xsl:variable>
-                                                <xsl:variable name="page-number-counter" as="attribute()?">
-                                                    <xsl:if test="not($page-counter-name=$default-page-counter-name)">
-                                                        <xsl:attribute name="page-number-counter" select="$page-counter-name"/>
-                                                    </xsl:if>
-                                                </xsl:variable>
-                                                <xsl:variable name="counter-set" as="item()*"
-                                                              select="for $s in ($volume-area-counter-set,
-                                                                                 current-group()[1]/s:get(css:parse-stylesheet(@css:counter-set),'counter-set'))
-                                                                      return s:iterate($s)"/>
-                                                <xsl:if test="exists($counter-set[not(s:toXml(.)/@name=$page-counter-name)])">
+                                        <xsl:variable name="default-page-counter-name" as="xs:string" select="concat($space,'-page')"/>
+                                        <xsl:variable name="volume-area-content" as="array(element()*)">
+                                            <!-- no xsl:array in XSLT 3.0, so using this convoluted xsl:map workaround -->
+                                            <xsl:variable name="groups" as="map(xs:integer,map(xs:integer,element()*))">
+                                                <xsl:map>
+                                                    <xsl:for-each-group select="$volume-area-content" group-starting-with="css:_[@css:counter-set]">
+                                                        <xsl:map-entry key="position()">
+                                                            <xsl:map>
+                                                                <xsl:for-each-group select="current-group()"
+                                                                                    group-adjacent="(self::css:_/@css:page/string(),$default-page-style)[1]">
+                                                                    <xsl:map-entry key="position()" select="current-group()"/>
+                                                                </xsl:for-each-group>
+                                                            </xsl:map>
+                                                        </xsl:map-entry>
+                                                    </xsl:for-each-group>
+                                                </xsl:map>
+                                            </xsl:variable>
+                                            <xsl:iterate select="sort(map:keys($groups))">
+                                                <xsl:param name="array" as="array(element()*)" select="[]"/>
+                                                <xsl:on-completion select="$array"/>
+                                                <xsl:variable name="groups" as="map(xs:integer,element()*)" select="map:get($groups,.)"/>
+                                                <xsl:next-iteration>
+                                                    <xsl:with-param name="array" as="array(element()*)">
+                                                        <xsl:iterate select="sort(map:keys($groups))">
+                                                            <xsl:param name="array" as="array(element()*)" select="$array"/>
+                                                            <xsl:on-completion select="$array"/>
+                                                            <xsl:next-iteration>
+                                                                <xsl:with-param name="array" select="array:append($array,map:get($groups,.))"/>
+                                                            </xsl:next-iteration>
+                                                        </xsl:iterate>
+                                                    </xsl:with-param>
+                                                </xsl:next-iteration>
+                                            </xsl:iterate>
+                                        </xsl:variable>
+                                        <xsl:iterate select="1 to array:size($volume-area-content)">
+                                            <xsl:param name="volume-area-counter-set" as="map(xs:string,xs:integer)" select="$volume-area-counter-set"/>
+                                            <xsl:on-completion>
+                                                <xsl:for-each select="map:keys($volume-area-counter-set)">
                                                     <xsl:call-template name="pf:warn">
                                                         <xsl:with-param name="msg">
-                                                            counter-set: {}: only the active page counter ({}) may be manipulated.
+                                                            counter-set: {} {}: ignored: no content in this {} volume area with this page counter.
                                                         </xsl:with-param>
-                                                        <xsl:with-param name="args" select="(string($counter-set[not(s:toXml(.)/@name=$page-counter-name)][1]),
-                                                                                             $page-counter-name)"/>
+                                                        <xsl:with-param name="args" select="(.,string(map:get($volume-area-counter-set,.)),$volume-area)"/>
                                                     </xsl:call-template>
+                                                </xsl:for-each>
+                                            </xsl:on-completion>
+                                            <xsl:variable name="volume-area-content" as="element()*" select="array:get($volume-area-content,.)"/>
+                                            <xsl:variable name="page-style" as="xs:string"
+                                                          select="($volume-area-content[1]/self::css:*/@css:page/string(),$default-page-style)[1]"/>
+                                            <xsl:variable name="page-properties" as="item()" select="map:get($page-styles,$page-style)"/>
+                                            <xsl:variable name="page-counter-name" as="xs:string">
+                                                <xsl:variable name="counter-increment" as="element(css:counter-set)*"
+                                                              select="s:toXml(s:get($page-properties,'counter-increment'))"/>
+                                                <xsl:sequence select="($counter-increment[last()]/@name,$default-page-counter-name)[1]"/>
+                                            </xsl:variable>
+                                            <xsl:variable name="page-number-counter" as="attribute()?">
+                                                <xsl:if test="not($page-counter-name=$default-page-counter-name)">
+                                                    <xsl:attribute name="page-number-counter" select="$page-counter-name"/>
                                                 </xsl:if>
-                                                <xsl:variable name="counter-set" as="item()*" select="$counter-set[s:toXml(.)/@name=$page-counter-name]"/>
-                                                <xsl:variable name="initial-page-number" as="attribute()?">
-                                                    <xsl:if test="exists($counter-set)">
-                                                        <xsl:variable name="value" as="xs:integer" select="xs:integer(s:toXml($counter-set[last()])/@value)"/>
-                                                        <xsl:if test="($value mod 2)=0">
-                                                            <!--
-                                                                FIXME: see https://github.com/mtmse/obfl/issues/22
-                                                            -->
-                                                            <xsl:call-template name="pf:error">
+                                            </xsl:variable>
+                                            <xsl:variable name="counter-set" as="item()?"
+                                                          select="$volume-area-content[1]/self::css:*/@css:counter-set
+                                                                                         /s:get(css:parse-stylesheet(.),'counter-set')"/>
+                                            <xsl:variable name="counter-set" as="item()*" select="for $s in $counter-set return s:iterate($s)"/>
+                                            <xsl:variable name="counter-set" as="xs:integer*">
+                                                <xsl:for-each select="$counter-set">
+                                                    <xsl:variable name="counter-set" as="element(css:counter-set)" select="s:toXml(.)"/>
+                                                    <xsl:choose>
+                                                        <xsl:when test="$counter-set/@name=$page-counter-name">
+                                                            <xsl:sequence select="xs:integer($counter-set/@value)"/>
+                                                        </xsl:when>
+                                                        <xsl:otherwise>
+                                                            <xsl:call-template name="pf:warn">
                                                                 <xsl:with-param name="msg">
-                                                                    counter-set: {}: page counter may not be set to an even value
+                                                                    counter-set: {}: only the active page counter ({}) may be manipulated.
                                                                 </xsl:with-param>
-                                                                <xsl:with-param name="args" select="$counter-set"/>
+                                                                <xsl:with-param name="args" select="(string(.),$page-counter-name)"/>
                                                             </xsl:call-template>
-                                                        </xsl:if>
-                                                        <xsl:attribute name="initial-page-number" select="string($value)"/>
-                                                    </xsl:if>
-                                                </xsl:variable>
+                                                        </xsl:otherwise>
+                                                    </xsl:choose>
+                                                </xsl:for-each>
+                                            </xsl:variable>
+                                            <xsl:variable name="counter-set" as="xs:integer?"
+                                                          select="(map:get($volume-area-counter-set,$page-counter-name),$counter-set)[last()]"/>
+                                            <xsl:if test="$counter-set[(. mod 2)=0]">
+                                                <!--
+                                                    FIXME: see https://github.com/mtmse/obfl/issues/22
+                                                -->
+                                                <xsl:call-template name="pf:error">
+                                                    <xsl:with-param name="msg">
+                                                        counter-set: {} {}: page counter may not be set to an even value
+                                                    </xsl:with-param>
+                                                    <xsl:with-param name="args" select="($page-counter-name,$counter-set)"/>
+                                                </xsl:call-template>
+                                            </xsl:if>
+                                            <xsl:variable name="initial-page-number" as="attribute()?">
+                                                <xsl:if test="exists($counter-set)">
+                                                    <xsl:attribute name="initial-page-number" select="string($counter-set)"/>
+                                                </xsl:if>
+                                            </xsl:variable>
                                                 <xsl:apply-templates mode="assert-nil-attr"
-                                                                     select="current-group()/self::css:_/(@* except (@css:flow|@css:page|@css:counter-set))"/>
-                                                <xsl:for-each-group select="for $e in current-group() return if ($e/self::css:_) then $e/* else $e"
+                                                                     select="$volume-area-content/self::css:_/(@* except (@css:flow|@css:page|@css:counter-set))"/>
+                                                <xsl:for-each-group select="for $e in $volume-area-content return if ($e/self::css:_) then $e/* else $e"
                                                                     group-starting-with="css:box[@type='block' and @css:_obfl-toc]">
-                                                    <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
+                                                    <xsl:variable name="first" as="xs:boolean" select="position()=1"/>
                                                     <xsl:for-each-group select="current-group()"
                                                                         group-ending-with="css:box[@type='block' and @css:_obfl-toc]">
                                                         <xsl:variable name="first" as="xs:boolean" select="$first and position()=1"/>
@@ -571,8 +628,11 @@
                                                         </xsl:choose>
                                                     </xsl:for-each-group>
                                                 </xsl:for-each-group>
-                                            </xsl:for-each-group>
-                                        </xsl:for-each-group>
+                                            <xsl:next-iteration>
+                                                <xsl:with-param name="volume-area-counter-set"
+                                                                select="map:remove($volume-area-counter-set,$page-counter-name)"/>
+                                            </xsl:next-iteration>
+                                        </xsl:iterate>
                                     </xsl:element>
                                 </xsl:if>
                             </xsl:for-each>
