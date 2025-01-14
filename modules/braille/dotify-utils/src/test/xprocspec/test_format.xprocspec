@@ -8386,7 +8386,7 @@
             </default-template>
           </layout-master>
           <table-of-contents name="toc">
-            <toc-block break-before="page">
+            <toc-block>
               <toc-block> <toc-entry ref-id="a">⠿⠿⠿ 1 ⠄⠄⠄⠄⠄⠄⠄⠄⠄
               <page-number ref-id="a" number-format="default"/></toc-entry>
               </toc-block>

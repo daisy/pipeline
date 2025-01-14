@@ -2159,6 +2159,24 @@
         </xsl:call-template>
     </xsl:template>
     
+    <xsl:template priority="1.1"
+                  mode="block-attr"
+                  match="css:box[@type='block' and @css:_obfl-toc]
+                         /descendant-or-self::css:box[@type='block']/@css:page-break-before">
+        <!-- ignore page-break-before on toc-block because it does not play nice with on-toc-start
+             and on-volume-start -->
+        <!-- if the attribute is on the -obfl-toc element, there is no need for a warning because
+             toc-sequences always start on a new sheet -->
+        <xsl:if test=".=('always','right') and not(parent::*[@css:_obfl-toc])">
+            <xsl:call-template name="pf:warn">
+                <xsl:with-param name="msg">
+                    Property page-break-before: {} not supported inside elements with display: -obfl-toc
+                </xsl:with-param>
+                <xsl:with-param name="args" select="string(.)"/>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+    
     <xsl:template mode="block-attr table-attr td-attr"
                   match="css:box[@type=('block','table','table-cell')]/@css:border-left-pattern|
                          css:box[@type=('block','table','table-cell')]/@css:border-right-pattern">
