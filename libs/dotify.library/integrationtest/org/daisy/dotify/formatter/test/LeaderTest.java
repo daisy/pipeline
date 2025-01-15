@@ -1,7 +1,10 @@
 package org.daisy.dotify.formatter.test;
 
+import org.daisy.dotify.api.engine.FormatterEngineMaker;
 import org.daisy.dotify.api.engine.LayoutEngineException;
+import org.daisy.dotify.api.writer.MediaTypes;
 import org.daisy.dotify.api.writer.PagedMediaWriterConfigurationException;
+import org.daisy.dotify.api.writer.PagedMediaWriterFactoryMaker;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -69,6 +72,23 @@ public class LeaderTest extends AbstractFormatterEngineTest {
             "resource-files/leader-flow-in-footer-input.obfl",
             "resource-files/leader-flow-in-footer-expected.pef",
             false
+        );
+    }
+
+    @Test
+    public void testLeaderKeepTogether() throws
+            LayoutEngineException,
+            IOException,
+            PagedMediaWriterConfigurationException {
+        testPEF(
+            FormatterEngineMaker.newInstance().newFormatterEngine(
+                "und-Brai",
+                "MOCK",
+                PagedMediaWriterFactoryMaker.newInstance().newPagedMediaWriter(MediaTypes.PEF_MEDIA_TYPE)
+            ),
+            "resource-files/leader-keep-together-input.obfl",
+            "resource-files/leader-keep-together-expected.pef",
+            null
         );
     }
 }

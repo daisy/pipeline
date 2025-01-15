@@ -168,6 +168,7 @@ task sourcesJar(type: Jar) {
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 signing {
+	useGpgCmd()
 	required { isReleaseVersion }
 	sign publishing.publications
 }
@@ -223,8 +224,9 @@ publishing {
 	}
 	repositories {
 		maven {
-			def stagingRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-			def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+			def stagingRepoUrl = "https://ossrh-staging-api.central.sonatype.com/service/local/staging/deploy/maven2/"
+			def snapshotsRepoUrl = "https://central.sonatype.com/repository/maven-snapshots/"
+
 			url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : stagingRepoUrl
 			credentials {
 				username = sonatypeUsername

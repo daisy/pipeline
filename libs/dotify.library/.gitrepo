@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:mtmse/dotify.library
 	branch = main
-	commit = f8a4fe9c3c7ec3f868934d907790c2f3ed72a441
-	parent = 0c77455c68dbd096e5ed2f209869741fde521c84
+	commit = 0e089118eac9dde1b21f307fe25d0515ccef0b1f
+	parent = 81f4daec6c5585af9a1c632cc353037ce418ba60
 	cmdver = 0.3.1

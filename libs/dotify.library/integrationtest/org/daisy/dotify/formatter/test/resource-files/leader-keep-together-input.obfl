@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false">
+   <meta xmlns:dc="http://purl.org/dc/elements/1.1/">
+      <dc:title>Leader keep together</dc:title>
+      <dc:description>Tests keeping a leader together with the preceding word.</dc:description>
+   </meta>
+   <layout-master name="body" duplex="false" page-width="10" page-height="5">
+      <default-template>
+         <header/>
+         <footer/>
+      </default-template>
+   </layout-master>
+   <sequence master="body">
+      <!--
+          In all the cases below, the leader should not be separated from the word before it.
+      -->
+      <block>
+         ⠤⠤⠤ ⠤⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/>⠿⠿⠿
+      </block>
+      <!--
+          In the following two examples, there is a space after the
+          leader, but a leader is always kept together with the
+          content after it.
+      -->
+      <block break-before="page">
+         ⠤⠤⠤ ⠤⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+      </block>
+      <block break-before="page">
+         ⠤⠤⠤ ⠤⠤⠤<leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+      </block>
+      <!--
+          In this last example, the space before the leader is a non-breaking one.
+      -->
+      <block break-before="page">
+         ⠤⠤⠤ ⠤⠤⠤ <leader pattern="⠁" position="100%" align="right"/> ⠿⠿⠿
+      </block>
+   </sequence>
+</obfl>

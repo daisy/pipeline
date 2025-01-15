@@ -8,6 +8,10 @@ import org.daisy.dotify.api.formatter.MarkerReference;
 import org.daisy.dotify.api.translator.AttributeWithContext;
 import org.daisy.dotify.api.translator.BrailleTranslatorResult;
 import org.daisy.dotify.api.translator.DefaultAttributeWithContext;
+import org.daisy.dotify.api.translator.FollowingText;
+import org.daisy.dotify.api.translator.PrecedingText;
+import org.daisy.dotify.api.translator.ResolvableText;
+import org.daisy.dotify.api.translator.TextWithContext;
 import org.daisy.dotify.api.translator.Translatable;
 import org.daisy.dotify.api.translator.TranslatableWithContext;
 import org.daisy.dotify.api.translator.TranslationException;
@@ -30,7 +34,9 @@ import org.daisy.dotify.formatter.impl.segment.TextSegment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -73,16 +79,18 @@ class SegmentProcessor {
     private final List<String> groupIdentifiers;
     private Object externalReference = null;
     /*
-     * Buffers a number of evaluated segments that follow a leader (contained in `leaderManager') in
+     * Buffers a number of evaluated segments that follow a leader (contained in `currentLeader') in
      * a single aggregated BrailleTranslatorResult. Can only be non-null if `current' is null.
      */
     private AggregatedBrailleTranslatorResult.Builder layoutOrApplyAfterLeader;
     /*
-     * Contains zero, one of two leader segments. If not empty, the first leader comes before
-     * `layoutOrApplyAfterLeader' or `current'. If there is a second leader it comes after `current'
-     * (`layoutOrApplyAfterLeader' is null).
+     * If not null, this leader segment comes before `layoutOrApplyAfterLeader' or `current'.
      */
-    private final LeaderManager leaderManager;
+    private Leader currentLeader;
+    /*
+     * Contains all leaders that come after `currentLeader'
+     */
+    private final LeaderManager nextLeaders;
     private ListItem item;
     private int forceCount;
     /**
@@ -137,7 +145,8 @@ class SegmentProcessor {
         this.groupAnchors = new ArrayList<>();
         this.groupIdentifiers = new ArrayList<>();
         this.externalReference = null;
-        this.leaderManager = new LeaderManager();
+        this.currentLeader = null;
+        this.nextLeaders = new LeaderManager();
         this.hasSignificantContent = calculateSignificantContent(this.segments, context, rdp);
         this.hasDynamicContent = this.segments.stream().anyMatch(
             s -> s.getSegmentType() == SegmentType.Evaluate ||
@@ -175,7 +184,8 @@ class SegmentProcessor {
         this.groupAnchors = new ArrayList<>(template.groupAnchors);
         this.groupMarkers = new ArrayList<>(template.groupMarkers);
         this.groupIdentifiers = new ArrayList<>(template.groupIdentifiers);
-        this.leaderManager = new LeaderManager(template.leaderManager);
+        this.currentLeader = template.currentLeader;
+        this.nextLeaders = new LeaderManager(template.nextLeaders);
         this.externalReference = template.externalReference;
         this.layoutOrApplyAfterLeader =
                 template.layoutOrApplyAfterLeader == null ?
@@ -350,7 +360,8 @@ class SegmentProcessor {
     private void initFields() {
         segmentIndex = 0;
         currentRow = null;
-        leaderManager.discardAllLeaders();
+        currentLeader = null;
+        nextLeaders.discardAllLeaders();
         layoutOrApplyAfterLeader = null;
         item = processorContext.getRowDataProps().getListItem();
         unusedLeft = processorContext.getFlowWidth();
@@ -364,18 +375,42 @@ class SegmentProcessor {
         // reset resolved values and (re)set resolvers
         for (Segment s : segments) {
             switch (s.getSegmentType()) {
-                case PageReference:
+                case PageReference: {
                     PageNumberReference prs = (PageNumberReference) s;
                     prs.setResolver(pagenumResolver);
                     break;
-                case MarkerReference:
+                }
+                case MarkerReference: {
                     MarkerReferenceSegment mrs = (MarkerReferenceSegment) s;
                     mrs.setResolver(markerRefResolver);
                     break;
-                case Evaluate:
+                }
+                case Evaluate: {
                     Evaluate e = (Evaluate) s;
                     e.setResolver(expressionResolver);
                     break;
+                }
+                case Leader: {
+                    LeaderSegment ls = (LeaderSegment) s;
+                    // translate pattern
+                    String pattern = ls.getPattern();
+                    try {
+                        pattern = processorContext
+                            .getFormatterContext()
+                            .getTranslator(ls.getTextProperties().getTranslationMode())
+                            .translate(Translatable.text(pattern).build()).getTranslatedRemainder();
+                    } catch (TranslationException e) {
+                        throw new RuntimeException(e);
+                    }
+                    // add to leader manager
+                    nextLeaders.addLeader(
+                        new Leader.Builder()
+                                  .pattern(pattern)
+                                  .position(ls.getPosition())
+                                  .align(ls.getAlignment())
+                                  .build());
+                    break;
+                }
                 default:
             }
         }
@@ -392,7 +427,7 @@ class SegmentProcessor {
                 (
                     currentRow != null ||
                     (rowsFlushed && processorContext.getRowDataProps().getUnderlineStyle() != null) ||
-                    leaderManager.hasLeader()
+                    currentLeader != null
                 );
         }
 
@@ -513,7 +548,7 @@ class SegmentProcessor {
      * - wrap them (text segments) in a CurrentResult
      * - apply it (anchor, marker, identifier or external-reference segment) to the active row or the block
      * - combine it (newline segment) with previously buffered content in a CurrentResult
-     * - add it (leader segment) to `leaderManager' and return previously buffered content as a CurrentResult
+     * - save it (leader segment) as `currentLeader' and return previously buffered content as a CurrentResult
      */
     private Optional<CurrentResult> loadNextSegment() {
         Segment s = segments.get(segmentIndex);
@@ -532,7 +567,19 @@ class SegmentProcessor {
                 }
                 return layoutTextSegment(ts, fromIndex, len);
             case Leader:
-                return layoutLeaderSegment((LeaderSegment) s);
+                try {
+                    if (currentLeader != null) {
+                        return layoutLeader();
+                    }
+                    return Optional.empty();
+                } finally {
+                    try {
+                        currentLeader = nextLeaders.getCurrentLeader();
+                    } catch (NoSuchElementException e) {
+                        throw new RuntimeException("coding error");
+                    }
+                    nextLeaders.removeLeader();
+                }
             case PageReference:
                 return layoutPageSegment((PageNumberReference) s);
             case MarkerReference:
@@ -600,6 +647,7 @@ class SegmentProcessor {
             TranslatableWithContext spec = TranslatableWithContext.from(segments, fromIndex, toIndex)
                     .attributes(attr)
                     .build();
+            spec = makeContentAfterNextLeaderUnbreakable(spec);
             btr = toResult(spec, mode);
             // Do not cache the braille translation of this text segment if there are preceding or
             // following segments whose values can change, because this may influence the
@@ -610,44 +658,14 @@ class SegmentProcessor {
         } else {
             btr = ts.newResult();
         }
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             layoutAfterLeader(btr);
         } else {
-            CurrentResult current = new CurrentResultImpl(btr, mode);
+            Leader nextTabStop = nextLeaders.hasLeader() ? nextLeaders.getCurrentLeader() : null;
+            CurrentResult current = new CurrentResultImpl(btr, null, nextTabStop, mode);
             return Optional.of(current);
         }
         return Optional.empty();
-    }
-
-    /*
-     * Add the leader segment to leader manager, and if a leader was already present, convert
-     * `layoutOrApplyAfterLeader' to a CurrentResult and return it.
-     */
-    private Optional<CurrentResult> layoutLeaderSegment(LeaderSegment ls) {
-        try {
-            if (leaderManager.hasLeader()) {
-                return layoutLeader();
-            }
-            return Optional.empty();
-        } finally {
-            // translate pattern
-            String pattern = ls.getPattern();
-            try {
-                pattern = processorContext
-                    .getFormatterContext()
-                    .getTranslator(ls.getTextProperties().getTranslationMode())
-                    .translate(Translatable.text(pattern).build()).getTranslatedRemainder();
-            } catch (TranslationException e) {
-                throw new RuntimeException(e);
-            }
-            // add to leader manager
-            leaderManager.addLeader(
-                new Leader.Builder()
-                          .pattern(pattern)
-                          .position(ls.getPosition())
-                          .align(ls.getAlignment())
-                          .build());
-        }
     }
 
     private Optional<CurrentResult> layoutPageSegment(PageNumberReference rs) {
@@ -662,12 +680,14 @@ class SegmentProcessor {
         spec = TranslatableWithContext.from(segments, segmentIndex - 1)
                 .attributes(attr)
                 .build();
-        if (leaderManager.hasLeader()) {
+        spec = makeContentAfterNextLeaderUnbreakable(spec);
+        if (currentLeader != null) {
             layoutAfterLeader(spec, null);
         } else {
             String mode = null; // use default translator to translate list label
             BrailleTranslatorResult btr = toResult(spec, null);
-            CurrentResult current = new CurrentResultImpl(btr, mode);
+            Leader nextTabStop = nextLeaders.hasLeader() ? nextLeaders.getCurrentLeader() : null;
+            CurrentResult current = new CurrentResultImpl(btr, null, nextTabStop, mode);
             return Optional.of(current);
         }
         return Optional.empty();
@@ -685,14 +705,16 @@ class SegmentProcessor {
             spec = TranslatableWithContext.from(segments, segmentIndex - 1)
                     .attributes(attr)
                     .build();
-            if (leaderManager.hasLeader()) {
+            spec = makeContentAfterNextLeaderUnbreakable(spec);
+            if (currentLeader != null) {
                 layoutAfterLeader(spec, null);
             } else {
                 String mode = null; // use default translator to translate list label
                 BrailleTranslatorResult btr = toResult(spec, null);
                 if (btr.hasNext()) { // Don't create a new row if the evaluated reference is empty
                                      // after applying the style
-                    CurrentResult current = new CurrentResultImpl(btr, mode);
+                    Leader nextTabStop = nextLeaders.hasLeader() ? nextLeaders.getCurrentLeader() : null;
+                    CurrentResult current = new CurrentResultImpl(btr, null, nextTabStop, mode);
                     return Optional.of(current);
                 }
             }
@@ -712,12 +734,14 @@ class SegmentProcessor {
             TranslatableWithContext spec = TranslatableWithContext.from(segments, segmentIndex - 1)
                     .attributes(attr)
                     .build();
-            if (leaderManager.hasLeader()) {
+            spec = makeContentAfterNextLeaderUnbreakable(spec);
+            if (currentLeader != null) {
                 layoutAfterLeader(spec, null);
             } else {
                 String mode = null; // use default translator to translate list label
                 BrailleTranslatorResult btr = toResult(spec, mode);
-                CurrentResult current = new CurrentResultImpl(btr, mode);
+                Leader nextTabStop = nextLeaders.hasLeader() ? nextLeaders.getCurrentLeader() : null;
+                CurrentResult current = new CurrentResultImpl(btr, null, nextTabStop, mode);
                 return Optional.of(current);
             }
         }
@@ -732,7 +756,7 @@ class SegmentProcessor {
      * Buffer an evaluated segment (BrailleTranslatorResult) in `layoutOrApplyAfterLeader'.
      */
     private void layoutAfterLeader(BrailleTranslatorResult result) {
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             if (layoutOrApplyAfterLeader == null) {
                 layoutOrApplyAfterLeader = new AggregatedBrailleTranslatorResult.Builder();
             }
@@ -749,7 +773,7 @@ class SegmentProcessor {
      * the active row or the block.
      */
     private void applyAfterLeader(MarkerSegment marker) {
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             if (layoutOrApplyAfterLeader == null) {
                 layoutOrApplyAfterLeader = new AggregatedBrailleTranslatorResult.Builder();
             }
@@ -768,7 +792,7 @@ class SegmentProcessor {
      * the active row or the block.
      */
     private void applyAfterLeader(final AnchorSegment anchor) {
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             if (layoutOrApplyAfterLeader == null) {
                 layoutOrApplyAfterLeader = new AggregatedBrailleTranslatorResult.Builder();
             }
@@ -787,7 +811,7 @@ class SegmentProcessor {
      * to the active row or the block.
      */
     private void applyAfterLeader(final IdentifierSegment identifier) {
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             if (layoutOrApplyAfterLeader == null) {
                 layoutOrApplyAfterLeader = new AggregatedBrailleTranslatorResult.Builder();
             }
@@ -806,7 +830,7 @@ class SegmentProcessor {
      * `layoutOrApplyAfterLeader' to a CurrentResult and return it.
      */
     private Optional<CurrentResult> layoutLeader() {
-        if (leaderManager.hasLeader()) {
+        if (currentLeader != null) {
             BrailleTranslatorResult btr;
             String mode = null; // use default translator to translate list label
             if (layoutOrApplyAfterLeader == null) {
@@ -815,7 +839,10 @@ class SegmentProcessor {
                 btr = layoutOrApplyAfterLeader.build();
                 layoutOrApplyAfterLeader = null;
             }
-            CurrentResult current = new CurrentResultImpl(btr, mode);
+            Leader l = currentLeader;
+            currentLeader = null;
+            Leader nextTabStop = nextLeaders.hasLeader() ? nextLeaders.getCurrentLeader() : null;
+            CurrentResult current = new CurrentResultImpl(btr, l, nextTabStop, mode);
             return Optional.of(current);
         }
         return Optional.empty();
@@ -945,6 +972,80 @@ class SegmentProcessor {
         return item;
     }
 
+    /**
+     * Make all content after the next leader unbreakable if the leader is right-aligned and no
+     * newline preceeds it.
+     */
+    private TranslatableWithContext makeContentAfterNextLeaderUnbreakable(TranslatableWithContext spec) {
+        if (nextLeaders.hasLeader()) {
+            Leader nextTabStop = nextLeaders.getCurrentLeader();
+            if (nextTabStop.getAlignment() == Leader.Alignment.RIGHT) {
+                List<FollowingText> followingContent = spec.getFollowingText();
+                List<FollowingText> unbreakable = new ArrayList<>();
+                for (Iterator<FollowingText> i = followingContent.iterator(); i.hasNext();) {
+                    FollowingText t = i.next();
+                    if (t instanceof Segment) {
+                        Segment s = (Segment) t;
+                        switch (s.getSegmentType()) {
+                        case NewLine:
+                            return spec;
+                        case Leader:
+                            // start of unbreakable segments
+                            unbreakable.add(s);
+                            while (i.hasNext()) {
+                                t = i.next();
+                                if (t instanceof Segment) {
+                                    s = (Segment) t;
+                                    switch (s.getSegmentType()) {
+                                    case NewLine:
+                                    case Leader:
+                                        // end of unbreakable segments
+                                        unbreakable.add(s);
+                                        while (i.hasNext()) {
+                                            unbreakable.add(i.next());
+                                        }
+                                        break;
+                                    default:
+                                        unbreakable.add(s.asUnbreakable());
+                                    }
+                                } else {
+                                    unbreakable.add(t);
+                                }
+                            }
+                            break;
+                        default:
+                            unbreakable.add(s);
+                        }
+                    } else {
+                        unbreakable.add(t);
+                    }
+                }
+                if (!unbreakable.equals(followingContent)) {
+                    TranslatableWithContext origSpec = spec;
+                    spec = TranslatableWithContext
+                        .text(
+                            new TextWithContext() {
+                                @Override
+                                public List<PrecedingText> getPrecedingText() {
+                                    return origSpec.getPrecedingText();
+                                }
+                                @Override
+                                public List<FollowingText> getFollowingText() {
+                                    return unbreakable;
+                                }
+                                @Override
+                                public List<ResolvableText> getTextToTranslate() {
+                                    return origSpec.getTextToTranslate();
+                                }
+                            })
+                        .attributes(attr)
+                        .build();
+                }
+            }
+        }
+        return spec;
+    }
+
     /* ========================= */
     /*       Inner classes       */
     /* ========================= */
@@ -971,17 +1072,40 @@ class SegmentProcessor {
         /* mode to translate list label */
         private final String mode;
         private boolean first;
+        private final LeaderManager leader;
+        private final Leader nextTabStop;
 
-        CurrentResultImpl(BrailleTranslatorResult btr, String mode) {
+        /**
+         * @param btr The translation result of a sequence of one or more segments, with as context
+         *            all preceding segments and all following segments (or at least the segments up to
+         *            the next newline, tab stop, or end of block). "Tab stop" refers to the
+         *            position right after a leader in case of left alignment, or in case of right
+         *            alignment the position before the first newline or leader after the leader, or
+         *            the end of the block if the leader is not followed by any other leaders or
+         *            newlines. Centered alignment is treated as left alignment when it comes to
+         *            determining the translation context.
+         * @param leader The leader that should precede the translation result, or null
+         * @param nextTabStop The next tab stop, or null if there is no next tab stop or a newline
+         *                    preceeds the next tab stop.
+         * @param mode The translation mode for translating list labels and leader patterns
+         */
+        CurrentResultImpl(BrailleTranslatorResult btr, Leader leader, Leader nextTabStop, String mode) {
             this.btr = btr;
             this.mode = mode;
             this.first = true;
+            this.leader = leader != null ? new LeaderManager() : null;
+            if (this.leader != null) {
+                this.leader.addLeader(leader);
+            }
+            this.nextTabStop = nextTabStop;
         }
 
         private CurrentResultImpl(CurrentResultImpl template) {
             this.btr = template.btr.copy();
             this.mode = template.mode;
             this.first = template.first;
+            this.leader = template.leader != null ? new LeaderManager(template.leader) : null;
+            this.nextTabStop = template.nextTabStop;
         }
 
         @Override
@@ -1131,31 +1255,52 @@ class SegmentProcessor {
                 throw new RuntimeException("Error in code.");
             }
             String tabSpace = ""; // leader content
-            boolean hasLeader = leaderManager.hasLeader();
-            int leaderPos = -1; // tab stop position
+            boolean hasLeader = leader != null && leader.hasLeader();
+            int leaderPos = -1; // current (not next) tab stop position
 
             // if a leader is pending lay it out first
             if (hasLeader) {
                 int preTabPos = row.getPreTabPosition(currentRow); // start position of leader
-                leaderPos = leaderManager.getLeaderPosition(
+                leaderPos = leader.getLeaderPosition(
                     processorContext.getAvailable() - lineProps.getReservedWidth()
                 );
-                int align = leaderManager.getLeaderAlign(btr.countRemaining()); // space after leader before tab stop
+                int align = leader.getLeaderAlign(btr.countRemaining()); // space after leader before tab stop
                 if (leaderPos - align < preTabPos) {
                     // if tab position has been passed try on a new row
                     return Optional.ofNullable(flushCurrentRow());
                 } else {
-                    tabSpace = leaderManager.getLeaderPattern(leaderPos - preTabPos - align); // leader length
+                    tabSpace = leader.getLeaderPattern(leaderPos - preTabPos - align); // leader length
                 }
             }
 
             // Size of content already present in row. If called from startNewRow() currentRow does
             // not include the left text indent, otherwise it does.
-            int contentLen = StringTools.length(tabSpace) + StringTools.length(currentRow.getText());
-            boolean force = contentLen == 0;
-            int availableIfLastRow = row.getMaxLength(currentRow) - contentLen;
-            // check whether we are on the last row of the block (only matters if there is a
-            // right-text-indent)
+            int contentLen = StringTools.length(currentRow.getText());
+            int leaderLen = StringTools.length(tabSpace);
+            int maxLength = row.getMaxLength(currentRow);
+            boolean force = contentLen + leaderLen == 0;
+            // The following statements become more understandable with the knowledge that
+            // row.available - row.getPreTabPosition(currentRow) == maxLength - contentLen
+            Integer availableUntilNextTabStop = nextTabStop != null
+                ? nextTabStop.getPosition().makeAbsolute(processorContext.getAvailable())
+                  - row.getPreTabPosition(currentRow)
+                  - leaderLen
+                : null;
+            int availableIfLastRow = nextTabStop != null
+                ? availableUntilNextTabStop
+                : maxLength - contentLen - leaderLen;
+
+            // Flush the row at the end if we have applied a reduced limit (with right-text-indent)
+            // and we want to avoid that more content is added on the same row, which might be
+            // possible if trailing spaces were trimmed to fit the current result on the row.
+            boolean flushRow = false;
+
+            // Check whether we are on the last row of the block. Note that onLastRow only has a
+            // meaning if it is true, or when there is a right-text-indent. When there is no
+            // right-text-indent, we don't check whether we are on the last row because it doesn't
+            // matter. Also note that we make assumptions which may not be true: we may be assuming
+            // we are not on the last row, while in fact we are, or we may be assuming we are on
+            // the last row, while in fact we aren't.
             boolean onLastRow = false;
             if (rightIndentIfNotLastRow > 0) {
                 // We only support the following cases:
@@ -1169,6 +1314,7 @@ class SegmentProcessor {
                 if (hasLeader) {
                     if (!hasMoreSegments()) {
                         BrailleTranslatorResult btrCopy = btr.copy();
+                        // this takes into account the next tab stop if present
                         btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
                         if (!btrCopy.hasNext()) {
                             onLastRow = true;
@@ -1177,26 +1323,111 @@ class SegmentProcessor {
                 // - The current result fits on the row regardless of whether it is the last row or
                 //   not. We assume that we are on the last row because it doesn't matter. Only in
                 //   the case the current result does not fit on a row with right text indent
-                //   applied, but does fit together with all the following content on a row without
-                //   right text indent applied we are incorrectly assuming we are not on the last
-                //   row. This only becomes a problem as soon as right-text-indent exceeds the
-                //   distance between the right end of the leader and the right edge of the box.
+                //   applied, but does fit together together with all the following segments on a
+                //   row without right text indent applied, we are incorrectly assuming we are not
+                //   on the last row.
                 } else {
                     BrailleTranslatorResult btrCopy = btr.copy();
+                    // this takes into account the next tab stop if present
                     String remainder = btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
                     if (!btrCopy.hasNext()
-                        && remainder.length() <= availableIfLastRow - rightIndentIfNotLastRow) {
-                        onLastRow = true;
+                        && contentLen + remainder.length() <= maxLength - rightIndentIfNotLastRow) {
+                        String wholeRemainder =  btr.copy().nextTranslatedRow(Integer.MAX_VALUE, force, false);
+                        if (wholeRemainder.equals(remainder)) {
+                            onLastRow = true;
+                        } else if (wholeRemainder.startsWith(remainder)) {
+                            // should always be the case
+                            String discarded = wholeRemainder.substring(remainder.length());
+                            if (trailingWsBraillePattern.matcher(discarded).replaceAll("").isEmpty()) {
+                                // should always be the case
+                                onLastRow = true;
+                                if (trailingWsBraillePattern.matcher(remainder).replaceAll("").equals(remainder)) {
+                                    // All trailing space was trimmed from the current result, so
+                                    // make sure no more content can be added.
+                                    flushRow = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!onLastRow) {
+                    // The current segment and remainder of the block might not all fit on this row,
+                    // but they might fit exactly after trailing spaces are trimmed.
+                    flushRow = true;
+                }
+            }
+            // break line
+            String next = null;
+            // space available for putting text
+            int available = onLastRow
+                ? availableIfLastRow // takes into account the next tab stop if present
+                : maxLength - contentLen - leaderLen - rightIndentIfNotLastRow;
+            int rightIndent = onLastRow
+                ? 0
+                : rightIndentIfNotLastRow;
+            // If there is a following leader, take into account its tab stop position when line
+            // breaking the current result, so that the line breaker can keep it together on the
+            // same row as the leader if desired. (If we only take into account the tab stop
+            // position when the content after the leader is layed out, it is too late.)
+            if (nextTabStop != null
+                // if we already think we are on the last row, the available space calculated above
+                // already takes into account the tab stop
+                && !onLastRow
+                // if the tab stop aligns exactly with the right indent limit, the available space
+                // calculated above must be right anyway
+                && availableUntilNextTabStop != maxLength - contentLen - leaderLen - rightIndentIfNotLastRow
+            ) {
+                // The actual available space depends on whether we are on the last row or not
+                // (which we are never really sure of). Even if, with a certain limit, the result
+                // fits entirely on the current row, we don't know whether more content will follow,
+                // and whether it will follow on the same row or on the next. All we know is that
+                // the line breaker had the opportunity to keep segments together if
+                // necessary. Whatever decision we make, we may always be using less space than is
+                // available:
+                if (availableUntilNextTabStop > maxLength - contentLen - leaderLen - rightIndentIfNotLastRow) {
+                    // When the tab stop is to the right of the right indent, we have no other
+                    // choice than to use the right indent limit (and we already know that the
+                    // result will not fit, see above). If we use the tab stop limit, we can not be
+                    // sure that we don't violate the right indent constraint (because we wouldn't
+                    // know for sure that we would be on the last row). The consequence is that we
+                    // may be using less space than is available if all the remaining content could
+                    // have fit on the current (last) row if we would have used the tab stop limit.
+
+                    // (Note that we can assume that the tab stop is always on the last line when it
+                    // is to the right of the right indent. If not, there may be cases where the
+                    // layout constraint can not be fulfilled, and that would result in an error
+                    // when the leader is processed, because we don't loosen one of the constaints
+                    // in those cases.)
+                } else {
+                    // When the tab stop is to the left of the right indent (note that it could be
+                    // either on the last line, or not, it does not matter), we have two choices. We
+                    // can either use the tab stop limit, with the risk that more content would fit
+                    // on the row if we would have used the right indent limit. Or, we can use the
+                    // right indent limit, with the risk of getting line breaks between segments
+                    // that shouldn't be split. We use the heuristic that if the current result fits
+                    // entirely on the current row with the tab stop limit, we use that limit. If
+                    // the result was split or moved entirely to the next row, we choose to call the
+                    // line breaker again without the tab stop constraint, because we think the risk
+                    // of getting a premature line break due to an incorrect tab stop constraint is
+                    // greater in this case.
+                    BrailleTranslatorResult btrCopy = btr.copy();
+                    next = btrCopy.nextTranslatedRow(availableUntilNextTabStop, force, true);
+                    if (!next.isEmpty()
+                        && !btrCopy.hasNext()
+                        && btr.copy().nextTranslatedRow(Integer.MAX_VALUE, force, true).equals(next)) {
+                        next = softHyphenPattern.matcher(next).replaceAll("");
+                        btr.nextTranslatedRow(Integer.MAX_VALUE, force, true);
+                        available = availableUntilNextTabStop;
+                    } else {
+                        next = null;
                     }
                 }
             }
-            int rightIndent = onLastRow ? 0 : rightIndentIfNotLastRow;
-            // space available for putting text
-            int available = availableIfLastRow - rightIndent;
-            // break line
-            String next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
-            // don't know if soft hyphens need to be replaced, but we'll keep it for now
-            next = softHyphenPattern.matcher(next).replaceAll("");
+            if (next == null) {
+                next = btr.nextTranslatedRow(available, force, lineProps.suppressHyphenation());
+                // don't know if soft hyphens need to be replaced, but we'll keep it for now
+                next = softHyphenPattern.matcher(next).replaceAll("");
+            }
             if (hasLeader) {
 
                 // If there is a leader, insert it if the content that follows it fits on the line
@@ -1204,7 +1435,7 @@ class SegmentProcessor {
                 // right or center and the content that follows it does not fit. If the leader
                 // alignment is left just insert any text that fits. If no text fits just insert the
                 // leader. It is an error if the leader does not even fit.
-                switch (leaderManager.getCurrentLeader().getAlignment()) {
+                switch (leader.getCurrentLeader().getAlignment()) {
                 case CENTER:
                 case RIGHT:
                     if (available < 0 || btr.hasNext()) {
@@ -1217,7 +1448,7 @@ class SegmentProcessor {
                             "Block is too narrow to fit the leader with the text after it ("
                             + "total available width: " + (processorContext.getAvailable() + rightMargin)
                             + ", leader position: " + leaderPos
-                            + ", leader alignment: " + leaderManager.getCurrentLeader().getAlignment()
+                            + ", leader alignment: " + leader.getCurrentLeader().getAlignment()
                             + ", text after leader: \"" + next + btr.getTranslatedRemainder() + "\""
                             + (rightIndent > 0 ? ", right text indent: " + rightIndent : "")
                             + (rightMargin > 0 ? ", right margin: " + rightMargin : "")
@@ -1247,7 +1478,7 @@ class SegmentProcessor {
                     currentRow.leaderSpace(currentRow.getLeaderSpace() + tabSpace.length());
                 }
                 // tabSpace has been inserted, discard the leader now
-                leaderManager.removeLeader();
+                leader.removeLeader();
             } else if (!next.isEmpty()) {
 
                 // If there is no leader, just insert any content that fits on the line.
@@ -1284,15 +1515,9 @@ class SegmentProcessor {
                 currentRow.addIdentifiers(abtr.getIdentifiers());
                 abtr.clearPending();
             }
-            // When right-text-indent was applied and the current result fitted exactly on the row
-            // and trailing spaces were discarded, we don't want more content to be added to it
-            // (which is possible because by cutting the trailing spaces and not applying
-            // right-text-indent we could have created just enough room to fit all remaining
-            // content). Hence we flush the row.
-            if (rightIndentIfNotLastRow > 0
-                && !onLastRow
-                && !btr.hasNext()
-            ) {
+            if (flushRow
+                // if btr has more content, the row will be flushed anyway
+                && !btr.hasNext()) {
                 return Optional.ofNullable(flushCurrentRow());
             }
             // Returning empty value means that currentRow has been updated but we don't want to
