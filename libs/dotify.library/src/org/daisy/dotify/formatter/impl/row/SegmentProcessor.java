@@ -1177,10 +1177,9 @@ class SegmentProcessor {
                 // - The current result fits on the row regardless of whether it is the last row or
                 //   not. We assume that we are on the last row because it doesn't matter. Only in
                 //   the case the current result does not fit on a row with right text indent
-                //   applied, but does fit together with all the following content on a row without
-                //   right text indent applied we are incorrectly assuming we are not on the last
-                //   row. This only becomes a problem as soon as right-text-indent exceeds the
-                //   distance between the right end of the leader and the right edge of the box.
+                //   applied, but does fit together together with all the following segments on a
+                //   row without right text indent applied, we are incorrectly assuming we are not
+                //   on the last row.
                 } else {
                     BrailleTranslatorResult btrCopy = btr.copy();
                     String remainder = btrCopy.nextTranslatedRow(availableIfLastRow, force, false);
