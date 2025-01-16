@@ -1,3 +1,11 @@
+v1.15.3
+==========
+
+Changes
+-------
+- Keep a leader together with the last word before it if there is no space in between
+  (https://github.com/mtmse/dotify.library/issues/24)
+
 v1.15.2
 ==========
 
