@@ -297,6 +297,10 @@ modules/braille/libhyphen-utils/.install-linux.jar \
 modules/braille/libhyphen-utils/.install-windows.jar: \
 	modules/braille/libhyphen-utils/.install
 
+# treat celia-hyphenation-tables as a released artifact
+.PHONY : $(MVN_LOCAL_REPOSITORY)/fi/celia/celia-hyphenation-tables/1.5.1-SNAPSHOT/celia-hyphenation-tables-1.5.1-SNAPSHOT.jar
+.PHONY : $(MVN_LOCAL_REPOSITORY)/fi/celia/celia-hyphenation-tables/1.5.1-SNAPSHOT!!!/celia-hyphenation-tables-1.5.1-SNAPSHOT!!!.jar
+
 .maven-init : | $(MVN_WORKSPACE)
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 $(MVN_WORKSPACE) :
