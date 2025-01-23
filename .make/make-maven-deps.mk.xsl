@@ -553,7 +553,7 @@
 					<xsl:value-of select="concat($dirname,'.release')"/>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x09;</xsl:text>
-					<xsl:text>+:</xsl:text>
+					<xsl:text>+//</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 				</xsl:otherwise>
 			</xsl:choose>
