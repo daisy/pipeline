@@ -331,10 +331,10 @@
 						<xsl:value-of select="concat($dirname,'.install.pom | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>+$(EVAL) 'test -e' $@</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-if-unix,touch $@)</xsl:text>
+						<xsl:text>+$(EVAL) touch $@</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
@@ -347,10 +347,10 @@
 						<xsl:value-of select="concat($dirname,'.install% | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-if-unix,'test -e' $@)</xsl:text>
+						<xsl:text>+$(EVAL) 'test -e' $@</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-if-unix,'touch' $@)</xsl:text>
+						<xsl:text>+$(EVAL) 'touch' $@</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>
@@ -360,9 +360,9 @@
 						<xsl:text> : %/.install.pom : %/pom.xml %/.compile-dependencies | %/.test-dependencies .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-for-host-platform,</xsl:text>
+						<xsl:text>+$(EVAL) </xsl:text>
 						<xsl:value-of select="$MY_DIR"/>
-						<xsl:text>/mvn-install-pom.sh,$$(dirname $@))</xsl:text>
+						<xsl:text>/mvn-install-pom.sh $$(dirname $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:if test="$type='jar'">
 							<xsl:text>&#x0A;</xsl:text>
@@ -380,9 +380,9 @@
 							<xsl:text> : | .maven-init .group-eval</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x09;</xsl:text>
-							<xsl:text>+$(call eval-for-host-platform,</xsl:text>
+							<xsl:text>+$(EVAL) </xsl:text>
 							<xsl:value-of select="$MY_DIR"/>
-							<xsl:text>/mvn-install.sh,$$(dirname $@))</xsl:text>
+							<xsl:text>/mvn-install.sh $$(dirname $@)</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:value-of select="concat($dirname,'.install')"/>
@@ -465,9 +465,9 @@
 						<xsl:text> : | .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(call eval-for-host-platform,</xsl:text>
+						<xsl:text>+$(EVAL) </xsl:text>
 						<xsl:value-of select="$MY_DIR"/>
-						<xsl:text>/mvn-install-doc.sh,$$(dirname $@))</xsl:text>
+						<xsl:text>/mvn-install-doc.sh $$(dirname $@)</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install-doc')"/>
@@ -687,11 +687,10 @@
 				<xsl:text>.group-eval</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>+$(call eval-for-host-platform,</xsl:text>
+				<xsl:text>+$(EVAL) </xsl:text>
 				<xsl:value-of select="$MY_DIR"/>
-				<xsl:text>/mvn-eclipse.sh,</xsl:text>
+				<xsl:text>/mvn-eclipse.sh </xsl:text>
 				<xsl:value-of select="substring($dirname,1,string-length($dirname) - 1)"/>
-				<xsl:text>)</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>.SECONDARY :</xsl:text>
