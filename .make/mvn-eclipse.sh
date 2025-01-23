@@ -4,28 +4,6 @@ set -e
 set -o pipefail
 shopt -s nocasematch
 
-if [ "$1" == "--dry-run" ]; then
-    shift
-    if [[ "${HOST_PLATFORM}" == "batch" ]]; then
-        for module in "$@"; do
-            echo mvn --projects $module \
-                      org.apache.maven.plugins:maven-eclipse-plugin:2.10:eclipse \
-                      -Declipse.useProjectReferences=true \
-                      -Declipse.projectNameTemplate=[groupId].[artifactId]
-        done
-        for module in "$@"; do
-            echo "rem Now import the project at '$module' into your Eclipse workspace"
-        done
-        exit 0
-    else
-        exit 1
-    fi
-else
-    if [[ -n ${HOST_PLATFORM} ]]; then
-        exit 1
-    fi
-fi
-
 # start eclim if available
 if which eclim >/dev/null; then
     if ! eclim -command ping >/dev/null 2>/dev/null; then

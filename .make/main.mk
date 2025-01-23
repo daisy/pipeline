@@ -11,7 +11,7 @@ MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
 GRADLE            := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(ROOT_DIR)/$(MY_DIR)/gradle.sh $(MVN_PROPERTIES)
 EVAL              := :
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE HOST_PLATFORM MAKE
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
@@ -19,14 +19,6 @@ export MAKECMDGOALS
 rwildcard = $(shell [ -d $1 ] && find $1 -type f -name '$2' | sed 's/ /\\ /g')
 # alternative, but does not support spaces in file names:
 #rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
-
-ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
-eval-for-host-platform = $(EVAL) $(call quote,$(shell $(1) --dry-run $(2) | paste -sd'&' -))
-eval-if-unix = :
-else
-eval-for-host-platform = $(EVAL) $(1) $(2)
-eval-if-unix = $(EVAL) $(1)
-endif
 
 update-target-if-changed = $@.tmp && ((! [ -e $@ ] || ! diff -q $@ $@.tmp >/dev/null) && mv $@.tmp $@ || rm $@.tmp ) || (rm $@.tmp && false)
 
@@ -232,13 +224,9 @@ $(addprefix eclipse-,$(MODULES)) : eclipse-% : %/.project
 # mvn-eclipse.sh requires parent poms to be installed because it uses `mvn --projects ...`
 $(addsuffix /.project,$(MODULES)) : parents
 
-ifneq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
-
 $(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
 .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | $(TARGET_DIR)/effective-settings.xml .group-eval
 	$(EVAL) $(MY_DIR)/eclipse-init.sh
-
-endif
 
 # FIXME: specifying "--debug" option breaks this code
 # - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
@@ -246,31 +234,6 @@ endif
 .SECONDARY : .group-eval
 .group-eval :
 ifndef SKIP_GROUP_EVAL_TARGET
-ifeq ($(shell echo $(HOST_PLATFORM) | tr A-Z a-z), batch)
-	# assuming that command grouping is not needed in this case, so we just print the commands
-	set -o pipefail; \
-	if commands=$$( \
-		$(MAKE) --no-print-directory -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
-		cat $(TARGET_DIR)/commands \
-		| perl -e '$$take = 1; \
-		           while (<>) { \
-		             chomp; \
-		             if ($$_ eq ":") {} \
-		             elsif ($$_ =~ /^: xxx (.+)/) { if ($$take) { print "$$1\n" } else { exit 1 }} \
-		             else { $$take = 0 }}' && \
-		rm $(TARGET_DIR)/commands \
-	); then \
-		if [ -n "$$commands" ]; then \
-			echo "$$commands" \
-			| while read -r line; do eval echo $$line; done \
-			| $(MY_DIR)/pretty-print.pl; \
-		fi \
-	else \
-		rv=$$? && \
-		echo "Error in build script. Contact maintainer." >&2 && \
-		exit $$rv; \
-	fi
-else
 	set -o pipefail; \
 	if commands=$$( \
 		$(MAKE) --no-print-directory -n EVAL=": xxx" SKIP_GROUP_EVAL_TARGET=true $(MAKECMDGOALS) >$(TARGET_DIR)/commands && \
@@ -297,7 +260,6 @@ else
 		echo "Error in build script. Contact maintainer." >&2 && \
 		exit $$rv; \
 	fi
-endif
 endif
 
 # so that initialization is not part of the commands to be evaluated
