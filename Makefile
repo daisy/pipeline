@@ -207,35 +207,35 @@ cli-$(cli/VERSION)-linux_386.deb \
 	+$(EVAL) cp $< $@
 
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,dev-launcher -- --without-persistence)
+	+$(EVAL) ./assembly-make.sh dev-launcher -- --without-persistence
 
 .SECONDARY : assembly/.install.deb
 assembly/.install.deb : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,deb)
+	+$(EVAL) ./assembly-make.sh deb
 
 .SECONDARY : assembly/.install.rpm
 assembly/.install.rpm : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,rpm)
+	+$(EVAL) ./assembly-make.sh rpm
 
 .SECONDARY : assembly/.install-linux.zip
 assembly/.install-linux.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-linux)
+	+$(EVAL) ./assembly-make.sh zip-linux
 
 .SECONDARY : assembly/.install-minimal.zip
 assembly/.install-minimal.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-minimal)
+	+$(EVAL) ./assembly-make.sh zip-minimal
 
 .SECONDARY : assembly/.install-mac.zip
 assembly/.install-mac.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-mac)
+	+$(EVAL) ./assembly-make.sh zip-mac
 
 .SECONDARY : assembly/.install-win.zip
 assembly/.install-win.zip : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,zip-win)
+	+$(EVAL) ./assembly-make.sh zip-win
 
 .SECONDARY : assembly/.install-cli.deb
 assembly/.install-cli.deb : | .maven-init .group-eval
-	+$(call eval-for-host-platform,./assembly-make.sh,deb-cli)
+	+$(EVAL) ./assembly-make.sh deb-cli
 
 webui/.deps.mk : webui/build.sbt
 	if ! bash .make/make-webui-deps.mk.sh >$@; then \
@@ -267,7 +267,7 @@ cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_38
 
 .SECONDARY : cli/.install
 cli/.install : | .maven-init .group-eval
-	+$(call eval-for-host-platform,.make/mvn-install.sh,$$(dirname $@))
+	+$(EVAL) .make/mvn-install.sh $$(dirname $@)
 
 updater/.install : $(call rwildcard,updater/,*)
 
