@@ -46,14 +46,10 @@ $(TARGET_DIR)/maven.mk : $(TARGET_DIR)/maven-modules $(TARGET_DIR)/maven-aggrega
 	echo "MAVEN_MODULES := \$$(shell cat $< 2>/dev/null)" >>$@
 	echo "export MVN_LOCAL_REPOSITORY" >>$@
 	cat $(word 2,$^) | while read -r module; do \
-		echo "ifeq (\$$(shell test -e $$module/pom.xml && echo yes), yes)" && \
-		echo "aggregators : $$module/pom.xml" && \
-		echo "endif"; \
+		echo "aggregators : $$module/pom.xml"; \
 	done >>$@
 	cat $< | while read -r module; do \
-		echo "ifeq (\$$(shell test -e $$module/pom.xml && echo yes), yes)" && \
-		echo "poms : $$module/pom.xml" && \
-		echo "endif"; \
+		echo "poms : $$module/pom.xml"; \
 	done >>$@
 	cat $< | while read -r module; do \
 		pom=$$module/pom.xml; \
