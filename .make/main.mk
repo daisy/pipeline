@@ -10,7 +10,30 @@ MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
 GRADLE            := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(ROOT_DIR)/$(MY_DIR)/gradle.sh $(MVN_PROPERTIES)
 EVAL              := //
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE
+CLASSPATH := $(shell                                                                    \
+    File classPath = new File("$(MY_DIR)/java");                                        \
+    List<File> javaFiles = glob(classPath.getPath() +  "/{*.java,**/*.java}");          \
+    if (javaFiles.stream().anyMatch(                                                    \
+        javaFile -> {                                                                   \
+            File classFile = new File(javaFile.getPath().replace(".java", ".class"));   \
+            return (!classFile.exists()                                                 \
+                    || javaFile.lastModified() > classFile.lastModified()); })) {       \
+        String javac = getOS() == OS.WINDOWS ? "javac.exe" : "javac";                   \
+        String JAVA_HOME = System.getenv("JAVA_HOME");                                  \
+        if (JAVA_HOME != null) {                                                        \
+            File f = new File(new File(new File(JAVA_HOME), "bin"), javac);             \
+            if (f.exists())                                                             \
+                javac = f.getAbsolutePath(); }                                          \
+        List<String> cmd = new ArrayList<>();                                           \
+        cmd.add(javac);                                                                 \
+        cmd.add("-cp");                                                                 \
+        cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib");            \
+        for (File f : javaFiles) cmd.add(f.getPath());                                  \
+        exitOnError(captureOutput(err::println, cmd)); }                                \
+    println(classPath.getPath());                                                       )
+STATIC_IMPORTS := build.core.*
+
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE SHELL STATIC_IMPORTS CLASSPATH
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
@@ -272,7 +295,7 @@ ifndef SKIP_GROUP_EVAL_TARGET
 						echo $(call quote-for-bash,$V=$($V));)) \
 					break; \
 				done >$(TARGET_DIR)/env && \
-				echo "$$commands" | $(MY_DIR)/group-eval.pl && \
+				echo "$$commands" | $(SHELL) 'groupEval();' && \
 				rm $(TARGET_DIR)/env; \
 			fi \
 		else \
