@@ -4,11 +4,247 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import static lib.util.*;
 
 public class core {
 	private core() {}
+
+	public static void mvn(String... args) throws IOException, InterruptedException {
+		mvn.mvn(null, args);
+	}
+
+	public static void mvn(File cd, String... args) throws IOException, InterruptedException {
+		mvn.mvn(cd, args);
+	}
+
+	public static void gradle(String... args) throws IOException, InterruptedException {
+		gradle.gradlew(null, args);
+	}
+
+	public static void redirectTo(String file) throws IOException {
+		cp(System.in, new FileOutputStream(file));
+	}
+
+	public static boolean isOutOfDate(String target, String... prerequisites) {
+		File[] prerequisiteFiles = new File[prerequisites.length];
+		for (int i = 0; i < prerequisites.length; i++)
+			prerequisiteFiles[i] = new File(prerequisites[i]);
+		return isOutOfDate(new File(target), prerequisiteFiles);
+	}
+
+	public static boolean isOutOfDate(File target, File... prerequisites) {
+		if (!target.exists())
+			return true;
+		for (File f : prerequisites)
+			if (f.lastModified() > target.lastModified())
+				return true;
+		return false;
+	}
+
+	public static OutputStream updateFileIfChanged(String file) throws IOException {
+		return updateFileIfChanged(new File(file));
+	}
+
+	public static OutputStream updateFileIfChanged(File file) throws IOException {
+		if (!file.exists()) {
+			mkdirs(file.getParentFile());
+			return new FileOutputStream(file);
+		}
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		return new FilterOutputStream(buffer) {
+			@Override
+			public void close() throws IOException {
+				super.close();
+				byte[] newContent = buffer.toByteArray();
+				boolean changed = false; {
+					try (InputStream oldContent = new FileInputStream(file)) {
+						int len = newContent.length;
+						byte[] block = new byte[1024];
+						int read = 0;
+						int totalRead = 0;
+						while (true) {
+							read = oldContent.read(block);
+							if (read < 0) {
+								changed = (totalRead != len);
+								break;
+							}
+							if (totalRead + read > len) {
+								changed = true;
+								break;
+							}
+							for (int i = 0; i < read; i++)
+								if (block[i] != newContent[totalRead + i]) {
+									changed = true;
+									break;
+								}
+							if (changed)
+								break;
+							totalRead += read;
+						}
+					}
+				}
+				if (changed)
+					try (OutputStream s = new FileOutputStream(file)) {
+						s.write(newContent);
+					}
+			}
+		};
+	}
+
+	public static mvn.Coords getMavenCoords(File dir) throws IOException {
+		File buildFile = new File(dir, "build.gradle");
+		if (!buildFile.exists())
+			throw new IllegalArgumentException(); // FIXME: check if directory has a pom.xml
+		File propertiesFile = new File(dir, "gradle.properties");
+		File settingsFile = new File(dir, "settings.gradle");
+		String g = egrep("^group", buildFile).map(x -> x.replaceAll("^.*=\\s*['\"](.*)['\"].*$", "$1"))
+		                                     .findFirst().get();
+		String a = dir.getName();
+		if (settingsFile.exists())
+			a = egrep("^rootProject\\.name", settingsFile).map(x -> x.replaceAll("^.*=\\s*['\"](.*)['\"].*$", "$1"))
+			                                              .findFirst().orElse(a);
+		String v = egrep("^distVersion", propertiesFile).map(x -> x.replaceAll("^.*=\\s*", ""))
+		                                                .findFirst().orElse(null);
+		if (v == null)
+			v = egrep("^version", propertiesFile).map(x -> x.replaceAll("^.*=\\s*", ""))
+			                                     .findFirst().get();
+		return new mvn.Coords(g, a ,v);
+	}
+
+	public static void computeMavenDeps(File modulesList, File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
+			throws IOException, InterruptedException {
+
+		String SAXON = System.getenv("SAXON");
+		String MY_DIR = System.getenv("MY_DIR");
+		List<String> modules = new BufferedReader(new FileReader(modulesList)).lines()
+		                                                                      .collect(Collectors.toList());
+		for (String m : modules)
+			rm(new File(new File(outputBaseDir, m), outputFileName));
+		if (
+			captureOutput(
+				_x -> {},
+				"java", "-cp", SAXON, "net.sf.saxon.Transform",
+				"-s:" + effectivePom,
+				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
+				"MY_DIR=" + MY_DIR,
+				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
+				"GRADLE_POM=" + gradlePom,
+				"MODULE=.",
+				"SRC_DIRS=" + modules.stream().map(m -> new File(new File(m), "src"))
+				                              .filter(File::exists)
+				                              .map(File::getPath)
+				                              .collect(Collectors.joining(" ")),
+				"MAIN_DIRS=" + modules.stream().map(m -> new File(new File(m), "src/main"))
+				                               .filter(File::exists)
+				                               .map(File::getPath)
+				                               .collect(Collectors.joining(" ")),
+				"DOC_DIRS=" + modules.stream().map(m -> new File(new File(m), "doc"))
+				                              .filter(File::exists)
+				                              .map(File::getPath)
+				                              .collect(Collectors.joining(" ")),
+				"INDEX_FILES=" + modules.stream().map(m -> new File(new File(m), "index.md"))
+				                                 .filter(File::exists)
+				                                 .map(File::getPath)
+				                                 .collect(Collectors.joining(" ")),
+				"RELEASE_DIRS=" + modules.stream().filter(m -> new File(new File(m), "bom/pom.xml").exists())
+				                                  .collect(Collectors.joining(" ")),
+				"OUTPUT_BASEDIR=" + outputBaseDir,
+				"OUTPUT_FILENAME=" + outputFileName,
+				"VERBOSE=" + (System.getenv("VERBOSE") != null)
+			) != 0) {
+			for (String m : modules)
+				rm(new File(new File(outputBaseDir, m), outputFileName));
+			exit(1);
+		};
+	}
+
+	public static void computeGradleDeps(String module, File outputBaseDir, String outputFileName) throws IOException {
+		File outputFile = new File(new File(outputBaseDir, module), outputFileName);
+		mkdirs(outputFile.getParentFile());
+		try {
+			mvn.Coords gav = getMavenCoords(new File(module));
+			String g = gav.g;
+			String a = gav.a;
+			String v = gav.v;
+			String m = module;
+			try (PrintStream s = new PrintStream(new FileOutputStream(outputFile))) {
+				s.println(m + "/VERSION := " + v);
+				s.println();
+				s.println(m + "/.last-tested : %/.last-tested : %/.test | .group-eval");
+				s.println("	+$(EVAL) touch(\"$@\");");
+				s.println();
+				s.println(".SECONDARY : " + m + "/.test");
+				s.println(m + "/.test : | .gradle-init .group-eval");
+				s.println("	+$(EVAL) gradle.test(\"" + m + "\");");
+				s.println();
+				s.println(m + "/.test : %/.test : "
+				          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
+				if (new File(m + "/test").exists())
+					s.println(m + "/.test : $(call rwildcard," + m + "/test/,*)");
+				if (new File(m + "/integrationtest").exists())
+					s.println(m + "/.test : $(call rwildcard," + m + "/integrationtest/,*)");
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println();
+					s.println(String.format("$(MVN_LOCAL_REPOSITORY)/%s/%s/%s/%s-%s.jar : %s/.install.jar",
+					                        g.replace(".", "/"), a, v, a, v, m));
+					s.println("	+$(EVAL) exit(new File(\"$@\").exists());");
+					s.println("	+$(EVAL) touch(\"$@\");");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.install.jar");
+					s.println(m + "/.install.jar : %/.install.jar : %/.install");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.install");
+					s.println(m + "/.install : | .gradle-init .group-eval");
+					s.println("	+$(EVAL) gradle.install(\"" + m + "\");");
+					s.println();
+					s.println(m + "/.install : %/.install : "
+					          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.dependencies");
+					s.println(m + "/.dependencies :");
+				}
+				s.println();
+				s.println(String.format("$(MVN_LOCAL_REPOSITORY)/%s/%s/%s/%s-%s.jar : %s/.release",
+				                        g.replace(".", "/"), a, v.replace("-SNAPSHOT", ""), a, v.replace("-SNAPSHOT", ""), m));
+				s.println();
+				s.println(".SECONDARY : " + m + "/.release");
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println(m + "/.release : | .gradle-init .group-eval");
+					s.println("	+$(EVAL) gradle.release(\"" + m + "\");");
+				} else {
+					// already released, but empty rule is needed because jar might not be in .maven-workspace yet
+					s.println(m + "/.release :");
+				}
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println();
+					// FIXME: gradle eclipse does not link up projects
+					// FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
+					// when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
+					s.println(m + "/.project : " + m + "/build.gradle " + m + "/gradle.properties " + m + "/.dependencies .group-eval");
+					s.println("	+$(EVAL) gradle.eclipse(\"" + m + "\");");
+					s.println();
+					s.println("clean-eclipse : " + m + "/.clean-eclipse");
+					s.println(".PHONY : " + m + "/.clean-eclipse");
+					s.println(m + "/.clean-eclipse :");
+					s.println("	$(call bash, \\");
+					s.println("		if ! git ls-files --error-unmatch " + m + "/.project >/dev/null 2>/dev/null; then \\");
+					s.println("			rm -rf $(addprefix " + m + "/,.project .classpath); \\");
+					s.println("		else \\");
+					s.println("			git checkout HEAD -- $(addprefix " + m + "/,.project .classpath); \\");
+					s.println("		fi \\");
+					s.println("	)");
+				}
+			}
+		} catch (RuntimeException|IOException e) {
+			rm(outputFile);
+			try (PrintStream s = new PrintStream(new FileOutputStream(outputFile))) {
+				s.println("$(error $@ could not be generated)");
+			}
+			throw e;
+		}
+	}
 
 	public static void groupEval() throws Exception {
 		String EVAL_JAVA = System.getenv("SHELL");

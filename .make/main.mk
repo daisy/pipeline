@@ -1,13 +1,13 @@
 ROOT_DIR          := $(CURDIR)
-MY_DIR            := $(shell $(call bash, dirname $(lastword $(MAKEFILE_LIST))))
+MY_DIR            := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
 TARGET_DIR        ?= $(MY_DIR)/target
-GRADLE_FILES      := $(shell $(call bash, find * -name build.gradle -o -name settings.gradle -o -name gradle.properties))
-GRADLE_MODULES    := $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES)))
+GRADLE_FILES      := $(shell for (File f : glob("**/{build.gradle,settings.gradle,gradle.properties}")) println(f.toString());)
+GRADLE_MODULES    := $(filter $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES))), \
+                              $(patsubst %/gradle.properties,%,$(filter %/gradle.properties,$(GRADLE_FILES))))
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
-GITREPOS          := $(shell $(call bash, find * -name .gitrepo -exec dirname {} \;))
-MVN               := $(ROOT_DIR)/$(MY_DIR)/mvn
-MVN_LOG           := cat>>$(ROOT_DIR)/maven.log
-GRADLE            := M2_HOME=$(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings $(ROOT_DIR)/$(MY_DIR)/gradle.sh $(MVN_PROPERTIES)
+GITREPOS          := $(shell for (File f : glob("[!.]**/.gitrepo")) println(f.getParentFile().toString());)
+MVN_LOG           := redirectTo("$(ROOT_DIR)/maven.log");
+M2_HOME           := $(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings
 EVAL              := //
 
 CLASSPATH := $(shell                                                                    \
@@ -31,13 +31,15 @@ CLASSPATH := $(shell                                                            
         for (File f : javaFiles) cmd.add(f.getPath());                                  \
         exitOnError(captureOutput(err::println, cmd)); }                                \
     println(classPath.getPath());                                                       )
-IMPORTS := build.mvn
+IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH
+export ROOT_DIR MY_DIR TARGET_DIR MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO M2_HOME MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
+
+eval-java = $(ROOT_DIR)/$(SHELL) $(call quote-for-bash,$1)
 
 rwildcard = $(shell $(call bash, [ -d $1 ] && find $1 -type f -name '$2' | sed 's/ /\\ /g'))
 # alternative, but does not support spaces in file names:
@@ -47,17 +49,14 @@ update-target-if-changed = $@.tmp && ((! [ -e $@ ] || ! diff -q $@ $@.tmp >/dev/
 
 .PHONY : $(TARGET_DIR)/properties
 $(TARGET_DIR)/properties :
-	$(call bash, echo $(call quote-for-bash,$(MVN_PROPERTIES)) >$(update-target-if-changed))
+	try (OutputStream s = updateFileIfChanged("$@")) { new PrintStream(s).println($(call quote-for-java,$(MVN_PROPERTIES))); }
 
 $(TARGET_DIR)/effective-settings.xml : $(MVN_SETTINGS) $(TARGET_DIR)/properties
 	/* the test is there because $(TARGET_DIR)/properties is always executed (but not always updated) */ \
-	/* cd into random directory in order to force Maven "stub" project */ \
-	$(call bash, \
-		if ! [ -e $@ ] || [[ -n $$(find $^ -newer $@ 2>/dev/null) ]]; then \
-			cd $(TARGET_DIR) && \
-			$(MVN) org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings -Doutput=$(ROOT_DIR)/$@; \
-		fi \
-	)
+	if (isOutOfDate("$@", "$^".trim().split("\\s+"))) \
+		/* cd into random directory in order to force Maven "stub" project */ \
+		mvn(new File("$(TARGET_DIR)"), \
+		    "org.apache.maven.plugins:maven-help-plugin:2.2:effective-settings", "-Doutput=$(ROOT_DIR)/$@");
 
 .SECONDARY : poms parents aggregators
 poms : pom.xml
@@ -146,10 +145,8 @@ endif
 
 $(SAXON) : | .maven-init
 	/* cd into random directory in order to force Maven "stub" project */ \
-	$(call bash, \
-		cd $(TARGET_DIR) && \
-		$(MVN) org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get -Dartifact=net.sf.saxon:Saxon-HE:9.4:jar \
-	)
+	mvn(new File("$(TARGET_DIR)"), \
+	    "org.apache.maven.plugins:maven-dependency-plugin:3.0.0:get", "-Dartifact=net.sf.saxon:Saxon-HE:9.4:jar");
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
@@ -197,7 +194,18 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(
 	)
 
 $(TARGET_DIR)/gradle-pom.xml : $(GRADLE_FILES)
-	$(call bash, $(MY_DIR)/make-gradle-pom.sh $(GRADLE_MODULES) > $@)
+	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
+		s.println("<projects xmlns=\"http://maven.apache.org/POM/4.0.0\">"); \
+		for (String module : "$(GRADLE_MODULES)".trim().split("\\s+")) { \
+			Coords gav = getMavenCoords(new File(module)); \
+			s.println("  <project>"); \
+			s.println("    <groupId>" + gav.g + "</groupId>"); \
+			s.println("    <artifactId>" + gav.a + "</artifactId>"); \
+			s.println("    <version>" + gav.v + "</version>"); \
+			s.println("  </project>"); \
+		} \
+		s.println("</projects>"); \
+	}
 
 .SECONDARY : .maven-init .gradle-init
 
@@ -213,30 +221,11 @@ $(TARGET_DIR)/.gradle-settings/conf/settings.xml : $(MVN_SETTINGS)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
 .SECONDARY : .maven-deps.mk
 .maven-deps.mk : $(TARGET_DIR)/maven-modules $(TARGET_DIR)/effective-pom.xml $(TARGET_DIR)/gradle-pom.xml | $(SAXON)
-	$(call bash, \
-		MAVEN_MODULES=$$(cat $< 2>/dev/null) && \
-		rm -f $$(for m in $$MAVEN_MODULES; do echo "$(TARGET_DIR)/mk/$$m/.deps.mk"; done) && \
-		if ! java -cp $(SAXON) net.sf.saxon.Transform \
-		          -s:$(word 2,$^) \
-		          -xsl:$(MY_DIR)/make-maven-deps.mk.xsl \
-		          MY_DIR="$(MY_DIR)" \
-		          ROOT_DIR="$(ROOT_DIR)" \
-		          GRADLE_POM="$(word 3,$^)" \
-		          MODULE="." \
-		          SRC_DIRS="$$(for m in $$MAVEN_MODULES; do test -e $$m/src && echo $$m/src; done )" \
-		          MAIN_DIRS="$$(for m in $$MAVEN_MODULES; do test -e $$m/src/main && echo $$m/src/main; done )" \
-		          DOC_DIRS="$$(for m in $$MAVEN_MODULES; do test -e $$m/doc && echo $$m/doc; done )" \
-		          INDEX_FILES="$$(for m in $$MAVEN_MODULES; do test -e $$m/index.md && echo $$m/index.md; done )" \
-		          RELEASE_DIRS="$$(for x in $(GITREPOS); do [ -e $$x/bom/pom.xml ] || [ -e $$x/bom/pom.xml ] && echo $$x; done )" \
-		          OUTPUT_BASEDIR="$(TARGET_DIR)/mk" \
-		          OUTPUT_FILENAME=".deps.mk" \
-		          VERBOSE="$$([[ -n $${VERBOSE+x} ]] && echo true || echo false)" \
-		          >/dev/null \
-		; then \
-			rm -f $$(for m in $$MAVEN_MODULES; do echo "$(TARGET_DIR)/mk/$$m/.deps.mk"; done) && \
-			exit 1; \
-		fi \
-	)
+	computeMavenDeps(new File("$<"), \
+	                 new File("$(word 2,$^)"), \
+	                 new File("$(word 3,$^)"), \
+	                 new File("$(TARGET_DIR)/mk"), \
+	                 ".deps.mk");
 
 ifneq ($(MAKECMDGOALS), clean)
 $(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(MAVEN_MODULES))) : .maven-deps.mk
@@ -251,14 +240,9 @@ endif
 
 ifneq ($(MAKECMDGOALS), clean)
 $(addsuffix /.deps.mk,$(addprefix $(TARGET_DIR)/mk/,$(GRADLE_MODULES))) : $(GRADLE_FILES)
-	$(call bash, \
-		mkdir -p $(dir $@) && \
-		module=$$(dirname $@) && \
-		module=$${module#$(TARGET_DIR)/mk/} && \
-		if ! $(MY_DIR)/make-gradle-deps.mk.sh $$module >$@; then \
-			echo "\$$(error $@ could not be generated)" >$@; \
-		fi \
-	)
+	computeGradleDeps("$(patsubst $(TARGET_DIR)/mk/%/.deps.mk,%,$@)", \
+	                  new File("$(TARGET_DIR)/mk"), \
+	                  ".deps.mk");
 endif
 
 PHONY : $(addprefix eclipse-,$(MODULES))

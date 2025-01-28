@@ -32,7 +32,7 @@ for module in "$@"; do
             mv build.gradle.tmp build.gradle
         fi
     fi
-    eval $GRADLE eclipse
+    $ROOT_DIR/$SHELL 'gradle.apply("eclipse");'
     # import project with eclim if available
     if which eclim >/dev/null; then
         if [ -e "$ROOT_DIR/$module/.project" ]; then
