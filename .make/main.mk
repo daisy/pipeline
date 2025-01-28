@@ -31,9 +31,10 @@ CLASSPATH := $(shell                                                            
         for (File f : javaFiles) cmd.add(f.getPath());                                  \
         exitOnError(captureOutput(err::println, cmd)); }                                \
     println(classPath.getPath());                                                       )
+IMPORTS := build.mvn
 STATIC_IMPORTS := build.core.*
 
-export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE SHELL STATIC_IMPORTS CLASSPATH
+export ROOT_DIR MY_DIR TARGET_DIR MVN MVN_SETTINGS MVN_PROPERTIES MVN_LOG MVN_RELEASE_CACHE_REPO GRADLE MAKE SHELL IMPORTS STATIC_IMPORTS CLASSPATH
 # MAKECMDGOALS used in gradle-release.sh and mvn-release.sh
 export MAKECMDGOALS
 # MAKEFLAGS exported by default
@@ -268,7 +269,7 @@ $(addsuffix /.project,$(MODULES)) : parents
 
 $(addsuffix /.project,$(MODULES)) : .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs
 .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.m2e.core.prefs : | $(TARGET_DIR)/effective-settings.xml .group-eval
-	$(EVAL) $(MY_DIR)/eclipse-init.sh
+	$(EVAL) $(call bash, $(MY_DIR)/eclipse-init.sh)
 
 # FIXME: specifying "--debug" option breaks this code
 # - passing "MAKEFLAGS=" does not fix it for some reason, and also has unwanted side effects
