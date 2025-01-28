@@ -16,11 +16,11 @@ fi
 echo "$module/VERSION := $v"
 echo ""
 echo "$module/.last-tested : %/.last-tested : %/.test | .group-eval"
-echo "	+\$(EVAL) touch \$@"
+echo "	+\$(EVAL) \$(call bash, touch \$@)"
 echo ""
 echo ".SECONDARY : $module/.test"
 echo "$module/.test : | .gradle-init .group-eval"
-echo "	+\$(EVAL) '${MY_DIR}/gradle-test.sh' \$\$(dirname \$@)"
+echo "	+\$(EVAL) \$(call bash, ${MY_DIR}/gradle-test.sh \$\$(dirname \$@))"
 echo ""
 echo "$module/.test : %/.test : %/build.gradle %/gradle.properties \$(call rwildcard,$module/src/,*) %/.dependencies"
 if [ -e $module/test ]; then
@@ -32,15 +32,15 @@ fi
 if [[ $v == *-SNAPSHOT ]]; then
 	echo ""
 	echo "\$(MVN_LOCAL_REPOSITORY)/$(echo $g |tr . /)/$a/$v/$a-$v.jar : $module/.install-jar"
-	echo "	+\$(EVAL) 'test -e' \$@"
-	echo "	+\$(EVAL) touch \$@"
+	echo "	+\$(EVAL) \$(call bash, test -e \$@)"
+	echo "	+\$(EVAL) \$(call bash, touch \$@)"
 	echo ""
 	echo ".SECONDARY : $module/.install-jar"
 	echo "$module/.install-jar : %/.install-jar : %/.install"
 	echo ""
 	echo ".SECONDARY : $module/.install"
 	echo "$module/.install : | .gradle-init .group-eval"
-	echo "	+\$(EVAL) ${MY_DIR}/gradle-install.sh \$\$(dirname \$@)"
+	echo "	+\$(EVAL) \$(call bash, ${MY_DIR}/gradle-install.sh \$\$(dirname \$@))"
 	echo ""
 	echo "$module/.install : %/.install : %/build.gradle %/gradle.properties \$(call rwildcard,$module/src/,*) %/.dependencies"
 	echo ""
@@ -53,7 +53,7 @@ echo ""
 echo ".SECONDARY : $module/.release"
 if [[ $v == *-SNAPSHOT ]]; then
 	echo "$module/.release : | .gradle-init .group-eval"
-	echo "	+\$(EVAL) \"${MY_DIR}/gradle-release.sh \$\$(dirname \$@)\""
+	echo "	+\$(EVAL) \$(call bash, ${MY_DIR}/gradle-release.sh \$\$(dirname \$@))"
 else
 	# already released, but empty rule is needed because jar might not be in .maven-workspace yet
 	echo "$module/.release :"
@@ -64,7 +64,7 @@ if [[ $v == *-SNAPSHOT ]]; then
 	# FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
 	# when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
 	echo "$module/.project : $module/build.gradle $module/gradle.properties $module/.dependencies .group-eval"
-	echo "	+\$(EVAL) '${MY_DIR}/gradle-eclipse.sh' \$\$(dirname \$@)"
+	echo "	+\$(EVAL) \$(call bash, ${MY_DIR}/gradle-eclipse.sh \$\$(dirname \$@))"
 	echo ""
 	echo "clean-eclipse : $module/.clean-eclipse"
 	echo ".PHONY : $module/.clean-eclipse"

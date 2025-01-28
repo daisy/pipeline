@@ -1,4 +1,6 @@
 /recipes/
 /target/
 /java/build/core.class
+/java/build/core$CombinableCommand.class
+/java/build/mvn.class
 .DS_Store

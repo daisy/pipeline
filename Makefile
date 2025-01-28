@@ -76,7 +76,7 @@ dist-rpm : pipeline2-$(assembly/VERSION)_redhat.rpm
 
 .PHONY : dist-docker-image
 dist-docker-image : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(EVAL) 'bash -c "unset MAKECMDGOALS && $(MAKE) -C assembly docker"'
+	+$(EVAL) $(call bash, unset MAKECMDGOALS && $(MAKE) -C assembly docker)
 
 # FIXME: $(cli/VERSION) does not always match version in assembly/pom.xml
 .PHONY : dist-cli-deb
@@ -196,68 +196,68 @@ $(addprefix check-,$(MODULES) $(MAVEN_AGGREGATORS)) : check-% : %/.last-tested
 pipeline2-$(assembly/VERSION)_linux.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-linux.zip \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 pipeline2-$(assembly/VERSION)_mac.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-mac.zip \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 pipeline2-$(assembly/VERSION)_windows.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-win.zip \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 pipeline2-$(assembly/VERSION)_minimal.zip \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-minimal.zip \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 pipeline2-$(assembly/VERSION)_debian.deb \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).deb \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 pipeline2-$(assembly/VERSION)_redhat.rpm \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION).rpm \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 cli-$(cli/VERSION)-linux_386.deb \
 	: $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assembly/$(assembly/VERSION)/assembly-$(assembly/VERSION)-cli.deb \
 	| .group-eval
-	+$(EVAL) cp $< $@
+	+$(EVAL) $(call bash, cp $< $@)
 
 $(dev_launcher) : assembly/.compile-dependencies | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh dev-launcher -- --without-persistence
+	+$(EVAL) $(call bash, ./assembly-make.sh dev-launcher -- --without-persistence)
 
 .SECONDARY : assembly/.install.deb
 assembly/.install.deb : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh deb
+	+$(EVAL) $(call bash, ./assembly-make.sh deb)
 
 .SECONDARY : assembly/.install.rpm
 assembly/.install.rpm : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh rpm
+	+$(EVAL) $(call bash, ./assembly-make.sh rpm)
 
 .SECONDARY : assembly/.install-linux.zip
 assembly/.install-linux.zip : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh zip-linux
+	+$(EVAL) $(call bash, ./assembly-make.sh zip-linux)
 
 .SECONDARY : assembly/.install-minimal.zip
 assembly/.install-minimal.zip : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh zip-minimal
+	+$(EVAL) $(call bash, ./assembly-make.sh zip-minimal)
 
 .SECONDARY : assembly/.install-mac.zip
 assembly/.install-mac.zip : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh zip-mac
+	+$(EVAL) $(call bash, ./assembly-make.sh zip-mac)
 
 .SECONDARY : assembly/.install-win.zip
 assembly/.install-win.zip : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh zip-win
+	+$(EVAL) $(call bash, ./assembly-make.sh zip-win)
 
 .SECONDARY : assembly/.install-cli.deb
 assembly/.install-cli.deb : | .maven-init .group-eval
-	+$(EVAL) ./assembly-make.sh deb-cli
+	+$(EVAL) $(call bash, ./assembly-make.sh deb-cli)
 
 webui/.deps.mk : webui/build.sbt
 	$(call bash, \
@@ -280,7 +280,7 @@ cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_38
 
 .SECONDARY : cli/.install
 cli/.install : | .maven-init .group-eval
-	+$(EVAL) .make/mvn-install.sh $$(dirname $@)
+	+$(EVAL) $(call bash, .make/mvn-install.sh $$(dirname $@))
 
 updater/.install : $(call rwildcard,updater/,*)
 
