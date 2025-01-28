@@ -296,7 +296,7 @@
 					<xsl:value-of select="concat($dirname,'.last-tested : %/.last-tested : %/.test | .group-eval')"/>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x09;</xsl:text>
-					<xsl:text>+$(EVAL) $(call bash, touch $@)</xsl:text>
+					<xsl:text>+$(EVAL) touch("$@");</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>.SECONDARY : </xsl:text>
@@ -305,9 +305,7 @@
 					<xsl:value-of select="concat($dirname,'.test : | .maven-init .group-eval')"/>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x09;</xsl:text>
-					<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-					<xsl:value-of select="$MY_DIR"/>
-					<xsl:text>/mvn-test.sh $$(dirname $@))</xsl:text>
+					<xsl:text>+$(EVAL) mvn.test("$(patsubst %/,%,$(dir $@))");</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:value-of select="concat($dirname,'.test : %/.test : %/pom.xml')"/>
@@ -331,10 +329,7 @@
 						<xsl:value-of select="concat($dirname,'.install.pom | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, test -e $@)</xsl:text>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, touch $@)</xsl:text>
+						<xsl:text>+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat('$(MVN_LOCAL_REPOSITORY)/',
@@ -347,10 +342,7 @@
 						<xsl:value-of select="concat($dirname,'.install% | .group-eval')"/>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, test -e $@)</xsl:text>
-						<xsl:text>&#x0A;</xsl:text>
-						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, touch $@)</xsl:text>
+						<xsl:text>+$(EVAL) if (new File("$@").exists()) touch("$@"); else exit(1);</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>.SECONDARY : </xsl:text>
@@ -360,9 +352,7 @@
 						<xsl:text> : %/.install.pom : %/pom.xml %/.compile-dependencies | %/.test-dependencies .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-						<xsl:value-of select="$MY_DIR"/>
-						<xsl:text>/mvn-install-pom.sh $$(dirname $@))</xsl:text>
+						<xsl:text>+$(EVAL) mvn.installPom("$(patsubst %/,%,$(dir $@))");</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:if test="$type='jar'">
 							<xsl:text>&#x0A;</xsl:text>
@@ -380,9 +370,7 @@
 							<xsl:text> : | .maven-init .group-eval</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x09;</xsl:text>
-							<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-							<xsl:value-of select="$MY_DIR"/>
-							<xsl:text>/mvn-install.sh $$(dirname $@))</xsl:text>
+							<xsl:text>+$(EVAL) mvn.install("$(patsubst %/,%,$(dir $@))");</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:value-of select="concat($dirname,'.install')"/>
@@ -465,9 +453,7 @@
 						<xsl:text> : | .maven-init .group-eval</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x09;</xsl:text>
-						<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-						<xsl:value-of select="$MY_DIR"/>
-						<xsl:text>/mvn-install-doc.sh $$(dirname $@))</xsl:text>
+						<xsl:text>+$(EVAL) mvn.installDoc("$(patsubst %/,%,$(dir $@))");</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install-doc')"/>
@@ -586,9 +572,7 @@
 								<xsl:value-of select="concat($dirname,'.release : | .maven-init .group-eval')"/>
 								<xsl:text>&#x0A;</xsl:text>
 								<xsl:text>&#x09;</xsl:text>
-								<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-								<xsl:value-of select="$MY_DIR"/>
-								<xsl:text>/mvn-release.sh $$(dirname $@))</xsl:text>
+								<xsl:text>+$(EVAL) mvn.releaseDir("$(patsubst %/,%,$(dir $@))");</xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
 							</xsl:otherwise>
 						</xsl:choose>
@@ -687,11 +671,9 @@
 				<xsl:text>.group-eval</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:text>+$(EVAL) $(call bash, </xsl:text>
-				<xsl:value-of select="$MY_DIR"/>
-				<xsl:text>/mvn-eclipse.sh </xsl:text>
+				<xsl:text>+$(EVAL) mvn.eclipse("</xsl:text>
 				<xsl:value-of select="substring($dirname,1,string-length($dirname) - 1)"/>
-				<xsl:text>)</xsl:text>
+				<xsl:text>");</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>.SECONDARY :</xsl:text>
@@ -710,7 +692,15 @@
 				<xsl:value-of select="concat($dirname,'.clean-eclipse :')"/>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:value-of select="concat('rm -rf $(addprefix ',$dirname,',.project .settings .classpath)')"/>
+				<xsl:text>rm("</xsl:text>
+				<xsl:value-of select="$dirname"/>
+				<xsl:text>.project"); \&#x0A;&#x09;</xsl:text>
+				<xsl:text>rm("</xsl:text>
+				<xsl:value-of select="$dirname"/>
+				<xsl:text>.settings"); \&#x0A;&#x09;</xsl:text>
+				<xsl:text>rm("</xsl:text>
+				<xsl:value-of select="$dirname"/>
+				<xsl:text>.classpath");</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:value-of select="concat('clean : ',$dirname,'.clean')"/>
@@ -721,7 +711,9 @@
 				<xsl:value-of select="concat($dirname,'.clean :')"/>
 				<xsl:text>&#x0A;</xsl:text>
 				<xsl:text>&#x09;</xsl:text>
-				<xsl:value-of select="concat('rm -rf ',$dirname,'target')"/>
+				<xsl:text>rm("</xsl:text>
+				<xsl:value-of select="$dirname"/>
+				<xsl:text>target");</xsl:text>
 				<xsl:text>&#x0A;</xsl:text>
 			</xsl:if>
 		</xsl:result-document>

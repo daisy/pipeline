@@ -1,7 +1,11 @@
 /recipes/
 /target/
 /java/build/core.class
+/java/build/core$1.class
+/java/build/core$2.class
 /java/build/core$CombinableCommand.class
+/java/build/gradle.class
 /java/build/mvn.class
+/java/build/mvn$Coords.class
 /java/build/mvn$VarArgsFunction.class
 .DS_Store

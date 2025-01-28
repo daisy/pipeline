@@ -1,25 +1,327 @@
 package build;
 
 import java.io.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
+
+import javax.xml.xpath.XPathExpressionException;
 
 import static lib.util.*;
 
 public class core {
 	private core() {}
 
+	public static void mvn(String... args) throws IOException, InterruptedException {
+		mvn.mvn(null, args);
+	}
+
+	public static void mvn(File cd, String... args) throws IOException, InterruptedException {
+		mvn.mvn(cd, args);
+	}
+
+	public static void gradle(String... args) throws IOException, InterruptedException {
+		gradle.gradlew(null, args);
+	}
+
+	public static void redirectTo(String file) throws IOException {
+		cp(System.in, new FileOutputStream(file));
+	}
+
+	public static boolean isOutOfDate(String target, String... prerequisites) {
+		File[] prerequisiteFiles = new File[prerequisites.length];
+		for (int i = 0; i < prerequisites.length; i++)
+			prerequisiteFiles[i] = new File(prerequisites[i]);
+		return isOutOfDate(new File(target), prerequisiteFiles);
+	}
+
+	public static boolean isOutOfDate(File target, File... prerequisites) {
+		if (!target.exists())
+			return true;
+		for (File f : prerequisites)
+			if (f.lastModified() > target.lastModified())
+				return true;
+		return false;
+	}
+
+	public static OutputStream updateFileIfChanged(String file) throws IOException {
+		return updateFileIfChanged(new File(file));
+	}
+
+	public static OutputStream updateFileIfChanged(File file) throws IOException {
+		if (!file.exists()) {
+			mkdirs(file.getParentFile());
+			return new FileOutputStream(file);
+		}
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		return new FilterOutputStream(buffer) {
+			@Override
+			public void close() throws IOException {
+				super.close();
+				byte[] newContent = buffer.toByteArray();
+				boolean changed = false; {
+					try (InputStream oldContent = new FileInputStream(file)) {
+						int len = newContent.length;
+						byte[] block = new byte[1024];
+						int read = 0;
+						int totalRead = 0;
+						while (true) {
+							read = oldContent.read(block);
+							if (read < 0) {
+								changed = (totalRead != len);
+								break;
+							}
+							if (totalRead + read > len) {
+								changed = true;
+								break;
+							}
+							for (int i = 0; i < read; i++)
+								if (block[i] != newContent[totalRead + i]) {
+									changed = true;
+									break;
+								}
+							if (changed)
+								break;
+							totalRead += read;
+						}
+					}
+				}
+				if (changed)
+					try (OutputStream s = new FileOutputStream(file)) {
+						s.write(newContent);
+					}
+			}
+		};
+	}
+
+	public static mvn.Coords getMavenCoords(File dirOrFile) throws IOException, XPathExpressionException {
+		File gradleBuildFile = null;
+		File pomFile = null;
+		File dir; {
+			if (dirOrFile.isDirectory()) {
+				dir = dirOrFile;
+				gradleBuildFile = new File(dir, "build.gradle");
+				if (gradleBuildFile.exists())
+					;
+				else {
+					gradleBuildFile = null;
+					pomFile = new File(dir, "pom.xml");
+					if (!pomFile.exists())
+						throw new IllegalArgumentException();
+				}
+			} else if (dirOrFile.exists()) {
+				if (dirOrFile.getName().equals("pom.xml"))
+					pomFile = dirOrFile;
+				else if (dirOrFile.getName().equals("build.gralde"))
+					gradleBuildFile = dirOrFile;
+				else
+					throw new IllegalArgumentException();
+				dir = dirOrFile.getParentFile();
+			} else
+				throw new IllegalArgumentException();
+		}
+		if (pomFile != null) {
+			String v = xpath(pomFile, "/*/*[local-name()='version']/text()");
+			String g = xpath(pomFile, "/*/*[local-name()='groupId']/text()");
+			if ("".equals(g))
+				g = xpath(pomFile, "/*/*[local-name()='parent']/*[local-name()='groupId']/text()");
+			String a = xpath(pomFile, "/*/*[local-name()='artifactId']/text()");
+			return new mvn.Coords(g, a ,v);
+		} else {
+			File propertiesFile = new File(dir, "gradle.properties");
+			File settingsFile = new File(dir, "settings.gradle");
+			String g = egrep("^group", gradleBuildFile).map(x -> x.replaceAll("^.*=\\s*['\"](.*)['\"].*$", "$1"))
+			                                           .findFirst().get();
+			String a = dir.getName();
+			if (settingsFile.exists())
+				a = egrep("^rootProject\\.name", settingsFile).map(x -> x.replaceAll("^.*=\\s*['\"](.*)['\"].*$", "$1"))
+				                                              .findFirst().orElse(a);
+			String v = egrep("^distVersion", propertiesFile).map(x -> x.replaceAll("^.*=\\s*", ""))
+			                                                .findFirst().orElse(null);
+			if (v == null)
+				v = egrep("^version", propertiesFile).map(x -> x.replaceAll("^.*=\\s*", ""))
+				                                     .findFirst().get();
+			return new mvn.Coords(g, a ,v);
+		}
+	}
+
+	public static void computeMavenDeps(File modulesList, File effectivePom, File gradlePom, File outputBaseDir, String outputFileName)
+			throws IOException, InterruptedException {
+
+		String SAXON = System.getenv("SAXON");
+		String MY_DIR = System.getenv("MY_DIR");
+		List<String> modules = new BufferedReader(new FileReader(modulesList)).lines()
+		                                                                      .collect(Collectors.toList());
+		for (String m : modules)
+			rm(new File(new File(outputBaseDir, m), outputFileName));
+		if (
+			captureOutput(
+				_x -> {},
+				"java", "-cp", SAXON, "net.sf.saxon.Transform",
+				"-s:" + effectivePom,
+				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
+				"MY_DIR=" + MY_DIR,
+				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
+				"GRADLE_POM=" + gradlePom,
+				"MODULE=.",
+				"SRC_DIRS=" + modules.stream().map(m -> new File(new File(m), "src"))
+				                              .filter(File::exists)
+				                              .map(File::getPath)
+				                              .collect(Collectors.joining(" ")),
+				"MAIN_DIRS=" + modules.stream().map(m -> new File(new File(m), "src/main"))
+				                               .filter(File::exists)
+				                               .map(File::getPath)
+				                               .collect(Collectors.joining(" ")),
+				"DOC_DIRS=" + modules.stream().map(m -> new File(new File(m), "doc"))
+				                              .filter(File::exists)
+				                              .map(File::getPath)
+				                              .collect(Collectors.joining(" ")),
+				"INDEX_FILES=" + modules.stream().map(m -> new File(new File(m), "index.md"))
+				                                 .filter(File::exists)
+				                                 .map(File::getPath)
+				                                 .collect(Collectors.joining(" ")),
+				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream().map(f -> f.getParentFile().toString())
+				                                         .collect(Collectors.joining(" ")),
+				"OUTPUT_BASEDIR=" + outputBaseDir,
+				"OUTPUT_FILENAME=" + outputFileName,
+				"VERBOSE=" + (System.getenv("VERBOSE") != null)
+			) != 0) {
+			for (String m : modules)
+				rm(new File(new File(outputBaseDir, m), outputFileName));
+			exit(1);
+		};
+	}
+
+	public static void computeGradleDeps(String module, File outputBaseDir, String outputFileName) throws IOException, XPathExpressionException {
+		File outputFile = new File(new File(outputBaseDir, module), outputFileName);
+		mkdirs(outputFile.getParentFile());
+		try {
+			mvn.Coords gav = getMavenCoords(new File(module));
+			String g = gav.g;
+			String a = gav.a;
+			String v = gav.v;
+			String m = module;
+			try (PrintStream s = new PrintStream(new FileOutputStream(outputFile))) {
+				s.println(m + "/VERSION := " + v);
+				s.println();
+				s.println(m + "/.last-tested : %/.last-tested : %/.test | .group-eval");
+				s.println("	+$(EVAL) touch(\"$@\");");
+				s.println();
+				s.println(".SECONDARY : " + m + "/.test");
+				s.println(m + "/.test : | .gradle-init .group-eval");
+				s.println("	+$(EVAL) gradle.test(\"" + m + "\");");
+				s.println();
+				s.println(m + "/.test : %/.test : "
+				          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
+				if (new File(m + "/test").exists())
+					s.println(m + "/.test : $(call rwildcard," + m + "/test/,*)");
+				if (new File(m + "/integrationtest").exists())
+					s.println(m + "/.test : $(call rwildcard," + m + "/integrationtest/,*)");
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println();
+					s.println(String.format("$(MVN_LOCAL_REPOSITORY)/%s/%s/%s/%s-%s.jar : %s/.install.jar",
+					                        g.replace(".", "/"), a, v, a, v, m));
+					s.println("	+$(EVAL) exit(new File(\"$@\").exists());");
+					s.println("	+$(EVAL) touch(\"$@\");");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.install.jar");
+					s.println(m + "/.install.jar : %/.install.jar : %/.install");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.install");
+					s.println(m + "/.install : | .gradle-init .group-eval");
+					s.println("	+$(EVAL) gradle.install(\"" + m + "\");");
+					s.println();
+					s.println(m + "/.install : %/.install : "
+					          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
+					s.println();
+					s.println(".SECONDARY : " + m + "/.dependencies");
+					s.println(m + "/.dependencies :");
+				}
+				s.println();
+				s.println(String.format("$(MVN_LOCAL_REPOSITORY)/%s/%s/%s/%s-%s.jar : %s/.release",
+				                        g.replace(".", "/"), a, v.replace("-SNAPSHOT", ""), a, v.replace("-SNAPSHOT", ""), m));
+				s.println();
+				s.println(".SECONDARY : " + m + "/.release");
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println(m + "/.release : | .gradle-init .group-eval");
+					s.println("	+$(EVAL) gradle.release(\"" + m + "\");");
+				} else {
+					// already released, but empty rule is needed because jar might not be in .maven-workspace yet
+					s.println(m + "/.release :");
+				}
+				if (v.endsWith("-SNAPSHOT")) {
+					s.println();
+					// FIXME: gradle eclipse does not link up projects
+					// FIXME: gradle eclipse does not take into account localRepository from .gradle-settings/conf/settings.xml
+					// when creating .classpath (but it does need the dependencies to be installed in .maven-workspace)
+					s.println(m + "/.project : " + m + "/build.gradle " + m + "/gradle.properties " + m + "/.dependencies .group-eval");
+					s.println("	+$(EVAL) gradle.eclipse(\"" + m + "\");");
+					s.println();
+					s.println("clean-eclipse : " + m + "/.clean-eclipse");
+					s.println(".PHONY : " + m + "/.clean-eclipse");
+					s.println(m + "/.clean-eclipse :");
+					s.println("	$(call bash, \\");
+					s.println("		if ! git ls-files --error-unmatch " + m + "/.project >/dev/null 2>/dev/null; then \\");
+					s.println("			rm -rf $(addprefix " + m + "/,.project .classpath); \\");
+					s.println("		else \\");
+					s.println("			git checkout HEAD -- $(addprefix " + m + "/,.project .classpath); \\");
+					s.println("		fi \\");
+					s.println("	)");
+				}
+			}
+		} catch (RuntimeException|IOException e) {
+			rm(outputFile);
+			try (PrintStream s = new PrintStream(new FileOutputStream(outputFile))) {
+				s.println("$(error $@ could not be generated)");
+			}
+			throw e;
+		}
+	}
+
 	public static void groupEval() throws Exception {
+		groupEval(System.in);
+	}
+
+	public static void groupEval(InputStream commands) throws Exception {
+		try (BufferedReader in = new BufferedReader(new InputStreamReader(commands))) {
+			groupEval(
+				new Iterator<String>() {
+					boolean nextComputed = false;
+					String next = null;
+					public boolean hasNext() {
+						if (!nextComputed) {
+							try {
+								next = in.readLine();
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+							if (next != null)
+								next = next.trim();
+							nextComputed = true;
+						}
+						return next != null;
+					}
+					public String next() throws NoSuchElementException {
+						if (!hasNext())
+							throw new NoSuchElementException();
+						nextComputed = false;
+						return next;
+					}
+				}
+			);
+		}
+	}
+
+	public static void groupEval(Iterator<String> commands) throws Exception {
 		String EVAL_JAVA = System.getenv("SHELL");
 		String ANSI_YELLOW_BOLD = "\033[1;33m";
 		String ANSI_RED_BOLD = "\033[1;31m";
 		String ANSI_RESET = "\u001B[0m";
-		LinkedList<Object> commands = new LinkedList<>(); {
-			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			String line;
-			while ((line = in.readLine()) != null) {
-				line = line.trim();
+		LinkedList<Object> groupedCommands = new LinkedList<>(); {
+			while (commands.hasNext()) {
+				String line = commands.next();
 				Pattern methodCall = Pattern.compile(
 					"^(mvn\\.releaseModulesInDir\\([^)]+\\))\\s*\\.apply\\(\\s*((?:[^\\s\"]|\"(\\\\\"|[^\"])*\")+\\s*(,\\s*(?:[^\\s\"]|\"(\\\\\"|[^\"])*\")+\\s*)*)\\)\\s*;$");
 				Matcher m = methodCall.matcher(line);
@@ -28,20 +330,20 @@ public class core {
 					String arguments = m.group(2).trim();
 					CombinableCommand cmd = new CombinableCommand(func, arguments);
 					CombinableCommand appendTo = (CombinableCommand)
-						commands.stream()
-						        .filter(x -> x instanceof CombinableCommand && ((CombinableCommand)x).isCombinableWith(cmd))
-						        .findFirst()
-						        .orElse(null);
+						groupedCommands.stream()
+						               .filter(x -> x instanceof CombinableCommand && ((CombinableCommand)x).isCombinableWith(cmd))
+						               .findFirst()
+						               .orElse(null);
 					if (appendTo != null)
 						appendTo.append(cmd);
 					else
-						commands.add(cmd);
+						groupedCommands.add(cmd);
 				} else
-					commands.add(line);
+					groupedCommands.add(line);
 			}
 		}
 		println("-------------- " + ANSI_YELLOW_BOLD + "Build order" + ANSI_RESET + ": -------------");
-		for (Object cmd : commands)
+		for (Object cmd : groupedCommands)
 			println(cmd);
 		println("-------------- " + ANSI_YELLOW_BOLD + "Environment" + ANSI_RESET + ": -------------");
 		Map<String,String> oldEnv = new HashMap<>(); {
@@ -72,7 +374,7 @@ public class core {
 			}
 		}
 		println("-----------------------------------------");
-		for (Object cmd : commands) {
+		for (Object cmd : groupedCommands) {
 			System.out.println("--> " + ANSI_YELLOW_BOLD + cmd + ANSI_RESET);
 			int rv = captureOutput(System.out::println, EVAL_JAVA, cmd.toString());
 			if (rv != 0) {
