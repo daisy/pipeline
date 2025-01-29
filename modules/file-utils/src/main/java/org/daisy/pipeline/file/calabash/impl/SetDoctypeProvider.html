@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>SetDoctypeProvider xref</title>
@@ -144,205 +144,211 @@
 <a class="jxr_linenumber" name="L135" href="#L135">135</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
 <a class="jxr_linenumber" name="L136" href="#L136">136</a> 					logger.error(<span class="jxr_string">"SetDoctype: unable to close OutputStreamWriter"</span>, e);
 <a class="jxr_linenumber" name="L137" href="#L137">137</a> 				}
-<a class="jxr_linenumber" name="L138" href="#L138">138</a> 				
-<a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">if</strong> (success) {
-<a class="jxr_linenumber" name="L140" href="#L140">140</a> 				    Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
-<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				}
-<a class="jxr_linenumber" name="L142" href="#L142">142</a> 				
-<a class="jxr_linenumber" name="L143" href="#L143">143</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
-<a class="jxr_linenumber" name="L144" href="#L144">144</a> 				<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L145" href="#L145">145</a> 					logger.error(<span class="jxr_string">"SetDoctype: px:set-doctype failed to read from "</span>+file, e);
-<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				}
-<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				e.printStackTrace();
-<a class="jxr_linenumber" name="L148" href="#L148">148</a> 
-<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			} <strong class="jxr_keyword">finally</strong> {
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">if</strong> (reader != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L151" href="#L151">151</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L152" href="#L152">152</a> 						reader.close();
-<a class="jxr_linenumber" name="L153" href="#L153">153</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
-<a class="jxr_linenumber" name="L154" href="#L154">154</a> 				}
-<a class="jxr_linenumber" name="L155" href="#L155">155</a> 				<strong class="jxr_keyword">if</strong> (in != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L156" href="#L156">156</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L157" href="#L157">157</a> 						in.close();
-<a class="jxr_linenumber" name="L158" href="#L158">158</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
-<a class="jxr_linenumber" name="L159" href="#L159">159</a> 				}
-<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				<strong class="jxr_keyword">if</strong> (writer != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L161" href="#L161">161</a> 					<strong class="jxr_keyword">try</strong> {
-<a class="jxr_linenumber" name="L162" href="#L162">162</a> 						writer.close();
-<a class="jxr_linenumber" name="L163" href="#L163">163</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
-<a class="jxr_linenumber" name="L164" href="#L164">164</a> 				}
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 			}
-<a class="jxr_linenumber" name="L166" href="#L166">166</a> 			
-<a class="jxr_linenumber" name="L167" href="#L167">167</a> 			<strong class="jxr_keyword">return</strong> success;
-<a class="jxr_linenumber" name="L168" href="#L168">168</a> 		}
-<a class="jxr_linenumber" name="L169" href="#L169">169</a> 		
-<a class="jxr_linenumber" name="L170" href="#L170">170</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> setDoctypeOnStream(Reader reader, Writer writer, String doctype, String name, Logger logger) <strong class="jxr_keyword">throws</strong> IOException {
-<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			<strong class="jxr_keyword">int</strong> offset = -1;
-<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			<strong class="jxr_keyword">int</strong> r;
-<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">char</strong> currentCharacter = ' ';
-<a class="jxr_linenumber" name="L174" href="#L174">174</a> 			<strong class="jxr_keyword">char</strong> nextCharacter = ' ';
-<a class="jxr_linenumber" name="L175" href="#L175">175</a> 			<strong class="jxr_keyword">char</strong> nextNextCharacter = ' ';
-<a class="jxr_linenumber" name="L176" href="#L176">176</a> 			<strong class="jxr_keyword">char</strong> nextNextNextCharacter = ' ';
-<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">int</strong> isReadingDoctype = 0;
-<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">boolean</strong> foundDoctype = false;
-<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">boolean</strong> isReadingPI = false;
-<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">boolean</strong> isReadingElement = false;
-<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">boolean</strong> isReadingComment = false;
-<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">char</strong> isReadingAttribute = ' ';
-<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">int</strong> skipChars = 0;
-<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			
-<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
-<a class="jxr_linenumber" name="L186" href="#L186">186</a> 				nextCharacter = (<strong class="jxr_keyword">char</strong>) r;
-<a class="jxr_linenumber" name="L187" href="#L187">187</a> 				offset++;
-<a class="jxr_linenumber" name="L188" href="#L188">188</a> 				
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
-<a class="jxr_linenumber" name="L190" href="#L190">190</a> 					nextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
-<a class="jxr_linenumber" name="L191" href="#L191">191</a> 					offset++;
-<a class="jxr_linenumber" name="L192" href="#L192">192</a> 					
-<a class="jxr_linenumber" name="L193" href="#L193">193</a> 					<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
-<a class="jxr_linenumber" name="L194" href="#L194">194</a> 						nextNextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
-<a class="jxr_linenumber" name="L195" href="#L195">195</a> 						offset++;
-<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					}
-<a class="jxr_linenumber" name="L197" href="#L197">197</a> 				}
-<a class="jxr_linenumber" name="L198" href="#L198">198</a> 			}
-<a class="jxr_linenumber" name="L199" href="#L199">199</a> 			
-<a class="jxr_linenumber" name="L200" href="#L200">200</a> 			<strong class="jxr_keyword">while</strong> ((r = reader.read()) != -1) {
-<a class="jxr_linenumber" name="L201" href="#L201">201</a> 				offset++;
-<a class="jxr_linenumber" name="L202" href="#L202">202</a> 				
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				<em class="jxr_comment">// warn after 100K chars, break after 1M chars, we can possibly reduce these if this becomes a bottleneck</em>
-<a class="jxr_linenumber" name="L204" href="#L204">204</a> 				<strong class="jxr_keyword">if</strong> (offset == 100000) {
-<a class="jxr_linenumber" name="L205" href="#L205">205</a> 					<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L206" href="#L206">206</a> 						logger.warn(<span class="jxr_string">"SetDoctype: More than 100 000 characters in prolog; this is probably not a XML document but will keep looking for DOCTYPE a little while longer: "</span>+name);
-<a class="jxr_linenumber" name="L207" href="#L207">207</a> 					}
-<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				}
-<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<strong class="jxr_keyword">if</strong> (offset &gt; 1000000) {
-<a class="jxr_linenumber" name="L210" href="#L210">210</a> 					<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
-<a class="jxr_linenumber" name="L211" href="#L211">211</a> 						logger.warn(<span class="jxr_string">"SetDoctype: More than 1 000 000 characters in prolog; this is extremely unlikely to be a XML document; will abort: "</span>+name);
-<a class="jxr_linenumber" name="L212" href="#L212">212</a> 					}
-<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					writer.close();
-<a class="jxr_linenumber" name="L214" href="#L214">214</a> 					writer = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// clear result contents</em>
-<a class="jxr_linenumber" name="L215" href="#L215">215</a> 					<strong class="jxr_keyword">break</strong>;
-<a class="jxr_linenumber" name="L216" href="#L216">216</a> 				}
-<a class="jxr_linenumber" name="L217" href="#L217">217</a> 
-<a class="jxr_linenumber" name="L218" href="#L218">218</a> 				currentCharacter = nextCharacter;
-<a class="jxr_linenumber" name="L219" href="#L219">219</a> 				nextCharacter = nextNextCharacter;
-<a class="jxr_linenumber" name="L220" href="#L220">220</a> 				nextNextCharacter = nextNextNextCharacter;
-<a class="jxr_linenumber" name="L221" href="#L221">221</a> 				nextNextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
-<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				
-<a class="jxr_linenumber" name="L223" href="#L223">223</a> 				<strong class="jxr_keyword">if</strong> (skipChars &gt; 0) {
-<a class="jxr_linenumber" name="L224" href="#L224">224</a> 					skipChars--;
-<a class="jxr_linenumber" name="L225" href="#L225">225</a> 					
-<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; nextNextCharacter == '-' &amp;&amp; nextNextNextCharacter == '-') {
-<a class="jxr_linenumber" name="L227" href="#L227">227</a> 					<em class="jxr_comment">// "&lt;!--"</em>
-<a class="jxr_linenumber" name="L228" href="#L228">228</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!--\""</span>);
-<a class="jxr_linenumber" name="L229" href="#L229">229</a> 					isReadingComment = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					
-<a class="jxr_linenumber" name="L231" href="#L231">231</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '-' &amp;&amp; nextCharacter == '-' &amp;&amp; nextNextCharacter == '&gt;' &amp;&amp; isReadingComment) {
-<a class="jxr_linenumber" name="L232" href="#L232">232</a> 					<em class="jxr_comment">// "--&gt;" and is reading comment</em>
-<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"--&gt;\" and is not reading comment"</span>);
-<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					isReadingComment = false;
-<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					skipChars = 2;
+<a class="jxr_linenumber" name="L138" href="#L138">138</a> 
+<a class="jxr_linenumber" name="L139" href="#L139">139</a> 				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L140" href="#L140">140</a> 					reader.close();
+<a class="jxr_linenumber" name="L141" href="#L141">141</a> 				} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L142" href="#L142">142</a> 					logger.error(<span class="jxr_string">"SetDoctype: unable to close InputStreamReader"</span>, e);
+<a class="jxr_linenumber" name="L143" href="#L143">143</a> 				}
+<a class="jxr_linenumber" name="L144" href="#L144">144</a> 				
+<a class="jxr_linenumber" name="L145" href="#L145">145</a> 				<strong class="jxr_keyword">if</strong> (success) {
+<a class="jxr_linenumber" name="L146" href="#L146">146</a> 				    Files.move(tempFile.toPath(), file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+<a class="jxr_linenumber" name="L147" href="#L147">147</a> 				}
+<a class="jxr_linenumber" name="L148" href="#L148">148</a> 				
+<a class="jxr_linenumber" name="L149" href="#L149">149</a> 			} <strong class="jxr_keyword">catch</strong> (IOException e) {
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 				<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L151" href="#L151">151</a> 					logger.error(<span class="jxr_string">"SetDoctype: px:set-doctype failed to read from "</span>+file, e);
+<a class="jxr_linenumber" name="L152" href="#L152">152</a> 				}
+<a class="jxr_linenumber" name="L153" href="#L153">153</a> 				e.printStackTrace();
+<a class="jxr_linenumber" name="L154" href="#L154">154</a> 
+<a class="jxr_linenumber" name="L155" href="#L155">155</a> 			} <strong class="jxr_keyword">finally</strong> {
+<a class="jxr_linenumber" name="L156" href="#L156">156</a> 				<strong class="jxr_keyword">if</strong> (reader != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L157" href="#L157">157</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L158" href="#L158">158</a> 						reader.close();
+<a class="jxr_linenumber" name="L159" href="#L159">159</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
+<a class="jxr_linenumber" name="L160" href="#L160">160</a> 				}
+<a class="jxr_linenumber" name="L161" href="#L161">161</a> 				<strong class="jxr_keyword">if</strong> (in != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L162" href="#L162">162</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L163" href="#L163">163</a> 						in.close();
+<a class="jxr_linenumber" name="L164" href="#L164">164</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 				}
+<a class="jxr_linenumber" name="L166" href="#L166">166</a> 				<strong class="jxr_keyword">if</strong> (writer != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L167" href="#L167">167</a> 					<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L168" href="#L168">168</a> 						writer.close();
+<a class="jxr_linenumber" name="L169" href="#L169">169</a> 					} <strong class="jxr_keyword">catch</strong> (IOException e) {}
+<a class="jxr_linenumber" name="L170" href="#L170">170</a> 				}
+<a class="jxr_linenumber" name="L171" href="#L171">171</a> 			}
+<a class="jxr_linenumber" name="L172" href="#L172">172</a> 			
+<a class="jxr_linenumber" name="L173" href="#L173">173</a> 			<strong class="jxr_keyword">return</strong> success;
+<a class="jxr_linenumber" name="L174" href="#L174">174</a> 		}
+<a class="jxr_linenumber" name="L175" href="#L175">175</a> 		
+<a class="jxr_linenumber" name="L176" href="#L176">176</a> 		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">boolean</strong> setDoctypeOnStream(Reader reader, Writer writer, String doctype, String name, Logger logger) <strong class="jxr_keyword">throws</strong> IOException {
+<a class="jxr_linenumber" name="L177" href="#L177">177</a> 			<strong class="jxr_keyword">int</strong> offset = -1;
+<a class="jxr_linenumber" name="L178" href="#L178">178</a> 			<strong class="jxr_keyword">int</strong> r;
+<a class="jxr_linenumber" name="L179" href="#L179">179</a> 			<strong class="jxr_keyword">char</strong> currentCharacter = ' ';
+<a class="jxr_linenumber" name="L180" href="#L180">180</a> 			<strong class="jxr_keyword">char</strong> nextCharacter = ' ';
+<a class="jxr_linenumber" name="L181" href="#L181">181</a> 			<strong class="jxr_keyword">char</strong> nextNextCharacter = ' ';
+<a class="jxr_linenumber" name="L182" href="#L182">182</a> 			<strong class="jxr_keyword">char</strong> nextNextNextCharacter = ' ';
+<a class="jxr_linenumber" name="L183" href="#L183">183</a> 			<strong class="jxr_keyword">int</strong> isReadingDoctype = 0;
+<a class="jxr_linenumber" name="L184" href="#L184">184</a> 			<strong class="jxr_keyword">boolean</strong> foundDoctype = false;
+<a class="jxr_linenumber" name="L185" href="#L185">185</a> 			<strong class="jxr_keyword">boolean</strong> isReadingPI = false;
+<a class="jxr_linenumber" name="L186" href="#L186">186</a> 			<strong class="jxr_keyword">boolean</strong> isReadingElement = false;
+<a class="jxr_linenumber" name="L187" href="#L187">187</a> 			<strong class="jxr_keyword">boolean</strong> isReadingComment = false;
+<a class="jxr_linenumber" name="L188" href="#L188">188</a> 			<strong class="jxr_keyword">char</strong> isReadingAttribute = ' ';
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 			<strong class="jxr_keyword">int</strong> skipChars = 0;
+<a class="jxr_linenumber" name="L190" href="#L190">190</a> 			
+<a class="jxr_linenumber" name="L191" href="#L191">191</a> 			<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
+<a class="jxr_linenumber" name="L192" href="#L192">192</a> 				nextCharacter = (<strong class="jxr_keyword">char</strong>) r;
+<a class="jxr_linenumber" name="L193" href="#L193">193</a> 				offset++;
+<a class="jxr_linenumber" name="L194" href="#L194">194</a> 				
+<a class="jxr_linenumber" name="L195" href="#L195">195</a> 				<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
+<a class="jxr_linenumber" name="L196" href="#L196">196</a> 					nextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
+<a class="jxr_linenumber" name="L197" href="#L197">197</a> 					offset++;
+<a class="jxr_linenumber" name="L198" href="#L198">198</a> 					
+<a class="jxr_linenumber" name="L199" href="#L199">199</a> 					<strong class="jxr_keyword">if</strong> ((r = reader.read()) != -1) {
+<a class="jxr_linenumber" name="L200" href="#L200">200</a> 						nextNextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
+<a class="jxr_linenumber" name="L201" href="#L201">201</a> 						offset++;
+<a class="jxr_linenumber" name="L202" href="#L202">202</a> 					}
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 				}
+<a class="jxr_linenumber" name="L204" href="#L204">204</a> 			}
+<a class="jxr_linenumber" name="L205" href="#L205">205</a> 			
+<a class="jxr_linenumber" name="L206" href="#L206">206</a> 			<strong class="jxr_keyword">while</strong> ((r = reader.read()) != -1) {
+<a class="jxr_linenumber" name="L207" href="#L207">207</a> 				offset++;
+<a class="jxr_linenumber" name="L208" href="#L208">208</a> 				
+<a class="jxr_linenumber" name="L209" href="#L209">209</a> 				<em class="jxr_comment">// warn after 100K chars, break after 1M chars, we can possibly reduce these if this becomes a bottleneck</em>
+<a class="jxr_linenumber" name="L210" href="#L210">210</a> 				<strong class="jxr_keyword">if</strong> (offset == 100000) {
+<a class="jxr_linenumber" name="L211" href="#L211">211</a> 					<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L212" href="#L212">212</a> 						logger.warn(<span class="jxr_string">"SetDoctype: More than 100 000 characters in prolog; this is probably not a XML document but will keep looking for DOCTYPE a little while longer: "</span>+name);
+<a class="jxr_linenumber" name="L213" href="#L213">213</a> 					}
+<a class="jxr_linenumber" name="L214" href="#L214">214</a> 				}
+<a class="jxr_linenumber" name="L215" href="#L215">215</a> 				<strong class="jxr_keyword">if</strong> (offset &gt; 1000000) {
+<a class="jxr_linenumber" name="L216" href="#L216">216</a> 					<strong class="jxr_keyword">if</strong> (logger != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L217" href="#L217">217</a> 						logger.warn(<span class="jxr_string">"SetDoctype: More than 1 000 000 characters in prolog; this is extremely unlikely to be a XML document; will abort: "</span>+name);
+<a class="jxr_linenumber" name="L218" href="#L218">218</a> 					}
+<a class="jxr_linenumber" name="L219" href="#L219">219</a> 					writer.close();
+<a class="jxr_linenumber" name="L220" href="#L220">220</a> 					writer = <strong class="jxr_keyword">null</strong>; <em class="jxr_comment">// clear result contents</em>
+<a class="jxr_linenumber" name="L221" href="#L221">221</a> 					<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L222" href="#L222">222</a> 				}
+<a class="jxr_linenumber" name="L223" href="#L223">223</a> 
+<a class="jxr_linenumber" name="L224" href="#L224">224</a> 				currentCharacter = nextCharacter;
+<a class="jxr_linenumber" name="L225" href="#L225">225</a> 				nextCharacter = nextNextCharacter;
+<a class="jxr_linenumber" name="L226" href="#L226">226</a> 				nextNextCharacter = nextNextNextCharacter;
+<a class="jxr_linenumber" name="L227" href="#L227">227</a> 				nextNextNextCharacter = (<strong class="jxr_keyword">char</strong>) r;
+<a class="jxr_linenumber" name="L228" href="#L228">228</a> 				
+<a class="jxr_linenumber" name="L229" href="#L229">229</a> 				<strong class="jxr_keyword">if</strong> (skipChars &gt; 0) {
+<a class="jxr_linenumber" name="L230" href="#L230">230</a> 					skipChars--;
+<a class="jxr_linenumber" name="L231" href="#L231">231</a> 					
+<a class="jxr_linenumber" name="L232" href="#L232">232</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; nextNextCharacter == '-' &amp;&amp; nextNextNextCharacter == '-') {
+<a class="jxr_linenumber" name="L233" href="#L233">233</a> 					<em class="jxr_comment">// "&lt;!--"</em>
+<a class="jxr_linenumber" name="L234" href="#L234">234</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!--\""</span>);
+<a class="jxr_linenumber" name="L235" href="#L235">235</a> 					isReadingComment = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L236" href="#L236">236</a> 					
-<a class="jxr_linenumber" name="L237" href="#L237">237</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '?' &amp;&amp; !isReadingComment) {
-<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					<em class="jxr_comment">// "&lt;?" and is not reading comment</em>
-<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;?\" and is not reading comment"</span>);
-<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					isReadingPI = <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L241" href="#L241">241</a> 
-<a class="jxr_linenumber" name="L242" href="#L242">242</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; <span class="jxr_string">"DdEeAaNn"</span>.indexOf(<span class="jxr_string">""</span>+nextNextCharacter) != -1 &amp;&amp; !isReadingComment) {
-<a class="jxr_linenumber" name="L243" href="#L243">243</a> 					<em class="jxr_comment">// "&lt;!D" or "&lt;!E" etc. and is not reading comment</em>
-<a class="jxr_linenumber" name="L244" href="#L244">244</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!D\" or \"&lt;!E\" etc. and is not reading comment"</span>);
-<a class="jxr_linenumber" name="L245" href="#L245">245</a> 					isReadingDoctype++;
-<a class="jxr_linenumber" name="L246" href="#L246">246</a> 					foundDoctype = <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L237" href="#L237">237</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '-' &amp;&amp; nextCharacter == '-' &amp;&amp; nextNextCharacter == '&gt;' &amp;&amp; isReadingComment) {
+<a class="jxr_linenumber" name="L238" href="#L238">238</a> 					<em class="jxr_comment">// "--&gt;" and is reading comment</em>
+<a class="jxr_linenumber" name="L239" href="#L239">239</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"--&gt;\" and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L240" href="#L240">240</a> 					isReadingComment = false;
+<a class="jxr_linenumber" name="L241" href="#L241">241</a> 					skipChars = 2;
+<a class="jxr_linenumber" name="L242" href="#L242">242</a> 					
+<a class="jxr_linenumber" name="L243" href="#L243">243</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '?' &amp;&amp; !isReadingComment) {
+<a class="jxr_linenumber" name="L244" href="#L244">244</a> 					<em class="jxr_comment">// "&lt;?" and is not reading comment</em>
+<a class="jxr_linenumber" name="L245" href="#L245">245</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;?\" and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L246" href="#L246">246</a> 					isReadingPI = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L247" href="#L247">247</a> 
-<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '?' &amp;&amp; nextCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
-<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<em class="jxr_comment">// "?&gt;" and is not reading comment or attribute</em>
-<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"?&gt;\" and is not reading comment or attribute"</span>);
-<a class="jxr_linenumber" name="L251" href="#L251">251</a> 					isReadingPI = false;
-<a class="jxr_linenumber" name="L252" href="#L252">252</a> 					skipChars = 1;
+<a class="jxr_linenumber" name="L248" href="#L248">248</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; nextCharacter == '!' &amp;&amp; <span class="jxr_string">"DdEeAaNn"</span>.indexOf(<span class="jxr_string">""</span>+nextNextCharacter) != -1 &amp;&amp; !isReadingComment) {
+<a class="jxr_linenumber" name="L249" href="#L249">249</a> 					<em class="jxr_comment">// "&lt;!D" or "&lt;!E" etc. and is not reading comment</em>
+<a class="jxr_linenumber" name="L250" href="#L250">250</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&lt;!D\" or \"&lt;!E\" etc. and is not reading comment"</span>);
+<a class="jxr_linenumber" name="L251" href="#L251">251</a> 					isReadingDoctype++;
+<a class="jxr_linenumber" name="L252" href="#L252">252</a> 					foundDoctype = <strong class="jxr_keyword">true</strong>;
 <a class="jxr_linenumber" name="L253" href="#L253">253</a> 
-<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
-<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<em class="jxr_comment">// "&gt;" and is not reading comment or attribute</em>
-<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&gt;\" and is not reading comment or attribute"</span>);
-<a class="jxr_linenumber" name="L257" href="#L257">257</a> 					
-<a class="jxr_linenumber" name="L258" href="#L258">258</a> 					isReadingDoctype--;
-<a class="jxr_linenumber" name="L259" href="#L259">259</a> 					
-<a class="jxr_linenumber" name="L260" href="#L260">260</a> 					<strong class="jxr_keyword">if</strong> (isReadingDoctype == 0) {
-<a class="jxr_linenumber" name="L261" href="#L261">261</a> 						logger.debug(<span class="jxr_string">"SetDoctype: inserting doctype"</span>);
-<a class="jxr_linenumber" name="L262" href="#L262">262</a> 						writer.write(doctype);
-<a class="jxr_linenumber" name="L263" href="#L263">263</a> 						writer.write(nextCharacter);
-<a class="jxr_linenumber" name="L264" href="#L264">264</a> 						writer.write(nextNextCharacter);
-<a class="jxr_linenumber" name="L265" href="#L265">265</a> 						writer.write(nextNextNextCharacter);
-<a class="jxr_linenumber" name="L266" href="#L266">266</a> 						
-<a class="jxr_linenumber" name="L267" href="#L267">267</a> 						logger.debug(<span class="jxr_string">"SetDoctype: done reading doctype"</span>);
-<a class="jxr_linenumber" name="L268" href="#L268">268</a> 						<strong class="jxr_keyword">break</strong>; <em class="jxr_comment">// done reading doctype</em>
-<a class="jxr_linenumber" name="L269" href="#L269">269</a> 					}
-<a class="jxr_linenumber" name="L270" href="#L270">270</a> 
-<a class="jxr_linenumber" name="L271" href="#L271">271</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((currentCharacter == '\'' || currentCharacter == '"') &amp;&amp; (isReadingElement || isReadingPI || isReadingDoctype &gt; 0) &amp;&amp; (isReadingAttribute == currentCharacter || isReadingAttribute == ' ')) {
-<a class="jxr_linenumber" name="L272" href="#L272">272</a> 					<strong class="jxr_keyword">if</strong> (currentCharacter != isReadingAttribute) {
-<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						<em class="jxr_comment">// found attribute value start</em>
-<a class="jxr_linenumber" name="L274" href="#L274">274</a> 						logger.debug(<span class="jxr_string">"SetDoctype: found attribute value start"</span>);
-<a class="jxr_linenumber" name="L275" href="#L275">275</a> 						isReadingAttribute = currentCharacter;
-<a class="jxr_linenumber" name="L276" href="#L276">276</a> 					} <strong class="jxr_keyword">else</strong> {
-<a class="jxr_linenumber" name="L277" href="#L277">277</a> 						<em class="jxr_comment">// found attribute value end</em>
-<a class="jxr_linenumber" name="L278" href="#L278">278</a> 						logger.debug(<span class="jxr_string">"SetDoctype: found attribute value end"</span>);
-<a class="jxr_linenumber" name="L279" href="#L279">279</a> 						isReadingAttribute = ' ';
-<a class="jxr_linenumber" name="L280" href="#L280">280</a> 					}
-<a class="jxr_linenumber" name="L281" href="#L281">281</a> 				
-<a class="jxr_linenumber" name="L282" href="#L282">282</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; (nextCharacter != '!' &amp;&amp; nextCharacter != '?') &amp;&amp; !isReadingComment) {
-<a class="jxr_linenumber" name="L283" href="#L283">283</a> 					<em class="jxr_comment">// found root element</em>
-<a class="jxr_linenumber" name="L284" href="#L284">284</a> 					
-<a class="jxr_linenumber" name="L285" href="#L285">285</a> 					logger.debug(<span class="jxr_string">"SetDoctype: found root element, inserting doctype"</span>);
-<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					writer.write(doctype);
-<a class="jxr_linenumber" name="L287" href="#L287">287</a> 					writer.write(<span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L288" href="#L288">288</a> 					writer.write(currentCharacter);
-<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					writer.write(nextCharacter);
-<a class="jxr_linenumber" name="L290" href="#L290">290</a> 					writer.write(nextNextCharacter);
-<a class="jxr_linenumber" name="L291" href="#L291">291</a> 					writer.write(nextNextNextCharacter);
-<a class="jxr_linenumber" name="L292" href="#L292">292</a> 					
-<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					logger.debug(<span class="jxr_string">"SetDoctype: found root element; stop searching for doctype"</span>);
-<a class="jxr_linenumber" name="L294" href="#L294">294</a> 					<strong class="jxr_keyword">break</strong>; <em class="jxr_comment">// found root element; stop searching for doctype</em>
-<a class="jxr_linenumber" name="L295" href="#L295">295</a> 				}
-<a class="jxr_linenumber" name="L296" href="#L296">296</a> 				
-<a class="jxr_linenumber" name="L297" href="#L297">297</a> 				<strong class="jxr_keyword">if</strong> (!foundDoctype) {
-<a class="jxr_linenumber" name="L298" href="#L298">298</a> 					logger.debug(<span class="jxr_string">"SetDoctype: not found doctype yet, writing: \""</span>+currentCharacter+<span class="jxr_string">"\""</span>);
-<a class="jxr_linenumber" name="L299" href="#L299">299</a> 					writer.write(currentCharacter);
-<a class="jxr_linenumber" name="L300" href="#L300">300</a> 				}
-<a class="jxr_linenumber" name="L301" href="#L301">301</a> 			}
-<a class="jxr_linenumber" name="L302" href="#L302">302</a> 			
-<a class="jxr_linenumber" name="L303" href="#L303">303</a> 			<strong class="jxr_keyword">if</strong> (offset &lt; 3) {
-<a class="jxr_linenumber" name="L304" href="#L304">304</a> 				writer.write(doctype);
-<a class="jxr_linenumber" name="L305" href="#L305">305</a> 				writer.write(<span class="jxr_string">"\n"</span>);
-<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 0) {
-<a class="jxr_linenumber" name="L307" href="#L307">307</a> 					writer.write(nextCharacter);
-<a class="jxr_linenumber" name="L308" href="#L308">308</a> 				}
-<a class="jxr_linenumber" name="L309" href="#L309">309</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 1) {
-<a class="jxr_linenumber" name="L310" href="#L310">310</a> 					writer.write(nextNextCharacter);
-<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				}
-<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 2) {
-<a class="jxr_linenumber" name="L313" href="#L313">313</a> 					writer.write(nextNextNextCharacter);
+<a class="jxr_linenumber" name="L254" href="#L254">254</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '?' &amp;&amp; nextCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
+<a class="jxr_linenumber" name="L255" href="#L255">255</a> 					<em class="jxr_comment">// "?&gt;" and is not reading comment or attribute</em>
+<a class="jxr_linenumber" name="L256" href="#L256">256</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"?&gt;\" and is not reading comment or attribute"</span>);
+<a class="jxr_linenumber" name="L257" href="#L257">257</a> 					isReadingPI = false;
+<a class="jxr_linenumber" name="L258" href="#L258">258</a> 					skipChars = 1;
+<a class="jxr_linenumber" name="L259" href="#L259">259</a> 
+<a class="jxr_linenumber" name="L260" href="#L260">260</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&gt;' &amp;&amp; !isReadingComment &amp;&amp; isReadingAttribute == ' ') {
+<a class="jxr_linenumber" name="L261" href="#L261">261</a> 					<em class="jxr_comment">// "&gt;" and is not reading comment or attribute</em>
+<a class="jxr_linenumber" name="L262" href="#L262">262</a> 					logger.debug(<span class="jxr_string">"SetDoctype: \"&gt;\" and is not reading comment or attribute"</span>);
+<a class="jxr_linenumber" name="L263" href="#L263">263</a> 					
+<a class="jxr_linenumber" name="L264" href="#L264">264</a> 					isReadingDoctype--;
+<a class="jxr_linenumber" name="L265" href="#L265">265</a> 					
+<a class="jxr_linenumber" name="L266" href="#L266">266</a> 					<strong class="jxr_keyword">if</strong> (isReadingDoctype == 0) {
+<a class="jxr_linenumber" name="L267" href="#L267">267</a> 						logger.debug(<span class="jxr_string">"SetDoctype: inserting doctype"</span>);
+<a class="jxr_linenumber" name="L268" href="#L268">268</a> 						writer.write(doctype);
+<a class="jxr_linenumber" name="L269" href="#L269">269</a> 						writer.write(nextCharacter);
+<a class="jxr_linenumber" name="L270" href="#L270">270</a> 						writer.write(nextNextCharacter);
+<a class="jxr_linenumber" name="L271" href="#L271">271</a> 						writer.write(nextNextNextCharacter);
+<a class="jxr_linenumber" name="L272" href="#L272">272</a> 						
+<a class="jxr_linenumber" name="L273" href="#L273">273</a> 						logger.debug(<span class="jxr_string">"SetDoctype: done reading doctype"</span>);
+<a class="jxr_linenumber" name="L274" href="#L274">274</a> 						<strong class="jxr_keyword">break</strong>; <em class="jxr_comment">// done reading doctype</em>
+<a class="jxr_linenumber" name="L275" href="#L275">275</a> 					}
+<a class="jxr_linenumber" name="L276" href="#L276">276</a> 
+<a class="jxr_linenumber" name="L277" href="#L277">277</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> ((currentCharacter == '\'' || currentCharacter == '"') &amp;&amp; (isReadingElement || isReadingPI || isReadingDoctype &gt; 0) &amp;&amp; (isReadingAttribute == currentCharacter || isReadingAttribute == ' ')) {
+<a class="jxr_linenumber" name="L278" href="#L278">278</a> 					<strong class="jxr_keyword">if</strong> (currentCharacter != isReadingAttribute) {
+<a class="jxr_linenumber" name="L279" href="#L279">279</a> 						<em class="jxr_comment">// found attribute value start</em>
+<a class="jxr_linenumber" name="L280" href="#L280">280</a> 						logger.debug(<span class="jxr_string">"SetDoctype: found attribute value start"</span>);
+<a class="jxr_linenumber" name="L281" href="#L281">281</a> 						isReadingAttribute = currentCharacter;
+<a class="jxr_linenumber" name="L282" href="#L282">282</a> 					} <strong class="jxr_keyword">else</strong> {
+<a class="jxr_linenumber" name="L283" href="#L283">283</a> 						<em class="jxr_comment">// found attribute value end</em>
+<a class="jxr_linenumber" name="L284" href="#L284">284</a> 						logger.debug(<span class="jxr_string">"SetDoctype: found attribute value end"</span>);
+<a class="jxr_linenumber" name="L285" href="#L285">285</a> 						isReadingAttribute = ' ';
+<a class="jxr_linenumber" name="L286" href="#L286">286</a> 					}
+<a class="jxr_linenumber" name="L287" href="#L287">287</a> 				
+<a class="jxr_linenumber" name="L288" href="#L288">288</a> 				} <strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (currentCharacter == '&lt;' &amp;&amp; (nextCharacter != '!' &amp;&amp; nextCharacter != '?') &amp;&amp; !isReadingComment) {
+<a class="jxr_linenumber" name="L289" href="#L289">289</a> 					<em class="jxr_comment">// found root element</em>
+<a class="jxr_linenumber" name="L290" href="#L290">290</a> 					
+<a class="jxr_linenumber" name="L291" href="#L291">291</a> 					logger.debug(<span class="jxr_string">"SetDoctype: found root element, inserting doctype"</span>);
+<a class="jxr_linenumber" name="L292" href="#L292">292</a> 					writer.write(doctype);
+<a class="jxr_linenumber" name="L293" href="#L293">293</a> 					writer.write(<span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L294" href="#L294">294</a> 					writer.write(currentCharacter);
+<a class="jxr_linenumber" name="L295" href="#L295">295</a> 					writer.write(nextCharacter);
+<a class="jxr_linenumber" name="L296" href="#L296">296</a> 					writer.write(nextNextCharacter);
+<a class="jxr_linenumber" name="L297" href="#L297">297</a> 					writer.write(nextNextNextCharacter);
+<a class="jxr_linenumber" name="L298" href="#L298">298</a> 					
+<a class="jxr_linenumber" name="L299" href="#L299">299</a> 					logger.debug(<span class="jxr_string">"SetDoctype: found root element; stop searching for doctype"</span>);
+<a class="jxr_linenumber" name="L300" href="#L300">300</a> 					<strong class="jxr_keyword">break</strong>; <em class="jxr_comment">// found root element; stop searching for doctype</em>
+<a class="jxr_linenumber" name="L301" href="#L301">301</a> 				}
+<a class="jxr_linenumber" name="L302" href="#L302">302</a> 				
+<a class="jxr_linenumber" name="L303" href="#L303">303</a> 				<strong class="jxr_keyword">if</strong> (!foundDoctype) {
+<a class="jxr_linenumber" name="L304" href="#L304">304</a> 					logger.debug(<span class="jxr_string">"SetDoctype: not found doctype yet, writing: \""</span>+currentCharacter+<span class="jxr_string">"\""</span>);
+<a class="jxr_linenumber" name="L305" href="#L305">305</a> 					writer.write(currentCharacter);
+<a class="jxr_linenumber" name="L306" href="#L306">306</a> 				}
+<a class="jxr_linenumber" name="L307" href="#L307">307</a> 			}
+<a class="jxr_linenumber" name="L308" href="#L308">308</a> 			
+<a class="jxr_linenumber" name="L309" href="#L309">309</a> 			<strong class="jxr_keyword">if</strong> (offset &lt; 3) {
+<a class="jxr_linenumber" name="L310" href="#L310">310</a> 				writer.write(doctype);
+<a class="jxr_linenumber" name="L311" href="#L311">311</a> 				writer.write(<span class="jxr_string">"\n"</span>);
+<a class="jxr_linenumber" name="L312" href="#L312">312</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 0) {
+<a class="jxr_linenumber" name="L313" href="#L313">313</a> 					writer.write(nextCharacter);
 <a class="jxr_linenumber" name="L314" href="#L314">314</a> 				}
-<a class="jxr_linenumber" name="L315" href="#L315">315</a> 			}
-<a class="jxr_linenumber" name="L316" href="#L316">316</a> 			
-<a class="jxr_linenumber" name="L317" href="#L317">317</a> 			<em class="jxr_comment">// Write remaining characters from reader to writer</em>
-<a class="jxr_linenumber" name="L318" href="#L318">318</a> 			logger.debug(<span class="jxr_string">"SetDoctype: Write remaining characters from reader to writer"</span>);
-<a class="jxr_linenumber" name="L319" href="#L319">319</a> 			<strong class="jxr_keyword">int</strong> bufferSize = 1024;
-<a class="jxr_linenumber" name="L320" href="#L320">320</a> 			<strong class="jxr_keyword">char</strong>[] buffer = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[bufferSize];
-<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			<strong class="jxr_keyword">int</strong> length = 0;
-<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			<strong class="jxr_keyword">do</strong> {
-<a class="jxr_linenumber" name="L323" href="#L323">323</a> 				length = reader.read(buffer, 0, bufferSize);
-<a class="jxr_linenumber" name="L324" href="#L324">324</a> 				<strong class="jxr_keyword">if</strong> (length &gt; 0) {
-<a class="jxr_linenumber" name="L325" href="#L325">325</a> 					writer.write(buffer, 0, length);
-<a class="jxr_linenumber" name="L326" href="#L326">326</a> 				}
-<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			} <strong class="jxr_keyword">while</strong> (length &gt; 0);
-<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			
-<a class="jxr_linenumber" name="L329" href="#L329">329</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
-<a class="jxr_linenumber" name="L330" href="#L330">330</a> 			
-<a class="jxr_linenumber" name="L331" href="#L331">331</a> 		}
-<a class="jxr_linenumber" name="L332" href="#L332">332</a> 	}
-<a class="jxr_linenumber" name="L333" href="#L333">333</a> 
-<a class="jxr_linenumber" name="L334" href="#L334">334</a> }
+<a class="jxr_linenumber" name="L315" href="#L315">315</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 1) {
+<a class="jxr_linenumber" name="L316" href="#L316">316</a> 					writer.write(nextNextCharacter);
+<a class="jxr_linenumber" name="L317" href="#L317">317</a> 				}
+<a class="jxr_linenumber" name="L318" href="#L318">318</a> 				<strong class="jxr_keyword">if</strong> (offset &gt;= 2) {
+<a class="jxr_linenumber" name="L319" href="#L319">319</a> 					writer.write(nextNextNextCharacter);
+<a class="jxr_linenumber" name="L320" href="#L320">320</a> 				}
+<a class="jxr_linenumber" name="L321" href="#L321">321</a> 			}
+<a class="jxr_linenumber" name="L322" href="#L322">322</a> 			
+<a class="jxr_linenumber" name="L323" href="#L323">323</a> 			<em class="jxr_comment">// Write remaining characters from reader to writer</em>
+<a class="jxr_linenumber" name="L324" href="#L324">324</a> 			logger.debug(<span class="jxr_string">"SetDoctype: Write remaining characters from reader to writer"</span>);
+<a class="jxr_linenumber" name="L325" href="#L325">325</a> 			<strong class="jxr_keyword">int</strong> bufferSize = 1024;
+<a class="jxr_linenumber" name="L326" href="#L326">326</a> 			<strong class="jxr_keyword">char</strong>[] buffer = <strong class="jxr_keyword">new</strong> <strong class="jxr_keyword">char</strong>[bufferSize];
+<a class="jxr_linenumber" name="L327" href="#L327">327</a> 			<strong class="jxr_keyword">int</strong> length = 0;
+<a class="jxr_linenumber" name="L328" href="#L328">328</a> 			<strong class="jxr_keyword">do</strong> {
+<a class="jxr_linenumber" name="L329" href="#L329">329</a> 				length = reader.read(buffer, 0, bufferSize);
+<a class="jxr_linenumber" name="L330" href="#L330">330</a> 				<strong class="jxr_keyword">if</strong> (length &gt; 0) {
+<a class="jxr_linenumber" name="L331" href="#L331">331</a> 					writer.write(buffer, 0, length);
+<a class="jxr_linenumber" name="L332" href="#L332">332</a> 				}
+<a class="jxr_linenumber" name="L333" href="#L333">333</a> 			} <strong class="jxr_keyword">while</strong> (length &gt; 0);
+<a class="jxr_linenumber" name="L334" href="#L334">334</a> 			
+<a class="jxr_linenumber" name="L335" href="#L335">335</a> 			<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">true</strong>;
+<a class="jxr_linenumber" name="L336" href="#L336">336</a> 			
+<a class="jxr_linenumber" name="L337" href="#L337">337</a> 		}
+<a class="jxr_linenumber" name="L338" href="#L338">338</a> 	}
+<a class="jxr_linenumber" name="L339" href="#L339">339</a> 
+<a class="jxr_linenumber" name="L340" href="#L340">340</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

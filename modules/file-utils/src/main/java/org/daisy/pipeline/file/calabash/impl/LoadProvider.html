@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>LoadProvider xref</title>
+<link type="text/css" rel="stylesheet" href="/pipeline/modules/file-utils/src/main/java/stylesheet.css">
+</head>
+<body>
+<pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.file.calabash.impl;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.io.IOException;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.net.URI;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.ArrayList;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> java.util.Map;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcConstants;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.core.XProcRuntime;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.io.WritablePipe;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.library.DefaultStep;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.model.RuntimeValue;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> com.xmlcalabash.runtime.XAtomicStep;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.QName;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> net.sf.saxon.s9api.SaxonApiException;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> <strong class="jxr_keyword">static</strong> org.daisy.common.saxon.SaxonHelper.jaxpQName;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.transform.TransformerException;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xml.DocumentBuilder;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XMLCalabashOutputValue;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStep;
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Reference;
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferenceCardinality;
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.ReferencePolicy;
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  <strong class="jxr_keyword">import</strong> org.xml.sax.InputSource;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  <strong class="jxr_keyword">import</strong> org.xml.sax.SAXException;
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  <strong class="jxr_keyword">import</strong> org.w3c.dom.Document;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  @Component(
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  	name = <span class="jxr_string">"px:load"</span>,
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  	service = { XProcStepProvider.<strong class="jxr_keyword">class</strong> },
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  	property = { <span class="jxr_string">"type:String={http://www.daisy.org/ns/pipeline/xproc}load"</span> }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  )
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/LoadProvider.html">LoadProvider</a> <strong class="jxr_keyword">implements</strong> XProcStepProvider {
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  	@Override
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  	<strong class="jxr_keyword">public</strong> XProcStep newStep(XProcRuntime runtime, XAtomicStep step, XProcMonitor monitor, Map&lt;String,String&gt; properties) {
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">return</strong> <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/LoadProvider.html">Load</a>(runtime, step);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  	}
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _href = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"href"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName _content_type = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"content-type"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">static</strong> <strong class="jxr_keyword">final</strong> QName err_XD0011 = <strong class="jxr_keyword">new</strong> QName(<span class="jxr_string">"err"</span>, XProcConstants.NS_XPROC_ERROR, <span class="jxr_string">"XD0011"</span>);
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/LoadProvider.html">Load</a> <strong class="jxr_keyword">extends</strong> DefaultStep <strong class="jxr_keyword">implements</strong> XProcStep {
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">private</strong> WritablePipe result = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">public</strong> <a href="/pipeline/modules/file-utils/src/main/java/org/daisy/pipeline/file/calabash/impl/LoadProvider.html">Load</a>(XProcRuntime runtime, XAtomicStep step) {
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">super</strong>(runtime,step);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		}
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> setOutput(String port, WritablePipe pipe) {
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			result = pipe;
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		}
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> reset() {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			result.resetWriter();
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  		}
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  		<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">super</strong>.run();
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  			<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  				RuntimeValue href = getOption(_href);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  				URI absoluteHref = href.getBaseURI().resolve(href.getString());
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  				InputSource source = <strong class="jxr_keyword">new</strong> InputSource(absoluteHref.toString());
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  				String contentType = getOption(_content_type, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  				<strong class="jxr_keyword">boolean</strong> isXml = <span class="jxr_string">""</span>.equals(contentType) || contentType.matches(<span class="jxr_string">"[^ ]*(/|\\+)xml"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  				Document doc = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				DocumentBuilder xmlParser = <strong class="jxr_keyword">null</strong>;
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  				<strong class="jxr_keyword">try</strong> {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  					<strong class="jxr_keyword">for</strong> (DocumentBuilder p : parsers) {
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  						<strong class="jxr_keyword">if</strong> (xmlParser == <strong class="jxr_keyword">null</strong> &amp;&amp; p.supportsContentType(<span class="jxr_string">"text/xml"</span>)) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  							xmlParser = p;
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  							<strong class="jxr_keyword">if</strong> (isXml) <strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  						}
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  						<strong class="jxr_keyword">if</strong> (!isXml &amp;&amp; p.supportsContentType(contentType)) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  							doc = p.parse(source);
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  							<strong class="jxr_keyword">break</strong>;
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  						}
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  					}
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  					<strong class="jxr_keyword">if</strong> (doc == <strong class="jxr_keyword">null</strong> &amp;&amp; xmlParser != <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  						<em class="jxr_comment">// content-type is either XML, not specified, or not recognized</em>
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  						<em class="jxr_comment">// in all cases we use (fallback to) the XML parser</em>
+<a class="jxr_linenumber" name="L93" href="#L93">93</a>  						doc = xmlParser.parse(source);
+<a class="jxr_linenumber" name="L94" href="#L94">94</a>  					}
+<a class="jxr_linenumber" name="L95" href="#L95">95</a>  				} <strong class="jxr_keyword">catch</strong> (SAXException|IOException e) {
+<a class="jxr_linenumber" name="L96" href="#L96">96</a>  					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(
+<a class="jxr_linenumber" name="L97" href="#L97">97</a>  						jaxpQName(err_XD0011),
+<a class="jxr_linenumber" name="L98" href="#L98">98</a>  						<strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"Error parsing "</span> + absoluteHref + <span class="jxr_string">" (content-type: "</span> + contentType + <span class="jxr_string">")"</span>, e));
+<a class="jxr_linenumber" name="L99" href="#L99">99</a>  				}
+<a class="jxr_linenumber" name="L100" href="#L100">100</a> 				<strong class="jxr_keyword">if</strong> (doc == <strong class="jxr_keyword">null</strong>) {
+<a class="jxr_linenumber" name="L101" href="#L101">101</a> 					<em class="jxr_comment">// this means no XML parser was found</em>
+<a class="jxr_linenumber" name="L102" href="#L102">102</a> 					<strong class="jxr_keyword">if</strong> (xmlParser != <strong class="jxr_keyword">null</strong>) <strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> RuntimeException(); <em class="jxr_comment">// coding error</em>
+<a class="jxr_linenumber" name="L103" href="#L103">103</a> 					<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> TransformerException(<strong class="jxr_keyword">new</strong> IllegalStateException(<span class="jxr_string">"No XML parser found"</span>));
+<a class="jxr_linenumber" name="L104" href="#L104">104</a> 				}
+<a class="jxr_linenumber" name="L105" href="#L105">105</a> 				<strong class="jxr_keyword">new</strong> XMLCalabashOutputValue(result, runtime).asNodeConsumer().accept(doc);
+<a class="jxr_linenumber" name="L106" href="#L106">106</a> 			} <strong class="jxr_keyword">catch</strong> (Throwable e) {
+<a class="jxr_linenumber" name="L107" href="#L107">107</a> 				<strong class="jxr_keyword">throw</strong> XProcStep.raiseError(e, step);
+<a class="jxr_linenumber" name="L108" href="#L108">108</a> 			}
+<a class="jxr_linenumber" name="L109" href="#L109">109</a> 		}
+<a class="jxr_linenumber" name="L110" href="#L110">110</a> 	}
+<a class="jxr_linenumber" name="L111" href="#L111">111</a> 
+<a class="jxr_linenumber" name="L112" href="#L112">112</a> 	<strong class="jxr_keyword">private</strong> <strong class="jxr_keyword">final</strong> List&lt;DocumentBuilder&gt; parsers = <strong class="jxr_keyword">new</strong> ArrayList&lt;&gt;();
+<a class="jxr_linenumber" name="L113" href="#L113">113</a> 
+<a class="jxr_linenumber" name="L114" href="#L114">114</a> 	@Reference(
+<a class="jxr_linenumber" name="L115" href="#L115">115</a> 		name = <span class="jxr_string">"input-parser"</span>,
+<a class="jxr_linenumber" name="L116" href="#L116">116</a> 		unbind = <span class="jxr_string">"-"</span>,
+<a class="jxr_linenumber" name="L117" href="#L117">117</a> 		service = DocumentBuilder.<strong class="jxr_keyword">class</strong>,
+<a class="jxr_linenumber" name="L118" href="#L118">118</a> 		cardinality = ReferenceCardinality.MULTIPLE,
+<a class="jxr_linenumber" name="L119" href="#L119">119</a> 		policy = ReferencePolicy.STATIC
+<a class="jxr_linenumber" name="L120" href="#L120">120</a> 	)
+<a class="jxr_linenumber" name="L121" href="#L121">121</a> 	<strong class="jxr_keyword">protected</strong> <strong class="jxr_keyword">void</strong> addInputParser(DocumentBuilder parser) {
+<a class="jxr_linenumber" name="L122" href="#L122">122</a> 		parsers.add(parser);
+<a class="jxr_linenumber" name="L123" href="#L123">123</a> 	}
+<a class="jxr_linenumber" name="L124" href="#L124">124</a> }
+</pre>
+<hr>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+</body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>CssSerializer xref</title>
@@ -10,92 +10,97 @@
 <a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> org.daisy.pipeline.css;
 <a class="jxr_linenumber" name="L2" href="#L2">2</a>   
 <a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.net.URI;
-<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.function.Function;
-<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.List;
-<a class="jxr_linenumber" name="L6" href="#L6">6</a>   
-<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Declaration;
-<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Term;
-<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermFunction;
-<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermInteger;
-<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermList;
-<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermNumber;
-<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermPair;
-<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermPercent;
-<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermString;
-<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermURI;
-<a class="jxr_linenumber" name="L17" href="#L17">17</a>  
-<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> java.util.Collection;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> java.util.function.Function;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> java.util.List;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Declaration;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.Term;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermFunction;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermIdent;
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermInteger;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermList;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermNumber;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermPair;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermPercent;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermString;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> cz.vutbr.web.css.TermURI;
 <a class="jxr_linenumber" name="L19" href="#L19">19</a>  
-<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssSerializer.html">CssSerializer</a> {
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.file.URLs;
 <a class="jxr_linenumber" name="L21" href="#L21">21</a>  
-<a class="jxr_linenumber" name="L22" href="#L22">22</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssSerializer.html">CssSerializer</a>() {}
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">final</strong> <strong class="jxr_keyword">class</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssSerializer.html">CssSerializer</a> {
 <a class="jxr_linenumber" name="L23" href="#L23">23</a>  
-<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(Term&lt;?&gt; term) {
-<a class="jxr_linenumber" name="L25" href="#L25">25</a>  		<strong class="jxr_keyword">return</strong> toString(term, t -&gt; toString(t));
-<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	}
-<a class="jxr_linenumber" name="L27" href="#L27">27</a>  
-<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(Term&lt;?&gt; term, Function&lt;Term&lt;?&gt;,String&gt; toStringFunction) {
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  		<strong class="jxr_keyword">if</strong> (term instanceof TermInteger) {
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  			TermInteger integer = (TermInteger)term;
-<a class="jxr_linenumber" name="L31" href="#L31">31</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + integer.getIntValue(); }
-<a class="jxr_linenumber" name="L32" href="#L32">32</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermNumber) {
-<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			TermNumber number = (TermNumber)term;
-<a class="jxr_linenumber" name="L34" href="#L34">34</a>  			Double value = number.getValue().doubleValue();
-<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			<strong class="jxr_keyword">if</strong> (value == Math.floor(value))
-<a class="jxr_linenumber" name="L36" href="#L36">36</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value.intValue();
-<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L38" href="#L38">38</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value; }
-<a class="jxr_linenumber" name="L39" href="#L39">39</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermPercent) {
-<a class="jxr_linenumber" name="L40" href="#L40">40</a>  			TermPercent percent = (TermPercent)term;
-<a class="jxr_linenumber" name="L41" href="#L41">41</a>  			Double value = percent.getValue().doubleValue();
-<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			<strong class="jxr_keyword">if</strong> (value == Math.floor(value))
-<a class="jxr_linenumber" name="L43" href="#L43">43</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value.intValue() + <span class="jxr_string">"%"</span>;
-<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L45" href="#L45">45</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value + <span class="jxr_string">"%"</span>; }
-<a class="jxr_linenumber" name="L46" href="#L46">46</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermList
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  		         || term instanceof Declaration) {
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  			String s = serializeTermList((List&lt;Term&lt;?&gt;&gt;)term, toStringFunction);
-<a class="jxr_linenumber" name="L49" href="#L49">49</a>  			<strong class="jxr_keyword">if</strong> (term instanceof TermFunction) {
-<a class="jxr_linenumber" name="L50" href="#L50">50</a>  				TermFunction function = (TermFunction)term;
-<a class="jxr_linenumber" name="L51" href="#L51">51</a>  				s = function.getFunctionName() + <span class="jxr_string">"("</span> + s + <span class="jxr_string">")"</span>; }
-<a class="jxr_linenumber" name="L52" href="#L52">52</a>  			<strong class="jxr_keyword">return</strong> s; }
-<a class="jxr_linenumber" name="L53" href="#L53">53</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermPair) {
-<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			TermPair&lt;?,?&gt; pair = (TermPair&lt;?,?&gt;)term;
-<a class="jxr_linenumber" name="L55" href="#L55">55</a>  			Object val = pair.getValue();
-<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + pair.getKey() + <span class="jxr_string">" "</span> + (val instanceof Term ? toString((Term&lt;?&gt;)val, toStringFunction) : val.toString()); }
-<a class="jxr_linenumber" name="L57" href="#L57">57</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermURI) {
-<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			TermURI termURI = (TermURI)term;
-<a class="jxr_linenumber" name="L59" href="#L59">59</a>  			URI uri = URLs.asURI(termURI.getValue());
-<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			<strong class="jxr_keyword">if</strong> (termURI.getBase() != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L61" href="#L61">61</a>  				uri = URLs.resolve(URLs.asURI(termURI.getBase()), uri);
-<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"url(\""</span> + uri + <span class="jxr_string">"\")"</span>; }
-<a class="jxr_linenumber" name="L63" href="#L63">63</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermString) {
-<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			TermString string = (TermString)term;
-<a class="jxr_linenumber" name="L65" href="#L65">65</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"'"</span> + string.getValue().replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"\\\\A "</span>).replaceAll(<span class="jxr_string">"'"</span>, <span class="jxr_string">"\\\\27 "</span>) + <span class="jxr_string">"'"</span>; }
-<a class="jxr_linenumber" name="L66" href="#L66">66</a>  		<strong class="jxr_keyword">else</strong>
-<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">return</strong> term.toString().replaceAll(<span class="jxr_string">"^[,/ ]+"</span>, <span class="jxr_string">""</span>);
-<a class="jxr_linenumber" name="L68" href="#L68">68</a>  	}
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
-<a class="jxr_linenumber" name="L70" href="#L70">70</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String serializeTermList(List&lt;Term&lt;?&gt;&gt; termList) {
-<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">return</strong> serializeTermList(termList, t -&gt; toString(t));
-<a class="jxr_linenumber" name="L72" href="#L72">72</a>  	}
-<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
-<a class="jxr_linenumber" name="L74" href="#L74">74</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String serializeTermList(List&lt;Term&lt;?&gt;&gt; termList, Function&lt;Term&lt;?&gt;,String&gt; toStringFunction) {
-<a class="jxr_linenumber" name="L75" href="#L75">75</a>  		String s = <span class="jxr_string">""</span>;
-<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">for</strong> (Term&lt;?&gt; t : termList) {
-<a class="jxr_linenumber" name="L77" href="#L77">77</a>  			<strong class="jxr_keyword">if</strong> (!s.isEmpty()) {
-<a class="jxr_linenumber" name="L78" href="#L78">78</a>  				Term.Operator o = t.getOperator();
-<a class="jxr_linenumber" name="L79" href="#L79">79</a>  				<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>)
-<a class="jxr_linenumber" name="L80" href="#L80">80</a>  					<strong class="jxr_keyword">switch</strong> (o) {
-<a class="jxr_linenumber" name="L81" href="#L81">81</a>  					<strong class="jxr_keyword">case</strong> COMMA:
-<a class="jxr_linenumber" name="L82" href="#L82">82</a>  						s += <span class="jxr_string">","</span>; }
-<a class="jxr_linenumber" name="L83" href="#L83">83</a>  				s += <span class="jxr_string">" "</span>; }
-<a class="jxr_linenumber" name="L84" href="#L84">84</a>  			s += toStringFunction.apply(t); }
-<a class="jxr_linenumber" name="L85" href="#L85">85</a>  		<strong class="jxr_keyword">return</strong> s;
-<a class="jxr_linenumber" name="L86" href="#L86">86</a>  	}
-<a class="jxr_linenumber" name="L87" href="#L87">87</a>  }
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  	<strong class="jxr_keyword">private</strong> <a href="/pipeline/modules/css-utils/src/main/java/org/daisy/pipeline/css/CssSerializer.html">CssSerializer</a>() {}
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(Term&lt;?&gt; term) {
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">return</strong> toString(term, t -&gt; toString(t));
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  	}
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String toString(Term&lt;?&gt; term, Function&lt;Term&lt;?&gt;,String&gt; toStringFunction) {
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>  		<strong class="jxr_keyword">if</strong> (term instanceof TermInteger) {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  			TermInteger integer = (TermInteger)term;
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + integer.getIntValue(); }
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermNumber) {
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>  			TermNumber number = (TermNumber)term;
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  			Double value = number.getValue().doubleValue();
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>  			<strong class="jxr_keyword">if</strong> (value == Math.floor(value))
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value.intValue();
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>  			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value; }
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermPercent) {
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>  			TermPercent percent = (TermPercent)term;
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>  			Double value = percent.getValue().doubleValue();
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>  			<strong class="jxr_keyword">if</strong> (value == Math.floor(value))
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value.intValue() + <span class="jxr_string">"%"</span>;
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>  			<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  				<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + value + <span class="jxr_string">"%"</span>; }
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermList
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>  		         || term instanceof Declaration) {
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>  			String s = serializeTermList((List&lt;Term&lt;?&gt;&gt;)term, toStringFunction);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>  			<strong class="jxr_keyword">if</strong> (term instanceof TermFunction) {
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>  				TermFunction function = (TermFunction)term;
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>  				s = function.getFunctionName() + <span class="jxr_string">"("</span> + s + <span class="jxr_string">")"</span>; }
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>  			<strong class="jxr_keyword">return</strong> s; }
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermPair) {
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>  			TermPair&lt;?,?&gt; pair = (TermPair&lt;?,?&gt;)term;
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>  			Object val = pair.getValue();
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">""</span> + pair.getKey() + <span class="jxr_string">" "</span> + (val instanceof Term ? toStringFunction.apply((Term&lt;?&gt;)val) : val.toString()); }
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermURI) {
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>  			TermURI termURI = (TermURI)term;
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>  			URI uri = URLs.asURI(termURI.getValue());
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>  			<strong class="jxr_keyword">if</strong> (termURI.getBase() != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>  				uri = URLs.resolve(URLs.asURI(termURI.getBase()), uri);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"url(\""</span> + uri + <span class="jxr_string">"\")"</span>; }
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermString) {
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>  			TermString string = (TermString)term;
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>  			<strong class="jxr_keyword">return</strong> <span class="jxr_string">"'"</span> + string.getValue().replaceAll(<span class="jxr_string">"\n"</span>, <span class="jxr_string">"\\\\A "</span>).replaceAll(<span class="jxr_string">"'"</span>, <span class="jxr_string">"\\\\27 "</span>) + <span class="jxr_string">"'"</span>; }
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>  		<strong class="jxr_keyword">else</strong> <strong class="jxr_keyword">if</strong> (term instanceof TermIdent) {
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  			TermIdent ident = (TermIdent)term;
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>  			<strong class="jxr_keyword">return</strong> ident.getValue(); }
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>  		<strong class="jxr_keyword">else</strong>
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  			<strong class="jxr_keyword">return</strong> term.toString().replaceAll(<span class="jxr_string">"^[,/ ]+"</span>, <span class="jxr_string">""</span>);
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  	}
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String serializeTermList(Collection&lt;? <strong class="jxr_keyword">extends</strong> Term&lt;?&gt;&gt; termList) {
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>  		<strong class="jxr_keyword">return</strong> serializeTermList(termList, t -&gt; toString(t));
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>  	}
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>  
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>  	<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> String serializeTermList(Collection&lt;? <strong class="jxr_keyword">extends</strong> Term&lt;?&gt;&gt; termList, Function&lt;Term&lt;?&gt;,String&gt; toStringFunction) {
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  		String s = <span class="jxr_string">""</span>;
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  		<strong class="jxr_keyword">for</strong> (Term&lt;?&gt; t : termList) {
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  			<strong class="jxr_keyword">if</strong> (!s.isEmpty()) {
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>  				Term.Operator o = t.getOperator();
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>  				<strong class="jxr_keyword">if</strong> (o != <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  					<strong class="jxr_keyword">switch</strong> (o) {
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  					<strong class="jxr_keyword">case</strong> COMMA:
+<a class="jxr_linenumber" name="L87" href="#L87">87</a>  						s += <span class="jxr_string">","</span>; }
+<a class="jxr_linenumber" name="L88" href="#L88">88</a>  				s += <span class="jxr_string">" "</span>; }
+<a class="jxr_linenumber" name="L89" href="#L89">89</a>  			s += toStringFunction.apply(t); }
+<a class="jxr_linenumber" name="L90" href="#L90">90</a>  		<strong class="jxr_keyword">return</strong> s;
+<a class="jxr_linenumber" name="L91" href="#L91">91</a>  	}
+<a class="jxr_linenumber" name="L92" href="#L92">92</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

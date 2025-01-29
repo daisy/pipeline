@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>SynthesizeStep xref</title>
@@ -171,7 +171,7 @@
 <a class="jxr_linenumber" name="L162" href="#L162">162</a> 
 <a class="jxr_linenumber" name="L163" href="#L163">163</a> 		VoiceConfigExtension configExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/VoiceConfigExtension.html">VoiceConfigExtension</a>();
 <a class="jxr_linenumber" name="L164" href="#L164">164</a> 		DynamicPropertiesExtension propsExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/DynamicPropertiesExtension.html">DynamicPropertiesExtension</a>();
-<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(mRuntime.getProcessor(), config.read(), configExt, propsExt);
+<a class="jxr_linenumber" name="L165" href="#L165">165</a> 		<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(mRuntime.getProcessor(), config.read(), <strong class="jxr_keyword">this</strong>.properties, configExt, propsExt);
 <a class="jxr_linenumber" name="L166" href="#L166">166</a> 		Map&lt;String,String&gt; properties = <strong class="jxr_keyword">this</strong>.properties;
 <a class="jxr_linenumber" name="L167" href="#L167">167</a> 		Map&lt;String,String&gt; dynProperties = propsExt.getDynamicProperties();
 <a class="jxr_linenumber" name="L168" href="#L168">168</a> 		<strong class="jxr_keyword">if</strong> (dynProperties != <strong class="jxr_keyword">null</strong> &amp;&amp; !dynProperties.isEmpty()) {
@@ -379,6 +379,6 @@
 <a class="jxr_linenumber" name="L370" href="#L370">370</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

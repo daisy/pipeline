@@ -8,7 +8,7 @@
 <link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
 <link rev="doc" href="../css-to-obfl.xpl">
 </head>
-<body><div class="code" about="../css-to-obfl.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">pxi</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc/internal"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cx</span>=<span class="code-xml-attribute-value">"http://xmlcalabash.com/ns/extensions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">css</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/braille-css"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">obfl</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2011/obfl"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsl</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/XSL/Transform"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"pxi:css-to-obfl"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"pxi xsl"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
+<body><div class="code" about="../css-to-obfl.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">pxi</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc/internal"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">f</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/internal-functions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cx</span>=<span class="code-xml-attribute-value">"http://xmlcalabash.com/ns/extensions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">css</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/braille-css"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">obfl</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/2011/obfl"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsl</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/XSL/Transform"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">s</span>=<span class="code-xml-attribute-value">"org.daisy.pipeline.braille.css.xpath.Style"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"pxi:css-to-obfl"</span> <span class="code-xml-attribute-local-name">exclude-inline-prefixes</span>=<span class="code-xml-attribute-value">"pxi xsl"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         Convert a document with inline braille CSS to OBFL (Open Braille Formatting Language).
@@ -40,28 +40,94 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/braille-css-utils/src/main/resources/xml/library.xpl" class="source">http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl</a>"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        css:adjust-boxes
-        css:eval-counter
-        css:eval-string-set
-        css:eval-target-content
-        css:eval-target-text
-        css:flow-from
-        css:flow-into
-        css:label-targets
-        css:make-anonymous-block-boxes
-        css:make-anonymous-inline-boxes
-        css:make-boxes
-        css:make-pseudo-elements
-        css:make-table-grid
-        css:new-definition
-        css:parse-content
-        css:parse-properties
-        css:parse-stylesheet
-        css:preserve-white-space
-        css:render-table-by
-        css:shift-id
-        css:shift-string-set
-        css:split
+        px:css-parse-stylesheet
+        px:css-parse-properties
+        px:css-parse-content
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/adjust-boxes.xpl" class="source">adjust-boxes.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:adjust-boxes
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/eval-counter.xpl" class="source">eval-counter.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:eval-counter
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/eval-target-content.xpl" class="source">eval-target-content.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:eval-target-content
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/eval-target-text.xpl" class="source">eval-target-text.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:eval-target-text
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/flow-from.xpl" class="source">flow-from.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:flow-from
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/flow-into.xpl" class="source">flow-into.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:flow-into
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/label-targets.xpl" class="source">label-targets.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:label-targets
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/make-anonymous-block-boxes.xpl" class="source">make-anonymous-block-boxes.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:make-anonymous-block-boxes
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/make-anonymous-inline-boxes.xpl" class="source">make-anonymous-inline-boxes.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:make-anonymous-inline-boxes
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/make-boxes.xpl" class="source">make-boxes.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:make-boxes
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/make-pseudo-elements.xpl" class="source">make-pseudo-elements.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:make-pseudo-elements
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/make-table-grid.xpl" class="source">make-table-grid.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:make-table-grid
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/preserve-white-space.xpl" class="source">preserve-white-space.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:preserve-white-space
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/render-table-by.xpl" class="source">render-table-by.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:render-table-by
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/shift-id.xpl" class="source">shift-id.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:shift-id
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/shift-string-set.xpl" class="source">shift-string-set.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:shift-string-set
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/split.xpl" class="source">split.xpl</a>"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        pxi:split
       &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/propagate-page-break.xpl" class="source">propagate-page-break.xpl</a>"</span>&gt;
@@ -84,9 +150,9 @@
         pxi:extract-obfl-pseudo-elements
       &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/deep-parse-page-and-volume-stylesheets.xpl" class="source">deep-parse-page-and-volume-stylesheets.xpl</a>"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/obfl-css-definition.xpl" class="source">obfl-css-definition.xpl</a>"</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        pxi:deep-parse-page-and-volume-stylesheets
+        pxi:obfl-css-definition
       &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">import</span>&gt;
     &lt;<span class="code-xml-element-prefix">cx:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/pipeline/modules/braille/css-utils/library.xsl"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"application/xslt+xml"</span>&gt;
@@ -94,11 +160,16 @@
         css:parse-counter-styles
       &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">cx:</span><span class="code-xml-element-local-name">import</span>&gt;
+    &lt;<span class="code-xml-element-prefix">cx:</span><span class="code-xml-element-local-name">import</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"deep-parse-page-and-volume-stylesheets.xsl"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"application/xslt+xml"</span>&gt;
+      &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+        f:deep-parse-page-and-volume-stylesheets
+      &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">cx:</span><span class="code-xml-element-local-name">import</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"pxi:recursive-parse-stylesheet-and-make-pseudo-elements"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-stylesheet</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-stylesheet</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Make css:page, css:volume, css:text-transform, css:hyphenation-resource,
                 css:counter-style, css:after, css:before, css:footnote-call, css:duplicate,
@@ -107,26 +178,26 @@
                 css:_obfl-on-volume-end, css:_obfl-on-collection-end, css:_obfl-on-toc-end,
                 css:_obfl-volume-transition and css:_obfl-on-resumed attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-stylesheet</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"flow"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-stylesheet</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"flow"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Make css:flow attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-scenario]/@css:flow"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 ::-obfl-alternate-scenario pseudo-elements must participate in the normal flow.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//*/@css:before|                           //*/@css:after|                           //*/@css:duplicate|                           //*/@css:alternate|                           //*/@css:footnote-call|                           //*/@css:_obfl-on-toc-start|                           //*/@css:_obfl-on-collection-start|                           //*/@css:_obfl-on-volume-start|                           //*/@css:_obfl-on-volume-end|                           //*/@css:_obfl-on-collection-end|                           //*/@css:_obfl-on-toc-end|                           //*/@css:_obfl-on-resumed[not(.='_')]|                           //*/@css:*[matches(local-name(),'^_obfl-alternate-scenario(-[1-9][0-9]*)?$')]                           "</span>&gt;
-                &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-pseudo-elements</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"//*/@css:before|                           //*/@css:after|                           //*/@css:duplicate|                           //*/@css:alternate|                           //*/@css:footnote-call|                           //*/@css:_obfl-on-toc-start|                           //*/@css:_obfl-on-collection-start|                           //*/@css:_obfl-on-volume-start|                           //*/@css:_obfl-on-volume-end|                           //*/@css:_obfl-on-collection-end|                           //*/@css:_obfl-on-toc-end|                           //*/@css:_obfl-on-resumed[not(.='_')]|                           //*/@css:*[matches(local-name(),'^_obfl-alternate-scenario')]                           "</span>&gt;
+                &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-pseudo-elements</span>&gt;
                     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                         Make css:before, css:after, css:duplicate, css:alternate and
                         css:footnote-call pseudo-elements from css:before, css:after, css:duplicate,
                         css:alternate and css:footnote-call attributes.
                     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-pseudo-elements</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-pseudo-elements</span>&gt;
                 &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-obfl-pseudo-elements</span>&gt;
                     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                         Make css:_obfl-on-toc-start, css:_obfl-on-collection-start,
@@ -187,17 +258,17 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"display render-table-by table-header-policy"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"display render-table-by table-header-policy"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Make css:display, css:render-table-by and css:table-header-policy attributes.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">render-table-by</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">render-table-by</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Layout tables as lists.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">render-table-by</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">render-table-by</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:render-table-by and not(@css:display='table')]"</span>&gt;
         &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">recursive-parse-stylesheet-and-make-pseudo-elements</span>&gt;
@@ -207,21 +278,12 @@
         &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">recursive-parse-stylesheet-and-make-pseudo-elements</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">viewport</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"extract-page-and-volume-styles"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span> <span class="code-xml-attribute-local-name">primary</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"_1"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"styles"</span> <span class="code-xml-attribute-local-name">sequence</span>=<span class="code-xml-attribute-value">"true"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_1"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">deep-parse-page-and-volume-stylesheets</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">sink</span>/&gt;
-    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".88"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"f:deep-parse-page-and-volume-stylesheets(/)"</span>/&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">filter</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*"</span>/&gt;
 
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".02"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".03"</span>&gt;
         &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">extract-obfl-pseudo-elements</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Extract css:_obfl-on-toc-start, css:_obfl-on-collection-start,
@@ -231,48 +293,40 @@
         &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">extract-obfl-pseudo-elements</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".04"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"content string-set counter-reset counter-set counter-increment -obfl-marker"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"content string-set counter-reset counter-set counter-increment -obfl-marker"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Make css:content, css:string-set, css:counter-reset, css:counter-set,
                 css:counter-increment and css:_obfl-marker attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-string-set</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-content</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".015"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                Evaluate css:string-set attributes.
+                Make css:string, css:text, css:content, css:counter and css:custom-func elements and
+                text nodes from css:content attributes. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-string-set</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-content</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"_"</span>/&gt;
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-content</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".015"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            Make css:string, css:text, css:content, css:counter and css:custom-func elements and
-            text nodes from css:content attributes. 
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-content</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">filter</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*"</span>/&gt;
-    
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".04"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Split into a sequence of flows.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"flow"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">"1"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"flow"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                     Make css:flow attributes.
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">split-sequence</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(/css:_[@css:flow])"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_1"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">wrap-sequence</span> <span class="code-xml-attribute-local-name">wrapper</span>=<span class="code-xml-attribute-value">"_"</span>/&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">flow-into</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_2"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">flow-into</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_2"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Extract named flows based on css:flow attributes and place anchors (css:id
                 attributes) in the normal flow.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">flow-into</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">flow-into</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">filter</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*"</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"_3"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"source"</span>&gt;
@@ -283,33 +337,33 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">identity</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">label-targets</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"label-targets"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">label-targets</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"label-targets"</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Make css:id attributes. 
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">label-targets</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">label-targets</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
       &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"@xml:base"</span>/&gt; 
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-target-content</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-target-content</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Evaluate css:content elements. 
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-target-content</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-target-content</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"white-space display list-style-type"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".24"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"white-space display"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                Make css:white-space, css:display and css:list-style-type attributes.
+                Make css:white-space and css:display attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">preserve-white-space</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">preserve-white-space</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Make css:white-space elements from css:white-space attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">preserve-white-space</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">preserve-white-space</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-scenario and not(@css:display[.=('block','table','none')])]"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"css:display"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"block"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Force "obfl-scenario" elements to be blocks.
@@ -330,23 +384,24 @@
                 Treat display:-obfl-toc and display:-obfl-list-of-references as block.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-table-grid</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-table-grid</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Create table grid structures from HTML/DTBook tables.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-table-grid</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-table-grid</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".20"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                Make css:box elements based on css:display and css:list-style-type attributes. 
+                Make css:box elements based on css:display attributes and list-style-type
+                properties. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-boxes</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-boxes</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[not(@type)]"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"type"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"inline"</span>/&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".25"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Move css:render-table-by, css:_obfl-table-col-spacing, css:_obfl-table-row-spacing
                 and css:_obfl-preferred-empty-space attributes to 'table' css:box elements.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"-obfl-table-col-spacing -obfl-table-row-spacing -obfl-preferred-empty-space"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"-obfl-table-col-spacing -obfl-table-row-spacing -obfl-preferred-empty-space"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:render-table-by]/css:box[@type='table']"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"css:render-table-by"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"parent::*/@css:render-table-by"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-table-col-spacing]/css:box[@type='table']"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"css:_obfl-table-col-spacing"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"parent::*/@css:_obfl-table-col-spacing"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-table-row-spacing]/css:box[@type='table']"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"css:_obfl-table-row-spacing"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"parent::*/@css:_obfl-table-row-spacing"</span>/&gt;
@@ -360,56 +415,58 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".55"</span>&gt;
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-counters"</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"distinct-values((                           if (not(/*/*[@selector='@page']))                           then 'page'                           else for $r in /*/*[@selector='@page'] return                                for $rr in (if ($r/*[matches(@selector,'^:')])                                            then $r/*[not(@selector)]                                            else $r) return                                  ((if ($rr/css:property) then $rr/css:property                                    else $rr/*[not(@selector)]/css:property)                                   [@name='counter-increment']/string(@value),'page')[1]                           ,                           if (not(//*[@selector='@begin']/*[@selector='@page']))                           then 'pre-page'                           else for $r in //*[@selector='@begin']/*[@selector='@page'] return                                for $rr in (if ($r/*[matches(@selector,'^:')])                                            then $r/*[not(@selector)]                                            else $r) return                                  ((if ($rr/css:property) then $rr/css:property                                    else $rr/*[not(@selector)]/css:property)                                   [@name='counter-increment']/string(@value),'pre-page')[1]                           ,                           if (not(//*[@selector='@end']/*[@selector='@page']))                           then 'post-page'                           else for $r in //*[@selector='@end']/*[@selector='@page'] return                                for $rr in (if ($r/*[matches(@selector,'^:')])                                            then $r/*[not(@selector)]                                            else $r) return                                  ((if ($rr/css:property) then $rr/css:property                                    else $rr/*[not(@selector)]/css:property)                                   [@name='counter-increment']/string(@value),'post-page')[1]                           ))"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"extract-page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"styles"</span>/&gt;
-    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".61"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-counters"</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string*"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"let $page-styles := for $s in $page-and-volume-styles return s:get($s,'@page'),                             $volume-styles := for $s in $page-and-volume-styles return s:get($s,'@volume'),                             $volume-styles := for $s in $volume-styles return ($s,for $k in s:keys($s)[matches(.,'^&amp;:')] return s:get($s,$k)),                             $volume-begin-styles := for $s in $volume-styles return s:get($s,'@begin'),                             $volume-begin-page-styles := for $s in $volume-begin-styles return s:get($s,'@page'),                             $volume-end-styles := for $s in $volume-styles return s:get($s,'@end'),                             $volume-end-page-styles := for $s in $volume-end-styles return s:get($s,'@page')                         return distinct-values((                           if (empty($page-styles)) then                             'page'                           else                             for $s in $page-styles return                               (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'page')[1]                           ,                           if (empty($volume-begin-page-styles)) then                             'pre-page'                           else                             for $s in $volume-begin-page-styles return                               (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'pre-page')[1]                           ,                           if (empty($volume-end-page-styles)) then                             'post-page'                           else                             for $s in $volume-end-page-styles return                               (for $p in s:get($s,'counter-increment') return tokenize(string($p),'\s+'),'post-page')[1]                         ))"</span>/&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-counter</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".17"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-counter</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".17"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Evaluate css:counter elements. All css:counter-set, css:counter-increment and
             css:counter-reset attributes in the output will be manipulating page counters. 
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"exclude-counters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(($page-counters,                                                                     'volume',                                                                     '-obfl-page',                                                                     '-obfl-volume',                                                                     '-obfl-volumes',                                                                     '-obfl-sheets-in-document',                                                                     '-obfl-sheets-in-volume',                                                                     '-obfl-started-volume-number',                                                                     '-obfl-started-page-number',                                                                     '-obfl-started-volume-first-content-page'),' ')"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"exclude-counters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"string-join(($page-counters,                                                                     'volume',                                                                     '-obfl-volumes',                                                                     '-obfl-sheets-in-document',                                                                     '-obfl-sheets-in-volume',                                                                     '-obfl-started-volume-number',                                                                     '-obfl-started-page-number',                                                                     '-obfl-started-volume-first-content-page'),' ')"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"css:parse-counter-styles(/_/*/@css:counter-style)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-counter-style-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-counter</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-counter</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".03"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                    Rename -obfl-collection() to flow() so that css:flow-from will process them.
+                    Rename -obfl-collection() to flow() so that css:flow-from will process them,
+                    except if ::-obfl-on-volume-start or ::-obfl-on-volume-end pseudo-elements are
+                    present and the scope is 'document'.
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-list-of-references]                                           //css:custom-func[@name='-obfl-collection'][@arg1]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"from"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"@arg1"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-list-of-references                                            and not(@css:_obfl-on-volume-start or @css:_obfl-on-volume-start)]                                           //css:custom-func[@name='-obfl-collection']|                                          *[@css:_obfl-list-of-references                                            and (@css:_obfl-on-volume-start or @css:_obfl-on-volume-start)]                                           //css:custom-func[@name='-obfl-collection']                                                            [not(@arg2='document')]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"from"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"@arg1"</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">rename</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:custom-func[@name='-obfl-collection'][@from]"</span> <span class="code-xml-attribute-local-name">new-name</span>=<span class="code-xml-attribute-value">"css:flow"</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:flow[@name='-obfl-collection'][@arg2]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"scope"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"@arg2"</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:flow[@name='-obfl-collection']/@name|                                  css:flow[@name='-obfl-collection']/@arg1|                                  css:flow[@name='-obfl-collection']/@arg2"</span>/&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                    Change scope 'document' to '-obfl-document' when ::-obfl-on-volume-start or
-                    ::-obfl-on-volume-end pseudo-elements are present.
-                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-list-of-references]                                           [@css:_obfl-on-volume-start or @css:_obfl-on-volume-start]                                           //css:flow[@from][@scope='document']"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"scope"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"'-obfl-document'"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
             &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span> <span class="code-xml-attribute-local-name">error-code</span>=<span class="code-xml-attribute-value">"XXX"</span> <span class="code-xml-attribute-local-name">message</span>=<span class="code-xml-attribute-value">"An element with 'display: -obfl-list-of-references' must consist of exactly one  -obfl-collection() or flow() and nothing more."</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                     Check that elements with "display: -obfl-list-of-references" contain exactly one
                     -obfl-collection() or flow().
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"every $e in //*[@css:_obfl-list-of-references] satisfies                                                    not($e//node()[not(self::css:box[@type='inline']|                                                                       self::css:_|                                                                       self::css:flow)])"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"test"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"every $e in //*[@css:_obfl-list-of-references] satisfies                                                    not($e//node()[not(self::css:box[@type='inline']|                                                                       self::css:_|                                                                       self::css:flow|                                                                       self::css:custom-func[@name='-obfl-collection'])])"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">assert</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">flow-from</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".03"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">flow-from</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".03"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Evaluate css:flow elements. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">flow-from</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">flow-from</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                    Rename -obfl-collection() that were previously skipped to flow().
+                &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[@css:_obfl-list-of-references]                                           //css:custom-func[@name='-obfl-collection']"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"from"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"@arg1"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">rename</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:custom-func[@name='-obfl-collection'][@from]"</span> <span class="code-xml-attribute-local-name">new-name</span>=<span class="code-xml-attribute-value">"css:flow"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:flow[@name='-obfl-collection'][@arg2]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"scope"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"@arg2"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:flow[@name='-obfl-collection']/@name|                                  css:flow[@name='-obfl-collection']/@arg1|                                  css:flow[@name='-obfl-collection']/@arg2"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Wrap unevaluated css:flow in block box so that we can be sure that when evaluated
                 later inline boxes have no descendant block boxes (see also
@@ -425,18 +482,18 @@
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-target-text</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-target-text</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Evaluate css:text elements. 
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">eval-target-text</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">eval-target-text</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".13"</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-anonymous-inline-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-anonymous-inline-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Wrap/unwrap with inline css:box elements.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-anonymous-inline-boxes</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-anonymous-inline-boxes</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"/*[@css:flow]//*/@css:volume|                          //css:box[@type='table']//*/@css:page|                          //css:box[@type='table']//*/@css:volume|                          //css:box[@type='table']//*/@css:counter-set"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Don't support 'volume' within named flows. Don't support 'volume', 'page' and
@@ -474,11 +531,11 @@
                 :top-of-page is only supported on block elements.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">shift-string-set</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".15"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-string-set</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".15"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Move css:string-set attributes to inline css:box elements. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">shift-string-set</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-string-set</span>&gt;
         &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-obfl-marker</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".15"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Move css:_obfl-marker attributes to inline css:box elements. 
@@ -486,11 +543,11 @@
         &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-obfl-marker</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
     
-    &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">shift-id</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-id</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
             Move css:id attributes to inline css:box elements.
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-    &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">shift-id</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">shift-id</span>&gt;
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".27"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:_[not(@css:* except (@css:_obfl-on-resumed|                                                   @css:_obfl-list-of-references|                                                   @css:_obfl-on-collection-start|                                                   @css:_obfl-on-collection-end|                                                   @css:_obfl-on-volume-start|                                                   @css:_obfl-on-volume-end))                                and parent::*]"</span>&gt;
@@ -503,12 +560,12 @@
                 pseudo-element. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">unwrap</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-anonymous-block-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-anonymous-block-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".05"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Wrap inline css:box elements in block css:box elements where necessary. 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">make-anonymous-block-boxes</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".25"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"margin-left margin-right margin-top margin-bottom                                           padding-left padding-right padding-top padding-bottom                                           border-left-pattern border-right-pattern border-top-pattern                                           border-bottom-pattern border-left-style border-right-style                                           border-top-style border-bottom-style text-indent"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">make-anonymous-block-boxes</span>&gt;
+        &lt;<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".25"</span> <span class="code-xml-attribute-local-name">properties</span>=<span class="code-xml-attribute-value">"margin-left margin-right margin-top margin-bottom                                              padding-left padding-right padding-top padding-bottom                                              border-left-pattern border-right-pattern border-top-pattern                                              border-bottom-pattern border-left-style border-right-style                                              border-top-style border-bottom-style text-indent"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 Make css:margin-left, css:margin-right, css:margin-top, css:margin-bottom,
                 css:padding-left, css:padding-right, css:padding-top, css:padding-bottom,
@@ -516,21 +573,18 @@
                 css:border-bottom-pattern, css:border-left-style, css:border-right-style,
                 css:border-top-style, css:border-bottom-style and css:text-indent attributes.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">parse-properties</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">adjust-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".25"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">px:</span><span class="code-xml-element-local-name">css-parse-properties</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">adjust-boxes</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".25"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                 
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">adjust-boxes</span>&gt;
-        &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">new-definition</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".40"</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">adjust-boxes</span>&gt;
+        &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">obfl-css-definition</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".40"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-                Convert CSS properties to corresponding OBFL attributes.
+                Convert CSS styles to corresponding OBFL properties.
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"definition"</span>&gt;
-                &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"obfl-css-definition.xsl"</span>/&gt;
-            &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"initial-braille-charset"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"if ($braille-charset='') then 'unicode' else 'custom'"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">new-definition</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">obfl-css-definition</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".03"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"parameters"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
@@ -571,12 +625,12 @@
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[@type='block'][following-sibling::*]/@css:page-break-after[.='auto-right']"</span>/&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"css:box[@type='block'][following-sibling::*]/@css:volume-break-after[.='always']"</span>/&gt;
             &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
-            &lt;<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">split</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span> <span class="code-xml-attribute-local-name">split-before</span>=<span class="code-xml-attribute-value">"css:box[preceding::css:box]                                             [@css:counter-set or                                              @css:page-break-before='auto-right' or                                              @css:volume-break-before='always']                                             [not(ancestor::*[@css:_obfl-scenarios])]"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">split</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span> <span class="code-xml-attribute-local-name">split-before</span>=<span class="code-xml-attribute-value">"css:box[preceding::css:box]                                             [@css:counter-set or                                              @css:page-break-before='auto-right' or                                              @css:volume-break-before='always']                                             [not(ancestor::*[@css:_obfl-scenarios])]"</span>&gt;
                 &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
                     Split before css:counter-set attributes, and before css:volume-break-before
                     attributes with value 'always'. 
                 &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
-            &lt;/<span class="code-xml-element-prefix">css:</span><span class="code-xml-element-local-name">split</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">pxi:</span><span class="code-xml-element-local-name">split</span>&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".50"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".10"</span>&gt;
@@ -672,26 +726,26 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-charset-table"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-charset"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$page-and-volume-styles"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-counters"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$page-counters"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volume-transition"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:_obfl-volume-transition"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"volume-transition"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"for $s in /_/*/@css:_obfl-volume-transition                                             /css:parse-stylesheet(concat('@-obfl-volume-transition { ',string(.),' }'))                               return s:get($s,'@-obfl-volume-transition')"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-volume-transition-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"default-text-transform"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$text-transform"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text-transforms"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:text-transform"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"text-transforms"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:text-transform/css:parse-stylesheet(.)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-text-transform-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"hyphenation-resources"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:hyphenation-resource"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"hyphenation-resources"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:hyphenation-resource/css:parse-stylesheet(.)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-hyphenation-resource-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:counter-style"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:counter-style/css:parse-stylesheet(.)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-counter-style-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
-        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/*/*"</span>&gt;
-            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"extract-page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"styles"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
     
@@ -712,11 +766,15 @@
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"braille-charset-table"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$braille-charset"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
-        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:counter-style"</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"page-and-volume-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$page-and-volume-styles"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">empty</span>/&gt;
+        &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
+        &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"counter-styles"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"/_/*/@css:counter-style/css:parse-stylesheet(.)"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">pipe</span> <span class="code-xml-attribute-local-name">step</span>=<span class="code-xml-attribute-value">"assert-counter-style-only-on-root"</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">with-param</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span>&gt;
     
+    &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">group</span>&gt;
     
     
@@ -731,17 +789,17 @@
     &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">choose</span>&gt;
     
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[not(@value)]                                         [some $class in @class satisfies                                          preceding::obfl:marker[concat(@class,'/prev')=$class]]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"value"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"(for $class in @class return                               (preceding::obfl:marker[concat(@class,'/prev')=$class])[last()]/@value)[1]"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">label-elements</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[not(@value)]                                         [some $class in @class satisfies                                          preceding::obfl:marker[concat(@class,'/prev')=$class]]"</span> <span class="code-xml-attribute-local-name">attribute</span>=<span class="code-xml-attribute-value">"value"</span> <span class="code-xml-attribute-local-name">label</span>=<span class="code-xml-attribute-value">"(for $class in @class return                               (preceding::obfl:marker[concat(@class,'/prev')=$class])[last()]/@value)[1]"</span>/&gt;
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[not(@value)]"</span>/&gt;
     
     
     &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">delete</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[for $class in @class return                                  not(//obfl:marker-reference[@marker=$class] or                                      //obfl:marker-indicator[tokenize(normalize-space(@markers),' ')=$class])]"</span>/&gt;
 
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[@value='']"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"value"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"​"</span>/&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">add-attribute</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"obfl:marker[@value='']"</span> <span class="code-xml-attribute-local-name">attribute-name</span>=<span class="code-xml-attribute-value">"value"</span> <span class="code-xml-attribute-local-name">attribute-value</span>=<span class="code-xml-attribute-value">"​"</span>/&gt;
 
     
-    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".005"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">xslt</span> <span class="code-xml-attribute-prefix">px:</span><span class="code-xml-attribute-local-name">progress</span>=<span class="code-xml-attribute-value">".01"</span>&gt;
         &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"stylesheet"</span>&gt;
             &lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">document</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"<a href="/pipeline/modules/braille/dotify-utils/src/main/resources/xml/move-table-of-contents.xsl" class="source">move-table-of-contents.xsl</a>"</span>/&gt;
         &lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">input</span>&gt;

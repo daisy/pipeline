@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>CssAnalyzeStep xref</title>
@@ -53,8 +53,8 @@
 <a class="jxr_linenumber" name="L44" href="#L44">44</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.calabash.XProcStepProvider;
 <a class="jxr_linenumber" name="L45" href="#L45">45</a>  <strong class="jxr_keyword">import</strong> org.daisy.common.xproc.XProcMonitor;
 <a class="jxr_linenumber" name="L46" href="#L46">46</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.Medium;
-<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.sass.SassAnalyzer;
-<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.sass.SassAnalyzer.SassVariable;
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.CssAnalyzer;
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.CssAnalyzer.SassVariable;
 <a class="jxr_linenumber" name="L49" href="#L49">49</a>  <strong class="jxr_keyword">import</strong> org.daisy.pipeline.css.UserAgentStylesheetRegistry;
 <a class="jxr_linenumber" name="L50" href="#L50">50</a>  
 <a class="jxr_linenumber" name="L51" href="#L51">51</a>  <strong class="jxr_keyword">import</strong> org.osgi.service.component.annotations.Component;
@@ -156,7 +156,7 @@
 <a class="jxr_linenumber" name="L147" href="#L147">147</a> 								<strong class="jxr_keyword">new</strong> InputSource(URLs.resolve(baseURI, URLs.asURI(t.nextToken())).toASCIIString())));
 <a class="jxr_linenumber" name="L148" href="#L148">148</a> 				}
 <a class="jxr_linenumber" name="L149" href="#L149">149</a> 			}
-<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">for</strong> (SassVariable v : <strong class="jxr_keyword">new</strong> SassAnalyzer(media, cssURIResolver, <strong class="jxr_keyword">null</strong>)
+<a class="jxr_linenumber" name="L150" href="#L150">150</a> 			<strong class="jxr_keyword">for</strong> (SassVariable v : <strong class="jxr_keyword">new</strong> CssAnalyzer(media, cssURIResolver, <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L151" href="#L151">151</a> 			                          .analyze(stylesheets, sourceDocument)
 <a class="jxr_linenumber" name="L152" href="#L152">152</a> 			                          .getVariables()) {
 <a class="jxr_linenumber" name="L153" href="#L153">153</a> 				<strong class="jxr_keyword">if</strong> (params.containsKey(v.getName()) &amp;&amp; v.isDefault())
@@ -252,6 +252,6 @@
 <a class="jxr_linenumber" name="L243" href="#L243">243</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

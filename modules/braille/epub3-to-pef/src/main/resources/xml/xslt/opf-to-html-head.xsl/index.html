@@ -30,7 +30,17 @@
         &lt;/<span class="code-xml-element-local-name">title</span>&gt;
     &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
 
-    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[not(self::opf:*) and not(self::dc:title)]"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"dc:creator[not(@refines) and not(dc:creator[not(@refines)])]"</span>&gt;
+        &lt;<span class="code-xml-element-local-name">creator</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@scheme|@http-equiv|@lang|@dir"</span>/&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@xml:lang"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"lang"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@xml:lang"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"normalize-space(.)"</span>/&gt;
+        &lt;/<span class="code-xml-element-local-name">creator</span>&gt;
+    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">match</span>=<span class="code-xml-attribute-value">"*[not(self::opf:*) and not(self::dc:title) and not(self::dc:creator)]"</span>&gt;
         &lt;<span class="code-xml-element-local-name">meta</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"{name()}"</span> <span class="code-xml-attribute-local-name">content</span>=<span class="code-xml-attribute-value">"{normalize-space(.)}"</span>&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">copy-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"@scheme|@http-equiv|@lang|@dir"</span>/&gt;
             &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"@xml:lang"</span>&gt;

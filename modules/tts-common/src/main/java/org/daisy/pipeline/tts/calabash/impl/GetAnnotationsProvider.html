@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>GetAnnotationsProvider xref</title>
@@ -75,7 +75,7 @@
 <a class="jxr_linenumber" name="L66" href="#L66">66</a>  			<strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">void</strong> run() <strong class="jxr_keyword">throws</strong> SaxonApiException {
 <a class="jxr_linenumber" name="L67" href="#L67">67</a>  
 <a class="jxr_linenumber" name="L68" href="#L68">68</a>  				AnnotationsConfigExtension annoExt = <strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/AnnotationsConfigExtension.html">AnnotationsConfigExtension</a>();
-<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(runtime.getProcessor(), mConfig.read(), annoExt);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  				<strong class="jxr_keyword">new</strong> <a href="/pipeline/modules/tts-common/src/main/java/org/daisy/pipeline/tts/config/ConfigReader.html">ConfigReader</a>(runtime.getProcessor(), mConfig.read(), properties, annoExt);
 <a class="jxr_linenumber" name="L70" href="#L70">70</a>  
 <a class="jxr_linenumber" name="L71" href="#L71">71</a>  				<strong class="jxr_keyword">for</strong> (XdmNode annotations : annoExt.getAnnotations(mContentType)) {
 <a class="jxr_linenumber" name="L72" href="#L72">72</a>  					mResult.write(annotations);
@@ -94,6 +94,6 @@
 <a class="jxr_linenumber" name="L85" href="#L85">85</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

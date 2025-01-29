@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>SassAnalyzer xref</title>
@@ -195,7 +195,7 @@
 <a class="jxr_linenumber" name="L186" href="#L186">186</a> 				Reader r = ss.getReader();
 <a class="jxr_linenumber" name="L187" href="#L187">187</a> 				<strong class="jxr_keyword">if</strong> (r == <strong class="jxr_keyword">null</strong>)
 <a class="jxr_linenumber" name="L188" href="#L188">188</a> 					r = <strong class="jxr_keyword">new</strong> InputStreamReader(ss.getInputStream(), StandardCharsets.UTF_8);
-<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				stylesheets.add(<strong class="jxr_keyword">new</strong> CSSSource(CharStreams.toString(r), <strong class="jxr_keyword">null</strong>, base, 0, 0));
+<a class="jxr_linenumber" name="L189" href="#L189">189</a> 				stylesheets.add(<strong class="jxr_keyword">new</strong> CSSSource(CharStreams.toString(r), (String)<strong class="jxr_keyword">null</strong>, base, 0, 0));
 <a class="jxr_linenumber" name="L190" href="#L190">190</a> 			} <strong class="jxr_keyword">else</strong> {
 <a class="jxr_linenumber" name="L191" href="#L191">191</a> 				<strong class="jxr_keyword">if</strong> (base == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L192" href="#L192">192</a> 					InputSource is = SAXSource.sourceToInputSource(s);
@@ -209,7 +209,7 @@
 <a class="jxr_linenumber" name="L200" href="#L200">200</a> 						<strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L201" href="#L201">201</a> 							<strong class="jxr_keyword">throw</strong> <strong class="jxr_keyword">new</strong> IllegalArgumentException(<span class="jxr_string">"unexpected source: no content and no base URI"</span>);
 <a class="jxr_linenumber" name="L202" href="#L202">202</a> 					}
-<a class="jxr_linenumber" name="L203" href="#L203">203</a> 					stylesheets.add(<strong class="jxr_keyword">new</strong> CSSSource(CharStreams.toString(r), <strong class="jxr_keyword">null</strong>, base, 0, 0));
+<a class="jxr_linenumber" name="L203" href="#L203">203</a> 					stylesheets.add(<strong class="jxr_keyword">new</strong> CSSSource(CharStreams.toString(r), (String)<strong class="jxr_keyword">null</strong>, base, 0, 0));
 <a class="jxr_linenumber" name="L204" href="#L204">204</a> 				} <strong class="jxr_keyword">else</strong>
 <a class="jxr_linenumber" name="L205" href="#L205">205</a> 					stylesheets.add(<strong class="jxr_keyword">new</strong> CSSSource(base, StandardCharsets.UTF_8, <strong class="jxr_keyword">null</strong>));
 <a class="jxr_linenumber" name="L206" href="#L206">206</a> 			}
@@ -364,6 +364,6 @@
 <a class="jxr_linenumber" name="L355" href="#L355">355</a> }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>

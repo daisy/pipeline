@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../load.xpl">
+</head>
+<body><div class="code" about="../load.xpl">&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">p</span>=<span class="code-xml-attribute-value">"http://www.w3.org/ns/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">px</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/ns/pipeline/xproc"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cx</span>=<span class="code-xml-attribute-value">"http://xmlcalabash.com/ns/extensions"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"1.0"</span> <span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"px:load"</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+		&lt;<span class="code-xml-element-local-name">p</span>&gt;Like &lt;<span class="code-xml-element-local-name">a</span> <span class="code-xml-attribute-local-name">href</span>=<span class="code-xml-attribute-value">"https://www.w3.org/XML/XProc/docs/langspec.html#c.load"</span>&gt;&lt;<span class="code-xml-element-local-name">code</span>&gt;p:load&lt;/<span class="code-xml-element-local-name">code</span>&gt;&lt;/<span class="code-xml-element-local-name">a</span>&gt;,
+		but also handles certain non-XML input when the optional
+		&lt;<span class="code-xml-element-local-name">code</span>&gt;content-type&lt;/<span class="code-xml-element-local-name">code</span>&gt; is specified.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"href"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"true"</span> <span class="code-xml-attribute-prefix">cx:</span><span class="code-xml-attribute-local-name">type</span>=<span class="code-xml-attribute-value">"xs:anyURI"</span>/&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"content-type"</span> <span class="code-xml-attribute-local-name">required</span>=<span class="code-xml-attribute-value">"false"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;A mime type.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">option</span>&gt;
+
+	&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span> <span class="code-xml-attribute-local-name">port</span>=<span class="code-xml-attribute-value">"result"</span>&gt;
+		&lt;<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/xhtml"</span>&gt;
+			&lt;<span class="code-xml-element-local-name">p</span>&gt;The parsed document. When &lt;<span class="code-xml-element-local-name">code</span>&gt;content-type&lt;/<span class="code-xml-element-local-name">code</span>&gt; is
+			specified, it is used to select a special-purpose
+			parser. Falls back to a standard XML parser.&lt;/<span class="code-xml-element-local-name">p</span>&gt;
+		&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">documentation</span>&gt;
+	&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">output</span>&gt;
+
+	
+
+&lt;/<span class="code-xml-element-prefix">p:</span><span class="code-xml-element-local-name">declare-step</span>&gt;</div></body>
+</html>

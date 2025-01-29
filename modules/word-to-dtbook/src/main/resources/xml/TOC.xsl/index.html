@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html vocab="http://www.daisy.org/ns/pipeline/" typeof="source">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="content-language" content="en">
+<link rel="stylesheet" type="text/css" href="/pipeline/css/nxml-mode.css">
+<link rel="shortcut icon" href="http://www.daisy.org/sites/default/files/favicon_0.ico">
+<link rev="doc" href="../TOC.xsl">
+</head>
+<body><div class="code" about="../TOC.xsl">&lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsl</span>=<span class="code-xml-attribute-value">"http://www.w3.org/1999/XSL/Transform"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xs</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">w</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/wordprocessingml/2006/main"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">pic</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/drawingml/2006/picture"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">wp</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">dcterms</span>=<span class="code-xml-attribute-value">"http://purl.org/dc/terms/"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">xsi</span>=<span class="code-xml-attribute-value">"http://www.w3.org/2001/XMLSchema-instance"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">cp</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/package/2006/metadata/core-properties"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">dc</span>=<span class="code-xml-attribute-value">"http://purl.org/dc/elements/1.1/"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">a</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/drawingml/2006/main"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">r</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/officeDocument/2006/relationships"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">v</span>=<span class="code-xml-attribute-value">"urn:schemas-microsoft-com:vml"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">m</span>=<span class="code-xml-attribute-value">"http://schemas.openxmlformats.org/officeDocument/2006/math"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">dcmitype</span>=<span class="code-xml-attribute-value">"http://purl.org/dc/dcmitype/"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">o</span>=<span class="code-xml-attribute-value">"urn:schemas-microsoft-com:office:office"</span> <span class="code-xml-attribute-prefix">xmlns:</span><span class="code-xml-attribute-local-name">d</span>=<span class="code-xml-attribute-value">"org.daisy.pipeline.word_to_dtbook.impl.DaisyClass"</span> <span class="code-xml-attribute-prefix">xmlns</span>=<span class="code-xml-attribute-value">"http://www.daisy.org/z3986/2005/dtbook/"</span> <span class="code-xml-attribute-local-name">version</span>=<span class="code-xml-attribute-value">"2.0"</span> <span class="code-xml-attribute-local-name">exclude-result-prefixes</span>=<span class="code-xml-attribute-value">"w pic wp dcterms xsi cp dc a r v dcmitype d xsl m o xs"</span>&gt;
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"Cite_style"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:Citation($myObj)"</span>/&gt;
+
+  
+  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"TableOfContents"</span>&gt;
+    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">param</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"pagination"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span>/&gt;
+    
+
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$documentXml//w:document/w:body/node()"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"self::w:p"</span>&gt;
+          
+          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:pPr/w:pStyle[substring(@w:val,1,3)='TOC']"</span>&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:hyperlink"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set_list"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:Set_Toc($myObj)"</span>/&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$set_list=1"</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;level1&gt;'"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:pPr/w:pStyle[@w:val='TOCHeading']"</span>&gt;
+                  &lt;<span class="code-xml-element-local-name">h1</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r/w:t"</span>/&gt;
+                  &lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;list type="pl"&gt;'"</span>/&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+              
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:hyperlink and not(w:pPr/w:pStyle[@w:val='TOCHeading'])"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;li&gt;'"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:hyperlink/w:r/w:rPr/w:rStyle[@w:val='Hyperlink']"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"club"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"../../w:t"</span>/&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:SetTOCMessage($myObj,$club)"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:GetTOCMessage($myObj)"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:NullMsg($myObj)"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:hyperlink/w:r"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(w:rPr/w:rStyle[@w:val='Hyperlink'])and w:t"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;pagenum&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:t"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/li&gt;'"</span>/&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+          &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"d:Set_Toc($myObj)&gt;1"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/list&gt;'"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/level1&gt;'"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:sink(d:Get_Toc($myObj))"</span>/&gt; 
+
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$documentXml//w:document/w:body/node()"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"self::w:p"</span>&gt;
+          
+          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:pPr/w:pStyle[substring(@w:val,1,3)='TOC']"</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(w:hyperlink)"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"set_list"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:Set_Toc($myObj)"</span>/&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$set_list=1"</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;level1&gt;'"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:pPr/w:pStyle[@w:val='TOCHeading']"</span>&gt;
+                  &lt;<span class="code-xml-element-local-name">h1</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r/w:t"</span>/&gt;
+                  &lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;list type="pl"&gt;'"</span>/&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;li&gt;'"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:t"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"setToc"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:integer"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:Set_tabToc($myObj)"</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$setToc&gt;=2"</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;
+                            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'pagenum'"</span>/&gt;
+                          &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+                          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt; &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:t"</span>/&gt;
+                        &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">when</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                        &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                          &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:t"</span>/&gt;
+                        &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">otherwise</span>&gt;
+                    &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">choose</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:sink(d:Get_tabToc($myObj))"</span>/&gt; 
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/li&gt;'"</span>/&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+          &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"d:Set_Toc($myObj)&gt;1"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/list&gt;'"</span>/&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/level1&gt;'"</span>/&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:sink(d:Get_Toc($myObj))"</span>/&gt; 
+
+      
+      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"$documentXml//w:body/w:sdt"</span>&gt;
+        
+        &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:sdtPr/w:docPartObj/w:docPartGallery/@w:val='Table of Contents'"</span>&gt;
+          &lt;<span class="code-xml-element-local-name">level1</span>&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'print_toc'"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">sequence</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:sink(d:CheckTocOccur($myObj))"</span>/&gt; 
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"$pagination='automatic'"</span>&gt;
+              
+              
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;<span class="code-xml-element-local-name">h1</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:sdtContent/w:p/w:r/w:t"</span>/&gt;
+            &lt;/<span class="code-xml-element-local-name">h1</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;list type="pl"&gt;'"</span>/&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"w:sdtContent/w:p/w:hyperlink"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:sdtContent/w:p/w:hyperlink"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;li&gt;'"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r/w:rPr/w:rStyle[@w:val='Hyperlink']"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"club"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"../../w:t"</span>/&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:SetTOCMessage($myObj,$club)"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:GetTOCMessage($myObj)"</span>/&gt;
+                &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:NullMsg($myObj)"</span>/&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(w:rPr/w:rStyle[@w:val='Hyperlink']) and w:t"</span>&gt;
+                    &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"class"</span>&gt;pagenum&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">attribute</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">text</span>&gt;
+                      &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:t"</span>/&gt;
+                    &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/li&gt;'"</span>/&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(w:sdtContent/w:p/w:hyperlink)"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:sdtContent/w:p"</span>&gt;
+                &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"not(w:pPr/w:pStyle[@w:val='TOCHeading'])"</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;li&gt;'"</span>/&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"w:r/w:t"</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">variable</span> <span class="code-xml-attribute-local-name">name</span>=<span class="code-xml-attribute-value">"club"</span> <span class="code-xml-attribute-local-name">as</span>=<span class="code-xml-attribute-value">"xs:string"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"."</span>/&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:SetTOCMessage($myObj,$club)"</span>/&gt;
+                  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+                  &lt;<span class="code-xml-element-local-name">lic</span>&gt;
+                    &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:GetTOCMessage($myObj)"</span>/&gt;
+                  &lt;/<span class="code-xml-element-local-name">lic</span>&gt;
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"d:NullMsg($myObj)"</span>/&gt;
+                  
+                  &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/li&gt;'"</span>/&gt;
+                &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+              &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+            &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span> <span class="code-xml-attribute-local-name">test</span>=<span class="code-xml-attribute-value">"(not(following-sibling::node()[1][w:r/w:rPr/w:rStyle[substring(@w:val,1,15)='PageNumberDAISY']]) and ($pagination='custom')) or (not($pagination='custom'))"</span>&gt;
+              &lt;<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">value-of</span> <span class="code-xml-attribute-local-name">disable-output-escaping</span>=<span class="code-xml-attribute-value">"yes"</span> <span class="code-xml-attribute-local-name">select</span>=<span class="code-xml-attribute-value">"'&lt;/list&gt;'"</span>/&gt;
+            &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+          &lt;/<span class="code-xml-element-local-name">level1</span>&gt;
+        &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">if</span>&gt;
+      &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">for-each</span>&gt;
+    
+  &lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">template</span>&gt;
+
+&lt;/<span class="code-xml-element-prefix">xsl:</span><span class="code-xml-element-local-name">stylesheet</span>&gt;</div></body>
+</html>

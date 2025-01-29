@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns:pf="http://www.daisy.org/ns/pipeline/functions" xmlns="http://www.w3.org/1999/xhtml">
+<head prefix="dc: http://purl.org/dc/elements/1.1/                   dp2: http://www.daisy.org/ns/pipeline/">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title property="dc:title">word-to-dtbook.script {http://www.daisy.org/ns/pipeline/xproc}</title>
+<link rev="dp2:doc" href="http://www.daisy.org/pipeline/modules/word-to-dtbook/word-to-dtbook.xpl">
+<link rel="rdf:type" href="http://www.daisy.org/ns/pipeline/apidoc">
+<style type="text/css" prefix="">
+        
+                 table                   { width: 100%; empty-cells: show; }
+                 thead                   { background-color: 184882; color: white; font-weight: bold; }
+                 td                      { vertical-align: top; padding: 2px; }
+                 .name                   { /* font-family: sans-serif; */ }
+                 .uri, .code             { font-family: monospace; }
+                 .primary, .required     { font-weight: bold; }
+                 .details                { display:block; text-align:right; font-size: x-small; font-style: italic; }
+                 .nowrap                 { white-space: nowrap; }
+                 .small                  { font-size: x-small; }
+        
+      </style>
+</head>
+<body>
+<h2>
+            Step <span class="name">word-to-dtbook.script</span> <span class="uri">{http://www.daisy.org/ns/pipeline/xproc}</span>
+</h2>
+<h1 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Word to DTBook</h1>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Transforms a Microsoft Office Word (.docx) document into a DTBook XML file.</p>
+<a xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="homepage" href="/pipeline/Get-Help/User-Guide/Scripts/word-to-dtbook">
+			Online documentation
+		</a><div>Defined in:
+          <span class="uri">http://www.daisy.org/pipeline/modules/word-to-dtbook/word-to-dtbook.xpl</span>
+</div>
+<h3>Options</h3>
+<table border="1">
+<thead><tr>
+<td class="nowrap">Local Name</td>
+<td class="nowrap">Namespace URI</td>
+<td class="nowrap">Default</td>
+<td>Description</td>
+</tr></thead>
+<tbody>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">source</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td>
+<h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Input Docx file</h2>
+<p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">The document you want to convert.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="required">result</span><span class="details"> required</span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code"></td>
+<td>
+<h2 xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">DTBook output</h2>
+<p xmlns="" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc" xml:space="preserve">Output folder of the conversion to DTBook XML</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">title</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Document title</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">creator</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Document author</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">publisher</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Document publisher</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">uid</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Document identifier</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Identifier to be added as dtb:uid metadata</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">subject</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Subject(s)</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Subject(s) to be added as dc:Subject metadata</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">accept-revisions</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Accept revisions</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">If the document has revisions that are not accepted, consider them as accepted for the conversion.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">version</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'14'</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">MasterSub</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">pagination</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'custom'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Pagination mode</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Define how page numbers are computed and inserted in the result</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">image-size</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'original'</td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Image resizing</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">dpi</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">96</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Image resampling value</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Image resampling targeted resolution in dpi (dot-per-inch)</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">character-styles</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td><h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Translate character styles</h2></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-position</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'end'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes position</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Footnotes position in content</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-level</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">0</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes insertion level</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Lowest level into which notes are inserted in content.
+			0 means the footnotes will be inserted as close as possible of its first call.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-numbering</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">'none'</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes numbering</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Customize footnotes numbering</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-start-value</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">1</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes starting value</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">If footnotes numbering is required, start the notes numbering process from this value</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-numbering-prefix</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes number prefix</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Add a prefix before the note's number if numbering is requested.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">footnotes-numbering-suffix</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">''</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Footnotes number suffix</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Add a text between the note's number and the note's content.</p>
+</td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">disableDateGeneration</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td></td>
+</tr>
+<tr>
+<td width="150px;" class="nowrap name">
+<span class="">extract-shapes</span><span class="details"></span>
+</td>
+<td width="10px" class="nowrap uri"></td>
+<td width="10px" class="nowrap code">false()</td>
+<td>
+<h2 xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="name">Extract vector shapes (Experimental)</h2>
+<p xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:xd="http://github.com/vojtechtoman/xprocdoc" px:role="desc">Try to export inline shapes like diagrams or charts during conversion using Microsoft Word.
+				If deactivated, those shapes will be replaced by their name and description in the result.
+
+				Proceed with caution : Word must not be blocked by any dialog bound to it, or the process might crash or get stuck indefinitely</p>
+</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

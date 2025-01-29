@@ -39,14 +39,14 @@
 </tr></thead>
 <tbody>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e301.html">add-xml-base</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e304.html">add-xml-base</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Does the same as p:add-xml-base, but has an additional
 		option called root to omit the xml:base attribute on the document element if
 		the input does not have an xml:base attribute on the document element either.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e436.html">assert-xml-declaration</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e479.html">assert-xml-declaration</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/xprocspec</td>
 <td>expect example:
             &lt;c:result version="1.0" encoding="UTF-8" standalone="true"/&gt;
@@ -56,84 +56,91 @@
             - empty or missing attributes means that those attributes must not be present in the xml declaration</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e107.html">copy-resource</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e110.html">copy-resource</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e465.html">copy</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e509.html">copy</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e538.html">cwd</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e582.html">cwd</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e335.html">data</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e338.html">data</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Step that behaves like a p:identity with a p:data input, with an option to
 		set the href.
 		Makes use of p:http-request.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e475.html">delete</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e519.html">delete</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e64.html">directory-list</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e67.html">directory-list</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>The p:directory-list step will return the contents of a single directory. The px:directory-list step will process a directory and it's subdirectories recursively. See also: http://xproc.org/library/#recursive-directory-list.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e160.html">file-peek</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e163.html">file-peek</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e205.html">file-xml-peek</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e208.html">file-xml-peek</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e487.html">head</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e531.html">head</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e481.html">info</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e525.html">info</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e497.html">mkdir</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e382.html">load</a></td>
+<td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
+<td>Like p:load,
+		but also handles certain non-XML input when the optional
+		content-type is specified.</td>
+</tr>
+<tr>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e541.html">mkdir</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e503.html">move</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e547.html">move</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e273.html">normalize-document-base</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e276.html">normalize-document-base</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e261.html">normalize-uri</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e264.html">normalize-uri</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e379.html">read-doctype</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e422.html">read-doctype</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Read the doctype declaration of an XML file.</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e413.html">read-xml-declaration</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e456.html">read-xml-declaration</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Example usage:
         
@@ -145,7 +152,7 @@
             &lt;c:result xmlns:c="http://www.w3.org/ns/xproc-step" standalone="yes" encoding="UTF-8" has-xml-declaration= [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e281.html">set-base-uri</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e284.html">set-base-uri</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Changes the base URI of the document.
 		px:set-base-uri has an effect on all elements that do not have an ancestor with an
@@ -153,24 +160,24 @@
 		different base URI than its parent does not matter as long as this is not made expli [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e125.html">set-doctype</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e128.html">set-doctype</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Sets, or deletes, the doctype of a file. If `doctype` is the empty string, the doctype will be deleted. It is an error if `doctype` does not match the regex
             `^&lt;!DOCTYPE\s+\w+\s*(|SYSTEM\s+("[^"]*"|'[^']*')|PUBLIC\s+("[\s\w\-'()+,\./:=?;!*#@$_%]*"|'[\s\w\-()+,\./:=?;!*#@$_%]*')\s+("[^ [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e227.html">set-xml-declaration</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e230.html">set-xml-declaration</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Sets, or deletes, the xml declaration of a file. If `xml-declaration` is the empty string, the xml declaration will be deleted. It is an error if `xml-declaration` does not match the regex
             `^&lt;\?xml[ \t\r\n]+version[ \t\r\n]*=[ \t\r\n]*(''1\.[0-9]+''|"1.[0-9]+")([ \t\r\n]+encoding[ \t [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e511.html">tail</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e555.html">tail</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e82.html">tempdir</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e85.html">tempdir</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td>Returns a &lt;c:result&gt; containing the absolute URI of a temporary
         directory, which is guaranteed not to already exist. The directory is created inside the
@@ -178,12 +185,12 @@
         system-dependent default temporary-file directory will b [...]</td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e521.html">tempfile</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e565.html">tempfile</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>
 <tr>
-<td width="150px" class="nowrap name"><a href="/pipeline/api/d1678e532.html">touch</a></td>
+<td width="150px" class="nowrap name"><a href="/pipeline/api/d1749e576.html">touch</a></td>
 <td width="150px" class="nowrap uri">http://www.daisy.org/ns/pipeline/xproc</td>
 <td></td>
 </tr>

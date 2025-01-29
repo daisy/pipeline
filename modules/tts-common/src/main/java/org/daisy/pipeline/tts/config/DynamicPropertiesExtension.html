@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_BE" lang="en_BE">
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <title>DynamicPropertiesExtension xref</title>
@@ -35,8 +35,8 @@
 <a class="jxr_linenumber" name="L26" href="#L26">26</a>  		String key = node.getAttributeValue(<strong class="jxr_keyword">new</strong> QName(<strong class="jxr_keyword">null</strong>, <span class="jxr_string">"key"</span>));
 <a class="jxr_linenumber" name="L27" href="#L27">27</a>  		<strong class="jxr_keyword">if</strong> (<span class="jxr_string">"property"</span>.equalsIgnoreCase(name)) {
 <a class="jxr_linenumber" name="L28" href="#L28">28</a>  			<strong class="jxr_keyword">if</strong> (HOST_PROTECTION_PROPERTY.equalsIgnoreCase(<span class="jxr_string">"false"</span>)) {
-<a class="jxr_linenumber" name="L29" href="#L29">29</a>  				<em class="jxr_comment">//	logger.warn("'" + HOST_PROTECTION_PROPERTY + "' setting is deprecated. " +</em>
-<a class="jxr_linenumber" name="L30" href="#L30">30</a>  				<em class="jxr_comment">//	            "It may become unavailable in future version of DAISY Pipeline.");</em>
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  					logger.warn(<span class="jxr_string">"'"</span> + HOST_PROTECTION_PROPERTY + <span class="jxr_string">"' setting is deprecated. "</span> +
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>  					            <span class="jxr_string">"It may become unavailable in future version of DAISY Pipeline."</span>);
 <a class="jxr_linenumber" name="L31" href="#L31">31</a>  				<strong class="jxr_keyword">if</strong> (key == <strong class="jxr_keyword">null</strong>) {
 <a class="jxr_linenumber" name="L32" href="#L32">32</a>  					logger.warn(<span class="jxr_string">"Missing key for config's property "</span> + node.toString());
 <a class="jxr_linenumber" name="L33" href="#L33">33</a>  				} <strong class="jxr_keyword">else</strong> {
@@ -68,6 +68,6 @@
 <a class="jxr_linenumber" name="L59" href="#L59">59</a>  }
 </pre>
 <hr>
-<div id="footer">Copyright © 2010–2024 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
+<div id="footer">Copyright © 2010–2025 <a href="http://www.daisy.org/" class="external-link" target="_blank">The DAISY Consortium</a>. All rights reserved.</div>
 </body>
 </html>
