@@ -13,7 +13,7 @@
 		</a>
 	</p:documentation>
 
-	<p:option name="source" required="true" px:type="anyFileURI">
+	<p:option name="source" required="true" px:type="anyFileURI" px:media-type="application/vnd.openxmlformats-officedocument.wordprocessingml.document">
 		<p:documentation>
 			<h2 px:role="name">Input Docx file</h2>
 			<p px:role="desc" xml:space="preserve">The document you want to convert.</p>
