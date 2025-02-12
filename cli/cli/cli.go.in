@@ -131,14 +131,11 @@ func NewCli(name string, link *PipelineLink) (cli *Cli, err error) {
 			os.Exit(-1)
 		}
 		cli.AddScripts(scripts, link)
-		if !link.IsLocal() {
-			//it we are not in local mode we need to send the data
-			for _, cmd := range cli.Scripts {
-
-				cmd.addDataOption()
-			}
+		for _, cmd := range cli.Scripts {
+			//if we are not in local mode we need to send the data
+			//a remote server can also be in local mode, so always allow the data option
+			cmd.addDataOption(!link.IsLocal())
 		}
-
 		return nil
 	})
 	//add config flags
@@ -171,7 +168,10 @@ func (c *Cli) setHelp() {
 //Adds the configuration global options to the parser
 func (c *Cli) addConfigOptions(conf Config) {
 	for option, desc := range config_descriptions {
-		c.AddOption(option, "", fmt.Sprintf("%v (default %v)", desc, conf[option]), "", "", func(optName string, value string) error {
+		if conf[option] != "" {
+			desc = fmt.Sprintf("%v (default %v)", desc, conf[option])
+		}
+		c.AddOption(option, "", desc, "", "", func(optName string, value string) error {
 			log.Println("option:", optName, "value:", value)
 			switch conf[optName].(type) {
 			case int:

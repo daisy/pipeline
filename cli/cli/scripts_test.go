@@ -14,14 +14,14 @@ import (
 
 func TestGetBasePath(t *testing.T) {
 	//return os.Getwd()
-	basePath := getBasePath(true)
+	basePath := getBasePath(nil)
 	if len(basePath) == 0 {
 		t.Error("Base path is 0")
 	}
 	if basePath[len(basePath)-1] != "/"[0] {
 		t.Error("Last element of the basePath should be /")
 	}
-	basePath = getBasePath(false)
+	basePath = getBasePath(make([]byte, 0))
 	if len(basePath) != 0 {
 		t.Errorf("Base path len is !=0: %v", basePath)
 	}
@@ -213,18 +213,33 @@ func TestScriptToCommand(t *testing.T) {
 		t.Error("script not set")
 	}
 	fmt.Printf("jobRequest.Inputs %+v\n", jobRequest.Inputs)
-	if jobRequest.Inputs["source"][0].String() != "./tmp/file" {
-		t.Errorf("Input source not set %v", jobRequest.Inputs["source"][0].String())
+	input, err := jobRequest.Inputs["source"][0](jobRequest.Data)
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
 	}
-	if jobRequest.Inputs["single"][0].String() != "./tmp/file2" {
-		t.Errorf("Input source not set %v", jobRequest.Inputs["source"][0].String())
+	if input.String() != "./tmp/file" {
+		t.Errorf("Input source not set %v", input.String())
 	}
-	if jobRequest.Options["test-opt"][0] != "./myfile.xml" {
-		t.Errorf("Option test opt not set %v", jobRequest.Options["test-opt"][0])
+	input, err = jobRequest.Inputs["single"][0](jobRequest.Data)
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
 	}
-
-	if jobRequest.Options["another-opt"][0] != "bar" {
-		t.Errorf("Option test opt not set %v", jobRequest.Options["another-opt"][0])
+	if input.String() != "./tmp/file2" {
+		t.Errorf("Input source not set %v", input.String())
+	}
+	option, err := jobRequest.Options["test-opt"][0](jobRequest.Data)
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+	if option != "./myfile.xml" {
+		t.Errorf("Option test opt not set %v", option)
+	}
+	option, err = jobRequest.Options["another-opt"][0](jobRequest.Data)
+	if err != nil {
+		t.Errorf("Unexpected error %v", err)
+	}
+	if option != "bar" {
+		t.Errorf("Option test opt not set %v", option)
 	}
 }
 

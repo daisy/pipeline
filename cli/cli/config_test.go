@@ -12,18 +12,12 @@ import (
 
 var (
 	YAML = `
-#WS CONFIGURATION
 host: http://daisy.org
 port: 9999
 ws_path: ws
-ws_timeup: 10
-#DP2 launch config 
-exec_line: prog 
-local: true
-# ROBOT CONF
+app_path: prog
 client_key: clientid
 client_secret: supersecret
-#connection settings
 timeout: 10
 #debug
 debug: true 
@@ -35,12 +29,12 @@ starting: true
 		"host":          "http://daisy.org",
 		"port":          9999,
 		"ws_path":       "ws",
-		"ws_timeup":     10,
-		"exec_line":     "prog",
+		"app_path":      "", // value should be emptied by the loading to avoid loading non existing programs
+		"exec_line":     "",
 		"client_key":    "clientid",
 		"client_secret": "supersecret",
 		"timeout":       10,
-		"starting":      true,
+		"starting":      false, // should be reset to false as the prog exec does not exists
 		"debug":         true,
 	}
 )
@@ -65,14 +59,9 @@ func tCompareCnfs(one, exp Config, t *testing.T) {
 	if res != exp[test] {
 		t.Errorf(T_STRING, test, exp[test], res)
 	}
-	test = WSTIMEUP
-	res = one[WSTIMEUP]
-	if res != exp[test] {
-		t.Errorf(T_STRING, test, exp[test], res)
-	}
 
-	test = EXECLINE
-	res = one[EXECLINE]
+	test = APPPATH
+	res = one[APPPATH]
 	if res != exp[test] {
 		t.Errorf(T_STRING, test, exp[test], res)
 	}
@@ -153,16 +142,16 @@ func TestNewConfigDefaultFile(t *testing.T) {
 func TestBuildPath(t *testing.T) {
 	//from a absolute path
 	conf := Config{}
-	conf[EXECLINE] = "/home/cosa/pipeline2"
+	conf[APPPATH] = "/home/cosa/pipeline2"
 	base := "/tmp"
-	path := conf.buildPath(base)
+	path := buildPath(base, conf[APPPATH].(string))
 	fmt.Printf("path %+v\n", path)
-	if path != conf[EXECLINE] {
-		t.Errorf("If the path is absolute no resolving against base should be done %v %v", path, conf[EXECLINE])
+	if path != conf[APPPATH] {
+		t.Errorf("If the path is absolute no resolving against base should be done %v %v", path, conf[APPPATH])
 
 	}
-	conf[EXECLINE] = "../cosa/pipeline2"
-	path = conf.buildPath(base)
+	conf[APPPATH] = "../cosa/pipeline2"
+	path = buildPath(base, conf[APPPATH].(string))
 	if path != filepath.FromSlash("/tmp/../cosa/pipeline2") {
 		t.Errorf("The path is not being resolved %v", path)
 

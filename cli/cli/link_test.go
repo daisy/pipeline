@@ -13,34 +13,44 @@ var (
 	JOB_REQUEST = JobRequest{
 		Script:   "test",
 		Nicename: "nice",
-		Options: map[string][]string{
-			SCRIPT.Options[0].Name: []string{"file1.xml", "file2.xml"},
-			SCRIPT.Options[1].Name: []string{"true"},
-		},
-		Inputs: map[string][]url.URL{
-			SCRIPT.Inputs[0].Name: []url.URL{
-				url.URL{Opaque: "tmp/file.xml"},
-				url.URL{Opaque: "tmp/file1.xml"},
+		Options: map[string][]func([]byte) (string, error){
+			SCRIPT.Options[0].Name: []func([]byte) (string, error) {
+				func([]byte) (string, error) { return "file1.xml", nil },
+				func([]byte) (string, error) { return "file2.xml", nil },
 			},
-			SCRIPT.Inputs[1].Name: []url.URL{
-				url.URL{Opaque: "tmp/file2.xml"},
+			SCRIPT.Options[1].Name: []func([]byte) (string, error){
+				func([]byte) (string, error) { return "true", nil },
+			},
+		},
+		Inputs: map[string][]func([]byte) (url.URL, error){
+			SCRIPT.Inputs[0].Name: []func([]byte) (url.URL, error) {
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file.xml"}, nil },
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file1.xml"}, nil },
+			},
+			SCRIPT.Inputs[1].Name: []func([]byte) (url.URL, error) {
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file2.xml"}, nil },
 			},
 		},
 	}
 	JOB_REQUEST_2 = JobRequest{
 		Script:   "test",
 		Nicename: "nice",
-		Options: map[string][]string{
-			SCRIPT.Options[0].Name: []string{"file1.xml", "file2.xml"},
-			SCRIPT.Options[1].Name: []string{"true"},
-		},
-		Inputs: map[string][]url.URL{
-			SCRIPT.Inputs[0].Name: []url.URL{
-				url.URL{Opaque: "tmp/file.xml"},
-				url.URL{Opaque: "tmp/file1.xml"},
+		Options: map[string][]func([]byte) (string, error){
+			SCRIPT.Options[0].Name: []func([]byte) (string, error) {
+				func([]byte) (string, error) { return "file1.xml", nil },
+				func([]byte) (string, error) { return "file2.xml", nil },
 			},
-			SCRIPT.Inputs[1].Name: []url.URL{
-				url.URL{Opaque: "tmp/file2.xml"},
+			SCRIPT.Options[1].Name: []func([]byte) (string, error){
+				func([]byte) (string, error) { return "true", nil },
+			},
+		},
+		Inputs: map[string][]func([]byte) (url.URL, error){
+			SCRIPT.Inputs[0].Name: []func([]byte) (url.URL, error) {
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file.xml"}, nil },
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file1.xml"}, nil },
+			},
+			SCRIPT.Inputs[1].Name: []func([]byte) (url.URL, error) {
+				func([]byte) (url.URL, error) { return url.URL{Opaque: "tmp/file2.xml"}, nil },
 			},
 		},
 	}
@@ -242,7 +252,7 @@ func TestBadStart(t *testing.T) {
 	pipeline := newPipelineTest(true)
 	pipeline.authentication = true
 	config[STARTING] = true
-	config[EXECLINE] = "nonexistingprogram"
+	config[APPPATH] = "nonexistingprogram"
 	link := PipelineLink{pipeline: pipeline, config: config}
 	err := link.Init()
 	if err == nil {
@@ -310,15 +320,20 @@ func TestJobRequestToPipeline(t *testing.T) {
 		}
 
 	}
-	if req.Inputs[0].Items[0].Value != JOB_REQUEST_2.Inputs[req.Inputs[0].Name][0].String() {
-		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", JOB_REQUEST_2.Inputs[req.Inputs[0].Name][0].String(), req.Inputs[0].Items[0].Value)
+	input, _ := JOB_REQUEST_2.Inputs[req.Inputs[0].Name][0](nil)
+	if (err != nil) {
+		t.Error("Unexpected error")
 	}
-	if req.Inputs[0].Items[1].Value != JOB_REQUEST_2.Inputs[req.Inputs[0].Name][1].String() {
-		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", JOB_REQUEST_2.Inputs[req.Inputs[0].Name][1].String(), req.Inputs[0].Items[1].Value)
+	if req.Inputs[0].Items[0].Value != input.String() {
+		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", input.String(), req.Inputs[0].Items[0].Value)
 	}
-
-	if req.Inputs[1].Items[0].Value != JOB_REQUEST_2.Inputs[req.Inputs[1].Name][0].String() {
-		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", JOB_REQUEST_2.Inputs[req.Inputs[1].Name][0].String(), req.Inputs[1].Items[0].Value)
+	input, _ = JOB_REQUEST_2.Inputs[req.Inputs[0].Name][1](nil)
+	if req.Inputs[0].Items[1].Value != input.String() {
+		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", input.String(), req.Inputs[0].Items[1].Value)
+	}
+	input, _ = JOB_REQUEST_2.Inputs[req.Inputs[1].Name][0](nil)
+	if req.Inputs[1].Items[0].Value != input.String() {
+		t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", input.String(), req.Inputs[1].Items[0].Value)
 	}
 
 	if len(req.Options) != 2 {
@@ -343,8 +358,9 @@ func TestJobRequestToPipeline(t *testing.T) {
 			t.Errorf("Len of options mismatch %v %v", name, len(reqOpts))
 		}
 		for idx, item := range opt.Items {
-			if item.Value != reqOpts[idx] {
-				t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", reqOpts, item.Value)
+			expected, _ := reqOpts[idx](nil)
+			if item.Value != expected {
+				t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", expected, item.Value)
 			}
 
 		}
@@ -355,9 +371,9 @@ func TestJobRequestToPipeline(t *testing.T) {
 		if len(opt.Items) != 0 {
 			t.Error("Simple option lenght !=0")
 		}
-		if opt.Value != JOB_REQUEST_2.Options[name][0] {
-
-			t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", JOB_REQUEST_2.Options[name][0], opt.Value)
+		expected, _ := JOB_REQUEST_2.Options[name][0](nil)
+		if opt.Value != expected {
+			t.Errorf("JobRequest to pipeline failed \nexpected %v \nresult %v", expected, opt.Value)
 		}
 	}
 }

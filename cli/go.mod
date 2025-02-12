@@ -20,4 +20,5 @@ require (
 	golang.org/x/mod v0.7.0
 	golang.org/x/tools v0.5.0
 	launchpad.net/goyaml v0.0.0-20140305200416-000000000051
+	github.com/mitchellh/go-ps v1.0.0
 )

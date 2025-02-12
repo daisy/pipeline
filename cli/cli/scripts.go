@@ -24,22 +24,22 @@ var LastIdPath = getLastIdPath(runtime.GOOS)
 
 //Represents the job request
 type JobRequest struct {
-	Script               string                  //Script id to call
-	Nicename             string                  //Job's nicename
-	Priority             string                  //Job's priority
-	Options              map[string][]string     //Options for the script
-	Inputs               map[string][]url.URL    //Input ports for the script
-	Data                 []byte                  //Data to send with the job request
-	Background           bool                    //Send the request and return
-	StylesheetParameters map[string]pipeline.StylesheetParameter
+	Script               string                                     //Script id to call
+	Nicename             string                                     //Job's nicename
+	Priority             string                                     //Job's priority
+	Options              map[string][]func([]byte) (string, error)  //Options for the script
+	Inputs               map[string][]func([]byte) (url.URL, error) //Input documents for the script
+	Data                 []byte                                     //Data to send with the job request
+	Background           bool                                       //Send the request and return
+	StylesheetParameters map[string]func([]byte) (pipeline.StylesheetParameter, error)
 }
 
 //Creates a new JobRequest
 func newJobRequest() *JobRequest {
 	return &JobRequest{
-		Options:              make(map[string][]string),
-		Inputs:               make(map[string][]url.URL),
-		StylesheetParameters: make(map[string]pipeline.StylesheetParameter),
+		Options:              make(map[string][]func([]byte) (string, error)),
+		Inputs:               make(map[string][]func([]byte) (url.URL, error)),
+		StylesheetParameters: make(map[string]func([]byte) (pipeline.StylesheetParameter, error)),
 	}
 }
 
@@ -74,7 +74,7 @@ func (j jobExecution) run(stdOut io.Writer) error {
 	log.Printf("run data len %v\n", len(j.req.Data))
 	//manual check of output
 	if !j.req.Background && j.output == "" {
-		return errors.New("--output option is mandatory if the job is not running in the req.Background")
+		return errors.New("--output option is mandatory if the job is not running in the background")
 	}
 	if j.req.Background && j.output != "" {
 		fmt.Printf("Warning: --output option ignored as the job will run in the background\n")
@@ -252,7 +252,7 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		if (shortDesc == "") {
 			shortDesc = input.NiceName
 		}
-		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest, link)).Must(input.Required)
+		command.AddOption(name, "", shortDesc, longDesc, italic("FILE"), inputFunc(jobRequest)).Must(input.Required)
 	}
 
 	var hasStylesheetParametersOption bool
@@ -285,7 +285,7 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 		}
 		command.AddOption(
 			name, "", shortDesc, longDesc, optionTypeToString(option.Type, name, option.Default),
-			optionFunc(jobRequest, link, option.Type, option.Sequence)).Must(option.Required)
+			optionFunc(jobRequest, option.Type, option.Sequence)).Must(option.Required)
 		if option.Name == "stylesheet-parameters" {
 			hasStylesheetParametersOption = true
 		}
@@ -328,7 +328,7 @@ func scriptToCommand(script pipeline.Script, cli *Cli, link *PipelineLink) (req 
 				}
 				command.AddOption(
 					name, "", shortDesc, longDesc, optionTypeToString(param.Type, name, param.Default),
-					paramFunc(jobRequest, link, param)).Must(false)
+					paramFunc(jobRequest, param)).Must(false)
 			}
 		}
 	}
@@ -502,7 +502,7 @@ func optionTypeToDetailedHelp(optionType pipeline.DataType) string {
 	return help
 }
 
-func (c *ScriptCommand) addDataOption() {
+func (c *ScriptCommand) addDataOption(required bool) {
 	c.AddOption("data", "d", "Zip file containing the files to convert", "", "", func(name, path string) error {
 		file, err := os.Open(path)
 		defer func() {
@@ -521,34 +521,36 @@ func (c *ScriptCommand) addDataOption() {
 		//}
 		log.Printf("data len %v\n", len(c.req.Data))
 		return nil
-	}).Must(true)
+	}).Must(required)
 }
 
 //Returns a function that fills the request info with the subcommand option name
 //and value
-func inputFunc(req *JobRequest, link *PipelineLink) func(string, string) error {
-	return func(name, value string) (err error) {
+func inputFunc(req *JobRequest) func(string, string) error {
+	return func(name, value string) error {
 		//control prefix
-		basePath := getBasePath(link.IsLocal())
 		if strings.HasPrefix("i-", name) {
 			name = name[2:]
 		}
 		// FIXME: check if input is a sequence
 		for _, path := range strings.Split(value, ",") {
-			var u *url.URL
-			u, err = pathToUri(path, basePath)
-			if err != nil {
-				return
-			}
-			req.Inputs[name] = append(req.Inputs[name], *u)
+			req.Inputs[name] = append(req.Inputs[name], func(data []byte) (result url.URL, err error) {
+				basePath := getBasePath(data)
+				var u *url.URL
+				u, err = pathToUri(path, basePath)
+				if err != nil {
+					return
+				}
+				return *u, nil
+			})
 		}
-		return
+		return nil
 	}
 }
 
 //Returns a function that fills the request option with the subcommand option name
 //and value
-func optionFunc(req *JobRequest, link *PipelineLink, optionType pipeline.DataType, sequence bool) func(string, string) error {
+func optionFunc(req *JobRequest, optionType pipeline.DataType, sequence bool) func(string, string) error {
 	return func(name, value string) error {
 		if strings.HasPrefix("x-", name) {
 			name = name[2:]
@@ -556,18 +558,22 @@ func optionFunc(req *JobRequest, link *PipelineLink, optionType pipeline.DataTyp
 		var err error
 		if sequence {
 			for _, v := range strings.Split(value, ",") {
-				v, err = validateOption(v, optionType, link)
-				if err != nil {
-					return validationError(name, v, err)
-				}
-				req.Options[name] = append(req.Options[name], v)
+				req.Options[name] = append(req.Options[name], func(data []byte) (string, error) {
+					v, err = validateOption(v, optionType, data)
+					if err != nil {
+						return v, validationError(name, v, err)
+					}
+					return v, nil
+				})
 			}
 		} else {
-			value, err = validateOption(value, optionType, link)
-			if err != nil {
-				return validationError(name, value, err)
-			}
-			req.Options[name] = append(req.Options[name], value)
+			req.Options[name] = append(req.Options[name], func(data []byte) (string, error) {
+				value, err = validateOption(value, optionType, data)
+				if err != nil {
+					return value, validationError(name, value, err)
+				}
+				return value, nil
+			})
 		}
 		return nil
 	}
@@ -575,17 +581,19 @@ func optionFunc(req *JobRequest, link *PipelineLink, optionType pipeline.DataTyp
 
 //Returns a function that fills the stylesheet-parameters option with the subcommand option name
 //and value
-func paramFunc(req *JobRequest, link *PipelineLink, param pipeline.StylesheetParameter) func(string, string) error {
+func paramFunc(req *JobRequest, param pipeline.StylesheetParameter) func(string, string) error {
 	return func(name, value string) error {
 		if strings.HasPrefix("x-", name) {
 			name = name[2:]
 		}
-		value, err := validateOption(value, param.Type, link)
-		if err != nil {
-			return validationError(name, value, err)
+		req.StylesheetParameters[name] = func(data []byte) (pipeline.StylesheetParameter, error) {
+			value, err := validateOption(value, param.Type, data)
+			if err != nil {
+				return param, validationError(name, value, err)
+			}
+			param.Value = value;
+			return param, nil
 		}
-		param.Value = value;
-		req.StylesheetParameters[name] = param
 		return nil
 	}
 }
@@ -598,7 +606,7 @@ func validationError(optionName, value string, cause error) error {
 	return errors.New(msg)
 }
 
-func validateOption(value string, optionType pipeline.DataType, link *PipelineLink) (result string, err error) {
+func validateOption(value string, optionType pipeline.DataType, data []byte) (result string, err error) {
 	result = value
 	switch t := optionType.(type) {
 	case pipeline.XsBoolean:
@@ -620,13 +628,13 @@ func validateOption(value string, optionType pipeline.DataType, link *PipelineLi
 		// _, err = url.Parse(value)
 	case pipeline.AnyFileURI:
 		var u *url.URL
-		u, err = pathToUri(value, getBasePath(link.IsLocal()))
+		u, err = pathToUri(value, getBasePath(data))
 		if err == nil {
 			result = u.String()
 		}
 	case pipeline.AnyDirURI:
 		var u *url.URL
-		u, err = pathToUri(value, getBasePath(link.IsLocal()))
+		u, err = pathToUri(value, getBasePath(data))
 		if err == nil {
 			result = u.String()
 		}
@@ -639,7 +647,7 @@ func validateOption(value string, optionType pipeline.DataType, link *PipelineLi
 		}
 	case pipeline.Choice:
 		for _, v := range t.Values {
-			result, err = validateOption(value, v, link)
+			result, err = validateOption(value, v, data)
 			if err == nil {
 				break
 			}
@@ -663,8 +671,8 @@ func validateOption(value string, optionType pipeline.DataType, link *PipelineLi
 
 //Gets the basepath. If the fwk accepts local uri's (file:///)
 //getBasePath os.Getwd() otherwise it returns an empty string
-func getBasePath(isLocal bool) string {
-	if isLocal {
+func getBasePath(data []byte) string {
+	if data == nil {
 		base, err := os.Getwd()
 		if err != nil {
 			panic("Error while getting current directory:" + err.Error())

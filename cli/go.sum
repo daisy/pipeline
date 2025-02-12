@@ -24,6 +24,8 @@ github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 h1:iQTw/8FWTuc7uia
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0/go.mod h1:1NbS8ALrpOvjt0rHPNLyCIeMtbizbir8U//inJ+zuB8=
 github.com/mattn/goveralls v0.0.11 h1:eJXea6R6IFlL1QMKNMzDvvHv/hwGrnvyig4N+0+XiMM=
 github.com/mattn/goveralls v0.0.11/go.mod h1:gU8SyhNswsJKchEV93xRQxX6X3Ei4PJdQk/6ZHvrvRk=
+github.com/mitchellh/go-ps v1.0.0 h1:i6ampVEEF4wQFF+bkYfwYgY+F/uYJDktmvLPf7qIgjc=
+github.com/mitchellh/go-ps v1.0.0/go.mod h1:J4lOc8z8yJs6vUwklHw2XEIiT4z4C40KtWVN3nvg8Pg=
 github.com/mitchellh/gox v1.0.1 h1:x0jD3dcHk9a9xPSDN6YEL4xL6Qz0dvNYm8yZqui5chI=
 github.com/mitchellh/gox v1.0.1/go.mod h1:ED6BioOGXMswlXa2zxfh/xdd5QhwYliBFn9V18Ap4z4=
 github.com/mitchellh/iochan v1.0.0 h1:C+X3KsSTLFVBr/tK1eYN/vs4rJcvsiLU338UhYPJWeY=

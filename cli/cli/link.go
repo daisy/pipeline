@@ -6,11 +6,13 @@ import (
 	"io"
 	"log"
 	"os"
-	"time"
+	"os/exec"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/daisy/pipeline-clientlib-go"
+	"github.com/mitchellh/go-ps"
 )
 
 const (
@@ -88,16 +90,107 @@ func (p PipelineLink) IsLocal() bool {
 //otherwise it brings it up and fills the
 //link object
 func bringUp(pLink *PipelineLink) error {
-	alive, err := pLink.pipeline.Alive()
-	if err != nil {
-		if pLink.config[STARTING].(bool) {
-			alive, err = NewPipelineLauncher(pLink.pipeline,
-				pLink.config.ExecPath(), pLink.config[TIMEOUT].(int)).Launch(os.Stdout)
-			if err != nil {
-				return fmt.Errorf("Error bringing the pipeline2 up %v", err.Error())
+	var alive pipeline.Alive
+	var err error
+	if !((pLink.config[HOST] == nil || pLink.config[HOST].(string) == "") &&
+		 (pLink.config[HOST] == nil || pLink.config[PORT].(int) == 0) &&
+		 (pLink.config[PATH] == nil || pLink.config[PATH].(string) == "")) {
+		// A webservice is configured to be used in loaded configuration either from
+		// - the user provided config (config file or command line)
+		// - The default webservice config, reinstated due to missing or incorrect app path
+		alive, err = pLink.pipeline.Alive()
+		if err != nil {
+			if pLink.config[STARTING] != nil && pLink.config[STARTING].(bool) {
+				execpath := pLink.config.ExecLine()
+				if (execpath != "") {
+					// the exec_line setting was kept for backward compatibility, intended
+					// for use on Linux (where there is no Pipeline app available)
+					alive, err = NewPipelineLauncher(
+						pLink.pipeline,
+						execpath,
+						pLink.config[TIMEOUT].(int),
+					).Launch(os.Stdout)
+					if err != nil {
+						return fmt.Errorf("failed to bring up the webservice: %v", err.Error())
+					}
+				}
 			}
-		} else {
-			return fmt.Errorf("Could not connect to the webservice and I'm not configured to start one\n\tError: %v", err.Error())
+			if (err != nil) {
+				return fmt.Errorf("could not connect to the webservice at %s\n\tError: %v",
+					pLink.config.Url(),
+					err.Error())
+			}
+		}
+	} else {
+		// No webservice configured from initial configuration checks
+		// Check if Pipeline app is running
+		processes, err := ps.Processes()
+		if err == nil {
+			execFound := ""
+			for _, element := range processes {
+				app := element.Executable()
+				if strings.HasSuffix(app, "DAISY Pipeline") ||
+					strings.HasSuffix(app, "DAISY Pipeline.exe") ||
+					pLink.config[APPPATH] != nil && pLink.config[APPPATH].(string) == app {
+					execFound = app
+					break
+				}
+			}
+			if execFound != "" {
+				// Found a running instance of the Pipeline app: reuse it with the command line tool
+				// (Note: multiple instance of the app are not allowed in the electron app)
+				args := os.Args[1:]
+				if len(os.Args) == 1 {
+					args = append(args, "help")
+				}
+				cmd := exec.Command(execFound, args...)
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				if err := cmd.Run(); err != nil {
+					return fmt.Errorf(
+						"could not connect to the running instance of the DAISY Pipeline app: %v", err)
+				} else {
+					os.Exit(cmd.ProcessState.ExitCode())
+				}
+			}
+		}
+		// if no running app process was found, continue here
+		// If the starting flag was set to true (set in config + valid path was provided)
+		if pLink.config[STARTING] != nil && pLink.config[STARTING].(bool) {
+			// app_path is validated at the config level in config.FromYaml()
+			// config.AppPath() returns the resolved path
+			execpath := pLink.config.AppPath()
+			if (execpath != "") {
+				// forward the command to the electron app
+				args := os.Args[1:]
+				if len(os.Args) == 1 {
+					args = append(args, "help")
+				}
+				cmd := exec.Command(execpath, args...)
+				cmd.Stdout = os.Stdout
+				cmd.Stderr = os.Stderr
+				if err := cmd.Run(); err != nil {
+					return fmt.Errorf(
+						"could not start the DAISY Pipeline app at %s: %v", execpath, err)
+				} else {
+					os.Exit(cmd.ProcessState.ExitCode())
+				}
+			} else {
+				return fmt.Errorf(
+					"could not locate the Pipeline app")
+			}
+		}
+		// fallback to default configuration
+		pLink.config = copyConf()
+		pLink.pipeline.SetUrl(pLink.config.Url())
+		alive, err = pLink.pipeline.Alive()
+		if err != nil {
+			return fmt.Errorf(
+				"The DAISY Pipeline app is not running," +
+				" and could not connect to the default webservice address (%s)." +
+				" Pass \"--starting true\" to start the app automatically.\n\tError: %v",
+				pLink.config.Url(),
+				err.Error())
 		}
 	}
 	log.Println("Setting values")
@@ -311,16 +404,20 @@ func flattenMessages(from []pipeline.Message, to chan Message, status string, pr
 	return lastSeq
 }
 
-func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequest, err error) {
+func jobRequestToPipeline(req JobRequest, p PipelineLink) (pipeline.JobRequest, error) {
 	href := p.pipeline.ScriptUrl(req.Script)
-	pReq = pipeline.JobRequest{
+	pReq := pipeline.JobRequest{
 		Script:   pipeline.Script{Href: href},
 		Nicename: req.Nicename,
 		Priority: req.Priority,
 	}
 	for name, values := range req.Inputs {
 		input := pipeline.Input{Name: name}
-		for _, value := range values {
+		for _, v := range values {
+			value, err := v(req.Data)
+			if (err != nil) {
+				return pReq, err
+			}
 			input.Items = append(input.Items, pipeline.Item{Value: value.String()})
 		}
 		pReq.Inputs = append(pReq.Inputs, input)
@@ -329,11 +426,19 @@ func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequ
 	for name, values := range req.Options {
 		option := pipeline.Option{Name: name}
 		if len(values) > 1 {
-			for _, value := range values {
+			for _, v := range values {
+				value, err := v(req.Data)
+				if (err != nil) {
+					return pReq, err
+				}
 				option.Items = append(option.Items, pipeline.Item{Value: value})
 			}
 		} else {
-			option.Value = values[0]
+			var err error
+			option.Value, err = values[0](req.Data)
+			if (err != nil) {
+				return pReq, err
+			}
 		}
 		if name == "stylesheet-parameters" {
 			stylesheetParametersOption = option
@@ -342,7 +447,11 @@ func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequ
 		}
 	}
 	var params []string
-	for name, param := range req.StylesheetParameters {
+	for name, p := range req.StylesheetParameters {
+		param, err := p(req.Data)
+		if (err != nil) {
+			return pReq, err
+		}
 		switch param.Type.(type) {
 		case pipeline.XsBoolean,
 		     pipeline.XsInteger,
@@ -376,5 +485,5 @@ func jobRequestToPipeline(req JobRequest, p PipelineLink) (pReq pipeline.JobRequ
 	if stylesheetParametersOption.Name != "" {
 		pReq.Options = append(pReq.Options, stylesheetParametersOption)
 	}
-	return
+	return pReq, nil
 }
