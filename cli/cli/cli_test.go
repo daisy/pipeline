@@ -219,10 +219,7 @@ func TestConfigIntOptions(t *testing.T) {
 	if err == nil {
 		t.Errorf("Port: non numeric type controll failed")
 	}
-	err = cli.Run([]string{"--" + WSTIMEUP, "abit", "test"})
-	if err == nil {
-		t.Errorf("ws_time_out: non numeric type controll failed")
-	}
+
 	err = cli.Run([]string{"--timeout" + TIMEOUT, "now!", "test"})
 	if err == nil {
 		t.Errorf("Port: non numeric type controll failed")
@@ -264,20 +261,20 @@ func TestConfigOptions(t *testing.T) {
 		HOST:         "http://google.com",
 		PORT:         80,
 		PATH:         "pipeline",
-		WSTIMEUP:     1,
-		EXECLINE:     "the_noose",
+		APPPATH:      "the_noose",
+		EXECLINE:     "",
 		CLIENTKEY:    "rounded",
 		CLIENTSECRET: "he_likes_justin_beiber",
 		TIMEOUT:      3,
 		DEBUG:        true,
 		STARTING:     true,
+		CONFPATH:     DEFAULT_FILE,
 	}
 
 	err = cli.Run([]string{"--" + HOST, exp[HOST].(string),
 		"--" + PORT, strconv.Itoa(exp[PORT].(int)),
 		"--" + PATH, exp[PATH].(string),
-		"--" + WSTIMEUP, strconv.Itoa(exp[WSTIMEUP].(int)),
-		"--" + EXECLINE, exp[EXECLINE].(string),
+		"--" + APPPATH, exp[APPPATH].(string),
 		"--" + CLIENTKEY, exp[CLIENTKEY].(string),
 		"--" + CLIENTSECRET, exp[CLIENTSECRET].(string),
 		"--" + TIMEOUT, strconv.Itoa(exp[TIMEOUT].(int)),
@@ -341,6 +338,8 @@ func TestConfigFile(t *testing.T) {
 	if err != nil {
 		t.Errorf("Unexpected error %v", err)
 	}
-	tCompareCnfs(res, EXP, t)
+	EXP2 := copyMap(EXP)
+	EXP2[CONFPATH] = tmpFile.Name()
+	tCompareCnfs(res, EXP2, t)
 
 }
