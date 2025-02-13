@@ -4,7 +4,9 @@
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 type="px:epub-to-daisy.script"
-                name="main">
+                name="main"
+                px:input-filesets="epub2 epub3"
+                px:output-filesets="daisy202 daisy3">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">EPUB to DAISY</h1>

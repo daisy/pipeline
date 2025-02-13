@@ -5,7 +5,9 @@
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="epub3"
+                px:output-filesets="epub3">
     
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
         <h1 px:role="name">EPUB 3 Enhancer</h1>

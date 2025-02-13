@@ -3,7 +3,9 @@
                 xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                type="px:word-to-dtbook.script" name="main">
+                type="px:word-to-dtbook.script" name="main"
+                px:input-filesets="docx"
+                px:output-filesets="dtbook">
 
 	<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 		<h1 px:role="name">Word to DTBook</h1>

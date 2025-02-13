@@ -8,7 +8,9 @@
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
                 xmlns:opf="http://www.idpf.org/2007/opf"
                 exclude-inline-prefixes="#all"
-                name="main">
+                name="main"
+                px:input-filesets="epub3"
+                px:output-filesets="pef">
 
     <p:documentation xmlns="http://www.w3.org/1999/xhtml">
 	    <h1 px:role="name">EPUB 3 to braille</h1>
