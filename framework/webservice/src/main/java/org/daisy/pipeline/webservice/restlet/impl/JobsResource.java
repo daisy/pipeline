@@ -31,9 +31,8 @@ import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.restlet.MultipartRequestData;
 import org.daisy.pipeline.webservice.xml.JobXmlWriter;
 import org.daisy.pipeline.webservice.xml.JobsXmlWriter;
-import org.daisy.pipeline.webservice.xml.ValidationStatus;
-import org.daisy.pipeline.webservice.xml.Validator;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
+import org.daisy.pipeline.webservice.xml.XmlValidator;
 
 import org.restlet.Request;
 import org.restlet.data.MediaType;
@@ -162,11 +161,9 @@ public class JobsResource extends AuthenticatedResource {
                 if (logger.isDebugEnabled())
                         logger.debug(XmlUtils.nodeToString(doc));
 
-                ValidationStatus status = Validator.validateJobRequest(doc, getScriptRegistry());
-
-                if (!status.isValid()) {
+                if (!XmlValidator.validate(doc, XmlValidator.JOB_REQUEST_SCHEMA_URL)) {
                         setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                        return this.getErrorRepresentation(status.getMessage());
+                        return this.getErrorRepresentation("Request XML not valid");
                 }
 
                 Optional<Job> job;
@@ -228,11 +225,11 @@ public class JobsResource extends AuthenticatedResource {
         private Optional<Job> createJob(Document doc, ZipFile zip)
                         throws LocalInputException, FileNotFoundException {
 
-                Element scriptElm = (Element) doc.getElementsByTagNameNS(Validator.NS_DAISY, "script").item(0);
+                Element scriptElm = (Element) doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "script").item(0);
                 Priority priority=Priority.MEDIUM;
                 String niceName="";
                 //get nice name
-                NodeList elems=doc.getElementsByTagNameNS(Validator.NS_DAISY,"nicename"); 
+                NodeList elems=doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "nicename"); 
                 if(elems.getLength()!=0)
                         niceName=elems.item(0).getTextContent();
                 logger.debug(String.format("Job's nice name: %s",niceName));
@@ -244,7 +241,7 @@ public class JobsResource extends AuthenticatedResource {
                 logger.debug(String.format("Job's batch id: %s",batchId));
 
                 //get priority
-                elems=doc.getElementsByTagNameNS(Validator.NS_DAISY,"priority"); 
+                elems=doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "priority"); 
                 if(elems.getLength()!=0){
                         String prioString=elems.item(0).getTextContent();
                         priority=Priority.valueOf(prioString.toUpperCase());
@@ -272,9 +269,9 @@ public class JobsResource extends AuthenticatedResource {
                 JobResources resourceCollection = zip != null ? new ZippedJobResources(zip) : null;
                 BoundScript.Builder bound = new BoundScript.Builder(script, resourceCollection);
 
-                addInputsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"input"), script, bound, zip != null);
-                addOptionsToJob(doc.getElementsByTagNameNS(Validator.NS_DAISY,"option"), script, bound, zip != null);
-                if (doc.getElementsByTagNameNS(Validator.NS_DAISY,"output").getLength() > 0) {
+                addInputsToJob(doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "input"), script, bound, zip != null);
+                addOptionsToJob(doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "option"), script, bound, zip != null);
+                if (doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "output").getLength() > 0) {
                         // show deprecation warning in server logs
                         logger.warn("Deprecated <output/> element used. Job results should be retrieved through the /jobs/ID/result API.");
                         // show deprecation warning in response header
@@ -296,7 +293,7 @@ public class JobsResource extends AuthenticatedResource {
          * @param doc The job request XML.
          */
         private void registerCallbacks(Job job, Document doc) {
-                NodeList callbacks = doc.getElementsByTagNameNS(Validator.NS_DAISY,"callback");
+                NodeList callbacks = doc.getElementsByTagNameNS(XmlUtils.NS_DAISY, "callback");
                 for (int i = 0; i<callbacks.getLength(); i++) {
                         Element elm = (Element)callbacks.item(i);
                         CallbackType type = CallbackType.valueOf(elm.getAttribute("type").toUpperCase());
@@ -336,8 +333,8 @@ public class JobsResource extends AuthenticatedResource {
                                 Element inputElm = (Element) nodes.item(i);
                                 String name = inputElm.getAttribute("name");
                                 if (name.equals(inputName)) {
-                                        NodeList fileNodes = inputElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
-                                        NodeList docwrapperNodes = inputElm.getElementsByTagNameNS(Validator.NS_DAISY,"docwrapper");
+                                        NodeList fileNodes = inputElm.getElementsByTagNameNS(XmlUtils.NS_DAISY, "item");
+                                        NodeList docwrapperNodes = inputElm.getElementsByTagNameNS(XmlUtils.NS_DAISY, "docwrapper");
 
                                         if (fileNodes.getLength() > 0) {
                                                 for (int j = 0; j < fileNodes.getLength(); j++) {
@@ -387,7 +384,7 @@ public class JobsResource extends AuthenticatedResource {
                                                        || "anyFileURI".equals(option.getType().getId());
                                         //eventhough the option is a sequence it may happen that 
                                         //there are no item elements, just one value
-                                        NodeList items = optionElm.getElementsByTagNameNS(Validator.NS_DAISY,"item");
+                                        NodeList items = optionElm.getElementsByTagNameNS(XmlUtils.NS_DAISY, "item");
                                         if (items.getLength() > 0) {
                                                 // accept <item> children even if it is not a sequence option
                                                 // but at most one (this is verified in BoundScript.Builder)

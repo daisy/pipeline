@@ -112,12 +112,12 @@ public class CommandRunner {
 					new ExecutorCompletionService<Void>(executor);
 				completionService.submit(() -> { outputConsumer.accept(p.getInputStream()); return null; });
 				completionService.submit(() -> { errorConsumer.accept(p.getErrorStream()); return null; });
-				for (int done = 0; done < 2; done++)
-					try {
+				try {
+					for (int done = 0; done < 2; done++)
 						completionService.take().get();
-					} finally {
-						executor.shutdownNow();
-					}
+				} finally {
+					executor.shutdownNow();
+				}
 			} else if (errorConsumer != null)
 				errorConsumer.accept(p.getErrorStream());
 			else if (outputConsumer != null)

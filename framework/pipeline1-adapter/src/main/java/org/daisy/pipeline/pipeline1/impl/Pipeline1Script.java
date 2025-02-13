@@ -354,6 +354,41 @@ public class Pipeline1Script extends Script {
 					withOption(name, new Pipeline1ScriptOption(name, param, script, provider.datatypeRegistry));
 				}
 			}
+			if (id.startsWith("daisy-")) {
+				withInputFileset("daisy202");
+				withInputFileset("daisy3");
+			} else if (id.startsWith("daisy202-"))
+				withInputFileset("daisy202");
+			else if (id.startsWith("daisy3-"))
+				withInputFileset("daisy3");
+			else if (id.startsWith("dtbook-")) {
+				withInputFileset("dtbook");
+				withInputFileset("nimas");
+			} else if (id.startsWith("ebraille-"))
+				withInputFileset("ebraille");
+			else if (id.startsWith("epub-")) {
+				withInputFileset("epub2");
+				withInputFileset("epub3");
+			} else if (id.startsWith("epub2-"))
+				withInputFileset("epub2");
+			else if (id.startsWith("epub3-"))
+				withInputFileset("epub3");
+			else if (id.startsWith("html-"))
+				withInputFileset("html");
+			else if (id.startsWith("mp3-"))
+				withInputFileset("mp3");
+			else if (id.startsWith("nimas-"))
+				withInputFileset("nimas");
+			else if (id.startsWith("odt-"))
+				withInputFileset("odt");
+			else if (id.startsWith("pef-"))
+				withInputFileset("pef");
+			else if (id.startsWith("rtf-"))
+				withInputFileset("rtf");
+			else if (id.startsWith("word-"))
+				withInputFileset("docx");
+			else if (id.startsWith("zedai-"))
+				withInputFileset("zedai");
 		}
 
 		/**

@@ -47,15 +47,21 @@ public class Authenticator {
 
 				SimpleDateFormat UTC_FORMATTER = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 				UTC_FORMATTER.setTimeZone(TimeZone.getTimeZone("UTC"));
+				SimpleDateFormat UTC_FORMATTER_2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+				UTC_FORMATTER_2.setTimeZone(TimeZone.getTimeZone("UTC"));
 
 				Date serverTimestamp = new Date(System.currentTimeMillis());
-				Date clientTimestamp;
-				try {
-					clientTimestamp = UTC_FORMATTER.parse(timestamp);
-				} catch (ParseException e) {
-					logger.error(String.format("Could not parse timestamp: %s", timestamp));
-					e.printStackTrace();
-					return false;
+				Date clientTimestamp; {
+					try {
+						clientTimestamp = UTC_FORMATTER.parse(timestamp);
+					} catch (ParseException e) {
+						try {
+							clientTimestamp = UTC_FORMATTER_2.parse(timestamp);
+						} catch (ParseException e2) {
+							logger.error(String.format("Could not parse timestamp: %s", timestamp), e2);
+							return false;
+						}
+					}
 				}
 				if(!hash.equals(serverHash)) {
 					logger.error("Hash values do not match");

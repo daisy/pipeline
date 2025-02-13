@@ -15,12 +15,17 @@ import org.restlet.ext.xml.DomRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class ScriptsResource.
  */
 public class ScriptsResource extends AuthenticatedResource {
-	/** The scripts. */
+
+	private static Logger logger = LoggerFactory.getLogger(ScriptsResource.class.getName());
+
 	List<Script> scripts = null;
 
 	/* (non-Javadoc)
@@ -35,7 +40,12 @@ public class ScriptsResource extends AuthenticatedResource {
 		ScriptRegistry scriptRegistry = getScriptRegistry();
 		scripts = new ArrayList<Script>();
 		for (ScriptService<?> script : scriptRegistry.getScripts()) {
-			scripts.add(script.load());
+			try {
+				scripts.add(script.load());
+			} catch (Throwable e) {
+				// skip script instead of failing to respond to request
+				logger.debug("Failed to load script", e);
+			}
 		}
 	}
 

@@ -135,6 +135,14 @@ public class Pipeline1ScriptProvider implements ScriptServiceProvider {
 									).build();
 								} catch (ScriptValidationException e) {
 									throw new IllegalStateException(e);
+								} catch (Throwable e) {
+									// Also catch other exceptions, notably NullPointerException thrown in
+									// PeekerPool.release(). Note that this NPE only seems to occur on the
+									// first attempt to load the script, after even only the first time after
+									// a system reboot. For now just ignore this exception when building the
+									// list of available scripts, and assume that there will be a next attempt
+									// to load the script, and that it will be successful.
+									throw new IllegalStateException(e);
 								}
 							}
 							return script;

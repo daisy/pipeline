@@ -28,6 +28,7 @@ import org.xml.sax.SAXException;
 
 public class XmlUtils {
 
+	public static final String NS_DAISY = "http://www.daisy.org/ns/pipeline/data";
 	public static final String NS_PIPELINE_DATA = "http://www.daisy.org/ns/pipeline/data";
 
 	private static final Logger logger = LoggerFactory.getLogger(XmlUtils.class);
