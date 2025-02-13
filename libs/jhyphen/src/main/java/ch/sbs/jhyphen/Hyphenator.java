@@ -239,21 +239,15 @@ public class Hyphenator {
 			
 				// TODO: assert that last element of wordHyphens is not a hyphen
 				String hyphenString = new String(wordHyphens.array(), 0, word.length());
-				String[] rep;
-				int[] pos;
-				int[] cut;
+				String[] rep = null;
+				int[] pos = null;
+				int[] cut = null;
 				if (repPointer.get().getValue() != Pointer.NULL
 				    && posPointer.get().getValue() != Pointer.NULL
 				    && cutPointer.get().getValue() != Pointer.NULL) {
-				
-					// will this also free the memory later or do I need to do this explicitly?
 					rep = repPointer.get().getValue().getStringArray(0L, wordSize, charset.name());
 					pos = posPointer.get().getValue().getIntArray(0, wordSize);
 					cut = cutPointer.get().getValue().getIntArray(0, wordSize); }
-				else {
-					rep = new String[wordSize];
-					pos = new int[wordSize];
-					cut = new int[wordSize]; }
 				CharacterIterator hyphens = new StringCharacterIterator(hyphenString);
 				int posInWord = 0;
 				for (char c = hyphens.first(); c != CharacterIterator.DONE; c = hyphens.next()) {
