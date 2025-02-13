@@ -148,7 +148,7 @@ public class Hyphenator {
 			word = word.toLowerCase();
 			byte[] wordBytes = encode(word);
 			int wordSize = wordBytes.length;
-			if (wordSize > wordHyphens.capacity())
+			if (wordSize >= wordHyphens.capacity())
 				wordHyphens = ByteBuffer.allocate(wordSize * 2);
 			repPointer.get().setValue(Pointer.NULL);
 			posPointer.get().setValue(Pointer.NULL);
@@ -229,7 +229,7 @@ public class Hyphenator {
 				word = word.toLowerCase();
 				byte[] wordBytes = encode(word);
 				int wordSize = wordBytes.length;
-				if (wordSize > wordHyphens.capacity())
+				if (wordSize >= wordHyphens.capacity())
 					wordHyphens = ByteBuffer.allocate(wordSize * 2);
 				repPointer.get().setValue(Pointer.NULL);
 				posPointer.get().setValue(Pointer.NULL);
