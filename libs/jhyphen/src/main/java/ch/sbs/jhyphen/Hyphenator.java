@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -140,15 +141,17 @@ public class Hyphenator {
 		while (matcher.find()) {
 			int start = matcher.start();
 			int end = matcher.end();
-			while (pos++ < start)
+			while (pos < start) {
 				hyphenBuffer.append('0');
+				pos++;
+			}
 			String word = text.substring(start, end);
 			
 			// libhyphen requires that word is lowercase
 			word = word.toLowerCase();
 			byte[] wordBytes = encode(word);
-			int wordSize = wordBytes.length;
-			if (wordSize > wordHyphens.capacity())
+			int wordSize = wordBytes.length - 1; // minus one because encode() 0-terminates string
+			if (wordSize >= wordHyphens.capacity())
 				wordHyphens = ByteBuffer.allocate(wordSize * 2);
 			repPointer.get().setValue(Pointer.NULL);
 			posPointer.get().setValue(Pointer.NULL);
@@ -160,6 +163,8 @@ public class Hyphenator {
 			    || cutPointer.get().getValue() != Pointer.NULL)
 				throw new StandardHyphenationException("Text contains non-standard hyphenation points.");
 				
+			// Note that Hyphen takes into account the encoding of the input, so that the wordHyphens
+			// output has the correct length (the length of word)
 			// TODO: assert that last element of wordHyphens is not a hyphen
 			hyphenBuffer.append(new String(wordHyphens.array(), 0, word.length()));
 			pos = end;
@@ -228,8 +233,8 @@ public class Hyphenator {
 				// libhyphen requires that word is lowercase
 				word = word.toLowerCase();
 				byte[] wordBytes = encode(word);
-				int wordSize = wordBytes.length;
-				if (wordSize > wordHyphens.capacity())
+				int wordSize = wordBytes.length - 1; // minus one because encode() 0-terminates string
+				if (wordSize >= wordHyphens.capacity())
 					wordHyphens = ByteBuffer.allocate(wordSize * 2);
 				repPointer.get().setValue(Pointer.NULL);
 				posPointer.get().setValue(Pointer.NULL);
@@ -239,21 +244,16 @@ public class Hyphenator {
 			
 				// TODO: assert that last element of wordHyphens is not a hyphen
 				String hyphenString = new String(wordHyphens.array(), 0, word.length());
-				String[] rep;
-				int[] pos;
-				int[] cut;
+				String[] rep = null;
+				int[] pos = null;
+				int[] cut = null;
 				if (repPointer.get().getValue() != Pointer.NULL
 				    && posPointer.get().getValue() != Pointer.NULL
 				    && cutPointer.get().getValue() != Pointer.NULL) {
-				
-					// will this also free the memory later or do I need to do this explicitly?
+					// Note that arrays and strings have been malloc'ed by Hyphen so may be garbage collected
 					rep = repPointer.get().getValue().getStringArray(0L, wordSize, charset.name());
 					pos = posPointer.get().getValue().getIntArray(0, wordSize);
 					cut = cutPointer.get().getValue().getIntArray(0, wordSize); }
-				else {
-					rep = new String[wordSize];
-					pos = new int[wordSize];
-					cut = new int[wordSize]; }
 				CharacterIterator hyphens = new StringCharacterIterator(hyphenString);
 				int posInWord = 0;
 				for (char c = hyphens.first(); c != CharacterIterator.DONE; c = hyphens.next()) {
@@ -402,11 +402,25 @@ public class Hyphenator {
 	/**
 	 * Encodes an input string into a byte array using the same encoding as the hyphenation dictionary.
 	 * A dummy character "?" (0x3F in case of ISO-8859-1) is inserted when a character can not be encoded.
+	 *
+	 * To work around a bug in libhyphen, the string is terminated with a 0.
+	 *
 	 * @param str The string to be encoded
 	 * @return A byte array
 	 */
 	private byte[] encode(String str) {
-		return charset.encode(str).array();
+		ByteBuffer bb = charset.encode(str);
+		int len = bb.limit();
+		if (len == bb.capacity())
+			bb = ByteBuffer.allocate(len + 1).put(bb);
+		else
+			bb.limit(len + 1).position(len);
+		bb.put((byte)0);
+		byte[] ba = bb.array();
+		if (ba.length == len + 1)
+			return ba;
+		else
+			return Arrays.copyOf(ba, len + 1);
 	}
 	
 	/**
