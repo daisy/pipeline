@@ -140,8 +140,10 @@ public class Hyphenator {
 		while (matcher.find()) {
 			int start = matcher.start();
 			int end = matcher.end();
-			while (pos++ < start)
+			while (pos < start) {
 				hyphenBuffer.append('0');
+				pos++;
+			}
 			String word = text.substring(start, end);
 			
 			// libhyphen requires that word is lowercase
