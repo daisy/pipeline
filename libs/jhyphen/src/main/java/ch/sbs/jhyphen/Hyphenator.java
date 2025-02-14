@@ -10,6 +10,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -405,7 +406,13 @@ public class Hyphenator {
 	 * @return A byte array
 	 */
 	private byte[] encode(String str) {
-		return charset.encode(str).array();
+		ByteBuffer bb = charset.encode(str);
+		byte[] ba = bb.array();
+		int len = bb.limit();
+		if (len == ba.length)
+			return ba;
+		else
+			return Arrays.copyOf(ba, len);
 	}
 	
 	/**
