@@ -162,6 +162,8 @@ public class Hyphenator {
 			    || cutPointer.get().getValue() != Pointer.NULL)
 				throw new StandardHyphenationException("Text contains non-standard hyphenation points.");
 				
+			// Note that Hyphen takes into account the encoding of the input, so that the wordHyphens
+			// output has the correct length (the length of word)
 			// TODO: assert that last element of wordHyphens is not a hyphen
 			hyphenBuffer.append(new String(wordHyphens.array(), 0, word.length()));
 			pos = end;
@@ -247,6 +249,7 @@ public class Hyphenator {
 				if (repPointer.get().getValue() != Pointer.NULL
 				    && posPointer.get().getValue() != Pointer.NULL
 				    && cutPointer.get().getValue() != Pointer.NULL) {
+					// Note that arrays and strings have been malloc'ed by Hyphen so may be garbage collected
 					rep = repPointer.get().getValue().getStringArray(0L, wordSize, charset.name());
 					pos = posPointer.get().getValue().getIntArray(0, wordSize);
 					cut = cutPointer.get().getValue().getIntArray(0, wordSize); }

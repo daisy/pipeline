@@ -82,15 +82,13 @@ public class Hyphen {
 		 *        hyphenated word.
 		 * @param rep
 		 * @param pos
-		 * @param cut In order to enable non-standard hyphenation, rep, pos and cut must
-		 *            all be non-null. On return, if the word was hyphenated in a
-		 *            non-standard way, they point to arrays of respectively the
-		 *            replacement strings and indexes and lengths of the replaced
-		 *            segments. If the arrays are empty at the time of the call they will
-		 *            be allocated and must be freed by the caller.
+		 * @param cut rep, pos and cut must all be non-null. On return, if the word was
+		 *            hyphenated in a non-standard way, they point to arrays of
+		 *            respectively the replacement strings and indexes and lengths of the
+		 *            replaced segments. If the arrays are empty at the time of the call
+		 *            they will be allocated and must be freed by the caller.
 		 * @return 0
 		 */
-		// FIXME: rep, pos and cut must be non-null (bug in hnj_hyphen_lhmin?)
 		public int hnj_hyphen_hyphenate2(Pointer dict, byte[] word, int word_size, ByteBuffer hyphens,
 				byte[] hyphenated_word, PointerByReference rep, PointerByReference pos,
 				PointerByReference cut);
