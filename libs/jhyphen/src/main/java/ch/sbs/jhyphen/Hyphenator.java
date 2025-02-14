@@ -150,7 +150,7 @@ public class Hyphenator {
 			// libhyphen requires that word is lowercase
 			word = word.toLowerCase();
 			byte[] wordBytes = encode(word);
-			int wordSize = wordBytes.length;
+			int wordSize = wordBytes.length - 1; // minus one because encode() 0-terminates string
 			if (wordSize >= wordHyphens.capacity())
 				wordHyphens = ByteBuffer.allocate(wordSize * 2);
 			repPointer.get().setValue(Pointer.NULL);
@@ -233,7 +233,7 @@ public class Hyphenator {
 				// libhyphen requires that word is lowercase
 				word = word.toLowerCase();
 				byte[] wordBytes = encode(word);
-				int wordSize = wordBytes.length;
+				int wordSize = wordBytes.length - 1; // minus one because encode() 0-terminates string
 				if (wordSize >= wordHyphens.capacity())
 					wordHyphens = ByteBuffer.allocate(wordSize * 2);
 				repPointer.get().setValue(Pointer.NULL);
@@ -402,17 +402,25 @@ public class Hyphenator {
 	/**
 	 * Encodes an input string into a byte array using the same encoding as the hyphenation dictionary.
 	 * A dummy character "?" (0x3F in case of ISO-8859-1) is inserted when a character can not be encoded.
+	 *
+	 * To work around a bug in libhyphen, the string is terminated with a 0.
+	 *
 	 * @param str The string to be encoded
 	 * @return A byte array
 	 */
 	private byte[] encode(String str) {
 		ByteBuffer bb = charset.encode(str);
-		byte[] ba = bb.array();
 		int len = bb.limit();
-		if (len == ba.length)
+		if (len == bb.capacity())
+			bb = ByteBuffer.allocate(len + 1).put(bb);
+		else
+			bb.limit(len + 1).position(len);
+		bb.put((byte)0);
+		byte[] ba = bb.array();
+		if (ba.length == len + 1)
 			return ba;
 		else
-			return Arrays.copyOf(ba, len);
+			return Arrays.copyOf(ba, len + 1);
 	}
 	
 	/**
