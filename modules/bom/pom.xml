@@ -321,7 +321,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>dtbook-to-epub3</artifactId>
-        <version>2.6.2</version>
+        <version>2.6.3-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>

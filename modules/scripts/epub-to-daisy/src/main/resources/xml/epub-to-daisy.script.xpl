@@ -59,7 +59,7 @@ This will remove any existing media overlays in the EPUB.</p>
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
-	<p:option name="stylesheet-parameters" select="''">
+	<p:option name="stylesheet-parameters" select="'()'">
 		<!-- defined in ../../../../../common-options.xpl -->
 	</p:option>
 
