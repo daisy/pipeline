@@ -50,7 +50,6 @@
 						<xsl:apply-templates mode="copy" select="."/>
 					</xsl:otherwise>
 				</xsl:choose>
-				<break time="250ms"/>
 			</voice>
 		</speak>
 	</xsl:template>
