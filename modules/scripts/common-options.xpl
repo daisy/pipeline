@@ -114,6 +114,7 @@
 	<!--
 	    dtbook-to-daisy3
 	    epub3-to-epub3
+	    epub-to-daisy
 	    zedai-to-epub3
 	-->
 	<p:option name="include-tts-log" px:type="boolean" select="'false'">
