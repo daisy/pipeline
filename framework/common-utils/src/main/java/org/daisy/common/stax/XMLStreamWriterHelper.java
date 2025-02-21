@@ -3,6 +3,7 @@ package org.daisy.common.stax;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,14 @@ import java.util.Stack;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
+import javax.xml.stream.events.Attribute;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.Comment;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.util.XMLEventConsumer;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.XMLStreamWriter;
@@ -77,6 +86,10 @@ public final class XMLStreamWriterHelper {
 	public static void writeAttribute(XMLStreamWriter writer, Node attr, boolean copyNamespaceNodes) throws XMLStreamException {
 		writeAttribute(writer, nodeName(attr), attr.getNodeValue(), copyNamespaceNodes);
 	}
+
+	public static void writeAttribute(XMLStreamWriter writer, Attribute attr) throws XMLStreamException {
+		writeAttribute(writer, attr.getName(), attr.getValue(), false);
+	}
 	
 	public static void writeAttribute(XMLStreamWriter writer, Map.Entry<QName,String> attribute) throws XMLStreamException {
 		writeAttribute(writer, attribute.getKey(), attribute.getValue());
@@ -93,6 +106,11 @@ public final class XMLStreamWriterHelper {
 			if (attr.getLocalName() == null) continue; // when is this the case?
 			writeAttribute(writer, attr, copyNamespaceNodes);
 		}
+	}
+	
+	public static void writeAttributes(XMLStreamWriter writer, StartElement element) throws XMLStreamException {
+		for (Iterator attributes = element.getAttributes(); attributes.hasNext();)
+			writeAttribute(writer, (Attribute)attributes.next());
 	}
 	
 	public static void writeAttributes(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
@@ -113,12 +131,20 @@ public final class XMLStreamWriterHelper {
 		writer.writeCharacters(text.getNodeValue());
 	}
 	
+	public static void writeCharacters(XMLStreamWriter writer, Characters text) throws XMLStreamException {
+		writer.writeCharacters(text.getData());
+	}
+	
 	public static void writeCharacters(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
 		writer.writeCharacters(reader.getText());
 	}
 	
 	public static void writeComment(XMLStreamWriter writer, Node node) throws XMLStreamException {
 		writer.writeComment(node.getNodeValue());
+	}
+	
+	public static void writeComment(XMLStreamWriter writer, Comment comment) throws XMLStreamException {
+		writer.writeComment(comment.getText());
 	}
 	
 	public static void writeComment(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
@@ -147,38 +173,30 @@ public final class XMLStreamWriterHelper {
 		writer.writeEndDocument();
 	}
 	
-	public static void writeElement(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
-		if (writer == null)
-			skipElement(reader);
-		writeStartElement(writer, reader.getName());
-		writeAttributes(writer, reader);
-		int depth = 0;
-		while (true)
+	public static void writeDocument(XMLStreamWriter writer, XMLEventReader reader) throws XMLStreamException {
+		writeDocument(writer, (Iterator<XMLEvent>)reader);
+	}
+
+	public static void writeDocument(XMLStreamWriter writer, Iterator<XMLEvent> reader) throws XMLStreamException {
+		writer.writeStartDocument();
+	  loop: while (true)
 			try {
-				int event = reader.next();
-				switch (event) {
-				case START_ELEMENT:
-					writeStartElement(writer, reader);
-					writeAttributes(writer, reader);
-					depth++;
+				XMLEvent event = reader.next();
+				switch (event.getEventType()) {
+				case START_DOCUMENT:
 					break;
-				case END_ELEMENT:
-					writer.writeEndElement();
-					depth--;
-					if (depth < 0)
-						return;
+				case END_DOCUMENT:
+					break loop;
+				case START_ELEMENT:
+					writeElement(writer, event.asStartElement(), reader);
 					break;
 				default:
-					writeEvent(writer, reader); }}
-			catch (NoSuchElementException e) {
-				throw new RuntimeException("coding error"); }
-	}
-	
-	public static void writeElement(XMLStreamWriter writer, Element element) throws XMLStreamException {
-		writeStartElement(writer, element, true, false, false);
-		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
-			writeNode(writer, child);
-		writer.writeEndElement();
+					writeEvent(writer, event);
+				}
+			} catch (NoSuchElementException e) {
+				break;
+			}
+		writer.writeEndDocument();
 	}
 	
 	public static void writeDocument(XMLStreamWriter writer, Document document) throws XMLStreamException {
@@ -196,6 +214,59 @@ public final class XMLStreamWriterHelper {
 		writer.writeStartDocument();
 		writeElement(writer, document.getDocumentElement());
 		writer.writeEndDocument();
+	}
+	
+	public static void writeElement(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
+		if (writer == null)
+			skipElement(reader);
+		writeStartElement(writer, reader.getName());
+		writeAttributes(writer, reader);
+		while (true)
+			try {
+				int event = reader.next();
+				switch (event) {
+				case START_ELEMENT:
+					writeElement(writer, reader);
+					break;
+				case END_ELEMENT:
+					writer.writeEndElement();
+					return;
+				default:
+					writeEvent(writer, reader); }}
+			catch (NoSuchElementException e) {
+				throw new RuntimeException("coding error"); }
+	}
+	
+	public static void writeElement(XMLStreamWriter writer, StartElement element, XMLEventReader reader) throws XMLStreamException {
+		writeElement(writer, element, (Iterator<XMLEvent>)reader);
+	}
+
+	public static void writeElement(XMLStreamWriter writer, StartElement element, Iterator<XMLEvent> reader) throws XMLStreamException {
+		if (writer == null)
+			skipElement(reader);
+		writeStartElement(writer, element);
+		writeAttributes(writer, element);
+		while (true)
+			try {
+				XMLEvent event = reader.next();
+				switch (event.getEventType()) {
+				case START_ELEMENT:
+					writeElement(writer, event.asStartElement(), reader);
+					break;
+				case END_ELEMENT:
+					writer.writeEndElement();
+					return;
+				default:
+					writeEvent(writer, event); }}
+			catch (NoSuchElementException e) {
+				throw new RuntimeException("coding error"); }
+	}
+	
+	public static void writeElement(XMLStreamWriter writer, Element element) throws XMLStreamException {
+		writeStartElement(writer, element, true, false, false);
+		for (Node child = element.getFirstChild(); child != null; child = child.getNextSibling())
+			writeNode(writer, child);
+		writer.writeEndElement();
 	}
 	
 	public static void writeNode(XMLStreamWriter writer, Node node) throws XMLStreamException {
@@ -241,8 +312,88 @@ public final class XMLStreamWriterHelper {
 		}
 	}
 	
+	public static void writeEvent(XMLStreamWriter writer, XMLEvent event) throws XMLStreamException {
+		switch (event.getEventType()) {
+		case START_DOCUMENT:
+			writer.writeStartDocument();
+			break;
+		case END_DOCUMENT:
+			writer.writeEndDocument();
+			break;
+		case START_ELEMENT:
+			writeStartElement(writer, event.asStartElement());
+			break;
+		case END_ELEMENT:
+			writer.writeEndElement();
+			break;
+		case SPACE:
+		case CHARACTERS:
+		case CDATA:
+			writeCharacters(writer, event.asCharacters());
+			break;
+		case PROCESSING_INSTRUCTION:
+			writeProcessingInstruction(writer, (javax.xml.stream.events.ProcessingInstruction)event);
+			break;
+		case COMMENT:
+			writeComment(writer, (Comment)event);
+			break;
+		}
+	}
+	
+	public static XMLEventWriter asXMLEventWriter(XMLStreamWriter writer) {
+		return new XMLEventWriter() {
+			@Override
+			public void add(XMLEvent event)  throws XMLStreamException {
+				writeEvent(writer, event);
+				if (event.getEventType() == START_ELEMENT)
+					writeAttributes(writer, event.asStartElement());
+			}
+			@Override
+			public void add(XMLEventReader reader) throws XMLStreamException {
+				while (reader.hasNext())
+					add(reader.nextEvent());
+			}
+			@Override
+			public void close() throws XMLStreamException {
+				writer.close();
+			}
+			@Override
+			public void flush() throws XMLStreamException {
+				writer.flush();
+			}
+			@Override
+			public NamespaceContext getNamespaceContext() {
+				return writer.getNamespaceContext();
+			}
+			@Override
+			public String getPrefix(String uri) throws XMLStreamException {
+				return writer.getPrefix(uri);
+			}
+			@Override
+			public void setDefaultNamespace(String uri) throws XMLStreamException {
+				writer.setDefaultNamespace(uri);
+			}
+			@Override
+			public void setNamespaceContext(NamespaceContext context) throws XMLStreamException {
+				writer.setNamespaceContext(context);
+			}
+			@Override
+			public void setPrefix(String prefix, String uri) throws XMLStreamException {
+				writer.setPrefix(prefix, uri);
+			}
+		};
+	}
+
 	public static void writeProcessingInstruction(XMLStreamWriter writer, Node pi) throws XMLStreamException {
-		writer.writeProcessingInstruction(((ProcessingInstruction)pi).getTarget(), pi.getNodeValue());
+		writeProcessingInstruction(writer, (ProcessingInstruction)pi);
+	}
+	
+	public static void writeProcessingInstruction(XMLStreamWriter writer, ProcessingInstruction pi) throws XMLStreamException {
+		writer.writeProcessingInstruction(pi.getTarget(), pi.getNodeValue());
+	}
+	
+	public static void writeProcessingInstruction(XMLStreamWriter writer, javax.xml.stream.events.ProcessingInstruction pi) throws XMLStreamException {
+		writer.writeProcessingInstruction(pi.getTarget(), pi.getData());
 	}
 	
 	public static void writeProcessingInstruction(XMLStreamWriter writer, XMLStreamReader reader) throws XMLStreamException {
@@ -296,6 +447,10 @@ public final class XMLStreamWriterHelper {
 		}
 	}
 	
+	public static void writeStartElement(XMLStreamWriter writer, StartElement element) throws XMLStreamException {
+		writeStartElement(writer, element.getName());
+	}
+
 	public static int skipElement(XMLStreamReader reader) throws XMLStreamException {
 		int depth = 0;
 		while (true)
@@ -316,6 +471,30 @@ public final class XMLStreamWriterHelper {
 		throw new RuntimeException("coding error");
 	}
 	
+	public static XMLEvent skipElement(XMLEventReader reader) throws XMLStreamException {
+		return skipElement((Iterator<XMLEvent>)reader);
+	}
+
+	public static XMLEvent skipElement(Iterator<XMLEvent> reader) throws XMLStreamException {
+		int depth = 0;
+		while (true)
+			try {
+				XMLEvent event = reader.next();
+				switch (event.getEventType()) {
+				case START_ELEMENT:
+					depth++;
+					break;
+				case END_ELEMENT:
+					if (--depth < 0) return event;
+					break;
+				default:
+				}
+			} catch (NoSuchElementException e) {
+				break;
+			}
+		throw new RuntimeException("coding error");
+	}
+
 	public interface WriterEvent {
 		public void writeTo(XMLStreamWriter writer) throws XMLStreamException;
 	}
