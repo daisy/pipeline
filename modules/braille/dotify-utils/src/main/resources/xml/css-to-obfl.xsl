@@ -199,8 +199,8 @@
     <xsl:template name="renderers">
         <xml-processor name="take-nth">
             <!--
-                FIXME: without the "bogus" attributes, Dotify currently does not preserve the in
-                scope namespace declarations
+                FIXME: without the "bogus" attributes, pxi:obfl-normalize-space currently does not preserve the
+                in scope namespace declarations
             -->
             <_xsl:stylesheet version="2.0"
                              d:bogus=""
@@ -2876,9 +2876,6 @@
         <xsl:variable name="hyphens" as="xs:string" select="($pending-hyphens,$hyphens)[1]"/>
         <xsl:choose>
             <xsl:when test="$white-space=('pre-wrap','pre-line') and matches($text,'\n')">
-                <!--
-                    not using style element because Dotify collapses spaces in OBFL
-                -->
                 <xsl:analyze-string select="$text" regex="\n">
                     <xsl:matching-substring>
                         <xsl:text>&#x200B;</xsl:text> <!-- to make sure there are no leading br elements in a block because those would be ignored -->

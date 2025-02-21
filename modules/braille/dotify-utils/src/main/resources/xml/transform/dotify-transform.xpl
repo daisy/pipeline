@@ -83,9 +83,7 @@
 		<p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
 	</pxi:css-to-obfl>
 	
-	<pxi:obfl-normalize-space px:progress=".01"/>
-	
-	<p:choose px:progress=".04">
+	<p:choose px:progress=".05">
 		<p:when test="$output='pef'">
 			<px:obfl-to-pef px:message="Transforming from OBFL to PEF" px:progress="1">
 				<p:input port="parameters">
@@ -94,7 +92,7 @@
 			</px:obfl-to-pef>
 		</p:when>
 		<p:otherwise>
-			<p:identity/>
+			<pxi:obfl-normalize-space px:progress="1"/>
 		</p:otherwise>
 	</p:choose>
 	

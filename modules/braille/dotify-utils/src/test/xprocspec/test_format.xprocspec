@@ -23,7 +23,6 @@
       <p:option name="skip-margin-top-of-page" select="'false'"/>
       <p:variable name="allow-text-overflow-trimming" select="'true'"/>
       <p:import href="../../main/resources/xml/css-to-obfl.xpl"/>
-      <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
       <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
@@ -33,8 +32,7 @@
         <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
       </pxi:css-to-obfl>
-      <pxi:obfl-normalize-space px:progress=".01"/>
-      <p:try px:progress=".10">
+      <p:try px:progress=".11">
         <p:group>
           <px:set-base-uri>
             <p:with-option name="base-uri" select="base-uri(/*)">
@@ -17377,14 +17375,14 @@
           </layout-master>
           <sequence master="a">
             <block>
-              <style name="hyphens: none"> ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ </style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
             </block>
             <block>
               <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"> ⠿⠿⠿⠿⠿⠿ </style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
             </block>
             <block>
-              <style name="hyphens: none"> ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ </style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
               <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
             </block>
             <block>
@@ -17396,14 +17394,14 @@
             </block>
             <block>
               <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ </style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
               <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
               <style name="hyphens: none"></style>
             </block>
             <block>
               <style name="hyphens: none"></style>
               <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"> ⠿⠿⠿⠿⠿⠿</style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
               <style name="hyphens: none"></style>
             </block>
             <block>
@@ -17421,7 +17419,7 @@
               <style name="hyphens: none"></style>
             </block>
             <block>
-              <style name="hyphens: none"> ⠒⠒⠒ </style>
+              <style name="hyphens: none">⠒⠒⠒</style>
             </block>
           </sequence>
         </obfl>

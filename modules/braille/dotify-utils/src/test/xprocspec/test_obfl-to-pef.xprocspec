@@ -14,7 +14,6 @@
       <p:option name="text-transform" select="'(input:braille)'"/>
       <p:option name="braille-charset" select="''"/>
       <p:input port="parameters" kind="parameter" primary="false"/>
-      <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:choose>
         <p:when test="not(exists(/obfl:obfl/meta))">
@@ -59,7 +58,6 @@
           <p:with-option name="replace" select='concat("&apos;",$text-transform,"&apos;")'/>
         </p:string-replace>
       </p:group>
-      <pxi:obfl-normalize-space/>
       <px:obfl-to-pef>
         <p:input port="parameters">
           <p:pipe step="main" port="parameters"/>
@@ -634,8 +632,13 @@
               </default-template>
             </layout-master>
             <xml-processor name="take-nth">
+              <!--
+                  FIXME: without the "bogus" attributes, pxi:obfl-normalize-space currently does not preserve the
+                  in scope namespace declarations
+              -->
               <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="2.0"
                               xmlns:xs="http://www.w3.org/2001/XMLSchema"
+                              xs:bogus=""
                               xpath-default-namespace="http://www.daisy.org/ns/pipeline/data">
                 <xsl:param name="n" as="xs:integer" required="yes"/>
                 <xsl:template match="/">
@@ -3355,7 +3358,7 @@
     <x:documentation>
       Tests that white space at the beginning of a block is stripped, also when it is preceded
       directly by an empty span element. Empty span elements are inserted in order to place IDs on
-      them. This is an issue in Dotify but a normalisation step in DP2 fixes it.
+      them. This is an issue in Dotify but Pipeline fixes it.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">
@@ -3407,7 +3410,7 @@
   <x:scenario label="comment-in-white-space">
     <x:documentation>
       Tests presence of a comment surrounded by white space. Dotify would normally drop the white
-      space but pxi:obfl-normalize-space prevents this.
+      space but Pipeline prevents this.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">

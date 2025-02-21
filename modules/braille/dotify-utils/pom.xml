@@ -115,6 +115,7 @@
       org.daisy.pipeline.modules.impl.Module_dotify_utils,
       org.daisy.pipeline.braille.dotify.calabash.impl.EvalCounterStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.OBFLToPEFStep$Provider,
+      org.daisy.pipeline.braille.dotify.calabash.impl.OBFLNormalizeSpaceStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftIdStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftObflMarkerStep$Provider,
       org.daisy.pipeline.braille.dotify.calabash.impl.ShiftStringSetStep$Provider,
