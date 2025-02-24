@@ -3300,10 +3300,7 @@
   
   <x:scenario label="white-space-normalization-in-span">
     <x:documentation>
-      Tests that white space at the beginning and end of a span is not stripped. Dotify would
-      normally strip it if DP2 wouldn't inhibit it by adding ZWSP characters. This is done because
-      Dotify strips white space too aggressively in some cases. The current solution is not ideal
-      either but it is better to strip too little than too much.
+      Tests that white space at the beginning and end of a span is not stripped.
     </x:documentation>
     <x:call step="pxi:test">
       <x:input port="source">

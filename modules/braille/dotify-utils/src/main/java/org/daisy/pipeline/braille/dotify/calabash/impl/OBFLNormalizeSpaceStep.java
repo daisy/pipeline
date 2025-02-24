@@ -102,9 +102,9 @@ public class OBFLNormalizeSpaceStep extends DefaultStep implements XProcStep {
 	}
 
 	@Component(
-		name = "pxi:obfl-normalize-space-2",
+		name = "pxi:obfl-normalize-space",
 		service = { XProcStepProvider.class },
-		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}obfl-normalize-space-2" }
+		property = { "type:String={http://www.daisy.org/ns/pipeline/xproc/internal}obfl-normalize-space" }
 	)
 	public static class Provider implements XProcStepProvider  {
 

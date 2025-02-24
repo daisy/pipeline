@@ -2187,13 +2187,13 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block><span translate="" xml:lang="">1. &#x200b;</span>⠤⠤⠤</block>
-            <block><span translate="" xml:lang="">2. &#x200b;</span>⠤⠤⠤</block>
-            <block><span translate="" xml:lang="">i. &#x200b;</span>⠤⠤⠤</block>
-            <block><span translate="" xml:lang="">ii. &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠶ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠶ &#x200b;</span>⠤⠤⠤</block>
-            <block><span translate="" xml:lang="">3. &#x200b;</span>⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">1.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">2.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">i.</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">ii.</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠶</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠶</span> ⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">3.</span> ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -5284,7 +5284,7 @@
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
-              &#x200b;<marker class="print-page/prev" value="3"/>
+              <marker class="print-page/prev" value="3"/>
               <marker class="print-page" value="4"/>
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
@@ -5887,7 +5887,7 @@
             </block>
             <block break-before="sheet">
               ⠤⠤⠤
-              &#x200b;<marker class="foo/prev" value="⠿"/>
+              <marker class="foo/prev" value="⠿"/>
               <marker class="foo" value="⠿⠿"/>
               ⠤⠤⠤
             </block>
@@ -6111,7 +6111,7 @@
                 <marker class="indicator/pagenum" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                &#x200b;<marker class="indicator/pagenum" value="x"/>
+                <marker class="indicator/pagenum" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -6228,7 +6228,7 @@
               <marker class="indicator/pagenum" value="x"/>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              &#x200b;<marker class="indicator/pagenum" value="x"/>
+              <marker class="indicator/pagenum" value="x"/>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
             </block>
           </sequence>
@@ -6447,9 +6447,9 @@
                 <tbody>
                   <tr>
                     <td>
-                      <block><span xml:lang="" translate="">1. &#x200b;</span></block>
-                      <block><span xml:lang="" translate="">2. &#x200b;</span></block>
-                      <block><span xml:lang="" translate="">3. &#x200b;</span></block>
+                      <block><span xml:lang="" translate="">1.</span></block>
+                      <block><span xml:lang="" translate="">2.</span></block>
+                      <block><span xml:lang="" translate="">3.</span></block>
                     </td>
                     <td>⠤⠤⠤</td>
                     <td>⠤⠤⠤</td>
@@ -10076,11 +10076,9 @@
           </layout-master>
           <sequence master="master_1">
             <block>
-              <span translate="">
-                1 2 3
-                &#x200b;</span>⠿⠿⠿<span translate="">&#x200b;
-                4 5 6
-              </span>
+              <span translate="">1 2 3</span>
+              ⠿⠿⠿
+              <span translate="">4 5 6</span>
             </block>
           </sequence>
         </obfl>
@@ -15058,7 +15056,7 @@
             </block>
             <block break-before="sheet">
               ⠤⠤⠤
-              &#x200b;<marker class="foo/if-not-set-next/prev" value="⠿"/>
+              <marker class="foo/if-not-set-next/prev" value="⠿"/>
               <marker class="foo/if-not-set-next" value="⠿⠿"/>
               ⠤⠤⠤
             </block>
@@ -16002,7 +16000,7 @@
               <toc-block>
                 <toc-entry ref-id="chapter">
                   ⠿⠿⠿
-                  <span translate="">&#x200b;
+                  <span translate="">
                     <style name="">
                       <page-number ref-id="chapter" number-format="default"/>
                     </style>
@@ -16530,7 +16528,7 @@
           </layout-master>
           <sequence master="body">
             <block>
-              <span translate="pre-translated-text-css">&#x200b;⠤⠤⠤ &#x200b;</span><style name="text-transform: downshift number">1</style>
+              <span translate="pre-translated-text-css">⠤⠤⠤</span> <style name="text-transform: downshift number">1</style>
             </block>
           </sequence>
         </obfl>
@@ -16639,13 +16637,13 @@
             </pre-content>
           </volume-template>
           <sequence master="master">
-            <block><span xml:lang="">⠈ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠉ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠙ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠛ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠻ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠿ &#x200b;</span>⠤⠤⠤</block>
-            <block><span xml:lang="">⠿⠈ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠈</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠉</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠙</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠛</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠻</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠿</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠿⠈</span> ⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>

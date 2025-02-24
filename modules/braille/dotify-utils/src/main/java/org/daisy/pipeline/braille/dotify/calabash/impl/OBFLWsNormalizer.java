@@ -100,7 +100,9 @@ public class OBFLWsNormalizer {
 			events.add(event);
 			while (input.hasNext()) {
 				event = input.nextEvent();
-				if (beginsMixedContent(event)) {
+				if (event.getEventType() == XMLStreamConstants.COMMENT)
+					; // ignore comments
+				else if (beginsMixedContent(event)) {
 					buffer.addAll(modifyWhitespace(events));
 					events.clear();
 					parseBlock(event);
@@ -113,12 +115,40 @@ public class OBFLWsNormalizer {
 			}
 		}
 
+		/* Merge text nodes on both sides of a comment
+		 */
+		private List<XMLEvent> coalesceTextNodes(List<XMLEvent> events) throws XMLStreamException {
+			List<XMLEvent> coalesced = new ArrayList<>();
+			Characters chars = null; // if previous event (that was not a comment) were characters
+			for (int i = 0; i < events.size(); i++) {
+				XMLEvent event = events.get(i);
+				if (event.getEventType() == XMLStreamConstants.CHARACTERS) {
+					if (chars != null)
+						chars = createCharacters(chars.getData() + event.asCharacters().getData(),
+						                         chars.getLocation());
+					else
+						chars = event.asCharacters();
+				} else {
+					if (chars != null) {
+						coalesced.add(chars);
+						chars = null;
+					}
+					coalesced.add(event);
+				}
+			}
+			if (chars != null)
+				coalesced.add(chars);
+			return coalesced;
+		}
+
 		// Note that there could in principle be some leading or trailing white space inside a toc-entry
 		// that is moved outside of the toc-entry, and because toc-entry are conditional, this could
 		// lead to unwanted white space. Because at the moment it is forbidden by the implementation
 		// (not by OBFL) that two toc-entry's are contained in the same block, this is not an actual
 		// issue.
 		private List<XMLEvent> modifyWhitespace(List<XMLEvent> events) throws XMLStreamException {
+			// code below assumes no two text nodes follow each other immediately
+			events = coalesceTextNodes(events);
 			List<XMLEvent> buffer = new ArrayList<>();
 			// for changing order between white space and markers, anchors and begin and end tags
 			String pendingSpace = null;
@@ -128,11 +158,11 @@ public class OBFLWsNormalizer {
 				XMLEvent event = events.get(i);
 				if (event.getEventType() == XMLStreamConstants.CHARACTERS) {
 					String data = event.asCharacters().getData();
-					// move over any trailing space to the following node that is not a marker or anchor (or
-					// otherwise strip it)
+					// move any trailing space at the end of an element outside the element, or strip it when
+					// at the end of the block
 					if (isSpace(data)) {
-						// strip space if it does not follow at least one element or text node that is not
-						// white space
+						// strip space if it does not follow at least one text node that is not white space,
+						// or an element that is not a span or marker
 						if (!firstContent)
 							pendingSpace = " ";
 					} else {
@@ -142,15 +172,8 @@ public class OBFLWsNormalizer {
 						pendingSpace = null;
 						if (!pendingTags.isEmpty()) {
 							if (!"".equals(pre)) {
-								// move any leading space at the start of an element outside the element
-								int lastEndTag = -1; {
-									int j = 0;
-									for (XMLEvent e : pendingTags) {
-										if (e.getEventType() == XMLStreamConstants.END_ELEMENT)
-											lastEndTag = j;
-										j++; }}
-								for (int j = 0; j <= lastEndTag; j++)
-									buffer.add(pendingTags.pollFirst());
+								// move any leading space at the start of an element outside the element, and
+								// move any leading space in front of marker elements
 								buffer.add(createCharacters(pre, event.getLocation()));
 								pre = "";
 							}
@@ -162,23 +185,26 @@ public class OBFLWsNormalizer {
 							pendingSpace = " ";
 						firstContent = false;
 					}
-				} else if (event.getEventType() == XMLStreamConstants.START_ELEMENT) {
-					if (!pendingTags.isEmpty()) {
-						buffer.addAll(pendingTags);
-						pendingTags.clear();
-					}
-					// move over any pending trailing space
-					if (pendingSpace != null
-						&& !isStartElement(event, ObflQName.MARKER,
-						                          ObflQName.ANCHOR)) {
-						buffer.add(createCharacters(pendingSpace, event.getLocation()));
-						pendingSpace = null;
-					}
+				} else if (isStartElement(event, ObflQName.SPAN,
+				                                 ObflQName.STYLE,
+				                                 ObflQName.TOC_ENTRY,
+				                                 ObflQName.MARKER,
+				                                 ObflQName.ANCHOR)
+				           || isEndElement(event, ObflQName.MARKER,
+				                                  ObflQName.ANCHOR))
 					pendingTags.add(event);
-				} else if (event.getEventType() == XMLStreamConstants.END_ELEMENT) {
-					pendingTags.add(event);
-					firstContent = false;
-				} else {
+				else {
+					if (event.getEventType() == XMLStreamConstants.START_ELEMENT) {
+						if (pendingSpace != null) {
+							buffer.add(createCharacters(pendingSpace, event.getLocation()));
+							pendingSpace = null;
+						}
+					} else if (firstContent
+					           && event.getEventType() == XMLStreamConstants.END_ELEMENT
+					           && !isEndElement(event, ObflQName.SPAN,
+					                                   ObflQName.STYLE,
+					                                   ObflQName.TOC_ENTRY))
+						firstContent = false;
 					if (!pendingTags.isEmpty()) {
 						buffer.addAll(pendingTags);
 						pendingTags.clear();
@@ -273,7 +299,10 @@ public class OBFLWsNormalizer {
 		static final QName BLOCK = new QName(OBFL_NS, "block");
 		static final QName ITEM = new QName(OBFL_NS, "item");
 		static final QName MARKER = new QName(OBFL_NS, "marker");
+		static final QName SPAN = new QName(OBFL_NS, "span");
+		static final QName STYLE = new QName(OBFL_NS, "style");
 		static final QName TD = new QName(OBFL_NS, "td");
 		static final QName TOC_BLOCK = new QName(OBFL_NS, "toc-block");
+		static final QName TOC_ENTRY = new QName(OBFL_NS, "toc-entry");
 	}
 }
