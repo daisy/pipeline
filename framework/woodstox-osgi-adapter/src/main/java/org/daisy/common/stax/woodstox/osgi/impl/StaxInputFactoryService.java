@@ -6,7 +6,6 @@ import com.ctc.wstx.stax.WstxInputFactory;
 
 import org.osgi.service.component.annotations.Component;
 
-// TODO: Auto-generated Javadoc
 /**
  * A factory for creating StaxInputFactoryService objects.
  */
