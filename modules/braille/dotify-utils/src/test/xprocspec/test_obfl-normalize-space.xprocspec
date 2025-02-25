@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
+               script="../../main/resources/xml/obfl-normalize-space.xpl">
+
+  <x:scenario label="test_01">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="print-page" value="⠤"/>
+            ⠤⠤⠤
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block><marker class="print-page" value="⠤"/>⠤⠤⠤</block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_02">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="print-page" value="⠤"/>
+            ⠤⠤⠤
+            <marker class="print-page" value="⠤"/>
+            <marker class="print-page" value="⠤"/>
+            <block>
+              ⠤⠤⠤
+              <marker class="print-page" value="⠤"/>
+              ⠤⠤⠤
+              <marker class="print-page" value="⠤"/>
+              <marker class="print-page" value="⠤"/>
+              ⠤⠤⠤
+            </block>
+            <marker class="print-page" value="⠤"/>
+            <block>
+              <marker class="print-page" value="⠤"/>
+              ⠤⠤⠤
+              <marker class="print-page" value="⠤"/>
+              <marker class="print-page" value="⠤"/>
+              <block>
+                ⠤⠤⠤
+                <marker class="print-page" value="⠤"/>
+                ⠤⠤⠤
+                <marker class="print-page" value="⠤"/>
+                <marker class="print-page" value="⠤"/>
+                ⠤⠤⠤
+              </block>
+              <marker class="print-page" value="⠤"/>
+              <block>
+                ⠤⠤⠤
+                <marker class="print-page" value="⠤"/>
+                ⠤⠤⠤
+                <marker class="print-page" value="⠤"/>
+                <marker class="print-page" value="⠤"/>
+                ⠤⠤⠤
+              </block>
+              <marker class="print-page" value="⠤"/>
+            </block>
+            <marker class="print-page" value="⠤"/>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><marker class="print-page" value="⠤"/>⠤⠤⠤<marker class="print-page" value="⠤"/><marker class="print-page" value="⠤"/><block>⠤⠤⠤ ​<marker class="print-page" value="⠤"/>⠤⠤⠤ ​<marker class="print-page" value="⠤"/><marker class="print-page" value="⠤"/>⠤⠤⠤</block><marker class="print-page" value="⠤"/><block><marker class="print-page" value="⠤"/>⠤⠤⠤<marker class="print-page" value="⠤"/><marker class="print-page" value="⠤"/><block>⠤⠤⠤ ​<marker class="print-page" value="⠤"/>⠤⠤⠤ ​<marker class="print-page" value="⠤"/><marker class="print-page" value="⠤"/>⠤⠤⠤</block><marker class="print-page" value="⠤"/><block>⠤⠤⠤ ​<marker class="print-page" value="⠤"/>⠤⠤⠤ ​<marker class="print-page" value="⠤"/><marker class="print-page" value="⠤"/>⠤⠤⠤</block><marker class="print-page" value="⠤"/></block><marker class="print-page" value="⠤"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_03">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <block first-line-indent="2">
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+              </block>
+            <block>
+              <leader pattern="⠐" position="100%" align="right"/> ⠿</block>
+            <block>
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            </block>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><block first-line-indent="2">⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤</block><block><leader pattern="⠐" position="100%" align="right"/> ⠿</block><block>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤</block></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_04">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ​<marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_05">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ​<marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_06">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <sequence>
+            <block>
+              <block>
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1" margin-bottom="1"/>
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+            <block margin-top="1">
+              <block margin-top="1" margin-bottom="1">
+                <evaluate expression="&#34;&#34;"/>
+              </block>
+              <block margin-top="1">
+                ⠿
+              </block>
+            </block>
+          </sequence>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <sequence><block><block>⠿</block></block><block margin-top="1"><block margin-top="1">⠿</block></block><block margin-top="1"><block margin-top="1" margin-bottom="1"/><block margin-top="1">⠿</block></block><block margin-top="1"><block margin-top="1" margin-bottom="1"><evaluate expression="&#34;&#34;"/></block><block margin-top="1">⠿</block></block></sequence>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_07">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ​<marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_08">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <block>
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
+            <marker class="indicator/pagenum" value="x"/>
+          </block>
+        </x:document>
+      </x:input>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+        <block><marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ​<marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+</x:description>
