@@ -355,7 +355,7 @@ elements that represent the sentences.</p>
                                                      resolve-uri($s,$source),
                                                    ' ')"/>
         <p:with-option name="stylesheet-parameters" select="$stylesheet-parameters"/>
-        <p:with-option name="lexicon" select="for $l in tokenize($stylesheet,'\s+')[not(.='')] return
+        <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
                                                 resolve-uri($l,$source)"/>
         <p:with-option name="apply-document-specific-stylesheets" select="$apply-document-specific-stylesheets"/>
         <p:with-option name="set-default-rendition-to-braille" select="$set-default-rendition-to-braille"/>
