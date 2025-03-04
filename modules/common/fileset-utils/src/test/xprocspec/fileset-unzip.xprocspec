@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="http://www.daisy.org/ns/xprocspec/xprocspec.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<x:description script="../../../src/main/resources/xml/xproc/fileset-unzip.xpl" xmlns:x="http://www.daisy.org/ns/xprocspec" xmlns:p="http://www.w3.org/ns/xproc"
-    xmlns:c="http://www.w3.org/ns/xproc-step" xmlns:px="http://www.daisy.org/ns/pipeline/xproc" xmlns:d="http://www.daisy.org/ns/pipeline/data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
+               xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
+               xmlns:p="http://www.w3.org/ns/xproc"
+               xmlns:c="http://www.w3.org/ns/xproc-step"
+               xmlns:d="http://www.daisy.org/ns/pipeline/data"
+               script="../../../src/main/resources/xml/xproc/fileset-unzip.xpl">
     
     <x:scenario label="Scenario for testing px:fileset-unzip - XProc test suite unzip-001">
         <x:call step="px:fileset-unzip">
@@ -58,7 +61,7 @@
         <x:expect label="There must be exactly 9 files in the fileset" type="count" min="1" max="1"/>
         <x:expect label="The fileset should be as expected" type="compare">
             <x:document type="inline" select="/*/*">
-                <d:fileset xmlns:d="http://www.daisy.org/ns/pipeline/data">
+                <d:fileset>
                     <d:file href="package.opf"/>
                 </d:fileset>
             </x:document>
@@ -289,7 +292,33 @@ CjwvcGFja2FnZT4NCg==
             <x:document type="errors"/>
         </x:context>
         <x:expect label="There should be errors" type="count" min="1"/>
-        <x:expect label="The error 'PZU001' should be thrown" type="xpath" test="/*/*/@code" equals="'PZU001'"/>
+        <x:expect label="The error 'PZU001' should be thrown (When store-to-disk='true' then unzipped-basedir must also be defined)"
+                  type="xpath" test="/*/*/@code" equals="'PZU001'"/>
+    </x:scenario>
+
+    <x:scenario label="ZIP with special characters in file names">
+        <x:call step="px:fileset-unzip">
+            <x:option name="href" select="resolve-uri('samples/fileset2/a.zip', base-uri(.))"/>
+        </x:call>
+        <x:context label="the fileset port">
+            <x:document type="port" port="fileset"/>
+        </x:context>
+        <x:expect label="should be as expected" type="compare">
+            <x:document type="inline">
+                <d:fileset>
+                    <d:file href="a.html"/>
+                    <d:file href="c-gif.img"/>
+                    <d:file href="e.svg"/>
+                    <d:file href="e%5Bxml%5D"/>
+                    <d:file href="f.tar.gz"/>
+                    <d:file href="MimeDetector.class"/>
+                    <d:file href="MimeDetector.java"/>
+                    <d:file href="resources/eu/medsea/mimeutil/magic.mime"/>
+                    <d:file href="resources/eu/medsea/mimeutil/mime-types.properties"/>
+                    <d:file href="resources/mime.cache"/>
+                </d:fileset>
+            </x:document>
+        </x:expect>
     </x:scenario>
 
 </x:description>

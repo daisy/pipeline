@@ -243,7 +243,9 @@
                     </p:choose>
                     <p:rename match="/*" new-name="d:fileset"/>
                     <p:rename match="/*/*" new-name="d:file"/>
-                    <p:rename match="/*/*/@name" new-name="href"/>
+                    <p:label-elements match="/*/d:file" attribute="href"
+                                      label="string-join(for $t in tokenize(@name,'/') return encode-for-uri($t),'/')"/>
+                    <p:delete match="/*/*/@name"/>
                     <p:viewport match="/*/*">
                         <p:add-attribute match="/*" attribute-name="original-href">
                             <p:with-option name="attribute-value" select="resolve-uri(/*/@href, base-uri(.))"/>
@@ -391,7 +393,8 @@
             <p:viewport match="/*/*">
                 <p:rename match="/*" new-name="d:file"/>
                 <p:add-attribute match="/*" attribute-name="href">
-                    <p:with-option name="attribute-value" select="/*/@name"/>
+                    <p:with-option name="attribute-value"
+                                   select="string-join(for $t in tokenize(/*/@name,'/') return encode-for-uri($t),'/')"/>
                 </p:add-attribute>
             </p:viewport>
             <p:delete match="/*/*/@*[not(name()='href')]"/>

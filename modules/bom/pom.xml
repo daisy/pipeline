@@ -134,7 +134,7 @@
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
         <artifactId>fileset-utils</artifactId>
-        <version>6.1.4</version>
+        <version>6.1.5-SNAPSHOT</version>
       </dependency>
       <dependency>
         <groupId>org.daisy.pipeline.modules</groupId>
