@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <x:description xmlns:x="http://www.daisy.org/ns/xprocspec"
-               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
-               script="../../main/resources/xml/obfl-normalize-space.xpl">
+               xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal">
+
+  <x:script>
+    <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                    type="pxi:obfl-normalize-space">
+      <p:input port="source"/>
+      <p:output port="result" primary="true"/>
+      <p:option name="skip-xslt" select="false()"/>
+      <p:declare-step type="pxi:obfl-normalize-space-2">
+        <p:input port="source"/>
+        <p:output port="result"/>
+      </p:declare-step>
+      <p:choose>
+        <p:when test="$skip-xslt">
+          <p:identity/>
+        </p:when>
+        <p:otherwise>
+          <p:xslt>
+            <p:input port="stylesheet">
+              <p:document href="../../main/resources/xml/obfl-normalize-space.xsl"/>
+            </p:input>
+            <p:input port="parameters">
+              <p:empty/>
+            </p:input>
+          </p:xslt>
+        </p:otherwise>
+      </p:choose>
+      <pxi:obfl-normalize-space-2/>
+    </p:declare-step>
+  </x:script>
 
   <x:scenario label="test_01">
     <x:call step="pxi:obfl-normalize-space">
@@ -255,6 +283,40 @@
     <x:expect label="normalized" type="compare" normalize-space="false">
       <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
         <block><marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ​<marker class="indicator/pagenum" value="x"/>⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/></block>
+      </x:document>
+    </x:expect>
+  </x:scenario>
+
+  <x:scenario label="test_09">
+    <x:call step="pxi:obfl-normalize-space">
+      <x:input port="source">
+        <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <sequence>
+            <block>   foo   </block>
+            <block><span>   foo   </span></block>
+            <block><span>foo</span>   bar</block>
+            <block><span>foo   </span>bar</block>
+            <block>foo   <marker/>bar</block>
+            <block>foo   <span>bar</span></block>
+            <block>foo<span>   bar</span></block>
+            <block><span>foo   </span><span>bar</span></block>
+            <block>foo   <marker/><span>bar</span></block>
+            <block><span>foo</span><span>   bar</span></block>
+            <block><span>foo   </span><page-number/></block>
+            <block>foo   <marker/><page-number/></block>
+            <block><page-number/><span>   bar</span></block>
+            <block>   <marker/>   foo</block>
+          </sequence>
+        </x:document>
+      </x:input>
+      <x:option name="skip-xslt" select="true()"/>
+    </x:call>
+    <x:context label="result">
+      <x:document type="port" port="result"/>
+    </x:context>
+    <x:expect label="normalized" type="compare" normalize-space="false">
+      <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
+          <sequence><block>foo</block><block><span>foo</span></block><block><span>foo</span> bar</block><block><span>foo</span> bar</block><block>foo<marker/> bar</block><block>foo <span>bar</span></block><block>foo <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block>foo<marker/> <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block><span>foo</span><page-number/></block><block>foo<marker/><page-number/></block><block><page-number/><span>bar</span></block><block><marker/> foo</block></sequence>
       </x:document>
     </x:expect>
   </x:scenario>
