@@ -165,40 +165,58 @@
   
   <x:scenario label="test_02">
     <x:documentation>
-      Tests rendering print page, running header and running footer in page margin. The strings are
+      Tests string() function in page margin as well as page body. The strings are
       set, and sometimes emptied, individually at various places in the document.
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
         <x:document type="inline">
-          <doc style="text-transform:none">
+          <doc style="text-transform: none">
             <body style="@page {
-                         size: 20 5;
-                         @top-center { content: string(running-header) }
-                         @bottom-right { content: string(print-page) }
-                         @bottom-center { content: string(running-footer) }}">
+                           size: 20 5;
+                           @top-center { content: string(running-header) }
+                           @bottom-right { content: string(print-page) }
+                           @bottom-center { content: string(running-footer) }}
+                         &amp;::alternate {
+                           flow: print-page;
+                           display: block;
+                           content: string(print-page) }">
               <section style="display: block;">
-                ⠤⠤⠤
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: string(print-page) }"/>
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '⠤'">
-                ⠤⠤⠤
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: flow(print-page, document) }"/>
               </section>
               <section style="display: block;
-                              page-break-before: always;
-                              string-set: print-page '⠤⠤', running-footer '⠤⠤'">
-                ⠤⠤⠤
+                              string-set: print-page '⠤⠤', running-footer '⠤⠤';
+                              @page {
+                                size: 20 10;
+                                @top-center { content: string(running-header) }
+                                @bottom-right { content: string(print-page) }
+                                @bottom-center { content: string(running-footer) }}">
+                ⠿⠿⠿
+              </section>
+              <section style="display: block">
+                ⠿⠿⠿
+                <p style="display: block;
+                          &amp;::before { content: string(print-page) }"/>
+
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '', running-header '⠤⠤'">
-                ⠤⠤⠤
+                ⠿⠿⠿
               </section>
               <section style="display: block;
                               page-break-before: always;
                               string-set: print-page '⠤⠤⠤', running-footer ''">
-                ⠤⠤⠤
+                ⠿⠿⠿
               </section>
             </body>
           </doc>
@@ -249,36 +267,85 @@
               </footer>
             </default-template>
           </layout-master>
+          <layout-master name="b" page-width="20" page-height="10" duplex="true">
+            <default-template>
+              <header>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-header" direction="forward" scope="page"/>
+                    <marker-reference marker="running-header" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+                <field>
+                  <string value=""/>
+                </field>
+              </header>
+              <footer>
+                <field>
+                  <string value=""/>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="running-footer" direction="forward" scope="page"/>
+                    <marker-reference marker="running-footer" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+                <field>
+                  <compound-marker-reference>
+                    <marker-reference marker="print-page" direction="forward" scope="page"/>
+                    <marker-reference marker="print-page" direction="backward" scope="document"/>
+                  </compound-marker-reference>
+                </field>
+              </footer>
+            </default-template>
+          </layout-master>
           <sequence master="a">
             <block>
-              ⠤⠤⠤
+              <block> ⠿⠿⠿ </block>
+              <block/>
             </block>
             <block break-before="page">
               <block>
-                <marker class="print-page" value="⠤"/>
+                <block>
+                  <marker class="print-page" value="⠤"/>
+                </block>
+                ⠿⠿⠿
               </block>
-              ⠤⠤⠤
+              <block>
+                <block>⠤</block>
+              </block>
             </block>
-            <block break-before="page">
+          </sequence>
+          <sequence master="b">
+            <block break-before="sheet">
               <block>
                 <marker class="print-page" value="⠤⠤"/>
                 <marker class="running-footer" value="⠤⠤"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
+            </block>
+          </sequence>
+          <sequence master="a">
+            <block break-before="sheet">
+              <block> ⠿⠿⠿ </block>
+              <block>⠤⠤</block>
             </block>
             <block break-before="page">
               <block>
                 <marker class="print-page" value="​"/>
                 <marker class="running-header" value="⠤⠤"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
             </block>
             <block break-before="page">
               <block>
                 <marker class="print-page" value="⠤⠤⠤"/>
                 <marker class="running-footer" value="​"/>
               </block>
-              ⠤⠤⠤
+              ⠿⠿⠿
             </block>
           </sequence>
         </obfl>
@@ -300,32 +367,48 @@
               <section>
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                 </page>
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
-                  <row/>
+                  <row>⠿⠿⠿</row>
+                  <row>⠤</row>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤</row>
                 </page>
+              </section>
+              <section rows="10">
                 <page>
                   <row/>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row/>
+                  <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
+                </page>
+              </section>
+              <section>
+                <page>
+                  <row/>
+                  <row>⠿⠿⠿</row>
+                  <row>⠤⠤</row>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤</row>
                 </page>
                 <page>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
                 </page>
                 <page>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠀⠀⠀⠀⠀⠀⠀⠀⠀</row>
-                  <row>⠤⠤⠤</row>
+                  <row>⠿⠿⠿</row>
                   <row/>
                   <row/>
                   <row>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠤⠤⠤</row>

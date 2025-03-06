@@ -5,6 +5,7 @@
                 xmlns:xs="http://www.w3.org/2001/XMLSchema"
                 xmlns:map="http://www.w3.org/2005/xpath-functions/map"
                 xmlns:array="http://www.w3.org/2005/xpath-functions/array"
+                xmlns:functx="http://www.functx.com"
                 xmlns:pxi="http://www.daisy.org/ns/pipeline/xproc/internal"
                 xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
                 xmlns:pef="http://www.daisy.org/ns/2008/pef"
@@ -2358,7 +2359,29 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:when>
+            <xsl:otherwise>
+                <!-- search in preceding sections -->
+                <xsl:variable name="sections-in-normal-flow" as="document-node()*" select="$sections[not(/*/@css:flow)]"/>
+                <xsl:variable name="current-section" as="document-node()" select="$context/root()"/>
+                <xsl:variable name="current-section" as="xs:integer"
+                              select="functx:index-of-node($sections-in-normal-flow,$current-section)"/>
+                <xsl:if test="$current-section &gt; 1">
+                    <xsl:sequence select="pxi:resolve-css-string(
+                                            $name,
+                                            ($sections-in-normal-flow[$current-section - 1]//descendant::*)[last()])"/>
+                </xsl:if>
+            </xsl:otherwise>
         </xsl:choose>
+    </xsl:function>
+    
+    <!--
+        http://www.xsltfunctions.com/xsl/functx_index-of-node.html
+    -->
+    <xsl:function name="functx:index-of-node" as="xs:integer*">
+        <xsl:param name="nodes" as="node()*"/>
+        <xsl:param name="nodeToFind" as="node()"/>
+        <xsl:sequence select="for $seq in (1 to count($nodes))
+                              return $seq[$nodes[$seq] is $nodeToFind]"/>
     </xsl:function>
     
     <xsl:template mode="css:eval-string"
