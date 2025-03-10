@@ -17320,8 +17320,6 @@
   <x:scenario label="test_144">
     <x:documentation>
       Tests line breaking when multiple spans are present.
-      
-      Currently broken: empty lines appear at row 5, 7 and 9 (after block 4, 5 and 6).
     </x:documentation>
     <x:call step="dotify:format">
       <x:input port="source">
@@ -17389,37 +17387,24 @@
               <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
             </block>
             <block>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
+              <style name="hyphens: none"></style><style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
             </block>
             <block>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
+              <style name="hyphens: none"></style><style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
             </block>
             <block>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
+              <style name="hyphens: none"></style><style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
             </block>
             <block>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
+              <style name="hyphens: none"></style><style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
             </block>
             <block>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none"></style>
+              <style name="hyphens: none"></style><style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
+              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿⠿</style><style name="hyphens: none"></style>
             </block>
             <block>
               <style name="hyphens: none">⠒⠒⠒</style>
@@ -17431,7 +17416,7 @@
     <x:context label="pef">
       <x:document type="port" port="result"/>
     </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare" xfail="true">
+    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
       <x:document type="inline">
         <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
           <head xmlns:dc="http://purl.org/dc/elements/1.1/">

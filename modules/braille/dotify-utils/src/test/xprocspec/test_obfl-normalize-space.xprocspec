@@ -316,7 +316,7 @@
     </x:context>
     <x:expect label="normalized" type="compare" normalize-space="false">
       <x:document type="inline" xmlns="http://www.daisy.org/ns/2011/obfl">
-          <sequence><block>foo</block><block><span>foo</span></block><block><span>foo</span> bar</block><block><span>foo</span> bar</block><block>foo<marker/> bar</block><block>foo <span>bar</span></block><block>foo <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block>foo<marker/> <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block><span>foo</span><page-number/></block><block>foo<marker/><page-number/></block><block><page-number/><span>bar</span></block><block><marker/> foo</block></sequence>
+          <sequence><block>foo</block><block><span>foo</span></block><block><span>foo</span> bar</block><block><span>foo</span> bar</block><block>foo<marker/> bar</block><block>foo <span>bar</span></block><block>foo <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block>foo<marker/> <span>bar</span></block><block><span>foo</span> <span>bar</span></block><block><span>foo</span> <page-number/></block><block>foo<marker/> <page-number/></block><block><page-number/> <span>bar</span></block><block><marker/> foo</block></sequence>
       </x:document>
     </x:expect>
   </x:scenario>

@@ -5,9 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.regex.Pattern;
 
 import javax.xml.namespace.QName;
@@ -107,8 +105,8 @@ public class OBFLWsNormalizer {
 					events.clear();
 					parseBlock(event);
 				} else if (isEndElement(event, name)) {
+					events.add(event);
 					buffer.addAll(modifyWhitespace(events));
-					buffer.add(event); // not passing end element to modifyWhitespace() in order to simplify code
 					break;
 				} else
 					events.add(event);
@@ -122,150 +120,75 @@ public class OBFLWsNormalizer {
 		// issue.
 		private List<XMLEvent> modifyWhitespace(List<XMLEvent> events) throws XMLStreamException {
 			List<XMLEvent> buffer = new ArrayList<>();
+			// for changing order between white space and markers, anchors and begin and end tags
+			String pendingSpace = null;
+			Deque<XMLEvent> pendingTags = new ArrayDeque<>();
+			boolean firstContent = true;
 			for (int i = 0; i < events.size(); i++) {
 				XMLEvent event = events.get(i);
 				if (event.getEventType() == XMLStreamConstants.CHARACTERS) {
 					String data = event.asCharacters().getData();
-					// strip leading space unless:
-					String pre = ""; {
-						// ... it is not a white space only text node that is the last node in the block, or
-						// that is immediately followed by a marker ...
-						if (isSpace(data)
-						    && (i == events.size() - 1
-						        || isStartElement(events.get(i + 1), ObflQName.MARKER)))
-							;
-						else if (i > 0) {
-							XMLEvent precedingEvent = events.get(i - 1);
-							// ... and it immediately follows a page-number, leader, evaluate, span, style,
-							// toc-entry, marker or anchor
-							if (startsWithSpace(data)
-							    && isEndElement(precedingEvent, ObflQName.PAGE_NUMBER,
-							                                    ObflQName.LEADER,
-							                                    ObflQName.EVALUATE,
-							                                    ObflQName.SPAN,
-							                                    ObflQName.STYLE,
-							                                    ObflQName.TOC_ENTRY,
-							                                    ObflQName.MARKER,
-							                                    ObflQName.ANCHOR))
-								pre = " ";
-							// in addition, move over any trailing space that precedes this node, with only
-							// markers and anchors in between ...
-							else if (i > 1
-							         && isEndElement(precedingEvent, ObflQName.MARKER,
-							                                         ObflQName.ANCHOR)) {
-								XMLEvent previousNotMarkerOrAnchor = tryPrevious(
-									backwardSkipWhile(
-										events.listIterator(i - 1), ObflQName.MARKER,
-										                            ObflQName.ANCHOR)
-								).orElse(null);
-								if (previousNotMarkerOrAnchor != null
-								    && previousNotMarkerOrAnchor.isCharacters()
-								    && endsWithSpace(previousNotMarkerOrAnchor.asCharacters().getData()))
-									pre = " ";
-							// ... as well as any trailing space within the immediately preceding element
-							} else if (i > 1
-							           && precedingEvent.isEndElement()) {
-								XMLEvent previousNotEndElement = tryPrevious(
-									backwardSkipWhile(
-										events.listIterator(i - 1), XMLStreamConstants.END_ELEMENT)
-								).orElse(null);
-								if (previousNotEndElement != null
-								    && previousNotEndElement.isCharacters()
-								    && endsWithSpace(previousNotEndElement.asCharacters().getData()))
-									pre = " ";
+					// move over any trailing space to the following node that is not a marker or anchor (or
+					// otherwise strip it)
+					if (isSpace(data)) {
+						// strip space if it does not follow at least one element or text node that is not
+						// white space
+						if (!firstContent)
+							pendingSpace = " ";
+					} else {
+						String pre = !firstContent && (pendingSpace != null || startsWithSpace(data))
+							? " "
+							: "";
+						pendingSpace = null;
+						if (!pendingTags.isEmpty()) {
+							if (!"".equals(pre)) {
+								// move any leading space at the start of an element outside the element
+								int lastEndTag = -1; {
+									int j = 0;
+									for (XMLEvent e : pendingTags) {
+										if (e.getEventType() == XMLStreamConstants.END_ELEMENT)
+											lastEndTag = j;
+										j++; }}
+								for (int j = 0; j <= lastEndTag; j++)
+									buffer.add(pendingTags.pollFirst());
+								buffer.add(createCharacters(pre, event.getLocation()));
+								pre = "";
 							}
+							buffer.addAll(pendingTags);
+							pendingTags.clear();
 						}
+						buffer.add(createCharacters(pre + normalizeSpace(data), event.getLocation()));
+						if (endsWithSpace(data))
+							pendingSpace = " ";
+						firstContent = false;
 					}
-					// strip trailing space unless:
-					String post = ""; {
-						// ... it does not occur at the end of the block ...
-						if (i < events.size() - 1) {
-							XMLEvent followingEvent = events.get(i + 1);
-							// ... and it is not a white space only node (because it would potentially also be
-							// preserved as leading space) ...
-							if (isSpace(data))
-								;
-							// ... and a page-number, leader, evaluate, span, style or toc-entry follows
-							// immediately
-							else if (endsWithSpace(data)
-							         && isStartElement(followingEvent, ObflQName.PAGE_NUMBER,
-							                                           ObflQName.LEADER,
-							                                           ObflQName.EVALUATE,
-							                                           ObflQName.SPAN,
-							                                           ObflQName.STYLE,
-							                                           ObflQName.TOC_ENTRY))
-								post = " ";
-							// in addition, move over any leading space within the immediately following
-							// element
-							else if (i < events.size() - 2
-							         && followingEvent.isStartElement()) {
-								XMLEvent nextNotStartElement = tryNext(
-									skipWhile(
-										events.listIterator(i + 2), XMLStreamConstants.START_ELEMENT)
-								).orElse(null);
-								if (nextNotStartElement != null
-								    && nextNotStartElement.isCharacters()
-								    && startsWithSpace(nextNotStartElement.asCharacters().getData()))
-									post = " ";
-							}
-						}
+				} else if (event.getEventType() == XMLStreamConstants.START_ELEMENT) {
+					if (!pendingTags.isEmpty()) {
+						buffer.addAll(pendingTags);
+						pendingTags.clear();
 					}
-					String chars = pre + normalizeSpace(data) + post;
-					if (!"".equals(chars))
-						buffer.add(createCharacters(chars, event.getLocation()));
-				// if this is a span, style or toc-entry
-				} else if (isStartElement(event, ObflQName.SPAN,
-				                                 ObflQName.STYLE,
-				                                 ObflQName.TOC_ENTRY)) {
-					if (i > 1) {
-						XMLEvent precedingEvent = events.get(i - 1);
-						// insert any trailing space that precedes this element, with only markers and anchors
-						// in between, before this element ...
-						if (isEndElement(precedingEvent, ObflQName.MARKER,
-							                             ObflQName.ANCHOR)) {
-							XMLEvent previousNotMarkerOrAnchor = tryPrevious(
-								backwardSkipWhile(
-									events.listIterator(i - 1), ObflQName.MARKER,
-									                            ObflQName.ANCHOR)
-							).orElse(null);
-							if (previousNotMarkerOrAnchor != null
-							    && previousNotMarkerOrAnchor.isCharacters()
-							    && endsWithSpace(previousNotMarkerOrAnchor.asCharacters().getData()))
-								buffer.add(createCharacters(" ", event.getLocation()));
-						// ... as well as any trailing space within the immediately preceding element
-						} else if (precedingEvent.isEndElement()) {
-							XMLEvent previousNotEndElement = tryPrevious(
-								backwardSkipWhile(
-									events.listIterator(i - 1), XMLStreamConstants.END_ELEMENT)
-							).orElse(null);
-							if (previousNotEndElement != null
-							    && previousNotEndElement.isCharacters()
-							    && endsWithSpace(previousNotEndElement.asCharacters().getData()))
-								buffer.add(createCharacters(" ", event.getLocation()));
-						}
+					// move over any pending trailing space
+					if (pendingSpace != null
+						&& !isStartElement(event, ObflQName.MARKER,
+						                          ObflQName.ANCHOR)) {
+						buffer.add(createCharacters(pendingSpace, event.getLocation()));
+						pendingSpace = null;
+					}
+					pendingTags.add(event);
+				} else if (event.getEventType() == XMLStreamConstants.END_ELEMENT) {
+					pendingTags.add(event);
+					firstContent = false;
+				} else {
+					if (!pendingTags.isEmpty()) {
+						buffer.addAll(pendingTags);
+						pendingTags.clear();
 					}
 					buffer.add(event);
-				} else if (isEndElement(event, ObflQName.SPAN,
-				                               ObflQName.STYLE,
-				                               ObflQName.TOC_ENTRY)) {
-					buffer.add(event);
-					if (i < events.size() - 2) {
-						XMLEvent followingEvent = events.get(i + 1);
-						// move over any leading space within the immediately following element after this
-						// span, style or toc-entry
-						if (followingEvent.isStartElement()) {
-							XMLEvent nextNotStartElement = tryNext(
-								skipWhile(
-									events.listIterator(i + 2), XMLStreamConstants.START_ELEMENT)
-							).orElse(null);
-							if (nextNotStartElement != null
-							    && nextNotStartElement.isCharacters()
-							    && startsWithSpace(nextNotStartElement.asCharacters().getData()))
-								buffer.add(createCharacters(" ", event.getLocation()));
-						}
-					}
-				} else
-					buffer.add(event);
+				}
+			}
+			if (!pendingTags.isEmpty()) {
+				buffer.addAll(pendingTags);
+				pendingTags.clear();
 			}
 			return buffer;
 		}
@@ -329,49 +252,6 @@ public class OBFLWsNormalizer {
 		}
 	}
 
-	private static ListIterator<XMLEvent> skipWhile(ListIterator<XMLEvent> events, int eventType) {
-		while (events.hasNext())
-			if (events.next().getEventType() != eventType) {
-				events.previous();
-				break;
-			}
-		return events;
-	}
-
-	private static ListIterator<XMLEvent> backwardSkipWhile(ListIterator<XMLEvent> events, int eventType) {
-		while (events.hasPrevious())
-			if (events.previous().getEventType() != eventType) {
-				events.next();
-				break;
-			}
-		return events;
-	}
-
-	private static ListIterator<XMLEvent> backwardSkipWhile(ListIterator<XMLEvent> events, QName... name) {
-		while (events.hasPrevious()) {
-			XMLEvent e = events.previous();
-			if (isStartElement(e, name) || isEndElement(e, name))
-				continue;
-			else {
-				events.next();
-				break;
-			}
-		}
-		return events;
-	}
-
-	private static <T> Optional<T> tryNext(Iterator<T> list) {
-		if (list.hasNext())
-			return Optional.of(list.next());
-		return Optional.empty();
-	}
-
-	private static <T> Optional<T> tryPrevious(ListIterator<T> list) {
-		if (list.hasPrevious())
-			return Optional.of(list.previous());
-		return Optional.empty();
-	}
-
 	private static boolean beginsMixedContent(XMLEvent event) {
 		return isStartElement(event, ObflQName.BLOCK,
 		                             ObflQName.TOC_BLOCK,
@@ -391,15 +271,9 @@ public class OBFLWsNormalizer {
 		static final QName ANCHOR = new QName(OBFL_NS, "anchor");
 		static final QName BEFORE = new QName(OBFL_NS, "before");
 		static final QName BLOCK = new QName(OBFL_NS, "block");
-		static final QName EVALUATE = new QName(OBFL_NS, "evaluate");
 		static final QName ITEM = new QName(OBFL_NS, "item");
-		static final QName LEADER = new QName(OBFL_NS, "leader");
 		static final QName MARKER = new QName(OBFL_NS, "marker");
-		static final QName PAGE_NUMBER = new QName(OBFL_NS, "page-number");
-		static final QName SPAN = new QName(OBFL_NS, "span");
-		static final QName STYLE = new QName(OBFL_NS, "style");
 		static final QName TD = new QName(OBFL_NS, "td");
 		static final QName TOC_BLOCK = new QName(OBFL_NS, "toc-block");
-		static final QName TOC_ENTRY = new QName(OBFL_NS, "toc-entry");
 	}
 }
