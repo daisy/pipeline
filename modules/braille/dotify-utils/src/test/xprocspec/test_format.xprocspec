@@ -23,16 +23,20 @@
       <p:option name="skip-margin-top-of-page" select="'false'"/>
       <p:variable name="allow-text-overflow-trimming" select="'true'"/>
       <p:import href="../../main/resources/xml/css-to-obfl.xpl"/>
+      <p:import href="../../main/resources/xml/obfl-normalize-space.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/braille/dotify-utils/library.xpl"/>
       <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
-      <pxi:css-to-obfl name="obfl" px:message="css-to-obfl" px:progress=".89"
+      <pxi:css-to-obfl px:message="css-to-obfl" px:progress=".89"
                        duplex="true">
         <p:with-option name="document-locale" select="$document-locale"/>
         <p:with-option name="text-transform" select="$text-transform"/>
         <p:with-option name="braille-charset" select="$braille-charset"/>
         <p:with-option name="skip-margin-top-of-page" select="$skip-margin-top-of-page"/>
       </pxi:css-to-obfl>
-      <p:try px:progress=".11">
+      <pxi:obfl-normalize-space name="obfl" px:progress=".01">
+          <!-- normalize the OBFL even though it is done again in px:obfl-to-pef -->
+      </pxi:obfl-normalize-space>
+      <p:try px:progress=".10">
         <p:group>
           <px:set-base-uri>
             <p:with-option name="base-uri" select="base-uri(/*)">
@@ -2183,13 +2187,13 @@
             </default-template>
           </layout-master>
           <sequence master="body">
-            <block><span translate="" xml:lang="">1. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">2. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">i. </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">ii. </span>⠤⠤⠤ </block>
-            <block><span xml:lang="">⠶ </span>⠤⠤⠤ </block>
-            <block><span xml:lang="">⠶ </span>⠤⠤⠤ </block>
-            <block><span translate="" xml:lang="">3. </span>⠤⠤⠤ </block>
+            <block><span translate="" xml:lang="">1. &#x200b;</span>⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">2. &#x200b;</span>⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">i. &#x200b;</span>⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">ii. &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠶ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠶ &#x200b;</span>⠤⠤⠤</block>
+            <block><span translate="" xml:lang="">3. &#x200b;</span>⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
@@ -5280,7 +5284,7 @@
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
-              <marker class="print-page/prev" value="3"/>
+              &#x200b;<marker class="print-page/prev" value="3"/>
               <marker class="print-page" value="4"/>
               ⠁⠁⠁⠁⠁
               ⠁⠁⠁⠁⠁
@@ -5883,7 +5887,7 @@
             </block>
             <block break-before="sheet">
               ⠤⠤⠤
-              <marker class="foo/prev" value="⠿"/>
+              &#x200b;<marker class="foo/prev" value="⠿"/>
               <marker class="foo" value="⠿⠿"/>
               ⠤⠤⠤
             </block>
@@ -6107,7 +6111,7 @@
                 <marker class="indicator/pagenum" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-                <marker class="indicator/pagenum" value="x"/>
+                &#x200b;<marker class="indicator/pagenum" value="x"/>
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
                 ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
@@ -6224,15 +6228,14 @@
               <marker class="indicator/pagenum" value="x"/>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <marker class="indicator/pagenum" value="x"/>
+              &#x200b;<marker class="indicator/pagenum" value="x"/>
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
             </block>
           </sequence>
           <sequence master="b">
             <block break-before="sheet">
               ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤
-              <marker class="indicator/pagenum" value="x"/>
+              ⠤⠤⠤ ⠤⠤⠤ ⠤⠤⠤<marker class="indicator/pagenum" value="x"/>
             </block>
           </sequence>
         </obfl>
@@ -6444,9 +6447,9 @@
                 <tbody>
                   <tr>
                     <td>
-                      <block><span xml:lang="" translate="">1.</span></block>
-                      <block><span xml:lang="" translate="">2.</span></block>
-                      <block><span xml:lang="" translate="">3.</span></block>
+                      <block><span xml:lang="" translate="">1. &#x200b;</span></block>
+                      <block><span xml:lang="" translate="">2. &#x200b;</span></block>
+                      <block><span xml:lang="" translate="">3. &#x200b;</span></block>
                     </td>
                     <td>⠤⠤⠤</td>
                     <td>⠤⠤⠤</td>
@@ -10075,7 +10078,7 @@
             <block>
               <span translate="">
                 1 2 3
-              </span>⠿⠿⠿<span translate="">
+                &#x200b;</span>⠿⠿⠿<span translate="">&#x200b;
                 4 5 6
               </span>
             </block>
@@ -15055,7 +15058,7 @@
             </block>
             <block break-before="sheet">
               ⠤⠤⠤
-              <marker class="foo/if-not-set-next/prev" value="⠿"/>
+              &#x200b;<marker class="foo/if-not-set-next/prev" value="⠿"/>
               <marker class="foo/if-not-set-next" value="⠿⠿"/>
               ⠤⠤⠤
             </block>
@@ -15999,7 +16002,7 @@
               <toc-block>
                 <toc-entry ref-id="chapter">
                   ⠿⠿⠿
-                  <span translate="">
+                  <span translate="">&#x200b;
                     <style name="">
                       <page-number ref-id="chapter" number-format="default"/>
                     </style>
@@ -16527,7 +16530,7 @@
           </layout-master>
           <sequence master="body">
             <block>
-              <span translate="pre-translated-text-css">⠤⠤⠤ </span><style name="text-transform: downshift number">1</style>
+              <span translate="pre-translated-text-css">&#x200b;⠤⠤⠤ &#x200b;</span><style name="text-transform: downshift number">1</style>
             </block>
           </sequence>
         </obfl>
@@ -16636,13 +16639,13 @@
             </pre-content>
           </volume-template>
           <sequence master="master">
-            <block><span xml:lang="">⠈</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠉</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠙</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠛</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠻</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠿</span> ⠤⠤⠤</block>
-            <block><span xml:lang="">⠿⠈</span> ⠤⠤⠤</block>
+            <block><span xml:lang="">⠈ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠉ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠙ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠛ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠻ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠿ &#x200b;</span>⠤⠤⠤</block>
+            <block><span xml:lang="">⠿⠈ &#x200b;</span>⠤⠤⠤</block>
           </sequence>
         </obfl>
       </x:document>
