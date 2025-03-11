@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
@@ -216,7 +217,39 @@ public class OBFLWsNormalizer {
 				buffer.addAll(pendingTags);
 				pendingTags.clear();
 			}
+			// drop empty style, span and toc-entry elements
+			buffer = dropEmptyStyles(buffer);
 			return buffer;
+		}
+
+		private List<XMLEvent> dropEmptyStyles(List<XMLEvent> events) throws XMLStreamException {
+			List<XMLEvent> cleaned = new ArrayList<>();
+			cleaned.addAll(events);
+			for (ListIterator<XMLEvent> i = cleaned.listIterator(); i.hasNext();) {
+				XMLEvent e = i.next();
+				if (isEndElement(e, ObflQName.SPAN,
+				                 ObflQName.STYLE,
+				                 ObflQName.TOC_ENTRY)) {
+					i.previous();
+					XMLEvent p = i.previous();
+					boolean skip = false; {
+						if (p.getEventType() == XMLStreamConstants.START_ELEMENT) {
+							skip = true;
+							// span elements are kept if they have an id attribute
+							if (p.asStartElement().getName().equals(ObflQName.SPAN)
+							    && p.asStartElement().getAttributeByName(ObflQName._ID) != null)
+								skip = false; }}
+					if (skip) {
+						i.remove();
+						i.next();
+						i.remove();
+					} else {
+						i.next();
+						i.next();
+					}
+				}
+			}
+			return cleaned;
 		}
 	}
 
@@ -304,5 +337,7 @@ public class OBFLWsNormalizer {
 		static final QName TD = new QName(OBFL_NS, "td");
 		static final QName TOC_BLOCK = new QName(OBFL_NS, "toc-block");
 		static final QName TOC_ENTRY = new QName(OBFL_NS, "toc-entry");
+
+		static final QName _ID = new QName("id");
 	}
 }
