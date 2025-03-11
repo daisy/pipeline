@@ -2889,6 +2889,19 @@
                 </xsl:analyze-string>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:variable name="text" as="xs:string">
+                    <xsl:choose>
+                        <!--
+                            For 'hyphens:none' all SHY and ZWSP characters are removed from the text in advance.
+                        -->
+                        <xsl:when test="$hyphens='none'">
+                            <xsl:sequence select="replace($text,'[&#x00AD;&#x200B;]','')"/>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:sequence select="$text"/>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:variable>
                 <xsl:variable name="text" as="xs:string*">
                     <xsl:choose>
                         <!--
@@ -2923,12 +2936,6 @@
                         <xsl:if test="$pending-braille-charset[not(.=$braille-charset)]">
                             <xsl:sequence select="concat('braille-charset: ',$pending-braille-charset)"/>
                         </xsl:if>
-                    </xsl:if>
-                    <!--
-                        hyphens handled through hyphenate attribute but not OBFL counterpart for value 'none'
-                    -->
-                    <xsl:if test="$hyphens='none'">
-                        <xsl:sequence select="concat('hyphens: ',$hyphens)"/>
                     </xsl:if>
                     <xsl:if test="$pending-hyphenate-character[not(.=$hyphenate-character)]">
                       <xsl:sequence select="concat('hyphenate-character: ',$pending-hyphenate-character)"/>

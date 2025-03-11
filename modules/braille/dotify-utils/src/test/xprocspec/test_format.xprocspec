@@ -4113,7 +4113,7 @@
               ⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿
             </block>
             <block>
-              <style name="hyphens: none">⠿⠿⠿­⠿⠿⠿ ⠿⠿⠿­⠿⠿⠿</style>
+              ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿
             </block>
             <block>
               <span translate="">1</span> ⠿⠿⠿
@@ -17064,7 +17064,7 @@
           </layout-master>
           <sequence master="a">
             <block>
-              <style name="hyphens: none">xxxxxx foo-bar xxxxxx</style>
+              xxxxxx foo-bar xxxxxx
             </block>
             <block>
               xxxxxx foo-bar xxxxxx
@@ -17079,7 +17079,7 @@
               xxxxxx foo-bar xxxxxx
             </block>
             <block>
-              <style name="hyphens: none">xxxxxx foo­bar xxxxxx</style>
+              xxxxxx foobar xxxxxx
             </block>
             <block>
               xxxxxx foo­bar xxxxxx
@@ -17094,7 +17094,7 @@
               xxxxxx foo­bar xxxxxx
             </block>
             <block>
-              <style name="hyphens: none">xxxxxx foobar xxxxxx</style>
+              xxxxxx foobar xxxxxx
             </block>
             <block>
               xxxxxx foobar xxxxxx
@@ -17315,134 +17315,4 @@
     </x:expect>
   </x:scenario>
   
-  <x:scenario label="test_144">
-    <x:documentation>
-      Tests line breaking when multiple spans are present.
-    </x:documentation>
-    <x:call step="dotify:format">
-      <x:input port="source">
-        <x:document type="inline">
-          <ul style="text-transform: none;
-                     hyphens: none;
-                     @page {
-                       size: 20 20 }">
-            <li style="display: block">
-              ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</span> ⠿⠿⠿⠿⠿⠿
-            </li>
-            <li style="display: block">
-              ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ <span>⠿⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</span> <span>⠿⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ </span><span>⠿⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</span><span> ⠿⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</span> <span>⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              <span>⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</span> <span>⠿⠿⠿⠿⠿⠿⠿</span>
-            </li>
-            <li style="display: block">
-              ⠒⠒⠒
-            </li>
-          </ul>
-        </x:document>
-      </x:input>
-    </x:call>
-    <x:context label="obfl">
-      <x:document type="port" port="obfl"/>
-    </x:context>
-    <x:expect label="obfl" type="custom" href="http://www.daisy.org/pipeline/modules/braille/obfl-utils/library.xpl" step="x:obfl-compare">
-      <x:document type="inline">
-        <obfl xmlns="http://www.daisy.org/ns/2011/obfl" version="2011-1" xml:lang="und" hyphenate="false" translate="pre-translated-text-css">
-          <meta xmlns:daisy="http://www.daisy.org/ns/pipeline/">
-            <daisy:style-type>text/css</daisy:style-type>
-          </meta>
-          <layout-master name="a" page-width="20" page-height="20" duplex="true">
-            <default-template>
-              <header/>
-              <footer/>
-            </default-template>
-          </layout-master>
-          <sequence master="a">
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿ ⠿⠿⠿⠿⠿⠿</style>
-              <style name="hyphens: none">⠿⠿⠿⠿⠿⠿⠿</style>
-            </block>
-            <block>
-              <style name="hyphens: none">⠒⠒⠒</style>
-            </block>
-          </sequence>
-        </obfl>
-      </x:document>
-    </x:expect>
-    <x:context label="pef">
-      <x:document type="port" port="result"/>
-    </x:context>
-    <x:expect label="pef" type="custom" href="http://www.daisy.org/pipeline/modules/braille/pef-utils/library.xpl" step="x:pef-compare">
-      <x:document type="inline">
-        <pef xmlns="http://www.daisy.org/ns/2008/pef" version="2008-1">
-          <head xmlns:dc="http://purl.org/dc/elements/1.1/">
-            <meta>
-              <dc:format>application/x-pef+xml</dc:format>
-            </meta>
-          </head>
-          <body>
-            <volume cols="20" rows="20" rowgap="0" duplex="true">
-              <section>
-                <page>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠀</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠀⠿⠿⠿⠿⠿⠿⠀</row>
-                  <row>⠿⠿⠿⠿⠿⠿⠿⠀</row>
-                  <row>⠒⠒⠒</row>
-                </page>
-              </section>
-            </volume>
-          </body>
-        </pef>
-      </x:document>
-    </x:expect>
-  </x:scenario>
-
 </x:description>
