@@ -466,16 +466,33 @@
                     <xsl:with-param name="refValue" select="replace(@imgref, '#', '')"/>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="parent::dtb:imggroup">
+            <xsl:when test="parent::dtb:imggroup[dtb:img]">
                 <!-- get the id of the image in the imggroup and use it as a ref -->
+                <xsl:variable name="img-id" as="attribute()?">
+                    <xsl:for-each select="../dtb:img[1]">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:variable>
                 <xsl:call-template name="createAnnotation">
                     <xsl:with-param name="byValue" select="'republisher'"/>
-                    <xsl:with-param name="refValue" select="../dtb:img/@id"/>
+                    <xsl:with-param name="refValue" select="$img-id/string(.)"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
+                <xsl:variable name="level-id" as="attribute()?">
+                    <xsl:for-each select="(ancestor::*[self::dtb:level1|
+                                                       self::dtb:level2|
+                                                       self::dtb:level3|
+                                                       self::dtb:level4|
+                                                       self::dtb:level5|
+                                                       self::dtb:level6|
+                                                       self::dtb:level])[last()]">
+                        <xsl:call-template name="generate-id"/>
+                    </xsl:for-each>
+                </xsl:variable>
                 <xsl:call-template name="createAnnotation">
                     <xsl:with-param name="byValue" select="'republisher'"/>
+                    <xsl:with-param name="refValue" select="$level-id/string(.)"/>
                 </xsl:call-template>
             </xsl:otherwise>
         </xsl:choose>
