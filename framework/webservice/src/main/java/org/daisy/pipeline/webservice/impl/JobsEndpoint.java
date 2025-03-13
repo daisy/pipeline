@@ -56,8 +56,16 @@ public class JobsEndpoint {
 			webservice,
 			session.getRequestURI().toString(),
 			new Reference(session.getRequestURI()).getQueryAsForm());
+		if (client == null) {
+			throw new RuntimeException("authentication error");
+		}
 		JobManager jobManager = webservice.getJobManager(client);
 		Optional<Job> job = jobManager.getJob(JobIdFactory.newIdFromString(jobId));
+
+		if (!job.isPresent()) {
+			throw new RuntimeException("no such job");
+		}
+
 		Form query = new Reference(session.getRequestURI()).getQueryAsForm();
 		int firstMessage = 0; {
 			String msgSeq = query.getFirstValue("msgSeq");
@@ -74,10 +82,21 @@ public class JobsEndpoint {
 
 	@OnMessage
 	public void onMessage(String message, Session session) {
+		System.out.printf("Received message in session " + session.getId() + ": " + message);
+		
+		//session.getBasicRemote()
+		
+		
+		try {
+			session.getBasicRemote().sendText(String.format("We received your message: %s%n", message));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@OnError
 	public void onError(Throwable e) {
+		e.printStackTrace();
 	}
 
 	@OnClose

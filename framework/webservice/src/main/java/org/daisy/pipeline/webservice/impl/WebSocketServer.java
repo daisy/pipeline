@@ -21,6 +21,8 @@ class WebSocketServer {
 		this.webservice = webservice;
 	}
 
+	// FIXME: start lazily when getActualPort() is called?
+
 	public void start() throws Exception {
 		server = new Server();
 		connector = new ServerConnector(server);
