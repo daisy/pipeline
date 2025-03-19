@@ -45,6 +45,7 @@ public class AudioBufferTracker implements AudioBufferAllocator {
 
 	@Override
 	public AudioBuffer allocateBuffer(int size) throws MemoryException {
+		ServerLogger.trace("Allocating {} in buffer from tts", size);
 		if (!mTTSCounter.tryAcquire(size))
 			throw new MemoryException(size);
 
@@ -71,6 +72,7 @@ public class AudioBufferTracker implements AudioBufferAllocator {
 	public void transferToEncoding(int ttsMemSize, int encodingMemSize)
 	        throws InterruptedException {
 		acquireEncodersMemory(encodingMemSize);
+		ServerLogger.trace("About to transfer (flush) {} of {} in buffer", ttsMemSize, mTTSCounter.availablePermits());
 		mTTSCounter.release(ttsMemSize);
 	}
 
@@ -99,6 +101,7 @@ public class AudioBufferTracker implements AudioBufferAllocator {
 	}
 
 	public void releaseTTSMemory(int size) {
+		ServerLogger.trace("About to release {} of {} in buffer", size, mTTSCounter.availablePermits());
 		mTTSCounter.release(size);
 	}
 

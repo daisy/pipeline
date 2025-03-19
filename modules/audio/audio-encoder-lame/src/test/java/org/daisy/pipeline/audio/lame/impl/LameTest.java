@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -28,7 +29,7 @@ import com.google.common.io.Files;
  * 
  * - Lame installed
  * 
- * - avconv installed
+ * - ffmpeg installed
  * 
  * - Read and write permissions on the OS' tmp directory
  */
@@ -54,8 +55,8 @@ public class LameTest {
 	private static byte[] mp3ToPCM(AudioFormat originalFormat, String mp3File)
 	        throws IOException, InterruptedException {
 
-		Assume.assumeTrue("Test can not be run because avconv not present",
-		                  BinaryFinder.find("avconv").isPresent());
+		Assume.assumeTrue("Test can not be run because ffmpeg not present",
+		                  BinaryFinder.find("ffmpeg").isPresent());
 		
 		String tmp = System.getProperty("java.io.tmpdir");
 		File pcmFile = new File(tmp, "converted.pcm");
@@ -82,9 +83,9 @@ public class LameTest {
 				f += "le";
 		}
 
-		//convert to PCM file with AVCONV
+		//convert to PCM file with ffmpeg
 		//TODO: check that it does not output WAV instead of PCM (the difference of size is rather suspicious)
-		ProcessBuilder ps = new ProcessBuilder("avconv", "-loglevel", "warning", "-i",
+		ProcessBuilder ps = new ProcessBuilder("ffmpeg", "-loglevel", "warning", "-i",
 		        mp3File, "-f", f, "-ar", String
 		                .valueOf((int) (originalFormat.getSampleRate())), "-acodec", "pcm_"
 		                + f, pcmFile.toString());
@@ -93,7 +94,7 @@ public class LameTest {
 		String line;
 		BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 		while ((line = in.readLine()) != null) {
-			System.out.println("avconv output: " + line);
+			System.out.println("ffmpeg output: " + line);
 		}
 		in.close();
 		p.waitFor();
@@ -129,7 +130,7 @@ public class LameTest {
 
 		//dump the reference on the disk using Lame
 		lame = new LameEncoder();
-		AudioEncoder.EncodingOptions opts = lame.parseEncodingOptions(Collections.EMPTY_MAP);
+		AudioEncoder.EncodingOptions opts = lame.parseEncodingOptions(Map.of("org.daisy.pipeline.tts.lame.minfreq", "0"));
 		Optional<String> uri = lame.encode(Arrays.asList(ref), refFormat, new File(System
 		        .getProperty("java.io.tmpdir")), "mp3ref", opts);
 		if (!uri.isPresent())
@@ -140,7 +141,7 @@ public class LameTest {
 	private boolean isValid(AudioFormat sourceFormat) throws Throwable {
 		AudioEncoder.EncodingOptions opts = lame.parseEncodingOptions(Collections.EMPTY_MAP);
 
-		//use avconv to create a new version of the PCM reference encoded with sourceFormat
+		//use ffmpeg to create a new version of the PCM reference encoded with sourceFormat
 		byte[] audio = mp3ToPCM(sourceFormat, mp3ref);
 
 		//use lame to convert it to MP3
@@ -181,13 +182,6 @@ public class LameTest {
 		double error = ((double) minerror) / window;
 
 		return (error < 10.0);
-	}
-
-	@Test
-	public void noHostProtection() throws Throwable {
-		System.setProperty("org.daisy.pipeline.tts.host.protection", "false");
-		boolean valid = isValid(new AudioFormat(8000, 8, 1, true, true));
-		Assert.assertTrue(valid);
 	}
 
 	@Test

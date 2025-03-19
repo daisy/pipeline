@@ -105,7 +105,7 @@ public class SimpleInlineStyle extends SingleMapNodeData implements NodeData, Cl
 			if (value != null)
 				sb.append(value);
 			else
-				sb.append(getProperty(key)); }
+				sb.append((Object)getProperty(key)); }
 		return sb.toString();
 	}
 	

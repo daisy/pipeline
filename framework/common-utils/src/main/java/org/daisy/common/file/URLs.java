@@ -245,7 +245,7 @@ public final class URLs {
 					final String _directory = directory;
 					try {
 						walkFileTree(d, EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<Path>() {
-							public FileVisitResult visitFile(Path f, BasicFileAttributes _) throws IOException {
+							public FileVisitResult visitFile(Path f, BasicFileAttributes a) throws IOException {
 								String fileName = f.getFileName().toString();
 								if (!fileName.endsWith("/") && isDirectory(f))
 									fileName += "/";

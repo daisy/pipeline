@@ -135,6 +135,7 @@ public class TextToPcmThread implements FormatSpecifications {
 							breakloop = true;
 						}
 					}
+					System.err.println("Flusing at end of thread " + Thread.currentThread().getId());
 					flush(section, pcmOutput);
 					progressListener.notifyFinished(section);
 				}
@@ -215,6 +216,11 @@ public class TextToPcmThread implements FormatSpecifications {
 				} catch (InterruptedException e) {
 					// Should never happen since interruptions only occur during calls to TTS processors.
 					mLogger.warn("interruption of memory transfer");
+				} catch (Error e) {
+					// Set here for debugging; improve or remove after finishing debugging
+					System.err.println("Other error when transferring to encoding: " + e.getClass().getName() + " for " + mMemFootprint + " with pcm of size " + pcm.sizeInBytes());
+					e.printStackTrace();
+					throw e;
 				}
 				pcmOutput.add(pcm);
 				pcm = null;
@@ -274,6 +280,7 @@ public class TextToPcmThread implements FormatSpecifications {
 					                         sentence.getID(), Sentence.computeSize(chunk.ssml()),
 					                         tts, voice, threadResources, new ArrayList<Mark>(),
 					                         expectedMarks);
+					mLogger.info("**** ya tengo los buffers");
 				} catch (MemoryException | SaxonApiException | SynthesisException
 				        | TimeoutException e) {
 					//TODO: flush the buffers here
@@ -289,9 +296,11 @@ public class TextToPcmThread implements FormatSpecifications {
 				if (chunk.leftMark() != null) {
 					marks.add(new Mark(chunk.leftMark(), offset));
 				}
+				mLogger.info("**** ya tengo los buffers - recorriendo");
 				for (AudioBuffer b : buffers) {
 					offset += b.size;
 				}
+				mLogger.info("**** ya tengo los buffers - recorridos {}", offset);
 				result = Iterables.concat(result, buffers);
 			}
 			
@@ -376,12 +385,15 @@ public class TextToPcmThread implements FormatSpecifications {
 				}
 				pcm = synthesize(timeout, interrupter, logEntry,
 				                 sentence, tts, v, resource, marks, expectedMarks);
+				mLogger.info("**** ya tengo el pcm");
 			}
 		} catch (TimeoutException e) {
 			logEntry.addError(
 			        new TTSLog.Error(ErrorCode.WARNING, "timeout (" + e.getSeconds()
 			                + " seconds) fired while speaking with "
 			                + TTSServiceUtil.displayName(tts.getProvider())));
+			// reset the interrupted state for the next iteration
+			Thread.interrupted();
 			return null;
 		} catch (SynthesisException e) {
 			StringWriter sw = new StringWriter();
@@ -472,6 +484,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			return false;
 		}
 		if (pcm == null) {
+			System.err.println("Warning: no pcm generated");
 			//release the resource to make it more likely for the next try to succeed
 			releaseResource(tts, mResources.get(tts));
 			mResources.remove(tts);
@@ -532,8 +545,8 @@ public class TextToPcmThread implements FormatSpecifications {
 		if (marks.size() == 0) {
 			SoundFileLink sf = new SoundFileLink();
 			sf.xmlid = sentence.getID();
-			sf.clipBegin = convertBytesToSecond(mLastFormat, begin);
-			sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile);
+			sf.clipBegin = convertBytesToSecond(mLastFormat, begin, mLogger);
+			sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile, mLogger);
 			mLinksOfCurrentFile.add(sf);
 		} else {
 			Map<String, Integer> starts = new HashMap<String, Integer>();
@@ -555,13 +568,13 @@ public class TextToPcmThread implements FormatSpecifications {
 				SoundFileLink sf = new SoundFileLink();
 				sf.xmlid = id;
 				if (starts.containsKey(id))
-					sf.clipBegin = convertBytesToSecond(mLastFormat, begin + starts.get(id));
+					sf.clipBegin = convertBytesToSecond(mLastFormat, begin + starts.get(id), mLogger);
 				else
-					sf.clipBegin = convertBytesToSecond(mLastFormat, begin);
+					sf.clipBegin = convertBytesToSecond(mLastFormat, begin, mLogger);
 				if (ends.containsKey(id))
-					sf.clipEnd = convertBytesToSecond(mLastFormat, begin + ends.get(id));
+					sf.clipEnd = convertBytesToSecond(mLastFormat, begin + ends.get(id), mLogger);
 				else
-					sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile);
+					sf.clipEnd = convertBytesToSecond(mLastFormat, mOffsetInFile, mLogger);
 				mLinksOfCurrentFile.add(sf);
 			}
 			/*
@@ -579,6 +592,7 @@ public class TextToPcmThread implements FormatSpecifications {
 			 * out-of-memory errors and smoothes the transfers of PCM data to
 			 * the encoders.
 			 */
+			System.err.println("Flusing at speak " + Thread.currentThread().getId());
 			flush(section, pcmOutput);
 		}
 		return true;
@@ -599,7 +613,8 @@ public class TextToPcmThread implements FormatSpecifications {
 		mBuffersOfCurrentFile = Iterables.concat(mBuffersOfCurrentFile, toadd);
 	}
 
-	private static double convertBytesToSecond(AudioFormat format, int bytes) {
+	private static double convertBytesToSecond(AudioFormat format, int bytes, Logger mLogger) {
+		mLogger.info("****convertBytesToSecond: {}, {}, {} ---- {}", bytes, format.getFrameRate(), format.getFrameSize(), bytes / (format.getFrameRate() * format.getFrameSize()));
 		return (bytes / (format.getFrameRate() * format.getFrameSize()));
 	}
 

@@ -207,6 +207,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 			}
 			Iterable<SoundFileLink> newfrags = ssmltoaudio.blockingRun(mAudioServices);
 			mErrorCounter += ssmltoaudio.getErrorCount();
+			logger.info("***mErrorCounter: {}", mErrorCounter);
 			soundFragments = Iterables.concat(soundFragments, newfrags);
 		} catch (SynthesisException e) {
 			logger.error("Synthesis failed", e);
@@ -227,6 +228,7 @@ public class SynthesizeStep extends DefaultStep implements FormatSpecifications,
 		int num = 0;
 		for (SoundFileLink sf : soundFragments) {
 			String soundFileURI = sf.soundFileURIHolder.toString();
+			logger.info("****SyntherizeStep {}, {}, {}, {}",sf.soundFileURIHolder, sf.clipBegin, sf.clipEnd, sf.xmlid);
 			if (!soundFileURI.isEmpty()) {
 				if (sf.clipBegin < sf.clipEnd){
 					//sf.clipBegin = sf.clipEnd if the input text is empty. Those clips are not useful

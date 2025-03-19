@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
@@ -15,6 +18,8 @@ import com.google.common.collect.Lists;
 public class VoiceInfo {
 	private static Pattern localePattern = Pattern
 	        .compile("(\\p{Alpha}{2})(?:[-_](\\p{Alpha}{2}))?(?:[-_](\\p{Alnum}{1,8}))*");
+	
+	private final static Logger logger = LoggerFactory.getLogger(VoiceInfo.class);
 
 	public enum Gender {
 		MALE_ADULT("male", "man", "male-adult"),
@@ -72,6 +77,18 @@ public class VoiceInfo {
 		//TODO: use a common function for pipeline-mod-nlp and pipeline-mod-tts
 		Locale locale = null;
 		if (langtag != null) {
+            /*
+             *  Se han detectado dos casos que idiomas devuelto por el el ws de amazon (polly) que no se corresponden con locales,
+             *  por lo que se decide realizar una transformación a un locale que no de error ya que unicamente se utilizan para formar parte de la clave de un mapa
+             *  donde se almacenan las voces disponibles:
+             *      - arb: se corresponde con idioma árabe y se sustituye por el local ar con mismo significado.
+             *      - cmn-CN: se corresponde con idiona chino mandarín, se sustituye por el locale zh_CN que se corresponde con el chino hablado en china.
+             */
+            if(langtag.equals("arb")) {
+                langtag = "ar";
+            } else if(langtag.equals("cmn-CN")) {
+                langtag = "zh_CN";
+            }
 			Matcher m = localePattern.matcher(langtag.toLowerCase());
 			if (m.matches()) {
 				locale = new Locale(m.group(1), m.group(2) != null ? m.group(2) : "");
@@ -98,6 +115,8 @@ public class VoiceInfo {
 		this.language = locale;
 		this.priority = priority;
 		this.gender = gender;
+		
+//		logger.info("VoiceInfo: {} {} {} {} {}",this.voiceEngine, this.voiceName, this.language, this.priority, this.gender);
 	}
 
 	@Override
@@ -145,6 +164,11 @@ public class VoiceInfo {
 	
 	public boolean isMultiLang(){
 		return this.language == NO_DEFINITE_LANG;
+	}
+	
+	@Override
+	public String toString() {
+		return "VoiceInfo: " + this.voiceEngine + " - " + this.voiceName + " - " + this.language + " - " + this.priority + " - " + this.gender;
 	}
 
 	public Gender gender;

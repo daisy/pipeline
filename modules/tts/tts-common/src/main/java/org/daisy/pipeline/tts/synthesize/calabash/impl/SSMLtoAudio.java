@@ -199,7 +199,6 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			for (String s : engineStatus)
 				mLogger.info(" * " + s);
 		}
-
 		mVoiceManager = new VoiceManager(workingEngines, configExt.getVoiceDeclarations());
 	}
 
@@ -442,6 +441,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 			listOfSections.add(mCurrentSection);
 		}
 		mCurrentSection.sentences.add(new Sentence(newSynth, voice, ssml));
+		System.err.println("Number of sentences: " + mCurrentSection.sentences.size());
 		return true;
 	}
 
@@ -540,19 +540,32 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 		for (int k = 0; k < encodingTh.length; ++k) {
 			pcmQueue.add(ContiguousPCM.EndOfQueue);
 		}
+		mLogger.info("****encodingTh.length: {}", encodingTh.length);
 		for (int j = 0; j < encodingTh.length; ++j) {
 			try {
 				encodingTh[j].waitToFinish();
 			} catch (EncodingException e) {
+				mLogger.info("encodingException1 {}", e.getMessage());
 				while (++j < encodingTh.length)
 					// FIXME: interrupt instead of waiting
 					try { encodingTh[j].waitToFinish(); }
-					catch (EncodingException _e) {}
+					catch (EncodingException _e) {
+						mLogger.info("encodingException2 {}", e.getMessage());
+					}
 				throw e;
 			}
 		}
 
 		mLogger.info("Audio encoding finished.");
+		for(Collection<SoundFileLink> fragmentItem : fragments ) {
+			mLogger.info("****fragmentItem {}",fragmentItem);
+			for( SoundFileLink fragment : fragmentItem ) {
+				mLogger.info("****fragment {}, {}, {}, {}",fragment.soundFileURIHolder, fragment.clipBegin, fragment.clipEnd, fragment.xmlid);
+				
+			}
+			
+		}
+		
 
 		return Iterables.concat(fragments);
 
@@ -586,6 +599,7 @@ public class SSMLtoAudio implements IProgressListener, FormatSpecifications {
 	private void reorganizeSections() {
 		mTotalTextSize = 0;
 		int sectionCount = 0;
+		System.err.println("Reorganizing sections: " + mOrganizedText.values());
 		for (List<ContiguousText> sections : mOrganizedText.values()) {
 			//compute the sections' size: needed for displaying the progress,
 			//splitting the sections and sorting them

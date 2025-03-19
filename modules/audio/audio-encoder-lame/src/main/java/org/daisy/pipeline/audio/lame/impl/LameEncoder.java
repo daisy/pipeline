@@ -4,23 +4,21 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioFormat;
 
-import org.daisy.common.shell.CommandRunner;
 import org.daisy.common.shell.BinaryFinder;
+import org.daisy.common.shell.CommandRunner;
 import org.daisy.pipeline.audio.AudioBuffer;
 import org.daisy.pipeline.audio.AudioEncoder;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.osgi.service.component.annotations.Component;
 
 @Component(
 	name = "audio-encoder-lame",
@@ -32,10 +30,12 @@ public class LameEncoder implements AudioEncoder {
 	static private class LameEncodingOptions implements EncodingOptions {
 		private String binpath;
 		private String[] cliOptions;
+		private float minfreq = 0.0f;
 	}
 
 	private Logger mLogger = LoggerFactory.getLogger(LameEncoder.class);
 	private static final String OutputFormat = ".mp3";
+	private static final float DEFAULT_MINFREQ = 44.1f;
 
 	@Override
 	public Optional<String> encode(Iterable<AudioBuffer> pcm, AudioFormat audioFormat,
@@ -44,7 +44,8 @@ public class LameEncoder implements AudioEncoder {
 		LameEncodingOptions lameOpts = (LameEncodingOptions) options;
 
 		File encodedFile = new File(outputDir, filePrefix + OutputFormat);
-		String freq = String.valueOf((Float.valueOf(audioFormat.getSampleRate()) / 1000));
+		float freqAsFloat = audioFormat.getSampleRate() / 1000;
+		String freq = String.valueOf(Float.valueOf(freqAsFloat));
 		String bitwidth = String.valueOf(audioFormat.getSampleSizeInBits());
 		String signedOpt = audioFormat.getEncoding() == AudioFormat.Encoding.PCM_UNSIGNED ? "--unsigned"
 		        : "--signed";
@@ -95,11 +96,20 @@ public class LameEncoder implements AudioEncoder {
 		//-r: raw pcm
 		//-s: sample rate in kHz
 		//-mm: mono
+		// --resample: output sample rate in kHz (only if the original freq is less than the minimum freq)  
 		//-: PCM read on the standard input
-		String[] cmdbegin = new String[]{
+		String[] cmdbegin;
+		if (freqAsFloat >= lameOpts.minfreq) {
+			cmdbegin = new String[]{
 		        lameOpts.binpath, "-r", "-s", freq, "--bitwidth", bitwidth, signedOpt,
 		        endianness, "-m", "m", "--silent"
-		};
+			};
+		} else {
+			cmdbegin = new String[]{
+			        lameOpts.binpath, "-r", "-s", freq, "--bitwidth", bitwidth, signedOpt,
+			        endianness, "--resample", String.valueOf(lameOpts.minfreq), "-m", "m", "--silent"
+				};
+		}
 		String[] cmdend = new String[]{
 		        "-", encodedFile.getAbsolutePath()
 		};
@@ -111,6 +121,7 @@ public class LameEncoder implements AudioEncoder {
 		        lameOpts.cliOptions.length);
 		System.arraycopy(cmdend, 0, cmd, cmdbegin.length + lameOpts.cliOptions.length,
 		        cmdend.length);
+		mLogger.info("Calling command {}", Arrays.asList(cmd));
 		new CommandRunner(cmd)
 			.feedInput(stream -> {
 					try (BufferedOutputStream out = new BufferedOutputStream(stream)) {
@@ -142,6 +153,14 @@ public class LameEncoder implements AudioEncoder {
 			Optional<String> lpath = BinaryFinder.find("lame");
 			if (lpath.isPresent())
 				opts.binpath = lpath.get();
+		}
+
+		String lameMinFreqProp = "org.daisy.pipeline.tts.lame.minfreq";
+		String minfreq = params.get(lameMinFreqProp);
+		if (minfreq != null) {
+			opts.minfreq = Float.parseFloat(minfreq);
+		} else {
+			opts.minfreq = DEFAULT_MINFREQ;
 		}
 
 		return opts;
@@ -176,4 +195,5 @@ public class LameEncoder implements AudioEncoder {
 			throw e;
 		}
 	}
+
 }

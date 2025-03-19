@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.daisy</groupId>
     <artifactId>daisy</artifactId>
-    <version>4</version>
+    <version>6-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -68,6 +68,7 @@
     <module>tts/tts-adapters/tts-adapter-qfrency</module>
     <module>tts/tts-adapters/tts-adapter-google</module>
     <module>tts/tts-adapters/tts-adapter-cereproc</module>
+	<module>tts/tts-adapters/tts-adapter-awsPolly</module>
     <module>tts/zedai-to-ssml</module>
     <module>tts/mathml-to-ssml</module>
     <module>braille/common-utils</module>

@@ -2,6 +2,7 @@ package org.daisy.pipeline.tts;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,6 +33,8 @@ public class VoiceManager {
 	private final Map<VoiceKey,Voice> mVoiceIndex;
 
 	public VoiceManager(Collection<TTSEngine> engines, Collection<VoiceInfo> voiceInfoFromConfig) {
+		
+//		ServerLogger.info("VoiceManager voiceFromConfig: {}", voiceInfoFromConfig);
 
 		// create a map of the best services for each available voice, given that two different
 		// services can serve the same voice
@@ -39,11 +42,13 @@ public class VoiceManager {
 			TTSTimeout timeout = new TTSTimeout();
 			int timeoutSecs = 30;
 			for (TTSEngine tts : engines) {
+				ServerLogger.info("tts: {} {}",TTSServiceUtil.displayName(tts.getProvider()), tts.toString());
 				try {
 					timeout.enableForCurrentThread(timeoutSecs);
 					Collection<Voice> voices = tts.getAvailableVoices();
 					if (voices != null)
 						for (Voice v : voices) {
+//							ServerLogger.info("tts->availableVoices->voice: {}", v);
 							TTSEngine competitor = mBestEngines.get(v);
 							if (competitor == null
 							    || competitor.getOverallPriority() < tts.getOverallPriority()) {
@@ -75,7 +80,12 @@ public class VoiceManager {
 		// get info from engines (lowest priority)
 		mPrimaryVoices = new HashMap<>();
 		for (Voice v : mBestEngines.keySet()) {
-			mPrimaryVoices.put(new VoiceKey(v.engine, v.name), v);
+			// Se eliminan los acentos y caracteres extraños
+            String name = "";
+            if(v.name != null) {
+                name = stripAccents(v.name);
+            }
+            mPrimaryVoices.put(new VoiceKey(v.engine, name), v);
 			if (v.getLocale().isPresent() && v.getGender().isPresent())
 				voiceInfo.add(new VoiceInfo(v.engine,
 				                            v.name,
@@ -87,7 +97,8 @@ public class VoiceManager {
 		// voices can also be applied to less specific locales (without region tag)
 		final float priorityVariantPenalty = 0.1f;
 		List<VoiceInfo> derivedVoiceInfo = new ArrayList<>(); {
-			for (VoiceInfo vi : voiceInfo)
+			for (VoiceInfo vi : voiceInfo) {
+//				ServerLogger.info("derivedVoiceInfo: {}", vi);
 				if (!vi.isMultiLang()) {
 					Locale shortLang = new Locale(vi.language.getLanguage());
 					if (!vi.language.equals(shortLang))
@@ -95,6 +106,7 @@ public class VoiceManager {
 							new VoiceInfo(vi.voiceEngine, vi.voiceName, shortLang, vi.gender,
 							              vi.priority - priorityVariantPenalty));
 				}
+			}
 		}
 		voiceInfo.addAll(derivedVoiceInfo);
 
@@ -183,7 +195,7 @@ public class VoiceManager {
 			  // with the same name (but different version) are currently not well supported.
 			  /*.append(" by ")
 			  .append(TTSServiceUtil.displayName(e.getValue().getProvider()))*/;
-		ServerLogger.info(sb.toString());
+//		ServerLogger.info(sb.toString());
 		sb = new StringBuilder("Voice selection data:");
 		for (VoiceInfo vi : availableVoiceInfo)
 			sb.append("\n * {")
@@ -192,8 +204,28 @@ public class VoiceManager {
 			  .append("}")
 			  .append(" -> ")
 			  .append(mPrimaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
-		ServerLogger.info(sb.toString());
+//		ServerLogger.info(sb.toString());
 	}
+	
+    
+    /**
+     * Método para la eliminación de tildes y caracteres extraños
+     * @param s
+     * @return string sin caracteres extraños ni tildes
+     */
+    private static String stripAccents(String s) 
+    {
+        /*Salvamos las ñ*/
+        s = s.replace('ñ', '\001');
+        s = s.replace('Ñ', '\002');
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        /*Volvemos las ñ a la cadena*/
+        s = s.replace('\001', 'ñ');
+        s = s.replace('\002', 'Ñ');
+
+        return s;
+    }
 
 	/**
 	 * @return null if no voice is available for the given parameters.
@@ -253,37 +285,62 @@ public class VoiceManager {
 
 		Locale shortLoc = new Locale(loc.getLanguage());
 		Voice result;
-
+		
 		// engine is more important than gender and priority, gender is more important than priority
 		exactMatch[0] = (voiceName == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender, voiceEngine))) != null)
+		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(loc, gender, voiceEngine)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender, voiceEngine))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(shortLoc, gender, voiceEngine)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender, voiceEngine)) {}", result);
 			return result;
+		}
 		exactMatch[0] = (voiceName == null && gender == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, voiceEngine))) != null)
+		if ((result = mVoiceIndex.get(new VoiceKey(loc, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(loc, voiceEngine)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, voiceEngine))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(shortLoc, voiceEngine)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, voiceEngine)) {}", result);
 			return result;
+		}
 		exactMatch[0] = (voiceName == null && voiceEngine == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender))) != null)
+		if ((result = mVoiceIndex.get(new VoiceKey(loc, gender))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(loc, gender)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc, gender))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(shortLoc, gender)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG, gender)) {}", result);
 			return result;
+		}
 		exactMatch[0] = (voiceName == null && voiceEngine == null && gender == null);
-		if ((result = mVoiceIndex.get(new VoiceKey(loc))) != null)
+		if ((result = mVoiceIndex.get(new VoiceKey(loc))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(loc)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(shortLoc))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(shortLoc)) {}", result);
 			return result;
-		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG))) != null)
+		}
+		if ((result = mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG))) != null) {
+//			ServerLogger.info("mVoiceIndex.get(new VoiceKey(NO_DEFINITE_LANG)) {}", result);
 			return result;
+		}
 
+//		ServerLogger.info("mVoiceIndex.get not found");
 		return null;
 	}
 

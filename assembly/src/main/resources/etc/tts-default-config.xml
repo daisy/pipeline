@@ -1,5 +1,55 @@
 <config>
 	<!--
+	    Polly
+	-->
+	<voice engine="polly" name="Conchita" lang="es-ES" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Lucia" lang="es-ES" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Zeina" lang="arb" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Zhiyu" lang="cmn-CN" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Naja" lang="da-DK" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Lotte" lang="nl-NL" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Salli" lang="en-US" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Celine" lang="fr-FR" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Marlene" lang="de-DE" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Aditi" lang="hi-IN" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Dora" lang="is-IS" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Bianca" lang="it-IT" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Mizuki" lang="ja-JP" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Seoyeon" lang="ko-KR" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Liv" lang="nb-NO" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Maja" lang="pl-PL" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Ines" lang="pt-PT" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Carmen" lang="ro-RO" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Tatyana" lang="ru-RU" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Astrid" lang="sv-SE" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Filiz" lang="tr-TR" gender="female-adult" priority="1"/>
+	<voice engine="polly" name="Gwyneth" lang="cy-GB" gender="female-adult" priority="1"/>
+	<!--
+	    eSpeak
+	-->
+	<voice engine="espeak" name="french" lang="fr" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="danish" lang="da" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="german" lang="de" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="greek" lang="el" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="hindi" lang="hi" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="hungarian" lang="hu" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="finnish" lang="fi" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="italian" lang="it" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="latin" lang="la" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="norwegian" lang="no" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="polish" lang="pl" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="portugal" lang="pt" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="russian_test" lang="ru" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="swedish" lang="sv" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="mandarin" lang="zh" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="turkish" lang="tr" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="afrikaans" lang="af" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="spanish" lang="es" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="spanish-latin-american" lang="es-la" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="english-us" lang="en" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="english-us" lang="en-us" gender="male-adult" priority="1"/>
+	<voice engine="espeak" name="english" lang="en-uk" gender="male-adult" priority="1"/>
+	<!--
 	    AT&T
 	-->
 	<voice engine="att" name="alain16" lang="fr" gender="male-adult" priority="10"/>

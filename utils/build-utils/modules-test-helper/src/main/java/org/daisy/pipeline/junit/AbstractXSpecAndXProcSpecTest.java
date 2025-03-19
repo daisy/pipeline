@@ -112,7 +112,7 @@ public abstract class AbstractXSpecAndXProcSpecTest extends AbstractTest {
 	
 	@Override @Configuration
 	public Option[] config() {
-		return _.config(
+		return _W.config(
 			Options.systemProperties(allSystemProperties()),
 			mavenBundles(
 				mavenBundles(toStrings(testDependencies())),

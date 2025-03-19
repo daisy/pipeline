@@ -14,16 +14,21 @@ import org.daisy.pipeline.tts.TTSService.Mark;
 import org.daisy.pipeline.tts.TTSService.SynthesisException;
 import org.daisy.pipeline.tts.TTSTimeout;
 import org.daisy.pipeline.tts.Voice;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import net.sf.saxon.s9api.QName;
 import net.sf.saxon.s9api.XdmNode;
 
 class TimedTTSExecutor {
 
-	private static final int FIRST_CHARACTERS = 2500;
+	private static final int FIRST_CHARACTERS = 25000;
 	private static final int SHORT_SENTENCE_THRESHOLD = 25;
 	private Map<TTSEngine,Integer> totalCharacters = new HashMap<>(); // only count first 2500 characters
 	private Map<TTSEngine,Integer> maxMicrosecPerCharacter = new HashMap<>();
 	private Map<TTSEngine,Integer> maxMillisecOfShortSentence = new HashMap<>(); // shorter than 25 characters
+	
+	private final static Logger logger = LoggerFactory.getLogger(TimedTTSExecutor.class);
 
 	/**
 	 * The maximum number of milliseconds the TTS engine is allowed to spend on a single word. This
@@ -31,35 +36,43 @@ class TimedTTSExecutor {
 	 * so far, and the time the engine has spent on previous sentences. A large enough safety factor
 	 * is taken into account for long words and other deviations.
 	 */
-	private int maximumMillisec(TTSEngine engine, int sentenceSize) {
+	private long maximumMillisec(TTSEngine engine, int sentenceSize) {
 		int wordCount = 1 + sentenceSize / 6; // ~6 characters/word
 		Integer n;
+		logger.info("****** maximumMillisec sentenceSize: {}", sentenceSize);
 		synchronized(totalCharacters) {
 			n = totalCharacters.get(engine);
-			Integer safeMillisec = null;
+			logger.info("****** maximumMillisec totalCharacters.get(engine): {}", n);
+			Long safeMillisec = null;
 			if (n == null || n < FIRST_CHARACTERS)
 				// initially base timeout on engine.expectedMillisecPerWord()
 				// adding initial offset because the processing time is not always directly
 				// proportional to the length of the sentence
-				safeMillisec = 5000 + 10 * engine.expectedMillisecPerWord() * wordCount;
+				safeMillisec = 5000L + 10 * engine.expectedMillisecPerWord() * wordCount;
+			logger.info("****** maximumMillisec safeMillisec: {}", safeMillisec);
 			if (n == null)
 				return safeMillisec;
 			else {
 				// in the long run base timeout on maxMicrosecPerCharacter and maxMillisecOfShortSentence
 				Integer estimatedMicrosec = maxMicrosecPerCharacter.get(engine) * sentenceSize;
 				Integer minMillisec = maxMillisecOfShortSentence.get(engine);
+				logger.info("****** maximumMillisec estimatedMicrosec: {}", estimatedMicrosec);
+				logger.info("****** maximumMillisec minMillisec: {}", minMillisec);
 				if (minMillisec != null) {
 					if (estimatedMicrosec < minMillisec * 1000)
 						estimatedMicrosec = minMillisec * 1000;
 				} else if (sentenceSize < SHORT_SENTENCE_THRESHOLD)
 					estimatedMicrosec = maxMicrosecPerCharacter.get(engine) * SHORT_SENTENCE_THRESHOLD;
-				if (n < FIRST_CHARACTERS)
+
+				logger.info("****** maximumMillisec estimatedMicrosec: {}", estimatedMicrosec);
+				long retVal = 3 * (Math.floorDiv(estimatedMicrosec - 1, 1000) + 1);
+				if (n < FIRST_CHARACTERS) {
+					logger.info("****** maximumMillisec interpolate: {}", n);
 					// interpolate
-					return
-						+ safeMillisec * (FIRST_CHARACTERS - n) / FIRST_CHARACTERS
-						+ 3 * estimatedMicrosec * n / 1000 / FIRST_CHARACTERS;
-				else
-					return 3 * estimatedMicrosec / 1000;
+					return Math.floorDiv(safeMillisec * (FIRST_CHARACTERS - n) + retVal * n - 1, FIRST_CHARACTERS) + 1;
+				} else {
+					return retVal;
+				}
 			}
 		}
 	}
@@ -70,11 +83,20 @@ class TimedTTSExecutor {
 		TTSResource threadResources, List<Mark> marks, List<String> expectedMarks,
 		AudioBufferAllocator bufferAllocator, boolean retry
 	) throws SynthesisException, MemoryException, TimeoutException {
+		String id = xmlSentence.getAttributeValue(new QName("id"));
 		long startTime = System.currentTimeMillis();
-		int timeoutSec = maximumMillisec(engine, sentenceSize) / 1000;
+		long timeoutMillis = maximumMillisec(engine, sentenceSize);
+		int timeoutSec = Math.floorDiv(((int)timeoutMillis) - 1, 1000) + 1; // ensure seconds are rounded up
+		if (timeoutSec > 0) {
+			logger.info("Calculated time-out for {} synthesis: {} ms ({} secs)", id, timeoutMillis, timeoutSec);
+		} else {
+			logger.warn("Calculated time-out for {} synthesis was invalid! Corrected to 1 sec from {} ms ({} secs)", id, timeoutMillis, timeoutSec);
+			timeoutSec = 1;
+		}
 		if (log != null)
 			log.setTimeout(timeoutSec);
 		try {
+			logger.info("Synthesizing {} via {} with {} seconds timeout", id, engine.getClass().getName(), timeoutSec);
 			timeout.enableForCurrentThread(interrupter, timeoutSec);
 			Collection<AudioBuffer> result = engine.synthesize(
 				sentence, xmlSentence, voice, threadResources, marks, expectedMarks, bufferAllocator, retry);
@@ -82,23 +104,23 @@ class TimedTTSExecutor {
 			if (log != null)
 				log.setTimeElapsed((float)millisecElapsed / 1000);
 			synchronized(totalCharacters) {
-				Long microsecElapsedPerCharacter = millisecElapsed * 1000 / sentenceSize;
-				int max = 1000; // don't go below 1 ms
-				if (maxMicrosecPerCharacter.containsKey(engine))
-					max = maxMicrosecPerCharacter.get(engine);
-				else
-					maxMicrosecPerCharacter.put(engine, max);
-				if (microsecElapsedPerCharacter > max)
+				int max = maxMicrosecPerCharacter.getOrDefault(engine, 1000); // don't go below 1 ms
+				if (sentenceSize < SHORT_SENTENCE_THRESHOLD) {
+						if (millisecElapsed > maxMillisecOfShortSentence.getOrDefault(engine, max * SHORT_SENTENCE_THRESHOLD)) {
+							maxMillisecOfShortSentence.put(engine, millisecElapsed.intValue());
+						}
+				}
+				Long microsecElapsedPerCharacter = millisecElapsed * 1000 / ((sentenceSize > 0)? sentenceSize:1);
+				if (microsecElapsedPerCharacter > max) {
 					maxMicrosecPerCharacter.put(engine, microsecElapsedPerCharacter.intValue());
-				if (sentenceSize < SHORT_SENTENCE_THRESHOLD
-				    && maxMillisecOfShortSentence.containsKey(engine)
-				    && millisecElapsed > maxMillisecOfShortSentence.get(engine))
-					maxMillisecOfShortSentence.put(engine, millisecElapsed.intValue());
-				Integer n = totalCharacters.get(engine);
-				if (n == null) n = 0;
+				} else if (!maxMicrosecPerCharacter.containsKey(engine)) {
+					maxMicrosecPerCharacter.put(engine, max);
+				}
+				Integer n = totalCharacters.getOrDefault(engine, 0);
 				if (n < FIRST_CHARACTERS)
 					totalCharacters.put(engine, n + sentenceSize);
 			}
+			logger.info("***** synthesizeWithTimeout return");
 			return result;
 		} catch (InterruptedException e) {
 			// assuming that the thread was interrupted by the timeout
@@ -115,6 +137,7 @@ class TimedTTSExecutor {
 		private TimeoutException(int seconds, InterruptedException cause) {
 			super("TTS timed out after " + seconds + " seconds", cause);
 			this.seconds = seconds;
+			System.err.println("Timeout happenned after " + seconds + "s");
 		}
 
 		/**
