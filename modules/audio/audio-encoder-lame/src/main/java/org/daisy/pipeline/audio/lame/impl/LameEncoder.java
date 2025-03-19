@@ -29,6 +29,7 @@ public class LameEncoder implements AudioEncoder {
 		String binpath;
 		Integer bitrate;
 		String[] extraCliArguments;
+		private float minfreq = 0.0f;
 	}
 
 	private static final Logger mLogger = LoggerFactory.getLogger(LameEncoder.class);
@@ -46,7 +47,8 @@ public class LameEncoder implements AudioEncoder {
 
 		AudioClip clip = new AudioClip(outputFile, Duration.ZERO, AudioUtils.getDuration(pcm));
 		AudioFormat audioFormat = pcm.getFormat();
-		String freq = String.valueOf((Float.valueOf(audioFormat.getSampleRate()) / 1000));
+		float freqAsFloat = audioFormat.getSampleRate() / 1000;
+		String freq = String.valueOf(Float.valueOf(freqAsFloat));
 		String bitwidth = String.valueOf(audioFormat.getSampleSizeInBits());
 		String signedOpt = audioFormat.getEncoding() == AudioFormat.Encoding.PCM_UNSIGNED ? "--unsigned"
 		        : "--signed";
@@ -142,6 +144,10 @@ public class LameEncoder implements AudioEncoder {
 			cmd.add(bitwidth);
 			cmd.add(signedOpt);    // --unsigned | --signed
 			cmd.add(endianness);   // --big-endian | --little-endian";
+			if (freqAsFloat < lameOpts.minfreq) {
+				cmd.add("--resample"); // output sample rate in kHz (only if the original freq is less than the minimum freq)
+				cmd.add(String.valueOf(lameOpts.minfreq));
+			}
 			cmd.add("-m");         // mode
 			cmd.add("m");          // mono
 			// output options
@@ -157,6 +163,7 @@ public class LameEncoder implements AudioEncoder {
 			cmd.add("-");          // read from stdin
 			cmd.add(outputFile.getAbsolutePath());
 		}
+		mLogger.info("Calling command {}", cmd);
 		new CommandRunner(cmd.toArray(new String[cmd.size()]))
 			.feedInput(lameInput)
 			.consumeError(mLogger)

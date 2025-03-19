@@ -412,6 +412,8 @@ public class TextToPcmThread implements FormatSpecifications {
 			        new TTSLog.Error(ErrorCode.WARNING, "timeout (" + e.getSeconds()
 			                + " seconds) fired while speaking with "
 			                + tts.getProvider().getName()));
+			// reset the interrupted state for the next iteration
+			Thread.interrupted();
 			return null;
 		} catch (SynthesisException e) {
 			logEntry.addError(

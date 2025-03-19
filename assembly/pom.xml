@@ -1649,7 +1649,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>1.5.0</version>
+          <version>3.0.0</version>
         </plugin>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
@@ -2383,6 +2383,10 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.daisy.pipeline.modules</groupId>
+                  <artifactId>tts-adapter-awsPolly</artifactId>
+                </artifactItem>
+				<artifactItem>
+                  <groupId>org.daisy.pipeline.modules</groupId>
                   <artifactId>tts-common</artifactId>
                 </artifactItem>
                 <artifactItem>
@@ -2567,6 +2571,81 @@
                 <artifactItem>
                   <groupId>org.json</groupId>
                   <artifactId>json</artifactId>
+                </artifactItem>
+                <!--
+                    for polly modules
+                -->
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>polly</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>aws-json-protocol</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>protocol-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>sdk-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>auth</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>http-client-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>regions</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>annotations</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>utils</artifactId>
+                </artifactItem>
+                 <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>profiles</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>aws-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>metrics-spi</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>apache-client</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>software.amazon.awssdk</groupId>
+                  <artifactId>netty-nio-client</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.fasterxml.jackson.core</groupId>
+                  <artifactId>jackson-core</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.fasterxml.jackson.core</groupId>
+                  <artifactId>jackson-databind</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>com.fasterxml.jackson.core</groupId>
+                  <artifactId>jackson-annotations</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.reactivestreams</groupId>
+                  <artifactId>reactive-streams</artifactId>
                 </artifactItem>
                 <!--
                     for audio-common
@@ -3910,6 +3989,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>test-checkJavaVersion</id>

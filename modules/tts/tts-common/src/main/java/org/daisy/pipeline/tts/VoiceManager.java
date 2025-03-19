@@ -2,6 +2,7 @@ package org.daisy.pipeline.tts;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -108,11 +109,20 @@ public class VoiceManager {
 		// get info from engines (lowest priority)
 		primaryVoices = new HashMap<>();
 		for (Voice v : bestEngines.keySet()) {
-			primaryVoices.put(new VoiceKey(v.getEngine(), v.getName()), v);
+			// FIXME: why is this needed?
+			// - for name matching, similar to why we convert voice names to lower case in VoiceKey?
+			// FIXME: move this to VoiceKey?
+			// FIXME: or handle this in AWSPollyEngine if needed
+			// Se eliminan los acentos y caracteres extraños
+			String name = "";
+			if (v.getName() != null) {
+				name = stripAccents(v.getName());
+			}
+			primaryVoices.put(new VoiceKey(v.getEngine(), name), v);
 			if (!v.getLocale().isEmpty() && v.getGender().isPresent()) {
 				Gender g = v.getGender().get();
 				for (LanguageRange l : v.getLocale())
-					voiceInfo.add(new VoiceInfo(v.getEngine(), v.getName(), l, g, 0));
+					voiceInfo.add(new VoiceInfo(v.getEngine(), name, l, g, 0));
 			}
 		}
 
@@ -311,6 +321,23 @@ public class VoiceManager {
 			  .append(primaryVoices.get(new VoiceKey(vi.voiceEngine, vi.voiceName)));
 		ServerLogger.debug(sb.toString());
 	}
+
+    /**
+     * Método para la eliminación de tildes y caracteres extraños
+     * @param s
+     * @return string sin caracteres extraños ni tildes
+     */
+    private static String stripAccents(String s) {
+        /*Salvamos las ñ*/
+        s = s.replace('ñ', '\001');
+        s = s.replace('Ñ', '\002');
+        s = Normalizer.normalize(s, Normalizer.Form.NFD);
+        s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        /*Volvemos las ñ a la cadena*/
+        s = s.replace('\001', 'ñ');
+        s = s.replace('\002', 'Ñ');
+        return s;
+    }
 
 	/**
 	 * @param voice is an available voice.
