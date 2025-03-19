@@ -106,8 +106,8 @@
   </issueManagement>
 
   <properties>
-    <java.source.version>1.8</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
-    <java.target.version>1.8</java.target.version>
+    <java.source.version>11</java.source.version> <!-- if we change this to 9 we also have to change target to 9 -->
+    <java.target.version>11</java.target.version>
     <!-- must match version from framework-bom -->
     <saxon.versionRange>[9.8.0,9.8.1)</saxon.versionRange>
   </properties>

@@ -90,13 +90,13 @@ public abstract class AbstractTest {
 	
 	@Configuration
 	public Option[] config() {
-		return _.config(
+		return _W.config(
 			Options.systemProperties(allSystemProperties()),
 			mavenBundles(toStrings(testDependencies())));
 	}
 	
 	// wrapped in class to avoid ClassNotFoundException
-	protected static abstract class _ {
+	protected static abstract class _W {
 		protected static Option[] config(Option systemProperties, MavenBundleOption testDependencies) {
 			try {
 				return options(

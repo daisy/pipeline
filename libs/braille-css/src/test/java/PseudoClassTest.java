@@ -1,46 +1,43 @@
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.vutbr.web.css.CombinedSelector;
-import cz.vutbr.web.css.CombinedSelector.Specificity;
-import cz.vutbr.web.css.CombinedSelector.Specificity.Level;
-import cz.vutbr.web.css.CSSException;
-import cz.vutbr.web.css.CSSFactory;
-import cz.vutbr.web.css.RuleFactory;
-import cz.vutbr.web.css.RuleSet;
-import cz.vutbr.web.css.Selector;
-import cz.vutbr.web.css.Selector.Combinator;
-import cz.vutbr.web.css.Selector.PseudoElement;
-import cz.vutbr.web.css.StyleSheet;
-import cz.vutbr.web.csskit.antlr.CSSSource;
-import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
-import cz.vutbr.web.csskit.CombinedSelectorImpl.SpecificityImpl;
-import cz.vutbr.web.csskit.DefaultNetworkProcessor;
-
-import org.apache.xerces.parsers.DOMParser;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.daisy.braille.css.BrailleCSSParserFactory;
 import org.daisy.braille.css.BrailleCSSRuleFactory;
 import org.daisy.braille.css.SelectorImpl.NegationPseudoClassImpl;
 import org.daisy.braille.css.SelectorImpl.RelationalPseudoClassImpl;
 import org.daisy.braille.css.SupportedBrailleCSS;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import org.junit.Test;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import org.xml.sax.SAXException;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import cz.vutbr.web.css.CSSException;
+import cz.vutbr.web.css.CSSFactory;
+import cz.vutbr.web.css.CombinedSelector;
+import cz.vutbr.web.css.CombinedSelector.Specificity;
+import cz.vutbr.web.css.CombinedSelector.Specificity.Level;
+import cz.vutbr.web.css.RuleFactory;
+import cz.vutbr.web.css.RuleSet;
+import cz.vutbr.web.css.Selector;
+import cz.vutbr.web.css.Selector.Combinator;
+import cz.vutbr.web.css.StyleSheet;
+import cz.vutbr.web.csskit.CombinedSelectorImpl.SpecificityImpl;
+import cz.vutbr.web.csskit.antlr.CSSSource;
+import cz.vutbr.web.csskit.antlr.DefaultCSSSourceReader;
 
 public class PseudoClassTest {
 	
@@ -53,7 +50,7 @@ public class PseudoClassTest {
 	}
 	
 	@Test
-	public void testNegationPseudoClass() throws CSSException, IOException, SAXException {
+	public void testNegationPseudoClass() throws CSSException, IOException, SAXException, ParserConfigurationException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":not(.foo,.bar) { display: none }",
 			              (String)null,
@@ -79,11 +76,18 @@ public class PseudoClassTest {
 		Specificity spec = new SpecificityImpl();
 		spec.add(Level.C);
 		assertEquals(cs.computeSpecificity(), spec);
-		DOMParser parser = new DOMParser();
-		parser.parse(new InputSource(new ByteArrayInputStream(
-			"<html><div class='foo'/><div/><div class='bar'/><div class='baz'></div></html>"
-			.getBytes(StandardCharsets.UTF_8))));
-		Document doc = parser.getDocument();
+//		DOMParser parser = new DOMParser();
+//		parser.parse(new InputSource(new ByteArrayInputStream(
+//			"<html><div class='foo'/><div/><div class='bar'/><div class='baz'></div></html>"
+//			.getBytes(StandardCharsets.UTF_8))));
+//		Document doc = parser.getDocument();
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder parser = factory.newDocumentBuilder();
+		Document doc = parser.parse(new InputSource(new ByteArrayInputStream(
+				"<html><div class='foo'/><div/><div class='bar'/><div class='baz'></div></html>"
+				.getBytes(StandardCharsets.UTF_8))));
+		
 		NodeList divs = doc.getElementsByTagName("div");
 		assertFalse(s.matches((Element)divs.item(0)));
 		assertTrue(s.matches((Element)divs.item(1)));
@@ -92,7 +96,7 @@ public class PseudoClassTest {
 	}
 	
 	@Test
-	public void testRelationalPseudoClass() throws CSSException, IOException, SAXException {
+	public void testRelationalPseudoClass() throws CSSException, IOException, SAXException, ParserConfigurationException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":has(.foo,.bar) { display: none }",
 			              (String)null,
@@ -124,11 +128,17 @@ public class PseudoClassTest {
 		Specificity spec = new SpecificityImpl();
 		spec.add(Level.C);
 		assertEquals(cs.computeSpecificity(), spec);
-		DOMParser parser = new DOMParser();
-		parser.parse(new InputSource(new ByteArrayInputStream(
+//		DOMParser parser = new DOMParser();
+//		 parser.parse(new InputSource(new ByteArrayInputStream(
+//					"<html><div><span class='bar'/></div><div/><div/></html>"
+//					.getBytes(StandardCharsets.UTF_8))));
+//		Document doc = parser.getDocument();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder parser = factory.newDocumentBuilder();
+		Document doc = parser.parse(new InputSource(new ByteArrayInputStream(
 			"<html><div><span class='bar'/></div><div/><div/></html>"
 			.getBytes(StandardCharsets.UTF_8))));
-		Document doc = parser.getDocument();
+
 		NodeList divs = doc.getElementsByTagName("div");
 		assertTrue(s.matches((Element)divs.item(0)));
 		assertFalse(s.matches((Element)divs.item(1)));
@@ -136,7 +146,7 @@ public class PseudoClassTest {
 	}
 	
 	@Test
-	public void testNegationCombinedWithRelationalPseudoClass() throws CSSException, IOException, SAXException {
+	public void testNegationCombinedWithRelationalPseudoClass() throws CSSException, IOException, SAXException, ParserConfigurationException {
 		StyleSheet sheet = new BrailleCSSParserFactory().parse(
 			new CSSSource(":not(:has(:not(.foo, .bar))) { display: none }",
 			              (String)null,
@@ -153,11 +163,16 @@ public class PseudoClassTest {
 		spec.add(Level.C);
 		assertEquals(cs.computeSpecificity(), spec);
 		Selector s = cs.get(0);
-		DOMParser parser = new DOMParser();
-		parser.parse(new InputSource(new ByteArrayInputStream(
-			"<html><div><span class='bar'/></div><div><span/></div><div/></html>"
-			.getBytes(StandardCharsets.UTF_8))));
-		Document doc = parser.getDocument();
+//		DOMParser parser = new DOMParser();
+//		parser.parse(new InputSource(new ByteArrayInputStream(
+//			"<html><div><span class='bar'/></div><div><span/></div><div/></html>"
+//			.getBytes(StandardCharsets.UTF_8))));
+//		Document doc = parser.getDocument();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder parser = factory.newDocumentBuilder();
+		Document doc = parser.parse(new InputSource(new ByteArrayInputStream(
+				"<html><div><span class='bar'/></div><div><span/></div><div/></html>"
+				.getBytes(StandardCharsets.UTF_8))));
 		NodeList divs = doc.getElementsByTagName("div");
 		assertTrue(s.matches((Element)divs.item(0)));
 		assertFalse(s.matches((Element)divs.item(1)));

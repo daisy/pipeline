@@ -122,7 +122,7 @@
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
-          <version>1.2.1</version>
+          <version>3.0.0</version>
           <executions>
             <execution>
               <id>ant-compile</id>
@@ -223,7 +223,7 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>exec-maven-plugin</artifactId>
-            <version>1.2.1</version>
+            <version>3.0.0</version>
             <executions>
               <execution>
                 <id>ant-dist</id>

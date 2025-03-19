@@ -14,7 +14,8 @@ public class URITest {
 	public void absolutePath() throws URISyntaxException {
 		URL url = ConfigReader.resolve("/foo/bar.xml", new URI("file:///tmp/"));
 		Assert.assertTrue("file:///foo/bar.xml".equals(url.toString())
-		                  || "file:/foo/bar.xml".equals(url.toString()));
+		                  || "file:/foo/bar.xml".equals(url.toString())
+		                  || "file:/C:/foo/bar.xml".equals(url.toString()));
 	}
 
 	@Test

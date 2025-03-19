@@ -40,6 +40,11 @@ public class LameEncoderService implements AudioEncoderService {
 	                                                                   "Bit rate of MP3 files",
 	                                                                   false,
 	                                                                   null);
+	private static final Property MIN_FREQ = Properties.getProperty("org.daisy.pipeline.tts.lame.minfreq",
+	                                                                true,
+	                                                                "Minimum sample rate of MP3 files in kHz",
+	                                                                false,
+	                                                                "44.1f");
 	private static final Property CLI_OPTIONS = Properties.getProperty("org.daisy.pipeline.tts.lame.cli.options",
 	                                                                   false,
 	                                                                   "Additional command line options passed to lame (deprecated)",
@@ -71,7 +76,7 @@ public class LameEncoderService implements AudioEncoderService {
 				try {
 					opts.bitrate = Integer.valueOf(bitrate);
 				} catch (NumberFormatException e) {
-					logger.warn(MP3_BITRATE.getName() + ": " + bitrate + "is  not a valid number");
+					logger.warn(MP3_BITRATE.getName() + ": " + bitrate + "is not a valid number");
 				}
 			}
 		}
@@ -84,6 +89,16 @@ public class LameEncoderService implements AudioEncoderService {
 			}
 		}
 		opts.binpath = findLame(params);
+		{
+			String minFreq = MIN_FREQ.getValue(params);
+			if (minFreq != null) {
+				try {
+					opts.minfreq = Float.parseFloat(minFreq);
+				} catch (NumberFormatException e) {
+					logger.warn(MIN_FREQ.getName() + ": " + minFreq + "is not a valid number");
+				}
+			}
+		}
 		return opts;
 	}
 
