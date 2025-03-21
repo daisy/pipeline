@@ -74,7 +74,9 @@ public class JobsWebSocketEndpoint {
 		CallbackType callbackType = CallbackType.MESSAGES; {
 			String type = query.getFirstValue("type");
 			if ("status".equals(type))
-				callbackType = CallbackType.STATUS; }
+				callbackType = CallbackType.STATUS;
+			else if ("progress".equals(type))
+				callbackType = CallbackType.PROGRESS;}
 		Callback callback = new WebSocketCallback(
 			job.get(), callbackType, 1, firstMessage, session, routes);
 		callbacks.put(session.getId(), callback);

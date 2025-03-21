@@ -34,7 +34,7 @@ item =
         attribute value { text }
      }
 
-callback.type = "messages" | "status"
+callback.type = "messages" | "progress" | "status"
 
 # docwrapper can contain anything
 docwrapper = 

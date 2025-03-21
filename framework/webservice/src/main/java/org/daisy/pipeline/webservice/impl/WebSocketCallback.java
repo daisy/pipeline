@@ -44,6 +44,7 @@ public class WebSocketCallback extends Callback {
 		}
 	}
 
+	@Override
 	public boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress) {
 		logger.debug("Posting status, progress and messages to socket: " + socket.getId());
 		// Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
@@ -77,6 +78,15 @@ public class WebSocketCallback extends Callback {
 		}
 	}
 
+	@Override
+	public boolean postProgress(BigDecimal progress) {
+		logger.debug("Posting status and progress to socket: " + socket.getId());
+		JobXmlWriter writer = new JobXmlWriter( getJob(), uri);
+		writer.withProgress(progress);
+		return postXml(writer.getXmlDocument());
+	}
+
+	@Override
 	public boolean postStatusUpdate(Status status) {
 		logger.debug("Posting status to socket: " + socket.getId());
 		JobXmlWriter writer = new JobXmlWriter(getJob(), uri);

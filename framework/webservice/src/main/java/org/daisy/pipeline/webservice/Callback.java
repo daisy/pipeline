@@ -9,7 +9,7 @@ import org.daisy.pipeline.job.Job.Status;
 
 public abstract class Callback {
 
-	public enum CallbackType {STATUS, MESSAGES}
+	public enum CallbackType {STATUS, PROGRESS, MESSAGES}
 
 	private final CallbackType type;
 	private final Job job;
@@ -46,6 +46,8 @@ public abstract class Callback {
 	}
 
 	public abstract boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress);
+
+	public abstract boolean postProgress(BigDecimal progress);
 
 	public abstract boolean postStatusUpdate(Status status);
 

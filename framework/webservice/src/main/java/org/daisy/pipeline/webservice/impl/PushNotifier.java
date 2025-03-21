@@ -48,7 +48,8 @@ public class PushNotifier implements CallbackHandler {
         final int PUSH_INTERVAL = 1000;
 
         // track the sequence numbers of the first and last message for the next timed push
-        private Map<Callback,Integer> lastPushedMessage = new HashMap<Callback,Integer>();
+        private Map<Callback,Integer> lastPushedMessage = new HashMap<>();
+        private Map<Callback,BigDecimal> currentProgress = new HashMap<>();
         private Map<MessageAccessor,Integer> lastUnpushedMessage = Collections.synchronizedMap(new HashMap<>());
 
         // track the last status of each job
@@ -116,6 +117,7 @@ public class PushNotifier implements CallbackHandler {
                                 }
                                 break;
                         }
+                        case PROGRESS:
                         case MESSAGES: {
                                 Status status = job.getStatus();
                                 if (status == Status.SUCCESS
@@ -128,7 +130,8 @@ public class PushNotifier implements CallbackHandler {
                                         // otherwise push the initial messages on the first new message event
                                         boolean alreadyListening = false;
                                         for (Callback c : list)
-                                                if (c.getType() == CallbackType.MESSAGES) {
+                                                if (c.getType() == CallbackType.PROGRESS ||
+                                                    c.getType() == CallbackType.MESSAGES) {
                                                         alreadyListening = true;
                                                         break; }
                                         if (!alreadyListening) {
@@ -159,7 +162,8 @@ public class PushNotifier implements CallbackHandler {
                         boolean keepListeningForMessages = false;
                         boolean keepListeningForStatusUpdates = false;
                         for (Callback c : list) {
-                                if (c.getType() == CallbackType.MESSAGES)
+                                if (c.getType() == CallbackType.PROGRESS ||
+                                    c.getType() == CallbackType.MESSAGES)
                                         keepListeningForMessages = true;
                                 else
                                         keepListeningForStatusUpdates = true;
@@ -183,6 +187,9 @@ public class PushNotifier implements CallbackHandler {
                                 callbacks.remove(job.getId());
                         synchronized (lastPushedMessage) {
                                 lastPushedMessage.remove(callback);
+                        }
+                        synchronized (currentProgress) {
+                                currentProgress.remove(callback);
                         }
                 }
         }
@@ -211,6 +218,10 @@ public class PushNotifier implements CallbackHandler {
                         synchronized (lastPushedMessage) {
                                 for (Callback c : callbacks)
                                         lastPushedMessage.remove(c);
+                        }
+                        synchronized (currentProgress) {
+                                for (Callback c : callbacks)
+                                        currentProgress.remove(c);
                         }
                 }
         }
@@ -307,7 +318,15 @@ public class PushNotifier implements CallbackHandler {
                                         if (to > 0) to--;
                                         Map<Integer,List<Message>> messagesFrom = new HashMap<>();
                                         for (Callback callback : callbacks) {
-                                                if (callback.getType() == CallbackType.MESSAGES) {
+                                                switch (callback.getType()) {
+                                                case PROGRESS: {
+                                                        BigDecimal from = currentProgress.get(callback);
+                                                        if (from == null || progress.compareTo(from) > 0) {
+                                                                callback.postProgress(progress);
+                                                                currentProgress.put(callback, progress);
+                                                        }
+                                                        break; }
+                                                case MESSAGES: {
                                                         int from = lastPushedMessage.containsKey(callback)
                                                                 ? lastPushedMessage.get(callback) + 1
                                                                 : callback.getFirstMessage();
@@ -323,6 +342,7 @@ public class PushNotifier implements CallbackHandler {
                                                         }
                                                         callback.postMessages(messages, from - 1, progress);
                                                         lastPushedMessage.put(callback, to);
+                                                        break; }
                                                 }
                                         }
                                 }

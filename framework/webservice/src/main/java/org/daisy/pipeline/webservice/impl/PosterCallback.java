@@ -46,6 +46,7 @@ public class PosterCallback extends Callback {
 		this.requestRootUrl = requestRootUrl;
 	}
 
+	@Override
 	public boolean postMessages(List<Message> messages, int newerThan, BigDecimal progress) {
 		logger.debug("Posting messages to " + url);
 		// Note that we're not using JobXmlWriter's messagesThreshold argument. It is no use because
@@ -57,6 +58,16 @@ public class PosterCallback extends Callback {
 		return postXml(doc, url, client);
 	}
 
+	@Override
+	public boolean postProgress(BigDecimal progress) {
+		logger.debug("Posting progress to " + url);
+		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
+		writer.withProgress(progress);
+		Document doc = writer.getXmlDocument();
+		return postXml(doc, url, client);
+	}
+
+	@Override
 	public boolean postStatusUpdate(Status status) {
 		logger.debug("Posting status '" + status + "' to " + url);
 		JobXmlWriter writer = new JobXmlWriter(getJob(), requestRootUrl);
