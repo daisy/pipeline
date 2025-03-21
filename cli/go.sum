@@ -18,6 +18,8 @@ github.com/daisy/pipeline-clientlib-go v0.0.0-20240710161849-3aeed200be9b h1:e06
 github.com/daisy/pipeline-clientlib-go v0.0.0-20240710161849-3aeed200be9b/go.mod h1:EqAuNzs3I84oUiMMlo787kGYRaNKozEPMfThpfj+sW8=
 github.com/daisy/pipeline-clientlib-go v0.0.0-20240813132445-afd664c2c897 h1:FOpeLDOUHVZVMZmgai5ZmsJhN5Iio2h6n33S1Z/N5Lo=
 github.com/daisy/pipeline-clientlib-go v0.0.0-20240813132445-afd664c2c897/go.mod h1:DPhabM5vvBH6oQhs7UfYXQc66hWZPJf+jMu/qVeoyyc=
+github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
+github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
 github.com/hashicorp/go-version v1.0.0 h1:21MVWPKDphxa7ineQQTrCU5brh7OuVVAzGOCnnCPtE8=
 github.com/hashicorp/go-version v1.0.0/go.mod h1:fltr4n8CU8Ke44wwGCBoEymUuxUHl09ZGVZPK5anwXA=
 github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0 h1:iQTw/8FWTuc7uiaSepXwyf3o52HaUYcV+Tu66S3F5GA=

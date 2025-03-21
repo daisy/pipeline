@@ -11,6 +11,8 @@ require (
 	github.com/capitancambio/restclient v0.0.0-20150219172137-547c7b5e0857
 	// go get github.com/daisy/pipeline-clientlib-go@afd664c2c8
 	github.com/daisy/pipeline-clientlib-go v0.0.0-20240813132445-afd664c2c897
+	// go get github.com/gorilla/websocket
+	github.com/gorilla/websocket v1.5.3
 	github.com/hashicorp/go-version v1.0.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/mattn/goveralls v0.0.11
