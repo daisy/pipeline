@@ -154,17 +154,18 @@ type JobRequest struct {
 }
 
 type Job struct {
-	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data job"`
-	Nicename string   `xml:"http://www.daisy.org/ns/pipeline/data nicename"`
-	BatchId  string   `xml:"http://www.daisy.org/ns/pipeline/data batchId"`
-	Script            `xml:"http://www.daisy.org/ns/pipeline/data script"`
-	Messages Messages `xml:"http://www.daisy.org/ns/pipeline/data messages"`
-	Log      Log      `xml:"http://www.daisy.org/ns/pipeline/data log"`
-	Results  Results  `xml:"http://www.daisy.org/ns/pipeline/data results"`
-	Priority string   `xml:"priority,attr"`
-	Status   string   `xml:"status,attr"`
-	Href     string   `xml:"href,attr"`
-	Id       string   `xml:"id,attr"`
+	XMLName       xml.Name `xml:"http://www.daisy.org/ns/pipeline/data job"`
+	Nicename      string   `xml:"http://www.daisy.org/ns/pipeline/data nicename"`
+	BatchId       string   `xml:"http://www.daisy.org/ns/pipeline/data batchId"`
+	Script                 `xml:"http://www.daisy.org/ns/pipeline/data script"`
+	Messages      Messages `xml:"http://www.daisy.org/ns/pipeline/data messages"`
+	Log           Log      `xml:"http://www.daisy.org/ns/pipeline/data log"`
+	Results       Results  `xml:"http://www.daisy.org/ns/pipeline/data results"`
+	Priority      string   `xml:"priority,attr"`
+	Status        string   `xml:"status,attr"`
+	Href          string   `xml:"href,attr"`
+	Id            string   `xml:"id,attr"`
+	Notifications string   `xml:"notifications,attr"`
 }
 type Result struct {
 	XMLName  xml.Name `xml:"http://www.daisy.org/ns/pipeline/data result"`
