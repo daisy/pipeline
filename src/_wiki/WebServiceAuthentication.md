@@ -24,9 +24,9 @@ follows:
  * The URI string now has three additional query parameters Example:
    `http://example.org/ws/scripts?authid=myclient&time=2012-02-09T02:23:40Z&nonce=533473712461604713238933268313`
 
-Then the client takes this URI string and generates an
-[HMAC SHA1 hash](http://en.wikipedia.org/wiki/HMAC) using their
-secret. The hash function looks roughly like this:
+Then the client takes this URI string and generates an [HMAC SHA1
+hash](http://en.wikipedia.org/wiki/HMAC) using their secret. The hash
+function looks roughly like this (pseudo-code):
 
 ~~~
 hashString = createHash("http://example.org/ws/scripts?authid=myclient&time=2012-02-09T02:23:40Z&nonce=533473712461604713238933268313", "mysecret")
@@ -46,3 +46,10 @@ This is the URI to submit to the Web Service. If `myclient` has a
 permission level to do what they want, then their request will be
 accepted.  Currently, only admin requests require a client to have a
 special permission level (`ADMIN` instead of the default `CLIENTAPP`).
+
+This process of adding the authentication parameters to a URL is
+illustrated in this [sample client application written in
+JavaScript](http://daisy.github.io/pipeline/Get-Help/API-Documentation/WebServiceAPI/example-client/).
+
+Sample code for other programming languages is available
+[here](https://github.com/daisy/pipeline-framework/tree/master/webservice/samples/clients).
