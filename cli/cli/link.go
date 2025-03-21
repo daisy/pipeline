@@ -10,10 +10,12 @@ import (
 	"regexp"
 	"strings"
 	"time"
+	"encoding/xml"
 
 	"github.com/daisy/pipeline-clientlib-go"
 	"github.com/mitchellh/go-ps"
 	"github.com/shirou/gopsutil/process"
+	"github.com/gorilla/websocket"
 )
 
 const (
@@ -342,7 +344,7 @@ func (p PipelineLink) Execute(jobReq JobRequest) (job pipeline.Job, messages cha
 	}
 	messages = make(chan Message)
 	if !jobReq.Background {
-		go getAsyncMessages(p, job.Id, messages)
+		go getAsyncMessages(p, job.Notifications, job.Id, messages)
 	} else {
 		close(messages)
 	}
@@ -360,14 +362,47 @@ func (p PipelineLink) StylesheetParameters(paramReq StylesheetParametersRequest)
 }
 
 //Feeds the channel with the messages describing the job's execution
-func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
+func getAsyncMessages(p PipelineLink, notificationsWsUrl string, jobId string, messages chan Message) {
+	var sock *websocket.Conn
+	if notificationsWsUrl != "" {
+		if p.Authentication {
+			req := restclient.RequestResponse{Url: notificationsWsUrl}
+			p.pipeline.Authenticator(&req)
+			notificationsWsUrl = req.Url
+		}
+		sock, _, err := websocket.DefaultDialer.Dial(notificationsWsUrl, nil)
+		if err != nil {
+			log.Printf(err.Error());
+			messages <- Message{Error: err}
+			return
+		}
+		defer sock.Close()
+	}
 	msgSeq := -1
 	for {
-		job, err := p.pipeline.Job(jobId, msgSeq)
-		if err != nil {
-			messages <- Message{Error: err}
-			close(messages)
-			return
+		var job pipeline.Job
+		if sock != nil {
+			_, msg, err := sock.ReadMessage()
+			if err != nil {
+				messages <- Message{Error: err}
+				close(messages)
+				return
+			}
+			err = xml.Unmarshal([]byte(msg), &job)
+			if err != nil {
+				messages <- Message{Error: err}
+				close(messages)
+				return
+			}
+		} else {
+			// to support older versions of Pipeline, get messages through polling
+			var err error
+			job, err = p.pipeline.Job(jobId, msgSeq)
+			if err != nil {
+				messages <- Message{Error: err}
+				close(messages)
+				return
+			}
 		}
 		n := msgSeq
 		if len(job.Messages.Message) > 0 {
@@ -383,9 +418,10 @@ func getAsyncMessages(p PipelineLink, jobId string, messages chan Message) {
 			close(messages)
 			return
 		}
-		time.Sleep(MSG_WAIT)
+		if sock == nil {
+			time.Sleep(MSG_WAIT)
+		}
 	}
-
 }
 
 //Flatten message coming from the Pipeline job and feed them into the channel
