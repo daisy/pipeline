@@ -527,9 +527,9 @@ public final class XProcScript extends Script {
 							defaultValue = "0";
 						}
 					} else if (datatype == DatatypeService.XS_BOOLEAN) {
-						if ("true".equals(select) || "1".equals(select))
+						if ("true".equals(select) || "true()".equals(select) || "1".equals(select))
 							defaultValue = "true";
-						else if ("false".equals(select) || "0".equals(select))
+						else if ("false".equals(select) || "false()".equals(select) || "0".equals(select))
 							defaultValue = "false";
 						else {
 							logger.debug("Select statement is not a valid " + datatype.getId() + ": " + select);
