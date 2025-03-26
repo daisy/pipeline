@@ -84,6 +84,7 @@
 
 	<!--
 		dtbook-validator
+		dtbook-to-ebraille
 		dtbook-to-epub3
 		dtbook-to-html
 		dtbook-to-zedai
@@ -379,10 +380,10 @@ appear in the lexicons.</p>
 			<h2 px:role="name">Style sheet parameters</h2>
 			<p px:role="desc" xml:space="preserve">A list of parameters passed to the style sheets.
 
-Style sheets, whether they're user style sheets (specified with the "stylesheet" option) or author
-style sheets (associated with the source), may have parameters (Sass variables). The
-"stylesheet-parameters" option, which takes a comma-separated list of key-value pairs enclosed in
-parenthesis, can be used to set these variables.
+Style sheets, whether they're user style sheets (specified with the "Style sheets" option) or author
+style sheets (associated with the source), may have parameters (Sass variables). This option, which
+takes a comma-separated list of key-value pairs enclosed in parenthesis, can be used to set these
+variables.
 
 For example, if a style sheet uses the Sass variable "foo":
 
@@ -397,6 +398,7 @@ you can control that variable with the following parameters list: `(foo:true)`.<
 	</p:option>
 
 	<!--
+	    dtbook-to-ebraille
 	    dtbook-to-pef
 	    html-to-pef
 	    epub3-to-pef

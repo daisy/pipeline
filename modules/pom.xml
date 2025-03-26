@@ -84,6 +84,7 @@
     <module>scripts/daisy3-to-epub3</module>
     <module>scripts/daisy3-to-mp3</module>
     <module>scripts/dtbook-to-daisy3</module>
+    <module>scripts/dtbook-to-ebraille</module>
     <module>scripts/dtbook-to-epub3</module>
     <module>scripts/dtbook-to-html</module>
     <module>scripts/dtbook-to-odt</module>

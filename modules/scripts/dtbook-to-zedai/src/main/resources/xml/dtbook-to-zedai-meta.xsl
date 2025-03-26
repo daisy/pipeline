@@ -59,7 +59,7 @@
         </xsl:for-each>
     </xsl:template>
 
-    <!-- identity template which discards everything -->
+    <!-- discard everything else -->
     <xsl:template match="@*|node()">
         <xsl:apply-templates select="@*|node()"/>
     </xsl:template>

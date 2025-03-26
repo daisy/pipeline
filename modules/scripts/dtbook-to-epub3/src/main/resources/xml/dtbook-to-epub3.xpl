@@ -216,8 +216,8 @@
 	    <p:with-option name="nimas" select="$nimas='true'"/>
 	    <p:with-option name="chunk-size" xmlns:_="dtbook" select="$_:chunk-size"/>
 	    <p:with-option name="output-name" select="$output-name"/>
-	    <p:with-option name="output-dir" select="$output-dir-uri"/>
-	    <p:with-option name="temp-dir" select="$temp-dir"/>
+	    <p:with-option name="output-dir" select="concat($temp-dir,'epub3-unzipped/')"/>
+	    <p:with-option name="temp-dir" select="concat($temp-dir,'temp/')"/>
 	  </px:dtbook-to-epub3>
 
 	  <px:epub3-store name="store" px:progress="1/9" px:message="Storing EPUB 3">

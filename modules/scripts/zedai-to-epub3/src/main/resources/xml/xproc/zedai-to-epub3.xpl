@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <p:declare-step xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
+                xmlns:pf="http://www.daisy.org/ns/pipeline/functions"
+                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:c="http://www.w3.org/ns/xproc-step"
                 xmlns:cx="http://xmlcalabash.com/ns/extensions"
-                xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
                 xmlns:d="http://www.daisy.org/ns/pipeline/data"
                 px:input-filesets="zedai"
                 px:output-filesets="epub3 mp3"
@@ -28,7 +29,7 @@
            publication even if the text-to-speech process has errors -->
       <!-- a `tts-success-rate' attribute contains the percentage of the input text that got
            successfully converted to speech -->
-      <p:pipe step="load-convert-store" port="status"/>
+      <p:pipe step="convert" port="status"/>
     </p:output>
 
     <p:option name="include-tts-log" select="p:system-property('d:org.daisy.pipeline.tts.log')">
@@ -36,7 +37,7 @@
     </p:option>
     <p:output port="tts-log" sequence="true">
       <!-- defined in ../../../../../../common-options.xpl -->
-      <p:pipe step="load-convert-store" port="tts-log"/>
+      <p:pipe step="convert" port="tts-log"/>
     </p:output>
     <p:serialization port="tts-log" indent="true" omit-xml-declaration="false"/>
 
@@ -72,46 +73,35 @@
       <!-- defined in ../../../../../../common-options.xpl -->
     </p:option>
 
-    <p:import href="zedai-to-epub3.convert.xpl"/>
-
+    <p:import href="zedai-to-epub3.convert.xpl">
+      <p:documentation>
+        px:zedai-to-epub3
+      </p:documentation>
+    </p:import>
     <p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
       <p:documentation>
         px:epub3-store
       </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl"/>
     <p:import href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl">
       <p:documentation>
         px:fileset-delete
       </p:documentation>
     </p:import>
-    <p:import href="http://www.daisy.org/pipeline/modules/common-utils/library.xpl"/>
-    <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl"/>
+    <p:import href="http://www.daisy.org/pipeline/modules/zedai-utils/library.xpl">
+      <p:documentation>
+        px:zedai-load
+      </p:documentation>
+    </p:import>
+    <cx:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xsl" type="application/xslt+xml">
+      <p:documentation>
+        pf:normalize-uri
+      </p:documentation>
+    </cx:import>
 
     <p:variable name="input-uri" select="base-uri(/)"/>
 
-    <px:normalize-uri name="output-dir-uri">
-      <p:with-option name="href" select="concat($result,'/')"/>
-    </px:normalize-uri>
-    <p:sink/>
-
-    <p:group name="load-convert-store">
-        <p:output port="status">
-          <p:pipe step="convert" port="status"/>
-        </p:output>
-        <p:output port="tts-log">
-          <p:pipe step="convert" port="tts-log"/>
-        </p:output>
-        <p:variable name="output-dir-uri" select="/c:result/string()">
-          <p:pipe step="output-dir-uri" port="normalized"/>
-        </p:variable>
-        <p:variable name="epub-file-uri" select="concat($output-dir-uri,replace($input-uri,'^.*/([^/]*?)(\.[^/\.]*)?$','$1'),'.epub')"/>
-
-        <px:zedai-load name="load">
-            <p:input port="source">
-                <p:pipe port="source" step="main"/>
-            </p:input>
-        </px:zedai-load>
+        <px:zedai-load name="load"/>
 
         <px:zedai-to-epub3 name="convert">
             <p:input port="in-memory.in">
@@ -126,14 +116,17 @@
                                                                      ' ')"/>
             <p:with-option name="lexicon" select="for $l in tokenize($lexicon,'\s+')[not(.='')] return
                                                     resolve-uri($l,$input-uri)"/>
-            <p:with-option name="output-dir" select="$temp-dir"/>
+            <p:with-option name="output-dir" select="concat($temp-dir,'epub-unzipped/')"/>
+            <p:with-option name="temp-dir" select="concat($temp-dir,'zedai-to-epub3/')"/>
             <p:with-option name="audio" select="$audio"/>
             <p:with-option name="chunk-size" xmlns:_="zedai" select="$_:chunk-size"/>
             <p:with-option name="include-tts-log" select="$include-tts-log"/>
         </px:zedai-to-epub3>
 
         <px:epub3-store name="store">
-            <p:with-option name="href" select="$epub-file-uri"/>
+            <p:with-option name="href" select="concat(
+                                                 pf:normalize-uri(concat($result,'/')),
+                                                 replace($input-uri,'^.*/([^/]*?)(\.[^/\.]*)?$','$1'),'.epub')"/>
             <p:input port="in-memory.in">
                 <p:pipe port="in-memory.out" step="convert"/>
             </p:input>
@@ -144,6 +137,5 @@
             <p:pipe step="convert" port="temp-audio-files"/>
           </p:input>
         </px:fileset-delete>
-    </p:group>
 
 </p:declare-step>

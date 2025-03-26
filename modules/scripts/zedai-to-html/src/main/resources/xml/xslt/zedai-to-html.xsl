@@ -740,7 +740,7 @@
          to either accessible description or accessible name -->
     <!-- <xsl:attribute name="title" select="."/> -->
     <xsl:attribute name="aria-label" select="concat(' ',.,'. ')"/> <!-- append period and surround with extra
-                                                                        spaces to help AT speaking the page
+                                                                        spaces to help AT speak the page
                                                                         number correctly -->
   </xsl:template>
 

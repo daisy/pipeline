@@ -11,6 +11,7 @@
                 exclude-result-prefixes="xs z f pf rdfa">
 
   <xsl:include href="http://www.daisy.org/pipeline/modules/common-utils/generate-id.xsl"/>
+  <xsl:include href="http://www.daisy.org/pipeline/modules/file-utils/uri-functions.xsl"/>
 
   <!--TODO resolve metadata prefixes from @profile and @prefix
      * default prefixes declared in @profile
@@ -21,6 +22,7 @@
   -->
 
   <xsl:param name="source-of-pagination" as="xs:string?" select="()"/>
+  <xsl:param name="output-base-uri" as="xs:string"/>
 
   <xsl:template match="/z:document" priority="1">
     <xsl:call-template name="pf:next-match-with-generated-ids">
@@ -134,15 +136,17 @@
                   select="ancestor::z:head//z:meta[@property='z3998:meta-record-type']
                                                   [rdfa:context(.)=$this/@resource]
                                                   [1]/@content"/>
+    <xsl:variable name="resource" select="resolve-uri(@resource,base-uri(.))"/>
+    <xsl:variable name="resource" select="pf:relativize-uri($resource,$output-base-uri)"/>
     <xsl:choose>
       <xsl:when test="$record-type='z3998:mods'">
-        <link rel="record" href="{@resource}" media-type="application/mods+xml"/>
+        <link rel="record" href="{$resource}" media-type="application/mods+xml"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:onix-books'">
-        <link rel="record" href="{@resource}" media-type="application/xml" properties="onix"/>
+        <link rel="record" href="{$resource}" media-type="application/xml" properties="onix"/>
       </xsl:when>
       <xsl:when test="$record-type='z3998:marc21-xml'">
-        <link rel="record" href="{@resource}" media-type="application/marcxml+xml"/>
+        <link rel="record" href="{$resource}" media-type="application/marcxml+xml"/>
       </xsl:when>
       <xsl:when test="$record-type=('z3998:dcterms-rdf','z3998:dctersm-rdfa')">
         <!--TODO translate external DCTERMS records ?-->

@@ -14,6 +14,12 @@
 	
 	<p:input port="source"/>
 	<p:output port="result"/>
+	<p:option name="output-base-uri" cx:as="xs:string?" select="()">
+		<p:documentation>
+			Will determine the relative path to linked resources in the output, which are assumed to
+			be relative to the input base URI in the input.
+		</p:documentation>
+	</p:option>
 	<p:option name="source-of-pagination" cx:as="xs:string?" select="()"/>
 	
 	<p:xslt>
@@ -21,6 +27,8 @@
 			<p:document href="../xslt/zedai-to-opf-metadata.xsl"/>
 		</p:input>
 		<p:with-param port="parameters" name="source-of-pagination" select="$source-of-pagination"/>
+		<p:with-param name="output-base-uri" select="($output-base-uri,base-uri(/))[1]"/>
+		<p:with-option name="output-base-uri" select="($output-base-uri,base-uri(/))[1]"/>
 	</p:xslt>
 	
 </p:declare-step>

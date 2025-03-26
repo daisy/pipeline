@@ -35,7 +35,8 @@
 					<d:config/>
 				</x:document>
 			</x:input>
-			<x:option name="output-dir" select="resolve-uri('temp-dir/')"/>
+			<x:option name="output-dir" select="resolve-uri('output-dir/')"/>
+			<x:option name="temp-dir" select="$temp-dir"/>
 		</x:call>
 		<x:context label="the fileset.out port">
 			<x:document type="port" port="fileset.out"/>
@@ -44,18 +45,18 @@
 		          type="custom" href="http://www.daisy.org/pipeline/modules/fileset-utils/library.xpl" step="x:fileset-compare">
 			<x:document type="inline">
 				<d:fileset>
-					<d:file href="temp-dir/epub/EPUB/alice-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="temp-dir/epub/EPUB/alice-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="temp-dir/epub/EPUB/alice-3.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="temp-dir/epub/EPUB/alice-4.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
-					<d:file href="temp-dir/epub/EPUB/package.opf" media-type="application/oebps-package+xml"/>
-					<d:file href="temp-dir/epub/META-INF/container.xml" media-type="application/xml"/>
+					<d:file href="output-dir/EPUB/alice-1.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="output-dir/EPUB/alice-2.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="output-dir/EPUB/alice-3.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="output-dir/EPUB/alice-4.xhtml" media-type="application/xhtml+xml" doctype="&lt;!DOCTYPE html&gt;"/>
+					<d:file href="output-dir/EPUB/package.opf" media-type="application/oebps-package+xml"/>
+					<d:file href="output-dir/META-INF/container.xml" media-type="application/xml"/>
 				</d:fileset>
 			</x:document>
 		</x:expect>
 		<x:context label="the package document">
 			<x:document type="port" port="in-memory.out"
-			            select="/*[base-uri()=resolve-uri('temp-dir/epub/EPUB/package.opf',$test-base-uri)]"/>
+			            select="/*[base-uri()=resolve-uri('output-dir/EPUB/package.opf',$test-base-uri)]"/>
 		</x:context>
 		<x:expect label="the package document" type="custom" href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl"
 		          step="x:epub3-compare-package-doc">
@@ -96,7 +97,7 @@
 		</x:expect>
 		<x:context label="the toc in the alice-1.xhtml file">
 			<x:document type="port" port="in-memory.out"
-			            select="/*[base-uri()=resolve-uri('temp-dir/epub/EPUB/alice-1.xhtml',$test-base-uri)]
+			            select="/*[base-uri()=resolve-uri('output-dir/EPUB/alice-1.xhtml',$test-base-uri)]
 			                    //html:nav[@epub:type='toc']"/>
 		</x:context>
 		<x:expect label="the toc in the alice-1.xhtml file" type="compare">
