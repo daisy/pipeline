@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/daisy/pipeline-clientlib-go"
+	"github.com/capitancambio/restclient"
 )
 
 const (
@@ -137,6 +138,9 @@ func (p PipelineTest) Call() string {
 func (p *PipelineTest) SetCredentials(key, secret string) {
 	p.key = key
 	p.secret = secret
+}
+
+func (p PipelineTest) Authenticator(req *restclient.RequestResponse) {
 }
 
 func (p *PipelineTest) Alive() (alive pipeline.Alive, err error) {
