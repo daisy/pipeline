@@ -4,13 +4,14 @@ go 1.23.0
 
 // toolchain go1.24.2
 
-// replace github.com/daisy/pipeline-clientlib-go => /Users/bert/src/github/daisy/pipeline/clientlib/go
+replace github.com/daisy/pipeline-clientlib-go => /Users/bert/src/github/daisy/pipeline/clientlib/go
 
 require (
 	github.com/bertfrees/blackterm v0.0.0-20230119134958-9d34cff72a06
 	github.com/bertfrees/go-subcommand v0.0.0-20230119135135-b5e2f5321a24
 	github.com/capitancambio/chalk v0.0.0-20160127153406-9dc2af224a17
 	github.com/capitancambio/restclient v0.0.0-20150219172137-547c7b5e0857
+	// FIXME: update to new version
 	// go get github.com/daisy/pipeline-clientlib-go@afd664c2c8
 	github.com/daisy/pipeline-clientlib-go v0.0.0-20240813132445-afd664c2c897
 	// go get github.com/gorilla/websocket
