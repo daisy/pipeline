@@ -12,8 +12,9 @@ import net.sf.saxon.s9api.*;
 import net.sf.saxon.trans.XPathException;
 
 import java.math.BigDecimal;
-import java.util.Vector;
+import java.util.Iterator;
 import java.util.Hashtable;
+import java.util.Vector;
 
 /**
  * Created by IntelliJ IDEA.
@@ -29,19 +30,42 @@ public class XWhen extends XCompoundStep {
 
     public boolean shouldRun() throws SaxonApiException {
         String testExpr = ((When) step).getTest();
-        XdmNode doc = null;
         NamespaceBinding nsbinding = new NamespaceBinding(runtime, step.getNode());
         Hashtable<QName,RuntimeValue> globals = parent.getInScopeOptions();
 
-        ReadablePipe reader = inputs.get("#xpath-context").firstElement();
-        doc = reader.read();
-
-        if (reader.moreDocuments() || inputs.get("#xpath-context").size() > 1) {
-            throw XProcException.dynamicError(5, step);
+        XdmNode doc = null;
+        Vector<XdmNode> defaultCollection = null; {
+            Iterator<ReadablePipe> xpathContext = inputs.get("#xpath-context").iterator();
+            if (!runtime.getAllowSequenceAsContext()) {
+                ReadablePipe reader = xpathContext.next();
+                if (xpathContext.hasNext()) {
+                    throw XProcException.dynamicError(5, step);
+                }
+                doc = reader.read();
+                if (reader.moreDocuments()) {
+                    throw XProcException.dynamicError(5, step);
+                }
+            } else {
+                defaultCollection = new Vector<XdmNode>();
+                while (xpathContext.hasNext()) {
+                    ReadablePipe reader = xpathContext.next();
+                    while (reader.moreDocuments()) {
+                        if (doc == null) {
+                            doc = reader.read();
+                            defaultCollection.add(doc);
+                        } else {
+                            defaultCollection.add(reader.read());
+                        }
+                    }
+                }
+            }
         }
 
         // Surround testExpr with "boolean()" to force the EBV.
-        Vector<XdmItem> results = evaluateXPath(doc, null, nsbinding.getNamespaceBindings(), "boolean(" + testExpr + ")", globals);
+        Vector<XdmItem> results = evaluateXPath(doc,
+                                                defaultCollection,
+                                                nsbinding.getNamespaceBindings(), "boolean(" + testExpr + ")",
+                                                globals);
 
         if (results.size() != 1) {
             throw new XProcException("Attempt to compute EBV in p:when did not return a singleton!?");

@@ -29,7 +29,7 @@ targetCompatibility = "1.8"
 repositories {
   // mavenLocal()
   mavenCentral()
-  maven { url "http://maven.restlet.org" }
+  maven { url "https://maven.restlet.talend.com" }
   maven { url "https://developer.marklogic.com/maven2" }
   maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
 }
