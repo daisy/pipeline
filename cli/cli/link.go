@@ -15,6 +15,7 @@ import (
 	"github.com/daisy/pipeline-clientlib-go"
 	"github.com/mitchellh/go-ps"
 	"github.com/gorilla/websocket"
+	"github.com/capitancambio/restclient"
 )
 
 const (
@@ -47,6 +48,7 @@ type PipelineApi interface {
 	Queue() ([]pipeline.QueueJob, error)
 	MoveUp(id string) ([]pipeline.QueueJob, error)
 	MoveDown(id string) ([]pipeline.QueueJob, error)
+	Authenticator(req *restclient.RequestResponse)
 }
 
 //Maintains some information about the pipeline client
@@ -357,6 +359,9 @@ func (p PipelineLink) StylesheetParameters(paramReq StylesheetParametersRequest)
 
 //Feeds the channel with the messages describing the job's execution
 func getAsyncMessages(p PipelineLink, notificationsWsUrl string, jobId string, messages chan Message) {
+
+	// FIXME: move stuff to clientlib/go
+
 	var sock *websocket.Conn
 	if notificationsWsUrl != "" {
 		if p.Authentication {
@@ -367,10 +372,12 @@ func getAsyncMessages(p PipelineLink, notificationsWsUrl string, jobId string, m
 		sock, _, err := websocket.DefaultDialer.Dial(notificationsWsUrl, nil)
 		if err != nil {
 			log.Printf(err.Error());
-			messages <- Message{Error: err}
-			return
+			log.Printf("falling back to message polling");
+			//messages <- Message{Error: err}
+			//return
+		} else {
+			defer sock.Close()
 		}
-		defer sock.Close()
 	}
 	msgSeq := -1
 	for {

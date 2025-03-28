@@ -95,6 +95,10 @@ func (p *Pipeline) SetCredentials(clientKey, clientSecret string) {
 	p.authenticator = authenticator(clientKey, clientSecret)
 }
 
+func (p Pipeline) Authenticator(req *restclient.RequestResponse) {
+	p.authenticator(req)
+}
+
 func (p *Pipeline) SetUrl(url string) {
 	p.BaseUrl = url
 }
