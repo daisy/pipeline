@@ -222,7 +222,7 @@ files are MP2, MP3 and WAVE. Audio files in other formats are transcoded to MP3.
 	    epub3-to-epub3
 	-->
 	<p:option name="stylesheet" required="false" px:type="anyURI" select="''" px:sequence="true" px:separator=" "
-	          px:media-type="text/css text/x-scss application/xslt+xml">
+	          px:media-type="text/css text/x-scss">
 		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
 			<h2 px:role="name">Style sheets</h2>
 			<p px:role="desc" xml:space="preserve">A list of CSS/Sass style sheets to take into account.
