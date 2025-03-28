@@ -162,14 +162,20 @@
                 <meta property="dc:publisher" content="Anonymous"/>
             </xsl:if>
 
-            <!-- use the current date -->
-            <meta property="dc:date">
-                <xsl:attribute name="content"
-                    select="format-dateTime(
-                    adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),
-                    '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"
-                />
-            </meta>
+            <!--
+                Ensure that a value for dc:date if there is none present in the source doc
+            -->
+            <xsl:if
+                test="string-length(normalize-space(dtb:meta[lower-case(@name)='dc:date'][1]/@content)) = 0">
+                <!-- use the current date -->
+                <meta property="dc:date" xml:id="meta-dcdate">
+                    <xsl:attribute name="content"
+                        select="format-dateTime(
+                        adjust-dateTime-to-timezone(current-dateTime(),xs:dayTimeDuration('PT0H')),
+                        '[Y0001]-[M01]-[D01]T[H01]:[m01]:[s01][Z]')"
+                    />
+                </meta>
+            </xsl:if>
         </head>
 
     </xsl:template>

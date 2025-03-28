@@ -740,6 +740,7 @@
 					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en-GB">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 							<dc:title id="title2">minimal</dc:title>
+							<meta refines="#title2" property="title-type">main</meta>
 							<dc:identifier id="pub-id">new-id</dc:identifier>
 							<dc:language>en-GB</dc:language>
 							<meta property="dcterms:modified">2021-02-01T16:03:09Z</meta>

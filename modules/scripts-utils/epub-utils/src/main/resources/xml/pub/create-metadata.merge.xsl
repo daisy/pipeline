@@ -130,7 +130,7 @@
                 </xsl:for-each-group>
             </xsl:if>
 
-            <!--generate dc:modified-->
+            <!--generate dcterms:modified-->
             <meta property="dcterms:modified">
                 <xsl:value-of
                     select="format-dateTime(
