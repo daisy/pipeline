@@ -386,7 +386,7 @@ public abstract class ReflexiveExtensionFunctionProvider implements ExtensionFun
 										} else
 											throw new XPathException(cause);
 									} catch (IllegalAccessException e) {
-										throw new RuntimeException(); // should not happen
+										throw new RuntimeException(e); // should not happen
 									}
 								}
 								if (nodeListFromXMLStreamWriter != null)

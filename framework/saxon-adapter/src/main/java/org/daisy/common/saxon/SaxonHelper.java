@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.IllformedLocaleException;
 import java.util.Hashtable;
@@ -54,6 +55,7 @@ import net.sf.saxon.type.ValidationException;
 import net.sf.saxon.value.AnyURIValue;
 import net.sf.saxon.value.BigDecimalValue;
 import net.sf.saxon.value.BooleanValue;
+import net.sf.saxon.value.DateTimeValue;
 import net.sf.saxon.value.DecimalValue;
 import net.sf.saxon.value.DoubleValue;
 import net.sf.saxon.value.EmptySequence;
@@ -101,6 +103,12 @@ public final class SaxonHelper {
 			return new AnyURIValue(((URI)object).toASCIIString());
 		else if (object instanceof Locale)
 			return itemFromObject(((Locale)object).toLanguageTag());
+		else if (object instanceof Date)
+			try {
+				return DateTimeValue.fromJavaDate((Date)object);
+			} catch (XPathException e) {
+				throw new RuntimeException(e); // should not happen
+			}
 		else if (object instanceof Map)
 			return mapItemFromMap((Map<?,?>)object);
 		else
@@ -401,6 +409,11 @@ public final class SaxonHelper {
 				}
 			} else
 				throw new IllegalArgumentException();
+		else if (type.equals(Date.class))
+			if (item instanceof DateTimeValue)
+				return (T)Date.from(((DateTimeValue)item).getCalendar().toZonedDateTime().toInstant());
+			else
+				throw new IllegalArgumentException();
 		else if (type.equals(Object.class))
 			// argument can be anything
 			if (item instanceof ArrayItem)
@@ -424,9 +437,9 @@ public final class SaxonHelper {
 			if (type.isInstance(o))
 				return (T)o;
 			else
-				throw new IllegalArgumentException("expected " + type + " object, but got " + o);
+				throw new IllegalArgumentException("expected " + type + " object, but got " + o.getClass());
 		} else
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("expected " + type + " object, but got " + item.getClass());
 	}
 
 	public static Item getSingleItem(Sequence sequence) throws XPathException {
