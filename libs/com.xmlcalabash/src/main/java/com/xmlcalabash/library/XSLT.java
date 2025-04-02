@@ -224,6 +224,14 @@ public class XSLT extends DefaultStep {
             XsltCompiler compiler = runtime.getProcessor().newXsltCompiler();
             compiler.setSchemaAware(processor.isSchemaAware());
             compiler.setErrorListener(new ReportCompileErrors());
+            for (QName name : params.keySet()) {
+                RuntimeValue v = params.get(name);
+                if (runtime.getAllowGeneralExpressions()) {
+                    compiler.setParameter(name, v.getValue());
+                } else {
+                    compiler.setParameter(name, v.getUntypedAtomic(runtime));
+                }
+            }
             XsltExecutable exec;
             try {
                 exec = compiler.compile(stylesheet.asSource());
@@ -245,16 +253,6 @@ public class XSLT extends DefaultStep {
                 throw XProcException.fromException(sae);
             }
             XsltTransformer transformer = exec.load();
-
-            for (QName name : params.keySet()) {
-                RuntimeValue v = params.get(name);
-                if (runtime.getAllowGeneralExpressions()) {
-                    transformer.setParameter(name, v.getValue());
-                } else {
-                    transformer.setParameter(name, v.getUntypedAtomic(runtime));
-                }
-            }
-
             if (document != null) {
                 transformer.setInitialContextNode(document);
             }
