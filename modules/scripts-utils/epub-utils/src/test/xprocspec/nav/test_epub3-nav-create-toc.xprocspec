@@ -44,7 +44,7 @@
 		</x:context>
 		<x:expect label="the result" type="compare">
 			<x:document type="inline">
-				<nav xmlns="http://www.w3.org/1999/xhtml" epub:type="toc" role="doc-toc">
+				<nav xmlns="http://www.w3.org/1999/xhtml" epub:type="toc" role="doc-toc" lang="fr">
 					<h1>Table des matières</h1>
 					<ol>
 						<li>
