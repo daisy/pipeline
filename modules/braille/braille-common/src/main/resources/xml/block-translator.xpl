@@ -2,7 +2,8 @@
 <p:pipeline xmlns:p="http://www.w3.org/ns/xproc" version="1.0"
             xmlns:px="http://www.daisy.org/ns/pipeline/xproc"
             exclude-inline-prefixes="#all"
-            type="px:block-translate">
+            type="px:block-translate"
+            name="main">
 	
 	<p:option name="text-transform" select="''"/>
 	<p:option name="braille-charset" select="''"/>
@@ -31,6 +32,9 @@
 		</p:input>
 		<p:with-param name="text-transform" select="$text-transform"/>
 		<p:with-param name="braille-charset" select="$braille-charset"/>
+		<p:input port="parameters">
+			<p:pipe step="main" port="parameters"/>
+		</p:input>
 	</p:xslt>
 	
 	<p:xslt px:progress="0.05">
