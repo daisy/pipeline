@@ -72,7 +72,7 @@
 				<xsl:analyze-string select="." regex="url\(\s*(.*?)\s*\)">
 					<xsl:matching-substring>
 						<xsl:variable name="url" select="f:parse-css-url(regex-group(1))"/>
-						<xsl:if test="$url">
+						<xsl:if test="$url and not(starts-with($url,'data:'))">
 							<xsl:variable name="url" select="resolve-uri($url,$css-base)"/>
 							<xsl:sequence select="$url"/>
 							<xsl:if test="pf:get-extension($url)='css'">
