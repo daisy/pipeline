@@ -38,7 +38,11 @@
 
   <xsl:template match="/z:document">
     <!-- TODO dynamically generate @prefix -->
-    <metadata prefix="dc: http://purl.org/dc/elements/1.1/">
+    <metadata>
+      <xsl:if test=".//z:pagebreak">
+          <xsl:attribute name="prefix" select="'a11y: http://www.idpf.org/epub/vocab/package/a11y/#'"/>
+      </xsl:if>
+      <xsl:namespace name="dc" select="'http://purl.org/dc/elements/1.1/'"/>
       <!--== Identifier ==-->
       <xsl:for-each select="f:get-identifiers(/)">
         <dc:identifier id="{if(position()=1) then 'pub-id' else concat('pub-id-',position())}">
@@ -110,10 +114,10 @@
           ==-->
       <xsl:if test=".//z:pagebreak
                     and exists($source-of-pagination)
-                    and not(//z:*[@property='pageBreakSource'
+                    and not(//z:*[@property='a11y:pageBreakSource'
                                   and not(@about)
                                   and normalize-space(if (@content) then @content else .)])">
-        <meta property="pageBreakSource">
+        <meta property="a11y:pageBreakSource">
           <xsl:value-of select="$source-of-pagination"/>
         </meta>
       </xsl:if>

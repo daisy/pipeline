@@ -235,7 +235,7 @@
 		          step="x:epub3-compare-package-doc">
 			<x:document type="inline">
 				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id23" version="3.0"
-				         xml:lang="en" prefix="media: http://www.idpf.org/epub/vocab/overlays/# schema: http://schema.org/">
+				         xml:lang="en" prefix="media: http://www.idpf.org/epub/vocab/overlays/# schema: http://schema.org/ a11y: http://www.idpf.org/epub/vocab/package/a11y/#">
 					<metadata>
 						<dc:title>Minimal DTBook</dc:title>
 						<dc:identifier id="pub-id23">my-id</dc:identifier>
@@ -255,8 +255,8 @@
 						<meta name="schema:accessMode" content="textual"/>
 						<meta property="schema:accessMode">auditory</meta>
 						<meta name="schema:accessMode" content="auditory"/>
-						<meta property="pageBreakSource">unknown</meta>
-						<meta name="pageBreakSource" content="unknown"/>
+						<meta property="a11y:pageBreakSource">unknown</meta>
+						<meta name="a11y:pageBreakSource" content="unknown"/>
 						<meta property="schema:accessibilityHazard">unknown</meta>
 						<meta name="schema:accessibilityHazard" content="unknown"/>
 						<meta property="media:duration" refines="#item_12">0:00:08.585</meta>

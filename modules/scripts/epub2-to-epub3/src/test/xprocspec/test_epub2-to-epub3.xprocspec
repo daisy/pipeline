@@ -197,7 +197,7 @@
 		          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
 			<x:document type="inline">
 				<package xmlns="http://www.idpf.org/2007/opf" version="3.0" xml:lang="en" unique-identifier="pub-id2"
-				         prefix="schema: http://schema.org/">
+				         prefix="schema: http://schema.org/ a11y: http://www.idpf.org/epub/vocab/package/a11y/#">
 					<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
 						<dc:title id="title2">minimal</dc:title>
 						<dc:identifier id="pub-id2">id</dc:identifier>
@@ -209,8 +209,8 @@
 						<meta name="schema:accessibilityFeature" content="tableOfContents"/>
 						<meta property="schema:accessibilityFeature">pageNavigation</meta>
 						<meta name="schema:accessibilityFeature" content="pageNavigation"/>
-						<meta property="pageBreakSource">unknown</meta>
-						<meta name="pageBreakSource" content="unknown"/>
+						<meta property="a11y:pageBreakSource">unknown</meta>
+						<meta name="a11y:pageBreakSource" content="unknown"/>
 					</metadata>
 					<manifest>
 						<item id="toc" href="toc.ncx" media-type="application/x-dtbncx+xml"/>

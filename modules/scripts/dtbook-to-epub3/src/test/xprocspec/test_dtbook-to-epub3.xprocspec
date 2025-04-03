@@ -322,7 +322,7 @@
 			<x:document type="port" port="result.in-memory" select="/*[ends-with(base-uri(),'/package.opf')]"/>
 		</x:context>
 		<x:expect label="the title of the package document" type="xpath"
-		          test="/opf:package/opf:metadata/opf:meta[@property='pageBreakSource']/string(.)"
+		          test="/opf:package/opf:metadata/opf:meta[@property='a11y:pageBreakSource']/string(.)"
 		          equals="'978-0-596-52068-7'"/>
 	</x:scenario>
 

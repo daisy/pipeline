@@ -32,7 +32,7 @@
 		</x:context>
 		<x:expect label="the result should be as expected" type="compare">
 			<x:document type="inline">
-				<metadata xmlns="http://www.idpf.org/2007/opf" prefix="dc: http://purl.org/dc/elements/1.1/">
+				<metadata xmlns="http://www.idpf.org/2007/opf">
 					<dc:identifier id="pub-id">ABC</dc:identifier>
 					<dc:title id="id_1">foo</dc:title>
 					<dc:language>en-US</dc:language>
