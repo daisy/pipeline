@@ -135,3 +135,5 @@
   artifact: html-break-detection
 - group: org.daisy.pipeline.modules
   artifact: dtbook-break-detection
+- group: org.daisy.pipeline.modules
+  artifact: dtbook-to-ebraille

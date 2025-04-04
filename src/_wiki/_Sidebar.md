@@ -25,6 +25,7 @@
       * [[DAISY 3 to MegaVoice multi-level|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/]]
       * [[DTBook Validator|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/]]
       * [[DTBook to DAISY 3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3/]]
+      * [[DTBook to eBraille|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-ebraille/]]
       * [[DTBook to EPUB 3|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3/]]
       * [[DTBook to HTML|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html/]]
       * [[DTBook to ODT|http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/]]
