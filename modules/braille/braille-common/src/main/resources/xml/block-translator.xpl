@@ -7,6 +7,7 @@
 	
 	<p:option name="text-transform" select="''"/>
 	<p:option name="braille-charset" select="''"/>
+	<p:option name="include-braille-code-in-language" select="'false'"/>
 	
 	<p:import href="http://www.daisy.org/pipeline/modules/braille/css-utils/library.xpl">
 		<p:documentation>
@@ -32,6 +33,8 @@
 		</p:input>
 		<p:with-param name="text-transform" select="$text-transform"/>
 		<p:with-param name="braille-charset" select="$braille-charset"/>
+		<p:with-param name="include-braille-code-in-language"
+		              select="$include-braille-code-in-language='true'"/>
 		<p:input port="parameters">
 			<p:pipe step="main" port="parameters"/>
 		</p:input>

@@ -109,7 +109,8 @@ public class LiblouisTranslatorJnaImplTest {
 				new AbstractHyphenator() {
 					public LineBreaker asLineBreaker() throws UnsupportedOperationException {
 						return hyphenator; }},
-				LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL
+				LiblouisTranslatorImpl.NON_STANDARD_HYPH_FAIL,
+				false
 			).new LineBreaker(
 				null
 			).new BrailleStreamImpl(styledText("volleyballederen volleyballederen", "hyphens:auto"), 0, -1);

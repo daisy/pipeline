@@ -182,12 +182,15 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 						public Provider<Query,T> apply(TransformProvider<T> provider) {
 							return provider.withContext(context); }});
 			}
+			
+			@Override
+			public abstract Dispatch<T> withContext(Logger context);
 		}
 		
 		@SuppressWarnings(
 			"unchecked" // safe cast to Iterable<Provider<Q,X>>
 		)
-		public static <T extends Transform> TransformProvider<T> dispatch(Iterable<? extends TransformProvider<T>> dispatch) {
+		public static <T extends Transform> Dispatch<T> dispatch(Iterable<? extends TransformProvider<T>> dispatch) {
 			return new DispatchFromProviderIterable<T>((Iterable<TransformProvider<T>>)dispatch, null);
 		}
 		
@@ -197,10 +200,12 @@ public interface TransformProvider<T extends Transform> extends Provider<Query,T
 				super(context);
 				this.dispatch = dispatch;
 			}
+			@Override
 			protected Iterable<TransformProvider<T>> _dispatch() {
 				return dispatch;
 			}
-			public TransformProvider<T> withContext(Logger context) {
+			@Override
+			public Dispatch<T> withContext(Logger context) {
 				return new DispatchFromProviderIterable<T>(dispatch, context);
 			}
 			@Override

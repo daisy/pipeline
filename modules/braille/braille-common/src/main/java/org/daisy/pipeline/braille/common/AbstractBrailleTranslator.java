@@ -84,6 +84,7 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 
 	private Map<Hyphenator,BrailleTranslator> withHyphenatorCache;
 
+	@Override
 	public final BrailleTranslator withHyphenator(Hyphenator hyphenator) throws UnsupportedOperationException {
 		BrailleTranslator t = null;
 		if (withHyphenatorCache == null)
@@ -97,12 +98,14 @@ public abstract class AbstractBrailleTranslator extends AbstractTransform implem
 		return t;
 	}
 
+	@Override
 	public FromStyledTextToBraille fromStyledTextToBraille() throws UnsupportedOperationException {
 		throw new UnsupportedOperationException();
 	}
 	
 	private LineBreakingFromStyledText lineBreakingFromStyledText = null;
 	
+	@Override
 	public LineBreakingFromStyledText lineBreakingFromStyledText() throws UnsupportedOperationException {
 		// default implementation based on fromStyledTextToBraille()
 		if (lineBreakingFromStyledText == null) {

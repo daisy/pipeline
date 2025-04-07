@@ -103,6 +103,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 			return toString();
 		}
 		
+		public TableInfo getInfo() {
+			return info;
+		}
+		
 		public String getDisplayName() {
 			return info != null ? info.get("display-name") : null;
 		}

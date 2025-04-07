@@ -51,6 +51,7 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 		this.useBrailleCharsetForInput = useBrailleCharsetForInput;
 	}
 
+	@Override
 	public UnityBrailleTranslator _withHyphenator(Hyphenator hyphenator) {
 		return this;
 	}
@@ -63,6 +64,7 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 	private final static PropertyValue BRAILLE_CHARSET_CUSTOM
 		= cssParser.parse("braille-charset: custom").get("braille-charset");
 
+	@Override
 	public FromStyledTextToBraille fromStyledTextToBraille() {
 		if (fromStyledTextToBraille == null)
 			fromStyledTextToBraille = new FromStyledTextToBraille() {
@@ -148,6 +150,7 @@ public class UnityBrailleTranslator extends AbstractBrailleTranslator implements
 
 	private LineBreakingFromStyledText lineBreakingFromStyledText = null;
 
+	@Override
 	public LineBreakingFromStyledText lineBreakingFromStyledText() {
 		if (lineBreakingFromStyledText == null) {
 			Character blankChar = brailleCharset == null
