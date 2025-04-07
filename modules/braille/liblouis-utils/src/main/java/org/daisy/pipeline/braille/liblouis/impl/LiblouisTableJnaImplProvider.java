@@ -290,6 +290,10 @@ public class LiblouisTableJnaImplProvider extends AbstractTransformProvider<Libl
 	}
 	
 	private TransformProvider<LiblouisTableJnaImpl> _provider
+
+	// FIXME: Note that the varyLocale() is not needed anymore because Liblouis treats language tags
+	// in table metadata as language ranges. Also, varyLocale() only works on "document-locale", not
+	// on "language" and "region", the its use was kind of limited anyway.
 	= varyLocale(
 		new AbstractTransformProvider<LiblouisTableJnaImpl>() {
 			public Iterable<LiblouisTableJnaImpl> _get(final Query query) {
