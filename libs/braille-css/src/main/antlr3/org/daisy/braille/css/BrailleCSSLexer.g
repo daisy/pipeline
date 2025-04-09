@@ -41,6 +41,11 @@ MARGIN_AREA
   | '@' PREFIX? 'footnotes'
   ;
 
+// for some reason I can not make this work in jstyleparser, where XSLT is defined
+DAISY_XSLT
+	: '@' PREFIX? 'xslt' { $type = XSLT; }
+	;
+
 NOT : 'not(' ;
 
 HAS : 'has(' ;
