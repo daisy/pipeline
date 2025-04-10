@@ -4023,17 +4023,5 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
-    <!-- springsource used for osgi version of mysql -->
-    <repository>
-      <id>com.springsource.repository.bundles.external</id>
-      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-      <url>https://repository.springsource.com/maven/bundles/external</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
   </repositories>
 </project>
