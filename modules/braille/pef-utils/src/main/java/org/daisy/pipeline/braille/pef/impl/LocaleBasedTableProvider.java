@@ -53,9 +53,9 @@ public class LocaleBasedTableProvider extends AbstractTableProvider {
 		putTable("org_daisy.EmbosserTableProvider.TableType.CS_CZ",                   parseLocale("cs"));
 		putTable("org_daisy.EmbosserTableProvider.TableType.DA_DK",                   parseLocale("da"));
 		putTable("org_daisy.EmbosserTableProvider.TableType.DE_DE",                   parseLocale("de"));
-		putTable("org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US", parseLocale("en"));
+		putTable("org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US", parseLocale("en"), // does not support 8-dot
+		                                                                              parseLocale("en-US"));
 		putTable("org_daisy.EmbosserTableProvider.TableType.EN_GB",                   parseLocale("en-GB"));
-		putTable("org.daisy.braille.impl.table.DefaultTableProvider.TableType.EN_US", parseLocale("en-US"));
 		putTable("org_daisy.EmbosserTableProvider.TableType.ES_ES_TABLE_2",           parseLocale("es"));
 		putTable("org_daisy.EmbosserTableProvider.TableType.IT_IT_FIRENZE",           parseLocale("it"));
 		putTable("com_braillo.BrailloTableProvider.TableType.BRAILLO_6DOT_047_01",    parseLocale("nb"));
