@@ -1,5 +1,6 @@
 FROM debian:bookworm
 LABEL maintainer="DAISY Consortium (http://www.daisy.org/)"
+RUN apt-get update && apt-get install -y espeak
 ADD daisy-pipeline /opt/daisy-pipeline2
 ADD logback.xml /opt/daisy-pipeline2/etc/logback.xml
 ARG TARGETARCH

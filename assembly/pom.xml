@@ -20,7 +20,7 @@
     <tag>HEAD</tag>
   </scm>
   <properties>
-    <cli.version>2.2.1</cli.version>
+    <cli.version>2.3.0</cli.version>
     <classifier />
     <classifier.dash /> <!-- classifier followed by "-" -->
     <!--
@@ -4016,18 +4016,6 @@
       <id>eclipse-gemini-repo</id>
       <name>Eclipse Gemini Maven repository</name>
       <url>https://download.eclipse.org/gemini/mvn/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <!-- springsource used for osgi version of mysql -->
-    <repository>
-      <id>com.springsource.repository.bundles.external</id>
-      <name>SpringSource Enterprise Bundle Repository - External Bundle Releases</name>
-      <url>https://repository.springsource.com/maven/bundles/external</url>
       <releases>
         <enabled>true</enabled>
       </releases>
