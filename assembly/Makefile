@@ -1,9 +1,19 @@
+EXTRA_CLASSPATH := $(CLASSPATH)
+EXTRA_IMPORTS := $(IMPORTS)
+EXTRA_STATIC_IMPORTS := $(STATIC_IMPORTS)
+
 include make/enable-java-shell.mk
 
+CLASSPATH := $(CLASSPATH) $(EXTRA_CLASSPATH)
+IMPORTS := $(IMPORTS) $(EXTRA_IMPORTS)
+STATIC_IMPORTS := $(STATIC_IMPORTS) $(EXTRA_STATIC_IMPORTS)
+
+export CLASSPATH IMPORTS STATIC_IMPORTS
+
 ifeq ($(OS), WINDOWS)
-MVN ?= mvn.cmd
+MVN ?= exec(cons("mvn.cmd", commandLineArgs));
 else
-MVN ?= mvn
+MVN ?= exec(cons("mvn", commandLineArgs));
 endif
 
 DOCKER := docker
@@ -71,11 +81,12 @@ $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip     \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install:install-file",                                                                               \
-	               "-Dfile=$<",                                                                                          \
-	               "-DpomFile=pom.xml",                                                                                  \
-	               "-Dclassifier=$(patsubst -%,%,$(patsubst assembly-$(assembly/VERSION)%,%,$(basename $(notdir $@))))", \
-	               "-Dpackaging=$(patsubst .%,%,$(suffix $@))");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--",                                                      \
+	     "install:install-file",                                                                               \
+	     "-Dfile=$<",                                                                                          \
+	     "-DpomFile=pom.xml",                                                                                  \
+	     "-Dclassifier=$(patsubst -%,%,$(patsubst assembly-$(assembly/VERSION)%,%,$(basename $(notdir $@))))", \
+	     "-Dpackaging=$(patsubst .%,%,$(suffix $@))");
 	exit(new File("$@").exists());
 endif
 
@@ -172,7 +183,7 @@ ifeq ($(OS), MACOSX)
 	    }                                                                                                       \
 	}
 endif
-	exec("$(MVN)", "assembly:single", "-Passemble-mac-zip");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-mac-zip");
 	exit(new File("$@").exists());
 endif
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
@@ -191,7 +202,7 @@ target/assembly-$(assembly/VERSION)-win.zip                                   : 
 endif # --with-jre32
 # -Passemble-win-zip run separately because -Pbuild-jre-win64 also run separately
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "assembly:single", "-Passemble-win-zip");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-win-zip");
 	exit(new File("$@").exists());
 endif
 endif # --without-jre
@@ -241,7 +252,7 @@ dir-word-addin                                                                 :
                                                                                      -Pbuild-jre-win32 \
                                                                                      -Pbuild-jre-win64
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "assembly:single", "-Passemble-win-dir");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-win-dir");
 endif
 
 ifneq ($(OS), WINDOWS)
@@ -348,7 +359,7 @@ endif # neq ($(OS), WINDOWS)
 
 .PHONY : clean
 clean :
-	exec("$(MVN)", "clean");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "clean");
 	rm("make/recipes");
 
 #                         process-sources      generate-resources      process-resources      prepare-package       package
@@ -472,7 +483,9 @@ endif
 mvn :
 ifndef DUMP_PROFILES
 	@List<String> cmd = new ArrayList<>();                                                                                   \
-	cmd.add("$(MVN)");                                                                                                       \
+	cmd.add("$(SHELL)");                                                                                                     \
+	cmd.add($(call quote-for-java,$(MVN)));                                                                                  \
+	cmd.add("--");                                                                                                           \
 	cmd.add("clean");                                                                                                        \
 	cmd.add("install");                                                                                                      \
 	cmd.add("-Dclassifier=$(--classifier)");                                                                                 \
@@ -513,19 +526,19 @@ ifeq ($(OS), MACOSX)
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64 -Pbuild-jre-mac : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else ifeq ($(OS), WINDOWS)
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
-	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"), \
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64-Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
-	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"), \
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 endif
 
