@@ -1,3 +1,18 @@
+Changes in release v1.15.1
+===========================
+
+## Modules
+
+- **NEW** DTBook to eBraille script
+- **FIX** Better gap length between sentences for Azure voices
+- **FIX** User lexicon feature was broken
+- **FIX** Issue handling EPUBs that have spaces in file names
+- **FIX** Issues in Word to DTBook regarding page numbers and character styles translation
+- **FIX** ncc:maxPageNormal metadata created by DAISY 3 to DAISY 2.02
+- **FIX** Don't insert cryptic annotations at frontmatter start in DTBook to EPUB 3
+- Changes to braille production scripts, see release notes of braille modules [v1.15.1](https://github.com/daisy/pipeline-modules/blob/master/braille/NEWS.md#v1151)
+- Various other bugfixes and improvements
+
 Changes in release v1.15.0
 ===========================
 

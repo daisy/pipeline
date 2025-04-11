@@ -1,17 +1,29 @@
-#WS CONFIGURATION
+# Host part of webservice address
+# Leave empty if you wish to use the app_path setting
 host: http://localhost
-port: 8181
-ws_path: ws
-ws_timeup: 25
-#DP2 launch config 
-exec_line: ${pipeline.cli.exec_line}
-local: true
-# ROBOT CONF
-client_key: ${pipeline.cli.clientkey}
-client_secret: ${pipeline.cli.clientsecret}
-#connection settings
-timeout: 60
-#debug
-debug: false
-starting: ${pipeline.cli.starting}
 
+# Port part of webservice address
+# Leave empty if you wish to use the app_path setting
+port: 8181
+
+# Path part of webservice address, as in HOST:PORT/PATH (e.g. http://localhost:8181/ws)
+# Leave empty if you wish to use the app_path setting
+ws_path: ws
+
+# Timeout for requests to the webservice in seconds
+timeout: 10
+
+# Path to webservice launch script
+exec_line: ${pipeline.cli.exec_line}
+
+# Client key for authenticated requests
+#client_key: ${pipeline.cli.clientkey}
+
+# Client secrect for authenticated requests
+#client_secret: ${pipeline.cli.clientsecret}
+
+# Print debug messages
+debug: false
+
+# Start the DAISY Pipeline app if it is not running
+starting: ${pipeline.cli.starting}

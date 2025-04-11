@@ -50,9 +50,29 @@
 				</repository>
 			</repositories>
 		</profile>
+		<profile>
+			<id>staged-releases</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<repositories>
+				<repository>
+					<id>sonatype-nexus-staging</id>
+					<name>Nexus Release Repository</name>
+					<url>https://oss.sonatype.org/content/groups/staging/</url>
+					<releases>
+						<enabled>true</enabled>
+					</releases>
+					<snapshots>
+						<enabled>false</enabled>
+					</snapshots>
+				</repository>
+			</repositories>
+		</profile>
 	</profiles>
 	<activeProfiles>
 		<activeProfile>central-https</activeProfile>
 		<activeProfile>snapshots</activeProfile>
+		<activeProfile>staged-releases</activeProfile>
 	</activeProfiles>
 </settings>

@@ -1,12 +1,5 @@
-# this hack is needed to make this file includable from the super project
-ifeq ($(patsubst %.exe,%,$(notdir $(SHELL))),eval-java)
 assembly/SOURCES := $(assembly/BASEDIR)/pom.xml \
-                    $(shell Files.walk(Paths.get("src")).filter(Files::isRegularFile).forEach(f -> println(f.toString().replace(" ", "\\ ")));)
-else
-assembly/SOURCES := $(assembly/BASEDIR)/pom.xml \
-                    $(shell [ -d $(assembly/BASEDIR)/src/main/ ] && \
-                            find $(assembly/BASEDIR)/src/main/ -type f | sed 's/ /\\ /g')
-endif
+                    $(shell Files.walk(Paths.get("$(assembly/BASEDIR)/src")).filter(Files::isRegularFile).forEach(f -> println(f.toString().replace(" ", "\\ ")));)
 
 .SECONDARY : assembly/SOURCES
 assembly/SOURCES : $(assembly/SOURCES)

@@ -1,9 +1,23 @@
+EXTRA_CLASSPATH := $(CLASSPATH)
+EXTRA_IMPORTS := $(IMPORTS)
+EXTRA_STATIC_IMPORTS := $(STATIC_IMPORTS)
+
 include make/enable-java-shell.mk
 
+CLASSPATH := $(CLASSPATH) $(EXTRA_CLASSPATH)
+IMPORTS := $(IMPORTS) $(EXTRA_IMPORTS)
+STATIC_IMPORTS := $(STATIC_IMPORTS) $(EXTRA_STATIC_IMPORTS)
+
+export CLASSPATH IMPORTS STATIC_IMPORTS
+
 ifeq ($(OS), WINDOWS)
-MVN ?= mvn.cmd
+MVN ?= try { \
+           System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "true"); \
+           exec(cons("mvn.cmd", commandLineArgs)); } \
+       finally { \
+           System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "false"); }
 else
-MVN ?= mvn
+MVN ?= exec(cons("mvn", commandLineArgs));
 endif
 
 DOCKER := docker
@@ -30,9 +44,7 @@ help :
 		"make zip-win:"                                                  + "\n" + \
 		"    Builds a ZIP for Windows"                                   + "\n" + \
 		"make dir-word-addin:"                                           + "\n" + \
-		"	Builds a directory to be included in SaveAsDAISY"            + "\n" + \
-		"make zip-minimal:"                                              + "\n" + \
-		"    Builds a minimal ZIP that will complete itself upon first update");  \
+		"	Builds a directory to be included in SaveAsDAISY");                   \
 	if (getOS() != OS.WINDOWS)                                                    \
 		err.println(                                                              \
 			"make docker:"                                               + "\n" + \
@@ -50,14 +62,13 @@ INSTALL_DIR                  := $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assem
 
 include deps.mk
 
-.PHONY : deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
+.PHONY : deb rpm zip-linux zip-mac zip-win deb-cli rpm-cli
 
 deb         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb
 rpm         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm
 zip-linux   : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip
 zip-mac     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip
 zip-win     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip
-zip-minimal : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip
 deb-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb
 rpm-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm
 
@@ -68,30 +79,27 @@ target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descrip
 # some artifacts are installed through command line
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip   \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip     \
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     \
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "install:install-file",                                                                               \
-	               "-Dfile=$<",                                                                                          \
-	               "-DpomFile=pom.xml",                                                                                  \
-	               "-Dclassifier=$(patsubst -%,%,$(patsubst assembly-$(assembly/VERSION)%,%,$(basename $(notdir $@))))", \
-	               "-Dpackaging=$(patsubst .%,%,$(suffix $@))");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--",                                                      \
+	     "install:install-file",                                                                               \
+	     "-Dfile=$<",                                                                                          \
+	     "-DpomFile=pom.xml",                                                                                  \
+	     "-Dclassifier=$(patsubst -%,%,$(patsubst assembly-$(assembly/VERSION)%,%,$(basename $(notdir $@))))", \
+	     "-Dpackaging=$(patsubst .%,%,$(suffix $@))");
 	exit(new File("$@").exists());
 endif
 
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb                  : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-updater-linux \
                                                                                     -Ppackage-deb
 target/assembly-$(assembly/VERSION)-linux.zip                                 : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-linux \
-                                                                                    -Punpack-updater-linux \
                                                                                     -Passemble-linux-zip
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-cli-mac \
-                                                                                    -Punpack-updater-mac
+                                                                                    -Punpack-cli-mac
 ifneq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pbuild-jre-mac
 endif
@@ -172,13 +180,12 @@ ifeq ($(OS), MACOSX)
 	    }                                                                                                       \
 	}
 endif
-	exec("$(MVN)", "assembly:single", "-Passemble-mac-zip");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-mac-zip");
 	exit(new File("$@").exists());
 endif
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-cli-win \
-                                                                                    -Punpack-updater-win
+                                                                                    -Punpack-cli-win
 ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Passemble-win-zip
 ifndef DUMP_PROFILES
@@ -191,16 +198,10 @@ target/assembly-$(assembly/VERSION)-win.zip                                   : 
 endif # --with-jre32
 # -Passemble-win-zip run separately because -Pbuild-jre-win64 also run separately
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "assembly:single", "-Passemble-win-zip");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-win-zip");
 	exit(new File("$@").exists());
 endif
 endif # --without-jre
-target/assembly-$(assembly/VERSION)-minimal.zip                               : mvn -Pcopy-artifacts \
-                                                                                    -Pgenerate-release-descriptor \
-                                                                                    -Punpack-updater-mac \
-                                                                                    -Punpack-updater-linux \
-                                                                                    -Punpack-updater-win \
-                                                                                    -Passemble-minimal-zip
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb              : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-linux \
@@ -228,27 +229,24 @@ $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm :
 endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
-# Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-osgi, --without-persistence,
-# --without-webservice, --without-cli, --without-updater and --with-simple-api were also specified.
+# Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-persistence,
+# --without-webservice, --without-cli and --with-simple-api were also specified.
 dir-word-addin                                                                 : assembly/SOURCES
-dir-word-addin                                                                 : mvn -Pwithout-osgi \
-                                                                                     -Pwithout-persistence \
+dir-word-addin                                                                 : mvn -Pwithout-persistence \
                                                                                      -Pwithout-webservice \
                                                                                      -Pwithout-cli \
-                                                                                     -Pwithout-updater \
                                                                                      -Pwith-simple-api \
                                                                                      -Pcopy-artifacts \
                                                                                      -Pbuild-jre-win32 \
                                                                                      -Pbuild-jre-win64
 ifndef DUMP_PROFILES
-	exec("$(MVN)", "assembly:single", "-Passemble-win-dir");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "assembly:single", "-Passemble-win-dir");
 endif
 
 ifneq ($(OS), WINDOWS)
 
 .PHONY : docker
-# Note that when `docker' is enabled together with other targets, it is as if --without-osgi was also specified.
-docker : mvn -Pwithout-osgi \
+docker : mvn \
          jre/target/maven-jlink/classifiers/linux \
          jre/target/maven-jlink/classifiers/linux-arm64 \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
@@ -317,20 +315,17 @@ jre/target/maven-jlink/classifiers/linux-arm64                         : mvn -Pb
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
-                                                                             -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
-                                                                             -Punpack-updater-linux \
                                                                              -Passemble-linux-dir
 
 endif # neq ($(OS), WINDOWS)
 
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb           \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb       \
-target/assembly-$(assembly/VERSION)-linux.zip             \
-target/assembly-$(assembly/VERSION)-minimal.zip           \
+target/assembly-$(assembly/VERSION)-linux.zip                          \
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   \
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 :
 ifndef DUMP_PROFILES
@@ -348,7 +343,7 @@ endif # neq ($(OS), WINDOWS)
 
 .PHONY : clean
 clean :
-	exec("$(MVN)", "clean");
+	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--", "clean");
 	rm("make/recipes");
 
 #                         process-sources      generate-resources      process-resources      prepare-package       package
@@ -378,16 +373,12 @@ clean :
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
-# unpack-updater-mac                           unpack-updater-mac
-# unpack-updater-linux                         unpack-updater-linux
-# unpack-updater-win                           unpack-updater-win
 # assemble-mac-dir                                                                            assemble-mac-dir
 # assemble-linux-dir                                                                          assemble-linux-dir
 # assemble-win-dir                                                                            assemble-win-dir
 # assemble-mac-zip                                                                                                  assemble-mac-zip
 # assemble-linux-zip                                                                                                assemble-linux-zip
 # assemble-win-zip                                                                                                  assemble-win-zip
-# assemble-minimal-zip                                                                                              assemble-minimal-zip
 # package-deb                                                          filter-deb-resources                         package-deb
 # package-deb-cli                                                                                                   package-deb-cli
 # package-rpm                                                                                                       package-rpm
@@ -402,17 +393,13 @@ PROFILES :=                     \
 	assemble-mac-zip            \
 	assemble-win-dir            \
 	assemble-win-zip            \
-	assemble-minimal-zip        \
 	package-deb                 \
 	package-deb-cli             \
 	package-rpm                 \
 	package-rpm-cli             \
 	unpack-cli-linux            \
 	unpack-cli-mac              \
-	unpack-cli-win              \
-	unpack-updater-linux        \
-	unpack-updater-mac          \
-	unpack-updater-win
+	unpack-cli-win
 
 .PHONY : --with-persistence --without-persistence
 --without-persistence : -Pwithout-persistence
@@ -423,11 +410,11 @@ else
 endif
 
 .PHONY : --with-osgi --without-osgi
---without-osgi : -Pwithout-osgi
-ifneq (--with-osgi,$(filter --with-osgi,$(MAKECMDGOALS)))
-PROFILES += without-osgi
+--with-osgi : -Pwith-osgi
+ifneq (--without-osgi,$(filter --without-osgi,$(MAKECMDGOALS)))
+PROFILES += with-osgi
 else
-.PHONY : -Pwithout-osgi
+.PHONY : -Pwith-osgi
 endif
 
 .PHONY : --with-webservice --without-webservice
@@ -444,14 +431,6 @@ ifneq (--with-cli,$(filter --with-cli,$(MAKECMDGOALS)))
 PROFILES += without-cli
 else
 .PHONY : -Pwithout-cli
-endif
-
-.PHONY : --with-updater --without-updater
---without-updater : -Pwithout-updater
-ifneq (--with-updater,$(filter --with-updater,$(MAKECMDGOALS)))
-PROFILES += without-updater
-else
-.PHONY : -Pwithout-updater
 endif
 
 .PHONY : --with-simple-api --without-simple-api
@@ -472,7 +451,9 @@ endif
 mvn :
 ifndef DUMP_PROFILES
 	@List<String> cmd = new ArrayList<>();                                                                                   \
-	cmd.add("$(MVN)");                                                                                                       \
+	cmd.add("$(SHELL)");                                                                                                     \
+	cmd.add($(call quote-for-java,$(MVN)));                                                                                  \
+	cmd.add("--");                                                                                                           \
 	cmd.add("clean");                                                                                                        \
 	cmd.add("install");                                                                                                      \
 	cmd.add("-Dclassifier=$(--classifier)");                                                                                 \
@@ -482,7 +463,7 @@ ifndef DUMP_PROFILES
 			line -> { if (line.startsWith("-P")) cmd.add(line); },                                                           \
 			Arrays.asList("$(MAKE) -s --no-print-directory ECHO=true DUMP_PROFILES=true -- $(MAKECMDGOALS)".split("\\s")))); \
 	println(String.join(" ", cmd));                                                                                          \
-	exec(runInShell(cmd));
+	exec(cmd);
 endif
 
 .PHONY : $(addprefix -P,$(PROFILES))
@@ -513,19 +494,19 @@ ifeq ($(OS), MACOSX)
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64 -Pbuild-jre-mac : src/main/jre/OpenJDK17U-jdk_x64_mac_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
 	exec(env("JAVA_HOME", "$(CURDIR)/$</Contents/Home"), \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else ifeq ($(OS), WINDOWS)
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64 -Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_windows_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
-	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"), \
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 else
 -Pbuild-jre-linux -Pbuild-jre-linux-arm64-Pbuild-jre-win32 -Pbuild-jre-win64                 : src/main/jre/OpenJDK17U-jdk_x64_linux_hotspot_17.0.7_7/jdk-17.0.7+7
 ifndef DUMP_PROFILES
-	exec(env("JAVA_HOME", "$(CURDIR)/$<"),               \
-	     "$(MVN)", "-f", "jre/build.xml", "jlink:jlink", "$@");
+	exec(env("JAVA_HOME", "$(CURDIR)/$<"), \
+	     "$(SHELL)", $(call quote-for-java,$(MVN)), "--", "-f", "jre/build.xml", "jlink:jlink", "$@");
 endif
 endif
 
