@@ -2173,11 +2173,11 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-ajp</artifactId>
+                  <artifactId>jetty-continuation</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
-                  <artifactId>jetty-continuation</artifactId>
+                  <artifactId>jetty-client</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
@@ -2189,11 +2189,103 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-security</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
                   <artifactId>jetty-server</artifactId>
                 </artifactItem>
                 <artifactItem>
                   <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-servlet</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
                   <artifactId>jetty-util</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>javax-websocket-client-impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>javax-websocket-server-impl</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-api</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-client</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-common</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-server</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty.websocket</groupId>
+                  <artifactId>websocket-servlet</artifactId>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <!-- FIXME: websockets are currently broken under OSGi: (and the solution in
+               https://stackoverflow.com/questions/39740531/jetty-websocket-java-lang-runtimeexception-cannot-load-platform-configurator
+               does not seem to work)
+          -->
+          <execution>
+            <id>copy-webservice-osgi</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/osgi/webservice</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.eclipse.jetty</groupId>
+                  <artifactId>jetty-util-ajax</artifactId>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.servicemix.bundles</groupId>
+                  <artifactId>org.apache.servicemix.bundles.javax-websocket-api</artifactId>
+                  <version>1.1_1</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.aries.spifly</groupId>
+                  <artifactId>org.apache.aries.spifly.dynamic.bundle</artifactId>
+                  <version>1.0.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.apache.aries</groupId>
+                  <artifactId>org.apache.aries.util</artifactId>
+                  <version>1.0.0</version>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>org.ow2.asm</groupId>
+                  <artifactId>asm-all</artifactId>
+                  <version>4.0</version>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-webservice-no-osgi</id>
+            <phase>process-sources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/jars/no-osgi/webservice</outputDirectory>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>javax.websocket</groupId>
+                  <artifactId>javax.websocket-api</artifactId>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -3906,6 +3998,10 @@
             <executions>
               <execution>
                 <id>copy-webservice</id>
+                <phase>none</phase>
+              </execution>
+              <execution>
+                <id>copy-webservice-osgi</id>
                 <phase>none</phase>
               </execution>
             </executions>
