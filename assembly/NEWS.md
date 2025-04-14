@@ -1,3 +1,10 @@
+Changes in release v1.15.1
+===========================
+
+## Framework
+
+- New websocket based push notification system for status, progress and messages of jobs. The previous push notification system has been deprecated.
+
 Changes in release v1.15.0
 ===========================
 
