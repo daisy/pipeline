@@ -22,7 +22,7 @@ public abstract class DateTimeParser {
 	)
 	public static class FunctionProvider extends ReflexiveExtensionFunctionProvider {
 
-		protected FunctionProvider() {
+		public FunctionProvider() {
 			super(DateTimeParser.class);
 		}
 	}

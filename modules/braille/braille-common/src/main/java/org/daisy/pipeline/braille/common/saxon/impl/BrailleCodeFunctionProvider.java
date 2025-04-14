@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 )
 public class BrailleCodeFunctionProvider extends ReflexiveExtensionFunctionProvider {
 
-	protected BrailleCodeFunctionProvider() {
+	public BrailleCodeFunctionProvider() {
 		super();
 		addExtensionFunctionDefinitionsFromClass(BrailleCodeFunctions.class, new BrailleCodeFunctions());
 	}
