@@ -27,7 +27,7 @@
     <module>parboiled</module>
     <module>pegdown</module>
     <module>saxon-98</module>
-    <!-- <module>servlet-api</module> -->
+    <module>servlet-api</module>
   </modules>
 
 </project>
