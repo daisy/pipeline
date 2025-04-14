@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:daisy/osgi-libs.git
 	branch = master
-	commit = 83b992697e6cdabb49c85df1184459fcad5ea227
-	parent = e344d2b8903b9c9a3479c7839f582d56c9bf376d
+	commit = 314303b381ead9d0c344eba20b1e8e2d1aec4a82
+	parent = 1b36605d25332752602f7b7dcf91ab550d77ae77
 	cmdver = 0.3.1
