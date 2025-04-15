@@ -3,6 +3,7 @@ package org.daisy.pipeline.css.impl;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -15,10 +16,10 @@ import java.net.URLStreamHandlerFactory;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.zip.ZipFile;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +46,6 @@ import org.daisy.pipeline.script.ScriptInput;
 import org.daisy.pipeline.webservice.restlet.AuthenticatedResource;
 import org.daisy.pipeline.webservice.restlet.MultipartRequestData;
 import org.daisy.pipeline.webservice.xml.XmlUtils;
-import org.daisy.pipeline.webservice.xml.XmlValidator;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -59,7 +59,6 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -72,9 +71,6 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 
 	private static final String STYLESHEET_PARAMETERS_DATA_FIELD = "stylesheet-parameters-data";
 	private static final String STYLESHEET_PARAMETERS_REQUEST_FIELD = "stylesheet-parameters-request";
-	private static final URL STYLESHEET_PARAMETERS_REQUEST_SCHEMA_URL
-		= URLs.getResourceFromJAR("rnc/stylesheetParametersRequest.rnc", StylesheetParametersResource.class);
-	private static final String NS_DAISY = "http://www.daisy.org/ns/pipeline/data";
 	private static final Logger logger = LoggerFactory.getLogger(StylesheetParametersResource.class.getName());
 
 	private URIResolver uriResolver;
@@ -105,13 +101,12 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
 			return null;
 		}
-		if (representation == null) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return getErrorRepresentation("POST request with no entity");
-		}
-		Document request = null;
+		Document doc = null;
 		ZippedJobResources data; {
-			if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
+			if (representation == null)
+				// everything will be in the query string
+				data = null;
+			else if (MediaType.MULTIPART_FORM_DATA.equals(representation.getMediaType(), true)) {
 				MultipartRequestData multi = null;
 				try {
 					multi = MultipartRequestData.processMultipart(getRequest(),
@@ -125,59 +120,80 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					return getErrorRepresentation("Multipart data is empty");
 				}
-				request = multi.getXml();
+				doc = multi.getXml(); // may be null
 				data = new ZippedJobResources(multi.getZipFile());
-			} else {
-				data = null;
+			} else if (MediaType.APPLICATION_ZIP.equals(representation.getMediaType(), true)) {
+				// data is in the ZIP, request is in the query string
+				// FIXME: I could not make this work: perhaps it is Restlet, or perhaps it
+				// is cURL, but the ZIP file is not identical to the uploaded file
+				logger.debug("Reading zip file");
 				try {
+					File tmp = File.createTempFile("p2ws", ".zip", new File(getConfiguration().getTmpDir()));
+					try (FileOutputStream fos = new FileOutputStream(tmp)) {
+						representation.write(fos);
+					}
+					data = new ZippedJobResources(new ZipFile(tmp));
+				} catch (Exception e) {
+					return badRequest(e);
+				}
+			} else {
+				// assuming XML - all data should be inline or on local file system
+				data = null;
+				String xml = null;
+				try {
+					xml = representation.getText();
 					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 					factory.setNamespaceAware(true);
 					DocumentBuilder builder = factory.newDocumentBuilder();
-					request = builder.parse(new InputSource(new StringReader(representation.getText())));
+					doc = builder.parse(new InputSource(new StringReader(xml)));
 				} catch (IOException|ParserConfigurationException|SAXException e) {
+					if (xml != null && logger.isDebugEnabled())
+						logger.debug("Request XML: " + xml);
 					return badRequest(e);
 				}
 			}
 		}
-		if (logger.isDebugEnabled())
-			logger.debug(XmlUtils.nodeToString(request));
-		if (!XmlValidator.validate(request, STYLESHEET_PARAMETERS_REQUEST_SCHEMA_URL)) {
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			return getErrorRepresentation("The request is not valid");
+		StylesheetParametersRequest req; {
+			if (doc != null) {
+				try {
+					req = StylesheetParametersRequest.fromXML(doc);
+				} catch (IllegalArgumentException e) {
+					if (doc != null && logger.isDebugEnabled())
+						logger.debug("Request XML: " + XmlUtils.nodeToString(doc));
+					return badRequest(e);
+				}
+			} else {
+				try {
+					req = StylesheetParametersRequest.fromQuery(getQuery());
+				} catch (IllegalArgumentException e) {
+					return badRequest(e);
+				}
+			}
 		}
 
 		// using ScriptInput.Builder to validate URIs and convert them to Source objects
 		ScriptInput inputs; {
 			ScriptInput.Builder builder = new ScriptInput.Builder(data);
-			NodeList userStylesheets = request.getElementsByTagNameNS(NS_DAISY, "userStylesheets");
-			if (userStylesheets.getLength() > 0) {
-				NodeList files = ((Element)userStylesheets.item(0)).getElementsByTagNameNS(NS_DAISY, "file");
-				for (int i = 0; i < files.getLength(); i++) {
-					Element file = (Element)files.item(i);
-					URI href = URI.create(file.getAttribute("href"));
-					try {
-						if ("file".equals(href.getScheme()) && !getConfiguration().isLocalFS())
-							throw new FileNotFoundException(
-								"WS does not allow local inputs but a href starting with 'file:' was found: " + href);
-						else if ("http".equals(href.getScheme()) || "https".equals(href.getScheme()))
-							builder.withInput("stylesheet",
-							                  new ByteArrayInputStream(
-								                  ("@import url(\"" + href + "\");").getBytes(StandardCharsets.UTF_8)));
-						else
-							builder.withInput("stylesheet", href);
-					} catch (IllegalArgumentException|FileNotFoundException e) {
-						return badRequest(e);
-					}
-				}
-			}
-			NodeList sourceDocument = request.getElementsByTagNameNS(NS_DAISY, "sourceDocument");
-			if (sourceDocument.getLength() > 0) {
-				NodeList file = ((Element)sourceDocument.item(0)).getElementsByTagNameNS(NS_DAISY, "file");
-				URI href = URI.create(((Element)file.item(0)).getAttribute("href"));
+			for (URI href : req.getUserStylesheets()) {
 				try {
 					if ("file".equals(href.getScheme()) && !getConfiguration().isLocalFS())
 						throw new FileNotFoundException(
-							"WS does not allow local inputs but a href starting with 'file:' was found: " + href);
+							"WS does not allow local inputs but a URI starting with 'file:' was found: " + href);
+					else if ("http".equals(href.getScheme()) || "https".equals(href.getScheme()))
+						builder.withInput("stylesheet",
+						                  new ByteArrayInputStream(
+							                  ("@import url(\"" + href + "\");").getBytes(StandardCharsets.UTF_8)));
+					else
+						builder.withInput("stylesheet", href);
+				} catch (IllegalArgumentException|FileNotFoundException e) {
+					return badRequest(e);
+				}
+			}
+			for (URI href : req.getSourceDocument().map(Collections::singleton).orElseGet(Collections::emptySet)) {
+				try {
+					if ("file".equals(href.getScheme()) && !getConfiguration().isLocalFS())
+						throw new FileNotFoundException(
+							"WS does not allow local inputs but a URI starting with 'file:' was found: " + href);
 					builder.withInput("source", href);
 				} catch (IllegalArgumentException|FileNotFoundException e) {
 					return badRequest(e);
@@ -185,18 +201,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 			}
 			inputs = builder.build();
 		}
-		List<Medium> media; {
-			media = null;
-			NodeList node = request.getElementsByTagNameNS(NS_DAISY, "media");
-			if (node.getLength() > 0)
-				try {
-					media = Medium.parseMultiple(((Element)node.item(0)).getAttribute("value"));
-				} catch (IllegalArgumentException e) {
-					return badRequest(e);
-				}
-			if (media == null)
-				media = Medium.parseMultiple("screen");
-		}
+		List<Medium> media = req.getMedia();
 		URI contextBase = URI.create("context:/");
 		uriResolver = fallback(uriResolver, simpleURIResolver);
 		URIResolver resolver = data == null
@@ -266,11 +271,11 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				}
 			};
 			List<Source> userAndUserAgentStylesheets = new ArrayList<>(); {
-				NodeList userAgentStylesheet = request.getElementsByTagNameNS(NS_DAISY, "userAgentStylesheet");
-				if (userAgentStylesheet.getLength() > 0) {
+				List<String> mediaTypes = req.getMediaTypes();
+				if (mediaTypes.size() > 0) {
 					for (URL u : userAgentStylesheetRegistry.get(
 					                 Collections.singleton("text/x-scss"),
-					                 Arrays.asList(((Element)userAgentStylesheet.item(0)).getAttribute("mediaType").trim().split("\\s+")),
+					                 mediaTypes,
 					                 media))
 						try {
 							userAndUserAgentStylesheets.add(simpleURIResolver.resolve(u.toString(), null));
@@ -288,7 +293,7 @@ public class StylesheetParametersResource extends AuthenticatedResource {
 				try {
 					for (SassVariable v : new CssAnalyzer(media, resolver, datatypeRegistry)
 						                      .analyze(userAndUserAgentStylesheets, sourceDocument)
-					                          .getVariables()) {
+						                      .getVariables()) {
 						if (v.isDefault()) {
 							Element parameterElem = parametersDoc.createElementNS(XmlUtils.NS_PIPELINE_DATA, "parameter");
 							parameterElem.setAttribute("name", v.getName());

@@ -163,8 +163,8 @@
                                         <!--
                                             Test whether the segments make up the whole heading or page number
                                         -->
-                                        <xsl:when test="replace(string-join($segments/string(.),''),'[\s\p{Z}]+','')
-                                                        =replace(string(.),'[\s\p{Z}]+','')">
+                                        <xsl:when test="replace(string-join($segments/string(.),''),'[\s\p{Z}\p{P}]+','')
+                                                        =replace(string(.),'[\s\p{Z}\p{P}]+','')">
                                             <xsl:variable name="smil-segments" as="element()*"
                                                           select="for $s in $segments return
                                                                   for $id in $s/concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id) return
@@ -208,9 +208,8 @@
                                                       string-join($audio-segments/concat(@src,' (',@clip-begin,'-',@clip-end,')'),', ')"/></xsl:with-param>
                                                   </xsl:call-template>
                                                   <!--
-                                                      Create an intermediary seq that contains all
-                                                      the segments. Later it will be replaced with
-                                                      the pars in the seq.
+                                                      Create an intermediary seq that contains all the segments. Later it will
+                                                      be replaced with the pars in the seq.
                                                   -->
                                                   <seq id="{$par-id}" textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
                                                       <xsl:choose>
@@ -229,13 +228,39 @@
                                             </xsl:choose>
                                       </xsl:when>
                                       <xsl:otherwise>
-                                          <xsl:message terminate="yes"
-                                                       select="concat('SMIL &quot;',replace($smil-base-uri,'^.*/([^/]+)^','$1'),
-                                                                      '&quot; references one or more segments inside a ',
-                                                                      if (starts-with(local-name(),'h')) then 'heading' else 'page number',
-                                                                      ' but these segments do not add up to the complete ',
-                                                                      if (starts-with(local-name(),'h')) then 'heading' else 'page number',
-                                                                      ': ',string-join($segments/concat($html-base-uri,'#',@id),', '))"/>
+                                          <!--
+                                              Not terminating because we can recover from it in create-linkbacks.xsl, by
+                                              linking to the first segment.
+                                          -->
+                                          <xsl:call-template name="pf:debug">
+                                              <xsl:with-param name="msg">SMIL &quot;<xsl:value-of select="
+                                              replace($smil-base-uri,'^.*/([^/]+)^','$1') "/>&quot; references one or more segments inside a
+                                              <xsl:value-of select=" if (starts-with(local-name(),'h')) then 'heading' else 'page number'"/>
+                                              but these segments do not add up to the complete <xsl:value-of select="
+                                              if (starts-with(local-name(),'h')) then 'heading' else 'page number'"/>. The NCC will contain a
+                                              link to the first segment.</xsl:with-param>
+                                          </xsl:call-template>
+                                          <!--
+                                              Create an intermediary seq that contains all the segments. Later it will be
+                                              replaced with the pars in the seq.
+                                          -->
+                                          <seq id="{$par-id}" textref="{pf:relativize-uri(concat($html-base-uri,'#',$id),$seq-base-uri)}">
+                                              <xsl:variable name="smil-segments" as="element()*"
+                                                            select="for $s in $segments return
+                                                                    for $id in $s/concat(pf:normalize-uri(pf:html-base-uri(.)),'#',@id) return
+                                                                    $smil//text[pf:normalize-uri(pf:resolve-uri(@src,.))=$id]/parent::*"/>
+                                              <xsl:choose>
+                                                  <xsl:when test=". intersect $page-number-elements">
+                                                      <xsl:for-each select="$smil-segments">
+                                                          <xsl:attribute name="system-required" select="'pagenumber-on'"/>
+                                                          <xsl:sequence select="@*|node()"/>
+                                                      </xsl:for-each>
+                                                  </xsl:when>
+                                                  <xsl:otherwise>
+                                                      <xsl:sequence select="$smil-segments"/>
+                                                  </xsl:otherwise>
+                                              </xsl:choose>
+                                          </seq>
                                       </xsl:otherwise>
                                     </xsl:choose>
                                 </xsl:when>

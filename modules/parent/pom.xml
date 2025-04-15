@@ -432,7 +432,7 @@
       <dependency>
         <groupId>org.daisy.pipeline</groupId>
         <artifactId>framework-bom</artifactId>
-        <version>1.15.2</version>
+        <version>1.15.3-SNAPSHOT</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -904,6 +904,9 @@
       <!-- only meant to be used for script modules -->
       <id>run-script-webserver</id>
       <dependencies>
+        <!--
+            FIXME: web sockets don't work when the web server is run this way
+        -->
         <dependency>
           <groupId>org.daisy.pipeline</groupId>
           <artifactId>webservice</artifactId>
