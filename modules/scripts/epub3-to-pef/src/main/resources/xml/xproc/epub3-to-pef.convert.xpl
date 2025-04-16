@@ -176,7 +176,7 @@
                                              ' AND (width: ',($parameter-map('page-width'),40)[1],')',
                                              ' AND (height: ',($parameter-map('page-height'),25)[1],')',
                                              if ($parameter-map('duplex'))
-                                               then ' AND (duplex: 1)'
+                                               then ' AND (-daisy-duplex: 1)'
                                                else ())"/>
                     <p:input port="parameters">
                         <p:empty/>
@@ -241,7 +241,7 @@
                                  ' AND (width: ',($parameter-map('page-width'),40)[1],')',
                                  ' AND (height: ',($parameter-map('page-height'),25)[1],')',
                                  if ($parameter-map('duplex'))
-                                   then ' AND (duplex: 1)'
+                                   then ' AND (-daisy-duplex: 1)'
                                    else ())"/>
         <p:input port="parameters">
             <p:empty/>
