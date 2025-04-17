@@ -123,7 +123,7 @@
 		</p:input>
 	</px:fileset-load>
 
-	<p:group name="process-dtbook">
+	<p:group name="process-dtbook" px:progress="1/4" px:message="Translating DTBook text to braille">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
@@ -156,20 +156,21 @@
 		     dc:source of the DTBook) -->
 		<p:delete match="dtb:head/dtb:meta[lower-case(@name)=('dc:date','dc:publisher','dc:rights')]"/>
 		<p:documentation>Translate all text content to Unicode braille</p:documentation>
-		<p:group>
+		<p:group px:progress="1">
 			<p:variable name="parameter-map"
 			            select="pf:css-parse-param-set(($braille-translator-stylesheet-parameters,()))"/>
-			<p:for-each>
+			<p:for-each px:progress="1">
 				<p:variable name="lang" select="(/*/@xml:lang,'und')[1]"/>
 				<px:css-cascade media="braille" content-type="application/x-dtbook+xml"
-				                include-user-agent-stylesheet="true" name="dtbook-with-css">
+				                include-user-agent-stylesheet="true" name="dtbook-with-css"
+				                px:progress="1/2">
 					<p:with-option name="user-stylesheet" select="$braille-translator-stylesheet"/>
 					<p:with-option name="parameters" select="$parameter-map"/>
 					<p:input port="parameters">
 						<p:empty/>
 					</p:input>
 				</px:css-cascade>
-				<px:transform>
+				<px:transform px:progress="1/2">
 					<!-- note that this step also translates text inside head (such as style
 					     elements), but this text should normally not end up in the result eBraille -->
 					<p:with-option name="query" select="concat('(input:css)(output:css)(output:braille)',
@@ -266,7 +267,7 @@
 		</px:fileset-update>
 	</p:group>
 
-	<px:dtbook-to-epub3 name="epub3" px:progress="1"
+	<px:dtbook-to-epub3 name="epub3" px:progress="3/8"
 	                    package-doc-path="package.opf"
 	                    navigation-doc-path="index.html"
 	                    content-path="ebraille/"
@@ -294,11 +295,11 @@
 			<p:pipe step="main" port="css.fileset"/>
 		</p:input>
 	</p:identity>
-	<p:choose name="add-css">
+	<p:choose name="add-css" px:progress="1/8">
 		<p:documentation>
 			Copy CSS files into eBraille publication
 		</p:documentation>
-		<p:when test="//d:file">
+		<p:when test="//d:file" px:message="Copying CSS files">
 			<p:output port="fileset" primary="true"/>
 			<p:output port="in-memory" sequence="true">
 				<p:pipe step="epub3" port="result.in-memory"/>
@@ -332,7 +333,7 @@
 		</p:otherwise>
 	</p:choose>
 
-	<p:group name="process-html">
+	<p:group name="process-html" px:progress="1/8">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
@@ -358,7 +359,7 @@
 			- Translate generated headings "Table of contents" and "List of pages" to braille
 			- Insert link to package.opf
 		</p:documentation>
-		<p:xslt>
+		<p:xslt px:progress="1/2" px:message="Finalizing primary entry page">
 			<p:input port="source">
 				<p:pipe step="filter-primary-entry-page" port="result.in-memory"/>
 			</p:input>
@@ -382,7 +383,7 @@
 			- Fix aria-label of page breaks
 			- Add links to CSS
 		</p:documentation>
-		<p:for-each>
+		<p:for-each px:progress="1/2">
 			<p:iteration-source>
 				<p:pipe step="filter-primary-entry-page" port="not-matched.in-memory"/>
 			</p:iteration-source>
@@ -415,7 +416,7 @@
 	</p:group>
 
 	<p:documentation>Generate new package document</p:documentation>
-	<p:group name="update-package-doc">
+	<p:group name="update-package-doc" px:progress="1/8" px:message="Finalizing package document">
 		<p:output port="fileset" primary="true"/>
 		<p:output port="in-memory" sequence="true">
 			<p:pipe step="update" port="result.in-memory"/>
@@ -475,7 +476,7 @@
 				<p:pipe step="process-html" port="in-memory"/>
 			</p:input>
 		</px:fileset-load>
-		<p:group name="metadata">
+		<p:group name="metadata" px:progress="1/2" px:message="Generating eBraille metadata">
 			<p:output port="result"/>
 			<p:filter select="//opf:metadata"/>
 			<p:delete match="opf:link[@href='ebraille/zedai-mods.xml']"/>
@@ -518,7 +519,7 @@
 			</p:input>
 		</px:fileset-filter>
 		<p:sink/>
-		<px:epub3-create-package-doc compatibility-mode="false" name="new-package-doc">
+		<px:epub3-create-package-doc compatibility-mode="false" name="new-package-doc" px:progress="1/2">
 			<p:input port="source.fileset">
 				<p:pipe step="filter-container" port="not-matched"/>
 			</p:input>
