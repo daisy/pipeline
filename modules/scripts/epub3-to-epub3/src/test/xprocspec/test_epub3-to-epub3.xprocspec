@@ -244,11 +244,11 @@
 			<x:expect label="package.opf" type="custom"
 			          href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl" step="x:epub3-compare-package-doc">
 				<x:document type="inline">
-					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id3" xml:lang="en">
+					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-							<dc:title id="title3">minimal</dc:title>
-							<dc:identifier id="pub-id3">id</dc:identifier>
-							<meta refines="#pub-id3" property="identifier-type" scheme="xsd:string">uuid</meta>
+							<dc:title id="title">minimal</dc:title>
+							<dc:identifier id="pub-id">id</dc:identifier>
+							<meta refines="#pub-id" property="identifier-type" scheme="xsd:string">uuid</meta>
 							<dc:language>en</dc:language>
 							<meta property="dcterms:modified">2020-03-06T11:11:52Z</meta>
 							<meta name="dcterms:modified" content="2020-03-06T11:11:52Z"/>
@@ -739,8 +739,8 @@
 				<x:document type="inline">
 					<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="pub-id" xml:lang="en-GB">
 						<metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
-							<dc:title id="title2">minimal</dc:title>
-							<meta refines="#title2" property="title-type">main</meta>
+							<dc:title id="title">minimal</dc:title>
+							<meta refines="#title" property="title-type">main</meta>
 							<dc:identifier id="pub-id">new-id</dc:identifier>
 							<dc:language>en-GB</dc:language>
 							<meta property="dcterms:modified">2021-02-01T16:03:09Z</meta>

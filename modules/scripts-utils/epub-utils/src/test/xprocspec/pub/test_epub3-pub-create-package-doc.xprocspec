@@ -234,11 +234,11 @@
 		<x:expect label="the result" type="custom" href="../../../main/resources/xml/pub/compare-package-doc.xpl"
 		          step="x:epub3-compare-package-doc">
 			<x:document type="inline">
-				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id23" version="3.0"
+				<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="pub-id" version="3.0"
 				         xml:lang="en" prefix="media: http://www.idpf.org/epub/vocab/overlays/# schema: http://schema.org/ a11y: http://www.idpf.org/epub/vocab/package/a11y/#">
 					<metadata>
 						<dc:title>Minimal DTBook</dc:title>
-						<dc:identifier id="pub-id23">my-id</dc:identifier>
+						<dc:identifier id="pub-id">my-id</dc:identifier>
 						<dc:language>en</dc:language>
 						<meta property="dcterms:modified">2019-10-17T17:37:04Z</meta>
 						<meta name="dcterms:modified" content="2019-10-17T17:37:04Z"/>

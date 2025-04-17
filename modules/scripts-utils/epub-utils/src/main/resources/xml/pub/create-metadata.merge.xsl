@@ -309,7 +309,7 @@
         <dc:identifier>
             <!-- make sure there is an ID for the unique-identifier attribute to point to -->
             <xsl:attribute name="id" select="f:unique-id(generate-id(),//@id)"/>
-            <xsl:apply-templates select="node() | @* except @id"/>
+            <xsl:apply-templates select="@*|node()"/>
         </dc:identifier>
     </xsl:template>
 
@@ -464,17 +464,19 @@
 
     <!-- 
         Returns a non-conflicting ID for an *existing* ID or IDREF attribute
-        The non-conflicting ID is created by appending the position number
-        of the parent metadata set for all sets after the first
+        The non-conflicting ID is created by appending 1 + the number of ID attributes with the same
+        name in preceding metadata elements, if this resulting number is more than one.
     -->
     <xsl:function name="f:unified-id" as="xs:string">
-        <xsl:param name="id" as="attribute()?"/>
-        <xsl:variable name="count" select="count($id/ancestor::metadata/preceding::metadata)"
-            as="xs:integer"/>
+        <xsl:param name="attr" as="attribute()?"/>
+        <xsl:variable name="id" as="xs:string"
+                      select="if (starts-with($attr,'#')) then substring($attr,2) else string($attr)"/>
+        <xsl:variable name="count" as="xs:integer"
+                      select="count($attr/ancestor::metadata/preceding::metadata//*/@id[string(.)=$id])"/>
         <xsl:sequence
             select="f:unique-id(
                       concat(
-                        if (starts-with($id,'#')) then substring($id,2) else $id,
+                        $id,
                         if ($count) then $count+1 else ''),
                         $existing-id-outside-metadata)"
         />
