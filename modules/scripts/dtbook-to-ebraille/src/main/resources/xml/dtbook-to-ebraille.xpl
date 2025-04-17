@@ -11,6 +11,8 @@
                 xmlns:dtb="http://www.daisy.org/z3986/2005/dtbook/"
                 xmlns:html="http://www.w3.org/1999/xhtml"
                 xmlns:opf="http://www.idpf.org/2007/opf"
+                xmlns:ocf="urn:oasis:names:tc:opendocument:xmlns:container"
+                xmlns:rend="http://www.idpf.org/2013/rendition"
                 type="px:dtbook-to-ebraille"
                 name="main">
 
@@ -40,7 +42,7 @@
 
 	<p:output port="result.fileset" primary="true"/>
 	<p:output port="result.in-memory" sequence="true">
-		<p:pipe step="update-package-doc" port="in-memory"/>
+		<p:pipe step="include-original-text" port="in-memory"/>
 	</p:output>
 	<p:output port="status" px:media-type="application/vnd.pipeline.status+xml">
 		<p:pipe step="epub3" port="status"/>
@@ -63,6 +65,11 @@
 			<p>Whether the input is NIMAS.</p>
 		</p:documentation>
 	</p:option>
+	<p:option name="include-original-text" cx:as="xs:boolean" select="false()">
+		<p:documentation xmlns="http://www.w3.org/1999/xhtml">
+			<p>Include original text as a secondary rendition.</p>
+		</p:documentation>
+	</p:option>
 
 	<p:option name="output-dir" required="true"/>
 	<p:option name="temp-dir" required="true"/>
@@ -78,6 +85,7 @@
 			px:fileset-filter
 			px:fileset-update
 			px:fileset-copy
+			px:fileset-move
 		</p:documentation>
 	</p:import>
 	<p:import href="http://www.daisy.org/pipeline/modules/file-utils/library.xpl">
@@ -103,6 +111,7 @@
 	<p:import href="http://www.daisy.org/pipeline/modules/epub-utils/library.xpl">
 		<p:documentation>
 			px:epub3-create-package-doc
+			px:epub-update-links
 			px:opf-spine-to-fileset
 		</p:documentation>
 	</p:import>
@@ -134,6 +143,16 @@
 		<p:output port="braille-codes">
 			<p:pipe step="get-used-braille-codes" port="codes"/>
 		</p:output>
+		<p:documentation>The dc:date, dc:publisher and dc:rights of the DTBook should not be used as
+		dc:date, dc:publisher and dc:rights of the eBraille publication.</p:documentation>
+		<!-- Later, the dc:date of the DTBook will be used as a dcterms:date refinement on dc:source
+		     of the eBraille, if dtb:uid is used as the dc:source of the eBraille (in absence of a
+		     dc:source of the DTBook)
+		     
+		     FIXME: this is a workaround for something that should be fixed in dtbook-to-epub3, so
+		     that the package document of the secondary rendition will have the same metadata
+		-->
+		<p:delete match="dtb:head/dtb:meta[lower-case(@name)=('dc:date','dc:publisher','dc:rights')]"/>
 		<p:documentation>Mark pagenum</p:documentation>
 		<!-- We will use this information later (px:dtbook-to-epub preserves the IDs) to get the
 		     original text of page numbers. -->
@@ -149,12 +168,6 @@
 		</p:insert>
 		<p:string-replace match="dtb:doctitle[normalize-space(.)='']/text()"
 		                  replace="//dtb:head/dtb:meta[@name='dc:Title']/@content"/>
-		<p:documentation>The dc:date, dc:publisher and dc:rights of the DTBook should not be used as
-		dc:date, dc:publisher and dc:rights of the eBraille publication.</p:documentation>
-		<!-- Later, the dc:date of the DTBook will be used as a dcterms:date refinement on dc:source
-		     of the eBraille, if dtb:uid is used as the dc:source of the eBraille (in absence of a
-		     dc:source of the DTBook) -->
-		<p:delete match="dtb:head/dtb:meta[lower-case(@name)=('dc:date','dc:publisher','dc:rights')]"/>
 		<p:documentation>Translate all text content to Unicode braille</p:documentation>
 		<p:group px:progress="1">
 			<p:variable name="parameter-map"
@@ -267,7 +280,7 @@
 		</px:fileset-update>
 	</p:group>
 
-	<px:dtbook-to-epub3 name="epub3" px:progress="3/8"
+	<px:dtbook-to-epub3 name="epub3" px:progress="1/4"
 	                    package-doc-path="package.opf"
 	                    navigation-doc-path="index.html"
 	                    content-path="ebraille/"
@@ -476,6 +489,10 @@
 				<p:pipe step="process-html" port="in-memory"/>
 			</p:input>
 		</px:fileset-load>
+		<!--
+		    FIXME: ebraille-metadata.xsl also does some things that should ideally be done in
+		    dtbook-to-epub3, so that the package document of the secondary rendition will have the
+		    same metadata -->
 		<p:group name="metadata" px:progress="1/2" px:message="Generating eBraille metadata">
 			<p:output port="result"/>
 			<p:filter select="//opf:metadata"/>
@@ -552,5 +569,158 @@
 			</p:input>
 		</px:fileset-update>
 	</p:group>
+
+	<p:choose name="include-original-text" px:progress="1/8">
+		<p:when test="not($include-original-text)">
+			<p:output port="fileset" primary="true"/>
+			<p:output port="in-memory" sequence="true">
+				<p:pipe step="update-package-doc" port="in-memory"/>
+			</p:output>
+			<p:identity/>
+		</p:when>
+		<p:otherwise px:message="Including original text">
+			<p:output port="fileset" primary="true"/>
+			<p:output port="in-memory" sequence="true">
+				<p:pipe step="update-container" port="result.in-memory"/>
+			</p:output>
+			<p:group name="original-text">
+				<p:output port="fileset" primary="true"/>
+				<p:output port="in-memory" sequence="true">
+					<p:pipe step="update" port="result.in-memory"/>
+				</p:output>
+				<p:sink/>
+				<px:fileset-update name="processed-dtbook-original-text">
+					<p:input port="source.fileset">
+						<p:pipe step="load-dtbook" port="unfiltered.fileset"/>
+					</p:input>
+					<p:input port="source.in-memory">
+						<p:pipe step="load-dtbook" port="unfiltered.in-memory"/>
+					</p:input>
+					<p:input port="update.fileset">
+						<p:pipe step="load-dtbook" port="result.fileset"/>
+					</p:input>
+					<p:input port="update.in-memory">
+						<p:pipe step="process-dtbook" port="original-text"/>
+					</p:input>
+				</px:fileset-update>
+				<!-- using same content-path so that resources can be shared; will move the HTML and OPF files afterwards -->
+				<px:dtbook-to-epub3 name="original-epub3"
+				                    package-doc-path="ebraille/package.opf"
+				                    navigation-doc-path="ebraille/nav.html"
+				                    content-path="ebraille/"
+				                    xhtml-file-extension=".html">
+					<p:input port="source.in-memory">
+						<p:pipe step="processed-dtbook-original-text" port="result.in-memory"/>
+					</p:input>
+					<p:with-option name="validation" select="'off'"/>
+					<p:with-option name="output-validation" select="'off'"/>
+					<p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
+					<p:with-option name="nimas" select="$nimas"/>
+					<p:with-option name="output-name"
+					               select="replace(replace(base-uri(/),'^.*/([^/]+)$','$1'),'\.[^\.]*$','')">
+						<p:pipe step="load-dtbook" port="result"/>
+					</p:with-option>
+					<p:with-option name="output-dir" select="$output-dir"/>
+					<!-- fine to use same temp-dir -->
+					<p:with-option name="temp-dir" select="$temp-dir"/>
+				</px:dtbook-to-epub3>
+				<p:documentation>Filter HTML and OPF files and move to other folder</p:documentation>
+				<px:fileset-filter media-types="application/oebps-package+xml application/xhtml+xml" name="filter">
+					<p:input port="source.in-memory">
+						<p:pipe step="original-epub3" port="result.in-memory"/>
+					</p:input>
+				</px:fileset-filter>
+				<px:fileset-move flatten="true" name="move">
+					<p:input port="source.in-memory">
+						<p:pipe step="filter" port="result.in-memory"/>
+					</p:input>
+					<p:with-option name="target" select="concat($output-dir,'original/')"/>
+				</px:fileset-move>
+				<p:sink/>
+				<px:epub-rename-files name="rename">
+					<p:input port="source.fileset">
+						<p:pipe step="original-epub3" port="result.fileset"/>
+					</p:input>
+					<p:input port="source.in-memory">
+						<p:pipe step="original-epub3" port="result.in-memory"/>
+					</p:input>
+					<p:input port="mapping">
+						<p:pipe step="move" port="mapping"/>
+					</p:input>
+				</px:epub-rename-files>
+				<p:documentation>Delete link to zedai-mods.xml in package document</p:documentation>
+				<px:fileset-load media-types="application/oebps-package+xml" name="package-doc">
+					<p:input port="in-memory">
+						<p:pipe step="rename" port="result.in-memory"/>
+					</p:input>
+				</px:fileset-load>
+				<p:delete match="opf:link[@href='../ebraille/zedai-mods.xml']" name="package-doc-without-link"/>
+				<p:sink/>
+				<px:fileset-update name="update">
+					<p:input port="source.fileset">
+						<p:pipe step="rename" port="result.fileset"/>
+					</p:input>
+					<p:input port="source.in-memory">
+						<p:pipe step="rename" port="result.in-memory"/>
+					</p:input>
+					<p:input port="update.fileset">
+						<p:pipe step="package-doc" port="result.fileset"/>
+					</p:input>
+					<p:input port="update.in-memory">
+						<p:pipe step="package-doc-without-link" port="result"/>
+					</p:input>
+				</px:fileset-update>
+			</p:group>
+			<p:sink/>
+			<p:documentation>Generate new container file</p:documentation>
+			<p:group name="container-with-secondary-rendition">
+				<p:output port="result" primary="true"/>
+				<p:output port="fileset">
+					<p:pipe step="load-container" port="result.fileset"/>
+				</p:output>
+				<px:fileset-load href="META-INF/container.xml" name="load-container">
+					<p:input port="fileset">
+						<p:pipe step="update-package-doc" port="fileset"/>
+					</p:input>
+					<p:input port="in-memory">
+						<p:pipe step="update-package-doc" port="in-memory"/>
+					</p:input>
+				</px:fileset-load>
+				<p:add-attribute match="/*" attribute-name="rend:tmp" attribute-value="">
+					<!-- to get namespace declaration on root element -->
+				</p:add-attribute>
+				<p:add-attribute match="ocf:rootfile[not(preceding-sibling::*)][not(@rend:accessMode)]"
+				                 attribute-name="rend:accessMode" attribute-value="tactile"/>
+				<p:insert match="ocf:rootfiles" position="last-child">
+					<p:input port="insertion">
+						<p:inline exclude-inline-prefixes="#all" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"
+						          ><rootfile full-path="original/package.opf"
+						                     media-type="application/oebps-package+xml"
+						                     rend:accessMode="textual"/></p:inline>
+					</p:input>
+				</p:insert>
+				<p:delete match="/*/@rend:tmp"/>
+			</p:group>
+			<p:sink/>
+			<px:fileset-join>
+				<p:input port="source">
+					<p:pipe step="update-package-doc" port="fileset"/>
+					<p:pipe step="original-text" port="fileset"/>
+				</p:input>
+			</px:fileset-join>
+			<px:fileset-update name="update-container">
+				<p:input port="source.in-memory">
+					<p:pipe step="update-package-doc" port="in-memory"/>
+					<p:pipe step="original-text" port="in-memory"/>
+				</p:input>
+				<p:input port="update.fileset">
+					<p:pipe step="container-with-secondary-rendition" port="fileset"/>
+				</p:input>
+				<p:input port="update.in-memory">
+					<p:pipe step="container-with-secondary-rendition" port="result"/>
+				</p:input>
+			</px:fileset-update>
+		</p:otherwise>
+	</p:choose>
 
 </p:declare-step>

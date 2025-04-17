@@ -146,6 +146,13 @@ you can control that variable with the following parameters list: `(foo:true)`.<
       <!-- defined in ../../../../../common-options.xpl -->
     </p:option>
 
+    <p:option name="include-original-text" cx:as="xs:boolean" select="false()">
+      <p:documentation xmlns="http://www.w3.org/1999/xhtml">
+        <h2 px:role="name">Include original text</h2>
+        <p px:role="desc">Include the original text as a secondary rendition.</p>
+      </p:documentation>
+    </p:option>
+
     <p:import href="dtbook-to-ebraille.xpl">
         <p:documentation>
             px:dtbook-to-ebraille
@@ -295,6 +302,7 @@ you can control that variable with the following parameters list: `(foo:true)`.<
                            select="$braille-translator-stylesheet-parameters"/>
             <p:with-option name="dtbook-is-valid" select="$dtbook-is-valid"/>
             <p:with-option name="nimas" select="$nimas='true'"/>
+            <p:with-option name="include-original-text" select="$include-original-text"/>
             <p:with-option name="output-dir" select="if ($epub-package)
                                                      then concat($temp-dir,'ebraille-unzipped/')
                                                      else concat($output-dir-uri,'/')"/>
@@ -323,22 +331,38 @@ you can control that variable with the following parameters list: `(foo:true)`.<
                   <p:pipe step="convert" port="result.in-memory"/>
                 </p:input>
               </px:fileset-filter>
-              <p:sink/>
-              <px:fileset-filter name="filter-container" href="META-INF/container.xml">
-                <p:input port="source">
-                  <p:pipe step="filter-mimetype" port="not-matched"/>
-                </p:input>
-                <p:input port="source.in-memory">
-                  <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
-                </p:input>
-              </px:fileset-filter>
-              <p:sink/>
+              <p:choose name="filter-container">
+                <p:when test="$include-original-text">
+                  <p:output port="fileset" primary="true">
+                    <p:pipe step="filter-mimetype" port="not-matched"/>
+                  </p:output>
+                  <p:output port="in-memory" sequence="true">
+                    <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                  </p:output>
+                  <p:sink/>
+                </p:when>
+                <p:otherwise>
+                  <p:output port="fileset" primary="true">
+                    <p:pipe step="filter" port="not-matched"/>
+                  </p:output>
+                  <p:output port="in-memory" sequence="true">
+                    <p:pipe step="filter" port="not-matched.in-memory"/>
+                  </p:output>
+                  <p:sink/>
+                  <px:fileset-filter name="filter" href="META-INF/container.xml">
+                    <p:input port="source">
+                      <p:pipe step="filter-mimetype" port="not-matched"/>
+                    </p:input>
+                    <p:input port="source.in-memory">
+                      <p:pipe step="filter-mimetype" port="not-matched.in-memory"/>
+                    </p:input>
+                  </px:fileset-filter>
+                  <p:sink/>
+                </p:otherwise>
+              </p:choose>
               <px:fileset-store>
-                <p:input port="fileset.in">
-                  <p:pipe step="filter-container" port="not-matched"/>
-                </p:input>
                 <p:input port="in-memory.in">
-                  <p:pipe step="filter-container" port="not-matched.in-memory"/>
+                  <p:pipe step="filter-container" port="in-memory"/>
                 </p:input>
               </px:fileset-store>
             </p:otherwise>
