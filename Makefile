@@ -252,11 +252,11 @@ assembly/.install-linux.zip : | .maven-init .group-eval
 
 .SECONDARY : assembly/.install-mac.zip
 assembly/.install-mac.zip : | .maven-init .group-eval
-	+$(EVAL) $(call make-assembly, "zip-mac")
+	+$(EVAL) $(call make-assembly, "zip-mac"$(comma) "--"$(comma) "--without-persistence")
 
 .SECONDARY : assembly/.install-win.zip
 assembly/.install-win.zip : | .maven-init .group-eval
-	+$(EVAL) $(call make-assembly, "zip-win")
+	+$(EVAL) $(call make-assembly, "zip-win"$(comma) "--"$(comma) "--without-persistence")
 
 .SECONDARY : assembly/.install-cli.deb
 assembly/.install-cli.deb : | .maven-init .group-eval
