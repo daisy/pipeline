@@ -229,11 +229,10 @@ $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm :
 endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
-# Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-osgi, --without-persistence,
+# Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-persistence,
 # --without-webservice, --without-cli and --with-simple-api were also specified.
 dir-word-addin                                                                 : assembly/SOURCES
-dir-word-addin                                                                 : mvn -Pwithout-osgi \
-                                                                                     -Pwithout-persistence \
+dir-word-addin                                                                 : mvn -Pwithout-persistence \
                                                                                      -Pwithout-webservice \
                                                                                      -Pwithout-cli \
                                                                                      -Pwith-simple-api \
@@ -247,8 +246,7 @@ endif
 ifneq ($(OS), WINDOWS)
 
 .PHONY : docker
-# Note that when `docker' is enabled together with other targets, it is as if --without-osgi was also specified.
-docker : mvn -Pwithout-osgi \
+docker : mvn \
          jre/target/maven-jlink/classifiers/linux \
          jre/target/maven-jlink/classifiers/linux-arm64 \
          target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2
@@ -412,11 +410,11 @@ else
 endif
 
 .PHONY : --with-osgi --without-osgi
---without-osgi : -Pwithout-osgi
-ifneq (--with-osgi,$(filter --with-osgi,$(MAKECMDGOALS)))
-PROFILES += without-osgi
+--with-osgi : -Pwith-osgi
+ifneq (--without-osgi,$(filter --without-osgi,$(MAKECMDGOALS)))
+PROFILES += with-osgi
 else
-.PHONY : -Pwithout-osgi
+.PHONY : -Pwith-osgi
 endif
 
 .PHONY : --with-webservice --without-webservice
