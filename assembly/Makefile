@@ -44,9 +44,7 @@ help :
 		"make zip-win:"                                                  + "\n" + \
 		"    Builds a ZIP for Windows"                                   + "\n" + \
 		"make dir-word-addin:"                                           + "\n" + \
-		"	Builds a directory to be included in SaveAsDAISY"            + "\n" + \
-		"make zip-minimal:"                                              + "\n" + \
-		"    Builds a minimal ZIP that will complete itself upon first update");  \
+		"	Builds a directory to be included in SaveAsDAISY");                   \
 	if (getOS() != OS.WINDOWS)                                                    \
 		err.println(                                                              \
 			"make docker:"                                               + "\n" + \
@@ -64,14 +62,13 @@ INSTALL_DIR                  := $(MVN_LOCAL_REPOSITORY)/org/daisy/pipeline/assem
 
 include deps.mk
 
-.PHONY : deb rpm zip-linux zip-mac zip-win zip-minimal deb-cli rpm-cli
+.PHONY : deb rpm zip-linux zip-mac zip-win deb-cli rpm-cli
 
 deb         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb
 rpm         : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).rpm
 zip-linux   : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip
 zip-mac     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip
 zip-win     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip
-zip-minimal : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip
 deb-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb
 rpm-cli     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.rpm
 
@@ -82,8 +79,7 @@ target/release-descriptor/releaseDescriptor.xml : mvn -Pgenerate-release-descrip
 # some artifacts are installed through command line
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-linux.zip   \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-mac.zip     \
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     \
-$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-minimal.zip : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
+$(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-win.zip     : $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)% : target/assembly-$(assembly/VERSION)%
 ifndef DUMP_PROFILES
 	exec("$(SHELL)", $(call quote-for-java,$(MVN)), "--",                                                      \
 	     "install:install-file",                                                                               \
@@ -96,17 +92,14 @@ endif
 
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb                  : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-updater-linux \
                                                                                     -Ppackage-deb
 target/assembly-$(assembly/VERSION)-linux.zip                                 : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-linux \
-                                                                                    -Punpack-updater-linux \
                                                                                     -Passemble-linux-zip
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-cli-mac \
-                                                                                    -Punpack-updater-mac
+                                                                                    -Punpack-cli-mac
 ifneq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-mac.zip                                   : mvn -Pbuild-jre-mac
 endif
@@ -192,8 +185,7 @@ endif
 endif
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
-                                                                                    -Punpack-cli-win \
-                                                                                    -Punpack-updater-win
+                                                                                    -Punpack-cli-win
 ifeq (--without-jre,$(filter --without-jre --with-jre,$(MAKECMDGOALS)))
 target/assembly-$(assembly/VERSION)-win.zip                                   : mvn -Passemble-win-zip
 ifndef DUMP_PROFILES
@@ -210,12 +202,6 @@ ifndef DUMP_PROFILES
 	exit(new File("$@").exists());
 endif
 endif # --without-jre
-target/assembly-$(assembly/VERSION)-minimal.zip                               : mvn -Pcopy-artifacts \
-                                                                                    -Pgenerate-release-descriptor \
-                                                                                    -Punpack-updater-mac \
-                                                                                    -Punpack-updater-linux \
-                                                                                    -Punpack-updater-win \
-                                                                                    -Passemble-minimal-zip
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb              : mvn -Pcopy-artifacts \
                                                                                     -Pgenerate-release-descriptor \
                                                                                     -Punpack-cli-linux \
@@ -244,13 +230,12 @@ endif # eq ($(OS), REDHAT)
 
 .PHONY : dir-word-addin
 # Note that when `dir-word-addin' is enabled together with other targets, it is as if --without-osgi, --without-persistence,
-# --without-webservice, --without-cli, --without-updater and --with-simple-api were also specified.
+# --without-webservice, --without-cli and --with-simple-api were also specified.
 dir-word-addin                                                                 : assembly/SOURCES
 dir-word-addin                                                                 : mvn -Pwithout-osgi \
                                                                                      -Pwithout-persistence \
                                                                                      -Pwithout-webservice \
                                                                                      -Pwithout-cli \
-                                                                                     -Pwithout-updater \
                                                                                      -Pwith-simple-api \
                                                                                      -Pcopy-artifacts \
                                                                                      -Pbuild-jre-win32 \
@@ -332,20 +317,17 @@ jre/target/maven-jlink/classifiers/linux-arm64                         : mvn -Pb
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-mac \
-                                                                             -Punpack-updater-mac \
                                                                              -Passemble-mac-dir
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 : mvn -Pcopy-artifacts \
                                                                              -Pgenerate-release-descriptor \
                                                                              -Punpack-cli-linux \
-                                                                             -Punpack-updater-linux \
                                                                              -Passemble-linux-dir
 
 endif # neq ($(OS), WINDOWS)
 
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER).deb           \
 $(INSTALL_DIR)/assembly-$(assembly/VERSION)$(CLASSIFIER)-cli.deb       \
-target/assembly-$(assembly/VERSION)-linux.zip             \
-target/assembly-$(assembly/VERSION)-minimal.zip           \
+target/assembly-$(assembly/VERSION)-linux.zip                          \
 target/assembly-$(assembly/VERSION)-mac/daisy-pipeline/bin/pipeline2   \
 target/assembly-$(assembly/VERSION)-linux/daisy-pipeline/bin/pipeline2 :
 ifndef DUMP_PROFILES
@@ -393,16 +375,12 @@ clean :
 # unpack-cli-mac                               unpack-cli-mac
 # unpack-cli-linux                             unpack-cli-linux
 # unpack-cli-win                               unpack-cli-win
-# unpack-updater-mac                           unpack-updater-mac
-# unpack-updater-linux                         unpack-updater-linux
-# unpack-updater-win                           unpack-updater-win
 # assemble-mac-dir                                                                            assemble-mac-dir
 # assemble-linux-dir                                                                          assemble-linux-dir
 # assemble-win-dir                                                                            assemble-win-dir
 # assemble-mac-zip                                                                                                  assemble-mac-zip
 # assemble-linux-zip                                                                                                assemble-linux-zip
 # assemble-win-zip                                                                                                  assemble-win-zip
-# assemble-minimal-zip                                                                                              assemble-minimal-zip
 # package-deb                                                          filter-deb-resources                         package-deb
 # package-deb-cli                                                                                                   package-deb-cli
 # package-rpm                                                                                                       package-rpm
@@ -417,17 +395,13 @@ PROFILES :=                     \
 	assemble-mac-zip            \
 	assemble-win-dir            \
 	assemble-win-zip            \
-	assemble-minimal-zip        \
 	package-deb                 \
 	package-deb-cli             \
 	package-rpm                 \
 	package-rpm-cli             \
 	unpack-cli-linux            \
 	unpack-cli-mac              \
-	unpack-cli-win              \
-	unpack-updater-linux        \
-	unpack-updater-mac          \
-	unpack-updater-win
+	unpack-cli-win
 
 .PHONY : --with-persistence --without-persistence
 --without-persistence : -Pwithout-persistence
@@ -459,14 +433,6 @@ ifneq (--with-cli,$(filter --with-cli,$(MAKECMDGOALS)))
 PROFILES += without-cli
 else
 .PHONY : -Pwithout-cli
-endif
-
-.PHONY : --with-updater --without-updater
---without-updater : -Pwithout-updater
-ifneq (--with-updater,$(filter --with-updater,$(MAKECMDGOALS)))
-PROFILES += without-updater
-else
-.PHONY : -Pwithout-updater
 endif
 
 .PHONY : --with-simple-api --without-simple-api

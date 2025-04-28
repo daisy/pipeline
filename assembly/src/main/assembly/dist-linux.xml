@@ -12,7 +12,6 @@
       <componentDescriptor>src/main/assembly/components/jars.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/jars-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/cli-linux.xml</componentDescriptor>
-      <componentDescriptor>src/main/assembly/components/updater-linux.xml</componentDescriptor>
       <componentDescriptor>src/main/assembly/components/simple-api.xml</componentDescriptor>
   </componentDescriptors>
 </assembly>

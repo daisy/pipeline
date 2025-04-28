@@ -52,11 +52,6 @@
         <version>${cli.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.daisy.pipeline</groupId>
-        <artifactId>updater</artifactId>
-        <version>1.0.2</version>
-      </dependency>
-      <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.main</artifactId>
         <version>5.6.10</version>
@@ -100,7 +95,7 @@
   </dependencyManagement>
   <dependencies>
     <!--
-        dependencies needed to run Pipeline as library (no webservice, no persistence, no updater, no OSGi)
+        dependencies needed to run Pipeline as library (no webservice, no persistence, no OSGi)
 
         this section must be kept in sync with the corresponding maven-dependency-plugin sections below
     -->
@@ -2782,6 +2777,7 @@
       </build>
     </profile>
     <profile>
+      <!-- FIXME: was needed for updater, but also still needed to get version number -->
       <id>generate-release-descriptor</id>
       <build>
         <plugins>
@@ -2986,96 +2982,6 @@
       </build>
     </profile>
     <profile>
-      <id>unpack-updater-mac</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-mac</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>darwin_amd64</classifier>
-                      <outputDirectory>${project.build.directory}/updater/mac32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>unpack-updater-linux</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-linux</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>linux_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/linux32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>unpack-updater-win</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-win</id>
-                <phase>generate-resources</phase>
-                <goals>
-                  <goal>unpack</goal>
-                </goals>
-                <configuration>
-                  <artifactItems>
-                    <artifactItem>
-                      <groupId>org.daisy.pipeline</groupId>
-                      <artifactId>updater</artifactId>
-                      <type>zip</type>
-                      <classifier>windows_386</classifier>
-                      <outputDirectory>${project.build.directory}/updater/win32</outputDirectory>
-                    </artifactItem>
-                  </artifactItems>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
       <id>assemble-mac-dir</id>
       <build>
         <plugins>
@@ -3267,39 +3173,6 @@
                   <filters>
                     <filter>src/main/assembly/dist.properties</filter>
                     <filter>src/main/assembly/dist-win.properties</filter>
-                  </filters>
-                  <appendAssemblyId>true</appendAssemblyId>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>assemble-minimal-zip</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>assemble-minimal-zip</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>single</goal>
-                </goals>
-                <configuration>
-                  <attach>false</attach> <!-- installed by Makefile -->
-                  <formats>
-                    <format>zip</format>
-                  </formats>
-                  <descriptors>
-                    <descriptor>src/main/assembly/dist-minimal.xml</descriptor>
-                  </descriptors>
-                  <filters>
-                    <filter>src/main/assembly/dist.properties</filter>
-                    <filter>src/main/assembly/dist-linux.properties</filter>
                   </filters>
                   <appendAssemblyId>true</appendAssemblyId>
                 </configuration>
@@ -3930,30 +3803,6 @@
               </execution>
               <execution>
                 <id>unpack-cli-win</id>
-                <phase>none</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>without-updater</id>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-dependency-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>unpack-updater-mac</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>unpack-updater-linux</id>
-                <phase>none</phase>
-              </execution>
-              <execution>
-                <id>unpack-updater-win</id>
                 <phase>none</phase>
               </execution>
             </executions>
