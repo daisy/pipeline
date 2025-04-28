@@ -70,9 +70,6 @@ dist-zip-mac : pipeline2-$(assembly/VERSION)_mac.zip
 .PHONY : dist-zip-win
 dist-zip-win : pipeline2-$(assembly/VERSION)_windows.zip
 
-.PHONY : dist-zip-minimal
-dist-zip-minimal : pipeline2-$(assembly/VERSION)_minimal.zip
-
 .PHONY : dist-deb
 dist-deb : pipeline2-$(assembly/VERSION)_debian.deb
 
@@ -253,10 +250,6 @@ assembly/.install.rpm : | .maven-init .group-eval
 assembly/.install-linux.zip : | .maven-init .group-eval
 	+$(EVAL) $(call make-assembly, "zip-linux")
 
-.SECONDARY : assembly/.install-minimal.zip
-assembly/.install-minimal.zip : | .maven-init .group-eval
-	+$(EVAL) $(call make-assembly, "zip-minimal")
-
 .SECONDARY : assembly/.install-mac.zip
 assembly/.install-mac.zip : | .maven-init .group-eval
 	+$(EVAL) $(call make-assembly, "zip-mac")
@@ -295,11 +288,6 @@ cli/.install-darwin_amd64.zip cli/.install-linux_386.zip cli/.install-windows_38
 .SECONDARY : cli/.install
 cli/.install : | .maven-init .group-eval
 	+$(EVAL) mvn.install("$(patsubst %/,%,$(dir $@))");
-
-updater/.install : $(call rwildcard,updater/,*)
-
-.SECONDARY : updater/.install-darwin_amd64.zip updater/.install-linux_386.zip updater/.install-windows_386.zip
-updater/.install-darwin_amd64.zip updater/.install-linux_386.zip updater/.install-windows_386.zip : updater/.install
 
 .SECONDARY : libs/jstyleparser/.install-sources.jar
 libs/jstyleparser/.install-sources.jar : libs/jstyleparser/.install
