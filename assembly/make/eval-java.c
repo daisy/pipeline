@@ -50,11 +50,19 @@ void exec_java(char *this_executable, char *java_executable, char *java_code, in
 	*classpath = '\0';
 	strcat(classpath, this_executable);
 	strcat(classpath, "/../../..");
+#ifdef _WIN32
+	char **java_argv = malloc((8 + argc) * sizeof (char *));
+#else
 	char **java_argv = malloc((7 + argc) * sizeof (char *));
+#endif
 	int i = 0;
 	java_argv[i++] = java_executable;
 	java_argv[i++] = "-classpath";
 	java_argv[i++] = classpath;
+#ifdef _WIN32
+	// to work around a bug in ProcessBuilder
+	java_argv[i++] = "-Djdk.lang.Process.allowAmbiguousCommands=false";
+#endif
 	java_argv[i++] = "eval_java";
 	java_argv[i++] = this_executable;
 	java_argv[i++] = java_code;
