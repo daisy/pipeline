@@ -7,13 +7,8 @@
                 xmlns="http://maven.apache.org/POM/4.0.0">
 	
 	<xsl:param name="ROOT_DIR"/>
-	<xsl:param name="MY_DIR"/>
 	<xsl:param name="GRADLE_POM"/>
 	<xsl:param name="MODULE"/>
-	<xsl:param name="SRC_DIRS"/>
-	<xsl:param name="DOC_DIRS"/>
-	<xsl:param name="INDEX_FILES"/>
-	<xsl:param name="MAIN_DIRS"/>
 	<!--
 	    directories from which multiple modules are released at once
 	-->
@@ -27,10 +22,6 @@
 	<xsl:variable name="effective-pom" select="/*"/>
 	<xsl:variable name="gradle-pom" select="document(concat($ROOT_DIR,'/',$GRADLE_POM))/*"/>
 	
-	<xsl:variable name="src-dirs" select="tokenize($SRC_DIRS, '\s+')"/>
-	<xsl:variable name="main-dirs" select="tokenize($MAIN_DIRS, '\s+')"/>
-	<xsl:variable name="doc-dirs" select="tokenize($DOC_DIRS, '\s+')"/>
-	<xsl:variable name="index-files" select="tokenize($INDEX_FILES, '\s+')"/>
 	<xsl:variable name="release-dirs" select="tokenize($RELEASE_DIRS, '\s+')"/>
 	
 	<xsl:template match="/">
@@ -310,12 +301,6 @@
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:value-of select="concat($dirname,'.test : %/.test : %/pom.xml')"/>
 					<xsl:text> %/.compile-dependencies %/.test-dependencies</xsl:text>
-					<xsl:for-each select="$src-dirs">
-						<xsl:if test="starts-with(.,$dirname)">
-							<!-- %/src/**/* does not work -->
-							<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
-						</xsl:if>
-					</xsl:for-each>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:text>&#x0A;</xsl:text>
 					<xsl:if test="ends-with($version,'-SNAPSHOT')">
@@ -375,12 +360,6 @@
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:value-of select="concat($dirname,'.install')"/>
 							<xsl:text> : %/.install : %/pom.xml</xsl:text>
-							<xsl:for-each select="$main-dirs">
-								<xsl:if test="starts-with(.,$dirname)">
-									<!-- %/src/**/* does not work -->
-									<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
-								</xsl:if>
-							</xsl:for-each>
 							<xsl:text> %/.compile-dependencies | %/.test-dependencies</xsl:text>
 							<xsl:text>&#x0A;</xsl:text>
 							<xsl:if test="$effective-pom
@@ -398,20 +377,6 @@
 								<xsl:value-of select="concat($dirname,'.install-doc.jar')"/>
 								<xsl:text> : %/.install-doc.jar : %/.install-doc</xsl:text>
 								<xsl:text>&#x0A;</xsl:text>
-								<xsl:for-each select="$doc-dirs">
-									<xsl:if test="starts-with(.,$dirname)">
-										<xsl:text>&#x0A;</xsl:text>
-										<xsl:value-of select="concat($dirname,'.install-doc.jar : $(call rwildcard,',.,'/,*)')"/>
-										<xsl:text>&#x0A;</xsl:text>
-									</xsl:if>
-								</xsl:for-each>
-								<xsl:for-each select="$index-files">
-									<xsl:if test="starts-with(.,$dirname)">
-										<xsl:text>&#x0A;</xsl:text>
-										<xsl:value-of select="concat($dirname,'.install-doc.jar : ',.)"/>
-										<xsl:text>&#x0A;</xsl:text>
-									</xsl:if>
-								</xsl:for-each>
 							</xsl:if>
 							<xsl:if test="$effective-pom
 							              /pom:project[pom:groupId=$groupId and
@@ -458,12 +423,6 @@
 						<xsl:text>&#x0A;</xsl:text>
 						<xsl:value-of select="concat($dirname,'.install-doc')"/>
 						<xsl:text> : %/.install-doc : %/pom.xml</xsl:text>
-						<xsl:for-each select="$src-dirs">
-							<xsl:if test="starts-with(.,$dirname)">
-								<!-- %/src/**/* does not work -->
-								<xsl:value-of select="concat(' $(call rwildcard,',.,'/,*)')"/>
-							</xsl:if>
-						</xsl:for-each>
 						<xsl:text> | %/.compile-dependencies %/.test-dependencies</xsl:text>
 						<xsl:text>&#x0A;</xsl:text>
 					</xsl:if>
