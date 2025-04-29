@@ -98,7 +98,7 @@ echo
 
 # update versions of external dependencies in dependepencyManagement section
 # other external dependencies are handled by maven-release-plugin.
-echo "java -cp $SAXON \\
+echo "java -cp $ROOT_DIR/$SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$update_external_versions_xsl \\
      -s:pom.xml \\
@@ -111,7 +111,7 @@ echo -n "( git commit -m 'Resolve snapshot dependencies (BOMs/parents)' >/dev/nu
 # disable modules that should not be released
 if [ ${#modules[@]} -gt 0 ]; then
     echo " && \\"
-    echo "java -cp $SAXON \\
+    echo "java -cp $ROOT_DIR/$SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$select_modules_xsl \\
      -s:pom.xml \\
@@ -169,7 +169,7 @@ if [ ${#modules[@]} -gt 0 ]; then
     echo
     echo "# fix poms after release (pt. 1)"
     echo
-    echo "java -cp $SAXON \\
+    echo "java -cp $ROOT_DIR/$SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$update_internal_versions_xsl \\
      -s:pom.xml \\
@@ -186,7 +186,7 @@ echo
 
 # work around a Maven bug: https://issues.apache.org/jira/browse/MNG-4979
 # note that this workaround can not be applied to the prepare step because the pom would get committed
-echo "java -cp $SAXON \\
+echo "java -cp $ROOT_DIR/$SAXON \\
      net.sf.saxon.Transform \\
      -xsl:$workaround_bug_4979_xsl \\
      -s:pom.xml \\

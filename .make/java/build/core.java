@@ -163,11 +163,11 @@ public class core {
 				"-s:" + effectivePom,
 				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
 				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
-				"GRADLE_POM=" + gradlePom,
+				"GRADLE_POM=" + gradlePom.getPath().replace('\\', '/'),
 				"MODULE=.",
 				"RELEASE_DIRS=" + modules.stream().filter(m -> new File(new File(m), "bom/pom.xml").exists())
 				                                  .collect(Collectors.joining(" ")),
-				"OUTPUT_BASEDIR=" + outputBaseDir,
+				"OUTPUT_BASEDIR=" + outputBaseDir.getPath().replace('\\', '/'),
 				"OUTPUT_FILENAME=" + outputFileName,
 				"VERBOSE=" + (System.getenv("VERBOSE") != null)
 			) != 0) {
