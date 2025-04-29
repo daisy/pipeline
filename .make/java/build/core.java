@@ -162,26 +162,9 @@ public class core {
 				"java", "-cp", SAXON, "net.sf.saxon.Transform",
 				"-s:" + effectivePom,
 				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
-				"MY_DIR=" + MY_DIR,
 				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
 				"GRADLE_POM=" + gradlePom,
 				"MODULE=.",
-				"SRC_DIRS=" + modules.stream().map(m -> new File(new File(m), "src"))
-				                              .filter(File::exists)
-				                              .map(File::getPath)
-				                              .collect(Collectors.joining(" ")),
-				"MAIN_DIRS=" + modules.stream().map(m -> new File(new File(m), "src/main"))
-				                               .filter(File::exists)
-				                               .map(File::getPath)
-				                               .collect(Collectors.joining(" ")),
-				"DOC_DIRS=" + modules.stream().map(m -> new File(new File(m), "doc"))
-				                              .filter(File::exists)
-				                              .map(File::getPath)
-				                              .collect(Collectors.joining(" ")),
-				"INDEX_FILES=" + modules.stream().map(m -> new File(new File(m), "index.md"))
-				                                 .filter(File::exists)
-				                                 .map(File::getPath)
-				                                 .collect(Collectors.joining(" ")),
 				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream().map(f -> f.getParentFile().toString())
 				                                         .collect(Collectors.joining(" ")),
 				"OUTPUT_BASEDIR=" + outputBaseDir,
@@ -214,11 +197,7 @@ public class core {
 				s.println("	+$(EVAL) gradle.test(\"" + m + "\");");
 				s.println();
 				s.println(m + "/.test : %/.test : "
-				          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
-				if (new File(m + "/test").exists())
-					s.println(m + "/.test : $(call rwildcard," + m + "/test/,*)");
-				if (new File(m + "/integrationtest").exists())
-					s.println(m + "/.test : $(call rwildcard," + m + "/integrationtest/,*)");
+				          + "%/build.gradle %/gradle.properties %/.dependencies");
 				if (v.endsWith("-SNAPSHOT")) {
 					s.println();
 					s.println(String.format("$(MVN_LOCAL_REPOSITORY)/%s/%s/%s/%s-%s.jar : %s/.install.jar",
@@ -234,7 +213,7 @@ public class core {
 					s.println("	+$(EVAL) gradle.install(\"" + m + "\");");
 					s.println();
 					s.println(m + "/.install : %/.install : "
-					          + "%/build.gradle %/gradle.properties $(call rwildcard," + m + "/src/,*) %/.dependencies");
+					          + "%/build.gradle %/gradle.properties %/.dependencies");
 					s.println();
 					s.println(".SECONDARY : " + m + "/.dependencies");
 					s.println(m + "/.dependencies :");
