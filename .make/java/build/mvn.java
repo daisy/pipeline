@@ -127,7 +127,7 @@ public class mvn {
 				logStream = System.out;
 		}
 		List<String> cmd = new ArrayList<>();
-		cmd.add("mvn");
+		cmd.add(getOS() == OS.WINDOWS ? "mvn.cmd" : "mvn");
 		cmd.add("--batch-mode");
 		if (settings != null) {
 			cmd.add("--settings");
@@ -137,7 +137,16 @@ public class mvn {
 			cmd.addAll(properties);
 		for (String a : args)
 			cmd.add(a);
-		int rv = captureOutput(logStream::println, cd, cmd);
+		int rv = 0;
+		try {
+			// FIXME: This system property is set to false by default in eval-java.exe, in order to
+			// work around a bug in ProcessBuilder on Windows. However, for some reason, the
+			// property needs to be set to true for Maven commands to work. Find out why.
+			System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "true");
+			rv = captureOutput(logStream::println, cd, cmd);
+		} finally {
+			System.setProperty("jdk.lang.Process.allowAmbiguousCommands", "false");
+		}
 		if (rv != 0) {
 			logStream.println("Command was: " + String.join(" ", cmd));
 			System.err.print(String.format("Maven exited with value %d.", rv));

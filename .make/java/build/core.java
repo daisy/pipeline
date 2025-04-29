@@ -163,11 +163,11 @@ public class core {
 				"-s:" + effectivePom,
 				"-xsl:" + MY_DIR + "/make-maven-deps.mk.xsl",
 				"ROOT_DIR=" + System.getenv("ROOT_DIR"),
-				"GRADLE_POM=" + gradlePom,
+				"GRADLE_POM=" + gradlePom.getPath().replace('\\', '/'),
 				"MODULE=.",
-				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream().map(f -> f.getParentFile().toString())
+				"RELEASE_DIRS=" + glob("[!.]**/.gitrepo").stream().map(f -> f.getParentFile().toString().replace('\\', '/'))
 				                                         .collect(Collectors.joining(" ")),
-				"OUTPUT_BASEDIR=" + outputBaseDir,
+				"OUTPUT_BASEDIR=" + outputBaseDir.getPath().replace('\\', '/'),
 				"OUTPUT_FILENAME=" + outputFileName,
 				"VERBOSE=" + (System.getenv("VERBOSE") != null)
 			) != 0) {

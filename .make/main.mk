@@ -1,7 +1,7 @@
 ROOT_DIR          := $(CURDIR)
 MY_DIR            := $(patsubst %/,%,$(dir $(lastword $(MAKEFILE_LIST))))
 TARGET_DIR        ?= $(MY_DIR)/target
-GRADLE_FILES      := $(shell for (File f : glob("**/{build.gradle,settings.gradle,gradle.properties}")) println(f.toString());)
+GRADLE_FILES      := $(shell for (File f : glob("**/{build.gradle,settings.gradle,gradle.properties}")) println(f.toString().replace('\\', '/'));)
 GRADLE_MODULES    := $(filter $(patsubst %/build.gradle,%,$(filter %/build.gradle,$(GRADLE_FILES))), \
                               $(patsubst %/gradle.properties,%,$(filter %/gradle.properties,$(GRADLE_FILES))))
 MODULES            = $(MAVEN_MODULES) $(GRADLE_MODULES)
@@ -9,27 +9,27 @@ MVN_LOG           := redirectTo("$(ROOT_DIR)/maven.log");
 M2_HOME           := $(ROOT_DIR)/$(TARGET_DIR)/.gradle-settings
 EVAL              := //
 
-CLASSPATH := $(shell                                                                    \
-    File classPath = new File("$(MY_DIR)/java");                                        \
-    List<File> javaFiles = glob(classPath.getPath() +  "/{*.java,**/*.java}");          \
-    if (javaFiles.stream().anyMatch(                                                    \
-        javaFile -> {                                                                   \
-            File classFile = new File(javaFile.getPath().replace(".java", ".class"));   \
-            return (!classFile.exists()                                                 \
-                    || javaFile.lastModified() > classFile.lastModified()); })) {       \
-        String javac = getOS() == OS.WINDOWS ? "javac.exe" : "javac";                   \
-        String JAVA_HOME = System.getenv("JAVA_HOME");                                  \
-        if (JAVA_HOME != null) {                                                        \
-            File f = new File(new File(new File(JAVA_HOME), "bin"), javac);             \
-            if (f.exists())                                                             \
-                javac = f.getAbsolutePath(); }                                          \
-        List<String> cmd = new ArrayList<>();                                           \
-        cmd.add(javac);                                                                 \
-        cmd.add("-cp");                                                                 \
-        cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib");            \
-        for (File f : javaFiles) cmd.add(f.getPath());                                  \
-        exitOnError(captureOutput(err::println, cmd)); }                                \
-    println(classPath.getPath());                                                       )
+CLASSPATH := $(shell                                                                              \
+    File classPath = new File("$(MY_DIR)/java");                                                  \
+    List<File> javaFiles = glob(classPath.getPath().replace("\\", "/") +  "/{*.java,**/*.java}"); \
+    if (javaFiles.stream().anyMatch(                                                              \
+        javaFile -> {                                                                             \
+            File classFile = new File(javaFile.getPath().replace(".java", ".class"));             \
+            return (!classFile.exists()                                                           \
+                    || javaFile.lastModified() > classFile.lastModified()); })) {                 \
+        String javac = getOS() == OS.WINDOWS ? "javac.exe" : "javac";                             \
+        String JAVA_HOME = System.getenv("JAVA_HOME");                                            \
+        if (JAVA_HOME != null) {                                                                  \
+            File f = new File(new File(new File(JAVA_HOME), "bin"), javac);                       \
+            if (f.exists())                                                                       \
+                javac = f.getAbsolutePath(); }                                                    \
+        List<String> cmd = new ArrayList<>();                                                     \
+        cmd.add(javac);                                                                           \
+        cmd.add("-cp");                                                                           \
+        cmd.add(classPath.getPath() + File.pathSeparator + "$(MY_DIR)/lib");                      \
+        for (File f : javaFiles) cmd.add(f.getPath());                                            \
+        exitOnError(captureOutput(err::println, cmd)); }                                          \
+    println(classPath.getPath().replace('\\', '/'));                                              )
 IMPORTS := build.mvn build.gradle build.mvn.Coords
 STATIC_IMPORTS := build.core.*
 
@@ -40,7 +40,7 @@ export MAKECMDGOALS
 
 eval-java = $(ROOT_DIR)/$(SHELL) $(call quote-for-bash,$1)
 
-rwildcard = $(shell if (new File("$1").isDirectory()) glob("$1**/$2").forEach(x -> println(x.getPath().replace(" ", "\\ ")));)
+rwildcard = $(shell if (new File("$1").isDirectory()) glob("$1**/$2").forEach(x -> println(x.getPath().replace('\\', '/').replace(" ", "\\ ")));)
 # this alternative does not support spaces in file names
 #rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2) $(filter $(subst *,%,$2),$d))
 
@@ -65,7 +65,9 @@ include $(TARGET_DIR)/maven.mk
 
 $(TARGET_DIR)/maven.mk : $(TARGET_DIR)/maven-modules $(TARGET_DIR)/maven-aggregators $(TARGET_DIR)/effective-settings.xml
 	try (PrintStream s = new PrintStream(new FileOutputStream("$@"))) { \
-		String localRepo = xpath(new File("$(word 3,$^)"), "/*/*[local-name()='localRepository']/text()"); \
+		String localRepo = xpath(new File("$(word 3,$^)"), "/*/*[local-name()='localRepository']/text()") \
+		                   .replace('\\', '/') \
+		                   .replace("$(ROOT_DIR)/", ""); \
 		s.println("MVN_LOCAL_REPOSITORY := " + localRepo); \
 		s.println("MAVEN_AGGREGATORS := $$(shell println(slurp(\"$(word 2,$^)\"));)"); \
 		s.println("MAVEN_MODULES := $$(shell println(slurp(\"$<\"));)"); \
@@ -101,7 +103,7 @@ $(TARGET_DIR)/maven-aggregators : aggregators poms
 						new File(module, "pom.xml"), "string(/*/*[local-name()='modules'])" \
 					).trim().split("\\s+"); \
 					if (submodules.length > 0 && !(submodules.length == 1 && submodules[0].equals(""))) { \
-						s.println(module.toString()); \
+						s.println(module.toString().replace('\\', '/')); \
 						for (String m : submodules) \
 							accept(".".equals(module.toString()) ? new File(m) : new File(module, m)); \
 					} \
@@ -127,7 +129,7 @@ $(TARGET_DIR)/maven-modules : aggregators poms
 						for (String m : submodules) \
 							accept(".".equals(module.toString()) ? new File(m) : new File(module, m)); \
 					} else \
-						s.println(module.toString()); \
+						s.println(module.toString().replace('\\', '/')); \
 				} catch (RuntimeException e) { \
 					throw e; \
 				} catch (Throwable e) { \
@@ -151,7 +153,6 @@ $(SAXON) : | .maven-init
 
 # the purpose of the test is for making "make -B" not affect this rule (to speed thing up)
 # MAVEN_MODULES computed here because maven.mk may not be up to date yet
-# FIXME: the mvn command below depends on the settings.xml.in file which is not inside this directory
 $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(MVN_SETTINGS)
 	String MAVEN_MODULES = slurp("$<"); \
 	String[] modules = MAVEN_MODULES.trim().split("\\s+"); \
@@ -177,17 +178,15 @@ $(TARGET_DIR)/effective-pom.xml : $(TARGET_DIR)/maven-modules poms | $(SAXON) $(
 						        "-xsl:$(MY_DIR)/mvn-set-version.xsl", \
 						        "VERSION=" + v)); \
 		} \
-		int rv = captureOutput( \
-			new PrintStream(new FileOutputStream("$(ROOT_DIR)/maven.log"))::println, \
-			"mvn", "--batch-mode", "--settings", "$(ROOT_DIR)/settings.xml.in", \
-			       "-Dworkspace=$(TARGET_DIR)/poms", \
-			       "-Dcache=.maven-cache", \
-			       "--projects", String.join(",", modules), \
-			       "-Prun-script-webserver", "-Ddocumentation", \
-			       "org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom", "-Doutput=$(ROOT_DIR)/$@"); \
-		if (rv != 0) { \
+		try { \
+			mvn("-Dworkspace=$(TARGET_DIR)/poms", \
+			    "-Dcache=.maven-cache", \
+			    "--projects", String.join(",", modules), \
+			    "-Prun-script-webserver", "-Ddocumentation", \
+			    "org.apache.maven.plugins:maven-help-plugin:2.2:effective-pom", "-Doutput=$(ROOT_DIR)/$@"); \
+		} catch (SystemExit ex) { \
 			err.println("Failed to compute Maven dependencies."); \
-			exit(rv); \
+			throw ex; \
 		} \
 	} else { \
 		touch("$@"); \
