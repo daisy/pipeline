@@ -41,7 +41,7 @@ all : $(JEKYLL_DIR)/_site
 ifneq (,$(findstring $(BUNDLE) exec,$(RUBY)))
 .SECONDARY : gems
 gems : Gemfile.lock
-	$(BUNDLE) install --path gems
+	$(BUNDLE) install
 else
 .PHONY : gems
 gems :

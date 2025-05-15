@@ -14,6 +14,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 * [DAISY 3 to navigable MP3 file-set](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-mp3/)
 * [DTBook Validator](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-validator/)
 * [DTBook to DAISY 3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3/)
+* [DTBook to eBraille](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-ebraille/)
 * [DTBook to EPUB3](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3/)
 * [DTBook to HTML](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html/)
 * [DTBook to ODT](http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-odt/)
@@ -42,11 +43,12 @@ with DAISY Pipeline 2. The complete list of available scripts is:
 <table id="scripts-matrix">
   <tr>
     <th colspan="2" rowspan="3">Inputs</th>
-    <th colspan="9">Outputs</th>
+    <th colspan="10">Outputs</th>
   </tr>
   <tr>
     <th colspan="2">DAISY</th>
     <th rowspan="2">DTBook</th>
+    <th rowspan="2">eBraille</th>
     <th rowspan="2">EPUB 3</th>
     <th rowspan="2">HTML</th>
     <th rowspan="2">ZedAI</th>
@@ -64,6 +66,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-daisy3">DAISY 2.02 to DAISY 3</a></td>
     <td></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy202-to-epub3">DAISY 2.02 to EPUB 3</a></td>
     <td></td>
     <td></td>
@@ -74,6 +77,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
   <tr>
     <th>3</th>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-daisy202">DAISY 3 to DAISY 2.02</a></td>
+    <td></td>
     <td></td>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/daisy3-to-epub3">DAISY 3 to EPUB 3</a></td>
@@ -88,6 +92,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-daisy3">DTBook to DAISY 3</a></td>
     <td></td>
+    <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-ebraille">DTBook to eBraille</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-epub3">DTBook to EPUB 3</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-html">DTBook to HTML</a></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/dtbook-to-zedai">DTBook to ZedAI</a></td>
@@ -106,11 +111,13 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td></td>
     <td></td>
+    <td></td>
   </tr>
   <tr>
     <th rowspan="2">EPUB</th>
     <th>2</th>
     <td colspan="2"><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
+    <td></td>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub2-to-epub3">EPUB Upgrader</a></td>
     <td></td>
@@ -126,6 +133,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-daisy3">EPUB 3 to DAISY 3</a> or
         <a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub-to-daisy">EPUB to DAISY</a></td>
     <td></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/epub3-to-epub3">EPUB 3 Enhancer</a></td>
     <td></td>
     <td></td>
@@ -138,6 +146,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
     <td></td>
     <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-dtbook">HTML to DTBook</a></td>
+    <td></td>
     <td><a href="http://daisy.github.io/pipeline/Get-Help/User-Guide/Scripts/html-to-epub3">HTML to EPUB 3</a></td>
     <td></td>
     <td></td>
@@ -147,6 +156,7 @@ with DAISY Pipeline 2. The complete list of available scripts is:
   </tr>
   <tr>
     <th colspan="2">ZedAI</th>
+    <td></td>
     <td></td>
     <td></td>
     <td></td>

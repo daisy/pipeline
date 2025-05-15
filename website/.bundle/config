@@ -1,0 +1,4 @@
+---
+BUNDLE_PATH: "gems"
+# to fix build issue on macOS
+BUNDLE_BUILD__NOKOGIRI: "--use-system-libraries --with-cflags=-Wno-incompatible-function-pointer-types -Wno-int-conversion"
