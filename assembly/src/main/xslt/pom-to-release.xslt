@@ -39,6 +39,12 @@
                                                 <xsl:when test="pom:id = 'copy-webservice'">
                                                         <xsl:value-of select="'system/webservice'"/>
                                                 </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-webservice-osgi'">
+                                                        <xsl:value-of select="'system/osgi/webservice'"/>
+                                                </xsl:when>
+                                                <xsl:when test="pom:id = 'copy-webservice-no-osgi'">
+                                                        <xsl:value-of select="'system/no-osgi/webservice'"/>
+                                                </xsl:when>
                                                 <xsl:when test="pom:id = 'copy-modules'">
                                                         <xsl:value-of select="'system/common'"/>
                                                 </xsl:when>

@@ -425,6 +425,13 @@ run() {
         PATHS="$PATHS system/no-osgi"
     fi
     PATHS="$PATHS system/$MODE"
+    if [ "$MODE" = "webservice" ]; then
+        if [ "$ENABLE_OSGI" = "true" ]; then
+            PATHS="$PATHS system/osgi/$MODE"
+        else
+            PATHS="$PATHS system/no-osgi/$MODE"
+        fi
+    fi
     if [ "$ENABLE_SHELL" = "true" ]; then
         if [ "$ENABLE_OSGI" = "true" ]; then
             PATHS="$PATHS system/osgi/gogo"

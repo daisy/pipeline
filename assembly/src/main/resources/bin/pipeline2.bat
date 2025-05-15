@@ -167,6 +167,11 @@ goto :RUN_LOOP
         set PATHS=!PATHS! system\no-osgi
     )
     set PATHS=!PATHS! system\webservice
+    if %ENABLE_OSGI% == true (
+        set PATHS=!PATHS! system\osgi\webservice
+    ) else (
+        set PATHS=!PATHS! system\no-osgi\webservice
+    )
     if %ENABLE_SHELL% == true (
         if %ENABLE_OSGI% == true (
             set PATHS=!PATHS! system\osgi\gogo
