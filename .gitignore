@@ -1,5 +1,4 @@
 /target/
 .DS_Store
 /.travis/secrets/deploy_key
-/.bundle/
 /gems/
